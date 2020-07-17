@@ -144,7 +144,7 @@
     <screen name="requestCatalogEntryForm">
         <section>
             <actions>
-                <set field="addressEntryBoxHeading" value="${uiLabelMap.RequestCatalogTitle}"/>
+                <set field="showAddressEntryBoxHeading" value="N"/>
                 <set field="addressInstructionsInfo" value="${uiLabelMap.RequestCatalogInstructionsInfo}"/>
                 <set field="custRequestTypeId" value="RF_CATALOG" />
                 <set field="custRequestName" value="Catalog Request" />

@@ -172,10 +172,6 @@
                    <#assign productImageUrl = "">
               </#if>
     
-              <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "DESCRIPTION", locale, dispatcher)?if_exists>
-              <#if !prodDescription?has_content && virtualProduct?has_content>
-                   <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "DESCRIPTION", locale, dispatcher)?if_exists>
-              </#if>
               <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher)?if_exists>
               <#if !productName?has_content && virtualProduct?has_content>
                    <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
@@ -219,8 +215,11 @@
 			                 <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productFeatureAndAppls,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
                             <#if productFeatureAndAppls?has_content>
                               <#list productFeatureAndAppls as productFeatureAndAppl>
-                                <#assign productFeature = productFeatureAndAppl.getRelatedOneCache("ProductFeatureCategory")?if_exists />
-                                <dd>${productFeature.description!}: ${productFeatureAndAppl.description!}</dd>
+                                <#assign productFeatureTypeLabel = ""/>
+                                <#if productFeatureTypesMap?has_content>
+                                  <#assign productFeatureTypeLabel = productFeatureTypesMap.get(productFeatureAndAppl.productFeatureTypeId)!"" />
+                                </#if>
+                                <dd>${productFeatureTypeLabel!}:${productFeatureAndAppl.description!}</dd>
                               </#list>
                             </#if>
                         </dl>
@@ -270,7 +269,7 @@
                     <td class="total numberCol lastCol <#if !orderItem_has_next>lastRow</#if>">
                         <ul>
                             <li>
-                                        <span class="price"><@ofbizCurrency amount=localOrderReadHelper.getOrderItemSubTotal(orderItem,localOrderReadHelper.getAdjustments()) rounding=2 isoCode=currencyUom/></span>
+                                <span class="price"><@ofbizCurrency amount=localOrderReadHelper.getOrderItemSubTotal(orderItem,localOrderReadHelper.getAdjustments()) rounding=2 isoCode=currencyUom/></span>
                             </li>
                         </ul>
                     </td>

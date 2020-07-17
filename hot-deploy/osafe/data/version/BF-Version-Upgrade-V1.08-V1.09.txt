@@ -23,9 +23,9 @@ UPDATE Product_Store_Email_Setting SET from_address="bigfishdev@salmonllc.com" W
              1001          1004
      If the Values are not in this order then the below query will flip the Column PRODUCT_ID and PRODUCT_ID_TO values. ***/
       
-    UPDATE PRODUCT_ASSOC SET PRODUCT_ID=@tmp:=PRODUCT_ID, PRODUCT_ID=PRODUCT_ID_TO, PRODUCT_ID_TO=@tmp where PRODUCT_ASSOC_TYPE_ID = 'PRODUCT_COMPLEMENT';
-    - NOTE:RB-1/31/2013 If the statement above causes a 'Duplicate Entry Error'. Use the following statement:
-        UPDATE IGNORE PRODUCT_ASSOC SET PRODUCT_ID=@tmp:=PRODUCT_ID, PRODUCT_ID=PRODUCT_ID_TO, PRODUCT_ID_TO=@tmp where PRODUCT_ASSOC_TYPE_ID = 'PRODUCT_COMPLEMENT';
+    UPDATE IGNORE PRODUCT_ASSOC SET PRODUCT_ID=@tmp:=PRODUCT_ID, PRODUCT_ID=PRODUCT_ID_TO, PRODUCT_ID_TO=@tmp where PRODUCT_ASSOC_TYPE_ID = 'PRODUCT_COMPLEMENT';
+    - NOTE:RB-1/31/2013 The 'IGNORE' in the sql above is needed for the case that there are two products that both have each other as complements. In this case, running this statement (without 'IGNORE') could cause a duplicate entry error.  The IGNORe keyword will do nothing when it runs into this error and continue to process the remaining rows.
+        
 
 01/18/2013 - Issue# 27203
 delete from X_Product_Store_Parm where parm_Key='PCA_ACTIVE_FLAG';

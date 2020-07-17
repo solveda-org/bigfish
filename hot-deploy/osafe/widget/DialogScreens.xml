@@ -162,6 +162,8 @@
                 <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
                 <set field="jqueryIdPrefix" value="quicklook_"/>
                 <set field="showHeadingTertiaryInformation" value="Y" />
+                <set field="addToCartAction" value="addItemToCart"/>
+                <set field="addToWishListAction" value="addItemToWishList"/>
             </actions>
             <widgets>
                  <container id="plpQuicklook_Container">
@@ -327,5 +329,40 @@
             </widgets>
         </section>
     </screen>
-
+    
+    <screen name="lightCartDialog">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="dialogPurpose" value="lightCart_"/>
+                <set field="dialogBoxTitle" value=""/>
+                <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
+                <set field="uiSequenceScreen" value="LightCart"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/lightbox/lightCart.groovy" />
+                <set field="formName" value="cartform" />
+                <set field="doneAction" value="checkout" />
+                
+            </actions>
+            <widgets>
+               <platform-specific>
+                 <html>
+                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                            <html-template-decorator-section name="lightCart_DialogBox">
+                                <container id="lightCart_Container">
+                                    <platform-specific>
+                                        <html>
+                                        <!-- Change this ftl name to a more descriptive one -->
+                                            <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/lightCart.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                 </html>
+               </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
 </screens>

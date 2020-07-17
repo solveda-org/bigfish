@@ -2,6 +2,80 @@
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
+
+    <!-- Shopping Wish List -->
+    <screen name="eCommerceShowWishList">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="pageTitle" value="${uiLabelMap.WishListTitle}" />
+                <set field="title" from-field="pageTitle" />
+
+                <set field="formName" value="wishListform" />
+                <set field="updateWishListAction" value="modifyWishList"/>
+                <set field="deleteFromWishListAction" value="deleteFromWishList"/>
+                <set field="addToCartFromWishListAction" value="addToCartFromWishList"/>
+                <set field="nextButtonUrl" value="main" />
+                <set field="nextButtonDescription" value="${uiLabelMap.ContinueShoppingBtn}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/showWishListItems.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceShowWishList" style="eCommerceShowWishList">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonCheckout.ftl">
+                                                <html-template-decorator-section name="entryFormJS">
+                                                    <include-screen name="entryFormJS"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="checkoutJS">
+                                                    <include-screen name="checkoutJS"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="pageMessages">
+                                                    <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="pageTopContent">
+                                                    <include-screen name="PTS_WISHLIST" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="cartBody">
+                                                    <include-screen name="showWishListDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="pageEndContent">
+                                                    <include-screen name="PES_WISHLIST" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+                                                </html-template-decorator-section>
+                                            </html-template-decorator>
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="showWishListOrderItems">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/cart/showWishListItems.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
     <!-- CART SCREENS -->
     <screen name="eCommerceShowcart">
         <section>

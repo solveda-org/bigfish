@@ -92,6 +92,8 @@
 	  <xsd:element name="AuthAmount" type="xsd:string" />
 	  <xsd:element name="PayerId" type="xsd:string" />
 	  <xsd:element name="TransactionId" type="xsd:string" />
+      <xsd:element name="PaymentId" type="xsd:string" />
+      <xsd:element name="MerchantReferenceNumber" type="xsd:string" />
 	  <xsd:element name="PaymentToken" type="xsd:string" />
 	  <xsd:element name="AuthReferenceNumber" type="xsd:string" />
 	  <xsd:element name="AuthDateTime" type="xsd:string" />

@@ -61,6 +61,39 @@ if (UtilValidate.isNotEmpty(context.virtualProduct))
 
 if (UtilValidate.isNotEmpty(context.variantProduct)) 
 {
+	//BUILD CONTEXT MAP FOR PRODUCT_FEATURE_TYPE_ID and DESCRIPTION(EITHER FROM PRODUCT_FEATURE_GROUP OR PRODUCT_FEATURE_TYPE)
+    Map productFeatureTypesMap = FastMap.newInstance();
+    productFeatureTypesList = delegator.findList("ProductFeatureType", null, null, null, null, false);
+
+    //get the whole list of ProductFeatureGroup and ProductFeatureGroupAndAppl
+    productFeatureGroupList = delegator.findList("ProductFeatureGroup", null, null, null, null, false);
+    productFeatureGroupAndApplList = delegator.findList("ProductFeatureGroupAndAppl", null, null, null, null, false);
+    productFeatureGroupAndApplList = EntityUtil.filterByDate(productFeatureGroupAndApplList);
+
+    if(UtilValidate.isNotEmpty(productFeatureTypesList))
+    {
+        for (GenericValue productFeatureType : productFeatureTypesList)
+        {
+        	//filter the ProductFeatureGroupAndAppl list based on productFeatureTypeId to get the ProductFeatureGroupId
+        	productFeatureGroupAndAppls = EntityUtil.filterByAnd(productFeatureGroupAndApplList, UtilMisc.toMap("productFeatureTypeId", productFeatureType.productFeatureTypeId));
+        	description = "";
+        	if(UtilValidate.isNotEmpty(productFeatureGroupAndAppls))
+        	{
+        		productFeatureGroupAndAppl = EntityUtil.getFirst(productFeatureGroupAndAppls);
+            	productFeatureGroups = EntityUtil.filterByAnd(productFeatureGroupList, UtilMisc.toMap("productFeatureGroupId", productFeatureGroupAndAppl.productFeatureGroupId));
+            	productFeatureGroup = EntityUtil.getFirst(productFeatureGroups);
+            	description = productFeatureGroup.description;
+        	}
+        	else
+        	{
+        		description = productFeatureType.description;
+        	}
+        	productFeatureTypesMap.put(productFeatureType.productFeatureTypeId,description);
+        }
+    	
+    }
+    context.productFeatureTypesMap = productFeatureTypesMap;
+	
     variantProduct = context.variantProduct;
     allVariantProductFeatureAndAppls = variantProduct.getRelated("ProductFeatureAndAppl");
     allVariantProductFeatureAndAppls = EntityUtil.filterByDate(allVariantProductFeatureAndAppls,true);
@@ -97,12 +130,12 @@ if (UtilValidate.isNotEmpty(context.variantProduct))
                     if (UtilValidate.isNotEmpty(variantProductFeatureAndApplList))
                     {
                         variantProductFeatureAndAppl = EntityUtil.getFirst(variantProductFeatureAndApplList);
-                        productFeatureType = variantProductFeatureAndAppl.getRelatedOne("ProductFeatureType")
-                        if(UtilValidate.isNotEmpty(productFeatureType))
+                        productFeatureTypeLabel = productFeatureTypesMap.get(variantProductFeatureAndAppl.productFeatureTypeId);
+                        if(UtilValidate.isNotEmpty(productFeatureTypeLabel))
                         {
                             if(UtilValidate.isNotEmpty(context.productDetailHeading))
                             {
-                                context.productDetailHeading = context.productDetailHeading + ", " + productFeatureType.description + ": " + variantProductFeatureAndAppl.description;
+                                context.productDetailHeading = context.productDetailHeading + ", " + productFeatureTypeLabel + ": " + variantProductFeatureAndAppl.description;
                             }
                         }
                     } 

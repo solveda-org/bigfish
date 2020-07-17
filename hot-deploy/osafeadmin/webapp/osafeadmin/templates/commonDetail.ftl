@@ -2,14 +2,6 @@ ${sections.render('commonFormJS')}
 ${sections.render('commonFormDialog')?if_exists}
 <form method="post" name="${detailFormName!""}" <#if detailFormId?exists>id="${detailFormId!}"</#if>>
     ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
-    
-    <#if showSuccessMessage?has_content >
-	  <div class="content-messages eCommerceSuccessMessage">
-	    <span class="checkMarkIcon eventImage"></span>
-	      <p class="eventMessage">${showSuccessMessage}</p>
-	  </div>
-	</#if>
-
     <#if generalInfoBoxHeading?exists && generalInfoBoxHeading?has_content>
     <div class="displayBox generalInfo">
         <div class="header"><h2>${generalInfoBoxHeading!}</h2></div>

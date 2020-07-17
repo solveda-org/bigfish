@@ -278,6 +278,21 @@
             </widgets>
         </section>
     </screen>
+    <screen name="pdpAddToWishlist">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAddToWishlistSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAddToWishlist.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
     <screen name="pdpVolumePricing">
         <section>
             <actions>
@@ -958,6 +973,21 @@
             </widgets>
         </section>
     </screen>
+    <screen name="pdpTabsAddToWishlist">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpTabsAddToWishlistSeq" id="pdpTabsAddToWishlist" >
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAddToWishlist.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
     <screen name="pdpTabsVolumePricing">
         <section>
             <actions>
@@ -1624,6 +1654,21 @@
             </widgets>
         </section>
     </screen>
+    <screen name="quicklookAddToWishlist">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="quicklookAddToWishlistSeq" id="quicklookAddToWishlist" >
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAddToWishlist.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
     <screen name="quicklookVolumePricing">
         <section>
             <actions>
@@ -1972,7 +2017,7 @@
                 <container style="quicklookSeeItemDetailsSeq">
                     <platform-specific>
                         <html>
-                            <html-template location="component://osafe/webapp/osafe/common/plp/plpSeeItemDetails.ftl" />
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSeeItemDetails.ftl" />
                         </html>
                     </platform-specific>
                 </container>
@@ -3265,7 +3310,48 @@
                  </container>
              </widgets>
          </section>
-     </screen>
+     </screen>  
+    
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Show Wish List Page  
+     Sequencer Type  : WishList -->
+<!-- **********************************************************************  -->     
+    <screen name="showWishListDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WishList"/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="showWishlistOrderItems">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="showWishlistOrderItemsSeq">
+                  <include-screen name="showWishListOrderItems" location="component://osafe/widget/EcommerceCheckoutScreens.xml"/>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="showWishlistContinueButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="showWishlistContinueButtonSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/continueCartButton.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
 <!-- **********************************************************************  -->     
 <!-- Sequence Screen : Show Cart Page  
      Sequencer Type  : ShowCart -->
@@ -5495,4 +5581,308 @@
             </widgets>
         </section>
     </screen>
+     
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Show Light Cart
+     Sequencer Type  : LightCart -->
+<!-- **********************************************************************  -->     
+    <screen name="showLightCartDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="LightCart"/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxOrderItems">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+                <!-- <set field="formName" value="cartform" /> -->
+                <!-- <set field="doneAction" value="checkout" /> -->
+                <set field="updateCartAction" value="modifycart"/>
+                <set field="shoppingCartSize" value="${groovy:org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request).size();}"/>
+                <set field="addPromoCodeRequest" value="validateShowCartPromoCode"/>
+                <set field="removePromoCodeRequest" value="removeShowCartPromoCode"/>
+                <set field="prevButtonUrl" value="main" />
+                <set field="prevButtonDescription" value="${uiLabelMap.ContinueShoppingBtn}"/>
+                <set field="prevButtonClass" value="${groovy:if(shoppingCartSize > 0)return 'standardBtn negative' else return 'standardBtn positive';}"/>
+                
+                <set field="nextButtonVisible" value="${groovy:if(shoppingCartSize > 0)return 'Y' else return 'N';}"/>
+                <set field="nextButtonUrlDescription" value="${uiLabelMap.CheckoutBtn}"/>
+                <!--  <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/lightbox/cartOrderItems.groovy" /> -->
+            </actions>
+            <widgets>
+            	<container style="lightBoxOrderItemsSeq">
+            		<platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartOrderItems.ftl" />
+                         </html>
+                     </platform-specific>
+            	</container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxContinueButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxContinueButtonSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartContinueButton.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxTotalNumberItems">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxTotalNumberItemsSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartTotalNumberItems.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxTotalSubAmount">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxTotalSubAmountSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartTotalSubAmount.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxShippingMethod">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxShippingMethodSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartShippingMethod.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxShippingAmount">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxShippingAmountSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartShippingAmount.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxTaxAmount">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxTaxAmountSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartTaxAmount.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxTotalAmount">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxTotalAmountSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartTotalAmount.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxPromoDiscount">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxPromoDiscountSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartPromoDiscount.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxTotalAdjustAmount">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxTotalAdjustAmountSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartTotalAdjustAmount.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Show Light Cart Order Items
+     Sequencer Type  : LightCartOrderItems -->
+<!-- **********************************************************************  -->  
+    <screen name="lightCartOrderItemsDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="LightCartOrderItems"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/lightbox/cartOrderItems.groovy" />
+                <set field="formName" value="cartform" />
+                <set field="doneAction" value="checkout" />
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxItemImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxItemImageSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartItemImage.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxItemName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxItemNameSeg">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartItemName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxItemQuantity">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxItemQuantitySeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartItemQuantity.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxItemPrice">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxItemPriceSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartItemPrice.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxItemTotal">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxItemTotalSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartItemPriceTotal.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxItemUpdateButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxItemUpdateButtonSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartItemUpdateButton.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="lightBoxItemRemoveButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="lightBoxItemRemoveButtonSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/lightbox/cartItemRemoveButton.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
  </screens>

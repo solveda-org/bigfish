@@ -31,6 +31,10 @@
         <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
         <#assign currencyUom = CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() />
         <#list shoppingCart.items() as cartLine>
+        
+        
+        
+        
           <#assign cartLineIndex = shoppingCart.getItemIndex(cartLine)>
           <#assign lineOptionalFeatures = cartLine.getOptionalProductFeatures()>
           <#assign product = cartLine.getProduct()>
@@ -69,10 +73,7 @@
           <#if (productImageUrl?string?has_content && (productImageUrl == "null"))>
                <#assign productImageUrl = "">
           </#if>
-          <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(cartLine.getProduct(), "DESCRIPTION", locale, dispatcher)?if_exists>
-          <#if !prodDescription?has_content && virtualProduct?has_content>
-               <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "DESCRIPTION", locale, dispatcher)?if_exists>
-          </#if>
+          
           <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(cartLine.getProduct(), "PRODUCT_NAME", locale, dispatcher)?if_exists>
           <#if !productName?has_content && virtualProduct?has_content>
                <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
@@ -112,13 +113,16 @@
                         <dd class="description">
                           <a href="${productFriendlyUrl}">${StringUtil.wrapString(productName!)}</a>
                         </dd>
-		                 <#assign productFeatureAndAppls = product.getRelatedCache("ProductFeatureAndAppl") />
-		                 <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndAppls,true)/>
-		                 <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productFeatureAndAppls,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
+		                <#assign productFeatureAndAppls = product.getRelatedCache("ProductFeatureAndAppl") />
+		                <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndAppls,true)/>
+		                <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productFeatureAndAppls,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
                         <#if productFeatureAndAppls?has_content>
                           <#list productFeatureAndAppls as productFeatureAndAppl>
-                            <#assign productFeature = productFeatureAndAppl.getRelatedOneCache("ProductFeatureCategory")?if_exists />
-                            <dd>${productFeature.description!}:${productFeatureAndAppl.description!}</dd>
+                            <#assign productFeatureTypeLabel = ""/>
+                            <#if productFeatureTypesMap?has_content>
+                              <#assign productFeatureTypeLabel = productFeatureTypesMap.get(productFeatureAndAppl.productFeatureTypeId)!"" />
+                            </#if>
+                            <dd>${productFeatureTypeLabel!}:${productFeatureAndAppl.description!}</dd>
                           </#list>
                         </#if>
                     </dl>

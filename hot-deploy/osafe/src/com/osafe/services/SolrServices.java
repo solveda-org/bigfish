@@ -188,6 +188,7 @@ public class SolrServices {
                                     productDocument.setName(productContentWrapper.get("PRODUCT_NAME").toString());
                                     productDocument.setInternalName(product.getString("internalName"));
                                     productDocument.setSequenceNum(productCategoryMember.getString("sequenceNum"));
+                                    productDocument.setCategoryName(workingCategory.getString("categoryName"));
                                     
                                     if (UtilValidate.isNotEmpty(categoryDescription) && !"null".equalsIgnoreCase(categoryDescription.toString())) {
                                     	productDocument.setCategoryDescription(categoryDescription.toString());
@@ -509,7 +510,7 @@ public class SolrServices {
         List<GenericValue> rollups = null;
 
         try {
-            rollups = delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("parentProductCategoryId", parentId), UtilMisc.toList("sequenceNum"));
+            rollups = delegator.findByAnd("ProductCategoryRollup", UtilMisc.toMap("parentProductCategoryId", parentId), UtilMisc.toList("sequenceNum"));
             if (limitView) {
                 rollups = EntityUtil.filterByDate(rollups, true);
             }
@@ -525,7 +526,7 @@ public class SolrServices {
                 Map<String, Object> cvMap = FastMap.newInstance();
 
                 try {
-                    cv = parent.getRelatedOneCache("CurrentProductCategory");
+                    cv = parent.getRelatedOne("CurrentProductCategory");
                 } catch (GenericEntityException e) {
                     Debug.logWarning(e.getMessage(), module);
                 }
@@ -572,7 +573,7 @@ public class SolrServices {
         List<GenericValue> rollups = null;
 
         try {
-            rollups = delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("productCategoryId", productCategoryId), UtilMisc.toList("sequenceNum"));
+            rollups = delegator.findByAnd("ProductCategoryRollup", UtilMisc.toMap("productCategoryId", productCategoryId), UtilMisc.toList("sequenceNum"));
             rollups = EntityUtil.filterByDate(rollups, true);
         } catch (GenericEntityException e) {
             Debug.logWarning(e.getMessage(), module);
@@ -587,7 +588,7 @@ public class SolrServices {
                     GenericValue topMostParentRollup = getTopMostParentProductCategory(delegator, parentProductCategoryId, browseRootProductCategoryId);
                     if (UtilValidate.isNotEmpty(topMostParentRollup)) {
                         try {
-                            gvTopMost = topMostParentRollup.getRelatedOneCache("CurrentProductCategory");
+                            gvTopMost = topMostParentRollup.getRelatedOne("CurrentProductCategory");
                         } catch (GenericEntityException e) {
                             Debug.logWarning(e.getMessage(), module);
                         }

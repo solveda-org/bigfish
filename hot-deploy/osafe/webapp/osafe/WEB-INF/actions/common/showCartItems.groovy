@@ -19,19 +19,16 @@
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.product.catalog.CatalogWorker;
-import org.ofbiz.order.shoppingcart.product.ProductDisplayWorker;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.product.store.ProductStoreWorker;
-import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.UtilValidate;
 import com.osafe.util.Util;
 import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
-import org.ofbiz.order.shoppingcart.shipping.ShippingEstimateWrapper;
-import org.ofbiz.party.contact.*;
 import org.ofbiz.order.shoppingcart.CheckOutEvents;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.services.CatalogUrlServlet;
+import javolution.util.FastMap;
 
 // Get the Product Store
 productStore = ProductStoreWorker.getProductStore(request);
@@ -43,20 +40,15 @@ userLogin = session.getAttribute("userLogin");
 
 // Get the Cart and Prepare Size
 shoppingCart = ShoppingCartEvents.getCartObject(request);
-context.shoppingCartSize = shoppingCart?.size() ?: 0;
-context.shoppingCart = shoppingCart;
+shoppingCartSize = shoppingCart?.size() ?: 0;
 
 // check if a parameter is passed
+product = null;
 if (UtilValidate.isNotEmpty(parameters.add_product_id)) 
 { 
     add_product_id = parameters.add_product_id;
     product = delegator.findByPrimaryKeyCache("Product", [productId : add_product_id]);
-    context.product = product;
 }
-
-// Get Catalog path
-context.contentPathPrefix = CatalogWorker.getContentPathPrefix(request);
-
 
 //Get Cart Shipment Method: Check for Default Shipping Method in System Parameters
 shipmentMethodTypeId= shoppingCart.getShipmentMethodTypeId();
@@ -65,75 +57,78 @@ if(UtilValidate.isEmpty(shipmentMethodTypeId))
    defaultProductStoreShipMethodId = Util.getProductStoreParm(request, "CHECKOUT_CART_DEFAULT_SHIP_METHOD");
    if(UtilValidate.isNotEmpty(defaultProductStoreShipMethodId))
    {
-     try 
-     {
-      productStoreShipEstimate = delegator.findByPrimaryKeyCache("ProductStoreShipmentMethView", [productStoreShipMethId : defaultProductStoreShipMethodId]);
-      if (UtilValidate.isNotEmpty(productStoreShipEstimate)) 
-      {
-         //Find Shipment Cost Estimate
-         shipmentCostEstimates = delegator.findByAndCache("ShipmentCostEstimate", UtilMisc.toMap("productStoreId", productStoreId,"productStoreShipMethId", defaultProductStoreShipMethodId), UtilMisc.toList("shipmentCostEstimateId"));         
-         if (UtilValidate.isNotEmpty(shipmentCostEstimates)) 
-         {
-            shippingContactMechId = shoppingCart.getShippingContactMechId();
-            //if shipping Address not set on cart And User Login Exists than set Logged user Default Shipping Address.
-            if(UtilValidate.isEmpty(shippingContactMechId) && (UtilValidate.isNotEmpty(userLogin) && userLogin.userLoginId != "anonymous"))
-            {
-              partyId = userLogin.partyId;
-              if (UtilValidate.isNotEmpty(partyId)) 
-              {
-                party = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
-                if (UtilValidate.isNotEmpty(party))
-                {
-                    partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
-                    partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
-                    partyContactMechPurpose = EntityUtil.orderBy(partyContactMechPurpose,UtilMisc.toList("-fromDate"));
-                    
-                    partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
-                    partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyShippingLocations);
-                    partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
-                    partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
-                    if (UtilValidate.isNotEmpty(partyShippingLocations)) 
-                    {
-                            partyShippingLocation = EntityUtil.getFirst(partyShippingLocations);
-                            shoppingCart.setShippingContactMechId(partyShippingLocation.contactMechId);
-                    }
-                }
-              }
-            }
-           shipCostEstimate = EntityUtil.getFirst(shipmentCostEstimates);
-           shoppingCart.setCarrierPartyId(0,shipCostEstimate.getString("carrierPartyId"));
-           shoppingCart.setShipmentMethodTypeId(0,shipCostEstimate.getString("shipmentMethodTypeId"));
-         }
-        
-      }
-     } catch (Exception e) 
+       try 
        {
-         Debug.logError(e, e.toString(), "showCartItems.groovy");
-       
+           productStoreShipEstimate = delegator.findByPrimaryKeyCache("ProductStoreShipmentMethView", [productStoreShipMethId : defaultProductStoreShipMethodId]);
+           if (UtilValidate.isNotEmpty(productStoreShipEstimate)) 
+           {
+               //Find Shipment Cost Estimate
+               shipmentCostEstimates = delegator.findByAndCache("ShipmentCostEstimate", UtilMisc.toMap("productStoreId", productStoreId,"productStoreShipMethId", defaultProductStoreShipMethodId), UtilMisc.toList("shipmentCostEstimateId"));         
+               if (UtilValidate.isNotEmpty(shipmentCostEstimates)) 
+               {
+                   shippingContactMechId = shoppingCart.getShippingContactMechId();
+                   //if shipping Address not set on cart And User Login Exists than set Logged user Default Shipping Address.
+                   if(UtilValidate.isEmpty(shippingContactMechId) && (UtilValidate.isNotEmpty(userLogin) && userLogin.userLoginId != "anonymous"))
+                   {
+                       partyId = userLogin.partyId;
+                       if (UtilValidate.isNotEmpty(partyId)) 
+                       {
+                           party = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
+                           if (UtilValidate.isNotEmpty(party))
+                           {
+                               partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
+                               partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+                               partyContactMechPurpose = EntityUtil.orderBy(partyContactMechPurpose,UtilMisc.toList("-fromDate"));
+                    
+                               partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+                               partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyShippingLocations);
+                               partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
+                               partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
+                               if (UtilValidate.isNotEmpty(partyShippingLocations)) 
+                               {
+                                   partyShippingLocation = EntityUtil.getFirst(partyShippingLocations);
+                                   shoppingCart.setShippingContactMechId(partyShippingLocation.contactMechId);
+                               }
+                           }
+                       }
+                   }
+                   shipCostEstimate = EntityUtil.getFirst(shipmentCostEstimates);
+                   shoppingCart.setCarrierPartyId(0,shipCostEstimate.getString("carrierPartyId"));
+                   shoppingCart.setShipmentMethodTypeId(0,shipCostEstimate.getString("shipmentMethodTypeId"));
+               }
+        
+           }
+       } 
+       catch (Exception e) 
+       {
+           Debug.logError(e, e.toString(), "showCartItems.groovy");
        }
-   
    }
 }
 
 // Selected Shipping Method
+chosenShippingMethod = "";
+chosenShippingMethodDescription = "";
 if (UtilValidate.isNotEmpty(shoppingCart.getShipmentMethodTypeId()) && UtilValidate.isNotEmpty(shoppingCart.getCarrierPartyId())) 
 {
-    context.chosenShippingMethod = shoppingCart.getShipmentMethodTypeId() + '@' + shoppingCart.getCarrierPartyId();
-    context.chosenShippingMethodDescription = shoppingCart.getCarrierPartyId() + " " + shoppingCart.getShipmentMethodType(0).description;
+    chosenShippingMethod = shoppingCart.getShipmentMethodTypeId() + '@' + shoppingCart.getCarrierPartyId();
+    chosenShippingMethodDescription = shoppingCart.getCarrierPartyId() + " " + shoppingCart.getShipmentMethodType(0).description;
 }
 
 //Set Cart Totals
 //Adjustments are pulled in the FTL
-try{
+try
+{
     ShippingEvents.getShipEstimate(request, response);
     CheckOutEvents.calcTax(request, response);
 }
-catch(Exception e){
+catch(Exception e)
+{
     Debug.logError(e, e.toString(), "showCartItems.groovy");
 }
-context.orderShippingTotal = shoppingCart.getTotalShipping();
-context.orderTaxTotal = shoppingCart.getTotalSalesTax();
-context.orderGrandTotal = shoppingCart.getGrandTotal();
+orderShippingTotal = shoppingCart.getTotalShipping();
+orderTaxTotal = shoppingCart.getTotalSalesTax();
+orderGrandTotal = shoppingCart.getGrandTotal();
 
 // set previos continue button url 
 continueShoppingLink = Util.getProductStoreParm(request, "CHECKOUT_CONTINUE_SHOPPING_LINK");
@@ -145,8 +140,8 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
 	if (UtilValidate.isNotEmpty(parameters.product_id)) 
 	{
         productId = parameters.product_id;
-        product = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
-    	if (UtilValidate.isNotEmpty(product))
+        parentProduct = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
+    	if (UtilValidate.isNotEmpty(parentProduct))
     	{
         	if (UtilValidate.isNotEmpty(parameters.add_category_id)) 
         	{
@@ -154,7 +149,7 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
         	}
         	else
         	{
-    	        productCategoryMemberList = product.getRelatedCache("ProductCategoryMember");
+    	        productCategoryMemberList = parentProduct.getRelatedCache("ProductCategoryMember");
                 productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
         	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
     	        if(UtilValidate.isNotEmpty(productCategoryMemberList))
@@ -167,7 +162,7 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
     	}
 	}
 	// take 0 index value from shopping cart
-	else if (context.shoppingCartSize > 0)
+	else if (shoppingCartSize > 0)
 	{
 	    sci = shoppingCart.findCartItem(0);
 		parentProduct = ProductWorker.getParentProduct(sci.getProductId(), delegator);
@@ -205,9 +200,62 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
 	//set url as per productId and product category id
     if (continueShoppingLink.equalsIgnoreCase("PLP") && UtilValidate.isNotEmpty(productCategoryId))
     {
-    	context.prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductList?productCategoryId="+productCategoryId);
+    	prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductList?productCategoryId="+productCategoryId);
     } else if (continueShoppingLink.equalsIgnoreCase("PDP") && UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productCategoryId)) 
     {
-    	context.prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
+    	prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
     }
 }
+//BUILD CONTEXT MAP FOR PRODUCT_FEATURE_TYPE_ID and DESCRIPTION(EITHER FROM PRODUCT_FEATURE_GROUP OR PRODUCT_FEATURE_TYPE)
+Map productFeatureTypesMap = FastMap.newInstance();
+productFeatureTypesList = delegator.findList("ProductFeatureType", null, null, null, null, true);
+
+//get the whole list of ProductFeatureGroup and ProductFeatureGroupAndAppl
+productFeatureGroupList = delegator.findList("ProductFeatureGroup", null, null, null, null, true);
+productFeatureGroupAndApplList = delegator.findList("ProductFeatureGroupAndAppl", null, null, null, null, true);
+productFeatureGroupAndApplList = EntityUtil.filterByDate(productFeatureGroupAndApplList);
+
+if(UtilValidate.isNotEmpty(productFeatureTypesList))
+{
+    for (GenericValue productFeatureType : productFeatureTypesList)
+    {
+    	//filter the ProductFeatureGroupAndAppl list based on productFeatureTypeId to get the ProductFeatureGroupId
+    	productFeatureGroupAndAppls = EntityUtil.filterByAnd(productFeatureGroupAndApplList, UtilMisc.toMap("productFeatureTypeId", productFeatureType.productFeatureTypeId));
+    	description = "";
+    	if(UtilValidate.isNotEmpty(productFeatureGroupAndAppls))
+    	{
+    		productFeatureGroupAndAppl = EntityUtil.getFirst(productFeatureGroupAndAppls);
+        	productFeatureGroups = EntityUtil.filterByAnd(productFeatureGroupList, UtilMisc.toMap("productFeatureGroupId", productFeatureGroupAndAppl.productFeatureGroupId));
+        	productFeatureGroup = EntityUtil.getFirst(productFeatureGroups);
+        	description = productFeatureGroup.description;
+    	}
+    	else
+    	{
+    		description = productFeatureType.description;
+    	}
+    	productFeatureTypesMap.put(productFeatureType.productFeatureTypeId,description);
+    }
+	
+}
+
+context.productFeatureTypesMap = productFeatureTypesMap;
+
+if(UtilValidate.isNotEmpty(chosenShippingMethod))
+{
+	context.chosenShippingMethod = chosenShippingMethod;
+}
+if(UtilValidate.isNotEmpty(chosenShippingMethodDescription))
+{
+	context.chosenShippingMethodDescription = chosenShippingMethodDescription;
+}
+if(UtilValidate.isNotEmpty(product))
+{
+	context.product = product;
+}
+context.prevButtonUrl = prevButtonUrl;
+context.shoppingCart = shoppingCart;
+context.shoppingCartSize = shoppingCartSize;
+
+context.orderShippingTotal = orderShippingTotal;
+context.orderTaxTotal = orderTaxTotal;
+context.orderGrandTotal = orderGrandTotal;

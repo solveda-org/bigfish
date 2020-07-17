@@ -240,6 +240,67 @@
       </div>
     </div>
   </div>
+<#elseif ebsInfo?has_content>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.PaymentMethodIdCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${ebsInfo.paymentMethodId!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.TransactionIdCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${ebsInfo.transactionId!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.PaymentIdCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${ebsInfo.paymentId!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.ReferenceNumberCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${ebsInfo.merchantRefNo!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.ResponseCodeCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${ebsInfo.responseCode!""}</p>
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.ResponseMessageCaption}</label>
+      </div>
+      <div class="infoValue">
+          <p>${ebsInfo.responseMessage!""}</p>
+      </div>
+    </div>
+  </div>
   <#else>
      <div class="infoRow">
        <div class="infoEntry">

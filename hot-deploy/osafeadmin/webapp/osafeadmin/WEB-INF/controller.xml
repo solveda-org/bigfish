@@ -92,6 +92,11 @@
         <response name="success" type="view" value="orderManagement"/>
         <response name="error" type="view" value="orderStatusDetail"/>
     </request-map>
+    <!-- Shipment Details -->
+    <request-map uri="orderShipmentDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="orderShipmentDetail"/>
+    </request-map>
     
     <request-map uri="statusUpdateList">
         <security https="true" auth="true"/>
@@ -1679,9 +1684,19 @@
     </request-map>
     <request-map uri="requestCatalog.csv">
         <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/" invoke="custRequestCSVName.groovy"/>
+        <response name="success" type="request" value="custRequestCatalogCSV"/>
+    </request-map>
+    <request-map uri="custRequestCatalogCSV">
+        <security https="true" auth="true"/>
         <response name="success" type="view" value="custRequestCatalogCSV"/>
     </request-map>
     <request-map uri="contactUs.csv">
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/" invoke="custRequestCSVName.groovy"/>
+        <response name="success" type="request" value="custRequestContactUsCSV"/>
+    </request-map>
+    <request-map uri="custRequestContactUsCSV">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="custRequestContactUsCSV"/>
     </request-map>
@@ -1896,7 +1911,12 @@
         <security https="true" auth="true"/>
         <event type="service" invoke="loadProductDataGroup"/>
         <response name="success" type="request-redirect" value="bigFishXlsLoader"/>
-        <response name="error" type="view" value="xlsLoaderPreview"/>
+        <response name="error" type="request" value="checkFileInSession"/>
+    </request-map>
+    <request-map uri="checkFileInSession">
+        <event type="java" path="com.osafe.events.OsafeAdminEvent" invoke="checkProductFileInSession"/>
+        <response name="success" type="view" value="xlsLoaderPreview"/>
+        <response name="error" type="request-redirect" value="bigFishXlsLoader"/>
     </request-map>
         
     <!-- Big Fish Sample XLS -->
@@ -2057,20 +2077,6 @@
             <redirect-parameter name="productId"/>
         </response>
         <response name="error" type="view" value="productImages"/>
-    </request-map>
-    <request-map uri="pdpVariantCaptionList">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="pdpVariantCaptionList"/>
-    </request-map>
-    <request-map uri="pdpVariantCaptionDetail">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="pdpVariantCaptionDetail"/>
-    </request-map>
-    <request-map uri="updatePDPVariantCaption">
-        <security auth="true" https="true"/>
-        <event type="service"  invoke="updatePDPVariantCaptionGroup"/>
-        <response name="success" type="request-redirect" value="pdpVariantCaptionList"/>
-        <response name="error" type="view" value="pdpVariantCaptionDetail"/>
     </request-map>
     <!-- system configuration files -->
      <request-map uri="sysConfigFileList">
@@ -2364,9 +2370,7 @@
     
     <request-map uri="setShippingOptionBottom">
         <security https="true" auth="true"/>
-        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="setShippingOption"/>
         <response name="success" type="view" value="shoppingCartBottom"/>
-        <response name="error" type="view" value="shoppingCartBottom"/>
     </request-map>
     
     <request-map uri="reloadPromoCode">
@@ -2374,65 +2378,21 @@
         <response name="success" type="view" value="reloadPromoCode"/>
     </request-map>
     
-    <request-map uri="addProductToCart">
+    <request-map uri="addToCart">
         <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="variantProductDetail"/>
-        <response name="error" type="view" value="variantProductDetail"/>
-    </request-map>
-    <request-map uri="addProductToCartFromProdList">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="productManagement"/>
-        <response name="error" type="view" value="productManagement"/>
-    </request-map>
-    <request-map uri="addProductToCartFromProdImgs">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="productImages"/>
-        <response name="error" type="view" value="productImages"/>
-    </request-map>
-    <request-map uri="addProductToCartFromProdMeta">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="productMetatag"/>
-        <response name="error" type="view" value="productMetatag"/>
-    </request-map>
-    <request-map uri="addProductToCartFromFinProd">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="finishedProductDetail"/>
-        <response name="error" type="view" value="finishedProductDetail"/>
-    </request-map>
-    <request-map uri="addProductToCartFromVarProd">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="variantProductDetail"/>
-        <response name="error" type="view" value="variantProductDetail"/>
-    </request-map>
-    <request-map uri="addProductToCartFromProdPrice">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="productPrice"/>
-        <response name="error" type="view" value="productPrice"/>
-    </request-map>
-    <request-map uri="addProductToCartFromRelatedProd">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="productAssociationDetail"/>
-        <response name="error" type="view" value="productAssociationDetail"/>
-    </request-map>
-    <request-map uri="addProductToCartFromProdCatMem">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="productCategoryMembershipDetail"/>
-        <response name="error" type="view" value="productCategoryMembershipDetail"/>
-    </request-map>
-    <request-map uri="addProductToCartFromProdVid">
-        <security https="true" auth="true"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request-redirect" value="productVideo"/>
-        <response name="error" type="view" value="productVideo"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="addToCart"/>
+        <response name="default" type="request-redirect" value="productManagement"/>
+        <response name="productManagement" type="request-redirect" value="productManagement"/>
+        <response name="finishedProductDetail" type="request-redirect" value="finishedProductDetail"/>
+        <response name="variantProductDetail" type="request-redirect" value="variantProductDetail"/>
+        <response name="productVideo" type="request-redirect" value="productVideo"/>
+        <response name="productImages" type="request-redirect" value="productImages"/>
+        <response name="productPrice" type="request-redirect" value="productPrice"/>
+        <response name="productMetatag" type="request-redirect" value="productMetatag"/>
+        <response name="productCategoryMembershipDetail" type="request-redirect" value="productCategoryMembershipDetail"/>
+        <response name="productAssociationDetail" type="request-redirect" value="productAssociationDetail"/>
+        <response name="productVariants" type="request-redirect" value="productVariants"/>
+        <response name="error" type="view-last"/>
     </request-map>
     
     <request-map uri="adminModifyCart">
@@ -2556,6 +2516,13 @@
         <response name="success" type="view" value="adminOrderConfirm"/>
         <response name="error" type="view" value="adminCheckout"/>
     </request-map>
+    <!-- Entity Sync -->
+    <request-map uri="entitySync">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="entitySyncGroup"/>
+        <response name="success" type="request-redirect" value="adminToolList"/>
+        <response name="error" type="view" value="adminToolDetail"/>
+    </request-map>
     
     <!-- ==== Admin Checkout Screens ===== -->
     
@@ -2571,6 +2538,7 @@
     <view-map name="orderManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderManagement"/>
     <view-map name="orderDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderDetail"/>
     <view-map name="orderStatusDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderStatusDetail"/>
+    <view-map name="orderShipmentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderShipmentDetail"/>
     <view-map name="statusUpdateList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#statusUpdateList"/>
     <view-map name="orderNotesList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderNotesList"/>
     <view-map name="visitDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#visitDetail"/>
@@ -2829,9 +2797,6 @@
     
     <view-map name="previewContent" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#previewContent"/>
     <view-map name="previewHomeSpotContent" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#previewHomeSpotContent"/>
-    
-    <view-map name="pdpVariantCaptionList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#pdpVariantCaptionList"/>
-    <view-map name="pdpVariantCaptionDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#pdpVariantCaptionDetail"/>
     
     <view-map name="xmlBFdsdump" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#xmlBFdsdump"/>
     <view-map name="exportBigfishContentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#exportBigfishContentDetail"/>

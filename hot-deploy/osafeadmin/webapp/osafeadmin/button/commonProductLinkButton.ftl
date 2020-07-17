@@ -1,32 +1,46 @@
 <#if product?has_content>
 <div class="linkButton">
   <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product, request)!""/>
+  <#if !showDetailLink?has_content>
+      <#assign showDetailLink = "true"/>
+  </#if>
   <#if !showImageLink?has_content>
       <#assign showImageLink = "true"/>
   </#if>
   <#if !showProductFeatureLink?has_content>
-	  <#assign showProductFeatureLink = "true"/>
+      <#assign showProductFeatureLink = "true"/>
   </#if>
   <#if !showVariantLink?has_content>
-	  <#assign showVariantLink = "true"/>
+      <#assign showVariantLink = "true"/>
   </#if>
   <#if !showMetaTagLink?has_content>
-	  <#assign showMetaTagLink = "true"/>
+      <#assign showMetaTagLink = "true"/>
   </#if>
   <#if !showPricingLink?has_content>
-	  <#assign showPricingLink = "true"/>
+      <#assign showPricingLink = "true"/>
   </#if>
   <#if !showRelatedLink?has_content>
-	  <#assign showRelatedLink = "true"/>
+      <#assign showRelatedLink = "true"/>
   </#if>
   <#if !showCategoryMemberLink?has_content>
-	  <#assign showCategoryMemberLink = "true"/>
+      <#assign showCategoryMemberLink = "true"/>
   </#if>
   <#if !showVideoLink?has_content>
-	  <#assign showVideoLink = "true"/>
+      <#assign showVideoLink = "true"/>
   </#if>
   <#if !showCartLink?has_content>
-	  <#assign showCartLink = "true"/>
+      <#assign showCartLink = "true"/>
+  </#if>
+  
+  <#if showDetailLink == 'true'>
+    <#if product.isVirtual?if_exists == 'Y'>
+      <a href="<@ofbizUrl>virtualProductDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ShowVirtualDetailTooltip}');" onMouseout="hideTooltip()"><span class="detailIcon"></span></a>
+    <#elseif (product.productTypeId?if_exists == 'FINISHED_GOOD') && (product.isVirtual?if_exists == 'N') && (product.isVariant?if_exists == 'N')>
+      <a href="<@ofbizUrl>finishedProductDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ShowFinishedDetailTooltip}');" onMouseout="hideTooltip()"><span class="detailIcon"></span></a>
+    <#else>
+      <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+      <a href="<@ofbizUrl>virtualProductDetail?productId=${virtualProduct.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ShowVirtualDetailTooltip}');" onMouseout="hideTooltip()"><span class="detailIcon"></span></a>
+    </#if>
   </#if>
   
   <#if productContentWrapper?exists>
@@ -39,24 +53,35 @@
   
   <#if showProductFeatureLink == 'true'>
    <#if (product.isVariant?if_exists == 'N')>
-     <#assign features = product.getRelated("ProductFeatureAppl")/>
-     <#if features?exists && features?has_content>
-       <a href="<@ofbizUrl>productFeatures?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductFeaturesTooltip}');" onMouseout="hideTooltip()"><span class="featureIcon"></span></a>
-     </#if>
+     <a href="<@ofbizUrl>productFeatures?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductFeaturesTooltip}');" onMouseout="hideTooltip()"><span class="featureIcon"></span></a>
+   <#else>
+     <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+     <a href="<@ofbizUrl>productFeatures?productId=${virtualProduct.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductFeaturesTooltip}');" onMouseout="hideTooltip()"><span class="featureIcon"></span></a>
    </#if>
   </#if>
   
   <#assign productAssocs = product.getRelated("MainProductAssoc")!""/>
   <#if showVariantLink == 'true'>
-    <#if (product.isVirtual?if_exists == 'Y') && (product.isVariant?if_exists == 'N')>
-        <#assign prodVariants = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_VARIANT'))/>
-        <#assign prodVariantCount = prodVariants.size()!0/>
-        <a href="<@ofbizUrl>productVariants?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductVariantsTooltip} [${prodVariantCount!}]');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
+    <#if product.isVariant?if_exists == 'N'>
+      <#assign prodVariants = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_VARIANT'))/>
+      <#assign prodVariantCount = prodVariants.size()!0/>
+      <a href="<@ofbizUrl>productVariants?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductVariantsTooltip} [${prodVariantCount!}]');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
+    <#else>
+      <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+      <#assign productAssocs = virtualProduct.getRelated("MainProductAssoc")!""/>
+      <#assign prodVariants = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_VARIANT'))/>
+      <#assign prodVariantCount = prodVariants.size()!0/>
+      <a href="<@ofbizUrl>productVariants?productId=${virtualProduct.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductVariantsTooltip} [${prodVariantCount!}]');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
     </#if>
   </#if>
   
   <#if showMetaTagLink == 'true'>
-    <a href="<@ofbizUrl>productMetatag?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
+    <#if (product.isVariant?if_exists == 'N')>
+      <a href="<@ofbizUrl>productMetatag?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
+    <#else>
+      <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+      <a href="<@ofbizUrl>productMetatag?productId=${virtualProduct.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
+    </#if>
   </#if>
   
   <#if showPricingLink == 'true'>
@@ -65,22 +90,32 @@
   
   <#if showRelatedLink == 'true'>
     <#assign prodRelatedComplement = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_COMPLEMENT'))/>
-	<#assign prodRelatedComplement = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(prodRelatedComplement)>
+    <#assign prodRelatedComplement = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(prodRelatedComplement)>
     <#assign prodRelatedComplementCount = prodRelatedComplement.size()!0/>
                    
     <#assign prodRelatedAccessory = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_ACCESSORY'))/>
-	<#assign prodRelatedAccessory = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(prodRelatedAccessory)>
+    <#assign prodRelatedAccessory = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(prodRelatedAccessory)>
     <#assign prodRelatedAccessoryCount = prodRelatedAccessory.size()!0/>
     <#assign prodRelatedCount = prodRelatedComplementCount + prodRelatedAccessoryCount>
-    <a href="<@ofbizUrl>productAssociationDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductAssociationsTooltip} [${prodRelatedCount!}]');" onMouseout="hideTooltip()"><span class="relatedIcon"></span></a>
+    <#if !(product.isVariant?if_exists == 'Y') >
+        <a href="<@ofbizUrl>productAssociationDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductAssociationsTooltip} [${prodRelatedCount!}]');" onMouseout="hideTooltip()"><span class="relatedIcon"></span></a>
+    <#else>
+        <a href="javascript:void(0);javascript:alert('${uiLabelMap.VariantProductAssocError}');" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductAssociationsTooltip} [${prodRelatedCount!}]');" onMouseout="hideTooltip()"><span class="relatedIcon"></span></a>
+    </#if>
   </#if>
   
   <#if showCategoryMemberLink == 'true'>
     <#if product.isVariant?if_exists == 'N'>
-        <#assign categoryMembers = product.getRelated("ProductCategoryMember")!""/>
-        <#assign categoryMembers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(categoryMembers)>
-        <#assign prodCatMembershipCount = categoryMembers.size()!0/>
-        <a href="<@ofbizUrl>productCategoryMembershipDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductcategoryMembershipTooltip} [${prodCatMembershipCount!}]');" onMouseout="hideTooltip()"><span class="membershipIcon"></span></a>
+      <#assign categoryMembers = product.getRelated("ProductCategoryMember")!""/>
+      <#assign categoryMembers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(categoryMembers)>
+      <#assign prodCatMembershipCount = categoryMembers.size()!0/>
+      <a href="<@ofbizUrl>productCategoryMembershipDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductcategoryMembershipTooltip} [${prodCatMembershipCount!}]');" onMouseout="hideTooltip()"><span class="membershipIcon"></span></a>
+    <#else>
+      <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+      <#assign categoryMembers = virtualProduct.getRelated("ProductCategoryMember")!""/>
+      <#assign categoryMembers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(categoryMembers)>
+      <#assign prodCatMembershipCount = categoryMembers.size()!0/>
+      <a href="<@ofbizUrl>productCategoryMembershipDetail?productId=${virtualProduct.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductcategoryMembershipTooltip} [${prodCatMembershipCount!}]');" onMouseout="hideTooltip()"><span class="membershipIcon"></span></a>
     </#if>
   </#if>
   
@@ -88,8 +123,50 @@
     <a href="<@ofbizUrl>productVideo?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductVideoTooltip}');" onMouseout="hideTooltip()"><span class="videoIcon"></span></a>
   </#if>
   <#if showCartLink == 'true'>
-  	<#if (product.productTypeId?if_exists == 'FINISHED_GOOD') && (product.isVirtual?if_exists == 'N')>
-    	<a href="<@ofbizUrl>${addToCartAction}?productId=${product.productId?if_exists}&add_product_id=${product.productId?if_exists}<#if (product.isVariant?if_exists == 'Y') >&prod_type=Variant<#elseif (product.isVariant?if_exists == 'N')>&prod_type=FinishedGood</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
+    <#if (product.productTypeId?if_exists == 'FINISHED_GOOD') && (product.isVirtual?if_exists == 'N')>
+      <#assign inventoryMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"INVENTORY_METHOD")!/>
+      <#assign notIntroduced = false />
+      <#if product.introductionDate?has_content>
+        <#assign introDate = product.introductionDate! />
+        <#assign introductionDate = (introDate)?string(preferredDateFormat)>
+        <#if nowTimestamp.before(introDate)><#assign notIntroduced = true /></#if>
+      </#if>
+      <#assign hasExpired = false />
+      <#if product.salesDiscontinuationDate?has_content>
+        <#assign discDate = product.salesDiscontinuationDate! />
+        <#assign salesDiscontinuationDate = (discDate)?string(preferredDateFormat)>
+        <#if nowTimestamp.after(discDate)><#assign hasExpired = true /></#if>
+      </#if>
+      <#if notIntroduced == true || hasExpired == true>
+        <#if notIntroduced?has_content && notIntroduced == true>
+          <a href="javascript:void(0);javascript:alert('${uiLabelMap.ProductNotIntroducedError} ${introductionDate}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()" ><span class="adminAddCartIcon"></span></a>
+        <#elseif hasExpired?has_content && hasExpired == true>
+          <a href="javascript:void(0);javascript:alert('${uiLabelMap.ProductExpiredError} ${salesDiscontinuationDate}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
+        </#if>
+      <#else>
+        <!-- If inventory method is BigFish then check how many items are in stock -->
+        <#if inventoryMethod?has_content && inventoryMethod.toUpperCase() == "BIGFISH" >
+          <#assign inventoryOutOfStockTo = Static["com.osafe.util.Util"].getProductStoreParm(request,"INVENTORY_OUT_OF_STOCK_TO")!/>
+          <#assign bfProductAllAttributes = product.getRelated("ProductAttribute") />
+          <#if bfProductAllAttributes?has_content>
+            <#assign bfTotalInventoryProductAttributes = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(bfProductAllAttributes,Static["org.ofbiz.base.util.UtilMisc"].toMap('attrName','BF_INVENTORY_TOT'))/> 
+            <#assign bfWHInventoryProductAttributes = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(bfProductAllAttributes,Static["org.ofbiz.base.util.UtilMisc"].toMap('attrName','BF_INVENTORY_WHS'))/>
+          </#if>
+          <#if bfTotalInventoryProductAttributes?has_content>
+            <#assign bfTotalInventoryProductAttribute = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(bfTotalInventoryProductAttributes) />
+            <#assign bfTotalInventory = bfTotalInventoryProductAttribute.attrValue!>
+          </#if>
+          <#if bfTotalInventory?has_content && inventoryOutOfStockTo?has_content && (bfTotalInventory?number > inventoryOutOfStockTo?number)>
+            <a href="<@ofbizUrl>${addToCartAction}?productId=${product.productId?if_exists}&add_product_id=${product.productId?if_exists}&addToCartFrom=${addToCartFrom?if_exists}<#if (product.isVariant?if_exists == 'Y') >&prod_type=Variant<#elseif (product.isVariant?if_exists == 'N')>&prod_type=FinishedGood</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a> 
+          <#else>
+            <a href="javascript:void(0);javascript:alert('${uiLabelMap.OutOfStockAddToCartError}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
+          </#if>
+        <#else>
+          <a href="<@ofbizUrl>${addToCartAction}?productId=${product.productId?if_exists}&add_product_id=${product.productId?if_exists}&addToCartFrom=${addToCartFrom?if_exists}<#if (product.isVariant?if_exists == 'Y') >&prod_type=Variant<#elseif (product.isVariant?if_exists == 'N')>&prod_type=FinishedGood</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a> 
+        </#if>
+      </#if>
+    <#else>
+      <a href="javascript:void(0);javascript:alert('${uiLabelMap.VirtualProductAddToCartError}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
     </#if>
   </#if>
 </div>

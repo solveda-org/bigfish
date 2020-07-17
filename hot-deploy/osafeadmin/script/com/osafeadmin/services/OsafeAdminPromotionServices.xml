@@ -21,9 +21,8 @@
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionIdLengthError"/>
                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
                     <else>
-                        <entity-one entity-name="ProductPromo" value-field="existingProductPromo">
-                            <field-map field-name="productPromoId" from-field="productPromoId"/>
-                        </entity-one>
+		                <set field="findProductPromoCtx.productPromoId" from-field="productPromoId"/>
+		                <find-by-primary-key value-field="existingProductPromo" entity-name="ProductPromo" map="findProductPromoCtx"/>
                         <if-not-empty field="existingProductPromo">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionIdExistError"/>
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
@@ -1084,14 +1083,15 @@
 
         <set-service-fields service-name="updateProductPromo" map="parameters" to-map="updateProductPromoCtx"/>
         <call-service service-name="updateProductPromo" in-map-name="updateProductPromoCtx"/>
-
-        <entity-one entity-name="ProductStorePromoAppl" value-field="oldProductStorePromoAppl">
+    
+        <entity-and entity-name="ProductStorePromoAppl" list="oldProductStorePromoAppls">
             <field-map field-name="productStoreId" from-field="parameters.productStoreId"/>
             <field-map field-name="productPromoId" from-field="parameters.productPromoId"/>
-            <field-map field-name="fromDate" from-field="parameters.productStorePromoApplFromDate"/>
-        </entity-one>
-        <set-service-fields service-name="deleteProductStorePromoAppl" map="oldProductStorePromoAppl" to-map="deleteProductStorePromoApplCtx"/>
-        <call-service service-name="deleteProductStorePromoAppl" in-map-name="deleteProductStorePromoApplCtx"/>
+        </entity-and>
+        <iterate entry="oldProductStorePromoAppl" list="oldProductStorePromoAppls">
+            <set-service-fields service-name="deleteProductStorePromoAppl" map="oldProductStorePromoAppl" to-map="deleteProductStorePromoApplCtx"/>
+            <call-service service-name="deleteProductStorePromoAppl" in-map-name="deleteProductStorePromoApplCtx"/>
+        </iterate>
         <set-service-fields service-name="createProductStorePromoAppl" map="parameters" to-map="createProductStorePromoApplCtx"/>
         <call-service service-name="createProductStorePromoAppl" in-map-name="createProductStorePromoApplCtx"/>
 

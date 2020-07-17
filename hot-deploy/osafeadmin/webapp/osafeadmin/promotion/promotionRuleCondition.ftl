@@ -248,7 +248,7 @@
                 <#assign carrierPartyGroup = carrierParty.getRelatedOne("PartyGroup")/>
                 <#assign carrierPartyGroupName = carrierPartyGroup.groupName?trim/>
               </#if>
-              <option value='${shippingMethod}' <#if selectedShippingMethod.equals(shippingMethod)>selected=selected</#if>><#if carrierPartyGroupName?has_content>${carrierPartyGroupName?if_exists}&nbsp;<#else>${carrierShipmentMethod.partyId?if_exists}&nbsp;</#if>${carrierShipmentMethod.description?if_exists}</option>
+              <option value='${shippingMethod}' <#if selectedShippingMethod?has_content && selectedShippingMethod.equals(shippingMethod)>selected=selected</#if>><#if carrierPartyGroupName?has_content>${carrierPartyGroupName?if_exists}&nbsp;<#else>${carrierShipmentMethod.partyId?if_exists}&nbsp;</#if>${carrierShipmentMethod.description?if_exists}</option>
             </#list>
           </select>
         </#if>

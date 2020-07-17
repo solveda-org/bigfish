@@ -7,8 +7,11 @@
           <div class="infoEntry">
             <div class="infoCaption">
               <label>
-                <#assign productFeatureType = delegator.findOne("ProductFeatureType", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureTypeId" , selFeatureType),false)?if_exists/>
-                ${productFeatureType.description!}:
+                <#assign productFeatureTypeLabel = ""/>
+                <#if productFeatureTypesMap?has_content>
+                  <#assign productFeatureTypeLabel = productFeatureTypesMap.get(selFeatureType)!"" />
+                </#if>
+                ${productFeatureTypeLabel!}:
               </label>
             </div>
             <div class="infoValue">
@@ -57,8 +60,11 @@
           <div class="infoEntry">
             <div class="infoCaption">
               <label>
-                <#assign productFeatureType = delegator.findOne("ProductFeatureType", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureTypeId" , descFeatureType),false)?if_exists/>
-                ${productFeatureType.description!}:
+                <#assign productFeatureTypeLabel = ""/>
+                <#if productFeatureTypesMap?has_content>
+                  <#assign productFeatureTypeLabel = productFeatureTypesMap.get(descFeatureType)!"" />
+                </#if>
+                ${productFeatureTypeLabel!}:
               </label>
             </div>
             <div class="infoValue">

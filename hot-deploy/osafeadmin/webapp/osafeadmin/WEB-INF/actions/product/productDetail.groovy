@@ -11,30 +11,12 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.StringUtil;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.UtilProperties;
 
 if (UtilValidate.isNotEmpty(parameters.productId)) 
 {
-	add_product_id = StringUtils.trimToEmpty(parameters.add_product_id);
-	prod_type = StringUtils.trimToEmpty(parameters.prod_type);
-	
-	if (UtilValidate.isNotEmpty(add_product_id) && UtilValidate.isNotEmpty(prod_type) && ProductWorker.isSellable(delegator, add_product_id))
-	{
-	   messageMap=[:];
-	   if(prod_type.equals("Variant"))
-	   {
-		   GenericValue add_virtual_product = ProductWorker.getParentProduct(add_product_id, delegator);
-		   add_product_name = ProductContentWrapper.getProductContentAsText(add_virtual_product, 'PRODUCT_NAME', request);
-	   }
-	   else if(prod_type.equals("FinishedGood"))
-	   {
-		   GenericValue finished_good = delegator.findByPrimaryKey("Product", [productId : add_product_id]);
-		   add_product_name = ProductContentWrapper.getProductContentAsText(finished_good, 'PRODUCT_NAME', request);
-	   }
-	   messageMap.put("add_product_name", add_product_name);
-	   context.showSuccessMessage = UtilProperties.getMessage("OSafeAdminUiLabels","CheckoutAddProductSuccess",messageMap, locale )
-	}
     product = delegator.findOne("Product",["productId":parameters.productId], false);
     
     virtualProductContentList = FastList.newInstance();

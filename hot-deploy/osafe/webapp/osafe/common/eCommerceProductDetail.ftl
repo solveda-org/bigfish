@@ -1,7 +1,7 @@
 <#-- virtual product javascript -->
 <#if currentProduct?exists && currentProduct?has_content>
 ${virtualJavaScript?if_exists}
-<form method="post" action="<@ofbizUrl>additem</@ofbizUrl>" name="addform"  style="margin: 0;" onSubmit="return addItem();">
+<form method="post" action="" name="addform"  style="margin: 0;">
 <#if uiSequenceSearchList?has_content>
    <#list uiSequenceSearchList as pdpDiv>
       <#assign sequenceNum = pdpDiv.value!/>

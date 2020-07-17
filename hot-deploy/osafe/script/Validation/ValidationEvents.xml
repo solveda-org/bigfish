@@ -736,26 +736,28 @@
                  </call-class-method>
                  <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
                  <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
-                    <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+                    <result-to-field result-name="address1" field="addressContext.address1"/>
+                    <result-to-field result-name="address2" field="addressContext.address2"/>
+                    <result-to-field result-name="address3" field="addressContext.address3"/>
+                    <result-to-field result-name="city" field="addressContext.city"/>
+                    <result-to-field result-name="postalCode" field="addressContext.postalCode"/>
+                    <result-to-field result-name="postalCodeExt" field="addressContext.postalCodeExt"/>
+                    <result-to-field result-name="stateProvinceGeoId" field="addressContext.stateCode"/>
+                    <result-to-field result-name="countyGeoId" field="addressContext.countyGeoId"/>
+                    <result-to-field result-name="countryGeoId" field="addressContext.countryCode"/>
+                    <result-to-field result-name="responseCode" field="responseCode"/>
+                    <result-to-field result-name="suggestionList" field="billingAddressSuggestionList"/>
                 </call-service>
-                <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
-                <!-- check verification method -->
-                <if-compare operator="not-equals" value="NONE" field="verificationMethod">
-                    <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
-                    <if-compare operator="greater" value="0" field="responseCode">
-                        <if-compare operator="equals" value="1" field="responseCode">
-                            <!-- verification success -->
-                        </if-compare>
-                        <if-compare operator="equals" value="2" field="responseCode">
-                            <!-- general configuration error -->
-                        </if-compare>
-                    <else>
-                         <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
-                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
-                         <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
-                    </else>
-                    </if-compare>
-                </if-compare>
+                <if-empty field="responseCode">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
+                <else>
+	                <if-compare operator="less-equals" value="0" field="responseCode">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
+	                </if-compare>
+                </else>
+                </if-empty>
             </if-empty>
         </if-empty>
         <list-to-list list="billing_error_list" to-list="error_list"/>
@@ -901,26 +903,28 @@
                  </call-class-method>
                  <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
                  <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
-                    <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+                    <result-to-field result-name="address1" field="shippingAddressContext.address1"/>
+                    <result-to-field result-name="address2" field="shippingAddressContext.address2"/>
+                    <result-to-field result-name="address3" field="shippingAddressContext.address3"/>
+                    <result-to-field result-name="city" field="shippingAddressContext.city"/>
+                    <result-to-field result-name="postalCode" field="shippingAddressContext.postalCode"/>
+                    <result-to-field result-name="postalCodeExt" field="shippingAddressContext.postalCodeExt"/>
+                    <result-to-field result-name="stateProvinceGeoId" field="shippingAddressContext.stateCode"/>
+                    <result-to-field result-name="countyGeoId" field="shippingAddressContext.countyGeoId"/>
+                    <result-to-field result-name="countryGeoId" field="shippingAddressContext.countryCode"/>
+                    <result-to-field result-name="responseCode" field="responseCode"/>
+                    <result-to-field result-name="suggestionList" field="shippingAddressSuggestionList"/>
                 </call-service>
-                <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
-                <!-- check verification method -->
-                <if-compare operator="not-equals" value="NONE" field="verificationMethod">
-                    <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
-                    <if-compare operator="greater" value="0" field="responseCode">
-                        <if-compare operator="equals" value="1" field="responseCode">
-                            <!-- verification success -->
-                        </if-compare>
-                        <if-compare operator="equals" value="2" field="responseCode">
-                            <!-- general configuration error -->
-                        </if-compare>
-                    <else>
-                         <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
-                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
-                         <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
-                    </else>
+                <if-empty field="responseCode">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
+                <else>
+                    <if-compare operator="less-equals" value="0" field="responseCode">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
                     </if-compare>
-                </if-compare>
+                </else>
+                </if-empty>
             </if-empty>
         </if-empty>
         <list-to-list list="shipping_error_list" to-list="error_list"/>
@@ -1146,26 +1150,33 @@
 		         </call-class-method>
 		         <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
 		         <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
-		            <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+		            <result-to-field result-name="address1" field="custRequestContext.address1"/>
+                    <result-to-field result-name="address2" field="custRequestContext.address2"/>
+                    <result-to-field result-name="address3" field="custRequestContext.address3"/>
+                    <result-to-field result-name="city" field="custRequestContext.city"/>
+                    <result-to-field result-name="postalCode" field="custRequestContext.postalCode"/>
+                    <result-to-field result-name="postalCodeExt" field="custRequestContext.postalCodeExt"/>
+                    <result-to-field result-name="stateProvinceGeoId" field="custRequestContext.stateCode"/>
+                    <result-to-field result-name="countyGeoId" field="custRequestContext.countyGeoId"/>
+                    <result-to-field result-name="countryGeoId" field="custRequestContext.countryCode"/>
+                    <result-to-field result-name="responseCode" field="responseCode"/>
+                    <result-to-field result-name="suggestionList" field="addressSuggestionList"/>
 		        </call-service>
-	            <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
-	            <!-- check verification method -->
-	            <if-compare operator="not-equals" value="NONE" field="verificationMethod">
-		            <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
-		            <if-compare operator="greater" value="0" field="responseCode">
-		                <if-compare operator="equals" value="1" field="responseCode">
-		                    <!-- verification success -->
-		                </if-compare>
-                        <if-compare operator="equals" value="2" field="responseCode">
-                            <!-- general configuration error -->
-                        </if-compare>
-		            <else>
-		                 <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
-		                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
-		                 <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_ADDRESS_ERROR" list="error_list"/>
-		            </else>
-		            </if-compare>
-	            </if-compare>
+                <if-empty field="responseCode">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_ADDRESS_ERROR" list="error_list"/>
+                <else>
+                    <if-compare operator="less-equals" value="0" field="responseCode">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_ADDRESS_ERROR" list="error_list"/>
+	                <else>
+	                    <if-not-empty field="custRequestContext.postalCodeExt">
+	                        <set field="custRequestContext.postalCode" value="${custRequestContext.postalCode}-${custRequestContext.postalCodeExt}"/>
+	                    </if-not-empty>
+	                </else>
+                    </if-compare>
+                </else>
+                </if-empty>
 	        </if-empty>
         </if-empty>
 
@@ -1296,26 +1307,28 @@
                  </call-class-method>
                  <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
                  <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
-                    <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+                    <result-to-field result-name="address1" field="addressContext.address1"/>
+                    <result-to-field result-name="address2" field="addressContext.address2"/>
+                    <result-to-field result-name="address3" field="addressContext.address3"/>
+                    <result-to-field result-name="city" field="addressContext.city"/>
+                    <result-to-field result-name="postalCode" field="addressContext.postalCode"/>
+                    <result-to-field result-name="postalCodeExt" field="addressContext.postalCodeExt"/>
+                    <result-to-field result-name="stateProvinceGeoId" field="addressContext.stateCode"/>
+                    <result-to-field result-name="countyGeoId" field="addressContext.countyGeoId"/>
+                    <result-to-field result-name="countryGeoId" field="addressContext.countryCode"/>
+                    <result-to-field result-name="responseCode" field="responseCode"/>
+                    <result-to-field result-name="suggestionList" field="addressSuggestionList"/>
                 </call-service>
-                <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
-                <!-- check verification method -->
-                <if-compare operator="not-equals" value="NONE" field="verificationMethod">
-                    <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
-                    <if-compare operator="greater" value="0" field="responseCode">
-                        <if-compare operator="equals" value="1" field="responseCode">
-                            <!-- verification success -->
-                        </if-compare>
-                        <if-compare operator="equals" value="2" field="responseCode">
-                            <!-- general configuration error -->
-                        </if-compare>
-                    <else>
-                         <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
-                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
-                         <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
-                    </else>
+                <if-empty field="responseCode">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
+                <else>
+                    <if-compare operator="less-equals" value="0" field="responseCode">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
                     </if-compare>
-                </if-compare>
+                </else>
+                </if-empty>
             </if-empty>
         </if-empty>
         <!-- now that everything is validated & setup, check to see if there are errors, then call the services -->

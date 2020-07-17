@@ -8,11 +8,11 @@
 			        <#assign reevooBadgeurl = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_BADGE_URL")!""/>
 			        <#assign reevooTrkref = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_TRKREF")!""/>
 			        <#assign reevooSku = "">
-			        <#assign skuProduct = delegator.findByPrimaryKeyCache("GoodIdentification", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", productId!"", "goodIdentificationTypeId", "SKU"))?if_exists />
+			        <#assign skuProduct = delegator.findByPrimaryKeyCache("GoodIdentification", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", plpProductId!"", "goodIdentificationTypeId", "SKU"))?if_exists />
 			        <#if skuProduct?has_content>
 			            <#assign reevooSku = skuProduct.idValue!"">
 			        <#else>
-			            <#assign reevooSku = productId!"">
+			            <#assign reevooSku = plpProductId!"">
 			        </#if>
 			        <#assign reevooBadgeurl = reevooBadgeurl.concat("/").concat(reevooTrkref!"").concat("/").concat(reevooSku!"")>
 			        <div class="reevoo-area">
@@ -21,8 +21,8 @@
 		        </#if>
 	        </#if>
 	    	<#if reviewMethod.toUpperCase() == "BIGFISH">
-		        <#if averageStarPLPRating?has_content>
-		            <#assign ratePercentage= ((averageStarPLPRating / 5) * 100)>
+		        <#if plpAverageStarRating?has_content>
+		            <#assign ratePercentage= ((plpAverageStarRating / 5) * 100)>
 		            <div class="rating_bar"><div style="width:${ratePercentage}%"></div></div>
 		        </#if>
 	        </#if>

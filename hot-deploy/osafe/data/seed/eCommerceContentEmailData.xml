@@ -584,6 +584,14 @@
                                                   <p>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</p>
                                               <td>
                                             </tr>
+                                            <#elseif ((paymentMethod?has_content) && (paymentMethod.paymentMethodTypeId == "EXT_EBS"))>
+                                            <tr>
+                                              <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.PaymentMethodCaption}</td>
+                                              <td>
+                                                  <#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")>
+                                                  <p>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</p>
+                                              <td>
+                                            </tr>
                                             </#if>
 
                                             <#assign outputted = true>

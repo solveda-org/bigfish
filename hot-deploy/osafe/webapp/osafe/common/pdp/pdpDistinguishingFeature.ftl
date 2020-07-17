@@ -39,12 +39,55 @@
   </#if>
 </div>
 
+<#if disFeatureDescription?has_content>
+	<div class="pdpDistinguishingFeature" id="pdpDistinguishingFeature_Virtual" style="display:none">
+	  <#if disFeatureTypesList?has_content>
+	    <div class="displayBox">
+	      <h3>${uiLabelMap.FeaturesHeading}</h3>
+	        <ul class="pdpDistinguishingFeatureList">
+	          <#list disFeatureTypesList as disFeatureType>
+	            <#assign index= 0/>
+	            <#if disFeatureByTypeMap?has_content>
+	              <#assign disFeatureAndApplList = disFeatureByTypeMap[disFeatureType]![]>
+	              <#list disFeatureAndApplList as disFeatureAndAppl>
+	                <#assign index = index + 1/>
+	                <#assign size = disFeatureAndApplList.size()/>
+	                <#assign disFeatureDescription = disFeatureAndAppl.description!"">
+	                <#if productFeatureTypesMap?has_content>
+	                      <#assign productFeatureTypeDescription = productFeatureTypesMap.get(disFeatureAndAppl.productFeatureTypeId)!"" />
+	                </#if>
+	                <#if productFeatureTypeDescription?has_content && productFeatureTypeDescription != disFeatureTypeDescription!"">
+	                  <#assign disFeatureTypeDescription = productFeatureTypeDescription!"">
+	                   <#if (index > 1)>
+	                     </ul>
+	                     </li>
+	                   </#if>
+	                   <li>
+	                     <label>${disFeatureTypeDescription!""}:</label>
+	                       <ul>
+	                </#if>
+	                <li>
+	                  <span>${disFeatureDescription!""}</span>
+	                </li>
+	                <#if (index == size)>
+	                  </ul>
+	                  </li>
+	                </#if>
+	              </#list>
+	            </#if>
+	          </#list>
+	        </ul>
+	    </div>
+	  </#if>
+	</div>
+</#if>
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
-    <#assign disFeatureMap = productVariantDisFeatureTypeMap.get('${key}')/>
-
-    <#assign varDisFeatureTypesList = disFeatureMap.productFeatureTypes!/>
-    <#assign varDisFeatureByTypeMap = disFeatureMap.productFeaturesByType!/>
+    <#assign disFeatureMap = productVariantDisFeatureTypeMap.get('${key}')!/>
+    <#if disFeatureMap?has_content>
+      <#assign varDisFeatureTypesList = disFeatureMap.productFeatureTypes!/>
+      <#assign varDisFeatureByTypeMap = disFeatureMap.productFeaturesByType!/>
+    </#if>
     <#if !varDisFeatureTypesList?has_content>
       <#assign varDisFeatureTypesList = disFeatureTypesList!/>
     </#if>

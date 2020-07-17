@@ -20,25 +20,59 @@ under the License.
 
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
-    <description>Accounting Services</description>
-    <vendor>OFBiz</vendor>
-    <version>1.0</version>
+    <description>EBS Services</description>
 
-    <!-- Belongs in accounting/services_payemntgateway.xml -->
-    <service name="updatePaymentGatewayConfigEBS" engine="simple" location="component://osafe/script/services/PaymentMethodServices.xml" invoke="updatePaymentGatewayConfigEBS">
-        <description>Update Payment Gateway Config EBS</description>
-        <auto-attributes entity-name="PaymentGatewayEbs" include="pk" mode="IN" optional="false"/>
-        <auto-attributes entity-name="PaymentGatewayEbs" include="nonpk" mode="IN" optional="true"/>
+    <!-- EBS Payment Interfaces -->
+    <service name="ebsCaptureInterface" engine="interface" location="" invoke="">
+        <description>EBS Capture Interface</description>
+        <attribute name="orderPaymentPreference" type="org.ofbiz.entity.GenericValue" mode="IN" optional="false"/>
+        <attribute name="captureAmount" type="BigDecimal" mode="INOUT" optional="false"/>
+        <attribute name="currency" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentConfig" type="String" mode="IN" optional="true"/>
+        <attribute name="authTrans" type="org.ofbiz.entity.GenericValue" mode="IN" optional="true"/>
+        <attribute name="paymentGatewayConfigId" type="String" mode="IN" optional="true"/>
+        <attribute name="captureResult" type="Boolean" mode="OUT" optional="true"/>
+        <attribute name="captureAltRefNum" type="String" mode="OUT" optional="true"/>
+        <attribute name="captureRefNum" type="String" mode="OUT" optional="false"/>
+        <attribute name="captureCode" type="String" mode="OUT" optional="true"/>
+        <attribute name="captureFlag" type="String" mode="OUT" optional="true"/>
+        <attribute name="captureMessage" type="String" mode="OUT" optional="true"/>
+        <attribute name="internalRespMsgs" type="List" mode="OUT" optional="true"/>
     </service>
-    
+    <service name="ebsSetCheckoutInterface" engine="interface" location="" invoke="">
+        <description>Interface for services performing the EBS setEbsChekout operation</description>
+        <attribute name="cart" mode="IN" type="org.ofbiz.order.shoppingcart.ShoppingCart" optional="false"></attribute>
+    </service>
+    <service name="ebsGetCheckoutInterface" engine="interface" location="" invoke="">
+        <description>Interface for services performing the EBS getEbsCheckout operation</description>
+        <attribute name="cart" mode="IN" type="org.ofbiz.order.shoppingcart.ShoppingCart" optional="false"></attribute>
+    </service>
+
+    <service name="setEbsChekout" engine="java"
+             location="com.osafe.services.ebs.EBSPaymentServices" invoke="setEbsChekout">
+        <implements service="ebsSetCheckoutInterface"/>
+    </service>
+    <service name="getEbsCheckout" engine="java"
+             location="com.osafe.services.ebs.EBSPaymentServices" invoke="getEbsCheckout">
+        <implements service="ebsGetCheckoutInterface"/>
+        <attribute name="ebsResponse" mode="IN" type="Map" optional="false"></attribute>
+    </service>
+
     <service name="ebsAuthProcessor" engine="java"
-        location="com.osafe.services.ebs.EBSPaymentServices" invoke="ebsAuthProcessor" auth="false">
-        <description>Create record for payment gateway record</description>
+             location="com.osafe.services.ebs.EBSPaymentServices" invoke="doAuthorization">
         <implements service="paymentProcessInterface" optional="true"/>
-        <attribute name="finished" type="Boolean" mode="OUT" optional="false"/>
-        <attribute name="serviceTypeEnum" type="String" mode="OUT" optional="false"/>
-        <auto-attributes entity-name="EbsPaymentMethod" mode="IN" include="all" optional="true"/>
-        <auto-attributes entity-name="PaymentGatewayResponse" mode="IN" include="all" optional="true"/>
     </service>
-
+    <service name="ebsCapture" engine="java"
+             location="com.osafe.services.ebs.EBSPaymentServices" invoke="doCapture">
+        <implements service="ebsCaptureInterface"/>
+    </service>
+    <service name="ebsRefund" engine="java"
+             location="com.osafe.services.ebs.EBSPaymentServices" invoke="doRefund">
+        <implements service="paymentRefundInterface"/>
+    </service>
+    <service name="ebsRelease" engine="java"
+             location="com.osafe.services.ebs.EBSPaymentServices" invoke="doRelease">
+        <description>EBS Order Payment Release</description>
+        <implements service="paymentReleaseInterface"/>
+    </service>
 </services>

@@ -176,4 +176,29 @@
 	            ((domain) ? "; domain=" + domain : "") +
 	            "; expires=Thu, 01-Jan-70 00:00:01 GMT";
 	    }
-}</script>
+	}
+	
+
+    jQuery(document).ready(function () {  
+	    jQuery('.showLightBoxCart').click(function (e) {
+	    	<#assign shoppingCart = Static["org.ofbiz.order.shoppingcart.ShoppingCartEvents"].getCartObject(request)! />  
+	    	<#if shoppingCart?has_content >
+	          	<#assign cartCount = shoppingCart.getTotalQuantity()!"0" />
+	          	<#assign cartSubTotal = shoppingCart.getSubTotal()!"0" />
+	        </#if>
+	        <#if (cartCount?if_exists > 0) >
+		        e.preventDefault();
+		        //alert("Test");
+		        displayDialogBox('lightCart_');
+		        //var dialogPurpose = 'lightCart_';
+		        //var dialogId = '#' + dialogPurpose + 'dialog';
+		        //displayDialogId = '#' + dialogPurpose + 'displayDialog';
+		        //dialogTitleId = '#' + dialogPurpose + 'dialogBoxTitle';
+		        //titleText = jQuery(dialogTitleId).val();
+		        showDialog(dialogId, displayDialogId, titleText);
+	        </#if>
+		});
+	});
+    
+
+</script>

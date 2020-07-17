@@ -918,5 +918,31 @@
             </widgets>
         </section>
     </screen>
+    <screen name="PTS_WISHLIST">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_WISHLIST}"/>
+                <set field="contentContainerId" value="ptsWishList"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_WISHLIST">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_WISHLIST}"/>
+                <set field="contentContainerId" value="pesWishList"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
 
 </screens>

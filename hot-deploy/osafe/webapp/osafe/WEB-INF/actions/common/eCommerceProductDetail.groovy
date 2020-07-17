@@ -1003,25 +1003,83 @@ if (UtilValidate.isNotEmpty(productId))
         context.disFeatureTypesList = productFeatureTypes;
         context.disFeatureByTypeMap = productFeaturesByType;
 
+        
+        //GET PRODUCT ASSOCIATE PRODUCT
+        productAssoc = gvProduct.getRelatedCache("MainProductAssoc");
+        productAssoc = EntityUtil.filterByDate(productAssoc,true);
+        productAssoc = EntityUtil.orderBy(productAssoc,UtilMisc.toList("sequenceNum"));
+        
+        //GET PRODUCT ASSOCIATE: PRODUCT_COMPLEMENT
+	    complementProducts = FastList.newInstance();
+	    productAssocComplement = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId", "PRODUCT_COMPLEMENT"));
+
+		for (GenericValue compProduct: productAssocComplement)
+		{
+		    if (ProductWorker.isSellable(delegator, compProduct.productIdTo))
+		    {
+			    complementProducts.add(compProduct);
+		    }
+		}
+	    if (UtilValidate.isNotEmpty(complementProducts))
+	    {
+	        context.complementProducts = complementProducts;
+	    }
+	    
+		
+        //GET PRODUCT ASSOCIATE: PRODUCT_ACCESSORY
+	    accessoryProducts = FastList.newInstance();
+	    productAssocAccessory = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId", "PRODUCT_ACCESSORY"));
+		for (GenericValue accessProduct: productAssocAccessory)
+		{
+		    if (ProductWorker.isSellable(delegator, accessProduct.productIdTo))
+		    {
+			    accessoryProducts.add(accessProduct);
+		    }
+		}
+	    if (UtilValidate.isNotEmpty(accessoryProducts))
+	    {
+	        context.accessoryProducts = accessoryProducts;
+	    }
+        
         //GET PRODUCT INVENTORY MAP
         Map productInventoryMap = FastMap.newInstance();
         inventoryLevelMap = InventoryServices.getProductInventoryLevel(gvProduct.productId, request);
         productInventoryMap.put(gvProduct.productId, inventoryLevelMap);
         context.productInventoryMap = productInventoryMap;
 
-        //BUILD CONTEXT MAP FOR PRODUCT_FEATURE_TYPES (productFeatureTypeId, description)
+        //BUILD CONTEXT MAP FOR PRODUCT_FEATURE_TYPE_ID and DESCRIPTION(EITHER FROM PRODUCT_FEATURE_GROUP OR PRODUCT_FEATURE_TYPE)
         Map productFeatureTypesMap = FastMap.newInstance();
         productFeatureTypesList = delegator.findList("ProductFeatureType", null, null, null, null, true);
+        
+        //get the whole list of ProductFeatureGroup and ProductFeatureGroupAndAppl
+        productFeatureGroupList = delegator.findList("ProductFeatureGroup", null, null, null, null, true);
+        productFeatureGroupAndApplList = delegator.findList("ProductFeatureGroupAndAppl", null, null, null, null, true);
+        productFeatureGroupAndApplList = EntityUtil.filterByDate(productFeatureGroupAndApplList);
+        
         if(UtilValidate.isNotEmpty(productFeatureTypesList))
         {
             for (GenericValue productFeatureType : productFeatureTypesList)
             {
-            	productFeatureTypesMap.put(productFeatureType.productFeatureTypeId,productFeatureType.description);
+            	//filter the ProductFeatureGroupAndAppl list based on productFeatureTypeId to get the ProductFeatureGroupId
+            	productFeatureGroupAndAppls = EntityUtil.filterByAnd(productFeatureGroupAndApplList, UtilMisc.toMap("productFeatureTypeId", productFeatureType.productFeatureTypeId));
+            	description = "";
+            	if(UtilValidate.isNotEmpty(productFeatureGroupAndAppls))
+            	{
+            		productFeatureGroupAndAppl = EntityUtil.getFirst(productFeatureGroupAndAppls);
+                	productFeatureGroups = EntityUtil.filterByAnd(productFeatureGroupList, UtilMisc.toMap("productFeatureGroupId", productFeatureGroupAndAppl.productFeatureGroupId));
+                	productFeatureGroup = EntityUtil.getFirst(productFeatureGroups);
+                	description = productFeatureGroup.description;
+            	}
+            	else
+            	{
+            		description = productFeatureType.description;
+            	}
+            	productFeatureTypesMap.put(productFeatureType.productFeatureTypeId,description);
             }
         	
         }
-        context.productFeatureTypesMap = productFeatureTypesMap;
         
+        context.productFeatureTypesMap = productFeatureTypesMap;
         
         
         context.variantTree = null;
@@ -1138,45 +1196,10 @@ if (UtilValidate.isNotEmpty(productId))
                     }
 
                     
-                    //GET PRODUCT ASSOCIATE PRODUCT
-			        productAssoc = gvProduct.getRelatedCache("MainProductAssoc");
-			        productAssoc = EntityUtil.filterByDate(productAssoc,true);
-			        productAssoc = EntityUtil.orderBy(productAssoc,UtilMisc.toList("sequenceNum"));
 
                     //GET PRODUCT ASSOCIATE PRODUCT: PRODUCT_VARIANT
 			        productAssocVariant = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId","PRODUCT_VARIANT"));
                 
-                    //GET PRODUCT ASSOCIATE PRODUCT: PRODUCT_COMPLEMENT
-            	    complementProducts = FastList.newInstance();
-            	    productAssocComplement = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId", "PRODUCT_COMPLEMENT"));
-
-            		for (GenericValue compProduct: productAssocComplement)
-            		{
-            		    if (ProductWorker.isSellable(delegator, compProduct.productIdTo))
-            		    {
-            			    complementProducts.add(compProduct);
-            		    }
-            		}
-            	    if (UtilValidate.isNotEmpty(complementProducts))
-            	    {
-            	        context.complementProducts = complementProducts;
-            	    }
-            	    
-            		
-                    //GET PRODUCT ASSOCIATE PRODUCT: PRODUCT_ACCESSORY
-            	    accessoryProducts = FastList.newInstance();
-            	    productAssocAccessory = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId", "PRODUCT_ACCESSORY"));
-            		for (GenericValue accessProduct: productAssocAccessory)
-            		{
-            		    if (ProductWorker.isSellable(delegator, accessProduct.productIdTo))
-            		    {
-            			    accessoryProducts.add(accessProduct);
-            		    }
-            		}
-            	    if (UtilValidate.isNotEmpty(accessoryProducts))
-            	    {
-            	        context.accessoryProducts = accessoryProducts;
-            	    }
             	    
                     
                     List<String> items = FastList.newInstance();
@@ -1287,10 +1310,19 @@ if (UtilValidate.isNotEmpty(productId))
 						           }
 						           features.add(disFeature);
 						        }
-						        variantDistinguishingFeatureMap.put("productFeatureTypes",productVariantFeatureTypes);
-						        variantDistinguishingFeatureMap.put("productFeaturesByType",productVariantFeaturesByType);
-						        productVariantDisFeatureMap.put(assocVariantProduct.productId,variantDistinguishingFeatureMap);
-						        
+						        if(UtilValidate.isNotEmpty(productVariantFeatureTypes))
+						        {
+						        	variantDistinguishingFeatureMap.put("productFeatureTypes",productVariantFeatureTypes);	
+						        }
+						        if(UtilValidate.isNotEmpty(productVariantFeaturesByType))
+						        {
+						        	variantDistinguishingFeatureMap.put("productFeaturesByType",productVariantFeaturesByType);
+						        }
+						        if(UtilValidate.isNotEmpty(variantDistinguishingFeatureMap))
+						        {
+						        	productVariantDisFeatureMap.put(assocVariantProduct.productId,variantDistinguishingFeatureMap);
+						        }
+
 						        //CREATE A MAP FOR PRODUCT FEATURE ID AND FIRST SELECTED VARIANT PRODUCT ID
 						        if (UtilValidate.isNotEmpty(productVariantStandardFeatures))
                                 {
@@ -1341,11 +1373,9 @@ if (UtilValidate.isNotEmpty(productId))
                         {
                         	jsBuf.append(buildVariantMapJS(productFeatureFirstVariantIdMap, productVariantStandardFeatureMap));
                         }
+                        
                         //CALL THE FUNCTION TO CREATE JS FOR PRODUCT FEATURE VARIANT GROUP MAP
-                        if(UtilValidate.isNotEmpty(productVariantDisFeatureMap))
-                        {
-                        	jsBuf.append(buildVariantGroupMapJS(productVariantDisFeatureMap, pdpFacetGroupVariantMatch));
-                        }
+                        jsBuf.append(buildVariantGroupMapJS(productVariantDisFeatureMap, pdpFacetGroupVariantMatch));
                         
                         // CALL THE FUNCTION TO CREATE DROPDOWN FOR ALL SELECTABLE FEATURE, LI FOR ALL SELECTABLE FEATURE EXCEPT FIRST.
                         if(UtilValidate.isNotEmpty(variantTree))

@@ -34,7 +34,6 @@ public class MelissaDataHelper {
     
     public static final String module = MelissaDataHelper.class.getName();
 
-    protected mdAddr ao = null;
     protected String productStoreId = null;
     protected String verificationMode = null;
     protected String webRegistrationId = null;
@@ -121,12 +120,30 @@ public class MelissaDataHelper {
         return dataFilepathCAN;
     }
 
+    public mdAddr getAddressObject() {
+    	mdAddr ao = new mdAddr();
+    	ao.SetLicenseString(getDataLicence());
+    	ao.SetPathToUSFiles(getDataFilepathUS());
+    	if (UtilValidate.isNotEmpty(getDataFilepathCAN()))
+        {
+        	ao.SetPathToCanadaFiles(getDataFilepathCAN());
+        }
+
+        //Initialize Data Files
+        mdAddr.ProgramStatus result = ao.InitializeDataFiles();
+        if (result != mdAddr.ProgramStatus.ErrorNone)
+        {
+          //Problem during initialization
+          return null;
+        }
+    	return ao;
+    }
     public AddressVerificationResponse verifyAddress(AddressDocument queryAddressdata) {
 
         AddressVerificationResponse avResponse = new AddressVerificationResponse();
 
         String verificationMode = getVerificationMode();
-        if (UtilValidate.isNotEmpty(verificationMode) && (verificationMode.equalsIgnoreCase("HTTP") || verificationMode.equalsIgnoreCase("HTTPS")))
+        if (UtilValidate.isNotEmpty(verificationMode) && verificationMode.equalsIgnoreCase("HTTP"))
         {
             try 
             {
@@ -152,10 +169,76 @@ public class MelissaDataHelper {
         }
         else if (UtilValidate.isNotEmpty(verificationMode) && verificationMode.equalsIgnoreCase("FILEPATH"))
         {
-            //TODO for DLL processing
+            try 
+            {
+            	mdAddr ao = getAddressObject();
+            	if (ao == null)
+            	{
+                    avResponse.setResponseCode(AddressVerificationResponse.GE);
+            	}
+            	else
+            	{
+            		ao = setMelissaFileRequest(ao, queryAddressdata);
+            		ao.VerifyAddress();
+            		avResponse = buildVerificationResponse(ao);
+            	    ao.delete();
+            	}
+            }
+            catch(Exception e)
+            {
+	            Debug.logError(e, "Error occured in Melissa file Call", module);
+	            avResponse.setResponseCode(AddressVerificationResponse.GE);
+            }
         }
         avResponse.setQueryAddressdata(queryAddressdata);
         return avResponse;
+    }
+
+    private mdAddr setMelissaFileRequest(mdAddr ao, AddressDocument queryAddressdata)
+    {
+	    String a2 = queryAddressdata.getAddress2();
+	    if (UtilValidate.isNotEmpty(queryAddressdata.getAddress3()))
+	    {
+	    	a2 = a2+" "+queryAddressdata.getAddress3();
+	    }
+        if (UtilValidate.isNotEmpty(queryAddressdata.getAddress1()))
+        	ao.SetAddress(queryAddressdata.getAddress1());
+        if (UtilValidate.isNotEmpty(a2))
+        	ao.SetAddress2(a2);
+        if (UtilValidate.isNotEmpty(queryAddressdata.getCity()))
+        	ao.SetCity(queryAddressdata.getCity());
+        if (UtilValidate.isNotEmpty(queryAddressdata.getStateProvinceGeoId()))
+        	ao.SetState(queryAddressdata.getStateProvinceGeoId());
+        if (UtilValidate.isNotEmpty(queryAddressdata.getPostalCode()))
+        	ao.SetZip(queryAddressdata.getPostalCode());
+        if (UtilValidate.isNotEmpty(queryAddressdata.getPostalCodeExt()))
+        	ao.SetPlus4(queryAddressdata.getPostalCodeExt());
+        if (UtilValidate.isNotEmpty(queryAddressdata.getCountryGeoId()))
+        	ao.SetCountryCode(queryAddressdata.getCountryGeoId());
+        return ao;
+    }
+
+    private static AddressVerificationResponse buildVerificationResponse(mdAddr ao){
+    	AddressVerificationResponse avResponse = new AddressVerificationResponse();
+		//check result success, changed or error
+		String results = ao.GetResults();
+		setResponseCode(avResponse, results);
+		if (UtilValidate.isEmpty(avResponse.getResponseCode())) 
+		{
+			avResponse.setResponseCode(AddressVerificationResponse.AS);
+		}
+    	List<AddressDocument> responseAddresseList = FastList.newInstance();
+    	AddressDocument responseAddress = new AddressDocument();
+    	responseAddress.setAddress1(ao.GetAddress());
+    	responseAddress.setAddress2(ao.GetAddress2());
+    	responseAddress.setCity(ao.GetCity());
+    	responseAddress.setStateProvinceGeoId(ao.GetState());
+    	responseAddress.setPostalCode(ao.GetZip());
+    	responseAddress.setPostalCodeExt(ao.GetPlus4());
+    	responseAddress.setCountryGeoId(ao.GetCountryCode());
+		responseAddresseList.add(responseAddress);
+		avResponse.setAlternateAddresses(responseAddresseList);
+		return avResponse;
     }
 
     private String createMelissaRestRequest(AddressDocument queryAddressdata)
@@ -278,11 +361,11 @@ public class MelissaDataHelper {
 			{
 				//Address Matched to Postal Database
 			}
-			else if (str.equals("AS09"))
+			else if (str.equals("AS02"))
 			{
 				//The default building address was verified but the suite or apartment number is missing or invalid.
 			}
-			else if (str.equals("AS02"))
+			else if (str.equals("AS09"))
 			{
 				//Foreign Postal Code Detected
 			}

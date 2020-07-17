@@ -66,10 +66,10 @@
         <category>CHECK_OUT</category>
         <description>Cash On Delivery</description>
     </property>
-    <property key="PayWithAnotherCardlabel">
+    <property key="PayWithAnotherCardLabel">
         <value xml:lang="en">Pay with another card, my details are below:</value>
         <category>CHECK_OUT</category>
-        <description>PayWithAnotherCardlabel</description>
+        <description>PayWithAnotherCardLabel</description>
     </property>
     <property key="CardExpirationLabel">
         <value xml:lang="en">Exp:</value>
@@ -417,6 +417,11 @@
         <category>CHECK_OUT</category>
         <description>PayPalOnlyCaption</description>
     </property>
+    <property key="EBSOnlyCaption">
+        <value xml:lang="en">EBS:</value>
+        <category>CHECK_OUT</category>
+        <description>EBSOnlyCaption</description>
+    </property>
     <property key="EBSCaption">
         <value xml:lang="en">Pay with EBS:</value>
         <category>CHECK_OUT</category>
@@ -543,10 +548,10 @@
         <category>MULTI_USE</category>
         <description>BuiltByLabel</description>
     </property>
-    <property key="SalmonLLCLabel">
-        <value xml:lang="en">Salmon LLC</value>
+    <property key="SolvedaLabel">
+        <value xml:lang="en">SolvedaC</value>
         <category>MULTI_USE</category>
-        <description>SalmonLLCLabel</description>
+        <description>SolvedaLabel</description>
     </property>
     <property key="CharactersLeftLabel">
         <value xml:lang="en">characters left</value>
@@ -1310,6 +1315,11 @@
         <value xml:lang="en">Your Search for &lt;span class="searchText"&gt;'${searchText}'&lt;/span &gt; produced &lt;span class="searchCount"&gt;${searchResultCount}&lt;/span &gt; results:</value>
         <category>PAGE_HEADING_H1</category>
         <description>SearchResultsCountsTitle</description>
+    </property>
+    <property key="SearchResultsSpellCheckCountsTitle">
+        <value xml:lang="en">Your Search for &lt;span class="searchText"&gt;'${searchText}'&lt;/span &gt; produced no results &lt;br/&gt; Showing &lt;span class="searchCount"&gt;${searchResultCount}&lt;/span &gt; results for &lt;span class="searchTextSpellCheck"&gt;'${searchTextSpellCheck}'&lt;/span &gt; instead</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>SearchResultsSpellCheckCountsTitle</description>
     </property>
     <property key="StoreLocatorTitle">
         <value xml:lang="en">Store Locator</value>
@@ -2612,6 +2622,11 @@
         <value xml:lang="en">Buy!</value>
         <category>BUTTON_TEXT</category>
         <description>OrderAddToCartBtn</description>
+    </property>
+    <property key="AddToWishlistBtn">
+        <value xml:lang="en">ADD TO WISH LIST</value>
+        <category>BUTTON_TEXT</category>
+        <description>AddToWishlistBtn</description>
     </property>
     <property key="GuestCheckoutBtn">
         <value xml:lang="en">Guest Checkout</value>

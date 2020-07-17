@@ -9,7 +9,7 @@
         <div class="infoRow">
             <div class="infoEntry">
                 <div class="infoValue confirmBtn">
-                    <input type="button" id='yesBtn' class="buttontext standardBtn action" name="yesBtn" value='${commonConfirmDialogYesBtn!""}' onClick="javascript:removeProductRow('ralatedProducts');"/>
+                    <input type="button" id='yesBtn' class="buttontext standardBtn action" name="yesBtn" value='${commonConfirmDialogYesBtn!""}' onClick=""/>
                     <input type="button" class="buttontext standardBtn action" name="noBtn" value='${commonConfirmDialogNoBtn!""}'  onClick="javascript:confirmDialogResult('N');"/>
                 </div>
             </div>

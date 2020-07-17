@@ -2,11 +2,13 @@
 function deletTableRow(productId, productName, tableId, assocType)
 {
     jQuery('#confirmDeleteTxt').html('${confirmDialogText!""} '+productId+': '+productName+'?');
-    jQuery('#yesBtn').attr("onClick","javascript:removeProductRow('"+tableId+"','"+assocType+"')");
+    jQuery('#yesBtn').attr('onclick','').unbind('click');
+    jQuery('#yesBtn').click(function() { removeProductRow(tableId,assocType)});
     displayDialogBox();
 }
 
-function removeProductRow(tableId, assocType){
+function removeProductRow(tableId, assocType)
+{
     var table=document.getElementById(tableId);
     var inputRow = table.getElementsByTagName('tr');
     var indexPos = jQuery('#'+assocType+'RowNo').val();
@@ -32,6 +34,7 @@ function addProductRow(tableId, assocType)
 function setProductIndexPos(table, assocType)
 {
     var rows = table.getElementsByTagName('tr');
+    // alert(rows.length);
     for (i = 1; i < rows.length; i++) {
         var columns = rows[i].getElementsByTagName('td');
         var productId;

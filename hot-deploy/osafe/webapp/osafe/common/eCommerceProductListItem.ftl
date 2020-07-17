@@ -8,8 +8,8 @@
  <div class="eCommerceThumbNailHolder">
     <div class="swatchProduct">
     <!-- using class pdpUrl for preparing PDP URL according to the selected swatch. -->
-        <a class="pdpUrl" title="${productName!""}" href="${productFriendlyUrl!"#"}" id="${productId!}">
-            <img alt="${productName!""}" title="${productName!""}" src="${productImageUrl}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productImageAltUrl?has_content && productImageAltUrl != ''> onmouseover="src='${productImageAltUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});" onmouseout="src='${productImageUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});"</#if> onerror="onImgError(this, 'PLP-Thumb');"/>
+        <a class="pdpUrl" title="${productName!""}" href="${plpProductFriendlyUrl!"#"}" id="${productId!}">
+            <img alt="${productName!""}" title="${productName!""}" src="${plpProductImageUrl}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if plpProductImageAltUrl?has_content && plpProductImageAltUrl != ''> onmouseover="src='${plpProductImageAltUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});" onmouseout="src='${plpProductImageUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});"</#if> onerror="onImgError(this, 'PLP-Thumb');"/>
         </a>
     </div>
 	<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"QUICKLOOK_ACTIVE") && uiSequenceScreen?has_content && uiSequenceScreen == 'PLP'>
@@ -71,8 +71,8 @@
 		        </#if>
 	        </#if>
 	    	<#if reviewMethod.toUpperCase() == "BIGFISH">
-		        <#if averageStarPLPRating?has_content>
-		            <#assign ratePercentage= ((averageStarPLPRating / 5) * 100)>
+		        <#if plpAverageStarRating?has_content>
+		            <#assign ratePercentage= ((plpAverageStarRating / 5) * 100)>
 		            <div class="rating_bar"><div style="width:${ratePercentage}%"></div></div>
 		        </#if>
 	        </#if>

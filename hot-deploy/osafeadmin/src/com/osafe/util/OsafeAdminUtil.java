@@ -896,4 +896,19 @@ public class OsafeAdminUtil {
 
         return html;
     }
+    // Method to reduce currenttimeStamp by 1 month.
+    public static Timestamp getMonthBackTimeStamp(int reduceMonth, String prefFormat) {
+    	Timestamp defaultFromdate = null;
+    	try {
+    	    Calendar c = Calendar.getInstance(); 
+    	    c.setTime(new Date()); 
+    	    c.add(Calendar.MONTH, -reduceMonth);
+    	    Date dateTime = c.getTime();
+    	    defaultFromdate = (Timestamp) ObjectType.simpleTypeConvert(dateTime, "Timestamp", prefFormat, null);
+    	}
+    	catch (Exception e){
+    		
+    	}
+        return defaultFromdate;
+    }
 }

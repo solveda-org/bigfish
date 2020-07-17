@@ -60,7 +60,12 @@
     });
     
     jQuery('.eCommerceComplementProduct .plpFeatureSwatchImage').click(function() {
+    	<#assign imgSizeCompH = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_COMPLEMENT_H")!""/>
+    	<#assign imgSizeCompW = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_COMPLEMENT_W")!""/>
         var swatchVariant = jQuery(this).next('.swatchVariant').clone();
+        var swatchVarImage = jQuery(swatchVariant).find('img');
+        jQuery(swatchVarImage).attr('height', '${imgSizeCompH}');
+        jQuery(swatchVarImage).attr('width', '${imgSizeCompW}');
         
         var swatchVariantOnlinePrice = jQuery(this).nextAll('.swatchVariantOnlinePrice:first').clone().show();
         swatchVariantOnlinePrice.removeClass('swatchVariantOnlinePrice').addClass('plpPriceOnline');
@@ -135,11 +140,17 @@
             jQuery('#addToCart').addClass("inactiveAddToCart");
         } else {
             jQuery('#addToCart').removeClass("inactiveAddToCart");
-            elm.setAttribute("onClick","javascript:addItem()");
+            elm.setAttribute("onClick","javascript:addItem('addToCart')");
+        }
+        var elm = document.getElementById("addToWishlist");
+        if (elm !=null )
+        {
+            elm.setAttribute("onClick","javascript:addItem('addToWishlist')");
+            jQuery('#addToWishlist').removeClass("inactiveAddToWishlist");
         }
     }
     
-    function addItem() {
+    function addItem(id) {
        if (document.addform.add_product_id.value == 'NULL' || document.addform.add_product_id.value == '') {
            for (i = 0; i < OPT.length; i++) {
             var optionName = OPT[i];
@@ -179,7 +190,18 @@
                 alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPQtyDecimalNumberError,'\"','\\"'))}");
                 return false;
            }
-           document.addform.submit();
+           if (id == "addToCart")
+           {
+               // add to cart action
+               document.addform.action="<@ofbizUrl>${addToCartAction!""}</@ofbizUrl>";
+               document.addform.submit();
+           }
+           else if (id == "addToWishlist")
+           {
+               // add to wish list action
+               document.addform.action="<@ofbizUrl>${addToWishListAction!""}</@ofbizUrl>";
+               document.addform.submit();
+           }
        }
     }
     
@@ -243,11 +265,15 @@
         }
         return -1;
     }
-
+var firstNoSelection = "false";
     function getList(name, index, src) 
     {
+    	var noSelection = "false";
         currentFeatureIndex = findIndex(name);
-        
+        if(firstNoSelection == "true")
+        {
+        	noSelection ="true";
+        }
         if(index != -1)
         {
         	var liElm = jQuery('#Li'+name+" li").get(index);
@@ -255,6 +281,7 @@
 		else
 		{
 			var liElm = jQuery('#Li'+name+" li").get(0);
+			noSelection ="true";
 		}
         jQuery(liElm).siblings("li").removeClass("selected");
         jQuery(liElm).addClass("selected");
@@ -293,10 +320,6 @@
                     //jQuery(variantAltImages).find('img').each(function(){ jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
                     jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
 
-                    var variantLargeImages = jQuery('#largeImageUrl_'+VARMAP[mapKey]).clone();
-                    jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
-                    jQuery('#seeLargerImage').html(variantLargeImages.html());
-
                     var variantSeeMainImages = jQuery('#seeMainImage_'+VARMAP[mapKey]).clone();
                     jQuery('#seeMainImage').html(variantSeeMainImages.html());
                     
@@ -325,38 +348,65 @@
                     jQuery('#pdpPriceOnLine').html(variantPdpPriceOnLine);
                     
                     var variantPdpVolumePricing = jQuery('#pdpVolumePricing_'+VARMAP[mapKey]).html();
-                    jQuery('#pdpVolumePricing').html(variantPdpVolumePricing);
+                    jQuery('#pdpVolumePricing').html(variantPdpVolumePricing);              
                     
-                    var variantPdpLongDescription = jQuery('#pdpLongDescription_'+VARMAP[mapKey]).html();
-                    jQuery('#pdpLongDescription').html(variantPdpLongDescription);
-                    
-                    var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_'+VARMAP[mapKey]).html();
-                    jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
-                
+                    var variantLargeImages = jQuery('#largeImageUrl_Virtual').clone();
+            		var variantPdpLongDescription = jQuery('#pdpLongDescription_Virtual').html();
+            		var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_Virtual').html();
+            	
+            		jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
+            		jQuery('#seeLargerImage').html(variantLargeImages.html());
+            		jQuery('#pdpLongDescription').html(variantPdpLongDescription);
+            		jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
                     
             }
             if (index == -1) {
               <#if featureOrderFirst?exists>
                 var Variable1 = eval("list" + "${featureOrderFirst}" + "()");
               </#if>
+              
+              firstNoSelection = "true";
+				
+			  var variantLargeImages = jQuery('#largeImageUrl_Virtual').clone();
+              var variantPdpLongDescription = jQuery('#pdpLongDescription_Virtual').html();
+              var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_Virtual').html();
+            	
+              jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
+              jQuery('#seeLargerImage').html(variantLargeImages.html());
+              jQuery('#pdpLongDescription').html(variantPdpLongDescription);
+              jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
+				
             } else {
+                firstNoSelection = "false";
                 var Variable1 = eval("list" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
                 var Variable2 = eval("listLi" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
                   
+                  var elm = document.getElementById("addToCart");
+                  elm.setAttribute("onClick","javascript:addItem('addToCart')");
+                  var elm = document.getElementById("addToWishlist");
+                  if (elm !=null )
+                  {
+                    elm.setAttribute("onClick","javascript:addItem('addToWishlist')");
+                  }
                   if (currentFeatureIndex+1 <= (OPT.length-1) ) 
                   {
                     var nextFeatureLength = document.forms["addform"].elements[OPT[(currentFeatureIndex+1)]].length;
                     if(nextFeatureLength == 2) {
                       getList(OPT[(currentFeatureIndex+1)],'0',1);
                       jQuery('#addToCart').removeClass("inactiveAddToCart");
+                      if (elm !=null )
+                      {
+                          jQuery('#addToWishlist').removeClass("inactiveAddToWishlist");
+                      }
                       return;
                     } else {
                       jQuery('#addToCart').addClass("inactiveAddToCart");
+                      if (elm !=null )
+                      {
+                          jQuery('#addToWishlist').addClass("inactiveAddToWishlist");
+                      }
                     }
                   }
-                  var elm = document.getElementById("addToCart");
-                  elm.setAttribute("onClick","javascript:addItem()");
-                  
                    
             }
             // set the product ID to NULL to trigger the alerts
@@ -371,7 +421,14 @@
             // using the selected index locate the sku
             var sku = document.forms["addform"].elements[name].options[indexSelected].value;
             // set the product ID
-            setAddProductId(sku);
+            if(firstNoSelection == "false")
+            {
+            	setAddProductId(sku);
+            }
+            else
+            {
+            	setAddProductId("");
+            }
             
             var varProductId = jQuery('#add_product_id').val();
             if(varProductId == "")
@@ -382,6 +439,11 @@
 			{
 				setProductStock(sku);
 			}
+			
+			if(noSelection=="true" || varProductId == ""){
+            	var indexDisplayed = 1;
+            	varProductId = document.forms["addform"].elements[name].options[indexDisplayed].value;
+            }
         
             if(jQuery('#mainImage_'+varProductId).length) 
             {
@@ -391,48 +453,44 @@
 	            detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
 	            jQuery('#productDetailsImageContainer').html(variantMainImages.html());
 	        }
-	            var variantAltImages = jQuery('#altImage_'+varProductId).clone();
-	            //jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
-	            jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
-	
-	            var variantLargeImages = jQuery('#largeImageUrl_'+varProductId).clone();
-	            jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
-	            jQuery('#seeLargerImage').html(variantLargeImages.html());
+	        
+	        var variantAltImages = jQuery('#altImage_'+varProductId).clone();
+        	var variantProductVideo = jQuery('#productVideo_'+varProductId).html();
+        	var variantProductVideoLink = jQuery('#productVideoLink_'+varProductId).html();
+        	var variantProductVideo360 = jQuery('#productVideo360_'+varProductId).html();
+        	var variantProductVideo360Link = jQuery('#productVideo360Link_'+varProductId).html();
+        	var variantPdpPriceSavingMoney = jQuery('#pdpPriceSavingMoney_'+varProductId).html();
+        	var variantPdpPriceSavingPercent = jQuery('#pdpPriceSavingPercent_'+varProductId).html();
+        	var variantPdpVolumePricing = jQuery('#pdpVolumePricing_'+varProductId).html();
+        	var variantPdpPriceList = jQuery('#pdpPriceList_'+varProductId).html();
+        	var variantPdpPriceOnLine = jQuery('#pdpPriceOnLine_'+varProductId).html();
 	            
-	            var variantProductVideo = jQuery('#productVideo_'+varProductId).html();
-	            jQuery('#productVideo').html(variantProductVideo);
-	            
-	            var variantProductVideoLink = jQuery('#productVideoLink_'+varProductId).html();
-	            jQuery('#productVideoLink').html(variantProductVideoLink);
-	            
-	            var variantProductVideo360 = jQuery('#productVideo360_'+varProductId).html();
-	            jQuery('#productVideo360').html(variantProductVideo360);
-	            
-	            var variantProductVideo360Link = jQuery('#productVideo360Link_'+varProductId).html();
-	            jQuery('#productVideo360Link').html(variantProductVideo360Link);
-	            
-	            var variantPdpPriceSavingMoney = jQuery('#pdpPriceSavingMoney_'+varProductId).html();
-                jQuery('#pdpPriceSavingMoney').html(variantPdpPriceSavingMoney);
-                
-                var variantPdpPriceSavingPercent = jQuery('#pdpPriceSavingPercent_'+varProductId).html();
-                jQuery('#pdpPriceSavingPercent').html(variantPdpPriceSavingPercent);
-
-                var variantPdpVolumePricing = jQuery('#pdpVolumePricing_'+varProductId).html();
-                jQuery('#pdpVolumePricing').html(variantPdpVolumePricing);
-                
-                var variantPdpPriceList = jQuery('#pdpPriceList_'+varProductId).html();
-                jQuery('#pdpPriceList').html(variantPdpPriceList);
-                
-                var variantPdpPriceOnLine = jQuery('#pdpPriceOnLine_'+varProductId).html();
-                jQuery('#pdpPriceOnLine').html(variantPdpPriceOnLine);
-                
-                
-                
-                var variantPdpLongDescription = jQuery('#pdpLongDescription_'+varProductId).html();
-                jQuery('#pdpLongDescription').html(variantPdpLongDescription);
-                
-                var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_'+varProductId).html();
-                jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
+            if(noSelection=="true" || varProductId == ""){
+            	var variantLargeImages = jQuery('#largeImageUrl_Virtual').clone();
+            	var variantPdpLongDescription = jQuery('#pdpLongDescription_Virtual').html();
+            	var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_Virtual').html();
+            }
+            else{
+            	var variantLargeImages = jQuery('#largeImageUrl_'+varProductId).clone();
+            	var variantPdpLongDescription = jQuery('#pdpLongDescription_'+varProductId).html();
+            	var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_'+varProductId).html();
+            }
+            
+            //jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+            jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
+			jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
+            jQuery('#seeLargerImage').html(variantLargeImages.html());
+            jQuery('#productVideo').html(variantProductVideo);
+            jQuery('#productVideoLink').html(variantProductVideoLink);
+            jQuery('#productVideo360').html(variantProductVideo360);
+            jQuery('#productVideo360Link').html(variantProductVideo360Link);
+            jQuery('#pdpPriceSavingMoney').html(variantPdpPriceSavingMoney);
+            jQuery('#pdpPriceSavingPercent').html(variantPdpPriceSavingPercent);
+			jQuery('#pdpVolumePricing').html(variantPdpVolumePricing);
+            jQuery('#pdpPriceList').html(variantPdpPriceList);
+            jQuery('#pdpPriceOnLine').html(variantPdpPriceOnLine);
+            jQuery('#pdpLongDescription').html(variantPdpLongDescription);
+            jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
             
         }
         activateZoom(detailImgUrl);

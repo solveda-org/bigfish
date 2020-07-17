@@ -34,7 +34,7 @@
           <label>&nbsp;</label>
         </div>
         <div class="entryInput checkbox medium">
-          <input class="checkBoxEntry" type="radio" name="shipping_method" value="${shippingMethod}" <#if (StringUtil.wrapString(shippingMethod) == StringUtil.wrapString(chosenShippingMethod!"")) || (!chosenShippingMethod?has_content && carrierMethod_index == 0)> checked </#if> onclick="setShippingMethod('${shippingMethod?if_exists}', 'N');" />
+          <input class="checkBoxEntry" type="radio" name="shipping_method" value="${shippingMethod}" <#if (StringUtil.wrapString(shippingMethod) == StringUtil.wrapString(chosenShippingMethod!"")) || (!chosenShippingMethod?has_content && carrierMethod_index == 0)> checked="checked" </#if> onclick="setShippingMethod('${shippingMethod?if_exists}', 'N');" />
           <#if shoppingCart.getShippingContactMechId()?exists>
             <#assign shippingEst = shippingEstWpr.getShippingEstimate(carrierMethod)?default(-1) />
           </#if>

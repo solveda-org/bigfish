@@ -1,6 +1,9 @@
 package com.osafe.services;
 
+import java.util.List;
 import java.util.Map;
+
+import javolution.util.FastList;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
@@ -11,7 +14,6 @@ import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 
 import com.osafe.services.AddressVerificationResponse;
-
 
 import com.osafe.util.Util;
 
@@ -35,11 +37,21 @@ public class AddressServices {
         String postalCodeExt = (String) context.get("postalCodeExt");
         String country = (String) context.get("countryGeoId");
 
-        AddressVerificationResponse avResponse = new AddressVerificationResponse();
+        List suggestionList = FastList.newInstance();
         String addressValidationMethod = Util.getProductStoreParm(productStoreId, "ADDRESS_VERIFICATION_METHOD");
-    	if (UtilValidate.isEmpty(addressValidationMethod))
+    	if (UtilValidate.isEmpty(addressValidationMethod) || addressValidationMethod.equalsIgnoreCase("NONE"))
     	{
     		addressValidationMethod="NONE";
+            responseMap.put("address1",address1);
+            responseMap.put("address2",address2);
+            responseMap.put("address3",address3);
+            responseMap.put("city",city);
+            responseMap.put("stateProvinceGeoId",state);
+            responseMap.put("countyGeoId",county);
+            responseMap.put("postalCode",postalCode);
+            responseMap.put("postalCodeExt",postalCodeExt);
+            responseMap.put("countryGeoId",country);
+            responseMap.put("responseCode",AddressVerificationResponse.AS);
     	}
 
     	if(addressValidationMethod.equalsIgnoreCase("MELISSA_DATA"))
@@ -61,16 +73,34 @@ public class AddressServices {
                 Map result = dispatcher.runSync("addressValidationMelissaData", melissaAddressParams);
                 if (!ModelService.RESPOND_ERROR.equals(result.get(ModelService.RESPONSE_MESSAGE)))
                 {
-                	avResponse = (AddressVerificationResponse) result.get("addressVerificationResponse");
+                    responseMap.put("address1",result.get("address1"));
+                    responseMap.put("address2",result.get("address2"));
+                    responseMap.put("address3",result.get("address3"));
+                    responseMap.put("city",result.get("city"));
+                    responseMap.put("stateProvinceGeoId",result.get("stateProvinceGeoId"));
+                    responseMap.put("countyGeoId",result.get("countyGeoId"));
+                    responseMap.put("postalCode",result.get("postalCode"));
+                    responseMap.put("postalCodeExt",result.get("postalCodeExt"));
+                    responseMap.put("countryGeoId",result.get("countryGeoId"));
+                    responseMap.put("responseCode",result.get("responseCode"));
+                    suggestionList = (List) result.get("suggestionList");
+                }
+                else
+                {
+                    responseMap.put("address1",address1);
+                    responseMap.put("address2",address2);
+                    responseMap.put("address3",address3);
+                    responseMap.put("city",city);
+                    responseMap.put("stateProvinceGeoId",state);
+                    responseMap.put("countyGeoId",county);
+                    responseMap.put("postalCode",postalCode);
+                    responseMap.put("postalCodeExt",postalCodeExt);
+                    responseMap.put("countryGeoId",country);
                 }
             }
-            catch (Exception e)
-            {
-            	
-            }
+            catch (Exception e){ }
     	}
-		avResponse.setVerificationMethod(addressValidationMethod);
-        responseMap.put("addressVerificationResponse",avResponse);
+        responseMap.put("suggestionList",suggestionList);
         return responseMap;
     }
 

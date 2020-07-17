@@ -410,7 +410,12 @@
       </analyzer>
     </fieldType>
 
-
+	<fieldType name="edgytext" class="solr.TextField" > 
+	  <analyzer> 
+	   <tokenizer class="solr.KeywordTokenizerFactory"/> 
+	   <filter class="solr.LowerCaseFilterFactory"/> 
+	  </analyzer> 
+	</fieldType>
     <!-- since fields of this type are by default not stored or indexed,
          any data added to them will be ignored outright.  -->
     <fieldtype name="ignored" stored="false" indexed="false" multiValued="true" class="solr.StrField" />
@@ -451,8 +456,8 @@
         <field name="name" type="string" indexed="true" stored="true" required="false"/>
         <field name="internalName" type="string" indexed="true" stored="true" required="false"/>
         <field name="description" type="text" indexed="true" stored="true" required="false"/>
-        <field name="productCategoryId" type="text_ws" indexed="true" stored="true" multiValued="true" required="false"/>
-        <field name="topMostProductCategoryId" type="text_ws" indexed="true" stored="true" multiValued="true" required="false"/>
+        <field name="productCategoryId" type="text_ws" indexed="true" stored="true" required="false"/>
+        <field name="topMostProductCategoryId" type="text_ws" indexed="true" stored="true" required="false"/>
         <field name="categoryLevel" type="int" indexed="true" stored="true" required="false"/>
         <field name="categoryName" type="text" indexed="true" stored="true" required="false"/>
         <field name="categoryDescription" type="text" indexed="true" stored="true" required="false"/>
@@ -466,16 +471,17 @@
         <field name="listPrice" type="float" indexed="true" stored="true" required="false"/>
         <field name="price" type="float" indexed="true" stored="true" required="false"/>
         <field name="customerRating" type="float" indexed="true" stored="true" required="false"/>
-        <field name="sequenceNum" type="string" indexed="true" stored="true" multiValued="true" required="false"/>
+        <field name="sequenceNum" type="string" indexed="true" stored="true" required="false"/>
         <field name="totalTimesViewed" type="long" indexed="true" stored="true" required="false"/>
         <field name="totalQuantityOrdered" type="float" indexed="true" stored="true" required="false"/>
         <!-- fields for finding facet grouping  -->
         <field name="productFeatureGroupId" type="string" indexed="true" stored="true" required="false"/>
         <field name="productFeatureGroupDescription" type="string" indexed="false" stored="true" required="false"/>
         <field name="productFeatureGroupFacetSort" type="string" indexed="false" stored="true" required="false"/>
-        <field name="productCategoryFacetGroups" type="text_ws" indexed="true" stored="true" required="false" multiValued="true" omitNorms="true"/>        
+        <field name="productCategoryFacetGroups" type="text_ws" indexed="true" stored="true" required="false" omitNorms="true"/>        
 
         <field name="spell" type="textSpell" indexed="true" stored="true" multiValued="true"/>
+        <field name="autocomplete_text" type="edgytext" indexed="true" stored="false"  multiValued="true" omitNorms="true" omitTermFreqAndPositions="false" />
         <!--  dynamicField element -->
         <dynamicField name="productFeature_*" type="text_ws" indexed="true" stored="true" required="false" multiValued="true" omitNorms="true"/>
 
@@ -483,6 +489,7 @@
             via copyField further on in this schema  -->
        <field name="searchText" type="text" indexed="true" stored="false" required="false" multiValued="true" />
  </fields>
+
 
  <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
@@ -495,21 +502,34 @@
  <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="OR"/>
 
- <copyField source="productId" dest="searchText"/>
- <copyField source="name" dest="searchText"/>
- <copyField source="internalName" dest="searchText"/>
- <copyField source="description" dest="searchText"/>
- <copyField source="categoryPdpDescription" dest="searchText"/>
- <copyField source="categoryDescription" dest="searchText"/>
- <copyField source="price" dest="searchText"/>
- <copyField source="productFeature_*" dest="searchText"/>
-<!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
+ <!-- SolrQueryParser configuration: defaultOperator="AND|OR" -->
  <solrQueryParser defaultOperator="AND"/>
 
   <!-- copyField commands copy one field to another at the time a document
         is added to the index.  It's used either to index the same field differently,
         or to add multiple fields to the same field for easier/faster searching.  -->
+        
+   <copyField source="productId" dest="searchText"/>
+   <copyField source="name" dest="searchText"/>
+   <copyField source="internalName" dest="searchText"/>
+   <copyField source="description" dest="searchText"/>
+   <copyField source="categoryPdpDescription" dest="searchText"/>
+   <copyField source="categoryDescription" dest="searchText"/>
+   <copyField source="categoryName" dest="searchText"/>
+   <copyField source="price" dest="searchText"/>
+   <copyField source="productFeature_*" dest="searchText"/>
+      
+   <copyField source="name" dest="autocomplete_text"/> 
+   <copyField source="internalName" dest="autocomplete_text"/>
+   <copyField source="description" dest="autocomplete_text"/>
+   <copyField source="categoryName" dest="autocomplete_text"/>
+   <copyField source="categoryDescription" dest="autocomplete_text"/>
+   <copyField source="productFeature_*" dest="autocomplete_text"/>
+
    <copyField source="name" dest="spell"/>
-
-
+   <copyField source="internalName" dest="spell"/>
+   <copyField source="description" dest="spell"/>
+   <copyField source="categoryName" dest="spell"/>
+   <copyField source="categoryDescription" dest="spell"/>
+   <copyField source="productFeature_*" dest="spell"/>
 </schema>

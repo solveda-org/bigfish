@@ -75,5 +75,22 @@
     <CustomMethod customMethodId="CC_REFUND_SGPAYTKN" customMethodTypeId="CC_REFUND" customMethodName="sagepaytokenCCRefund" description="SagePay token refund"/>
     <CustomMethod customMethodId="CC_RELEASE_SGPAYTKN" customMethodTypeId="CC_RELEASE" customMethodName="sagepaytokenCCRelease" description="SagePay token release"/>
 
+    <!-- EBS Payment Gateway Config -->
+    <PaymentGatewayConfigType paymentGatewayConfigTypeId="EBS" hasTable="N" description="EBS Payment Gateway"/>
+    <PaymentMethodType paymentMethodTypeId="EXT_EBS" description="EBS Payment" />
+    <PaymentGatewayConfig paymentGatewayConfigId="EBS_CONFIG" paymentGatewayConfigTypeId="EBS" description="EBS Config"/>
+    <PaymentGatewayEbs paymentGatewayConfigId="EBS_CONFIG" apiUrl="https://secure.ebs.in/api/1_0" merchantId="MERCHANT ID" secretKey="MERCHANT SECRET KEY" mode="TEST" redirectUrl="https://secure.ebs.in/pg/ma/sale/pay/" returnUrl="https://www.yourdomainname.com/online/control/ebsCheckoutReturn?DR={DR}"/>
 
+    <!-- EBS Payment Custom Method Type-->
+    <CustomMethodType customMethodTypeId="EBS_AUTH" parentTypeId="" hasTable="N" description="EBS authorize methods"/>
+    <CustomMethodType customMethodTypeId="EBS_RELEASE" parentTypeId="" hasTable="N" description="EBS release methods"/>
+    <CustomMethodType customMethodTypeId="EBS_CAPTURE" parentTypeId="" hasTable="N" description="EBS capture methods"/>
+    <CustomMethodType customMethodTypeId="EBS_REFUND" parentTypeId="" hasTable="N" description="EBS refund methods"/>
+    
+    <!-- EBS Payment Custom Method -->
+    <CustomMethod customMethodId="EBS_AUTH" customMethodTypeId="EBS_AUTH" customMethodName="ebsAuthProcessor" description="EBS payment authorize"/>
+    <CustomMethod customMethodId="EBS_RELEASE" customMethodTypeId="EBS_RELEASE" customMethodName="ebsRelease" description="EBS Order Release"/>
+    <CustomMethod customMethodId="EBS_CAPTURE" customMethodTypeId="EBS_CAPTURE" customMethodName="ebsCapture" description="EBS payment capture"/>
+    <CustomMethod customMethodId="EBS_REFUND" customMethodTypeId="EBS_REFUND" customMethodName="ebsRefund" description="EBS payment refund"/>
+    
 </entity-engine-xml>

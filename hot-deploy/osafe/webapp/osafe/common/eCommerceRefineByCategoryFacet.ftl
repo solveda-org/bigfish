@@ -153,6 +153,8 @@
   <#if facetList?has_content>
     <#list facetList as facet>
       <#if parameters.searchText?has_content && !parameters.productCategoryId?has_content>
+      <#assign facetMinValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MIN")?if_exists?number />
+      <#assign facetMaxValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MAX")?if_exists?number />
       <#if includedSearchFacetGroup?has_content && includedSearchFacetGroup.contains(facet.productFeatureGroupId?upper_case!)>
         <li>
           <h3 class="facetGroup <#if facetMinValue == 0>showHideFacetGroupLink seeMoreFacetGroupLink</#if>">${facet.name}</h3>

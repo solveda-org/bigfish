@@ -42,6 +42,12 @@ if(UtilValidate.isNotEmpty(orderId))
                     context.payPalInfo = paymentMethodInfo;
                     context.paymentMethodInfoHeading =  uiLabelMap.PayPalPaymentMethodHeading;
                 }
+                if((paymentMethod.getString("paymentMethodTypeId")).equals("EXT_EBS"))
+                {
+                    paymentMethodInfo = paymentMethod.getRelatedOne("EbsPaymentMethod");
+                    context.ebsInfo = paymentMethodInfo;
+                    context.paymentMethodInfoHeading =  uiLabelMap.EbsPaymentMethodHeading;
+                }
             }
         }
         context.paymentPrefInfo = orderPaymentPreference;

@@ -57,7 +57,7 @@
     <entity-resource type="data" reader-name="contentmenu" loader="main" location="data/seed/bigFishContentMenu.xml"/>
 
     <!-- BigFish Content Types -->
-    <entity-resource type="data" reader-name="bigfishtypes" loader="main" location="data/seed/bigFishContentMenu.xml"/> 
+    <entity-resource type="data" reader-name="bigfishtypes" loader="main" location="data/seed/bigFishContentTypes.xml"/> 
 
     <!-- BigFish Extended Store Content -->
     <entity-resource type="data" reader-name="extendedstore" loader="main" location="data/bigFishExtendedStore.xml"/>
@@ -84,12 +84,16 @@
     <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/070-ProductAssoc.xml"/>
     <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/075-ProductAttribute.xml"/>
 
-    <!-- Content Demo Data -->
+    <!-- Content Demo Data 
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_HP_SPOT.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_PTS_SPOT.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SI_INFO.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SP_PAGE.xml"/>
+    -->
+
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/XProductStoreParm.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/BigfishContent.xml"/>
 
 
     <!-- service resources: model(s), eca(s) and group definitions -->

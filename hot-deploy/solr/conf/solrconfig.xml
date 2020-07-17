@@ -507,6 +507,7 @@
       <str>spellcheck</str>
     </arr>
   </requestHandler>
+  
 
 <!-- Please refer to http://wiki.apache.org/solr/SolrReplication for details on configuring replication -->
 <!-- remove the <lst name="master"> section if this is just a slave -->
@@ -707,42 +708,88 @@
     
   </searchComponent>
 -->
-  <!-- ADDED by len -->
+
+<requestHandler name="/spell" class="solr.SearchHandler" startup="lazy">
+    <lst name="defaults">
+        <str name="df">spell</str>
+        <str name="spellcheck.dictionary">default</str> 
+        <str name="spellcheck">on</str>
+        <str name="spellcheck.extendedResults">true</str> 
+        <str name="spellcheck.count">10</str>
+        <str name="spellcheck.collate">true</str>
+        <str name="spellcheck.maxCollationTries">10</str>
+        <str name="spellcheck.maxCollations">5</str> 
+    </lst>
+    <arr name="last-components">
+        <str>spellcheck</str>
+    </arr>
+</requestHandler>
+
+<searchComponent name="spellcheck" class="solr.SpellCheckComponent">
+    <str name="queryAnalyzerFieldType">textSpell</str>
+    <lst name="spellchecker">
+        <str name="name">default</str>
+        <str name="field">spell</str>
+        <str name="spellcheckIndexDir">./spellchecker</str>
+        <str name="buildOnCommit">true</str>
+    </lst>
+</searchComponent>
+
+
+<searchComponent class="solr.SpellCheckComponent" name="suggest">
+    <lst name="spellchecker">
+        <str name="name">suggest</str>
+        <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
+        <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>     
+        <str name="storeDir">suggest</str>
+        <str name="field">autocomplete_text</str>
+        <bool name="exactMatchFirst">true</bool>
+        <float name="threshold">0.005</float>
+        <str name="buildOnCommit">true</str>
+        <str name="buildOnOptimize">true</str>
+    </lst>
+    <str name="queryAnalyzerFieldType">edgytext</str> 
+</searchComponent>
+ 
+<requestHandler class="org.apache.solr.handler.component.SearchHandler" name="/suggest" startup="lazy">
+    <lst name="defaults">
+      <str name="spellcheck">true</str>
+      <str name="spellcheck.dictionary">default</str>
+      <str name="spellcheck.extendedResults">true</str>
+      <str name="spellcheck.count">10</str>
+      <str name="spellcheck.collate">true</str>
+      <str name="spellcheck.maxCollations">5</str>
+      <str name="spellcheck.maxCollationTries">10</str>
+    </lst>
+    <arr name="last-components">
+      <str>suggest</str>
+      <str>query</str>
+    </arr>
+</requestHandler>
+
+
+  <!-- ADDED by len 
 	<searchComponent name="spellcheck" class="solr.SpellCheckComponent">
 	
 	    <lst name="spellchecker">
-	      <!--
-	          Optional, it is required when more than one spellchecker is configured.
-	          Select non-default name with spellcheck.dictionary in request handler.
-	     -->
+	      
 	     <str name="name">default</str>
-	     <!-- The classname is optional, defaults to IndexBasedSpellChecker -->
 	     <str name="classname">solr.IndexBasedSpellChecker</str>
-	     <!--
-	              Load tokens from the following field for spell checking,
-	              analyzer for the field's type as defined in schema.xml are used
-	     -->
 	     <str name="field">textSpell</str>
-	     <!-- Optional, by default use in-memory index (RAMDirectory) -->
 	     <str name="spellcheckIndexDir">./spellchecker</str>
-	     <!-- Set the accuracy (float) to be used for the suggestions. Default is 0.5 -->
 	     <str name="accuracy">0.7</str>
-	     <!-- Require terms to occur in 1/100th of 1% of documents in order to be included in the dictionary -->
 	     <float name="thresholdTokenFrequency">.0001</float>
          <str name="buildOnOptimize">true</str>
       </lst>
-	   <!-- Example of using different distance measure -->
 	   <lst name="spellchecker">
 	     <str name="name">jarowinkler</str>
 	     <str name="field">textSpell</str>
-	     <!-- Use a different Distance Measure -->
 	     <str name="distanceMeasure">org.apache.lucene.search.spell.JaroWinklerDistance</str>
 	     <str name="spellcheckIndexDir">./spellchecker</str>
          <str name="buildOnOptimize">true</str>
 	   </lst>
-	   <!-- This field type's analyzer is used by the QueryConverter to tokenize the value for "q" parameter -->
 	    <str name="queryAnalyzerFieldType">textSpell</str>
-	</searchComponent>
+	</searchComponent> -->
   <!-- ADDED by len -->
    <queryConverter name="queryConverter" class="solr.SpellingQueryConverter"/>	
   <!-- A request handler utilizing the spellcheck component.  
@@ -756,21 +803,18 @@
   WANT FOR YOUR PRODUCTION SYSTEM!
   #############################################################################
   -->
-  <requestHandler name="/spell" class="solr.SearchHandler" lazy="true">
+  <!-- <requestHandler name="/spell" class="solr.SearchHandler" lazy="true">
     <lst name="defaults">
       <str name="spellcheck">true</str>
       <str name="spellcheck.dictionary">default</str>
-      <!-- omp = Only More Popular -->
       <str name="spellcheck.onlyMorePopular">false</str>
-      <!-- exr = Extended Results -->
       <str name="spellcheck.extendedResults">false</str>
-      <!--  The number of suggestions to return -->
       <str name="spellcheck.count">1</str>
     </lst>
     <arr name="last-components">
       <str>spellcheck</str>
     </arr>
-  </requestHandler>
+  </requestHandler>  -->
 
   <searchComponent name="tvComponent" class="org.apache.solr.handler.component.TermVectorComponent"/>
   <!-- A Req Handler for working with the tvComponent.  This is purely as an example.
@@ -1101,5 +1145,5 @@
     <healthcheck type="file">server-enabled</healthcheck>
     -->
   </admin>
-
+  
 </config>

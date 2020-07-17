@@ -36,11 +36,24 @@
             document.getElementById("paymentMethodTypeId").value = value;
             form.action="<@ofbizUrl>${ebsAction!""}</@ofbizUrl>";
             form.submit();
+        } else if (mode == "UWL") {
+            // update wish list action
+            if (updateCart()) {
+                form.action="<@ofbizUrl>${updateWishListAction!""}</@ofbizUrl>";
+                form.submit();
+            }
+        } else if (mode == "ACW") {
+            // add to cart from wish list action
+            if (updateCart()) {
+                document.getElementById("add_item_id").value = value;
+                form.action="<@ofbizUrl>${addToCartFromWishListAction!""}</@ofbizUrl>";
+                form.submit();
+            }
         }
     }
 
     function updateCart() {
-      var cartItemsNo = ${shoppingCartSize!"0"};
+      var cartItemsNo = ${shoppingCartSize!wishListSize!"0"};
       <#assign PDP_QTY_MIN = Static["com.osafe.util.Util"].getProductStoreParm(request,"PDP_QTY_MIN")!"1"/>
       <#assign PDP_QTY_MAX = Static["com.osafe.util.Util"].getProductStoreParm(request,"PDP_QTY_MAX")!"99"/>
       var lowerLimit = ${PDP_QTY_MIN!"1"};

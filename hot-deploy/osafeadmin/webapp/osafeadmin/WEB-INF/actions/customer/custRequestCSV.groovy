@@ -13,11 +13,6 @@ custRequestList = delegator.findList("CustRequest",custRequestCond, null, null, 
 
 if (UtilValidate.isNotEmpty(custRequestList)) 
 {
-    if (UtilValidate.isNotEmpty(custRequestCSVName)) 
-    {
-        custRequestCSVName = custRequestCSVName+(OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(), "yyyy-MM-dd-HH:mm"));
-        response.setHeader("Content-Disposition","attachment; filename=\"" + UtilValidate.stripWhitespace(custRequestCSVName) + ".csv" + "\";");
-    }
     for(GenericValue custRequest : custRequestList)
     {
         custRequestId = custRequest.custRequestId;

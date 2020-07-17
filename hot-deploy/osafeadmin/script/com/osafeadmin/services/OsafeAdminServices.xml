@@ -1254,16 +1254,6 @@
         <field-to-result field="parameters.productLoadImagesDir" result-name="productLoadImagesDir"/>
     </simple-method>
 
-    <simple-method method-name="updatePDPVariantCaption" short-description="Update PDP Variant Caption">
-        <if-empty field="parameters.description">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCaptionError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
-        </if-empty>
-        <check-errors/>
-        <set-service-fields service-name="updateProductFeatureType" to-map="updateProductFeatureTypeMap" map="parameters"/>
-        <call-service service-name="updateProductFeatureType" in-map-name="updateProductFeatureTypeMap"/>
-    </simple-method>
-
     <simple-method method-name="getStyleFilePath" short-description="get style css file path for specific product store id or visual theme id">
 
        <set field="returnFilePath" value="" type="String"/>
@@ -1789,5 +1779,35 @@
             </iterate>
         </if-not-empty>
     </simple-method>
-    
+    <simple-method method-name="pushEntitySync" short-description="Performs Entity Sync push">
+        <if-not-empty field="parameters.entitySyncId">
+        <set-service-fields service-name="runEntitySync" to-map="runEntitySyncCtx" map="parameters"/>
+            <call-service service-name="runEntitySync" in-map-name="runEntitySyncCtx">
+            
+            </call-service>
+        <else>    
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UnsuccessfulEntitySyncError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+        </else>
+        </if-not-empty>
+        <set field="entitySyncHistoryMap.entitySyncId" from-field="parameters.entitySyncId" />
+        <entity-condition list="entitySyncHistoryList" entity-name="EntitySyncHistory">
+            <condition-expr field-name="entitySyncId" operator="equals" from-field="parameters.entitySyncId"/>
+            <order-by field-name="-createdStamp"/>
+        </entity-condition>
+        
+        <call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="entitySyncHistory">
+            <field field="entitySyncHistoryList" type="List"/>
+        </call-class-method>
+        <if-not-empty field="entitySyncHistory">
+            <set field="toCreate" from-field="entitySyncHistory.totalRowsToCreate" />
+            <set field="toStore" from-field="entitySyncHistory.totalRowsToStore" />
+            <set field="toDelete" from-field="entitySyncHistory.totalRowsToRemove" />
+        </if-not-empty>
+        <set field="argListNames[]" from-field="toCreate"/>
+        <set field="argListNames[]" from-field="toStore"/>
+        <set field="argListNames[]" from-field="toDelete"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="EntitySyncSuccess" field="entitySyncSuccessMessage" arg-list-name="argListNames"/>
+        <string-to-list string="${entitySyncSuccessMessage}" list="successMessageList"/>
+    </simple-method>
 </simple-methods>

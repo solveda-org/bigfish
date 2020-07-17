@@ -118,61 +118,6 @@ if(UtilValidate.isNotEmpty(toDateShort) && Util.isDateTime(toDateShort))
     nowTs = UtilDateTime.getDayEnd(nowTs);
 }
 
-// Days
-if(UtilValidate.isNotEmpty(srchDays))
-{
-
-	Timestamp fiveDaysAgo = UtilDateTime.addDaysToTimestamp(nowTs,-5);
-	Timestamp tenDaysAgo = UtilDateTime.addDaysToTimestamp(nowTs,-10);
-	Timestamp twentyDaysAgo = UtilDateTime.addDaysToTimestamp(nowTs,-20);
-
-    if("oneToFive".equals(srchDays))
-    {
-        // 1-5 Days
-        // Now - 5 Days
-
-        ecl = EntityCondition.makeCondition([
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, fiveDaysAgo),
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, nowTs)
-        ],
-        EntityOperator.AND);
-        exprs.add(ecl);
-    }
-    else if("sixToTen".equals(srchDays))
-    {
-        // 5-10 Days
-        // 5 - 10 Days
-
-        ecl = EntityCondition.makeCondition([
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, tenDaysAgo),
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, fiveDaysAgo)
-        ],
-        EntityOperator.AND);
-        exprs.add(ecl);
-    }
-    else if("elevenToTwenty".equals(srchDays))
-    {
-        // 10-20 Days
-        // 10 - 20... Days
-        ecl = EntityCondition.makeCondition([
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, twentyDaysAgo),
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, tenDaysAgo)
-        ],
-        EntityOperator.AND);
-        exprs.add(ecl);
-    }
-    else if("twentyPlus".equals(srchDays))
-    {
-        // 20+ Days
-        // 20 - ... Days
-        ecl = EntityCondition.makeCondition([
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, twentyDaysAgo)
-        ],
-        EntityOperator.AND);
-        exprs.add(ecl);
-    }
-    context.srchDays=srchDays;
-}
 
 // Reviewer
 if(srchReviewer)
@@ -205,7 +150,7 @@ if(srchReviewReject){
 
 }
 dateExpr= FastList.newInstance();
-//SUMMARY PAGE to LIST PAGE CONDITION.
+//Considering Date Condition
 if(UtilValidate.isNotEmpty(fromDateShort) && Util.isDateTime(fromDateShort))
 {
     fromDate = ObjectType.simpleTypeConvert(fromDateShort, "Timestamp", entryDateFormat, locale);
@@ -257,7 +202,7 @@ orderBy = ["productReviewId"];
 productReviews=FastList.newInstance();
 if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") 
  {
-	productReviews = delegator.findList("ProductReview",mainCond, null, orderBy, null, true);
+	productReviews = delegator.findList("ProductReview",mainCond, null, orderBy, null, false);
  }
  
 productSearchByCategoryList=FastList.newInstance();

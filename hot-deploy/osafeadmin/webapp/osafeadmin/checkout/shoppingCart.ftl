@@ -190,7 +190,7 @@
                       </#if>
                     </#if>
                      <tr>
-	                   <td class="totalCaption"><label><#if promoText?has_content>${promoText!""} <#if promoCodeText?has_content><a href="<@ofbizUrl>promotionCodeDetail?productPromoCodeId=${promoCodeText}</@ofbizUrl>">(${promoCodeText!})</a></#if><#else>${adjustmentType.get("description",locale)?if_exists}</#if>:</label></td>
+	                   <td class="totalCaption"><label><#if promoText?has_content>${promoText!""} <#if promoCodeText?has_content><a href="<@ofbizUrl>promotionCodeDetail?productPromoCodeId=${promoCodeText}</@ofbizUrl>">(${promoCodeText!})</a></#if><#elseif adjustmentType?has_content>${adjustmentType.get("description",locale)?if_exists}</#if>:</label></td>
 	                   <td class="totalValue"><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustment(cartAdjustment, shoppingCart.getSubTotal()) rounding=2 isoCode=currencyUom/></td>
 	                 </tr>
                   </#list>

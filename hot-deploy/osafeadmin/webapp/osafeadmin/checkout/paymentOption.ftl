@@ -6,48 +6,27 @@
 <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>&nbsp;</label>
+            <label>${uiLabelMap.PickOneCaption}</label>
         </div>
-        <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry paymentOption" type="radio" id="paymentOptionCCExist" name="paymentOption"  value="CCExist" <#if (selectedPaymentOption?has_content && selectedPaymentOption?string == "CCExist") || !selectedPaymentOption?has_content> checked</#if> />${uiLabelMap.PaymentOptionCreditCardExistLabel}
-        </div>
-    </div>
-</div>
-
-<div class="infoRow row">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>&nbsp;</label>
-        </div>
-        <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry paymentOption" type="radio" id="paymentOptionCCNew" name="paymentOption"  value="CCNew" <#if selectedPaymentOption?has_content && selectedPaymentOption?string == "CCNew"> checked</#if> />${uiLabelMap.PaymentOptionCreditCardNewLabel}
+        <div class="entry checkbox medium">
+            <input class="checkBoxEntry paymentOption" type="radio" id="paymentOptionCCExist" name="paymentOption"  value="CCExist" <#if (selectedPaymentOption?has_content && selectedPaymentOption?string == "CCExist") || !selectedPaymentOption?has_content> checked</#if> />${uiLabelMap.PaymentOptionCreditCardExistLabel}</br>
+            <input class="checkBoxEntry paymentOption" type="radio" id="paymentOptionCCNew" name="paymentOption"  value="CCNew" <#if selectedPaymentOption?has_content && selectedPaymentOption?string == "CCNew"> checked</#if> />${uiLabelMap.PaymentOptionCreditCardNewLabel}</br>
+            <input class="checkBoxEntry paymentOption" type="radio" id="paymentOptionOffLine" name="paymentOption"  value="OffLine" <#if selectedPaymentOption?has_content && selectedPaymentOption?string == "OffLine"> checked</#if> />${uiLabelMap.PaymentOptionOffLineLabel}</br>
         </div>
     </div>
 </div>
-    
-<div class="infoRow row">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>&nbsp;</label>
-        </div>
-        <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry paymentOption" type="radio" id="paymentOptionOffLine" name="paymentOption"  value="OffLine" <#if selectedPaymentOption?has_content && selectedPaymentOption?string == "OffLine"> checked</#if> />${uiLabelMap.PaymentOptionOffLineLabel}
-        </div>
-    </div>
-</div>    
-
 
 <div class="infoRow row CCExist">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.PickOneCaption}<span class="required">*</span></label>
+            <label>${uiLabelMap.SelectOneCaption}</label>
         </div>
         <div class="infoValue">
-           <#assign hasSavedCard= ""/>
-            <input type="hidden" name="paymentMethodTypeId" id="paymentMethodTypeId" value="CREDIT_CARD" />
-           <#if paymentMethodValueMaps?has_content>
-	          <select name="savedCard" id="savedCard" class="small">
-                 <option value="">${uiLabelMap.CommonSelectOne}</option>
+          <#assign hasSavedCard= ""/>
+          <input type="hidden" name="paymentMethodTypeId" id="paymentMethodTypeId" value="CREDIT_CARD" />
+	        <select name="savedCard" id="savedCard" class="small">
+             <option value="">${uiLabelMap.CommonSelectOne}</option>
+               <#if paymentMethodValueMaps?has_content>
                  <#assign alreadyShownSavedCreditCardList = Static["javolution.util.FastList"].newInstance()/>
                  <#assign selectedSavedCard = parameters.savedCard!""/>
 	             <#list paymentMethodValueMaps as savedPaymentMethodValueMap>
@@ -80,8 +59,8 @@
                         </#if>
 	                </#if>
 	             </#list>
-             </select>
-           </#if>
+	           </#if>
+            </select>
         </div>
     </div>
 </div>
@@ -89,7 +68,7 @@
 <div class="infoRow row CCExist">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.VerificationCaption}<span class="required">*</span></label>
+            <label><span class="required">*</span>${uiLabelMap.VerificationCaption}</label>
         </div>
         <div class="infoValue">
         		<input class="medium" type="text" maxlength="30" id="savedVerificationNo"  name="savedVerificationNo" value="${parameters.savedVerificationNo!""}"/>
@@ -100,7 +79,7 @@
 <div class="infoRow row CCNew">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.CardTypeCaption}<span class="required">*</span></label>
+            <label><span class="required">*</span>${uiLabelMap.CardTypeCaption}</label>
         </div>
         <div class="infoValue">
              <input type="hidden" name="paymentMethodTypeId" id="paymentMethodTypeId" value="CREDIT_CARD" />
@@ -123,7 +102,7 @@
 <div class="infoRow row CCNew">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.CardNumberCaption}<span class="required">*</span></label>
+            <label><span class="required">*</span>${uiLabelMap.CardNumberCaption}</label>
         </div>
         <div class="infoValue">
         		<input class="medium" type="text" maxlength="30" id="cardNumber"  name="cardNumber" value="${parameters.cardNumber!""}"/>
@@ -134,7 +113,7 @@
 <div class="infoRow row CCNew">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.ExpirationMonthCaption}<span class="required">*</span></label>
+            <label><span class="required">*</span>${uiLabelMap.ExpirationMonthCaption}</label>
         </div>
         <div class="infoValue">
           <select id="expMonth" name="expMonth" class="expMonth">
@@ -152,7 +131,7 @@
 <div class="infoRow row CCNew">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.ExpirationYearCaption}<span class="required">*</span></label>
+            <label><span class="required">*</span>${uiLabelMap.ExpirationYearCaption}</label>
         </div>
         <div class="infoValue">
           <select id="expYear" name="expYear" class="expYear">
@@ -170,7 +149,7 @@
 <div class="infoRow row CCNew">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.VerificationCaption}<span class="required">*</span></label>
+            <label><span class="required">*</span>${uiLabelMap.VerificationCaption}</label>
         </div>
         <div class="infoValue">
         		<input class="medium" type="text" maxlength="30" id="verificationNo"  name="verificationNo" value="${parameters.verificationNo!""}"/>
@@ -181,7 +160,7 @@
 <div class="infoRow row OffLine">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.ReferenceCaption}<span class="required">*</span></label>
+            <label><span class="required">*</span>${uiLabelMap.ReferenceCaption}</label>
         </div>
         <div class="infoValue">
         		<input class="medium" type="text" maxlength="30" id="referenceNo"  name="referenceNo" value="${parameters.referenceNo!""}"/>

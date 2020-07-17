@@ -1,6 +1,5 @@
 package com.osafe.services;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.solr.client.solrj.beans.Field;
 
 public class SolrIndexDocument {
@@ -53,12 +52,6 @@ public class SolrIndexDocument {
     private Float price;
     @Field
     private Float customerRating;
-    @Field
-    private String color;
-    @Field
-    private String size;
-    @Field
-    private String type;
 
     public SolrIndexDocument() {
         super();
@@ -121,12 +114,6 @@ public class SolrIndexDocument {
     }
 
     public String getProductCategoryId() {
-        if ("productCategory".equals(rowType)) {
-            String[] productCategoryIdParts = StringUtils.split(productCategoryId, " ");
-            if (productCategoryIdParts.length > 0) {
-                return productCategoryIdParts[productCategoryIdParts.length - 1];
-            }
-        }
         return productCategoryId;
     }
 
@@ -260,32 +247,4 @@ public class SolrIndexDocument {
     public void setCustomerRating(Float customerRating) {
         this.customerRating = customerRating;
     }
-
-    public String getColor() {
-        return color;
-    }
-
-    @Field("productFeature_COLOR")
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    @Field("productFeature_SIZE")
-    public void setSize(String size) {
-        this.size = size;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    @Field("productFeature_TYPE")
-    public void setType(String type) {
-        this.type = type;
-    }
-
 }

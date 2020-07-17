@@ -19,8 +19,12 @@
 <#if postalAddressData?has_content>
     <#assign postalAddressContactMechId = postalAddressData.contactMechId!"" />
 </#if>
-
-<h3>${addressEntryBoxHeading!"Address"}</h3>
+<#if !showAddressEntryBoxHeading?has_content>
+    <#assign showAddressEntryBoxHeading = "Y"/>
+</#if>
+<#if showAddressEntryBoxHeading == "Y">
+    <h3>${addressEntryBoxHeading!"Address"}</h3>
+</#if>
 <#if addressEntryInfo?exists && addressEntryInfo?has_content>
    <p class="instructions">${addressEntryInfo!}</p>
 </#if>

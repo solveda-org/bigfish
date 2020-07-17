@@ -1,4 +1,20 @@
 <!-- start promotionsSearch.ftl -->
+    <#assign nowTimestamp=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
+    <#assign defaultFromDate=Static["com.osafe.util.OsafeAdminUtil"].getMonthBackTimeStamp(1,preferredDateFormat)>
+    <div class="entryRow">
+      <div class="entry">
+        <label>${uiLabelMap.FromDateCaption}</label>
+        <div class="entryInput from">
+          <input class="dateEntry" type="text" name="from" maxlength="40" value="${parameters.from!from!defaultFromDate?string(preferredDateFormat)!""}"/>
+        </div>
+      </div> 
+      <div class="entry medium">
+        <label>${uiLabelMap.ToCaption}</label>
+        <div class="entryInput to">
+          <input class="dateEntry" type="text" name="to" maxlength="40" value="${parameters.to!to!nowTimestamp?string(preferredDateFormat)!""}"/>
+        </div>
+      </div> 
+    </div>
      <div class="entryRow">
       <div class="entry">
           <label>${uiLabelMap.ReviewIdCaption}</label>
@@ -26,18 +42,6 @@
           <div class="entryInput">
             <input class="textEntry" type="text" id="srchProductId" name="srchProductId" maxlength="40" value="${parameters.srchProductId!srchProductId!""}"/>
           </div>
-      </div>
-      <div class="entry">
-            <label>${uiLabelMap.DaysSincePostCaption}</label>
-            <div class="entryInput select">
-                <select id="srchDays" name="srchDays">
-                    <option value="" <#if (parameters.srchDays!"") == "">selected</#if>>${uiLabelMap.ChooseOneLabel}</option>
-                    <option value="oneToFive" <#if (parameters.srchDays!"") == "oneToFive">selected</#if>>${uiLabelMap.OneToFiveDaysLabel}</option>
-                    <option value="sixToTen" <#if (parameters.srchDays!"") == "sixToTen">selected</#if>>${uiLabelMap.SixToTenDaysLabel}</option>
-                    <option value="elevenToTwenty" <#if (parameters.srchDays!"") == "elevenToTwenty">selected</#if>>${uiLabelMap.ElevenToTwentyDaysLabel}</option>
-                    <option value="twentyPlus" <#if (parameters.srchDays!"") == "twentyPlus">selected</#if>>${uiLabelMap.TwentyPlusDaysLabel}</option>
-                </select>
-            </div>
       </div>
      </div>
 <!-- end promotionsSearch.ftl -->

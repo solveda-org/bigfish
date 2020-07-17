@@ -11,18 +11,18 @@
             <#assign rowClass = "1">
                 <tr class="dataRow even">
                      <td class="descCol" >
-                       <label>${uiLabelMap.MerchantIdCaption!""}</label>
+                       <label>${uiLabelMap.ApiUrlCaption!""}</label>
                      </td>
                      <td class="seqCol">
-                       <input type="text" class="large" name="merchantId" id="merchantId" maxlength="255" value="${parameters.merchantId!paymentGatewayEBS.merchantId!""}"/>
+                       <input type="text" class="large" name="apiUrl" id="apiUrl" maxlength="255" value="${parameters.apiUrl!paymentGatewayEBS.apiUrl!""}"/>
                      </td>
                 </tr>
                 <tr class="dataRow odd">
                      <td class="descCol" >
-                       <label>${uiLabelMap.ReturnUrlCaption!""}</label>
+                       <label>${uiLabelMap.MerchantIdCaption!""}</label>
                      </td>
                      <td class="seqCol">
-                       <input type="text" class="large" name="returnUrl" id="returnUrl" maxlength="255" value="${parameters.returnUrl!paymentGatewayEBS.returnUrl!""}"/>
+                       <input type="text" class="large" name="merchantId" id="merchantId" maxlength="60" value="${parameters.merchantId!paymentGatewayEBS.merchantId!""}"/>
                      </td>
                 </tr>
                 <tr class="dataRow even">
@@ -35,18 +35,18 @@
                 </tr>
                 <tr class="dataRow odd">
                      <td class="descCol" >
-                       <label>${uiLabelMap.RedirectUrlCaption!""}</label>
+                       <label>${uiLabelMap.ReturnUrlCaption!""}</label>
                      </td>
                      <td class="seqCol">
-                       <input type="text" class="large" name="redirectUrl" id="redirectUrl"maxlength="60" value="${parameters.redirectUrl!paymentGatewayEBS.redirectUrl!""}"/>
+                       <input type="text" class="large" name="returnUrl" id="returnUrl" maxlength="255" value="${parameters.returnUrl!paymentGatewayEBS.returnUrl!""}"/>
                      </td>
                 </tr>
                 <tr class="dataRow even">
                      <td class="descCol" >
-                       <label>${uiLabelMap.ReferenceNoCaption!""}</label>
+                       <label>${uiLabelMap.RedirectUrlCaption!""}</label>
                      </td>
                      <td class="seqCol">
-                       <input type="text" class="large" name="referenceNo" id="referenceNo" maxlength="60" value="${parameters.referenceNo!paymentGatewayEBS.referenceNo!""}"/>
+                       <input type="text" class="large" name="redirectUrl" id="redirectUrl"maxlength="255" value="${parameters.redirectUrl!paymentGatewayEBS.redirectUrl!""}"/>
                      </td>
                 </tr>
                 <tr class="dataRow odd">

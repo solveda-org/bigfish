@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -25,14 +26,15 @@ import org.apache.solr.client.solrj.impl.BinaryRequestWriter;
 import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
+import org.apache.solr.client.solrj.response.TermsResponse.Term;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.FacetParams;
+import org.apache.solr.common.params.ModifiableSolrParams;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -74,7 +76,14 @@ public class SolrEvents {
             if (UtilValidate.isEmpty(searchText))
             {
                 searchText = Util.stripHTML((String)request.getAttribute("searchText"));
-                
+            }
+            
+            // Get text to use for a site search query
+            String searchTextSpellCheck = Util.stripHTML((String)request.getAttribute("searchTextSpellCheck"));
+            
+            if (UtilValidate.isNotEmpty(searchTextSpellCheck))
+            {
+                searchText = searchTextSpellCheck;
             }
             
             GenericValue productStore = ProductStoreWorker.getProductStore(request);
@@ -83,7 +92,7 @@ public class SolrEvents {
             String catalogTopCategoryId = CatalogWorker.getCatalogTopCategoryId(request);
             
             String solrServer = OSAFE_PROPS.getString("solr-search-server");
-            CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
+			CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
             solr.setRequestWriter(new BinaryRequestWriter());
 
             String facetSearchCategoryLabel = OSAFE_UI_LABELS.getString("FacetSearchCategoryCaption");
@@ -248,7 +257,7 @@ public class SolrEvents {
                     facetGroups.remove(filterGroupParts[0]);
                 }
             }
-
+            //queryFacet += " Red";
             // Add filter query (Price)
             if (UtilValidate.isNotEmpty(filterPriceQuery)) {
                 try {
@@ -372,7 +381,8 @@ public class SolrEvents {
                     priceHigh = solrIndexDocumentHigh.getPrice();
                 }    
             }
-
+            
+			
             if (priceLow != null && priceHigh != null) {
                 float priceHighVal = priceHigh.floatValue();
                 float priceLowVal = priceLow.floatValue();
@@ -619,6 +629,11 @@ public class SolrEvents {
                 newresult = newresultComplete.subList(startIndex, newresultComplete.size());
             }
             
+            if (UtilValidate.isNotEmpty(searchText) && sdl.getNumFound() < 1) 
+            {
+                return "error";
+            }
+            
             request.setAttribute("numFound", newresultComplete.size());
             request.setAttribute("start", sdl.getStart());
             request.setAttribute("size", sdl.size());
@@ -630,9 +645,6 @@ public class SolrEvents {
             request.setAttribute("documentList", newresult); //request.setAttribute("documentList", newresult);
             request.setAttribute("completeDocumentList", newresultComplete);
             request.setAttribute("sortResults",sortResults);
-            if (UtilValidate.isNotEmpty(searchText) && sdl.getNumFound() < 1) {
-                return "error";
-            }
 
         } catch (MalformedURLException e) {
             Debug.logError(e.getMessage(), module);
@@ -663,6 +675,88 @@ public class SolrEvents {
             Debug.log(e.getMessage());
         }
         return newresult;
+    }
+    
+    public static String solrSpellCheck(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	String solrServer = OSAFE_PROPS.getString("solr-search-server");
+        
+    	String searchText = Util.stripHTML(request.getParameter("searchText"));
+        
+        if (UtilValidate.isEmpty(searchText))
+        {
+            searchText = Util.stripHTML((String)request.getAttribute("searchText"));
+        }
+        try 
+        {
+        	CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
+        	ModifiableSolrParams params = new ModifiableSolrParams();
+            params.set("qt", "/spell");
+            params.set("q", searchText);
+            QueryResponse responseSpellCheck = solr.query(params);
+            if(responseSpellCheck.getSpellCheckResponse().isCorrectlySpelled()) 
+            {
+            	request.setAttribute("searchText", searchText);	
+            } 
+            else 
+            {
+            	request.setAttribute("searchTextSpellCheck", responseSpellCheck.getSpellCheckResponse().getCollatedResult());
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.logError(e.getMessage(), module);
+        }
+        return "success";
+    }
+    
+    public static String autoSuggestionList(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	String solrServer = OSAFE_PROPS.getString("solr-search-server");
+    	
+    	List<String> autoSuggestionList = FastList.newInstance();
+    	List<Long> autoSuggestionFreqList = FastList.newInstance();
+        
+    	String searchText = Util.stripHTML(request.getParameter("searchText"));
+        
+        if (UtilValidate.isEmpty(searchText))
+        {
+            searchText = Util.stripHTML((String)request.getAttribute("searchText"));
+        }
+        try 
+        {
+        	CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
+        	ModifiableSolrParams params = new ModifiableSolrParams();
+            params.set("qt", "/terms");
+            params.set("terms.fl", "autocomplete_text");
+            params.set("omitHeader", "true");
+            params.set("terms.sort", "index");
+            params.set("terms.prefix", searchText);
+            QueryResponse responseSpell = solr.query(params);
+            String terms = responseSpell.getTermsResponse().getTerms("autocomplete_text").get(0).getTerm();
+            
+            List<Term> termsListParent = responseSpell.getTermsResponse().getTerms("autocomplete_text");
+            
+            for(Term termsListChild : termsListParent)
+            {
+                autoSuggestionList.add(termsListChild.getTerm());
+            	autoSuggestionFreqList.add(termsListChild.getFrequency());
+            }
+            if(UtilValidate.isNotEmpty(autoSuggestionList))
+            {
+            	HashSet set = new HashSet(autoSuggestionList);
+                autoSuggestionList.clear();
+                autoSuggestionList.addAll(set);
+            }
+            
+            request.setAttribute("autoSuggestionList", autoSuggestionList);
+            request.setAttribute("response", "success");
+        } 
+        catch (Exception e) 
+        {
+            Debug.logError(e.getMessage(), module);
+        }
+        return "success";
     }
     
 }

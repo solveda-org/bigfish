@@ -58,6 +58,24 @@
                         </div>
                    </div>
                    </#if>
+          
+          <#elseif "EXT_EBS" == paymentMethod.paymentMethodTypeId>
+
+                <#assign orderPaymentPreferences = paymentMethod.getRelated("OrderPaymentPreference")>
+                <#assign orderPaymentPreference = ""/>
+                <#if orderPaymentPreferences?has_content>
+                    <#assign orderPaymentPreference = orderPaymentPreferences[0]!"">
+                </#if>
+              <#-- ebs info -->
+              <#if "EXT_EBS" == paymentMethod.paymentMethodTypeId && orderPaymentPreference?has_content>
+                 <div class="displayBox">
+                           <h3>${uiLabelMap.PaymentInformationHeading}</h3>
+                        <div class="payPalInfo">
+                            <p><label for="ebsImage">${uiLabelMap.EBSOnlyCaption}</label><img class="ebsImage" alt="ebs" src="/osafe_theme/images/icon/ebs_wider.gif"></p>
+                            <p><label for="amount">${uiLabelMap.AmountCaption}</label>${orderPaymentPreference.maxAmount}</p>
+                        </div>
+                 </div>
+              </#if>
            </#if>
         </#list>
       </div>

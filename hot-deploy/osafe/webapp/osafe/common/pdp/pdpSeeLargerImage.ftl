@@ -5,11 +5,16 @@
   </#if>
 </div>
 </div>
+<#assign productDetailImageUrl = context.get("productDetailImageUrl")!""/>
+<#if (productDetailImageUrl?has_content && productDetailImageUrl != '')>
+  <div id="largeImageUrl_Virtual" style="display:none">
+    <a name="mainImageLink" class="mainImageLink" href="javascript:setDetailImage('<#if (productDetailImageUrl?has_content && productDetailImageUrl !='')>${productDetailImageUrl!}</#if>');displayDialogBox('largeImage_');"><span>${uiLabelMap.ViewLargerImageLabel}</span></a>
+  </div>
+</#if> 
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
     <#assign variantProdCtntWrapper = productVariantContentWrapperMap.get('${key}')!/>
     <#assign variantContentIdMap = productVariantProductContentIdMap.get('${key}')!""/>
-    <#assign productDetailImageUrl = context.get("productDetailImageUrl")!""/>
     <#if variantContentIdMap?has_content>
     	<#assign variantContentId = variantContentIdMap.get("DETAIL_IMAGE_URL")!""/>
         <#if variantContentId?has_content>

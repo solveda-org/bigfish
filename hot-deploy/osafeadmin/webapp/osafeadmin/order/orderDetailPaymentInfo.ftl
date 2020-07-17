@@ -38,7 +38,7 @@
 	          <div class="infoValue">
 	              <#-- TODO: add links to UPS/FEDEX/etc based on carrier partyId  -->
 	              <#if shipGroup.trackingNumber?has_content>
-	                <p>${shipGroup.trackingNumber}</p>
+	                ${shipGroup.trackingNumber}
 	              </#if>
 	          </div>
 	        </#if>

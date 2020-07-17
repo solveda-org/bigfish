@@ -18,7 +18,7 @@
 <#if inStock>
   <div class="addToCart">
 	<label>${uiLabelMap.QuantityLabel}:</label><input type="text" class="quantity" size="5" name="quantity" value="1" maxlength="5"/>
-	<a href="javascript:void(0);" onClick="javascript:addItem();" class="standardBtn addToCart <#if featureOrder?exists && featureOrder?size gt 0>inactiveAddToCart</#if>" id="addToCart"><span>${uiLabelMap.OrderAddToCartBtn}</span></a>
+	<a href="javascript:void(0);" onClick="javascript:addItem('addToCart');" class="standardBtn addToCart <#if featureOrder?exists && featureOrder?size gt 0>inactiveAddToCart</#if>" id="addToCart"><span>${uiLabelMap.OrderAddToCartBtn}</span></a>
   </div>
 <#elseif !isSellable>
   <div class="addToCart">

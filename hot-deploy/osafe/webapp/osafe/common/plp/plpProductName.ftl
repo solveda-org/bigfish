@@ -1,4 +1,4 @@
 <div class="plpProductName">
- <span>${productName!""}</span>
+ <span>${plpProductName!""}</span>
 </div>
            

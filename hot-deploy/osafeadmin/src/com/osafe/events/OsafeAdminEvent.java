@@ -247,6 +247,18 @@ public class OsafeAdminEvent {
             request.setAttribute("osafeSuccessMessageList", success_list);
             return "success";
         }
-    }  
+    }
+    
+    public static String checkProductFileInSession(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	String xlsFileName = (String) request.getSession().getAttribute("uploadedXLSFile");
+    	if(UtilValidate.isEmpty(xlsFileName)) {
+    		request.setAttribute("_ERROR_MESSAGE_LIST_", null);
+    		return "error";
+    	}
+    	else {
+    		return "success";
+    	}
+    }
  
 }

@@ -286,7 +286,9 @@
             jQuery('.selectOrderItem').hide();
         } else if (jQuery('input:radio[name=changeStatusAll]:checked').val() == "N") {
             jQuery('.selectOrderItem').show();
-        } 
+        } else {
+            jQuery('.selectOrderItem').hide();
+        }
     }
     function getOrderStatusChangeDisplay(statusId) {
         if (jQuery(statusId).val() == "ORDER_COMPLETED") {
@@ -1565,25 +1567,26 @@ function setRowNo(rowNo) {
  	}
  }
  
- // update the order item section
+    // update the shopping cart sections and update the promotion section
     function setShippingMethod(selectedShippingOption, isOnLoad) {
         if (jQuery('#shoppingCartContainer').length) {
-            jQuery('#shoppingCartContainer').load('<@ofbizUrl>setShippingOption?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+            jQuery('#shoppingCartContainer').load('<@ofbizUrl>setShippingOption?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>',  function(){
+	            if (jQuery('#shoppingCartBottomContainer').length) {
+		            jQuery('#shoppingCartBottomContainer').load('<@ofbizUrl>setShippingOptionBottom?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(){
+		            	if((isOnLoad != null) && (isOnLoad =='N')) {
+		            		if (jQuery('#promoCodeContainer').length) { 
+				                jQuery('#promoCodeContainer').load('<@ofbizUrl>reloadPromoCode?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+				            }
+		            	}
+		            });
+		        }
+            });
         }
-        if (jQuery('#shoppingCartBottomContainer').length) {
-            jQuery('#shoppingCartBottomContainer').load('<@ofbizUrl>setShippingOptionBottom?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
-        }
-        if((isOnLoad != null) && (isOnLoad =='N')) {
-            //call ajax and update promotion info section
-            if (jQuery('#promoCodeContainer').length) {
-                jQuery('#promoCodeContainer').load('<@ofbizUrl>reloadPromoCode?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
-           }
-        }
+        
         if(selectedShippingOption != "NO_SHIPPING@_NA_")
         {
         	jQuery('#checkoutStoreName').hide();
         }
-        
     }
     
     //add promo code for checkout screen

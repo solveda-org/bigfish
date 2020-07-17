@@ -1223,24 +1223,43 @@
 
         <check-errors/>
 
-        <!-- create party , person, user login -->
-        <set-service-fields service-name="createPersonAndUserLogin" to-map="personUserLoginContext" map="parameters"/>
-        <set field="personUserLoginContext.userLoginId" from-field="parameters.loginEmail"/>
-        <set field="personUserLoginContext.currentPassword" from-field="parameters.password"/>
-        <set field="personUserLoginContext.currentPasswordVerify" from-field="parameters.passwordConfirm"/>
+        <!-- create party -->
+        <make-value value-field="createPartyEntity" entity-name="Party"/>
+        <set-pk-fields map="parameters" value-field="createPartyEntity"/>
+        <set-nonpk-fields map="parameters" value-field="createPartyEntity"/>
+        <set field="createPartyEntity.partyTypeId" value="PERSON"/>
+        <create-value value-field="createPartyEntity"/>
+
+        <!-- create person -->
+        <make-value value-field="createPersonEntity" entity-name="Person"/>
+        <set-pk-fields map="parameters" value-field="createPersonEntity"/>
+        <set-nonpk-fields map="parameters" value-field="createPersonEntity"/>
+        <create-value value-field="createPersonEntity"/>
+
+        <!-- create user login -->
+        <set-service-fields service-name="createUserLogin" to-map="createUserLoginContext" map="parameters"/>
+        <set field="createUserLoginContext.userLoginId" from-field="parameters.loginEmail"/>
+        <set field="createUserLoginContext.currentPassword" from-field="parameters.password"/>
+        <set field="createUserLoginContext.currentPasswordVerify" from-field="parameters.passwordConfirm"/>
         <if-compare operator="equals" value="PARTY_DISABLED" field="parameters.statusId">
-            <set field="personUserLoginContext.enabled" value="N"/>
+            <set field="createUserLoginContext.enabled" value="N"/>
         <else>
-            <set field="personUserLoginContext.enabled" value="Y"/>
+            <set field="createUserLoginContext.enabled" value="Y"/>
         </else>
         </if-compare>
-        <call-service service-name="createPersonAndUserLogin" in-map-name="personUserLoginContext">
-            <result-to-field result-name="partyId" field="parameters.partyId"/>
-        </call-service>
+        <call-service service-name="createUserLogin" in-map-name="createUserLoginContext"/>
 
         <!-- create party role -->
         <set-service-fields service-name="createPartyRole" to-map="partyRoleContext" map="parameters"/>
         <call-service service-name="createPartyRole" in-map-name="partyRoleContext"/>
+
+        <!-- create product store role -->
+        <make-value entity-name="ProductStoreRole" value-field="productStoreRole"/>
+        <set field="productStoreRole.partyId" from-field="parameters.partyId"/>
+        <set field="productStoreRole.roleTypeId" from-field="parameters.roleTypeId"/>
+        <set field="productStoreRole.productStoreId" from-field="parameters.productStoreId"/>
+        <now-timestamp field="productStoreRole.fromDate"/>  
+        <create-value value-field="productStoreRole"/>
 
         <!-- login email - address -->
         <set-service-fields service-name="createPartyEmailAddress" to-map="emailAddressContext" map="parameters"/>

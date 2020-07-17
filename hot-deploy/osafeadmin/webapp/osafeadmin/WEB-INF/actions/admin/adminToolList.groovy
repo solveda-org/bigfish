@@ -43,6 +43,14 @@ adminTool.put("toolDetail", "solrReIndexDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.SolrReIndxLabel).toUpperCase());
 adminToolsList.add(adminTool);
 
+//entity Sync 
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.EntitySyncLabel);
+adminTool.put("toolDesc", uiLabelMap.EntitySyncInfo);
+adminTool.put("toolDetail", "entitySyncDetail");
+adminTool.put("toolTypeUpperCase", (uiLabelMap.EntitySyncLabel).toUpperCase());
+adminToolsList.add(adminTool);
+
 context.adminToolsList = UtilMisc.sortMaps(adminToolsList, UtilMisc.toList("toolTypeUpperCase"));
 // END OF ADMIN TOOLS
 

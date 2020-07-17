@@ -20,8 +20,17 @@ under the License.
 
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+    
+    <!-- Belongs in accounting.payment.PaymentGatewayConfigSeervices.xml -->
     <simple-method method-name="updatePaymentGatewayConfigSagePayToken" short-description="Update Payment Gateway Config SagePay Token">
         <entity-one entity-name="PaymentGatewaySagePayToken" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
+    
+    <!-- Belongs in accounting.payment.PaymentGatewayConfigSeervices.xml -->
+    <simple-method method-name="updatePaymentGatewayConfigEBS" short-description="Update Payment Gateway Config EBS">
+        <entity-one entity-name="PaymentGatewayEbs" value-field="lookedUpValue"/>
         <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
         <store-value value-field="lookedUpValue"/>
     </simple-method>

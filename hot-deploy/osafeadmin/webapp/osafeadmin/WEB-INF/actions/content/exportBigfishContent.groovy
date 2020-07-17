@@ -36,7 +36,8 @@ import javolution.util.FastList;
 tmpDir = FileUtil.getFile("runtime/tmp");
 exportFileName = "bigfish-content-export"+(OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(), "yyyyMMdd-HHmm"))+".xml";
 exportFile = new File(tmpDir, exportFileName);
-if(!exportFile.exists()) {
+if(!exportFile.exists()) 
+{
     exportFile.createNewFile();
 }
 
@@ -60,36 +61,44 @@ if (UtilValidate.isNotEmpty(initializedCB))
 passedContentTypeIds = FastList.newInstance();
 passedProdCatContentTypeIds = FastList.newInstance();
 
-if(exportContentLibrary) {
+if(exportContentLibrary) 
+{
     passedContentTypeIds.add("BF_CONTENT_LIBRARY");
     context.exportContentLibrary=exportContentLibrary;
 }
-if(exportContentHomePage) {
+if(exportContentHomePage) 
+{
     passedContentTypeIds.add("BF_HOME_PAGE");
     context.exportContentHomePage=exportContentHomePage;
 }
-if(exportContentSiteInfo) {
+if(exportContentSiteInfo) 
+{
     passedContentTypeIds.add("BF_SITE_INFO");
     context.exportContentSiteInfo=exportContentSiteInfo;
 }
-if(exportContentStaticPage) {
+if(exportContentStaticPage) 
+{
     passedContentTypeIds.add("BF_STATIC_PAGE");
     context.exportContentStaticPage=exportContentStaticPage;
 }
-if(exportContentPageTop) {
+if(exportContentPageTop) 
+{
     passedContentTypeIds.add("BF_PAGE_TOP_SPOT");
     context.exportContentPageTop=exportContentPageTop;
 }
-if(exportContentPDPSpot) {
+if(exportContentPDPSpot) 
+{
     passedContentTypeIds.add("BF_PDP_SPOT");
     context.exportContentPDPSpot=exportContentPDPSpot;
 }
-if(exportContentEmail) {
+if(exportContentEmail) 
+{
     passedContentTypeIds.add("BF_EMAIL_TEMPLATE");
     context.exportContentEmail=exportContentEmail;
 }
 
-if(exportContentProdCat) {
+if(exportContentProdCat) 
+{
     passedProdCatContentTypeIds.add("PDP_ADDITIONAL");
     passedProdCatContentTypeIds.add("PLP_ESPOT_PAGE_TOP");
     passedProdCatContentTypeIds.add("PLP_ESPOT_PAGE_END");
@@ -106,23 +115,27 @@ numberOfContentTypeIds = passedContentTypeIds?.size() ?: 0;
 context.numberOfContentTypeIds = numberOfContentTypeIds;
 
 numberWritten = 0;
-if (exportFile && numberOfContentTypeIds) {
+if (exportFile) 
+{
 
     writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile.getAbsolutePath()), "UTF-8")));
     writer.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
     writer.println("<entity-engine-xml>");
 
-    for(contentTypeId in passedContentTypeIds) {
+    for(contentTypeId in passedContentTypeIds) 
+    {
         beganTransaction = TransactionUtil.begin(3600);
         try {
             TransactionUtil.commit(beganTransaction);
             contentType = delegator.findByPrimaryKey("ContentType", ["contentTypeId" : contentTypeId]);
-            if (contentType!= null) {
+            if (contentType!= null) 
+            {
                 contentType.writeXmlText(writer, "");
                 numberWritten++;
                 findXContentXrefMap = ["productStoreId" : productStoreId, "contentTypeId" : contentTypeId];
                 xContentXrefList = delegator.findByAnd("XContentXref", findXContentXrefMap);
-                for(xContentXref in xContentXrefList) {
+                for(xContentXref in xContentXrefList) 
+                {
                     content = xContentXref.getRelatedOne("Content");
                     if (content != null) 
                     {
@@ -169,17 +182,20 @@ if (exportFile && numberOfContentTypeIds) {
             TransactionUtil.commit(beganTransaction);
         } 
     }
-    for(prodCatContentTypeId in passedProdCatContentTypeIds) {
+    for(prodCatContentTypeId in passedProdCatContentTypeIds) 
+    {
         beganTransaction = TransactionUtil.begin(3600);
         try {
             TransactionUtil.commit(beganTransaction);
             contentType = delegator.findByPrimaryKey("ProductCategoryContentType", ["prodCatContentTypeId" : prodCatContentTypeId]);
-            if (contentType!= null) {
+            if (contentType!= null) 
+            {
                 //contentType.writeXmlText(writer, "");
                 numberWritten++;
                 findProductCategoryContentMap = ["prodCatContentTypeId" : prodCatContentTypeId];
                 productCategoryContentList = delegator.findByAnd("ProductCategoryContent", findProductCategoryContentMap);
-                for(productCategoryContent in productCategoryContentList) {
+                for(productCategoryContent in productCategoryContentList) 
+                {
                     content = productCategoryContent.getRelatedOne("Content");
                     if (content != null) 
                     {
@@ -194,7 +210,8 @@ if (exportFile && numberOfContentTypeIds) {
 	                        numberWritten++;
                             
                             electronicText = dataResource.getRelatedOne("ElectronicText");
-                            if (electronicText != null) {
+                            if (electronicText != null) 
+                            {
                                 electronicText.writeXmlText(writer, "");
                                 numberWritten++;
                             }

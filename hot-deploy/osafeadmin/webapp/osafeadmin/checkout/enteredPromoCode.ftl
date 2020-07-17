@@ -55,10 +55,12 @@
             </#if>
           </td>
           <td class="statusCol">
-            <#assign qtyLeftInActions = productPromoUseInfo.quantityLeftInActions.toString() />
+            <#if productPromoUseInfo.quantityLeftInActions?has_content >
+              <#assign qtyLeftInActions = productPromoUseInfo.quantityLeftInActions.toString() />
+            </#if>
             <#assign is_Float = Static["com.osafe.util.OsafeAdminUtil"].isFloat(qtyLeftInActions!"") />
             <!-- When Promo Code is Applied, qtyLeftInActions returns a number. When it is not Applied, it will return a null value. -->
-            <#if !(productPromoUseInfo.quantityLeftInActions?string?has_content) || !(is_Float)>
+            <#if !(productPromoUseInfo.quantityLeftInActions?has_content) || !(is_Float)>
               ${uiLabelMap.PromoCodeAddedOnlyInfo}
             <#else>
               ${uiLabelMap.PromoCodeAppliedInfo}

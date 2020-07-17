@@ -220,6 +220,12 @@
     <property key="PAGE_END_SPOT_STORE_PICKUP">
         <value xml:lang="en">PES_STORE_PICKUP</value>
     </property>
+    <property key="PAGE_TOP_SPOT_WISHLIST">
+        <value xml:lang="en">PTS_WISHLIST</value>
+    </property>
+    <property key="PAGE_END_SPOT_WISHLIST">
+        <value xml:lang="en">PES_WISHLIST</value>
+    </property>
 
     <!-- *** ECOMMERCE PDP SPOT MENU HOT SPOTS *************************************** -->
     <property key="PDP_SPOT_INTRODUCED">

@@ -1,11 +1,6 @@
 ${sections.render('commonFormJS')}
 ${sections.render('commonFormDialog')?if_exists}
-<#if showSuccessMessage?has_content >
-  <div class="content-messages eCommerceSuccessMessage">
-    <span class="checkMarkIcon eventImage"></span>
-      <p class="eventMessage">${showSuccessMessage}</p>
-  </div>
-</#if>
+
 <#if searchBoxHeading?exists && searchBoxHeading?has_content>
 <div class="displaySearchBox">
      <div class="header"><h2>${searchBoxHeading?if_exists}</h2></div>

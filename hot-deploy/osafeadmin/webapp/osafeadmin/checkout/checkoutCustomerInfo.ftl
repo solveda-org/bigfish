@@ -2,7 +2,7 @@
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.CustomerNoCaption}</label>
+                <label><span class="required">*</span>${uiLabelMap.CustomerNoCaption}</label>
             </div>
             <div class="infoValue">
             	${party?if_exists.partyId!""}
@@ -35,7 +35,7 @@
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.FirstNameCaption}</label>
+                <label><span class="required">*</span>${uiLabelMap.FirstNameCaption}</label>
             </div>
             <div class="infoValue">
                  ${partyFirstName?if_exists!""}
@@ -63,7 +63,7 @@
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.LastNameCaption}</label>
+                <label><span class="required">*</span>${uiLabelMap.LastNameCaption}</label>
             </div>
             <div class="infoValue">
                 ${partyLastName?if_exists!""}

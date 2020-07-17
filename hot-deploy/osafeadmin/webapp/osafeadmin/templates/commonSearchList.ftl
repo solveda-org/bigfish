@@ -1,9 +1,3 @@
-<#if showSuccessMessage?has_content >
-  <div class="content-messages eCommerceSuccessMessage">
-    <span class="checkMarkIcon eventImage"></span>
-      <p class="eventMessage">${showSuccessMessage}</p>
-  </div>
-</#if>
 
 <div class="displaySearchBox">
     <div class="header"><h2>${searchBoxHeading?if_exists}</h2></div>

@@ -10,6 +10,7 @@
     <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_CONTACT_US</@ofbizUrl>">Contact Us</a></li>
     <li><a href="<@ofbizUrl>requestCatalog</@ofbizUrl>">Request Catalog</a></li>
     <li><a href="<@ofbizUrl>MyAccount</@ofbizUrl>">My Account</a></li>
+    <li><a href="<@ofbizUrl>eCommerceShowWishList</@ofbizUrl>">Wish List</a></li>
     <#if userLogin?has_content && userLogin.userLoginId != "anonymous">
         <li><a href="<@ofbizUrl>logout</@ofbizUrl>">Logout</a></li>
     <#else/>

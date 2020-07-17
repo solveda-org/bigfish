@@ -163,9 +163,6 @@
     <property key="OrderViewNav">
         <value xml:lang="en">View Orders</value>
     </property>
-    <property key="PDPVariantCaptionNav">
-        <value xml:lang="en">PDP Variant Captions</value>
-    </property>
     <property key="PageContentSpotsNav">
         <value xml:lang="en">Page Content Spots</value>
     </property>
@@ -652,9 +649,6 @@
     <property key="OrdHeading">
         <value xml:lang="en">Ord</value>
     </property>
-    <property key="PDPVariantCaptionsHeading">
-        <value xml:lang="en">PDP Variant Captions</value>
-    </property>
     <property key="PTSHeading">
         <value xml:lang="en">Page Content Spots</value>
     </property>
@@ -675,12 +669,6 @@
     </property>
     <property key="PDPSpotTableHeading">
         <value xml:lang="en">PDP Content</value>
-    </property>
-    <property key="PDPVariantCaptionListHeading">
-        <value xml:lang="en">PDP Variant Captions</value>
-    </property>
-    <property key="PDPVariantCaptionDetailHeading">
-        <value xml:lang="en">PDP Variant Caption:</value>
     </property>
     <property key="PixelTrackingDetailHeading">
         <value xml:lang="en">Pixel Tracking Detail: </value>
@@ -1095,6 +1083,9 @@
     </property>
     <property key="PayPalPaymentMethodHeading">
         <value xml:lang="en">Pay Pal Payment Method</value>
+    </property>
+    <property key="EbsPaymentMethodHeading">
+        <value xml:lang="en">EBS Payment Method</value>
     </property>
     <property key="PaymentMethodInfoHeading">
         <value xml:lang="en">Payment Method</value>
@@ -1999,6 +1990,9 @@
     <property key="TextEmailPreferenceInfo">
         <value xml:lang="en">Plain Text</value>
     </property>
+    <property key="ApiUrlCaption">
+        <value xml:lang="en">Api Url</value>
+    </property>
     <property key="MerchantIdCaption">
         <value xml:lang="en">Merchant Id</value>
     </property>
@@ -2776,6 +2770,15 @@
     <property key="TransactionIdCaption">
         <value xml:lang="en">Transaction ID:</value>
     </property>
+    <property key="ReferenceNumberCaption">
+        <value xml:lang="en">Reference Number:</value>
+    </property>
+    <property key="ResponseCodeCaption">
+        <value xml:lang="en">Response Code:</value>
+    </property>
+    <property key="ResponseMessageCaption">
+        <value xml:lang="en">Response Message:</value>
+    </property>
     <property key="PaymentServiceTypeEnumIdCaption">
         <value xml:lang="en">Service Type Enum ID:</value>
     </property>
@@ -2799,6 +2802,9 @@
     </property>
     <property key="StoreIdCaption">
         <value xml:lang="en">Store ID:</value>
+    </property>
+    <property key="SelectOneCaption">
+        <value xml:lang="en">Select One:</value>
     </property>
     <!-- *** Caption Ends*************************************** -->
 
@@ -3188,7 +3194,7 @@
         <value xml:lang="en">Credit Card, enter a new card</value>
     </property>
     <property key="PaymentOptionOffLineLabel">
-        <value xml:lang="en">Offline Payment, Check or Money Order</value>
+        <value xml:lang="en">Offline Payment, COD, Check or Money Order</value>
     </property>
     <property key="PaymentOptionPaypalNewLabel">
         <value xml:lang="en">Paypal</value>
@@ -4452,6 +4458,9 @@
     <property key="ScheduledJobEmailSuccess">
         <value xml:lang="en">Processed Successfully</value>
     </property>
+    <property key="EntitySyncSuccess">
+        <value xml:lang="en">Entity Sync Completed Successfully. Created {0} rows, Updated {1} rows, Deleted {2} rows </value>
+    </property>
     <property key="ScheduledJobEmailFailError">
         <value xml:lang="en">*** FAILED ***</value>
     </property>
@@ -4460,6 +4469,9 @@
     </property>
     <property key="SystemLabel">
         <value xml:lang="en">System?</value>
+    </property>
+    <property key="EntitySyncLabel">
+        <value xml:lang="en">Entity Sync</value>
     </property>
     <property key="EnabledLabel">
         <value xml:lang="en">Enabled?</value>
@@ -4800,6 +4812,9 @@
     <property key="OrderStatusDetailTitle">
         <value xml:lang="en">order status change</value>
     </property>
+    <property key="OrderShipmentDetailTitle">
+        <value xml:lang="en">order shipping detail</value>
+    </property>
     <property key="OrderNoteDetailTitle">
         <value xml:lang="en">order note detail</value>
     </property>
@@ -4829,12 +4844,6 @@
     </property>
     <property key="PDPAdditionContentListTitle">
         <value xml:lang="en">dynamic PDP additional content list</value>
-    </property>
-    <property key="PDPVariantCaptionListTitle">
-        <value xml:lang="en">PDP variant captions list</value>
-    </property>
-    <property key="PDPVariantCaptionDetailTitle">
-        <value xml:lang="en">PDP variant captions detail</value>
     </property>
     <property key="PixelTrackingListTitle">
         <value xml:lang="en">pixel tracking list</value>
@@ -5217,6 +5226,9 @@
     <property key="ViewTaxesTitle">
         <value xml:lang="en">view taxes</value>
     </property>
+    <property key="EntitySyncDetailTitle">
+        <value xml:lang="en">Entity Sync</value>
+    </property>
     <property key="ViewTaxDetailTitle">
         <value xml:lang="en">view tax detail</value>
     </property>
@@ -5277,6 +5289,9 @@
     </property>
     <property key="AdminPaymentSettingInfo">
         <value xml:lang="en">This function provides the ability to associated various OFBiz payment functions to specific Payment Gateways.</value>
+    </property>
+    <property key="EntitySyncInfo">
+        <value xml:lang="en">Entity Sync.</value>
     </property>
     <property key="RatingReviewSummaryInfo">
         <value xml:lang="en">Quick snapshot of all Reviews summarized by Status</value>
@@ -5571,9 +5586,6 @@
     </property>
     <property key="OptionalResizeNoteInfo">
         <value xml:lang="en">Note: preview image resized from original H=${height}px, W=${originalWidth}px to H=${height}px, W=${width}px</value>
-    </property>
-    <property key="PDPVariantCaptionsInfo">
-        <value xml:lang="en">Maintain the captions in the PDP for the variant selectors (color, size etc.)</value>
     </property>
     <property key="PayInStoreInfo">
         <value xml:lang="en">Pay In Store.</value>
@@ -6035,6 +6047,12 @@
     <property key="BlankActiveFromDateError">
         <value xml:lang="en">The Active From field cannot be blank</value>
     </property>
+    <property key="ProductExpiredError">
+        <value xml:lang="en">This product is discontinued. Disco-Date is</value>
+    </property>
+    <property key="ProductNotIntroducedError">
+        <value xml:lang="en">This product has not yet been introduced. Intro-Date is</value>
+    </property>
     <property key="BlankCategoryImageError">
         <value xml:lang="en">Category image file cannot be blank</value>
     </property>
@@ -6418,6 +6436,18 @@
     </property>
     <property key="SequenceNumNotVaildNumError">
         <value xml:lang="en">The Sequence# must be numeric and between 1 and 1000.</value>
+    </property>
+    <property key="FacetMinValueNotVaildNumError">
+        <value xml:lang="en">The Min Display must be numeric and between 0 and 99.</value>
+    </property>
+    <property key="FacetMaxValueNotVaildNumError">
+        <value xml:lang="en">The Max Display must be numeric and between 1 and 99.</value>
+    </property>
+    <property key="InvalidFacetMaxValueError">
+        <value xml:lang="en">The Max Display must be greater than the Min Display.</value>
+    </property>
+    <property key="InvalidMinMaxValueError">
+        <value xml:lang="en">Leave both entries blank to use the System Defaults. Otherwise both values are required</value>
     </property>
     <property key="InvalidSequenceNumber">
         <value xml:lang="en">The Seq# must be numeric and between 1 and 1000.</value>
@@ -7050,6 +7080,12 @@
     <property key="CheckoutNoCustomerError">
         <value xml:lang="en">There is no customer currently in context. You must select a Customer in the Admin / Customer option in order to Check Out</value>
     </property>
+    <property key="VariantProductAssocError">
+        <value xml:lang="en">You cannot make associations for VARIANT products. They are only applicable for VIRTUAL or FINISHED GOODS</value>
+    </property>
+    <property key="VirtualProductAddToCartError">
+        <value xml:lang="en">You cannot purchase a VIRTUAL product. Please select a VARIANT in order to Add to Cart</value>
+    </property>
     <property key="CheckoutNoItemsInCartError">
         <value xml:lang="en">There are no items in the Shopping Cart. You must add items in order to Check Out</value>
     </property>
@@ -7110,8 +7146,65 @@
     <property key="ShoppingCartEmptyError">
         <value xml:lang="en">Shopping cart must have at least one product</value>
     </property>
-    <property key="EmptyRefNumError">
+    <property key="EmptyRefNumberError">
         <value xml:lang="en">Reference number can not be blank</value>
+    </property>
+    <property key="VerificationNumberMissingError">
+        <value xml:lang="en">A valid Verification Code must be entered. Please try again.</value>
+    </property>
+    <property key="SavedCardMissingError">
+        <value xml:lang="en">Please select one of saved card</value>
+    </property>
+    <property key="FirstNameOnCardMissingError">
+        <value xml:lang="en">Please enter your First Name on Card</value>
+    </property>
+    <property key="LastNameOnCardMissingError">
+        <value xml:lang="en">Please enter your Last Name on Card</value>
+    </property>
+    <property key="CardTypeMissingError">
+        <value xml:lang="en">A Credit Card type must be selected from the drop-down</value>
+    </property>
+    <property key="CardNumberMissingError">
+        <value xml:lang="en">Please enter your Card Number</value>
+    </property>
+    <property key="ExpirationMonthMissingError">
+        <value xml:lang="en">Please enter your Expiration Month</value>
+    </property>
+    <property key="ExpirationYearMissingError">
+        <value xml:lang="en">Please enter your Expiration Year</value>
+    </property>
+    <property key="ExpirationDateIsBeforeTodayError">
+        <value xml:lang="en">Please enter your Expiration Year</value>
+    </property>
+    <property key="CreditCardNumberInvalidError">
+        <value xml:lang="en">A valid Credit Card number must be entered. Please try again.</value>
+    </property>
+    <property key="CreditCardNumberInvalidSuggestError">
+        <value xml:lang="en">{0} is not a valid {1} credit card number. (It appears to be a {2} credit card number)</value>
+    </property>
+    <property key="OfferCodeMissingError">
+        <value xml:lang="en">Please enter your Offer Code.</value>
+    </property>
+    <property key="OfferCodeNotFoundError">
+        <value xml:lang="en">Unfortunately the Offer Code that you entered is incorrect.  Please check the details and enter the information again.</value>
+    </property>
+    <property key="OfferCodeNotFoundError">
+        <value xml:lang="en">Unfortunately the Offer Code that you entered is incorrect.  Please check the details and enter the information again.</value>
+    </property>
+    <property key="OfferCodeInUseError">
+        <value xml:lang="en">The Offer Code that you entered is has already been applied to your shopping cart</value>
+    </property>
+    <property key="OfferCodeExpireError">
+        <value xml:lang="en">The Offer Code that you entered is has already been applied to your shopping cart</value>
+    </property>
+    <property key="OfferCodeUseExcessError">
+        <value xml:lang="en">This promotion code has reached it's maximum use limit for you and can no longer be used.</value>
+    </property>
+    <property key="ProcessPaymentError">
+        <value xml:lang="en">We cannot process your payment information. Please check your information and retry.</value>
+    </property>
+    <property key="OutOfStockAddToCartError">
+        <value xml:lang="en">This item is currently out of stock.</value>
     </property>
  <!-- ******* Error Messages  Ends*************************************** -->
  
@@ -7137,6 +7230,9 @@
     </property>
     <property key="EditGroupBtn">
         <value xml:lang="en">Edit Group</value>
+    </property>
+    <property key="EntitySyncBtn">
+        <value xml:lang="en">Run Entity Sync</value>
     </property>
     <property key="StaticPageSeoUrlBtn">
         <value xml:lang="en">SEO Friendly URLs</value>
@@ -7573,6 +7669,12 @@
     <property key="AddToCartTooltip">
         <value xml:lang="en">Add to Cart</value>
     </property>
+    <property key="ShowVirtualDetailTooltip">
+        <value xml:lang="en">Edit Virtual Product</value>
+    </property>
+    <property key="ShowFinishedDetailTooltip">
+        <value xml:lang="en">Edit Finished Good Product</value>
+    </property>
     
     <!-- === Tooltip Ends ===== -->
 
@@ -7588,6 +7690,9 @@
     </property>
     <property key="CustomerAddressDetailHeading">
         <value xml:lang="en">Address</value>
+    </property>
+    <property key="EntitySyncDetailHeading">
+        <value xml:lang="en">Entity Sync</value>
     </property>
     <property key="ClearCacheConfirmText">
         <value xml:lang="en">You are about to clear _CACHE_TYPE_.&lt;br/&gt;In a PRODUCTION environment, clearing cache can have a serious impact on performance. You should be absolutely sure that the specific cache needs to be cleared.&lt;br/&gt;Are you sure?</value>
@@ -7895,6 +8000,9 @@
     </property>
     <property key="PromoCodeAppliedInfo">
         <value xml:lang="en">Applied, see Shopping Cart</value>
+    </property>
+    <property key="PromoCodeAddedOnlyInfo">
+        <value xml:lang="en">Added but does not apply</value>
     </property>
     <!-- === End of Helper info ===== -->
 </resource>

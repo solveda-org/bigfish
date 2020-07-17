@@ -1,10 +1,10 @@
-<#if productSelectableFeatureAndAppl?has_content>
+<#if plpProductSelectableFeatureAndAppl?has_content>
  <#assign PRODUCT_MONEY_THRESHOLD = Static["com.osafe.util.Util"].getProductStoreParm(request,"PRODUCT_MONEY_THRESHOLD")!"0"/>
  <#assign PRODUCT_PCT_THRESHOLD = Static["com.osafe.util.Util"].getProductStoreParm(request,"PRODUCT_PCT_THRESHOLD")!"0"/>
  <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
 <div class="plpSwatchImage">
   <div class="swatch">
-    <#list productSelectableFeatureAndAppl as productFeatureAppls>
+    <#list plpProductSelectableFeatureAndAppl as productFeatureAppls>
       <#assign productFeatureId=productFeatureAppls.productFeatureId/>
       <#assign productFeatureTypeId=productFeatureAppls.productFeatureTypeId/>
       <#assign productFeatureDescription=productFeatureAppls.description!""/>
@@ -19,9 +19,8 @@
           <#assign variantOnlinePrice = productVariantFeatureMap.get("basePrice")!""/>
       </#if>
       <#if productFeatureVariantId?has_content>
-
-        <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, StringUtil.wrapString(pdpUrl) + "&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
-        <input type = "hidden" id="${productId}${productFeatureTypeId!}:${productFeatureDescription!}" value="${variantProductUrl!}"/>
+        <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, StringUtil.wrapString(plpPdpUrl) + "&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
+        <input type = "hidden" id="${plpProductId}${productFeatureTypeId!}:${productFeatureDescription!}" value="${variantProductUrl!}"/>
         <input type = "hidden" class="featureGroup" value="${descriptiveFeatureGroupDesc!}"/>
         
         <#assign productVariantContentWrapper = plpProductVariantContentWrapperMap.get('${productFeatureVariantId!}')/>
@@ -34,13 +33,13 @@
 	        <#if variantContentId?has_content>
                 <#assign productVariantSmallURL = productVariantContentWrapper.get("SMALL_IMAGE_URL")!"">
             <#else>
-                <#assign productVariantSmallURL = productContentWrapper.get("SMALL_IMAGE_URL")!"">
+                <#assign productVariantSmallURL = plpProductContentWrapper.get("SMALL_IMAGE_URL")!"">
 	        </#if>
 	    	<#assign variantContentId = variantContentIdMap.get("SMALL_IMAGE_ALT_URL")!""/>
 	        <#if variantContentId?has_content>
                <#assign productVariantSmallAltURL = productVariantContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
             <#else>
-                <#assign productVariantSmallAltURL = productContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
+                <#assign productVariantSmallAltURL = plpProductContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
 	        </#if>
 	    	<#assign variantContentId = variantContentIdMap.get("PLP_SWATCH_IMAGE_URL")!""/>
 	        <#if variantContentId?has_content>
@@ -48,22 +47,22 @@
 	        </#if>
 	    </#if>
         <#if productVariantPlpSwatchURL?string?has_content>
-          <img src="<@ofbizContentUrl>${productVariantPlpSwatchURL}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight?has_content && plpSwatchImageHeight != '0'>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth?has_content && plpSwatchImageWidth != '0'>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
+          <img src="<@ofbizContentUrl>${productVariantPlpSwatchURL}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${plpProductId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight?has_content && plpSwatchImageHeight != '0'>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth?has_content && plpSwatchImageWidth != '0'>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
         <#else>
           <#assign productFeatureUrl = ""/>
-          <#if productFeatureDataResourceMap?has_content>
-           <#assign productFeatureResourceUrl = productFeatureDataResourceMap.get(productFeatureId)!""/>
+          <#if plpProductFeatureDataResourceMap?has_content>
+           <#assign productFeatureResourceUrl = plpProductFeatureDataResourceMap.get(productFeatureId)!""/>
            <#if productFeatureResourceUrl?has_content>
              <#assign productFeatureUrl=productFeatureResourceUrl/>
            </#if>
           </#if>
           <#if productFeatureUrl?has_content>
-            <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight?has_content && plpSwatchImageHeight != '0'>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth?has_content && plpSwatchImageWidth != '0'>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
+            <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${plpProductId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight?has_content && plpSwatchImageHeight != '0'>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth?has_content && plpSwatchImageWidth != '0'>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
           </#if>
         </#if>
         <div class="swatchVariant" style="display:none">
-          <a class="pdpUrl" title="${productName}" href="${productFriendlyUrl}">
-            <img alt="${productName}" title="${productName}" src="${productVariantSmallURL!}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productVariantSmallAltURL?string?has_content>onmouseover="src='${productVariantSmallAltURL}'"</#if> onmouseout="src='${productVariantSmallURL}'" onerror="onImgError(this, 'PLP-Thumb');"/>
+          <a class="pdpUrl" title="${plpProductName}" href="${plpProductFriendlyUrl}">
+            <img alt="${plpProductName}" title="${plpProductName}" src="${productVariantSmallURL!}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productVariantSmallAltURL?string?has_content>onmouseover="src='${productVariantSmallAltURL}'"</#if> onmouseout="src='${productVariantSmallURL}'" onerror="onImgError(this, 'PLP-Thumb');"/>
           </a>
         </div>
 

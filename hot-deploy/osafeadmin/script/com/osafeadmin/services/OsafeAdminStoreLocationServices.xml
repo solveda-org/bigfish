@@ -239,6 +239,13 @@
         <!-- End of Create Store content spot -->
         <set-service-fields service-name="genPartyGeoPoint" map="parameters" to-map="genPartyGeoPointCtx"/>
         <call-service service-name="genPartyGeoPoint" in-map-name="genPartyGeoPointCtx"/>
+        
+        <make-value entity-name="ProductStoreRole" value-field="productStoreRole"/>
+        <set field="productStoreRole.partyId" from-field="parameters.partyId"/>
+        <set field="productStoreRole.roleTypeId" value="STORE_LOCATION"/>
+        <set field="productStoreRole.productStoreId" from-field="parameters.productStoreId"/>
+        <now-timestamp field="productStoreRole.fromDate"/>  
+        <create-value value-field="productStoreRole"/>
 
         <set field="argListNames[]" from-field="parameters.groupNameLocal"/>
         <property-to-field resource="OSafeAdminUiLabels" property="StoreLocationSavedSuccess" field="StoreLocationSavedSuccess" arg-list-name="argListNames"/>

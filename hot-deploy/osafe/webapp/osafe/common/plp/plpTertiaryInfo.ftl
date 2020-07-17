@@ -4,8 +4,8 @@
 	 </div>
  <#else>
 	  <div class="plpTertiaryInfo">
-	     <#if productInternalName?has_content>
-	       <p class="tertiaryInformation">${uiLabelMap.InternalNameLabel}&nbsp;${productInternalName!""}</p>
+	     <#if plpProductInternalName?has_content>
+	       <p class="tertiaryInformation">${uiLabelMap.InternalNameLabel}&nbsp;${plpProductInternalName!""}</p>
 	     </#if>
 	  </div>
 </#if>

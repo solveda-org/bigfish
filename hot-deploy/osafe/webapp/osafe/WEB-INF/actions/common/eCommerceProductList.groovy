@@ -24,6 +24,8 @@ String productCategoryId = parameters.productCategoryId;
 GenericValue gvProductCategory =  delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId",productCategoryId), true);
 
 String searchText = com.osafe.util.Util.stripHTML(parameters.searchText);
+String searchTextSpellCheck = com.osafe.util.Util.stripHTML(parameters.searchTextSpellCheck);
+
 if (gvProductCategory) 
 {
     CategoryContentWrapper currentProductCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
@@ -63,7 +65,15 @@ if (gvProductCategory)
     if(request.getAttribute("completeDocumentList"))
     {
         searchResultCount = request.getAttribute("completeDocumentList").size();
-        String SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsCountsTitle", UtilMisc.toMap("searchText", searchText,"searchResultCount",searchResultCount), locale)
+        String SearchResultsCountsTitle = "";
+        if(UtilValidate.isEmpty(searchTextSpellCheck))
+        {
+        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsCountsTitle", UtilMisc.toMap("searchText", searchText,"searchResultCount",searchResultCount), locale)
+        }
+        else
+        {
+        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsSpellCheckCountsTitle", UtilMisc.toMap("searchText", searchText,"searchResultCount",searchResultCount, "searchTextSpellCheck", searchTextSpellCheck), locale)
+        }
         context.pageTitle = SearchResultsCountsTitle;
     }
     context.title = searchResultsTitle + " - " + searchText;

@@ -175,6 +175,8 @@
                 <set field="dialogPurpose" value="largeImage_" global="true" /> 
                 <set field="dialogBoxStyle" value="viewLargerImage" global="true" />
                 <set field="isQuickLook" value="false"/>
+                <set field="addToCartAction" value="addItemToCart"/>
+                <set field="addToWishListAction" value="addItemToWishList"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">

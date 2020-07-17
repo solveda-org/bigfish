@@ -8,6 +8,14 @@
   </#if>
 </div>
 
+<#if pdpLongDescription?has_content>
+  <div class="pdpLongDescription" id="pdpLongDescription_Virtual" style="display:none">
+    <div class="displayBox">
+      <h3>${uiLabelMap.PDPLongDescriptionHeading}</h3>
+      <p>${pdpLongDescription!}</p>
+    </div>
+  </div>
+</#if>
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
     <#assign variantContentId = ''/>

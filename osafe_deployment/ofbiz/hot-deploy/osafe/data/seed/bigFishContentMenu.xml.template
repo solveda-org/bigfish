@@ -523,4 +523,10 @@
 
 <!-- END XContentXref content product store reference -->
 
+<!-- Update SequenceValueItem (avoids duplicate entry after installing seed) -->
+<SequenceValueItem seqName="DataResource" seqId="900000"/>
+<SequenceValueItem seqName="Content" seqId="900000"/>
+<SequenceValueItem seqName="Product" seqId="900000"/>
+<SequenceValueItem seqName="ProductCategory" seqId="900000"/>
+
 </entity-engine-xml>

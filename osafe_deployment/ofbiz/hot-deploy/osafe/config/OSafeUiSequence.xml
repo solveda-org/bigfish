@@ -1982,4 +1982,19 @@
         <div>writeReviewCancelButton</div>
         <description>The Cancel button.</description>
     </property>
+<!-- *************************************** -->
+<!-- Wish List -->
+<!-- *************************************** -->
+    <property key="orderItems">
+        <value xml:lang="en">0</value>
+        <screen>WishList</screen>
+        <div>showWishlistOrderItems</div>
+        <description>All the items that have been added to the Wish List</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">0</value>
+        <screen>WishList</screen>
+        <div>showWishlistContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the previous step.</description>
+    </property>
 </resource>

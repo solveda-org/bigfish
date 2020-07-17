@@ -25,20 +25,21 @@ if(UtilValidate.isNotEmpty(productId))
   product = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
   if (UtilValidate.isNotEmpty(product)) 
   {
-    productStore = ProductStoreWorker.getProductStore(request);
-	productStoreId = productStore.get("productStoreId");
 	productName = product.productName;
     categoryId = "";
     productInternalName = product.internalName;
     productFriendlyUrl = "";
     pdpUrl = "";
     productImageUrl = "";
-    productImageAlt = "";
     productImageAltUrl= "";
     price = "";
     listPrice = "";
     plpLabel = "";
+    plpProductFeatureType = "";
+    
     ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
+    productStore = ProductStoreWorker.getProductStore(request);
+	productStoreId = productStore.get("productStoreId");
 
     
     if (UtilValidate.isNotEmpty(productContentWrapper))
@@ -80,13 +81,27 @@ if(UtilValidate.isNotEmpty(productId))
         
     }
     
-    priceContext = [product : product, currencyUomId : cart.getCurrency(),"userLogin": userLogin];
-    priceContext.productStoreId = productStoreId;
-    priceContext.productStoreGroupId = "_NA_";
-    priceMap = dispatcher.runSync("calculateProductPrice",priceContext);
-    context.priceMap = priceMap;
-    price = priceMap.defaultPrice ;
-    listPrice = priceMap.listPrice;
+    //Not useing the calculateProductPrice service on purpose.
+    //Instead just pulling the pricing directly from DB for plp type item displays (Complement, Accessory and  Recently Viewed)
+    virtualProductPrices = delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", productId, "currencyUomId", cart.getCurrency(), "productStoreGroupId", "_NA_"), UtilMisc.toList("-fromDate"));
+    virtualProductPrices = EntityUtil.filterByDate(virtualProductPrices, true);
+    if (UtilValidate.isNotEmpty(virtualProductPrices))
+    {
+        for(GenericValue virtualProductPrice : virtualProductPrices)
+        {
+          if (virtualProductPrice.productPriceTypeId == "DEFAULT_PRICE")
+          {
+        	    price = virtualProductPrice.price;
+                continue;
+          }
+          if (virtualProductPrice.productPriceTypeId == "LIST_PRICE")
+          {
+        	    listPrice = virtualProductPrice.price;
+                continue;
+          }
+        }
+    	
+    }
 
     //CHECK WE HAVE A DEFAULT PRODUCT CATEGORY THE PRODUCT IS MEMBER OF
     if (UtilValidate.isEmpty(categoryId))
@@ -104,10 +119,9 @@ if(UtilValidate.isNotEmpty(productId))
     //GET PRODUCT RATINGS AND REVIEWS
     decimals=Integer.parseInt("1");
     rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
-    context.put("decimals",decimals);
-    context.put("rounding",rounding);
 	reviewMethod = Util.getProductStoreParm(request, "REVIEW_METHOD");
 	reviewSize=0;
+	averageCustomerRating="";
 	if(UtilValidate.isNotEmpty(reviewMethod))
 	{
 	    if(reviewMethod.equalsIgnoreCase("BIGFISH"))
@@ -120,16 +134,7 @@ if(UtilValidate.isNotEmpty(productId))
 		        if (UtilValidate.isNotEmpty(averageRating) && averageRating > 0)
 		        {
 		 	       averageCustomerRating= averageRating.setScale(1,rounding);
-		 	       context.put("averageStarPLPRating", averageCustomerRating);
 		        }
-		        else
-		        {
-		 	       context.put("averageStarPLPRating", "");
-		        }
-		    }
-		    else
-		    {
-			    context.put("averageStarPLPRating", "");
 		    }
 	        
 	        reviews = product.getRelatedCache("ProductReview");
@@ -141,26 +146,12 @@ if(UtilValidate.isNotEmpty(productId))
 	        
 	    }
 	}
-    context.put("reviewPLPSize",reviewSize);
-    
     // get the no of reviews
     
-    context.productName = productName;
-    context.productId = productId;
-    context.categoryId = categoryId;
-    context.productInternalName = productInternalName;
-    context.productImageUrl = productImageUrl;
-    context.price=price;
-    context.listPrice = listPrice;
-    context.product = product;
-    context.productContentWrapper = productContentWrapper;
 
-    context.productImageAlt = productImageAlt;
-    context.productImageAltUrl = productImageAltUrl;
-	context.plpLabel = plpLabel;
    
-    productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
-    context.pdpUrl = 'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId;
+	productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
+    pdpUrl = 'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId;
     
     List productSelectableFeatureAndAppl = FastList.newInstance();
     List productVariantFeatureList = FastList.newInstance();
@@ -169,13 +160,14 @@ if(UtilValidate.isNotEmpty(productId))
     Map productVariantContentWrapperMap = FastMap.newInstance();
     Map productVariantProductContentIdMap = FastMap.newInstance();
     Map productFeatureFirstVariantIdMap = FastMap.newInstance();
+    Map productFeatureDataResourceMap = FastMap.newInstance();
 
     featureValueSelected = request.getAttribute("featureValueSelected");
     productFeatureSelectVariantId="";
     productFeatureSelectVariantProduct = "";
 
     
-    if(UtilValidate.isNotEmpty((context.product).isVirtual) && ((context.product).isVirtual).toUpperCase()== "Y")
+    if(UtilValidate.isNotEmpty((product).isVirtual) && ((product).isVirtual).toUpperCase()== "Y")
     {
    	
     	Map productVariantPriceMap = FastMap.newInstance();
@@ -217,29 +209,29 @@ if(UtilValidate.isNotEmpty(productId))
 	            {
 	              if (variantProductPrice.productPriceTypeId == "DEFAULT_PRICE")
 	              {
-	                	basePrice = variantProductPrice.price;
+	                	varBasePrice = variantProductPrice.price;
 	                    varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
 	                    if (UtilValidate.isNotEmpty(varPriceMap)) 
 	                    {
-	                        varPriceMap.put("basePrice", basePrice)
+	                        varPriceMap.put("basePrice", varBasePrice)
 	                    } 
 	                    else 
 	                    {
-	                    	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("basePrice", basePrice))
+	                    	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("basePrice", varBasePrice))
 	                    }
 	                    continue;
 	              }
 	              if (variantProductPrice.productPriceTypeId == "LIST_PRICE")
 	              {
-		            	listPrice = variantProductPrice.price;
+		            	varListPrice = variantProductPrice.price;
 		                varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
 		                if (UtilValidate.isNotEmpty(varPriceMap)) 
 		                {
-		                    varPriceMap.put("listPrice", listPrice)
+		                    varPriceMap.put("listPrice", varListPrice)
 		                } 
 		                else 
 		                {
-		                	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("listPrice", listPrice))
+		                	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("listPrice", varListPrice))
 		                }
 		                continue;
 	              }
@@ -361,7 +353,6 @@ if(UtilValidate.isNotEmpty(productId))
 	      productSelectableFeatureAndAppl = EntityUtil.filterByDate(productSelectableFeatureAndAppl,true);
 	      
           //BUILD CONTEXT MAP FOR PRODUCT_FEATURE_DATA_RESOURCE (productFeatureId, objectInfo)
-          Map productFeatureDataResourceMap = FastMap.newInstance();
           productFeatureDataResourceList = delegator.findList("ProductFeatureDataResource", EntityCondition.makeCondition(["featureDataResourceTypeId" : "PLP_SWATCH_IMAGE_URL"]), null, ["productFeatureId"], null, true);
           if (UtilValidate.isNotEmpty(productFeatureDataResourceList))
           {
@@ -375,7 +366,6 @@ if(UtilValidate.isNotEmpty(productId))
               }
           	
           }
-          context.productFeatureDataResourceMap = productFeatureDataResourceMap;
 	      
 	      if(UtilValidate.isEmpty(productFeatureSelectVariantId) && UtilValidate.isNotEmpty(productSelectableFeatureAndAppl))
 	      {
@@ -404,11 +394,8 @@ if(UtilValidate.isNotEmpty(productId))
 	      }
 	    }
     
-	  context.featureValueSelected = featureValueSelected;
 	  if(UtilValidate.isNotEmpty(productFeatureSelectVariantId))
 	  {
-	        productImageUrl = "";
-	        productImageAltUrl = "";
 	        productVariantSelectSmallURL = "";
 	        productVariantSelectSmallAltURL = "";
 	        productVariantSelectContentWrapper = ProductContentWrapper.makeProductContentWrapper(productFeatureSelectVariantProduct, request);
@@ -446,21 +433,21 @@ if(UtilValidate.isNotEmpty(productId))
 	        {
 	   	        if (UtilValidate.isNotEmpty(plpFacetGroupVariantSticky))
 	   	        {
-	        	    context.productFeatureType = plpFacetGroupVariantSticky;
-	                productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId+'&productFeatureType='+plpFacetGroupVariantSticky+':'+featureValueSelected);
+	        	    plpProductFeatureType = plpFacetGroupVariantSticky;
+	        	    productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId+'&productFeatureType='+plpFacetGroupVariantSticky+':'+featureValueSelected);
 	   	        }
 	   	        else
 	   	        {
-	                productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
+	   	        	productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
 	   	        }
 	        }
 	        if(UtilValidate.isNotEmpty(productVariantSelectSmallURL))
 	        {
-	            productImageUrl = productVariantSelectSmallURL;
+	        	productImageUrl = productVariantSelectSmallURL;
 	        }
 	        if(UtilValidate.isNotEmpty(productVariantSelectSmallAltURL))
 	        {
-	            productImageAltUrl = productVariantSelectSmallAltURL;
+	        	productImageAltUrl = productVariantSelectSmallAltURL;
 	        }
 	        
 	        if(UtilValidate.isNotEmpty(productVariantFeatureList))
@@ -469,19 +456,38 @@ if(UtilValidate.isNotEmpty(productId))
 	            {
 	               if(productVariantFeature.productVariantId == productFeatureSelectVariantId)
 	               {
-	                   context.price = productVariantFeature.basePrice;
-	                   context.listPrice = productVariantFeature.listPrice; 
+	                   price = productVariantFeature.basePrice;
+	                   listPrice = productVariantFeature.listPrice; 
 	               }
 	            }
 	        }
-	        context.productImageAltUrl = productImageAltUrl;
-	        context.productImageUrl = productImageUrl;
 	  }
     }
     
 
-    context.productSelectableFeatureAndAppl = productSelectableFeatureAndAppl;
-    context.productFriendlyUrl = productFriendlyUrl;
+    context.plpProductName = productName;
+    context.plpProductId = productId;
+    context.plpCategoryId = categoryId;
+    context.plpProductInternalName = productInternalName;
+    context.plpProductImageUrl = productImageUrl;
+    context.plpPrice=price;
+    context.plpListPrice = listPrice;
+    context.plpProductContentWrapper = productContentWrapper;
+	context.plpLabel = plpLabel;
+    context.plpPdpUrl = pdpUrl;
+    context.plpProductFriendlyUrl = productFriendlyUrl;
+    context.plpProductImageAltUrl = productImageAltUrl;
+    context.featureValueSelected = featureValueSelected;
+
+    //Ratings
+    context.decimals = decimals;
+    context.rounding = rounding;
+    context.plpAverageStarRating = averageCustomerRating;
+    context.plpReviewSize = reviewSize;
+
+    context.plpProductFeatureType = plpProductFeatureType;
+    context.plpProductFeatureDataResourceMap = productFeatureDataResourceMap;
+    context.plpProductSelectableFeatureAndAppl = productSelectableFeatureAndAppl;
     context.plpProductVariantContentWrapperMap = productVariantContentWrapperMap;
     context.plpProductFeatureFirstVariantIdMap = productFeatureFirstVariantIdMap;
     context.plpProductVariantProductContentIdMap = productVariantProductContentIdMap;

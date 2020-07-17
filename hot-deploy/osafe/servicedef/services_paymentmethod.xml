@@ -51,4 +51,27 @@ under the License.
         <auto-attributes entity-name="PaymentGatewaySagePayToken" include="nonpk" mode="IN" optional="true"/>
     </service>
 
+
+    <service name="createEbsPaymentMethod" engine="simple"
+            location="component://osafe/script/services/PaymentMethodServices.xml" invoke="createEbsPaymentMethod" auth="true">
+        <description>Create a Sage Pay Token Payment Method</description>
+        <auto-attributes mode="INOUT" entity-name="EbsPaymentMethod" include="pk" optional="true"/>
+        <auto-attributes mode="IN" entity-name="EbsPaymentMethod" include="nonpk" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="paymentMethodId" type="String" mode="INOUT" optional="true"/>
+    </service>
+
+    <service name="updateEbsPaymentMethod" engine="simple"
+            location="component://osafe/script/services/PaymentMethodServices.xml" invoke="updateEbsPaymentMethod" auth="true">
+        <description>Update a Sage Pay Token Payment Method</description>
+        <attribute name="paymentMethodId" mode="INOUT" type="String" optional="false"/>
+        <auto-attributes mode="IN" entity-name="EbsPaymentMethod" include="nonpk" optional="true"/>
+    </service>
+
+    <!-- Belongs in accounting/services_payemntgateway.xml -->
+    <service name="updatePaymentGatewayConfigEBS" engine="simple" location="component://osafe/script/services/PaymentGatewayConfigServices.xml" invoke="updatePaymentGatewayConfigEBS">
+        <description>Update Payment Gateway Config EBS</description>
+        <auto-attributes entity-name="PaymentGatewayEbs" include="pk" mode="IN" optional="false"/>
+        <auto-attributes entity-name="PaymentGatewayEbs" include="nonpk" mode="IN" optional="true"/>
+    </service>
 </services>

@@ -38,11 +38,14 @@
 	        <div class="entryValue">
 	          <span>
 	            <#if storePhone?has_content>
-	              <#if storePhone.areaCode?has_content>${storePhone.areaCode?if_exists}-</#if>
 	              <#if storePhone.contactNumber?has_content>
 	                <#if storePhone.contactNumber?length &gt; 6>
-	                  ${storePhone.contactNumber.substring(0, 3)}-${storePhone.contactNumber.substring(3, 7)}
+	                <#assign contactPhoneNumber = storePhone.contactNumber!"">
+                    <#assign areaCode = storePhone.areaCode!"">
+                    <#assign fullPhone= Static["com.osafe.util.Util"].formatTelephone(areaCode, contactPhoneNumber?if_exists, FORMAT_TELEPHONE_NO!)/>
+                      ${fullPhone!""}
 	                <#else>
+	                <#if storePhone.areaCode?has_content>${storePhone.areaCode?if_exists}-</#if>
 	                  ${storePhone.contactNumber?if_exists}
 	                </#if>
 	              </#if>

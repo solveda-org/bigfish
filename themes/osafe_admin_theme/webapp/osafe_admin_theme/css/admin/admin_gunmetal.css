@@ -929,7 +929,7 @@ border-top-right-radius: 8px;
 
 .displayBox .boxBody,
 .displaySearchBox .boxBody {
-    padding: 10px 0 0 0;
+    padding: 10px 0;
 }
 
 .displayBox.detailInfo .boxBody table,
@@ -1313,13 +1313,18 @@ float: none;
 
 #displayDialog .displayListBox {
     margin: 0;
-   width: auto;
+   width: 720px;
 }
 
 .infoValue.confirmBtn {
     padding: 0 0 0 10px;
     margin: 0 0 0 10px!important;
 }
+
+#displayDialog .displayListBox .infoValue.confirmBtn {
+    margin: 10px 0 10px 10px!important;
+}
+
 .infoValue.withOutCaption {
     padding: 0 0 0 20px;
 }
@@ -1882,7 +1887,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 }
 
 #orderManagementOrderDetail .displayBox.customerInfo {
-    margin: 0x 20px 10px 0;
+    margin: 0 20px 10px 0;
 }
 
 #orderManagementOrderDetail .displayBox.paymentInfo {
@@ -2080,7 +2085,7 @@ input[type="text"].promoCodeEntry {
   height: 21px;
   text-align:center;
   vertical-align: middle;
-  background: #feeaca;
+
 }
 .calendar_date_select td.weekend {
   background: #ecb564;
@@ -2419,6 +2424,7 @@ table.tablesorter thead tr .headerSortDown {
 }
 
 #displayLookUpDialog .selectorSearchBox {
+    float: left;
     background: none repeat scroll 0 0 #f5f5f5;
     padding: 0 0 10px 0;
 }
@@ -2528,7 +2534,7 @@ td div.infoEntry input[type="text"] {
 }
 
 .tooltipMiddle div.tooltipData {
-    //background-color: #FEEACA;
+    //background-color: #f5f5f5;
     display: inline-block;
     text-align: left;
 }
@@ -3019,11 +3025,23 @@ a.standardBtn.adminCartIcon:hover {
     display: inline-block;
 }
 
+.shipmentDetailIcon {
+    background-image: url("/osafe_admin_theme/images/gunmetal/icon/shipmentDetailIcon.gif");
+    background-repeat: no-repeat;
+    display: block;
+    float: right;
+    height: 16px;
+    margin: 0 0 0 5px;
+    position: relative;
+    width: 16px;
+}
+
+
 /****************************************************************
 * Detail Entry Table
 ****************************************************************/
 .detailEntryTable tr:hover{
-    background:  #feeaca;
+    background:  #f5f5f5;
 }
 .detailEntryTable th, .detailEntryTable td {
     padding: 0 13px 5px 0;
@@ -3074,36 +3092,40 @@ table#sortTable tfoot tr {
 }
 .productLoaderTab {
     margin: 0.5em;
+    padding: 10px 0 0 0;
 }
 
 .displayBox.detailInfo.productLoaderData {
-    background: #FEEACA;
+    background: #f5f5f5;
     width: 1068px;
 }
 .productLoaderDataOverflow {
     overflow: auto;
 }
 .heading {
-/*    background-color: #ECB564;  */
+    background: none repeat scroll 0 0 #8BA0B3;
     border-bottom: 1px solid #0C0C0C;
+    border-top: 1px solid #0C0C0C;
+    color: #FFFFFF;
     font-weight: bold;
+    padding: 2px 0 2px 10px;
 }
 input[type="button"].standardBtn.productLoaderTab.errorMark {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/errorMark.jpg);
     background-repeat:no-repeat;
-    background-position: left center;
+    background-position: 10px center;
     padding-left: 15px; /* add to original .standardBtn style */
 }
 input[type="button"].standardBtn.productLoaderTab.warningMark {
-    background-image: url(/osafe_admin_theme/images/icon/warningMark.jpg);
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/warningMark.jpg);
     background-repeat:no-repeat;
-    background-position: left center;
+    background-position: 10px center;
     padding-left: 15px;  /* add to original .standardBtn style */
 }
 input[type="button"].standardBtn.productLoaderTab {
-    background: none repeat scroll 0 0 #FEF2DE;
-    border: 1px solid black;
-    color: #800000;
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #445566;
+    color: #445566;
     font-weight: normal;
     margin-left: 10px; /* added to .standardBtn */
     min-width: 115px;
@@ -4320,7 +4342,8 @@ a.standardBtn.contextIcon {
 
 .generalInfo .infoRow div.infoValue p,
 #customerManagementDetail .displayBox.detailInfo p,
-.displayBox.personalInformation p { /* Used for text with an icon; to flank icon to the right */
+.displayBox.personalInformation p,
+.displayBox.customerInformation p { /* Used for text with an icon; to flank icon to the right */
    float: left; 
 }
 
@@ -4343,6 +4366,10 @@ a.standardBtn.contextIcon {
 #checkoutStoreName {
     display: inline-block;
     color: #445566;
+}
+
+.displayBox.paymentOption .entry.checkbox.medium {
+    margin: 0 0 10px 0;
 }
 
 /* Customers */

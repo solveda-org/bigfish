@@ -573,7 +573,6 @@
         <set field="partyRole.partyId" from-field="tempMap.partyId"/>
         <create-value value-field="partyRole"/>
 
-
         <make-value entity-name="ContactMech" value-field="contactMech"/>
         <sequenced-id sequence-name="ContactMech" field="contactMech.contactMechId"/>
         <set from-field="parameters.SUBSCRIBER_EMAIL" field="contactMech.infoString"/>                
@@ -581,7 +580,6 @@
         <create-value value-field="contactMech"/>
         <set field="tempMap.contactMechId" from-field="contactMech.contactMechId"/>
 
-         
         <make-value entity-name="PartyContactMech" value-field="partyContactMech"/>
         <set field="partyContactMech.partyId" from-field="tempMap.partyId"/>
         <set field="partyContactMech.contactMechId" from-field="tempMap.contactMechId"/>
@@ -595,7 +593,6 @@
         </if-not-empty>
         <create-value value-field="partyContactMech"/>
 
-
         <make-value entity-name="PartyContactMechPurpose" value-field="partyContactMechPurpose"/>
         <set field="partyContactMechPurpose.partyId" from-field="tempMap.partyId"/>
         <set field="partyContactMechPurpose.contactMechId" from-field="tempMap.contactMechId"/>
@@ -603,8 +600,6 @@
         <now-timestamp field="partyContactMechPurpose.fromDate"/>  
         <create-value value-field="partyContactMechPurpose"/>
          
-
-
         <if-not-empty field="parameters.PARTY_EMAIL_PREFERENCE">
             <make-value entity-name="PartyAttribute" value-field="partyAttribute"/>
             <set from-field="tempMap.partyId" field="partyAttribute.partyId"/>
@@ -612,6 +607,13 @@
             <set from-field="parameters.PARTY_EMAIL_PREFERENCE" field="partyAttribute.attrValue"/>
             <create-value value-field="partyAttribute"/>
         </if-not-empty>
+        
+        <make-value entity-name="ProductStoreRole" value-field="productStoreRole"/>
+        <set field="productStoreRole.partyId" from-field="tempMap.partyId"/>
+        <set field="productStoreRole.roleTypeId" value="EMAIL_SUBSCRIBER"/>
+        <set field="productStoreRole.productStoreId" from-field="parameters.productStoreId"/>
+        <now-timestamp field="productStoreRole.fromDate"/>  
+        <create-value value-field="productStoreRole"/>
 
         <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="JoinMailingListSuccess"/>
         <string-to-list string="${tempSuccessMessage}"  list="success_list"/>

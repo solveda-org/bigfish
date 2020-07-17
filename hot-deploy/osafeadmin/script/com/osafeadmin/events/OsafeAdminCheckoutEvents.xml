@@ -52,21 +52,21 @@
         <if-compare operator="equals" value="CCExist" field="parameters.paymentOption">
             <if-compare-field field="parameters.savedVerificationNo" operator="not-equals" to-field="nullValue">
                 <if-empty field="parameters.savedVerificationNo">
-                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
                     <else>
                         <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
                              <field field="parameters.savedVerificationNo" type="String"/>
                         </call-class-method>
                         <if-compare operator="equals" value="false" field="isInteger">
-                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
                             <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
                         </if-compare>
                     </else>
                 </if-empty>
             </if-compare-field>
             <if-empty field="parameters.savedCard">
-                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="SavedCardMissingError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SavedCardMissingError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="SAVED_CC" list="error_list"/>
                 <else>
                     <entity-one value-field="savedCreditCard" entity-name="CreditCard">
@@ -92,14 +92,14 @@
         <if-compare operator="equals" value="CCNew" field="parameters.paymentOption">
             <if-compare-field field="parameters.verificationNo" operator="not-equals" to-field="nullValue">
                 <if-empty field="parameters.verificationNo">
-                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
                     <else>
                         <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
                              <field field="parameters.verificationNo" type="String"/>
                         </call-class-method>
                         <if-compare operator="equals" value="false" field="isInteger">
-                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
                             <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
                         </if-compare>
                     </else>
@@ -115,22 +115,22 @@
                     <process field="partyId"><copy/></process>
                     <process field="companyNameOnCard"><copy/></process>
                     <process field="titleOnCard"><copy/></process>
-                    <process field="firstNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="FirstNameOnCardMissingError"/></not-empty></process>
+                    <process field="firstNameOnCard"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="FirstNameOnCardMissingError"/></not-empty></process>
                     <process field="middleNameOnCard"><copy/></process>
-                    <process field="lastNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="LastNameOnCardMissingError"/></not-empty></process>
+                    <process field="lastNameOnCard"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="LastNameOnCardMissingError"/></not-empty></process>
                     <process field="suffixOnCard"><copy/></process>
-                    <process field="cardType"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardTypeMissingError"/></not-empty></process>
-                    <process field="cardNumber"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardNumberMissingError"/></not-empty></process>
+                    <process field="cardType"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="CardTypeMissingError"/></not-empty></process>
+                    <process field="cardNumber"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="CardNumberMissingError"/></not-empty></process>
                     <process field="contactMechId"><copy/></process>
                     <process field="description"><copy/></process>
-                    <process field="expMonth"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationMonthMissingError"/></not-empty></process>
-                    <process field="expYear"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationYearMissingError"/></not-empty></process>
+                    <process field="expMonth"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="ExpirationMonthMissingError"/></not-empty></process>
+                    <process field="expYear"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="ExpirationYearMissingError"/></not-empty></process>
                     <process field="expireDate"><copy/></process>
                   </simple-map-processor>
              </call-map-processor>
              <if-not-empty field="parameters.expMonth">
                <if-validate-method field="creditCardContext.expireDate" method="isDateBeforeToday" >
-                   <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ExpirationDateIsBeforeTodayError"/>
+                   <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ExpirationDateIsBeforeTodayError"/>
                    <string-to-list string="${tempErrorMessage}" message-field="expMonth" list="error_list"/>
                </if-validate-method>
             </if-not-empty>
@@ -139,7 +139,7 @@
                      <field field="creditCardContext.cardNumber" type="String"/>
                 </call-class-method>
                 <if-compare operator="equals" value="false" field="isInteger">
-                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
                 <else>
                     <if-empty field="creditCardContext.cardType">
@@ -147,7 +147,7 @@
                              <field field="creditCardContext.cardNumber" type="String"/>
                         </call-class-method>
                         <if-compare field="isCreditCard" operator="equals" value="false">
-                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidError"/>
                             <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
                         </if-compare>
                     <else>
@@ -160,13 +160,13 @@
                                  <field field="creditCardContext.cardNumber" type="String"/>
                             </call-class-method>
                             <if-compare field="suggestCardType" operator="equals" value="Unknown">
-                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidError"/>
                                 <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
                             <else>
                                 <set field="argListNames[]" from-field="creditCardContext.cardNumber"/>
                                 <set field="argListNames[]" from-field="creditCardContext.cardType"/>
                                 <set field="argListNames[]" from-field="suggestCardType"/>
-                                <property-to-field resource="OSafeUiLabels" property="CreditCardNumberInvalidSuggestError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                <property-to-field resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidSuggestError" field="tempErrorMessage" arg-list-name="argListNames"/>
                                 <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
                             </else>
                             </if-compare>
@@ -180,7 +180,7 @@
         </if-compare>
         <if-compare operator="equals" value="OffLine" field="parameters.paymentOption">
         	<if-empty field="parameters.referenceNo">
-        		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmptyRefNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="EmptyRefNumberError"/>
                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
         		<else>
 	               <call-bsh>
@@ -412,7 +412,7 @@
 
                 <process field="productPromoCodeId">
                     <copy to-field="productPromoCodeId"/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="OfferCodeMissingError"/></not-empty>
+                    <not-empty><fail-property resource="OSafeAdminUiLabels" property="OfferCodeMissingError"/></not-empty>
                 </process>
 
              </simple-map-processor>
@@ -426,7 +426,7 @@
             <set from-field="productPromoCodeUpperCase" field="promoCodeExistsMap.productPromoCodeId"/>
             <find-by-primary-key entity-name="ProductPromoCode" map="promoCodeExistsMap" value-field="existingPromoCode"/>
             <if-empty field="existingPromoCode">
-                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeNotFoundError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OfferCodeNotFoundError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
             <else>
                 <!-- Check that "Promo Code" has association with product store-->
@@ -437,7 +437,7 @@
                      <field field="existingPromoCode.productPromoCodeId" type="Object"/>
                 </call-object-method>
                 <if-compare field="hasProductStroeAssoc" operator="equals" value="false" type="Boolean">
-                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeNotFoundError"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OfferCodeNotFoundError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
                 <else>
                     <!-- Check that "Promo Code" is not already applied on cart-->
@@ -446,7 +446,7 @@
                          <field field="existingPromoCode.productPromoCodeId" type="Object"/>
                     </call-object-method>
                     <if-compare field="promoCodeInUse" operator="equals" value="true" type="Boolean">
-                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeInUseError"/>
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OfferCodeInUseError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
                     <else>
                         <!-- Check that "Promo Code" is Expire-->
@@ -455,7 +455,7 @@
                             <field field="tempPromoCodeList" type="List"/>
                         </call-class-method>
                         <if-empty field="tempPromoCodeList">
-                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeExpireError"/>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OfferCodeExpireError"/>
                             <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
                         <else>
                             <!-- Check that "Promo Code" use limit-->
@@ -473,7 +473,7 @@
                                     </or>
                                 </condition>
                                 <then>
-                                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeUseExcessError"/>
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OfferCodeUseExcessError"/>
                                     <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
                                 </then>
                             <else>
@@ -579,7 +579,7 @@
         <set field="isPaymentProcessError" value="Y"/>
         <field-to-request field="isPaymentProcessError" />
         <request-to-field field="errorMessage" request-name="_ERROR_MESSAGE_"/>
-        <property-to-field field="errorMessage" resource="OSafeUiLabels" property="ProcessPaymentError"/>
+        <property-to-field field="errorMessage" resource="OSafeAdminUiLabels" property="ProcessPaymentError"/>
         <field-to-request field="errorMessage" request-name="_ERROR_MESSAGE_"/>
     </simple-method>
     
@@ -587,7 +587,7 @@
         <set field="isPaymentProcessError" value="Y"/>
         <field-to-request field="isPaymentProcessError" />
         <request-to-field field="errorMessage" request-name="_ERROR_MESSAGE_"/>
-        <property-to-field field="errorMessage" resource="OSafeUiLabels" property="ProcessPaymentError"/>
+        <property-to-field field="errorMessage" resource="OSafeAdminUiLabels" property="ProcessPaymentError"/>
         <field-to-request field="errorMessage" request-name="_ERROR_MESSAGE_"/>
     </simple-method>
     
@@ -597,6 +597,53 @@
     	
         <property-to-field resource="OSafeAdminUiLabels" property="OrderCheckoutSuccess" field="orderCheckoutSuccessMessage"/>
         <string-to-list string="${orderCheckoutSuccessMessage}" list="successMessageList"/>
+    </simple-method>
+    
+    <simple-method method-name="addToCart" short-description="add to cart and render success message" login-required="false">
+		<set field="productName" value=""/>
+		<if-not-empty field="parameters.add_product_id">
+			<if-not-empty field="parameters.prod_type">
+				<call-class-method class-name="org.ofbiz.product.product.ProductWorker" method-name="isSellable" ret-field="prodIsSellable">
+					<field field="delegator" type="org.ofbiz.entity.Delegator"/>
+		            <field field="parameters.add_product_id" type="String"/>
+		        </call-class-method>
+		        <if-compare operator="equals" value="true" field="prodIsSellable">
+		        	<if-compare operator="equals" value="Variant" field="parameters.prod_type">
+		        		<call-class-method class-name="org.ofbiz.product.product.ProductWorker" method-name="getParentProduct" ret-field="productToCart">
+				            <field field="parameters.add_product_id" type="String"/>
+				            <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+				        </call-class-method>
+		        	</if-compare>
+		        	<if-compare operator="equals" value="FinishedGood" field="parameters.prod_type">
+		        		<entity-one value-field="productToCart" entity-name="Product">
+	                        <field-map field-name="productId" from-field="parameters.add_product_id"/>
+	                    </entity-one>
+		        	</if-compare>
+		        	<call-class-method class-name="org.ofbiz.product.product.ProductContentWrapper" method-name="getProductContentAsText" ret-field="prodName">
+			        	<field field="productToCart" type="GenericValue"/>
+			        	<string value="PRODUCT_NAME"/>
+						<field field="request" type="javax.servlet.http.HttpServletRequest"/>
+			        </call-class-method>
+			        <if-not-empty field="prodName">
+			        	<set field="add_product_name" from-field="prodName"/>
+			        </if-not-empty>
+		        </if-compare>
+			</if-not-empty>
+		</if-not-empty>
+	
+        <call-class-method method-name="addToCart" class-name="org.ofbiz.order.shoppingcart.ShoppingCartEvents">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+            <field field="response" type="javax.servlet.http.HttpServletResponse"/>
+        </call-class-method>
+       <property-to-field resource="OSafeAdminUiLabels" property="CheckoutAddProductSuccess" field="checkoutAddProductSuccess"/>
+       <string-to-list string="${checkoutAddProductSuccess}" list="osafeSuccessMessageList"/>
+       <field-to-request field="osafeSuccessMessageList"/>
+       <if-not-empty field="parameters.addToCartFrom">
+           <return response-code="${parameters.addToCartFrom}"/>
+       <else>
+           <return response-code="default"/>
+       </else>
+       </if-not-empty>
     </simple-method>
 
 

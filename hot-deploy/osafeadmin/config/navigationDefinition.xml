@@ -62,12 +62,11 @@
         <sub-menu-item name="ManageEmailNav" text="ManageEmailNav" href="manageEmailList" sequenceNumber="2" className="subLevel" heading="ManageEmailHeading" description="ManageEmailInfo"/>
         <sub-menu-item name="SolrConfigNav" text="SolrConfigNav" href="solrConfigList" sequenceNumber="3" className="subLevel" heading="SolrConfigHeading" description="SolrConfigInfo"/>
         <sub-menu-item name="LookupDataNav" text="LookupDataNav" href="lookupDataList" sequenceNumber="4" className="subLevel" heading="LookupDataHeading" description="LookupDataInfo"/>
-        <sub-menu-item name="PDPVariantCaptionNav" text="PDPVariantCaptionNav" href="pdpVariantCaptionList" sequenceNumber="5" className="subLevel" heading="PDPVariantCaptionsHeading" description="PDPVariantCaptionsInfo"/>
-        <sub-menu-item name="PaymentSettingsNav" text="PaymentSettingsNav" href="paymentSettingsList" sequenceNumber="6" className="subLevel" heading="PaymentSettingsHeading" description="PaymentSettingsInfo"/>
-        <sub-menu-item name="AdminPixelTrackingNav" text="AdminPixelTrackingNav" href="pixelTrackingManagement" sequenceNumber="7" className="subLevel" heading="AdminPixelTrackingHeading" description="AdminPixelTrackingInfo"/>
-        <sub-menu-item name="JobNav" text="JobNav" href="scheduledJob" sequenceNumber="8" className="subLevel" heading="ScheduledJobHeading" description="ScheduledJobInfo"/>
-        <sub-menu-item name="FeedsNav" text="FeedsNav" href="feedsList" sequenceNumber="9" className="subLevel" heading="FeedsHeading" description="FeedsInfo"/>
-        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="10" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>    
+        <sub-menu-item name="PaymentSettingsNav" text="PaymentSettingsNav" href="paymentSettingsList" sequenceNumber="5" className="subLevel" heading="PaymentSettingsHeading" description="PaymentSettingsInfo"/>
+        <sub-menu-item name="AdminPixelTrackingNav" text="AdminPixelTrackingNav" href="pixelTrackingManagement" sequenceNumber="6" className="subLevel" heading="AdminPixelTrackingHeading" description="AdminPixelTrackingInfo"/>
+        <sub-menu-item name="JobNav" text="JobNav" href="scheduledJob" sequenceNumber="7" className="subLevel" heading="ScheduledJobHeading" description="ScheduledJobInfo"/>
+        <sub-menu-item name="FeedsNav" text="FeedsNav" href="feedsList" sequenceNumber="8" className="subLevel" heading="FeedsHeading" description="FeedsInfo"/>
+        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="9" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>    
     </menu-item>
     
      

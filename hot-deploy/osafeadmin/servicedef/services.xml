@@ -2706,24 +2706,6 @@
         <attribute name="productId" mode="INOUT" type="String" optional="true"/>
         <attribute name="productContentTypeId" mode="IN" type="String" optional="true"/>
     </service>
-
-    <service name="updatePDPVariantCaptionGroup" engine="group" auth="true">
-        <description>
-         Update Product Variant Caption and render success message.
-        </description>
-        <group>
-            <invoke name="updatePDPVariantCaption" result-to-context="true"/>
-            <invoke name="successMessage" result-to-context="true"/>
-        </group>
-    </service>
-
-    <service name="updatePDPVariantCaption" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
-            invoke="updatePDPVariantCaption">
-        <description>
-         Check For Blank Caption and Update Product Variant Caption.
-        </description>
-        <implements service="updateProductFeatureType"/>
-    </service>
     
     <service name="getSysConfigFiles" engine="simple" auth="false" 
              location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
@@ -3483,5 +3465,20 @@
         <attribute name="loginEmailConfirm" type="String" mode="IN" optional="true"/>
         <attribute name="password" type="String" mode="IN" optional="true"/>
         <attribute name="passwordConfirm" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="entitySyncGroup" engine="group" auth="false">
+        <description>
+         performs Entity sync and render success message
+        </description>
+        <group>
+            <invoke name="pushEntitySync" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="pushEntitySync" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="pushEntitySync">
+        <description>Run Entity Sync</description>
+        <attribute name="entitySyncId" type="String" mode="IN" optional="false"/>
     </service>
 </services>

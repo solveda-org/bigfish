@@ -18,8 +18,11 @@
         <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"})/>
         <#if productFeatureAndAppls?exists && productFeatureAndAppls?has_content>
           <#list productFeatureAndAppls as productFeatureAndAppl>
+            <#assign featureType = ""/>
+            <#if productFeatureTypesMap?has_content>
+              <#assign featureType = productFeatureTypesMap.get(productFeatureAndAppl.productFeatureTypeId)!"" />
+            </#if>
             <#assign curProductFeatureType = productFeatureAndAppl.getRelatedOne("ProductFeatureType")>
-            <#assign featureType = (curProductFeatureType.get("description",locale))?default((productFeatureAndAppl.productFeatureTypeId)?if_exists)/>
             <th class="statusCol">${featureType}</th>
           </#list>
         </#if>

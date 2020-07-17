@@ -158,7 +158,7 @@ if (UtilValidate.isNotEmpty(orderHeader))
 	context.orderPaymentPreferences = orderPaymentPreferences;
 
 	// ship groups
-	shipGroups = orderHeader.getRelatedOrderBy("OrderItemShipGroup", ["shipGroupSeqId"]);
+	shipGroups = orderHeader.getRelatedOrderBy("OrderItemShipGroup", ["-shipGroupSeqId"]);
 	context.shipGroups = shipGroups;
 
 

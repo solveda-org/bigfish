@@ -574,10 +574,6 @@
                  <field field="userLogin" type="org.ofbiz.entity.GenericValue"/>
                  <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
              </call-object-method>
-             <call-object-method obj-field="shoppingCart" method-name="addAdditionalPartyRole">
-                 <field field="userLogin.partyId"/>
-                 <string value="GUEST_CUSTOMER"/>
-             </call-object-method>
          </if-compare>
         <log level="info" message="anonymous userLogin is ${userLogin}"/>
     </simple-method>
@@ -593,9 +589,16 @@
             <set from-field="tempMap.partyId" field="parameters.partyId"/>
             <call-simple-method method-name="setAnonUserLogin"/>
             <!-- add the party to the customer role -->
-            <set field="roleMap.roleTypeId" value="CUSTOMER"/>
+            <set field="roleMap.roleTypeId" value="GUEST_CUSTOMER"/>
             <set field="roleMap.partyId" from-field="tempMap.partyId"/>
             <call-service service-name="createPartyRole" in-map-name="roleMap"/>
+              
+	        <make-value entity-name="ProductStoreRole" value-field="productStoreRole"/>
+	        <set field="productStoreRole.partyId" from-field="tempMap.partyId"/>
+	        <set field="productStoreRole.roleTypeId" value="GUEST_CUSTOMER"/>
+	        <set field="productStoreRole.productStoreId" from-field="parameters.productStoreId"/>
+	        <now-timestamp field="productStoreRole.fromDate"/>  
+	        <create-value value-field="productStoreRole"/>
         <else>
             <set from-field="parameters.partyId" field="personContext.partyId"/>
             <set-service-fields service-name="updatePerson" to-map="updatePersonCtx" map="personContext"/>
@@ -862,10 +865,6 @@
              <call-object-method obj-field="shoppingCart" method-name="setUserLogin">
                  <field field="createdUserLogin" type="org.ofbiz.entity.GenericValue"/>
                  <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
-             </call-object-method>
-             <call-object-method obj-field="shoppingCart" method-name="removeAdditionalPartyRole">
-                 <field field="userLoginContext.partyId"/>
-                 <string value="GUEST_CUSTOMER"/>
              </call-object-method>
         </if-compare>
         <log level="info" message="userLogin is ${userLogin}"/>
