@@ -70,8 +70,8 @@
                 <div class ="paymentOptions" <#if showPaymentOption == "false">style="display:none"</#if>>
                  <h3>${uiLabelMap.PaymentOptionsHeading}</h3>
                   <div class="entry">
-                    <input type="radio" id="payInStore" name="payInStore" value="N" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "N"))>checked="checked"</#if>/><span>${uiLabelMap.PayNowlabel}</span>
-                    <input type="radio" id="payInStore" name="payInStore" value="Y" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "Y"))>checked="checked"</#if>/><span>${uiLabelMap.PayInStorelabel}</span>
+                    <input type="radio" id="payInStore" name="payInStore" value="N" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "N"))>checked="checked"</#if>/><span>${uiLabelMap.PayNowLabel}</span>
+                    <input type="radio" id="payInStore" name="payInStore" value="Y" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "Y"))>checked="checked"</#if>/><span>${uiLabelMap.PayInStoreLabel}</span>
                   </div>
                 </div>
                 
@@ -111,11 +111,11 @@
                     </#list>
                     <#if hasSavedCard?has_content>
                         <div class="entry">
-                            <input type="radio" id="useSavedCard" name="useSavedCard" value="Y" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "Y") || (savedPaymentMethodValueMaps?has_content))>checked="checked"</#if>/><span>${uiLabelMap.UseSavedCardlabel}</span>
+                            <input type="radio" id="useSavedCard" name="useSavedCard" value="Y" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "Y") || (savedPaymentMethodValueMaps?has_content))>checked="checked"</#if>/><span>${uiLabelMap.UseSavedCardLabel}</span>
                         </div>
                         <div class="entry">
-                            <label for="savedCard">${uiLabelMap.SelectSavedcardCaption}</label>
-                             <select id="savedCard" name="savedCard" class="savedCard" onfocus="window.dropdown_menu_hack(this)">
+                            <label for="savedCard">${uiLabelMap.SelectSavedCardCaption}</label>
+                             <select id="savedCard" name="savedCard" class="savedCard">
                                  <option value="">${uiLabelMap.CommonSelectOne}</option>
                                  <#assign alreadyShownSavedCreditCardList = Static["javolution.util.FastList"].newInstance()/>
                                  <#assign selectedSavedCard = parameters.savedCard!""/>
@@ -242,6 +242,14 @@
                 </#if>
               </div>
               <!-- Credit card section Ends-->
+              
+              <#-- Cash on Delivery start -->
+               <div class ="codOptions" <#if showPaymentOption == "true" || !(Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD"))>style="display:none"</#if>>
+                 <h3>${uiLabelMap.CODHeading}</h3>
+                  <div class="entry">
+                    <input type="radio" id="codPayment" name="codPayment" value="Y" <#if ((parameters.codPayment?exists && parameters.codPayment?string == "Y"))>checked="checked"</#if>/><span>${uiLabelMap.CODLabel}</span>
+                  </div>
+               </div>
 	        </fieldset>
 	
 	           </div>

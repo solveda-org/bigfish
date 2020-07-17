@@ -2,9 +2,8 @@
   <#if paramMap?has_content>
       <#assign previousParams = Static["org.ofbiz.base.util.UtilHttp"].urlEncodeArgs(paramMap)/>
   </#if>
-  <tr class="footer">
-    <th colspan="0">
-      <div class="entryButtonRow">
+
+     <div class="entryButton footer">
         <#if backAction?exists && backAction?has_content>
           <a href="<@ofbizUrl>${backAction}?backActionFlag=Y<#if previousParams?has_content>&${StringUtil.wrapString(previousParams)}</#if></@ofbizUrl>"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
         <#else>
@@ -28,19 +27,22 @@
         <#if seoAction?exists && seoAction?has_content>
           <a href="<@ofbizUrl>${seoAction}</@ofbizUrl>" class="buttontext standardBtn action">${seoActionBtn!""}</a>
         </#if>
-        <#if resultList?exists && resultList?has_content>
-        <div class="linkButton">
+     </div>
+     <#if resultList?exists && resultList?has_content>
+     <div class="infoDetailIcon">
           <#if ExportToPdfAction?exists && ExportToPdfAction?has_content>
             <a href="<@ofbizUrl>${ExportToPdfAction}</@ofbizUrl>" target="Download PDF" class="buttontext action" onMouseover="showTooltip(event,'${ExportToPdfTooltipText!""}');" onMouseout="hideTooltip()"><span class="exportToPdfIcon"></span></a>
           </#if>
-          <#if ExportToXMLAction?exists && ExportToXMLAction?has_content>
-            <a href="<@ofbizUrl>${ExportToXMLAction}</@ofbizUrl>" class="buttontext action" onMouseover="showTooltip(event,'${ExportToXmlTooltipText!""}');" onMouseout="hideTooltip()"><span class="exportToXmlIcon"></span></a>
-          </#if>
           <#if ExportToFileAction?exists && ExportToFileAction?has_content>
-            <a href="<@ofbizUrl>${ExportToFileAction}</@ofbizUrl>" target="Download FILE" class="buttontext action" onMouseover="showTooltip(event,'${ExportToCsvTooltipText!""}');" onMouseout="hideTooltip()"><span class="exportToCsvIcon"></span></a>
+            <a href="<@ofbizUrl>${ExportToFileAction}</@ofbizUrl>" target="Download FILE" class="buttontext action" onMouseover="showTooltip(event,'${ExportToFileTooltipText!"${uiLabelMap.ExportToCSVTooltipText}"}');" onMouseout="hideTooltip()"><span class="exportToCsvIcon"></span></a>
           </#if>
-        </div>
-        </#if>
+          <#if ExportToXMLAction?exists && ExportToXMLAction?has_content>
+            <#if ExportToXMLParam?exists && ExportToXMLAction?has_content>
+                <a href="<@ofbizUrl>${ExportToXMLAction}?${ExportToXMLParam!}=${ExportToXMLParamValue}</@ofbizUrl>" <#if !execInNewTab?has_content>target="Download XML"</#if>class="buttontext action" onMouseover="showTooltip(event,'${ExportToXmlTooltipText!"${uiLabelMap.ExportToXMLTooltipText}"}')" onMouseout="hideTooltip()"><span class="exportToXmlIcon"></span></a>
+            <#else>
+                <a href="<@ofbizUrl>${ExportToXMLAction}</@ofbizUrl>" <#if !execInNewTab?has_content>target="Download XML"</#if>class="buttontext action" onMouseover="showTooltip(event,'${ExportToXmlTooltipText!"${uiLabelMap.ExportToXMLTooltipText}"}');" onMouseout="hideTooltip()"><span class="exportToXmlIcon"></span></a>
+            </#if>
+          </#if>
      </div>
-    </th>
-  </tr>
+     </#if>
+

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/widget-screen.xsd">
+
+    <screen name="adminCheckout">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="submitFormAction" value="validateCheckout"/>
+                <set field="submitFormActionBtn" value="${uiLabelMap.SubmitOrderBtn}"/>
+                <set field="helperFileName" value ="adminCheckoutHelp.htm"/>
+                <set field="detailFormName" value="adminCheckoutFORM"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                      </actions>
+                      <widgets>
+                        <container id="adminCheckout" style="commonDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonCheckout.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="salesChannelBoxBody">
+                                             <include-screen name="salesChannel"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="shoppingCartBoxBody">
+                                             <include-screen name="shoppingCart"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="customerInformationBoxBody">
+                                             <include-screen name="customerInformation"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="billingAddressBoxBody">
+                                             <include-screen name="billingAddress"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="shippingAddressBoxBody">
+                                             <include-screen name="shippingAddress"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="shippingOptionBoxBody">
+                                             <include-screen name="shippingOption"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="promotionOptionBoxBody">
+                                             <include-screen name="promotionOption"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="shoppingCartBottomBoxBody">
+                                             <include-screen name="shoppingCartBottom"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="paymentOptionBoxBody">
+                                             <include-screen name="paymentOption"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="footerBoxBody">
+                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                        <container>
+                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="salesChannel">
+        <section>
+            <actions>
+                   <entity-and entity-name="Enumeration" list="enumerationList">
+                       <field-map field-name="enumTypeId" value="ORDER_SALES_CHANNEL"/>
+                       <order-by field-name="sequenceId"/>
+                   </entity-and>
+                   <set field="salesChannelList" from-field="enumerationList"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/saleschannel.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="shoppingCart">
+        <section>
+            <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
+            </actions>
+            <widgets>
+            <container id="shoppingCartContainer">
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shoppingCart.ftl"/>
+                    </html>
+                </platform-specific>
+            </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="shoppingCartBottom">
+        <section>
+            <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
+            </actions>
+            <widgets>
+            <container id="shoppingCartBottomContainer">
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shoppingCartBottom.ftl"/>
+                    </html>
+                </platform-specific>
+            </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="customerInformation">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/checkoutCustomerInfo.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="billingAddress">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/billingAddress.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="shippingAddress">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shippingAddress.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="shippingOption">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/shippingOption.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="promotionOption">
+        <section>
+            <actions>
+            	<property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
+            </actions>
+            <widgets>
+	            <container id="promoCodeContainer">
+	                <platform-specific>
+	                    <html>
+	                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/promotionOption.ftl"/>
+	                    </html>
+	                </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="paymentOption">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/paymentOption.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="enteredPromoCode">
+        <section>
+            <widgets>
+	                <platform-specific>
+	                    <html>
+	                        <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/enteredPromoCode.ftl" />
+	                    </html>
+	                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="adminOrderConfirm">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.OrderManagementOrderDetailTitle} &lt;span class='pageTitleAdditionalText'&gt;(${parameters.orderId})&lt;/span&gt;"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="detailId" value="${parameters.orderId}"/>
+                <set field="detailParamKey" value="orderId"/>
+                <set field="orderStatusChangeBtnVisible" value="Y"/>
+                <set field="orderStatusChangeAction" value="orderStatusDetail"/>
+                <set field="generalInfoBoxHeading" value="${uiLabelMap.OrderDetailInfoHeading}"/>
+                <set field="customerInfoBoxHeading" value="${uiLabelMap.CustomerInfoHeading}"/>
+                <set field="paymentInfoBoxHeading" value="${uiLabelMap.PaymentInfoHeading}"/>
+                <set field="orderItemInfoBoxHeading" value="${uiLabelMap.OrderItemsHeading}"/>
+                <set field="orderAttributeInfoBoxHeading" value="${uiLabelMap.OrderAttributeHeading}"/>
+                <set field="helperFileName" value ="orderDetailHelp.htm"/>
+                <set field="detailRequest" value ="N" global="true" />
+                <set field="activeTopMenuItem" value="OrderMgmntNav"/>
+                <set field="activeSubMenuItem" value="OrderViewNav"/>
+                <set field="showStatusUpdateLink" value = "true"/>
+                <set field="showPDFLink" value = "true"/>
+                <set field="showXMLLink" value = "true"/>
+                <set field="showOrderNotesLink" value = "true"/>
+                <set field="showOrderDetailLink" value = "true"/>
+                <set field="showOrderAttributeHeading" value = "true"/>
+                <set field="showOrderItemsPaging" value = "true"/>
+                <!-- This set has to be before the groovy invocation -->
+                <set field="showThankYouStatus" value="Y" />
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                          <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderDetail.groovy"/>
+                          <set field="argListNames[]" from-field="notesCount"/>
+                          <property-to-field resource="OSafeAdminUiLabels" property="OrderNotesLabel" field="orderNotesTooltipText" arg-list-name="argListNames"/>
+                      </actions>
+                      <widgets>
+                        <container id="orderManagementOrderDetail" style="commonOrderDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonOrderDetail.ftl">
+                                        <html-template-decorator-section name="generalInfoBoxBody">
+                                             <platform-specific>
+                                                <html>
+                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailGeneralInfo.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="customerInfoBoxBody">
+                                             <platform-specific>
+                                                <html>
+                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailCustomerInfo.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="paymentInfoBoxBody">
+                                             <platform-specific>
+                                                <html>
+                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailPaymentInfo.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listPagingBody">
+                                             <include-screen name="ListPaging" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="orderItemBoxBody">
+                                            <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                            <platform-specific>
+                                                <html>
+                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailOrderItems.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="orderAttributeBoxBody">
+                                            <platform-specific>
+                                                <html>
+                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderAttributeList.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="footerBoxBody">
+                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailLinkButton">
+                                            <include-screen name="commonOrderLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonConfirm">
+                                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+</screens>

@@ -2,6 +2,10 @@
 <script type="text/javascript">
     jQuery(document).ready(function () {
     
+        //disabled or enabled the Selectable feature based on the Finished/Virtual 
+        var virtualRadio = jQuery('input:radio[name=isVirtual]:checked');
+        selectFinishedProduct(virtualRadio);
+        
     	//handle the disable date
 		var enabledCheckBox = jQuery('input:radio[name=enabled]:checked').val();
 		if(enabledCheckBox == "Y")
@@ -101,6 +105,11 @@
         jQuery('input:radio[name=changeStatusAll]').click(function(event) {
             getOrderItemCheckDisplay('changeStatusAll');
         });
+
+        paymentOptionDisplay('paymentOption');
+        jQuery('input:radio[name=paymentOption]').click(function(event) {
+            paymentOptionDisplay('paymentOption');
+        });
        jQuery("#closeButton").click(function (e){
            hideDialog('#dialog', '#displayDialog');
            e.preventDefault();
@@ -143,12 +152,16 @@
            });
        }
         if (jQuery('#simpleTest').length){
-            getEmailTestFormat(jQuery('input:radio[name=simpleTest]:checked').val());
+            getEmailTestFormat(jQuery('input:radio[name=simpleTest]:checked').val(), 'Y');
         }
         if (jQuery('#emailTemplateId').length){
             jQuery('#emailTemplateId').change(function(){
                 getEmailTemplateFormat('#emailTemplateId');
             });
+        }
+        if (jQuery('#USER_country').length)
+        {
+            getAddressFormat('USER');
         }
         
        jQuery("div.actionIconMenu").mouseenter(function(event)
@@ -160,21 +173,29 @@
        });
     });
 
-    function getEmailTestFormat(simpleTestValue) {
+    function getEmailTestFormat(simpleTestValue, isPageLoad) {
         if (simpleTestValue == "N") {
+            jQuery('.emailTextDiv').hide();
             jQuery('.emailTemplateDdDiv').show();
             getEmailTemplateFormat('#emailTemplateId');
         } else {
+            jQuery('.emailTextDiv').show();
             jQuery('.emailTemplateDdDiv').hide();
             jQuery('.customerIdDiv').hide();
             jQuery('.orderIdDiv').hide();
+        }
+        if (isPageLoad == "N") {
+            $('toAddress').value = "";
         }
     }
 
     function getEmailTemplateFormat(emailTemplateId) {
         var templateId = jQuery(emailTemplateId).val();
-        if ((templateId == "E_ABANDON_CART") || (templateId == "E_SCHED_JOB_ALERT")) {
+        if ((templateId == "E_SCHED_JOB_ALERT")) {
             //TBD;
+        } else if ((templateId == "E_ABANDON_CART")) {
+            jQuery('.customerIdDiv').show();
+            jQuery('.orderIdDiv').show();
         } else if ((templateId == "E_CHANGE_CUSTOMER") || (templateId == "E_NEW_CUSTOMER") || (templateId == "E_FORGOT_PASSWORD") ) {
             jQuery('.customerIdDiv').show();
             jQuery('.orderIdDiv').hide();
@@ -209,7 +230,8 @@
     function loadProductCategoryFeture(productCategoryId) {
        productCategoryId = jQuery(productCategoryId).val();
        productId = jQuery('#productId').val();
-       jQuery.get('<@ofbizUrl>loadProductCategoryFeture?productId='+productId+'&productCategoryId='+productCategoryId+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+       isVirtual = jQuery('input:radio[name=isVirtual]:checked').val();
+       jQuery.get('<@ofbizUrl>loadProductCategoryFeture?productId='+productId+'&productCategoryId='+productCategoryId+'&isVirtual='+isVirtual+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
             jQuery('#productCategoryFetureDetail').replaceWith(data);
         });
     }
@@ -219,6 +241,25 @@
             jQuery('#productFeatureId_' + index).show();
         } else {
             jQuery('#productFeatureId_' + index).hide();
+        }
+        if (jQuery(elm).val() == "DISTINGUISHING_FEAT") 
+        {
+            jQuery('#selectedHelperIcon_' + index).hide();
+            jQuery('#notApplicableHelperIcon_' + index).hide();
+            jQuery('#descriptiveHelperIcon_' + index).show();
+        }
+        else if(jQuery(elm).val() == "SELECTABLE_FEATURE")
+        {
+            jQuery('#descriptiveHelperIcon_' + index).hide();
+            jQuery('#notApplicableHelperIcon_' + index).hide();
+            jQuery('#selectedHelperIcon_' + index).show();
+            
+        }
+        else
+        {
+            jQuery('#selectedHelperIcon_' + index).hide();
+            jQuery('#descriptiveHelperIcon_' + index).hide();
+            jQuery('#notApplicableHelperIcon_' + index).show();
         }
     }
 
@@ -254,6 +295,34 @@
             jQuery('.COMPLETED').hide();
         }
     }
+    function showPostalAddress(contactMechId,divType) {
+        jQuery('.'+divType).hide();
+        jQuery('.'+divType+' :input').attr('disabled', 'disabled');
+        jQuery('#'+contactMechId).show();
+        jQuery('#'+contactMechId+' :input').removeAttr('disabled');
+    }
+
+    function paymentOptionDisplay(paymentOption) {
+       var selectedPaymentOption = jQuery('input:radio[name=paymentOption]:checked').val();
+       jQuery('.CCExist').hide();
+       jQuery('.CCNew').hide();
+       jQuery('.OffLine').hide();
+       jQuery('.Paypal').hide();
+       
+        if (selectedPaymentOption == "CCExist") {
+            jQuery('.CCExist').show();
+        } else if (selectedPaymentOption == "CCNew") {
+            jQuery('.CCNew').show();
+        } else if (selectedPaymentOption == "OffLine") {
+            jQuery('.OffLine').show();
+        } else if (selectedPaymentOption == "Paypal") {
+            jQuery('.Paypal').show();
+        } else {
+            jQuery('.CCExist').show();
+        }
+
+    }
+
     function displayDialogBox(dialogContent) {
         showDialog('#dialog', '#displayDialog',dialogContent);
     }
@@ -502,10 +571,92 @@
 	    	//go to meta tag page
             form.action="<@ofbizUrl>${metaAction!""}</@ofbizUrl>";
             form.submit();
-	    }
+	    }else if (mode == "SF") {
+            // execute action
+            form.action="<@ofbizUrl>${submitFormAction!""}</@ofbizUrl>";
+            form.submit();
+        }else if (mode == "UC") {
+            // update cart action
+            var modifyCart = "adminModifyCart"; 
+            if (updateCart()) {
+                form.action="<@ofbizUrl>" + modifyCart + "</@ofbizUrl>";
+                form.submit();
+            }
+        }else if (mode == "UCPS") {
+            // update cart pickup in store
+            var setStorePickup = "setStorePickup";
+            form.action="<@ofbizUrl>" + setStorePickup + "</@ofbizUrl>";
+            form.submit();
+        }
 	}
 	
-
+	function refreshFromBottomCart(){
+		//set the values from bottom cart to the top cart
+		jQuery('.BOTTOM_CART_ITEM').each(function () {
+        		var newQty = jQuery(this).val(); 
+        		var bottomCartInput = jQuery(this).attr("name");
+        		var bottomLineNo = bottomCartInput.split('_')[1];
+        		
+        		jQuery('#update_'+bottomLineNo).val(newQty);
+     	});
+     	//refresh the top cart
+     	var modifyCart = "adminModifyCart"; 
+     	if (updateCart()) {
+                document.adminCheckoutFORM.action="<@ofbizUrl>" + modifyCart + "</@ofbizUrl>";
+                document.adminCheckoutFORM.submit();
+        }
+     		
+     		
+	}
+	
+	var isWhole_re = /^\s*\d+\s*$/;
+    function isWhole (s) {
+        return String(s).search (isWhole_re) != -1
+    }
+	
+    function updateCart() {
+      var cartItemsNo = ${shoppingCartSize!"0"};
+      <#assign PDP_QTY_MIN = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MIN")!"1"/>
+      <#assign PDP_QTY_MAX = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MAX")!"99"/> 
+      var lowerLimit = ${PDP_QTY_MIN!"1"};
+      var upperLimit = ${PDP_QTY_MAX!"99"};
+      var zeroQty = false;
+      
+      for (var i=0;i<cartItemsNo;i++)
+      {
+          var quantity = jQuery('#update_'+i).val();
+          if(quantity != 0) 
+          {
+	          if(quantity < lowerLimit)
+	          {
+	              alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMinQtyError,'\"','\\"'))}");
+	              return false;
+	          }
+	          if(upperLimit!= 0 && quantity > upperLimit)
+	          {
+	              alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMaxQtyError,'\"','\\"'))}");
+	              return false;
+	          }
+	          if(!isWhole(quantity))
+	          {
+	              alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPQtyDecimalNumberError,'\"','\\"'))}");
+	              return false;
+	          }
+          } 
+          else
+          {
+              zeroQty = true;
+          }
+      }
+      if(zeroQty == true)
+      {
+          window.location='<@ofbizUrl>deleteProductFromCart</@ofbizUrl>';
+      }
+      return true;
+    }
+    
+    
+    
 	
 	function submitDetailUploadForm(form) {
         if(form.action == "")
@@ -622,8 +773,9 @@
         displayDialogBox();
     }
     function setIndexPos(table) {
+      //var extraRows = jQuery('.extraTr').size()
         var rows = table.getElementsByTagName('tr');
-        for (i = 1; i < rows.length; i++) {
+        for (i = rows.length- 1; i >=1 ; i--) {
             var inputs = rows[i].getElementsByTagName('input');
             for (j = 0; j < inputs.length; j++) {
                 attrType = inputs[j].getAttribute("type");
@@ -633,9 +785,14 @@
             var anchors = rows[i].getElementsByTagName('a');
             if(anchors.length == 3)  {  
                     var deleteAnchor = anchors[0];
-                    var deleteTagSecondMethodIndex = deleteAnchor.getAttribute("href").indexOf(";");
-                    var deleteTagSecondMethod = deleteAnchor.getAttribute("href").substring(deleteTagSecondMethodIndex+1,deleteAnchor.getAttribute("href").length);
-                    deleteAnchor.setAttribute("href", "javascript:setNewRowNo('"+i+"');"+deleteTagSecondMethod);
+                    if (jQuery(deleteAnchor).hasClass('normalAnchor'))
+                    {
+                    } else
+                    {
+                        var deleteTagSecondMethodIndex = deleteAnchor.getAttribute("href").indexOf(";");
+                        var deleteTagSecondMethod = deleteAnchor.getAttribute("href").substring(deleteTagSecondMethodIndex+1,deleteAnchor.getAttribute("href").length);
+                        deleteAnchor.setAttribute("href", "javascript:setNewRowNo('"+i+"');"+deleteTagSecondMethod);
+                    }
                     
                     var insertBeforeAnchor = anchors[1];
                     var insertBeforeTagSecondMethodIndex = insertBeforeAnchor.getAttribute("href").indexOf(";");
@@ -654,12 +811,12 @@
                     insertBeforeAnchor.setAttribute("href", "javascript:setNewRowNo('"+i+"');"+insertBeforeTagSecondMethod);
             }
         }
-        if(rows.length > 2) {
+        if(rows.length > jQuery('.extraTr').size()) {
             jQuery('#addIconRow').hide();
         } else {
             jQuery('#addIconRow').show();
         }
-        $('totalRows').value = rows.length-2;
+        jQuery('#totalRows').val(rows.length - jQuery('tr.extraTr').size());
         hideTooltip();
     }
     
@@ -681,7 +838,7 @@
         }
     }
 
-    function getAddressFormat(countryId) {
+    function getStoreAddressFormat(countryId) {
         if ($F(countryId) == "USA") {
             jQuery('.CAN').hide();
             jQuery('.OTHER').hide();
@@ -696,37 +853,88 @@
             jQuery('.OTHER').show();
         }
     }
+    function getAddressFormat(idPrefix) {
+        var countryId = '#'+idPrefix+'_country';
+        if (jQuery(countryId).val() == "USA") {
+            jQuery('.'+idPrefix+'_CAN').hide();
+            jQuery('.'+idPrefix+'_OTHER').hide();
+           jQuery('.'+idPrefix+'_USA').show();
+        } else if (jQuery(countryId).val() == "CAN") {
+            jQuery('.'+idPrefix+'_USA').hide();
+            jQuery('.'+idPrefix+'_OTHER').hide();
+            jQuery('.'+idPrefix+'_CAN').show();
+        } else{
+            jQuery('.'+idPrefix+'_USA').hide();
+            jQuery('.'+idPrefix+'_CAN').hide();
+            jQuery('.'+idPrefix+'_OTHER').show();
+        }
+      }
+
+    function copyAddress(fromAddr, fromAddrContainer, toAddr, toAddrSection, triggerElt, isBlindup) {
+        jQuery(fromAddrContainer).find('input, select, textarea').change(function(){
+          if(jQuery(triggerElt).is(":checked")){
+            copyFieldvalue(fromAddr, this, toAddr);
+          }
+        });
+        if(jQuery(triggerElt).is(":checked") && jQuery(toAddrSection).length){
+          if (isBlindup) {
+            jQuery(toAddrSection).hide();
+          }
+          copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt);
+        }
+        jQuery(triggerElt).click(function(){
+          if (isBlindup) {
+            //jQuery(toAddrSection).slideToggle(1000);
+            if(jQuery(triggerElt).is(":checked")){
+                jQuery(toAddrSection).hide();
+            } else {
+                jQuery(toAddrSection).show();
+            }
+          }
+          copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt);
+        });
+    }
+    
+    function copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt) {
+        jQuery(fromAddrContainer).find('input, select, textarea').each(function(){
+          if(jQuery(triggerElt).is(":checked")){
+            copyFieldvalue(fromAddr, this, toAddr);
+          }
+        });
+    }
+    
+    function copyFieldvalue(fromAddrPurpose, fromElm, toAddrPurpose) {
+        fromElmId = jQuery(fromElm).attr('id');
+        var toElmId = '#'+toAddrPurpose + fromElmId.sub(fromAddrPurpose, "");
+        if(jQuery(toElmId).length) {
+          if(fromElmId == fromAddrPurpose+'AddressContactMechId') {
+              return;
+          }
+          jQuery(toElmId).val(jQuery(fromElm).val());
+          jQuery(toElmId).change();
+        }
+    }
 
     function getAssociatedStateList(countryId, stateId, divStateId, addressLine3) {
         var optionList = "";
-        var requestToSend = "getAssociatedStateList";
-        new Ajax.Request(requestToSend, {
-            asynchronous: false,
-            parameters: {countryGeoId:$F(countryId)},
-            onSuccess: function(transport) {
-                var data = transport.responseText.evalJSON(true);
-                stateList = data.stateList;
-                stateList.each(function(state) {
-                    if (state.geoId) {
-                        optionList = optionList + "<option value = "+state.geoId+" >"+state.geoName+"</option>";
-                    } else {
-                        optionList = optionList + "<option value = >"+state.geoName+"</option>";
-                    }
-                });
-                $(stateId).update(optionList);
-                if (stateList.size() <= 1) {
-                    if ($(divStateId).visible()) {
-                        Effect.Fade(divStateId, {duration: 0.0});
-                        Event.stopObserving(stateId, 'blur');
-                        //Show the Address 3 Field if States are not found.
-                        Effect.Appear(addressLine3, {duration: 0.0});
-                    }
-                } else {
-                    //Hide the Address 3 Field if States are found.
-                    Effect.Fade(addressLine3, {duration: 0.0});
-                    Effect.Appear(divStateId, {duration: 0.0});
-                }
+        jQuery.ajaxSetup({async:false});
+        jQuery.post("<@ofbizUrl>getAssociatedStateList</@ofbizUrl>", {countryGeoId: jQuery("#"+countryId).val()}, function(data) {
+          var stateList = data.stateList;
+          jQuery(stateList).each(function() {
+            if (this.geoId) {
+              optionList = optionList + "<option value = "+this.geoId+" >"+this.geoName+"</option>";
+            } else {
+              optionList = optionList + "<option value = >"+this.geoName+"</option>";
             }
+          });
+          jQuery("#"+stateId).html(optionList);
+          if (jQuery(stateList).size() <= 1) {
+            jQuery("#"+addressLine3).show();
+            jQuery("#"+divStateId).hide();
+          } else {
+            jQuery("#"+addressLine3).hide();
+            jQuery("#"+divStateId).show();
+          }
         });
     }
     
@@ -752,12 +960,12 @@
         jQuery('.confirmTxt').html('${confirmDialogText!""}'+currentMediaName);
     }
 
-    
-    function showImageField(fieldDivId) {
-        jQuery('.commonDivHide').hide();
-        if(fieldDivId != '') {
-            jQuery('#'+fieldDivId).show();
-        }
+    function changeImageRef(showFieldId1,showFieldId2,hideFieldId1, hideFieldId2) 
+    { 
+ 	    jQuery('#'+showFieldId1).show();
+ 	    jQuery('#'+showFieldId2).show();
+ 	    jQuery('#'+hideFieldId1).hide();
+ 	    jQuery('#'+hideFieldId2).hide();
     }
 
     function addDivRow(processObject) {
@@ -1026,6 +1234,15 @@
           submitDetailForm(document.${detailFormName!""}, 'MA');
         </#if>
     }
+    function setNewValue(key,value) {
+        document.getElementById('newValue').value = value;
+        document.getElementById('key').value = key;
+        
+        <#if detailFormName?has_content>
+          document.${detailFormName!""}.submit();
+          //submitDetailForm(document.${detailFormName!""}, 'MA');
+        </#if>
+    }
     function setStars(starValue) {
        // Change stars image
        var ratingPerct = ((starValue / 5) * 100);
@@ -1292,7 +1509,7 @@ function setTableIndexPos(table)
     for (i = 1; i < rows.length; i++) {
         var columns = rows[i].getElementsByTagName('td');
         for (j = 0; j < columns.length; j++) {
-            if(j == 1) {
+            if(j ==  (columns.length-1)) {
                 var anchors = columns[j].getElementsByTagName('a');
                 if(anchors.length == 3) {
                     var deleteAnchor = anchors[0];
@@ -1348,7 +1565,62 @@ function setRowNo(rowNo) {
  	}
  }
  
-
-
- 
+ // update the order item section
+    function setShippingMethod(selectedShippingOption, isOnLoad) {
+        if (jQuery('#shoppingCartContainer').length) {
+            jQuery('#shoppingCartContainer').load('<@ofbizUrl>setShippingOption?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+        }
+        if (jQuery('#shoppingCartBottomContainer').length) {
+            jQuery('#shoppingCartBottomContainer').load('<@ofbizUrl>setShippingOptionBottom?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+        }
+        if((isOnLoad != null) && (isOnLoad =='N')) {
+            //call ajax and update promotion info section
+            if (jQuery('#promoCodeContainer').length) {
+                jQuery('#promoCodeContainer').load('<@ofbizUrl>reloadPromoCode?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+           }
+        }
+        if(selectedShippingOption != "NO_SHIPPING@_NA_")
+        {
+        	jQuery('#checkoutStoreName').hide();
+        }
+        
+    }
+    
+    //add promo code for checkout screen
+    function addManualPromoCode() {
+        if (jQuery('#manualOfferCode').length && jQuery('#manualOfferCode').val() != null) {
+          promo = jQuery('#manualOfferCode').val().toUpperCase();
+          promoCodeWithoutSpace = promo.replace(/^\s+|\s+$/g, "");
+        }
+        var cform = document.${detailFormName!"adminCheckoutFORM"};
+        cform.action="<@ofbizUrl>adminValidatePromoCode?productPromoCodeId="+promoCodeWithoutSpace+"</@ofbizUrl>";
+        cform.submit();
+    }
+    
+    //remove promo code for checkout screen
+    function removePromoCode(promoCode) {
+        if (promoCode != null) {
+          var cform = document.${detailFormName!"adminCheckoutFORM"};
+          cform.action="<@ofbizUrl>adminRemovePromoCode?productPromoCodeId="+promoCode+"</@ofbizUrl>";
+          cform.submit();
+        }
+    }
+    
+    //disabled or enabled the Selectable feature based on the Finished/Virtual
+    function selectFinishedProduct(elm) {
+        if(jQuery(elm+':checked').val() == "N"){
+            jQuery('.selectableRadio').hide();
+        } else {
+            jQuery('.selectableRadio').show();
+        }
+    }
+    function clearCache(cacheName, cacheType)
+    {
+        document.getElementById('cacheName').value=cacheName;
+        document.getElementById('cacheType').value=cacheType;
+        var textConfirmClear = "${StringUtil.wrapString(confirmDialogText!"")}";
+        textConfirmClear = textConfirmClear.replace("_CACHE_TYPE_", cacheType);
+        jQuery('.confirmTxt').html(textConfirmClear);
+        displayDialogBox();
+    }
 </script>

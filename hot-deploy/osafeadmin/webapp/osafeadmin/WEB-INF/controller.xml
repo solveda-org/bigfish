@@ -30,6 +30,35 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="customerDetail"/>
     </request-map>
+    <request-map uri="updateCustomer">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateCustomerGroup"/>
+        <response name="success" type="request-redirect" value="customerManagement"/>
+        <response name="error" type="view" value="customerDetail"/>
+    </request-map>
+    <request-map uri="addCustomer">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addCustomer"/>
+    </request-map>
+    <request-map uri="createCustomer">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createCustomerGroup"/> 
+        <response name="success" type="request-redirect" value="customerManagement"/>
+        <response name="error" type="view" value="addCustomer"/>
+    </request-map>
+    <request-map uri="customerAddressDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="customerAddressDetail"/>
+    </request-map>
+    <request-map uri="createUpdateCustomerAddress">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createUpdateCustomerAddressGroup"/>
+        <response name="success" type="request-redirect" value="customerDetail">
+            <redirect-parameter name="partyId"/>
+        </response>
+        <response name="error" type="view" value="customerAddressDetail"/>
+    </request-map>
+
     <request-map uri="searchCustomers">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="customerManagement"/>
@@ -63,9 +92,14 @@
         <response name="success" type="view" value="orderManagement"/>
         <response name="error" type="view" value="orderStatusDetail"/>
     </request-map>
+    
     <request-map uri="statusUpdateList">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="statusUpdateList"/>
+    </request-map>
+    <request-map uri="orderNotesList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="orderNotesList"/>
     </request-map>
     <request-map uri="searchOrders">
         <security https="true" auth="true"/>
@@ -1046,15 +1080,35 @@
         <response name="success" type="view" value="productManagement"/>
         <response name="error" type="view" value="productManagement"/>
     </request-map>
-    <request-map uri="productDetail">
+    <request-map uri="virtualProductDetail">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="productDetail"/>
+        <response name="success" type="view" value="virtualProductDetail"/>
     </request-map>
-    <request-map uri="updateProductPriceGroup">
+    <request-map uri="finishedProductDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="finishedProductDetail"/>
+    </request-map>
+    <request-map uri="variantProductDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="variantProductDetail"/>
+    </request-map>
+    <request-map uri="updateVirtualProductPriceGroup">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateProductPriceGroup"/>
         <response name="success" type="request-redirect" value="productManagement"/>
-        <response name="error" type="view" value="productDetail"/>
+        <response name="error" type="view" value="virtualProductDetail"/>
+    </request-map>
+    <request-map uri="updateFinishedProductPriceGroup">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductPriceGroup"/>
+        <response name="success" type="request-redirect" value="productManagement"/>
+        <response name="error" type="view" value="finishedProductDetail"/>
+    </request-map>
+    <request-map uri="updateVariantProductPriceGroup">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductPriceGroup"/>
+        <response name="success" type="request-redirect" value="productVariants"/>
+        <response name="error" type="view" value="variantProductDetail"/>
     </request-map>
     <request-map uri="productVariants">
         <security https="true" auth="true"/>
@@ -1118,7 +1172,7 @@
 
     <request-map uri="loadProductCategoryFeture">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="productCategoryFetureDetail"/>
+        <response name="success" type="view" value="productDetailFeature"/>
     </request-map>
     
     <request-map uri="createProduct">
@@ -1170,6 +1224,26 @@
         <response name="success" type="request-redirect" value="facetValueList"/>
         <response name="error" type="view" value="facetValueDetail"/>
     </request-map>
+    <request-map uri="createFacetGroupDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createFacetGroupDetail"/>
+    </request-map>
+    <request-map uri="validateFacetGroup">
+        <security https="true" auth="true"/>
+        <event type="service"  invoke="validateFacetGroupGroup"/>
+        <response name="success" type="request-redirect" value="createFacetValueDetail"/>
+        <response name="error" type="view" value="createFacetGroupDetail"/>
+    </request-map>
+    <request-map uri="createFacetValue">
+        <security https="true" auth="true"/>
+        <event type="service"  invoke="createFacetGroupAndValueGroup"/>
+        <response name="success" type="request-redirect" value="facetGroupDetail"/>
+        <response name="error" type="view" value="createFacetValueDetail"/>
+    </request-map>
+    <request-map uri="createFacetValueDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="createFacetValueDetail"/>
+    </request-map>
     <request-map uri="featureSwatchImage">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="featureSwatchImage"/>
@@ -1210,15 +1284,9 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="adminToolDetail"/>
     </request-map>
-    <request-map uri="clearLabelCache">
+    <request-map uri="clearCache">
         <security https="true" auth="true"/>
-        <event type="service" invoke="clearLabelCacheGroup"/>
-        <response name="success" type="request-redirect" value="adminToolList"/>
-        <response name="error" type="view" value="adminToolDetail"/>
-    </request-map>
-    <request-map uri="clearPixelCache">
-        <security https="true" auth="true"/>
-        <event type="service" invoke="clearPixelCacheGroup"/>
+        <event type="service" invoke="clearCacheGroup"/>
         <response name="success" type="request-redirect" value="adminToolList"/>
         <response name="error" type="view" value="adminToolDetail"/>
     </request-map>
@@ -1311,11 +1379,43 @@
         <response name="success" type="request-redirect" value="manageDivSequenceDetail"/>
         <response name="error" type="view" value="manageDivSeqItemDetail"/>
     </request-map>
+    
     <request-map uri="deleteDivSeqItem">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteDivSeqItemGroup"/>
         <response name="success" type="request-redirect" value="manageDivSequenceDetail"/>
         <response name="error" type="view" value="manageDivSeqItemDetail"/>
+    </request-map>
+    <!-- Synchronise XML files -->
+    <request-map uri="changeParameterValue">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="changeParameterValue"/>
+    </request-map>
+    <request-map uri="changeDivSeqItemValue">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="changeDivSeqItemValue"/>
+    </request-map>
+    <request-map uri="changeUiLabelValue">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="changeUiLabelValue"/>
+    </request-map>
+    <request-map uri="changeParameter">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateProductStoreParmGroup"/>
+        <response name="success" type="request-redirect" value="compareParametersResult"/>
+        <response name="error" type="view" value="manageParameterDetail"/>
+    </request-map>
+    <request-map uri="changeDivSequenceItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateDivSequenceItemGroup"/>
+        <response name="success" type="request-redirect" value="compareDivSequenceFileResultSearch"/>
+        <response name="error" type="view" value="manageDivSeqItemDetail"/>
+    </request-map>
+    <request-map uri="changeUiLabel">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateUiLabelGroup"/>
+        <response name="success" type="request-redirect" value="compareLabelFileResultSearch"/>
+        <response name="error" type="view" value="manageUiLabelDetail"/>
     </request-map>
     <!--  edit and manage e-commerce style css file  -->
     <request-map uri="manageEcommerceStyleDetail">
@@ -1606,12 +1706,17 @@
     <request-map uri="createOrderNoteData">
         <security https="true" auth="true"/>
         <event type="service" invoke="createOrderNoteDataGroup"/>
-        <response name="success" type="request-redirect" value="orderDetail">
+        <response name="success" type="request-redirect" value="orderNotesList">
             <redirect-parameter name="orderId" />
         </response>
         <response name="error" type="view" value="addOrderNoteDetail"/>
     </request-map>
     
+    
+    <request-map uri="customerNoteList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="customerNoteList"/>
+    </request-map>
     <request-map uri="customerNoteDetail">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="customerNoteDetail"/>
@@ -1619,7 +1724,7 @@
     <request-map uri="updateCustomerNoteData">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateNoteDataGroup"/>
-        <response name="success" type="request-redirect" value="customerDetail">
+        <response name="success" type="request-redirect" value="customerNoteList">
             <redirect-parameter name="partyId"/>
         </response>
         <response name="error" type="view" value="customerNoteDetail"/>
@@ -1631,7 +1736,7 @@
     <request-map uri="createCustomerNoteData">
         <security https="true" auth="true"/>
         <event type="service" invoke="createCustomerNoteDataGroup"/>
-        <response name="success" type="request-redirect" value="customerDetail">
+        <response name="success" type="request-redirect" value="customerNoteList">
             <redirect-parameter name="partyId"/>
         </response>
         <response name="error" type="view" value="addCustomerNoteDetail"/>
@@ -1765,6 +1870,11 @@
         <response name="success" type="none"/>
         <response name="notDownload" type="view" value="feedsList"/>
     </request-map>
+    <request-map uri="downloadFile">
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="downloadFile.groovy"/>
+        <response name="success" type="none"/>
+    </request-map>
     <!-- Product Loader FUNCTIONS -->
     <request-map uri="productLoaderDetail">
         <security https="true" auth="true"/>
@@ -1882,16 +1992,16 @@
         <response name="error" type="view" value="categoryImageDetail"/>
     </request-map>
     
-    <request-map uri="relatedProductsDetail">
+    <request-map uri="productAssociationDetail">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="relatedProductsDetail"/>
+        <response name="success" type="view" value="productAssociationDetail"/>
     </request-map>
     
-    <request-map uri="manageRelatedProducts">
+    <request-map uri="manageProductAssociations">
         <security https="true" auth="true"/>
-        <event type="service" invoke="manageRelatedProductsGroup"/>
+        <event type="service" invoke="manageProductAssociationsGroup"/>
         <response name="success" type="request-redirect" value="productManagement"/>
-        <response name="error" type="view" value="relatedProductsDetail"/>
+        <response name="error" type="view" value="productAssociationDetail"/>
     </request-map>
     
     <request-map uri="addProductRow">
@@ -2226,16 +2336,243 @@
         <response name="success" type="view" value="ratingReviewSummary"/>
     </request-map>
     
+    
+    <!-- ==== Admin Checkout Screens ===== -->
+    <request-map uri="adminCheckout">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="adminCheckout"/>
+    </request-map>
+    <request-map uri="deleteProductFromCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="deleteFromCart"/>
+        <response name="success" type="request" value="resetPaymentMethod"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    <request-map uri="resetPaymentMethod">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="resetPaymentMethod"/>
+        <response name="success" type="request" value="adminCheckout"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="setShippingOption">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="setShippingOption"/>
+        <response name="success" type="view" value="shoppingCart"/>
+        <response name="error" type="view" value="shoppingCart"/>
+    </request-map>
+    
+    <request-map uri="setShippingOptionBottom">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="setShippingOption"/>
+        <response name="success" type="view" value="shoppingCartBottom"/>
+        <response name="error" type="view" value="shoppingCartBottom"/>
+    </request-map>
+    
+    <request-map uri="reloadPromoCode">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="reloadPromoCode"/>
+    </request-map>
+    
+    <request-map uri="addProductToCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="variantProductDetail"/>
+        <response name="error" type="view" value="variantProductDetail"/>
+    </request-map>
+    <request-map uri="addProductToCartFromProdList">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="productManagement"/>
+        <response name="error" type="view" value="productManagement"/>
+    </request-map>
+    <request-map uri="addProductToCartFromProdImgs">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="productImages"/>
+        <response name="error" type="view" value="productImages"/>
+    </request-map>
+    <request-map uri="addProductToCartFromProdMeta">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="productMetatag"/>
+        <response name="error" type="view" value="productMetatag"/>
+    </request-map>
+    <request-map uri="addProductToCartFromFinProd">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="finishedProductDetail"/>
+        <response name="error" type="view" value="finishedProductDetail"/>
+    </request-map>
+    <request-map uri="addProductToCartFromVarProd">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="variantProductDetail"/>
+        <response name="error" type="view" value="variantProductDetail"/>
+    </request-map>
+    <request-map uri="addProductToCartFromProdPrice">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="productPrice"/>
+        <response name="error" type="view" value="productPrice"/>
+    </request-map>
+    <request-map uri="addProductToCartFromRelatedProd">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="productAssociationDetail"/>
+        <response name="error" type="view" value="productAssociationDetail"/>
+    </request-map>
+    <request-map uri="addProductToCartFromProdCatMem">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="productCategoryMembershipDetail"/>
+        <response name="error" type="view" value="productCategoryMembershipDetail"/>
+    </request-map>
+    <request-map uri="addProductToCartFromProdVid">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
+        <response name="success" type="request-redirect" value="productVideo"/>
+        <response name="error" type="view" value="productVideo"/>
+    </request-map>
+    
+    <request-map uri="adminModifyCart">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="modifyCart"/>
+        <response name="success" type="request" value="adminCheckout"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="adminValidatePromoCode">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="validateCartPromoCode"/>
+        <response name="success" type="request" value="adminAddPromoCode"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="adminAddPromoCode">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addProductPromoCode"/>
+        <response name="success" type="view" value="adminCheckout"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="adminRemovePromoCode">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="removeCartPromoCode"/>
+        <response name="success" type="request" value="adminCheckout"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="setStorePickup">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="setStorePickup"/>
+        <response name="success" type="request" value="adminCheckout"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="removeStorePickup">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="removeStorePickup"/>
+        <response name="success" type="none"/>
+        <response name="error" type="view" value="storePickup"/>
+    </request-map>
+    
+    <request-map uri="validateCheckout">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="validateCheckout"/>
+        <response name="success" type="request" value="processCheckout"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="processCheckout">
+        <security https="true" auth="true"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="createOrder"/>
+        <response name="sales_order" type="request" value="adminCheckBlacklist"/>
+    </request-map>
+    <request-map uri="adminCheckBlacklist">
+        <security direct-request="false"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="checkOrderBlacklist"/>
+        <response name="success" type="request" value="adminProcesspayment"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    <request-map uri="adminProcesspayment">
+        <security https="true" direct-request="false"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="processPayment"/>
+        <response name="success" type="request" value="adminProcessBigfishInventory"/>
+        <response name="fail" type="request" value="adminProcesspaymentFail"/>
+        <response name="error" type="view" value="adminProcesspaymentError"/>
+    </request-map>
+    <request-map uri="adminProcesspaymentFail">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="processpaymentFail"/>
+        <response name="success" type="request" value="adminCheckout"/>
+        <response name="error" type="request" value="adminCheckout"/>
+    </request-map>
+
+    <request-map uri="adminProcesspaymentError">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="processpaymentError"/>
+        <response name="success" type="view" value="adminCheckout"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+
+    <request-map uri="adminProcessBigfishInventory">
+        <security direct-request="false"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="processBigfishInventory"/>
+        <response name="success" type="request" value="adminClearcartfororder"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    <request-map uri="adminClearcartfororder">
+        <security direct-request="false"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="clearCart"/>
+        <response name="success" type="request" value="adminCheckExternalPayment"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    <request-map uri="adminCheckExternalPayment">
+        <security https="true" direct-request="false"/>
+        <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="checkExternalPayment"/>
+        <response name="none" type="request" value="adminAutoCapturePayments"/>
+        <response name="offline" type="request" value="adminEmailorder"/>
+        <response name="billact" type="request" value="adminEmailorder"/>
+        <response name="cod" type="request" value="adminEmailorder"/>
+        <response name="ebs" type="request" value="adminEmailorder"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    <request-map uri="adminAutoCapturePayments">
+        <security https="true" direct-request="false"/>
+        <event type="java" path="com.osafe.events.CheckOutEvents" invoke="autoCaptureAuthPayments"/>
+        <response name="success" type="request" value="adminEmailorder"/>
+    </request-map>
+    <request-map uri="adminEmailorder">
+        <security https="true" direct-request="false"/>
+        <event type="service" path="async" invoke="sendOrderConfirmation"/>
+        <response name="success" type="request-redirect" value="checkoutConfirm"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <request-map uri="checkoutConfirm">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="confirmCheckout"/>
+        <response name="success" type="view" value="adminOrderConfirm"/>
+        <response name="error" type="view" value="adminCheckout"/>
+    </request-map>
+    
+    <!-- ==== Admin Checkout Screens ===== -->
+    
+    
     <view-map name="login" type="screen" page="component://osafeadmin/widget/CommonScreens.xml#login"/>
     <view-map name="main" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#adminHome"/>
     <view-map name="customerManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerManagement"/>
     <view-map name="customerDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerDetail"/>
+    <view-map name="addCustomer" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addCustomer"/>
+    <view-map name="customerAddressDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerAddressDetail"/>
     <view-map name="customerActivityDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerActivityDetail"/>
     
     <view-map name="orderManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderManagement"/>
     <view-map name="orderDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderDetail"/>
     <view-map name="orderStatusDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderStatusDetail"/>
     <view-map name="statusUpdateList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#statusUpdateList"/>
+    <view-map name="orderNotesList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderNotesList"/>
     <view-map name="visitDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#visitDetail"/>
     <view-map name="OrderStatusSummary" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#OrderStatusSummary"/>
 
@@ -2374,6 +2711,9 @@
     <!--  Parameters view will go here -->
     <view-map name="parameterList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#parameterList"/>
     <view-map name="manageParameterDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageParameterDetail"/>
+    <view-map name="changeParameterValue" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#changeParameterValue"/>
+    <view-map name="changeDivSeqItemValue" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#changeDivSeqItemValue"/>
+    <view-map name="changeUiLabelValue" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#changeUiLabelValue"/>
     <view-map name="addParameter" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addParameter"/>
     <view-map name="compareParameters" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#compareParameters"/>
     <view-map name="compareParametersResult" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#compareParametersResult"/>
@@ -2394,7 +2734,9 @@
     <!-- End of manage DIV sequencing screens  -->
     <view-map name="productManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productManagement"/>
     <view-map name="plpSequence" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#plpSequenceDetail"/>
-    <view-map name="productDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productDetail"/>
+    <view-map name="virtualProductDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#virtualProductDetail"/>
+    <view-map name="finishedProductDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#finishedProductDetail"/>
+    <view-map name="variantProductDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#variantProductDetail"/>
     <view-map name="productFeatureList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productFeatureList"/>
     <view-map name="productFeatureDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productFeatureDetail"/>
     <view-map name="productVariantList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productVariantList"/>
@@ -2402,12 +2744,14 @@
     <view-map name="addProductVariant" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addProductVariant"/>
     <view-map name="productImages" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productImages"/>
     <view-map name="addProduct" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addProduct"/>
-    <view-map name="productCategoryFetureDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productCategoryFetureDetail"/>
+    <view-map name="productDetailFeature" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productDetailFeature"/>
     
     <view-map name="solrConfigList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#solrConfigList"/>
     <view-map name="facetValueList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#facetValueList"/>
     <view-map name="facetGroupList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#facetGroupList"/>
     <view-map name="facetValueDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#facetValueDetail"/>
+    <view-map name="createFacetGroupDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#createFacetGroupDetail"/>
+    <view-map name="createFacetValueDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#createFacetValueDetail"/>
     <view-map name="facetGroupDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#facetGroupDetail"/>
     <view-map name="featureSwatchImage" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#featureSwatchImage"/>
     
@@ -2465,6 +2809,7 @@
     
     <view-map name="orderNoteDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderNoteDetail"/>
     <view-map name="addOrderNoteDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addOrderNoteDetail"/>
+    <view-map name="customerNoteList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerNoteList"/>
     <view-map name="customerNoteDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerNoteDetail"/>
     <view-map name="addCustomerNoteDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addCustomerNoteDetail"/>
     
@@ -2476,7 +2821,7 @@
     <view-map name="staticPageMetatagDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#staticPageMetatagDetail"/>
     
     <view-map name="categoryImageDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#categoryImageDetail"/>
-    <view-map name="relatedProductsDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#relatedProductsDetail"/>
+    <view-map name="productAssociationDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productAssociationDetail"/>
     <view-map name="productCategoryMembershipDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productCategoryMembershipDetail"/>
     <view-map name="addCategoryMemberRow" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addCategoryMemberRow"/>
     <view-map name="addProductRow" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addProductRow"/>
@@ -2510,5 +2855,13 @@
     <view-map name="orderPaymentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderPaymentDetail"/>
     <view-map name="ratingReviewAnalysis" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#ratingReviewAnalysis"/>
     <view-map name="ratingReviewSummary" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#ratingReviewSummary"/>
+
+    <!-- Checkout screens -->
+    <view-map name="adminCheckout" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#adminCheckout"/>
+    <view-map name="shoppingCart" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#shoppingCart"/>
+    <view-map name="shoppingCartBottom" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#shoppingCartBottom"/>
+    <view-map name="reloadPromoCode" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#promotionOption"/>
+    <view-map name="adminOrderConfirm" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#adminOrderConfirm"/>
+    
 </site-conf>
 

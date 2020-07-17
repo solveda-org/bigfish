@@ -82,7 +82,7 @@
             <div class="infoEntry">
                 <div class="infoCaption"><label>${uiLabelMap.SeqIdCaption}</label></div>
                 <div class="infoValue">
-                    <input type="text" name="value" value="${parameters.value!value!""}" />
+                    <input type="text" name="value" value="${parameters.newValue!parameters.value!value!""}" />
                 </div>
             </div>
         </div>

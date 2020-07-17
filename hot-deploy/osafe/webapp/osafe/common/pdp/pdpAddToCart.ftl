@@ -1,7 +1,7 @@
 <#assign inStock = true />
-<#assign isSellable = Static["org.ofbiz.product.product.ProductWorker"].isSellable(currentProduct?if_exists) />
+<#assign isSellable = Static["org.ofbiz.product.product.ProductWorker"].isSellable(currentProduct?if_exists)/>
 
-<#assign productInventoryLevel = Static["com.osafe.services.InventoryServices"].getProductInventoryLevel(currentProduct.productId?if_exists, request) />
+<#assign productInventoryLevel = productInventoryMap.get('${currentProduct.productId}')!""/>
 <#assign inventoryLevel = productInventoryLevel.get("inventoryLevel")/>
 <#assign inventoryInStockFrom = productInventoryLevel.get("inventoryLevelInStockFrom")/>
 <#assign inventoryOutOfStockTo = productInventoryLevel.get("inventoryLevelOutOfStockTo")/>

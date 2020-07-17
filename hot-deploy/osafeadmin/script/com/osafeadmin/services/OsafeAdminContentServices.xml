@@ -182,6 +182,7 @@
             <set field="removeXContentXrefCtx.productStoreId" from-field="parameters.productStoreId"/>
             <remove-by-and entity-name="XContentXref" map="removeXContentXrefCtx"/>
             <set field="removeContentCtx.contentId" from-field="content.contentId"/>
+            <remove-by-and entity-name="ContentAttribute" map="removeContentCtx"/>
             <remove-by-and entity-name="ContentRole" map="removeContentCtx"/>
             <remove-by-and entity-name="ContentPurpose" map="removeContentCtx"/>
             <call-service service-name="removeContent" in-map-name="removeContentCtx"/>
@@ -268,6 +269,31 @@
     </simple-method>
 
     <simple-method method-name="updateStaticPageSeoUrl" short-description="Update static pages seo url">
+        <iterate-map key="contentIdKey" value="contentId" map="parameters.contentIds">
+            <iterate-map key="attrValueKey" value="attrValue" map="parameters.attrValues">
+                <if-compare-field field="contentIdKey" to-field="attrValueKey" operator="equals">
+                    <call-object-method method-name="indexOf" obj-field="attrValue" ret-field="indexOf">
+                        <string value="-"/>
+                    </call-object-method>
+                    <if-compare operator="greater" value="-1" field="indexOf" type="Integer">
+                        <set field="isValidSeoName" value="false"/>
+                    <else>
+	                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+	                        <field field="attrValue"/>
+	                    </call-class-method>
+	                    <if-compare field="isValidId" operator="equals" value="false">
+	                        <set field="isValidSeoName" value="false"/>
+	                    </if-compare>
+                    </else>
+                    </if-compare>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+        <if-compare field="isValidSeoName" operator="equals" value="false">
+	        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeoNameError"/>
+	        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-compare>
+        <check-errors/>
         <iterate-map key="contentIdKey" value="contentId" map="parameters.contentIds">
             <iterate-map key="attrValueKey" value="attrValue" map="parameters.attrValues">
                 <if-compare-field field="contentIdKey" to-field="attrValueKey" operator="equals">

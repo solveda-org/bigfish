@@ -3,4 +3,3 @@
     <input type="button" class="standardBtn dateSelect" name="addButton" id="addButton" value="${uiLabelMap.AddBtn}" onClick="javascript:addRow('${detailEntryTable}');"/>
     <input type="button" class="standardBtn dateSelect" name="deleteButton" id="deleteButton" value="${uiLabelMap.DeleteBtn}" onClick="javascript:deleteRow('${detailEntryTable}');"/>
 </div>
-</div>

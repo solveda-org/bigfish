@@ -1,3 +1,3 @@
 <div class="pdpManufacturerName">
-    <p class="profileName">${manufacturerProfileName!""}</p>
+    <p class="profileName">${pdpManufacturerProfileName!""}</p>
 </div>

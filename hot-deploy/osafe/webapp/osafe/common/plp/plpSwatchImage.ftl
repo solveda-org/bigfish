@@ -10,42 +10,60 @@
       <#assign productFeatureDescription=productFeatureAppls.description!""/>
 
       <#assign productFeatureVariantId=""/>
-      <#list productVariantFeatureList as productVariantFeatureListInfo>
-        <#if productVariantFeatureListInfo.productFeatureId==productFeatureId && !productFeatureVariantId?has_content>
-          <#assign productFeatureVariantId=productVariantFeatureListInfo.productVariantId/>
-          <#assign productFeatureVariantProduct=productVariantFeatureListInfo.productVariant/>
-          <#assign descriptiveFeatureGroupDesc = productVariantFeatureListInfo.descriptiveFeatureGroupDesc />
-          <#assign variantListPrice = productVariantFeatureListInfo.listPrice!""/>
-          <#assign variantOnlinePrice = productVariantFeatureListInfo.basePrice!""/>
-        </#if>
-      </#list>
-      
+      <#assign productVariantFeatureMap = plpProductFeatureFirstVariantIdMap.get(productFeatureId)!"">
+      <#if productVariantFeatureMap?has_content>
+          <#assign productFeatureVariantId=productVariantFeatureMap.get("productVariantId")!""/>
+          <#assign productFeatureVariantProduct=productVariantFeatureMap.get("productVariant")!""/>
+          <#assign descriptiveFeatureGroupDesc = productVariantFeatureMap.get("descriptiveFeatureGroupDesc")!"" />
+          <#assign variantListPrice = productVariantFeatureMap.get("listPrice")!""/>
+          <#assign variantOnlinePrice = productVariantFeatureMap.get("basePrice")!""/>
+      </#if>
       <#if productFeatureVariantId?has_content>
 
         <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, StringUtil.wrapString(pdpUrl) + "&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
         <input type = "hidden" id="${productId}${productFeatureTypeId!}:${productFeatureDescription!}" value="${variantProductUrl!}"/>
         <input type = "hidden" class="featureGroup" value="${descriptiveFeatureGroupDesc!}"/>
         
-        <#assign productVariantContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(productFeatureVariantProduct, request)!""/>
-        <#assign productVariantSmallURL = productVariantContentWrapper.get("SMALL_IMAGE_URL")!"">
-        <#assign productVariantSmallAltURL = productVariantContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
-        <#assign productVariantPlpSwatchURL = productVariantContentWrapper.get("PLP_SWATCH_IMAGE_URL")!"">
+        <#assign productVariantContentWrapper = plpProductVariantContentWrapperMap.get('${productFeatureVariantId!}')/>
+        <#assign variantContentIdMap = plpProductVariantProductContentIdMap.get('${productFeatureVariantId}')!""/>
+        <#assign productVariantSmallURL = "">
+        <#assign productVariantSmallAltURL = "">
+        <#assign productVariantPlpSwatchURL = "">
+ 	    <#if variantContentIdMap?has_content>
+	    	<#assign variantContentId = variantContentIdMap.get("SMALL_IMAGE_URL")!""/>
+	        <#if variantContentId?has_content>
+                <#assign productVariantSmallURL = productVariantContentWrapper.get("SMALL_IMAGE_URL")!"">
+            <#else>
+                <#assign productVariantSmallURL = productContentWrapper.get("SMALL_IMAGE_URL")!"">
+	        </#if>
+	    	<#assign variantContentId = variantContentIdMap.get("SMALL_IMAGE_ALT_URL")!""/>
+	        <#if variantContentId?has_content>
+               <#assign productVariantSmallAltURL = productVariantContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
+            <#else>
+                <#assign productVariantSmallAltURL = productContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
+	        </#if>
+	    	<#assign variantContentId = variantContentIdMap.get("PLP_SWATCH_IMAGE_URL")!""/>
+	        <#if variantContentId?has_content>
+                <#assign productVariantPlpSwatchURL = productVariantContentWrapper.get("PLP_SWATCH_IMAGE_URL")!"">
+	        </#if>
+	    </#if>
         <#if productVariantPlpSwatchURL?string?has_content>
           <img src="<@ofbizContentUrl>${productVariantPlpSwatchURL}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight?has_content && plpSwatchImageHeight != '0'>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth?has_content && plpSwatchImageWidth != '0'>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
         <#else>
-	      <#assign productFeatureDataResources = delegator.findByAndCache("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",productFeatureId,"featureDataResourceTypeId","PLP_SWATCH_IMAGE_URL"))/>
-	      <#if productFeatureDataResources?has_content>
-            <#assign productFeatureDataResource = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productFeatureDataResources) />
-            <#assign dataResource = productFeatureDataResource.getRelatedOneCache("DataResource")/>
-            <#assign productFeatureUrl = dataResource.objectInfo!""/>
-	      </#if>
+          <#assign productFeatureUrl = ""/>
+          <#if productFeatureDataResourceMap?has_content>
+           <#assign productFeatureResourceUrl = productFeatureDataResourceMap.get(productFeatureId)!""/>
+           <#if productFeatureResourceUrl?has_content>
+             <#assign productFeatureUrl=productFeatureResourceUrl/>
+           </#if>
+          </#if>
           <#if productFeatureUrl?has_content>
             <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight?has_content && plpSwatchImageHeight != '0'>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth?has_content && plpSwatchImageWidth != '0'>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
           </#if>
         </#if>
         <div class="swatchVariant" style="display:none">
           <a class="pdpUrl" title="${productName}" href="${productFriendlyUrl}">
-            <img alt="${productName}" title="${productName}" src="${productVariantSmallURL}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productVariantSmallAltURL?string?has_content>onmouseover="src='${productVariantSmallAltURL}'"</#if> onmouseout="src='${productVariantSmallURL}'" onerror="onImgError(this, 'PLP-Thumb');"/>
+            <img alt="${productName}" title="${productName}" src="${productVariantSmallURL!}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productVariantSmallAltURL?string?has_content>onmouseover="src='${productVariantSmallAltURL}'"</#if> onmouseout="src='${productVariantSmallURL}'" onerror="onImgError(this, 'PLP-Thumb');"/>
           </a>
         </div>
 

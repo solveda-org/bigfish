@@ -6,13 +6,13 @@
     <#assign shipmentMethodTypeId = shipCharge.shipmentMethodTypeId!"" />
     <#assign minTotal = shipCharge.minTotal!"" />
     <#assign maxTotal = shipCharge.maxTotal!"" />
-    <#assign sequenceNumber = shipCharge.sequenceNumber!"" />
+    <#assign sequenceNum = shipCharge.sequenceNumber!"" />
     
     
     <#assign selectedParty = shipCharge.partyId!""/>
     <#assign selectedShipmentMethodType = shipCharge.shipmentMethodTypeId!""/>
     
-    <#else>
+  <#else>
     	<#assign selectedParty = parameters.partyId!""/>
     	<#assign selectedShipmentMethodType = parameters.shipmentMethodTypeId!""/>
 
@@ -176,9 +176,9 @@
       </div>
       <div class="infoValue">
         <#if mode="add">
-        	<input name="sequenceNumber" type="text" id="sequenceNumber" maxlength="20" value="${parameters.sequenceNumber!sequenceNumber!"1"}"/>
+        	<input name="sequenceNum" type="text" id="sequenceNum" maxlength="20" value="${parameters.sequenceNum!sequenceNum!"1"}"/>
         <#else>
-          	<input name="sequenceNumber" type="text" id="sequenceNumber" maxlength="20" value="${shipCharge.sequenceNumber!sequenceNumber!""}"/>
+          	<input name="sequenceNum" type="text" id="sequenceNum" maxlength="20" value="${shipCharge.sequenceNum!sequenceNum!"1"}"/>
         </#if>
       </div>
     </div>

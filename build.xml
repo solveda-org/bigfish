@@ -442,6 +442,36 @@ under the License.
             <arg value="readers=proddata"/>
         </java>
     </target>
+    <target name="run-bigfish-contentmenu" depends="build"
+        description="This loads content data; meant for adding data for BigFish OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=contentmenu"/>
+        </java>
+    </target>
+    <target name="run-bigfish-types" depends="build"
+        description="This loads content data; meant for adding data for BigFish OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=bigfishtypes"/>
+        </java>
+    </target>
+    <target name="run-bigfish-extendedstore" depends="build"
+        description="This loads extended store data; meant for adding data for BigFish OFBiz">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=extendedstore"/>
+        </java>
+    </target>
     <target name="run-bigfish-parameters" depends="build"
         description="This loads bigFishParameters.xml data; meant for adding/updating product store parms and various types to run BigFish OFBiz">
         <java jar="ofbiz.jar" fork="true">

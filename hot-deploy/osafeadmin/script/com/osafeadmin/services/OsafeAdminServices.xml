@@ -439,7 +439,7 @@
         <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
     </simple-method>
 
-    <simple-method method-name="clearLabelCache" short-description="clear label cache">
+    <simple-method method-name="clearCache" short-description="clear cache">
         <if-not-empty field="parameters.cacheName">
             <call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="cacheResourceList">
                    <field field="parameters.cacheName" type="String"/>
@@ -452,45 +452,17 @@
                 <if-not-empty field="utilCache">
                     <call-object-method method-name="clear" obj-field="utilCache"></call-object-method>
                     <set field="cacheSuccessful" value="Y"/>
-                <else>
-                    <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheError" field="clearCacheError"/>
-                    <string-to-list string="${clearCacheError}" list="error_list"/>
-                </else>    
                 </if-not-empty>
             </iterate>
             <if-not-empty field="cacheSuccessful">
-                <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheSuccess" field="clearCacheSuccess"/>
-                <string-to-list string="${clearCacheSuccess}" list="successMessageList"/>
-            </if-not-empty>    
-        <else>
-            <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheError" field="clearCacheError"/>
-            <string-to-list string="${clearCacheError}" list="error_list"/>
-        </else>
-        </if-not-empty>
-        <check-errors/>
-    </simple-method>
-    
-    <simple-method method-name="clearPixelCache" short-description="clear pixel cache">
-        <if-not-empty field="parameters.UTIL_CACHE_NAME">
-            <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="findCache" ret-field="utilCache" >
-                 <field field="parameters.UTIL_CACHE_NAME" type="String"/>
-            </call-class-method>
-            <if-not-empty field="utilCache">
-                 <call-object-method method-name="clear" obj-field="utilCache"></call-object-method>
-                 <set field="cacheSuccessful" value="Y"/>
-                <else>
-                     <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheError" field="clearCacheError"/>
-                     <string-to-list string="${clearCacheError}" list="error_list"/>
-                </else>    
-            </if-not-empty> 
-            <if-not-empty field="cacheSuccessful">
-                <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheSuccess" field="clearCacheSuccess"/>
-                <string-to-list string="${clearCacheSuccess}" list="successMessageList"/>
-            </if-not-empty>    
-        <else>
-            <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheError" field="clearCacheError"/>
-            <string-to-list string="${clearCacheError}" list="error_list"/>
-        </else>
+                <set field="argListNames[]" from-field="parameters.cacheType" set-if-null="true"/>
+                <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheSuccess" field="clearCacheSuccess" arg-list-name="argListNames"/>
+                <string-to-list string="${clearCacheSuccess}" list="successMessageList"/>    
+	        <else>
+	            <property-to-field resource="OSafeAdminUiLabels" property="ClearCacheError" field="clearCacheError"/>
+	            <string-to-list string="${clearCacheError}" list="error_list"/>
+	        </else>
+            </if-not-empty>
         </if-not-empty>
         <check-errors/>
     </simple-method>
@@ -1277,74 +1249,6 @@
             <clear-field field="uploadFileCtx"/>
         </if-not-empty>
         
-        <if-not-empty field="parameters.imageLocation">
-            <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="osafeThemeServerPath">
-                <string value="osafe.properties"/>
-                <string value="osafe.theme.server"/>
-            </call-class-method>
-            
-            <!-- For Media Library Zip File -->
-            <if-compare field="parameters.imageLocation" operator="equals" value="mediaLibraryZip" type="String">
-                <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="userContentImagePath">
-                    <string value="osafe.properties"/>
-                    <string value="user-content.image-path"/>
-                </call-class-method>
-                <set field="zipFileName" value="${osafeThemeServerPath}${userContentImagePath}${parameters.mediaLibraryZipFile}"/>
-                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="unzipZipFile">
-                    <field field="zipFileName"/>
-                    <field field="parameters.productFilePath"/>
-                </call-class-method>
-                <set field="parameters.productLoadImagesDir" from-field="parameters.productFilePath"/>
-            </if-compare>
-            
-            <!-- For Media Library individual images -->
-            <if-compare field="parameters.imageLocation" operator="equals" value="mediaLibraryIndividual" type="String">
-                <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="userContentImagePath">
-                    <string value="osafe.properties"/>
-                    <string value="user-content.image-path"/>
-                </call-class-method>
-                <set field="parameters.productLoadImagesDir" value="${osafeThemeServerPath}${userContentImagePath}images"/>
-            </if-compare>
-            
-            <!-- For Server Zip File -->
-            <if-compare field="parameters.imageLocation" operator="equals" value="serverZip" type="String">
-                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="unzipZipFile">
-                    <field field="parameters.serverZipFile"/>
-                    <field field="parameters.productFilePath"/>
-                </call-class-method>
-                <set field="parameters.productLoadImagesDir" from-field="parameters.productFilePath"/>
-            </if-compare>
-            
-            <!-- For Server individual images -->
-            <if-compare field="parameters.imageLocation" operator="equals" value="serverIndividual" type="String">
-                <set field="parameters.productLoadImagesDir" from-field="parameters.serverDir"/>
-            </if-compare>
-            
-            <!-- For Local Zip File -->
-            <if-compare field="parameters.imageLocation" operator="equals" value="localZip" type="String">
-                <if-not-empty field="parameters._localZipFile_fileName">
-                    <set field="uploadFileCtx.uploadedFile" from-field="parameters.localZipFile"/>
-                    <set field="uploadFileCtx._uploadedFile_fileName" from-field="parameters._localZipFile_fileName"/>
-                    <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
-                        <result-to-field result-name="uploadFileName" field="parameters.localZipFileName"/>
-                        <result-to-field result-name="uploadFilePath" field="parameters.localZipFilePath"/>
-                    </call-service>
-                    <clear-field field="uploadFileCtx"/>
-                    <set field="zipFileName" value="${parameters.localZipFilePath}${parameters.localZipFileName}"/>
-                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="unzipZipFile">
-                        <field field="zipFileName"/>
-                        <field field="parameters.localZipFilePath"/>
-                    </call-class-method>
-                    <set field="parameters.productLoadImagesDir" from-field="parameters.localZipFilePath"/>
-                </if-not-empty>
-            </if-compare>
-            
-            <!-- For URL -->
-            <if-compare field="parameters.imageLocation" operator="equals" value="url" type="String">
-                <field-to-result field="parameters.imageUrl" result-name="imageUrl"/>
-            </if-compare>
-        </if-not-empty>
-        
         <field-to-result field="parameters.productFileName" result-name="uploadedXLSFile"/>
         <field-to-result field="parameters.productFilePath" result-name="uploadedXLSPath"/>
         <field-to-result field="parameters.productLoadImagesDir" result-name="productLoadImagesDir"/>
@@ -1588,29 +1492,36 @@
             </call-class-method>
         </else>
         </if-not-empty>
-
-        <iterate-map key="key" value="keyValue" map="parameters.keys">
+        <iterate-map key="entryKey" value="keyValue" map="parameters.keys">
             <set field="updateDivSequenceXmlCtx.key" from-field="keyValue"/>
+            <clear-field field="sequenceNumKey"/>
+            <clear-field field="sequenceNumValue"/>
             <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.values">
-                <if-compare-field field="key" to-field="sequenceNumKey" operator="equals">
+                <if-compare-field field="entryKey" to-field="sequenceNumKey" operator="equals">
                     <if-empty field="sequenceNumValue">
                         <set field="sequenceNumValue" value="0" type="String"/>
                     </if-empty>
                     <set field="updateDivSequenceXmlCtx.value" from-field="sequenceNumValue"/>
                 </if-compare-field>
             </iterate-map>
+            <clear-field field="screenKey"/>
+            <clear-field field="screenValue"/>
             <iterate-map key="screenKey" value="screenValue" map="parameters.screens">
-                <if-compare-field field="key" to-field="screenKey" operator="equals">
+                <if-compare-field field="entryKey" to-field="screenKey" operator="equals">
                     <set field="updateDivSequenceXmlCtx.screen" from-field="screenValue"/>
                 </if-compare-field>
             </iterate-map>
+            <clear-field field="descriptionKey"/>
+            <clear-field field="descriptionValue"/>
             <iterate-map key="descriptionKey" value="descriptionValue" map="parameters.descriptions">
-                <if-compare-field field="key" to-field="descriptionKey" operator="equals">
+                <if-compare-field field="entryKey" to-field="descriptionKey" operator="equals">
                     <set field="updateDivSequenceXmlCtx.description" from-field="descriptionValue"/>
                 </if-compare-field>
             </iterate-map>
+            <clear-field field="groupNumKey"/>
+            <clear-field field="groupNumValue"/>
             <iterate-map key="groupNumKey" value="groupNumValue" map="parameters.groups">
-                <if-compare-field field="key" to-field="groupNumKey" operator="equals">
+                <if-compare-field field="entryKey" to-field="groupNumKey" operator="equals">
                     <set field="updateDivSequenceXmlCtx.group" from-field="groupNumValue"/>
                 </if-compare-field>
             </iterate-map>
@@ -1878,4 +1789,5 @@
             </iterate>
         </if-not-empty>
     </simple-method>
+    
 </simple-methods>

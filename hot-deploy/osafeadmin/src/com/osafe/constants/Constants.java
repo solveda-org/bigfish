@@ -24,7 +24,7 @@ public class Constants {
                                                            "ProductKeyword", "ProductAssoc", "ProductContent",
                                                            "ProductPrice", "ProductFeatureGroupAppl", "ProductFeatureCategoryAppl", 
                                                            "ProductFeatureCatGrpAppl", "ProductFeatureGroup", "ProductFeatureAppl",
-                                                           "ProductFeature", "ProductFeatureCategory", "ProductCategoryMember", 
+                                                           "ProductFeature", "ProductFeatureCategory", "ProductFeatureDataResource", "ProductCategoryMember", 
                                                            "ProductCategoryRollup","CartAbandonedLine","Product", "ProductCategory","PartyContent"};
 
 

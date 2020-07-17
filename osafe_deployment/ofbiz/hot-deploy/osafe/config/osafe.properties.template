@@ -152,10 +152,6 @@ ecommerce-UiSequence-xml-file=${sys:getProperty('ofbiz.home')}/hot-deploy/osafe/
 pdp-alternate-images = 10
 
 #######################################
-# Good Indentification Types
-#######################################
-goodIdentificationTypes = @goodIdentificationTypes@
-#######################################
 # PLP SORT OPTIONS
 #Format (SORT_OPTION=SORT_VALUE-ORDER(asc,desc),SORT_LABEL)
 #######################################

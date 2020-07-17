@@ -18,4 +18,8 @@ if (UtilValidate.isNotEmpty(context.contentId) && UtilValidate.isNotEmpty(contex
         content = xContentXref.getRelatedOneCache("Content");
         context.content = content;
     }
+    else
+    {
+    	context.content = "";
+    }
 }

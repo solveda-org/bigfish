@@ -100,12 +100,12 @@ body {
 /****************************************************************
 * Standard HTML Tags
 ****************************************************************/
-input[type=text], select, textarea {
+input[type=text],input[type=password], select, textarea {
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
     color: #445566;
     border: 1px solid #000000;
 }
-input[type=text]:focus, select:focus, textarea:focus {
+input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus {
    	background: #e5edf6;
    border: 1px solid #666666;
 }
@@ -408,12 +408,12 @@ ul.pagingLinksBody li {
     }
 
 ul.pagingLinksBody li.pagingLinks {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     margin: 0 0 0 10px;
 }
 ul.pagingLinksBody li.pagingLinksText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #0c0c0c;
     margin: 0 420px;
@@ -473,7 +473,7 @@ h1 {
     color: #484848;
     display: inline-block;
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
-    font-size: 1.8em;
+    font-size: 18px;
     font-weight: 700;
     margin: 10px 0 0 0;
     text-transform: capitalize;
@@ -487,15 +487,15 @@ span.headingOrderId{
 }
 
 h2 {
-    font-size: 2.0em;
+    font-size: 20px;
 }
 
 h3 {
-    font-size: 1.8em;
+    font-size: 18px;
 }
 
 h4 {
-    font-size: 1.5em;
+    font-size: 15px;
 }
 
 /****************************************************************
@@ -523,7 +523,7 @@ label, .caption{
 #header #siteTitleImage {
     color: #993300;
     float: left;
-    font-size: 2.4em;
+    font-size: 24px;
     font-weight: bold;
     margin: 20px;
 
@@ -535,7 +535,7 @@ label, .caption{
 * Site Info
 ****************************************************************/
 #header #siteInfoContainer {
-    font-size: .9em;
+    font-size: 9px;
     width: 555px;
     margin: 0 auto;
 }
@@ -545,7 +545,7 @@ label, .caption{
 
 
 #siteInfo #welcome p, #siteInfo #adminModule p {
-    font-size: 1.2em;
+    font-size: 12px;
     font-weight: bold;
     color: #c0c0c0;
 }
@@ -569,7 +569,7 @@ label, .caption{
     color: #f5f5f5;
 }
 #siteInfo #helperImages .helperText {
-    font-size: 1em;
+    font-size: 10px;
     color: #f5f5f5;
 }
 
@@ -586,7 +586,7 @@ label, .caption{
     color: #C9CBCF;
 
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
-    font-size: 1.5em;
+    font-size: 15px;
     border: 1px solid #fff;
 }
 
@@ -627,6 +627,8 @@ border-bottom: none;
     position:        absolute;
     top:            -999em;
     width:          auto; /* left offset of submenus need to match (see below) */
+   *width: 220px; /* IE7 needs width to accomodate drop down link width */
+
     
 }
 
@@ -641,15 +643,16 @@ border-bottom: none;
     position:        relative;
 }
 #navigationMenu a {
+background: none repeat scroll 0 0 #C0C0C0;
     display:        block;
     position:        relative;
     border-top: 1px solid #fff;
     border-bottom: 1px solid #666;
-    background: #c0c0c0;
-    padding:         3px 18px 2px 21px;
-    padding         3px 18px 3px 21px\0/;
+    margin: 0 0 0 5px;
+    padding: 3px 0 2px;
+    text-align: center;
     text-decoration:none;
-    font-size:      1.45em;
+    font-size: 1.45em;
     font-weight: bold;
 
 -webkit-border-top-left-radius: 8px;
@@ -668,8 +671,8 @@ border-top-right-radius: 8px;
 #navigationMenu li:hover ul,
 #navigationMenu li.sfHover ul {
 	position: absolute;
-    background: #000;
-    left:            0;
+    /*background: #000;*/
+    left:            5px;
     top:            24px; /* match top ul list item height */
    top: 23px\9; /*IE8 and below */ 
     z-index:        99;
@@ -685,7 +688,7 @@ border-top-right-radius: 8px;
     top:            24px; /* match top ul list item height */
     top: 23px\9; /* For IE 9 and Below */
     left:            -111px;
-    left: -107px\9; /* For IE 9 and Below */
+    left: -110px\9; /* For IE 9 and Below */
     z-index:        99;
 }
 
@@ -716,6 +719,7 @@ ul#navigationMenu li li li.sfHover ul {
     background: #637b93!important;
     color: #fff!important;
     white-space: nowrap;
+    text-align: left;
 }
 
  /* basic Cloring of Navbar Item Text */
@@ -725,15 +729,11 @@ ul#navigationMenu li li li.sfHover ul {
 }
 /* Vertical bar to left of each top level item */
 #navigationMenu li.topLevel {
-    padding-left: 0px;
-/*    border-left: 1px solid #0c0c0c;
-    border-right: 1px solid #fff; */
-   margin: 0 5px 0 0;
+    width: 10%;
 }
 /* Hide Vertical bar to left of first top level item */
 #navigationMenu  li.topLevel.firstItem {
-    padding-left: 0px;
-    border-left: medium none;
+
 }
 /* Hide Vertical bar to right of last top level item */
 #navigationMenu li.topLevel {
@@ -755,7 +755,9 @@ ul#navigationMenu li li li.sfHover ul {
 
 /* Background Color of Top nav on Hover*/
 /* Color of Top nav text on Hover*/
-#navigationMenu li:hover, #navigationMenu li.sfHover, #navigationMenu a:focus, #navigationMenu a:hover, #navigationMenu a:active {
+#navigationMenu a:focus,
+#navigationMenu a:hover,
+#navigationMenu a:active {
     background: #637b93;
     outline: 0;
     color: #FFFFFF;
@@ -798,7 +800,7 @@ border-top-right-radius: 8px;
     color: #000000;
     float: left;
     clear: both;
-    width: 1068px;
+    width: 1066px;
     background: #ffffff;
 }
 
@@ -811,7 +813,7 @@ border-top-right-radius: 8px;
     float:right; 
     padding: 5px 40px 0 0; 
     color:#333333;
-    font-size: .85em;
+    font-size: 9px;
 }
 
 .eCommerceErrorMessage {
@@ -839,38 +841,37 @@ border-top-right-radius: 8px;
     padding: 0 0 0 2.5em
 }
 .fieldErrorMessage {
-    font-size: 1.3em;
+    font-size: 13px;
     color: #c00000;
 }
 .eCommerceErrorMessage p, .eCommerceSuccessMessage p {
     margin: 10px 0 0 10px;
-    font-size: 1.3em;
+    font-size: 13px;
 }
 
 /****************************************************************
 * Display Box
 ****************************************************************/
-.displayBox, .displayListBox{
+.displayBox,
+.displayListBox{
     border: 1px solid #000000;
     float: left;
     width: 100%;
-}
-
-.displayBox {
-    margin: 1em 0;
-
+    margin: 0 0 1em 0;
 }
 
 .displayBox, .displayListBox table{
     width: 100%;
 }
 
-.displayBox .header, .displaySearchBox .header , .displayListBox .header {
-    background: #637b93;
+.displayBox .header,
+.displaySearchBox .header,
+.displayListBox .header {
+    background: none repeat scroll 0 0 #637B93;
     border-bottom: 1px solid #000000;
     padding: 3px 0;
-
 }
+
 .displayBox .header {
     text-align:left;
 }
@@ -888,7 +889,6 @@ border-top-right-radius: 8px;
 }
 
 .displaySearchBox  div.searchButton {
-   padding: 0 0 0 7px;
 
 }
 .displayBox .subHeader {
@@ -900,27 +900,46 @@ border-top-right-radius: 8px;
 }
 
 .header h2 {
-    font-size: 1.4em;
+    /*font-size: 1.4em;*/
+    font-size: 14px;
     font-weight: bold;
     color: #FFFFFF;
 }
 .infoRow .header {
     border-top: 1px solid #000000;
+    margin: 0 0 10px 0;
 }
 .infoRow .header h2 {
-    font-size: 1.4em;
+    
 }
 .subHeader h3 {
-    font-size: 1.3em;
+    font-size: 13px;
     font-weight: bold;
     color: #f5f5f5;
 
 }
 
-.displayBox .boxBody, .displaySearchBox .boxBody, .displayListBox .boxBody {
-	clear: left;
-    background: #f5f5f5;
-    font-size: 1.3em;
+.displayBox .boxBody,
+.displaySearchBox .boxBody,
+.displayListBox .boxBody {
+    background: none repeat scroll 0 0 #F5F5F5;
+    clear: left;
+    font-size: 13px;
+}
+
+.displayBox .boxBody,
+.displaySearchBox .boxBody {
+    padding: 10px 0 0 0;
+}
+
+.displayBox.detailInfo .boxBody table,
+.displaySearchBox.detailInfo .boxBody table {
+     margin: -10px 0 0 0; /* To compensate for the boxBody padding */
+}
+
+#dashboard .displayBox .boxBody,
+#dashboard .displaySearchBox .boxBody {
+    padding: 0;
 }
 
 .displayBox .boxBody:after, .displaySearchBox .boxBody:after, .displayListBox .boxBody:after {
@@ -932,7 +951,7 @@ border-top-right-radius: 8px;
 }
 
 .displayBox .boxText {
-    font-size: 1.3em;
+    font-size: 13px;
 }
 
 tr.even{
@@ -967,7 +986,7 @@ tr.odd{
 }
 
 .boxBody td.boxCaption {
-    font-size: 1em;
+    font-size: 10px;
     width: 100%;
     color: #0c0c0c;
 }
@@ -980,14 +999,14 @@ tr.odd{
     padding: 0 3px;
 }
 .boxBody td.boxNumber {
-    font-size: 1em;
+    font-size: 12px;
     font-weight: bold;
     padding: 0 2px 0 0;
     text-align: center;
     width: 100%!important; /* js2 */
 }
 .boxBody td.boxDollar, .boxBody th.boxDollar {
-    font-size: 1em;
+    font-size: 12px;
     font-weight: bold;
     width: 100%;
     padding: 0 2px 0 0;
@@ -1007,6 +1026,7 @@ tr.odd{
 .displayBox.footerInfo {
     border: medium none;
     clear: left;
+    padding: 10px 0 0 0;
 }
 
 .displayBox.footerInfo div.boxBody {
@@ -1051,14 +1071,15 @@ categoryDetail:after {
 .displaySearchBox{
     border: 1px solid #000000;
     margin: 0 auto 1em auto;
+    float: left;
 }
 
 .entryRow {
     clear: left;
-    padding: 0.5em 0;
-	float: left; 
-	width: 100%;
+   float: left; 
+   width: 100%;
    position: relative; /* so icons within can use absolute positioning */
+   min-height: 25px; /* Set the same as infoRow for row uniformity */
 }
 
 .entryRow label, .entryRow div.entry, .entryRow div.entryInput {
@@ -1086,20 +1107,20 @@ categoryDetail:after {
 }
 
 .entryRow div.entryInput.checkbox.short {
-    width: 250px;
+    /* width: 250px; default width: auto */  
 }
 .entryRow div.entryInput.checkbox.medium {
-    width: 390px;
+    /* width: 390px; default width: auto */
 }
 .entryRow div.entryInput.checkbox.small {
-    width: 200px;
+    /* width: 200px; default width: auto */
 
 }
 .entryRow div.entryInput.checkbox.short {
-    width: 115px;
+    /* width: 115px; default width: auto */
 }
 .entryRow div.entryInput.checkbox.extraSmall {
-    width: 240px;
+    /* width: 240px; default width: auto */
 
 }
 .entryRow .entry{
@@ -1171,7 +1192,7 @@ categoryDetail:after {
 }
 
 div.searchButton {
-    padding: 0 0 0 0.5em;
+
 }
 
 /****************************************************************
@@ -1184,23 +1205,19 @@ div.searchButton {
 }
 
 .infoRow {
+    background: none repeat scroll 0 0 #F5F5F5;
     float: left;
-    padding: .5em 0 .5em 0;
+    min-height: 25px; /* To accommodate button and input fields */
     width: 100%;
-    background: #f5f5f5;
 
 }
 
 .infoRow.column {
     width: 480px;
-    min-height: 20px;  /* Needed to accomodate input boxes that won't clear */
-    min-height: 22px\9;  /* IE9- */
-
 }
 
 .infoRow.column .infoEntry {
     float: left;
-    padding: 3px 0;
     clear: left;
     *float: none; /* IE7 only */
 }
@@ -1218,6 +1235,7 @@ div.searchButton {
 
 .infoRow div.infoCaption label {
     text-align: right;
+    font-size: 13px;
 }
 
 .infoRow div.infoCaption label a{
@@ -1243,7 +1261,7 @@ div.searchButton {
 
 .infoRow div.infoIcon {
     float: left;
-    margin: 5px;
+    margin: 0 0 0 5px;
 }
 
 .infoRow.column div.infoValue {
@@ -1366,39 +1384,41 @@ div.infoValue div.geoCode {
 
 .infoRow div.entry.checkbox {
     background: #ffffff;
-    width: 625px;
+    width: auto;
     border: 1px solid #000;
+    padding: 0 5px 0 0;
+    font-size: 13px;
 
 }
 .infoRow select.short {
-    width: 110px;
+    /* width: 110px; */
 }
 .infoRow select.small {
-    width: 220px;
+    /* width: 220px; */
 }
 .infoRow select.extraSmall {
-    width: 330px;
+    /* width: 330px; */
 }
 .infoRow select.medium {
-    width: 440px;
+    /* width: 440px; */
 }
 .infoRow div.entry.checkbox.short {
-    width: 250px;
+    /* width: 250px; */
 }
 .infoRow div.entry.checkbox.medium {
-    width: 409px;
+    /* width: 409px; */
 }
 .infoRow div.entry.checkbox.small {
-    width: 200px;
+    /* width: 200px; */
 }
 .infoRow div.entry.checkbox.short {
-    width: 115px;
+    /* width: 115px; */
 }
 .infoRow div.entry.checkbox.extraSmall {
-    width: 240px;
+   /* width: 240px; */
 }
 .infoRow div.entry.checkbox.large {
-    width: 450px;
+    /* width: 450px; */
 }
 table.osafe tbody tr td div.infoEntry div.infoValue {
     width: 160px!important;
@@ -1497,19 +1517,19 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 .boxBody td.idCol.firstCol, .boxBody th.idCol.firstCol {
     text-align: left;
 }
-.displayListBox .boxBody td.dateCol, .boxBody th.dateCol, .boxBody td.dateCol{
+.boxBody td.dateCol, .boxBody th.dateCol {
   /*width: 60px;*/
     text-align: center;
 }
-.displayListBox .boxBody td.sizeCol, .boxBody th.sizeCol{
+.boxBody td.sizeCol, .boxBody th.sizeCol{
     /*width: 100px;*/
     text-align: center;
 }
-.displayListBox .boxBody td.dollarCol, .boxBody th.dollarCol {
+.boxBody td.dollarCol, .boxBody th.dollarCol {
   /*width: 100px;*/
     text-align: right;
 }
-.displayListBox .boxBody td.qtyCol, .boxBody th.qtyCol, .boxBody td.qtyCol{
+.boxBody td.qtyCol, .boxBody th.qtyCol {
     /*width: 110px;*/
     text-align: center;
 }
@@ -1664,7 +1684,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 .sortBox label {
     position: relative;
     top: 4px;
-    font-size: 1.3em;
+    font-size: 13px;
     width: 60px;
 }
 
@@ -1687,7 +1707,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     clear: right;
     color: #637B93;
     float: right;
-    font-size: 1.2em;
+    font-size: 12px;
     font-weight: bold;
     margin: 1em 10px 0 0;
 }
@@ -1706,7 +1726,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     }
 
 #dashboard .trendRange {
-    font-size: 0.85em;
+    font-size: 9px;
     margin: 0 0 0 5px;
 }
 
@@ -1724,7 +1744,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     background-position: left center;
     background-repeat: no-repeat;
     padding: 0 0 0 15px;
-    font-size: 0.85em;
+    font-size: 9px;
 
 }
 
@@ -1734,7 +1754,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     background-position: left center;
     background-repeat: no-repeat;
     padding: 0 0 0 15px;
-    font-size:0.85em;
+    font-size:9px;
 }
 
 .boxBody.boxBody td.boxDollar.positiveTrendColor{
@@ -1747,7 +1767,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 
 .boxBody.boxBody td.boxDollar.noTrend{
     padding: 0 0 0 15px;
-    font-size:0.85em;
+    font-size: 9px;
 }
 /****************************************************************
 * Dashboard
@@ -1824,7 +1844,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     width: 1068px;
 }
 #customerManagementDetail .displayBox.generalInfo .infoRow {
-    padding: .25em 0 .25em 0;
+
 }
 
 
@@ -1862,7 +1882,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 }
 
 #orderManagementOrderDetail .displayBox.customerInfo {
-    margin: 10px 20px 0 0;
+    margin: 0x 20px 10px 0;
 }
 
 #orderManagementOrderDetail .displayBox.paymentInfo {
@@ -1912,7 +1932,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 #orderManagementOrderDetail .displayListBox.orderItemInfo {
     clear: left;
     width: 1068px;
-    margin: 1em 0;
+    margin: 0 0 1em 0;
 }
 
 /****************************************************************
@@ -1921,7 +1941,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 div.totalOrdersBox{
     border: 1px solid black;
     background: #fff2de;
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     text-align: right;
     margin: 1em 5px 0 0
@@ -2217,27 +2237,27 @@ table.osafe th.descCol,td.descCol {
 }
 
 table.osafe th.radioCol,td.radioCol {
-    width: 180px;
+    /*width: 180px; */
     text-align: left;
 }
 
 table.osafe th.longDescCol,td.longDescCol {
-    width: 450px;
+    /* width: 450px; */
     text-align: left;
 }
 
 table.osafe th.seqCol, th.valueCol {
-    width: 150px;
+    /* width: 150px; */
     text-align: left;
 }
 table.osafe td.seqCol, td.valueCol{
-    width: 150px;
+   /* width: 150px; */
     text-align: left;
     padding: 2px 0 0 0;
 }
 
 table.osafe th.boxCaption,td.boxCaption {
-    width: 350px;
+   width: 350px; 
 }
 table.osafe th.boxNumber,td.boxNumber,th.boxDollar,td.boxDollar {
     width: 100px;
@@ -2269,14 +2289,14 @@ tr.noResult td {
 .navDescriptorBox .descriptorTitle a {
    font-weight: bold;
    text-decoration: underline;
-   font-size: 1.3em;
+   font-size: 13px;
    color: #637B93;
 }
 
 .navDescriptorBox p {
     margin: 0 1em 1em 1em;
     text-align: center;
-    font-size: 1.3em;
+    font-size: 13px;
     
 }
 #adminParamInfoId {
@@ -2386,11 +2406,28 @@ table.tablesorter thead tr .headerSortDown {
     width: 500px;
 }
 
+#displayLookUpDialog .selectorPagingLinksBox {
+    background: none repeat scroll 0 0 #f5f5f5;
+    border-left: 1px solid black;
+    border-right: 1px solid;
+    float: left;
+    font-family: 'Verdana','Helvetica Neue','Lucida Sans Unicode',sans-serif;
+    width: 500px;
+}
+#displayLookUpDialog .selectorListBox {
+   border-top: none;
+}
+
+#displayLookUpDialog .selectorSearchBox {
+    background: none repeat scroll 0 0 #f5f5f5;
+    padding: 0 0 10px 0;
+}
+
 /****************************************************************
 * No Results Box
 ****************************************************************/
 .noResultsText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #484848;
 }
@@ -2406,7 +2443,7 @@ ul.pagingLinksBody li.noResultsText.criteria {
 * Enter Criteria Box
 ****************************************************************/
 ul.pagingLinksBody li.enterCriteriaText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #484848;
     margin: 0 190px;
@@ -2776,7 +2813,7 @@ td div.infoEntry input[type="text"] {
 .entryIcon {  /* wild card icon; system parameter */
     left: 30px;
     position: absolute;
-    top: 9px; 
+    top: 2px; 
 }
 
 .entryIcon a.helper {
@@ -2880,6 +2917,107 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+a.standardBtn.adminCartIcon {
+    background-color: #8BA0B3;
+    background-image: url("/osafe_admin_theme/images/gunmetal/icon/adminCartIcon.png");
+    background-position: 4px 50%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    font-size: 11px;
+    padding: 5px 5px 5px 25px;
+}
+
+a.standardBtn.adminCartIcon:hover {
+    text-decoration: underline;
+}
+
+.adminAddCartIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/adminAddCartIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.refreshIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/refreshIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.editIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/editIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.orderIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/orderIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.noteIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/noteIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.contactUsIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/contactUsIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.catalogRequestIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/catalogRequestIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.compareDescIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/compareDescIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.syncIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/syncIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.exportToCsvIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/exportToCsvIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.clearCacheIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/clearCacheIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
 
 /****************************************************************
 * Detail Entry Table
@@ -2900,11 +3038,13 @@ td div.infoEntry input[type="text"] {
 }
 .entryButton {
     float: left;
-    padding: .5em 0 .5em 0;
+    padding: .5em 0 .5em 7px;
 }
 
 .infoDetailIcon {
-
+    display: inline-block;
+    float: right;
+    margin: 7px 5px 0 0;
 }
 
 .infoDetailIcon a, td.actionCol a {
@@ -2913,10 +3053,7 @@ td div.infoEntry input[type="text"] {
 
 
 .linkButton{
-    display: inline-block;
-    float: right;
-    margin: 0 10px 0 0;
-    padding: 0.5em 0;
+
 }
 
 .mediaImage {
@@ -2995,7 +3132,7 @@ input[type="button"].standardBtn.productLoaderTab {
     border-bottom: 1px solid black;
 }
 
-.boxBody .warningText {
+.warningText {
 /*    clear: right;  */
     float: right;
     margin: 7px 10px 0 0;
@@ -3038,7 +3175,7 @@ Lookups and Selectors
 
  .fieldLookupHeader{
     height: 0px!important;
-    font-size: 1.6em;
+    font-size: 16px;
     font-weight: bold;
     color: #FFFFFF;
     padding: 0 0 0 10px;
@@ -3125,7 +3262,7 @@ Lookups and Selectors
 }
 .selectorSearchBox .boxBody, .selectorListBox .boxBody {
     background: #f5f5f5;
-    font-size: 1.3em;
+    font-size: 16px;
 }
 .selectorListBox {
     border: 1px solid black;
@@ -3144,7 +3281,7 @@ Lookups and Selectors
 }
 .selectorHeader h2 {
     color: #FFFFFF;
-    font-size: 1.4em;
+    font-size: 14px;
     font-weight: bold;
     padding: 4px 0 8px 10px;
 }
@@ -3161,7 +3298,7 @@ Lookups and Selectors
     }
 
 ul.pagingLinksBody li.selectorPagingLinksText {
-    font-size: 1.1em;
+    font-size:11px;
     font-weight: bold;
     color: #0c0c0c;
     margin: 0 0 0 150px;
@@ -3182,13 +3319,13 @@ ul.pagingLinksBody li.selectorPagingLinksText.showpagesnext{
     width: 100%;
 }
 ul.pagingLinksBody li.selectorNoResultText.criteria {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #445566;
     margin: 0 0 0 85px;
 }
 ul.pagingLinksBody li.selectorNoResultText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #445566;
 /*    width: 100%; 
@@ -3959,7 +4096,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 .spacer {
     display: inline-block;
-    width: 104px;
+    width: 98px;
 }
 /* Admin Tools */
 
@@ -3971,6 +4108,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     display: inline-block;
     position: relative;
     top: 2px;
+    width: 16px;
 }
 
 
@@ -3991,10 +4129,12 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 .actionIcon {
         font-size:11px;
         color:#fff;
-	padding: 5px;
+	padding: 5px 0;
         background: #fff;
         border: 1px solid #4D5A7F;
         border-right: none;
+        float: left;
+        width: 100%;
 }
 
 .actionIcon:after {
@@ -4008,7 +4148,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 .actionIconBox {
     background-image: url("/osafe_admin_theme/images/gunmetal/tooltip/ToolTipArrow.png");
     background-repeat: no-repeat;
-    padding: 0 10px 0 0;
+    padding: 0 11px 0 0;
     width: 315px;
 
 }
@@ -4018,8 +4158,6 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     right: 15px;
     top: -19px;
     width: 315px;
-    *right: 35px; /* IE7 Only */
-
 }
 
 .actionIconBox.actionIconBoxArrowBottomRight {
@@ -4029,16 +4167,11 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     width: 315px;
     background-image: url("/osafe_admin_theme/images/gunmetal/tooltip/ToolTipArrowBottom.png");
     background-repeat: no-repeat;
-    *right: 35px; /* IE7 Only */
 }
 
 .actionIcon img.actionIconMenuImage {
     float: left;
-    width: 100px;
-}
-
-.actionIcon img.actionIconMenuImage {
-    float: left;
+    margin: 0 0 0 5px;
     width: 100px;
 }
 
@@ -4072,6 +4205,11 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 	text-decoration: underline;	
 }
 
+.actionIcon ul li p {
+	padding: 2px;
+	margin: 0;
+}
+
 .actionIcon ul li a span {
     margin: 0 5px 0 0;
     position: relative;
@@ -4083,7 +4221,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 
 #catalogList .actionIconBox {
-     width: 380px;
+     width: 400px;
 }
 
 #emailConfigList .actionIconBox {
@@ -4180,8 +4318,81 @@ a.standardBtn.contextIcon {
     padding: 0 0 0 50px !important;
 }
 
-.generalInfo .infoRow div.infoValue p { /* Used for text with an icon; to flank icon to the right */
+.generalInfo .infoRow div.infoValue p,
+#customerManagementDetail .displayBox.detailInfo p,
+.displayBox.personalInformation p { /* Used for text with an icon; to flank icon to the right */
    float: left; 
+}
+
+/* Admin Checkout */
+
+.required {
+     color: #A50000;
+     margin: 0 5px 0 0;
+}
+
+.adminCheckoutCartContent {
+     margin: 0 0 10px 0;
+}
+
+#checkoutStoreSearch {
+    display: inline-block;
+    margin: 0 0 0 20px;
+}
+
+#checkoutStoreName {
+    display: inline-block;
+    color: #445566;
+}
+
+/* Customers */
+
+#customerManagement .actionIconBoxArrowTopRight,
+#customerManagement .actionIconBoxArrowBottomRight {
+     width: 225px;
+}
+
+h2 span.addIcon {
+    float: right;
+}
+
+/* New Customer / Address Info */
+
+.displayBox.addressInfo .boxBody {
+    padding: 0 0 10px 0;
+}
+
+.displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header,
+.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header {
+   background: #8BA0B3;
+}
+
+
+.displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header {
+   border-top: none;
+}
+
+.displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header h2,
+.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header h2 {
+   font-size: small;
+}
+
+/* Add Product */
+
+#productCategoryFetureDetail select {
+    width: 200px;
+}
+
+#productCategoryFetureDetail table.osafe tbody {
+    margin: 10px 0 0 0;
+}
+
+#productCategoryFetureDetail table.osafe tr.dataRow {
+    height: 25px;
+}
+
+#productCategoryFetureDetail table.osafe td.radioCol {
+    width: 650px;
 }
 
 

@@ -148,6 +148,9 @@
                 <set field="addressInstructionsInfo" value="${uiLabelMap.RequestCatalogInstructionsInfo}"/>
                 <set field="custRequestTypeId" value="RF_CATALOG" />
                 <set field="custRequestName" value="Catalog Request" />
+                <set field="fieldPurpose" value="REQ_CATALOG" />
+                <set field="showName" value="Y" />
+                <set field="showEmailAddr" value="Y" />
             </actions>
             <widgets>
                 <platform-specific>

@@ -42,8 +42,6 @@
                         </if-not-empty>
                     </else>
                 </if-empty>
-                
-                
             </else>
         </if-empty>
            
@@ -56,6 +54,11 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipmentMethodTypeIdError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
         </if-empty>
+        
+        <if-empty field="parameters.carrierServiceCode">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCarrierServiceCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
  
         <if-not-empty field="parameters.minTotal">
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
@@ -64,14 +67,12 @@
             <if-compare field="isFloat" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMinTotalError"/>
                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                	<set field="parameters.minTotal" from-field="parameters.minTotal" type="BigDecimal"/>
+                </else>
             </if-compare>
         </if-not-empty>
         
-        <if-empty field="parameters.carrierServiceCode">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCarrierServiceCodeError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
-
         <if-not-empty field="parameters.maxTotal">
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
                 <field field="parameters.maxTotal"/>
@@ -79,6 +80,9 @@
             <if-compare field="isFloat" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMaxTotalError"/>
                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                	<set field="parameters.maxTotal" from-field="parameters.maxTotal" type="BigDecimal"/>
+                </else>
             </if-compare>
         </if-not-empty>
         
@@ -86,7 +90,7 @@
 	        <if-not-empty field="parameters.maxTotal">
 	        	<if>
                     <condition>
-                    	<if-compare  operator="greater-equals" value="${parameters.maxTotal}" field="parameters.minTotal" type="Integer"/>
+                    	<if-compare operator="greater-equals" value="${parameters.maxTotal}" field="parameters.minTotal" type="BigDecimal"/>
                     </condition>
                     <then>
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MinGreaterError"/>
@@ -96,11 +100,11 @@
 	        </if-not-empty>
         </if-not-empty>
         
-        <if-empty field="parameters.sequenceNumber">
-        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        <if-empty field="parameters.sequenceNum">
+        	<set field="parameters.sequenceNum" value="1" type="Long"/>
         	<else>
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
-                <field field="parameters.sequenceNumber"/>
+                <field field="parameters.sequenceNum"/>
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
@@ -136,13 +140,7 @@
         <set field="carrier" value="CARRIER" type="String"/>
         <set from-field="carrier" field="carrierShipmentMethodMap.roleTypeId"/>
         <find-by-primary-key map="carrierShipmentMethodMap" value-field="carrierShipmentMethodValue"/>
-        
-        <!-- 
-        <if-empty field="carrierShipmentMethodValue.partyId">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadCarrierShipmentIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-        </if-empty>
-         -->
+
         <!-- create record in entities: CarrierShipmentMethod, ProductStoreShipmentMeth and ShipmentCostEstimate -->  
         <if-empty field="carrierShipmentMethodValue.partyId">
 	        <set-service-fields service-name="createCarrierShip" map="parameters" to-map="createCarrierShipCtx"/>
@@ -189,6 +187,7 @@
         <set field="carrier" value="CARRIER" type="String"/>
         <set from-field="carrier" field="createShipChargeEntity.roleTypeId"/>
         <set from-field="parameters.productStoreId" field="createShipChargeEntity.productStoreId"/>
+        <set from-field="parameters.sequenceNum" field="createShipChargeEntity.sequenceNumber" type="Long"/>
         <create-value value-field="createShipChargeEntity"/>
                
         <make-value value-field="createShipmentCostEstimateEntity" entity-name="ShipmentCostEstimate"/>
@@ -205,7 +204,7 @@
         <set field="carrier" value="CARRIER" type="String"/>
         <set from-field="carrier" field="createShipmentCostEstimateEntity.carrierRoleTypeId"/>
         <set from-field="parameters.productStoreShipMethId" field="createShipmentCostEstimateEntity.productStoreShipMethId"/>
-        <set from-field="parameters.orderFlatPrice" field="createShipmentCostEstimateEntity.orderFlatPrice"/>
+        <set from-field="parameters.orderFlatPrice" field="createShipmentCostEstimateEntity.orderFlatPrice" type="BigDecimal"/>
         <create-value value-field="createShipmentCostEstimateEntity"/>
 
     </simple-method>
@@ -264,6 +263,9 @@
             <if-compare field="isFloat" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMinTotalError"/>
                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                	<set field="parameters.minTotal" from-field="parameters.minTotal" type="BigDecimal"/>
+                </else>
             </if-compare>
         </if-not-empty>
         
@@ -274,6 +276,9 @@
             <if-compare field="isFloat" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMaxTotalError"/>
                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                	<set field="parameters.maxTotal" from-field="parameters.maxTotal" type="BigDecimal"/>
+                </else>
             </if-compare>
         </if-not-empty>
         
@@ -281,7 +286,7 @@
 	        <if-not-empty field="parameters.maxTotal">
 	        	<if>
                     <condition>
-                    	<if-compare  operator="greater-equals" value="${parameters.maxTotal}" field="parameters.minTotal" type="Integer"/>
+                    	<if-compare  operator="greater-equals" value="${parameters.maxTotal}" field="parameters.minTotal" type="BigDecimal"/>
                     </condition>
                     <then>
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MinGreaterError"/>
@@ -291,11 +296,11 @@
 	        </if-not-empty>
         </if-not-empty>
         
-        <if-empty field="parameters.sequenceNumber">
-        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        <if-empty field="parameters.sequenceNum">
+        	<set field="parameters.sequenceNum" value="1" type="Long"/>
         	<else>
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
-                <field field="parameters.sequenceNumber"/>
+                <field field="parameters.sequenceNum"/>
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
@@ -325,15 +330,15 @@
         
         <!-- update record in entities: CarrierShipmentMethod, ProductStoreShipmentMeth and ShipmentCostEstimate --> 
         <make-value entity-name="CarrierShipmentMethod" value-field="lookupPKMap"/>
-	        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
-	        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
-	        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
-	        <now-timestamp field="nowTimestamp"/>
-	        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedTxStamp"/>
-	        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
-	        <set field="carrier" value="CARRIER" type="String"/>
-	        <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
-	        <store-value value-field="lookedUpValue"/>
+        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
+        <store-value value-field="lookedUpValue"/>
 	            
         <make-value entity-name="ProductStoreShipmentMeth" value-field="lookupPKMap"/>
         <set-pk-fields map="parameters" value-field="lookupPKMap"/>
@@ -344,6 +349,7 @@
         <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
         <set field="carrier" value="CARRIER" type="String"/>
         <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
+        <set from-field="parameters.sequenceNum" field="lookedUpValue.sequenceNumber" type="Long"/>
         <store-value value-field="lookedUpValue"/>
 
         <make-value entity-name="ShipmentCostEstimate" value-field="anotherLookupPKMap"/>
@@ -351,10 +357,9 @@
         <set from-field="parameters.productStoreShipMethId" field="shipmentCostEstValue.productStoreShipMethId"/>
         <set from-field="parameters.partyId" field="shipmentCostEstValue.carrierPartyId"/>
         <set from-field="parameters.shipmentMethodTypeId" field="shipmentCostEstValue.shipmentMethodTypeId"/>
-        <set from-field="parameters.minTotal" field="shipmentCostEstValue.minTotal"/>
-        <set from-field="parameters.maxTotal" field="shipmentCostEstValue.maxTotal"/>
-        <set from-field="parameters.sequenceNumber" field="shipmentCostEstValue.sequenceNumber"/>
-        <set from-field="parameters.orderFlatPrice" field="shipmentCostEstValue.orderFlatPrice"/>
+        <set from-field="parameters.minTotal" field="shipmentCostEstValue.minTotal" type="BigDecimal"/>
+        <set from-field="parameters.maxTotal" field="shipmentCostEstValue.maxTotal" type="BigDecimal"/>
+        <set from-field="parameters.orderFlatPrice" field="shipmentCostEstValue.orderFlatPrice" type="BigDecimal"/>
         <now-timestamp field="nowTimestamp"/>
         <set from-field="nowTimestamp" field="shipmentCostEstValue.lastUpdatedTxStamp"/>
         <set from-field="nowTimestamp" field="shipmentCostEstValue.lastUpdatedStamp"/>
@@ -404,7 +409,7 @@
     
     <simple-method method-name="createCarrier" short-description="Create a shipping charge carrier">
     
-        <if-empty field="parameters.partyId">
+        <if-empty field="parameters.carrierPartyId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
             <else>
@@ -412,7 +417,7 @@
                 <set field="spaceReplacement" value=" " type="String"/>
                 <set field="makeUpCase" value="true" type="Boolean"/>
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="partyId">
-                    <field field="parameters.partyId" type="String"/>
+                    <field field="parameters.carrierPartyId" type="String"/>
                     <field field="maxLength" type="Integer"/>
                     <field field="spaceReplacement" type="String"/>
                     <field field="makeUpCase" type="boolean"/>
@@ -429,10 +434,10 @@
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
                             <else>
                             	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
-					                <field field="parameters.partyId"/>
+					                <field field="parameters.carrierPartyId"/>
 					            </call-class-method>
 					            <if-compare field="isValidId" operator="equals" value="false">
-					            	<set field="errorKey" from-field="parameters.partyId"/>
+					            	<set field="errorKey" from-field="parameters.carrierPartyId"/>
 					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
 					                <string-to-list string="${tempErrorMessage}" list="error_list"/>
 					            </if-compare>
@@ -550,7 +555,7 @@
         </if-empty>
 
         <if-empty field="parameters.sequenceNumber">
-        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<set field="parameters.sequenceNumber" value="1" type="Long"/>
         	<else>
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                 <field field="parameters.sequenceNumber"/>
@@ -558,6 +563,9 @@
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                	<set field="parameters.sequenceNumber" from-field="parameters.sequenceNumber" type="Long"/>
+                </else>
             </if-compare>
             </else>
         </if-empty> 
@@ -576,6 +584,7 @@
         <set from-field="nowTimestamp" field="createCarrierShipEntity.lastUpdatedStamp"/>
         <set field="carrier" value="CARRIER" type="String"/>
         <set from-field="carrier" field="createCarrierShipEntity.roleTypeId"/>
+        <set from-field="parameters.sequenceNumber" field="createCarrierShipEntity.sequenceNumber" type="Long"/>
         <create-value value-field="createCarrierShipEntity"/>
 
     </simple-method>
@@ -610,7 +619,7 @@
         </if-empty>
 
         <if-empty field="parameters.sequenceNumber">
-        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<set field="parameters.sequenceNumber" value="1" type="Long"/>
         	<else>
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                 <field field="parameters.sequenceNumber"/>
@@ -618,6 +627,9 @@
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                	<set field="parameters.sequenceNumber" from-field="parameters.sequenceNumber" type="Long"/>
+                </else>
             </if-compare>
             </else>
         </if-empty> 
@@ -634,6 +646,7 @@
         <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
         <set field="carrier" value="CARRIER" type="String"/>
         <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
+        <set from-field="parameters.sequenceNumber" field="createCarrierShipEntity.sequenceNumber" type="Long"/>
         <store-value value-field="lookedUpValue"/>
 
     </simple-method>
@@ -685,7 +698,7 @@
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
         </if-empty>
         <if-empty field="parameters.sequenceNum">
-        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<set field="parameters.sequenceNum" value="1" type="Long"/>
         	<else>
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                 <field field="parameters.sequenceNum"/>
@@ -700,6 +713,7 @@
         <check-errors/>
  
         <set-service-fields service-name="createShipmentMethodType" map="parameters" to-map="createShipmentMethodTypeCtx"/>
+        <set from-field="parameters.sequenceNum" field="createShipmentMethodTypeCtx.sequenceNum" type="Long"/>
         <call-service service-name="createShipmentMethodType" in-map-name="createShipmentMethodTypeCtx">
             <result-to-field result-name="shipmentMethodTypeId"/>
         </call-service>
@@ -707,7 +721,7 @@
     
     <simple-method method-name="updateCarrier" short-description="Update a carrier">
     	<!-- check for bad or missing values -->     
-    	<if-empty field="parameters.partyId">
+    	<if-empty field="parameters.carrierPartyId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
             <else>
@@ -715,7 +729,7 @@
                 <set field="spaceReplacement" value=" " type="String"/>
                 <set field="makeUpCase" value="true" type="Boolean"/>
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="partyId">
-                    <field field="parameters.partyId" type="String"/>
+                    <field field="parameters.carrierPartyId" type="String"/>
                     <field field="maxLength" type="Integer"/>
                     <field field="spaceReplacement" type="String"/>
                     <field field="makeUpCase" type="boolean"/>

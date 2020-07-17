@@ -1,10 +1,11 @@
+<input type="hidden" name="productCategoryId" value="${parameters.productCategoryId!}"/>
 <#if productFeatureCatGrpApplList?has_content>
     <input type="hidden" name="_useRowSubmit" value="Y" />
     <table class="osafe" cellspacing="0">
       <thead>
         <tr class="heading">
-          <th class="idCol firstCol">${uiLabelMap.IdLabel}</th>
-          <th class="idCol">${uiLabelMap.FacetGroupLabel}</th>
+          <th class="idCol firstCol">${uiLabelMap.FacetGroupIdLabel}</th>
+          <th class="idCol">${uiLabelMap.FacetDescriptionLabel}</th>
           <th class="radioCol">${uiLabelMap.HideShowLabel}</th>
           <th class="seqCol">${uiLabelMap.SeqNumberLabel}</th>
           <th class="valueCol">${uiLabelMap.MinDisplayLabel}</th>
@@ -14,7 +15,6 @@
       <tbody>
         <#assign alt_row = false>
         <#assign rowNo = 1/>
-        <input type="hidden" name="productCategoryId" value="${parameters.productCategoryId!}"/>
         <#list productFeatureCatGrpApplList as productFeatureCatGrpAppl>
           <tr id="row_${productFeatureCatGrpAppl.productFeatureGroupId!}" <#if alt_row> class="alternate-row"</#if>>
             <td class="idCol firstCol">
@@ -47,6 +47,7 @@
             <td class="valueCol">
               <#assign facetValueMax = request.getParameter("facetValueMax_${productFeatureCatGrpAppl_index}")!productFeatureCatGrpAppl.facetValueMax!''/>
               <input type="text" class="infoValue small textAlignCenter" name="facetValueMax_${productFeatureCatGrpAppl_index}" value="${facetValueMax!}"/>
+              <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.MinMaxDisplayHelperIconInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
             </td>
           </tr>
           <#assign alt_row = !alt_row>

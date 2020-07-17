@@ -1,10 +1,11 @@
 package common;
-import org.apache.commons.lang.StringUtils;
 
-import org.ofbiz.base.util.*;
+import org.apache.commons.lang.StringUtils;
+import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
-import org.ofbiz.product.catalog.*;
-import org.ofbiz.product.category.*;
+import org.ofbiz.product.catalog.CatalogWorker;
+import org.ofbiz.product.category.CategoryWorker;
 import javolution.util.FastMap;
 import javolution.util.FastList;
 

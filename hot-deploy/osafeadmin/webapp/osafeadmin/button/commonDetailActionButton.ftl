@@ -8,15 +8,6 @@
     <#else>
         <a href="${backHref!}"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
     </#if>
-    <#if ExportToPdfAction?exists && ExportToPdfAction?has_content>
-        <a href="<@ofbizUrl>${ExportToPdfAction}?${detailParamKey}=${detailId}</@ofbizUrl>" target="Download PDF" class="buttontext standardBtn action">${uiLabelMap.ExportToPdfBtn}</a>
-    </#if>
-    <#if ExportToXMLAction?exists && ExportToXMLAction?has_content>
-       <a href="<@ofbizUrl>${ExportToXMLAction}?${detailParamKey}=${detailId}</@ofbizUrl>" target="Download XML" class="buttontext standardBtn action">${uiLabelMap.ExportToXMLBtn}</a>
-    </#if>
-    <#if ExportToFileAction?exists && ExportToFileAction?has_content>
-      <a href="<@ofbizUrl>${ExportToFileAction}?${detailParamKey!}=${detailId!}</@ofbizUrl>" target="Download FILE" class="buttontext standardBtn action">${ExportToFileBtn!"${uiLabelMap.ExportToFileBtn}"}</a>
-    </#if>
     <#if OrderAction?exists && OrderAction?has_content>
         <a href="<@ofbizUrl>${OrderAction}?${detailParamKey}=${detailId}&preRetrieved=Y</@ofbizUrl>" class="buttontext standardBtn action">${uiLabelMap.OrdersBtn}</a>
     </#if>
@@ -67,5 +58,8 @@
     </#if>
     <#if statusUpdateAction?exists && statusUpdateAction?has_content>
       <a href="<@ofbizUrl>${statusUpdateAction}?${detailParamKey!}=${detailId!}</@ofbizUrl>" class="buttontext standardBtn action">${statusUpdateBtnText!}</a>
+    </#if>
+    <#if submitFormAction?exists && submitFormAction?has_content>
+        <a href="javascript:submitDetailForm(document.${detailFormName!""}, 'SF');" class="buttontext standardBtn action">${submitFormActionBtn}</a>
     </#if>
   </div>

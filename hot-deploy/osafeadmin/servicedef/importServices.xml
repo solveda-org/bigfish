@@ -99,6 +99,7 @@
         <description>Import xls tabs, generate xml files in given directory using importDefinitionNames</description>
         <attribute name="xlsDataFile" mode="IN" type="String" optional="false"/>
         <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false"/>
         <attribute name="productLoadImagesDir" mode="IN" type="String" optional="true"/>
         <attribute name="imageUrl" mode="IN" type="String" optional="true"/>
         <attribute name="removeAll" mode="IN" type="Boolean" optional="true" />

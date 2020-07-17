@@ -366,8 +366,14 @@
                 </else>
                 </if-validate-method>
             <else>
-                <set field="parameters.paymentMethodTypeId" value="CREDIT_CARD"/>
-                <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
+                <if-not-empty field="parameters.codPayment">
+                    <set field="parameters.paymentMethodTypeId" value="EXT_COD"/>
+                    <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
+                <else>
+                    <set field="parameters.paymentMethodTypeId" value="CREDIT_CARD"/>
+                    <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
+                </else>
+                </if-not-empty>
             </else>
             </if-not-empty>
         </if-not-empty>

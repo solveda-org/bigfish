@@ -147,13 +147,13 @@ public class SolrServices {
                     productCategoryIdPath = StringUtils.join(categoryTrail, " ");
                     productCategoryDocument.setProductCategoryId(productCategoryIdPath);
                     productCategoryDocument.setCategoryLevel(categoryLevel);
-                    productCategoryDocument.setCategoryName(categoryContentWrapper.get("CATEGORY_NAME").toString());
-                    StringUtil.StringWrapper categoryImageUrl = categoryContentWrapper.get("CATEGORY_IMAGE_URL");
+                    productCategoryDocument.setCategoryName(workingCategory.getString("categoryName"));
+                    String categoryImageUrl = workingCategory.getString("categoryImageUrl");
                     if (UtilValidate.isNotEmpty(categoryImageUrl)) {
-                        productCategoryDocument.setCategoryImageUrl(categoryImageUrl.toString());
+                        productCategoryDocument.setCategoryImageUrl(categoryImageUrl);
                     }
                     // Category_DESCRIPTION
-                    categoryDescription = CategoryContentWrapper.getProductCategoryContentAsText(workingCategory, "LONG_DESCRIPTION", locale, dispatcher);
+                    categoryDescription = workingCategory.getString("longDescription");
                     if (UtilValidate.isNotEmpty(categoryDescription) && !"null".equalsIgnoreCase(categoryDescription)) {
                         productCategoryDocument.setCategoryDescription(categoryDescription.toString());
                     }
@@ -406,31 +406,32 @@ public class SolrServices {
                                                 Debug.logError(nfe, nfe.getMessage(), module);
                                             }
 
-                                            facetGroupDocument = new ProductDocument();
-                                            facetGroupDocument.setId(SolrConstants.ROW_TYPE_FACET_GROUP + "_" + productCategoryId + "_" + productFeatureGroupId);
-                                            facetGroupDocument.setRowType(SolrConstants.ROW_TYPE_FACET_GROUP);
-                                            facetGroupDocument.setProductCategoryId(productCategoryId);
-                                            facetGroupDocument.setProductFeatureGroupFacetValueMin(facetValueMin);
-                                            facetGroupDocument.setProductFeatureGroupFacetValueMax(facetValueMax);
-
-                                            facetGroupDocument.setProductFeatureGroupDescription(productFeatureGroupDescription);
-                                            facetGroupDocument.setProductFeatureGroupId(productFeatureGroupId);
-
                                             List<GenericValue> productFeatureGroupAppls = delegator.findByAnd("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureGroupId", productFeatureGroupId));
                                             productFeatureGroupAppls = EntityUtil.filterByDate(productFeatureGroupAppls);
-                                            productFeatureGroupAppls = EntityUtil.orderBy(productFeatureGroupAppls, UtilMisc.toList("sequenceNum"));
+                                            if(productFeatureGroupAppls.size() > 0) {
+                                            	facetGroupDocument = new ProductDocument();
+                                                facetGroupDocument.setId(SolrConstants.ROW_TYPE_FACET_GROUP + "_" + productCategoryId + "_" + productFeatureGroupId);
+                                                facetGroupDocument.setRowType(SolrConstants.ROW_TYPE_FACET_GROUP);
+                                                facetGroupDocument.setProductCategoryId(productCategoryId);
+                                                facetGroupDocument.setProductFeatureGroupFacetValueMin(facetValueMin);
+                                                facetGroupDocument.setProductFeatureGroupFacetValueMax(facetValueMax);
+                                                facetGroupDocument.setProductFeatureGroupDescription(productFeatureGroupDescription);
+                                                facetGroupDocument.setProductFeatureGroupId(productFeatureGroupId);
 
-                                            for (GenericValue productFeatureGroupAppl : productFeatureGroupAppls) {
-                                                GenericValue productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature");
-                                                String productFeatureTypeId = productFeature.getString("productFeatureTypeId");
-                                                String key = SolrConstants.EXTRACT_PRODUCT_FEATURE_PREFIX + productFeatureTypeId;
-                                                productFeatureTypeMap.put(key, productFeatureTypeId);
+                                                productFeatureGroupAppls = EntityUtil.orderBy(productFeatureGroupAppls, UtilMisc.toList("sequenceNum"));
+                                                for (GenericValue productFeatureGroupAppl : productFeatureGroupAppls) {
+                                                    GenericValue productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature");
+                                                    String productFeatureTypeId = productFeature.getString("productFeatureTypeId");
+                                                    String key = SolrConstants.EXTRACT_PRODUCT_FEATURE_PREFIX + productFeatureTypeId;
+                                                    productFeatureTypeMap.put(key, productFeatureTypeId);
+                                                }
+
+                                                String productFeatureTypeIds = StringUtils.join(UtilMisc.toList(productFeatureTypeMap.keySet()), " ");
+
+                                                facetGroupDocument.setProductCategoryFacetGroups(productFeatureTypeIds);
+                                                documentList.add(facetGroupDocument);
                                             }
-
-                                            String productFeatureTypeIds = StringUtils.join(UtilMisc.toList(productFeatureTypeMap.keySet()), " ");
-
-                                            facetGroupDocument.setProductCategoryFacetGroups(productFeatureTypeIds);
-                                            documentList.add(facetGroupDocument);
+                                            
                                         }
                                     }
 

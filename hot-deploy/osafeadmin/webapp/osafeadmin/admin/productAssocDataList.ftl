@@ -2,8 +2,9 @@
 <table class="osafe">
   <tr class="heading">
     <th class="idCol firstCol">${uiLabelMap.RowNoLabel}</th>
-    <th class="idCol firstCol">${uiLabelMap.FromMASTERProductIdLabel}</th>
+    <th class="idCol">${uiLabelMap.FromMASTERProductIdLabel}</th>
     <th class="idCol">${uiLabelMap.ToMASTERProductIdLabel}</th>
+    <th class="typeCol">${uiLabelMap.ProductAssocTypeLabel}</th>
     <th class="dateCol">${uiLabelMap.FromDateLabel}</th>
     <th class="dateCol">${uiLabelMap.ThruDateLabel}</th>
   </tr>
@@ -13,8 +14,9 @@
     <#list productAssocDataList as productAssoc>
       <tr class="<#if rowClass == "2">even</#if>">
         <td class="idCol firstCol" >${rowNo!""}</td>
-        <td class="idCol firstCol" >${productAssoc.productId!""}</td>
+        <td class="idCol" >${productAssoc.productId!""}</td>
         <td class="idCol">${productAssoc.productIdTo!""}</td>
+        <td class="typeCol">${productAssoc.productAssocType!""}</td>
         <td class="dateCol">${productAssoc.fromDate!""}</td>
         <td class="dateCol">${productAssoc.thruDate!""}</td>
       </tr>

@@ -100,51 +100,65 @@ under the License.
      </#if>
      
      <#-- Customer -->
-    <#assign placingParty = orderReadHelper.getPlacingParty()/>
-    <#assign billToEmailList = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(placingParty, "PRIMARY_EMAIL", "EMAIL_ADDRESS", false)/>
-    <#if billToEmailList?has_content>
-         <#assign customerEmail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(billToEmailList)/>
-         <#assign customerEmailAddress = customerEmail.infoString/>
-    </#if>
-     
-     <#-- Customer Phone -->
-      <#assign partyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", placingParty.partyId))/>
       <#assign formattedHomePhone = ''/>
       <#assign formattedWorkPhone = ''/>
       <#assign formattedCellPhone = ''/>
       <#assign partyWorkPhoneExt = ''/>
-        <#-- Home Phone -->
-      <#if partyContactDetails?has_content>
-        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_HOME"}) />
-      </#if>
-      <#if partyHomePhoneDetails?has_content>
-        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyHomePhoneDetails?if_exists) />
-        <#assign partyHomePhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyHomePhoneDetails?if_exists) />
-        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-      </#if>
-      
-        <#-- Work Phone -->
-      <#if partyContactDetails?has_content>
-        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_WORK"}) />
-      </#if>
-      <#if partyWorkPhoneDetails?has_content>
-        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyWorkPhoneDetails?if_exists) />
-        <#assign partyWorkPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyWorkPhoneDetails?if_exists) />
-        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-        <#if partyWorkPhoneDetail?has_content>
-          <#assign partyWorkPhoneExt = partyWorkPhoneDetail.extension!/> 
+     <#assign placingParty = orderReadHelper.getPlacingParty()/>
+     <#if placingParty?has_content>
+         <#assign partyContactMechPurpose = placingParty.getRelated("PartyContactMechPurpose")/>
+         <#assign partyContactMechPurpose = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyContactMechPurpose,true)/>
+
+        <#assign partyPurposeEmails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactMechPurpose, Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL"))/>
+        <#assign partyPurposeEmails = Static["org.ofbiz.entity.util.EntityUtil"].getRelated("PartyContactMech", partyPurposeEmails)/>
+        <#assign partyPurposeEmails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyPurposeEmails,true)/>
+        <#assign partyPurposeEmails = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(partyPurposeEmails, Static["org.ofbiz.base.util.UtilMisc"].toList("fromDate DESC"))/>
+        <#if partyPurposeEmails?has_content> 
+        	<#assign partyPurposeEmail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyPurposeEmails)/>
+            <#assign customerEmail = partyPurposeEmail.getRelatedOne("ContactMech")/>
+            <#assign customerEmailAddress = customerEmail.infoString/>
+            <#assign customerEmailAllowSolicitation= partyPurposeEmail.allowSolicitation!""/>
         </#if>
-      </#if>
-        
-        <#-- Cell Phone --> 
-      <#if partyContactDetails?has_content>
-        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_MOBILE"}) />
-      </#if>
-      <#if partyCellPhoneDetails?has_content>
-        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyCellPhoneDetails?if_exists) />
-        <#assign partyCellPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyCellPhoneDetails?if_exists) />
-        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-      </#if>
+
+        <#assign partyPurposeHomePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactMechPurpose, Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechPurposeTypeId", "PHONE_HOME"))/>
+        <#assign partyPurposeHomePhones = Static["org.ofbiz.entity.util.EntityUtil"].getRelated("PartyContactMech", partyPurposeHomePhones)/>
+        <#assign partyPurposeHomePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyPurposeHomePhones,true)/>
+        <#assign partyPurposeHomePhones = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(partyPurposeHomePhones, Static["org.ofbiz.base.util.UtilMisc"].toList("fromDate DESC"))/>
+        <#if partyPurposeHomePhones?has_content> 
+        	<#assign partyPurposePhone = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyPurposeHomePhones)/>
+        	<#assign telecomNumber = partyPurposePhone.getRelatedOne("TelecomNumber")/>
+            <#assign phoneHomeTelecomNumber =telecomNumber/>
+            <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneHomeTelecomNumber.areaCode?if_exists, phoneHomeTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
+        </#if>
+
+        <#assign partyPurposeWorkPhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactMechPurpose, Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechPurposeTypeId", "PHONE_WORK"))/>
+        <#assign partyPurposeWorkPhones = Static["org.ofbiz.entity.util.EntityUtil"].getRelated("PartyContactMech", partyPurposeWorkPhones)/>
+        <#assign partyPurposeWorkPhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyPurposeWorkPhones,true)/>
+        <#assign partyPurposeWorkPhones = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(partyPurposeWorkPhones, Static["org.ofbiz.base.util.UtilMisc"].toList("fromDate DESC"))/>
+        <#if partyPurposeWorkPhones?has_content> 
+        	<#assign partyPurposePhone = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyPurposeWorkPhones)/>
+        	<#assign telecomNumber = partyPurposePhone.getRelatedOne("TelecomNumber")/>
+            <#assign phoneWorkTelecomNumber =telecomNumber/>
+	        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneWorkTelecomNumber.areaCode?if_exists, phoneWorkTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
+	        <#if phoneWorkTelecomNumber.extension?has_content>
+	          <#assign partyWorkPhoneExt = phoneWorkTelecomNumber.extension!/> 
+	        </#if>
+        </#if>
+
+        <#assign partyPurposeMobilePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactMechPurpose, Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechPurposeTypeId", "PHONE_MOBILE"))/>
+        <#assign partyPurposeMobilePhones = Static["org.ofbiz.entity.util.EntityUtil"].getRelated("PartyContactMech", partyPurposeMobilePhones)/>
+        <#assign partyPurposeMobilePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyPurposeMobilePhones,true)/>
+        <#assign partyPurposeMobilePhones = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(partyPurposeMobilePhones, Static["org.ofbiz.base.util.UtilMisc"].toList("fromDate DESC"))/>
+        <#if partyPurposeMobilePhones?has_content> 
+        	<#assign partyPurposePhone = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyPurposeMobilePhones)/>
+        	<#assign telecomNumber = partyPurposePhone.getRelatedOne("TelecomNumber")/>
+            <#assign phoneMobileTelecomNumber =telecomNumber/>
+            <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneMobileTelecomNumber.areaCode?if_exists, phoneMobileTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
+        </#if>
+
+     </#if>
+     
+
     <fo:page-sequence master-reference="${pageLayoutName?default("main-page")}">
 
         <#-- Header -->
@@ -288,20 +302,6 @@ under the License.
         </#if>
         <#-- the body -->
         <fo:flow flow-name="xsl-region-body">
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         <#-- order info -->
         <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-number="1" column-width="proportional-column-width(125)"/>
@@ -435,89 +435,72 @@ under the License.
         
         <fo:block space-after="0.2in"/>
         <#-- end order info -->
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         <fo:table table-layout="fixed" width="100%">
         <fo:table-column column-number="1" column-width="proportional-column-width(48)"/>
         <fo:table-column column-number="2" column-width="proportional-column-width(4)"/>
         <fo:table-column column-number="3" column-width="proportional-column-width(48)"/>
-          <fo:table-body>
+         <fo:table-body>
             <fo:table-row>
               <fo:table-cell>
                 <fo:table table-layout="fixed" border-end-style="solid" border-bottom-style="solid" border-start-style="solid" border-top-style="solid">
-                <fo:table-body>
-                 <fo:table-row height="20px">
-                  <fo:table-cell number-columns-spanned="2">
-                    <fo:block font-weight="bold" font-size="10pt" text-align="center" background-color="#EEEEEE">${uiLabelMap.CustomerInfoHeading}</fo:block>
-                  </fo:table-cell>
-                 </fo:table-row>
-                 <fo:table-row height="20px">
-                  <fo:table-cell text-align="start" >
-                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerIdCaption}</fo:block>
-                  </fo:table-cell>
-                  <fo:table-cell text-align="start">
-                        <fo:block font-size="8pt" start-indent="10pt">${placingParty.partyId}</fo:block>
-                  </fo:table-cell>
-                 </fo:table-row>
-                 <fo:table-row>
+                 <fo:table-body>
+                 
+                  <fo:table-row height="20px">
+                   <fo:table-cell number-columns-spanned="2">
+                     <fo:block font-weight="bold" font-size="10pt" text-align="center" background-color="#EEEEEE">${uiLabelMap.CustomerInfoHeading}</fo:block>
+                   </fo:table-cell>
+                  </fo:table-row>
+                  
+                  <fo:table-row height="20px">
+                   <fo:table-cell text-align="start" >
+                     <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerIdCaption}</fo:block>
+                   </fo:table-cell>
+                   <fo:table-cell text-align="start">
+                     <fo:block font-size="8pt" start-indent="10pt"><#if placingParty?has_content>${placingParty.partyId!""}</#if></fo:block>
+                   </fo:table-cell>
+                  </fo:table-row>
+                  
+                  <fo:table-row>
                    <fo:table-cell number-columns-spanned="2">
                      <fo:block font-weight="bold" font-size="10pt" text-align="center"></fo:block>
                    </fo:table-cell>
                   </fo:table-row>
-                    <#assign orderContactMechs = Static["org.ofbiz.party.contact.ContactMechWorker"].getOrderContactMechValueMaps(delegator, orderHeader.get("orderId"))>
-                    <#list orderContactMechs as orderContactMechValueMap>
-                        <#assign contactMech = orderContactMechValueMap.contactMech>
-                        <#assign contactMechPurpose = orderContactMechValueMap.contactMechPurposeType>
-                            <#if contactMech.contactMechTypeId == "POSTAL_ADDRESS">
-                            <#if contactMechPurpose.contactMechPurposeTypeId == "BILLING_LOCATION" || (contactMechPurpose.contactMechPurposeTypeId == "SHIPPING_LOCATION" && (!isStorePickup?has_content || isStorePickup != "Y"))>
-              <fo:table-row>
-                            <#assign postalAddress = orderContactMechValueMap.postalAddress>
-                       <fo:table-cell text-align="start">
-                             <fo:block font-size="8pt" text-align="right" font-weight="bold" > <#if contactMechPurpose.contactMechPurposeTypeId == "BILLING_LOCATION">${uiLabelMap.BillingAddressCaption}
-                            </#if>
-                        <#if contactMechPurpose.contactMechPurposeTypeId == "SHIPPING_LOCATION">${uiLabelMap.ShippingAddressCaption}
+                  <#assign orderContactMechs = Static["org.ofbiz.party.contact.ContactMechWorker"].getOrderContactMechValueMaps(delegator, orderHeader.get("orderId"))>
+                  <#list orderContactMechs as orderContactMechValueMap>
+                   <#assign contactMech = orderContactMechValueMap.contactMech>
+                   <#assign contactMechPurpose = orderContactMechValueMap.contactMechPurposeType>
+                   <#if contactMech.contactMechTypeId == "POSTAL_ADDRESS">
+                    <#if contactMechPurpose.contactMechPurposeTypeId == "BILLING_LOCATION" || (contactMechPurpose.contactMechPurposeTypeId == "SHIPPING_LOCATION" && (!isStorePickup?has_content || isStorePickup != "Y"))>
+                     <fo:table-row>
+                      <#assign postalAddress = orderContactMechValueMap.postalAddress>
+                      <fo:table-cell text-align="start">
+                       <fo:block font-size="8pt" text-align="right" font-weight="bold"> 
+                        <#if contactMechPurpose.contactMechPurposeTypeId == "BILLING_LOCATION">${uiLabelMap.BillingAddressCaption}</#if>
+                        <#if contactMechPurpose.contactMechPurposeTypeId == "SHIPPING_LOCATION">${uiLabelMap.ShippingAddressCaption}</#if>
+                       </fo:block>
+                      </fo:table-cell>
+                      <fo:table-cell>
+                       <fo:block font-size="7pt" start-indent="10pt">
+                        <#if postalAddress?has_content>
+                         <#if postalAddress.toName?has_content><fo:block>${postalAddress.toName?if_exists}</fo:block></#if>
+                          <fo:block>${postalAddress.address1?if_exists}</fo:block>
+                         <#if postalAddress.address2?has_content><fo:block>${postalAddress.address2?if_exists}</fo:block></#if>
+                          <fo:block>
+                           <#assign stateGeo = (delegator.findOne("Geo", {"geoId", postalAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
+                           ${postalAddress.city}<#if stateGeo?has_content && stateGeo.geoId != '_NA_'>, ${stateGeo.geoName?if_exists}</#if> ${postalAddress.postalCode?if_exists}
+                          </fo:block>
+                          <fo:block>
+                           <#assign countryGeo = (delegator.findOne("Geo", {"geoId", postalAddress.countryGeoId?if_exists}, false))?if_exists />
+                           <#if countryGeo?has_content>${countryGeo.geoName?if_exists}</#if>
+                          </fo:block>
                         </#if>
-                            </fo:block>
-                       </fo:table-cell>
-                       <fo:table-cell>
-                            <fo:block font-size="7pt" start-indent="10pt">
-                                <#if postalAddress?has_content>
-                                    <#if postalAddress.toName?has_content><fo:block>${postalAddress.toName?if_exists}</fo:block></#if>
-                                <fo:block>${postalAddress.address1?if_exists}</fo:block>
-                                    <#if postalAddress.address2?has_content><fo:block>${postalAddress.address2?if_exists}</fo:block></#if>
-                                <fo:block>
-                                        <#assign stateGeo = (delegator.findOne("Geo", {"geoId", postalAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
-                                        ${postalAddress.city}<#if stateGeo?has_content && stateGeo.geoId != '_NA_'>, ${stateGeo.geoName?if_exists}</#if> ${postalAddress.postalCode?if_exists}
-                                </fo:block>
-                                <fo:block>
-                                        <#assign countryGeo = (delegator.findOne("Geo", {"geoId", postalAddress.countryGeoId?if_exists}, false))?if_exists />
-                                        <#if countryGeo?has_content>${countryGeo.geoName?if_exists}</#if>
-                                </fo:block>
-                                </#if>
-                            </fo:block>
-                       </fo:table-cell>
-              </fo:table-row>
-                        </#if>
-                      </#if>
-                        
-                    </#list>
+                       </fo:block>
+                      </fo:table-cell>
+                     </fo:table-row>
+                    </#if>
+                   </#if>
+                  </#list>
 
-                    <#assign billToEmailList = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(placingParty, "PRIMARY_EMAIL", "EMAIL_ADDRESS", false)/>
-                                <#if billToEmailList?has_content>
-                                     <#assign customerEmail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(billToEmailList)/>
-                                     <#assign customerEmailAddress = customerEmail.infoString/>
-                                </#if>
                                 <fo:table-row height="20px">
                                   <fo:table-cell text-align="start" >
                                     <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.EmailAddressCaption}</fo:block>
@@ -696,21 +679,25 @@ under the License.
                            <fo:block font-size="7pt">
                              <#assign orderPayments = orderReadHelper.getPaymentPreferences()/>
                             <#if orderPayments?has_content>
-                            <#list orderPayments as orderPaymentPreference>
-                                <#assign paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")?if_exists>
-                                <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
-                                <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>          
-                                <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
-                                <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "CREDIT_CARD") && (orderPaymentPreference.getString("paymentMethodId")?has_content))>
-                                    <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
-                                    <fo:block start-indent="10pt">${creditCard.get("cardType")?if_exists}</fo:block>
-                                <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y")>
-                                    <fo:block start-indent="10pt">${uiLabelMap.PayInStoreInfo}</fo:block>
-                                <#else>
-                                    <#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")>
-                                    <fo:block start-indent="10pt">${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</fo:block>
-                                </#if>
-                            </#list>
+	                          <#list orderPayments as orderPaymentPreference>
+	                                <#assign paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")?if_exists>
+	                                <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
+	                                <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>          
+	                                <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
+	                                <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "CREDIT_CARD") && (orderPaymentPreference.getString("paymentMethodId")?has_content))>
+	                                    <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
+	                                    <fo:block start-indent="10pt">${creditCard.get("cardType")?if_exists}</fo:block>
+	                                <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y")>
+	                                    <fo:block start-indent="10pt">${uiLabelMap.PayInStoreInfo}</fo:block>
+	                                <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD"))>
+	                                    <fo:block start-indent="10pt">${uiLabelMap.CashOnDeliveryInfo}</fo:block>
+	                                <#else>
+	                                	<#if paymentMethod?has_content>
+	                                    	<#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")>
+	                                    </#if>
+	                                    <fo:block start-indent="10pt"><#if paymentMethod?has_content>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</#if></fo:block>
+	                                </#if>
+	                          </#list>
                             <#else>
                           		<fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.NoPaymentMethodInfo}</fo:block>
                             </#if>
@@ -733,6 +720,7 @@ under the License.
                            </fo:block>
                         </fo:table-cell>
                       </fo:table-row>
+                      
                       <fo:table-row height="20px">
                         <fo:table-cell>
                             <fo:block font-size="8pt" font-weight="bold"  text-align="right">${uiLabelMap.ExpireDateCaption}</fo:block>
@@ -743,7 +731,7 @@ under the License.
                            </fo:block>
                         </fo:table-cell>
                       </fo:table-row>
-                    </#if>
+                   </#if>
                     
                     
 

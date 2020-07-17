@@ -202,4 +202,32 @@
         <description>Send a order notification</description>
         <implements service="orderNotificationInterface"/>
     </service>
+    <service name="extendedAddressValidation" engine="java" location="com.osafe.services.AddressServices" invoke="extendedAddressValidation" auth="false">
+        <description>Check if Address information needs further validation</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="address1" type="String" mode="IN" optional="true"/>
+        <attribute name="address2" type="String" mode="IN" optional="true"/>
+        <attribute name="address3" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCodeExt" type="String" mode="IN" optional="true"/>
+        <attribute name="stateProvinceGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="countyGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="countryGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="addressVerificationResponse" type="com.osafe.services.AddressVerificationResponse" mode="OUT" optional="false"/>
+    </service>
+    <service name="addressValidationMelissaData" engine="java" location="com.osafe.services.MelissaDataServices" invoke="addressChecker" auth="false">
+        <description>Validate Address using Melissa Data</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="address1" type="String" mode="IN" optional="true"/>
+        <attribute name="address2" type="String" mode="IN" optional="true"/>
+        <attribute name="address3" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCodeExt" type="String" mode="IN" optional="true"/>
+        <attribute name="stateProvinceGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="countyGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="countryGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="addressVerificationResponse" type="com.osafe.services.AddressVerificationResponse" mode="OUT" optional="false"/>
+    </service>
 </services>

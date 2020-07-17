@@ -40,23 +40,24 @@ under the License.
 </#macro>
 
 <#macro renderCrumb category>
-      <#if topLevelList.contains(category)>
-        <#assign categoryUrl = "eCommerceCategoryList"/>
+      <#assign productCategoryMembers = category.getRelatedCache("ProductCategoryMember")!"" />
+      <#assign productCategoryMembers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryMembers)/>
+      <#if (productCategoryMembers?size > 0)>
+        <#assign categoryUrl = "eCommerceProductList"/>
       <#else>
-        <#assign categoryUrl = "eCommerceProductList" />
+        <#assign categoryUrl = "eCommerceCategoryList" />
       </#if>
       <li>
-        <#if catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?exists>
-          <#assign catName = catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")/>
-        <#elseif catContentWrappers[category.productCategoryId].get("DESCRIPTION")?exists>
-          <#assign catName = catContentWrappers[category.productCategoryId].get("DESCRIPTION")/>
-        <#else>
-          <#assign catName=category.description?if_exists/>
+        <#if category.categoryName?has_content>
+          <#assign catName = category.categoryName!/>
+        <#elseif category.description?has_content>
+          <#assign catName = category.description!/>
         </#if>
         <#if (curCategoryId?exists && curCategoryId == category.productCategoryId) && !facetGroups?has_content && !product_id?has_content>
            ${catName}
         <#else>
-           <a href="<@ofbizUrl>${categoryUrl}?productCategoryId=${category.productCategoryId}</@ofbizUrl>">${catName}</a>
+           <#assign catalogFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${categoryUrl}?productCategoryId=${category.productCategoryId!""}')/>
+           <a href="${catalogFriendlyUrl}">${catName}</a>
         </#if>
       </li>
 </#macro>
@@ -77,14 +78,14 @@ under the License.
     <#if productCategoryIdFacet?has_content && productCategoryIdFacet=="Y">
         <#if facetPart1?has_content && facetPart1=="productCategoryId">
             <#assign productCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", facetPart2), true)>
-            <#assign catName =Static["org.ofbiz.product.category.CategoryContentWrapper"].getProductCategoryContentAsText(productCategory, "CATEGORY_NAME", locale, dispatcher)/>
+            <#assign catName = productCategory.categoryName!/>
             <#assign facetPart2Desc = catName/>
         </#if>
     </#if>
     <#if topMostProductCategoryIdFacet?has_content && topMostProductCategoryIdFacet=="Y">
         <#if facetPart1?has_content && facetPart1=="topMostProductCategoryId">
             <#assign productCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", facetPart2), true)>
-            <#assign catName =Static["org.ofbiz.product.category.CategoryContentWrapper"].getProductCategoryContentAsText(productCategory, "CATEGORY_NAME", locale, dispatcher)/>
+            <#assign catName = productCategory.categoryName!/>
             <#assign facetPart2Desc = catName/>
         </#if>
     </#if>

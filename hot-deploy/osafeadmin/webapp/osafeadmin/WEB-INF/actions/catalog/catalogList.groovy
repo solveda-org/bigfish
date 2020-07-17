@@ -1,23 +1,23 @@
 package catalog;
 
-import org.ofbiz.base.util.*;
-import org.ofbiz.product.catalog.*;
-import org.ofbiz.product.category.*;
-import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.product.category.CategoryContentWrapper;
 import javolution.util.FastMap;
 import javolution.util.FastList;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityConditionBuilder;
 import org.ofbiz.entity.condition.EntityConditionList;
 import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import java.sql.Timestamp;
 import org.ofbiz.base.util.ObjectType;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
 import com.ibm.icu.util.Calendar;
+import com.osafe.util.Util;
+import org.ofbiz.base.util.StringUtil;
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);

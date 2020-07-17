@@ -83,8 +83,8 @@
     <th class="seqCol">${uiLabelMap.SeqNumberLabel}</th>
     <th class="descCol">${uiLabelMap.SubItemLabel}</th>
     <th class="dateCol">${uiLabelMap.ActiveFromLabel}</th>
-    <th class="dateCol">${uiLabelMap.ActiveThruLabel}</th>
-    <th class="actionCol">${uiLabelMap.EditLabel}</th>
+    <th class="dateCol">${uiLabelMap.ActiveToLabel}</th>
+    <th class="actionCol">${uiLabelMap.FacetsLabel}</th>
   </tr>
   <#if topLevelList?has_content>
     <#assign rowClass = "1">

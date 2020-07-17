@@ -6,8 +6,8 @@
                 <label>${uiLabelMap.EmailTestModeCaption}</label>
             </div>
             <div class="entry checkbox medium">
-              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="Y" <#if (!parameters.simpleTest?exists || (parameters.simpleTest?exists && parameters.simpleTest?string == "Y"))>checked="checked"</#if> onclick="getEmailTestFormat('Y')"/>${uiLabelMap.SimpleTestLabel}
-              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="N" <#if (parameters.simpleTest?exists && parameters.simpleTest?string == "N")>checked="checked"</#if> onclick="getEmailTestFormat('N')"/>${uiLabelMap.EmailTemplateLabel}
+              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="Y" <#if (!parameters.simpleTest?exists || (parameters.simpleTest?exists && parameters.simpleTest?string == "Y"))>checked="checked"</#if> onclick="getEmailTestFormat('Y', 'N')"/>${uiLabelMap.SimpleTestLabel}
+              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="N" <#if (parameters.simpleTest?exists && parameters.simpleTest?string == "N")>checked="checked"</#if> onclick="getEmailTestFormat('N', 'N')"/>${uiLabelMap.EmailTemplateLabel}
             </div>
         </div>
       </div>
@@ -19,7 +19,7 @@
              <div class="infoValue">
                  <#assign selectedEmailTemplate = parameters.emailTemplateId!"">
                  <select id="emailTemplateId" name="emailTemplateId" class="small">
-                     <!--<option value="E_ABANDON_CART" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_ABANDON_CART")>selected</#if>>E_ABANDON_CART</option>-->
+                     <option value="E_ABANDON_CART" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_ABANDON_CART")>selected</#if>>E_ABANDON_CART</option>
                      <option value="E_CHANGE_CUSTOMER" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_CHANGE_CUSTOMER")>selected</#if>>E_CHANGE_CUSTOMER</option>
                      <option value="E_CONTACT_US" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_CONTACT_US")>selected</#if>>E_CONTACT_US</option>
                      <option value="E_FORGOT_PASSWORD" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_FORGOT_PASSWORD")>selected</#if>>E_FORGOT_PASSWORD</option>
@@ -88,7 +88,7 @@
       </div>
 
       <div class="infoRow">
-        <div class="infoEntry">
+        <div class="infoEntry emailTextDiv">
             <div class="infoCaption">
                 <label>${uiLabelMap.TextCaption!""}</label>
             </div>

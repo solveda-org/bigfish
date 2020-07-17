@@ -1,0 +1,603 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="validateCheckout" short-description="Validate Admin Order and setup shopping cart" login-required="false">
+        
+        <session-to-field field="shoppingCart"/>
+        <call-object-method method-name="items" obj-field="shoppingCart" ret-field="shoppingCartItems"/>
+        <if-empty field="parameters.salesChannel">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SalesChannelMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SALES_CHANNEL" list="error_list"/>
+        </if-empty>
+        <if-empty field="shoppingCartItems">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShoppingCartEmptyError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHOPPING_CART" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.BILLING_SELECT_ADDRESS">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BillingAddressMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.SHIPPING_SELECT_ADDRESS">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingAddressMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.paymentOption">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PaymentMethodMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="PAYMENT_METHOD" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.shipping_method">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingMethodMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_METHOD" list="error_list"/>
+                        <else>
+                        	<!-- if it is a store pickup then check to see if the store exists -->
+	                        <if-compare field="parameters.shipping_method" operator="equals" value="NO_SHIPPING@_NA_">
+	                        	<call-object-method obj-field="shoppingCart" method-name="getOrderAttribute" ret-field="cartStoreId">
+						            <string value="STORE_LOCATION"/>
+						        </call-object-method>
+						        <if-not-empty field="cartStoreId">
+						        	<entity-one value-field="partyGroupStore" entity-name="PartyGroup">
+				                        <field-map field-name="partyId" from-field="cartStoreId"/>
+				                    </entity-one>
+				                    <if-empty field="partyGroupStore">
+				                    	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingMethodMissingError"/>
+                        				<string-to-list string="${tempErrorMessage}" message-field="SHIPPING_METHOD" list="error_list"/>
+				                    </if-empty>
+						        </if-not-empty>
+	                        </if-compare>
+                        </else>
+        </if-empty>
+        
+        <if-compare operator="equals" value="CCExist" field="parameters.paymentOption">
+            <if-compare-field field="parameters.savedVerificationNo" operator="not-equals" to-field="nullValue">
+                <if-empty field="parameters.savedVerificationNo">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
+                    <else>
+                        <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+                             <field field="parameters.savedVerificationNo" type="String"/>
+                        </call-class-method>
+                        <if-compare operator="equals" value="false" field="isInteger">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
+                        </if-compare>
+                    </else>
+                </if-empty>
+            </if-compare-field>
+            <if-empty field="parameters.savedCard">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="SavedCardMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SAVED_CC" list="error_list"/>
+                <else>
+                    <entity-one value-field="savedCreditCard" entity-name="CreditCard">
+                        <field-map field-name="paymentMethodId" from-field="parameters.savedCard"/>
+                    </entity-one>
+                    <set field="creditCardContext.cardType" from-field="savedCreditCard.cardType"/>
+                    <set field="creditCardContext.cardNumber" from-field="savedCreditCard.cardNumber"/>
+                    <set field="creditCardContext.expireDate" from-field="savedCreditCard.expireDate"/>
+                    <set field="creditCardContext.companyNameOnCard" from-field="savedCreditCard.companyNameOnCard"/>
+                    <set field="creditCardContext.titleOnCard" from-field="savedCreditCard.titleOnCard"/>
+                    <set field="creditCardContext.firstNameOnCard" from-field="savedCreditCard.firstNameOnCard"/>
+                    <set field="creditCardContext.middleNameOnCard" from-field="savedCreditCard.middleNameOnCard"/>
+                    <set field="creditCardContext.lastNameOnCard" from-field="savedCreditCard.lastNameOnCard"/>
+                    <set field="creditCardContext.suffixOnCard" from-field="savedCreditCard.suffixOnCard"/>
+                    <set field="creditCardContext.cardNumber" from-field="savedCreditCard.cardNumber"/>
+                    <set field="creditCardContext.contactMechId" from-field="parameters.BILLING_SELECT_ADDRESS"/>
+                    
+                    <set field="paymentMethodId" from-field="parameters.savedCard"/>
+                </else>
+            </if-empty>
+             <set field="cardSecurityCode" from-field="parameters.savedVerificationNo" set-if-null="true" set-if-empty="true"/>
+        </if-compare>
+        <if-compare operator="equals" value="CCNew" field="parameters.paymentOption">
+            <if-compare-field field="parameters.verificationNo" operator="not-equals" to-field="nullValue">
+                <if-empty field="parameters.verificationNo">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
+                    <else>
+                        <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+                             <field field="parameters.verificationNo" type="String"/>
+                        </call-class-method>
+                        <if-compare operator="equals" value="false" field="isInteger">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="VERIFICATION_NO" list="error_list"/>
+                        </if-compare>
+                    </else>
+                </if-empty>
+            </if-compare-field>
+             <call-map-processor in-map-name="parameters" out-map-name="creditCardContext">
+                  <simple-map-processor name="createCreditCard">
+                    <make-in-string field="expireDate">
+                      <in-field field="expMonth"/>
+                      <constant>/</constant>
+                      <in-field field="expYear"/>
+                    </make-in-string>
+                    <process field="partyId"><copy/></process>
+                    <process field="companyNameOnCard"><copy/></process>
+                    <process field="titleOnCard"><copy/></process>
+                    <process field="firstNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="FirstNameOnCardMissingError"/></not-empty></process>
+                    <process field="middleNameOnCard"><copy/></process>
+                    <process field="lastNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="LastNameOnCardMissingError"/></not-empty></process>
+                    <process field="suffixOnCard"><copy/></process>
+                    <process field="cardType"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardTypeMissingError"/></not-empty></process>
+                    <process field="cardNumber"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardNumberMissingError"/></not-empty></process>
+                    <process field="contactMechId"><copy/></process>
+                    <process field="description"><copy/></process>
+                    <process field="expMonth"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationMonthMissingError"/></not-empty></process>
+                    <process field="expYear"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationYearMissingError"/></not-empty></process>
+                    <process field="expireDate"><copy/></process>
+                  </simple-map-processor>
+             </call-map-processor>
+             <if-not-empty field="parameters.expMonth">
+               <if-validate-method field="creditCardContext.expireDate" method="isDateBeforeToday" >
+                   <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ExpirationDateIsBeforeTodayError"/>
+                   <string-to-list string="${tempErrorMessage}" message-field="expMonth" list="error_list"/>
+               </if-validate-method>
+            </if-not-empty>
+            <if-not-empty field="creditCardContext.cardNumber">
+                <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+                     <field field="creditCardContext.cardNumber" type="String"/>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="isInteger">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                <else>
+                    <if-empty field="creditCardContext.cardType">
+                        <call-class-method method-name="isCreditCard" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isCreditCard">
+                             <field field="creditCardContext.cardNumber" type="String"/>
+                        </call-class-method>
+                        <if-compare field="isCreditCard" operator="equals" value="false">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                        </if-compare>
+                    <else>
+                        <call-class-method method-name="isCardMatch" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isCardMatch">
+                            <field field="creditCardContext.cardType" type="String"/>
+                             <field field="creditCardContext.cardNumber" type="String"/>
+                        </call-class-method>
+                        <if-compare field="isCardMatch" operator="equals" value="false">
+                            <call-class-method method-name="getCardType" class-name="org.ofbiz.base.util.UtilValidate" ret-field="suggestCardType">
+                                 <field field="creditCardContext.cardNumber" type="String"/>
+                            </call-class-method>
+                            <if-compare field="suggestCardType" operator="equals" value="Unknown">
+                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                            <else>
+                                <set field="argListNames[]" from-field="creditCardContext.cardNumber"/>
+                                <set field="argListNames[]" from-field="creditCardContext.cardType"/>
+                                <set field="argListNames[]" from-field="suggestCardType"/>
+                                <property-to-field resource="OSafeUiLabels" property="CreditCardNumberInvalidSuggestError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                            </else>
+                            </if-compare>
+                        </if-compare>
+                    </else>
+                    </if-empty>
+                </else>
+                </if-compare>
+             <set field="cardSecurityCode" from-field="parameters.verificationNo" set-if-null="true" set-if-empty="true"/>
+            </if-not-empty>
+        </if-compare>
+        <if-compare operator="equals" value="OffLine" field="parameters.paymentOption">
+        	<if-empty field="parameters.referenceNo">
+        		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmptyRefNumError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        		<else>
+	               <call-bsh>
+	               <![CDATA[
+	               	   refNum = parameters.get("referenceNo");
+	                   shoppingCart.addPaymentAmount("EXT_COD", shoppingCart.getGrandTotal(), false);
+	                   shoppingCart.addPaymentRef("EXT_COD", refNum, "");
+	               ]]>
+	               </call-bsh>
+               </else>
+            </if-empty>
+        </if-compare>
+        
+        <check-errors/>
+        
+        <if-compare operator="equals" value="CCNew" field="parameters.paymentOption">
+	        <call-service service-name="createCreditCard" in-map-name="creditCardContext">
+	            <default-message>Credit Card successfully created.</default-message>
+	            <result-to-request result-name="paymentMethodId"/>
+	            <result-to-field result-name="paymentMethodId" field="paymentMethodId"/>
+	        </call-service>
+        </if-compare>
+       
+        <create-object class-name="org.ofbiz.order.shoppingcart.CheckOutHelper" field="checkOutHelper">
+            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+            <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+        </create-object>
+        <call-object-method obj-field="shoppingCart" method-name="addContactMech">
+            <string value="BILLING_LOCATION"/>
+            <field field="parameters.BILLING_SELECT_ADDRESS"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
+            <field field="parameters.SHIPPING_SELECT_ADDRESS"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setChannelType">
+            <field field="parameters.salesChannel"/>
+        </call-object-method>
+
+        <call-bsh><![CDATA[
+            shippingMethod = parameters.get("shipping_method");
+            if(shippingMethod != null) {
+                shipmentMethodTypeId = shippingMethod.substring(0, shippingMethod.indexOf("@"));
+                if (shippingMethod.indexOf(":") != -1) {
+                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1, shippingMethod.indexOf(":"));
+                    productStoreShipMethId =  shippingMethod.substring(shippingMethod.indexOf(":")+1);
+                    parameters.put("productStoreShipMethId", productStoreShipMethId);
+                } else {
+                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1);
+                }
+                parameters.put("shipmentMethodTypeId", shipmentMethodTypeId);
+                parameters.put("carrierPartyId", carrierPartyId);
+            }
+        ]]></call-bsh>
+        <set field="shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
+        <set field="carrierPartyId" from-field="parameters.carrierPartyId"/>
+        <set field="productStoreShipMethId" from-field="parameters.productStoreShipMethId"/>
+        <call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
+            <field field="shipmentMethodTypeId"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
+            <field field="carrierPartyId"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setProductStoreShipMethId">
+            <field field="productStoreShipMethId"/>
+        </call-object-method>
+        
+        <call-object-method  obj-field="shoppingCart" method-name="getCurrency" ret-field="isoCode"/>
+        <set field="dispatcher" from-field="parameters.dispatcher" type="Object"/>
+        <set field="delegator" from-field="parameters.delegator" type="Object"/>
+        <set field="locale" from-field="parameters.locale" type="Object"/>
+
+        <call-bsh><![CDATA[
+            Map shipCost = org.ofbiz.order.shoppingcart.shipping.ShippingEvents.getShipGroupEstimate(dispatcher, delegator, shoppingCart, 0);
+            shippingTotal = shipCost.get("shippingTotal");
+            if (shippingTotal == null) {
+                shippingTotal = java.math.BigDecimal.ZERO;
+            }
+            shoppingCart.setItemShipGroupEstimate(shippingTotal, 0);
+            parameters.put("shippingTotal", org.ofbiz.base.util.UtilFormatOut.formatCurrency(shippingTotal, isoCode, locale));
+
+            checkOutHelper = new org.ofbiz.order.shoppingcart.CheckOutHelper(dispatcher, delegator, shoppingCart);
+            // Calculate and add the tax adjustments
+            checkOutHelper.calcAndAddTax();
+
+            salesTax = shoppingCart.getTotalSalesTax();
+            totalSalesTax = org.ofbiz.base.util.UtilFormatOut.formatCurrency(salesTax, isoCode, locale);
+            parameters.put("totalSalesTax", totalSalesTax);
+
+            cartGrandTotal = org.ofbiz.base.util.UtilFormatOut.formatCurrency(shoppingCart.getGrandTotal(), isoCode, locale);
+            parameters.put("cartGrandTotal", cartGrandTotal);
+        ]]></call-bsh>
+
+        <if-not-empty field="paymentMethodId">
+             <create-object class-name="org.ofbiz.order.shoppingcart.CheckOutHelper" field="checkOutHelper">
+                 <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+                 <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+                 <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+             </create-object>
+             <set field="callResult" value="${groovy:checkOutHelper.finalizeOrderEntryPayment(paymentMethodId, null, false, false)}"/>
+             <set field="cartPaymentInfo" value="${groovy: org.ofbiz.order.shoppingcart.ShoppingCart.CartPaymentInfo cpi = shoppingCart.getPaymentInfo(paymentMethodId, null, null, null, true); cpi.securityCode = cardSecurityCode; return cpi;}"/>
+         </if-not-empty>
+         
+         <call-simple-method method-name="processCartAttribute"/>
+
+        <check-errors/>
+
+    </simple-method>
+
+    <simple-method method-name="processCartAttribute" short-description="process Cart Attribute" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <if-not-empty field="shoppingCart">
+            <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="storeId">
+                <string value="STORE_LOCATION"/>
+            </call-object-method>
+            <if-not-empty field="storeId">
+                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                    <string value="DELIVERY_OPTION"/>
+                    <string value="STORE_PICKUP"/>
+                </call-object-method>
+            <else>
+                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                    <string value="DELIVERY_OPTION"/>
+                    <string value="SHIP_TO"/>
+                </call-object-method>
+            </else>
+            </if-not-empty>
+            <call-object-method obj-field="shoppingCart" method-name="getAttribute" ret-field="guestCheckoutAttr">
+                <string value="GUEST_CHECKOUT"/>
+            </call-object-method>
+            <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                <string value="IS_DOWNLOADED"/>
+                <string value="N"/>
+            </call-object-method>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="setShippingOption" short-description="Set shipping method" login-required="false">
+    	<!-- In case a store was previously set on the cart, remove it -->
+    	<if-not-empty field="parameters.shipMethod">
+	    	<if-compare value="NO_SHIPPING@_NA_" operator="not-equals" field="parameters.shipMethod" >
+	    		<call-simple-method method-name="removeStorePickup"/>
+	    	</if-compare>
+    	</if-not-empty>
+        <call-bsh><![CDATA[
+            shippingMethod = parameters.get("shipMethod");
+            if(shippingMethod != null) {
+                shipmentMethodTypeId = shippingMethod.substring(0, shippingMethod.indexOf("@"));
+                if (shippingMethod.indexOf(":") != -1) {
+                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1, shippingMethod.indexOf(":"));
+                    productStoreShipMethId =  shippingMethod.substring(shippingMethod.indexOf(":")+1);
+                    parameters.put("productStoreShipMethId", productStoreShipMethId);
+                } else {
+                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1);
+                }
+                parameters.put("shipmentMethodTypeId", shipmentMethodTypeId);
+                parameters.put("carrierPartyId", carrierPartyId);
+            }
+        ]]></call-bsh>
+        <set field="shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
+        <set field="carrierPartyId" from-field="parameters.carrierPartyId"/>
+        <set field="productStoreShipMethId" from-field="parameters.productStoreShipMethId"/>
+        <log level="info" message=" shipmentMethodTypeId is ${shipmentMethodTypeId} "/>
+        <log level="info" message=" carrierPartyId is ${carrierPartyId}"/>
+        <log level="info" message=" productStoreShipMethId is ${productStoreShipMethId}"/>
+
+        <entity-one entity-name="CarrierAndShipmentMethod" value-field="shipmentMethod" use-cache="true">
+            <field-map field-name="shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
+            <field-map field-name="partyId" from-field="carrierPartyId"/>
+            <field-map field-name="roleTypeId" value="CARRIER"/>
+        </entity-one>
+        <field-to-request field="shipmentMethod.description" request-name="shippingDescription"/>
+
+        <set field="shoppingCart" from-field="parameters.shoppingCart"/>
+        <if-empty field="shoppingCart">
+            <session-to-field field="shoppingCart"/>
+        </if-empty>
+        <call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
+            <field field="shipmentMethodTypeId"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
+            <field field="carrierPartyId"/>
+        </call-object-method>
+        <call-object-method obj-field="shoppingCart" method-name="setProductStoreShipMethId">
+            <field field="productStoreShipMethId"/>
+        </call-object-method>
+        <call-object-method  obj-field="shoppingCart" method-name="getCurrency" ret-field="isoCode"/>
+        <set field="dispatcher" from-field="parameters.dispatcher" type="Object"/>
+        <set field="delegator" from-field="parameters.delegator" type="Object"/>
+        <set field="locale" from-field="parameters.locale" type="Object"/>
+
+        <call-bsh><![CDATA[
+            Map shipCost = org.ofbiz.order.shoppingcart.shipping.ShippingEvents.getShipGroupEstimate(dispatcher, delegator, shoppingCart, 0);
+            shippingTotal = shipCost.get("shippingTotal");
+            if (shippingTotal == null) {
+                shippingTotal = java.math.BigDecimal.ZERO;
+            }
+            shoppingCart.setItemShipGroupEstimate(shippingTotal, 0);
+            parameters.put("shippingTotal", org.ofbiz.base.util.UtilFormatOut.formatCurrency(shippingTotal, isoCode, locale));
+
+            checkOutHelper = new org.ofbiz.order.shoppingcart.CheckOutHelper(dispatcher, delegator, shoppingCart);
+            // Calculate and add the tax adjustments
+            checkOutHelper.calcAndAddTax();
+
+            salesTax = shoppingCart.getTotalSalesTax();
+            totalSalesTax = org.ofbiz.base.util.UtilFormatOut.formatCurrency(salesTax, isoCode, locale);
+            parameters.put("totalSalesTax", totalSalesTax);
+
+            cartGrandTotal = org.ofbiz.base.util.UtilFormatOut.formatCurrency(shoppingCart.getGrandTotal(), isoCode, locale);
+            parameters.put("cartGrandTotal", cartGrandTotal);
+        ]]></call-bsh>
+        <call-class-method method-name="doPromotions" class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker">
+            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+        </call-class-method>
+        <field-to-request field="parameters.shippingTotal" request-name="shippingTotal"/>
+        <field-to-request field="parameters.cartGrandTotal" request-name="cartGrandTotal"/>
+        <field-to-request field="parameters.totalSalesTax" request-name="totalSalesTax"/>
+        <log level="info" message="Shipping total is : ${parameters.shippingTotal}"/>
+        <log level="info" message="Cart Grand total is : ${parameters.cartGrandTotal}"/>
+        <log level="info" message="Total sale tax is : ${parameters.totalSalesTax}"/>
+    </simple-method>
+    
+    <simple-method method-name="validateCartPromoCode" short-description="Validate Address" login-required="false">
+
+        <!-- Check that a "Promo Code" has been entered -->
+         <call-map-processor in-map-name="parameters" out-map-name="promoCodeContext">
+             <simple-map-processor name="promoCode">
+
+                <process field="productPromoCodeId">
+                    <copy to-field="productPromoCodeId"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="OfferCodeMissingError"/></not-empty>
+                </process>
+
+             </simple-map-processor>
+             
+         </call-map-processor>
+
+        <!-- Check that a "Promo Code" exists -->
+        <if-not-empty field="promoCodeContext.productPromoCodeId">
+            <session-to-field field="shoppingCart"/>
+            <call-object-method obj-field="promoCodeContext.productPromoCodeId" method-name="toUpperCase" ret-field="productPromoCodeUpperCase"/>
+            <set from-field="productPromoCodeUpperCase" field="promoCodeExistsMap.productPromoCodeId"/>
+            <find-by-primary-key entity-name="ProductPromoCode" map="promoCodeExistsMap" value-field="existingPromoCode"/>
+            <if-empty field="existingPromoCode">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeNotFoundError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+            <else>
+                <!-- Check that "Promo Code" has association with product store-->
+                <call-class-method class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker" method-name="getStoreProductPromoCodes" ret-field="storeProductPromoCodes">
+                    <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+                </call-class-method>
+                <call-object-method obj-field="storeProductPromoCodes" method-name="contains" ret-field="hasProductStroeAssoc">
+                     <field field="existingPromoCode.productPromoCodeId" type="Object"/>
+                </call-object-method>
+                <if-compare field="hasProductStroeAssoc" operator="equals" value="false" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeNotFoundError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+                <else>
+                    <!-- Check that "Promo Code" is not already applied on cart-->
+                    <call-object-method obj-field="shoppingCart" method-name="getProductPromoCodesEntered" ret-field="promoCodesEntered"/>
+                    <call-object-method obj-field="promoCodesEntered" method-name="contains" ret-field="promoCodeInUse">
+                         <field field="existingPromoCode.productPromoCodeId" type="Object"/>
+                    </call-object-method>
+                    <if-compare field="promoCodeInUse" operator="equals" value="true" type="Boolean">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeInUseError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+                    <else>
+                        <!-- Check that "Promo Code" is Expire-->
+                        <set field="tempPromoCodeList[]" from-field="existingPromoCode"/>
+                        <call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="filterByDate" ret-field="tempPromoCodeList">
+                            <field field="tempPromoCodeList" type="List"/>
+                        </call-class-method>
+                        <if-empty field="tempPromoCodeList">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeExpireError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+                        <else>
+                            <!-- Check that "Promo Code" use limit-->
+                            <call-object-method obj-field="shoppingCart" method-name="getPartyId" ret-field="partyId"/>
+                            <call-class-method class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker" method-name="getProductPromoCodeUseLimit" ret-field="codeUseLimit">
+                                <field field="existingPromoCode" type="org.ofbiz.entity.GenericValue"/>
+                                <field field="partyId"/>
+                                <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+                            </call-class-method>
+                            <if>
+                                <condition>
+                                    <or>
+                                        <if-empty field="codeUseLimit"/>
+                                        <if-compare field="codeUseLimit" operator="less-equals" value="0" type="Long"/>
+                                    </or>
+                                </condition>
+                                <then>
+                                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeUseExcessError"/>
+                                    <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+                                </then>
+                            <else>
+                                <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="useOnlyOnePromoCode">
+                                    <field field="request" type="javax.servlet.ServletRequest"/>
+                                    <string value="CHECKOUT_PROMO_MANUAL_ONE_ONLY"/>
+                                </call-class-method>
+                                <call-class-method class-name="com.osafe.util.Util" method-name="isProductStoreParmTrue" ret-field="isTrue">
+                                    <field field="useOnlyOnePromoCode"/>
+                                </call-class-method>
+                                <if-compare field="isTrue" operator="equals" value="true">
+                                    <call-object-method obj-field="shoppingCart" method-name="getProductPromoCodesEntered" ret-field="promoCodesEntered"/>
+                                    <call-object-method obj-field="shoppingCart" method-name="clearAllPromotionInformation"/>
+                                    <call-object-method obj-field="promoCodesEntered" method-name="clear"/>
+                                </if-compare>
+                            </else>
+                            </if>
+                        </else>
+                        </if-empty>
+                    </else>
+                    </if-compare>
+                </else>
+                </if-compare>
+            </else>
+            </if-empty>
+        </if-not-empty>
+        <set field="fieldLevelErrors" value="Y"/>
+        <field-to-request field="fieldLevelErrors" />
+        <check-errors/>
+
+    </simple-method>
+    
+    <simple-method method-name="removeCartPromoCode" short-description="remove applied Promo Code" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <call-object-method obj-field="shoppingCart" method-name="getProductPromoCodesEntered" ret-field="promoCodesEntered"/>
+        <call-object-method obj-field="promoCodesEntered" method-name="remove">
+            <field field="parameters.productPromoCodeId" type="Object"/>
+        </call-object-method>
+        <call-class-method class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker" method-name="doPromotions">
+            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+        </call-class-method>
+        <check-errors/>
+    </simple-method>
+    
+    <simple-method method-name="setStorePickup" short-description="Set Store For Pickup Order" login-required="false">
+        <if-not-empty field="parameters.storeId">
+            <session-to-field field="shoppingCart"/>
+            <if-not-empty field="shoppingCart">
+                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                    <string value="STORE_LOCATION"/>
+                    <field field="parameters.storeId" type="String"/>
+                </call-object-method>
+                <set field="parameters.shipMethod" value="NO_SHIPPING@_NA_"/>
+                <call-simple-method method-name="setShippingOption"/>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="removeStorePickup" short-description="Remove Store For Pickup Order" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <if-not-empty field="shoppingCart">
+            <call-object-method method-name="removeOrderAttribute" obj-field="shoppingCart">
+                <string value="STORE_LOCATION"/>
+            </call-object-method>
+        <else>
+            <return response-code="error"/>
+        </else>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="processBigfishInventory" short-description="process Cart Attribute" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <if-not-empty field="shoppingCart">
+            <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="storeId">
+                <string value="STORE_LOCATION"/>
+            </call-object-method>
+            
+            <call-object-method method-name="items" obj-field="shoppingCart" ret-field="shoppingCartItems"/>
+            <call-object-method method-name="getProductStoreId" obj-field="shoppingCart" ret-field="productStoreId"/>
+            
+            <if-not-empty field="storeId">
+               <set field="deliveryOption" value="STORE_PICKUP"/>
+            <else>
+                <set field="deliveryOption" value="SHIP_TO"/>
+            </else>
+            </if-not-empty>
+                
+            <if-not-empty field="shoppingCartItems">
+                <iterate entry="shoppingCartItem" list="shoppingCartItems">
+                    <call-class-method class-name="com.osafe.services.InventoryServices" method-name="setProductInventoryLevel" >
+                        <field field="shoppingCartItem.productId"/>
+                        <field field="productStoreId"/>
+                        <field field="shoppingCartItem.quantity" type="BigDecimal"/>
+                        <field field="deliveryOption"/>
+                    </call-class-method>
+                </iterate>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="processpaymentError" short-description="process payment error" login-required="false">
+        <set field="isPaymentProcessError" value="Y"/>
+        <field-to-request field="isPaymentProcessError" />
+        <request-to-field field="errorMessage" request-name="_ERROR_MESSAGE_"/>
+        <property-to-field field="errorMessage" resource="OSafeUiLabels" property="ProcessPaymentError"/>
+        <field-to-request field="errorMessage" request-name="_ERROR_MESSAGE_"/>
+    </simple-method>
+    
+    <simple-method method-name="processpaymentFail" short-description="process payment fail" login-required="false">
+        <set field="isPaymentProcessError" value="Y"/>
+        <field-to-request field="isPaymentProcessError" />
+        <request-to-field field="errorMessage" request-name="_ERROR_MESSAGE_"/>
+        <property-to-field field="errorMessage" resource="OSafeUiLabels" property="ProcessPaymentError"/>
+        <field-to-request field="errorMessage" request-name="_ERROR_MESSAGE_"/>
+    </simple-method>
+    
+    <simple-method method-name="confirmCheckout" short-description="Confirm checkout success" login-required="false">
+    	<!-- Ofbiz does not clear the store pickup info from cart in ShoppingCartEvents (clearCart method)-->
+    	<call-simple-method method-name="removeStorePickup"/>
+    	
+        <property-to-field resource="OSafeAdminUiLabels" property="OrderCheckoutSuccess" field="orderCheckoutSuccessMessage"/>
+        <string-to-list string="${orderCheckoutSuccessMessage}" list="successMessageList"/>
+    </simple-method>
+
+
+</simple-methods>

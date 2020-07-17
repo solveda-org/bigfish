@@ -47,6 +47,16 @@
                 <script type="text/javascript" src="<@ofbizContentUrl>${javaScript}</@ofbizContentUrl>"></script>
             </#list>
         </#if>
+
+        <#assign addressVerificationMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"ADDRESS_VERIFICATION_METHOD")!""/>
+        <#if addressVerificationMethod?has_content && loadPca?has_content && loadPca == "Y">
+            <#if addressVerificationMethod.toUpperCase() == "PCA">
+                <#assign osafeCapturePlus = Static["com.osafe.captureplus.OsafeCapturePlus"].getInstance(globalContext.productStoreId!) />
+                <#if osafeCapturePlus.isNotEmpty()>
+                    ${setRequestAttribute("osafeCapturePlus",osafeCapturePlus)}
+                </#if>
+            </#if>
+        </#if>
     </head>
     <body class="all">
         <div id="mainContainer">

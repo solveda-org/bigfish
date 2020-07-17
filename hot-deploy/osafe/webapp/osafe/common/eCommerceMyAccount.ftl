@@ -10,7 +10,7 @@
 </div>
 <div id="CustomerAddressBook" class="displayBox">
     <h3>${uiLabelMap.CustomerAddressBookHeading?if_exists}</h3>
-    <p class="instructions">${uiLabelMap.CustomerAddressbookInfo}</p>
+    <p class="instructions">${uiLabelMap.CustomerAddressBookInfo}</p>
     <p><a id="CustomerAddressBook" href="<@ofbizUrl>eCommerceEditAddressBook</@ofbizUrl>">${uiLabelMap.ClickAddressBookInfo}</a></p>
 </div>
 <div id="CustomerOrderStatus" class="displayBox">

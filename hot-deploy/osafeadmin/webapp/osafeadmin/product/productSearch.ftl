@@ -1,5 +1,4 @@
 <!-- start searchBox -->
-<#if (requestAttributes.topLevelList)?exists><#assign topLevelList = requestAttributes.topLevelList></#if>
   <div class="entryRow">
     <div class="entry">
       <label>${uiLabelMap.ProductNoCaption}</label>
@@ -38,6 +37,10 @@
     </div>
   </div>
   
+  <#if rootProductCategoryId?has_content>
+      <#assign topLevelList = delegator.findByAnd("ProductCategoryRollupAndChild", {"parentProductCategoryId" : rootProductCategoryId}, Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum')) />
+      <#assign topLevelList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(topLevelList) />
+  </#if>
   <div class="entryRow">
     <div class="entry">
       <label>${uiLabelMap.CategoryCaption}</label>
@@ -46,17 +49,14 @@
           <option value="all" <#if (parameters.srchCategoryId!"") == "all">selected</#if>>All</option>
             <#if topLevelList?exists && topLevelList?has_content>
               <#list topLevelList as category>
-                <#if catContentWrappers?exists>
-                  <option value="${category.productCategoryId?if_exists}" <#if (parameters.srchCategoryId!"") == "${category.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}</option>
-				  <#if subCatRollUpMap?has_content>
-				    <#assign subCatList = subCatRollUpMap.get(category.productCategoryId)!/>
-				  </#if> 
+                  <option value="${category.productCategoryId?if_exists}" <#if (parameters.srchCategoryId!"") == "${category.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;${category.categoryName?if_exists}</option>
+                  <#assign subCatList = delegator.findByAnd("ProductCategoryRollupAndChild", {"parentProductCategoryId" : category.getString("productCategoryId")}, Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum')) />
+                  <#assign subCatList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(subCatList) />
                   <#if subCatList?exists && subCatList?has_content>
                     <#list subCatList as subCategory>
-                      <option value="${subCategory.productCategoryId?if_exists}" <#if (parameters.srchCategoryId!"") == "${subCategory.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;${catContentWrappers[subCategory.productCategoryId].get("CATEGORY_NAME")?if_exists}</option>
+                      <option value="${subCategory.productCategoryId?if_exists}" <#if (parameters.srchCategoryId!"") == "${subCategory.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;${subCategory.categoryName?if_exists}</option>
                     </#list>
                   </#if>
-                </#if>
               </#list>
             </#if>
           </select>
@@ -75,7 +75,7 @@
       <#assign intiCb = "${initializedCB!}"/>
       <label>${uiLabelMap.VirtualProductsCaption}</label>
       <div class="entryInput checkbox short">
-         <input class="checkBoxEntry" type="checkbox" id="srchAll" name="srchall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','srch')" <#if parameters.srchall?has_content>checked</#if>/>${uiLabelMap.AllLabel}
+         <input class="checkBoxEntry" type="checkbox" id="srchAll" name="srchall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','srch')" <#if parameters.srchall?has_content|| ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.AllLabel}
          <input class="checkBoxEntry" type="checkbox" id="srchVirtualOnly" name="srchVirtualOnly" value="Y" <#if parameters.srchVirtualOnly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.VirtualLabel}
          <input class="checkBoxEntry" type="checkbox" id="srchFinishedGoodOnly" name="srchFinishedGoodOnly" value="Y" <#if parameters.srchFinishedGoodOnly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.FinishedGoodLabel}
       </div>

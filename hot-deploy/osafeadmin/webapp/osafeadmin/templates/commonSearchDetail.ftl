@@ -1,5 +1,11 @@
 ${sections.render('commonFormJS')}
 ${sections.render('commonFormDialog')?if_exists}
+<#if showSuccessMessage?has_content >
+  <div class="content-messages eCommerceSuccessMessage">
+    <span class="checkMarkIcon eventImage"></span>
+      <p class="eventMessage">${showSuccessMessage}</p>
+  </div>
+</#if>
 <#if searchBoxHeading?exists && searchBoxHeading?has_content>
 <div class="displaySearchBox">
      <div class="header"><h2>${searchBoxHeading?if_exists}</h2></div>
@@ -8,6 +14,7 @@ ${sections.render('commonFormDialog')?if_exists}
            <input type="hidden" name="initializedCB" value="Y"/>
            <input type="hidden" name="preRetrieved" value="Y"/>
            ${sections.render('searchBoxBody')?if_exists}
+           ${sections.render('tooltipBody')?if_exists}
            ${sections.render('commonSearchButton')?if_exists}
        </form>
      </div>
@@ -21,7 +28,7 @@ ${sections.render('commonFormDialog')?if_exists}
     </div>
 </div>
 </#if>
-<#if parameters.showDetail?has_content && parameters.showDetail == "true" >
+<#if (parameters.showDetail?has_content && parameters.showDetail == "true") || (showDetail?has_content && showDetail == "true")>
 <div class="displayListBox detailInfo">
     <div class="header"><h2>${detailInfoBoxHeading!}</h2></div>
     <div class="boxBody">
@@ -34,11 +41,13 @@ ${sections.render('commonFormDialog')?if_exists}
             ${sections.render('commonDetailEntryButton')!}
           </div>
           ${sections.render('commonDetailActionButton')!}
+         <div class="infoDetailIcon">
           ${sections.render('commonDetailLinkButton')!}
+	      ${sections.render('commonListHelperText')!}
+	      ${sections.render('commonDetailHelperIcon')!}
+	      ${sections.render('commonDetailWarningIcon')!}
+         </div>
       </form>
-      ${sections.render('commonListHelperText')!}
-      ${sections.render('commonDetailHelperIcon')!}
-      ${sections.render('commonDetailWarningIcon')!}
     </div>
 </div>
 ${sections.render('commonConfirm')!}

@@ -1,6 +1,6 @@
 <#assign categoryId = ""/>
-<#if (currentProductCategoryContentWrapper)?exists>
-  <#assign categoryId = currentProductCategoryContentWrapper.get("PRODUCT_CATEGORY_ID")!"">
+<#if currentProductCategory?exists>
+  <#assign categoryId = currentProductCategory.productCategoryId!"">
 </#if>
 <#if !categoryId?has_content>
   <#assign categoryId = parameters.productCategoryId?if_exists />
@@ -32,21 +32,24 @@
 </#if>
  
 <h3 class="CategoryFacetTitle">${CategoryFacetTitle}</h3>
-<#assign facetMinValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MIN")?if_exists?number />
+<#assign facetMinValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MIN")?if_exists />
 <#assign facetMaxValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MAX")?if_exists?number />
 <#assign facetShowItemCount = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"FACET_SHOW_ITEM_CNT")/>
 <input type="hidden" name="facetShowItemCnt" id="facetShowItemCnt" value="${FACET_SHOW_ITEM_CNT!}" />
 <ul>
   <#if facetCatList?has_content>
     <#if facetMinValue?has_content>
-      <#assign valueCnt = facetMinValue?if_exists?number />
+      <#assign facetMinValue = facetMinValue?number />
     <#else>
-      <#assign valueCnt = facetShowValueCnt!5 />
+      <#assign facetMinValue = facetShowValueCnt!5 />
+    </#if>
+    <#if !facetMaxValue?has_content>
+      <#assign facetMaxValue = '99'?number />
     </#if>
     <#if parameters._CURRENT_VIEW_ == 'eCommerceCategoryList' || Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"FACET_CAT_ON_PLP")>
     <#list facetCatList as facet>
       <li>
-        <h3 class="facetGroup">${facet.name}</h3>
+        <h3 class="facetGroup <#if facetMinValue == 0>showHideFacetGroupLink seeMoreFacetGroupLink</#if>">${facet.name}</h3>
         <#if facet.refinementValues?has_content>
           <#assign indx=0/>
           <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
@@ -72,8 +75,10 @@
                   <#assign remaining = facetMaxValue?number - facetMinValue?number />
                   <input type="hidden" id="less_${facet.name}" value="${facetMinValue!}" />
                   <input type="hidden" id="remaining_${facet.name!}" value="${remaining!}" />
-                  <a class="seeMoreLink" href="javascript:void(0);">${uiLabelMap.FacetSeeMoreLinkCaption} <#if facetShowItemCount>(${remaining!})</#if></a>
-                  <a class="seeLessLink" href="javascript:void(0);">${uiLabelMap.FacetSeeLessLinkCaption}</a>
+                  <#if facetMinValue != 0>
+                    <a class="seeMoreLink" href="javascript:void(0);">${uiLabelMap.FacetSeeMoreLinkCaption} <#if facetShowItemCount>(${remaining!})</#if></a>
+                    <a class="seeLessLink" href="javascript:void(0);">${uiLabelMap.FacetSeeLessLinkCaption}</a>
+                  </#if>
                 </li>
               </#if>
             </#list>
@@ -150,7 +155,7 @@
       <#if parameters.searchText?has_content && !parameters.productCategoryId?has_content>
       <#if includedSearchFacetGroup?has_content && includedSearchFacetGroup.contains(facet.productFeatureGroupId?upper_case!)>
         <li>
-          <h3 class="facetGroup">${facet.name}</h3>
+          <h3 class="facetGroup <#if facetMinValue == 0>showHideFacetGroupLink seeMoreFacetGroupLink</#if>">${facet.name}</h3>
           <#if facet.refinementValues?has_content>
             <#assign indx=0/>
             <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
@@ -176,8 +181,10 @@
                     <#assign remaining = facetMaxValue?number - facetMinValue?number />
                     <input type="hidden" id="less_${facet.productFeatureGroupId!}" value="${facetMinValue!}" />
                     <input type="hidden" id="remaining_${facet.productFeatureGroupId!}" value="${remaining!}" />
-                    <a class="seeMoreLink" href="javascript:void(0);">${uiLabelMap.FacetSeeMoreLinkCaption} <#if facetShowItemCount>(${remaining!})</#if></a>
-                    <a class="seeLessLink" href="javascript:void(0);">${uiLabelMap.FacetSeeLessLinkCaption}</a>
+                    <#if facetMinValue != 0>
+                      <a class="seeMoreLink" href="javascript:void(0);">${uiLabelMap.FacetSeeMoreLinkCaption} <#if facetShowItemCount>(${remaining!})</#if></a>
+                      <a class="seeLessLink" href="javascript:void(0);">${uiLabelMap.FacetSeeLessLinkCaption}</a>
+                    </#if>
                   </li>
                 </#if>
                 <#if indx == facetMaxValue><#break></#if>
@@ -196,11 +203,11 @@
       </#if>
       <#if productFeatureCatGrpAppls?has_content>
         <#assign productFeatureCatGrpAppl = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productFeatureCatGrpAppls) />
-        <#assign facetMinValue = productFeatureCatGrpAppl.facetValueMin?default(facetMinValue?if_exists?number)/>
-        <#assign facetMaxValue = productFeatureCatGrpAppl.facetValueMax?default(facetMaxValue?if_exists?number)/>
+        <#assign facetMinValue = productFeatureCatGrpAppl.facetValueMin!'5'?number/>
+        <#assign facetMaxValue = (productFeatureCatGrpAppl.facetValueMax)!'99'?number/>
         <#if ((productFeatureCatGrpAppl.getTimestamp("fromDate"))?exists && (!nowTimestamp.before(productFeatureCatGrpAppl.getTimestamp("fromDate")))) && (!productFeatureCatGrpAppl.getTimestamp("thruDate")?has_content || (!nowTimestamp.after(productFeatureCatGrpAppl.getTimestamp("thruDate")!)))>
           <li>
-            <h3 class="facetGroup">${facet.name}</h3>
+            <h3 class="facetGroup <#if facetMinValue == 0>showHideFacetGroupLink seeMoreFacetGroupLink</#if>">${facet.name}</h3>
             <#if facet.refinementValues?has_content>
               <#assign indx=0/>
               <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
@@ -226,8 +233,10 @@
                       <#assign remaining = facetMaxValue?number - facetMinValue?number />
                       <input type="hidden" id="less_${facet.productFeatureGroupId}" value="${facetMinValue!}" />
                       <input type="hidden" id="remaining_${facet.productFeatureGroupId}" value="${remaining!}" />
-                      <a class="seeMoreLink" href="javascript:void(0);">${uiLabelMap.FacetSeeMoreLinkCaption} <#if facetShowItemCount>(${remaining!})</#if></a>
-                      <a class="seeLessLink" href="javascript:void(0);">${uiLabelMap.FacetSeeLessLinkCaption}</a>
+                      <#if facetMinValue != 0>
+                        <a class="seeMoreLink" href="javascript:void(0);">${uiLabelMap.FacetSeeMoreLinkCaption} <#if facetShowItemCount>(${remaining!})</#if></a>
+                        <a class="seeLessLink" href="javascript:void(0);">${uiLabelMap.FacetSeeLessLinkCaption}</a>
+                      </#if>
                     </li>
                   </#if>
                   <#if indx == facetMaxValue><#break></#if>

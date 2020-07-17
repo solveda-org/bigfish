@@ -185,7 +185,7 @@
             <actions>
                 <set field="dialogPurpose" from-field="dialogPurpose" default-value="dialogPurpose_"/>
                 <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
-                <set field="largeImageUrl" value="${groovy:request.getAttribute(&quot;largeImageUrl&quot;)}"/>
+                <set field="largeImageUrl" value="${groovy:request.getAttribute(&quot;detailImageUrl&quot;)}"/>
                 <set field="dialogPurpose" value="largeImage_" />
                 <set field="dialogBoxTitle" value=""/>
             </actions>

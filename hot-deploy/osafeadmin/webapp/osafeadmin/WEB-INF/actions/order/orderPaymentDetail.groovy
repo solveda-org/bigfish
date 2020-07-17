@@ -1,20 +1,22 @@
 package order;
 
 import org.apache.commons.lang.StringUtils;
-import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.order.order.OrderReadHelper;
-import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.party.contact.ContactMechWorker;
 import org.ofbiz.base.util.UtilValidate;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
+
+orderHeader = null;
+
+if (UtilValidate.isNotEmpty(orderId)) 
+{
+	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
+	context.orderHeader = orderHeader;
+}
+
 if(UtilValidate.isNotEmpty(orderId))
 {
     //Fetching Data For PAYMENT METHOD INFO && PAYMENT PREFERENCE section(credit card or paypal)

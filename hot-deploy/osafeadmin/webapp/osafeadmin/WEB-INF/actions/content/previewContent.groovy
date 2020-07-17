@@ -1,7 +1,6 @@
 package content;
 
 import java.io.IOException;
-import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 
@@ -10,12 +9,16 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilValidate;
 
-if (UtilValidate.isNotEmpty(parameters.textData)) {
+if (UtilValidate.isNotEmpty(parameters.textData)) 
+{
     Writer writer = new StringWriter();
     nowTimestampString = UtilHttp.encodeBlanks(UtilDateTime.nowTimestamp().toString());
-    try {
+    try 
+    {
         FreeMarkerWorker.renderTemplateFromString(parameters.textData, nowTimestampString, context, writer);
-    } catch (IOException ioe) {
+    } 
+    catch (IOException ioe) 
+    {
         //Debug.logError(ioe, module);
     } catch (Exception exc) {
         //Debug.logError(exc, module);
@@ -23,5 +26,3 @@ if (UtilValidate.isNotEmpty(parameters.textData)) {
     writerContent = writer.toString();
     globalContext.writerContent = writerContent;
 }
-globalContext.shoppingCart = shoppingCart;
-globalContext.shoppingCartSize = shoppingCartSize;

@@ -48,7 +48,7 @@
             <div class="infoEntry long">
                 <div class="infoCaption"><label>${uiLabelMap.CaptionCaption}</label></div>
                 <div class="infoValue">
-                    <textarea class="smallArea" name="value" cols="50" rows="5">${parameters.value!value!""}</textarea>
+                    <textarea class="smallArea" name="value" cols="50" rows="5">${parameters.newValue!parameters.value!value!""}</textarea>
                 </div>
             </div>
         </div>

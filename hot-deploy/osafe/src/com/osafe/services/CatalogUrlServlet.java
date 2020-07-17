@@ -233,7 +233,7 @@ public class CatalogUrlServlet extends HttpServlet {
         	{
         		String sKey = (String)iter.next();
         		String sValue = "/" + OSAFE_FRIENDLY_URL.get(sKey);
-        		if (sValue.equals(sURLvalue))
+        		if (sValue.equalsIgnoreCase(sURLvalue))
         		{
         			URL=StringUtil.replaceString(sKey,"~","&");
         			URL=StringUtil.replaceString(URL,"^^","=");

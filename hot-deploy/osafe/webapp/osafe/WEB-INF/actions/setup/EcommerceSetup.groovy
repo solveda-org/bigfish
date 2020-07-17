@@ -1,13 +1,10 @@
 package setup;
 
-import java.util.*;
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.*;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.common.CommonWorkers;
-import org.ofbiz.order.shoppingcart.*;
-import org.ofbiz.webapp.control.*;
 import com.osafe.util.Util;
 
 productStore = ProductStoreWorker.getProductStore(request);

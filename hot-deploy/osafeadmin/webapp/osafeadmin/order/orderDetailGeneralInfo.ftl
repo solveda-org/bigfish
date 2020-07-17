@@ -12,7 +12,7 @@
      </div>
      <div class="infoValue">
         <#if orderHeader?has_content>
-            <#assign statusItem = orderHeader.getRelatedOneCache("StatusItem")>
+            <#assign statusItem = orderHeader.getRelatedOne("StatusItem")>
             ${statusItem.get("description",locale)?default(statusItem.statusId?default("N/A"))}
             <#if orderStatusChangeBtnVisible?has_content && orderStatusChangeBtnVisible =="Y" && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED" && orderHeader.statusId != "ORDER_COMPLETED">
                 <a href="<@ofbizUrl>${orderStatusChangeAction}?orderId=${orderHeader.orderId!}</@ofbizUrl>" class="standardBtn secondary">${uiLabelMap.ChangeBtn}</a>

@@ -2,6 +2,14 @@ ${sections.render('commonFormJS')}
 ${sections.render('commonFormDialog')?if_exists}
 ${sections.render('tooltipBody')?if_exists}
 <form method="post" enctype="multipart/form-data" name="${detailFormName!""}" id="${detailFormName!""}">
+
+<#if showSuccessMessage?has_content >
+  <div class="content-messages eCommerceSuccessMessage">
+    <span class="checkMarkIcon eventImage"></span>
+      <p class="eventMessage">${showSuccessMessage}</p>
+  </div>
+</#if>
+
   <div class="displayBox detailInfo">
     <div class="header"><h2>${detailInfoBoxHeading!}</h2></div>
     <div class="boxBody">

@@ -4,11 +4,11 @@
 <#if (requestAttributes.numFound)?exists><#assign numFound = requestAttributes.numFound!></#if>
 
 <#assign categoryId = ""/>
-<#if (currentProductCategoryContentWrapper)?exists>
-    <#assign categoryName = currentProductCategoryContentWrapper.get("CATEGORY_NAME")!currentProductCategory.categoryName!"">
-    <#assign longDescription = currentProductCategoryContentWrapper.get("LONG_DESCRIPTION")!currentProductCategory.longDescription!"">
-    <#assign categoryImageUrl = currentProductCategoryContentWrapper.get("CATEGORY_IMAGE_URL")!"">
-    <#assign categoryId = currentProductCategoryContentWrapper.get("PRODUCT_CATEGORY_ID")!"">
+<#if currentProductCategory?exists>
+    <#assign categoryName = currentProductCategory.categoryName!"">
+    <#assign longDescription = currentProductCategory.longDescription!"">
+    <#assign categoryImageUrl = currentProductCategory.categoryImageUrl!"">
+    <#assign categoryId = currentProductCategory.productCategoryId!"">
 </#if>
 <#if !categoryId?has_content>
   <#assign categoryId = parameters.productCategoryId?if_exists />
@@ -90,6 +90,7 @@
             <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                  ${setRequestAttribute("featureValueSelected",featureValueSelected)}
+                 <#break>
             </#if>
           </#list>
        </#if>
@@ -99,6 +100,7 @@
             <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                 ${setRequestAttribute("featureValueSelected",featureValueSelected)}
+                 <#break>
             </#if>
           </#list>
        </#if>

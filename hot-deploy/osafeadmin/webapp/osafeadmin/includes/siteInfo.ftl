@@ -19,10 +19,33 @@
       <p>${uiLabelMap.CatalogCaption} <span class="name">[${globalContext.prodCatalogName?if_exists}]</span></p>
     </div>
    <div id="helperImages">
+
+   			<div class="adminCheckoutCartContent">
+		   		<#assign shoppingCart = Static["org.ofbiz.order.shoppingcart.ShoppingCartEvents"].getCartObject(request)! />
+           		<#assign currencyUom = CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() />
+           		<#if shoppingCart?has_content >
+	              	<#assign cartCount = shoppingCart.getTotalQuantity()!"0" />
+	              	<#assign cartSubTotal = shoppingCart.getSubTotal()!"0" />
+	            <#else>
+	            	<#assign cartCount = "0" />
+	              	<#assign cartSubTotal = "0" />
+           		</#if>
+		        <#if adminContext?exists>
+		            <#if adminContext.CONTEXT_PARTY_ID?has_content && (cartCount?if_exists > 0) >
+		                 <a class="standardBtn adminCartIcon" href="<@ofbizUrl>adminCheckout</@ofbizUrl>">${cartCount!} <#if cartCount == 1 >${uiLabelMap.CommonItem}<#else>${uiLabelMap.CommonItems}</#if> <@ofbizCurrency amount=cartSubTotal rounding=2 isoCode=currencyUom/></a>
+		            <#else>
+		                 <a class="standardBtn adminCartIcon" href="javascript:void(0);javascript:<#if !adminContext.CONTEXT_PARTY_ID?has_content>alert('${uiLabelMap.CheckoutNoCustomerError}');</#if><#if !(cartCount?if_exists > 0)>alert('${uiLabelMap.CheckoutNoItemsInCartError}');</#if>">${cartCount!} <#if cartCount == 1 >${uiLabelMap.CommonItem}<#else>${uiLabelMap.CommonItems}</#if> <@ofbizCurrency amount=cartSubTotal rounding=2 isoCode=currencyUom/></a>
+		            </#if>
+		        </#if>
+		   </div>
+   
 		   <a class="standardBtn help" href="${ADM_HELP_URL!}${helperFileName!"index.htm"}" target="_blank" >${uiLabelMap.HelpBtn}</a>
 		   <a class="standardBtn logout" href="<@ofbizUrl>logout</@ofbizUrl>">${uiLabelMap.LogoutBtn}</a>
+ 
            <div class="context" onMouseover="javascript:showContextInfotip(event, this, 'contextInfoBox');" onMouseout="hideContextInfotip(event, this, 'contextInfoBox')">
-               <a class="standardBtn contextIcon" href="javascript:void(0);">${uiLabelMap.ContextBtn}</a>
+              <#if adminContext?exists>
+                          <a class="standardBtn contextIcon" href="javascript:void(0);">${uiLabelMap.ContextBtn}</a>
+              </#if>
                <div class="contextInfoBox" style="display:none">
                    <#if adminContext?exists>
                        <#if adminContext.CONTEXT_PARTY_ID?has_content>
@@ -82,7 +105,13 @@
                            </div>
                            <div class=contextInfoValue>
                                <div class=contextId>
-                                   <a href="<@ofbizUrl>productDetail?productId=${adminContext.CONTEXT_PRODUCT_ID?if_exists}</@ofbizUrl>">${adminContext.CONTEXT_PRODUCT_ID?if_exists}</a>
+                                   <#if product?has_content && product.isVirtual == 'Y'>
+                                     <a href="<@ofbizUrl>virtualProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+                                   <#elseif product?has_content && product.isVariant == 'Y'>
+                                     <a href="<@ofbizUrl>variantProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+                                   <#elseif product?has_content && product.isVirtual == 'N' && product.isVariant == 'N'>
+                                     <a href="<@ofbizUrl>finishedProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+                                   </#if>
                                </div>
                                <div class=contextDesc>
                                    ${StringUtil.wrapString(productName!adminContext.CONTEXT_PRODUCT_ID?if_exists)}
@@ -112,6 +141,7 @@
                    </#if>
                </div>
            </div>
+       
     </div>
 </div>
 

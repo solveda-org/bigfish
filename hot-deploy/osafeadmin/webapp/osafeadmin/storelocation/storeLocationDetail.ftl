@@ -1,9 +1,9 @@
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        getAddressFormat('countryGeoId');
+        getStoreAddressFormat('countryGeoId');
         Event.observe($('countryGeoId'), 'change', function(){
             getAssociatedStateList('countryGeoId', 'stateProvinceGeoId', 'divStateProvinceGeoId', 'divAddress3');
-            getAddressFormat('countryGeoId');
+            getStoreAddressFormat('countryGeoId');
           });
     });
 </script>

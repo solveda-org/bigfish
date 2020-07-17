@@ -2,7 +2,7 @@
       <input type="hidden" name="detailScreen" value="${parameters.detailScreen?default(detailScreen!"")}" />
       <div class="infoRow">
           <div class="infoDetail">
-              <p>${uiLabelMap.SiteMapInfo}</p>
+              <p>${uiLabelMap.SeoUrlMapInfo}</p>
           </div>
       </div>
   <#else>

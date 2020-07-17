@@ -72,7 +72,7 @@
       } else {
           url = '${dialogActionRequest!"dialogActionRequest"}';
       }
-      jQuery.getScript(url, function(data, textStatus, jqxhr)
+      jQuery.get(url, function(data)
       {
           jQuery(displayContainerId).replaceWith(data);
           jQuery(myDialog).dialog( "option", "position", 'top' );

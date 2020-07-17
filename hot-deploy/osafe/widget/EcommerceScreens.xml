@@ -1145,58 +1145,6 @@
             </widgets>
         </section>
     </screen>
-    <screen name="eCommerceAboutUs">
-        <section>
-            <actions>
-                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-                <set field="contentId" value="${idMap.STATIC_PAGE_ABOUT_US}" />
-                <set field="containerId" value="eCommerceAboutUsContainer" />
-                <set field="containerStyle" value="staticContent" />
-            </actions>
-            <widgets>
-                <include-screen name="eCommerceContent" location="component://osafe/widget/EcommerceContentScreens.xml" />
-            </widgets>
-        </section>
-    </screen>
-    <screen name="eCommercePrivacyPolicy">
-        <section>
-            <actions>
-                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-                <set field="contentId" value="${idMap.STATIC PAGE_ABOUT_US}" />
-                <set field="containerId" value="eCommercePrivacyPolicyContainer" />
-                <set field="containerStyle" value="staticContent" />
-            </actions>
-            <widgets>
-                <include-screen name="eCommerceContent" location="component://osafe/widget/EcommerceContentScreens.xml" />
-            </widgets>
-        </section>
-    </screen>
-    <screen name="eCommerceTermsConditions">
-        <section>
-            <actions>
-                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-                <set field="contentId" value="${idMap.STATIC PAGE_TERMS_CONDITIONS}" />
-                <set field="containerId" value="eCommerceTermsConditionsContainer" />
-                <set field="containerStyle" value="staticContent" />
-            </actions>
-            <widgets>
-                <include-screen name="eCommerceContent" location="component://osafe/widget/EcommerceContentScreens.xml" />
-            </widgets>
-        </section>
-    </screen>
-    <screen name="eCommerceSiteMap">
-        <section>
-            <actions>
-                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-                <set field="contentId" value="${idMap.STATIC PAGE_SITE_MAP}" />
-                <set field="containerId" value="eCommerceSiteMapContainer" />
-                <set field="containerStyle" value="staticContent" />
-            </actions>
-            <widgets>
-                <include-screen name="eCommerceContent" location="component://osafe/widget/EcommerceContentScreens.xml" />
-            </widgets>
-        </section>
-    </screen>
 
     <screen name="eCommerceHeaderLinks">
         <section>

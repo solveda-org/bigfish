@@ -1,4 +1,4 @@
-<input type="hidden" name="productId" id="productId" maxlength="20" value="${parameters.productId!""}"/>
+<input type="hidden" name="productId" id="productId" maxlength="20" value="${product.productId!""}"/>
 <#if resultList?exists && resultList?has_content>
 <table class="osafe" cellspacing="0">
   <thead>
@@ -37,7 +37,7 @@
         <td class="actionColSmall firstCol">
             <input type="checkbox" class="checkBoxEntry" name="variantProductId" id="variantProductId" value="${variantProduct.productIdTo?if_exists}"/>
         </td>
-        <td class="idCol <#if !variantProduct_has_next?if_exists>lastRow</#if>" ><a href="<@ofbizUrl>productDetail?productId=${variantProduct.productIdTo?if_exists}</@ofbizUrl>">${(variantProduct.productIdTo)?if_exists}</a></td>
+        <td class="idCol <#if !variantProduct_has_next?if_exists>lastRow</#if>" ><a href="<@ofbizUrl>variantProductDetail?productId=${variantProduct.productIdTo?if_exists}</@ofbizUrl>">${(variantProduct.productIdTo)?if_exists}</a></td>
         <td class="nameCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${(variantProdDetail.internalName)?if_exists}</td>
         <td class="dateCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${(variantProdDetail.introductionDate?string(preferredDateFormat))!""}</td>
         <td class="dateCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">${(variantProdDetail.salesDiscontinuationDate?string(preferredDateFormat))!""}</td>
@@ -45,11 +45,11 @@
         <#assign productVariantListPrice =  Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, variantProdDetail.productId, "LIST_PRICE")!>
         <#if productVariantListPrice?has_content>
 	    	<#assign listPrice = productVariantListPrice.price!"" />
-	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantListPrice", globalContext.currencySymbol+""+listPrice, "productListPrice", globalContext.currencySymbol+""+productListPrice.price)>
+	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantListPrice", globalContext.currencySymbol+""+listPrice, "productListPrice", globalContext.currencySymbol+""+productListPrice.price!"")>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VariantOverridePriceInfo",pricesMap, locale )+"</p>">
 	    <#else>
 	    	<#assign listPrice = productListPrice.price!"" />
-	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("productListPrice", globalContext.currencySymbol+""+productListPrice.price)>
+	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("productListPrice", globalContext.currencySymbol+""+productListPrice.price!"")>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VirtualListPriceInfo",pricesMap, locale )+"</p>">
 	  	</#if>
         <td class="dollarCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">

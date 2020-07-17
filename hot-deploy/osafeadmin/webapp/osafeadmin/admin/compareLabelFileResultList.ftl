@@ -40,7 +40,16 @@
           <#assign tooltipData = tooltipData+"<div class=tooltipCaption><label>${uiLabelMap.CategoryCaption}</label></div><div class=tooltipValue>${categoryCompareToLabelFile}</div>"/>
           <#assign tooltipData = tooltipData+"<div class=tooltipCaption><label>${uiLabelMap.ValueCaption}</label></div><div class=tooltipValue>${valueCompareToLabelFile}</div>"/>
           <#assign tooltipData = tooltipData+"</div>"/>
-          <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></a>
+          <#assign valuesMatch = "true"/>
+          <#if compareLabelResult.type?has_content && compareLabelResult.type == '3'>
+              <#if (valueCompareToLabelFile?has_content && valueYourLabelFile?has_content) && (valueCompareToLabelFile != valueYourLabelFile)>
+                  <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="compareDescIcon"></span></a>
+                  <#assign valuesMatch = "false"/>
+              </#if>
+          </#if>
+          <#if valuesMatch?has_content && valuesMatch == "true">
+              <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></a>
+          </#if>
         </td>
         <td class="descCol <#if !lblCompareResult_has_next?if_exists>lastRow</#if>">
         <!-- type  1 searchKeysNotInYourLabelFile |  2 searchKeysNotInUploadedFile  |  3  searchKeysInBothFile -->
@@ -61,6 +70,11 @@
               <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","AddKeyTooltip",keyMap, locale ) />
               <a href="<@ofbizUrl>addMissingUiLabel?addKey=${compareLabelResult.key?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="createIcon"></a>
             </#if>
+            <#if compareLabelResult.type == "3" && compareLabelResult.key?has_content && valuesMatch == "false">
+              <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareLabelResult.key, "value", valueCompareToLabelFile)>
+              <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SyncKeyAndValueTooltip",keyMap, locale ) />
+              <a href="javascript:setNewValue('${compareLabelResult.key?if_exists}','${valueCompareToLabelFile!}');" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="syncIcon"></a>
+            </#if>
           </#if>
         </td>
       </tr>
@@ -71,4 +85,12 @@
       </#if>
     </#list>
   </#if>
+<tr>
+  <td colspan="4">
+    <form method="post" id="passParameters" name="${detailFormName}" action="<@ofbizUrl>changeUiLabelValue</@ofbizUrl>">
+        <input type="hidden" name="key" id="key" value="" />
+        <input type="hidden" name="newValue" id="newValue" value="" />
+    </form>
+  </td>
+</tr>
 <!-- end listBox -->

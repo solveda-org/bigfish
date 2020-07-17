@@ -5,7 +5,6 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.party.contact.ContactHelper;
 
 partyId = null;
 userLogin = context.userLogin;

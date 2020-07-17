@@ -2,10 +2,8 @@ package common;
 
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilMisc;
-import javax.servlet.http.HttpServletRequest;
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilHttp;
-import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.product.category.CategoryContentWrapper;
@@ -15,8 +13,6 @@ import org.apache.commons.lang.StringUtils;
 import com.osafe.util.Util;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityConditionBuilder;
-import org.ofbiz.entity.condition.EntityConditionList;
-import org.ofbiz.entity.condition.EntityExpr;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.condition.EntityFunction;
 import org.ofbiz.entity.util.EntityUtil;
@@ -32,22 +28,20 @@ if (gvProductCategory)
 {
     CategoryContentWrapper currentProductCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
     context.currentProductCategory = gvProductCategory;
-    context.currentProductCategoryContentWrapper = currentProductCategoryContentWrapper;
 
     //set Meta title, Description and Keywords
-    String categoryName = currentProductCategoryContentWrapper.get("CATEGORY_NAME");
-    if (UtilValidate.isEmpty(categoryName)) {
-        categoryName = gvProductCategory.categoryName;
-    }
+    String categoryName = "";
+    categoryName = gvProductCategory.categoryName;
+
     if(UtilValidate.isNotEmpty(categoryName)) {
         context.metaTitle = categoryName;
         context.pageTitle = categoryName;
     }
-    if(UtilValidate.isNotEmpty(currentProductCategoryContentWrapper.get("DESCRIPTION"))) {
-        context.metaKeywords = currentProductCategoryContentWrapper.get("DESCRIPTION");
+    if(UtilValidate.isNotEmpty(gvProductCategory.description)) {
+        context.metaKeywords = gvProductCategory.description;
     }
-    if(UtilValidate.isNotEmpty(currentProductCategoryContentWrapper.get("LONG_DESCRIPTION"))) {
-        context.metaDescription = currentProductCategoryContentWrapper.get("LONG_DESCRIPTION");
+    if(UtilValidate.isNotEmpty(gvProductCategory.longDescription)) {
+        context.metaDescription = gvProductCategory.longDescription;
     }
     //override Meta title, Description and Keywords
     String metaTitle = currentProductCategoryContentWrapper.get("HTML_PAGE_TITLE");

@@ -1,55 +1,107 @@
 package product;
-import java.text.NumberFormat;
 
-import org.ofbiz.base.util.*;
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.util.*;
-import org.ofbiz.service.*;
-import org.ofbiz.webapp.taglib.*;
+import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.product.product.ProductContentWrapper;
-import org.ofbiz.product.product.ProductSearch;
-import org.ofbiz.product.product.ProductSearchSession;
 import org.ofbiz.product.product.ProductWorker;
-import org.ofbiz.product.catalog.*;
-import org.ofbiz.product.store.*;
-import org.ofbiz.webapp.stats.VisitHandler;
-
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
-import com.osafe.util.OsafeAdminUtil;
 import javolution.util.FastList;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilMisc;
+import org.apache.commons.lang.StringUtils;
+import org.ofbiz.base.util.UtilProperties;
 
 if (UtilValidate.isNotEmpty(parameters.productId)) 
 {
+	add_product_id = StringUtils.trimToEmpty(parameters.add_product_id);
+	prod_type = StringUtils.trimToEmpty(parameters.prod_type);
+	
+	if (UtilValidate.isNotEmpty(add_product_id) && UtilValidate.isNotEmpty(prod_type) && ProductWorker.isSellable(delegator, add_product_id))
+	{
+	   messageMap=[:];
+	   if(prod_type.equals("Variant"))
+	   {
+		   GenericValue add_virtual_product = ProductWorker.getParentProduct(add_product_id, delegator);
+		   add_product_name = ProductContentWrapper.getProductContentAsText(add_virtual_product, 'PRODUCT_NAME', request);
+	   }
+	   else if(prod_type.equals("FinishedGood"))
+	   {
+		   GenericValue finished_good = delegator.findByPrimaryKey("Product", [productId : add_product_id]);
+		   add_product_name = ProductContentWrapper.getProductContentAsText(finished_good, 'PRODUCT_NAME', request);
+	   }
+	   messageMap.put("add_product_name", add_product_name);
+	   context.showSuccessMessage = UtilProperties.getMessage("OSafeAdminUiLabels","CheckoutAddProductSuccess",messageMap, locale )
+	}
     product = delegator.findOne("Product",["productId":parameters.productId], false);
+    
     virtualProductContentList = FastList.newInstance();
+    productContentList = FastList.newInstance();
     context.product = product;
-    // get the product price and content wrapper
+    
+    virtualProduct = null;
+    variantProduct = null;
+    finishedProduct = null;
+    currentProduct = null
+    
+    isVirtual = "N";
+    isVariant = "N";
+    isFinished = "N";
+    
+    if(UtilValidate.isNotEmpty(product))
+    { 
+        currentProduct = product;
+        if("Y".equals(product.getString("isVirtual")))
+	    {
+	        virtualProduct = product;
+	        isVirtual = "Y";
+	    } else if("Y".equals(product.getString("isVariant")))
+	    {
+	        variantProduct = product;
+	        isVariant = "Y";
+	        GenericValue parent = ProductWorker.getParentProduct(variantProduct.productId, delegator);
+	        if(UtilValidate.isNotEmpty(parent))
+	        {
+	            virtualProduct = parent;
+	        }
+	    } else
+	    {
+	        finishedProduct = product;
+	        isFinished = "Y";
+	    }
+    }
+    context.virtualProduct = virtualProduct;
+    context.variantProduct = variantProduct;
+    context.finishedProduct = finishedProduct;
+    context.currentProduct = currentProduct;
+    
+    context.isVirtual = isVirtual;
+    context.isVariant = isVariant;
+    context.isFinished = isFinished;
+    // get the content wrapper
+    
+    
     if("Y".equals(product.getString("isVariant")))
-	 {
+	{
 		GenericValue parent = ProductWorker.getParentProduct(product.productId, delegator);
 		if (parent != null)
-		 {
-		    productListPrice =  OsafeAdminUtil.getProductPrice(request, parent.productId, "LIST_PRICE");
-		    productDefaultPrice = OsafeAdminUtil.getProductPrice(request, parent.productId, "DEFAULT_PRICE");
-			productContentWrapper = new ProductContentWrapper(parent, request);
-     		productContentList = delegator.findByAnd("ProductContent", UtilMisc.toMap("productId" ,parameters.productId));
+		{
+		    productContentWrapper = new ProductContentWrapper(parent, request);
+     		productContentList = product.getRelated("ProductContent");
         	productContentList = EntityUtil.filterByDate(productContentList,true);
-     		virtualProductContentList = delegator.findByAnd("ProductContent", UtilMisc.toMap("productId" ,parent.productId));
-     		virtualProductContentList = EntityUtil.filterByDate(virtualProductContentList,true);
-	     }
-	 }
-    else
-     {
-        productListPrice =  OsafeAdminUtil.getProductPrice(request, product.productId, "LIST_PRICE");
-        productDefaultPrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE");
-        productContentWrapper = new ProductContentWrapper(product, request);
 
-		productContentList = delegator.findByAnd("ProductContent", UtilMisc.toMap("productId" ,product.productId));
-		productContentList = EntityUtil.filterByDate(productContentList,true);
-     }
+     		virtualProductContentList =  parent.getRelated("ProductContent");
+     		virtualProductContentList = EntityUtil.filterByDate(virtualProductContentList,true);
+	    }
+	}
+    else
+    {
+        productContentWrapper = new ProductContentWrapper(product, request);
+        productContentList = product.getRelated("ProductContent"); 
+        productContentList = EntityUtil.filterByDate(productContentList,true);
+    }
     // render content for varaint group use 0 index variant id 
     if (UtilValidate.isNotEmpty(context.passedVariantProductIds) || UtilValidate.isNotEmpty(parameters.variantProductIds))
     {
@@ -69,7 +121,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
 		GenericValue parent = ProductWorker.getParentProduct(varaintProductId, delegator);
         productContentList = delegator.findByAnd("ProductContent", UtilMisc.toMap("productId" ,varaintProductId));
         productContentList = EntityUtil.filterByDate(productContentList,true);
- 		virtualProductContentList = delegator.findByAnd("ProductContent", UtilMisc.toMap("productId" ,parent.productId));
+ 		virtualProductContentList = parent.getRelated("ProductContent");
  		virtualProductContentList = EntityUtil.filterByDate(virtualProductContentList,true);
     }
 
@@ -80,6 +132,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
     		   productContentTypeId = productContent.productContentTypeId;
     		   context.put(productContent.productContentTypeId,productContent);
             }
+            context.productContentList = productContentList;
 	}
 	if (UtilValidate.isNotEmpty(virtualProductContentList))
 	{
@@ -91,17 +144,10 @@ if (UtilValidate.isNotEmpty(parameters.productId))
 		       context.put(productContent.productContentTypeId,productContent);
 		   }
         }
+        context.virtualProductContentList = virtualProductContentList;
 	}
 
-    if (productListPrice) 
-    {
-        context.productListPrice = productListPrice;
-    }
     
-    if (productDefaultPrice) 
-    {
-        context.productDefaultPrice = productDefaultPrice;
-    }
     String productDetailHeading = "";
     if (UtilValidate.isNotEmpty(productContentWrapper))
     {
@@ -127,5 +173,6 @@ if (UtilValidate.isNotEmpty(parameters.productId))
     	prodCatList = delegator.findList("ProductCategoryAndMember", ecl, null, null, null, false);
     	context.productCategory = EntityUtil.getFirst(prodCatList);
     }
+    
     context.productDetailHeading = productDetailHeading;
 }

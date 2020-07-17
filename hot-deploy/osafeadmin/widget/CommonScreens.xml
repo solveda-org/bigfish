@@ -507,6 +507,18 @@
         </section>
     </screen>
     
+    <screen name="commonCustRequestLinkButton">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonCustRequestLinkButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="navigationDescriptor">
         <section>
             <actions>
@@ -624,7 +636,6 @@
                     <field-map field-name="visualThemeId"/>
                     <field-map field-name="themeResources" from-field="layoutSettings"/>
                 </service>
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/content/previewContent.groovy"/>
             </actions>
             <widgets>
@@ -696,4 +707,55 @@
         </section>
     </screen>
 
+    <screen name="ddDays">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/ddDays.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ddMonths">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/ddMonths.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ddYears">
+        <section>
+            <actions>
+                <set field="thisDate" from-field="nowTimestamp"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/ddYears.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="titleTypes">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="PERSONAL_TITLE"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/titleTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commonAddressEntry">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/commonAddressEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 </screens>

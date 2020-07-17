@@ -20,10 +20,11 @@
     <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
 
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSecurityData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/bigFishTypes.xml"/> 
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedData.xml"/>
-	<entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentIdSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/clientStoreSeedData.xml"/>
-	<entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/bigFishContentMenu.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
 
     <!-- Geo Files -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/01-GeoAssocType.xml"/>
@@ -52,6 +53,15 @@
     <!-- BigFish Parameters -->
     <entity-resource type="data" reader-name="parameters" loader="main" location="data/bigFishParameters.xml"/>
 
+    <!-- BigFish Content Menu -->
+    <entity-resource type="data" reader-name="contentmenu" loader="main" location="data/seed/bigFishContentMenu.xml"/>
+
+    <!-- BigFish Content Types -->
+    <entity-resource type="data" reader-name="bigfishtypes" loader="main" location="data/seed/bigFishContentMenu.xml"/> 
+
+    <!-- BigFish Extended Store Content -->
+    <entity-resource type="data" reader-name="extendedstore" loader="main" location="data/bigFishExtendedStore.xml"/>
+
     <!-- BigFish Schedulers -->
     <entity-resource type="data" reader-name="schedulers" loader="main" location="data/eCommerceBigfishScheduledJobs.xml"/>
 
@@ -74,7 +84,7 @@
     <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/070-ProductAssoc.xml"/>
     <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/075-ProductAttribute.xml"/>
 
-    <!-- Content Fashion Demo Data -->
+    <!-- Content Demo Data -->
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_HP_SPOT.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_PTS_SPOT.xml"/>

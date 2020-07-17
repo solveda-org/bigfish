@@ -26,7 +26,7 @@
                 <div class="infoCaption"><label>${uiLabelMap.CategoryCaption}</label></div>
                <div class="infoValue">
                   <#if mode?has_content && mode == "add">
-                    <input type="text" name="parmCategory" value="${parameters.parmCategory!description!""}" />
+                    <input type="text" name="parmCategory" value="${parameters.parmCategory!parmCategory!""}" />
                   <#elseif mode?has_content && mode == "edit">
                     <input type="hidden" name="parmCategory" value="${parmCategory!""}" />${parmCategory!""}
                   </#if>
@@ -49,7 +49,7 @@
             <div class="infoEntry long">
                 <div class="infoCaption"><label>${uiLabelMap.ValueCaption}</label></div>
                 <div class="infoValue">
-                    <textarea class="smallArea characterLimit" maxlength = "255" name="parmValue" cols="50" rows="5">${parameters.parmValue!parmValue!""}</textarea>
+                    <textarea class="smallArea characterLimit" maxlength = "255" name="parmValue" cols="50" rows="5">${parameters.newValue!parameters.parmValue!parmValue!""}</textarea>
                     <span class="textCounter"></span>
                 </div>
             </div>

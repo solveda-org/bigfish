@@ -9,11 +9,13 @@
                 <th class="typeCol">${uiLabelMap.CustomerRoleLabel}</th>
                 <th class="statusCol">${uiLabelMap.CustomerStatusLabel}</th>
                 <th class="statusCol lastCol">${uiLabelMap.ExportStatusLabel}</th>
+                <th class="actionCol">&nbsp;</th>
             </tr>
           </thead>
         <#if resultList?exists && resultList?has_content>
             <#assign rowClass = "1">
             <#list resultList as partyRow>
+                  <#assign hasNext = partyRow_has_next/>
                   <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
                     <td class="idCol <#if !partyRow_has_next>lastRow</#if> firstCol" ><a href="<@ofbizUrl>customerDetail?partyId=${partyRow.partyId}</@ofbizUrl>">${partyRow.partyId}</a></td>
                    <#assign person = delegator.findByPrimaryKey("Person", {"partyId", partyRow.partyId})/>
@@ -56,18 +58,37 @@
 		                ${postalAddress.address1}<br>${postalAddress.city!""} ${postalAddress.stateProvinceGeoId!""}
                     </#if>
                     </td> 
+                     <#assign customerOnly = parameters.roleCustomerId?if_exists/>
+                     <#assign guestOnly = parameters.roleGuestId?if_exists/>
+                     <#assign emailIdOnly = parameters.roleEmailId?if_exists/>
+                     <#assign showAll = parameters.roleall?if_exists/>
                      <#assign partyRoles = delegator.findByAnd("PartyRole", {"partyId", partyRow.partyId})>
                      <#if partyRoles?has_content>
-                      <#list partyRoles as partyRole>
-	                      <#assign roleType = partyRole.getRelatedOne("RoleType") />
-	                      <#if roleType.roleTypeId=="GUEST_CUSTOMER">
-	                        <#assign partyRoleType = roleType.description />
-	                        <#break>
-	                      </#if>
-	                      <#if roleType.roleTypeId=="CUSTOMER" || roleType.roleTypeId=="EMAIL_SUBSCRIBER">
-	                         <#assign partyRoleType = roleType.description />
-	                       </#if>
-                      </#list>
+                          <#list partyRoles as partyRole>
+                          <#assign roleType = partyRole.getRelatedOne("RoleType") />
+                          <!-- when showAll is checked OR all the options are checked OR none is checked -->
+                          <#if showAll?has_content || (!customerOnly?has_content && !guestOnly?has_content && !emailIdOnly?has_content) || (customerOnly?has_content && guestOnly?has_content && emailIdOnly?has_content)>
+    	                      <#if roleType.roleTypeId=="GUEST_CUSTOMER">
+    	                        <#assign partyRoleType = roleType.description />
+    	                        <#break>
+    	                      </#if>
+    	                      <#if (roleType.roleTypeId=="CUSTOMER" || roleType.roleTypeId=="EMAIL_SUBSCRIBER")>
+    	                         <#assign partyRoleType = roleType.description />
+    	                       </#if>
+    	                  <!-- when ShowAll is not checked -->
+    	                  <#else>
+                              <#if customerOnly?has_content && (roleType.roleTypeId=="CUSTOMER")>
+                                  <#assign partyRoleType = roleType.description />
+                              </#if>
+                              <#if guestOnly?has_content && (roleType.roleTypeId=="GUEST_CUSTOMER")>
+                                  <#assign partyRoleType = roleType.description />
+                                  <#break>
+                              </#if>
+                              <#if emailIdOnly?has_content && (roleType.roleTypeId=="EMAIL_SUBSCRIBER")>
+                                  <#assign partyRoleType = roleType.description />
+                              </#if>
+                          </#if>
+                          </#list>
                      <#else>
                       <#assign partyRoleType = "">
                      </#if>
@@ -87,6 +108,53 @@
                         <#else>
                             ${uiLabelMap.DownloadNewInfo}
                         </#if>
+                    </td>
+                    <td class="actionCol <#if !hasNext?if_exists>lastRow</#if> <#if !hasNext?if_exists>bottomActionIconRow</#if>">
+                        <div class="actionIconMenu">
+                            <a class="toolIcon" href="javascript:void(o);"></a>
+                            <div class="actionIconBox" style="display:none">
+                                <div class="actionIcon">
+                                    <ul>
+                                       <li><a href="<@ofbizUrl>customerDetail?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="editIcon"></span>${uiLabelMap.EditCustomerTooltip}</a></li>
+                                       <#assign partyOrders = party.getRelated("OrderRole",  {"roleTypeId" : "PLACING_CUSTOMER"}, [])?if_exists/>
+                                       <li>
+                                           <#if (partyOrders?has_content)>
+                                               <a href="<@ofbizUrl>searchOrders?partyId=${partyRow.partyId}&preRetrieved=Y</@ofbizUrl>"><span class="orderIcon"></span>${uiLabelMap.CustomerOrderTooltip} [${partyOrders.size()!}]</a>
+                                           <#else>
+                                               <p><span class="orderIcon"></span> ${uiLabelMap.CustomerOrderTooltip} [0]</p>
+                                           </#if>
+                                       </li>
+                                       <#assign partyNotes = party.getRelated("PartyNote")?if_exists/>
+                                       <li>
+                                           <#if (partyNotes?has_content)>
+                                               <a href="<@ofbizUrl>customerNoteList?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="noteIcon"></span>${uiLabelMap.CustomerNoteTooltip} [${partyNotes.size()!}]</a>
+                                           <#else>
+                                               <a href="<@ofbizUrl>customerNoteList?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="noteIcon"></span>${uiLabelMap.CustomerNoteTooltip} [0]</a>
+                                           </#if>
+                                       </li>
+                                       <#assign partyContactUs = delegator.findByAnd("CustRequest",  {"fromPartyId" : partyRow.partyId, "custRequestTypeId" : "RF_CONTACT_US"})?if_exists/>
+                                       <li>
+                                           <#if (partyContactUs?has_content)>
+                                               <a href="<@ofbizUrl>custRequestContactUsSearch?partyId=${partyRow.partyId}&preRetrieved=Y</@ofbizUrl>"><span class="contactUsIcon"></span>${uiLabelMap.CustomerContactUsTooltip} [${partyContactUs.size()!}]</a>
+                                           <#else>
+                                               <p><span class="contactUsIcon"></span> ${uiLabelMap.CustomerContactUsTooltip} [0]</p>
+                                           </#if>
+                                       </li>
+                                       <#assign partyCatalogReqs = delegator.findByAnd("CustRequest",  {"fromPartyId" : partyRow.partyId, "custRequestTypeId" : "RF_CATALOG"})?if_exists/>
+                                       <li>
+                                           <#if (partyCatalogReqs?has_content)>
+                                               <a href="<@ofbizUrl>custRequestCatalogSearch?partyId=${partyRow.partyId}&preRetrieved=Y</@ofbizUrl>"><span class="catalogRequestIcon"></span>${uiLabelMap.CustomerCatalogRequestTooltip} [${partyCatalogReqs.size()!}]</a>
+                                           <#else>
+                                               <p><span class="catalogRequestIcon"></span> ${uiLabelMap.CustomerCatalogRequestTooltip} [0]</p>
+                                           </#if>
+                                       </li>
+                                       <li><a href="<@ofbizUrl>customerActivityDetail?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="customerActivityIcon"></span>${uiLabelMap.CustomerWebsiteActivityTooltip}</a></li>
+                                       <li><a href="<@ofbizUrl>${ExportToPdfAction!}?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="exportToPdfIcon"></span>${uiLabelMap.ExportToPdfTooltip}</a></li>
+                                       <li><a href="<@ofbizUrl>${ExportToXMLAction!}?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="exportToXmlIcon"></span>${uiLabelMap.ExportToXmlTooltip}</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
                     </td>
                   </tr>
                   <#-- toggle the row color -->

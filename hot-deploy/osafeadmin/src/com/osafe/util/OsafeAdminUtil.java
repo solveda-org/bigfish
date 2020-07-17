@@ -1,9 +1,6 @@
 package com.osafe.util;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
-import java.util.Iterator;
 import com.ibm.icu.text.NumberFormat;
 import com.ibm.icu.util.Currency;
 
@@ -27,13 +23,11 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.DelegatorFactory;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.product.category.CategoryWorker;
 import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.service.ServiceUtil;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
@@ -42,9 +36,7 @@ import org.ofbiz.common.CommonWorkers;
 import com.ibm.icu.util.Calendar;
 import com.osafe.services.OsafeManageXml;
 
-import java.io.*;
 import java.util.*;
-import java.util.zip.*;
 
 public class OsafeAdminUtil {
 
@@ -115,35 +107,6 @@ public class OsafeAdminUtil {
               if (!UtilValidate.isEmail(email)) return false;
           }
           return true;
-    }
-    
-   	/** 
-	 * Returns a List of Product Id's that are associated
-	 * from top level category and it's sublevel categories.
-	 */
-    public static List<String> getAssociatedProductFromCategory(ServletRequest request, String productCategoryId) {
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
-        List<String> categoryIds = FastList.newInstance();
-        List<GenericValue> productCategoryMembers = FastList.newInstance();
-        List<String> productIds = FastList.newInstance();
-        if (UtilValidate.isNotEmpty(productCategoryId))
-        {
-    	    List<GenericValue> categories = CategoryWorker.getRelatedCategoriesRet(request, null, productCategoryId, true, false, true);
-    	    if (UtilValidate.isNotEmpty(categories))
-    	    {
-    	    	categoryIds = EntityUtil.getFieldListFromEntityList(categories, "productCategoryId", true);
-    	    }
-    	    categoryIds.add(productCategoryId);
-    	    try {
-    	    	productCategoryMembers = delegator.findList("ProductCategoryMember", EntityCondition.makeCondition("productCategoryId", EntityOperator.IN, categoryIds), null, null, null, false);
-    	    	if (UtilValidate.isNotEmpty(productCategoryMembers)) {
-    	    		productIds = EntityUtil.getFieldListFromEntityList(productCategoryMembers, "productId", true);
-    	    	}
-            } catch (GenericEntityException e) {
-                Debug.logWarning(e, module);
-            }
-        }
-    	return productIds;
     }
     
     /** 
@@ -411,50 +374,6 @@ public class OsafeAdminUtil {
         }
     }
 
-    /**
-     *return the XProductStoreParm Map of given parmKey.
-     *@param delegator
-     *@param webSiteId
-     *@param productStoreId
-     *@return Map of the XProductStoreParm
-     */
-    public static Map getProductStoreParmMap(Delegator delegator, String webSiteId, String productStoreId) {
-        Map mProductStoreParm = FastMap.newInstance();
-        if (UtilValidate.isNotEmpty(webSiteId)  || UtilValidate.isNotEmpty(productStoreId)) 
-        {
-            try 
-            {
-                String storeId=null;
-                if (UtilValidate.isEmpty(productStoreId))
-                {
-                    GenericValue webSite = delegator.findByPrimaryKeyCache("WebSite", UtilMisc.toMap("webSiteId", webSiteId));
-                    storeId=webSite.getString("productStoreId");
-                }
-                else
-                {
-                    storeId=productStoreId;
-                }
-                if (UtilValidate.isNotEmpty(storeId))
-                {
-                    List lProductStoreParam = delegator.findByAnd("XProductStoreParm", UtilMisc.toMap("productStoreId", storeId));
-                    if (UtilValidate.isNotEmpty(lProductStoreParam))
-                    {
-                         Iterator parmIter = lProductStoreParam.iterator();
-                         while (parmIter.hasNext()) 
-                         {
-                             GenericValue prodStoreParm = (GenericValue) parmIter.next();
-                             mProductStoreParm.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
-                         }
-                    }
-                }
-            } 
-            catch (Exception e) {
-                Debug.logError(e, e.getMessage(), module);
-            }
-        }
-        return mProductStoreParm;
-    }
-    
     private static Map<String, ?> context = FastMap.newInstance();
 	
     public static String buildProductImagePathExt(String productContentTypeId) 
@@ -493,11 +412,6 @@ public class OsafeAdminUtil {
         return nf.getCurrency().getSymbol(locale);
     }
     
-    public static boolean isFileExist(String fileDirPath, String fileName) 
-    {
-        File file = new File(fileDirPath + fileName);
-        return file.exists();
-    }
     /** String with in the given limit
      * @param String that need to refactor
      * @param String length
@@ -599,6 +513,26 @@ public class OsafeAdminUtil {
         return true;
     }
     
+    public static boolean isValidDesc(String desc) 
+    {
+        if (UtilValidate.isEmpty(desc)) 
+        {
+            return false;
+        }
+        char[] chars = desc.toCharArray();
+        for (char c: chars) 
+        {
+            if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_')) 
+            {
+            	if(!(c == ' '))
+                {
+            		return false;
+                }
+            }
+        }
+        return true;
+    }
+    
     public static java.sql.Timestamp toTimestamp(String date) {
         String entryDateFormat = UtilProperties.getPropertyValue("osafeAdmin.properties", "entry-date-format");
         try {
@@ -620,59 +554,9 @@ public class OsafeAdminUtil {
         }
     }
 
-    
-    public static final void writeFile(InputStream in, OutputStream out) throws IOException {
-        byte[] buffer = new byte[1024];
-        int len;
-
-        while ((len = in.read(buffer)) >= 0) {
-            out.write(buffer, 0, len);
-        }
-        in.close();
-        out.close();
-    }
-
-    public static void unzipZipFile(String zipFileName, String directoryToExtractTo) {
-        Enumeration entriesEnum;
-        ZipFile zipFile;
-        try {
-            zipFile = new ZipFile(zipFileName);
-            entriesEnum = zipFile.entries();
-
-            File directory= new File(directoryToExtractTo);
-
-            if(!directory.exists()) {
-                new File(directoryToExtractTo).mkdir();
-            }
-            while (entriesEnum.hasMoreElements()) {
-            try {
-                ZipEntry entry = (ZipEntry) entriesEnum.nextElement();
-
-                if (entry.isDirectory()) {
-                
-                } else {
-                    int index = 0;
-                    String name = entry.getName();
-                    index = entry.getName().lastIndexOf("/");
-                    if (index > 0 && index != name.length())
-                        name = entry.getName().substring(index + 1);
-
-                    writeFile(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(directoryToExtractTo + name)));
-                 }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } 
-            }
-        }
-        catch (Exception e) {
-    	    e.printStackTrace();
-        }
-    }
     public static String formatTelephone(String areaCode, String contactNumber) {
         return formatTelephone(areaCode, contactNumber,null);
-    	
     }
-    
     
     //If you update this method also update Util.formatTelephone.
     public static String formatTelephone(String areaCode, String contactNumber, String numberFormat) {
@@ -865,5 +749,151 @@ public class OsafeAdminUtil {
         }
     	return trimmedStr;
     }
+    
+    public static boolean isValidURL(String url) 
+    {
+        if (UtilValidate.isEmpty(url)) {
+            return false;
+        }
+        if (url.indexOf("//") != -1)
+            return true;
+        return false;
+    }
 
+    public static String checkTelecomNumber(String areaCode, String contactNumber, String required) {
+        return checkTelecomNumber(areaCode, contactNumber, null, required);
+    }
+
+    public static String checkTelecomNumber(String areaCode, String contactNumber, String extension, String required) {
+
+        if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required)) {
+            if (UtilValidate.isEmpty(areaCode) && UtilValidate.isEmpty(contactNumber)) {
+                return "missing";
+            }
+            if (UtilValidate.isEmpty(areaCode) || UtilValidate.isEmpty(contactNumber)) {
+                return "invalid";
+            }
+        }
+
+        if (UtilValidate.isNotEmpty(areaCode)) {
+            String justNumbers = StringUtil.removeRegex(areaCode, "[\\s-]");
+            if (!UtilValidate.isInteger(justNumbers)) {
+                return "invalid";
+            } else if (justNumbers.length() < 3) {
+                return "invalid";
+            }
+
+        }
+        if (UtilValidate.isNotEmpty(contactNumber)) {
+            String justNumbers = StringUtil.removeRegex(contactNumber, "[\\s-]");
+            if (!UtilValidate.isInteger(justNumbers)) {
+                return "invalid";
+            } else if (justNumbers.length() < 7) {
+                return "invalid";
+            }
+        }
+        if (UtilValidate.isNotEmpty(extension)) {
+            String justNumbers = StringUtil.removeRegex(extension, "[\\s-]");
+            if (!UtilValidate.isInteger(justNumbers)) {
+                return "invalid";
+            }
+        }
+
+        return "success";
+    }
+
+    public static Map<String, Object> getCountryGeoInfo(Delegator delegator, String geoId) {
+        GenericValue geo = null;
+        Map<String, Object> result = FastMap.newInstance();
+        try {
+            Debug.logInfo("geoId: " + geoId, module);
+
+            geo = delegator.findByPrimaryKeyCache("Geo", UtilMisc.toMap("geoId", geoId.toUpperCase()));
+            Debug.logInfo("Found a geo entity " + geo, module);
+            if (UtilValidate.isNotEmpty(geo)) 
+            {
+                result.put("geoId", (String) geo.get("geoId"));
+                result.put("geoName", (String) geo.get("geoName"));
+            }
+        } catch (Exception e) {
+            String errMsg = "Failed to find/setup geo id";
+            Debug.logError(e, errMsg, module);
+            return ServiceUtil.returnError(errMsg);
+        }
+        return result;
+    }
+
+    public static String passPattern(String password, String pwdLenStr, String minDigitStr, String minUpCaseStr) {
+
+        int pwdLength = 6;//Need to confirm this value.
+        int minDigit = 0;
+        int minUpCase = 0;
+
+        if (isNumber(pwdLenStr)  && (Integer.parseInt(pwdLenStr) > 0)) {
+            pwdLength = Integer.parseInt(pwdLenStr);
+       }
+       if (isNumber(minDigitStr)) {
+           minDigit = Integer.parseInt(minDigitStr);
+       }
+       if (isNumber(minUpCaseStr)) {
+           minUpCase = Integer.parseInt(minUpCaseStr);
+       }
+
+       return passPattern(password, pwdLength, minDigit, minUpCase);
+    
+    }
+
+    public static String passPattern(String password, int passwordLength, int minDigit, int minUpperCase) {
+        if (passwordLength > 0) {
+            String digitMsgStr = "digits";
+            String upperCaseMsgStr = "letters";
+        String errormessage = UtilProperties.getMessage("OSafeUiLabels", "PasswordMinLengthError", UtilMisc.toMap("passwordLength", passwordLength), Locale.getDefault());
+        if (minDigit > 0) {
+            if (minDigit == 1) {
+                digitMsgStr = "digit";
+                
+            }
+            errormessage = errormessage+" "+UtilProperties.getMessage("OSafeUiLabels", "PasswordDigitError", UtilMisc.toMap("minDigit", (Integer)minDigit, "digitMsgStr", digitMsgStr), Locale.getDefault());
+        }
+        
+        if (minUpperCase == 1) {
+            upperCaseMsgStr = "letter";
+        }
+        if (minDigit > 0 && minUpperCase > 0) {
+            errormessage = errormessage+" and "+UtilProperties.getMessage("OSafeUiLabels", "PasswordUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
+        } else if (minDigit == 0 && minUpperCase > 0) {
+            errormessage = errormessage+" "+UtilProperties.getMessage("OSafeUiLabels", "PasswordWithNoDigitUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
+        }
+        
+        if (!(password.length() >= passwordLength)) {
+            return errormessage;
+        } else {
+            char[] passwordChars = password.toCharArray();
+            int digitCount = 0;
+            int upperCount = 0;
+            for (char passwordChar: passwordChars) {
+                if (Character.isDigit(passwordChar)) {
+                    digitCount = digitCount + 1;
+                } else if (Character.isUpperCase(passwordChar)) {
+                    upperCount = upperCount + 1;
+                }
+            }
+            if (!(digitCount >= minDigit) || !(upperCount >= minUpperCase)) {
+                return errormessage;
+            }
+        }
+        }
+        return "success";
+    }
+    
+    public static String htmlSpecialChars(String html) {
+        html = StringUtil.replaceString(html, "&", "&amp;");
+        html = StringUtil.replaceString(html, "<", "&lt;");
+        html = StringUtil.replaceString(html, ">", "&gt;");
+        html = StringUtil.replaceString(html, "\"", "&quot;");
+        html = StringUtil.replaceString(html, "'", "&#039");
+        html = StringUtil.replaceString(html, "\n", "<br>");
+
+        return html;
+    }
 }

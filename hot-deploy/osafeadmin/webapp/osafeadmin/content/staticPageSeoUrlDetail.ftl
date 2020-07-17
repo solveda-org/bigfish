@@ -27,8 +27,8 @@
               <#if contentAttribute?has_content>
                 <#assign seoUrlValue = contentAttribute.attrValue!"" />
               </#if>
-              <#assign seoUrlValue = seoUrlValue?trim?replace(" ","-") />
-              <input type="text" name="attrValue_${content_index}" value="${seoUrlValue!}" class="medium"/>
+              <#assign seoUrlValue = seoUrlValue?trim?lower_case?replace(" ","-") />
+              <input type="text" name="attrValue_${content_index}" value="${request.getParameter("attrValue_${content_index}")!seoUrlValue!}" class="medium"/>
             </td>
             <#if rowClass == "2">
                 <#assign rowClass = "1">

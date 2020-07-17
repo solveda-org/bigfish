@@ -70,6 +70,22 @@ under the License.
     <#if userLogins?has_content>
          <#assign userLoginId = userLogins.get(0).userLoginId>
     </#if>
+    <#assign typeId = party.get("partyTypeId")>
+    <#if typeId?has_content && typeId=="PERSON">
+        <#assign person = party.getRelatedOne("Person")/>
+        <#if person?has_content>
+            <#assign firstName = person.get("firstName")/>
+            <#assign lastName = person.get("lastName")/>
+        </#if>
+    </#if>
+    <#-- Personal info --> 
+    <#assign emailPreference = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","PARTY_EMAIL_PREFERENCE"))!""/>
+    <#if emailPreference?has_content>
+        <#assign emailPreference = emailPreference.attrValue!"" >
+    <#else>
+        <#assign emailPreference = "HTML" >
+    </#if>
+
     <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "IS_DOWNLOADED"}, false)!"" />
     <#if partyAttribute?has_content>
       <#assign downloadStatus = partyAttribute.attrValue!"">
@@ -112,11 +128,11 @@ under the License.
       <#assign selAddresses = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(companyAddresses, nowTimestamp, "fromDate", "thruDate", true)/>
       <#if selAddresses?has_content>
         <#assign companyAddress = delegator.findByPrimaryKey("PostalAddress", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",selAddresses[0].contactMechId))/>
-        <#assign country = companyAddress.getRelatedOneCache("CountryGeo")/>
+        <#assign country = companyAddress.getRelatedOne("CountryGeo")/>
         <#if country?has_content>
           <#assign countryName = country.get("geoName", locale)/>
         </#if>
-        <#assign stateProvince = companyAddress.getRelatedOneCache("StateProvinceGeo")/>
+        <#assign stateProvince = companyAddress.getRelatedOne("StateProvinceGeo")/>
         <#if stateProvince?has_content>
           <#assign stateProvinceAbbr = stateProvince.abbreviation/>
         </#if>
@@ -365,105 +381,117 @@ under the License.
 				                  <fo:table-cell text-align="start">
 				                        <fo:block font-size="8pt" start-indent="10pt">${partyId}</fo:block>
 				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerStatusCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-									        <#if party?has_content>
-									           <#assign statusItem = party.getString("statusId")>
-									           <#if statusItem?has_content && statusItem=="PARTY_ENABLED">
-									              ${uiLabelMap.CustomerEnabledInfo}
-									           <#else>
-									              ${uiLabelMap.CustomerDisabledInfo}
-									           </#if>
-									        </#if>
-				                        </fo:block>
-				                  </fo:table-cell>
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerRoleCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">${partyRoleType!""}</fo:block>
+                                  </fo:table-cell>
 			                 </fo:table-row>
-			                 <fo:table-row height="20px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerNameCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">${partyName!""}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerRoleCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">${partyRoleType!""}</fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 <fo:table-row height="20px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.UserLoginCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-   								         <#if userLoginId?has_content>
-									           ${userLoginId}
-								        <#else>
-									           ${uiLabelMap.NoUserLoginIdInfo}
-								        </#if>
-				                        </fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.ExportStatusCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-									     <#if downloadStatus?has_content>
-									               ${uiLabelMap.ExportStatusInfo}
- 							             <#else>
-									               ${uiLabelMap.DownloadNewInfo}
-									     </#if>
-				                        </fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 <fo:table-row height="20px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.EmailAddressCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">${primaryEmailAddress!""}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.OptInCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-								            <#if allowSolicitation?has_content && allowSolicitation=='N'>
-								               ${uiLabelMap.NoInfo}
-								            <#else>
-								               ${uiLabelMap.YesInfo}
-								            </#if>
-				                        </fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
+                             <fo:table-row height="20px">
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.FirstNameCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">${firstName!""}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.UserLoginCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">
+                                         <#if userLoginId?has_content>
+                                               ${userLoginId}
+                                        <#else>
+                                               ${uiLabelMap.NoUserLoginIdInfo}
+                                        </#if>
+                                        </fo:block>
+                                  </fo:table-cell>
+                             </fo:table-row>
+                             <fo:table-row height="20px">
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.LastNameCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">${lastName!""}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerStatusCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">
+                                            <#if party?has_content>
+                                               <#assign statusItem = party.getString("statusId")>
+                                               <#if statusItem?has_content && statusItem=="PARTY_ENABLED">
+                                                  ${uiLabelMap.CustomerEnabledInfo}
+                                               <#else>
+                                                  ${uiLabelMap.CustomerDisabledInfo}
+                                               </#if>
+                                            </#if>
+                                        </fo:block>
+                                  </fo:table-cell>
+                             </fo:table-row>
+                             <fo:table-row height="20px">
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.EmailAddressCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">${primaryEmailAddress!""}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.ExportStatusCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">
+                                         <#if downloadStatus?has_content>
+                                                   ${uiLabelMap.ExportStatusInfo}
+                                         <#else>
+                                                   ${uiLabelMap.DownloadNewInfo}
+                                         </#if>
+                                        </fo:block>
+                                  </fo:table-cell>
+                             </fo:table-row>
+                             <fo:table-row height="20px">
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.HomePhoneCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                    <fo:block font-size="8pt" start-indent="10pt">
+                                      ${formattedHomePhone!}
+                                    </fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.OptInCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">
+                                            <#if allowSolicitation?has_content && allowSolicitation=='N'>
+                                               ${uiLabelMap.NoInfo}
+                                            <#else>
+                                               ${uiLabelMap.YesInfo}
+                                            </#if>
+                                        </fo:block>
+                                  </fo:table-cell>
+                             </fo:table-row>
+                             <fo:table-row height="20px">
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.WorkPhoneCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                    <fo:block font-size="8pt" start-indent="10pt">
+                                      ${formattedWorkPhone!}<#if partyWorkPhoneExt?has_content> x${partyWorkPhoneExt!}</#if>
+                                    </fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.EmailPreferenceCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                    <fo:block font-size="8pt" start-indent="10pt">${emailPreference}
+                                        
+                                    </fo:block>
+                                  </fo:table-cell>
+                             </fo:table-row>
 			                 
-			                 <#if formattedHomePhone?has_content || formattedWorkPhone?has_content>
-			                 <fo:table-row height="20px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"><#if formattedHomePhone?has_content>${uiLabelMap.HomePhoneCaption}</#if></fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                    <fo:block font-size="8pt" start-indent="10pt">
-									  ${formattedHomePhone!}
-				                    </fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"><#if formattedWorkPhone?has_content>${uiLabelMap.WorkPhoneCaption}</#if></fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                    <fo:block font-size="8pt" start-indent="10pt">
-									  ${formattedWorkPhone!}<#if partyWorkPhoneExt?has_content> x${partyWorkPhoneExt!}</#if>
-				                    </fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 </#if>
-			                 
-			                 <#if formattedCellPhone?has_content>
 			                 <fo:table-row height="20px">
 				                  <fo:table-cell text-align="start" >
 				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CellPhoneCaption}</fo:block>
@@ -481,7 +509,6 @@ under the License.
 				                    </fo:block>
 				                  </fo:table-cell>
 			                 </fo:table-row>
-			               </#if>
 		                </fo:table-body>
 	                 </fo:table>
               </fo:table-cell>
@@ -635,110 +662,70 @@ under the License.
            </fo:table>
         <fo:block space-after="0.2in"/>
      
-</#if>    
-   
-        <#if shippingContactMechList?has_content>
-          <#assign idx=0>
-          <#assign rowIdx=0>
-		        <fo:table table-layout="fixed" width="100%">
-		        <fo:table-column column-number="1" column-width="proportional-column-width(68)"/>
-		        <fo:table-column column-number="2" column-width="proportional-column-width(25)"/>
-		        <fo:table-column column-number="3" column-width="proportional-column-width(68)"/>
-		        <fo:table-column column-number="4" column-width="proportional-column-width(0)"/>
-		          <fo:table-body>
-		            <fo:table-row>
-          <#list shippingContactMechList as shippingContactMech>
-              <#if rowIdx ==2>
-	                 <fo:table-row height="10px">
-		                  <fo:table-cell text-align="start" number-columns-spanned="4">
-		                  </fo:table-cell>
-	                 </fo:table-row>
-		            <fo:table-row>
-                   <#assign rowIdx=0>
-              </#if>
-             <#assign rowIdx=rowIdx + 1>
-             <#assign idx=idx + 1>
-             <#assign shippingAddress = shippingContactMech.getRelatedOne("PostalAddress")>
-		              <fo:table-cell>
-		                <fo:table table-layout="fixed" border-end-style="solid" border-bottom-style="solid" border-start-style="solid" border-top-style="solid">
-		                <fo:table-body>
-			                 <fo:table-row height="20px">
-				                  <fo:table-cell number-columns-spanned="2">
-				                    <fo:block font-weight="bold" font-size="10pt" text-align="center" background-color="#EEEEEE">${shippingAddress.attnName!shippingAddress.address1}</fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.AddressCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-							                 <#if shippingAddress.toName?has_content>${shippingAddress.toName}</#if>
-				                        </fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"> </fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">${shippingAddress.address1}</fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-        	                 <#if shippingAddress.address2?has_content>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"> </fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">${shippingAddress.address2}</fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 </#if>
-        	                 <#if shippingAddress.address3?has_content>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"> </fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">${shippingAddress.address3}</fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 </#if>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"> </fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-	                                     <#if shippingAddress.city?has_content && shippingAddress.city != '_NA_'>${shippingAddress.city}</#if><#if shippingAddress.stateProvinceGeoId?has_content && shippingAddress.stateProvinceGeoId != '_NA_'>, ${shippingAddress.stateProvinceGeoId}</#if>
-	                                     <#if shippingAddress.postalCode?has_content && shippingAddress.postalCode != '_NA_' > ${shippingAddress.postalCode}</#if>
-				                        </fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-        	                 <#if shippingAddress.countryGeoId?has_content>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"> </fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">${shippingAddress.countryGeoId}</fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-			                 </#if>
-						    
-		                </fo:table-body>
-		               </fo:table>
-		              </fo:table-cell>
-		              <fo:table-cell>
-		              </fo:table-cell>
-				    <#if (rowIdx == 2) || (idx == shippingContactMechList.size())>
-   		                </fo:table-row>
-		            </#if>
-         </#list>
-		          </fo:table-body>
-		        </fo:table>
-       </#if>
+</#if>
+
+<#-- Customer Address book Start-->
+<fo:table border-bottom-style="solid" border-top-style="solid" border-end-style="solid" border-start-style="solid">
+  <fo:table-body>
+    <fo:table-row>
+      <fo:table-cell>
+        <fo:table>
+          <fo:table-column column-width="2in"/>
+          <fo:table-column column-width="5.475in"/>
+          <fo:table-header font-size="8pt" font-weight="bold" background-color="#F5F2F2">
+            <fo:table-row>
+              <fo:table-cell number-columns-spanned="2">
+                <fo:block font-weight="bold" font-size="10pt" text-align="center" background-color="#EEEEEE">${uiLabelMap.GeneralAddressHeading}</fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+            <fo:table-row >
+              <fo:table-cell >
+                <fo:block >${uiLabelMap.NameLabel}</fo:block>
+              </fo:table-cell>
+              <fo:table-cell >
+                <fo:block >${uiLabelMap.AddressLabel}</fo:block>
+              </fo:table-cell>
+            </fo:table-row>
+          </fo:table-header>
+          <fo:table-body font-size="8pt">
+            <#if shippingContactMechList?exists && shippingContactMechList?has_content> 
+              <#list shippingContactMechList as shippingContactMech>
+                <#assign postalAddress = shippingContactMech.getRelatedOne("PostalAddress")?if_exists>
+                <fo:table-row>
+                  <fo:table-cell>
+                    <fo:block>${postalAddress?if_exists.attnName?default((postalAddress?if_exists.address1)?if_exists)}</fo:block>
+                  </fo:table-cell>
+                  <fo:table-cell>
+                    <fo:block>
+                      <#if postalAddress?has_content>
+                        <#if postalAddress.address1?has_content>${postalAddress.address1},</#if>
+                        <#if postalAddress.address2?has_content> ${postalAddress.address2},</#if>
+                        <#if postalAddress.address3?has_content> ${postalAddress.address3},</#if>
+                        <#-- city and state have to stay on one line otherwise an extra space is added before the comma -->
+                        <#if postalAddress.city?has_content && postalAddress.city != '_NA_'> ${postalAddress.city},</#if>
+                        <#if postalAddress.stateProvinceGeoId?has_content && postalAddress.stateProvinceGeoId != '_NA_'> ${postalAddress.stateProvinceGeoId}</#if>
+                        <#if postalAddress.postalCode?has_content && postalAddress.postalCode != '_NA_' > ${postalAddress.postalCode}</#if>
+                        <#if postalAddress.countryGeoId?has_content> ${postalAddress.countryGeoId}</#if>
+                      </#if>
+                    </fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </#list>
+            <#else>
+              <fo:table-row>
+                <fo:table-cell number-columns-spanned="2">
+                  <fo:block text-align="center">${uiLabelMap.NoDataAvailableInfo}</fo:block>
+                </fo:table-cell>
+              </fo:table-row>
+            </#if>
+          </fo:table-body>
+        </fo:table>
+      </fo:table-cell>
+    </fo:table-row>
+  </fo:table-body>
+</fo:table>
+<#--Customer Address book End -->
+
 <#-- Customer Notes Start-->
           <fo:block space-after="0.2in"/>
     
@@ -753,7 +740,7 @@ under the License.
               <fo:table-column column-width="1in"/>
               <fo:table-column column-width="1in"/>
               <fo:table-column column-width="3.475in"/>
-              <fo:table-header font-size="8pt" font-weight="bold" background-color="#EEEEEE">
+              <fo:table-header font-size="8pt" font-weight="bold" background-color="#F5F2F2">
                 <fo:table-row >
                   <fo:table-cell >
                     <fo:block >${uiLabelMap.NoteNoLabel}</fo:block>

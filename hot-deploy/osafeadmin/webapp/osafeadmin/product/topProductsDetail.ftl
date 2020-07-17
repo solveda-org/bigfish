@@ -42,7 +42,15 @@
                 </#if>
                                 
                 <tr class="<#if rowClass == "2">even</#if>">
-                    <td class="idCol firstCol <#if !product_has_next?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>productDetail?productId=${productId?if_exists}</@ofbizUrl>">${productId?if_exists}</a></td>
+                    <td class="idCol firstCol <#if !product_has_next?if_exists>lastRow</#if> firstCol" >
+                      <#if topProduct?has_content && topProduct.isVirtual == 'Y'>
+                        <a href="<@ofbizUrl>virtualProductDetail?productId=${topProduct.productId!}</@ofbizUrl>">${topProduct.productId!}</a>
+                      <#elseif topProduct?has_content && topProduct.isVariant == 'Y'>
+                        <a href="<@ofbizUrl>variantProductDetail?productId=${topProduct.productId!}</@ofbizUrl>">${topProduct.productId!}</a>
+                      <#elseif topProduct?has_content && topProduct.isVirtual == 'N' && topProduct.isVariant == 'N'>
+                        <a href="<@ofbizUrl>finishedProductDetail?productId=${topProduct.productId!}</@ofbizUrl>">${topProduct.productId!}</a>
+                      </#if>
+                    </td>
                     <td class="nameCol <#if !product_has_next>lastRow</#if>">${internalName!""}</td>
                     <td class="descCol <#if !product_has_next>lastRow</#if>">${productName?if_exists} </td>
                     <td class="nameCol <#if !product_has_next>lastRow</#if>">

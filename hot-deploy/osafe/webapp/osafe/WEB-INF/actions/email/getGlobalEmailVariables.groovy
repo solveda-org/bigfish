@@ -98,32 +98,6 @@ if (UtilValidate.isNotEmpty(parameters.scheduledJobMessage))
 orderId=context.orderId;
 globalContext.put("EMAIL_TITLE",context.title);
 
-if (UtilValidate.isNotEmpty(partyId)) 
-{
-    gvParty = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
-    if (UtilValidate.isNotEmpty(gvParty)) 
-    {
-        person=gvParty.getRelatedOneCache("Person");
-        if (UtilValidate.isNotEmpty(person)) 
-        {
-          globalContext.put("PARTY_ID",partyId);
-          globalContext.put("FIRST_NAME",person.firstName);
-          globalContext.put("LAST_NAME",person.lastName);
-          globalContext.put("MIDDLE_NAME",person.middleName);
-          globalContext.put("GENDER",person.gender);
-          globalContext.put("SUFFIX",person.suffix);
-          globalContext.put("PERSONAL_TITLE",person.personalTitle);
-          globalContext.put("NICKNAME",person.nickname);
-        }
-        userLogins=gvParty.getRelatedCache("UserLogin");
-        userLogin = EntityUtil.getFirst(userLogins);
-        if (UtilValidate.isNotEmpty(userLogin)) 
-        {
-          globalContext.put("LOGIN_EMAIL",userLogin.userLoginId);
-        }
-    }
-}
-
 if (UtilValidate.isNotEmpty(orderId)) 
 {
     orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
@@ -169,6 +143,11 @@ if (UtilValidate.isNotEmpty(orderId))
           }
         }
        }
+       if (UtilValidate.isEmpty(partyId))
+       {
+	       party = orderReadHelper.getPlacingParty();
+	       partyId = party.partyId;
+       }
         
        osisCond = EntityCondition.makeCondition([orderId : orderId], EntityOperator.AND);
        osisOrder = ["shipmentId", "shipmentRouteSegmentId", "shipmentPackageSeqId"];
@@ -189,6 +168,7 @@ if (UtilValidate.isNotEmpty(orderId))
        globalContext.put("ORDER_TAX_TOTAL",orderTaxTotal);
        globalContext.put("ORDER_TOTAL",orderGrandTotal);
        globalContext.put("ORDER_ITEMS",orderItems);
+       globalContext.put("CART_ITEMS",orderItems);
        globalContext.put("ORDER_ADJUSTMENTS",headerAdjustmentsToShow);
        globalContext.put("ORDER_SHIP_ADDRESS",shippingAddress);
        globalContext.put("ORDER_BILL_ADDRESS",billingAddress);
@@ -199,6 +179,34 @@ if (UtilValidate.isNotEmpty(orderId))
        globalContext.put("ORDER_ITEM_SHIP_GROUP",orderItemShipGroups);
     }
 
+}
+
+if (UtilValidate.isNotEmpty(partyId)) 
+{
+    gvParty = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
+    if (UtilValidate.isNotEmpty(gvParty)) 
+    {
+        person=gvParty.getRelatedOneCache("Person");
+        if (UtilValidate.isNotEmpty(person)) 
+        {
+          globalContext.put("PARTY_ID",partyId);
+          globalContext.put("FIRST_NAME",person.firstName);
+          globalContext.put("LAST_NAME",person.lastName);
+          globalContext.put("MIDDLE_NAME",person.middleName);
+          globalContext.put("GENDER",person.gender);
+          globalContext.put("SUFFIX",person.suffix);
+          globalContext.put("PERSONAL_TITLE",person.personalTitle);
+          globalContext.put("NICKNAME",person.nickname);
+        }
+        userLogins=gvParty.getRelatedCache("UserLogin");
+        userLogin = EntityUtil.getFirst(userLogins);
+        if (UtilValidate.isNotEmpty(userLogin)) 
+        {
+	      globalContext.put("USER_LOGIN",userLogin);
+	      globalContext.put("USER_LOGIN_ID",userLogin.userLoginId);
+          globalContext.put("LOGIN_EMAIL",userLogin.userLoginId);
+        }
+    }
 }
 shoppingListId = context.shoppingListId;
 if (UtilValidate.isNotEmpty(shoppingListId)) 

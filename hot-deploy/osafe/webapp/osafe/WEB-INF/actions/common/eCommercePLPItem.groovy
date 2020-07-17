@@ -2,38 +2,32 @@ package common;
 
 import javolution.util.FastMap;
 import javolution.util.FastList;
-
-import org.ofbiz.product.store.*;
+import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.StringUtil;
 import com.osafe.services.CatalogUrlServlet;
-import com.osafe.util.Util;
 import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.party.content.PartyContentWrapper;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.GenericValue;
+import com.osafe.util.Util;
 import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityOperator;
 
 plpItem = request.getAttribute("plpItem");
-plpItemId = request.getAttribute("plpItemId");
 autoUserLogin = request.getSession().getAttribute("autoUserLogin");
 cart = session.getAttribute("shoppingCart");
 
-if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) 
+if(UtilValidate.isNotEmpty(plpItem)) 
 {
-    productName = "";
-    if (UtilValidate.isNotEmpty(parameters.productCategoryId)) 
-    {
-      categoryId = parameters.productCategoryId;
-    }
-    else
-    {
-      categoryId = "";
-    }
+  productId=plpItem.productId;
+  product = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
+  if (UtilValidate.isNotEmpty(product)) 
+  {
+	productName = product.productName;
+    categoryId = "";
     productInternalName = "";
     productFriendlyUrl = "";
     pdpUrl = "";
@@ -42,100 +36,46 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
     productImageAltUrl= "";
     price = "";
     listPrice = "";
-    productId="";
-
-    // gets productId
-    if(UtilValidate.isNotEmpty(plpItemId)) 
-    {
-        productId = plpItemId;
-    } else if (UtilValidate.isNotEmpty(plpItem)) 
-    {
-        productId=plpItem.productId;
-    } else 
-    {
-        return;
-    }
+    ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
+    
 
     productStore = ProductStoreWorker.getProductStore(request);
 	productStoreId = productStore.get("productStoreId");
 
-    product = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
     
-    
-   // Setting variables required in the Manufacturer Info section 
-    if (UtilValidate.isNotEmpty(product)) 
+    if (UtilValidate.isNotEmpty(plpItem.name)) 
     {
-	    priceContext = [product : product, currencyUomId : cart.getCurrency(),"userLogin": userLogin];
-	    priceContext.productStoreId = productStoreId;
-	    priceContext.productStoreGroupId = "_NA_";
-	    
-        productId = product.productId;
-        partyManufacturer=product.getRelatedOneCache("ManufacturerParty");
-        if (UtilValidate.isNotEmpty(partyManufacturer))
-        {
-          context.manufacturerPartyId = partyManufacturer.partyId;
-          PartyContentWrapper partyContentWrapper = new PartyContentWrapper(partyManufacturer, request);
-          context.partyContentWrapper = partyContentWrapper;
-          context.manufacturerDescription = partyContentWrapper.get("DESCRIPTION");
-          context.manufacturerProfileName = partyContentWrapper.get("PROFILE_NAME");
-          context.manufacturerProfileImageUrl = partyContentWrapper.get("PROFILE_IMAGE_URL");
-        }
+        productName = StringUtil.wrapString(plpItem.name);
     }
-    
-    //retrieves Product related data when Product Id was received.
-    if(UtilValidate.isNotEmpty(plpItemId)) 
+    if (UtilValidate.isNotEmpty(plpItem.productImageSmallUrl)) 
     {
-        productContentWrapper = ProductContentWrapper.makeProductContentWrapper(product, request)
-        if (UtilValidate.isNotEmpty(productContentWrapper))
-        {
-	        productName =  productContentWrapper.get("PRODUCT_NAME");  
-	        productImageUrl = productContentWrapper.get("SMALL_IMAGE_URL");
-	        productImageAltUrl = productContentWrapper.get("SMALL_IMAGE_ALT_URL");
-        }
-        if (UtilValidate.isNotEmpty(priceContext))
-        {
-            priceMap = dispatcher.runSync("calculateProductPrice",priceContext);
-	        context.priceMap = priceMap;
-            price = priceMap.defaultPrice ;
-            listPrice = priceMap.listPrice;
-        }
-        
-        productInternalName = product.internalName;
+        productImageUrl = plpItem.productImageSmallUrl;
     }
-    
-    //retrieves product related Data when Solr document was received .
-    else if (UtilValidate.isNotEmpty(plpItem)) 
+    if (UtilValidate.isNotEmpty(plpItem.price)) 
     {
-        if (UtilValidate.isNotEmpty(plpItem.name)) 
-        {
-            productName = StringUtil.wrapString(plpItem.name);
-        }
-        if (UtilValidate.isNotEmpty(plpItem.productImageSmallUrl)) 
-        {
-            productImageUrl = plpItem.productImageSmallUrl;
-        }
-        if (UtilValidate.isNotEmpty(plpItem.price)) 
-        {
-            price = plpItem.price;
-        }
-        if (UtilValidate.isNotEmpty(plpItem.listPrice)) 
-        {
-            listPrice = plpItem.listPrice;
-        }
-        if (UtilValidate.isNotEmpty(plpItem.internalName)) 
-        {
-            productInternalName = plpItem.internalName;
-        }    
-        productId=plpItem.productId;
-        if (UtilValidate.isNotEmpty(plpItem.productImageSmallAlt)) 
-        {
-            productImageAlt = plpItem.productImageSmallAlt;
-        }
-        if (UtilValidate.isNotEmpty(plpItem.productImageSmallAltUrl)) 
-        {
-            productImageAltUrl = plpItem.productImageSmallAltUrl;
-        }
+        price = plpItem.price;
     }
+    if (UtilValidate.isNotEmpty(plpItem.listPrice)) 
+    {
+        listPrice = plpItem.listPrice;
+    }
+    if (UtilValidate.isNotEmpty(plpItem.internalName)) 
+    {
+        productInternalName = plpItem.internalName;
+    }    
+    if (UtilValidate.isNotEmpty(plpItem.productImageSmallAlt)) 
+    {
+        productImageAlt = plpItem.productImageSmallAlt;
+    }
+    if (UtilValidate.isNotEmpty(plpItem.productImageSmallAltUrl)) 
+    {
+        productImageAltUrl = plpItem.productImageSmallAltUrl;
+    }
+    if (UtilValidate.isNotEmpty(plpItem)) 
+    {
+      categoryId = parameters.productCategoryId;
+    }
+
     
     //CHECK WE HAVE A DEFAULT PRODUCT CATEGORY THE PRODUCT IS MEMBER OF
     if (UtilValidate.isEmpty(categoryId))
@@ -155,34 +95,32 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
     rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
     context.put("decimals",decimals);
     context.put("rounding",rounding);
-    // get the average rating
-    productCalculatedInfo = product.getRelatedOneCache("ProductCalculatedInfo");
-    if (UtilValidate.isNotEmpty(productCalculatedInfo))
-    {
-        averageRating= productCalculatedInfo.getBigDecimal("averageCustomerRating");
-        if (UtilValidate.isNotEmpty(averageRating) && averageRating > 0)
-        {
- 	       averageCustomerRating= averageRating.setScale(1,rounding);
- 	       context.put("averageStarPLPRating", averageCustomerRating);
-        }
-        else
-        {
- 	       context.put("averageStarPLPRating", "");
-        	
-        }
-        
-    }
-    else
-    {
-	       context.put("averageStarPLPRating", "");
-    	
-    }
 	reviewMethod = Util.getProductStoreParm(request, "REVIEW_METHOD");
 	reviewSize=0;
 	if(UtilValidate.isNotEmpty(reviewMethod))
 	{
 	    if(reviewMethod.equalsIgnoreCase("BIGFISH"))
 	    {
+	        // get the average rating
+		    productCalculatedInfo = product.getRelatedOneCache("ProductCalculatedInfo");
+		    if (UtilValidate.isNotEmpty(productCalculatedInfo))
+		    {
+		        averageRating= productCalculatedInfo.getBigDecimal("averageCustomerRating");
+		        if (UtilValidate.isNotEmpty(averageRating) && averageRating > 0)
+		        {
+		 	       averageCustomerRating= averageRating.setScale(1,rounding);
+		 	       context.put("averageStarPLPRating", averageCustomerRating);
+		        }
+		        else
+		        {
+		 	       context.put("averageStarPLPRating", "");
+		        }
+		    }
+		    else
+		    {
+			    context.put("averageStarPLPRating", "");
+		    }
+	        
 	        reviews = product.getRelatedCache("ProductReview");
 	        if (UtilValidate.isNotEmpty(reviews))
 	        {
@@ -204,52 +142,62 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
     context.price=price;
     context.listPrice = listPrice;
     context.product = product;
+    context.productContentWrapper = productContentWrapper;
 
     context.productImageAlt = productImageAlt;
     context.productImageAltUrl = productImageAltUrl;
 	context.plpLabel = "";
-    if (UtilValidate.isNotEmpty(ProductContentWrapper.getProductContentAsText(context.product, 'PLP_LABEL', request)))
-    {
-        context.plpLabel = ProductContentWrapper.getProductContentAsText(context.product, 'PLP_LABEL', request);
-    }
+    productContentList = delegator.findByAndCache("ProductContent", UtilMisc.toMap("productId",productId, "productContentTypeId", "PLP_LABEL"));
+    productContentList = EntityUtil.filterByDate(productContentList,true);
+	if (UtilValidate.isNotEmpty(productContentList))
+	{
+		productContent = EntityUtil.getFirst(productContentList);
+  	    productContentId = productContent.contentId;
+	    if (UtilValidate.isNotEmpty(productContentId))
+	    {
+	    	context.plpLabel = productContentWrapper.get("PLP_LABEL");
+	    }
+	}
    
     productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
     context.pdpUrl = 'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId;
-    productSelectableFeatureAndAppl = FastList.newInstance();
-    productVariantFeatureList = FastList.newInstance();
-    productAssoc= FastList.newInstance();
+    
+    List productSelectableFeatureAndAppl = FastList.newInstance();
+    List productVariantFeatureList = FastList.newInstance();
+    List productAssoc= FastList.newInstance();
+    
+    Map productVariantContentWrapperMap = FastMap.newInstance();
+    Map productVariantProductContentIdMap = FastMap.newInstance();
+    Map productFeatureFirstVariantIdMap = FastMap.newInstance();
+
     featureValueSelected = request.getAttribute("featureValueSelected");
     productFeatureSelectVariantId="";
     productFeatureSelectVariantProduct = "";
-    facetGroupVariantMatch = request.getAttribute("FACET_GROUP_VARIANT_MATCH");
-    plpFacetGroupVariantSticky = request.getAttribute("PLP_FACET_GROUP_VARIANT_STICKY");
     
     if(UtilValidate.isNotEmpty((context.product).isVirtual) && ((context.product).isVirtual).toUpperCase()== "Y")
     {
-    	productVariantPriceMap = FastMap.newInstance();
-    	descpFeatureGroupDescMap = FastMap.newInstance();
-        productAssoc = product.getRelatedCache("MainProductAssoc");
+    	Map productVariantPriceMap = FastMap.newInstance();
+    	Map descpFeatureGroupDescMap = FastMap.newInstance();
+        variantFirstFeatureIdExist = [];
+        facetGroupVariantMatch = request.getAttribute("FACET_GROUP_VARIANT_MATCH");
+        plpFacetGroupVariantSticky = request.getAttribute("PLP_FACET_GROUP_VARIANT_STICKY");
+        plpFacetGroupVariantSwatch = request.getAttribute("PLP_FACET_GROUP_VARIANT_SWATCH");
+    	plpFacetGroupVariantMatch = Util.getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_MATCH");
+
+    	
+    	productAssoc = product.getRelatedCache("MainProductAssoc");
         productAssoc = EntityUtil.filterByDate(productAssoc,true);
         productAssoc = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId","PRODUCT_VARIANT"));
 	    productAssoc = EntityUtil.orderBy(productAssoc,UtilMisc.toList("sequenceNum"));
 
         if (UtilValidate.isNotEmpty(productAssoc)) 
         {
-        	PLP_FACET_GROUP_VARIANT_MATCH = Util.getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_MATCH");
-		    plpFacetGroupVariantSwatch = request.getAttribute("PLP_FACET_GROUP_VARIANT_SWATCH");
-		    if (UtilValidate.isNotEmpty(plpFacetGroupVariantSwatch))
-		    {
-		           productSelectableFeatureAndAppl = product.getRelatedCache("ProductFeatureAndAppl");
-		           productSelectableFeatureAndAppl = EntityUtil.filterByDate(productSelectableFeatureAndAppl,true);
-                   productSelectableFeatureAndAppl = EntityUtil.filterByAnd(productSelectableFeatureAndAppl, UtilMisc.toMap("productFeatureTypeId",plpFacetGroupVariantSwatch,"productFeatureApplTypeId","SELECTABLE_FEATURE"));
-		           productSelectableFeatureAndAppl = EntityUtil.orderBy(productSelectableFeatureAndAppl,UtilMisc.toList("sequenceNum"));
-		    }
         	
             for(GenericValue pAssoc : productAssoc)
             {
 		      productIdTo = pAssoc.productIdTo;
               isSellableVariant = ProductWorker.isSellable(delegator, productIdTo);
-	          if (UtilValidate.isNotEmpty(isSellableVariant))
+	          if (isSellableVariant)
 		      {
                 assocVariantProduct = pAssoc.getRelatedOneCache("AssocProduct");
                 variantProductFeatureAndAppls = assocVariantProduct.getRelatedCache("ProductFeatureAndAppl");
@@ -259,6 +207,10 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
                 variantProductPrices = assocVariantProduct.getRelatedCache("ProductPrice");
                 variantProductPrices = EntityUtil.filterByDate(variantProductPrices,true);
 
+                //BULLD PRODUCT CONTENT WRAPPER FOR EACH VARIANT TO PUT INTO CONTEXT
+                varProductContentWrapper = new ProductContentWrapper(assocVariantProduct, request);
+                productVariantContentWrapperMap.put(assocVariantProduct.productId, varProductContentWrapper);
+                
 	            for(GenericValue variantProductPrice : variantProductPrices)
 	            {
 	              if (variantProductPrice.productPriceTypeId == "DEFAULT_PRICE")
@@ -293,9 +245,9 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
 
                 for (GenericValue variantProductFeatureAndAppl: variantProductFeatureAndAppls)
                 {
-		            if (UtilValidate.isNotEmpty(PLP_FACET_GROUP_VARIANT_MATCH)) 
+		            if (UtilValidate.isNotEmpty(plpFacetGroupVariantMatch)) 
 		            {
-	                   if (variantProductFeatureAndAppl.productFeatureTypeId == PLP_FACET_GROUP_VARIANT_MATCH && variantProductFeatureAndAppl.productFeatureApplTypeId == "DISTINGUISHING_FEAT")
+	                   if (variantProductFeatureAndAppl.productFeatureTypeId == plpFacetGroupVariantMatch && variantProductFeatureAndAppl.productFeatureApplTypeId == "DISTINGUISHING_FEAT")
 	                    {
 	            		          descpFeatureGroupDescMap.put(variantProductFeatureAndAppl.productId, variantProductFeatureAndAppl.description);
 	            		          continue;
@@ -348,6 +300,35 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
 			             }
 			
 			             productVariantFeatureList.add(productVariantFeatureMap);
+			             
+    			        //CREATE A MAP FOR First PRODUCT FEATURE ID AND VARIANT PRODUCT ID
+			             //This is only needed if swatches are displayed and is used in plpSwatch.ftl
+			            //(featureId, variantIdMap)
+			     	    if (UtilValidate.isNotEmpty(plpFacetGroupVariantSwatch))
+			     	    {
+			        		if(!variantFirstFeatureIdExist.contains(variantProductFeatureAndAppl.productFeatureId))
+	                        {
+	                    		productVariantContentList = assocVariantProduct.getRelatedCache("ProductContent");
+	                    		productVariantContentList = EntityUtil.filterByDate(productVariantContentList,true);
+	                    		if (UtilValidate.isNotEmpty(productVariantContentList))
+	                    		{
+	                                Map variantProductContentMap = FastMap.newInstance();
+	                                for (GenericValue productContent: productVariantContentList) 
+	                                {
+	                        		   productContentTypeId = productContent.productContentTypeId;
+	                        		   variantProductContentMap.put(productContent.productContentTypeId,productContent.contentId);
+	                                }
+	                                productVariantProductContentIdMap.put(assocVariantProduct.productId,variantProductContentMap);
+	                                
+	                    		}
+			        			
+	                            productFeatureFirstVariantIdMap.put(variantProductFeatureAndAppl.productFeatureId, productVariantFeatureMap); 
+	                            variantFirstFeatureIdExist.add(variantProductFeatureAndAppl.productFeatureId);
+	                        }
+			     	    }
+                    
+				             
+			             
                     }
                     
 				    if(UtilValidate.isNotEmpty(featureValueSelected) && UtilValidate.isNotEmpty(facetGroupVariantMatch))
@@ -374,41 +355,93 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
             }
         }
     
-      if(UtilValidate.isEmpty(productFeatureSelectVariantId) && UtilValidate.isNotEmpty(productSelectableFeatureAndAppl))
-      {
-	        if(UtilValidate.isNotEmpty(productVariantFeatureList) && UtilValidate.isNotEmpty(plpFacetGroupVariantSticky))
-	        {
-	          for(GenericValue productFeatureAppls : productSelectableFeatureAndAppl)
-	          {
-	              firstSelectableFeatureId = productFeatureAppls.productFeatureId;
-	          
-	              for(Map productVariantFeatureMap : productVariantFeatureList)
-	              {
-	                if (productVariantFeatureMap.productFeatureId == firstSelectableFeatureId && productVariantFeatureMap.productFeatureTypeId == plpFacetGroupVariantSticky)
-	                {
-				        productFeatureSelectVariantId = productVariantFeatureMap.productVariantId;
-				        productFeatureSelectVariantProduct = productVariantFeatureMap.productVariant;
-				        featureValueSelected=productVariantFeatureMap.productFeatureDesc;
-	                    break;
-	                }
-	              }
-	              if(UtilValidate.isNotEmpty(productFeatureSelectVariantId))
-	              {
-	                  break;
-	              }
+	    if (UtilValidate.isNotEmpty(plpFacetGroupVariantSwatch))
+	    {
+	      productSelectableFeatureAndAppl = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId",productId, "productFeatureTypeId", plpFacetGroupVariantSwatch, "productFeatureApplTypeId", "SELECTABLE_FEATURE"), UtilMisc.toList("sequenceNum"));
+	      productSelectableFeatureAndAppl = EntityUtil.filterByDate(productSelectableFeatureAndAppl,true);
+	      
+          //BUILD CONTEXT MAP FOR PRODUCT_FEATURE_DATA_RESOURCE (productFeatureId, objectInfo)
+          Map productFeatureDataResourceMap = FastMap.newInstance();
+          productFeatureDataResourceList = delegator.findList("ProductFeatureDataResource", EntityCondition.makeCondition(["featureDataResourceTypeId" : "PLP_SWATCH_IMAGE_URL"]), null, ["productFeatureId"], null, true);
+          if (UtilValidate.isNotEmpty(productFeatureDataResourceList))
+          {
+              for (GenericValue productFeatureDataResource : productFeatureDataResourceList)
+              {
+              	dataResource = productFeatureDataResource.getRelatedOneCache("DataResource");
+                  if(UtilValidate.isNotEmpty(dataResource.objectInfo))
+                  {
+                  	productFeatureDataResourceMap.put(productFeatureDataResource.productFeatureId,dataResource.objectInfo);
+                  }
               }
-	        }
-      }
+          	
+          }
+          context.productFeatureDataResourceMap = productFeatureDataResourceMap;
+	      
+	      if(UtilValidate.isEmpty(productFeatureSelectVariantId) && UtilValidate.isNotEmpty(productSelectableFeatureAndAppl))
+	      {
+		        if(UtilValidate.isNotEmpty(productVariantFeatureList) && UtilValidate.isNotEmpty(plpFacetGroupVariantSticky))
+		        {
+		          for(GenericValue productFeatureAppls : productSelectableFeatureAndAppl)
+		          {
+		              firstSelectableFeatureId = productFeatureAppls.productFeatureId;
+		          
+		              for(Map productVariantFeatureMap : productVariantFeatureList)
+		              {
+		                if (productVariantFeatureMap.productFeatureId == firstSelectableFeatureId && productVariantFeatureMap.productFeatureTypeId == plpFacetGroupVariantSticky)
+		                {
+					        productFeatureSelectVariantId = productVariantFeatureMap.productVariantId;
+					        productFeatureSelectVariantProduct = productVariantFeatureMap.productVariant;
+					        featureValueSelected=productVariantFeatureMap.productFeatureDesc;
+		                    break;
+		                }
+		              }
+		              if(UtilValidate.isNotEmpty(productFeatureSelectVariantId))
+		              {
+		                  break;
+		              }
+	              }
+		        }
+	      }
+	    }
     
 	  context.featureValueSelected = featureValueSelected;
 	  if(UtilValidate.isNotEmpty(productFeatureSelectVariantId))
 	  {
-	        productVariantSelectContentWrapper = ProductContentWrapper.makeProductContentWrapper(productFeatureSelectVariantProduct, request);
-	        productVariantSelectSmallURL = productVariantSelectContentWrapper.get("SMALL_IMAGE_URL");
-	        productVariantSelectSmallAltURL = productVariantSelectContentWrapper.get("SMALL_IMAGE_ALT_URL");
 	        productImageUrl = "";
 	        productImageAltUrl = "";
-		        
+	        productVariantSelectSmallURL = "";
+	        productVariantSelectSmallAltURL = "";
+	        productVariantSelectContentWrapper = ProductContentWrapper.makeProductContentWrapper(productFeatureSelectVariantProduct, request);
+	        if (UtilValidate.isNotEmpty(productVariantSelectContentWrapper))
+	        {
+	            productContentList = delegator.findByAndCache("ProductContent", UtilMisc.toMap("productId",productFeatureSelectVariantId, "productContentTypeId", "SMALL_IMAGE_URL"));
+	            productContentList = EntityUtil.filterByDate(productContentList,true);
+        		if (UtilValidate.isNotEmpty(productContentList))
+        		{
+        			productContent = EntityUtil.getFirst(productContentList);
+    		  	    productContentId = productContent.contentId;
+    		        if (UtilValidate.isNotEmpty(productContentId))
+    		        {
+    			        productVariantSelectSmallURL = productVariantSelectContentWrapper.get("SMALL_IMAGE_URL");
+
+    		            productContentList = delegator.findByAndCache("ProductContent", UtilMisc.toMap("productId",productFeatureSelectVariantId, "productContentTypeId", "SMALL_IMAGE_ALT_URL"));
+    		            productContentList = EntityUtil.filterByDate(productContentList,true);
+    	        		if (UtilValidate.isNotEmpty(productContentList))
+    	        		{
+    	        			productContent = EntityUtil.getFirst(productContentList);
+            		  	    productContentId = productContent.contentId;
+        			        if (UtilValidate.isNotEmpty(productContentId))
+        			        {
+             			        productVariantSelectSmallAltURL = productVariantSelectContentWrapper.get("SMALL_IMAGE_ALT_URL");
+        			        }
+    	        			
+    	        		}
+    		        	
+    		        }
+        			
+        		}
+	        	
+	        }
 	        if(UtilValidate.isNotEmpty(featureValueSelected))
 	        {
 	   	        if (UtilValidate.isNotEmpty(plpFacetGroupVariantSticky))
@@ -448,8 +481,9 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
     
 
     context.productSelectableFeatureAndAppl = productSelectableFeatureAndAppl;
-    context.productVariantFeatureList  = productVariantFeatureList;            
-    context.productFeatureSelectVariantProduct = productFeatureSelectVariantProduct;
-    context.productFeatureSelectVariantId = productFeatureSelectVariantId;
     context.productFriendlyUrl = productFriendlyUrl;
+    context.plpProductVariantContentWrapperMap = productVariantContentWrapperMap;
+    context.plpProductFeatureFirstVariantIdMap = productFeatureFirstVariantIdMap;
+    context.plpProductVariantProductContentIdMap = productVariantProductContentIdMap;
+  }    
 }

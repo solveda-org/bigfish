@@ -42,7 +42,16 @@
           <#assign tooltipData = tooltipData+"<div class=tooltipCaption><label>${uiLabelMap.KeyCaption}</label></div><div class=tooltipValue>${keyCompareToLabelFile}</div>"/>
           <#assign tooltipData = tooltipData+"<div class=tooltipCaption><label>${uiLabelMap.ValueCaption}</label></div><div class=tooltipValue>${valueCompareToLabelFile}</div>"/>
           <#assign tooltipData = tooltipData+"</div>"/>
+          <#assign valuesMatch = "true"/>
+          <#if compareDivResult.type?has_content && compareDivResult.type == '3'>
+              <#if (valueCompareToLabelFile?has_content && valueYourLabelFile?has_content) && (valueCompareToLabelFile != valueYourLabelFile)>
+                  <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="compareDescIcon"></span></a>
+                  <#assign valuesMatch = "false"/>
+              </#if>
+          </#if>
+          <#if valuesMatch?has_content && valuesMatch == "true">
           <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></a>
+          </#if>
         </td>
         <td class="descCol <#if !lblCompareResult_has_next?if_exists>lastRow</#if>">
         <!-- type  1 searchKeysNotInYourLabelFile |  2 searchKeysNotInUploadedFile  |  3  searchKeysInBothFile -->
@@ -62,6 +71,11 @@
               <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareDivResult.key)>
               <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","AddKeyTooltip",keyMap, locale ) />
               <a href="<@ofbizUrl>addMissingDivSeqItem?addKey=${compareDivResult.key?if_exists}&amp;screen=${compareDivResult.screen?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="createIcon"></a>
+            </#if>
+            <#if compareDivResult.type == "3" && compareDivResult.key?has_content && valuesMatch == "false">
+              <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareDivResult.key, "value", valueCompareToLabelFile)>
+              <#assign addKeyTooltipText = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SyncKeyAndValueTooltip",keyMap, locale ) />
+              <a href="<@ofbizUrl>changeDivSeqItemValue?key=${compareDivResult.key?if_exists}&amp;screen=${compareDivResult.screen?if_exists}&amp;newValue=${valueCompareToLabelFile}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addKeyTooltipText!""}');" onMouseout="hideTooltip()" class="syncIcon"></a>
             </#if>
           </#if>
         </td>

@@ -1,7 +1,6 @@
 package product;
 
-import org.ofbiz.entity.*;
-import org.ofbiz.entity.util.*;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.base.util.UtilValidate;
@@ -10,14 +9,43 @@ import javolution.util.FastMap;
 import javolution.util.FastList;
 import org.ofbiz.base.util.UtilMisc;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.ofbiz.entity.GenericValue;
+import org.apache.commons.lang.StringUtils;
+import org.ofbiz.base.util.UtilProperties;
 
 if (UtilValidate.isNotEmpty(parameters.productId)) 
 {
+	//checkout message
+	add_product_id = StringUtils.trimToEmpty(parameters.add_product_id);
+	prod_type = StringUtils.trimToEmpty(parameters.prod_type);
+	
+	if (UtilValidate.isNotEmpty(add_product_id) && UtilValidate.isNotEmpty(prod_type) && ProductWorker.isSellable(delegator, add_product_id))
+	{
+	   messageMap=[:];
+	   if(prod_type.equals("Variant"))
+	   {
+		   GenericValue add_virtual_product = ProductWorker.getParentProduct(add_product_id, delegator);
+		   add_product_name = ProductContentWrapper.getProductContentAsText(add_virtual_product, 'PRODUCT_NAME', request);
+	   }
+	   else if(prod_type.equals("FinishedGood"))
+	   {
+		   GenericValue finished_good = delegator.findByPrimaryKey("Product", [productId : add_product_id]);
+		   add_product_name = ProductContentWrapper.getProductContentAsText(finished_good, 'PRODUCT_NAME', request);
+	   }
+	   messageMap.put("add_product_name", add_product_name);
+	   context.showSuccessMessage = UtilProperties.getMessage("OSafeAdminUiLabels","CheckoutAddProductSuccess",messageMap, locale )
+	}
+	//end checkout message
+	
     product = delegator.findOne("Product",["productId":parameters.productId], false);
     context.product = product;
+    
+    virtualProductPriceCondList = FastList.newInstance();
+    int virtualProductPriceCondListSize = 0;
+    
     // get the product price
     if("Y".equals(product.isVariant))
-     {
+    {
         productVariantListPrice =  OsafeAdminUtil.getProductPrice(request, product.productId, "LIST_PRICE");
         productVariantSalePrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE");
         GenericValue parent = ProductWorker.getParentProduct(product.productId, delegator);
@@ -36,13 +64,40 @@ if (UtilValidate.isNotEmpty(parameters.productId))
          {
              context.productVariantSalePrice = productVariantSalePrice;
          }
-     }
+         
+       // get QUANTITY price break rules for virtual
+	    virtualProductPriceCondListAll = delegator.findByAnd("ProductPriceCond", [inputParamEnumId: "PRIP_PRODUCT_ID", condValue: parent.productId],["productPriceRuleId ASC"]);
+	    
+	    if (UtilValidate.isNotEmpty(virtualProductPriceCondListAll))
+	    {
+	        for (GenericValue priceCond: virtualProductPriceCondListAll) 
+	        {
+	            priceRule = priceCond.getRelatedOne("ProductPriceRule");
+	            
+	            prdQtyBreakIdCondList = priceRule.getRelated("ProductPriceCond");
+		        prdQtyBreakIdCondList = EntityUtil.filterByAnd(prdQtyBreakIdCondList,UtilMisc.toMap("inputParamEnumId","PRIP_QUANTITY"));
+		        prdQtyBreakIdCondList = EntityUtil.orderBy(prdQtyBreakIdCondList,UtilMisc.toList("productPriceRuleId"));
+	            if (UtilValidate.isNotEmpty(prdQtyBreakIdCondList)) 
+	            {
+	              //Check for Active Price Rule
+	                List<GenericValue> productPriceRuleList = delegator.findByAnd("ProductPriceRule", UtilMisc.toMap("productPriceRuleId",priceRule.productPriceRuleId));
+	                productPriceRuleList = EntityUtil.filterByDate(productPriceRuleList);
+	                if(UtilValidate.isNotEmpty(productPriceRuleList)) 
+	                {
+	                    virtualProductPriceCondList.add(priceCond);
+	                    context.prdQtyBreakIdCondList = prdQtyBreakIdCondList;
+	                    virtualProductPriceCondListSize = virtualProductPriceCondListSize + 1;
+	                }
+	            }
+	        }
+	    }
+    }
     else
-     {
+    {
         productListPrice =  OsafeAdminUtil.getProductPrice(request, product.productId, "LIST_PRICE");
         productDefaultPrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE");
         productContentWrapper = new ProductContentWrapper(product, request);
-     }
+    }
     String productDetailHeading = "";
     if (UtilValidate.isNotEmpty(productContentWrapper))
     {
@@ -69,7 +124,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
         context.productDefaultPrice = productDefaultPrice;
     }
     
- // get QUANTITY price break rules to show
+   // get QUANTITY price break rules to show
     productPriceCondListAll = delegator.findByAnd("ProductPriceCond", [inputParamEnumId: "PRIP_PRODUCT_ID", condValue: product.productId],["productPriceRuleId ASC"]);
     productPriceCondList = FastList.newInstance();
     int productPriceCondListSize = 0;
@@ -78,7 +133,10 @@ if (UtilValidate.isNotEmpty(parameters.productId))
         for (GenericValue priceCond: productPriceCondListAll) 
         {
             priceRule = priceCond.getRelatedOne("ProductPriceRule");
-            prdQtyBreakIdCondList = delegator.findByAnd("ProductPriceCond", [inputParamEnumId: "PRIP_QUANTITY", productPriceRuleId: priceRule.productPriceRuleId],["productPriceRuleId"]);
+            
+            prdQtyBreakIdCondList = priceRule.getRelated("ProductPriceCond");
+	        prdQtyBreakIdCondList = EntityUtil.filterByAnd(prdQtyBreakIdCondList,UtilMisc.toMap("inputParamEnumId","PRIP_QUANTITY"));
+	        prdQtyBreakIdCondList = EntityUtil.orderBy(prdQtyBreakIdCondList,UtilMisc.toList("productPriceRuleId"));
             if (UtilValidate.isNotEmpty(prdQtyBreakIdCondList)) 
             {
               //Check for Active Price Rule
@@ -97,5 +155,10 @@ if (UtilValidate.isNotEmpty(parameters.productId))
     {
         context.productPriceCondList = productPriceCondList;
         context.productPriceCondListSize = productPriceCondListSize;
+    }
+    if(virtualProductPriceCondListSize > 0) 
+    {
+        context.virtualProductPriceCondList = virtualProductPriceCondList;
+        context.virtualProductPriceCondListSize = virtualProductPriceCondListSize;
     }
 }

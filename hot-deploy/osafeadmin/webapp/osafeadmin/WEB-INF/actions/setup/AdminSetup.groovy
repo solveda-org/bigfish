@@ -18,7 +18,7 @@ import org.ofbiz.webapp.control.*;
 import org.ofbiz.webapp.website.WebSiteWorker;
 import org.ofbiz.order.order.OrderReadHelper;
 import com.osafe.util.OsafeAdminUtil;
-import com.osafe.services.CategoryServices;
+import com.osafe.services.OsafeAdminCatalogServices;
 import javolution.util.FastMap;
 import javolution.util.FastList;
 import org.apache.commons.lang.StringUtils;
@@ -136,7 +136,7 @@ if (retrieveProductStoreData && UtilValidate.isNotEmpty(productStore))
              globalContext.rootProductCategoryId=prodCatalogCategory.productCategoryId;
              
     	     currentCategories = FastList.newInstance();
-    	     allUnexpiredCategories = CategoryServices.getRelatedCategories(delegator, prodCatalogCategory.productCategoryId, null, true, false, true,false);
+    	     allUnexpiredCategories = OsafeAdminCatalogServices.getRelatedCategories(delegator, prodCatalogCategory.productCategoryId, null, true, false, true);
     	     for (Map<String, Object> workingCategoryMap : allUnexpiredCategories) 
     	     {
     	        workingCategory = (GenericValue) workingCategoryMap.get("ProductCategory");
@@ -231,6 +231,9 @@ globalContext.preferredDateFormat = OsafeAdminUtil.isValidDateFormat(preferredDa
 globalContext.preferredDateTimeFormat = OsafeAdminUtil.isValidDateFormat(preferredDateTimeFormat)?preferredDateTimeFormat:"MM/dd/yy h:mma";
 globalContext.preferredTimeFormat = "h:mma";
 
+//Shopping cart
+shopCart = ShoppingCartEvents.getCartObject(request);
+
 //ADMIN CONTEXT PROCESSING
 adminContext = FastMap.newInstance();
 if (UtilValidate.isNotEmpty(session.getAttribute("ADMIN_CONTEXT")))
@@ -243,7 +246,12 @@ storePartyId = StringUtils.trimToEmpty(parameters.storePartyId);
 productId = StringUtils.trimToEmpty(parameters.productId);
 if (UtilValidate.isNotEmpty(partyId))
 {
-    adminContext.put("CONTEXT_PARTY_ID", partyId);
+	//if the partyId is changed, then clear the shopping cart
+	if(UtilValidate.isNotEmpty(adminContext.get("CONTEXT_PARTY_ID")) && !((adminContext.get("CONTEXT_PARTY_ID")).equals(partyId)))
+	{
+		shopCart.clear();
+	}
+	adminContext.put("CONTEXT_PARTY_ID", partyId);
 }
 if (UtilValidate.isNotEmpty(orderId))
 {
@@ -259,3 +267,11 @@ if (UtilValidate.isNotEmpty(productId))
 }
 context.adminContext = adminContext;
 session.setAttribute("ADMIN_CONTEXT", adminContext);
+
+context.shoppingCart =shopCart;
+
+
+
+
+
+

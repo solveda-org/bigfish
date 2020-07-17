@@ -14,7 +14,7 @@
                 <process field="satisfactionRate"><copy to-field="satisfactionRating"/></process>
                 <process field="productId"><copy to-field="productId"/></process>
                 <process field="productStoreId"><copy to-field="productStoreId"/></process>
-                <process field="REVIEW_NICK_NAME"><copy to-field="reviewNickName"/><not-empty><fail-property resource="OSafeUiLabels" property="NicknameMissingError"/></not-empty></process>
+                <process field="REVIEW_NICK_NAME"><copy to-field="reviewNickName"/><not-empty><fail-property resource="OSafeUiLabels" property="NickNameMissingError"/></not-empty></process>
                 <process field="REVIEW_TITLE"><copy to-field="reviewTitle"/><not-empty><fail-property resource="OSafeUiLabels" property="ReviewTitleMissingError"/></not-empty></process>
                 <process field="REVIEW_TEXT"><copy to-field="productReview"/></process>
                 <process field="REVIEW_GENDER"><copy to-field="reviewGender"/></process>

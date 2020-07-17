@@ -608,13 +608,11 @@ public class RefinementsHelperSolr {
 
     private String getProductCategoryName(String key) {
 
-        HttpServletRequest request = commandContext.getRequest();
         GenericValue productCategory = null;
         String productCategoryName = key;
         try {
             productCategory = delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId", key), true);
-            CategoryContentWrapper categoryContentWrapper = new CategoryContentWrapper(productCategory, request);
-            productCategoryName = categoryContentWrapper.get("CATEGORY_NAME").toString();
+            productCategoryName = productCategory.getString("categoryName");
         } catch (GenericEntityException e) {
             Debug.logError(e.getMessage(), module);
         }
@@ -623,13 +621,11 @@ public class RefinementsHelperSolr {
 
     private String getProductCategorySupportingText(String key) {
 
-        HttpServletRequest request = commandContext.getRequest();
         GenericValue productCategory = null;
         String supportingText = "";
         try {
             productCategory = delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId", key), true);
-            CategoryContentWrapper categoryContentWrapper = new CategoryContentWrapper(productCategory, request);
-            StringWrapper supportingTextWrapper = categoryContentWrapper.get("LONG_DESCRIPTION");
+            String supportingTextWrapper = productCategory.getString("longDescription");
             if (supportingTextWrapper != null) {
                 supportingText = supportingTextWrapper.toString();
             }
@@ -642,13 +638,11 @@ public class RefinementsHelperSolr {
 
     private String getProductCategoryImage(String key) {
 
-        HttpServletRequest request = commandContext.getRequest();
         GenericValue productCategory = null;
         String productCategoryImage = null;
         try {
             productCategory = delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId", key), true);
-            CategoryContentWrapper categoryContentWrapper = new CategoryContentWrapper(productCategory, request);
-            StringUtil.StringWrapper categoryImageUrl = categoryContentWrapper.get("CATEGORY_IMAGE_URL");
+            String categoryImageUrl = productCategory.getString("categoryImageUrl");
             if (UtilValidate.isNotEmpty(categoryImageUrl)) {
                 productCategoryImage = categoryImageUrl.toString();
             }

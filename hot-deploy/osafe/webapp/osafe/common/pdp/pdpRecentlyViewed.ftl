@@ -30,6 +30,7 @@
             <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                  ${setRequestAttribute("featureValueSelected",featureValueSelected)}
+                <#break>
             </#if>
           </#list>
        </#if>
@@ -39,6 +40,7 @@
             <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                 ${setRequestAttribute("featureValueSelected",featureValueSelected)}
+                <#break>
             </#if>
           </#list>
        </#if>

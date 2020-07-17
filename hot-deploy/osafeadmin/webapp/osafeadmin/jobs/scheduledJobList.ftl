@@ -17,17 +17,21 @@
         <#if resultList?exists && resultList?has_content>
             <#assign rowClass = "1">
             <#list resultList as job>
-              <#assign hasNext = job_has_next>
+              <#assign hasNext = job_has_next/>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">                
-                    <td class="idCol firstCol <#if !hasNext>lastRow</#if> " ><a href="<@ofbizUrl>scheduledJobDetail?jobId=${job.jobId}&jobName=${job.jobName}</@ofbizUrl>">${job.jobId}</a></td>
+                    <td class="idCol firstCol <#if !hasNext>lastRow</#if> " ><a href="<@ofbizUrl>scheduledJobDetail?jobId=${job.jobId!""}&jobName=${job.jobName!""}</@ofbizUrl>">${job.jobId!""}</a></td>
+                    <#assign parentJobName=""/>
                     <#if job.parentJobId?has_content>
                     	<#assign parentJob = delegator.findOne("JobSandbox", {"jobId" : job.parentJobId}, false)?if_exists/> 
+                    	<#assign parentJobName = parentJob.jobName!""/> 
                     </#if>
-                    <td class="idCol <#if !hasNext>lastRow</#if>"><a href="<@ofbizUrl>scheduledJobDetail?jobId=${job.parentJobId!""}&jobName=${parentJob.jobName}</@ofbizUrl>">${job.parentJobId!""}</a></td>
+                    <td class="idCol <#if !hasNext>lastRow</#if>"><a href="<@ofbizUrl>scheduledJobDetail?jobId=${job.parentJobId!""}&jobName=${parentJobName!""}</@ofbizUrl>">${job.parentJobId!""}</a></td>
+                    <#assign prevJobName=""/>
                     <#if job.previousJobId?has_content>
                     	<#assign prevJob = delegator.findOne("JobSandbox", {"jobId" : job.previousJobId}, false)?if_exists/> 
+                    	<#assign prevJobName = prevJob.jobName!""/> 
                     </#if>
-                    <td class="idCol <#if !hasNext>lastRow</#if>"><a href="<@ofbizUrl>scheduledJobDetail?jobId=${job.previousJobId!""}&jobName=${prevJob.jobName}</@ofbizUrl>">${job.previousJobId!""}</a></td>
+                    <td class="idCol <#if !hasNext>lastRow</#if>"><a href="<@ofbizUrl>scheduledJobDetail?jobId=${job.previousJobId!""}&jobName=${prevJobName!""}</@ofbizUrl>">${job.previousJobId!""}</a></td>
                     <td class="nameCol <#if !hasNext>lastRow</#if>">${job.jobName!""}</td>
                     <#assign statusId=job.statusId >
                     <#assign statusId = statusId?split("_") />

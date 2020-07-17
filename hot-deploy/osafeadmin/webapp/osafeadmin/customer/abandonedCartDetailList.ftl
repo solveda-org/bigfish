@@ -13,12 +13,20 @@
       <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
         <td class="idCol <#if !result_has_next?if_exists>lastRow</#if>">${rowNo}</td>
         <#assign rowNo = rowNo + 1 />
-        <td class="idCol <#if !result_has_next?if_exists>lastRow</#if>"><a href="<@ofbizUrl>productDetail?productId=${result.productId}</@ofbizUrl>">${result.productId!}</a></td>
         <#if result.productId?has_content >
          	<#assign product = delegator.findByPrimaryKey("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", result.productId!))/>
          	<#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product,request)>
          	<#assign productName = productContentWrapper.get("PRODUCT_NAME")!itemProduct.productName!"">
         </#if>
+        <td class="idCol <#if !result_has_next?if_exists>lastRow</#if>">
+          <#if product?has_content && product.isVirtual == 'Y'>
+            <a href="<@ofbizUrl>virtualProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+          <#elseif product?has_content && product.isVariant == 'Y'>
+            <a href="<@ofbizUrl>variantProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+          <#elseif product?has_content && product.isVirtual == 'N' && product.isVariant == 'N'>
+            <a href="<@ofbizUrl>finishedProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+          </#if>
+        </td>
         <td class="nameCol <#if !result_has_next?if_exists>lastRow</#if>">${(product.internalName)!""}</td>
         <td class="nameCol <#if !customerActivity_has_next?if_exists>lastRow</#if>">${productName!""}</td>
         <td class="qtyCol <#if !customerActivity_has_next?if_exists>lastRow</#if>">${result.quantity!""}</td>

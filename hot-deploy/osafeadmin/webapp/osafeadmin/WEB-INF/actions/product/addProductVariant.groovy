@@ -1,32 +1,116 @@
 package product;
 
-
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.product.product.ProductWorker;
-import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.GenericValue;
+import javolution.util.FastMap;
+import javolution.util.FastList;
+import org.ofbiz.base.util.UtilMisc;
 
-if (UtilValidate.isNotEmpty(parameters.productId)) 
+if (UtilValidate.isNotEmpty(context.virtualProduct)) 
 {
-    product = delegator.findOne("Product",["productId":parameters.productId], false);
-    context.product = product;
-    if (UtilValidate.isNotEmpty(product)) 
-     {
-        productFeatureGroupAndAppls = delegator.findByAnd("ProdFeaGrpAppAndProdFeaApp", [productId : parameters.productId, productFeatureApplTypeId : "SELECTABLE_FEATURE"], ['sequenceNum']);
-        if (UtilValidate.isNotEmpty(productFeatureGroupAndAppls)) 
-        {
-            productFeatureGroupIds = EntityUtil.getFieldListFromEntityList(productFeatureGroupAndAppls, "productFeatureGroupId", true);
-            productSelectableFeatureTypes = delegator.findList("ProductFeatureGroup", EntityCondition.makeCondition("productFeatureGroupId", EntityOperator.IN, productFeatureGroupIds), null, null, null, false);
-            context.productSelectableFeatureTypes = productSelectableFeatureTypes;
-        }
-        productFeatureGroupAndAppls = delegator.findByAnd("ProdFeaGrpAppAndProdFeaApp", [productId : parameters.productId, productFeatureApplTypeId : "DISTINGUISHING_FEAT"], ['sequenceNum']);
-        if (UtilValidate.isNotEmpty(productFeatureGroupAndAppls)) 
-        {
-            productFeatureGroupIds = EntityUtil.getFieldListFromEntityList(productFeatureGroupAndAppls, "productFeatureGroupId", true);
-            productDistinguishingFeatureTypes = delegator.findList("ProductFeatureGroup", EntityCondition.makeCondition("productFeatureGroupId", EntityOperator.IN, productFeatureGroupIds), null, null, null, false);
-            context.productDistinguishingFeatureTypes = productDistinguishingFeatureTypes;
-        }
-     }
+    virtualProduct = context.virtualProduct;
+    allProductFeatureAndAppls = virtualProduct.getRelated("ProductFeatureAndAppl");
+    allProductFeatureAndAppls = EntityUtil.filterByDate(allProductFeatureAndAppls,true);
+    allProductFeatureAndAppls = EntityUtil.orderBy(allProductFeatureAndAppls,UtilMisc.toList("sequenceNum"));
+    
+    allProductSelectableFeatureAndAppls = EntityUtil.filterByAnd(allProductFeatureAndAppls, UtilMisc.toMap("productFeatureApplTypeId", "SELECTABLE_FEATURE"));
+    
+    productSelFeatureTypes = FastList.newInstance();
+    productSelFeaturesByType = new LinkedHashMap();
+    for (GenericValue feature: allProductSelectableFeatureAndAppls) 
+    {
+       featureType = feature.getString("productFeatureTypeId");
+       if (!productSelFeatureTypes.contains(featureType)) 
+       {
+          productSelFeatureTypes.add(featureType);
+       }
+       features = productSelFeaturesByType.get(featureType);
+       if (UtilValidate.isEmpty(features)) 
+       {
+          features = FastList.newInstance();
+          productSelFeaturesByType.put(featureType, features);
+       }
+       features.add(feature);
+    }
+    context.selFeatureTypesList = productSelFeatureTypes;
+    context.selFeatureByTypeMap = productSelFeaturesByType;
+    
+    allProductDescFeatureAndAppls = EntityUtil.filterByAnd(allProductFeatureAndAppls, UtilMisc.toMap("productFeatureApplTypeId", "DISTINGUISHING_FEAT"));
+    
+    productDescFeatureTypes = FastList.newInstance();
+    productDescFeaturesByType = new LinkedHashMap();
+    for (GenericValue feature: allProductDescFeatureAndAppls) 
+    {
+       featureType = feature.getString("productFeatureTypeId");
+       if (!productDescFeatureTypes.contains(featureType)) 
+       {
+          productDescFeatureTypes.add(featureType);
+       }
+       features = productDescFeaturesByType.get(featureType);
+       if (UtilValidate.isEmpty(features)) 
+       {
+          features = FastList.newInstance();
+          productDescFeaturesByType.put(featureType, features);
+       }
+       features.add(feature);
+    }
+    context.descFeatureTypesList = productDescFeatureTypes;
+    context.descFeatureByTypeMap = productDescFeaturesByType; 
 }
+
+if (UtilValidate.isNotEmpty(context.variantProduct)) 
+{
+    variantProduct = context.variantProduct;
+    allVariantProductFeatureAndAppls = variantProduct.getRelated("ProductFeatureAndAppl");
+    allVariantProductFeatureAndAppls = EntityUtil.filterByDate(allVariantProductFeatureAndAppls,true);
+    allVariantProductFeatureAndAppls = EntityUtil.orderBy(allVariantProductFeatureAndAppls,UtilMisc.toList("sequenceNum"));
+    
+    variantProductStandardFeatureAndAppls = EntityUtil.filterByAnd(allVariantProductFeatureAndAppls, UtilMisc.toMap("productFeatureApplTypeId", "STANDARD_FEATURE"));
+    context.variantProductStandardFeatureAndAppls = variantProductStandardFeatureAndAppls;
+    variantProductStdFeatureTypes = FastList.newInstance();
+    variantProductStdFeaturesByType = new LinkedHashMap();
+    for (GenericValue feature: variantProductStandardFeatureAndAppls) 
+    {
+       featureType = feature.getString("productFeatureTypeId");
+       if (!variantProductStdFeatureTypes.contains(featureType)) 
+       {
+          variantProductStdFeatureTypes.add(featureType);
+       }
+       features = variantProductStdFeaturesByType.get(featureType);
+       if (UtilValidate.isEmpty(features)) 
+       {
+          features = FastList.newInstance();
+          variantProductStdFeaturesByType.put(featureType, features);
+       }
+       features.add(feature);
+    }
+    variantProductStdFeatureTypesList = variantProductStdFeatureTypes;
+    variantProductStdFeaturesByTypeMap = variantProductStdFeaturesByType;
+    if (UtilValidate.isNotEmpty(variantProductStdFeatureTypesList))
+        {
+            for(String variantProductStdFeatureType: variantProductStdFeatureTypesList)
+            {
+                if (UtilValidate.isNotEmpty(variantProductStdFeaturesByTypeMap))
+                {
+                    variantProductFeatureAndApplList = variantProductStdFeaturesByTypeMap.get(variantProductStdFeatureType);
+                    if (UtilValidate.isNotEmpty(variantProductFeatureAndApplList))
+                    {
+                        variantProductFeatureAndAppl = EntityUtil.getFirst(variantProductFeatureAndApplList);
+                        productFeatureType = variantProductFeatureAndAppl.getRelatedOne("ProductFeatureType")
+                        if(UtilValidate.isNotEmpty(productFeatureType))
+                        {
+                            if(UtilValidate.isNotEmpty(context.productDetailHeading))
+                            {
+                                context.productDetailHeading = context.productDetailHeading + ", " + productFeatureType.description + ": " + variantProductFeatureAndAppl.description;
+                            }
+                        }
+                    } 
+                }
+            }
+        }
+    
+    variantProductDescFeatureAndAppls = EntityUtil.filterByAnd(allVariantProductFeatureAndAppls, UtilMisc.toMap("productFeatureApplTypeId", "DISTINGUISHING_FEAT"));
+    context.variantProductDescFeatureAndAppls = variantProductDescFeatureAndAppls;
+}
+

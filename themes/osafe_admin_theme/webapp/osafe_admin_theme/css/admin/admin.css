@@ -9,7 +9,6 @@ Input, a, H1, TD, LastOrder, Nav:Hover, footer table head, .totalCaption label, 
 hex: #A50000 (Dark Red)
 
 ----------
-
 Navigation, Stat Counter Border, OrderCount Border, Revenue Count Border, site info p
 
 hex: #f9a41f (Orange)
@@ -87,12 +86,12 @@ body {
 /****************************************************************
 * Standard HTML Tags
 ****************************************************************/
-input[type=text], select, textarea {
+input[type=text],input[type=password], select, textarea {
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
     color: #A50000;
     border: 1px solid #000000;
 }
-input[type=text]:focus, select:focus, textarea:focus {
+input[type=text]:focus,input[type=password]:focus, select:focus, textarea:focus {
    background: #f5f2ec;
    border: 1px solid #BF7400;
 }
@@ -283,6 +282,7 @@ a.standardBtn {
     /*margin: 0 0 0 10px; */
     margin: 0 10px 0 0 ;
     color: #ffffff;
+    cursor: pointer;
     border: 1px solid #000000;
     background: #A50000;
     text-transform: inherit;
@@ -377,12 +377,12 @@ ul.pagingLinksBody li {
     }
 
 ul.pagingLinksBody li.pagingLinks {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     margin: 0 0 0 10px;
 }
 ul.pagingLinksBody li.pagingLinksText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #0c0c0c;
     margin: 0 420px;
@@ -439,7 +439,7 @@ ul.pagingLinksBody li.disabled {
 ****************************************************************/
 h1 {
     font-family: "Arial Rounded MT Bold", Arial, Helvetica, sans-serif;
-    font-size: 2.86em;
+    font-size: 28px;
     color: #a50000;
     margin: 10px 0 0 0;
     text-transform: lowercase;
@@ -454,15 +454,15 @@ span.headingOrderId{
 }
 
 h2 {
-    font-size: 2.0em;
+    font-size: 20px;
 }
 
 h3 {
-    font-size: 1.8em;
+    font-size: 18px;
 }
 
 h4 {
-    font-size: 1.5em;
+    font-size: 15px;
 }
 
 /****************************************************************
@@ -490,7 +490,7 @@ label, .caption{
 #header #siteTitleImage {
     color: #993300;
     float: left;
-    font-size: 2.4em;
+    font-size: 24px;
     font-weight: bold;
     margin: 20px;
 
@@ -502,7 +502,7 @@ label, .caption{
 * Site Info
 ****************************************************************/
 #header #siteInfoContainer {
-    font-size: .9em;
+    font-size: 9px;
     width: 555px;
     margin: 0 auto;
 }
@@ -512,7 +512,7 @@ label, .caption{
 
 
 #siteInfo #welcome p, #siteInfo #adminModule p {
-    font-size: 1.2em;
+    font-size: 12px;
     font-weight: bold;
     color: #F9A41F;
 }
@@ -528,14 +528,14 @@ label, .caption{
 
 #siteInfo #helperImages  {
     float: right;
-    margin: 53px 0 0 0;
+    margin: 23px 0 5px 0;
 }
 #siteInfo #helperImages a {
     margin: 0 0 0 10px;
     color: #ffffff;
 }
 #siteInfo #helperImages .helperText {
-    font-size: 1em;
+    font-size: 10px;
     color: #ffffff;
 }
 
@@ -551,7 +551,7 @@ label, .caption{
     margin: 10px 10px 0 0;
     color: #ffa521;
     font-family: 'Verdana','Helvetica Neue','Lucida Sans Unicode',sans-serif;
-    font-size: 2.34em;
+    font-size: 23px;
     border: 1px solid #f9a41f;
 }
 
@@ -593,7 +593,8 @@ border-bottom: none;
 #navigationMenu ul {
     position:        absolute;
     top:            -999em;
-    width:          auto; /* left offset of submenus need to match (see below) */
+    width:          auto; 
+    *width: 220px; /* IE7 needs width to accomodate drop down link width */
     
 }
 
@@ -607,36 +608,28 @@ border-bottom: none;
     float:            left;
     position:        relative;
 }
-#navigationMenu a {
-    display:        block;
-    position:        relative;
-}
+
 #navigationMenu li:hover ul,
 #navigationMenu li.sfHover ul {
     left:            0;
     top:            23px; /* match top ul list item height */
-    top: 22px\9; /* For IE 8 and Below */
+    top: 22px\9; /* For IE 9 and Below */
     z-index:        99;
     border-top: 1px solid #000;
 }
 
 #navigationMenu li.lastItem ul,
 #navigationMenu li.lastItem ul {
-    left: -99px\9; /* For IE 8 and Below */
+    left: -99px\9; /* For IE 9 and Below */
 }
 #navigationMenu li.lastItem:hover ul,
 #navigationMenu li.lastItem.sfHover ul {
     border-top: 1px solid #000000;
-    left: -101px;
+    left: -102px;
     top: 23px;
-    top: 22px\9; /* For IE 8 and Below */
-    left: -99px\9; /* For IE 8 and Below */
+    top: 22px\9; /* For IE 9 and Below */
+    left: -110px\9; /* For IE 9 and Below */
     z-index: 99;
-}
-
-:root #navigationMenu li.lastItem:hover ul,
-:root #navigationMenu li.lastItem.sfHover ul {
-
 }
 
 ul#navigationMenu li:hover li ul,
@@ -653,22 +646,29 @@ ul#navigationMenu li li li.sfHover ul {
     top:            0;
 }
 
-/* Size and Padding width of each Navbar a Item*/
 #navigationMenu a { 
-    padding:         3px 21px 2px 21px;
-   *padding         35px 30px 5px 30px;
-    padding          3px 21px 3px 21px\0/;
-    text-decoration:none;
-    font-size:      1.45em;
+    border-right: 1px solid #000000;
+    font-size: 14.5px;
     font-weight: bold;
+    padding: 3px 0 2px 0;
+    text-align: center;
+    text-decoration: none;
+    position: relative;
+    display: block;
+}
+
+#navigationMenu li.topLevel a {
+    border-bottom: medium none;
 }
 
 /* Size and Padding width of each Sub Navbar a Item*/
 
 #navigationMenu .subLevel a {
-    padding:        2px 5px 2px 5px;
-    font-size:      13px !important;
+    border: medium none;
+    font-size: 13px !important;
     font-weight: bold;
+    padding: 2px 5px;
+    text-align: left;
     white-space: nowrap;
 }
 
@@ -676,19 +676,17 @@ ul#navigationMenu li li li.sfHover ul {
 #navigationMenu a, #navigationMenu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
     color: #0c0c0c;
 }
-/* Vertical bar to left of each top level item */
+
 #navigationMenu li.topLevel {
-    padding-left: 0px;
-    border-left: 1px solid #0c0c0c;
+    width: 10%; /* Ten Top Level Links */
 }
 /* Hide Vertical bar to left of first top level item */
 #navigationMenu  li.topLevel.firstItem {
-    padding-left: 0px;
-    border-left: medium none;
+
 }
 /* Vertical bar to right of last top level item */
 #navigationMenu  li.topLevel.lastItem {
-    padding-left: 5px;
+
 }
 
 #navigationMenu li li a {
@@ -736,7 +734,7 @@ ul#navigationMenu li li li.sfHover ul {
     color: #000000;
     float: left;
     clear: both;
-    width: 1068px;
+    width: 1066px;
     background: #ffffff;
 }
 
@@ -749,7 +747,7 @@ ul#navigationMenu li li li.sfHover ul {
     float:right; 
     padding: 5px 40px 0 0; 
     color:#333333;
-    font-size: .85em;
+    font-size: 9px;
 }
 
 .eCommerceErrorMessage {
@@ -777,25 +775,28 @@ ul#navigationMenu li li li.sfHover ul {
     padding: 0 0 0 2.5em
 }
 .fieldErrorMessage {
-    font-size: 1.3em;
+    font-size: 13px;
     color: #c00000;
 }
 .eCommerceErrorMessage p, .eCommerceSuccessMessage p {
     margin: 10px 0 0 10px;
-    font-size: 1.3em;
+    font-size: 13px;
 }
 
 /****************************************************************
 * Display Box
 ****************************************************************/
 
-.displayBox, .displayListBox{
+.displayBox,
+.displayListBox {
     border: 2px solid #000000;
     float: left;
+    margin: 0 0 1em 0;
 }
 
 .displayBox {
-    margin: 1em 0;
+    /*margin: 1em 0;*/
+
 
 }
 
@@ -833,15 +834,17 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
 .header h2 {
-    font-size: 1.5em;
+    font-size: 15px;
+    /*font-size: 1.5em;*/
     font-weight: bold;
     color: #ffffff;
 }
 .infoRow .header {
     border-top: 1px solid #000000;
+    margin: 0 0 10px 0;
 }
 .infoRow .header h2 {
-    font-size: 16px;
+
 }
 .subHeader h3 {
     font-size: 1.3em;
@@ -854,12 +857,17 @@ ul#navigationMenu li li li.sfHover ul {
 .displayListBox .boxBody {
     background: none repeat scroll 0 0 #FEEACA; 
     clear: left;
-    font-size: 1.3em;
+    font-size: 13px;
 }
 
 .displayBox .boxBody,
 .displaySearchBox .boxBody {
-    padding: 5px 0;
+    padding: 10px 0;
+}
+
+.displayBox.detailInfo .boxBody table,
+.displaySearchBox.detailInfo .boxBody table {
+     margin: -10px 0 0 0; /* To compensate for the boxBody padding */
 }
 
 .displayBox .boxBody:after, .displaySearchBox .boxBody:after, .displayListBox .boxBody:after {
@@ -871,7 +879,7 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
 .displayBox .boxText {
-    font-size: 1.3em;
+    font-size: 13px;
 }
 
 tr.even{
@@ -906,7 +914,7 @@ tr.odd{
 }
 
 .boxBody td.boxCaption {
-    font-size: 1em;
+    font-size: 13px;
     width: 100%;
     padding: 0 2px 0 0;
     color: #0c0c0c;
@@ -920,14 +928,12 @@ tr.odd{
     padding: 0 3px;
 }
 .boxBody td.boxNumber {
-    font-size: 1em;
     font-weight: bold;
     padding: 0 2px 0 0;
     text-align: center;
     width: 100%!important; /* js2 */
 }
 .boxBody td.boxDollar, .boxBody th.boxDollar {
-    font-size: 1em;
     font-weight: bold;
     width: 100%;
     padding: 0 2px 0 0;
@@ -950,6 +956,7 @@ tr.odd{
     width: 1068px;
     clear: left;
     border: none;
+    padding: 10px 0 0 0;
 }
 .displayBox.footerInfo tr.footer:hover {
     background: #FFFFFF!important;
@@ -990,14 +997,14 @@ categoryDetail:after {
 ****************************************************************/
 .displaySearchBox{
     border: 2px solid #000000;
+    float: left;
     margin: 0 auto 1em auto;
-/*    margin: 1em 10px 1em 5px;*/
 }
 
 .entryRow {
     clear: left;
     float: left;
-    padding: 3px 0;
+    min-height: 25px; /* Set the same as infoRow for row uniformity */
     position: relative;   /*  so icons with can use absolute positioning  */
     width: 100%;
 }
@@ -1112,7 +1119,7 @@ categoryDetail:after {
 }
 
 div.searchButton {
-    padding: 0 0 0 0.5em;
+    
 }
 
 /****************************************************************
@@ -1127,22 +1134,18 @@ div.searchButton {
 
 .infoRow {
     float: left;
-    /*padding: .5em 0 .5em 0;*/
-    padding: 3px 0;
     width: 100%;
     background: #feeaca;
-
+    min-height: 25px; /* Accommodates Icons and Input Fields */ 
+    min-height: 25px\9;  /* IE9 */
 }
 
 .infoRow.column {
     width: 480px;
-    min-height: 20px;  /* Needed to accomodate input boxes that won't clear */
-    min-height: 22px\9;  /* IE9- */
 }
 
 .infoRow.column .infoEntry {
     float: left;
-    padding: 3px 0;
     clear: left;
     *float: none; /* IE7 only */
 }
@@ -1165,6 +1168,7 @@ float: left;
 
 .infoRow div.infoCaption label {
     text-align: right;
+    font-size: 13px;
 }
 
 .infoRow div.infoCaption label a {
@@ -1320,8 +1324,10 @@ div.infoValue div.geoCode {
 
 .infoRow div.entry.checkbox {
     background: #ffffff;
-    width: 625px;
+    width:  auto;
     border: 1px solid #000;
+    padding: 0 5px 0 0;
+    font-size: 13px;
 }
 .infoRow select.short {
     width: 110px;
@@ -1336,22 +1342,22 @@ div.infoValue div.geoCode {
     width: 440px;
 }
 .infoRow div.entry.checkbox.short {
-    width: 250px;
+    /* width: 250px; */
 }
 .infoRow div.entry.checkbox.medium {
-    width: 409px;
+    /* width: 409px; */
 }
 .infoRow div.entry.checkbox.small {
-    width: 200px;
+   /*  width: 200px; */
 }
 .infoRow div.entry.checkbox.short {
-    width: 115px;
+    /* width: 115px; */
 }
 .infoRow div.entry.checkbox.extraSmall {
-    width: 240px;
+    /* width: 240px; */
 }
 .infoRow div.entry.checkbox.large {
-    width: 450px;
+    /* width: 450px; */
 }
 table.osafe tbody tr td div.infoEntry div.infoValue {
     width: 160px!important;
@@ -1441,26 +1447,26 @@ float: left;
 
 
 }
-.displayListBox .boxBody td.idCol, .boxBody th.idCol, .boxBody td.idCol{
+.boxBody td.idCol, .boxBody th.idCol, {
    /*width: 150px;*/
     text-align: center;
 }
 .boxBody td.idCol.firstCol, .boxBody th.idCol.firstCol {
     text-align: left;
 }
-.displayListBox .boxBody td.dateCol, .boxBody th.dateCol, .boxBody td.dateCol{
+.boxBody td.dateCol, .boxBody th.dateCol {
     /*width: 60px;*/
     text-align: center;
 }
-.displayListBox .boxBody td.sizeCol, .boxBody th.sizeCol{
+.boxBody td.sizeCol, .boxBody th.sizeCol {
     /*width: 100px;*/
     text-align: center;
 }
-.displayListBox .boxBody td.dollarCol, .boxBody th.dollarCol {
+.boxBody td.dollarCol, .boxBody th.dollarCol {
     /*width: 100px;*/
     text-align: right;
 }
-.displayListBox .boxBody td.qtyCol, .boxBody th.qtyCol, .boxBody td.qtyCol{
+.boxBody th.qtyCol, .boxBody td.qtyCol {
     /*width: 110px;*/
     text-align: center;
 }
@@ -1576,6 +1582,7 @@ float: left;
     float: left;
     padding: 0;
     width: 100%;
+    margin: 0 0 5px 0;
 }
 
 .periodBox label {
@@ -1623,7 +1630,7 @@ float: left;
 .sortBox label {
     position: relative;
     top: 4px;
-    font-size: 1.3em;
+    font-size: 13px;
     width: 60px;
 }
 
@@ -1646,7 +1653,7 @@ float: left;
     color: #a50000;
     float: right;
     clear: right;
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     margin: 1em 8px 0 0;
 }
@@ -1665,7 +1672,7 @@ float: left;
     }
 
 #dashboard .trendRange {
-    font-size: 0.85em;
+    font-size: 9px;
     margin: 0 0 0 5px;
 }
 
@@ -1683,7 +1690,7 @@ float: left;
     background-position: left center;
     background-repeat: no-repeat;
     padding: 0 0 0 15px;
-    font-size: 0.85em;
+    font-size: 9px;
 
 }
 
@@ -1693,7 +1700,7 @@ float: left;
     background-position: left center;
     background-repeat: no-repeat;
     padding: 0 0 0 15px;
-    font-size:0.85em;
+    font-size: 9px;
 }
 
 .boxBody.boxBody td.boxDollar.positiveTrendColor{
@@ -1706,7 +1713,7 @@ float: left;
 
 .boxBody.boxBody td.boxDollar.noTrend{
     padding: 0 0 0 15px;
-    font-size:0.85em;
+    font-size: 9px;
 }
 /****************************************************************
 * Dashboard
@@ -1825,7 +1832,7 @@ float: left;
 }
 
 #orderManagementOrderDetail .displayBox.customerInfo {
-    margin: 10px 20px 0 0;
+    margin: 0 20px 10px 0;
 }
 
 #orderManagementOrderDetail .displayBox.paymentInfo {
@@ -1877,7 +1884,7 @@ float: left;
 
 .displayListBox.orderItemInfo {
     clear: left;
-    margin: 1em 0;
+    margin: 0 0 1em 0;
 }
 
 /****************************************************************
@@ -1886,7 +1893,7 @@ float: left;
 div.totalOrdersBox{
     border: 1px solid black;
     background: #fff2de;
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     text-align: right;
     margin: 1em 5px 0 0
@@ -1955,7 +1962,7 @@ input[type="text"].promoCodeEntry {
   background: #bf7400;
   border-top: 1px solid #0c0c0c;
   padding:3px;
-  font-size:12px;
+  font-size: 12px;
   text-align:center;
 }
 
@@ -1971,7 +1978,7 @@ input[type="text"].promoCodeEntry {
 }
 
 .calendar_date_select .cds_header span {
-  font-size:15px;
+  font-size: 15px;
   color: #000;
   font-weight: bold;
 }
@@ -2231,13 +2238,13 @@ tr.noResult td {
    color: #a50000;
    font-weight: bold;
    text-decoration: underline;
-   font-size: 1.3em;
+   font-size: 13px;
 }
 
 .navDescriptorBox p {
     margin: 0 1em 1em 1em;
     text-align: center;
-    font-size: 1.3em;
+    font-size: 13px;
     
 }
 #adminParamInfoId {
@@ -2351,11 +2358,29 @@ table.tablesorter thead tr .headerSortDown {
     width: 500px;
 }
 
+#displayLookUpDialog .selectorPagingLinksBox {
+    background: none repeat scroll 0 0 #FEEACA;
+    border-left: 1px solid black;
+    border-right: 1px solid;
+    float: left;
+    font-family: 'Verdana','Helvetica Neue','Lucida Sans Unicode',sans-serif;
+    width: 500px;
+}
+#displayLookUpDialog .selectorListBox {
+   border-top: none;
+}
+
+#displayLookUpDialog .selectorSearchBox {
+    background: none repeat scroll 0 0 #FEEACA;
+    padding: 0 0 10px 0;
+    float: left;
+}
+
 /****************************************************************
 * No Results Box
 ****************************************************************/
 .noResultsText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #a50000;
 }
@@ -2371,7 +2396,7 @@ ul.pagingLinksBody li.noResultsText.criteria {
 * Enter Criteria Box
 ****************************************************************/
 ul.pagingLinksBody li.enterCriteriaText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #a50000;
     margin: 0 190px;
@@ -2741,7 +2766,7 @@ td div.infoEntry input[type="text"] {
 .entryIcon {  /* wild card icon; system parameter */
     left: 30px;
     position: absolute;
-    top: 9px; 
+    top: 2px; 
 }
 
 .entryIcon a.helper {
@@ -2846,6 +2871,105 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+a.standardBtn.adminCartIcon {
+    background: url("/osafe_admin_theme/images/classic/icon/adminCartIcon.gif") no-repeat scroll 0 0 transparent !important;
+    background-repeat:no-repeat;
+    padding: 10px 0 2px 25px !important;
+    display: inline-block;
+    font-weight: normal;
+}
+
+a.standardBtn.adminCartIcon:hover {
+    text-decoration: underline;
+}
+
+.adminAddCartIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/adminAddCartIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.refreshIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/refreshIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.editIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/editIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.orderIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/orderIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.noteIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/noteIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.contactUsIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/contactUsIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.catalogRequestIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/catalogRequestIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.compareDescIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/compareDescIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.syncIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/syncIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.exportToCsvIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/exportToCsvIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.clearCacheIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/clearCacheIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
 
 /****************************************************************
 * Detail Entry Table
@@ -2875,7 +2999,7 @@ td div.infoEntry input[type="text"] {
 
 .infoDetailIcon {
     float: right;
-    margin: 0 5px 0 0;
+    margin: 7px 5px 0 0;
 }
 
 .displayBox.footerInfo .infoDetailIcon {
@@ -2970,7 +3094,7 @@ input[type="button"].standardBtn.productLoaderTab {
     border-bottom: 1px solid black;
 }
 
-.boxBody .warningText {
+.warningText {
     float: right;
     /*margin: 7px 10px 0 0;*/
     margin: 1px 5px 0 0;
@@ -3051,7 +3175,7 @@ input[type="button"].standardBtn.productLoaderTab {
 #loginNavigation .displayBox .header {
     color: #000;
     font-weight: bold;
-    font-size: 1.4em;
+    font-size: 14px;
     padding: 5px;
     background: none;
     border: none;
@@ -3146,7 +3270,7 @@ Lookups and Selectors
 
  .fieldLookupHeader{
     height: 0px!important;
-    font-size: 1.6em;
+    font-size: 16px;
     font-weight: bold;
     color: #FFFFFF;
     padding: 0 0 0 10px;
@@ -3233,7 +3357,7 @@ Lookups and Selectors
 }
 .selectorSearchBox .boxBody, .selectorListBox .boxBody {
     background: #feeaca;
-    font-size: 1.3em;
+    font-size: 13px;
 }
 .selectorListBox {
     border: 1px solid black;
@@ -3252,7 +3376,7 @@ Lookups and Selectors
 }
 .selectorHeader h2 {
     color: #FFFFFF;
-    font-size: 1.6em;
+    font-size: 16px;
     font-weight: bold;
      padding: 4px 0 8px 10px;
 }
@@ -3269,7 +3393,7 @@ Lookups and Selectors
     }
 
 ul.pagingLinksBody li.selectorPagingLinksText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #0c0c0c;
     margin: 0 0 0 150px;
@@ -3291,13 +3415,13 @@ ul.pagingLinksBody li.selectorPagingLinksText.showpagesnext{
     width: 100%;
 }
 ul.pagingLinksBody li.selectorNoResultText.criteria {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #A50000;
     margin: 0 0 0 85px;
 }
 ul.pagingLinksBody li.selectorNoResultText {
-    font-size: 1.1em;
+    font-size: 11px;
     font-weight: bold;
     color: #A50000;
     margin: 0 0 0 175px;
@@ -3361,9 +3485,9 @@ ul.pagingLinksBody li.selectorNoResultText {
 
 /* Component containers
 ----------------------------------*/
-.ui-widget { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 1.1em; }
-.ui-widget .ui-widget { font-size: 1em; }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 1em; }
+.ui-widget { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 11px; }
+.ui-widget .ui-widget { font-size: 10px; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Trebuchet MS, Tahoma, Verdana, Arial, sans-serif; font-size: 10px; }
 .ui-widget-content { border: 1px solid #dddddd; background: #eeeeee url(/osafe_admin_theme/images/classic/icon/ui-bg_highlight-soft_100_eeeeee_1x100.png) 50% top repeat-x; color: #333333; }
 .ui-widget-content a { color: #333333; }
 .ui-widget-header { border: 1px solid #e78f08; background: #f6a828 url(/osafe_admin_theme/images/classic/icon/ui-bg_gloss-wave_35_f6a828_500x100.png) 50% 50% repeat-x; color: #ffffff; font-weight: bold; }
@@ -3645,7 +3769,7 @@ ul.pagingLinksBody li.selectorNoResultText {
 .ui-accordion .ui-accordion-header { cursor: pointer; position: relative; margin-top: 1px; zoom: 1; }
 .ui-accordion .ui-accordion-li-fix { display: inline; }
 .ui-accordion .ui-accordion-header-active { border-bottom: 0 !important; }
-.ui-accordion .ui-accordion-header a { display: block; font-size: 1em; padding: .5em .5em .5em .7em; }
+.ui-accordion .ui-accordion-header a { display: block; font-size: 10px; padding: .5em .5em .5em .7em; }
 .ui-accordion-icons .ui-accordion-header a { padding-left: 2.2em; }
 .ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
 .ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; }
@@ -3906,7 +4030,7 @@ button.ui-datepicker-trigger img {
 }
 
 button.ui-datepicker-trigger:active {
-background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg") 1px 1px no-repeat\9;  /* For IE 8 and lower */
+background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg") 1px 1px no-repeat\9;  /* For IE 9 and lower */
 
 }
 
@@ -4026,7 +4150,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 .spacer {
     display: inline-block;
-    width: 104px;
+    width: 103px;
 }
 /* Admin Tools */
 
@@ -4035,6 +4159,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 
 .actionIconMenu {
+    width: 16px;
     display: inline-block;
     position: relative;
     top: 2px;
@@ -4058,10 +4183,13 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 .actionIcon {
         font-size:11px;
         color:#fff;
-	    padding: 5px;
+	padding: 5px 0;
         background: #fff;
         border: 1px solid #A50000;
         border-right: none;
+        float: left;
+        width: 100%;
+
 }
 
 .actionIcon:after {
@@ -4075,7 +4203,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 .actionIconBox {
     background-image: url("/osafe_admin_theme/images/classic/tooltip/ToolTipArrow.png");
     background-repeat: no-repeat;
-    padding: 0 10px 0 0;
+    padding: 0 11px 0 0;
     width: 315px;
 }
 
@@ -4084,7 +4212,6 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     right: 15px;
     top: -19px;
     width: 315px;
-    *right: 35px; /* IE7 Only */
 
 }
 
@@ -4095,7 +4222,6 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     width: 315px;
     background-image: url("/osafe_admin_theme/images/classic/tooltip/ToolTipArrowBottom.png");
     background-repeat: no-repeat;
-    *right: -35px; /* IE7 Only */
 }
 
 .actionIcon img.actionIconMenuImage {
@@ -4110,6 +4236,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 
 .actionIcon img.actionIconMenuImage {
     float: left;
+    margin: 0 0 0 5px;
     width: 100px;
 }
 
@@ -4138,6 +4265,11 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 	text-decoration: underline;	
 }
 
+.actionIcon ul li p {
+	padding: 2px;
+	margin: 0;
+}
+
 .actionIcon ul li a span {
     margin: 0 5px 0 0;
     position: relative;
@@ -4149,7 +4281,8 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 
 #catalogList .actionIconBox {
-     width: 380px;
+     width: 400px;
+     
 }
 
 #emailConfigList .actionIconBox {
@@ -4236,6 +4369,10 @@ a.standardBtn.contextIcon {
     padding: 0;
 }
 
+.adminCheckoutCartContext {
+    margin: 0 0 10px 0;
+}
+
 /* Users */
 
 #commonUserDetail .infoRow div.entry.checkbox {
@@ -4248,10 +4385,82 @@ a.standardBtn.contextIcon {
     padding: 0 0 0 50px !important;
 }
 
-.generalInfo .infoRow div.infoValue p { /* Used for text with an icon; to flank icon to the right */
+.generalInfo .infoRow div.infoValue p,
+#customerManagementDetail .displayBox.detailInfo p,
+.displayBox.personalInformation p { /* Used for text with an icon; to flank icon to the right */
    float: left; 
 }
 
 
+/* Admin Checkout */ 
+
+.required {
+     color: #A50000;
+     margin: 0 5px 0 0;
+
+}
+
+.adminCheckoutCartContent {
+    margin: 0 0 10px 0;
+}
+
+#checkoutStoreSearch {
+    display: inline-block;
+    margin: 0 0 0 20px;
+}
+
+#checkoutStoreName {
+    display: inline-block;
+    color: #a50000;
+}
+
+/* Customers */
+
+#customerManagement .actionIconBoxArrowTopRight,
+#customerManagement .actionIconBoxArrowBottomRight {
+     width: 225px;
+}
+
+h2 span.addIcon {
+    float: right;
+}
+
+/* New Customer / Address Info */
+
+.displayBox.addressInfo .boxBody {
+    padding: 0 0 10px 0;
+}
+
+.displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header,
+.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header {
+   background: #ECB564;
+}
 
 
+.displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header {
+   border-top: none;
+}
+
+.displayBox.addressInfo .boxBody #billing_addressEntry .infoRow .header h2,
+.displayBox.addressInfo .boxBody #shipping_addressEntry .infoRow .header h2 {
+   color: #000000;
+   font-size: small;
+}
+
+/* Add Product */
+
+#productCategoryFetureDetail select {
+    width: 200px;
+}
+
+#productCategoryFetureDetail table.osafe tbody {
+    margin: 10px 0 0 0;
+}
+
+#productCategoryFetureDetail table.osafe tr.dataRow {
+    height: 25px;
+}
+
+#productCategoryFetureDetail table.osafe td.radioCol {
+    width: 650px;
+}

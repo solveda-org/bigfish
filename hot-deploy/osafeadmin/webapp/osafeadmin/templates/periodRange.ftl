@@ -39,6 +39,12 @@
             </div>
             <div class="entryButtons">
                 <input type="submit" class="standardBtn action" name="periodBtn" value="${uiLabelMap.SearchBtn}" />
+                <#if periodFromTs?exists && periodFromTs?has_content && periodToTs?exists && periodToTs?has_content >
+                  <#assign subtractFromDay=Static["org.ofbiz.base.util.UtilDateTime"].addDaysToTimestamp(periodFromTs?if_exists,-1?int)>
+                  <#assign subtractToDay=Static["org.ofbiz.base.util.UtilDateTime"].addDaysToTimestamp(periodToTs?if_exists,-1?int)>
+                  <#assign addFromDay=Static["org.ofbiz.base.util.UtilDateTime"].addDaysToTimestamp(periodFromTs,1?int)>
+                  <#assign addToDay=Static["org.ofbiz.base.util.UtilDateTime"].addDaysToTimestamp(periodToTs,1?int)>
+	            </#if>
                 <#assign nowTimestamp=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
                 <#assign yesterday=Static["org.ofbiz.base.util.UtilDateTime"].getDayStart(nowTimestamp, -1?int)/>
                 <#assign weekStart=Static["org.ofbiz.base.util.UtilDateTime"].getWeekStart(nowTimestamp)>
@@ -53,6 +59,8 @@
                 </#if>
             </div>
 	            <div class="dateSelectButtons">
+	            	<input type="button" class="standardBtn dateSelect" name="SubtractDayBtn" value="${uiLabelMap.SubtractDayBtn}" <#if periodFromTs?exists && periodFromTs?has_content && periodToTs?exists && periodToTs?has_content > onClick="setDateRange('${subtractFromDay?if_exists?string(preferredDateFormat)}','${subtractToDay?if_exists?string(preferredDateFormat)}');" </#if>/>
+	            	<input type="button" class="standardBtn dateSelect" name="AddDayBtn" value="${uiLabelMap.AddDayBtn}" <#if periodFromTs?exists && periodFromTs?has_content && periodToTs?exists && periodToTs?has_content > onClick="setDateRange('${addFromDay?if_exists?string(preferredDateFormat)}','${addToDay?if_exists?string(preferredDateFormat)}');" </#if>/>
 	                <input type="button" class="standardBtn dateSelect" name="TodayBtn" value="${uiLabelMap.TodayBtn}" onClick="setDateRange('${nowTimestamp?string(preferredDateFormat)}','${nowTimestamp?string(preferredDateFormat)}');"/>
 	                <input type="button" class="standardBtn dateSelect" name="YesterdayBtn" value="${uiLabelMap.YesterdayBtn}" onClick="setDateRange('${yesterday?string(preferredDateFormat)}','${yesterday?string(preferredDateFormat)}');"/>
 					<input type="button" class="standardBtn dateSelect" name="ThisWeekBtn" value="${uiLabelMap.ThisWeekBtn}" onClick="setDateRange('${weekStart?string(preferredDateFormat)}','${nowTimestamp?string(preferredDateFormat)}');"/>

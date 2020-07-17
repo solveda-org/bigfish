@@ -236,7 +236,6 @@
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductReview.groovy" />
             </actions>
             <widgets>
                 <container style="pdpReviewListSeq">
@@ -452,7 +451,6 @@
             <actions>
                 <set field="uiSequenceScreen" value="PDPComplement"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceComplementProduct.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
             </actions>
             <widgets>
@@ -462,6 +460,36 @@
                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpComplement.ftl" />
                         </html>
                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAccessory">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="PDPAccessory"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
+                <set field="showTertiaryInformation" value="Y" />
+            </actions>
+            <widgets>
+                <container style="pdpAccessorySeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAccessory.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpComplementAccessory">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpComplementAccessorySeq">
+                    <include-screen name="pdpComplement"/>
+                    <include-screen name="pdpAccessory"/>
                 </container>
             </widgets>
         </section>
@@ -888,7 +916,6 @@
     <screen name="pdpTabsReviewList">
         <section>
             <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductReview.groovy" />
             </actions>
             <widgets>
                 <container style="pdpTabsReviewListSeq" id="pdpTabsReviewList" >
@@ -1089,7 +1116,6 @@
             <actions>
                 <set field="uiSequenceScreen" value="PDPComplement"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceComplementProduct.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
             </actions>
             <widgets>
@@ -1099,6 +1125,36 @@
                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpComplement.ftl" />
                         </html>
                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpTabsAccessory">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="PDPAccessory"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
+                <set field="showTertiaryInformation" value="Y" />
+            </actions>
+            <widgets>
+                <container style="pdpTabsAccessorySeq" id="pdpTabsAccessory" >
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAccessory.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpTabsComplementAccessory">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpTabsComplementAccessorySeq">
+                    <include-screen name="pdpComplement"/>
+                    <include-screen name="pdpAccessory"/>
                 </container>
             </widgets>
         </section>
@@ -1526,7 +1582,6 @@
     <screen name="quicklookReviewList">
         <section>
             <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductReview.groovy" />
             </actions>
             <widgets>
                 <container style="quicklookReviewListSeq">
@@ -1742,7 +1797,6 @@
             <actions>
                 <set field="uiSequenceScreen" value="PDPComplement"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceComplementProduct.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
             </actions>
             <widgets>
@@ -1752,6 +1806,36 @@
                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpComplement.ftl" />
                         </html>
                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="quicklookAccessory">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="PDPAccessory"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
+                <set field="showTertiaryInformation" value="Y" />
+            </actions>
+            <widgets>
+                <container style="quicklookAccessorySeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAccessory.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="quicklookComplementAccessory">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="quicklookComplementAccessorySeq">
+                    <include-screen name="pdpComplement"/>
+                    <include-screen name="pdpAccessory"/>
                 </container>
             </widgets>
         </section>
@@ -1980,6 +2064,21 @@
 <!-- Sequence Screen : Product Listing Page (PLP) 
      Sequencer Type  : List: PLP -->
 <!-- **********************************************************************  -->     
+    <screen name="plpDivSequenceItem">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePLPItem.groovy" />
+                <set field="jqueryIdPrefix" value="PLP_"/>
+            </actions>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/eCommerceProductListItem.ftl" />
+                        </html>
+                    </platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="plpDivSequence">
         <section>
             <actions>
@@ -2265,7 +2364,7 @@
     <screen name="PDPComplementDivSequence">
         <section>
             <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePLPItem.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePDPItem.groovy" />
                 <set field="jqueryIdPrefix" value="pdpComplement_"/>
             </actions>
             <widgets>
@@ -2539,6 +2638,288 @@
             </widgets>
         </section>
     </screen>
+    
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : PDP 
+     Sequencer Type  : PDPAccessory -->
+<!-- **********************************************************************  -->     
+    <screen name="PDPAccessoryDivSequence">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePDPItem.groovy" />
+                <set field="jqueryIdPrefix" value="pdpAccessory_"/>
+            </actions>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/eCommerceDivSequence.ftl" />
+                        </html>
+                    </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAccessoryProductName">
+        <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryProductNameSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpProductName.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+    <screen name="pdpAccessoryDetailLink">
+        <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryDetailLinkSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpDetailLink.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="pdpAccessoryPriceList">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryPriceListSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceList.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="pdpAccessoryPriceOnline">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryPriceOnlineSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceOnline.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="pdpAccessoryPriceSavingPercent">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryPriceSavingPercentSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceSavingPercent.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="pdpAccessoryPriceSavingMoney">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryPriceSavingMoneySeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceSavingMoney.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="pdpAccessorySwatchImage">
+         <section>
+             <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_W')}"/>
+                <set field="plpSwatchImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_H')}"/>
+                <set field="plpSwatchImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_W')}"/>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessorySwatchImageSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpSwatchImage.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="pdpAccessoryTertiaryInfo">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryTertiaryInfoSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpTertiaryInfo.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+      <screen name="pdpAccessoryReviewStars">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryReviewStarsSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpReviewStars.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+
+      <screen name="pdpAccessoryReviewRead">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryReviewReadSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpReviewRead.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+      <screen name="pdpAccessoryReviewWrite">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="pdpAccessoryReviewWriteSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpReviewWrite.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+    <screen name="pdpAccessoryThumbImage">
+        <section>
+            <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_ACCESSORY_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_ACCESSORY_W')}"/>
+            </actions>
+            <widgets>
+                <container style="pdpAccessoryThumbImageSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/plp/plpThumbImage.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAccessoryManufacturerDescription">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAccessoryManufacturerDescriptionSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerDescription.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAccessoryManufacturerHeading">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAccessoryManufacturerHeadingSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerHeading.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAccessoryManufacturerImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAccessoryManufacturerImageSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerImage.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAccessoryManufacturerName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAccessoryManufacturerNameSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAccessorySeeItemDetails">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAccessorySeeItemDetailsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/plp/plpSeeItemDetails.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
 
 <!-- **********************************************************************  -->     
 <!-- Sequence Screen : PDP Page
@@ -2547,7 +2928,7 @@
     <screen name="PDPRecentDivSequence">
         <section>
             <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePLPItem.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePDPItem.groovy" />
                 <set field="jqueryIdPrefix" value="pdpRecent_"/>
             </actions>
             <widgets>
@@ -4463,6 +4844,21 @@
                     <platform-specific>
                          <html>
                              <html-template location="component://osafe/webapp/osafe/common/entry/addressInfo/addressInfoZipPostcode.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressSkipVerification">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressSkipVerificationSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/addressInfo/addressSkipVerification.ftl"/>
                          </html>
                      </platform-specific>
                 </container>

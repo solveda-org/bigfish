@@ -54,14 +54,18 @@
                                         <#assign carrierPartyId = shipGroup.carrierPartyId?if_exists>
                                         <#if shipmentMethodType?has_content>
                                             <#assign carrier =  delegator.findByPrimaryKeyCache("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
-                                            <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shipmentMethodType.description >
+                                            <#if carrier?has_content >
+                                              <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shipmentMethodType.description >
+                                            </#if>
                                         </#if>
                                     </#if>
                                   <#elseif shoppingCartItems?has_content && (shoppingCartItems.size() &gt; 0)>
                                     <#assign selectedStoreId = shoppingCart.getOrderAttribute("STORE_LOCATION")?if_exists />
                                     <#if !selectedStoreId?has_content && shoppingCart.getShipmentMethodTypeId()?has_content && shoppingCart.getCarrierPartyId()?has_content>
                                       <#assign carrier =  delegator.findByPrimaryKeyCache("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shoppingCart.getCarrierPartyId()))?if_exists />
-                                      <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shoppingCart.getShipmentMethodType(0).description />
+                                      <#if carrier?has_content >
+                                        <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shoppingCart.getShipmentMethodType(0).description />
+                                      </#if>
                                     </#if>
                                   </#if>
                                 </#list><#-- end list of orderItemShipGroups -->

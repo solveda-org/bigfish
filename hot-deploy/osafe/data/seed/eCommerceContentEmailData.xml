@@ -24,7 +24,7 @@
 </a>
 </#if>
 <#if contentEmailBodyId?exists && contentEmailBodyId?has_content>
-       		<#if contentEmailBodyId !="E_SCHED_JOB_ALERT">
+            <#if contentEmailBodyId !="E_SCHED_JOB_ALERT">
 <div class="emailTitle" style="font-family:${EMAIL_FONT_FAMILY!""};">
                 <h1>${EMAIL_CLNT_NAME!""}: ${EMAIL_TITLE!""}</h1>
 </div>
@@ -118,7 +118,7 @@
   <textData>
             <![CDATA[
 <#if contentEmailBodyId?exists && contentEmailBodyId?has_content>
-       		<#if contentEmailBodyId !="E_SCHED_JOB_ALERT">        
+            <#if contentEmailBodyId !="E_SCHED_JOB_ALERT">        
 <div class="thankYouContent" style="font-family:${EMAIL_FONT_FAMILY};">
 <p>Thank you,</p>
 <p>The ${EMAIL_CLNT_NAME!""} Team<br><a href="mailto:${EMAIL_CLNT_REPLY_TO!""}?subject=${EMAIL_CLNT_NAME!""} Customer Service Team">${EMAIL_CLNT_REPLY_TO!""}</a>
@@ -172,7 +172,7 @@
 <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
 <p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
 <p>We have generated a new password for you.</p>
-<p>Your password has been changed to: ${password}</p>
+<p>Your password has been changed to: ${password!""}</p>
 <p>Use this password next time you log in.</p>
 <p>You can change the password from the MY ACCOUNT page.</p>
 </div>
@@ -419,9 +419,9 @@
                     <td class="infoValue">
                          <#assign areaCode = parameters.contactPhoneArea!"">
                          <#assign contactPhoneContact = parameters.contactPhoneContact!"">
-						 <#assign fullPhone= Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(areaCode, contactPhoneContact?if_exists, FORMAT_TELEPHONE_NO!)/>
+                         <#assign fullPhone= Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(areaCode, contactPhoneContact?if_exists, FORMAT_TELEPHONE_NO!)/>
 
-						 ${fullPhone!""}
+                         ${fullPhone!""}
                     </td>
                 </tr>
                 <tr>
@@ -505,7 +505,7 @@
                                             <#if ORDER_HELPER?exists && ORDER?has_content>
                                               <#assign displayParty = ORDER_HELPER.getPlacingParty()?if_exists/>
                                               <#if displayParty?has_content>
-                                                <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "compareDate", ORDER.orderDate, "userLogin", userLogin))/>
+                                                <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "compareDate", ORDER.orderDate, "userLogin", USER_LOGIN))/>
                                               </#if>
                                             <tr>
                                                 <td>${uiLabelMap.NameCaption}</td>
@@ -543,7 +543,12 @@
                                                 <#if orderAttrPickupStore?has_content>
                                                     <tr>
                                                         <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.PaymentMethodCaption}</td>
-                                                        <td><p>${uiLabelMap.PayInStorelabel}</p><td>
+                                                        <td><p>${uiLabelMap.PayInStoreLabel}</p><td>
+                                                    </tr>
+                                                <#else>
+                                                    <tr>
+                                                        <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.PaymentMethodCaption}</td>
+                                                        <td><p>${uiLabelMap.CashOnDeliveryLabel}</p><td>
                                                     </tr>
                                                 </#if>
                                             </#if>
@@ -585,16 +590,16 @@
                                             
                                              <#--sagepay token-->
                                             <#if "SAGEPAY_TOKEN" == paymentMethod.paymentMethodTypeId>
-                                            	   <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>
-								                   <#if creditCard?has_content>
-								                   <tr>
-								                        <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.CreditCardCaption}</td>
-								                        <td>
-								                            <#if creditCard.cardType?has_content><p> ${creditCard.cardType!""}</p></#if>
-								                        </td>
-								                   </tr>
-								                   </#if>
-								            </#if>
+                                                   <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>
+                                                   <#if creditCard?has_content>
+                                                   <tr>
+                                                        <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.CreditCardCaption}</td>
+                                                        <td>
+                                                            <#if creditCard.cardType?has_content><p> ${creditCard.cardType!""}</p></#if>
+                                                        </td>
+                                                   </tr>
+                                                   </#if>
+                                            </#if>
                                             <#--end of sagepay token-->
                                         </#list>
                                         </table>
@@ -621,7 +626,7 @@
                                     <td style="border-top: 1px solid black;">
                                         <#-- shipping address -->
                                         <#assign groupIdx = 0>
-                                        <#list ORDER_ITEM_SHIP_GROUP as shipGroup>
+                                        <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(ORDER_ITEM_SHIP_GROUP) />
                                           <#if ORDER?has_content>
                                             <#assign shippingAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
                                             <#assign groupNumber = shipGroup.shipGroupSeqId?if_exists>
@@ -683,11 +688,8 @@
                                             </tr>
                                             </#if>
 
-                                            <#if shipGroup_has_next>
-                                            </#if>
                                         </table>
                                         <#assign groupIdx = groupIdx + 1>
-                                        </#list><#-- end list of ORDER_ITEM_SHIP_GROUP-->
                             </#if>
                                     </td>
                                 </tr>
@@ -720,6 +722,7 @@
             <#-- Heading Row -->
             <tr>
                 <td colspan="2" style="font-weight: bold;">${uiLabelMap.ProductLabel}</td>
+                <td style="font-weight: bold;" align="center">Status</td>
                 <td style="font-weight: bold;">${uiLabelMap.QuantityLabel}</td>
                 <td style="font-weight: bold;">${uiLabelMap.PriceLabel}</td>
                 <td style="font-weight: bold;">${uiLabelMap.TotalLabel}</td>
@@ -752,6 +755,10 @@
                 <#if !productName?has_content && virtualProduct?has_content>
                     <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
                 </#if>
+                <#-- ITEM STATUS -->
+                <#assign itemStatus = orderItem.getRelatedOne("StatusItem")/>
+                <#assign itemOrderStatus = delegator.findByAnd("OrderStatus", Static["org.ofbiz.base.util.UtilMisc"].toMap("orderId",orderItem.orderId,"statusId",orderItem.statusId,"orderItemSeqId",orderItem.orderItemSeqId))/>
+                <#assign itemOrderStatus = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(itemOrderStatus)/>
             <tr>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductDetail?productId=${urlProductId}</@ofbizUrl>" id="image_${urlProductId}">
                     <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${baseUrl}/${productImageUrl}">
@@ -780,6 +787,8 @@
                    </#if>
                 </table>
                 </td>
+                <#-- ITEM STATUS -->
+                <td align="center" <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${itemStatus.get("description",locale)} <br> ${itemOrderStatus.statusDatetime?string("yyyy-MM-dd")}</td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${orderItem.quantity?string.number}</td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=ORDER_HELPER.getOrderItemSubTotal(orderItem,ORDER_HELPER.getAdjustments()) isoCode=currencyUomId/></td>
@@ -787,13 +796,12 @@
             </#list>
             <#-- Footer Rows -->
             <tr>
-                <td colspan="5"></td>
+                <td colspan="6"></td>
             </tr>
             <tr>
-                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.CommonSubtotal}</span></td>
+                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.CommonSubtotal}</span></td>
                 <td><@ofbizCurrency amount=ORDER_SUB_TOTAL isoCode=currencyUomId/></td>
-                <td>&nbsp;</td>
-            </tr=
+            </tr>
             <#list ORDER_ADJUSTMENTS as orderHeaderAdjustment>
             <tr>
                 <#assign adjustmentType = orderHeaderAdjustment.getRelatedOneCache("OrderAdjustmentType")>
@@ -819,27 +827,23 @@
                        </#list>
                    </#if>
                 </#if>
-                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;"><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText} )</#if><#else>${ORDER_HELPER.getAdjustmentType(orderHeaderAdjustment)}</#if></span></td>
+                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;"><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText} )</#if><#else>${ORDER_HELPER.getAdjustmentType(orderHeaderAdjustment)}</#if></span></td>
                 <td><@ofbizCurrency amount=ORDER_HELPER.getOrderAdjustmentTotal(orderHeaderAdjustment) isoCode=currencyUomId/></td>
-                <td>&nbsp;</td>
             </tr>
             </#list>
             <tr>
-                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.ShippingAndHandlingLabel}</span></td>
+                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.ShippingAndHandlingLabel}</span></td>
                 <td><@ofbizCurrency amount=ORDER_SHIP_TOTAL isoCode=currencyUomId/></td>
-                <td>&nbsp;</td>
             </tr>
             <#if (!Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"")) || (ORDER_TAX_TOTAL?has_content && (ORDER_TAX_TOTAL &gt; 0))>
                 <tr>
-                    <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
+                    <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
                     <td><@ofbizCurrency amount=ORDER_TAX_TOTAL isoCode=currencyUomId/></td>
-                    <td>&nbsp;</td>
                 </tr>
             </#if>
             <tr>
-                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TotalLabel}</span></td>
+                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TotalLabel}</span></td>
                 <td><span style="font-weight: bold;"><@ofbizCurrency amount=ORDER_TOTAL isoCode=currencyUomId/></span></td>
-                <td>&nbsp;</td>
             </tr>
         </table>
         </td>
@@ -933,7 +937,7 @@ If you did not make these changes then may we suggest that you return to <a href
 Your logon id is the Email address you supplied when you registered:
 <br>
 <br>
-${userLogin.userLoginId}
+${USER_LOGIN.userLoginId}
 </p>
 </div>
 

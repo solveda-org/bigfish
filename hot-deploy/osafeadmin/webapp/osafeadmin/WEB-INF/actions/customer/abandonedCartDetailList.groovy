@@ -23,7 +23,6 @@ messageMap.put("partyId", partyId);
 messageMap.put("shoppingListId", shoppingListId);
 
 context.partyId=partyId;
-context.userLoginId=userLoginId;
 context.pageTitle = UtilProperties.getMessage("OSafeAdminUiLabels","AbandonedCartDetailTitle",messageMap, locale )
 context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerDetailInfoHeading",messageMap, locale )
 context.customerNoteInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerNoteHeading",messageMap, locale )

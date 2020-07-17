@@ -1,8 +1,9 @@
 package com.osafe.solr;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class GenericRefinement {
+public class GenericRefinement implements Serializable{
 
     private String type;
     private String name;

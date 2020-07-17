@@ -49,7 +49,15 @@
                 <td class="actionOrderCol <#if !orderItem_has_next>lastRow</#if> firstCol selectOrderItem">
                     <input type="checkbox" class="checkBoxEntry" name="orderItemSeqId-${orderItem_index}" id="orderItemSeqId-${rowNo}" value="${orderItem.orderItemSeqId!}" <#if parameters.get("orderItemSeqId-${rowNo}")?has_content>checked</#if>/>
                 </td>
-                <td class="idCol <#if !orderItem_has_next>lastRow</#if>"><a href="<@ofbizUrl>productDetail?productId=${itemProduct.productId?if_exists}</@ofbizUrl>">${itemProduct.productId!"N/A"}</a></td>
+                <td class="idCol <#if !orderItem_has_next>lastRow</#if>">
+                  <#if itemProduct?has_content && itemProduct.isVirtual == 'Y'>
+                    <a href="<@ofbizUrl>virtualProductDetail?productId=${itemProduct.productId!}</@ofbizUrl>">${itemProduct.productId!"N/A"}</a>
+                  <#elseif itemProduct?has_content && itemProduct.isVariant == 'Y'>
+                    <a href="<@ofbizUrl>variantProductDetail?productId=${itemProduct.productId!}</@ofbizUrl>">${itemProduct.productId!"N/A"}</a>
+                  <#elseif itemProduct?has_content && itemProduct.isVirtual == 'N' && itemProduct.isVariant == 'N'>
+                    <a href="<@ofbizUrl>finishedProductDetail?productId=${itemProduct.productId!}</@ofbizUrl>">${itemProduct.productId!"N/A"}</a>
+                  </#if>
+                </td>
                 <td class="itemCol <#if !orderItem_has_next>lastRow</#if>">${itemProduct.internalName!itemProduct.productId!""}</td>
                 <td class="nameCol <#if !orderItem_has_next>lastRow</#if>">${productName?if_exists} ${itemProduct.productId}</td>
                 <td class="statusCol <#if !orderItem_has_next>lastRow</#if>">${itemStatus.get("description",locale)}</td>

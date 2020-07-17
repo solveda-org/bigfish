@@ -11,9 +11,11 @@
                 <#assign index = index + 1/>
                 <#assign size = disFeatureAndApplList.size()/>
                 <#assign disFeatureDescription = disFeatureAndAppl.description!"">
-                <#assign productFeatureType = disFeatureAndAppl.getRelatedOneCache("ProductFeatureType")!"" />
-                <#if productFeatureType?has_content && productFeatureType.description != disFeatureTypeDescription!"">
-                  <#assign disFeatureTypeDescription = productFeatureType.description!"">
+                <#if productFeatureTypesMap?has_content>
+                      <#assign productFeatureTypeDescription = productFeatureTypesMap.get(disFeatureAndAppl.productFeatureTypeId)!"" />
+                </#if>
+                <#if productFeatureTypeDescription?has_content && productFeatureTypeDescription != disFeatureTypeDescription!"">
+                  <#assign disFeatureTypeDescription = productFeatureTypeDescription!"">
                    <#if (index > 1)>
                      </ul>
                      </li>
@@ -62,9 +64,11 @@
                 <#assign index = index + 1/>
                 <#assign size = disFeatureAndApplList.size()/>
                 <#assign disFeatureDescription = disFeatureAndAppl.description!"">
-                <#assign productFeatureType = disFeatureAndAppl.getRelatedOneCache("ProductFeatureType")!"" />
-                <#if productFeatureType?has_content && productFeatureType.description != disFeatureTypeDescription!"">
-                  <#assign disFeatureTypeDescription = productFeatureType.description!"">
+                <#if productFeatureTypesMap?has_content>
+                      <#assign productFeatureTypeDescription = productFeatureTypesMap.get(disFeatureAndAppl.productFeatureTypeId)!"" />
+                </#if>
+                <#if productFeatureTypeDescription?has_content && productFeatureTypeDescription != disFeatureTypeDescription!"">
+                  <#assign disFeatureTypeDescription = productFeatureTypeDescription!"">
                    <#if (index > 1)>
                      </ul>
                      </li>

@@ -10,7 +10,6 @@
   }
 
   jQuery(document).ready(function () {
-
     if (jQuery('#BILLING_ADDRESS_ENTRY').length && jQuery('#SHIPPING_ADDRESS_ENTRY').length && jQuery('#isSameAsBilling').length && jQuery('#SHIPPING_AddressSection').length) {
       copyAddress('BILLING', jQuery('#BILLING_ADDRESS_ENTRY'), 'SHIPPING', jQuery('#SHIPPING_AddressSection'), jQuery('#isSameAsBilling'), true);
     }

@@ -17,6 +17,7 @@ import java.sql.Timestamp;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.*;
 
+String partyId = StringUtils.trimToEmpty(parameters.partyId);
 String lastName = StringUtils.trimToEmpty(parameters.lastName);
 contactUsDateFrom = StringUtils.trimToEmpty(parameters.contactUsDateFrom);
 contactUsDateTo = StringUtils.trimToEmpty(parameters.contactUsDateTo);
@@ -68,7 +69,7 @@ if(UtilValidate.isNotEmpty(isDownloaded)){
         attrExportExpr.add(EntityCondition.makeCondition("custRequestId", EntityOperator.IN, custRequestIdList));
     }
     custReqAttrList = delegator.findList("CustRequestAttribute",EntityCondition.makeCondition(attrExportExpr, EntityOperator.AND), null, null, null, false);
-} else if (UtilValidate.isEmpty(lastName) && UtilValidate.isNotEmpty(parameters.downloadall)) {
+} else if (UtilValidate.isEmpty(lastName) && UtilValidate.isNotEmpty(parameters.downloadnew) && UtilValidate.isNotEmpty(parameters.downloadloaded)) {
     custReqAttrList = delegator.findList("CustRequestAttribute",null, null, null, null, false);
 }
 
@@ -77,11 +78,18 @@ contactUsSearchList=FastList.newInstance();
 dateExpr= FastList.newInstance();
 dateCond = null;
 mainCond = null;
+if(UtilValidate.isNotEmpty(partyId)) {
+    mainCond = EntityCondition.makeCondition("fromPartyId", EntityOperator.EQUALS, partyId);
+}
 
 if(UtilValidate.isNotEmpty(custReqAttrList)) {
     custRequestIdList = EntityUtil.getFieldListFromEntityList(custReqAttrList, "custRequestId", true);
     paramsExpr.add(EntityCondition.makeCondition("custRequestId", EntityOperator.IN, custRequestIdList));
-    mainCond=EntityCondition.makeCondition(paramsExpr, EntityOperator.AND);
+    if (mainCond) {
+    	mainCond = EntityCondition.makeCondition([mainCond, EntityCondition.makeCondition(paramsExpr, EntityOperator.AND)], EntityOperator.AND);
+    } else {
+        mainCond=EntityCondition.makeCondition(paramsExpr, EntityOperator.AND);
+    }
 }
 
 if(UtilValidate.isNotEmpty(contactUsDateFrom)){

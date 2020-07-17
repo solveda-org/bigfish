@@ -1,17 +1,27 @@
 package product;
 
-
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.product.product.ProductWorker;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.apache.commons.lang.StringEscapeUtils;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.product.product.ProductWorker;
+import org.ofbiz.entity.GenericValue;
 
 if (UtilValidate.isNotEmpty(parameters.productId)) 
 {
     product = delegator.findOne("Product",["productId":parameters.productId], false);
+    if("Y".equals(product.getString("isVariant")))
+	{
+	    GenericValue parent = ProductWorker.getParentProduct(product.productId, delegator);
+	    if(UtilValidate.isNotEmpty(parent))
+	    {
+	        product = parent;
+	    }
+	}
     context.product = product;
     if (UtilValidate.isNotEmpty(product)) 
-     {
+    {
         productContentWrapper = new ProductContentWrapper(product, request);
         String productDetailHeading = "";
         if (UtilValidate.isNotEmpty(productContentWrapper))
@@ -28,6 +38,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
             context.productDetailHeading = productDetailHeading;
             context.productContentWrapper = productContentWrapper;
         }
-        context.resultList = delegator.findByAnd("ProductAssoc", [productId : parameters.productId, productAssocTypeId : "PRODUCT_VARIANT"]);
-     }
+        productAssocs = product.getRelated("MainProductAssoc");
+        context.resultList = EntityUtil.filterByAnd(productAssocs, UtilMisc.toMap("productAssocTypeId", "PRODUCT_VARIANT")); 
+    }
 }

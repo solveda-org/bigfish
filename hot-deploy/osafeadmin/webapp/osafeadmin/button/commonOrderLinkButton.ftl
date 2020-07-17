@@ -2,8 +2,8 @@
     <#if showOrderDetailLink?has_content && showOrderDetailLink == 'true'>
         <a href="<@ofbizUrl>orderDetail?orderId=${detailId!}</@ofbizUrl>" class="buttontext action" onMouseover="showTooltip(event,'${uiLabelMap.OrderDetailsLabel}');" onMouseout="hideTooltip()"><span class="detailIcon"></span></a>
     </#if>
-    <#if showAddNoteLink?has_content && showAddNoteLink == 'true'>
-        <a href="<@ofbizUrl>addOrderNote?orderId=${detailId!}</@ofbizUrl>" class="buttontext action" onMouseover="showTooltip(event,'${uiLabelMap.OrderNotesLabel}');" onMouseout="hideTooltip()"><span class="addNoteIcon"></span></a>
+    <#if showOrderNotesLink?has_content && showOrderNotesLink == 'true'>
+        <a href="<@ofbizUrl>orderNotesList?orderId=${detailId!}</@ofbizUrl>" class="buttontext action" onMouseover="showTooltip(event,'${orderNotesTooltipText}');" onMouseout="hideTooltip()"><span class="addNoteIcon"></span></a>
     </#if>
     <#if showStatusUpdateLink?has_content && showStatusUpdateLink == 'true'>
         <a href="<@ofbizUrl>statusUpdateList?orderId=${detailId!}</@ofbizUrl>" class="buttontext action" onMouseover="showTooltip(event,'${uiLabelMap.OrderStatusHistoryLabel}');" onMouseout="hideTooltip()"><span class="statusUpdateIcon"></span></a>

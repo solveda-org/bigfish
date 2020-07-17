@@ -28,7 +28,6 @@ import javax.xml.namespace.QName;
 
 import com.osafe.feeds.FeedsUtil;
 import com.osafe.feeds.osafefeeds.*;
-
 import com.osafe.services.ImportServices;
 
 uiLabelMap = UtilProperties.getResourceBundleMap("OSafeAdminUiLabels", locale);
@@ -58,26 +57,34 @@ List productFeatureSwatchDataList = FastList.newInstance();
 List manufacturerDataList = FastList.newInstance();
 
 File inputWorkbook = null;
-try {
+try 
+{
     inputWorkbook = new File(filePath);
-    
-} catch (IOException ioe) {
+} 
+catch (IOException ioe) 
+{
     //Debug.logError(ioe, module);
-} catch (Exception exc) {
+} 
+catch (Exception exc) 
+{
     //Debug.logError(exc, module);
 }
-if (inputWorkbook != null) {
+if (inputWorkbook != null) 
+{
   if(xlsFileName.endsWith(".xls"))
   {
-    try {
+    try 
+    {
         WorkbookSettings ws = new WorkbookSettings();
         ws.setLocale(new Locale("en", "EN"));
         Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
         
         // Gets the sheets from workbook
-        for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) {
+        for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) 
+        {
             BufferedWriter bw = null; 
-            try {
+            try 
+            {
                 Sheet s = wb.getSheet(sheet);
                 
                 String sTabName=s.getName();
@@ -101,19 +108,26 @@ if (inputWorkbook != null) {
                 {
                     manufacturerDataList = OsafeProductLoaderHelper.getManufacturerXLSDataList(s);
                 }
-            } catch (Exception exc) {
+            } 
+            catch (Exception exc) 
+            {
                 //Debug.logError(exc, module);
             } 
         }
-    } catch (BiffException be) {
+    } 
+    catch (BiffException be) 
+    {
         //Debug.logError(be, module);
-    } catch (Exception exc) {
+    } 
+    catch (Exception exc) 
+    {
         //Debug.logError(exc, module);
     }
   }
   if(xlsFileName.endsWith(".xml"))
   {
-      try {
+      try 
+      {
       JAXBContext jaxbContext = JAXBContext.newInstance("com.osafe.feeds.osafefeeds");
       Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
       JAXBElement<BigFishProductFeedType> bfProductFeedType = (JAXBElement<BigFishProductFeedType>)unmarshaller.unmarshal(inputWorkbook);
@@ -125,66 +139,83 @@ if (inputWorkbook != null) {
       List<ManufacturerType> productManufacturers = FastList.newInstance();
             	
       ProductsType productsType = bfProductFeedType.getValue().getProducts();
-      if(UtilValidate.isNotEmpty(productsType)) {
+      if(UtilValidate.isNotEmpty(productsType)) 
+      {
           products = productsType.getProduct();
       }
             	
       ProductCategoryType productCategoryType = bfProductFeedType.getValue().getProductCategory();
-      if(UtilValidate.isNotEmpty(productCategoryType)) {
+      if(UtilValidate.isNotEmpty(productCategoryType)) 
+      {
           productCategories = productCategoryType.getCategory();
       }
             	
       ProductAssociationType productAssociationType = bfProductFeedType.getValue().getProductAssociation();
-      if(UtilValidate.isNotEmpty(productAssociationType)) {
+      if(UtilValidate.isNotEmpty(productAssociationType)) 
+      {
           productAssociations = productAssociationType.getAssociation();
       }
             	
       ProductFeatureSwatchType productFeatureSwatchType = bfProductFeedType.getValue().getProductFeatureSwatch();
-      if(UtilValidate.isNotEmpty(productFeatureSwatchType)) {
+      if(UtilValidate.isNotEmpty(productFeatureSwatchType)) 
+      {
           productFeatureSwatches = productFeatureSwatchType.getFeature();
       }
             	
       ProductManufacturerType productManufacturerType = bfProductFeedType.getValue().getProductManufacturer();
-      if(UtilValidate.isNotEmpty(productManufacturerType)) {
+      if(UtilValidate.isNotEmpty(productManufacturerType)) 
+      {
           productManufacturers = productManufacturerType.getManufacturer();
       }
             	
-      if(productCategories.size() > 0) {
+      if(productCategories.size() > 0) 
+      {
           List dataRows = ImportServices.buildProductCategoryXMLDataRows(productCategories);
-          for (int i=0 ; i < dataRows.size() ; i++) {
+          for (int i=0 ; i < dataRows.size() ; i++) 
+          {
             Map mRow = (Map)dataRows.get(i);
             productCatDataList.add(mRow);
           }
       }
-      if(products.size() > 0) {
+      if(products.size() > 0) 
+      {
           List dataRows = ImportServices.buildProductXMLDataRows(products);
-          for (int i=0 ; i < dataRows.size() ; i++) {
+          for (int i=0 ; i < dataRows.size() ; i++) 
+          {
             Map mRow = (Map)dataRows.get(i);
             productDataList.add(mRow);
           }
       }
-      if(productAssociations.size() > 0) {
+      if(productAssociations.size() > 0) 
+      {
           List dataRows = ImportServices.buildProductAssociationXMLDataRows(productAssociations);
-          for (int i=0 ; i < dataRows.size() ; i++) {
+          for (int i=0 ; i < dataRows.size() ; i++) 
+          {
             Map mRow = (Map)dataRows.get(i);
             productAssocDataList.add(mRow);
           }
       }
-      if(productFeatureSwatches.size() > 0) {
+      if(productFeatureSwatches.size() > 0) 
+      {
           List dataRows = ImportServices.buildProductFeatureSwatchXMLDataRows(productFeatureSwatches);
-          for (int i=0 ; i < dataRows.size() ; i++) {
+          for (int i=0 ; i < dataRows.size() ; i++) 
+          {
             Map mRow = (Map)dataRows.get(i);
             productFeatureSwatchDataList.add(mRow);
           }
       }
-      if(productManufacturers.size() > 0) {
+      if(productManufacturers.size() > 0) 
+      {
           List dataRows = ImportServices.buildProductManufacturerXMLDataRows(productManufacturers);
-          for (int i=0 ; i < dataRows.size() ; i++) {
+          for (int i=0 ; i < dataRows.size() ; i++) 
+          {
             Map mRow = (Map)dataRows.get(i);
             manufacturerDataList.add(mRow);
           }
       }
-    } catch (Exception e){
+    } 
+    catch (Exception e)
+    {
     }
   }
 }

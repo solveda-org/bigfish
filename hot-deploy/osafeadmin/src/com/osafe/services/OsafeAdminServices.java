@@ -58,6 +58,7 @@ public class OsafeAdminServices {
         String xlsFileName = (String)context.get("xlsFileName");
         String processingOpt = (String)context.get("processingOpt");
         String errorExists = (String)context.get("errorExists");
+        String productStoreId = (String)context.get("productStoreId");
         
         List<String> error_list = new ArrayList<String>();
         if (UtilValidate.isEmpty(processingOpt)) {
@@ -89,7 +90,7 @@ public class OsafeAdminServices {
             try {
                 Map result  = FastMap.newInstance();
                 if(xlsDataFile.endsWith(".xls")) {
-                    importClientProductTemplateCtx = UtilMisc.toMap("xlsDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
+                    importClientProductTemplateCtx = UtilMisc.toMap("xlsDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin, "productStoreId", productStoreId);
                     result = dispatcher.runSync("importClientProductTemplate", importClientProductTemplateCtx);
                 }
                 if(xlsDataFile.endsWith(".xml")) {

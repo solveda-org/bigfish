@@ -69,7 +69,7 @@
           <h3>${uiLabelMap.PaymentInformationHeading}</h3>
               <#if  "EXT_COD" == paymentMethodType.paymentMethodTypeId>
                   <div class="PayInStoreInfo">
-                      <p>${uiLabelMap.PayInStorelabel}</p>
+                      <p>${uiLabelMap.PayInStoreLabel}</p>
                   </div>
               <#elseif "CREDIT_CARD" == paymentMethodType.paymentMethodTypeId>
                   <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>

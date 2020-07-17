@@ -1,18 +1,27 @@
 <div class="pdpSeeLargerImage">
 <div id="seeLargerImage" class="seeLargerImage">
-  <#if productLargeImageUrl?has_content && productLargeImageUrl!=''>
+  <#if productDetailImageUrl?has_content && productDetailImageUrl!=''>
     <a name="mainImageLink" id="mainImageLink" href="javascript:displayDialogBox('largeImage_');"><span>${uiLabelMap.ViewLargerImageLabel}</span></a>
   </#if>
 </div>
 </div>
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
-    <#assign variantProdCtntWrapper = productVariantMap.get('${key}')/>
-    <#assign productLargeImageUrl = variantProdCtntWrapper.get("LARGE_IMAGE_URL")!""/>
-    <#assign productDetailImageUrl = variantProdCtntWrapper.get("DETAIL_IMAGE_URL")!""/>
-    <#if productLargeImageUrl?has_content && productLargeImageUrl!=''>
+    <#assign variantProdCtntWrapper = productVariantContentWrapperMap.get('${key}')!/>
+    <#assign variantContentIdMap = productVariantProductContentIdMap.get('${key}')!""/>
+    <#assign productDetailImageUrl = context.get("productDetailImageUrl")!""/>
+    <#if variantContentIdMap?has_content>
+    	<#assign variantContentId = variantContentIdMap.get("DETAIL_IMAGE_URL")!""/>
+        <#if variantContentId?has_content>
+           <#assign productDetailImageUrl = variantProdCtntWrapper.get("DETAIL_IMAGE_URL")!""/>
+        </#if>
+    </#if>
+    <#if (!variantProductDetailImageUrl?has_content || variantProductDetailImageUrl == '')  && (productDetailImageUrl?has_content && productDetailImageUrl != '')>
+      <#assign variantProductDetailImageUrl = productDetailImageUrl/>
+    </#if>
+    <#if (variantProductDetailImageUrl?has_content && variantProductDetailImageUrl != '')>
       <div id="largeImageUrl_${key}" style="display:none">
-        <a name="mainImageLink" class="mainImageLink" href="javascript:setDetailImage('${productDetailImageUrl!productLargeImageUrl!}');displayDialogBox('largeImage_');"><span>${uiLabelMap.ViewLargerImageLabel}</span></a>
+        <a name="mainImageLink" class="mainImageLink" href="javascript:setDetailImage('<#if (variantProductDetailImageUrl?has_content && variantProductDetailImageUrl !='')>${variantProductDetailImageUrl!}</#if>');displayDialogBox('largeImage_');"><span>${uiLabelMap.ViewLargerImageLabel}</span></a>
       </div>
     </#if>  
   </#list>

@@ -4,20 +4,11 @@
 
 <#-- looping macro -->
 <#macro navBar parentCategory category levelUrl levelValue listIndex listSize>
-  <#if catContentWrappers?exists && catContentWrappers[category.productCategoryId]?exists && catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?exists>
-    <#-- Value is from the related Content record -->
-    <#assign categoryName = catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")>
-  <#else>
-    <#-- Value is from the Product Category entity-->
-    <#assign categoryName = category.categoryName?if_exists>
-  </#if>
-  <#if catContentWrappers?exists && catContentWrappers[category.productCategoryId]?exists && catContentWrappers[category.productCategoryId].get("DESCRIPTION")?exists>
-    <#-- Value is from the related Content record -->
-    <#assign categoryDescription = catContentWrappers[category.productCategoryId].get("DESCRIPTION")>
-  <#else>
-    <#-- Value is from the Product Category entity-->
-    <#assign categoryDescription = category.description?if_exists>
-  </#if>
+ 
+  <#-- Value is from the Product Category entity-->
+  <#assign categoryName = category.categoryName!>
+  <#-- Value is from the Product Category entity-->
+  <#assign categoryDescription = category.description!>
 
   <#if listIndex =1>
     <#assign itemIndexClass="navfirstitem">

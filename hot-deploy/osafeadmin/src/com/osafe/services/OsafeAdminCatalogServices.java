@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.util.List;
@@ -42,10 +43,16 @@ public class OsafeAdminCatalogServices {
     String productContentTypeId = (String) context.get("productContentTypeId");
     ByteBuffer imageData = (ByteBuffer) context.get("uploadedFile");
     String fileName = (String)context.get("_uploadedFile_fileName");
-    if (UtilValidate.isNotEmpty(fileName)) {
+    String imageFilePath = (String)context.get("imageFilePath");
+    String imageUrlRef = (String)context.get("imageUrlRef");
+    String imageResourceType = (String)context.get("imageResourceType");
+    
+    String imageUrl = "";
+    String filenameToUse = "";
+    
+    if (imageResourceType.equals("file")) 
+    {
         String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), context);
-        String productImagePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "product.images-path"), context);
-        String filenameToUse = "";
         int extensionIndex = fileName.lastIndexOf(".");
         if (extensionIndex == -1) {
         	filenameToUse = fileName;
@@ -54,7 +61,7 @@ public class OsafeAdminCatalogServices {
         }
         filenameToUse = StringUtil.replaceString(filenameToUse, " ", "_");
         
-        String productImageFullPath = OsafeAdminUtil.buildProductImagePathExt(productContentTypeId);
+        //String productImageFullPath = OsafeAdminUtil.buildProductImagePathExt(productContentTypeId);
         
         List<GenericValue> fileExtension = FastList.newInstance();
         try {
@@ -69,10 +76,10 @@ public class OsafeAdminCatalogServices {
             filenameToUse += "." + extension.getString("fileExtensionId");
         }
 
-        File file = new File(osafeThemeServerPath + productImageFullPath + filenameToUse);
+        File file = new File(osafeThemeServerPath + imageFilePath + filenameToUse);
         
-        if (!new File(osafeThemeServerPath + productImageFullPath).exists()) {
-        	new File(osafeThemeServerPath + productImageFullPath).mkdirs();
+        if (!new File(osafeThemeServerPath + imageFilePath).exists()) {
+        	new File(osafeThemeServerPath + imageFilePath).mkdirs();
 	    }
         
         try {
@@ -87,7 +94,16 @@ public class OsafeAdminCatalogServices {
             return ServiceUtil.returnError("Unable to write binary data to: " + file.getAbsolutePath());
         }
 
-        String imageUrl = productImageFullPath + filenameToUse;
+        imageUrl = imageFilePath + filenameToUse;
+    }
+    else if(imageResourceType.equals("url"))
+    {
+    	if(UtilValidate.isNotEmpty(imageUrlRef))
+    	{
+    		imageUrl = imageUrlRef;
+    		filenameToUse = imageUrlRef.substring(imageUrlRef.lastIndexOf("/")+1);
+    	}
+    }
         GenericValue productContent = null;
         String contentId = null;
         try {
@@ -193,7 +209,7 @@ public class OsafeAdminCatalogServices {
                 }
             }
         }
-    }
+    
        return ServiceUtil.returnSuccess();
 }
     
@@ -207,10 +223,16 @@ public class OsafeAdminCatalogServices {
     ByteBuffer imageData = (ByteBuffer) context.get("uploadedFile");
     String fileName = (String) context.get("_uploadedFile_fileName");
     
-    if (UtilValidate.isNotEmpty(fileName)) {
+    String imageFilePath = (String)context.get("imageFilePath");
+    String imageUrlRef = (String)context.get("imageUrlRef");
+    String imageResourceType = (String)context.get("imageResourceType");
+    
+    String imageUrl = "";
+    String filenameToUse = "";
+    
+    if (imageResourceType.equals("file")) 
+    {
         String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), context);
-        
-        String filenameToUse = null;
         
         int extensionIndex = fileName.lastIndexOf(".");
         if (extensionIndex == -1) {
@@ -231,12 +253,12 @@ public class OsafeAdminCatalogServices {
         if (extension != null) {
             filenameToUse += "." + extension.getString("fileExtensionId");
         }
-        String productCategoryImagePath = OsafeAdminUtil.buildProductImagePathExt("CATEGORY_IMAGE_URL");
+        //String productCategoryImagePath = OsafeAdminUtil.buildProductImagePathExt("CATEGORY_IMAGE_URL");
         
-        File file = new File(osafeThemeServerPath + productCategoryImagePath + filenameToUse);
+        File file = new File(osafeThemeServerPath + imageFilePath + filenameToUse);
         
-        if (!new File(osafeThemeServerPath + productCategoryImagePath).exists()) {
-        	new File(osafeThemeServerPath + productCategoryImagePath).mkdirs();
+        if (!new File(osafeThemeServerPath + imageFilePath).exists()) {
+        	new File(osafeThemeServerPath + imageFilePath).mkdirs();
 	    }
         
         try {
@@ -250,23 +272,30 @@ public class OsafeAdminCatalogServices {
             Debug.logError(e, module);
             return ServiceUtil.returnError("Unable to write binary data to: " + file.getAbsolutePath());
         }
-
-        String imageUrl = productCategoryImagePath + filenameToUse;
-
-        if (UtilValidate.isNotEmpty(imageUrl) && imageUrl.length() > 0) {
-        	
-            Map<String, Object> productCategoryCtx = FastMap.newInstance();
-        	productCategoryCtx.put("productCategoryId", productCategoryId);
-        	productCategoryCtx.put("categoryImageUrl", imageUrl);
-        	productCategoryCtx.put("productCategoryTypeId", "CATALOG_CATEGORY");
-        	productCategoryCtx.put("userLogin", userLogin);
-        	try {
-        		dispatcher.runSync("updateProductCategory", productCategoryCtx);
-        	} catch (GenericServiceException e) {
-        		Debug.logError(e, module);
-			}
-        }
-      }
+        imageUrl = imageFilePath + filenameToUse;
+    }
+    else if(imageResourceType.equals("url"))
+    {
+    	if(UtilValidate.isNotEmpty(imageUrlRef))
+    	{
+    		imageUrl = imageUrlRef;
+    	}
+    }
+    
+    if (UtilValidate.isNotEmpty(imageUrl) && imageUrl.length() > 0) 
+    {
+    	
+        Map<String, Object> productCategoryCtx = FastMap.newInstance();
+    	productCategoryCtx.put("productCategoryId", productCategoryId);
+    	productCategoryCtx.put("categoryImageUrl", imageUrl);
+    	productCategoryCtx.put("productCategoryTypeId", "CATALOG_CATEGORY");
+    	productCategoryCtx.put("userLogin", userLogin);
+    	try {
+    		dispatcher.runSync("updateProductCategory", productCategoryCtx);
+    	} catch (GenericServiceException e) {
+    		Debug.logError(e, module);
+		}
+    }
       return ServiceUtil.returnSuccess();
     }
     
@@ -286,7 +315,7 @@ public class OsafeAdminCatalogServices {
         List<GenericValue> rollups = null;
 
         try {
-            rollups = delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("parentProductCategoryId", parentId), UtilMisc.toList("sequenceNum"));
+            rollups = delegator.findByAnd("ProductCategoryRollup", UtilMisc.toMap("parentProductCategoryId", parentId), UtilMisc.toList("sequenceNum"));
             if (limitView) {
                 rollups = EntityUtil.filterByDate(rollups, true);
             }
@@ -301,7 +330,7 @@ public class OsafeAdminCatalogServices {
                 Map<String, Object> cvMap = FastMap.newInstance();
 
                 try {
-                    cv = parent.getRelatedOneCache("CurrentProductCategory");
+                    cv = parent.getRelatedOne("CurrentProductCategory");
                 } catch (GenericEntityException e) {
                     Debug.logWarning(e.getMessage(), module);
                 }
@@ -355,19 +384,24 @@ public class OsafeAdminCatalogServices {
     String productContentTypeId = (String) context.get("productContentTypeId");
     ByteBuffer imageData = (ByteBuffer) context.get("uploadedFile");
     String fileName = (String)context.get("_uploadedFile_fileName");
-    if (UtilValidate.isNotEmpty(fileName)) {
+    String imageFilePath = (String)context.get("imageFilePath");
+    String imageUrlRef = (String)context.get("imageUrlRef");
+    String imageResourceType = (String)context.get("imageResourceType");
+        
+    String imageUrl = "";
+    String filenameToUse = "";
+    if (imageResourceType.equals("file")) {
         String osafeThemeServerPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "osafe.theme.server"), context);
-        String productImagePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe", "product.images-path"), context);
-        String filenameToUse = "";
-
+        
         filenameToUse = StringUtil.replaceString(fileName, " ", "_");
         
-        String productImageFullPath = OsafeAdminUtil.buildProductImagePathExt(productContentTypeId);
+        //String productImageFullPath = OsafeAdminUtil.buildProductImagePathExt(productContentTypeId);
         
-        File file = new File(osafeThemeServerPath + productImageFullPath + filenameToUse);
+        File file = new File(osafeThemeServerPath + imageFilePath + filenameToUse);
         
-        if (!new File(osafeThemeServerPath + productImageFullPath).exists()) {
-        	new File(osafeThemeServerPath + productImageFullPath).mkdirs();
+        if (!new File(osafeThemeServerPath + imageFilePath).exists()) 
+        {
+        	new File(osafeThemeServerPath + imageFilePath).mkdirs();
 	    }
         
         try {
@@ -381,8 +415,17 @@ public class OsafeAdminCatalogServices {
             Debug.logError(e, module);
             return ServiceUtil.returnError("Unable to write binary data to: " + file.getAbsolutePath());
         }
-
-        String imageUrl = productImageFullPath + filenameToUse;
+        imageUrl = imageFilePath + filenameToUse;
+    }
+    else if(imageResourceType.equals("url"))
+    {
+    	if(UtilValidate.isNotEmpty(imageUrlRef))
+    	{
+    		imageUrl = imageUrlRef;
+    		filenameToUse = imageUrlRef.substring(imageUrlRef.lastIndexOf("/")+1);
+    	}
+    }
+        
         GenericValue productContent = null;
         String contentId = null;
         try {
@@ -488,7 +531,7 @@ public class OsafeAdminCatalogServices {
                 }
             }
         }
-    }
+    
        return ServiceUtil.returnSuccess();
 }
    

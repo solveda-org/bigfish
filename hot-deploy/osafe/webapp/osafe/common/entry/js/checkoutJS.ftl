@@ -1,5 +1,5 @@
 <script type="text/javascript">
-
+<#assign allowCOD = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD")/>
     function submitCheckoutForm(form, mode, value) 
     {
         if (mode == "DN") {
@@ -131,9 +131,13 @@
                 if (${storeCC.toString()}) {
                     if (!${storeCCReq.toString()}) {
                         jQuery('.paymentOptions').show();
+                        jQuery('.codOptions').hide();
                     }
                 } else {
                     jQuery('.creditCardEntry').hide();
+                    if(${allowCOD.toString()}) {
+                        jQuery('.codOptions').show();
+                    }
                 }
             });
         });
@@ -147,7 +151,7 @@
         //submit store locator search form
         jQuery('.storePickup_Form').submit(function(event) {
             event.preventDefault();
-            jQuery.getScript(jQuery(this).attr('action')+'?'+jQuery(this).serialize(), function(data, textStatus, jqxhr) {
+            jQuery.get(jQuery(this).attr('action')+'?'+jQuery(this).serialize(), function(data) {
                 jQuery('#eCommerceStoreLocatorContainer').replaceWith(data);
                 pickupStoreEventListener();
                 if (jQuery('#isGoogleApi').val() != "Y") {
@@ -226,6 +230,9 @@
             jQuery('.shippingOptionsStorePickup').show();
             jQuery('.creditCardEntry').show();
             jQuery('.paymentOptions').hide();
+            if(${allowCOD.toString()}) {
+                jQuery('.codOptions').show();
+            }
         });
     }
 

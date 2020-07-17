@@ -29,7 +29,7 @@ if (UtilValidate.isNotEmpty(preRetrieved))
 }
 else
 {
-  preRetrieved = context.preRetrieved;
+   preRetrieved = context.preRetrieved;
 }
 
 if (UtilValidate.isNotEmpty(initializedCB))
@@ -41,10 +41,15 @@ compareParamList = FastList.newInstance();
 tmpDir = FileUtil.getFile("runtime/tmp");
 uploadedFile = new File(tmpDir, context.uploadedFileName);
 
+//List of Existing Params
+productStoreId = globalContext.productStoreId;
 systemParamList = delegator.findList("XProductStoreParm", EntityCondition.makeCondition([productStoreId : productStoreId]), null, null, null, false);
 XmlFileToPath =  uploadedFile.getAbsolutePath();
+
+//List of UploadedFile Params
 paramToList =  UtilMisc.sortMaps(OsafeManageXml.getListMapsFromXmlFile(XmlFileToPath, "XProductStoreParm"), UtilMisc.toList("parmKey"));
-if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") {
+if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") 
+{
     //type  1 searchParamKeysNotInYourDatabase |  2 searchParamKeysNotInUploadedFile  |  3  searchParamKeysInBoth
     for (fromMapEntry in systemParamList) 
     {
@@ -56,7 +61,8 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") {
                 compareParamList.add(UtilMisc.toMap("key", fromMapEntry.parmKey, "fromMap", fromMapEntry, "toMap", toMapEntry, "type", "3"));
             }
             paramToList.remove(toMapEntry);
-        } else 
+        } 
+        else 
         {
             if (initial || searchParamKeysNotInUploadedFile.equals("Y")) 
             {

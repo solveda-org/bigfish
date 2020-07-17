@@ -67,12 +67,16 @@
     <#assign strippedMetaKeywords = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(metaKeywords!productStore.subtitle!"",Static["com.osafe.util.Util"].getProductStoreParm(request,"SEO_META_KEY_LEN"))!"")/>
     <meta name="keywords" content="${strippedMetaKeywords!""}"/>
 
-    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"PCA_ACTIVE_FLAG") && loadPca?has_content && loadPca == "Y">
-        <#assign osafeCapturePlus = Static["com.osafe.captureplus.OsafeCapturePlus"].getInstance(globalContext.productStoreId!) />
-        <#if osafeCapturePlus.isNotEmpty()>
-            ${setRequestAttribute("osafeCapturePlus",osafeCapturePlus)}
+    <#assign addressVerificationMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"ADDRESS_VERIFICATION_METHOD")!""/>
+    <#if addressVerificationMethod?has_content && loadPca?has_content && loadPca == "Y">
+        <#if addressVerificationMethod.toUpperCase() == "PCA">
+            <#assign osafeCapturePlus = Static["com.osafe.captureplus.OsafeCapturePlus"].getInstance(globalContext.productStoreId!) />
+            <#if osafeCapturePlus.isNotEmpty()>
+                ${setRequestAttribute("osafeCapturePlus",osafeCapturePlus)}
+            </#if>
         </#if>
     </#if>
+
     <#assign reviewMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"REVIEW_METHOD")!""/>
     <#if reviewMethod?has_content >
 	    <#if reviewMethod.toUpperCase() == "REEVOO" >

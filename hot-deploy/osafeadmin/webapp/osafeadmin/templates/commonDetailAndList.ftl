@@ -15,6 +15,7 @@ ${sections.render('tooltipBody')?if_exists}
       <div class="header"><h2>${detailListBoxHeading!}</h2></div>
       <div class="boxBody">
         <table class="osafe">
+            ${sections.render('detailEntryTableBody')!}
             ${sections.render('detailListBoxBody')?if_exists}
         </table>
       </div>

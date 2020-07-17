@@ -24,10 +24,34 @@
         <#assign dateTo = Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(visitorCountInfo.tempToDate, preferredDateFormat)!>
         <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
              <td class="qtyCol firstCol" >${visitorCountInfo.month!""}</a></td>
-             <td class="qtyCol"><a href="abandonedCartList?isAnon=isAnonAll&isReg=isNoReg&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.anonVisitorCount!""}</a></td>
-             <td class="qtyCol"><a href="abandonedCartList?isAnon=isAnonItems&isReg=isNoReg&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.anonItemsVisitorCount!""}</a></td>
-             <td class="qtyCol"><a href="abandonedCartList?isReg=isRegAll&isAnon=isNoAnon&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.regVisitorCount!""}</a></td>
-             <td class="qtyCol"><a href="abandonedCartList?isReg=isRegItems&isAnon=isNoAnon&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.regItemsVisitorCount!""}</a></td>
+             <td class="qtyCol">
+	             <#if visitorCountInfo.anonVisitorCount != 0>
+	             	<a href="abandonedCartList?isAnon=isAnonAll&isReg=isNoReg&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.anonVisitorCount!""}</a>
+	             <#else>
+	             	${visitorCountInfo.anonVisitorCount!""}
+	             </#if>
+             </td>
+             <td class="qtyCol">
+             	<#if visitorCountInfo.anonItemsVisitorCount != 0>
+	             	<a href="abandonedCartList?isAnon=isAnonItems&isReg=isNoReg&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.anonItemsVisitorCount!""}</a>
+	             <#else>
+	             	${visitorCountInfo.anonItemsVisitorCount!""}
+	             </#if>
+             </td>
+             <td class="qtyCol">
+	             <#if visitorCountInfo.regVisitorCount != 0>
+	             	<a href="abandonedCartList?isReg=isRegAll&isAnon=isNoAnon&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.regVisitorCount!""}</a>
+	             <#else>
+	             	${visitorCountInfo.regVisitorCount!""}
+	             </#if>
+             </td>
+             <td class="qtyCol">
+	             <#if visitorCountInfo.regItemsVisitorCount != 0>
+	             	<a href="abandonedCartList?isReg=isRegItems&isAnon=isNoAnon&dateFrom=${dateFrom}&dateTo=${dateTo}">${visitorCountInfo.regItemsVisitorCount!""}</a>
+	             <#else>
+	             	${visitorCountInfo.regItemsVisitorCount!""}
+	             </#if>
+             </td>
         </tr>
         <#-- toggle the row color -->
         <#if rowClass == "2">

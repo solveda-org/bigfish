@@ -20,7 +20,7 @@ import org.ofbiz.entity.util.EntityFindOptions;
 
 
 productStoreId=globalContext.productStoreId;
-partyId=parameters.partyId;
+partyId=parameters.carrierPartyId;
 
 //get carrier info
 if (UtilValidate.isNotEmpty(partyId))

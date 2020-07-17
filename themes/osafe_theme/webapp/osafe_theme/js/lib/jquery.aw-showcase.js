@@ -38,7 +38,7 @@
 					<!-- You can add multiple elements to the anchor-tag which are display in the tooltip. -->
 					<img src="images/glasses.png" />
 					<span style="display: block; font-weight: bold; padding: 3px 0 3px 0; text-align: center;">
-						White Glasses: 500$
+						White Glasses: 500jQuery
 					</span>
 				</a>
 			</div>
@@ -135,7 +135,7 @@
 			options.dynamic_height = false;
 			content_container.css('width', content_viewline_width);
 			showcase.css('overflow', 'hidden');
-			$('.showcase-arrow-previous').hide();
+			jQuery('.showcase-arrow-previous').hide();
 		}
 		
 		// Set up content and create the content and thumbnail array
@@ -450,7 +450,7 @@
 					changeContent(current_id+1, 'next');
 				});
 				
-			if (options.viewline) { $('.showcase-arrow-previous').hide(); }
+			if (options.viewline) { jQuery('.showcase-arrow-previous').hide(); }
 		}
 		
 		// Adding navigation buttons
@@ -594,19 +594,19 @@
 								old_animation_distance = animation_distance;
 								animation_distance -= addedContentArray[current_id].find('.showcase-content').children().width();
 							}
-							else if ($('.showcase-arrow-next').is(':visible')) 
+							else if (jQuery('.showcase-arrow-next').is(':visible')) 
 							{
 								old_animation_distance = animation_distance;
 								animation_distance = -(content_viewline_width - (remaining_width + (showcase_width - remaining_width)));
-								$('.showcase-arrow-next').fadeOut(300);
+								jQuery('.showcase-arrow-next').fadeOut(300);
 							}
 							
 							content_container.animate({left: animation_distance + 'px'}, options.transition_speed, function() { animating = false; });
 							
 							// Change current content id (if content is finished)
-							if ($('.showcase-arrow-next').is(':visible')) { current_id++; }
+							if (jQuery('.showcase-arrow-next').is(':visible')) { current_id++; }
 							
-							$('.showcase-arrow-previous').fadeIn(300);
+							jQuery('.showcase-arrow-previous').fadeIn(300);
 						}
 					}
 					else {
@@ -707,7 +707,7 @@
 							// Change current content id
 							current_id--;
 							
-							if (current_id === 0) { $('.showcase-arrow-previous').fadeOut(300); }
+							if (current_id === 0) { jQuery('.showcase-arrow-previous').fadeOut(300); }
 							
 							// Set old distance
 							old_id = current_id - 1;
@@ -715,7 +715,7 @@
 							old_animation_distance = old_animation_distance + sub_width;
 						}
 						
-						$('.showcase-arrow-next').fadeIn(300);
+						jQuery('.showcase-arrow-next').fadeIn(300);
 					}
 					else {
 					
@@ -1159,9 +1159,9 @@
 		}
 		
 		// Show all content on one page
-		$('#awOnePageButton').click(function showInOnePage()
+		jQuery('#awOnePageButton').click(function showInOnePage()
 		{
-			if ($('.view-page').is(':visible'))
+			if (jQuery('.view-page').is(':visible'))
 			{
 				var temp_container = jQuery(document.createElement('div'));
 				temp_container.addClass('showcase-onepage');
@@ -1170,11 +1170,11 @@
 				// Disable auto change on click
 				if (myInterval) { pause_loop = true; clearInterval(myInterval); }
 				
-				$(this).find('.view-page').hide();
-				$(this).find('.view-slide').show();
+				jQuery(this).find('.view-page').hide();
+				jQuery(this).find('.view-slide').show();
 				showcase.hide();
 			
-				$.each(contentArray, function(index, value)
+				jQuery.each(contentArray, function(index, value)
 				{
 					obj = getContent(index);
 					obj.css('position', 'relative');
@@ -1193,9 +1193,9 @@
 			}
 			else
 			{
-				$('.showcase-onepage').remove();
-				$(this).find('.view-page').show();
-				$(this).find('.view-slide').hide();
+				jQuery('.showcase-onepage').remove();
+				jQuery(this).find('.view-page').show();
+				jQuery(this).find('.view-slide').hide();
 				showcase.show();
 			}
 			
@@ -1209,8 +1209,8 @@
 			content_viewline_width = 0;
 			content_container.children('div').each(function()
 			{
-				content_viewline_width += $(this).find('.showcase-content').children().width();
-				addedContentArray.push($(this));
+				content_viewline_width += jQuery(this).find('.showcase-content').children().width();
+				addedContentArray.push(jQuery(this));
 			});
 		}
 		

@@ -84,6 +84,33 @@
         jQuery(this).addClass('selected');
         makeProductUrl(this);
     });
+    
+    jQuery('.eCommerceAccessoryProduct .plpFeatureSwatchImage').click(function() {
+        var swatchVariant = jQuery(this).next('.swatchVariant').clone();
+        
+        var swatchVariantOnlinePrice = jQuery(this).nextAll('.swatchVariantOnlinePrice:first').clone().show();
+        swatchVariantOnlinePrice.removeClass('swatchVariantOnlinePrice').addClass('plpPriceOnline');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpAccessoryPriceOnlineSeq').find('.plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
+
+        var swatchVariantListPrice = jQuery(this).nextAll('.swatchVariantListPrice:first').clone().show();
+        swatchVariantListPrice.removeClass('swatchVariantListPrice').addClass('plpPriceList');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpAccessoryPriceListSeq').find('.plpPriceList').replaceWith(swatchVariantListPrice);
+        
+        var swatchVariantSaveMoney = jQuery(this).nextAll('.swatchVariantSaveMoney:first').clone().show();
+        swatchVariantSaveMoney.removeClass('swatchVariantSaveMoney').addClass('plpPriceSavingMoney');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpAccessoryPriceSavingMoneySeq').find('.plpPriceSavingMoney').replaceWith(swatchVariantSaveMoney);
+        
+        var swatchVariantSavingPercent = jQuery(this).nextAll('.swatchVariantSavingPercent:first').clone().show();
+        swatchVariantSavingPercent.removeClass('swatchVariantSavingPercent').addClass('plpPriceSavingPercent');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpAccessoryPriceSavingPercentSeq').find('.plpPriceSavingPercent').replaceWith(swatchVariantSavingPercent);
+        
+        jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
+        jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
+        jQuery(this).siblings('.plpFeatureSwatchImage').removeClass('selected');
+        jQuery(this).addClass('selected');
+        makeProductUrl(this);
+    });
+    
     activateInitialZoom();
 
     var selectedSwatch = '${StringUtil.wrapString(parameters.productFeatureType)!""}';
@@ -112,17 +139,6 @@
         }
     }
     
-    function isVirtual(product) {
-        var isVirtual = false;
-        <#if virtualJavaScript?exists>
-        for (i = 0; i < VIR.length; i++) {
-            if (VIR[i] == product) {
-                isVirtual = true;
-            }
-        }
-        </#if>
-        return isVirtual;
-    }
     function addItem() {
        if (document.addform.add_product_id.value == 'NULL' || document.addform.add_product_id.value == '') {
            for (i = 0; i < OPT.length; i++) {
@@ -163,12 +179,7 @@
                 alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPQtyDecimalNumberError,'\"','\\"'))}");
                 return false;
            }
-           if (isVirtual(document.addform.add_product_id.value)) {
-               document.location = '<@ofbizUrl>product?category_id=${categoryId?if_exists}&product_id=</@ofbizUrl>' + document.addform.add_product_id.value;
-               return;
-           } else {
-               document.addform.submit();
-           }
+           document.addform.submit();
        }
     }
     
@@ -224,23 +235,6 @@
       };
     }
     
-    function popupDetail(detailImageUrl) {
-        extraWidth = 100;
-        height = ${IMG_SIZE_PDP_POPUP_H!} + extraWidth;
-        width = ${IMG_SIZE_PDP_POPUP_W!} + extraWidth;
-        popUp("<@ofbizUrl>popupDetailImage?detail=" + detailImageUrl + "</@ofbizUrl>", 'detailImage', height, width);
-    }
-
-    function toggleAmt(toggle) {
-        if (toggle == 'Y') {
-            changeObjectVisibility("add_amount", "visible");
-        }
-
-        if (toggle == 'N') {
-            changeObjectVisibility("add_amount", "hidden");
-        }
-    }
-
     function findIndex(name) {
         for (i = 0; i < OPT.length; i++) {
             if (OPT[i] == name) {
@@ -250,18 +244,23 @@
         return -1;
     }
 
-    function addFeatureAction(featureUl) {
-        jQuery('#'+featureUl+' li').click(function(){
-            jQuery(this).siblings("li").removeClass("selected");
-            jQuery(this).addClass("selected"); 
-        });
-    }
-
     function getList(name, index, src) 
     {
         currentFeatureIndex = findIndex(name);
-            // set the drop down index for swatch selection
-            document.forms["addform"].elements[name].selectedIndex = (index*1)+1;
+        
+        if(index != -1)
+        {
+        	var liElm = jQuery('#Li'+name+" li").get(index);
+		}
+		else
+		{
+			var liElm = jQuery('#Li'+name+" li").get(0);
+		}
+        jQuery(liElm).siblings("li").removeClass("selected");
+        jQuery(liElm).addClass("selected");
+        
+        // set the drop down index for swatch selection
+        document.forms["addform"].elements[name].selectedIndex = (index*1)+1;
         if (currentFeatureIndex < (OPT.length-1)) 
         {
             // eval the next list if there are more
@@ -273,9 +272,11 @@
 
             jQuery('.pdpRecentlyViewed .'+featureGroupDesc).click();
             jQuery('.pdpComplement .'+featureGroupDesc).click();
+            jQuery('.pdpAccessory .'+featureGroupDesc).click();
             
             jQuery('.pdpRecentlyViewed .'+selectedText).click();
             jQuery('.pdpComplement .'+selectedText).click();
+            jQuery('.pdpAccessory .'+selectedText).click();
             
             var detailImgUrl = '';
             if(VARMAP[mapKey]) 
@@ -371,12 +372,17 @@
             var sku = document.forms["addform"].elements[name].options[indexSelected].value;
             // set the product ID
             setAddProductId(sku);
-            setProductStock(sku);
-
-            // check for amount box
-            toggleAmt(checkAmtReq(sku));
-        
+            
             var varProductId = jQuery('#add_product_id').val();
+            if(varProductId == "")
+            {
+            	jQuery('#addToCart').addClass("inactiveAddToCart");
+			}
+			else 
+			{
+				setProductStock(sku);
+			}
+        
             if(jQuery('#mainImage_'+varProductId).length) 
             {
 	            var variantMainImages = jQuery('#mainImage_'+varProductId).clone();
@@ -433,50 +439,7 @@
         activateScroller();
     }
 
-    function validate(x){
-        var msg=new Array();
-        msg[0]="Please use correct date format [yyyy-mm-dd]";
 
-        var y=x.split("-");
-        if(y.length!=3){ alert(msg[0]);return false; }
-        if((y[2].length>2)||(parseInt(y[2])>31)) { alert(msg[0]); return false; }
-        if(y[2].length==1){ y[2]="0"+y[2]; }
-        if((y[1].length>2)||(parseInt(y[1])>12)){ alert(msg[0]); return false; }
-        if(y[1].length==1){ y[1]="0"+y[1]; }
-        if(y[0].length>4){ alert(msg[0]); return false; }
-        if(y[0].length<4) {
-            if(y[0].length==2) {
-                y[0]="20"+y[0];
-            } else {
-                alert(msg[0]);
-                return false;
-            }
-        }
-        return (y[0]+"-"+y[1]+"-"+y[2]);
-    }
-
-    <#if currentProduct.virtualVariantMethodEnum?if_exists == "VV_FEATURETREE" && featureLists?has_content>
-        function checkRadioButton() {
-            var block1 = document.getElementById("addCart1");
-            var block2 = document.getElementById("addCart2");
-            <#list featureLists as featureList>
-                <#list featureList as feature>
-                    <#if feature_index == 0>
-                        var myList = document.getElementById("FT${feature.productFeatureTypeId}");
-                         if (myList.options[0].selected == true){
-                             block1.style.display = "none";
-                             block2.style.display = "block";
-                             return;
-                         }
-                        <#break>
-                    </#if>
-                </#list>
-            </#list>
-            block1.style.display = "block";
-            block2.style.display = "none";
-        }
-    </#if>
-    
     function activateZoom(imgUrl) {
         if (typeof imgUrl == "undefined" || imgUrl == "NULL" || imgUrl == "") 
         {
@@ -553,31 +516,6 @@ var zoomOptions = {
         jQuery(elm).parents('.eCommerceListItem').find('a.pdpUrl').attr("href",pdpUrl);
         jQuery(elm).parents('.eCommerceListItem').find('a.pdpUrl.review').attr("href",pdpUrl+"#productReviews");
     }
-    
-
-// hidden div functions
-
-function getStyleObject(objectId) {
-    if (document.getElementById && document.getElementById(objectId)) {
-        return document.getElementById(objectId).style;
-    } else if (document.all && document.all(objectId)) {
-        return document.all(objectId).style;
-    } else if (document.layers && document.layers[objectId]) {
-        return document.layers[objectId];
-    } else {
-        return false;
-    }
-}
-function changeObjectVisibility(objectId, newVisibility) {
-    var styleObject = getStyleObject(objectId);
-    if (styleObject) {
-        styleObject.visibility = newVisibility;
-        return true;
-    } else {
-        return false;
-    }
-}
-
 </#if>
 
  </script>

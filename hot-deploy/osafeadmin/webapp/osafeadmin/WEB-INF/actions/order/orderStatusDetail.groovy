@@ -1,24 +1,58 @@
 package order;
 
 import org.apache.commons.lang.StringUtils;
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.order.order.OrderReadHelper;
-import org.ofbiz.party.contact.ContactHelper;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
-
 import javolution.util.FastList;
-import javolution.util.FastMap;
-
-import org.ofbiz.base.util.*;
+import org.ofbiz.base.util.UtilValidate;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
-if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
+
+orderHeader = null;
+OrderNotes = null;
+
+if (UtilValidate.isNotEmpty(orderId)) 
+{
+	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
+	context.orderHeader = orderHeader;
+	
+	notes = orderHeader.getRelatedOrderBy("OrderHeaderNoteView", ["-noteDateTime"]);
+	context.orderNotes = notes;
+	orderNotes = notes;
+
+	showNoteHeadingOnPDF = false;
+	if (UtilValidate.isNotEmpty(notes) && EntityUtil.filterByCondition(notes, EntityCondition.makeCondition("internalNote", EntityOperator.EQUALS, "N")).size() > 0) 
+	{
+		showNoteHeadingOnPDF = true;
+	}
+	context.showNoteHeadingOnPDF = showNoteHeadingOnPDF;
+	
+	
+	// note these are overridden in the OrderViewWebSecure.groovy script if run
+	context.hasPermission = true;
+	context.canViewInternalDetails = true;
+
+	orderReadHelper = new OrderReadHelper(orderHeader);
+	orderItems = orderReadHelper.getOrderItems();
+	orderAdjustments = orderReadHelper.getAdjustments();
+	orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
+	orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
+	orderTerms = orderHeader.getRelated("OrderTerm");
+
+	context.orderHeader = orderHeader;
+	context.orderReadHelper = orderReadHelper;
+	context.orderItems = orderItems;
+	
+	pagingListSize=orderItems.size();
+	context.pagingListSize=pagingListSize;
+	context.pagingList = orderItems;
+}
+
+if(UtilValidate.isNotEmpty(orderId) && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
 {
     messageMap=[:];
     messageMap.put("orderId", orderId);
@@ -33,15 +67,17 @@ conditions.add(EntityCondition.makeCondition("statusId", EntityOperator.IN, ["OR
 mainCond = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 statusItems = delegator.findList("StatusItem", mainCond, null, ["sequenceId"], null, false);
 context.statusItems = statusItems;
-
+context.notesCount = orderNotes.size();
 
 //is it a store pickup?
 storeId = "";
-orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], false);
+orderDeliveryOptionAttr = orderHeader.getRelatedByAnd("OrderAttribute", [attrName : "DELIVERY_OPTION"]);
+orderDeliveryOptionAttr = EntityUtil.getFirst(orderDeliveryOptionAttr);
 if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP") 
 {
 	context.isStorePickup = "Y";
-	orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], false);
+	orderStoreLocationAttr = orderHeader.getRelatedByAnd("OrderAttribute", [attrName : "STORE_LOCATION"]);
+	orderStoreLocationAttr = EntityUtil.getFirst(orderStoreLocationAttr);
 	if (UtilValidate.isNotEmpty(orderStoreLocationAttr)) 
 	{
 		storeId = orderStoreLocationAttr.attrValue;

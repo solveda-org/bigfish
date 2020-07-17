@@ -617,7 +617,6 @@
                 <process field="BILLING_ATTN_NAME"><copy to-field="attnName"/></process>
                 <process field="BILLING_ADDRESS1">
                     <copy to-field="address1"/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="AddressLine1MissingError"/></not-empty>
                 </process>
                 <process field="BILLING_ADDRESS2"><copy to-field="address2"/></process>
                 <process field="BILLING_CITY">
@@ -629,19 +628,26 @@
                 </process>
                 <process field="BILLING_COUNTRY">
                     <copy to-field="countryGeoId"/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="CountryMissingError"/></not-empty>
                 </process>
                 <process field="BILLING_ADDRESS_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
             </simple-map-processor>
         </call-map-processor>
+        <if-empty field="parameters.BILLING_ADDRESS1">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressLine1MissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS1" list="billing_error_list"/>
+        </if-empty>
+        <if-empty field="parameters.BILLING_COUNTRY">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CountryMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="BILLING_COUNTRY" list="billing_error_list"/>
+        </if-empty>
         <if-empty field="parameters.BILLING_POSTAL_CODE">
             <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ZipCodeMissingError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="billing_error_list"/>
             </if-compare>
             <if-compare value="CAN" operator="equals" field="parameters.BILLING_COUNTRY">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="billing_error_list"/>
             </if-compare>
         </if-empty>
 
@@ -656,11 +662,11 @@
             <then>
                 <if-empty field="parameters.BILLING_CITY">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_CITY" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_CITY" list="billing_error_list"/>
                 </if-empty>
                 <if-empty field="parameters.BILLING_STATE">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_STATE" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_STATE" list="billing_error_list"/>
                 </if-empty>
             </then>
             <else>
@@ -696,7 +702,7 @@
                 </if-not-empty>
                 <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="billing_error_list"/>
                 </if-compare>
             </else>
         </if>
@@ -710,7 +716,7 @@
             </if-compare>
             <if-compare field="isZipCode" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidZipCodeError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="billing_error_list"/>
             </if-compare>
         </if-not-empty>
 
@@ -719,7 +725,41 @@
             <set field="addressContext.address3" from-field="parameters.BILLING_ADDRESS3"/>
         </if-compare>
 
-            <return response-code="success"/>
+
+         <!-- if no error in validation then perform verification -->
+         <if-empty field="billing_error_list">
+             <if-empty field="parameters.BILLING_SKIP_VERIFICATION">
+                  <!-- Check if there are any extended address validation to perform -->
+                 <set-service-fields service-name="extendedAddressValidation" to-map="extendedAddressValidationCtx" map="addressContext"/>
+                 <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                     <field field="request" type="javax.servlet.ServletRequest"/>
+                 </call-class-method>
+                 <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
+                 <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
+                    <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+                </call-service>
+                <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
+                <!-- check verification method -->
+                <if-compare operator="not-equals" value="NONE" field="verificationMethod">
+                    <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
+                    <if-compare operator="greater" value="0" field="responseCode">
+                        <if-compare operator="equals" value="1" field="responseCode">
+                            <!-- verification success -->
+                        </if-compare>
+                        <if-compare operator="equals" value="2" field="responseCode">
+                            <!-- general configuration error -->
+                        </if-compare>
+                    <else>
+                         <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
+                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                         <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
+                    </else>
+                    </if-compare>
+                </if-compare>
+            </if-empty>
+        </if-empty>
+        <list-to-list list="billing_error_list" to-list="error_list"/>
+        <return response-code="success"/>
     </simple-method>
 
     <simple-method method-name="validateShippingAddress" short-description="validate Shipping Address" login-required="false">
@@ -737,7 +777,6 @@
                 </process>
                 <process field="SHIPPING_ADDRESS1">
                     <copy to-field="address1"/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="AddressLine1MissingError"/></not-empty>
                 </process>
                 <process field="SHIPPING_ADDRESS2"><copy to-field="address2"/></process>
                 <process field="SHIPPING_CITY"><copy to-field="city"/></process>
@@ -745,27 +784,34 @@
                 <process field="SHIPPING_POSTAL_CODE"><copy to-field="postalCode"/></process>
                 <process field="SHIPPING_COUNTRY">
                     <copy to-field="countryGeoId"/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="CountryMissingError"/></not-empty>
                 </process>
                 <process field="SHIPPING_ADDRESS_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
             </simple-map-processor>
         </call-map-processor>
+        <if-empty field="parameters.SHIPPING_ADDRESS1">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressLine1MissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS1" list="shipping_error_list"/>
+        </if-empty>
+        <if-empty field="parameters.SHIPPING_COUNTRY">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CountryMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_COUNTRY" list="shipping_error_list"/>
+        </if-empty>
 
         <if-compare-field field="parameters.SHIPPING_ATTN_NAME" operator="not-equals" to-field="nullValue">
             <if-empty field="parameters.SHIPPING_ATTN_NAME ">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressNickNameMissingError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ATTN_NAME" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ATTN_NAME" list="shipping_error_list"/>
             </if-empty>
         </if-compare-field>
 
         <if-empty field="parameters.SHIPPING_POSTAL_CODE ">
             <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ZipCodeMissingError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="shipping_error_list"/>
             </if-compare>
             <if-compare value="CAN" operator="equals" field="parameters.SHIPPING_COUNTRY">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="shipping_error_list"/>
             </if-compare>
         </if-empty>
 
@@ -780,11 +826,11 @@
                 <then>
                     <if-empty field="parameters.SHIPPING_CITY">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_CITY" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_CITY" list="shipping_error_list"/>
                     </if-empty>
                     <if-empty field="parameters.SHIPPING_STATE">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_STATE" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_STATE" list="shipping_error_list"/>
                     </if-empty>
                 </then>
                 <else>
@@ -820,7 +866,7 @@
                     </if-not-empty>
                     <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="shipping_error_list"/>
                     </if-compare>
                 </else>
         </if>
@@ -834,7 +880,7 @@
             </if-compare>
             <if-compare field="isZipCode" operator="equals"  value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidZipCodeError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="error_list"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="shipping_error_list"/>
             </if-compare>
         </if-not-empty>
 
@@ -843,7 +889,42 @@
             <set field="shippingAddressContext.address3" from-field="parameters.SHIPPING_ADDRESS3"/>
         </if-compare>
 
-                <return response-code="success"/>
+
+
+         <!-- if no error in validation then perform verification -->
+         <if-empty field="billing_error_list">
+             <if-empty field="parameters.SHIPPING_SKIP_VERIFICATION">
+                  <!-- Check if there are any extended address validation to perform -->
+                 <set-service-fields service-name="extendedAddressValidation" to-map="extendedAddressValidationCtx" map="shippingAddressContext"/>
+                 <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                     <field field="request" type="javax.servlet.ServletRequest"/>
+                 </call-class-method>
+                 <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
+                 <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
+                    <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+                </call-service>
+                <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
+                <!-- check verification method -->
+                <if-compare operator="not-equals" value="NONE" field="verificationMethod">
+                    <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
+                    <if-compare operator="greater" value="0" field="responseCode">
+                        <if-compare operator="equals" value="1" field="responseCode">
+                            <!-- verification success -->
+                        </if-compare>
+                        <if-compare operator="equals" value="2" field="responseCode">
+                            <!-- general configuration error -->
+                        </if-compare>
+                    <else>
+                         <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
+                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                         <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
+                    </else>
+                    </if-compare>
+                </if-compare>
+            </if-empty>
+        </if-empty>
+        <list-to-list list="shipping_error_list" to-list="error_list"/>
+        <return response-code="success"/>
     </simple-method>
 
     <simple-method method-name="validateRequestCatalog" short-description="validate Request catalog" login-required="false">
@@ -1053,6 +1134,41 @@
             </if>
         </if-compare>
 
+         <!-- if no error in validation then perform verification -->
+         <if-empty field="error_list">
+	         <if-empty field="parameters.REQ_CATALOG_SKIP_VERIFICATION">
+		          <!-- Check if there are any extended address validation to perform -->
+		         <set-service-fields service-name="extendedAddressValidation" to-map="extendedAddressValidationCtx" map="custRequestContext"/>
+	             <set field="extendedAddressValidationCtx.stateProvinceGeoId" from-field="custRequestContext.stateCode"/>
+		         <set field="extendedAddressValidationCtx.countryGeoId" from-field="custRequestContext.countryCode"/>
+		         <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+		             <field field="request" type="javax.servlet.ServletRequest"/>
+		         </call-class-method>
+		         <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
+		         <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
+		            <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+		        </call-service>
+	            <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
+	            <!-- check verification method -->
+	            <if-compare operator="not-equals" value="NONE" field="verificationMethod">
+		            <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
+		            <if-compare operator="greater" value="0" field="responseCode">
+		                <if-compare operator="equals" value="1" field="responseCode">
+		                    <!-- verification success -->
+		                </if-compare>
+                        <if-compare operator="equals" value="2" field="responseCode">
+                            <!-- general configuration error -->
+                        </if-compare>
+		            <else>
+		                 <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
+		                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+		                 <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_ADDRESS_ERROR" list="error_list"/>
+		            </else>
+		            </if-compare>
+	            </if-compare>
+	        </if-empty>
+        </if-empty>
+
         <check-errors/>
     </simple-method>
     
@@ -1169,6 +1285,39 @@
             </if-compare>
         </if-not-empty>
 
+
+         <!-- if no error in validation then perform verification -->
+         <if-empty field="error_list">
+             <if-empty field="parameters.CUSTOMER_SKIP_VERIFICATION">
+                  <!-- Check if there are any extended address validation to perform -->
+                 <set-service-fields service-name="extendedAddressValidation" to-map="extendedAddressValidationCtx" map="addressContext"/>
+                 <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                     <field field="request" type="javax.servlet.ServletRequest"/>
+                 </call-class-method>
+                 <set field="extendedAddressValidationCtx.productStoreId" from-field="productStoreId"/>
+                 <call-service service-name="extendedAddressValidation" in-map-name="extendedAddressValidationCtx">
+                    <result-to-field result-name="addressVerificationResponse" field="addressVerificationResponse"/>
+                </call-service>
+                <call-object-method method-name="getVerificationMethod" obj-field="addressVerificationResponse" ret-field="verificationMethod"/>
+                <!-- check verification method -->
+                <if-compare operator="not-equals" value="NONE" field="verificationMethod">
+                    <call-object-method method-name="getResponseCode" obj-field="addressVerificationResponse" ret-field="responseCode"/>
+                    <if-compare operator="greater" value="0" field="responseCode">
+                        <if-compare operator="equals" value="1" field="responseCode">
+                            <!-- verification success -->
+                        </if-compare>
+                        <if-compare operator="equals" value="2" field="responseCode">
+                            <!-- general configuration error -->
+                        </if-compare>
+                    <else>
+                         <call-object-method method-name="getAlternateAddresses" obj-field="addressVerificationResponse" ret-field="alternateAddresses"/>
+                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
+                         <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
+                    </else>
+                    </if-compare>
+                </if-compare>
+            </if-empty>
+        </if-empty>
         <!-- now that everything is validated & setup, check to see if there are errors, then call the services -->
         <check-errors/>
 

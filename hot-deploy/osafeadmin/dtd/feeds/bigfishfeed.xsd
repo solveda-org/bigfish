@@ -492,6 +492,7 @@
     <xsd:sequence>
       <xsd:element type="xsd:string" name="MasterProductId" default=""/>
       <xsd:element type="xsd:string" name="MasterProductIdTo" default=""/>
+      <xsd:element type="xsd:string" name="ProductAssocType" default=""/>
       <xsd:element type="xsd:string" name="FromDate" default=""/>
       <xsd:element type="xsd:string" name="ThruDate" default=""/>
     </xsd:sequence>

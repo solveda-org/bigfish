@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 
-<!-- Product Store Parm count (128)-->
+<!-- Product Store Parm count (189)-->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MIN" description="Number of facet values to show; see less/More" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MAX" description="Max Number of facet values to show" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_CAT_ON_PLP" description="Display categories as a facet group on the PLP page true or false" parmCategory="SOLR"/>
@@ -12,7 +12,9 @@
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_MONEY_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PRODUCT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_PCT_THRESHOLD" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PRODUCT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_INC_GOOD_ID" description="A comma separated list of which Good Identification Type IDs to include in the Admin Product detail screen." parmCategory="PRODUCT"/>
 
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_WISHLIST_ACTIVE_FLAG" description="Determines if the ADD TO WISHLIST functionality is activated" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_FACET_GROUP_VARIANT_SWATCH_IMG" description="This is the FACET GROUP that may have variant 'swatches' images on the PLP. For example, if this parameter is set to COLOR then the PDP will offer the 'color swatches'as a selector." parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_QTY_MIN" description="The minimum allowed quantity that can be ordered on the PDP" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_QTY_MAX" description="The maximum allowed quantity that can be ordered on the PDP" parmCategory="PDP"/>
@@ -21,6 +23,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_ACTIVE" description="TRUE or FALSE. This will define if there is a special scroller component implemented for the set of alternate images" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_VERTICAL" description="TRUE or FALSE. A value of TRUE will display a Vertical scroller. A value of FALSE will display a Horizontal scroller." parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_IMAGES" description="The number of images that should be scrolled up or down when the arrow is clicked." parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_FACET_GROUP_VARIANT_MATCH" description="This is the FACET GROUP that will be used for matching in the PDP. Examples: customer clicks on the Blue Swatch, system needs to match on Color-Group facet to show matching you-may-also-like products." parmCategory="PDP"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_NUM_ITEMS_PER_PAGE" description="The number of items that should appear per page in the PLP." parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_DEFAULT_SORT" description="Controls the default sequence used on all PLP pages. Valid values are: HIGHEST_RATING, BEST_SELLING, MOST_VIEWED, MOST_POPULAR, NAME_ASCENDING, NAME_DESCENDING, HIGHEST_PRICE, LOWEST_PRICE" parmCategory="PLP"/>
@@ -78,6 +81,8 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_RECENT_W" description="Width of PDP Recent Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_COMPLEMENT_H" description="Height of PDP Complement Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_COMPLEMENT_W" description="Width of PDP Complement Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_ACCESSORY_H" description="Height of the PDP Accessory Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_ACCESSORY_W" description="Width of PDP Accessory Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_MFG_H" description="Height of PDP Manufacturer logo Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_MFG_W" description="Width of PDP Manufacturer logo Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PROF_MFG_H" description="Height of Profile Manufacturer logo Image" parmCategory="IMAGE"/>
@@ -94,6 +99,8 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_SWATCH_W" description="Width of PDP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_H" description="Height of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_W" description="Width of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_WISHLIST_H" description="Height of Wishlist Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_WISHLIST_W" description="Width of Wishlist Image" parmCategory="IMAGE"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_H" description="Height of PDP Product Video" parmCategory="VIDEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_W" description="Width of PDP Product Video" parmCategory="VIDEO"/>
@@ -145,6 +152,8 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CONFIRM_GET_COOKIE" description="A comma separated list of Cookies that should be read for possible content. The Order Confirmation will use the content of each cookie, if it exists, to store additional attributes for the Order. Typically used for Affiliate Tracking." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CART_DEFAULT_SHIP_METHOD" description="The default Shipping Charge ID that will be used in the View Cart. This will allow for an estimation of shipping to be computed. Leave blank if no shipping charge defaults should be in the cart." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CONTINUE_SHOPPING_LINK" description="The link from the Continue-Shopping button. Values are HOMEPAGE, PDP or PLP" parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_COD" description="Determines if COD (Cash on Delivery) is an option for checkout. This is used extensively in the Indian marketplace." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_GOOGLE" description="Determines if Google Checkout is an acceptable for of payment during the Check Out process." parmCategory="CHECKOUT"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_ACTIVE" description="Display quick view on the PLP page for each product." parmCategory="QUICKLOOK"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_DELAY_MS" description="The time, in milliseconds, that the site will wait before displaying the Quick Look icon" parmCategory="QUICKLOOK"/>
@@ -155,18 +164,26 @@
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_META_DESC_LEN" description="Length of Meta  DESCRIPTION tag. Will truncate to include a full word." parmCategory="SEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_META_KEY_LEN" description="Length of Meta  KEY tag. Will truncate to include a full word." parmCategory="SEO"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_TITLE" description="Value for the <TITLE> tag for the Home Page" parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_TITLE" description="Value for the TITLE tag for the Home Page" parmCategory="SEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_META_DESC" description="Value for the Meta DESCRIPTION tag for the Home Page" parmCategory="SEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_META_KEY" description="Value for the Meta KEYWORDS tag for the Home Page" parmCategory="SEO"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_H1" description="Value for the <H1> tag for the Home Page" parmCategory="SEO"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE" description="General name of the Store to be used in all <TITLE> tags except the Home Page. This will supplement other information that is used to derive the <TITLE> tag." parmCategory="SEO"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE_POSITION" description="Parameter to define whether the SEO_GENERAL_TITLE is used as PREFIX or SUFFIX when building <TITLE> tags" parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_H1" description="Value for the H1 tag for the Home Page" parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE" description="General name of the Store to be used in all TITLE tags except the Home Page. This will supplement other information that is used to derive the TITLE tag." parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE_POSITION" description="Parameter to define whether the SEO_GENERAL_TITLE is used as PREFIX or SUFFIX when building TITLE tags" parmCategory="SEO"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_ACTIVE_FLAG" description="This defines whether the e-Commerce site will support the post code anywhere feature." parmCategory="PCA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADDRESS_VERIFICATION_METHOD" parmValue="NONE" description="Method of verying the addres (in addition to standard validation).Valid values are NONE, PCA, MELISSA_DATA" parmCategory="ADDRESS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_JS_URL" description="Request url for find address" parmCategory="PCA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_CSS_URL" description="Request url for link PCA CSS" parmCategory="PCA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_KEY" description="Request Url Key for intracting with PCA product" parmCategory="PCA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_APP_NO" description="Request url application number." parmCategory="PCA"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_LICENSE" description="A current license string is required to use the functionality of locally installed Melissa address tool. Use 'DEMO' string as license in demo mode." parmCategory="MELISSA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_FILE_PATH_US" description="Indicates the Directory location where the Melissa US db is configured for checking the US address." parmCategory="MELISSA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_FILE_PATH_CAN" description="Indicates the Directory location where the Melissa Canada db is configured for checking the Canadian address." parmCategory="MELISSA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_VERIFICATION_MODE" description="Melissa provides the two types of services for address verification. First install the Melissa address tool locally and second send HTTP request for verification. Possible values are HTTP or FILEPATH." parmCategory="MELISSA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_HTTP_URL" description="HTTP url for address verification. Default value is https://addresscheck.melissadata.net/v2/REST/Service.svc/doAddressCheck" parmCategory="MELISSA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_REGISTRATION_ID" description="Registered customer Id for web data verification " parmCategory="MELISSA"/>
+
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SHOW_BUILT_BY" description="Simple TRUE or FALSE value that will determine if the Built by Salmon LLC link will be displayed" parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_PRODUCT_URL_DIR" description="Client to Bigfish Incoming Product File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
@@ -207,657 +224,6 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 
-<!-- role Type -->
-<RoleType roleTypeId="EMAIL_SUBSCRIBER" parentTypeId="CUSTOMER" description="Email Subscriber"/>
-<RoleType  roleTypeId="STORE_LOCATION" hasTable="N" parentTypeId="" description="store location" />
-<RoleType roleTypeId="GUEST_CUSTOMER" parentTypeId="CUSTOMER" description="Guest"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CLP_HIDE_SUB_CATEGORIES" description="On the CLP (Category Listing Page) a value of TRUE will hide all standard sub-categories on the assumption that Content Spots will be displayed in order to manage the customer experience on every CLP." parmCategory="CLP"/>
 
-<!-- PRODUCT STORE EMAIL SETTING (emailType) -->
-<Enumeration enumId="CONTI_NOTI_EMAIL" enumTypeId="PARTY_EMAIL" description="Contact-Us Notification" enumCode="CONT_EMAIL" sequenceId="05"/>
-<Enumeration enumId="REQCAT_NOTI_EMAIL" enumTypeId="PARTY_EMAIL" description="Request Catalog Notification" enumCode="REQCAT_EMAIL" sequenceId="06"/>
-<Enumeration enumId="ABCART_EMAIL" enumTypeId="PARTY_EMAIL" description="Abandon Cart Notification" enumCode="ABCART_EMAIL" sequenceId="07"/>
-<Enumeration enumId="SHIPREVIEW_EMAIL" enumTypeId="PARTY_EMAIL" description="Send email for product review after day ? shipped" enumCode="SHIPREVIEW_EMAIL" sequenceId="08"/>
-<Enumeration enumId="PRDS_ABD_CART" enumTypeId="PRDS_EMAIL" description="Abandon Cart Email" enumCode="ABD_CART"  sequenceId="27"/>
-<Enumeration enumId="PRDS_SHIP_REVIEW" enumTypeId="PRDS_EMAIL" description="Ship Review Email" enumCode="SHIP_REVIEW"  sequenceId="28"/>
-<Enumeration enumId="PRDS_EMAIL_TEST" enumTypeId="PRDS_EMAIL" description="Test Email" enumCode="EMAIL_TEST"  sequenceId="29"/>
-<Enumeration enumId="PRDS_MAILING_LIST" enumTypeId="PRDS_EMAIL" description="Mailing List Subscription" enumCode="MAILING_LIST"  sequenceId="30"/>
-<Enumeration enumId="PRDS_SCHED_JOB_ALERT" enumTypeId="PRDS_EMAIL" description="Scheduled Job Notification" enumCode="SCHED_JOB_ALERT"  sequenceId="31"/>
-
-<!-- CONTACT US REASON -->
-<EnumerationType enumTypeId="CONTACT_US_REASON" parentTypeId="" hasTable="" description="Reason For Contact"/>
-<Enumeration enumId="CR_ORDER_INQUIRY" enumTypeId="CONTACT_US_REASON" enumCode="CR_ORDER_INQUIRY"/>
-<Enumeration enumId="CR_CUSTOMER_SERVICE" enumTypeId="CONTACT_US_REASON" enumCode="CR_CUSTOMER_SERVICE"/>
-<Enumeration enumId="CR_BILLING_INQUIRY" enumTypeId="CONTACT_US_REASON" enumCode="CR_BILLING_INQUIRY"/>
-<Enumeration enumId="CR_DELIVERY_QUESTION" enumTypeId="CONTACT_US_REASON" enumCode="CR_DELIVERY_QUESTION"/>
-<Enumeration enumId="CR_PROD_INFORMATION" enumTypeId="CONTACT_US_REASON" enumCode="CR_PROD_INFORMATION"/>
-<Enumeration enumId="CR_SUGGESTIONS" enumTypeId="CONTACT_US_REASON" enumCode="CR_SUGGESTIONS"/>
-<Enumeration enumId="CR_OTHER" enumTypeId="CONTACT_US_REASON" enumCode="CR_OTHER"/>
-
-<!-- PERSONAL TITLE -->
-<EnumerationType enumTypeId="PERSONAL_TITLE" parentTypeId="" hasTable="" description="Personal title"/>
-<Enumeration enumId="PT_MR" enumTypeId="PERSONAL_TITLE" description="Mr" enumCode="PT_MR" sequenceId="01"/>
-<Enumeration enumId="PT_MRS" enumTypeId="PERSONAL_TITLE" description="Mrs" enumCode="PT_MRS" sequenceId="02"/>
-<Enumeration enumId="PT_MISS" enumTypeId="PERSONAL_TITLE" description="Miss" enumCode="PT_MISS" sequenceId="03"/>
-
-<!-- Email Settings -->
-<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_MAILING_LIST" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#mailingListEmailNotification" xslfoAttachScreenLocation=""  />
-<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_SCHED_JOB_ALERT" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#sendScheduledJobNotification" xslfoAttachScreenLocation="" fromAddress="bigfishtest@salmonllc.com" ccAddress="" bccAddress="bigfish@salmonllc.com" subject="${EMAIL_CLNT_NAME}: Scheduled Job ${SCHEDULED_JOB_NAME} has ${SCHEDULED_JOB_STATUS}" contentType="" />
-
-<!-- Email Settings for Test Email -->
-<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_EMAIL_TEST" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#emailTest" xslfoAttachScreenLocation="" />
-
-<!-- CUSTOMER REQUEST TYPE -->
-<CustRequestType custRequestTypeId="RF_CATALOG" parentTypeId="" hasTable="N" description="Request For Catalog"/>
-<CustRequestType custRequestTypeId="RF_CONTACT_US" parentTypeId="" hasTable="N" description="Request For Contact"/>
-
-
-<!-- PRODUCT CATEGORY CONTENT TYPE -->
-<ProductCategoryContentType prodCatContentTypeId="PDP_ADDITIONAL" description="Product Detail Page (PDP) Additional Content By Category" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="PLP_ESPOT_CONTENT" description="Product Category (PLP) Espot" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="HTML_PAGE_TITLE" description="Html Page Title" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="HTML_PAGE_META_DESC" description="Html Page Meta Description" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="HTML_PAGE_META_KEY" description="Html Page Meta Keyword" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="PLP_ESPOT_MEGA_MENU" description="To be use as an alternative to the Sub-Nav drop-down" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="PLP_ESPOT_PAGE_TOP" description="Product Category (PLP) Espot Page Top" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="PLP_ESPOT_PAGE_END" description="Product Category (PLP) Espot Page End" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="PLP_ESPOT_FACET_TOP" description="Product Category (PLP) Espot Facet Top" hasTable="N" parentTypeId=""/>
-<ProductCategoryContentType prodCatContentTypeId="PLP_ESPOT_FACET_END" description="Product Category (PLP) Espot Facet End" hasTable="N" parentTypeId=""/>
-
-<!-- PRODUCT CONTENT TYPE -->
-<ProductContentType productContentTypeId="PLP_LABEL" description="(PLP) Label Text" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="PDP_LABEL" description="(PDP) Label Text" hasTable="N" parentTypeId="" />
-<ProductContentType productContentTypeId="THUMBNAIL_IMAGE_URL" description="Image - Additional View PDP LARGE" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_1_SMALL" description="Image - Additional View 1 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_1_MEDIUM" description="Image - Additional View 1 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_1_LARGE" description="Image - Additional View 1 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_1_DETAIL" description="Image - Additional View 1 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_2_SMALL" description="Image - Additional View 2 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_2_MEDIUM" description="Image - Additional View 2 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_2_LARGE" description="Image - Additional View 2 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_2_DETAIL" description="Image - Additional View 2 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_3_SMALL" description="Image - Additional View 3 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_3_MEDIUM" description="Image - Additional View 3 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_3_LARGE" description="Image - Additional View 3 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_3_DETAIL" description="Image - Additional View 3 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_4_SMALL" description="Image - Additional View 4 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_4_MEDIUM" description="Image - Additional View 4 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_4_LARGE" description="Image - Additional View 4 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_4_DETAIL" description="Image - Additional View 4 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_5_SMALL" description="Image - Additional View 5 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_5_MEDIUM" description="Image - Additional View 5 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_5_LARGE" description="Image - Additional View 5 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_5_DETAIL" description="Image - Additional View 5 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_6_SMALL" description="Image - Additional View 6 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_6_MEDIUM" description="Image - Additional View 6 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_6_LARGE" description="Image - Additional View 6 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_6_DETAIL" description="Image - Additional View 6 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_7_SMALL" description="Image - Additional View 7 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_7_MEDIUM" description="Image - Additional View 7 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_7_LARGE" description="Image - Additional View 7 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_7_DETAIL" description="Image - Additional View 7 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_8_SMALL" description="Image - Additional View 8 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_8_MEDIUM" description="Image - Additional View 8 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_8_LARGE" description="Image - Additional View 8 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_8_DETAIL" description="Image - Additional View 8 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_9_SMALL" description="Image - Additional View 9 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_9_MEDIUM" description="Image - Additional View 9 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_9_LARGE" description="Image - Additional View 9 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_9_DETAIL" description="Image - Additional View 9 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_10_SMALL" description="Image - Additional View 10 Small" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_10_MEDIUM" description="Image - Additional View 10 Medium" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_10_LARGE" description="Image - Additional View 10 Large" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="XTRA_IMG_10_DETAIL" description="Image - Additional View 10 Detail" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_1" description="Image - Additional View 1" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_2" description="Image - Additional View 2" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_3" description="Image - Additional View 3" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_4" description="Image - Additional View 4" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_5" description="Image - Additional View 5" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_6" description="Image - Additional View 6" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_7" description="Image - Additional View 7" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_8" description="Image - Additional View 8" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_9" description="Image - Additional View 9" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="ADDITIONAL_IMAGE_10" description="Image - Additional View 10" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="HTML_PAGE_TITLE" description="Html Page Title" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="HTML_PAGE_META_DESC" description="Html Page Meta Description" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="HTML_PAGE_META_KEY" description="Html Page Meta Keyword" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="SMALL_IMAGE_ALT_URL" description="Image - Alt View PLP SMALL IMAGE ALT" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="SMALL_IMAGE_ALT" description="PLP Image Title Text" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Swatch Image" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Swatch Image" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="PDP_VIDEO_URL" description="PDP Product Video" hasTable="N" parentTypeId=""/>
-<ProductContentType productContentTypeId="PDP_VIDEO_360_URL" description="PDP 360 Product Video" hasTable="N" parentTypeId=""/>
-
-<!-- Party CONTENT TYPE -->
-<PartyContentType partyContentTypeId="DESCRIPTION" description="Short Description" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="LONG_DESCRIPTION" description="Long Description" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="PROFILE_NAME" description="Profile Name" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="PROFILE_FB_LIKE_URL" description="Profile FaceBook URL" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="PROFILE_TWEET_URL" description="Profile Tweet Url" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="PROFILE_IMAGE_URL" description="Profile Image Url" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="STORE_HOURS" description="Store Working Hours" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="STORE_NOTICE" description="Store Notice" hasTable="N" parentTypeId=""/>
-<PartyContentType partyContentTypeId="STORE_CONTENT_SPOT" description="Store Content Spot" hasTable="N" parentTypeId=""/>
-
-<!-- FEATURE DATA RESOURCE TYPE -->
-<FeatureDataResourceType featureDataResourceTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Default Swatch Image URL" hasTable="N"/>
-<FeatureDataResourceType featureDataResourceTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Default Swatch Image URL" hasTable="N"/>
-
-<!-- Payment Gateway Config -->
-<PaymentGatewayConfigType paymentGatewayConfigTypeId="SAGEPAYTOKEN" hasTable="N" description="SagePay Token Payment Gateway"/>
-<PaymentGatewayConfig paymentGatewayConfigId="SAGEPAYTOKEN_CONFIG" paymentGatewayConfigTypeId="SAGEPAYTOKEN" description="SagePay Token Config"/>
-
-<!-- Payment METHOD TYPE -->
-<PaymentMethodType description="SagePay Token" paymentMethodTypeId="SAGEPAY_TOKEN"/>
-
-<!-- Payment Custom Method -->
-<CustomMethod customMethodId="CC_AUTH_SGPAYTKN" customMethodTypeId="CC_AUTH" customMethodName="sagepaytokenCCAuth" description="SagePay token authorize"/>
-<CustomMethod customMethodId="CC_CAPTURE_SGPAYTKN" customMethodTypeId="CC_CAPTURE" customMethodName="sagepaytokenCCCapture" description="SagePay token capture"/>
-<CustomMethod customMethodId="CC_REFUND_SGPAYTKN" customMethodTypeId="CC_REFUND" customMethodName="sagepaytokenCCRefund" description="SagePay token refund"/>
-<CustomMethod customMethodId="CC_RELEASE_SGPAYTKN" customMethodTypeId="CC_RELEASE" customMethodName="sagepaytokenCCRelease" description="SagePay token release"/>
-
-<!-- CONTENT STATUS DESCRIPTIONS -->
-<StatusItem statusId="CTNT_INITIAL_DRAFT" description="Initial Draft"/>
-<StatusItem statusId="CTNT_IN_PROGRESS" description="Pending"/>
-<StatusItem statusId="CTNT_REVISED_DRAFT" description="Revised Draft"/>
-<StatusItem statusId="CTNT_FINAL_DRAFT" description="Final Draft"/>
-<StatusItem statusId="CTNT_PUBLISHED" description="Active"/>
-<StatusItem statusId="CTNT_AVAILABLE" description="Available"/>
-<StatusItem statusId="CTNT_DEACTIVATED" description="Inactive"/>
-
-<!-- New content type,  This allows for specific content to be grouped together  -->
-<ContentType contentTypeId="BF_CONTENT_LIBRARY" description="content library" hasTable="N" parentTypeId=""/>
-<ContentType contentTypeId="BF_HOME_PAGE" description="home page" hasTable="N" parentTypeId=""/>
-<ContentType contentTypeId="BF_SITE_INFO" description="site info" hasTable="N" parentTypeId=""/>
-<ContentType contentTypeId="BF_STATIC_PAGE" description="static page" hasTable="N" parentTypeId=""/>
-<ContentType contentTypeId="BF_PAGE_TOP_SPOT" description="page spot" hasTable="N" parentTypeId=""/>
-<ContentType contentTypeId="BF_PDP_SPOT" description="PDP spot" hasTable="N" parentTypeId=""/>
-<ContentType contentTypeId="BF_EMAIL_TEMPLATE" description="email template" hasTable="N" parentTypeId=""/>
-    
-<!-- WEBSTIE PUBLISH POINT -->
-<Content contentId="OTS_PPOINT" contentTypeId="WEB_SITE_PUB_PT" contentName="Web Site Publish Point" description=""/>
-<!-- ********************************* -->
-
-<!-- HOME PAGE (DEFAULT) -->
-<DataResource dataResourceId="OSAFE_HOME" dataResourceTypeId="URL_RESOURCE" dataTemplateTypeId="SCREEN_COMBINED" objectInfo="component://osafe/widget/CommonScreens.xml#homePage"/>
-<Content contentId="OSAFE_HOME" contentTypeId="DOCUMENT" contentName="Home Page" dataResourceId="OSAFE_HOME"/>
-<ContentAssoc contentId="OTS_PPOINT" contentIdTo="OSAFE_HOME" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="homePage"/>
-<!-- ********************************* -->
-
-<!-- SITE INFO-->
-<DataResource dataResourceId="SI_HEADER_CONTENT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SI_FOOTER_CONTENT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SI_LOGO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SI_SHOPPING_CART" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SI_SEARCH" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SI_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SI_HEAD_TAG_CONTENT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<ElectronicText dataResourceId="SI_HEADER_CONTENT"/>
-<ElectronicText dataResourceId="SI_FOOTER_CONTENT"/>
-<ElectronicText dataResourceId="SI_LOGO"/>
-<ElectronicText dataResourceId="SI_SHOPPING_CART"/>
-<ElectronicText dataResourceId="SI_SEARCH"/>
-<ElectronicText dataResourceId="SI_MAILING_LIST"/>
-<ElectronicText dataResourceId="SI_HEAD_TAG_CONTENT"/>
-<Content contentId="SI_HEADER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER_CONTENT"/>
-<Content contentId="SI_FOOTER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER_CONTENT"/>
-<Content contentId="SI_LOGO" contentTypeId="BF_SITE_INFO"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO"/>
-<Content contentId="SI_SHOPPING_CART" contentTypeId="BF_SITE_INFO"  description="Main Site View Cart displayed on every page" contentName="Site Shopping Cart" dataResourceId="SI_SHOPPING_CART"/>
-<Content contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH"/>
-<Content contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING_LIST"/>
-<Content contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG_CONTENT"/>
-<Content contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG_CONTENT"/>
-<ContentPurpose contentId="SI_HEADER_CONTENT" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SI_FOOTER_CONTENT" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SI_LOGO" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SI_SHOPPING_CART" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SI_SEARCH" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SI_MAILING_LIST" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SI_HEAD_TAG_CONTENT" contentPurposeTypeId="SECTION"/>
-<!-- ********************************* -->
-
-
-<!-- HOME PAGE SPOTS -->
-<DataResource dataResourceId="HPS_01" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="HPS_02" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_03" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_04" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_05" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_06" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_07" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_08" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_09" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_10" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_11" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_12" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_13" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_14" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_15" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />
-<DataResource dataResourceId="HPS_16" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" />  
-<ElectronicText dataResourceId="HPS_01"/>
-<ElectronicText dataResourceId="HPS_02" />
-<ElectronicText dataResourceId="HPS_03"/>
-<ElectronicText dataResourceId="HPS_04"/>
-<ElectronicText dataResourceId="HPS_05"/>
-<ElectronicText dataResourceId="HPS_06"/>
-<ElectronicText dataResourceId="HPS_07"/>
-<ElectronicText dataResourceId="HPS_08"/>
-<ElectronicText dataResourceId="HPS_09"/>
-<ElectronicText dataResourceId="HPS_10"/>
-<ElectronicText dataResourceId="HPS_11"/>
-<ElectronicText dataResourceId="HPS_12"/>
-<ElectronicText dataResourceId="HPS_13"/>
-<ElectronicText dataResourceId="HPS_14"/>
-<ElectronicText dataResourceId="HPS_15"/>
-<ElectronicText dataResourceId="HPS_16"/>
-<Content contentId="HPS_01" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_01"  description="Home Page Spot 1" contentName="Home Page Spot 1"/>
-<Content contentId="HPS_02" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_02"  description="Home Page Spot 2" contentName="Home Page Spot 2"/>
-<Content contentId="HPS_03" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_03"  description="Home Page Spot 3" contentName="Home Page Spot 3"/>
-<Content contentId="HPS_04" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_04"  description="Home Page Spot 4" contentName="Home Page Spot 4"/>
-<Content contentId="HPS_05" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_05"  description="Home Page Spot 5" contentName="Home Page Spot 5"/>
-<Content contentId="HPS_06" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_06"  description="Home Page Spot 6" contentName="Home Page Spot 6"/>
-<Content contentId="HPS_07" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_07"  description="Home Page Spot 7" contentName="Home Page Spot 7"/>
-<Content contentId="HPS_08" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_08"  description="Home Page Spot 8" contentName="Home Page Spot 8"/>
-<Content contentId="HPS_09" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_09"  description="Home Page Spot 9" contentName="Home Page Spot 9"/>
-<Content contentId="HPS_10" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_10"  description="Home Page Spot 10" contentName="Home Page Spot 10"/>
-<Content contentId="HPS_11" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_11"  description="Home Page Spot 11" contentName="Home Page Spot 11"/>
-<Content contentId="HPS_12" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_12"  description="Home Page Spot 12" contentName="Home Page Spot 12"/>
-<Content contentId="HPS_13" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_13"  description="Home Page Spot 13" contentName="Home Page Spot 13"/>
-<Content contentId="HPS_14" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_14"  description="Home Page Spot 14" contentName="Home Page Spot 14"/>
-<Content contentId="HPS_15" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_15"  description="Home Page Spot 15" contentName="Home Page Spot 15"/>
-<Content contentId="HPS_16" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_16"  description="Home Page Spot 16" contentName="Home Page Spot 16"/>
-<!-- ********************************* -->
-
-
-<!-- ESPOTS -->
-<DataResource dataResourceId="PTS_ADDR_BOOK_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_ADDR_BOOK_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_MY_ACCOUNT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_ORDER_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_ORDER_STATUS" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_ORDER_SUMMARY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_SHIPPING_ADDRESS" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_SHIPPING_METHOD" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_SHOPPING_CART" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_CONTACT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_STORE_LOCATOR" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_LOGIN" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_LOGIN_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_PERSONAL_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_ONE_STEP_CHKOUT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PTS_STORE_PICKUP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_ADDR_BOOK_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_ADDR_BOOK_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_MY_ACCOUNT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_ORDER_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_ORDER_STATUS" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_ORDER_SUMMARY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_SHIPPING_ADDRESS" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_SHIPPING_METHOD" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_SHOPPING_CART" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_CONTACT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_STORE_LOCATOR" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_LOGIN" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_LOGIN_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_PERSONAL_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_ONE_STEP_CHKOUT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PES_STORE_PICKUP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="PDP_CONTENT_01" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_01"/>
-<DataResource dataResourceId="PDP_CONTENT_02" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_02"/>
-<DataResource dataResourceId="PDP_CONTENT_03" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_03"/>
-<DataResource dataResourceId="PDP_CONTENT_04" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_04"/>
-<DataResource dataResourceId="PDP_CONTENT_05" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_05"/>
-<ElectronicText dataResourceId="PTS_ADDR_BOOK_VIEW"/>
-<ElectronicText dataResourceId="PTS_ADDR_BOOK_EDIT"/>
-<ElectronicText dataResourceId="PTS_MY_ACCOUNT"/>
-<ElectronicText dataResourceId="PTS_ORDER_CONFIRM"/>
-<ElectronicText dataResourceId="PTS_ORDER_STATUS"/>
-<ElectronicText dataResourceId="PTS_ORDER_SUMMARY"/>
-<ElectronicText dataResourceId="PTS_SHIPPING_ADDRESS"/>
-<ElectronicText dataResourceId="PTS_SHIPPING_METHOD"/>
-<ElectronicText dataResourceId="PTS_SHOPPING_CART"/>
-<ElectronicText dataResourceId="PTS_CONTACT_US"/>
-<ElectronicText dataResourceId="PTS_STORE_LOCATOR"/>
-<ElectronicText dataResourceId="PTS_MAILING_LIST"/>
-<ElectronicText dataResourceId="PTS_LOGIN"/>
-<ElectronicText dataResourceId="PTS_LOGIN_INFO"/>
-<ElectronicText dataResourceId="PTS_PERSONAL_INFO"/>
-<ElectronicText dataResourceId="PTS_CONFIRM"/>
-<ElectronicText dataResourceId="PTS_SEARCH_NO_RESULT"/>
-<ElectronicText dataResourceId="PTS_ONE_STEP_CHKOUT"/>
-<ElectronicText dataResourceId="PTS_STORE_PICKUP"/>
-<ElectronicText dataResourceId="PES_ADDR_BOOK_VIEW"/>
-<ElectronicText dataResourceId="PES_ADDR_BOOK_EDIT"/>
-<ElectronicText dataResourceId="PES_MY_ACCOUNT"/>
-<ElectronicText dataResourceId="PES_ORDER_CONFIRM"/>
-<ElectronicText dataResourceId="PES_ORDER_STATUS"/>
-<ElectronicText dataResourceId="PES_ORDER_SUMMARY"/>
-<ElectronicText dataResourceId="PES_SHIPPING_ADDRESS"/>
-<ElectronicText dataResourceId="PES_SHIPPING_METHOD"/>
-<ElectronicText dataResourceId="PES_SHOPPING_CART"/>
-<ElectronicText dataResourceId="PES_CONTACT_US"/>
-<ElectronicText dataResourceId="PES_STORE_LOCATOR"/>
-<ElectronicText dataResourceId="PES_MAILING_LIST"/>
-<ElectronicText dataResourceId="PES_LOGIN"/>
-<ElectronicText dataResourceId="PES_LOGIN_INFO"/>
-<ElectronicText dataResourceId="PES_PERSONAL_INFO"/>
-<ElectronicText dataResourceId="PES_CONFIRM"/>
-<ElectronicText dataResourceId="PES_SEARCH_NO_RESULT"/>
-<ElectronicText dataResourceId="PES_ONE_STEP_CHKOUT"/>
-<ElectronicText dataResourceId="PES_STORE_PICKUP"/>
-<ElectronicText dataResourceId="PDP_CONTENT_01"/>
-<ElectronicText dataResourceId="PDP_CONTENT_02"/>
-<ElectronicText dataResourceId="PDP_CONTENT_03"/>
-<ElectronicText dataResourceId="PDP_CONTENT_04"/>
-<ElectronicText dataResourceId="PDP_CONTENT_05"/>
-<Content contentId="PTS_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BOOK_VIEW" description="Content Spot displayed on the TOP of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BOOK_EDIT" description="Content Spot displayed on the TOP of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_MY_ACCOUNT" description="Content Spot displayed on the TOP of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ORDER_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORDER_CONFIRM" description="Content Spot displayed on the TOP of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ORDER_STATUS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORDER_STATUS" description="Content Spot displayed on the TOP of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ORDER_SUMMARY" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORDER_SUMMARY" description="Content Spot displayed on the TOP of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SHIPPING_ADDRESS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHIPPING_ADDRESS" description="Content Spot displayed on the TOP of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SHIPPING_METHOD" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHIPPING_METHOD" description="Content Spot displayed on the TOP of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SHOPPING_CART" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHOPPING_CART" description="Content Spot displayed on the TOP of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_CONTACT_US" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONTACT_US" description="Content Spot displayed on the TOP of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_STORE_LOCATOR" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_STORE_LOCATOR" description="Content Spot displayed on the TOP of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_MAILING_LIST" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_MAILING_LIST" description="Content Spot displayed on the TOP of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_LOGIN" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_LOGIN" description="Content Spot displayed on the TOP of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_LOGIN_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_LOGIN_INFO" description="Content Spot displayed on the TOP of the Change-Login-Info Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_PERSONAL_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PERSONAL_INFO" description="Content Spot displayed on the TOP of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONFIRM" description="Content Spot displayed on the TOP of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SEARCH_NO_RESULT" description="Content Spot displayed on TOP of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ONE_STEP_CHKOUT" description="Content Spot displayed at the top of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_STORE_PICKUP" description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box " contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_VIEW" description="Content Spot displayed on the END of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_EDIT" description="Content Spot displayed on the END of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MY_ACCOUNT" description="Content Spot displayed on the END of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ORDER_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORDER_CONFIRM" description="Content Spot displayed on the END of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ORDER_STATUS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORDER_STATUS" description="Content Spot displayed on the END of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ORDER_SUMMARY" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORDER_SUMMARY" description="Content Spot displayed on the END of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SHIPPING_ADDRESS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHIPPING_ADDRESS" description="Content Spot displayed on the END of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SHIPPING_METHOD" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHIPPING_METHOD" description="Content Spot displayed on the END of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SHOPPING_CART" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHOPPING_CART" description="Content Spot displayed on the END of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_CONTACT_US" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONTACT_US" description="Content Spot displayed on the END of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_STORE_LOCATOR" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_STORE_LOCATOR" description="Content Spot displayed on the END of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_MAILING_LIST" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MAILING_LIST" description="Content Spot displayed on the END of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_LOGIN" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_LOGIN" description="Content Spot displayed on the END of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_LOGIN_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_LOGIN_INFO" description="Content Spot displayed on the END of the Change-Login-Info Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_PERSONAL_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PERSONAL_INFO" description="Content Spot displayed on the END of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONFIRM" description="Content Spot displayed on the END of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SEARCH_NO_RESULT" description="Content Spot displayed on END of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ONE_STEP_CHKOUT" description="Content Spot displayed at the END of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_STORE_PICKUP" description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box " contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PDP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_01"/>
-<Content contentId="PDP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_02"/>
-<Content contentId="PDP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_03"/>
-<Content contentId="PDP_CONTENT_04" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_04"/>
-<Content contentId="PDP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05"/>
-<ContentRole contentId="PTS_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_MY_ACCOUNT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_ORDER_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_ORDER_STATUS" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_ORDER_SUMMARY" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_SHIPPING_ADDRESS" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_SHIPPING_METHOD" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_SHOPPING_CART" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_CONTACT_US" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_STORE_LOCATOR" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_MAILING_LIST" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_LOGIN" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_LOGIN_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_PERSONAL_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
-<ContentRole contentId="PTS_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
-<ContentRole contentId="PTS_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_ONE_STEP_CHKOUT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PTS_STORE_PICKUP" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_MY_ACCOUNT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_ORDER_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_ORDER_STATUS" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_ORDER_SUMMARY" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_SHIPPING_ADDRESS" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_SHIPPING_METHOD" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_SHOPPING_CART" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_CONTACT_US" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_STORE_LOCATOR" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_MAILING_LIST" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_LOGIN" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_LOGIN_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_PERSONAL_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
-<ContentRole contentId="PES_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
-<ContentRole contentId="PES_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_ONE_STEP_CHKOUT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PES_STORE_PICKUP" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PDP_CONTENT_01" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PDP_CONTENT_02" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PDP_CONTENT_03" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PDP_CONTENT_04" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PDP_CONTENT_05" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<!-- ********************************* -->
-
-<!-- PDP SPOTS -->
-<DataResource dataResourceId="PS_INTRODUCED" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="espot1"/>
-<DataResource dataResourceId="PS_DISCONTINUED" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="espot1"/>
-<ElectronicText dataResourceId="PS_INTRODUCED"/>
-<ElectronicText dataResourceId="PS_DISCONTINUED"/>
-<Content contentId="PS_INTRODUCED" contentTypeId="BF_PDP_SPOT"  description="A content-spot displayed on the PDP if the product is not yet available. Product Introduced Date is greater than [today]." contentName="PDP Product Available eSpot" dataResourceId="PS_INTRODUCED"/>
-<Content contentId="PS_DISCONTINUED" contentTypeId="BF_PDP_SPOT"  description="A content-spot displayed on the PDP if [today] is after the Product Discontinued Date" contentName="PDP Product Sale Discontinuatiuon eSpot" dataResourceId="PS_DISCONTINUED"/>
-<ContentRole contentId="PS_INTRODUCED" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-<ContentRole contentId="PS_DISCONTINUED" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
-
-
-<!-- STATIC PAGES-->
-<DataResource dataResourceId="SP_ABOUT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SP_PRIVACY_POLICY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SP_TERMS_CONDITIONS" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SP_SITE_MAP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SP_ERROR_PAGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SP_RETURN_POLICY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="SP_CONTACT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<ElectronicText dataResourceId="SP_ABOUT_US"/>
-<ElectronicText dataResourceId="SP_PRIVACY_POLICY"/>
-<ElectronicText dataResourceId="SP_TERMS_CONDITIONS"/>
-<ElectronicText dataResourceId="SP_SITE_MAP"/>
-<ElectronicText dataResourceId="SP_ERROR_PAGE"/>
-<ElectronicText dataResourceId="SP_RETURN_POLICY"/>
-<ElectronicText dataResourceId="SP_CONTACT_US"/>
-<Content contentId="SP_ABOUT_US" contentTypeId="BF_STATIC_PAGE"  description="About Us (Seeded SAMPLE)" contentName="About Us" dataResourceId="SP_ABOUT_US"/>
-<Content contentId="SP_PRIVACY_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Privacy Policy (Seeded SAMPLE)" contentName="Privacy Policy" dataResourceId="SP_PRIVACY_POLICY"/>
-<Content contentId="SP_TERMS_CONDITIONS" contentTypeId="BF_STATIC_PAGE"  description="Terms and Conditions (Seeded SAMPLE)" contentName="Terms and Conditions" dataResourceId="SP_TERMS_CONDITIONS"/>
-<Content contentId="SP_SITE_MAP" contentTypeId="BF_STATIC_PAGE"  description="Site Map (Seeded SAMPLE)" contentName="Site Map" dataResourceId="SP_SITE_MAP"/>
-<Content contentId="SP_ERROR_PAGE" contentTypeId="BF_STATIC_PAGE"  description="System error page used for Page-Not-Found conditions. You should not edit the ID." contentName="Error Page" dataResourceId="SP_ERROR_PAGE"/>
-<Content contentId="SP_RETURN_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Return Policy (Seeded SAMPLE)" contentName="Return Policy" dataResourceId="SP_RETURN_POLICY"/>
-<Content contentId="SP_CONTACT_US" contentTypeId="BF_STATIC_PAGE"  description="Contact Us (Seeded SAMPLE)" contentName="Contact Us" dataResourceId="SP_CONTACT_US"/>
-<ContentPurpose contentId="SP_ABOUT_US" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SP_PRIVACY_POLICY" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SP_TERMS_CONDITIONS" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SP_SITE_MAP" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SP_ERROR_PAGE" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SP_RETURN_POLICY" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="SP_CONTACT_US" contentPurposeTypeId="SECTION"/>
-<!-- ********************************* -->
-
-<!-- CONTENT LIBRARY-->
-<!-- ********************************* -->
-
-<!-- EMAIL CONTENT-->
-
-<!-- COMMON CLIENT EMAIL STYLES  -->
-<DataResource dataResourceId="E_COMMON_STYLES" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_COMMON_HEADER" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_COMMON_FOOTER" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_NEW_CUSTOMER" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_CHANGE_CUSTOMER" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_FORGOT_PASSWORD" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_ABANDON_CART" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_CONTACT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_REQUEST_CATALOG" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_ORDER_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_ORDER_CHANGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_SHIP_REVIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_ORDER_DETAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_SCHED_JOB_ALERT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<ElectronicText dataResourceId="E_COMMON_STYLES"/>
-<ElectronicText dataResourceId="E_COMMON_HEADER"/>
-<ElectronicText dataResourceId="E_COMMON_FOOTER"/>
-<ElectronicText dataResourceId="E_NEW_CUSTOMER"/>
-<ElectronicText dataResourceId="E_CHANGE_CUSTOMER"/>
-<ElectronicText dataResourceId="E_FORGOT_PASSWORD"/>
-<ElectronicText dataResourceId="E_ABANDON_CART"/>
-<ElectronicText dataResourceId="E_CONTACT_US"/>
-<ElectronicText dataResourceId="E_REQUEST_CATALOG"/>
-<ElectronicText dataResourceId="E_ORDER_CONFIRM"/>
-<ElectronicText dataResourceId="E_ORDER_DETAIL"/>
-<ElectronicText dataResourceId="E_ORDER_CHANGE"/>
-<ElectronicText dataResourceId="E_SHIP_REVIEW"/>
-<ElectronicText dataResourceId="E_ORDER_DETAIL"/>
-<ElectronicText dataResourceId="E_MAILING_LIST"/>
-<ElectronicText dataResourceId="E_SCHED_JOB_ALERT"/>
-<Content contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
-<Content contentId="E_COMMON_HEADER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included in the beginning of all BigFish generated emails. Use this to define standard heading information such as your logo and company information." contentName="Common Client Header" dataResourceId="E_COMMON_HEADER"/>
-<Content contentId="E_COMMON_FOOTER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included at the end of all BigFish generated emails. Use this to define standard closing information such as Yours-Sincerely and your company contact information. " contentName="Common Client Footer " dataResourceId="E_COMMON_FOOTER"/>
-<Content contentId="E_NEW_CUSTOMER" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the New-Customer email (when the customer completes the registration form)." contentName="Create Party Email" dataResourceId="E_NEW_CUSTOMER"/>
-<Content contentId="E_CHANGE_CUSTOMER" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Change-Customer email (when the customer updates their profile)." contentName="Change Party Email" dataResourceId="E_CHANGE_CUSTOMER"/>
-<Content contentId="E_FORGOT_PASSWORD" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Forgot-Password email." contentName="Forgot Password Email" dataResourceId="E_FORGOT_PASSWORD"/>
-<Content contentId="E_ABANDON_CART" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Abandoned Cart email. Other PARAMETERS control the timing of this email." contentName="Abandon Cart Email" dataResourceId="E_ABANDON_CART"/>
-<Content contentId="E_CONTACT_US" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Contact-Us email. This email is sent to both the customer and the client." contentName="Contact Us Email" dataResourceId="E_CONTACT_US"/>
-<Content contentId="E_REQUEST_CATALOG" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client." contentName="Request Catalog Email" dataResourceId="E_REQUEST_CATALOG"/>
-<Content contentId="E_ORDER_CONFIRM" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Confirm Email" dataResourceId="E_ORDER_CONFIRM"/>
-<Content contentId="E_ORDER_CHANGE" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Change email (when the Status on the Order gets modified from one state to another)." contentName="Order Notice Email" dataResourceId="E_ORDER_CHANGE"/>
-<Content contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW"/>
-<Content contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
-<Content contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Mailing-List email. This email sent to both the customer and the client." contentName="Mailing List Email" dataResourceId="E_MAILING_LIST"/>
-<Content contentId="E_SCHED_JOB_ALERT" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Scheduled Job email. This email sent to both the customer and the client." contentName="Scheduled Job Email" dataResourceId="E_SCHED_JOB_ALERT"/>
-<ContentPurpose contentId="E_COMMON_HEADER" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_COMMON_STYLES" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_COMMON_FOOTER" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_NEW_CUSTOMER" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_CHANGE_CUSTOMER" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_FORGOT_PASSWORD" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_ABANDON_CART" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_CONTACT_US" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_REQUEST_CATALOG" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_ORDER_CONFIRM" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_ORDER_CHANGE" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_SHIP_REVIEW" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_ORDER_DETAIL" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_MAILING_LIST" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_SCHED_JOB_ALERT" contentPurposeTypeId="SECTION"/>
-
-<!-- XContentXref content product store reference -->
-<!-- SITE INFO-->
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_HEADER_CONTENT" contentId="SI_HEADER_CONTENT" contentTypeId="BF_SITE_INFO"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_FOOTER_CONTENT" contentId="SI_FOOTER_CONTENT" contentTypeId="BF_SITE_INFO"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_LOGO" contentId="SI_LOGO" contentTypeId="BF_SITE_INFO"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SHOPPING_CART" contentId="SI_SHOPPING_CART" contentTypeId="BF_SITE_INFO"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SEARCH" contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_MAILING_LIST" contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_HEAD_TAG_CONTENT" contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"/>
-
-
-<!-- HOME PAGE SPOTS -->
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_01" contentId="HPS_01" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_02" contentId="HPS_02" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_03" contentId="HPS_03" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_04" contentId="HPS_04" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_05" contentId="HPS_05" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_06" contentId="HPS_06" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_07" contentId="HPS_07" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_08" contentId="HPS_08" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_09" contentId="HPS_09" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_10" contentId="HPS_10" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_11" contentId="HPS_11" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_12" contentId="HPS_12" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_13" contentId="HPS_13" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_14" contentId="HPS_14" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_15" contentId="HPS_15" contentTypeId="BF_HOME_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_16" contentId="HPS_16" contentTypeId="BF_HOME_PAGE"/>
-
-<!-- ESPOTS -->
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_VIEW" contentId="PTS_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_EDIT" contentId="PTS_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_MY_ACCOUNT" contentId="PTS_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_CONFIRM" contentId="PTS_ORDER_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_STATUS" contentId="PTS_ORDER_STATUS" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_SUMMARY" contentId="PTS_ORDER_SUMMARY" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHIPPING_ADDRESS" contentId="PTS_SHIPPING_ADDRESS" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHIPPING_METHOD" contentId="PTS_SHIPPING_METHOD" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHOPPING_CART" contentId="PTS_SHOPPING_CART" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_CONTACT_US" contentId="PTS_CONTACT_US" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_STORE_LOCATOR" contentId="PTS_STORE_LOCATOR" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_MAILING_LIST" contentId="PTS_MAILING_LIST" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_LOGIN" contentId="PTS_LOGIN" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_LOGIN_INFO" contentId="PTS_LOGIN_INFO" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PERSONAL_INFO" contentId="PTS_PERSONAL_INFO" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_CONFIRM" contentId="PTS_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SEARCH_NO_RESULT" contentId="PTS_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ONE_STEP_CHKOUT" contentId="PTS_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_STORE_PICKUP" contentId="PTS_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_VIEW" contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_EDIT" contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_MY_ACCOUNT" contentId="PES_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ORDER_CONFIRM" contentId="PES_ORDER_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ORDER_STATUS" contentId="PES_ORDER_STATUS" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ORDER_SUMMARY" contentId="PES_ORDER_SUMMARY" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHIPPING_ADDRESS" contentId="PES_SHIPPING_ADDRESS" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHIPPING_METHOD" contentId="PES_SHIPPING_METHOD" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHOPPING_CART" contentId="PES_SHOPPING_CART" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_CONTACT_US" contentId="PES_CONTACT_US" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_STORE_LOCATOR" contentId="PES_STORE_LOCATOR" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_MAILING_LIST" contentId="PES_MAILING_LIST" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_LOGIN" contentId="PES_LOGIN" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_LOGIN_INFO" contentId="PES_LOGIN_INFO" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PERSONAL_INFO" contentId="PES_PERSONAL_INFO" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_CONFIRM" contentId="PES_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SEARCH_NO_RESULT" contentId="PES_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ONE_STEP_CHKOUT" contentId="PES_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_STORE_PICKUP" contentId="PES_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_01" contentId="PDP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_02" contentId="PDP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_03" contentId="PDP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_04" contentId="PDP_CONTENT_04" contentTypeId="BF_PAGE_TOP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_05" contentId="PDP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"/>
-
-<!-- PDP SPOTS -->
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_INTRODUCED" contentId="PS_INTRODUCED" contentTypeId="BF_PDP_SPOT"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_DISCONTINUED" contentId="PS_DISCONTINUED" contentTypeId="BF_PDP_SPOT"/>
-
-<!-- STATIC PAGES-->
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_ABOUT_US" contentId="SP_ABOUT_US" contentTypeId="BF_STATIC_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_PRIVACY_POLICY" contentId="SP_PRIVACY_POLICY" contentTypeId="BF_STATIC_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_TERMS_CONDITIONS" contentId="SP_TERMS_CONDITIONS" contentTypeId="BF_STATIC_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_SITE_MAP" contentId="SP_SITE_MAP" contentTypeId="BF_STATIC_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_ERROR_PAGE" contentId="SP_ERROR_PAGE" contentTypeId="BF_STATIC_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_RETURN_POLICY" contentId="SP_RETURN_POLICY" contentTypeId="BF_STATIC_PAGE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_CONTACT_US" contentId="SP_CONTACT_US" contentTypeId="BF_STATIC_PAGE"/>
-
-<!-- CONTENT LIBRARY-->
-
-<!-- EMAIL CONTENT-->
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_COMMON_HEADER" contentId="E_COMMON_HEADER" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_COMMON_STYLES" contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_COMMON_FOOTER" contentId="E_COMMON_FOOTER" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_NEW_CUSTOMER" contentId="E_NEW_CUSTOMER" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_CHANGE_CUSTOMER" contentId="E_CHANGE_CUSTOMER" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_FORGOT_PASSWORD" contentId="E_FORGOT_PASSWORD" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ABANDON_CART" contentId="E_ABANDON_CART" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_CONTACT_US" contentId="E_CONTACT_US" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_REQUEST_CATALOG" contentId="E_REQUEST_CATALOG" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_CONFIRM" contentId="E_ORDER_CONFIRM" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_CHANGE" contentId="E_ORDER_CHANGE" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SHIP_REVIEW" contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_DETAIL" contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_MAILING_LIST" contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHED_JOB_ALERT " contentTypeId="BF_EMAIL_TEMPLATE"/>
-
-<!-- END XContentXref content product store reference -->
 </entity-engine-xml>

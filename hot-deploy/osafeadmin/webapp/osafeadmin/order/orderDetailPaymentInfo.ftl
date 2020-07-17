@@ -104,6 +104,8 @@
                     <a href="<@ofbizUrl>orderPaymentDetail?orderPaymentPreferenceId=${orderPaymentPreferenceId!""}&orderId=${parameters.orderId}</@ofbizUrl>"><span class="paymentDetailIcon"></span></a>
               <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y") >
                   <p>${uiLabelMap.PayInStoreInfo}</p>
+              <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD")) >
+                  <p>${uiLabelMap.CashOnDeliveryInfo}</p>
               <#else>
                   <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>
                   <#if paymentMethod?has_content>

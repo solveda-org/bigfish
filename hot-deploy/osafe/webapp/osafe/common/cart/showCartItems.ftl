@@ -42,7 +42,7 @@
              <#assign productCategoryMemberList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryMemberList,true)/>
              <#assign productCategoryMemberList = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productCategoryMemberList,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
               <#if productCategoryMemberList?has_content>
-    	          <#assign productCategoryMember = EntityUtil.getFirst(productCategoryMemberList)/>
+    	          <#assign productCategoryMember = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productCategoryMemberList)/>
                   <#assign productCategoryId = productCategoryMember.productCategoryId!"">
               </#if>
           </#if>

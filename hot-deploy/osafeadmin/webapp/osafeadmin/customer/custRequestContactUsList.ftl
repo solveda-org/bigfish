@@ -2,6 +2,7 @@
 <thead>
   <tr class="heading">
     <th class="idCol firstCol">${uiLabelMap.IdLabel}</th>
+    <th class="idCol firstCol">${uiLabelMap.CustomerNoLabel}</th>
     <th class="nameCol">${uiLabelMap.LastNameLabel}</th>
     <th class="nameCol">${uiLabelMap.FirstNameLabel}</th>
     <th class="descCol">${uiLabelMap.ContactReasonLabel}</th>
@@ -17,7 +18,14 @@
     <#list resultList as contactUs>
       <#assign hasNext = contactUs_has_next>
       <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
-        <td class="idCol <#if !contactUs_has_next?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>custRequestContactUsDetail?custReqId=${contactUs.custRequestId?if_exists}</@ofbizUrl>">${contactUs.custRequestId?if_exists}</a></td>
+        <td class="idCol <#if !contactUs_has_next?if_exists>lastRow</#if> firstCol" >
+            <a href="<@ofbizUrl>custRequestContactUsDetail?custReqId=${contactUs.custRequestId?if_exists}<#if contactUs.fromPartyId?has_content>&partyId=${contactUs.fromPartyId?if_exists}</#if></@ofbizUrl>">${contactUs.custRequestId?if_exists}</a>
+        </td>
+        <td class="idCol <#if !reqCatalog_has_next?if_exists>lastRow</#if> firstCol" >
+            <#if contactUs.fromPartyId?has_content>
+                <a href="<@ofbizUrl>customerDetail?partyId=${contactUs.fromPartyId?if_exists}</@ofbizUrl>">${contactUs.fromPartyId?if_exists}</a>
+            </#if>
+        </td>
         <#assign custReqAttributeList = delegator.findByAnd("CustRequestAttribute",Static["org.ofbiz.base.util.UtilMisc"].toMap("custRequestId", contactUs.custRequestId))>
         <#assign comment =""/>
         <#if custReqAttributeList?exists && custReqAttributeList?has_content>

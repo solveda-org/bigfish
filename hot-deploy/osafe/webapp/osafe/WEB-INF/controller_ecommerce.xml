@@ -1439,35 +1439,13 @@
 
     <!-- MULTI-STEP CHECK OUT FLOW -->
 
-    <!-- CONTENT Requests -->
-
-    <request-map uri="aboutUs">
-        <security https="false" auth="false"/>
-        <response name="success" type="view" value="aboutUs"/>
-    </request-map>
-
-    <request-map uri="privacyPolicy">
-        <security https="false" auth="false"/>
-        <response name="success" type="view" value="privacyPolicy"/>
-    </request-map>
-
-    <request-map uri="termsConditions">
-        <security https="false" auth="false"/>
-        <response name="success" type="view" value="termsConditions"/>
-    </request-map>
-
-    <request-map uri="siteMap">
-        <security https="false" auth="false"/>
-        <response name="success" type="view" value="siteMap"/>
-    </request-map>
-
     <!-- Request Catalog -->
     <request-map uri="requestCatalog" edit="false">
         <security https="true" auth="false"/>
         <response name="success" type="view" value="ecommerceRequestCatalog"/>
     </request-map>
     <request-map uri="submitRequestCatalog">
-        <security https="false" auth="false"/>
+        <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Event/CustRequestEvents.xml" invoke="submitRequestCatalog"/>
         <response name="success" type="view" value="eCommerceConfirmRequestCatalog"/>
         <response name="error" type="view" value="ecommerceRequestCatalog"/>
@@ -1659,13 +1637,6 @@
 
     <!-- Order -->
     <view-map name="eCommerceOrderStatus" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceOrderStatus"/>
-
-
-    <!-- CONTENT  -->
-    <view-map name="aboutUs" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceAboutUs"/>
-    <view-map name="privacyPolicy" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommercePrivacyPolicy"/>
-    <view-map name="termsConditions" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceTermsConditions"/>
-    <view-map name="siteMap" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceSiteMap"/>
 
     <!-- Request Catalog -->
     <view-map name="ecommerceRequestCatalog" type="screen" page="component://osafe/widget/EcommerceScreens.xml#ecommerceRequestCatalog"/>

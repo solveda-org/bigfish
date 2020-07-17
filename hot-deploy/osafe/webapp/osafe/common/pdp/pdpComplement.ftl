@@ -1,7 +1,4 @@
-<#-- variable setup and worker calls -->
-<#assign productName = productContentWrapper.get("PRODUCT_NAME")!currentProduct.productName!"">
-
-<#if recommendProducts?has_content>
+<#if complementProducts?has_content>
   <div class="pdpComplement">
        <#assign plpFacetGroupVariantSwatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG")!""/>
        <#assign plpFacetGroupVariantSticky =  Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_PDP_MATCH")!""/>
@@ -31,6 +28,7 @@
             <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                  ${setRequestAttribute("featureValueSelected",featureValueSelected)}
+                 <#break>
             </#if>
           </#list>
        </#if>
@@ -40,13 +38,14 @@
             <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                 ${setRequestAttribute("featureValueSelected",featureValueSelected)}
+                 <#break>
             </#if>
           </#list>
        </#if>
        
        <h2>${uiLabelMap.ComplementProductHeading}</h2>
-            <#list recommendProducts as complementProduct>
-             ${setRequestAttribute("plpItemId",complementProduct.productId)}
+            <#list complementProducts as complementProduct>
+             ${setRequestAttribute("plpItemId",complementProduct.productIdTo)}
                  <!-- DIV for Displaying Recommended productss STARTS here -->
                       <div class="eCommerceListItem eCommerceComplementProduct">
                         ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPComplementDivSequence")}

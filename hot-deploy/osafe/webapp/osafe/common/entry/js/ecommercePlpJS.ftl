@@ -60,6 +60,12 @@ jQuery(document).ready(function () {
         jQuery(this).siblings('.seeMoreLink').show();
     });
     
+    jQuery('.showHideFacetGroupLink').click(function() {
+        jQuery(this).siblings('ul').find('li.hideThem').slideToggle();
+        jQuery(this).toggleClass("seeMoreFacetGroupLink");
+        jQuery(this).toggleClass("seeLessFacetGroupLink");
+    });
+    
     function changeSwatchImg(elm) {
         var swatchVariant = jQuery(elm).next('.swatchVariant').clone();
         var swatchVariantOnlinePrice = jQuery(elm).nextAll('.swatchVariantOnlinePrice:first').clone().show();

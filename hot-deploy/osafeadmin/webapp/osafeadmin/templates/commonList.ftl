@@ -8,8 +8,6 @@ ${sections.render('commonFormJS')}
         <table class="osafe">
             ${sections.render('listBoxBody')?if_exists}
         </table>
-        <table class="osafe">
-            ${sections.render('commonListButton')?if_exists}
-        </table>
+        ${sections.render('commonListButton')?if_exists}
     </div>
 </div>

@@ -1,3 +1,10 @@
+<#if showSuccessMessage?has_content >
+  <div class="content-messages eCommerceSuccessMessage">
+    <span class="checkMarkIcon eventImage"></span>
+      <p class="eventMessage">${showSuccessMessage}</p>
+  </div>
+</#if>
+
 <div class="displaySearchBox">
     <div class="header"><h2>${searchBoxHeading?if_exists}</h2></div>
     <div class="boxBody">
@@ -9,8 +16,8 @@
       </form>
     </div>
 </div>
-<div class="displayListBox">
 
+<div class="displayListBox">
     ${sections.render('tooltipBody')?if_exists}
     ${sections.render('listPagingBody')?if_exists}
     ${sections.render('commonFormJS')?if_exists}
@@ -22,11 +29,6 @@
             ${sections.render('listBoxBody')?if_exists}
             ${sections.render('listNoResultBody')?if_exists}
         </table>
-        <table class="osafe">
-           ${sections.render('commonListButton')?if_exists}
-           ${sections.render('commonDetailLinkButton')?if_exists}
-           ${sections.render('commonOrderLinkButton')?if_exists}
-        </table>
+        ${sections.render('commonListButton')?if_exists}
     </div>
-      
 </div>

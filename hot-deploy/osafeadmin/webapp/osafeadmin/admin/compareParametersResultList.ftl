@@ -40,7 +40,16 @@
           <#assign tooltipData = tooltipData+"<div class=tooltipCaption><label>${uiLabelMap.CategoryCaption}</label></div><div class=tooltipValue>${categoryCompareToParamFile!}</div>"/>
           <#assign tooltipData = tooltipData+"<div class=tooltipCaption><label>${uiLabelMap.ValueCaption}</label></div><div class=tooltipValue>${valueCompareToParamFile!}</div>"/>
           <#assign tooltipData = tooltipData+"</div>"/>
-          <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></a>
+          <#assign valuesMatch = "true"/>
+          <#if compareParamResult.type?has_content && compareParamResult.type == '3'>
+              <#if (valueCompareToParamFile?has_content && valueYourDatabase?has_content) && (valueCompareToParamFile != valueYourDatabase)>
+                  <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="compareDescIcon"></span></a>
+                  <#assign valuesMatch = "false"/>
+              </#if>
+          </#if>
+          <#if valuesMatch?has_content && valuesMatch == "true">
+              <a href="javascript:void(0);" onMouseover="javascript:showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></a>
+          </#if>
         </td>
         <td class="descCol <#if !hasNext?if_exists>lastRow</#if>">
         <!-- type  1 searchKeysNotInYourDatabase |  2 searchKeysNotInUploadedFile  |  3  searchKeysInBoth -->
@@ -61,6 +70,11 @@
               <#assign addParamKeyTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","AddParamKeyTooltip",keyMap, locale ) />
               <a href="<@ofbizUrl>addMissingParameter?addKey=${compareParamResult.key?if_exists}</@ofbizUrl>" onMouseover="javascript:showTooltip(event,'${addParamKeyTooltip!""}');" onMouseout="hideTooltip()" class="createIcon"></a>
             </#if>
+            <#if compareParamResult.type == "3" && compareParamResult.key?has_content && valuesMatch == "false">
+              <#assign keyMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("key", compareParamResult.key, "value", valueCompareToParamFile)>
+              <#assign addParamKeyTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SyncKeyAndValueTooltip",keyMap, locale ) />
+              <a href="javascript:setNewValue('${compareParamResult.key?if_exists}','${valueCompareToParamFile!}');" onMouseover="javascript:showTooltip(event,'${addParamKeyTooltip!""}');" onMouseout="hideTooltip()" class="syncIcon"></a>
+            </#if>
           </#if>
         </td>
       </tr>
@@ -71,4 +85,11 @@
       </#if>
     </#list>
   </#if>
+<td colspan="4">
+    <form method="post" id="passParameters" name="${detailFormName}" action="<@ofbizUrl>changeParameterValue</@ofbizUrl>">
+        <input type="hidden" name="parmKey" id="key" value="" />
+        <input type="hidden" name="newValue" id="newValue" value="" />
+    </form>
+  </td>
+</tr>
 <!-- end listBox -->

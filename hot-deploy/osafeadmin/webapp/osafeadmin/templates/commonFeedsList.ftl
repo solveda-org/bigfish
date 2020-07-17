@@ -29,9 +29,5 @@ ${sections.render('tooltipBody')?if_exists}
     </div>
 </div>
 <div class="displayBox footerInfo">
-    <div class="boxBody">
-        <table class="osafe">
-            ${sections.render('commonListButton')?if_exists}
-        </table>
-    </div>
+    ${sections.render('commonListButton')?if_exists}
 </div>

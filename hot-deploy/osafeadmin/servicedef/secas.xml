@@ -19,6 +19,9 @@
     <eca service="updateDivSequenceXml" event="commit">
         <action service="copyDivSequenceXml" mode="sync"/>
     </eca>
+    <eca service="updateDivSeqXml" event="commit">
+        <action service="copyDivSequenceXml" mode="sync"/>
+    </eca>
     <eca service="modifyImageLocationPreferencesXml" event="commit">
         <action service="copyImageLocationPreferencesXml" mode="sync"/>
     </eca>

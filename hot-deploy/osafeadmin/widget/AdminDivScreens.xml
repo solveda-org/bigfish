@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+   
+   <screen name="adminDivSequence">
+        <section>
+            <actions>
+                <set field="excludeDivs" from-field="excludeDivs"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/adminDivSequence.groovy" />
+            </actions>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafeadmin/webapp/osafeadmin/common/adminDivSequence.ftl" />
+                        </html>
+                    </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Customer Personal Info Detail  
+     Sequencer Type  : PersonalInfo -->
+<!-- **********************************************************************  -->     
+    
+    <screen name="personalInfoDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="PersonalInfo"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+            </actions>
+            <widgets>
+                <include-screen name="adminDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoTitle">
+        <section>
+            <widgets>
+                <container style="personalInfoTitleSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoTitle.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoFirstName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoFirstNameSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoFirstName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoLastName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoLastNameSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoLastName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoGender">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoGenderSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoGender.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoDateOfBirthMMDDYYYY">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoDateOfBirthMMDDYYYYSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoDobMMDDYYYY.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoDateOfBirthMMDD">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoDateOfBirthMMDDSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoDobMMDD.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoDateOfBirthDDMMYYYY">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoDateOfBirthDDMMYYYYSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoDobDDMMYYYY.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoDateOfBirthDDMM">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoDateOfBirthDDMMSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoDobDDMM.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoPhoneHome">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoPhoneHomeSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoPhoneHome.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>    
+    <screen name="personalInfoPhoneCell">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoPhoneCellSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoPhoneCell.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoPhoneWork">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoPhoneWorkSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoPhoneWork.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Address  
+     Sequencer Type  : AddressInfo -->
+<!-- **********************************************************************  -->     
+    
+    <screen name="addressInfoDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="AddressInfo"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+                <entity-one value-field="postalAddress" entity-name="PostalAddress"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/adminCountry.groovy" />
+            </actions>
+            <widgets>
+                <include-screen name="adminDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoCustomObject">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoCustomObjectSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoCapturePlus.ftl"/>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/js/capturePlusEntryJS.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="capturePlusJs">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/common/js/capturePlusJs.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoCountry">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoCountrySeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoCountry.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoNickname">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoNicknameSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoNickname.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoAddress1">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoAddress1Seq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoAddress1.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoAddress2">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoAddress2Seq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoAddress2.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoAddress3">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoAddress3Seq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoAddress3.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoCityTown">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoCityTownSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoCityTown.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoStateProvince">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoStateProvinceSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoStateProvince.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressInfoZipPostcode">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressInfoZipPostcodeSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressInfoZipPostcode.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressSkipVerification">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="addressSkipVerificationSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafeadmin/webapp/osafeadmin/common/addressInfo/addressSkipVerification.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+ </screens>

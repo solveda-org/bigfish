@@ -1,3 +1,12 @@
+<#if checkoutSuccessMessageList?has_content>
+  <div class="content-messages eCommerceSuccessMessage">
+    <span class="checkMarkIcon eventImage"></span>
+    <#list checkoutSuccessMessageList as checkOutMsg>
+      <p class="eventMessage">${checkOutMsg}</p>
+    </#list>
+  </div>
+</#if>
+
 <form method="post" name="${detailFormName!""}" <#if detailFormId?exists>id="${detailFormId!}"</#if>>
 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
 <#if generalInfoBoxHeading?exists && generalInfoBoxHeading?has_content>
@@ -45,6 +54,7 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
 </#if>
 <#if orderNoteInfoBoxHeading?exists && orderNoteInfoBoxHeading?has_content>
     <div class="displayListBox orderItemInfo">
+        ${sections.render('listPagingBody')}
         <div class="header"><h2>${orderNoteInfoBoxHeading!}</h2></div>
         <div class="boxBody">
             ${sections.render('orderNoteBoxBody')!}

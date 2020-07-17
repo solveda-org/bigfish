@@ -46,60 +46,35 @@
     </#list>
 
     <#-- Customer Email-->
-    <#assign placingParty = orderReadHelper.getPlacingParty()/>
-    <#assign billToEmailList = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(placingParty, "PRIMARY_EMAIL", "EMAIL_ADDRESS", false)/>
-    <#if billToEmailList?has_content>
-         <#assign customerEmail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(billToEmailList)/>
-         <#assign customerEmailAddress = customerEmail.infoString/>
-    </#if>
-
     <#-- Start Email Address -->
+    <#if userEmailAddress?exists && userEmailAddress?has_content>
           <div class="infoRow">
            <div class="infoEntry">
              <div class="infoCaption">
                 <label>${uiLabelMap.EmailAddressCaption}</label>
              </div>
              <div class="infoValue">
-                 <p> ${customerEmailAddress!""}</p>
+                 <p> ${userEmailAddress!""}</p>
              </div>
-           </div> <#-- end infoEntry -->
-          </div> <#-- end infoRow -->
+           </div> 
+          </div>
+    </#if>
     <#-- End Email Address -->
     
     <#-- Start Phone Number -->
-      <#assign partyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId))/>
-        <#-- Home Phone -->
-      <#if partyContactDetails?has_content>
-        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_HOME"}) />
+      <#if phoneHomeTelecomNumber?has_content>
+        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneHomeTelecomNumber.areaCode?if_exists, phoneHomeTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
       </#if>
-      <#if partyHomePhoneDetails?has_content>
-        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyHomePhoneDetails?if_exists)?if_exists />
-        <#assign partyHomePhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyHomePhoneDetails?if_exists)?if_exists />
-        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-      </#if>
-      
-        <#-- Work Phone -->
-      <#if partyContactDetails?has_content>
-        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_WORK"}) />
-      </#if>
-      <#if partyWorkPhoneDetails?has_content>
-        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyWorkPhoneDetails?if_exists)?if_exists />
-        <#assign partyWorkPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyWorkPhoneDetails?if_exists)?if_exists />
-        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-        <#if partyWorkPhoneDetail?has_content && partyWorkPhoneDetail.extension?has_content>
-          <#assign partyWorkPhoneExt = partyWorkPhoneDetail.extension!/> 
+      <#if phoneWorkTelecomNumber?has_content>
+        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneWorkTelecomNumber.areaCode?if_exists, phoneWorkTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
+        <#if phoneWorkTelecomNumber.extension?has_content>
+          <#assign partyWorkPhoneExt = phoneWorkTelecomNumber.extension!/> 
         </#if>
       </#if>
-        
-        <#-- Cell Phone --> 
-      <#if partyContactDetails?has_content>
-        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_MOBILE"}) />
+      <#if phoneMobileTelecomNumber?has_content>
+        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(phoneMobileTelecomNumber.areaCode?if_exists, phoneMobileTelecomNumber.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
       </#if>
-      <#if partyCellPhoneDetails?has_content>
-        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyCellPhoneDetails?if_exists)?if_exists />
-        <#assign partyCellPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyCellPhoneDetails?if_exists)?if_exists />
-        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
-      </#if>
+      
     <#if formattedHomePhone?has_content || formattedCellPhone?has_content || formattedWorkPhone?has_content>
 	  <div class="infoRow">
 	    <#if formattedHomePhone?has_content>

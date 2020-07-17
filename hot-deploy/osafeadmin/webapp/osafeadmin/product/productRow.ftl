@@ -6,11 +6,19 @@
       </#if>
          <tr class="dataRow">
          
-           <input type="hidden" name="relatedProductId_" id="relatedProductId" value="${product.productId!}"/>
-           <td class="idCol firstCol" ><a href="<@ofbizUrl>productDetail?productId=${product.productId?if_exists}</@ofbizUrl>">${(product.productId)?if_exists}</a></td>
+           <input type="hidden" name="${parameters.assocType!}RelatedProductId_" id="${parameters.assocType!}RelatedProductId" value="${product.productId!}"/>
+           <td class="idCol firstCol" >
+             <#if product.isVirtual == 'Y'>
+               <a href="<@ofbizUrl>virtualProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+             <#elseif product.isVariant == 'Y'>
+               <a href="<@ofbizUrl>variantProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+             <#elseif product.isVirtual == 'N' && product.isVariant == 'N'>
+               <a href="<@ofbizUrl>finishedProductDetail?productId=${product.productId!}</@ofbizUrl>">${product.productId!}</a>
+             </#if>
+           </td>
            <td class="nameCol">${(product.internalName)?if_exists}</td>
            <td class="longDescCol ">
-           <input type="hidden" name="relatedProductName_" id="relatedProductName" value="${productName!""}"/>
+           <input type="hidden" name="${parameters.assocType!}RelatedProductName_" id="${parameters.assocType!}RelatedProductName" value="${productName!""}"/>
            ${productName?html!""}</td>
            <td class="actionCol">
              <#if productLongDescription?has_content && productLongDescription !="">
@@ -20,12 +28,13 @@
              <a href="javascript:void(0);" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
            </td>
            <td class="seqCol">
-             <input type="text" class="infoValue small textAlignCenter" name="sequenceNum_" id="sequenceNum" value=""/>
+             <input type="text" class="infoValue small textAlignCenter" name="${parameters.assocType!}SequenceNum_" id="${parameters.assocType!}SequenceNum" value=""/>
            </td>
            <#assign productName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productContentWrapper.get("PRODUCT_NAME")!""}')/>
            <td class="actionCol">
-             <a href="javascript:setRowNo('');javascript:deletTableRow('${product.productId?if_exists}','${productName!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()" ><span class="crossIcon"></span></a>
-             <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
-             <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>           </td>
+             <a href="javascript:setRowNo('');javascript:deletTableRow('${product.productId?if_exists}','${productName!""}','${parameters.tableId!}','${parameters.assocType!}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteProductAssociationTooltip}');" onMouseout="hideTooltip()" ><span class="crossIcon"></span></a>
+             <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.${parameters.assocType!}AddProductId,document.${detailFormName!}.${parameters.assocType!}AddProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
+             <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.${parameters.assocType!}AddProductId,document.${detailFormName!}.${parameters.assocType!}AddProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
+           </td>
          </tr>
      </#if>

@@ -11,8 +11,6 @@
     <th class="decsCol">${uiLabelMap.ShortDescLabel}</th>
     <th class="decsCol">${uiLabelMap.LongDescLabel}</th>
     <th class="nameCol">${uiLabelMap.ManuImageLabel}</th>
-    <th class="nameCol">${uiLabelMap.FacebookUrlLabel}</th>
-    <th class="nameCol">${uiLabelMap.TweetUrlLabel}</th>
   </tr>
   <#if manufacturerDataList?exists && manufacturerDataList?has_content>
     <#assign rowClass = "1">
@@ -43,8 +41,6 @@
           </#if>
         </td>
         <td class="nameCol">${manufacturer.manufacturerImage!""}</td>
-        <td class="nameCol">${manufacturer.profileFbUrl!""}</td>
-        <td class="nameCol">${manufacturer.profileTweetUrl!""}</td>
       </tr>
       <#-- toggle the row color -->
       <#if rowClass == "2">

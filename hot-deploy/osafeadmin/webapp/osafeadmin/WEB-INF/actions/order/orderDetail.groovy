@@ -1,41 +1,246 @@
 package order;
 
 import org.apache.commons.lang.StringUtils;
-import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.party.contact.ContactHelper;
-import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.contact.ContactMechWorker;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilMisc;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
-if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session)){
+context.orderId = orderId;
+
+orderHeader = null;
+orderItems = null;
+orderNotes = null;
+partyId = null;
+
+if (UtilValidate.isNotEmpty(orderId)) 
+{
+	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
+}
+
+if (UtilValidate.isNotEmpty(orderHeader)) 
+{
+	// note these are overridden in the OrderViewWebSecure.groovy script if run
+	context.hasPermission = true;
+	context.canViewInternalDetails = true;
+
+	orderReadHelper = new OrderReadHelper(orderHeader);
+	orderItems = orderReadHelper.getOrderItems();
+
+	context.orderHeader = orderHeader;
+	context.orderReadHelper = orderReadHelper;
+	context.orderItems = orderItems;
+
+	// get the order type
+	orderType = orderHeader.orderTypeId;
+	context.orderType = orderType;
+
+	// get the display party
+	displayParty = null;
+	if ("PURCHASE_ORDER".equals(orderType)) 
+	{
+		displayParty = orderReadHelper.getSupplierAgent();
+	} 
+	else 
+	{
+		displayParty = orderReadHelper.getPlacingParty();
+	}
+	if (UtilValidate.isNotEmpty(displayParty)) 
+	{
+		partyId = displayParty.partyId;
+		context.displayParty = displayParty;
+		context.partyId = partyId;
+
+		
+		//Get PRIMARY EMAIL, TELEPHONE LOCATIONS
+        partyContactMechPurpose = displayParty.getRelated("PartyContactMechPurpose");
+        partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+
+        partyPurposeEmails = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL"));
+        partyPurposeEmails = EntityUtil.getRelated("PartyContactMech", partyPurposeEmails);
+        partyPurposeEmails = EntityUtil.filterByDate(partyPurposeEmails,true);
+        partyPurposeEmails = EntityUtil.orderBy(partyPurposeEmails, UtilMisc.toList("fromDate DESC"));
+        if (UtilValidate.isNotEmpty(partyPurposeEmails)) 
+        {
+        	partyPurposeEmail = EntityUtil.getFirst(partyPurposeEmails);
+            contactMech = partyPurposeEmail.getRelatedOne("ContactMech");
+            context.userEmailContactMech = contactMech;
+            context.userEmailAddress = contactMech.infoString;
+            context.userEmailAllowSolicitation= partyPurposeEmail.allowSolicitation;
+            userEmailContactMechList= EntityUtil.getRelated("ContactMech",partyPurposeEmails);
+            context.userEmailContactMechList = userEmailContactMechList;
+            
+        }
+
+        partyPurposeHomePhones = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PHONE_HOME"));
+        partyPurposeHomePhones = EntityUtil.getRelated("PartyContactMech", partyPurposeHomePhones);
+        partyPurposeHomePhones = EntityUtil.filterByDate(partyPurposeHomePhones,true);
+        partyPurposeHomePhones = EntityUtil.orderBy(partyPurposeHomePhones, UtilMisc.toList("fromDate DESC"));
+        if (UtilValidate.isNotEmpty(partyPurposeHomePhones)) 
+        {
+        	partyPurposePhone = EntityUtil.getFirst(partyPurposeHomePhones);
+        	telecomNumber = partyPurposePhone.getRelatedOne("TelecomNumber");
+            context.phoneHomeTelecomNumber =telecomNumber;
+            context.phoneHomeAreaCode =telecomNumber.areaCode;
+            context.phoneHomeContactNumber =telecomNumber.contactNumber;
+            context.partyPurposeHomePhones =partyPurposeHomePhones;
+        }
+        
+        partyPurposeWorkPhones = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PHONE_WORK"));
+        partyPurposeWorkPhones = EntityUtil.getRelated("PartyContactMech", partyPurposeWorkPhones);
+        partyPurposeWorkPhones = EntityUtil.filterByDate(partyPurposeWorkPhones,true);
+        partyPurposeWorkPhones = EntityUtil.orderBy(partyPurposeWorkPhones, UtilMisc.toList("fromDate DESC"));
+        if (UtilValidate.isNotEmpty(partyPurposeWorkPhones)) 
+        {
+        	partyPurposePhone = EntityUtil.getFirst(partyPurposeWorkPhones);
+        	telecomNumber = partyPurposePhone.getRelatedOne("TelecomNumber");
+            context.phoneWorkTelecomNumber =telecomNumber;
+            context.phoneWorkAreaCode =telecomNumber.areaCode;
+            context.phoneWorkContactNumber =telecomNumber.contactNumber;
+            context.partyPurposeWorkPhones =partyPurposeWorkPhones;
+        }
+
+        partyPurposeMobilePhones = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PHONE_MOBILE"));
+        partyPurposeMobilePhones = EntityUtil.getRelated("PartyContactMech", partyPurposeMobilePhones);
+        partyPurposeMobilePhones = EntityUtil.filterByDate(partyPurposeMobilePhones,true);
+        partyPurposeMobilePhones = EntityUtil.orderBy(partyPurposeMobilePhones, UtilMisc.toList("fromDate DESC"));
+        if (UtilValidate.isNotEmpty(partyPurposeMobilePhones)) 
+        {
+        	partyPurposePhone = EntityUtil.getFirst(partyPurposeMobilePhones);
+        	telecomNumber = partyPurposePhone.getRelatedOne("TelecomNumber");
+            context.phoneMobileTelecomNumber =telecomNumber;
+            context.phoneMobileAreaCode =telecomNumber.areaCode;
+            context.phoneMobileContactNumber =telecomNumber.contactNumber;
+            context.partyPurposeMobilePhones =partyPurposeMobilePhones;
+        }
+		
+	}
+
+	canceledPromoOrderItem = [:];
+	orderItemList = orderReadHelper.getOrderItems();
+	orderItemList.each { orderItem ->
+		if("Y".equals(orderItem.get("isPromo")) && "ITEM_CANCELLED".equals(orderItem.get("statusId"))) 
+		{
+			canceledPromoOrderItem = orderItem;
+		}
+		orderItemList.remove(canceledPromoOrderItem);
+	}
+	context.orderItemList = orderItemList;
+
+	shippingAddress = orderReadHelper.getShippingAddress();
+	context.shippingAddress = shippingAddress;
+
+	billingAddress = orderReadHelper.getBillingAddress();
+	context.billingAddress = billingAddress;
+
+	distributorId = orderReadHelper.getDistributorId();
+	context.distributorId = distributorId;
+
+	affiliateId = orderReadHelper.getAffiliateId();
+	context.affiliateId = affiliateId;
+
+	billingAccount = orderHeader.getRelatedOne("BillingAccount");
+	context.billingAccount = billingAccount;
+	context.billingAccountMaxAmount = orderReadHelper.getBillingAccountMaxAmount();
+
+	ecl = EntityCondition.makeCondition([
+									EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+									EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")],
+								EntityOperator.AND);
+	orderPaymentPreferences = delegator.findList("OrderPaymentPreference", ecl, null, null, null, false);
+	context.orderPaymentPreferences = orderPaymentPreferences;
+
+	// ship groups
+	shipGroups = orderHeader.getRelatedOrderBy("OrderItemShipGroup", ["shipGroupSeqId"]);
+	context.shipGroups = shipGroups;
+
+
+	customerPoNumber = null;
+	orderItemList.each { orderItem ->
+		customerPoNumber = orderItem.correspondingPoId;
+	}
+	context.customerPoNumber = customerPoNumber;
+
+	statusChange = delegator.findByAnd("StatusValidChange", [statusId : orderHeader.statusId]);
+	context.statusChange = statusChange;
+
+	currentStatus = orderHeader.getRelatedOne("StatusItem");
+	context.currentStatus = currentStatus;
+
+	orderHeaderStatuses = orderReadHelper.getOrderHeaderStatuses();
+	context.orderHeaderStatuses = orderHeaderStatuses;
+
+	adjustmentTypes = delegator.findList("OrderAdjustmentType", null, null, ["description"], null, false);
+	context.orderAdjustmentTypes = adjustmentTypes;
+
+	notes = orderHeader.getRelatedOrderBy("OrderHeaderNoteView", ["-noteDateTime"]);
+	context.orderNotes = notes;
+	orderNotes = notes;
+	
+	if(UtilValidate.isNotEmpty(context.showOrderNotesPaging) && context.showOrderNotesPaging == "true")
+	{
+        pagingListSize=orderNotes.size();
+        context.pagingListSize=pagingListSize;
+        context.pagingList = orderNotes;
+	}
+    
+	showNoteHeadingOnPDF = false;
+	if (UtilValidate.isNotEmpty(notes) && EntityUtil.filterByCondition(notes, EntityCondition.makeCondition("internalNote", EntityOperator.EQUALS, "N")).size() > 0) 
+	{
+		showNoteHeadingOnPDF = true;
+	}
+	context.showNoteHeadingOnPDF = showNoteHeadingOnPDF;
+
+	cmvm = ContactMechWorker.getOrderContactMechValueMaps(delegator, orderId);
+	context.orderContactMechValueMaps = cmvm;
+
+	orderItemChangeReasons = delegator.findByAnd("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
+	context.orderItemChangeReasons = orderItemChangeReasons;
+
+}
+
+if(UtilValidate.isNotEmpty(orderId) && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
+{
     messageMap=[:];
     messageMap.put("orderId", orderId);
 
     context.orderId=orderId;
     context.pageTitle = UtilProperties.getMessage("OSafeAdminUiLabels","OrderManagementOrderDetailTitle",messageMap, locale )
     context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderDetailInfoHeading",messageMap, locale )
-    context.orderNoteInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderNoteHeading",messageMap, locale )
-	context.orderAttributeInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderAttributeHeading",messageMap, locale )
-
-    pagingListSize=orderItems.size();
-    context.pagingListSize=pagingListSize;
-    context.pagingList = orderItems;
-
+    if(UtilValidate.isNotEmpty(context.showOrderNoteHeading) && context.showOrderNoteHeading == "true" )
+	{
+        context.orderNoteInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderNoteHeading",messageMap, locale )
+	}
+    if(UtilValidate.isNotEmpty(context.showOrderAttributeHeading) && context.showOrderAttributeHeading == "true" )
+	{
+        context.orderAttributeInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderAttributeHeading",messageMap, locale )
+	}
+	
+	context.notesCount = orderNotes.size();
+    
+	if(UtilValidate.isNotEmpty(context.showOrderItemsPaging) && context.showOrderItemsPaging == "true")
+	{
+        pagingListSize=orderItems.size();
+        context.pagingListSize=pagingListSize;
+        context.pagingList = orderItems;
+	}
 
     storeId = "";
-    orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], false);
+	orderDeliveryOptionAttr = orderHeader.getRelatedByAnd("OrderAttribute", [attrName : "DELIVERY_OPTION"]);
+	orderDeliveryOptionAttr = EntityUtil.getFirst(orderDeliveryOptionAttr);
+	
     if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP") 
     {
         context.isStorePickup = "Y";
-        orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], false);
+		orderStoreLocationAttr = orderHeader.getRelatedByAnd("OrderAttribute", [attrName : "STORE_LOCATION"]);
+		orderStoreLocationAttr = EntityUtil.getFirst(orderStoreLocationAttr);
         if (UtilValidate.isNotEmpty(orderStoreLocationAttr)) 
         {
             storeId = orderStoreLocationAttr.attrValue;
@@ -47,12 +252,14 @@ if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
         context.storeId = storeId;
         store = delegator.findOne("Party", [partyId : storeId], false);
         context.store = store;
-        storeInfo = delegator.findOne("PartyGroup", [partyId : storeId], false);
-        if (UtilValidate.isNotEmpty(storeInfo)) 
+        if (UtilValidate.isNotEmpty(store)) 
         {
-            context.storeInfo = storeInfo;
+    	    storeInfo = store.getRelatedOne("PartyGroup");
+            if (UtilValidate.isNotEmpty(storeInfo)) 
+            {
+                context.storeInfo = storeInfo;
+            }
         }
-        
         partyContactMechValueMaps = ContactMechWorker.getPartyContactMechValueMaps(delegator, storeId, false);
         if (UtilValidate.isNotEmpty(partyContactMechValueMaps)) 
         {
@@ -68,3 +275,19 @@ if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
         }
     }
 }
+
+//display success message for checkout
+String showThankYouStatus = context.showThankYouStatus;
+if (UtilValidate.isEmpty(showThankYouStatus)){
+	context.showThankYouStatus ="N"
+}
+if("Y".equals (showThankYouStatus))
+{
+	messageMap=[:];
+	messageMap.put("orderId", orderId);
+	checkoutSuccessMessageList = UtilMisc.toList(UtilProperties.getMessage("OSafeAdminUiLabels","OrderCheckoutSuccess",messageMap, locale ));
+	context.checkoutSuccessMessageList = checkoutSuccessMessageList;
+}
+
+
+

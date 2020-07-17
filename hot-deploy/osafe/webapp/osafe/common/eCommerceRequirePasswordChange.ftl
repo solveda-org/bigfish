@@ -9,7 +9,7 @@
           <input type="hidden" name="requirePasswordChange" value="Y"/>
           <input type="hidden" name="USERNAME" value="${username}" maxlength="200"/>
             <div class="entry">
-                <label for="USERNAME">${uiLabelMap.UsernameCaption}</label>
+                <label for="USERNAME">${uiLabelMap.UserNameCaption}</label>
                 <input id="usernameReadOnly" name="USERNAMEReadOnly" type="text" class="userName readonly" value="${parameters.USERNAME!username!""}" maxlength="200" readonly="readonly" disabled="disabled"/>
             </div>
             <div class="entry">

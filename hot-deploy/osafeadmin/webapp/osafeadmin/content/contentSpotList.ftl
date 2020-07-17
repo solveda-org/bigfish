@@ -122,7 +122,7 @@
                         <input type="checkbox" value="${thisContent.contentId?if_exists}" class="homeSpotCheck" name="contentId" />
                       </#if>
                       <#if contentTypeId?exists && emailContentTypeId?exists && contentTypeId == emailContentTypeId>
-                          <a href="<@ofbizUrl>adminToolDetail?detailScreen=emailTestDetail&simpleTest=N&emailTemplateId=${thisContent.contentId}</@ofbizUrl>"><span class="emailIcon"></span></a>
+                          <a href="<@ofbizUrl>adminToolDetail?detailScreen=emailTestDetail&simpleTest=N&emailTemplateId=${thisContent.contentId}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.EmailTestTooltip}');" onMouseout="hideTooltip()"><span class="emailIcon"></span></a>
                       </#if>
                     </td>
                 </tr>

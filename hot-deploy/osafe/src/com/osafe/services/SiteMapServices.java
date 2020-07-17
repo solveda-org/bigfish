@@ -507,7 +507,11 @@ public class SiteMapServices {
         	friendlyValue=StringUtil.replaceString(friendlyValue,"&amp;","And");
         	friendlyValue=StringUtil.replaceString(friendlyValue,"&","And");
         	friendlyValue=StringUtil.replaceString(friendlyValue,",","");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,"-","");
+        	//Do not replace '-' if this was a static page friendly name (contentAttribute type=SEO_FRIENDLY_URL) 
+        	if (UtilValidate.isEmpty(contentSeoFriendlyName))
+        	{
+        	     friendlyValue=StringUtil.replaceString(friendlyValue,"-","");
+        	}
         	friendlyValue=StringUtil.replaceString(friendlyValue,".","");
         	friendlyValue=StringUtil.replaceString(friendlyValue," ","-");
         	

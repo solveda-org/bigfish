@@ -31,7 +31,7 @@
 	      </div>
 	      <div class="infoValue">
 	        	<input name="currentPassword" type="password" id="currentPassword" value="${parameters.currentPassword!""}"/>
-	        	<a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserPasswordHelpInfo!}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
+	        	<a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserPasswordHelpInfo!}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
 	      </div>
 	    </div>
 	  </div>
@@ -43,7 +43,7 @@
 	      </div>
 	      <div class="infoValue">
 	        	<input name="newPassword" type="password" id="newPassword" value="${parameters.newPassword!""}"/>
-	        	<#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserPasswordHelpInfo!}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a></#if>
+	        	<#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserPasswordHelpInfo!}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a></#if>
 	      </div>
 	    </div>
 	  </div>
@@ -54,7 +54,7 @@
 	      </div>
 	      <div class="infoValue">
 	        	<input name="confirmPassword" type="password" id="confirmPassword" value="${parameters.confirmPassword!""}"/>
-	        	<#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserPasswordHelpInfo!}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a></#if>
+	        	<#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserPasswordHelpInfo!}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a></#if>
 	      </div>
 	    </div>
 	  </div>  
@@ -113,7 +113,7 @@
                      <input class="<#if mode != 'add' >USER_ENABLED_CHECKBOX_ </#if>checkBoxEntry" type="radio" name="enabled" value="N" <#if  parameters.enabled?exists && parameters.enabled?string == "N">checked="checked" <#elseif enabled?exists && enabled?string == "N">checked</#if> <#if mode = 'add'>disabled</#if>/>${uiLabelMap.NoLabel}
                      <#if mode = 'add'><input type='hidden' name='enabled' value='Y'/></#if>
               </div>
-              <#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${successFailedLoginToolTipText!}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a></#if>
+              <#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${successFailedLoginToolTipText!}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a></#if>
 		    </div>
 		  </div>
 		  
@@ -170,7 +170,7 @@
 							<option value='2'<#if selectedAMPM == "2">selected=selected</#if>>${uiLabelMap.CommonPM}</option>
 					      </select>
 					      
-					      <a href="javascript:void(0);" onMouseover="showTooltip(event,'${successFailedMinutesToolTipText!}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
+					      <a href="javascript:void(0);" onMouseover="showTooltip(event,'${successFailedMinutesToolTipText!}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
 			        </div>
 			      </div>
 			 </div>
@@ -186,7 +186,7 @@
                      <input class="checkBoxEntry" type="radio" name="requirePasswordChange"  value="Y" <#if parameters.requirePasswordChange?exists && parameters.requirePasswordChange?string == "Y">checked="checked"<#elseif requirePasswordChange?exists && requirePasswordChange?string == "Y">checked="checked"</#if> <#if mode = 'add'>disabled</#if>/>${uiLabelMap.YesLabel}
                      <input class="checkBoxEntry" type="radio" name="requirePasswordChange" value="N" <#if parameters.requirePasswordChange?exists && parameters.requirePasswordChange?string == "N">checked="checked" <#elseif requirePasswordChange?exists && requirePasswordChange?string == "N">checked="checked"</#if> <#if mode = 'add'>disabled checked</#if>/>${uiLabelMap.NoLabel}
               </div>
-              <#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserRequirePasswordResetHelpInfo!}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a></#if>
+              <#if mode="edit"><a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UserRequirePasswordResetHelpInfo!}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a></#if>
 		    </div>
 		  </div>
 	  </div>
@@ -201,7 +201,7 @@
 		      </div>
 		      <div class="infoValue">
 		        	<input class="small" name="successiveFailedLogins" type="text" id="successiveFailedLogins" value="${parameters.successiveFailedLogins!successiveFailedLogins!""}" disabled/>
-		        	<a href="javascript:void(0);" onMouseover="showTooltip(event,'${successiveFailedLoginsToolTipText!}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
+		        	<a href="javascript:void(0);" onMouseover="showTooltip(event,'${successiveFailedLoginsToolTipText!}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
 		      </div>
 		    </div>
 		  </div>

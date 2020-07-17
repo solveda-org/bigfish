@@ -160,6 +160,48 @@
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
+    	
+    	<!-- BIGFISH Types -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishTypes.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishTypes.xml">
+            <filterset >
+              <filter token="store.storePrefix" value="${store.storePrefix}"/>
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
+              <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishTypes.xml" todir="../../hot-deploy/osafe/data/seed/" overwrite="true" failonerror="false"/>
+    	
+    	<!-- BIGFISH Content Menu -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml">
+            <filterset >
+              <filter token="store.storePrefix" value="${store.storePrefix}"/>
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
+              <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml" todir="../../hot-deploy/osafe/data/seed/" overwrite="true" failonerror="false"/>
+    	
+    	<!-- BIGFISH Extended Store -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishExtendedStore.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishExtendedStore.xml">
+            <filterset >
+              <filter token="store.storePrefix" value="${store.storePrefix}"/>
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
+              <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+              <filter token="ofbiz.locale.default" value="${ofbiz.locale.default}"/>
+              <filter token="url.port.https" value="${url.port.https}"/>
+              <filter token="url.port.http" value="${url.port.http}"/>
+              <filter token="url.https.host" value="${url.https.host}"/>
+              <filter token="url.http.host" value="${url.http.host}"/>
+              <filter token="extendedStore.suffix" value="${extendedStore.suffix}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishExtendedStore.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
 
     	<!-- BIGFISH Schedulers -->
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml">

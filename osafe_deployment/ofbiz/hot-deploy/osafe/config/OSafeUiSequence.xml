@@ -108,6 +108,12 @@
         <div>pdpAddToCart</div>
         <description>Add To Cart. The actual action button that adds the Product to the cart.</description>
     </property>
+    <property key="addToWishlist">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpAddToWishlist</div>
+        <description>Add To Wishlist. The actual action button that adds the Product to the Wish List.</description>
+    </property>
     <property key="volumePricing">
         <value xml:lang="en">180</value>
         <screen>PDP</screen>
@@ -179,6 +185,18 @@
         <screen>PDP</screen>
         <div>pdpComplement</div>
         <description>Complement Products. A container that is further defined in pdpComplement. </description>
+    </property>
+    <property key="accessory">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpAccessory</div>
+        <description>Accessory Products. A container that is further defined in pdpAccessory.</description>
+    </property>
+    <property key="complementAccessory">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpComplementAccessory</div>
+        <description>Complement and Accessory product combined into a container with an outer &quot;div&quot;.</description>
     </property>
     <property key="recentlyViewed">
         <value xml:lang="en">310</value>
@@ -387,6 +405,13 @@
         <group>0</group>
         <description>Add To Cart. The actual action button that adds the Product to the cart.</description>
     </property>
+    <property key="addToWishlist">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsAddToWishlist</div>
+        <group>0</group>
+        <description>Add To Wishlist. The actual action button that adds the Product to the Wish List.</description>
+    </property>
     <property key="volumePricing">
         <value xml:lang="en">0</value>
         <screen>PDPTabs</screen>
@@ -463,6 +488,20 @@
         <div>pdpTabsComplement</div>
         <group>0</group>
         <description>Complement Products. A container that is further defined in pdpComplement. </description>
+    </property>
+    <property key="accessory">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsAccessory</div>
+        <group>0</group>
+        <description>Accessory Products. A container that is further defined in pdpAccessory.</description>
+    </property>
+    <property key="complementAccessory">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsComplementAccessory</div>
+        <group>0</group>
+        <description>Complement and Accessory product combined into a container with an outer &quot;div&quot;.</description>
     </property>
     <property key="recentlyViewed">
         <value xml:lang="en">0</value>
@@ -667,6 +706,12 @@
         <div>quicklookAddToCart</div>
         <description>Add To Cart. The actual action button that adds the Product to the cart.</description>
     </property>
+    <property key="addToWishlist">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookAddToWishlist</div>
+        <description>Add To Wishlist. The actual action button that adds the Product to the Wish List.</description>
+    </property>
     <property key="volumePricing">
         <value xml:lang="en">180</value>
         <screen>Quicklook</screen>
@@ -738,6 +783,18 @@
         <screen>Quicklook</screen>
         <div>quicklookComplement</div>
         <description>A container Tab component. </description>
+    </property>
+    <property key="accessory">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookAccessory</div>
+        <description>Accessory Products. A container that is further defined in pdpAccessory.</description>
+    </property>
+    <property key="complementAccessory">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookComplementAccessory</div>
+        <description>Complement and Accessory product combined into a container with an outer &quot;div&quot;.</description>
     </property>
     <property key="recentlyViewed">
         <value xml:lang="en">310</value>
@@ -943,6 +1000,12 @@
         <div>pdpComplementProductName</div>
         <description>Product Name</description>
     </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">80</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
     <property key="detailLink">
         <value xml:lang="en">20</value>
         <screen>PDPComplement</screen>
@@ -978,12 +1041,6 @@
         <screen>PDPComplement</screen>
         <div>pdpComplementSwatchImage</div>
         <description>Swatch Image</description>
-    </property>
-    <property key="tertiaryInfo">
-        <value xml:lang="en">80</value>
-        <screen>PDPComplement</screen>
-        <div>pdpComplementTertiaryInfo</div>
-        <description>Product Tertiary Info</description>
     </property>
     <property key="reviewStars">
         <value xml:lang="en">90</value>
@@ -1037,6 +1094,112 @@
         <value xml:lang="en">170</value>
         <screen>PDPComplement</screen>
         <div>pdpComplementSeeItemDetails</div>
+        <description>See Item Details</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- PDPAccessory-->
+<!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryProductName</div>
+        <description>Product Name</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="detailLink">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryDetailLink</div>
+        <description>Product Info Link </description>
+    </property>
+    <property key="priceList">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryDetailLink</div>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
+    </property>
+    <property key="priceOnline">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryPriceOnline</div>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration. </description>
+    </property>
+    <property key="priceSavingPercent">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryPriceSavingPercent</div>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="priceSavingMoney">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryPriceSavingMoney</div>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter. </description>
+    </property>
+    <property key="swatchImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessorySwatchImage</div>
+        <description>Swatch Image</description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="reviewRead">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryReviewRead</div>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="reviewWrite">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryReviewWrite</div>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="thumbImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryManufacturerDescription</div>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryManufacturerHeading</div>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="manufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryManufacturerImage</div>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="manufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryManufacturerName</div>
+        <description>Manufacturer Name</description>
+    </property>
+    <property key="seeItemDetails">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessorySeeItemDetails</div>
         <description>See Item Details</description>
     </property>
 
@@ -1588,29 +1751,35 @@
         <div>addressInfoZipPostcode</div>
         <description>Zip or Postcode</description>
     </property>
+    <property key="addressSkipVerification">
+        <value xml:lang="en">0</value>
+        <screen>AddressInfo</screen>
+        <div>addressSkipVerification</div>
+        <description>Checkbox that allows the customer to accept (skip) address entry from an address Verification method</description>
+    </property>
     <!-- *************************************** -->
     <!-- Write-Review -->
     <!-- *************************************** -->
     <property key="productContainer">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">10</value>
         <screen>WriteReview</screen>
         <div>writeReviewProduct</div>
         <description>Review Product Information.</description>
     </property>
     <property key="ratingContainer">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>WriteReview</screen>
         <div>writeReviewRating</div>
         <description>Review Product Ratings.</description>
     </property>
     <property key="detailContainer">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">30</value>
         <screen>WriteReview</screen>
         <div>writeReviewDetail</div>
         <description>Review Text.</description>
     </property>
     <property key="aboutYouContainer">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">40</value>
         <screen>WriteReview</screen>
         <div>writeReviewAboutYou</div>
         <description>Review User Information.</description>
@@ -1622,7 +1791,7 @@
         <description>Help Links. </description>
     </property>
     <property key="buttonContainer">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">50</value>
         <screen>WriteReview</screen>
         <div>writeReviewButton</div>
         <description>Submit and Cancel Button.</description>
@@ -1631,7 +1800,7 @@
     <!-- Write-Review-Product -->
     <!-- *************************************** -->
     <property key="productName">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">10</value>
         <screen>WriteReviewProduct</screen>
         <div>writeReviewProductName</div>
         <description>Product Name</description>
@@ -1643,7 +1812,7 @@
         <description>Product Tertiary Information.</description>
     </property>
     <property key="thumbImage">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>WriteReviewProduct</screen>
         <div>writeReviewThumbImage</div>
         <description>Main Image</description>
@@ -1712,25 +1881,25 @@
     <!-- Write-Review-Rating -->
     <!-- *************************************** -->
     <property key="rateOverallStars">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">10</value>
         <screen>WriteReviewRating</screen>
         <div>writeReviewRateOverallStars</div>
         <description>The overall rating star selection</description>
     </property>
     <property key="rateQualityStars">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>WriteReviewRating</screen>
         <div>writeReviewRateQualityStars</div>
         <description>The quality rating star selection</description>
     </property>
     <property key="rateEffectivenessStars">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">30</value>
         <screen>WriteReviewRating</screen>
         <div>writeReviewRateEffectivenessStars</div>
         <description>The effectiveness rating star selection</description>
     </property>
     <property key="rateSatisfactionStars">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">40</value>
         <screen>WriteReviewRating</screen>
         <div>writeReviewRateSatisfactionStars</div>
         <description>The satisfaction rating star selection</description>
@@ -1739,25 +1908,25 @@
     <!-- Write-Review-Detail -->
     <!-- *************************************** -->
     <property key="reviewerNickname">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">10</value>
         <screen>WriteReviewDetail</screen>
         <div>writeReviewReviewerNickname</div>
         <description>The Nickname of the reviewer</description>
     </property>
     <property key="reviewerTitle">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>WriteReviewDetail</screen>
         <div>writeReviewReviewerTitle</div>
         <description>The Title for the review</description>
     </property>
     <property key="reviewerText">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">30</value>
         <screen>WriteReviewDetail</screen>
         <div>writeReviewReviewerText</div>
         <description>The Text of the review</description>
     </property>
     <property key="reviewerTip">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">40</value>
         <screen>WriteReviewDetail</screen>
         <div>writeReviewReviewerTip</div>
         <description>Tips for writing a review, from Label file</description>
@@ -1772,13 +1941,13 @@
         <description>Location of reviewer</description>
     </property>
     <property key="reviewerAge">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">10</value>
         <screen>WriteReviewAboutYou</screen>
         <div>writeReviewReviewerAge</div>
         <description>Age of reviewer</description>
     </property>
     <property key="reviewerGender">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>WriteReviewAboutYou</screen>
         <div>writeReviewReviewerGender</div>
         <description>Gender of reviewer</description>
@@ -1802,13 +1971,13 @@
     <!-- Write-Review-Button -->
     <!-- *************************************** -->
     <property key="submitButton">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">10</value>
         <screen>WriteReviewButton</screen>
         <div>writeReviewSubmitButton</div>
         <description>The Submit button.</description>
     </property>
     <property key="cancelButton">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>WriteReviewButton</screen>
         <div>writeReviewCancelButton</div>
         <description>The Cancel button.</description>

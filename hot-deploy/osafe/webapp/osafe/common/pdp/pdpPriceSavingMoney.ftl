@@ -16,8 +16,7 @@
 
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
-    <#assign product = delegator.findOne("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",key), true)/>
-    <#assign productPrice = dispatcher.runSync("calculateProductPrice", Static["org.ofbiz.base.util.UtilMisc"].toMap("product", product,"productStoreId",productStoreId, "userLogin", userLogin))/>
+    <#assign productPrice = productVariantPriceMap.get('${key}')/>
     <#if productPrice?has_content>
       <#assign showSavingMoneyAbove = PRODUCT_MONEY_THRESHOLD!"0"/>
       <#if productPrice.listPrice?has_content && productPrice.basePrice?has_content>

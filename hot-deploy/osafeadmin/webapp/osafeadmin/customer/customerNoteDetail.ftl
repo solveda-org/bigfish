@@ -7,7 +7,6 @@
   <#assign noteInfo = note.noteInfo!/>
   <input type="hidden" name="noteId" value="${parameters.noteId!}"/>
 </#if>
-<input type="hidden" name="partyId" value="${party.partyId!}"/>
 <input type="hidden" name="internalNote" value="Y"/>
 <#if mode == 'edit'>
   <div class="infoRow row">

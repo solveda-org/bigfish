@@ -14,7 +14,6 @@
 	</#if>
 	<#if mode != "add">		
 	  <div class="infoRow">
-	  
 	    <div class="infoEntry">
 	      <div class="infoCaption">
 	        	<label>${uiLabelMap.JobIdCaption}</label>
@@ -25,15 +24,11 @@
 	         	<input name="currentId" type="hidden" id="currentId" value="${parameters.jobId!jobId!""}"/>
 	      </div>
 	    </div>
-	    
-	    
 	    <div class="infoEntry">
 	      <div class="infoRowIcon">
 	        	<a href="runtimeDataParametersDetail?runtimeDataId=${schedJob.runtimeDataId}&jobId=${parameters.jobId}&jobName=${parameters.jobName}" onMouseover="javascript:showTooltip(event,'${uiLabelMap.ScheduledJobViewRuntimeParamsInfo!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></a>
 	      </div>
 	    </div>
-	    
-	    
 	  </div>
 	</#if>  
 	
@@ -47,18 +42,16 @@
 	        	<label>${uiLabelMap.ParentJobIdCaption}</label>
 	      </div>
 	      <div class="infoValue">
-	      	<#if parentJob?has_content>
-	        	<a href="<@ofbizUrl>scheduledJobDetail?jobId=${schedJob.parentJobId!""}&jobName=${parentJob.jobName}</@ofbizUrl>">${schedJob.parentJobId!""}</a>
+	      	<#if parentJob?exists && parentJob?has_content>
+	        	<a href="<@ofbizUrl>scheduledJobDetail?jobId=${schedJob.parentJobId!""}&jobName=${parentJob.jobName!""}</@ofbizUrl>">${schedJob.parentJobId!""}</a>
 	        </#if>
 	      </div>
 	    </div>
-   
 	  </div>
 	</#if>  
 	
 	<#if mode != "add">		
 	  <div class="infoRow column">
-
 	    <div class="infoEntry">
 	      <div class="infoCaption">
 	        	<label>${uiLabelMap.MaxRetryCaption}</label>
@@ -67,10 +60,8 @@
 	        	${schedJob.maxRetry!""}
 	      </div>
 	    </div>
-	    
 	  </div>
 	</#if> 
-	
 	
 	<#if mode != "add">		
 	  <div class="infoRow column">
@@ -82,19 +73,16 @@
 	        	<label>${uiLabelMap.PrevJobIdCaption}</label>
 	      </div>
 	      <div class="infoValue">
-	      	<#if prevJob?has_content>
+	      	<#if prevJob?exists && prevJob?has_content>
 	        	<a href="<@ofbizUrl>scheduledJobDetail?jobId=${schedJob.previousJobId!""}&jobName=${prevJob.jobName!""}</@ofbizUrl>">${schedJob.previousJobId!""}</a>
 	        </#if>
 	      </div>
 	    </div>
-   
 	  </div>
 	</#if> 
 	
-	
 	<#if mode != "add">		
 	  <div class="infoRow column">
-
 	    <div class="infoEntry">
 	      <div class="infoCaption">
 	        	<label>${uiLabelMap.LoaderNameCaption}</label>
@@ -103,11 +91,8 @@
 	        	${schedJob.loaderName!""}
 	      </div>
 	    </div>
-	    
-	    
 	  </div>
 	</#if> 
-	
 	
 	  <div class="infoRow <#if mode != "add">column</#if>">
 	    <div class="infoEntry">
@@ -119,8 +104,6 @@
 	      </div>
 	    </div>
 	  </div>
-	  
-	  
 	  
 	<#if mode != "add">		
 	  <div class="infoRow column">
@@ -135,12 +118,6 @@
 	  </div>
 	</#if> 
 	
-	
-	
-	
-	  
-	  
-	  
 	  <div class="infoRow <#if mode != "add">column</#if>">
 	    <div class="infoEntry">
 	      <div class="infoCaption">
@@ -160,8 +137,6 @@
 	    </div>
 	  </div>
 	  
-	  
-	  
 	<#if mode != "add">		
 	  <div class="infoRow column">
 	    <div class="infoEntry">
@@ -175,11 +150,6 @@
 	  </div>
 	</#if> 
 	
-	
-	
-	
-	  
-	  
 	  <div class="infoRow">
 	    <div class="infoEntry">
 	      <div class="infoCaption">

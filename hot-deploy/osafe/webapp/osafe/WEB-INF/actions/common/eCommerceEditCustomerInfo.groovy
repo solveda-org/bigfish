@@ -4,7 +4,6 @@ import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.base.util.*;
 
@@ -65,14 +64,7 @@ if (UtilValidate.isNotEmpty(userLogin))
         contactMech = partyPurposeEmail.getRelatedOneCache("ContactMech");
         context.userEmailContactMech = contactMech;
         context.userEmailAddress = contactMech.infoString;
-        partyContactMechs = partyPurposeEmail.getRelatedCache("PartyContactMech");
-        partyContactMechs = EntityUtil.filterByAnd(partyContactMechs, UtilMisc.toMap("contactMechId", contactMech.contactMechId));
-        if (UtilValidate.isNotEmpty(partyContactMechs))
-        {
-        	partyContactMech = EntityUtil.getFirst(partyContactMechs);
-            context.userEmailAllowSolicitation= partyContactMech.allowSolicitation;
-        	
-        }
+        context.userEmailAllowSolicitation= partyPurposeEmail.allowSolicitation;
         
     }
     

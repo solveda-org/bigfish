@@ -7,7 +7,7 @@
      
   <table id="volumePriceTable">
     <thead>
-      <tr>
+      <tr class="extraTr">
         <th>&nbsp;</th>
         <th class="qtyCol">${uiLabelMap.FromQtyLabel}</th>
         <th class="qtyCol">${uiLabelMap.ToQtyLabel}</th>
@@ -97,7 +97,7 @@
           </tr>
         </#list>
       </#if>
-      <tr id="addIconRow" <#if (productPriceCondList?exists && productPriceCondList?has_content) || (minRow?exists && minRow &gt; 0)> style="display:none"</#if>>
+      <tr id="addIconRow extraTr" <#if (productPriceCondList?exists && productPriceCondList?has_content) || (minRow?exists && minRow &gt; 0)> style="display:none"</#if>>
       <td colspan="5">&nbsp;</td>
       <td class="actionCol">
         <span class="noAction"></span>

@@ -10,8 +10,7 @@
 
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
-    <#assign product = delegator.findOne("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",key), true)/>
-    <#assign productPrice = dispatcher.runSync("calculateProductPrice", Static["org.ofbiz.base.util.UtilMisc"].toMap("product", product,"productStoreId",productStoreId, "userLogin", userLogin))/>
+    <#assign productPrice = productVariantPriceMap.get('${key}')/>
     <#if productPrice?has_content>
       <#if (productPrice.listPrice?has_content) && (productPrice.basePrice?has_content) && (productPrice.listPrice gt productPrice.basePrice)>
         <div class="pdpPriceList" id="pdpPriceList_${key}" style="display:none">

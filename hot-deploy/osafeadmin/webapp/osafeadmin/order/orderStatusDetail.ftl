@@ -24,7 +24,7 @@
 <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>&nbsp</label>
+            <label>&nbsp;</label>
         </div>
         <div class="entryInput checkbox medium">
             <input class="checkBoxEntry" type="radio" id="changeStatusAll" name="changeStatusAll" value="N" <#if (parameters.changeStatusAll?exists && parameters.changeStatusAll?string == "N")>checked="checked"</#if> />${uiLabelMap.ChangeStatusSelectedOrderItemLabel}

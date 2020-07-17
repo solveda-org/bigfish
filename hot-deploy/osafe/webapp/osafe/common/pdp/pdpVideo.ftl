@@ -19,8 +19,16 @@
   
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
-    <#assign variantProdCtntWrapper = productVariantMap.get('${key}')/>
-    <#assign pdpVideoUrl = variantProdCtntWrapper.get("PDP_VIDEO_URL")!""/>
+    <#assign variantProdCtntWrapper = productVariantContentWrapperMap.get('${key}')/>
+    <#assign variantContentIdMap = productVariantProductContentIdMap.get('${key}')!""/>
+    <#assign pdpVideoUrl = ""/>
+    <#if variantContentIdMap?has_content>
+    	<#assign variantContentId = variantContentIdMap.get("PDP_VIDEO_URL")!""/>
+        <#if variantContentId?has_content>
+           <#assign pdpVideoUrl = variantProdCtntWrapper.get("PDP_VIDEO_URL")!""/>
+        </#if>
+    </#if>
+    
     <#if pdpVideoUrl?has_content && pdpVideoUrl!=''>
       <div id="productVideoLink_${key}" style="display:none">
          <a href="javascript:void(0);" id="pdpShowVideo_${key}" onclick="javascript:showProductVideo('productVideo')"><span>${uiLabelMap.PdpVideoLabel}</span></a>
