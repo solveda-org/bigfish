@@ -3,7 +3,8 @@
     <table class="osafe" cellspacing="0">
       <thead>
         <tr class="heading">
-          <th class="idCol firstCol">${uiLabelMap.FacetGroupLabel}</th>
+          <th class="idCol firstCol">${uiLabelMap.IdLabel}</th>
+          <th class="idCol">${uiLabelMap.FacetGroupLabel}</th>
           <th class="radioCol">${uiLabelMap.HideShowLabel}</th>
           <th class="seqCol">${uiLabelMap.SeqNumberLabel}</th>
           <th class="valueCol">${uiLabelMap.MinDisplayLabel}</th>
@@ -15,9 +16,11 @@
         <#assign rowNo = 1/>
         <input type="hidden" name="productCategoryId" value="${parameters.productCategoryId!}"/>
         <#list productFeatureCatGrpApplList as productFeatureCatGrpAppl>
-          <#assign rowSeq = rowNo * 10>
           <tr id="row_${productFeatureCatGrpAppl.productFeatureGroupId!}" <#if alt_row> class="alternate-row"</#if>>
             <td class="idCol firstCol">
+              ${productFeatureCatGrpAppl.productFeatureGroupId!}
+            </td>
+            <td class="idCol">
               <input type="hidden" name="productCategoryId_${productFeatureCatGrpAppl_index}" value="${productFeatureCatGrpAppl.productCategoryId!}"/>
               <input type="hidden" name="fromDate_${productFeatureCatGrpAppl_index}" value="${productFeatureCatGrpAppl.fromDate!}"/>
               <input type="hidden" name="productFeatureGroupId_${productFeatureCatGrpAppl_index}" value="${productFeatureCatGrpAppl.productFeatureGroupId!}"/>
@@ -34,7 +37,7 @@
               </span>
             </td>
             <td class="seqCol">
-              <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureCatGrpAppl_index}")!rowSeq!''/>
+              <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureCatGrpAppl_index}")!productFeatureCatGrpAppl.sequenceNum!''/>
               <input type="text" class="infoValue small textAlignCenter" name="sequenceNum_${productFeatureCatGrpAppl_index}" value="${rowSeq!}"/>
             </td>
             <td class="valueCol">

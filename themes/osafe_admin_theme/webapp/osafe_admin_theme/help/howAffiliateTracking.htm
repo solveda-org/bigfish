@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/helpHowDoI.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>BigFish Admin Help</title>
+<link rel="shortcut icon" href="bigfishfavicon.gif" />
+<!-- InstanceEndEditable -->
+				<link rel="stylesheet" href="helpScreen.css" type="text/css" media="screen" />
+				<link rel="stylesheet" href="helpPrint.css" type="text/css" media="print" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="collapse.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+$("html").addClass("js");
+$.fn.accordion.defaults.container = false; 
+$(function() {
+  $("#acc3").accordion({initShow : "#current"});
+  $("#acc4").accordion({initShow : "#current"});
+  $("html").removeClass("js");
+});
+//--><!]]>
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+
+<body>
+<a name="top" id="top"></a>
+<!-- InstanceBeginEditable name="helpHeader" -->
+<div id="helpHeader"><!-- #BeginLibraryItem "/Library/helpHeaderContent.lbi" --><div id="helpNavigation">
+	<ul>
+		<li><a href="#" onclick="history.go(-1);return false;"><img src="back.png" width="18" height="18" alt="Go Back"></a></li>
+		<li><a class="homeHelpButton" href="index.htm"><img src="home.png" width="18" height="18" alt="Help Home"></a></li>
+		<li><a href="#" onclick="history.go(1);return false;"><img src="forward.png" width="18" height="18" alt="Advance"></a></li>
+	</ul>
+</div>
+
+<a class="contact" href="http://bigfish.salmonllc.com/bfContactUs.html" target="_blank">Contact BigFish</a>
+<p class="logo">BigFish Online Help</p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+
+	<div id="helpWrapper">
+    
+<!-- InstanceBeginEditable name="helpContent" -->
+  <div id="contentHelp">
+
+	<h1>Affiliate Tracking</h1>
+	<h2>Overview</h2>
+                <ul class="helpList">
+                    <li>Bigfish has a feature called “Pixel Tracking”</li>
+                    <li>It is accessible under the Admin <img class="arrow" src="linkPathArrow.png" width="16" height="16" alt="arrow" /> Tools options</li>
+                   	<li>Pixel Tracking provides a powerful way to include functions throughout the site that can be used for various tasks</li>
+                    <li>The most common is probably tracking affiliate information</li>
+
+				</ul>
+                
+	<h2>Business Scenarios</h2>
+                <ul class="helpList">
+					<li>Simple Scenario:
+						<ul>
+                        	<li>A customer may be browsing the web, sees a banner ad, clicks on the ad</li>
+                            <li>If that customer purchases a product then the “affiliate” gets credit for that sale and is paid a commission</li>
+                            <li>This scenario is easily solved since the customer originated their visit with an URL of something like “?affiliate=acme”</li>
+                            <li>This is simply tracked throughout the visit, in the session, and credit given on Order Confirmation</li>
+						</ul>
+					</li>
+					<li>Typical Scenario:
+						<ul>
+                        	<li>It is more typical that an Affiliate is to given credit if the customer makes a purchase a certain number of days AFTER seeing the banner ad</li>
+                            <li>So, the customer is browsing the web, sees a banner ad, clicks on the ad</li>
+                            <li>They browse your site, but not complete the purchase</li>
+                            <li>Some days later they return to your site directly (not via a banner link) and complete the purchase</li>
+                            <li>The Affiliate may still be due a commission since the visit was initiated by their banner efforts</li>
+						</ul>
+					</li>
+					<li>Additional Nuance
+						<ul>
+                        	<li>In many cases you may have multiple Affiliate programs running at the same time</li>
+							<li>You only want to pay commission to one Affiliate</li>
+							<li>So, if both Affiliates prompt the same customer to enter your site, the solution provided below will give credit to the LAST affiliate</li>
+						</ul>
+					</li>
+
+				</ul>
+    <ul class="helpList">
+		<li>The client.properties file contains many of the high-level configuration options that the underlying platform OFBiz requires
+        	<ul>
+            	<li>The client-deployment.properties files is a BigFish configuration file that consolidates the various OFBiz properties.</li>
+                <li>To build / admin-module / restart apache</li>
+			</ul>
+		</li>
+	</ul>
+
+<h1>Identifying an Affiliate and tracking in a cookie</h1>
+                <ul class="helpList">
+                	<li>First, create a Pixel Tracking as follows:</li>
+					<p>Name:	AFFILIATE_TRACKING</p>
+					<p>Scope:	ALL_EXCEPT_ORDER_CONFIRM</p>
+					<p>Script:</p>
+<pre>
+<code>
+&lt;script type="text/javascript"&gt;
+// store cookie value with optional details as needed
+function setPixelCookie (name, value, expires, path, domain, secure) {
+    document.cookie = name + "=" + escape (value) +
+        ((expires) ? "; expires=" + expires : "") +
+        ((path) ? "; path=" + path : "") +
+        ((domain) ? "; domain=" + domain : "") +
+        ((secure) ? "; secure" : "");
+}
+&lt;/script&gt;
+
+&lt;script type="text/javascript"&gt;
+   &lt;#if parameters.affiliate?exists && parameters.affiliate?has_content&gt;
+        setPixelCookie('AFFILIATE_TRACKING','${parameters.affiliate}');
+  &lt;/#if>
+&lt;/script&gt;
+</code>
+</pre>
+
+					<li>Notes:	
+					<ul>
+                    	<li>The name of the cookie (AFFILIATE_TRACKING) is entirely up to you</li>
+						<li>This script will capture the value ACME of from the URL suffix “?affiliate=ACME”</li>
+					</ul>
+				</li>
+			</ul>
+<div class="warningBox">
+<p>Pixel Tracking is stored in memory cache. Whenever you make modifications to scripts the cache will need to be reset.</p> 
+
+<p>To reset the cache use the Admin <img class="arrow" src="linkPathArrow.png" width="16" height="16" alt="arrow" /> Tools <img class="arrow" src="linkPathArrow.png" width="16" height="16" alt="arrow" /> Reset Cache function.
+
+</div>
+<h1>Using the cookie value to give credit to an Affiliate</h1>
+
+    <ul class="helpList">
+    	<li>Create an additional Pixel Tracking as follows:</li>
+		<p>Name:	AFFILIATE_COMMISSION</p>
+		<p>Scope:	ORDER_CONFIRM</p>
+		<p>Script:</p>
+<pre>
+<code>
+&lt;script type="text/javascript"&gt;
+// primary function to retrieve cookie by name
+function getPixelCookie(name) {
+    var arg = name + "=";
+    var alen = arg.length;
+    var clen = document.cookie.length;
+    var i = 0;
+    while (i < clen) {
+        var j = i + alen;
+        if (document.cookie.substring(i, j) == arg) {
+            return getPixelCookieVal(j);
+        }
+        i = document.cookie.indexOf(" ", i) + 1;
+        if (i == 0) break; 
+    }
+    return null;
+}
+// utility function called by getCookie()
+function getPixelCookieVal(offset) {
+    var endstr = document.cookie.indexOf (";", offset);
+    if (endstr == -1) {
+        endstr = document.cookie.length;
+    }
+    return unescape(document.cookie.substring(offset, endstr));
+}
+&lt;/script&gt;
+
+
+&lt;script type="text/javascript"&gt;
+   // Get the value from the Cookie AFFILIATE_TRACKING
+   // If it exists and has not expired then
+   //     depending on which Affiliate is identified generate
+   //         an appropriate script
+  
+   var AFFILIATE = getPixelCookie('AFFILIATE_TRACKING');
+   if (AFFILIATE)
+   {
+      if (AFFILIATE.toUpperCase() == 'ACME')
+     {
+        var _affiliate = [];
+        _affiliate.push(['ACME_ORDER_ID', '${ORDER_ID!}']);
+        _affiliate.push(['ACME_ORDER_ITEMS_QTY', '${ORDER_ITEMS_QTY!}']);
+        _affiliate.push(['ACME_ORDER_ITEMS_MONEY', '${ORDER_ITEMS_MONEY!}']);
+        _affiliate.push(['ACME_ORDER_TOTAL_PROMO', '${ORDER_TOTAL_PROMO!}']);
+        _affiliate.push(['ACME_ORDER_TOTAL_SHIP', '${ORDER_TOTAL_SHIP!}']);
+        _affiliate.push(['ACME_ORDER_TOTAL_TAX', '${ORDER_TOTAL_TAX!}']);
+       _affiliate.push(['ACME_ORDER_TOTAL_MONEY', '${ORDER_TOTAL_MONEY!}']);
+     }
+  
+     if (AFFILIATE.toUpperCase() == ‘XYZ’)
+     {
+        var _affiliate = [];
+        _affiliate.push(['ABC_ORDER_ID', '${ORDER_ID!}']);
+        _affiliate.push(['ABC_ORDER_ITEMS_QTY', '${ORDER_ITEMS_QTY!}']);
+        _affiliate.push(['ABC_ORDER_ITEMS_MONEY', '${ORDER_ITEMS_MONEY!}']);
+        _affiliate.push(['ABC_ORDER_TOTAL_PROMO', '${ORDER_TOTAL_PROMO!}']);
+        _affiliate.push(['ABC_ORDER_TOTAL_SHIP', '${ORDER_TOTAL_SHIP!}']);
+        _affiliate.push(['ABC_ORDER_TOTAL_TAX', '${ORDER_TOTAL_TAX!}']);
+        _affiliate.push(['ABC_ORDER_TOTAL_MONEY', '${ORDER_TOTAL_MONEY!}']);
+     }
+   }
+&lt;/script&gt;
+</code>
+</pre>
+</ul>
+<div class="warningBox">
+<p>Pixel Tracking is stored in memory cache. Whenever you make modifications to scripts the cache will need to be reset.</p> 
+
+<p>To reset the cache use the Admin <img class="arrow" src="linkPathArrow.png" width="16" height="16" alt="arrow" /> Tools <img class="arrow" src="linkPathArrow.png" width="16" height="16" alt="arrow" /> Reset Cache function.
+
+</div>
+<h1>Tagging an Order with the Affiliate</h1>
+<h2>Verifying your commission charges</h2>
+<ul>
+	<li>In most cases you will want to verify the Invoice received from the Affiliate</li>
+	<li>This process describes how to tag the Order with the affiliate value 
+		<ul>
+        	<li>In the above example, this would be either ACME or ABC</li>
+		</ul>
+	</li>
+</ul>
+<h2>Bigfish Configuration</h2>
+<ul>
+	<li>Review the parameter CHECKOUT_CONFIRM_GET_COOKIE
+		<ul>
+        	<li>Description: A comma separated list of Cookies that should be read for possible content. The Order Confirmation will use the content of each cookie, if it exists, to store additional attributes for the Order. Typically used for Affiliate Tracking.</li>
+		</ul>
+	</li>
+
+	<li>Using the above example the parameter CHECKOUT_CONFIRM_GET_COOKIE should be set to AFFILIATE_TRACKING</li>
+	<li>This means that on Order Confirmation the cookie AFFILIATE_TRACKING will be reviewed
+If there is a value then this value will be tagged as a value pair on the Order</li>
+	<li>Technical Note:
+		<ul>
+        	<li>The value is stored on the ORDER_ATTRIBUTE entity</li>
+			<li>ATTR_NAME is the name of the Cookie, in our example AFFILIATE_TRACKING</li>
+			<li>ATTR_VALUE is the actual value, in our example ACME</li>
+		</ul>
+	</li>
+</ul>
+
+<a class="backTop" href="#top">Back to Top</a>
+
+</div>
+  
+
+<!-- InstanceEndEditable -->    
+    </div>
+
+
+	<!-- InstanceBeginEditable name="helpFooter" -->
+	<div id="helpFooter"><!-- #BeginLibraryItem "/Library/helpFooterContent.lbi" --><p>Built by <a target="_blank" href="http://www.salmonllc.com">Salmon LLC</a></p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

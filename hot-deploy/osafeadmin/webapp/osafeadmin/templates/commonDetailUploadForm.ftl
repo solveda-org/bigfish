@@ -8,8 +8,11 @@ ${sections.render('tooltipBody')?if_exists}
       ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
       ${sections.render('detailInfoBoxBody')!}
       ${sections.render('commonDetailActionButton')!}
+      <div class="infoDetailIcon">
       ${sections.render('commonDetailLinkButton')!}
       ${sections.render('commonDetailHelperIcon')!}
+      ${sections.render('commonDetailWarningIcon')!}
+     </div>
     </div>
   </div>
   ${sections.render('additionalDetailInfo')!}

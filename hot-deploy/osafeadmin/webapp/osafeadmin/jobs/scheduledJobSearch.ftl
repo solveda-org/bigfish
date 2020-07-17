@@ -1,4 +1,5 @@
-
+<!-- hidden input for delete function -->
+<input type="hidden" class="confirmHiddenFields" name="currentId" id="currentId" value=""/> `
 <!-- start searchBox -->
      <div class="entryRow">
       <div class="entry">
@@ -76,16 +77,6 @@
 	          </div>
 	     </div>
      </div>
-     <div class="entryRow">
-	      <div class="entry short">
-	          <label>${uiLabelMap.ScopeCaption}</label>
-	          <div class="entryInput checkbox small">
-	          			<input type="checkbox" class="checkBoxEntry" name="viewbigfishonly" id="viewbigfishonly" value="Y" <#if parameters.viewbigfishonly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.BigFishOnlyLabel}
-	                    <input type="checkbox" class="checkBoxEntry" name="viewall" id="viewall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','view')" <#if parameters.viewall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
-	                    
-	          </div>
-	     </div>
-      
-     </div>
+    
 <!-- end searchBox -->
 

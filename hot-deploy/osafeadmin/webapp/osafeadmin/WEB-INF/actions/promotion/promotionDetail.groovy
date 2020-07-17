@@ -22,7 +22,15 @@ import org.ofbiz.entity.util.EntityFindOptions;
 // productStoreId    productPromoApplEnums  selectedProductPromoApplEnum
 // inputParamEnums  selectedInputParamEnum  condOperEnums  selectedCondOperEnum
 // productPromoActionEnums selectedProductPromoActionEnum
-
+if(globalContext.productStore)
+{
+    productStoreId = productStore.productStoreId;
+    context.productStoreId = productStoreId;
+}
+// list to find all the shipmentMethods from the view named "ProductStoreShipmentMethView".
+if (context.productStoreId) {
+    context.productStoreShipmentMethList = delegator.findByAndCache('ProductStoreShipmentMethView', [productStoreId: context.productStoreId], ['sequenceNumber']);
+}
 conditions = FastList.newInstance();
 conditions.add(EntityCondition.makeCondition("enumTypeId", EntityOperator.EQUALS, "PROD_PROMO_PCAPPL"));
 conditions.add(EntityCondition.makeCondition("sequenceId", EntityOperator.IN, ["01", "02"]));
@@ -108,7 +116,7 @@ if (UtilValidate.isNotEmpty(productPromotionId))
     productPromo = delegator.findByPrimaryKey("ProductPromo", [productPromoId : productPromotionId]);
     context.productPromo = productPromo;
  
-    productStorePromoApplList = delegator.findByAnd("ProductStorePromoAppl", [productPromoId : productPromotionId]);
+    productStorePromoApplList = delegator.findByAnd("ProductStorePromoAppl", [productPromoId : productPromotionId, productStoreId : context.productStoreId]);
     if (UtilValidate.isNotEmpty(productStorePromoApplList))
     {
         productStorePromoAppl = EntityUtil.getFirst(productStorePromoApplList);
@@ -129,7 +137,7 @@ if (UtilValidate.isNotEmpty(productPromoId))
     productPromo = delegator.findByPrimaryKey("ProductPromo", [productPromoId : productPromoId]);
     context.productPromo = productPromo;
  
-    productStorePromoApplList = delegator.findByAnd("ProductStorePromoAppl", [productPromoId : productPromoId]);
+    productStorePromoApplList = delegator.findByAnd("ProductStorePromoAppl", [productPromoId : productPromoId, productStoreId : context.productStoreId]);
     if (UtilValidate.isNotEmpty(productStorePromoApplList))
     {
         productStorePromoAppl = EntityUtil.getFirst(productStorePromoApplList);

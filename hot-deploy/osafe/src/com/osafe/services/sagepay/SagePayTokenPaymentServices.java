@@ -53,7 +53,7 @@ public class SagePayTokenPaymentServices {
     private static Map<String, String> buildCustomerBillingInfo(Map<String, Object> context) {
 
         Debug.logInfo("SagePay Token - Entered buildCustomerBillingInfo", module);
-        Debug.logInfo("SagePay Token - buildCustomerBillingInfo context : " + context, module);
+//        Debug.logInfo("SagePay Token - buildCustomerBillingInfo context : " + context, module);
 
         Map<String, String> billingInfo = FastMap.newInstance();
 
@@ -137,7 +137,7 @@ public class SagePayTokenPaymentServices {
                     billingInfo.put("cardHolder",  nameOnCard);
                     billingInfo.put("expiryDate", expireDate);
                     billingInfo.put("cardType", cardType);
-                    billingInfo.put("cv2", "123");
+                    billingInfo.put("cv2", securityCode);
 
                     //getting billing address
                     GenericValue billingAddress = (GenericValue) context.get("billingAddress");
@@ -193,7 +193,7 @@ public class SagePayTokenPaymentServices {
         }
 
         
-        Debug.logInfo("SagePay Token billingInfo : " + billingInfo, module);
+//        Debug.logInfo("SagePay Token billingInfo : " + billingInfo, module);
         Debug.logInfo("SagePay Token - Exiting buildCustomerBillingInfo", module);
 
         return billingInfo;
@@ -202,7 +202,7 @@ public class SagePayTokenPaymentServices {
     private static Map<String, String> buildOrderBasket(Map<String, Object> context) {
 
         Debug.logInfo("SagePay Token - Entered buildOrderBasket", module);
-        Debug.logInfo("SagePay Token - buildOrderBasket context : " + context, module);
+//        Debug.logInfo("SagePay Token - buildOrderBasket context : " + context, module);
 
         Map<String, String> basketInfo = FastMap.newInstance();
 
@@ -271,7 +271,7 @@ public class SagePayTokenPaymentServices {
         }
 
         
-        Debug.logInfo("SagePay Token billingInfo : " + basketInfo, module);
+//        Debug.logInfo("SagePay Token billingInfo : " + basketInfo, module);
         Debug.logInfo("SagePay Token - Exiting buildCustomerBillingInfo", module);
 
         return basketInfo;
@@ -284,7 +284,7 @@ public class SagePayTokenPaymentServices {
     
     public static Map<String, Object> ccAuth(DispatchContext dctx, Map<String, Object> context) {
         Debug.logInfo("SagePay Token - Entered ccAuth", module);
-        Debug.logInfo("SagePay Token ccAuth context : " + context, module);
+//        Debug.logInfo("SagePay Token ccAuth context : " + context, module);
         Map<String, Object> response = null;
 
         String orderId = (String) context.get("orderId");
@@ -292,9 +292,11 @@ public class SagePayTokenPaymentServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
-        if (null == orderPaymentPreference) {
+        if (null == orderPaymentPreference) 
+        {
             response = ServiceUtil.returnError("OrderPaymentPreference for order : " + orderId + " is null : " + orderPaymentPreference);
-        } else 
+        } 
+        else 
         {
             response = processCardRegistrationPayment(dctx, context);
             if (UtilValidate.isEmpty((String)response.get("token")))
@@ -306,16 +308,26 @@ public class SagePayTokenPaymentServices {
                 try {
 	            	context.put("token",response.get("token"));
 	                response = processCardAuthorisationPayment(dctx, context);
-	                //No Clear all credit card Data regardless if everything went well
-	                 dispatcher.runSync("clearCreditCardData", UtilMisc.toMap("userLogin", userLogin,"paymentMethodId",orderPaymentPreference.getString("paymentMethodId")));
 	                	
                 }
                  catch (Exception e)
                  {
+                     Debug.logInfo("SagePay Token processCardAuthorisationPayment: " + e.getMessage(), module);
                 	 
                  }
                
             }
+            try {
+                //Now Clear all credit card Data regardless if everything went well
+                Debug.logInfo("SagePay Token clear Credit Card Data", module);
+                 dispatcher.runSync("clearCreditCardData", UtilMisc.toMap("userLogin", userLogin,"paymentMethodId",orderPaymentPreference.getString("paymentMethodId")));
+                	
+            }
+             catch (Exception e)
+             {
+                 Debug.logInfo("SagePay Token clear credit card: " + e.getMessage(), module);
+            	 
+             }
         }
         Debug.logInfo("SagePay Token ccAuth response : " + response, module);
         Debug.logInfo("SagePay Token - Exiting ccAuth", module);
@@ -450,7 +462,7 @@ public class SagePayTokenPaymentServices {
 
     public static Map<String, Object> ccCapture(DispatchContext ctx, Map<String, Object> context) {
         Debug.logInfo("SagePay Token - Entered ccCapture", module);
-        Debug.logInfo("SagePay Token ccCapture context : " + context, module);
+//        Debug.logInfo("SagePay Token ccCapture context : " + context, module);
         Map<String,Object> response=null;
 
         GenericValue orderPaymentPreference = (GenericValue) context.get("orderPaymentPreference");

@@ -330,6 +330,7 @@
 <DataResource dataResourceId="E_ORDER_DETAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_TEST_EMAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="E_SCHED_JOB_ALERT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="E_COMMON_STYLES"/>
 <ElectronicText dataResourceId="E_COMMON_HEADER"/>
 <ElectronicText dataResourceId="E_COMMON_FOOTER"/>
@@ -346,6 +347,7 @@
 <ElectronicText dataResourceId="E_ORDER_DETAIL"/>
 <ElectronicText dataResourceId="E_TEST_EMAIL"/>
 <ElectronicText dataResourceId="E_MAILING_LIST"/>
+<ElectronicText dataResourceId="E_SCHED_JOB_ALERT"/>
 <Content contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
 <Content contentId="E_COMMON_HEADER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included in the beginning of all BigFish generated emails. Use this to define standard heading information such as your logo and company information." contentName="Common Client Header" dataResourceId="E_COMMON_HEADER"/>
 <Content contentId="E_COMMON_FOOTER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included at the end of all BigFish generated emails. Use this to define standard closing information such as Yours-Sincerely and your company contact information. " contentName="Common Client Footer " dataResourceId="E_COMMON_FOOTER"/>
@@ -361,6 +363,7 @@
 <Content contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
 <Content contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be used to send out a test email." contentName="Test Email" dataResourceId="E_TEST_EMAIL"/>
 <Content contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Mailing-List email. This email sent to both the customer and the client." contentName="Mailing List Email" dataResourceId="E_MAILING_LIST"/>
+<Content contentId="E_SCHED_JOB_ALERT" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Scheduled Job email. This email sent to both the customer and the client." contentName="Scheduled Job Email" dataResourceId="E_SCHED_JOB_ALERT"/>
 <ContentPurpose contentId="E_COMMON_HEADER" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_STYLES" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_FOOTER" contentPurposeTypeId="SECTION"/>
@@ -376,6 +379,7 @@
 <ContentPurpose contentId="E_ORDER_DETAIL" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_TEST_EMAIL" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_MAILING_LIST" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_SCHED_JOB_ALERT" contentPurposeTypeId="SECTION"/>
 <Content contentId="E_COMMON_HEADER" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_COMMON_STYLES" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_COMMON_FOOTER" statusId="CTNT_PUBLISHED"/>
@@ -391,6 +395,7 @@
 <Content contentId="E_ORDER_DETAIL" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_TEST_EMAIL" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_MAILING_LIST" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_SCHED_JOB_ALERT" statusId="CTNT_PUBLISHED"/>
 
 <!-- ********************************* -->
 

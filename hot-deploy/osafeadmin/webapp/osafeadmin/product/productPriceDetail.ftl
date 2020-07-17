@@ -3,8 +3,11 @@
 <#assign priceType= parameters.PriceTypeRadio!""/>
   <div id="errorMessageInsert" class="fieldErrorMessage" style="display:none">${uiLabelMap.NoRowSelectedInsertError}</div>
   <div id="errorMessageDelete" class="fieldErrorMessage" style="display:none">${uiLabelMap.NoRowSelectedDeleteError}</div>
-<input type="hidden" name="productId" value="${product.productId?if_exists}" />
-<input type="hidden" name="isVariant" id="isVariant" value="${product.isVariant!""}"/>
+  <input type="hidden" name="productId" value="${product.productId?if_exists}" />
+  <input type="hidden" name="isVariant" id="isVariant" value="${product.isVariant!""}"/>
+  <#assign currencyUomId = CURRENCY_UOM_DEFAULT!currencyUomId />
+  <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId!currencyUomId!}" />
+  
   <div class="infoRow">
     <div>
       <input type="radio" name="PriceTypeRadio" value="SimplePrice" <#if (!productPriceCondList?has_content && priceType=='') || (priceType=='SimplePrice')>checked="checked"</#if> onclick="javascript:hideVolumePricing('volumepricing');"/>
@@ -24,7 +27,7 @@
       </div>
       <div class="infoValue">
         <#if isVariant == 'Y'>
-          <@ofbizCurrency amount=parameters.listPrice!productListPrice.price! isoCode=productListPrice.currencyUomId!/>
+          <input type="text" class="textEntry textAlignRight" name="variantListPrice" id="variantListPrice" value="<#if parameters.variantListPrice?has_content || productVariantListPrice?has_content>${parameters.variantListPrice!productVariantListPrice.price?string("0.00")!}</#if>"/>
         <#else>
           <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="${parameters.listPrice!productListPrice.price?string("0.00")!}"/>
         </#if>
@@ -46,7 +49,7 @@
       </div>
       <div class="infoValue">
         <#if isVariant == 'Y'>
-          <@ofbizCurrency amount=parameters.defaultPrice!productDefaultPrice.price! isoCode=productDefaultPrice.currencyUomId!/>
+          <input type="text"  class="textEntry textAlignRight" name="variantSalePrice" id="variantSalePrice" value="<#if parameters.variantSalePrice?has_content || productVariantSalePrice?has_content>${parameters.variantSalePrice!productVariantSalePrice.price?string("0.00")!}</#if>"/>
         <#else>
           <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="${parameters.defaultPrice!productDefaultPrice.price?string("0.00")!}"/>
         </#if>

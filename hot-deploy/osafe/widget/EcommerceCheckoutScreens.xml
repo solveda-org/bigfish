@@ -25,7 +25,7 @@
                 <set field="doneAction" value="checkout" />
                 <set field="nextButtonVisible" value="${groovy:if(shoppingCartSize > 0)return 'Y' else return 'N';}"/>
                 <set field="nextButtonUrlDescription" value="${uiLabelMap.CheckoutBtn}"/>
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/showCartItems.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -87,6 +87,8 @@
                 <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
                 <set field="updateShippingOptionRequest" value="anonSinglePageUpdateShippingOption" />
                 <set field="setShippingOptionRequest" value="anonSinglePageSetShippingOption" />
+                <set field="calcTaxRequest" value="anonSinglePageCalcTaxAjax" />
+                <set field="reloadPromoCodeRequest" value="anonSinglePagePromoCode"/>
                 <set field="addPromoCodeRequest" value="anonSinglePageValidatePromoCode"/>
                 <set field="removePromoCodeRequest" value="anonSinglePageRemovePromoCode"/>
                 <set field="removeStorePickupRequest" value="removeStorePickup" />
@@ -248,6 +250,8 @@
                 <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
                 <set field="updateShippingOptionRequest" value="singlePageUpdateShippingOption" />
                 <set field="setShippingOptionRequest" value="singlePageSetShippingOption" />
+                <set field="calcTaxRequest" value="singlePageCalcTaxAjax" />
+                <set field="reloadPromoCodeRequest" value="anonSinglePagePromoCode"/>
                 <set field="addPromoCodeRequest" value="singlePageValidatePromoCode"/>
                 <set field="removePromoCodeRequest" value="singlePageRemovePromoCode"/>
                 <set field="removeStorePickupRequest" value="removeStorePickup" />
@@ -1328,6 +1332,7 @@
     <screen name="singlePagePromoCode">
         <section>
             <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
             </actions>
             <widgets>
                 <include-screen name="eCommerceEnterPromoCode"/>
@@ -1443,6 +1448,7 @@
     <screen name="anonSinglePagePromoCode">
         <section>
             <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
             </actions>
             <widgets>
                 <include-screen name="eCommerceEnterPromoCode"/>

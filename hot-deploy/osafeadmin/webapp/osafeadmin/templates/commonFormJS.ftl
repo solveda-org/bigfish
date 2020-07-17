@@ -39,6 +39,9 @@
            hideDialog('#lookUpDialog', '#displayLookUpDialog');
            e.preventDefault();
        });
+       <#if focusField?has_content>
+           jQuery("#${focusField!""}").focus();
+       </#if>
 
        jQuery('input:checkbox.homeSpotCheck').change(function(){
            if (jQuery('input:checkbox[name=contentId]:checked').length) {
@@ -97,6 +100,7 @@
     function displayDialogBox(dialogContent) {
         showDialog('#dialog', '#displayDialog',dialogContent);
     }
+    
     
     function showDialog(dialog, displayDialog,dialogContent) {
         jQuery('.commonHide').hide();
@@ -214,6 +218,8 @@
             postConfirmDialog();
         }
     }
+
+    
 	function submitDetailForm(form, mode) {
 	    if (mode == "NE") {
 	        // create action
@@ -285,7 +291,46 @@
 	    form.action="<@ofbizUrl>${confirmAction!"confirmAction"}</@ofbizUrl>";
 	    form.submit();
 	}
+	
+	
+	
+	
+	
+	function confirmDialogResultAction(result,action) {
+        hideDialog('#dialog', '#displayDialog');
+        if (result == 'Y') {
+            postConfirmDialogAction(action);
+        }
+        if (result == 'N') {
+	        jQuery(".buttontext")[0].onclick = null;
+        }
+    }
     
+    function postConfirmDialogAction(action) {
+	    form = document.${detailFormName!"detailForm"};
+	    form.action="<@ofbizUrl>" + action + "</@ofbizUrl>";
+	    form.submit();
+	}
+	
+	function setConfirmDialogContent(idValue,confirmDialogText,action) {
+    	if(!idValue)
+    	{
+    		jQuery('.confirmTxt').html(confirmDialogText);
+    	}
+    	else
+    	{
+    		var idValues = idValue.split(':');
+    		count = 0;
+    		jQuery('.confirmHiddenFields').each(function () {
+        		jQuery(this).val(idValues[count]);
+        		count = count +1;
+     		});
+     		jQuery('.confirmTxt').html(confirmDialogText + ' ' + idValues[0]);
+    	}
+        jQuery(".buttontext")[0].onclick = null;
+		jQuery('input[name="yesBtn"]').click(function() {confirmDialogResultAction('Y',action)});
+    }
+	
     function showVolumePricing(volumePricingId) {
        jQuery('#'+volumePricingId).show();
        $('default_price').innerHTML=$('Default_Sale_Price').value;
@@ -321,7 +366,11 @@
         jQuery(jQuery(table).find('tr')[parseInt(indexPos)-1]).after(newRow);
         setIndexPos(table);
     }
-    
+    function deleteConfirmTxt(appendText)
+    {
+        jQuery('.confirmTxt').html('${confirmDialogText!""} '+appendText+'?');
+        displayDialogBox();
+    }
     function setIndexPos(table) {
         var rows = table.getElementsByTagName('tr');
         for (i = 1; i < rows.length; i++) {
@@ -452,6 +501,7 @@
         jQuery('#currentMediaName').val(currentMediaName);
         jQuery('.confirmTxt').html('${confirmDialogText!""}'+currentMediaName);
     }
+
     
     function showImageField(fieldDivId) {
         jQuery('.commonDivHide').hide();
@@ -697,18 +747,23 @@
         } else if (enumId == "PPIP_ORDER_TOTAL") {
             jQuery('.promoConditionCategory').hide();
             jQuery('.promoConditionProduct').hide();
+            jQuery('.promoConditionShippingMethod').hide();
         } else if (enumId == "PPIP_PRODUCT_TOTAL") {
             jQuery('.promoConditionCategory').show();
             jQuery('.promoConditionProduct').show();
+            jQuery('.promoConditionShippingMethod').hide();
         } else if (enumId == "PPIP_PRODUCT_AMOUNT") {
             jQuery('.promoConditionCategory').show();
             jQuery('.promoConditionProduct').show();
+            jQuery('.promoConditionShippingMethod').hide();
         } else if (enumId == "PPIP_PRODUCT_QUANT") {
             jQuery('.promoConditionCategory').show();
             jQuery('.promoConditionProduct').show();
+            jQuery('.promoConditionShippingMethod').hide();
         } else if (enumId == "PPIP_ORDER_SHIPTOTAL") {
             jQuery('.promoConditionCategory').hide();
             jQuery('.promoConditionProduct').hide();
+            jQuery('.promoConditionShippingMethod').show();
         }
     }
     function changeColor(inputId) {

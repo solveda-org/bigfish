@@ -48,6 +48,7 @@
        buttonImageOnly: false,
        <#if FORMAT_DATE?exists && FORMAT_DATE?has_content>
          <#assign format = StringUtil.wrapString(FORMAT_DATE.toLowerCase()) />
+         <#assign format = format?replace("yy", "y") />
        <#else>
          <#assign format = "mm/dd/y" />
        </#if>

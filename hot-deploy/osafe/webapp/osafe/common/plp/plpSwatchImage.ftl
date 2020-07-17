@@ -1,4 +1,4 @@
-<#if productSelectableFeatureAndAppl?has_content && productSelectableFeatureAndAppl.size() gt 1>
+<#if productSelectableFeatureAndAppl?has_content>
 <div class="plpSwatchImage">
   <div class="swatch">
     <#list productSelectableFeatureAndAppl as productFeatureAppls>
@@ -20,19 +20,14 @@
         <#if productVariantFeatureListInfo.productFeatureId==productFeatureId && !productFeatureVariantId?has_content>
           <#assign productFeatureVariantId=productVariantFeatureListInfo.productVariantId/>
           <#assign productFeatureVariantProduct=productVariantFeatureListInfo.productVariant/>
+          <#assign descriptiveFeatureGroupDesc = productVariantFeatureListInfo.descriptiveFeatureGroupDesc />
+          <#assign variantListPrice = productVariantFeatureListInfo.listPrice!""/>
+          <#assign variantOnlinePrice = productVariantFeatureListInfo.basePrice!""/>
         </#if>
       </#list>
+      
       <#if productFeatureVariantId?has_content>
-        
-        <#if PLP_FACET_GROUP_VARIANT_MATCH?has_content>
-          <#assign descriptiveProductFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" ,productFeatureVariantId, 'productFeatureTypeId', PLP_FACET_GROUP_VARIANT_MATCH, 'productFeatureApplTypeId','DISTINGUISHING_FEAT')) />
-		  <#assign descriptiveProductFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(descriptiveProductFeatureAndAppls?if_exists)/>
-		  <#if descriptiveProductFeatureAndAppls?has_content>
-		    <#assign descriptiveProductFeatureAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(descriptiveProductFeatureAndAppls?if_exists)/>
-		    <#assign descriptiveFeatureGroupDesc = descriptiveProductFeatureAndAppl.description! />
-		  </#if>
-        </#if>
-        
+
         <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, StringUtil.wrapString(pdpUrl) + "&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
         <input type = "hidden" id="${productId}${productFeatureTypeId!}:${productFeatureDescription!}" value="${variantProductUrl!}"/>
         <input type = "hidden" class="featureGroup" value="${descriptiveFeatureGroupDesc!}"/>
@@ -53,6 +48,36 @@
             <img alt="${productName}" title="${productName}" src="${productVariantSmallURL}" class="productThumbnailImage" <#if IMG_SIZE_PLP_H?has_content> height="${thumbImageHeight!""}"</#if> <#if IMG_SIZE_PLP_W?has_content> width="${thumbImageWidth!""}"</#if> <#if productVariantSmallAltURL?string?has_content>onmouseover="src='${productVariantSmallAltURL}'"</#if> onmouseout="src='${productVariantSmallURL}'" onerror="onImgError(this, 'PLP-Thumb');"/>
           </a>
         </div>
+
+        <div class="swatchVariantOnlinePrice" style="display:none">
+          <p class="price">${uiLabelMap.PlpPriceLabel} <@ofbizCurrency amount=variantOnlinePrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+        </div>
+        
+        <div class="swatchVariantListPrice" style="display:none">
+          <#if variantListPrice?has_content && variantListPrice gt variantOnlinePrice>
+            <p class="price">${uiLabelMap.PlpListPriceLabel} <@ofbizCurrency amount=variantListPrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+          </#if>
+        </div>
+        
+        <div class="swatchVariantSaveMoney" style="display:none">
+          <#assign showSavingMoneyAbove = PRODUCT_MONEY_THRESHOLD!"0"/>
+          <#assign youSaveMoney = (variantListPrice - variantOnlinePrice)/>
+          <#if youSaveMoney gt showSavingMoneyAbove?number>  
+            <p class="price">${uiLabelMap.YouSaveCaption}<@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+          </#if>
+        </div>
+        
+        <div class="swatchVariantSavingPercent" style="display:none">
+          <#if variantListPrice != 0>
+            <#assign showSavingPercentAbove = PRODUCT_PCT_THRESHOLD!"0"/>
+            <#assign showSavingPercentAbove = (showSavingPercentAbove?number)/100.0 />
+            <#assign youSavePercent = ((variantListPrice - variantOnlinePrice)/variantListPrice) />
+            <#if youSavePercent gt showSavingPercentAbove?number>  
+              <p class="price">${uiLabelMap.YouSaveCaption}${youSavePercent?string("#0%")}</p>
+            </#if>
+          </#if>
+        </div>
+        
       <#else>
         <#if productFeatureUrl?has_content>
           <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if>" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>

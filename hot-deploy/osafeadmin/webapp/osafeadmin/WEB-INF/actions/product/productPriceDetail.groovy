@@ -16,12 +16,21 @@ if (UtilValidate.isNotEmpty(parameters.productId)) {
     // get the product price
     if("Y".equals(product.isVariant))
      {
+        productVariantListPrice =  OsafeAdminUtil.getProductPrice(request, product.productId, "LIST_PRICE");
+        productVariantSalePrice = OsafeAdminUtil.getProductPrice(request, product.productId, "DEFAULT_PRICE");
         GenericValue parent = ProductWorker.getParentProduct(product.productId, delegator);
         if (parent != null)
          {
             productListPrice =  OsafeAdminUtil.getProductPrice(request, parent.productId, "LIST_PRICE");
             productDefaultPrice = OsafeAdminUtil.getProductPrice(request, parent.productId, "DEFAULT_PRICE");
 			productContentWrapper = new ProductContentWrapper(parent, request);
+         }
+         if (productVariantListPrice) {
+             context.productVariantListPrice = productVariantListPrice;
+         }
+    
+         if (productVariantSalePrice) {
+             context.productVariantSalePrice = productVariantSalePrice;
          }
      }
     else

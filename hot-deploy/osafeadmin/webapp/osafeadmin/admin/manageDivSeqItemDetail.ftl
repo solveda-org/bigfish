@@ -58,7 +58,9 @@
                     <input type="hidden" name="uiDiv" value="${div!""}" />${div!""}
                   </#if>
                </div>
-               <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.DivTagPurposeHelperInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+               <div class="infoIcon">
+                <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.DivTagPurposeHelperInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+               </div>
             </div>
         </div>
         <div class="infoRow">

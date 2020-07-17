@@ -19,10 +19,7 @@
   
   <#if showVariantLink?has_content && showVariantLink == 'true'>
     <#if (product.isVirtual?if_exists == 'Y') && (product.isVariant?if_exists == 'N')>
-      <#assign variants = delegator.findByAnd("ProductAssoc", {"productId" : product.productId, "productAssocTypeId" : "PRODUCT_VARIANT"})/>
-      <#if variants?exists && variants?has_content>
         <a href="<@ofbizUrl>productVariants?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductVariantsTooltip}');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
-      </#if>
     </#if>
   </#if>
   

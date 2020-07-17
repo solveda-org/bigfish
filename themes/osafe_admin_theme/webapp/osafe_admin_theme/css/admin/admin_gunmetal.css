@@ -1032,6 +1032,7 @@ categoryDetail:after {
     padding: 0.5em 0;
 	float: left; 
 	width: 100%;
+   position: relative; /* so icons within can use absolute positioning */
 }
 
 .entryRow label, .entryRow div.entry, .entryRow div.entryInput {
@@ -1172,8 +1173,7 @@ categoryDetail:after {
 }
 
 .infoRow div.infoCaption {
- /*   float: left;  */
-    clear: left;
+    float: left;
 
 }
 
@@ -1191,10 +1191,14 @@ categoryDetail:after {
 }
 
 .infoRow div.infoValue {
-    margin: 0 0 0 3px;
     font-weight: normal;
     color: #445566;
     text-align: justify;
+}
+
+.infoRow div.infoIcon {
+    float: left;
+    margin: 5px;
 }
 
 .infoRow.column div.infoValue {
@@ -1268,8 +1272,7 @@ div.infoValue div.geoCode {
     max-width : 800px;
 }
 .infoRow .infoEntry{
-    width: 100%;
-    line-height: 1.5em;
+
 }
 .infoRow .infoEntry.long {
 /*    width: 1100px;  */
@@ -1287,7 +1290,7 @@ div.infoValue div.geoCode {
     width: 320px;
 }
 .infoValue.small{
-    width: 160px;  
+
 }
 .infoRow div.infoDetail {
     padding: 5px 50px 0 0;
@@ -1320,7 +1323,7 @@ div.infoValue div.geoCode {
     background: #ffffff;
     width: 625px;
     border: 1px solid #000;
-    margin: 0 0 0 3px;
+
 }
 .infoRow select.short {
     width: 110px;
@@ -1369,6 +1372,26 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     width: 160px;
 }
 
+#contentSpotList table td.idCol,  /* for content library list */
+#contentSpotList table th.idCol,    
+#contentSpotList table td.actionCol, 
+#contentSpotList table th.actionCol, 
+#contentSpotList table td.nameCol,
+#contentSpotList table th.nameCol,
+#contentSpotList table td.statusCol,
+#contentSpotList table th.statusCol,
+#contentSpotList table td.dateCol,
+#contentSpotList table th.dateCol,
+#contentSpotList table th.actionColSmall,
+#contentSpotList table td.actionColSmall {
+    width: auto!important;
+}
+
+#contentSpotList table th.descCol, /* for content library list */
+#contentSpotList table td.descCol {
+    width: 500px;
+}
+
 /****************************************************************
 * Search List Box
 ****************************************************************/
@@ -1400,7 +1423,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     text-align: center;
 }
 .displayListBox .boxBody th.promoCodeCol {
- 
+     background: none repeat scroll 0 0 #6B91B3;
 }
 .displayListBox .boxBody td.idCol, .boxBody th.idCol {
     width: 150px;
@@ -1790,6 +1813,12 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 #orderManagementOrderDetail .displayBox.paymentInfo div.infoValue {
 /*    float: none;  */
 
+}
+
+
+#orderManagementOrderDetail .displayBox.paymentInfo .infoRow div.infoCaption {
+    clear: left;
+    float: none;
 }
 
 /****************************************************************
@@ -2448,12 +2477,11 @@ td div.infoEntry input[type="text"] {
 }
 .helperIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/helperIcon.gif);
-    background-repeat:no-repeat;
-    width: 16px;
-    height:16px;
-    margin-top:2px;
-    margin-left:2px;
+    background-repeat: no-repeat;
     display: inline-block;
+    height: 14px;
+    margin-left: 2px;
+    width: 12px;
 }
 .variantIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/productvariant.gif);
@@ -2470,6 +2498,14 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+.wildcardIcon {
+    background-image: url("/osafe_admin_theme/images/gunmetal/icon/wildcardIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    width: 16px;
+}
+
 .helpIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/helpIcon.png);
     background-repeat:no-repeat;
@@ -2482,8 +2518,20 @@ td div.infoEntry input[type="text"] {
     cursor: pointer;
 }
 
+.informationIcon {
+    background-image: url("/osafe_admin_theme/images/gunmetal/icon/infoIcon.gif");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 13px;
+    margin-left: 2px;
+    margin-top: 2px;
+    position: relative;
+    top: 2px;
+    width: 16px;
+}
+
 .featureIcon {
-    background-image: url(/osafe_admin_theme/images/classic/icon/productFeature.gif);
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/productFeature.gif);
     background-repeat:no-repeat;
     width: 16px;
     height:16px;
@@ -2646,6 +2694,16 @@ td div.infoEntry input[type="text"] {
     margin: 0 5px 0 0;
 }
 
+.entryIcon {  /* wild card icon; system parameter */
+    left: 30px;
+    position: absolute;
+    top: 9px; 
+}
+
+.entryIcon a.helper {
+    
+}
+
 /****************************************************************
 * Detail Entry Table
 ****************************************************************/
@@ -2667,6 +2725,16 @@ td div.infoEntry input[type="text"] {
     float: left;
     padding: .5em 0 .5em 0;
 }
+
+.infoDetailIcon {
+
+}
+
+.infoDetailIcon a, td.actionCol a {
+    *padding: 2px;
+}
+
+
 .linkButton{
     display: inline-block;
     float: right;
@@ -2750,16 +2818,25 @@ input[type="button"].standardBtn.productLoaderTab {
     border-bottom: 1px solid black;
 }
 
+.boxBody .warningText {
+/*    clear: right;  */
+    float: right;
+    margin: 7px 10px 0 0;
+}
+
 .boxBody .helperText {
     float: right;
-    margin: 0 10px 0 0;
+    margin: 7px 10px 0 0;
 }
 
 .boxBody .helperText span {
-    display: block;
-    padding: 10px 0;
-    font-size: .85em;
-    margin: 0 0 0 10px;
+    padding: 5px 0;
+}
+
+.searchHelperText {
+    left: 30px;
+    position: relative;
+    top: 25px;
 }
 
 

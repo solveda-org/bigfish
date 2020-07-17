@@ -12,8 +12,8 @@
           <span class="noImage imageBorder"></span>
         </#if>
       </div>
-      <div class="infoText">
-        <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.CategoryImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+      <div class="infoIcon">
+        <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.CategoryImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
       </div>
     </div>
   </div>

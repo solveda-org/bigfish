@@ -48,7 +48,9 @@
                          <option value="">${uiLabelMap.CommonSelectOne}</option>
                          ${screens.render("component://osafeadmin/widget/CommonScreens.xml#creditCardTypes")}
                       </select>
-                      <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.CreditCardTypeHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                    </div>
+                    <div class="infoIcon">
+                      <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.CreditCardTypeHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
                     </div>
                 </div>
             </div>
@@ -59,8 +61,10 @@
                 <div class="infoCaption"><label>${uiLabelMap.SeqNumberCaption}</label></div>
                 <div class="infoValue">
                  <input type="text" name="sequenceId" value="${parameters.sequenceId!sequenceId!""}" class="small"/>
-                 <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SeqHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
                 </div>
+               <div class="infoIcon">
+                 <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SeqHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+               </div>
             </div>
         </div>
 

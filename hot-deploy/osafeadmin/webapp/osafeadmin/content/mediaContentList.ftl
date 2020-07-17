@@ -17,7 +17,9 @@
       </#if>
       <td class="descCol firstCol" ><a href="<@ofbizUrl>mediaContentDetail?mediaName=${fileName?if_exists}&mediaType=${fileAttrMap.parentDirName!}</@ofbizUrl>">${fileName}</a></td>
       <td class="actionCol">
-          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ContentPathHelperInfo} <@ofbizContentUrl>${fileAttrMap.imagePath}</@ofbizContentUrl>');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+          <div class="infoIcon">
+            <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ContentPathHelperInfo} <@ofbizContentUrl>${fileAttrMap.imagePath}</@ofbizContentUrl>');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+          </div>
       </td>
       <td class="actionCol">
         <#if (fileAttrMap.height > 0 && fileAttrMap.width > 0)>
@@ -37,7 +39,7 @@
       <td class="sizeCol" >${fileAttrMap.fileSize?string}kb</td>
       <td class="sizeCol" >${fileAttrMap.height}px</td>
       <td class="sizeCol" >${fileAttrMap.width}px</td>
-      <td class="actionColSmall"><a href="javascript:setMediaDetail('${fileName?html}','${fileAttrMap.parentDirName!}');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a></td>
+      <td class="actionColSmall"><a href="javascript:setConfirmDialogContent('${fileName?html}:${fileAttrMap.parentDirName!}','${uiLabelMap.deleteMediaAssetConfirmText}','deleteMediaContentFromList');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a></td>
     </tr>
     <#if rowClass == "2">
       <#assign rowClass = "1">

@@ -1,7 +1,8 @@
 #############################
 # Solr
 #############################
-solr-server=http://localhost:@port.http@/solr
+solr-search-server=http://@solr.search.server@:@solr.search.port@/solr
+solr-index-server=http://@solr.index.server@:@solr.index.port@/solr
 solr-product-index-file=${sys:getProperty('ofbiz.home')}/hot-deploy/solr/import/productsToIndex.csv
 product-category-facet-description=Category
 product-category-facet-cat-list-description=Refine by Category

@@ -21,6 +21,8 @@ under the License.
 
     <input type="hidden" name="productStoreId" value="${productStore.productStoreId}">
     <input type="hidden" name="productId" value="${productId}">
+    <input type="hidden" name="productDescription" value="${title!}">
+	<input type="hidden" name="CLIENT" value="${EMAIL_CLNT_NAME!}">
     <input type="hidden" name="productCategoryId" value="${requestParameters.productCategoryId!parameters.productCategoryId!}">
     <input type="hidden" value="${requestParameters.overallRate!overallRate!""}" id="overallValue" name="overallRate">
     <input type="hidden" value="${requestParameters.qualityRate?if_exists}" id="rateObj0Value" name="qualityRate">

@@ -15,7 +15,6 @@
         <#assign rowNo = 1/>
         <input type="hidden" name="productFeatureGroupId" value="${parameters.productFeatureGroupId!}"/>
         <#list productFeatureGrpApplList as productFeatureGrpAppl>
-        <#assign rowSeq = rowNo * 10>
           <tr id="row_${productFeatureGrpAppl.productFeatureGroupId!}" class="<#if rowClass == "2">even<#else>odd</#if>">
             <td class="idCol firstCol">
               <input type="hidden" name="fromDate_${productFeatureGrpAppl_index}" value="${productFeatureGrpAppl.fromDate!}"/>
@@ -37,7 +36,7 @@
               </span>
             </td>
             <td class="seqCol">
-               <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureGrpAppl_index}")!rowSeq!''/>
+               <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureGrpAppl_index}")!productFeatureGrpAppl.sequenceNum!''/>
                <input type="text" class="small" name="sequenceNum_${productFeatureGrpAppl_index}" value="${rowSeq!}"/>
             </td>
             <td class="actionColSmall">
@@ -55,7 +54,7 @@
             <th colspan="5">
             <div class="entryInput checkbox">
               <input type="checkbox" class="checkBoxEntry" name="updateProductFeatureAppls" id="updateProductFeatureAppls" value="Y"<#if parameters.updateProductFeatureAppls?has_content>checked</#if> />${uiLabelMap.BroadcastChangeToProductLabel}
-              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.BroadcastChangeToProductHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
+              <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.BroadcastChangeToProductHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
             </div>
             </th>
         </tr>

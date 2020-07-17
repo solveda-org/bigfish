@@ -14,7 +14,6 @@
         <input type="hidden" name="productFeatureTypeId" value="${parameters.productFeatureTypeId!}"/>
         <input type="hidden" name="productId" value="${parameters.productId!}"/>
         <#list productFeatureAndAppls as productFeatureAndAppl>
-        <#assign rowSeq = rowNo * 10>
           <tr id="row_${productFeatureAndAppl.productFeatureId!}" class="<#if rowClass == "2">even<#else>odd</#if>">
             <td class="idCol firstCol">
               <input type="hidden" name="fromDate_${productFeatureAndAppl_index}" value="${productFeatureAndAppl.fromDate!}"/>
@@ -30,7 +29,7 @@
               </span>
             </td>
             <td class="seqCol">
-               <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureAndAppl_index}")!rowSeq!''/>
+               <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureAndAppl_index}")!productFeatureAndAppl.sequenceNum!''/>
                <input type="text" class="small" name="sequenceNum_${productFeatureAndAppl_index}" value="${rowSeq!}"/>
             </td>
             <#if rowClass == "2">

@@ -52,21 +52,27 @@
     <!-- BigFish Parameters -->
     <entity-resource type="data" reader-name="parameters" loader="main" location="data/bigFishParameters.xml"/>
 
+    <!-- BigFish Schedulers -->
+    <entity-resource type="data" reader-name="schedulers" loader="main" location="data/eCommerceBigfishScheduledJobs.xml"/>
+
     <!-- Demo Data -->
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceShippingOptions.xml"/>
 
-    <!-- Product Fashion Demo Data -->
+    <!-- Product Data -->
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/000-ProductCategory.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/010-ProductCategoryFeature.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/020-Manufacturer.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/030-Product.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/040-ProductVariant.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/043-ProductSelectableFeature.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/045-ProductGoodIdentification.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/050-ProductContent.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/055-ProductVariantContent.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/060-ProductDistinguishingFeature.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/065-ProductFeatureImage.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/070-ProductAssoc.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/075-ProductAttribute.xml"/>
 
     <!-- Content Fashion Demo Data -->
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
@@ -75,14 +81,17 @@
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SI_INFO.xml"/>
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SP_PAGE.xml"/>
 
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/MegaMenuSettings.xml"/>
+
 
     <!-- service resources: model(s), eca(s) and group definitions -->
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_paymentmethod.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_sagepay.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_ebs.xml"/>
-    <!--
+    <service-resource type="model" loader="main" location="servicedef/services_scheduledJobs.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
+    <!--
     <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
     -->
 

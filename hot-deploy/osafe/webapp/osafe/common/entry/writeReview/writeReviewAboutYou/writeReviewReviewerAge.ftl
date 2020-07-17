@@ -1,4 +1,4 @@
-<div class="writeReviewReviewerAge" style="display:block">
+<div class="writeReviewReviewerAge">
 <div class="entry">
       <label for="reviewAge">${uiLabelMap.AgeCaption}</label>
       <select name="REVIEW_AGE" id="REVIEW_AGE">

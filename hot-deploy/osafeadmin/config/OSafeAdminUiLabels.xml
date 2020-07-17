@@ -160,9 +160,6 @@
     <property key="PageContentSpotsNav">
         <value xml:lang="en">Page Content Spots</value>
     </property>
-    <property key="ProductLoaderNav">
-        <value xml:lang="en">Product Loader</value>
-    </property>
     <property key="PromotionConfigureNav">
         <value xml:lang="en">Configure</value>
     </property>
@@ -223,8 +220,8 @@
 	<property key="SolrConfigNav">
 		<value xml:lang="en">Manage SOLR Configuration</value>
 	</property>
-	<property key="EntityMaintenanceNav">
-		<value xml:lang="en">Entity Maintenance</value>
+	<property key="LookupDataNav">
+		<value xml:lang="en">Lookup Data</value>
 	</property>
 	<property key="PaymentSettingsNav">
 		<value xml:lang="en">Payment Settings</value>
@@ -234,6 +231,18 @@
     </property>
 	<property key="ManageEmailNav">
 		<value xml:lang="en">Manage Emails</value>
+	</property>
+	<property key="UserNav">
+		<value xml:lang="en">Users</value>
+	</property>
+	<property key="UserManagementNav">
+		<value xml:lang="en">Manage Users</value>
+	</property>
+	<property key="SecurityGroupNav">
+		<value xml:lang="en">Security Groups</value>
+	</property>
+	<property key="PermissionListNav">
+		<value xml:lang="en">Permissions List</value>
 	</property>
     <!-- *** Navigation Ends *************************************** -->
 
@@ -280,8 +289,8 @@
     <property key="SolrConfigHeading">
         <value xml:lang="en">Manage SOLR Configuration</value>
     </property>
-    <property key="EntityMaintenanceHeading">
-        <value xml:lang="en">Entity Maintenance</value>
+    <property key="LookupDataHeading">
+        <value xml:lang="en">Lookup Data</value>
     </property>
     <property key="AdminUserHeading">
         <value xml:lang="en">Manage Users</value>
@@ -291,6 +300,21 @@
     </property>
     <property key="AnalysisBestReviewedHeading">
         <value xml:lang="en">Analysis: Best Reviewed Products</value>
+    </property>
+     <property key="AnalysisResultBoxHeading">
+        <value xml:lang="en">Results and Possible Corrective Actions</value>
+    </property>
+    <property key="LoggingParamsHeading">
+        <value xml:lang="en">Logging Parameters</value>
+    </property>
+    <property key="ScheduledJobsHealthCheckHeading">
+        <value xml:lang="en">Scheduled Jobs Health Check</value>
+    </property>
+    <property key="EntityRowSizeHealthCheckHeading">
+        <value xml:lang="en">Entity Row Size Health Check</value>
+    </property>
+    <property key="SysHealthCheckHeading">
+        <value xml:lang="en">System Health Check</value>
     </property>
     <property key="AdminPayGatewayHeading">
         <value xml:lang="en">Payment Gateway settings</value>
@@ -493,9 +517,6 @@
     <property key="ManufacturerHeading">
         <value xml:lang="en">Manufacturer</value>
     </property>
-    <property key="ProductLoaderHeading">
-        <value xml:lang="en">Product Loader</value>
-    </property>
     <property key="ProductLoaderDetailHeading">
         <value xml:lang="en">Product Loader</value>
     </property>
@@ -564,6 +585,9 @@
     </property>
     <property key="OrderHeading">
         <value xml:lang="en">Matching Orders:</value>
+    </property>
+    <property key="OrderNoteHeading">
+        <value xml:lang="en">Order ${orderId} Notes</value>
     </property>
     <property key="OrderNoteHeading">
         <value xml:lang="en">Order ${orderId} Notes</value>
@@ -946,6 +970,25 @@
 	<property key="ManageEmailListHeading">
 		<value xml:lang="en">Manage Email</value>
 	</property>
+	<property key="OrderAttributeHeading">
+		<value xml:lang="en">Order ${orderId} Attributes</value>
+	</property>
+	<property key="UserManagementHeading">
+		<value xml:lang="en">Manage Users</value>
+	</property>
+	<property key="SecurityGroupHeading">
+		<value xml:lang="en">Security Groups</value>
+	</property>
+	<property key="PermissionListHeading">
+		<value xml:lang="en">Permissions List</value>
+	</property>
+	<property key="UserHeading">
+		<value xml:lang="en">Manage Users</value>
+	</property>
+	<property key="UserDetailHeading">
+		<value xml:lang="en">User Detail: </value>
+	</property>
+	
 	
    <!-- *** Heading Ends*************************************** -->
 
@@ -1081,6 +1124,12 @@
     </property>
     <property key="EmailTypeCaption">
         <value xml:lang="en">Email Type:</value>
+    </property>
+    <property key="ExportXmlFileOnServerCaption">
+        <value xml:lang="en">Export XML File (on Server):</value>
+    </property>
+    <property key="FileNameCaption">
+        <value xml:lang="en">File Name:</value>
     </property>
     <property key="EntitytoExportCaption">
         <value xml:lang="en">Content Entities to Export:</value>
@@ -1502,6 +1551,18 @@
     <property key="VariantCaption">
         <value xml:lang="en">Variant:</value>
     </property>
+    <property key="VariantListPriceCaption">
+        <value xml:lang="en">Variant List Price:</value>
+    </property>
+    <property key="VariantSalePriceCaption">
+        <value xml:lang="en">Variant Sale Price:</value>
+    </property>
+    <property key="VirtualListPriceCaption">
+        <value xml:lang="en">Virtual List Price:</value>
+    </property>
+    <property key="VirtualSalePriceCaption">
+        <value xml:lang="en">Virtual Sale Price:</value>
+    </property>
     <property key="VirtualCaption">
         <value xml:lang="en">Virtual:</value>
     </property>
@@ -1794,6 +1855,9 @@
     </property>
      <property key="PromotionCondProductCaption">
         <value xml:lang="en">Products:</value>
+    </property>
+     <property key="PromotionCondShippingMethodCaption">
+        <value xml:lang="en">Shipping Method:</value>
     </property>
      <property key="PromotionActionCaption">
         <value xml:lang="en">Action:</value>
@@ -2134,6 +2198,39 @@
     <property key="ReviewAgesDescCaption">
         <value xml:lang="en">Review Age Desc:</value>
     </property>
+    <property key="UserLoginIdCaption">
+        <value xml:lang="en">User Login ID:</value>
+    </property>
+    <property key="SecurityGroupCaption">
+        <value xml:lang="en">Security Group:</value>
+    </property>
+    <property key="CurrentPasswordCaption">
+        <value xml:lang="en">Current Password:</value>
+    </property>
+    <property key="ConfirmPasswordCaption">
+        <value xml:lang="en">Confirm Password:</value>
+    </property>
+    <property key="PasswordHintCaption">
+        <value xml:lang="en">Password Hint:</value>
+    </property>
+    <property key="IsSystemCaption">
+        <value xml:lang="en">System?:</value>
+    </property>
+    <property key="EnabledCaption">
+        <value xml:lang="en">Enabled?:</value>
+    </property>
+    <property key="HasLoggedOutCaption">
+        <value xml:lang="en">Has Logged Out?:</value>
+    </property>
+    <property key="RequirePasswordChangeCaption">
+        <value xml:lang="en">Req Pwd Change?:</value>
+    </property>
+    <property key="DisabledDateTimeCaption">
+        <value xml:lang="en">Disabled Date:</value>
+    </property>
+    <property key="SuccFailedLoginsCaption">
+        <value xml:lang="en">Succ Failed Logins:</value>
+    </property>
 	
     <!-- *** Caption Ends*************************************** -->
 
@@ -2205,6 +2302,30 @@
     </property>
     <property key="DescLabel">
         <value xml:lang="en">Desc</value>
+    </property>
+    <property key="ExportContentLibraryLabel">
+        <value xml:lang="en">Content Library</value>
+    </property>
+    <property key="ExportContentHomePageLabel">
+        <value xml:lang="en">Home Page</value>
+    </property>
+    <property key="ExportContentSiteInfoLabel">
+        <value xml:lang="en">Site Info</value>
+    </property>
+    <property key="ExportContentStaticPageLabel">
+        <value xml:lang="en">Static Pages</value>
+    </property>
+    <property key="ExportContentPageTopLabel">
+        <value xml:lang="en">Page Content Spots</value>
+    </property>
+    <property key="ExportContentProductCategorySpotsLabel">
+        <value xml:lang="en">Product Category Content</value>
+    </property>
+    <property key="ExportContentPDPSpotLabel">
+        <value xml:lang="en">General PDP Spots</value>
+    </property>
+    <property key="ExportContentEmailLabel">
+        <value xml:lang="en">Email Templates</value>
     </property>
     <property key="ItemDollarLabel">
         <value xml:lang="en">Item ${currencySymbol}</value>
@@ -2347,6 +2468,15 @@
     <property key="RequestCatalogExportLabel">
         <value xml:lang="en">Request Catalog</value>
     </property>
+    <property key="IncludeItemNotExportedLabel">
+        <value xml:lang="en">Only Include Items that are NOT exported already?</value>
+    </property>
+    <property key="AfterExportSetFlagLabel">
+        <value xml:lang="en">After Exporting, set the Export Flag to TRUE?</value>
+    </property>
+    <property key="AfterExportAllowSaveLabel">
+        <value xml:lang="en">After Exporting, allow View or Save-As?</value>
+    </property>
     
     <!-- Leave so if we want to specific verbage we do not have to change the key -->
     <property key="ActionsLabel">
@@ -2377,7 +2507,7 @@
         <value xml:lang="en">Add Products in this Category to the Cart using Default Quantities</value>
     </property>
     <property key="AdjustAmountLabel">
-        <value xml:lang="en">Adj Amount</value>
+        <value xml:lang="en">Adj $</value>
     </property>
     <property key="AdminEditLabel">
         <value xml:lang="en">Edit</value>
@@ -3438,6 +3568,93 @@
     <property key="ReviewAgesDescLabel">
         <value xml:lang="en">Review Age Description</value>
     </property>
+    <property key="AttributeNameLabel">
+        <value xml:lang="en">Attribute</value>
+    </property>
+    <property key="AttributeValueLabel">
+        <value xml:lang="en">Value</value>
+    </property>
+    <property key="OfferPriceLabel">
+        <value xml:lang="en">Offer Price</value>
+    </property>
+    <property key="ActiveSettingsLabel">
+        <value xml:lang="en">Active settings are:</value>
+    </property>
+    <property key="FinishedExclLabel">
+        <value xml:lang="en">FINISHED (excluding last 30 days)</value>
+    </property>
+    <property key="FinishedWithinLabel">
+        <value xml:lang="en">FINISHED (within the last 30 days)</value>
+    </property>
+    <property key="SysHealthCheckLabel">
+        <value xml:lang="en">System Health Check</value>
+    </property>    
+    <property key="EntityHealthCheckLabel">
+        <value xml:lang="en">Entity Row Size Health Check</value>
+    </property>
+    <property key="ScheduledJobHealthCheckLabel">
+        <value xml:lang="en">Scheduled Jobs Health Check</value>
+    </property>
+    <property key="LoggingParamsHealthCheckLabel">
+        <value xml:lang="en">Logging Parameters</value>
+    </property>
+    <property key="printVerbosePropLabel">
+        <value xml:lang="en">print.verbose=</value>
+    </property>
+    <property key="printTimingPropLabel">
+        <value xml:lang="en">print.timing=</value>
+    </property>
+    <property key="printInfoPropLabel">
+        <value xml:lang="en">print.info=</value>
+    </property>
+    <property key="printImportantPropLabel">
+        <value xml:lang="en">print.important=</value>
+    </property>
+    <property key="printWarningPropLabel">
+        <value xml:lang="en">print.warning=</value>
+    </property>
+    <property key="printErrorPropLabel">
+        <value xml:lang="en">print.error=</value>
+    </property>
+    <property key="printFatalPropLabel">
+        <value xml:lang="en">print.fatal=</value>
+    </property>
+    <property key="JobStatusLabel">
+        <value xml:lang="en">Job Status</value>
+    </property>  
+    <property key="ServerHitEntityLabel">
+        <value xml:lang="en">SERVER_HIT</value>
+    </property>
+    <property key="ServerHitBinEntityLabel">
+        <value xml:lang="en">SERVER_HIT_BIN</value>
+    </property>
+    <property key="VisitEntityLabel">
+        <value xml:lang="en">VISIT</value>
+    </property>
+    <property key="VisitorEntityLabel">
+        <value xml:lang="en">VISITOR</value>
+    </property>
+    <property key="ScheduledJobEmailSuccess">
+        <value xml:lang="en">Processed Successfully</value>
+    </property>
+    <property key="ScheduledJobEmailFailError">
+        <value xml:lang="en">*** FAILED ***</value>
+    </property>
+    <property key="UserLoginIdLabel">
+        <value xml:lang="en">User Login ID</value>
+    </property>
+    <property key="SystemLabel">
+        <value xml:lang="en">System?</value>
+    </property>
+    <property key="EnabledLabel">
+        <value xml:lang="en">Enabled?</value>
+    </property>
+    <property key="PasswordChangeLabel">
+        <value xml:lang="en">Req Pwd Change?</value>
+    </property>
+    <property key="DisabledDateLabel">
+        <value xml:lang="en">Disabled Date</value>
+    </property>
     <!-- **** Label Ends *************************************** -->
     
     <!-- **** Page Title  Starts*************************************** -->
@@ -3663,6 +3880,12 @@
     <property key="ProductVariantsTitle">
         <value xml:lang="en">product variants</value>
     </property>
+    <property key="AddProductVariantsTitle">
+        <value xml:lang="en">add a variant</value>
+    </property>
+    <property key="AddProductVariantsHeading">
+        <value xml:lang="en">For Master Product</value>
+    </property>
     <property key="ProductFeaturesTitle">
         <value xml:lang="en">manage product feature sequencing</value>
     </property>
@@ -3841,7 +4064,7 @@
         <value xml:lang="en">Payment Settings</value>
     </property>
     <property key="BigFishSampleFileDetailTitle">
-        <value xml:lang="en">create bigfish template XLS file</value>
+        <value xml:lang="en">create bigfish template file</value>
     </property>
     <property key="BigFishProductFileFromDBDetailTitle">
         <value xml:lang="en">create bigfish product file from database</value>
@@ -3897,8 +4120,29 @@
     <property key="ManageEmailListTitle">
         <value xml:lang="en">manage email</value>
     </property>
-    <property key="EntityMaintenanceTitle">
-        <value xml:lang="en">entity maintenance</value>
+    <property key="LookupDataTitle">
+        <value xml:lang="en">lookup data</value>
+    </property>
+    <property key="SysHealthCheckTitle">
+        <value xml:lang="en">System Health Check</value>
+    </property>
+    <property key="LoggingParamsHealthCheckTitle">
+        <value xml:lang="en">Logging Parameters</value>
+    </property>
+    <property key="ScheduledJobsHealthCheckTitle">
+        <value xml:lang="en">Scheduled Jobs Health Check</value>
+    </property>
+    <property key="EntityRowSizeHealthCheckTitle">
+        <value xml:lang="en">Entity Row Size Health Check</value>
+    </property>
+    <property key="UserTitle">
+        <value xml:lang="en">manage users</value>
+    </property>
+    <property key="UserManagementTitle">
+        <value xml:lang="en">manage users</value>
+    </property>
+    <property key="UserDetailTitle">
+        <value xml:lang="en">user detail</value>
     </property>
     <!-- ******* Page Title Ends *************************************** -->
     
@@ -3977,6 +4221,30 @@
     </property>
     <property key="SeeHelperInfo">
         <value xml:lang="en">See helper on List Screen</value>
+    </property>
+    <property key="ParameterSearchHelperInfo">
+        <value xml:lang="en">Full wildcard search that ignores case.</value>
+    </property>
+    <property key="scheduledJobsHealthCheckInfo">
+        <value xml:lang="en">Recurring Scheduled Jobs can generate a large number of entries in the OFBiz entity JOB_SANDBOX.</value>
+    </property>
+    <property key="EntityRowSizeHealthCheckInfo">
+        <value xml:lang="en">There are many OFBiz entities that can collect logging, visitor tracking and other information. These tables may contain a large number of rows depending on the specific configuration. Large row counts many impact stability and performance.</value>
+    </property>
+    <property key="scheduledJobsMoreInfo">
+        <value xml:lang="en">For more details about specific jobs you can access via Admin -> Scheduled Jobs.</value>
+    </property>
+    <property key="JobFinishedExclInfo">
+        <value xml:lang="en">Deleting rows from the JOB_SANDBOX for FINISHED jobs that completed more than 30 days ago is considered a very safe action. </value>
+    </property>
+    <property key="JobFinishedWithinInfo">
+        <value xml:lang="en">Deleting rows from the JOB_SANDBOX for jobs that have FINISHED within the last 30 days is very safe, unless you need this history for other purposes. </value>
+    </property>
+    <property key="SysHealthCheckInfo">
+        <value xml:lang="en">A general function that can perform some common health checks and take corrective actions.</value>
+    </property>
+    <property key="LoggingParamsChangeInfo">
+        <value xml:lang="en">The System Administrator should be involved in making any changes to these settings. </value>
     </property>
     <property key="SeeWarningInfo">
         <value xml:lang="en">New content is only valid if you use a specific BF-Content-ID that is used in the eCommerce implementation. This function should only be used for emergency situations.</value>
@@ -4148,9 +4416,6 @@
     </property>
     <property key="PricingRulesApplyInfo">
         <value xml:lang="en">* Pricing Rules Apply</value>
-    </property>
-    <property key="ProductLoaderInfo">
-        <value xml:lang="en">Import Product Catalog and Item data. Setup selectable and descriptive features.</value>
     </property>
     <property key="ProductLoaderDetailInfo">
         <value xml:lang="en">This function will read an XLS or XML import file that defines Product Information. There are options to re-load (remove existing and load fresh) or append to the Product entities.</value>
@@ -4362,7 +4627,7 @@
 	<property key="SolrConfigInfo">
 		<value xml:lang="en">Options to configure both Facet GROUPS and VALUES</value>
 	</property>
-	<property key="EntityMaintenanceInfo">
+	<property key="LookupDataInfo">
 		<value xml:lang="en">Control the allowed Contact Us Reason, Titles, Review Ages, Credit Cards etc.</value>
 	</property>
 	<property key="PaymentSettingsInfo">
@@ -4371,10 +4636,33 @@
 	<property key="ManageEmailInfo">
 		<value xml:lang="en">Manage the content within various Email Templates as well the configuration for sending.</value>
 	</property>
+	<property key="IncludeItemNotExportedInfo">
+		<value xml:lang="en">Set to YES if you only want to exported those records that have not already been exported. This is typically used for an interim live export. Set to NO if you simply want all records to be exported, this is good for testing.</value>
+	</property>
+	<property key="AfterExportSetFlagInfo">
+		<value xml:lang="en">Set to YES if after this functions exports the records you want the Export-Flag to be set to TRUE. Set to NO if you do not want this feature, this is good for testing.</value>
+	</property>
+	<property key="AfterExportAllowSaveInfo">
+		<value xml:lang="en">By default the XML export file will be created on the Server. If you want to view or save the file immediately then check this option to YES.</value>
+	</property>
 	<property key="ReviewAgesInfo">
         <value xml:lang="en">Ability to maintain which Ages are offered during the Write a Review process. Example: 10-21, 22-30 etc.</value>
     </property>
-	
+	<property key="VariantListPriceInfo">
+        <value xml:lang="en">Only enter a Variant List Price if it differs from the VIRTUAL Pricing. Leave the VARIANT List Price blank in order to use VIRTUAL List Pricing</value>
+    </property>
+    <property key="VariantSalePriceInfo">
+        <value xml:lang="en">Only enter a Variant Sales Price if it differs from the VIRTUAL Pricing. Leave the VARIANT Sales Price blank in order to use VIRTUAL Sales Pricing</value>
+    </property>
+    <property key="UserManagementInfo">
+        <value xml:lang="en">Ability to view all current Users of the Admin Module, and the relationships to Security Groups and Permissions.</value>
+    </property>
+    <property key="SecurityGroupInfo">
+        <value xml:lang="en">A “role based” concept, with definitions of a Security-Group and associations to the available Permissions.</value>
+    </property>
+    <property key="PermissionListInfo">
+        <value xml:lang="en">A simple list of all available OFBiz permissions – not all of which are used by the BigFish Admin Module.</value>
+    </property>
      <!-- ******* Info Messages Ends*************************************** -->
    
     <!-- ******* Success Messages  starts*************************************** -->
@@ -4383,6 +4671,12 @@
     </property>
     <property key="DeletedSuccess">
         <value xml:lang="en">You have Successfully Deleted Your Information</value>
+    </property>
+    <property key="DeletedJobsSuccessMessage">
+        <value xml:lang="en"> {0} rows were successfully deleted from the JOB_SANDBOX entity</value>
+    </property>
+    <property key="DeletedRowsSuccessMessage">
+        <value xml:lang="en"> {0} rows were successfully deleted from the {1} entity</value>
     </property>
     <property key="DivSequenceSuccess">
         <value xml:lang="en">DIV Sequencing Successful</value>
@@ -4549,8 +4843,11 @@
     <property key="BlankOrderItemSelectionError">
         <value xml:lang="en">Please select any item for status change.</value>
     </property>
-    <property key="ProductFileNotXLSError">
-        <value xml:lang="en">The Product Loader uses MS-Excel format files, please check the file name and try again</value>
+    <property key="ProductFileNotXlsOrXmlError">
+        <value xml:lang="en">The Product Loader uses XLS or XML format files, please check the file name and try again</value>
+    </property>
+    <property key="ExportedFileNotXmlError">
+        <value xml:lang="en">The Export XML File should contain a valid SERVER directory and must have a .XML file extension</value>
     </property>
     <property key="FeedFileNotXmlError">
         <value xml:lang="en">The Feeds Import uses XML format files, please check the file name and try again</value>
@@ -4747,6 +5044,12 @@
     <property key="ProductListPriceError">
         <value xml:lang="en">Please enter a Valid Product List Price. It should be a Number.</value>
     </property>
+    <property key="ProductVariantListPriceError">
+        <value xml:lang="en">Please enter a Valid Product Variant List Price. It should be a Number.</value>
+    </property>
+    <property key="ProductVariantSalePriceError">
+        <value xml:lang="en">Please enter a Valid Product Variant Sale Price. It should be a Number.</value>
+    </property>
     <property key="SameNameMediaFileError">
         <value xml:lang="en">A Media File with the same name currently exists, please retry</value>
     </property>
@@ -4785,6 +5088,12 @@
     </property>
     <property key="BadCaptionError">
         <value xml:lang="en">The Caption field [${parameters.value}] cannot contain less-than (&lt;) or greater-than (&gt;) symbols</value>
+    </property>
+    <property key="BadValueUnequalTagsError">
+        <value xml:lang="en">The number of less-than tags (&lt;) must match the number of greater-than tags (&gt;), please review and retry</value>
+    </property>
+    <property key="BadValueNewLineError">
+        <value xml:lang="en">The Value cannot contain a new-line (carriage return), please remove and retry</value>
     </property>
     <property key="BlankShipDateError">
         <value xml:lang="en">A Ship Date is required when changing the status to Completed.</value>
@@ -4896,6 +5205,15 @@
     </property>
     <property key="ValidTopNavBarError">
         <value xml:lang="en">When adding a new Top Navigation Item it must be unique</value>
+    </property>
+    <property key="ProductFeatureRequiredError">
+        <value xml:lang="en">Please select any {0} feature.</value>
+    </property>
+    <property key="BlankProductFeturesError">
+        <value xml:lang="en">Master product have not any feature. First add the feature to this master product.</value>
+    </property>
+    <property key="SameVariantExistError">
+        <value xml:lang="en">A varient with these feature is already exist.</value>
     </property>
     <property key="PromotionProductRequiredError">
         <value xml:lang="en">Action Products is required.</value>
@@ -5075,7 +5393,7 @@
         <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999.</value>
     </property>
     <property key="ReviewAgesIdLengthError">
-        <value xml:lang="en">The Review Ages Id field cannot be more than 20 characters.</value>
+        <value xml:lang="en">The Review Age Id field cannot be more than 20 characters.</value>
     </property>
     <property key="ReviewAgesIdExistError">
         <value xml:lang="en">The Review Age ID field must be unique</value>
@@ -5198,9 +5516,39 @@
 		<value xml:lang="en">Run Date must be entered and for a Pending job it must be in the future</value>
 	</property>
     <property key="TestEmailSendFailError">
-        <value xml:lang="en">An error occurred attempting to send an email. Error is {0}. Check the client.properties file. Specific email properties are listed in the 'General Properties' section. It is possible that these are not configured correctly. For more information check the Help function "How To Set Up BigFish Emails".
+        <value xml:lang="en">An error occurred attempting to send an email. Error is [${errorMessage}]. Check the client.properties file. Specific email properties are listed in the 'General Properties' section. It is possible that these are not configured correctly. For more information check the Help function "How To Set Up BigFish Emails".
 </value>
     </property>
+    <property key="MissingParamError">
+		<value xml:lang="en">The service [${serviceName}] cannot run without the parameter [${name}].</value>
+	</property>
+	<property key="ProductIntroDiscCompareError">
+		<value xml:lang="en">The Discontinued Date must be AFTER the Introduced Date</value>
+	</property>
+	<property key="CataologFromThruCompareError">
+		<value xml:lang="en">The Active THRU date must be AFTER the Active FROM date</value>
+	</property>
+	<property key="BadUserLoginIdError">
+		<value xml:lang="en">User Login ID cannot be blank and must be at least 6 characters</value>
+	</property>
+	<property key="UserLoginIdExistError">
+		<value xml:lang="en">User Login ID has already been allocated</value>
+	</property>
+	<property key="BlankPasswordHintError">
+		<value xml:lang="en">The Password Hint cannot be blank</value>
+	</property>
+	<property key="UserLoginIncorrectPasswordError">
+		<value xml:lang="en">The Current Password you have entered is incorrect</value>
+	</property>
+	<property key="BlankGroupIdError">
+		<value xml:lang="en">Security Group ID cannot be blank</value>
+	</property>
+	<property key="GroupIdExistError">
+		<value xml:lang="en">Security Group ID has already been allocated</value>
+	</property>
+	<property key="BlankSecurityGroupDescriptionError">
+		<value xml:lang="en">The Description cannot be blank</value>
+	</property>
  <!-- ******* Error Messages  Ends*************************************** -->
  
  
@@ -5259,6 +5607,9 @@
     <property key="CancelBtn">
         <value xml:lang="en">Cancel</value>
     </property>
+    <property key="CancelScheduledJobBtn">
+        <value xml:lang="en">Cancel Job</value>
+    </property>
     <property key="ChangeBtn">
         <value xml:lang="en">Change</value>
     </property>
@@ -5288,6 +5639,9 @@
     </property>
     <property key="DeleteBtn">
         <value xml:lang="en">Delete</value>
+    </property>
+    <property key="DeleteScheduledJobBtn">
+        <value xml:lang="en">Delete Job</value>
     </property>
     <property key="DescriptionBtn">
         <value xml:lang="en">Description</value>
@@ -5469,7 +5823,18 @@
 	<property key="SolrReIndxBtn">
 		<value xml:lang="en">Re-index SOLR</value>
 	</property>
-    
+    <property key="ScheduledJobsAnalysisBtn">
+        <value xml:lang="en">Scheduled Jobs Analysis</value>
+    </property>
+    <property key="EntityRowSizeAnalysisBtn">
+        <value xml:lang="en">Check DB Row Count</value>
+    </property>
+    <property key="LoggingParamsAnalysisBtn">
+        <value xml:lang="en">Check Active Settings</value>
+    </property>
+    <property key="TruncateBtn">
+        <value xml:lang="en">Truncate</value>
+    </property>
     <!-- **** Button Ends*************************************** -->
     
     <!-- =====  Labels for CONTENT Specific === -->
@@ -5587,6 +5952,12 @@
     <property key="deleteContentConfirmText">
         <value xml:lang="en">Are you sure you want to DELETE this content?</value>
     </property>
+    <property key="deleteFinishedJobsConfirmText">
+        <value xml:lang="en">Are you sure you want to remove all rows from JOB_SANDBOX where the status is </value>
+    </property>
+    <property key="deleteRowConfirmText">
+        <value xml:lang="en">Are you sure you want to remove all rows from</value>
+    </property>
     <property key="deleteProductImageConfirmText">
         <value xml:lang="en">Are you sure you want to delete this image?</value>
     </property>
@@ -5607,6 +5978,12 @@
     </property>
     <property key="deleteMediaAssetConfirmText">
         <value xml:lang="en">Are you sure you want to delete the Media Asset?</value>
+    </property>
+    <property key="deleteScheduledJobConfirmListText">
+        <value xml:lang="en">Are you sure you want to delete Job ID?</value>
+    </property>
+    <property key="deleteScheduledJobConfirmDetailText">
+        <value xml:lang="en">Are you sure you want to delete Job ID ${parameters.jobId}?</value>
     </property>
     <property key="DeleteRelatedProductConfirmText">
         <value xml:lang="en">Are you sure you want to delete the Related Product</value>
@@ -5631,6 +6008,9 @@
 	</property>
 	<property key="CancelScheduledJobConfirmText">
 		<value xml:lang="en">Are you sure you want to cancel this Scheduled Job?</value>
+	</property>
+	<property key="ScheduledJobInfoText">
+		<value xml:lang="en">Job ${parameters.scheduledJobName} ran on ${parameters.nowDateTime} and returned ${parameters.responseMessage}.</value>
 	</property>
     <!-- === confirm Ends ===== -->
     
@@ -5773,37 +6153,33 @@
     <property key="ExportFileNameHelpInfo">
         <value xml:lang="en">This should identify the XML file that will be used to identify the actual output file.</value>
     </property>
+    <property key="ExportXmlFileOnServerInfo">
+        <value xml:lang="en">This is the SERVER directory and file location of the exported data. Access to the SERVER directory is required. The file should have an XML extension</value>
+    </property>
     <property key="ImportDataHelperText">
         <value xml:lang="en">Import this data? </value>
     </property>
     <property key="ImportDataHelperInfo">
-        <value xml:lang="en">To import the XML file into another BigFish instance: use standard OFBiz, click on Webtools, and use the Import XML function. More information is available in the Online Help.</value>
+        <value xml:lang="en">The XML file will be available for you to save on a local directory. Using this XML file, the details can be IMPORTED into a another instance using the Webtools feature within OFBiz. More information is available in the Online Help.</value>
     </property>
-    
+    <property key="OfferPriceHelperInfo">
+        <value xml:lang="en">Line Item Promotion {0} was applied</value>
+    </property>
+    <property key="ServerHitEntityHelperInfo">
+        <value xml:lang="en">SERVER_HIT logging can normally be safely truncated unless you have specific requirements to view the data.</value>
+    </property>
+    <property key="ServerHitBinEntityHelperInfo">
+        <value xml:lang="en">SERVER_HIT_BIN logging can normally be safely truncated unless you have specific requirements to view the data.</value>
+    </property>
+    <property key="VisitEntityHelperInfo">
+        <value xml:lang="en">The VISIT table logging can normally be safely truncated, unless you are using the data for analytics. To change the setting look at the serverstats.properties file, specific property is stats.persist.visit</value>
+    </property>
+    <property key="VisitorEntityHelperInfo">
+        <value xml:lang="en">The VISITOR table logging can normally be safely truncated, unless you are using the data for analytics. To change the setting look at the serverstats.properties file, specific property is stats.persist.visitor</value>
+    </property>
+    <property key="UserPasswordHelpInfo">
+        <value xml:lang="en">Leave all Password fields blank if you do not want to change</value>
+    </property>
     <!-- === End of Helper info ===== -->
      <!-- === End of Helper info ===== -->
-
-    <!-- *** content Type Descriptions Starts*************************************** -->
-    <property key="ContentType.description.BF_CONTENT_LIBRARY">
-        <value xml:lang="en">Content Library</value>
-    </property>
-    <property key="ContentType.description.BF_HOME_PAGE">
-        <value xml:lang="en">Home Page Content</value>
-    </property>
-    <property key="ContentType.description.BF_SITE_INFO">
-        <value xml:lang="en">Site Info</value>
-    </property>
-    <property key="ContentType.description.BF_STATIC_PAGE">
-        <value xml:lang="en">Static Page</value>
-    </property>
-    <property key="ContentType.description.BF_PAGE_TOP_SPOT">
-        <value xml:lang="en">Page Top Spots</value>
-    </property>
-    <property key="ContentType.description.BF_PDP_SPOT">
-        <value xml:lang="en">Page Top Spots</value>
-    </property>
-    <property key="ContentType.description.BF_EMAIL_TEMPLATE">
-        <value xml:lang="en">Email Address</value>
-    </property>
-     <!-- *** Contact Mech Purpose Type Descriptions Ends*************************************** -->
 </resource>

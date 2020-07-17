@@ -86,6 +86,18 @@
 <ContentPurpose contentId="SP_REVIEW_GUIDELINES" contentPurposeTypeId="SECTION"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_REVIEW_TERMS_COND" contentId="SP_REVIEW_TERMS_COND" contentTypeId="BF_STATIC_PAGE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_REVIEW_GUIDELINES" contentId="SP_REVIEW_GUIDELINES" contentTypeId="BF_STATIC_PAGE"/>
+08/28/2012 issue#26698
+<EnumerationType enumTypeId="REVIEW_AGE" parentTypeId="" hasTable="" description="Review Age"/>
+<Enumeration enumId="RA_0_TO_10" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_0_TO_10" sequenceId="01"/>
+<Enumeration enumId="RA_11_TO_20" enumTypeId="REVIEW_AGE" description="11 - 20" enumCode="RA_11_TO_20" sequenceId="02"/>
+<Enumeration enumId="RA_21_TO_30" enumTypeId="REVIEW_AGE" description="21 - 30" enumCode="RA_21_TO_30" sequenceId="03"/>
+<Enumeration enumId="RA_31_TO_40" enumTypeId="REVIEW_AGE" description="31 - 40" enumCode="RA_31_TO_40" sequenceId="04"/>
+<Enumeration enumId="RA_41_TO_50" enumTypeId="REVIEW_AGE" description="41 - 50" enumCode="RA_41_TO_50" sequenceId="05"/>
+<Enumeration enumId="RA_51_TO_60" enumTypeId="REVIEW_AGE" description="51 - 60" enumCode="RA_51_TO_60" sequenceId="06"/>
+<Enumeration enumId="RA_61_AND_OLDER" enumTypeId="REVIEW_AGE" description="61 and older" enumCode="RA_61_AND_OLDER" sequenceId="07"/>
+
+08/28/2012 issue#26729
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CONFIRM_GET_COOKIE" description="A comma separated list of Cookies that should be read for possible content. The Order Confirmation will use the content of each cookie, if it exists, to store additional attributes for the Order. Typically used to include Affiliate Tracking information in the Order." parmCategory="CHECKOUT"/>
 
 //Remove
     07/30/12 issue#26302

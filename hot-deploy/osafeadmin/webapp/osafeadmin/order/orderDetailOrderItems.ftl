@@ -7,6 +7,7 @@
                 <th class="statusCol">${uiLabelMap.ItemStatusLabel}</th>
                 <th class="dollarCol">${uiLabelMap.QtyLabel}</th>
                 <th class="dollarCol">${uiLabelMap.UnitPriceLabel}</th>
+                <th class="dollarCol">${uiLabelMap.OfferPriceLabel}</th>
                 <th class="dollarCol">${uiLabelMap.AdjustAmountLabel}</th>
                 <th class="dollarCol total lastCol">${uiLabelMap.ItemTotalLabel}</th>
             </tr>
@@ -31,6 +32,36 @@
                 <#assign itemAdjustment = Static["org.ofbiz.order.order.OrderReadHelper"].getOrderItemAdjustmentsTotal(orderItem, orderAdjustments, true, false, false)>
                 <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(itemProduct,request)>
                 <#assign productName = productContentWrapper.get("PRODUCT_NAME")!itemProduct.productName!"">
+                <!-- offer price from promo -->
+                <#assign itemPromoAdjustment = (orderReadHelper.getOrderItemAdjustmentsTotal(orderItem, true, false, false)/orderItem.quantity)/>
+                <#assign offerPrice = orderItem.unitPrice + itemPromoAdjustment/>
+                <#assign orderItemAdjustments = orderReadHelper.getOrderItemAdjustments(orderItem) />
+                <#if orderItemAdjustments?has_content>
+                	<#list orderItemAdjustments as orderItemAdjustment>
+                		<#assign productPromo = orderItemAdjustment.getRelatedOneCache("ProductPromo")!"">
+                        <#if productPromo?has_content>
+                         <#assign promoText = productPromo.promoText?if_exists/>
+                         <#assign productPromoCode = productPromo.getRelatedCache("ProductPromoCode")>
+                         <#assign promoCodesEntered = orderReadHelper.getProductPromoCodesEntered()!""/>
+                         <#if promoCodesEntered?has_content>
+                            <#list promoCodesEntered as promoCodeEntered>
+                              <#if productPromoCode?has_content>
+                                <#list productPromoCode as promoCode>
+                                  <#assign promoCodeEnteredId = promoCodeEntered/>
+                                  <#assign promoCodeId = promoCode.productPromoCodeId!""/>
+                                  <#if promoCodeEnteredId?has_content>
+                                      <#if promoCodeId == promoCodeEnteredId>
+                                      <#assign promoCodeText = promoCode.productPromoCodeId?if_exists/>
+                                      <#assign toolTipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "OfferPriceHelperInfo", Static["org.ofbiz.base.util.UtilMisc"].toList(promoCodeText!""), locale)/>
+                                      </#if>
+                                  </#if>
+                                </#list>
+                              </#if>
+                             </#list>
+                         </#if>
+                      </#if>
+                    </#list>
+                </#if>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd></#if>">
                     <td class="idCol <#if !orderItem_has_next>lastRow</#if> firstCol"><a href="<@ofbizUrl>productDetail?productId=${itemProduct.productId?if_exists}</@ofbizUrl>">${itemProduct.internalName!itemProduct.productId!"N/A"}</a></td>
                     <td class="itemCol <#if !orderItem_has_next>lastRow</#if> firstCol">
@@ -40,6 +71,7 @@
                     <td class="statusCol <#if !orderItem_has_next>lastRow</#if>">${itemStatus.get("description",locale)}</td>
                     <td class="dollarCol <#if !orderItem_has_next>lastRow</#if>">${orderItem.quantity?string.number}</td>
                     <td class="dollarCol <#if !orderItem_has_next>lastRow</#if>"><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></td>
+                    <td class="dollarCol <#if !orderItem_has_next>lastRow</#if>"><#if (itemPromoAdjustment < 0)><a onMouseover="showTooltip(event,'${toolTipData}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></a><@ofbizCurrency amount=offerPrice isoCode=currencyUomId/></#if></td>
                     <td class="dollarCol <#if !orderItem_has_next>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemAdjustmentsTotal(orderItem) isoCode=currencyUomId/></td>
                     <td class="dollarCol total <#if !orderItem_has_next>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemSubTotal(orderItem,orderReadHelper.getAdjustments()) isoCode=currencyUomId/></td>
                 </tr>
@@ -53,7 +85,7 @@
             </#list>
          <tfoot>
             <tr>
-                <td colspan="8">
+                <td colspan="9">
                     <table class="osafe orderSummary">
                         <tr>
                           <td class="totalCaption"><label>${uiLabelMap.SubtotalCaption}</label></td>
@@ -110,7 +142,7 @@
         <#else>
             <tbody>
                 <tr>
-                    <td colspan="7" class="boxNumber">${uiLabelMap.NoDataAvailableInfo}</td>
+                    <td colspan="9" class="boxNumber">${uiLabelMap.NoDataAvailableInfo}</td>
                 </tr>
             </tbody>
         </#if>

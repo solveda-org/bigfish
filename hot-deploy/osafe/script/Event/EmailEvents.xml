@@ -129,4 +129,67 @@
         
     </simple-method>
 
+    
+    <simple-method method-name="sendUpdatePersonalInfoEmailNotification" short-description="Send the Notification email on personal information updation" login-required="false">
+
+        <!-- send email -->
+         <if-empty field="parameters.productStoreId">
+             <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                 <field field="request" type="javax.servlet.ServletRequest"/>
+             </call-class-method>
+             <set field="parameters.productStoreId" from-field="productStoreId"/>
+             <else>
+                 <set field="productStoreId" from-field="parameters.productStoreId"/>
+             </else>
+         </if-empty>
+         <set field="userLogin" from-field="parameters.userLogin"/>
+         <session-to-field field="userLogin"/>
+         <if-empty field="userLogin">
+             <session-to-field field="userLogin"/>
+         </if-empty>
+
+        <set field="storeEmailLookup.productStoreId" from-field="productStoreId"/>
+        <set field="storeEmailLookup.emailType" value="UPD_PRSNL_INF_CNFRM"/>
+        <entity-one entity-name="ProductStoreEmailSetting" value-field="storeEmail">
+            <field-map field-name="productStoreId" from-field="storeEmailLookup.productStoreId"/>
+            <field-map field-name="emailType" from-field="storeEmailLookup.emailType"/>
+        </entity-one>
+        <if-not-empty field="storeEmail.bodyScreenLocation">
+	        <set field="getPartyEmailMap.partyId" from-field="parameters.partyId"/>
+	        <call-service service-name="getPartyEmail" in-map-name="getPartyEmailMap">
+	            <result-to-field result-name="emailAddress" field="partyEmailAddress"/>
+	        </call-service>
+            <map-to-map map="parameters" to-map="bodyParameters"/>
+            <set field="bodyParameters.userLogin" from-field="userLogin"/>
+            <set field="emailParams.sendTo" from-field="partyEmailAddress"/>
+            <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+            <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
+
+            <if-not-empty field="emailParams.sendTo">
+                <call-service service-name="sendMailFromScreen" in-map-name="emailParams"/>
+                <else>
+                    <log level="warning" message="Tried to send Update Personal Info Notifcation with no to address; partyId is [${partyId}]"/>
+                </else>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="clearSendEmailError" short-description="clear email send error" login-required="false">
+        <!--   set _ERROR_MESSAGE_  _ERROR_MESSAGE_LIST_ errorMessage errorMessageList as null   -->
+        <call-bsh><![CDATA[
+           if(request.getAttribute("_ERROR_MESSAGE_") != null){
+              request.removeAttribute("_ERROR_MESSAGE_");
+           }
+           if(request.getAttribute("_ERROR_MESSAGE_LIST_") != null){
+              request.removeAttribute("_ERROR_MESSAGE_LIST_");
+           }
+           if(request.getAttribute("errorMessage") != null){
+              request.removeAttribute("errorMessage");
+           }
+           if(request.getAttribute("errorMessageList") != null){
+              request.removeAttribute("errorMessageList");
+           }
+           ]]></call-bsh>
+    </simple-method>
+
 </simple-methods>

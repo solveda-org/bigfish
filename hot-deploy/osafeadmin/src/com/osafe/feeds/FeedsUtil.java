@@ -139,7 +139,7 @@ public class FeedsUtil {
 	
 	public static String getFeedDirectory(String feedType) {
 		
-		String feedDirectory = System.getProperty("ofbiz.home") + "/hot-deploy/osafeadmin/data/feeds/";
+		String feedDirectory = System.getProperty("ofbiz.home") + "/runtime/tmp/download/";
 		
 		if(UtilValidate.isNotEmpty(feedType)) {
 			feedDirectory = feedDirectory + feedType + "/";

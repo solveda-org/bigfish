@@ -6,7 +6,7 @@
     <th class="dateCol">${uiLabelMap.DiscoDateLabel}</th>
     <#list resultList as variantProduct>
       <#assign variantProdDetail = variantProduct.getRelatedOneCache("AssocProduct")>
-        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists})/>
+        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"})/>
         <#if productFeatureAndAppls?exists && productFeatureAndAppls?has_content>
           <#list productFeatureAndAppls as productFeatureAndAppl>
             <#assign curProductFeatureType = productFeatureAndAppl.getRelatedOneCache("ProductFeatureType")>
@@ -26,7 +26,7 @@
         <td class="nameCol">${(variantProdDetail.internalName)?if_exists}</td>
         <td class="dateCol <#if !variantProdDetail_has_next?if_exists>lastRow</#if>">${(variantProdDetail.introductionDate?string(preferredDateFormat))!""}</td>
         <td class="dateCol <#if !variantProdDetail_has_next?if_exists>lastRow</#if>">${(variantProdDetail.salesDiscontinuationDate?string(preferredDateFormat))!""}</td>
-        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists})/>
+        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", {"productId" : (variantProduct.productIdTo)?if_exists, "productFeatureApplTypeId", "STANDARD_FEATURE"})/>
         <#if productFeatureAndAppls?exists && productFeatureAndAppls?has_content>
           <#list productFeatureAndAppls as productFeatureAndAppl>
             <td class="statusCol">${(productFeatureAndAppl.get("description",locale))?if_exists}</td>

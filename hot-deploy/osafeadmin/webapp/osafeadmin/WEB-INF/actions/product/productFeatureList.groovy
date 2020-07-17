@@ -30,7 +30,9 @@ if (UtilValidate.isNotEmpty(parameters.productId)) {
         productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", [productId : parameters.productId]);
         if (UtilValidate.isNotEmpty(productFeatureAndAppls)) {
             productFeatureTypeIds = EntityUtil.getFieldListFromEntityList(productFeatureAndAppls, "productFeatureTypeId", true);
-            context.resultList = delegator.findList("ProductFeatureType", EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.IN, productFeatureTypeIds), null, null, null, false);
+            productFeatureTypes = delegator.findList("ProductFeatureType", EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.IN, productFeatureTypeIds), null, null, null, false);
+            context.productFeatureTypes = productFeatureTypes;
+            context.resultList = productFeatureTypes;
         }
      }
 }

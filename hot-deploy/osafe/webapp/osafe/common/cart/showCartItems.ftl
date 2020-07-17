@@ -182,12 +182,53 @@
           <tr class=" discount_subtotal">
             <td  class="caption" <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >colspan="7"<#else>colspan="6"</#if>>
               <ul class="footContainer">
+                  <li>
+                    <div class="labelText">
+                      <label>${uiLabelMap.SubTotalLabel}</label>
+                    </div>
+                    <div class="labelValue">
+                      <span class="amount"><@ofbizCurrency amount=shoppingCart.getSubTotal() rounding=2 isoCode=currencyUom/></span>
+                    </div>
+                   </li>
+                   <#if (shoppingCart.getShipmentMethodTypeId()?has_content)>
+                     <#assign selectedStoreId = shoppingCart.getOrderAttribute("STORE_LOCATION")?if_exists />
+                     <#if !selectedStoreId?has_content && shoppingCart.getShipmentMethodTypeId()?has_content && shoppingCart.getCarrierPartyId()?has_content>
+                         <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shoppingCart.getCarrierPartyId()))?if_exists />
+                         <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shoppingCart.getShipmentMethodType(0).description />
+                     </#if>
+                   <li>
+                     <div class="labelText">
+                       <label>${uiLabelMap.CartShippingMethodLabel}</label>
+                     </div>
+                     <div class="labelValue">
+                       <span class="shippingMethod">${chosenShippingMethodDescription!}</span>
+                     </div>
+                   </li>
+                   <li>
+                      <div class="labelText">
+                        <label>${uiLabelMap.CartShippingAndHandlingLabel}</label>
+                      </div>
+                      <div class="labelValue">
+                        <span class="amount"><@ofbizCurrency amount=orderShippingTotal rounding=2 isoCode=currencyUom/></span>
+                      </div>
+                   </li>
+                  </#if>
+                  <#if userLogin?has_content && (!Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"") || (orderTaxTotal?has_content && (orderTaxTotal &gt; 0)))>
+                   <li>
+                        <div class="labelText">
+                            <label>${uiLabelMap.CartTaxLabel}</label>
+                        </div>
+                        <div class="labelValue">
+                            <span class="amount"><@ofbizCurrency amount=orderTaxTotal rounding=2 isoCode=currencyUom/></span>
+                        </div>
+                   </li>
+                  </#if>
                 <li>
                   <div class="labelText">
-                    <label>${uiLabelMap.SubTotalLabel}</label>
+                    <label>${uiLabelMap.CartTotalLabel}</label>
                   </div>
                   <div class="labelValue">
-                    <span class="amount"><@ofbizCurrency amount=shoppingCart.getSubTotal() rounding=2 isoCode=currencyUom/></span>
+                    <span class="amount"><@ofbizCurrency amount=orderGrandTotal rounding=2 isoCode=currencyUom/></span>
                   </div>
                 </li>
                 <#if shoppingCart.getAdjustments()?has_content>
@@ -217,7 +258,7 @@
                          </#if>
                       </#if>
                     </#if>
-                    <li>
+                  <li>
                       <div class="labelText">
                         <label><#if promoText?has_content>(<#if promoCodeText?has_content>${promoCodeText} </#if>${promoText})<#else>${adjustmentType.get("description",locale)?if_exists}</#if></label>
                       </div>
@@ -228,14 +269,14 @@
                   </#list>
                   <#-- show adjusted total if a promo is entered -->
                   <#if promoText?has_content>
-	                  <li>
-		                  <div class="labelText">
-		                    <div class="adjustedTotalLabel"><label>${uiLabelMap.AdjustedTotalLabel}</label></div>
-		                  </div>
-		                  <div class="labelValue">
-		                    <div class="adjustedTotalValue"><span class="amount"><@ofbizCurrency amount=shoppingCart.getGrandTotal() rounding=2 isoCode=currencyUom/></span></div>
-		                  </div>
-	                  </li>
+                     <li>
+                        <div class="labelText">
+                          <div class="adjustedTotalLabel"><label>${uiLabelMap.CartAdjustedTotalLabel}</label></div>
+                        </div>
+                        <div class="labelValue">
+                          <div class="adjustedTotalValue"><span class="amount"><@ofbizCurrency amount=shoppingCart.getGrandTotal() rounding=2 isoCode=currencyUom/></span></div>
+                        </div>
+                     </li>
                   </#if>
                 </#if>
               </ul>

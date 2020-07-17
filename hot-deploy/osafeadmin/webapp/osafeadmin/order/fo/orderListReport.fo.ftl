@@ -707,12 +707,13 @@ under the License.
             <fo:table>
             <fo:table-column column-width=".8in"/>
             <fo:table-column column-width=".72in"/>
-            <fo:table-column column-width="1.4in"/>
-            <fo:table-column column-width="1in"/>
+            <fo:table-column column-width="1.3in"/>
             <fo:table-column column-width=".8in"/>
-            <fo:table-column column-width=".8in"/>
-            <fo:table-column column-width=".98in"/>
-            <fo:table-column column-width=".98in"/>
+            <fo:table-column column-width=".7in"/>
+            <fo:table-column column-width=".68in"/>
+            <fo:table-column column-width=".68in"/>
+            <fo:table-column column-width=".9in"/>
+            <fo:table-column column-width=".9in"/>
             <fo:table-header font-size="8pt" font-weight="bold" background-color="#EEEEEE">
                 <fo:table-row >
                     <fo:table-cell >
@@ -732,6 +733,9 @@ under the License.
                     </fo:table-cell>
                     <fo:table-cell>
                         <fo:block >${uiLabelMap.UnitListLabel}</fo:block>
+                    </fo:table-cell>
+                    <fo:table-cell>
+                        <fo:block >${uiLabelMap.OfferPriceLabel}</fo:block>
                     </fo:table-cell>
                     <fo:table-cell>
                         <fo:block>${uiLabelMap.AdjustAmountLabel}</fo:block>
@@ -768,6 +772,8 @@ under the License.
                     <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(itemProduct,request)>
                     <#assign productName = productContentWrapper.get("PRODUCT_NAME")!itemProduct.productName!"">
                     <#assign product = orderItem.getRelatedOne("Product")?if_exists>
+                    <#assign itemPromoAdjustment = (orderReadHelper.getOrderItemAdjustmentsTotal(orderItem, true, false, false)/orderItem.quantity)/>
+                	<#assign offerPrice = orderItem.unitPrice + itemPromoAdjustment/>
                     <fo:table-row>
                         <fo:table-cell>
                             <fo:block>
@@ -811,6 +817,9 @@ under the License.
                         </fo:table-cell>
                         <fo:table-cell >
                             <fo:block><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell >
+                            <fo:block><@ofbizCurrency amount=offerPrice isoCode=currencyUomId/></fo:block>
                         </fo:table-cell>
                         <fo:table-cell >
                             <fo:block><@ofbizCurrency amount=itemAdjustment isoCode=currencyUomId/></fo:block>
@@ -1108,6 +1117,62 @@ under the License.
         </fo:table-body>
       </fo:table>
         <#--Order Notes End -->
+        
+        
+        <#-- Order Attributes Start-->
+          <fo:block space-after="0.2in"/>
+    
+    
+    <fo:table border-bottom-style="solid" border-top-style="solid" border-end-style="solid" border-start-style="solid">
+      <fo:table-body>
+        <fo:table-row>
+          <fo:table-cell>
+            <fo:table>
+              <fo:table-column column-width="3.735in"/>
+              <fo:table-column column-width="3.735in"/>
+              <fo:table-header font-size="8pt" font-weight="bold" background-color="#EEEEEE">
+                <fo:table-row >
+                  <fo:table-cell >
+                    <fo:block >${uiLabelMap.AttributeNameLabel}</fo:block>
+                  </fo:table-cell>
+                  <fo:table-cell >
+                    <fo:block >${uiLabelMap.AttributeValueLabel}</fo:block>
+                  </fo:table-cell>
+                </fo:table-row>
+              </fo:table-header>
+              <fo:table-body font-size="8pt">
+                  <#assign attributeList = delegator.findByAnd("OrderAttribute", {"orderId" : orderId!})/>
+                  <#if attributeList?exists && attributeList?has_content>
+                    <#list attributeList as attribute>
+                    	<#if attribute.attrName = "DATETIME_DOWNLOADED">
+				      		<#assign exportedDateTs = Static["java.sql.Timestamp"].valueOf(attribute.attrValue)/>
+				      		<#assign attributeValue = (Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(exportedDateTs, preferredDateTimeFormat)) />
+				        <#else>
+				      		<#assign attributeValue = attribute.attrValue!/>
+				        </#if>
+	                    <fo:table-row>
+	                      <fo:table-cell>
+	                        <fo:block>${attribute.attrName?if_exists}</fo:block>
+	                      </fo:table-cell>
+	                      <fo:table-cell>
+	                        <fo:block>${attributeValue?if_exists}</fo:block>
+	                      </fo:table-cell>
+	                    </fo:table-row>
+                    </#list>
+                  <#else>
+                    <fo:table-row>
+                      <fo:table-cell number-columns-spanned="2">
+                        <fo:block text-align="center">${uiLabelMap.NoDataAvailableInfo}</fo:block>
+                      </fo:table-cell>
+                    </fo:table-row>
+                  </#if>
+                </fo:table-body>
+              </fo:table>
+            </fo:table-cell>
+          </fo:table-row>
+        </fo:table-body>
+      </fo:table>
+        <#--Order Attributes End -->
                
                 
             <fo:block id="theEnd"/>  <#-- marks the end of the pages and used to identify page-number at the end -->

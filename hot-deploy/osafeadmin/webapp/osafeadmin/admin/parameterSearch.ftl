@@ -1,5 +1,8 @@
 <!-- start searchBox -->
   <div class="entryRow">
+    <div class="entryIcon">  
+        <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ParameterSearchHelperInfo!""}');" onMouseout="hideTooltip()"><span class="wildcardIcon"></span></a>
+    </div>
     <div class="entry">
       <label>${uiLabelMap.SearchForCaption}</label>
       <div class="entryInput">

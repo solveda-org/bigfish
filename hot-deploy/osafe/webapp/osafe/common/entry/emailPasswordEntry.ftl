@@ -53,11 +53,11 @@
         <@fieldErrors fieldName="CONFIRM_PASSWORD"/>
       </div>
 
-      <#assign partyAllowSolicit=parameters.CUSTOMER_EMAIL_ALLOW_SOL!partyDBAllowSolicit!""/>
-      <#if partyAllowSolicit?has_content && partyAllowSolicit == "N">
-        <#assign partyAllowSolicitChecked=""/>
-      <#else>
+      <#assign partyAllowSolicit=parameters.CUSTOMER_EMAIL_ALLOW_SOL!""/>
+      <#if partyAllowSolicit?has_content && partyAllowSolicit == "Y">
         <#assign partyAllowSolicitChecked="checked"/>
+      <#else>
+        <#assign partyAllowSolicitChecked=""/>
       </#if>
 
       <div class="entry">

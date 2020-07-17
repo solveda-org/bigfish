@@ -14,9 +14,12 @@ import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.party.content.PartyContentWrapper;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 
 plpItem = request.getAttribute("plpItem");
 plpItemId = request.getAttribute("plpItemId");
+autoUserLogin = request.getSession().getAttribute("autoUserLogin");
 if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
     productName = "";
     categoryId = "";
@@ -27,6 +30,7 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
     productImageAlt = "";
     productImageAltUrl= "";
     price = "";
+    listPrice = "";
     productId="";
     averageCustomerRating = "";
 
@@ -42,6 +46,8 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
     product = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
     priceMap = (dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "userLogin", userLogin)));
     context.priceMap = priceMap;
+    context.listPrice = priceMap.listPrice;
+    
     
    // Setting variables required in the Manufacturer Info section 
     if (UtilValidate.isNotEmpty(product)) 
@@ -117,7 +123,7 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
     productStoreId = productStore.get("productStoreId");
     reviewByAnd = UtilMisc.toMap("statusId", "PRR_APPROVED", "productStoreId", productStoreId,"productId", productId);
     reviews = delegator.findByAnd("ProductReview", reviewByAnd);
-    context.put("reviewSize",reviews.size());
+    context.put("reviewPLPSize",reviews.size());
     
     context.productName = productName;
     context.productId = productId;
@@ -141,12 +147,52 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
     
     if(UtilValidate.isNotEmpty((context.product).isVirtual) && ((context.product).isVirtual).toUpperCase()== "Y")
     {
+    	productVariantPriceMap = FastMap.newInstance();
+    	descpFeatureGroupDescMap = FastMap.newInstance();
         productAssoc = delegator.findByAnd("ProductAssoc",UtilMisc.toMap("productId" ,context.productId,'productAssocTypeId','PRODUCT_VARIANT'));
+        if (productAssoc) {
+        	variantProductIds = EntityUtil.getFieldListFromEntityList(productAssoc, "productIdTo", true);
+
+        	PLP_FACET_GROUP_VARIANT_MATCH = context.PLP_FACET_GROUP_VARIANT_MATCH;
+            if(UtilValidate.isNotEmpty(PLP_FACET_GROUP_VARIANT_MATCH)) {
+                  List productFeatureAndApplCond = [];
+                  productFeatureAndApplCond.add(EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.EQUALS, PLP_FACET_GROUP_VARIANT_MATCH));
+                  productFeatureAndApplCond.add(EntityCondition.makeCondition("productFeatureApplTypeId", EntityOperator.EQUALS, "DISTINGUISHING_FEAT"));
+                  productFeatureAndApplCond.add(EntityCondition.makeCondition("productId", EntityOperator.IN, variantProductIds));
+                  descriptiveProductFeatureAndAppls = EntityUtil.filterByDate(delegator.findList("ProductFeatureAndAppl", EntityCondition.makeCondition(productFeatureAndApplCond, EntityOperator.AND), null, null, null, false));
+                  if(UtilValidate.isNotEmpty(descriptiveProductFeatureAndAppls)) {
+        		      descriptiveProductFeatureAndAppls.each { descriptiveProductFeatureAndAppl ->
+        		          descpFeatureGroupDescMap.put(descriptiveProductFeatureAndAppl.productId, descriptiveProductFeatureAndAppl.description);
+        		      }
+        	      }
+            }
+            orderBy = ["-fromDate"];
+        	variantProductPrices = delegator.findList("ProductPrice", EntityCondition.makeCondition("productId", EntityOperator.IN, variantProductIds), null, orderBy, null, false);
+        	variantProductPrices.each { variantProductPrice ->
+                if (variantProductPrice.productPriceTypeId == "DEFAULT_PRICE") {
+                	basePrice = variantProductPrice.price;
+                    varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
+                    if (UtilValidate.isNotEmpty(varPriceMap)) {
+                        varPriceMap.put("basePrice", basePrice)
+                    } else {
+                    	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("basePrice", basePrice))
+                    }
+                } else if(variantProductPrice.productPriceTypeId == "LIST_PRICE") {
+                	listPrice = variantProductPrice.price;
+                    varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
+                    if (UtilValidate.isNotEmpty(varPriceMap)) {
+                        varPriceMap.put("listPrice", listPrice)
+                    } else {
+                    	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("listPrice", listPrice))
+                    }
+                }
+        	}
+        }
+
         productAssoc.each { pAssoc ->
           productFeatureAndAppl = EntityUtil.filterByDate(delegator.findByAndCache("ProductFeatureAndAppl",UtilMisc.toMap("productId" ,pAssoc.productIdTo,'productFeatureApplTypeId','STANDARD_FEATURE'),UtilMisc.toList("sequenceNum")), true);
           productIdTo = pAssoc.productIdTo;
           productTo = pAssoc.getRelatedOne("AssocProduct");
-         
           productFeatureAndAppl.each { pFeatureAndAppl ->
              productFeatureDesc = "";
              if(UtilValidate.isNotEmpty(pFeatureAndAppl.description))
@@ -154,8 +200,46 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
                  productFeatureDesc = pFeatureAndAppl.description;
              }
              productVariantFeatureMap = UtilMisc.toMap("productVariantId", productIdTo,"productVariant", productTo, "productFeatureId", pFeatureAndAppl.productFeatureId,"productFeatureDesc", productFeatureDesc,"productFeatureTypeId", pFeatureAndAppl.productFeatureTypeId);
+
+             variantPriceMap = productVariantPriceMap.get(productIdTo);
+             
+             if (UtilValidate.isNotEmpty(variantPriceMap))
+             {
+				if (UtilValidate.isNotEmpty(variantPriceMap.get("basePrice")))
+				{
+					productVariantFeatureMap.put("basePrice", variantPriceMap.get("basePrice"));
+				}
+             }
+             else 
+             {
+                 productVariantFeatureMap.put("basePrice", priceMap.price);
+             }
+             
+             if (UtilValidate.isNotEmpty(variantPriceMap))
+             {
+				if (UtilValidate.isNotEmpty(variantPriceMap.get("listPrice")))
+				{
+                    productVariantFeatureMap.put("listPrice", variantPriceMap.get("listPrice"));
+				}
+             }
+             else 
+             {
+                 productVariantFeatureMap.put("listPrice", priceMap.listPrice);
+             }
+
+             descpFeatureGroupDesc = descpFeatureGroupDescMap.get(productIdTo);
+             if (UtilValidate.isNotEmpty(descpFeatureGroupDesc))
+             {
+                 productVariantFeatureMap.put("descriptiveFeatureGroupDesc", descpFeatureGroupDesc);
+             }
+             else 
+             {
+                 productVariantFeatureMap.put("descriptiveFeatureGroupDesc", "");
+             }
+
              productVariantFeatureList.add(productVariantFeatureMap);
           }
+          
         }
        context.productVariantFeatureList = productVariantFeatureList;
        
@@ -252,6 +336,18 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
         if(UtilValidate.isNotEmpty(productVariantSelectSmallAltURL))
         {
             productImageAltUrl = productVariantSelectSmallAltURL;
+        }
+        
+        if(UtilValidate.isNotEmpty(productVariantFeatureList))
+        {
+            for(Map productVariantFeature : productVariantFeatureList)
+            {
+               if(productVariantFeature.productVariantId == productFeatureSelectVariantId)
+               {
+                   context.price = productVariantFeature.basePrice;
+                   context.listPrice = productVariantFeature.listPrice; 
+               }
+            }
         }
         context.productImageAltUrl = productImageAltUrl;
         context.productImageUrl =productImageUrl;

@@ -27,6 +27,6 @@ if (UtilValidate.isNotEmpty(parameters.productId) && UtilValidate.isNotEmpty(par
             context.productDetailHeading = productDetailHeading;
             context.productContentWrapper = productContentWrapper;
         }
-        context.productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", [productId : parameters.productId, productFeatureTypeId : parameters.productFeatureTypeId], UtilMisc.toList("sequenceNum"));
+        context.productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", [productId : parameters.productId, productFeatureTypeId : parameters.productFeatureTypeId], UtilMisc.toList("sequenceNum","productFeatureId"));
      }
 }

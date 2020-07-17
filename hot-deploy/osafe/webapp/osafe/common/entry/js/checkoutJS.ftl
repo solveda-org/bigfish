@@ -98,9 +98,11 @@
 
         // update shipping options base on shipping postal code
         if (jQuery('#SHIPPING_POSTAL_CODE').length) {
-          updateShippingOption();
+          updateShippingOption('Y');
+          calcTax();
           jQuery('#SHIPPING_POSTAL_CODE').change(function () {
-            updateShippingOption()
+            updateShippingOption('N');
+            calcTax();
           });
         }
 
@@ -111,7 +113,6 @@
 
         // activate pick up store event listener
         pickupStoreEventListener();
-
     });
 
     function pickupStoreEventListener() {
@@ -119,7 +120,7 @@
         jQuery('.pickupStore').submit(function(event) {
             event.preventDefault();
             jQuery.post(jQuery(this).attr('action'), jQuery(this).serialize(), function(data) {
-                updateShippingOption();
+                updateShippingOption('N');
                 jQuery(displayDialogId).dialog('close');
                 jQuery('.shippingOptionsStorePickup').hide();
                 <#assign storeCC = Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC!)/>
@@ -156,7 +157,7 @@
     }
 
     // update shipping option base on postal code 
-    function updateShippingOption() {
+    function updateShippingOption(isOnLoad) {
         if (jQuery('#deliveryOptionBox').length) {
             if (jQuery('#SHIPPING_POSTAL_CODE').length) {
                 if (jQuery('#SHIPPING_POSTAL_CODE').val() == '') {
@@ -167,9 +168,9 @@
                 jQuery.get('<@ofbizUrl>${updateShippingOptionRequest?if_exists}?postalCode='+postalcode+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
                     jQuery('#deliveryOptionBox').replaceWith(data);
                     if(jQuery('input.shipping_method:checked').val() != null) {
-                        setShippingMethod(jQuery('input.shipping_method:checked').val());
+                        setShippingMethod(jQuery('input.shipping_method:checked').val(), isOnLoad);
                     } else {
-                        setShippingMethod(jQuery('input.shipping_method').val());
+                        setShippingMethod(jQuery('input.shipping_method').val(), isOnLoad);
                     }
                 });
             } else {
@@ -178,19 +179,47 @@
             }
         }
     }
+    // calculate tax 
+    function calcTax() {
+        // get shipping address values
+        var address1 = (jQuery('#SHIPPING_ADDRESS1').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_ADDRESS1').val());
+        var address2 = (jQuery('#SHIPPING_ADDRESS2').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_ADDRESS2').val());
+        var address3 = (jQuery('#SHIPPING_ADDRESS3').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_ADDRESS3').val());
+        var city = (jQuery('#SHIPPING_CITY').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_CITY').val());
+        var postalCode = (jQuery('#SHIPPING_POSTAL_CODE').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_POSTAL_CODE').val());
+        var stateProvinceGeoId = (jQuery('#SHIPPING_STATE').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_STATE').val());
+        var countryGeoId = (jQuery('#SHIPPING_COUNTRY').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_COUNTRY').val());
 
-    // update the order item section
-    function setShippingMethod(selectedShippingOption) {
-        if (jQuery('.onePageCheckoutOrderItemsSeq').length) {
-            jQuery('.onePageCheckoutOrderItemsSeq').load('<@ofbizUrl>${setShippingOptionRequest?if_exists}?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+        // make ajax request parameters
+        var reqParam = '?address1='+address1+'&address2='+address2+'&address3='+address3+'&city='+city;
+        reqParam = reqParam+'&postalCode='+postalCode+'&stateProvinceGeoId='+stateProvinceGeoId+'&countryGeoId='+countryGeoId;
+
+        //call ajax and update order item section
+        if (jQuery('#SHIPPING_POSTAL_CODE').length) {
+            if (jQuery('.onePageCheckoutOrderItemsSeq').length) {
+                jQuery('.onePageCheckoutOrderItemsSeq').load('<@ofbizUrl>${calcTaxRequest?if_exists}'+reqParam+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+            }
         }
     }
 
+    // update the order item section
+    function setShippingMethod(selectedShippingOption, isOnLoad) {
+        if (jQuery('.onePageCheckoutOrderItemsSeq').length) {
+            jQuery('.onePageCheckoutOrderItemsSeq').load('<@ofbizUrl>${setShippingOptionRequest?if_exists}?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+        }
+        if((isOnLoad != null) && (isOnLoad =='N')) {
+            //call ajax and update promotion info section
+            if (jQuery('.onePageCheckoutPromoCodeSeq').length) {
+                jQuery('.onePageCheckoutPromoCodeSeq').load('<@ofbizUrl>${reloadPromoCodeRequest?if_exists}?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+            }
+        }
+    }
+    
     // remove store pick up
     function removeStorePickup(paymentMethodType) {
         jQuery('#paymentMethodTypeId').val(paymentMethodType);
         jQuery.post('<@ofbizUrl>${removeStorePickupRequest?if_exists}</@ofbizUrl>', {isGuestCheckout: "Y"}, function(data) {
-            updateShippingOption();
+            updateShippingOption('N');
             jQuery('.shippingOptionsStorePickup').show();
             jQuery('.creditCardEntry').show();
             jQuery('.paymentOptions').hide();

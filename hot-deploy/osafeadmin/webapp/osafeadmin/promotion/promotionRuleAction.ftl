@@ -64,8 +64,8 @@
       </div>
 
       <div class="AMOUNTDIV">
-        <div>
-          <label class="smallLabel">
+        <div class="infoCaption">
+          <label>
             <span class="PRICE">${uiLabelMap.PromotionPriceCaption}</span>
             <span class="DISC">${uiLabelMap.PromotionDiscCaption}</span>
             <span class="DISCPER">${uiLabelMap.PromotionDiscPercentCaption}</span>
@@ -79,8 +79,8 @@
       </div>
 
       <div class="ITEMDIV">
-        <div>
-          <label class="smallLabel">
+        <div class="infoCaption">
+          <label>
             <span>${uiLabelMap.PromotionItemIdCaption}</span>
           </label>
         </div>

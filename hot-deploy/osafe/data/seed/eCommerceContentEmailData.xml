@@ -12,20 +12,24 @@
 <Content contentId="E_ORDER_CONFIRM" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_CHANGE" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_MAILING_LIST" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_SCHED_JOB_ALERT" statusId="CTNT_PUBLISHED"/>
 <!-- COMMON CLIENT EMAIL HEADER -->
 <ElectronicText dataResourceId="E_COMMON_HEADER">
  <textData>
     <![CDATA[
-    
 <#if baseEcommerceUrl?exists><#assign urlPrefix = baseEcommerceUrl/></#if>
 <#if EMAIL_CLNT_LOGO?exists && EMAIL_CLNT_LOGO?has_content>
 <a title="${EMAIL_CLNT_NAME!""}" href="<@ofbizUrl fullPath="true">main</@ofbizUrl>">
 <img alt="${EMAIL_CLNT_NAME!""}" src="${baseUrl}/${EMAIL_CLNT_LOGO!""}">
 </a>
 </#if>
+<#if contentEmailBodyId?exists && contentEmailBodyId?has_content>
+       		<#if contentEmailBodyId !="E_SCHED_JOB_ALERT">
 <div class="emailTitle" style="font-family:${EMAIL_FONT_FAMILY!""};">
                 <h1>${EMAIL_CLNT_NAME!""}: ${EMAIL_TITLE!""}</h1>
 </div>
+      </#if>
+</#if>
             ]]>
  </textData>
 </ElectronicText>
@@ -113,6 +117,8 @@
 <ElectronicText dataResourceId="E_COMMON_FOOTER">
   <textData>
             <![CDATA[
+<#if contentEmailBodyId?exists && contentEmailBodyId?has_content>
+       		<#if contentEmailBodyId !="E_SCHED_JOB_ALERT">        
 <div class="thankYouContent" style="font-family:${EMAIL_FONT_FAMILY};">
 <p>Thank you,</p>
 <p>The ${EMAIL_CLNT_NAME!""} Team<br><a href="mailto:${EMAIL_CLNT_REPLY_TO!""}?subject=${EMAIL_CLNT_NAME!""} Customer Service Team">${EMAIL_CLNT_REPLY_TO!""}</a>
@@ -120,6 +126,8 @@
 <p>Visit us at: <a href="${EMAIL_CLNT_URL_LINK!""}">${EMAIL_CLNT_URL_DISP!""}</a>
 </p>
 </div>
+    </#if>
+</#if>
 ]]>
   </textData>
  </ElectronicText>
@@ -933,7 +941,7 @@ ${userLogin.userLoginId}
    </textData>
 </ElectronicText>
 
-<!-- COMMON CLIENT EMAIL HEADER -->
+<!-- MAILING LIST EMAIL -->
 <ElectronicText dataResourceId="E_MAILING_LIST">
  <textData>
     <![CDATA[
@@ -980,6 +988,16 @@ ${userLogin.userLoginId}
                     </td>
                 </tr>
             </table>
+            ]]>
+ </textData>
+</ElectronicText>
+
+<!-- SCHEDULED JOB NOTIFICATION EMAIL -->
+<ElectronicText dataResourceId="E_SCHED_JOB_ALERT">
+ <textData>
+    <![CDATA[<p>${uiLabelMap.JobNameLabel}${SCHED_JOB_NAME!}</p>
+<p>${uiLabelMap.JobStatusLabel} ${SCHED_JOB_STATUS!}</p>
+<p>${uiLabelMap.JobInfoLabel} ${SCHED_JOB_INFO!}</p>
             ]]>
  </textData>
 </ElectronicText>

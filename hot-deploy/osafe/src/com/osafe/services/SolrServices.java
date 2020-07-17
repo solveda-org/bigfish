@@ -117,6 +117,7 @@ public class SolrServices {
             StringUtil.StringWrapper imageUrl = null;
             String categoryDescription = null;
             Double totalQuantityOrdered = 0.00;
+            BigDecimal averageProductRating = BigDecimal.ZERO;
             Long totalTimesViewed = 0L;
             
             String productDocumentId = null;
@@ -326,12 +327,16 @@ public class SolrServices {
                                     results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "currencyUomId", currencyUomId));
                                     productDocument.setPrice((BigDecimal) results.get("price"));
 
+                                    GenericValue ProductCalculatedInfo = delegator.findOne("ProductCalculatedInfo", UtilMisc.toMap("productId", productId), false);
                                     // Product Ratings
-                                    BigDecimal averageProductRating = ProductWorker.getAverageProductRating(delegator, productId, productStoreId);
+                                    if(UtilValidate.isNotEmpty(ProductCalculatedInfo) && UtilValidate.isNotEmpty(ProductCalculatedInfo.getBigDecimal("averageCustomerRating"))){
+                                        averageProductRating = ProductCalculatedInfo.getBigDecimal("averageCustomerRating");
+                                    } else {
+                                        averageProductRating = BigDecimal.ZERO;
+                                    }
                                     productDocument.setCustomerRating(averageProductRating);
 
                                     // Product Quantity Ordered
-                                   GenericValue ProductCalculatedInfo = delegator.findOne("ProductCalculatedInfo", UtilMisc.toMap("productId", productId), false);
                                    if(UtilValidate.isNotEmpty(ProductCalculatedInfo) && ProductCalculatedInfo.getDouble("totalQuantityOrdered")!= null){
                                       totalQuantityOrdered = ProductCalculatedInfo.getDouble("totalQuantityOrdered");
                                     }
@@ -456,7 +461,7 @@ public class SolrServices {
                 cbw.close();
                 writer.flush();
 
-                String solrServer = UtilProperties.getPropertyValue("osafe.properties", "solr-server");
+                String solrServer = UtilProperties.getPropertyValue("osafe.properties", "solr-index-server");
 
                 Debug.log("solrServer=" + solrServer, module);
 
@@ -736,4 +741,27 @@ public class SolrServices {
             }
         }
     }
+    
+    //<!-- REMOVE THE TEST JOB -->
+    public static Map testJob(DispatchContext dctx, Map context){
+    	Map<String, Object> resp = null;
+    	Map<String, Object> results = null;
+    	String testValue = "success";
+    	//results.put("test", "testing");
+    	if(UtilValidate.isNotEmpty(testValue))
+    	{
+    		if(testValue.equals("error")){
+    			resp= ServiceUtil.returnError("Your testJob service threw this error.");
+    		}
+    		else if(testValue.equals("fail")){
+    			resp=  ServiceUtil.returnFailure("Your testJob has failed");
+    		}
+    		else if(testValue.equals("success")){
+    			resp=  ServiceUtil.returnSuccess("Your testJob ran successfully.");
+    		}
+    		
+    	}
+    	return resp;
+    }
+    
 }

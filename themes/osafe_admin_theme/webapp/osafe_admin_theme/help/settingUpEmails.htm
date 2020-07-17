@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/helpHowDoI.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>BigFish Admin Help</title>
+<link rel="shortcut icon" href="bigfishfavicon.gif" />
+<!-- InstanceEndEditable -->
+				<link rel="stylesheet" href="helpScreen.css" type="text/css" media="screen" />
+				<link rel="stylesheet" href="helpPrint.css" type="text/css" media="print" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="collapse.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+$("html").addClass("js");
+$.fn.accordion.defaults.container = false; 
+$(function() {
+  $("#acc3").accordion({initShow : "#current"});
+  $("#acc4").accordion({initShow : "#current"});
+  $("html").removeClass("js");
+});
+//--><!]]>
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+
+<body>
+<a name="top" id="top"></a>
+<!-- InstanceBeginEditable name="helpHeader" -->
+<div id="helpHeader"><!-- #BeginLibraryItem "/Library/helpHeaderContent.lbi" --><div id="helpNavigation">
+	<ul>
+		<li><a href="#" onclick="history.go(-1);return false;"><img src="back.png" width="18" height="18" alt="Go Back"></a></li>
+		<li><a class="homeHelpButton" href="index.htm"><img src="home.png" width="18" height="18" alt="Help Home"></a></li>
+		<li><a href="#" onclick="history.go(1);return false;"><img src="forward.png" width="18" height="18" alt="Advance"></a></li>
+	</ul>
+</div>
+
+<a class="contact" href="http://bigfish.salmonllc.com/bfContactUs.html" target="_blank">Contact BigFish</a>
+<p class="logo">BigFish Online Help</p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+
+	<div id="helpWrapper">
+    
+<!-- InstanceBeginEditable name="helpContent" -->
+  <div id="contentHelp">
+
+	<h1>Setting Up Email</h1>
+	<h2>Client-deployment.properties file</h2>
+                <ul class="helpList">
+                  <li>The client.properties file contains many of the high-level configuration options that the underlying platform OFBiz requires</li>
+                  <li>When making changes to this file OFBiz will need  to be restarted for the changes to take effect</li>
+                  <li>For emails, in the “General Properties” section, there are several properties that need to be considered:</li>
+				</ul>
+                
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Property</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>defaultFromEmailAddress</td>
+          <td>General default &ldquo;from email address&rdquo; for all outgoing  emails. This will be overridden for specific emails by using the Admin -&gt;  Email Configuration. It is recommended that the specific email configurations  are used.</td>
+        </tr>
+        <tr>
+          <td>mail.notifications.enabled</td>
+          <td>If set to &ldquo;N&rdquo;, then emails will NOT be sent, all  emails will be logged as an OFBiz &ldquo;communication event&rdquo;. If set to &ldquo;Y&rdquo; then  emails will be sent. </td>
+        </tr>
+        <tr>
+          <td>mail.smtp.relay.host</td>
+          <td>The default email server to be used. For example,  mail.acmecorp.com. </td>
+        </tr>
+        <tr>
+          <td>mail.smtp.auth.user		</td>
+          <td>If required, the user name needed for the SMTP server.</td>
+        </tr>
+        <tr>
+          <td>mail.smtp.auth.password</td>
+          <td>If required, the password needed for the SMTP server.</td>
+        </tr>
+        <tr>
+          <td>mail.notifications.redirectTo</td>
+          <td>For initial testing purposes. This will override ALL emails sent via BigFish and send them to this address. </td>
+        </tr>
+      </tbody>
+    </table>
+    
+	<ul class="helpList">
+		<li>The client.properties file contains many of the high-level configuration options that the underlying platform OFBiz requires
+        	<ul>
+            	<li>The client-deployment.properties files is a BigFish configuration file that consolidates the various OFBiz properties.</li>
+                <li>To build / admin-module / restart apache</li>
+			</ul>
+		</li>
+	</ul>
+    <a class="learnMore" href="helpPageNeeded.htm">Learn More About Client-deployment Properties</a>
+    
+ 
+    <h2>Email Configuration</h2>
+			<span class="access">Admin <img src="linkPathArrow.png" width="16" height="16" alt="linkPath" />Email Configuration</span>
+	<ul class="helpList">
+		<li>The primary purpose of this function is to control the following identifiers in the sent emails:
+        	<ul>
+            	<li><strong>From:</strong> for each email this determines which email is used as the “from address.”</li>
+                <li><strong>CC: </strong>for each email, this determines who should be “copied” on the email. Typically this would be a member of the customer service department for control purposes.</li>
+              <li><strong>BCC:</strong> similar to the “cc” option, a “blind copy” of the email.</li>
+			</ul>
+		</li>
+	</ul>
+    <a class="learnMore" href="emailConfigListHelp.htm">Learn More About Email Configuration</a>
+
+    <h2>Email Templates</h2>
+			<span class="access">Admin <img src="linkPathArrow.png" width="16" height="16" alt="linkPath" />Email Templates</span>
+            	<ul class="helpList">
+                <li>This function allows for the specific content of each email to be maintained</li>
+                <li>The content can be quite complex and clients should proceed with caution when modifying</li>	
+				<li>For the latest content:
+        			<ul>
+                        <li>Go to bigfish.salmonllc.com</li>
+                        <li>Click on “Demo”</li>
+               		  <li>Login to the Fashion House Admin Module</li>
+                        <li>Click Admin -&gt; Email Templates</li>
+                        <li>This content can be copied from the Fashion House Demo instance to your instance</li>
+					</ul>
+				</li>
+				</ul>
+                
+    <a class="learnMore" href="emailSpotListHelp.htm">Learn More About Email Templates</a>
+
+<h2>System Parameters</h2>
+                <ul>
+                <li>There are many BigFish System Parameters to consider when initially setting up emails:</li>
+                <li>To view all relevant parameters:
+        			<ul>
+                        <li>Go to the Admin -&gt; System Parameters function</li>
+                        <li>Enter “email” in the entry box and click “Search”</li>
+                		<li>Review all available parameters and configure accordingly</li>
+					</ul>
+				</li>
+				</ul>
+                
+    <a class="learnMore" href="parameterListHelp.htm">Learn More About System Parameters</a>
+    
+    <h2>Scheduled Jobs</h2>
+                <ul>
+                <li>There are 2 specific Scheduled Jobs that can be maintained via the Admin -&gt; Scheduled Jobs function:
+       			  <ul>
+                        <li>Abandoned Cart Email:
+                        	<ul>
+                        		<li>a job that will identify all “abandoned carts” and send an email to the registered user.</li>
+                				<li>Two system parameters should be considered: EMAIL_ABANDON_HRS and EMAIL_ABANDON_NUM</li>
+                                <li>The email template is E_ABANDON_CART</li>
+                                <li>The email configuration is PRDS_ABD_CART</li>
+                            </ul>
+						</li>
+                        <li>Review Email
+                        	<ul>
+                            	<li>a job that will identify all completed purchases and send an email encouraging the customer to return to the site and post a product review</li>
+                                <li>The following system parameters should be considered: EMAIL_REVIEW_SHP_DYS, REVIEW_ACTIVE_FLAG, REVIEW_AUTO_APPROVE and REVIEW_SEND_EMAIL</li>
+                                <li>The email template is E_SHIP_REVIEW</li>
+                                <li>The email configuration is  PRDS_SHIP_REVIEW</li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+    <a class="learnMore" href="scheduledJobHelp.htm">Learn More About Scheduled Jobs</a>
+<a class="backTop" href="#top">Back to Top</a>
+
+</div>
+  
+
+<!-- InstanceEndEditable -->    
+    </div>
+
+
+	<!-- InstanceBeginEditable name="helpFooter" -->
+	<div id="helpFooter"><!-- #BeginLibraryItem "/Library/helpFooterContent.lbi" --><p>Built by <a target="_blank" href="http://www.salmonllc.com">Salmon LLC</a></p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

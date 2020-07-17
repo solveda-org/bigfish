@@ -1,0 +1,281 @@
+//********************************************************************************************
+//SQL UPDATES
+//********************************************************************************************
+09/06/12 issue#26821 
+update X_PRODUCT_STORE_PARM set DESCRIPTION='This defines how dates are displayed within both the eCommerce and Admin modules. CASE SENSITIVE. dd=Day, MM=Month yy=Year hh=Hour mm=Minute ss=Second.' where PARM_KEY='FORMAT_DATE';
+update X_PRODUCT_STORE_PARM set DESCRIPTION='This defines how dates with time are displayed within both the eCommerce and Admin modules. CASE SENSITIVE. dd=Day, MM=Month yy=Year hh=Hour mm=Minute ss=Second.' where PARM_KEY='FORMAT_DATE_TIME';
+09/06/12 issue#26834
+DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_DOLLAR_THRESHOLD';
+09/11/12 issue#26902
+update X_PRODUCT_STORE_PARM set PARM_VALUE="https://maps.googleapis.com/maps/api/geocode/xml?sensor=false" where PARM_KEY="GMAP_GEOPT_API_URL";
+update X_PRODUCT_STORE_PARM set PARM_VALUE="https://maps.google.com/maps/api/js?sensor=false&amp;key=" where PARM_KEY="GMAP_JS_API_URL";
+09/11/12 issue#26844
+DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='ADM_BF_SERVICES_AVAIL_FOR_SCHED';
+--@PRODUCT_STORE_ID@ replace this variable with product store id
+INSERT INTO PRODUCT_STORE_EMAIL_SETTING (product_store_id, email_type, body_screen_location, from_address, bcc_address, subject)
+VALUES ("@PRODUCT_STORE_ID@", "PRDS_SCHED_JOB_ALERT", "component://osafe/widget/EmailScreens.xml#sendScheduledJobNotification", "bigfishtest@salmonllc.com", "bigfish@salmonllc.com", "${EMAIL_CLNT_NAME}: Scheduled Job ${SCHEDULED_JOB_NAME} has ${SCHEDULED_JOB_STATUS}");
+09/13/12 issue#26978
+update X_PRODUCT_STORE_PARM set DESCRIPTION='The time in hours to wait before sending the Abandoned Cart email. Set to 0 to disable the Abandoned Cart email.' where PARM_KEY='EMAIL_ABANDON_HRS';
+update X_PRODUCT_STORE_PARM set DESCRIPTION='The number of times to send the Abandoned Cart email, reset if the customer purchases. Set to 0 to disable the Abandoned Cart email.' where PARM_KEY='EMAIL_ABANDON_NUM';
+
+//********************************************************************************************
+//BIGFISH PARAMETERS UPDATES
+//FILE: bigFishParameters.xml
+//********************************************************************************************
+
+//Add
+08/31/12 issue#26701
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_PRODUCT_URL_DIR" description="Client to Bigfish Incoming Product File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_ORDER_STATUS_URL_DIR" description="Client to Bigfish Incoming Order Status File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_RATING_URL_DIR" description="Client to Bigfish Incoming Rating File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_STORE_URL_DIR" description="Client to Bigfish Incoming Store File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_SUCCESS_SUB_DIR" description="Sub directory reference that indicates where Incoming files should be moved after successful processing." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_ERROR_SUB_DIR" description="Sub directory reference that indicates where Incoming files should be moved if errors are found during processing." parmCategory="FEEDS"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CUSTOMER_URL_DIR" description="Bigfish to Client Outgoing Customer File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_ORDER_URL_DIR" description="Bigfish to Client Outgoing Order File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CONTACT_US_URL_DIR" description="Bigfish to Client Outgoing Contact-Us File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_REQUEST_CATALOG_URL_DIR" description="Bigfish to Client Outgoing Request-Catalog File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CUSTOMER_PREFIX" description="Bigfish to Client Outgoing Customer File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_ORDER_PREFIX" description="Bigfish to Client Outgoing Order File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CONTACT_US_PREFIX" description="Bigfish to Client Outgoing Contact-Us File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_REQUEST_CATALOG_PREFIX" description="Bigfish to Client Outgoing Request-Catalog File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
+
+09/10/2012 issue#26889
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_MONEY_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PRODUCT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_PCT_THRESHOLD" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PRODUCT"/>
+
+09/11/12 issue#26844
+<Enumeration enumId="PRDS_SCHED_JOB_ALERT" enumTypeId="PRDS_EMAIL" description="Scheduled Job Notification" enumCode="SCHED_JOB_ALERT"  sequenceId="31"/>
+<DataResource dataResourceId="E_SCHED_JOB_ALERT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<ElectronicText dataResourceId="E_SCHED_JOB_ALERT"/>
+<Content contentId="E_SCHED_JOB_ALERT" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Scheduled Job email. This email sent to both the customer and the client." contentName="Scheduled Job Email" dataResourceId="E_SCHED_JOB_ALERT"/>
+<ContentPurpose contentId="E_SCHED_JOB_ALERT" contentPurposeTypeId="SECTION"/>
+<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_SCHED_JOB_ALERT" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#sendScheduledJobNotification" xslfoAttachScreenLocation="" fromAddress="bigfishtest@salmonllc.com" ccAddress="" bccAddress="bigfish@salmonllc.com" subject="${EMAIL_CLNT_NAME}: Scheduled Job ${SCHEDULED_JOB_NAME} has ${SCHEDULED_JOB_STATUS}" contentType="" />
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHED_JOB_ALERT " contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_SCHED_JOB_ALERT" description="List of recipients, comma separated, who will receive a Scheduled Job alert email." parmCategory="EMAIL"/>
+
+//Remove
+09/10/2012 issue#26889
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_MONEY_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_PCT_THRESHOLD" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PDP"/>
+   
+//********************************************************************************************
+//LABEL UPDATES
+//FILE: OSafeUiLabels.xml
+//********************************************************************************************
+
+//Add
+  Issue 26853 09/13/2012
+  <property key="CartShippingMethodLabel">
+        <value xml:lang="en">Shipping Method:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Shipping Method:</description>
+    </property>
+    <property key="CartShippingAndHandlingLabel">
+        <value xml:lang="en">Estimated Shipping:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Shipping And Handling</description>
+    </property>
+    <property key="CartAdjustedTotalLabel">
+        <value xml:lang="en">Adjusted Total:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Adjusted Total</description>
+    </property>
+    <property key="CartTaxLabel">
+        <value xml:lang="en">Estimated Tax:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Estimated Tax</description>
+    </property>
+    <property key="CartTotalLabel">
+        <value xml:lang="en">Total:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Total </description>
+    </property> 
+    
+09/11/12 issue#26844
+	<property key="ScheduledJobEmailTitle">
+        <value xml:lang="en">Scheduled Job Notification</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>ScheduledJobEmailTitle</description>
+	</property>
+	<property key="JobNameLabel">
+        <value xml:lang="en">Job Name: </value>
+        <category>SCHEDULED_JOB</category>
+        <description>JobNameLabel</description>
+    </property>
+	<property key="JobStatusLabel">
+        <value xml:lang="en">Job Status: </value>
+        <category>SCHEDULED_JOB</category>
+        <description>JobStatusLabel</description>
+    </property>
+	<property key="JobInfoLabel">
+        <value xml:lang="en">Job Info: </value>
+        <category>SCHEDULED_JOB</category>
+        <description>JobInfoLabel</description>
+    </property>
+    
+09/11/12 issue#26768   
+    <property key="ConfirmH1Review">
+        <value xml:lang="en">${Client} Write a Review</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Page Title</description>
+    </property>
+    <property key="ConfirmH2Review">
+        <value xml:lang="en">Thank you</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Sub Title</description>
+    </property>
+    <property key="ConfirmTextReview">
+        <value xml:lang="en">Thank you for submitting a review for ${productDescription}</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Text</description>
+    </property>
+09/20/12 issue#27003
+    <property key="OfferCodeExpireError">
+        <value xml:lang="en">The promotion code has expired.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>OfferCodeExpireError</description>
+    </property>
+    <property key="OfferCodeUseExcessError">
+        <value xml:lang="en">This promotion code has reached it's maximum use limit for you and can no longer be used.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>OfferCodeUseExcessError</description>
+    </property>
+
+//Remove
+
+
+
+
+//********************************************************************************************
+//DIV SEQUENCE UPDATES
+//FILE: OSafeUiSequence.xml
+//********************************************************************************************
+
+//Add
+
+
+
+//Remove
+
+
+//********************************************************************************************
+//CLIENT DEPLOYMENT UPDATES
+//FILE: client-deployment.properties
+//********************************************************************************************
+
+//Add
+     
+     08/30/2012 - ls
+
+        #########################################################
+        # SOLR: Osafe.properties
+        #
+        # Ofbiz File : hot-deploy/osafe/config/osafe.properties
+        #########################################################
+        solr.search.server=localhost
+        solr.search.port=8086
+
+        solr.index.server=localhost
+        solr.index.port=8086
+
+//Remove
+
+//********************************************************************************************
+//ECOMMERCE SEED UPDATES
+//FILE: eCommerceSeedData.xml
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+
+
+//********************************************************************************************
+//ECOMMERCE CSS UPDATES
+//FILE: bigFishClientSkin.css
+//********************************************************************************************
+
+//Add 
+
+8.30.2012
+
+.pdpTertiaryInformation, .displayBox ul.PDPUnorderedList { }.displayBox ul.PDPUnorderedList li {}.displayBox ul.PDPUnorderedList ul {}.displayBox ul.PDPUnorderedList ul li {}, .entry span {}, #multiPageShippingOptions #deliveryOptionBox .displayBox {	}#multiPageShippingOptions #deliveryOptionBox .displayBox h3 {	}#multiPageShippingOptions #deliveryOptionBox .displayBox .shippingMethodsContainer {	border-bottom: 2px dotted #CCCCCC;}#multiPageShippingOptions #deliveryOptionBox .displayBox .shippingMethodsContainer .col {} #multiPageShippingOptions #deliveryOptionBox { }	#multiPageShippingOptions #deliveryOptionBox .displayBox { }#multiPageShippingOptions #deliveryOptionBox .displayBox h3 { }#multiPageShippingOptions #deliveryOptionBox #customerStorePickup {  /* Appears when customer selects 'Store Pickup' */}#multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow {     float: left;    width: 100%;}#multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow .entry {     float: left;    width: 100%;} #multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel { }#multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span {     float: left;    font-size: 1.6em;    margin: 9px 0 0 10px;}#multiPageShippingOptions #deliveryOptionBox #customerStorePickup p {     display: inline-block;    margin: 10px 0;}#multiPageShippingOptions #deliveryOptionBox .deliveryOption {     display: inline-block;    margin: 10px 0 20px;    width: 100%;} #multiPageShippingOptions #deliveryOptionBox .deliveryOption span {     font-size: 1.6em;}#multiPageShippingOptions .shippingOptionsStorePickup {    display: inline-block;    margin: 10px 0 20px;    width: 100%;}#multiPageShippingOptions .shippingOptionsStorePickup>span {}font-size: 1.6em;#multiPageOrderSummary h3 {},#multiPageOrderSummary .entry h3 {} /* For Paypal and Credit Card H3s */, #multiPageOrderSummary #createAccountEntry {  }#multiPageOrderSummary #createAccountEntry .displayBox {  }#multiPageOrderSummary #createAccountEntry .displayBox h3 {  }#multiPageOrderSummary #createAccountEntry .displayBox h3 .boxTopMessage {  }#multiPageOrderConfirm {}#multiPageOrderConfirm:after {    visibility: hidden;	display: block;	font-size: 0;	content: " ";	clear: both;	height: 0;}#multiPageOrderConfirm h3 { }#multiPageOrderConfirm .entry h3 { /* For Paypal and Credit Card H3s */}#multiPageOrderConfirm .checkoutOrderStorePickup {}#multiPageOrderConfirm .checkoutOrderStorePickup .entryRow label {}.storeDetail .storehours {}.storeDetail .storephone {}.requestCatalog .entry ul li {}.textCounter {}.emailSubscriber {}.emailSubscriber:after {	visibility: hidden;	display: block;	font-size: 0;	content: " ";	clear: both;	height: 0;}.emailSubscriber h3 {}#emailSubscriberEntry .col {}#eCommerceMyAccountContainer {}#eCommerceMyAccountContainer h3 {}#eCommerceMyAccountContainer .displayBox {}#Customerpersonalinfo {}#Customerlogininfo {}#CustomerAddressBook {}#CustomerOrderStatus {}.writeReview { /* Write Review Container */	}/* ---- Review Product ---- */#productReviewDetails.displayBox {	}.productReviewHeaderRow {	}.writeReviewProduct .pdpProductName {	}.writeReviewProduct .pdpProductName h1 {	}.writeReviewProduct .pdpTertiaryInfo {	}.writeReviewProduct .pdpTertiaryInfo .tertiaryInformation {	}.writeReviewProduct .pdpMainImage {	}.writeReviewProduct .pdpReviewStars {	}.writeReviewProduct .pdpLongDescription {	}.writeReviewProduct .pdpDistinguishingFeature {	}.writeReviewProduct .pdpSalesPitch {	}.writeReviewProduct .pdpSpecialInstructions {	}.writeReviewProduct .pdpDeliveryInfo {	}.writeReviewProduct .pdpDirections {	}.writeReviewProduct .pdpIngredients {	}.writeReviewProduct .pdpWarnings {	}.writeReviewProduct .pdpTermsAndConditions {	}/* ---- Review Rating ---- */#productRatingEntry.displayBox {	}.writeReviewRateOverallStars {	}#overallRatingRow {	}.writeReviewRateQualityStars {	}#qualityRatingRow {	}.writeReviewRateEffectivenessStars {	}#effectRatingRow {	}.writeReviewRateSatisfactionStars {	}#satisfactionRatingRow {	}/* ---- Review Details ---- */#productRatingShareEntry.displayBox {	}.writeReviewReviewerNickname {	}.writeReviewReviewerTitle {	}.writeReviewReviewerText {	}.writeReviewReviewerText textarea {	}.writeReviewReviewerTip {	}.writeReviewReviewerTip .tipBoxListHeader {	}.writeReviewReviewerTip .tipBoxTips {	}.writeReviewReviewerTip .tipBoxTips .tipBoxTips_sub {	}/* ---- Review Links ---- */.writeReviewLink {	}.writeReviewReviewTermsCondLink {	}.writeReviewReviewGuidelinesLink {	}/* ---- Review About You ---- */#productRatingTellOtherEntry.displayBox {	}.writeReviewReviewerLocation {	}.writeReviewReviewerAge {	}.writeReviewReviewerGender {	}/* ---- Review Buttons ---- */.writeReviewButton {	}.writeReviewSubmitButton {	}.writeReviewCancelButton {	}
+
+
+
+
+//Remove
+
+8.30.2012
+
+#multiPageOrderSummary .checkoutOrderCreateAccount {  }#multiPageOrderSummary .checkoutOrderCreateAccount .displayBox {  }#multiPageOrderSummary .checkoutOrderCreateAccount .displayBox h3 {  }#multiPageOrderSummary .checkoutOrderCreateAccount .displayBox h3 .boxTopMessage {  }#multiPageOrderConfirm .orderConfirmStorePickup {}
+
+ 
+
+//********************************************************************************************
+//OSAFE PROPERTIES UPDATE
+//FILE: osafe.properties.template
+//********************************************************************************************
+
+//Add
+   08/30/2012
+    solr-search-server=http://@solr.search.server@:@solr.search.port@/solr
+    solr-index-server=http://@solr.index.server@:@solr.index.port@/solr
+
+//Remove
+ 
+   08/30/2012
+    solr-server=http://@solr.search.server@:@solr.search.port@/solr
+   
+ 
+//********************************************************************************************
+//EECAS XML TEMPLATE UPDATE
+//FILE: eecas.xml.template
+//********************************************************************************************
+
+
+//********************************************************************************************
+//OFBIZ COMPONENT XML UPDATES
+//FILE: ofbiz-component.xml.template
+//********************************************************************************************
+
+//Add
+08/29/12 issue#26701
+<service-resource type="model" loader="main" location="servicedef/services_scheduledJobs.xml"/>
+
+//Remove
+
+//********************************************************************************************
+//CLIENT STORE SEED DATA XML UPDATES
+//FILE: clientStoreSeedData.xml.template
+//********************************************************************************************
+
+//Add
+05/09/2012
+<ProductStore productStoreId="MODA_STORE" primaryStoreGroupId="" storeName="MODA Store Name" companyName="Company Name" title="Store Title" subtitle="Store Sub Title" payToPartyId="MODA_COMPANY" daysToCancelNonPay="30" manualAuthIsCapture="Y" prorateShipping="Y" prorateTaxes="Y" viewCartOnAdd="N" autoSaveCart="Y" autoApproveReviews="N" isDemoStore="N" isImmediatelyFulfilled="Y" inventoryFacilityId="MODA_FAC" oneInventoryFacility="Y" checkInventory="N" reserveInventory="N" reserveOrderEnumId="" requireInventory="N" balanceResOnOrderCreation="N" requirementMethodEnumId="" orderNumberPrefix="WS" defaultLocaleString="@ofbiz.locale.default@" defaultCurrencyUomId="GBP" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" defaultPassword="" explodeOrderItems="N" checkGcBalance="N" retryFailedAuths="N" headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED" itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" authDeclinedMessage="There has been a problem with your method of payment. Please  try a  different method or call customer service." authFraudMessage="Your order has been rejected and  your account  has been disabled due to fraud." authErrorMessage="" visualThemeId="OSAFE_DEFAULT" storeCreditAccountEnumId="FIN_ACCOUNT" usePrimaryEmailUsername="N" requireCustomerRole="N" autoInvoiceDigitalItems="Y" reqShipAddrForDigItems="Y" showCheckoutGiftOptions="Y" selectPaymentTypePerItem="N" showPricesWithVatTax="N" showTaxIsExempt="Y" vatTaxAuthGeoId="" vatTaxAuthPartyId="" enableAutoSuggestionList="Y" enableDigProdUpload="N" prodSearchExcludeVariants="Y" digProdUploadCategoryId="" autoOrderCcTryExp="Y" autoOrderCcTryOtherCards="Y" autoOrderCcTryLaterNsf="Y" autoOrderCcTryLaterMax="" storeCreditValidDays="90" autoApproveInvoice="Y" autoApproveOrder="Y" shipIfCaptureFails="Y" setOwnerUponIssuance="N" reqReturnInventoryReceive="N" addToCartRemoveIncompat="N" addToCartReplaceUpsell="N" splitPayPrefPerShpGrp="N" showOutOfStockProducts="N" />
+
+09/10/2012 issue#26889
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_MONEY_THRESHOLD" parmValue="15" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PRODUCT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_PCT_THRESHOLD" parmValue="5" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PRODUCT"/>
+09/13/2012 Issue #26853 
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CART_DEFAULT_SHIP_METHOD" description="The default Shipping Charge ID that will be used in the View Cart. This will allow for an estimation of shipping to be computed. Leave blank if no shipping charge defaults should be in the cart." parmCategory="CHECKOUT"/>
+//Remove
+05/09/2012
+<ProductStore productStoreId="MODA_STORE" primaryStoreGroupId="" storeName="MODA Store Name" companyName="Company Name" title="Store Title" subtitle="Store Sub Title" payToPartyId="MODA_COMPANY" daysToCancelNonPay="30" manualAuthIsCapture="Y" prorateShipping="Y" prorateTaxes="Y" viewCartOnAdd="N" autoSaveCart="Y" autoApproveReviews="N" isDemoStore="N" isImmediatelyFulfilled="Y" inventoryFacilityId="MODA_FAC" oneInventoryFacility="Y" checkInventory="N" reserveInventory="N" reserveOrderEnumId="" requireInventory="N" balanceResOnOrderCreation="N" requirementMethodEnumId="" orderNumberPrefix="WS" defaultLocaleString="en_US" defaultCurrencyUomId="GBP" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" defaultPassword="" explodeOrderItems="N" checkGcBalance="N" retryFailedAuths="N" headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED" itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" authDeclinedMessage="There has been a problem with your method of payment. Please  try a  different method or call customer service." authFraudMessage="Your order has been rejected and  your account  has been disabled due to fraud." authErrorMessage="" visualThemeId="OSAFE_DEFAULT" storeCreditAccountEnumId="FIN_ACCOUNT" usePrimaryEmailUsername="N" requireCustomerRole="N" autoInvoiceDigitalItems="Y" reqShipAddrForDigItems="Y" showCheckoutGiftOptions="Y" selectPaymentTypePerItem="N" showPricesWithVatTax="N" showTaxIsExempt="Y" vatTaxAuthGeoId="" vatTaxAuthPartyId="" enableAutoSuggestionList="Y" enableDigProdUpload="N" prodSearchExcludeVariants="Y" digProdUploadCategoryId="" autoOrderCcTryExp="Y" autoOrderCcTryOtherCards="Y" autoOrderCcTryLaterNsf="Y" autoOrderCcTryLaterMax="" storeCreditValidDays="90" autoApproveInvoice="Y" autoApproveOrder="Y" shipIfCaptureFails="Y" setOwnerUponIssuance="N" reqReturnInventoryReceive="N" addToCartRemoveIncompat="N" addToCartReplaceUpsell="N" splitPayPrefPerShpGrp="N" showOutOfStockProducts="N" />
+
+09/10/2012 issue#26889
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_MONEY_THRESHOLD" parmValue="15" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_PCT_THRESHOLD" parmValue="5" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PDP"/>
+
+09/11/12 issue#26844
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_SCHED_JOB_ALERT" parmValue="" description="List of recipients, comma separated, who will receive a Scheduled Job alert email." parmCategory="EMAIL"/>
+<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_SCHED_JOB_ALERT" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#sendScheduledJobNotification" xslfoAttachScreenLocation="" fromAddress="bigfishtest@salmonllc.com" ccAddress="" bccAddress="bigfish@salmonllc.com" subject="${EMAIL_CLNT_NAME}: Scheduled Job ${SCHEDULED_JOB_NAME} has ${SCHEDULED_JOB_STATUS}" contentType="" />
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHED_JOB_ALERT " contentTypeId="BF_EMAIL_TEMPLATE"/>
+
+//comment out all services
+

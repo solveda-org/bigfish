@@ -1,0 +1,847 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/helpHowDoI.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>BigFish Admin Help</title>
+<link rel="shortcut icon" href="bigfishfavicon.gif" />
+<!-- InstanceEndEditable -->
+				<link rel="stylesheet" href="helpScreen.css" type="text/css" media="screen" />
+				<link rel="stylesheet" href="helpPrint.css" type="text/css" media="print" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="collapse.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+$("html").addClass("js");
+$.fn.accordion.defaults.container = false; 
+$(function() {
+  $("#acc3").accordion({initShow : "#current"});
+  $("#acc4").accordion({initShow : "#current"});
+  $("html").removeClass("js");
+});
+//--><!]]>
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+
+<body>
+<a name="top" id="top"></a>
+<!-- InstanceBeginEditable name="helpHeader" -->
+<div id="helpHeader"><!-- #BeginLibraryItem "/Library/helpHeaderContent.lbi" --><div id="helpNavigation">
+	<ul>
+		<li><a href="#" onclick="history.go(-1);return false;"><img src="back.png" width="18" height="18" alt="Go Back"></a></li>
+		<li><a class="homeHelpButton" href="index.htm"><img src="home.png" width="18" height="18" alt="Help Home"></a></li>
+		<li><a href="#" onclick="history.go(1);return false;"><img src="forward.png" width="18" height="18" alt="Advance"></a></li>
+	</ul>
+</div>
+
+<a class="contact" href="http://bigfish.salmonllc.com/bfContactUs.html" target="_blank">Contact BigFish</a>
+<p class="logo">BigFish Online Help</p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+
+	<div id="helpWrapper">
+    
+<!-- InstanceBeginEditable name="helpContent" -->
+  <div id="contentHelp">
+
+	<h1>Managing Content</h1>
+	<h2>Overview</h2>
+                <ul class="helpList">
+					<li>Content can be included in many different areas within BigFish.</li>
+					<li>Primary content is accessed via the Admin -> Content function. Content is also maintained as part of the Email Templates</li>
+					<li>Content can take make many forms: 
+						<ul>
+                        	<li>HTML tags. All HTML tags can be used within content. References to styling within the CSS is encouraged. For example, a Static Page may look like:
+							<pre>
+<code>
+&lt;h1&gt;About Us&lt;/h1&gt;
+&lt;p&gt;This is a paragraph that describes our company&lt;/p&gt;
+</code>
+</pre>
+							</li>
+							<li>Freemarker Code (FTL) can also be included. For example, a common usage would within SI_SHOPPING_CART will determine if there is 1 item in the cart and therefore display “1 Item”, otherwise “n Items” will be displayed.
+            			<pre>
+                        <code>
+<#if ${CART_ITEMS_QTY!} == 1>
+   Item
+<#else>
+   Items
+</#if></code></pre>
+                       	  </li>
+				</ul>
+                </li>
+    </ul>
+<h2>Creating reusable content</h2>
+	<ul class="helpList">
+		<li>BigFish has a Content Library function that allows for generic reusable content to be defined and then reused in other content areas</li>
+		<li>This reusable content is defined the same as any other piece of content, it can include both HTML tags and Freemarker code.</li>
+		<li>For example:
+			<ul>
+            	<li>Define a reusable content spot in the Content Library called “MY_REUSABLE_CONTENT”:</li>
+					<pre>
+                		<code>
+&lt;p&gt;This is My-Content that sis reusable&lt;/p&gt;
+						</code>
+                	</pre>
+				<li>Include this piece of content by using the following syntax:</li>
+					<pre>
+            			<code>
+&lt;@renderContentAsText contentId="MY_REUSABLE_CONTENT" /&gt;
+            			</code>
+            		</pre>
+            </ul>
+		</li>
+	</ul>
+
+<h2>Including data attributes at runtime	</h2>
+<ul>
+    	<li>Data Attributes can be:
+			<ul>
+            	<li>System Parameters: this is to define static values that can be used within Content. For example, the system parameter EMAIL_CLNT_NAME is defined solely to be used within Content (it does not impact processing).</li>
+				<li>Dynamic Variables: these are resolved at runtime. For example, including the customer registration information in an email.</li>
+			</ul>
+		</li>
+		<li>A feature of Freemarker is that data can be included in the content. For example:
+			<ul>
+            	<li>Assume that the System Parameter EMAIL_CLNT_NAME has a value of “ACME”</li>
+				<li>Assume that an email template has the following content:</li>
+				<pre>
+                <code>
+&lt;P&gt;Welcome to ${EMAIL_CLNT_NAME!}&lt;/p&gt;
+				</code>
+                </pre>
+				<li>The email would be rendered as:</li>
+				<code>
+                <pre>
+Welcome to ACME
+                </pre>
+                </code>	
+			</ul>
+		</li>
+		<li>In addition to System Parameters, BigFish has exposed many dynamic variables that can be included in content. For example:
+			<ul>
+            	<li>Assume that a new customer registered. Customer entered a first name of “John” and a last name of “Smith”</li>
+				<li>In order to send an email we would need to know the dynamic variable, such as registered user name</li>
+				<li>In an email template this can be defined as:</li>
+				<pre>
+                <code>
+&lt;P&gt;Dear ${LOGIN_FIRST_NAME!} ${LOGIN_LAST_NAME!},&l/p&gt;
+				</code>
+                </pre>
+				<li>The email would be rendered as:</li>
+				<pre>
+                <code>
+Dear John Smith,</code>
+                </pre>
+                
+			</ul>
+		</li>
+		<li>Allowing empty text:
+			<ul>
+            	<li>The “!” in the above examples allows for an “empty” value to be rendered without throwing an error</li>
+				<li>If for some reason an error should be thrown if an “empty” value is found then do not use the “!”</li>
+			</ul>
+		</li>
+	</ul>
+    
+   <h2>Content with links to BigFish functions</h2>
+   
+   <ul>  
+		<li>There are many times when content requires a simple link.</li>
+		<li>For example, in most eCommerce implementations that standard “header” will contain links for the Store Locator, My Account and other useful links.</li>
+		<li>The Store Locator is defined as follows:</li>
+	<pre>
+                <code>
+&lt;a href="&lt;@ofbizUrl&gt;storeLocator&lt;/@ofbizUrl&gt;"&gt;Find a Store&lt;/a&gt;</code>
+                </pre>
+		<li>The text “Find a Store” is user managed. In other words, this could be “Store Locator” or any appropriate text for your specific implementation.</li>
+		<li>The tag <@ofbizUrl> is a special tag that will define the beginning of the URL in the correct format, simply reference the BigFish page (storeLocator) to complete.</li>
+		<li>??? SHOULD WE DEFINE ALL POSSIBLE PAGE URLS THAT ARE USEFUL ???</li>
+		<li>??? Are there any other similar <@xxxx> tags that we should document ???</li>
+	</ul>
+<h1>Dynamic Data Attributes</h1>
+<h2>System Parameters</h2>
+<ul>
+	<li>Some of the BigFish system parameters are defined specifically for inclusion into content (the values have no impact on processing or functionality)</li>
+</ul>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>EMAIL_CLNT_NAME</td>
+          <td>A standard parameter that should contain the full client name. Used throughout email templates. For example:  “Thank you for shopping with ${EMAIL_CLNT_NAME}” </td>
+        </tr>
+        <tr>
+          <td>HTTP_HOST</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>HTTPS_HOST</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+<h2>Dynamic Variables: Login / Customer</h2>
+<ul>
+	<li>The login information variables are most typically used in Email Templates.</li>
+	<li>For example, the new customer email, template E_NEW_CUSTOMER, would typically note to the customer that their email address is to be used as their login user. The email would further note the actual email address for confirmation.</li>
+	<li>First and Last names would most typically be used in Emails as a standard “Dear John Smith”</li>
+</ul>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LOGIN_EMAIL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>LOGIN_FIRST_NAME</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>LOGIN_LAST_NAME</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+<h2>Dynamic Variables: Product</h2>
+	<ul>
+		<li>The product information variables are the most widely used within general content</li>
+		<li>For example, as a PDP Facebook share:</li>
+	</ul>
+    <table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PRODUCT_ID</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>PRODUCT_NAME</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>PRODUCT_DESCRIPTION</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>PRODUCT_LIST_PRICE</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+<h2>Dynamic Variables: Product Category</h2>
+<ul>
+	<li>Category Information</li>
+</ul>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CATEGORY_ID</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>CATEGORY_NAME</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+    
+<h2>Dynamic Variables: Shopping Cart</h2>
+<ul>
+	<li>Typical Usage
+    	<ul>
+        	<li>Pixel Tracking: in the Order Confirmation page</li>
+		</ul>
+    </li>
+	<li>For example, assume that an Shopping Cart has the following:</li>
+</ul>
+	    <table class="cartExampleTable">
+	      <thead>
+	        <tr>
+	          <td>Product</td>
+	          <td><span>Price</span></td>
+	          <td>Offer-Price</td>
+	          <td><span>Qty</span></td>
+	          <td>Total</td>
+            </tr>
+          </thead>
+	      <tbody>
+	        <tr>
+	          <td>Product A</td>
+	          <td><span>$12</span></td>
+	          <td>$10</td>
+	          <td><span>2</span></td>
+	          <td>$20.00</td>
+            </tr>
+	        <tr>
+	          <td>Product B</td>
+	          <td><span>$15</span></td>
+	          <td>$15</td>
+	          <td><span>1</span></td>
+	          <td>$15.00</td>
+            </tr>
+	        <tr>
+	          <td>&nbsp;</td>
+	          <td>&nbsp;</td>
+	          <td colspan="2">&nbsp;</td>
+	          <td>&nbsp;</td>
+            </tr>
+	        <tr>
+	          <td>&nbsp;</td>
+	          <td>&nbsp;</td>
+	          <td colspan="2" class="right">Cart Sub Total:</td>
+	          <td>$35.00</td>
+            </tr>
+	        <tr>
+	          <td>&nbsp;</td>
+	          <td>&nbsp;</td>
+	          <td colspan="2" class="right">Promo “DISC10”:</td>
+	          <td>-$3.50</td>
+            </tr>
+	        <tr>
+	          <td>&nbsp;</td>
+	          <td>&nbsp;</td>
+	          <td colspan="2" class="right">Shipping</td>
+	          <td>$6.95</td>
+            </tr>
+	        <tr>
+	          <td>&nbsp;</td>
+	          <td>&nbsp;</td>
+	          <td colspan="2" class="right">Tax: </td>
+	          <td>$2.50</td>
+            </tr>
+	        <tr>
+	          <td>&nbsp;</td>
+	          <td>&nbsp;</td>
+	          <td colspan="2" class="right">CART TOTAL:</td>
+	          <td>$40.95</td>
+            </tr>
+          </tbody>
+        </table>
+<p>Any other page:</p>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>CART_SIZE</td>
+          <td>The total numbers of line-items. Used for looping logic when required to set the upper boundary. In the above example this would be 2.</td>
+        </tr>
+        <tr>
+          <td>CART_ITEMS_QTY</td>
+          <td>The total number of items purchased. In the above example this would be 3.</td>
+        </tr>
+        <tr>
+          <td>CART_ITEMS_MONEY</td>
+          <td>The monetary value for all items purchased. In the above example this would be $35.00.</td>
+        </tr>
+        <tr>
+          <td>CART_TOTAL_PROMO</td>
+          <td>The total adjustment made for Promotions. In the above example this would be -$3.50</td>
+        </tr>
+        <tr>
+          <td>CART_TOTAL_SHIP</td>
+          <td>The total shipping charge. In the above example this would be $6.95. </td>
+        </tr>
+        <tr>
+          <td>CART_TOTAL_TAX</td>
+          <td>The total taxes applied. In the above example this would be $2.50</td>
+        </tr>
+        <tr>
+          <td>CART_TOTAL_MONEY</td>
+          <td>The total to be charged to the customer. In the above example this would be $40.95</td>
+        </tr>
+      </tbody>
+    </table>
+<p>Order Summary and Order Confirmation use these:</p>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ORDER_SIZE</td>
+          <td>The total numbers of line-items. Used for looping logic when required to set the upper boundary. In the above example this would be 2.</td>
+        </tr>
+        <tr>
+          <td>ORDER_ITEMS_QTY</td>
+          <td>The total number of items purchased. In the above example this would be 3.</td>
+        </tr>
+        <tr>
+          <td>ORDER_ITEMS_MONEY</td>
+          <td>The monetary value for all items purchased. In the above example this would be $35.00.</td>
+        </tr>
+        <tr>
+          <td>ORDER_TOTAL_PROMO</td>
+          <td>The total adjustment made for Promotions. In the above example this would be -$3.50</td>
+        </tr>
+        <tr>
+          <td>ORDER_TOTAL_SHIP</td>
+          <td>The total shipping charge. In the above example this would be $6.95. </td>
+        </tr>
+        <tr>
+          <td>ORDER_TOTAL_TAX</td>
+          <td>The total taxes applied. In the above example this would be $2.50</td>
+        </tr>
+        <tr>
+          <td>ORDER_TOTAL_MONEY</td>
+          <td>The total to be charged to the customer. In the above example this would be $40.95</td>
+        </tr>
+      </tbody>
+    </table>
+<h2>Dynamic Variables: Order</h2>
+	<ul>
+    	<li>Typical usage:
+			<ul>
+            	<li>Email Templates: specifically Order Confirmation, Order Status Change, Product Review </li>
+				<li>Pixel Tracking: on Order Confirmation page</li>
+			</ul>
+		</li>
+        <li>For example, assume that an Order has the following Confirmation Page displayed:</li>
+	</ul>
+    <table class="orderConfirmation">
+      <thead>
+        <tr>
+          <td>Order Confirmation</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Thank you for shopping with [client.com], below is a confirmation of your order# BF-33002940.</td>
+        </tr>
+	  </tbody>
+        <tfoot>
+        <tr>
+          <td>PTS_ORDER_CONFIRM</td>
+        </tr>
+      </tfoot>
+	</table>
+    <table class="staticTable">
+		<thead>
+    	<tr>
+        	<td colspan="7">Order Details</td>
+		</tr>
+        </thead>
+		<tbody>
+        <tr class="subheading">
+        	<td class="center" colspan="2">Products</td>
+            <td class="center">Quantity</td>
+            <td class="center">Availability</td>
+            <td class="right">Price</td>
+            <td class="right">Offer Price</td>
+            <td class="right">Total</td>
+		</tr>
+        <tr>
+        	<td class="center">Product<br />Image</td>
+            <td>Live Fish 1<br />Size: Medium<br />Color: Red</td>
+            <td class="red center">1</td>
+            <td class="red center">In Stock</td>
+            <td class="red right">$6.99</td>
+            <td class="red right">$6.99</td>
+            <td class="red right">$6.99</td>
+		</tr>
+        <tr>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+		</tr>
+        <tr>
+        	<td class="center">Product<br />Image</td>
+            <td>Live Fish 2<br />Size: Large<br />Color: Red</td>
+            <td class="red center">2</td>
+            <td class="red center">In Stock</td>
+            <td class="red right">$8.99</td>
+            <td class="red right">$7.99</td>
+            <td class="red right">$25.98</td>
+		</tr>
+        <tr>
+          <td colspan="6">&nbsp;</td>
+          <td class="red">&nbsp;</td>
+      </tr>
+        <tr>
+          <td class="right" colspan="6">Sub Total</td>
+          <td>$22.97</td>
+        </tr>
+        <tr>
+          <td class="right" colspan="6">Shipping Method</td>
+          <td>UPS</td>
+        </tr>
+        <tr>
+          <td class="right" colspan="6">Shipping And Handling</td>
+          <td>$6.95</td>
+        </tr>
+        <tr>
+          <td class="right" colspan="6">Promotion (Free Shipping)</td>
+          <td>($6.95)</td>
+        </tr>
+        <tr>
+          <td class="right" colspan="6">Sales tax</td>
+          <td>$0.00</td>
+        </tr>
+        <tr>
+          <td class="right" colspan="6">Total</td>
+          <td class="red bold">$22.97</td>
+        </tr>
+        </tbody>
+	</table>
+    <table class="staticTable">
+		<thead>
+    	<tr>
+        	<td colspan="2">Store Pickup</td>
+		</tr>
+        </thead>
+		<tbody>
+        <tr>
+        	<td class="center">Store Code:</td>
+            <td>STORE-001</td>
+		</tr>
+        <tr>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+		</tr>
+       <tr>
+        	<td class="center">Store Address:</td>
+            <td>110 Lexington Ave</td>
+		</tr>
+        <tr>
+          <td>&nbsp;</td>
+          <td>New York, NY 11009</td>
+        </tr>
+        <tr>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+		</tr>
+<tr>
+        	<td class="center">Store Tel:</td>
+            <td>1-212-789-8177</td>
+		</tr>
+        <tr>
+        	<td>&nbsp;</td>
+        	<td>&nbsp;</td>
+		</tr>
+        </tbody>
+        <tfoot>
+			<tr>
+                <td colspan="2">* We will contact you via email when your merchandise is available. This will typically be within 24 hours. You can pay at the time of pickup.</td>
+			</tr>
+		</tfoot>
+	</table>
+<table class="staticTable">
+		<thead>
+    	<tr>
+        	<td colspan="2">Your Address Information </td>
+		</tr>
+        </thead>
+		<tbody>
+        <tr class="subheadingAlt">
+        	<td>Billing Address</td>
+            <td>Shipping Address</td>
+		</tr>
+        <tr>
+        	<td>Joe Smith</td>
+        	<td>Joe Smith</td>
+		</tr>
+       <tr>
+        	<td>10 Billing Avenue</td>
+            <td>10 Shipping Avenue</td>
+		</tr>
+        <tr>
+          <td>Billtown, NY 11501</td>
+          <td>Shiptown, NY 11501</td>
+        </tr>
+        </tbody>
+        <tfoot>
+		</tfoot>
+	</table>
+<table class="staticTable">
+		<thead>
+    	<tr>
+        	<td>Payment Information </td>
+		</tr>
+        </thead>
+		<tbody>
+        <tr>
+          <td>See below</td>
+        </tr>
+        </tbody>
+        <tfoot>
+		</tfoot>
+        
+	</table>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ORDER_ID</td>
+          <td>The actual BigFish Order-ID assigned. In the above example this would be WS10001</td>
+        </tr>
+        <tr>
+          <td>SHOPPING_CART_SIZE</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>SHOPPING_CART</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>SHOPPING_CART_ITEMS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_HEADER</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_ID</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_SUB_TOTAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_SHIP_TOTAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_TOTAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_ITEMS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_ADJUSTMENTS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_SHIP_ADDRESS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_BILL_ADDRESS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_PAYMENTS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_PAY_PREFERENCES</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_PAYMENT_TYPE</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_SHIPPING_INFO</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_ITEM_SHIP_GROUP</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+<h2>Dynamic Variable: Email</h2>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>PRODUCT_STORE_ID</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>USER_LOGIN</td>
+          <td>User Login Entity</td>
+        </tr>
+        <tr>
+          <td>USER_LOGIN_ID</td>
+          <td>User Login Id</td>
+        </tr>
+        <tr>
+          <td>EMAIL_MESSAGE</td>
+          <td>The text that was entered into a comment box, currently used on the email test.</td>
+        </tr>
+        <tr>
+          <td>PARTY_ID</td>
+          <td>The party id in context; for example on Order Confirmation email the party id associated to the order will be in context.</td>
+        </tr>
+        <tr>
+          <td>FIRST_NAME</td>
+          <td>Person Entity</td>
+        </tr>
+        <tr>
+          <td>LAST_NAME</td>
+          <td>Person Entity</td>
+        </tr>
+        <tr>
+          <td>MIDDLE_NAME</td>
+          <td>Person Entity</td>
+        </tr>
+        <tr>
+          <td>NICKNAME</td>
+          <td>Person Entity</td>
+        </tr>
+        <tr>
+          <td>LOGIN_EMAIL</td>
+          <td>Email Address (User Login Id ) of logged in user</td>
+        </tr>
+        <tr>
+          <td>ORDER_ID</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER</td>
+          <td>Order Entity</td>
+        </tr>
+        <tr>
+          <td>ORDER_HELPER</td>
+          <td>Order Reader Helper; this object has helper methods to get information about the order.  For example getOrderGrandTotal() and getOrderItemSubTotal()</td>
+        </tr>
+        <tr>
+          <td>ORDER_SUB_TOTAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_SHIP_TOTAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_TAX_TOTAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_TOTAL</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_ITEMS</td>
+          <td>Order Items Entity (List)</td>
+        </tr>
+        <tr>
+          <td>ORDER_ADJUSTMENTS</td>
+          <td>&nbsp;</td>
+        </tr>
+        <tr>
+          <td>ORDER_SHIP_ADDRESS</td>
+          <td>Postal Code Entity</td>
+        </tr>
+        <tr>
+          <td>ORDER_BILL_ADDRESS</td>
+          <td>Postal Code Entity</td>
+        </tr>
+        <tr>
+          <td>ORDER_PAYMENTS</td>
+          <td>Payment Method Entity (List)</td>
+        </tr>
+        <tr>
+          <td>ORDER_PAY_PREFERENCES</td>
+          <td>Order Payment Preferences Entity (List)</td>
+        </tr>
+        <tr>
+          <td>ORDER_SHIPPING_INFO</td>
+          <td>Order item Ship Group Entity (List)</td>
+        </tr>
+        <tr>
+          <td>ORDER_ITEM_SHIP_GROUP</td>
+          <td>Order item Ship Group Entity (List)</td>
+        </tr>
+        <tr>
+          <td>CART_ITEMS</td>
+          <td>Shopping Cart Items (List)</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>Dynamic Variables: Technical</h2>
+	<ul>
+  			<li>HTML tags. All HTML tags can be used within content. References to styling within the CSS is encouraged. For example, a Static Page may look like:</li>
+		</ul>
+<table class="helpTable">
+      <thead>
+        <tr>
+          <td>Variable Name</td>
+          <td><span>Description</span></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>REQUEST_URL</td>
+          <td>&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+			<pre>
+			<code>
+&lt;a target="facebook" 
+
+    href="http://www.facebook.com/sharer/sharer.php?
+    u=${HTTPS_HOST!}${REQUEST_URL!}"&gt;
+    
+    &lt;img src="/osafe_theme/images/user_content/images/fb.gif"&gt;
+
+&lt;/a&gt;
+
+			</code>
+			</pre>
+<a class="backTop" href="#top">Back to Top</a>
+
+</div>
+  
+
+<!-- InstanceEndEditable -->    
+    </div>
+
+
+	<!-- InstanceBeginEditable name="helpFooter" -->
+	<div id="helpFooter"><!-- #BeginLibraryItem "/Library/helpFooterContent.lbi" --><p>Built by <a target="_blank" href="http://www.salmonllc.com">Salmon LLC</a></p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

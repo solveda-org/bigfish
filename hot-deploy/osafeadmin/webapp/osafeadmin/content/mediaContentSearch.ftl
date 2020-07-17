@@ -1,5 +1,5 @@
-<input type="hidden" name="currentMediaType" id="currentMediaType" value=""/>
-<input type="hidden" name="currentMediaName" id="currentMediaName" value=""/>
+<input type="hidden" class="confirmHiddenFields" name="currentMediaName" id="currentMediaName" value=""/>
+<input type="hidden" class="confirmHiddenFields" name="currentMediaType" id="currentMediaType" value=""/>
 <div class="entryRow">
     <div class="entry long">
       <label>${uiLabelMap.TypeCaption}</label>

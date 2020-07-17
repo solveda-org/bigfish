@@ -78,7 +78,7 @@ public class SagePayTokenServices
     public static Map<String, Object> paymentRegistration(DispatchContext ctx, Map<String, Object> context)
     {
         Debug.logInfo("SagePay Token -  Entered paymentRegistration", module);
-        Debug.logInfo("SagePay Token - paymentRegistration context : " + context, module);
+//        Debug.logInfo("SagePay Token - paymentRegistration context : " + context, module);
 
         Delegator delegator = ctx.getDelegator();
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -190,7 +190,7 @@ public class SagePayTokenServices
     public static Map<String, Object> paymentAuthentication(DispatchContext ctx, Map<String, Object> context)
     {
         Debug.logInfo("SagePay Token - Entered paymentAuthentication", module);
-        Debug.logInfo("SagePay Token paymentAuthentication context : " + context, module);
+//        Debug.logInfo("SagePay Token paymentAuthentication context : " + context, module);
 
         Delegator delegator = ctx.getDelegator();
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -266,8 +266,18 @@ public class SagePayTokenServices
         if (billingAddress2 != null) { parameters.put("BillingAddress2", billingAddress2); }
         if (billingCity != null) { parameters.put("BillingCity", billingCity); }
         if (billingPostCode != null) { parameters.put("BillingPostCode", billingPostCode); }
-        if (billingCountry != null) { parameters.put("BillingCountry", billingCountry); }
-//        if (UtilValidate.isNotEmpty(billingState)) {parameters.put("BillingState", billingState);}
+        if (billingCountry != null) 
+         { 
+        	parameters.put("BillingCountry", billingCountry); 
+        	if ("USA".equals(billingCountry))
+        	{
+              if (UtilValidate.isNotEmpty(billingState)) 
+              {
+            	  parameters.put("BillingState", billingState);
+              }
+        		
+        	}
+         }
         if (billingPhone != null) { parameters.put("BillingPhone", billingPhone); }
         //end - billing details
 
@@ -289,8 +299,18 @@ public class SagePayTokenServices
             if (deliveryAddress2 != null) { parameters.put("DeliveryAddress2", deliveryAddress2); }
             if (deliveryCity != null) { parameters.put("DeliveryCity", deliveryCity); }
             if (deliveryPostCode != null) { parameters.put("DeliveryPostCode", deliveryPostCode); }
-            if (deliveryCountry != null) { parameters.put("DeliveryCountry", deliveryCountry); }
-//            if (UtilValidate.isNotEmpty(deliveryState)) { parameters.put("DeliveryState", deliveryState); }
+            if (deliveryCountry != null) 
+            { 
+            	parameters.put("DeliveryCountry", deliveryCountry);
+	           	if ("USA".equals(deliveryCountry))
+	           	{
+	                 if (UtilValidate.isNotEmpty(deliveryState)) 
+	                 {
+	               	  parameters.put("DeliveryState", deliveryState);
+	                 }
+	           		
+	           	}
+            }
             if (deliveryPhone != null) {parameters.put("DeliveryPhone", deliveryPhone); }
         }
         //end - delivery details
@@ -404,7 +424,7 @@ public class SagePayTokenServices
     public static Map<String, Object> paymentAuthorisation(DispatchContext ctx, Map<String, Object> context)
     {
         Debug.logInfo("SagePay Token -  Entered paymentAuthorisation", module);
-        Debug.logInfo("SagePay Token - paymentAuthorisation context : " + context, module);
+//        Debug.logInfo("SagePay Token - paymentAuthorisation context : " + context, module);
 
         Delegator delegator = ctx.getDelegator();
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -461,7 +481,7 @@ public class SagePayTokenServices
         if (billingState != null) { parameters.put("BillingState", billingState); }
         if (billingPhone != null) { parameters.put("BillingPhone", billingPhone); }
 
-        Debug.logInfo("authorization parameters -> " + parameters, module);
+//        Debug.logInfo("authorization parameters -> " + parameters, module);
         //end - authorization parameters
 
         try {
@@ -527,7 +547,7 @@ public class SagePayTokenServices
     public static Map<String, Object> paymentRelease(DispatchContext ctx, Map<String, Object> context)
     {
         Debug.logInfo("SagePay Token -  Entered paymentRelease", module);
-        Debug.logInfo("SagePay Token - paymentRelease context : " + context, module);
+//        Debug.logInfo("SagePay Token - paymentRelease context : " + context, module);
 
         Delegator delegator = ctx.getDelegator();
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -652,7 +672,7 @@ public class SagePayTokenServices
     public static Map<String, Object> paymentVoid(DispatchContext ctx, Map<String, Object> context)
     {
         Debug.logInfo("SagePay Token -  Entered paymentVoid", module);
-        Debug.logInfo("SagePay Token - paymentVoid context : " + context, module);
+//        Debug.logInfo("SagePay Token - paymentVoid context : " + context, module);
 
         Delegator delegator = ctx.getDelegator();
         Map<String, Object> resultMap = new HashMap<String, Object>();
@@ -775,7 +795,7 @@ public class SagePayTokenServices
     public static Map<String, Object> paymentRefund(DispatchContext ctx, Map<String, Object> context)
     {
         Debug.logInfo("SagePay Token -  Entered paymentRefund", module);
-        Debug.logInfo("SagePay Token - paymentRefund context : " + context, module);
+//        Debug.logInfo("SagePay Token - paymentRefund context : " + context, module);
 
         Delegator delegator = ctx.getDelegator();
         Map<String, Object> resultMap = new HashMap<String, Object>();

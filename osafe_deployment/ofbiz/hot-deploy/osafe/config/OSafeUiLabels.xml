@@ -207,6 +207,26 @@
         <category>MY_ACCOUNT</category>
         <description>TitleCaption</description>
     </property>
+    <property key="DOB_Caption">
+        <value xml:lang="en">Date Of Birth:</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBCaption</description>
+    </property>
+    <property key="DOB_Month">
+        <value xml:lang="en">Month</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBMonthCaption</description>
+    </property>
+    <property key="DOB_Day">
+        <value xml:lang="en">Day</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBDayCaption</description>
+    </property>
+    <property key="DOB_Year">
+        <value xml:lang="en">Year</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBYearCaption</description>
+    </property>
     <property key="CountryCaption">
         <value xml:lang="en">Country:</value>
         <category>MY_ACCOUNT</category>
@@ -1115,6 +1135,31 @@
         <category>PDP</category>
         <description>PDP TAB Label</description>
     </property>
+    <property key="CartShippingMethodLabel">
+        <value xml:lang="en">Shipping Method:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Shipping Method:</description>
+    </property>
+    <property key="CartShippingAndHandlingLabel">
+        <value xml:lang="en">Estimated Shipping:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Shipping And Handling</description>
+    </property>
+    <property key="CartAdjustedTotalLabel">
+        <value xml:lang="en">Adjusted Total:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Adjusted Total</description>
+    </property>
+    <property key="CartTaxLabel">
+        <value xml:lang="en">Estimated Tax:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Estimated Tax</description>
+    </property>
+    <property key="CartTotalLabel">
+        <value xml:lang="en">Total:</value>
+        <category>CHECKOUT</category>
+        <description>Cart Total </description>
+    </property> 
     <!-- **** Page Title *************************************** -->
     <property key="LoginTitle">
         <value xml:lang="en">Sign In</value>
@@ -1285,6 +1330,26 @@
         <value xml:lang="en">Designer</value>
         <category>PAGE_HEADING_H1</category>
         <description>Manufacturer Title</description>
+    </property>
+	<property key="ScheduledJobEmailTitle">
+        <value xml:lang="en">Scheduled Job Notification</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>ScheduledJobEmailTitle</description>
+    </property>
+	<property key="JobNameLabel">
+        <value xml:lang="en">Job Name: </value>
+        <category>SCHEDULED_JOB</category>
+        <description>JobNameLabel</description>
+    </property>
+	<property key="JobStatusLabel">
+        <value xml:lang="en">Job Status: </value>
+        <category>SCHEDULED_JOB</category>
+        <description>JobStatusLabel</description>
+    </property>
+	<property key="JobInfoLabel">
+        <value xml:lang="en">Job Info: </value>
+        <category>SCHEDULED_JOB</category>
+        <description>JobInfoLabel</description>
     </property>
     <!-- **** Heading *************************************** -->
     <property key="ReturningCustomerLoginHeading">
@@ -2031,6 +2096,11 @@
         <category>MESSAGE_ERROR</category>
         <description>eCommerceViewPermissionError</description>
     </property>
+    <property key="ValidDobDateError">
+        <value xml:lang="en">Please Enter a Valid Date.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ValidDobDateError</description>
+    </property>
     <property key="ContactReasonMissingError">
         <value xml:lang="en">o	Please select a Reason for Contact. This allows us to better serve you.</value>
         <category>MESSAGE_ERROR</category>
@@ -2300,6 +2370,16 @@
         <value xml:lang="en">The Offer Code that you entered is hasalready been applied to your shopping cart</value>
         <category>MESSAGE_ERROR</category>
         <description>OfferCodeInUseError</description>
+    </property>
+    <property key="OfferCodeExpireError">
+        <value xml:lang="en">The promotion code has expired.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>OfferCodeExpireError</description>
+    </property>
+    <property key="OfferCodeUseExcessError">
+        <value xml:lang="en">This promotion code has reached it's maximum use limit for you and can no longer be used.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>OfferCodeUseExcessError</description>
     </property>
     <property key="FirstNameOnCardMissingError">
         <value xml:lang="en">Please enter your First Name on Card</value>
@@ -2679,6 +2759,21 @@
         <value xml:lang="en">Your comments have been received. We will respond to any business query within 2-3 business days. Thank you for your interest in companyName, we appreciate your business!</value>
         <category>CONFIRM</category>
         <description>Confirm Contact Us Text</description>
+    </property>
+	<property key="ConfirmH1Review">
+        <value xml:lang="en">${Client} Write a Review</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Page Title</description>
+    </property>
+    <property key="ConfirmH2Review">
+        <value xml:lang="en">Thank you</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Sub Title</description>
+    </property>
+    <property key="ConfirmTextReview">
+        <value xml:lang="en">Thank you for submitting a review for ${productDescription}</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Text</description>
     </property>
     <!-- === Confirm dialog box ===== -->
     <property key="CommonConfirmDialogText">

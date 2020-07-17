@@ -19,7 +19,8 @@ if(UtilValidate.isNotEmpty(configFileList)) {
           sysConfigFile = FastMap.newInstance();
           sysConfigFile.put("fileName", configFile.getName());
           sysConfigFile.put("filePath", configFile);
+          sysConfigFile.put("fileNameUpperCase", configFile.getName().toUpperCase());
           fileList.add(sysConfigFile);
       }
-      context.configFileResultList = UtilMisc.sortMaps(fileList, UtilMisc.toList("fileName"));
+      context.configFileResultList = UtilMisc.sortMaps(fileList, UtilMisc.toList("fileNameUpperCase"));
 }

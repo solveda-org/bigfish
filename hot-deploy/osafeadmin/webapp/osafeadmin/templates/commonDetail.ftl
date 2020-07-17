@@ -20,11 +20,13 @@ ${sections.render('commonFormDialog')?if_exists}
             ${sections.render('commonDetailEntryButton')!}
           </div>
           ${sections.render('commonDetailActionButton')!}
-          ${sections.render('commonDetailLinkButton')!}
       </form>
+      <div class="infoDetailIcon">
+      ${sections.render('commonDetailLinkButton')!}
       ${sections.render('commonDetailHelperText')!}
-      ${sections.render('commonDetailWarningIcon')!}
       ${sections.render('commonDetailHelperIcon')!}
+      ${sections.render('commonDetailWarningIcon')!}
+     </div>
     </div>
 </div>
 ${sections.render('commonConfirm')!}

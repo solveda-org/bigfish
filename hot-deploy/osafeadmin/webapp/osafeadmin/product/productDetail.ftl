@@ -103,11 +103,18 @@
   <#assign isVariant = product.isVariant!"" />
   <#assign internalName = product.internalName!"" />
   <#assign isVirtual = product.isVirtual!"" />
-  <#if productListPrice?exists && productListPrice?has_content>
+  <#if productListPrice?has_content>
     <#assign listPrice = productListPrice.price!"" />
   </#if>
-  <#if productDefaultPrice?exists && productDefaultPrice?has_content>
+  <#if productDefaultPrice?has_content>
     <#assign defaultPrice = productDefaultPrice.price!"" />
+  </#if>
+  
+  <#if productVariantListPrice?has_content>
+    <#assign variantListPrice = productVariantListPrice.price!"" />
+  </#if>
+  <#if productVariantSalePrice?has_content>
+    <#assign variantSalePrice = productVariantSalePrice.price!"" />
   </#if>
   
   <#if product.introductionDate?has_content>
@@ -405,12 +412,14 @@
                </div>
                <div class="infoValue">
                  <#if isVariant?exists && isVariant == 'Y'>
-                   <@ofbizCurrency amount=parameters.listPrice!productListPrice.price! isoCode=productListPrice.currencyUomId!/>
+                   <#if productListPrice?has_content>
+                     <@ofbizCurrency amount=productListPrice.price! isoCode=productListPrice.currencyUomId!/>
+                   </#if>
                  <#else>
                    <#if (mode?has_content && mode == "add")>
                      <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="${parameters.listPrice!listPrice!}"/>
                    <#elseif mode?has_content && mode == "edit">
-                     <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="${parameters.listPrice!listPrice?string("0.00")!}"/>
+                     <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="<#if parameters.listPrice?has_content || listPrice?has_content>${parameters.listPrice!listPrice?string("0.00")!}</#if>"/>
                    </#if>
                  </#if>
                </div>
@@ -423,18 +432,51 @@
                </div>
                <div class="infoValue">
                  <#if isVariant?exists && isVariant == 'Y'>
-                   <@ofbizCurrency amount=parameters.defaultPrice!productDefaultPrice.price! isoCode=productDefaultPrice.currencyUomId!/>
+                   <#if productDefaultPrice?has_content>
+                     <@ofbizCurrency amount=productDefaultPrice.price! isoCode=productDefaultPrice.currencyUomId!/>
+                   </#if>
                  <#else>
                    <#if (mode?has_content && mode == "add")>
                      <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="${parameters.defaultPrice!defaultPrice!}"/>
                    <#elseif mode?has_content && mode == "edit">
-                     <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="${parameters.defaultPrice!defaultPrice?string("0.00")!}"/>
+                     <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="<#if parameters.defaultPrice?has_content || defaultPrice?has_content>${parameters.defaultPrice!defaultPrice?string("0.00")!}</#if>"/>
                      <#if productPriceCondList?has_content><span class="pricingInfo">${uiLabelMap.PricingRulesApplyInfo}</span></#if>
                    </#if>
                  </#if>
                </div>
             </div>
         </div>
+        
+        <#if (isVariant?exists && isVariant == 'Y') && (mode?has_content && mode == "edit")>
+          <div class="infoRow column">
+            <div class="infoEntry">
+              <div class="infoCaption">
+                <label>${uiLabelMap.VariantListPriceCaption}</label>
+              </div>
+              <div class="infoValue">
+                <input type="text" class="textEntry textAlignRight" name="variantListPrice" id="variantListPrice" value="<#if parameters.variantListPrice?has_content || variantListPrice?has_content>${parameters.variantListPrice!variantListPrice?string("0.00")!}</#if>"/>
+              </div>
+   	          <div class="infoIcon">
+               <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VariantListPriceInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+		      </div>
+            </div>
+          </div>
+          
+          <div class="infoRow column">
+            <div class="infoEntry">
+              <div class="infoCaption">
+                <label>${uiLabelMap.VariantSalePriceCaption}</label>
+              </div>
+              <div class="infoValue">
+                <input type="text"  class="textEntry textAlignRight" name="variantSalePrice" id="variantSalePrice" value="<#if parameters.variantSalePrice?has_content || variantSalePrice?has_content>${parameters.variantSalePrice!variantSalePrice?string("0.00")!}</#if>"/>
+              </div>
+	  	      <div class="infoIcon">
+	              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VariantSalePriceInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+			  </div>
+            </div>
+          </div>
+        </#if>
+        
         <div class="infoRow column">
             <div class="infoEntry">
                 <div class="infoCaption">

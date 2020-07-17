@@ -64,6 +64,7 @@
       <xsd:element maxOccurs="unbounded" name="CartPromotion" type="CartPromotionType" />
       <xsd:element name="OrderLineItems" type="OrderLineItemsType" />
       <xsd:element name="OrderPayment" type="OrderPaymentType" />
+      <xsd:element name="OrderAttribute" type="OrderAttributeType" />
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="OrderPaymentType">
@@ -96,12 +97,20 @@
       <xsd:element name="ProductId" type="xsd:string" />
       <xsd:element name="Quantity" type="xsd:int" />
       <xsd:element name="Price" type="xsd:string" />
+      <xsd:element name="OfferPrice" type="xsd:string" />
       <xsd:element name="LineTotalGross" type="xsd:string" />
       <xsd:element name="SalesTax" type="xsd:string" />
       <xsd:element name="ShippingCharge" type="xsd:string" />
       <xsd:element name="ShippingTax" type="xsd:string" />
       <xsd:element name="Carrier" type="xsd:string" />
       <xsd:element name="CarrierCustomInfo" type="xsd:string" />
+      <xsd:element maxOccurs="unbounded" name="OrderLinePromotion" type="OrderLinePromotionType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OrderLinePromotionType">
+    <xsd:sequence>
+      <xsd:element name="PromotionCode" type="xsd:string" />
+      <xsd:element name="PromotionAmount" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="CartPromotionType">
@@ -120,11 +129,20 @@
       <xsd:element name="OrderTotalTax" type="xsd:string" />
       <xsd:element name="OrderTotalNet" type="xsd:string" />
       <xsd:element name="Currency" type="xsd:string" />
-      <xsd:element name="ItemsToRemove" type="xsd:string" />
-      <xsd:element name="ValidateWebTotals" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
-    
+  <xsd:complexType name="OrderAttributeType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Attribute" type="AttributeType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="AttributeType">
+    <xsd:sequence>
+      <xsd:element name="Name" type="xsd:string" />
+      <xsd:element name="Value" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
   <!-- definition of Customer ContactUs elements -->
   <xsd:element name="BigFishContactUsFeed" type="BigFishContactUsFeedType" />
   <xsd:complexType name="BigFishContactUsFeedType">
@@ -244,6 +262,7 @@
       <xsd:element type="xsd:string" name="ManufacturerId" default=""/>
       <xsd:element type="xsd:string" name="FromDate" default=""/>
       <xsd:element type="xsd:string" name="ThruDate" default=""/>
+      <xsd:element type="xsd:string" name="UseVariantPricing" default=""/>
       <xsd:element type="ProductPriceType" name="ProductPrice"/>
       <xsd:element type="ProductCategoryMemberType" name="ProductCategoryMember"/>
       <xsd:element type="ProductSelectableFeatureType" name="ProductSelectableFeature"/>
@@ -311,7 +330,7 @@
       <xsd:element type="xsd:string" name="FeatureId" default=""/>
       <xsd:element type="xsd:string" name="Value" maxOccurs="unbounded" default=""/>
       <xsd:element type="xsd:string" name="Description" default=""/>
-      <xsd:element type="xsd:string" name="sequenceNum" default=""/>
+      <xsd:element type="xsd:string" name="SequenceNum" default=""/>
       <xsd:element type="xsd:string" name="FromDate" default=""/>
       <xsd:element type="xsd:string" name="ThruDate" default=""/>
     </xsd:sequence>
@@ -331,58 +350,70 @@
       <xsd:element type="PdpAlternateImageType" name="PdpAlternateImage"/>
     </xsd:sequence>
   </xsd:complexType>
+  
   <xsd:element type="xsd:string" name="Url" default=""/>
+  <xsd:element type="xsd:string" name="ThruDate" default=""/>
+  
   <xsd:complexType name="PlpSwatchType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpSwatchType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PlpSmallImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpThumbnailImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpLargeImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpDetailImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpVideoType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpVideo360Type">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PlpSmallAltImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
@@ -403,18 +434,21 @@
   <xsd:complexType name="PdpAdditionalThumbImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpAdditionalLargeImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
   <xsd:complexType name="PdpAdditionalDetailImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   
@@ -487,6 +521,7 @@
   <xsd:complexType name="ManufacturerImageType">
     <xsd:sequence>
       <xsd:element ref="Url"/>
+      <xsd:element ref="ThruDate"/>
     </xsd:sequence>
   </xsd:complexType>
   

@@ -3,28 +3,12 @@
     <description>OSafe Services</description>
     <vendor/>
     <version>1.0</version>
-    <service name="genProductsIndex" engine="java" location="com.osafe.services.SolrServices" invoke="genProductsIndex" auth="false" transaction-timeout="7200">
-        <description>Create list of document for SOLR Indexing</description>
-        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
-        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
-        <attribute name="documentListCount" type="Integer" mode="OUT" optional="false"/>
-    </service>
     <service name="checkUserPassword" engine="java" location="com.osafe.services.LoginServices" invoke="checkUserPassword" auth="false">
         <description>Check User s password for login</description>
         <attribute name="username" mode="IN" type="String" ></attribute>
         <attribute name="password" mode="IN" type="String" ></attribute>
         <attribute name="passwordMatches" mode="OUT" type="String"  optional="false"></attribute>
         <attribute name="userLogin" mode="OUT" type="org.ofbiz.entity.GenericValue"  optional="true"></attribute>
-    </service>
-    <service name="abandonCartEmail" engine="java" location="com.osafe.services.EmailServices" invoke="abandonCartEmail" auth="false" transaction-timeout="7200">
-        <description>Send Abandon Cart Emails </description>
-        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
-        <attribute name="intervalHours" mode="IN" type="Integer" optional="true"></attribute>
-        <attribute name="emailCount" mode="IN" type="Integer" optional="true"></attribute>
-    </service>
-    <service name="shipReviewEmail" engine="java" location="com.osafe.services.EmailServices" invoke="shipReviewEmail" auth="false" transaction-timeout="7200">
-        <description>Send Ship Review Emails </description>
-        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
     </service>
     <service name="sendContactUsEmailToCompany" engine="simple"
             location="component://osafe/script/Event/CommunicationEvent.xml" invoke="sendContactUsEmailToCompany" auth="false">
@@ -189,13 +173,13 @@
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" />
     </service>
 
-    <service name="getReevooXmlFeed" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="getReevooXmlFeed" auth="false" transaction-timeout="7200">
-        <description>down load csv feed</description>
+    <service name="reevooGetProductRatingScores" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="reevooGetProductRatingScores" auth="false" transaction-timeout="7200">
+        <description>down load xml feed</description>
         <attribute name="productStoreId" type="String" mode="IN" optional="false" />
-        <attribute name="apiAccessUrl" type="String" mode="IN" optional="true"/>
-        <attribute name="apiCsvUrl" type="String" mode="IN" optional="true"/>
-        <attribute name="apiUserName" type="String" mode="IN" optional="true"/>
-        <attribute name="apiPassword" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiCsvUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiUserName" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiPassword" type="String" mode="IN" optional="true"/>
         <attribute name="xmlFile" type="java.io.File" mode="OUT" optional="true"/>
         <attribute name="xmlFileAsString" type="String" mode="OUT" optional="true"/>
     </service>
@@ -203,10 +187,10 @@
     <service name="getReevooCsvFeed" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="getReevooCsvFeed" auth="false" transaction-timeout="7200">
         <description>down load csv feed</description>
         <attribute name="productStoreId" type="String" mode="IN" optional="false" />
-        <attribute name="apiAccessUrl" type="String" mode="IN" optional="true"/>
-        <attribute name="apiCsvUrl" type="String" mode="IN" optional="true"/>
-        <attribute name="apiUserName" type="String" mode="IN" optional="true"/>
-        <attribute name="apiPassword" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiCsvUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiUserName" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiPassword" type="String" mode="IN" optional="true"/>
         <attribute name="csvFile" type="java.io.File" mode="OUT" optional="true"/>
         <attribute name="csvFileAsString" type="String" mode="OUT" optional="true"/>
     </service>

@@ -26,6 +26,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.condition.EntityOperator;
@@ -156,7 +157,7 @@ public class OsafeAdminUtil {
     	if(UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productPriceTypeId))
     	{
     		try {
-    	        productPriceList = delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", productPriceTypeId));
+    	        productPriceList = delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", productPriceTypeId), UtilMisc.toList("-fromDate"));
     	        if(UtilValidate.isNotEmpty(productPriceList))
     	        {
     	            productPriceListFiltered = EntityUtil.filterByDate(productPriceList);
@@ -736,4 +737,127 @@ public class OsafeAdminUtil {
         list.addAll(set);
     }
 
+    public static <K, V> Map <K, V> sortMapByValues(final Map <K, V> mapToSort) 
+    {
+        if (mapToSort == null) 
+        {
+            return null;
+        }
+        try 
+        {
+            List <Map.Entry <K, V>> entries = new ArrayList <Map.Entry <K, V>> (mapToSort.size());
+            entries.addAll(mapToSort.entrySet());  
+            Collections.sort(entries, new Comparator <Map.Entry <K, V>> () 
+            {
+                public int compare(final Map.Entry < K, V> entry1,final Map.Entry < K, V> entry2) 
+                {
+                    return ((Comparable <V>)entry1.getValue()).compareTo(entry2.getValue());  
+                }
+            });
+            Map <K, V> sortedMap = new LinkedHashMap <K, V> ();
+            for (Map.Entry < K, V >  entry : entries) 
+            {
+                sortedMap.put(entry.getKey(), entry.getValue());  
+            }
+            return sortedMap;
+        } catch (Exception e){
+            return mapToSort;
+        }
+    }
+
+    public static <K, V> Map <K, V> setSequenceMap(final Map <K, V> sequenceMap) 
+    {
+        return setSequenceMapByMultiple(sequenceMap, null);
+    }
+
+    public static <K, V> Map <K, V> setSequenceMapByMultiple(final Map <K, V> sequenceMap, Integer multiple) 
+    {
+        if (sequenceMap == null) 
+        {
+            return null;
+        }
+        try 
+        {
+            Map <K, Integer> sequenceSortedMap = FastMap.newInstance();
+            for (Map.Entry < K, V>  entry : sequenceMap.entrySet()) 
+            {
+                if (UtilValidate.isNotEmpty(entry.getValue()) && UtilValidate.isInteger(entry.getValue().toString()))
+                {
+                	sequenceSortedMap.put(entry.getKey(), Integer.parseInt(entry.getValue().toString()));
+                }
+                else
+                {
+                	sequenceSortedMap.put(entry.getKey(), -1);
+                }
+            }
+
+            sequenceSortedMap = sortMapByValues(sequenceSortedMap);
+
+            Map <K, V> sequenceMapInMultiple = FastMap.newInstance();
+            int row = 0;
+            for (Map.Entry < K, Integer>  entry : sequenceSortedMap.entrySet()) 
+            {
+                if (entry.getValue() == -1)
+                {
+                    sequenceMapInMultiple.put(entry.getKey(), (V)"");
+                } 
+                else if (entry.getValue() == 0)
+                {
+                    sequenceMapInMultiple.put(entry.getKey(), (V)entry.getValue().toString());
+                }
+                else
+                {
+                    if (multiple == null)
+                    {
+                        sequenceMapInMultiple.put(entry.getKey(), (V)entry.getValue().toString());
+                    }
+                    else
+                    {
+                        Integer seqValue = (++row)*multiple;
+                        sequenceMapInMultiple.put(entry.getKey(), (V)seqValue.toString());
+                    }
+                }
+            }
+            return sequenceMapInMultiple;
+        } catch (Exception e){
+            return sequenceMap;
+        }
+    }
+    /** Returns the ocurrences of a subStr in a String. */
+    public static int countOccurrences(String str, String subStr) {
+        int subStrCount = 0;
+        if (UtilValidate.isNotEmpty(str) && UtilValidate.isNotEmpty(subStr)) 
+        {
+            subStrCount = str.length() - str.replaceAll(subStr, "").length();
+        }
+        return subStrCount;
+    }
+
+    /**
+     *return the parmValue of given parmKey.
+     *
+     *@param pramKey
+     *@return String of the pramKey
+     */
+     @Deprecated
+    public static String getProductStoreParm(String parmKey) {
+        if (UtilValidate.isEmpty(parmKey)) {
+            return null;
+        }
+        String productStoreId = null;
+        Delegator delegator = DelegatorFactory.getDelegator(null);
+        try {
+            List<GenericValue> productStoreList = delegator.findList("ProductStore",null,null,null,null,true);
+            if (UtilValidate.isNotEmpty(productStoreList)) {
+                GenericValue productStore = EntityUtil.getFirst(productStoreList);
+                productStoreId = productStore.getString("productStoreId");
+            }
+        } catch (Exception e) {
+            Debug.logError(e, "Problem getting Product Store", module);
+        }
+        if (UtilValidate.isEmpty(productStoreId)) {
+            return null;
+        }
+        return getProductStoreParm(delegator, productStoreId, parmKey);
+    }
 }

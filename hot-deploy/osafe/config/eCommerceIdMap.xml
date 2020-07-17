@@ -260,6 +260,9 @@
     <property key="EMAIL_TEST_EMAIL">
         <value xml:lang="en">E_TEST_EMAIL</value>
     </property>
+    <property key="EMAIL_SCHEDULED_JOB">
+        <value xml:lang="en">E_SCHED_JOB_ALERT</value>
+    </property>
     <property key="EMAIL_MAILING_LIST">
         <value xml:lang="en">E_MAILING_LIST</value>
     </property>

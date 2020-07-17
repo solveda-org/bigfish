@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><!-- InstanceBegin template="/Templates/helpHowDoI.dwt" codeOutsideHTMLIsLocked="false" -->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- InstanceBeginEditable name="doctitle" -->
+<title>BigFish Admin Help</title>
+<link rel="shortcut icon" href="bigfishfavicon.gif" />
+<!-- InstanceEndEditable -->
+				<link rel="stylesheet" href="helpScreen.css" type="text/css" media="screen" />
+				<link rel="stylesheet" href="helpPrint.css" type="text/css" media="print" />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript" src="collapse.js"></script>
+<script type="text/javascript">
+<!--//--><![CDATA[//><!--
+$("html").addClass("js");
+$.fn.accordion.defaults.container = false; 
+$(function() {
+  $("#acc3").accordion({initShow : "#current"});
+  $("#acc4").accordion({initShow : "#current"});
+  $("html").removeClass("js");
+});
+//--><!]]>
+</script>
+<!-- InstanceBeginEditable name="head" -->
+<!-- InstanceEndEditable -->
+</head>
+
+<body>
+<a name="top" id="top"></a>
+<!-- InstanceBeginEditable name="helpHeader" -->
+<div id="helpHeader"><!-- #BeginLibraryItem "/Library/helpHeaderContent.lbi" --><div id="helpNavigation">
+	<ul>
+		<li><a href="#" onclick="history.go(-1);return false;"><img src="back.png" width="18" height="18" alt="Go Back"></a></li>
+		<li><a class="homeHelpButton" href="index.htm"><img src="home.png" width="18" height="18" alt="Help Home"></a></li>
+		<li><a href="#" onclick="history.go(1);return false;"><img src="forward.png" width="18" height="18" alt="Advance"></a></li>
+	</ul>
+</div>
+
+<a class="contact" href="http://bigfish.salmonllc.com/bfContactUs.html" target="_blank">Contact BigFish</a>
+<p class="logo">BigFish Online Help</p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+
+	<div id="helpWrapper">
+    
+<!-- InstanceBeginEditable name="helpContent" -->
+  <div id="contentHelp">
+
+	<h1>SSL Certificate Setup</h1>
+	<p>Choose a password to enter later when prompted. This same password will be used for the keystore password and for another question a bit later as the key password for.</p>
+	<h3>1. Run: "keytool -genkey -keyalg RSA -alias ssl -keystore [keystore name]"</h3>
+	<p>Go through and answer the following questions:</p>
+    <p>Enter keystore password: [password]</p>
+    <ul>
+		<li class="question">What is your first and last name?</li>
+		<li class="answer">[Unknown]: www.mydomain.com (example)</li>
+		<li class="question">What is the name of your organizational unit?</li>
+		<li class="answer">[Unknown]: Undersun Testing (example)</li>
+		<li class="question">What is the name of your organization?</li>
+		<li class="answer">[Unknown]: Undersun Testing (example)</li>
+		<li class="question">What is the name of your City or Locality?</li>
+		<li class="answer">[Unknown]: New York (example)</li>
+		<li class="question">What is the name of your State or Province?</li>
+		<li class="answer">[Unknown]: New York (example)</li>
+		<li class="question">What is the name of your organizational unit?</li>
+		<li class="answer">[Unknown]: Undersun Testing (example)</li>
+		<li class="question">What is the two-letter country code for this unit?</li>
+		<li class="answer">[Unknown]: US (example)</li>
+		<li class="question">Is CN=www.mydomain.com, OU=Undersun Testing, O=Undersun Testing, L=New York, ST=New York, C=US correct?</li>
+		<li class="answer">[no]: yes</li>
+	</ul>
+    <p><strong>Enter key password for:</strong></p>
+	<p>(RETURN if same as keystore password): [password]</p>
+	<h3>2. Run: &quot;keytool -certreq -alias ssl -keyalg RSA -file certreq.csr -keystore [keystore name]&quot;</h3>
+	<p>The following will be prompted/shown:</p>
+	<p><strong>Enter keystore password: [password]</strong></p>
+	<p><em>The CSR will be saved in the current directory: BEGIN NEW CERTIFICATE REQUEST and END NEW CERTIFICATE REQUEST</em></p>
+    
+<a class="backTop" href="#top">Back to Top</a>
+<h3>3. Submit the CSR to a signing authority (Thawte, Verisign, etc)</h3>
+<h3>4. Download your certificate from the signing authority. Please remember to download the Certificate in PKCS#7 format</h3>
+<h3>5. Import the Certificate into the keystore by running:</h3>
+<p>"keytool -import -alias ssl -trustcacerts -file mysignedcert.cer -keystore [keystore name]"</p>
+<h3>6. Configure the ofbiz-containers.xml file to point to your new keystore and password:</h3>
+<ul>
+	<li>If using Tomcat (Catalina), which is the default, find the "catalina-container" <img src="linkPathArrow.png" width="16" height="16" alt="arrow" /> "https-connector" <img src="linkPathArrow.png" width="16" height="16" alt="arrow" /> "keystoreFile" and "keystorePass" properties and set them.</li>
+    <li>If using Jetty find the "jetty-container" <img src="linkPathArrow.png" width="16" height="16" alt="arrow" />  "https-listener" <img src="linkPathArrow.png" width="16" height="16" alt="arrow" /> "keystore" and "password" properties and set them.</li>
+    <li>For other Servlet containers, see the documentation for that container to find out how to set the HTTPS keystore and password settings.</li>
+</ul>
+</div>
+  
+
+<!-- InstanceEndEditable -->    
+    </div>
+
+
+	<!-- InstanceBeginEditable name="helpFooter" -->
+	<div id="helpFooter"><!-- #BeginLibraryItem "/Library/helpFooterContent.lbi" --><p>Built by <a target="_blank" href="http://www.salmonllc.com">Salmon LLC</a></p><!-- #EndLibraryItem --></div>
+<!-- InstanceEndEditable -->
+</body>
+<!-- InstanceEnd --></html>

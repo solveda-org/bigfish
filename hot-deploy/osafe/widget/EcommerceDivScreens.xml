@@ -235,6 +235,7 @@
     <screen name="pdpReviewList">
         <section>
             <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductReview.groovy" />
             </actions>
             <widgets>

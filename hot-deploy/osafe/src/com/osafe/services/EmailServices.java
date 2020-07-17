@@ -63,6 +63,8 @@ public class EmailServices {
 
     protected static final HtmlScreenRenderer htmlScreenRenderer = new HtmlScreenRenderer();
     protected static final FoScreenRenderer foScreenRenderer = new FoScreenRenderer();
+    
+    public static final String err_resource = "OSafeAdminUiLabels";
 
     @SuppressWarnings("unchecked")
     public static Map abandonCartEmail(DispatchContext dctx, Map context) {
@@ -507,7 +509,8 @@ public class EmailServices {
                 {
                     subjectString = productStoreEmail.getString("subject");
                 }
-                Map subjectMap = Util.getProductStoreParmMap(delegator, null,productStoreId);
+                Map<String, Object> subjectMap = Util.getProductStoreParmMap(delegator, null,productStoreId);
+                subjectMap.putAll(bodyParameters);
                 subjectString = FlexibleStringExpander.expandString(subjectString, subjectMap);
                 serviceContext.put("subject", subjectString);
                 serviceContext.put("contentType", productStoreEmail.get("contentType"));
@@ -660,6 +663,7 @@ public class EmailServices {
         String subject = (String) serviceContext.remove("subject");
         subject = FlexibleStringExpander.expandString(subject, screenContext, locale);
         Debug.logInfo("Expanded email subject to: " + subject, module);
+
         serviceContext.put("subject", subject);
         serviceContext.put("partyId", partyId);
         if (UtilValidate.isNotEmpty(orderId)) {
@@ -675,6 +679,7 @@ public class EmailServices {
             	System.out.println("muti");
             	sendMailResult = dispatcher.runSync("sendMailMultiPart", serviceContext);
             } else {
+            	serviceContext.put("sendFailureNotification", Boolean.FALSE);
                 sendMailResult = dispatcher.runSync("sendMail", serviceContext);
             }
         } catch (Exception e) {
@@ -683,7 +688,7 @@ public class EmailServices {
             return ServiceUtil.returnError(errMsg);
         }
         if (ServiceUtil.isError(sendMailResult)) {
-            return ServiceUtil.returnError(ServiceUtil.getErrorMessage(sendMailResult));
+            return ServiceUtil.returnError(UtilProperties.getMessage(EmailServices.err_resource, "TestEmailSendFailError", sendMailResult, locale));
         }
 
         result.put("messageWrapper", sendMailResult.get("messageWrapper"));

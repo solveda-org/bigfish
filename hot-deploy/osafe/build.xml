@@ -135,6 +135,7 @@
               <filter token="store.productStoreId" value="${store.productStoreId}"/>
               <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
               <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+              <filter token="ofbiz.locale.default" value="${ofbiz.locale.default}"/>
               <filter token="url.port.https" value="${url.port.https}"/>
               <filter token="url.port.http" value="${url.port.http}"/>
               <filter token="url.https.host" value="${url.https.host}"/>
@@ -154,10 +155,23 @@
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
-        <!-- Osafe Properties -->
+
+    	<!-- BIGFISH Schedulers -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml">
+            <filterset >
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/eCommerceBigfishScheduledJobs.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
+
+    	<!-- Osafe Properties -->
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties">
             <filterset >
-              <filter token="port.http" value="${port.http}"/>
+              <filter token="solr.search.server" value="${solr.search.server}"/>
+              <filter token="solr.search.port" value="${solr.search.port}"/>
+              <filter token="solr.index.server" value="${solr.index.server}"/>
+              <filter token="solr.index.port" value="${solr.index.port}"/>
               <filter token="localDispatcherName" value="${localDispatcherName}"/>
 			  <filter token="product.images.path" value="${product.images.path}"/>
               <filter token="productCategory.images.path" value="${productCategory.images.path}"/>
@@ -293,6 +307,15 @@
         <!-- Copy any client specific osafe files over existing files -->
         <copy todir="../../hot-deploy/osafe" failonerror="true" overwrite="true">
             <fileset dir="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe" >
+                   <exclude name="**/*.svn"/>
+                   <exclude name="**/*.patch"/>
+                   <exclude name="**/*.template"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy any accounting component files over existing files -->
+        <copy todir="../../applications/accounting" failonerror="true" overwrite="true">
+            <fileset dir="${osafe.deployemt.home}/ofbiz/applications/accounting" >
                    <exclude name="**/*.svn"/>
                    <exclude name="**/*.patch"/>
                    <exclude name="**/*.template"/>

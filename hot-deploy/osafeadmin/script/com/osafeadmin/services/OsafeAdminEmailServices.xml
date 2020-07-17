@@ -116,6 +116,7 @@
             <set field="emailParams.sendTo" from-field="parameters.toAddress"/>
             <set field="emailParams.subject" from-field="parameters.emailSubject"/>
             <set field="emailParams.sendFrom" from-field="parameters.fromAddress"/>
+        	<set field="emailParams.emailType" from-field="parameters.emailType"/>
             <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
             <set field="emailParams.bodyScreenUri" from-field="productStoreEmailSetting.bodyScreenLocation"/>
             <call-service service-name="sendMailFromScreen" in-map-name="emailParams">
@@ -165,6 +166,87 @@
             </else>
             </if>
             
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="sendScheduledJobNotification" short-description="This Service Sends the scheduled jobs email notification">
+    	<!-- responseMessage returns either 'success', 'fail', or 'error' -->
+		<if-not-empty field="parameters.responseMessage">
+			<if-compare field="parameters.responseMessage" operator="equals"  value="success">
+				<!-- set the success STATUS -->
+				<property-to-field resource="OSafeAdminUiLabels" property="ScheduledJobEmailSuccess" field="ProccessSuccess"/>
+				<set field="scheduledJobStatus" from-field="ProccessSuccess"/>
+				<!-- set the success info message -->
+				<if-not-empty field="parameters._SUCCESS_MESSAGE_">
+						<set field="scheduledJobReturnMessageText" from-field="parameters._SUCCESS_MESSAGE_"/>
+				</if-not-empty>
+				<if-not-empty field="parameters.successMessage">
+						<set field="scheduledJobReturnMessageText" from-field="parameters.successMessage"/>
+				</if-not-empty>
+				<else>
+					<!-- set the error/fail STATUS -->
+					<property-to-field resource="OSafeAdminUiLabels" property="ScheduledJobEmailFailError" field="ProccessFailError"/>
+					<set field="scheduledJobStatus" from-field="ProccessFailError"/>
+					<!-- set the error/fail info message -->
+					<if-not-empty field="parameters._ERROR_MESSAGE_">
+						<set field="scheduledJobReturnMessageText" from-field="parameters._ERROR_MESSAGE_"/>
+					</if-not-empty>
+					<if-not-empty field="parameters.errorMessage">
+						<set field="scheduledJobReturnMessageText" from-field="parameters.errorMessage"/>
+					</if-not-empty>
+				</else>
+			</if-compare>
+		</if-not-empty>
+        <if-empty field="parameters.productStoreId">
+             <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                     <field field="request" type="javax.servlet.ServletRequest"/>
+             </call-class-method>
+             <set field="parameters.productStoreId" from-field="productStoreId"/>
+             <else>
+                  <set field="productStoreId" from-field="parameters.productStoreId"/>
+             </else>
+        </if-empty>
+        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="ToEmails">
+	            <field field="productStoreId" type="String"/>
+	            <string value="EMAIL_SCHED_JOB_ALERT"/>
+	    </call-class-method>
+	    <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="preferredDateFormat">
+	            <field field="productStoreId" type="String"/>
+	            <string value="FORMAT_DATE"/>
+	    </call-class-method>
+	    <if-empty field="preferredDateFormat">
+	    	<set field="preferredDateFormat" from-field="MM/dd/y"/>
+	    </if-empty>
+	    <now-timestamp field="nowTimeStamp"/>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="parameters.nowDateTime">
+            <field field="nowTimeStamp" type="Timestamp"/>
+            <field field="preferredDateFormat" type="String"/>
+        </call-class-method>
+        <property-to-field resource="OSafeAdminUiLabels" property="ScheduledJobInfoText" field="scheduledJobInfoText"/>
+        <!-- if the service returns a message then append this message to the Job info -->
+		<if-not-empty field="scheduledJobReturnMessageText">
+			<string-append field="scheduledJobInfoText" string=" [${scheduledJobReturnMessageText}]"/>
+		</if-not-empty>
+		<set field="bodyParameters.scheduledJobMessage" from-field="scheduledJobInfoText"/>
+        <set field="bodyParameters.productStoreId" from-field="productStoreId"/>
+        <set field="bodyParameters.emailType" value="PRDS_SCHED_JOB_ALERT"/>
+        <set field="bodyParameters.scheduledJobName" from-field="parameters.scheduledJobName"/>
+        <set field="bodyParameters.scheduledJobStatus" from-field="scheduledJobStatus"/>
+        <set field="bodyParameters.nowDateTime" from-field="parameters.nowDateTime"/>
+        <set field="bodyParameters.SCHEDULED_JOB_NAME" from-field="parameters.scheduledJobName"/>
+        <set field="bodyParameters.SCHEDULED_JOB_STATUS" from-field="scheduledJobStatus"/>
+        <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
+                <field-map field-name="productStoreId" from-field="bodyParameters.productStoreId"/>
+                <field-map field-name="emailType" from-field="bodyParameters.emailType"/>
+        </entity-one>
+        <!-- Send email-->
+        <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+            
+            <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+            <set field="emailParams.userLogin" from-field="systemUserLogin"/>
+            <set field="emailParams.sendTo" value="${ToEmails}"/>
+        	<set field="emailParams.emailType" from-field="bodyParameters.emailType"/>
+            <call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
         </if-not-empty>
     </simple-method>
     

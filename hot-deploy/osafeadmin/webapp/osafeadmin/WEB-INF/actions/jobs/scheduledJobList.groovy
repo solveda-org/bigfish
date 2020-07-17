@@ -36,6 +36,12 @@ import com.ibm.icu.util.Calendar;
 
 import org.ofbiz.base.util.ObjectType;
 
+// Paging variables
+viewIndex = Integer.valueOf(parameters.viewIndex  ?: 1);
+viewSize = Integer.valueOf(parameters.viewSize ?: UtilProperties.getPropertyValue("osafeAdmin", "default-view-size"));
+context.viewSize=viewSize;
+context.viewIndex=viewIndex;
+
 //input
 String srchJobName = StringUtils.trimToEmpty(parameters.srchJobName);
 srchRunDateFrom = StringUtils.trimToEmpty(parameters.srchRunDateFrom);
@@ -56,11 +62,7 @@ srchPending=StringUtils.trimToEmpty(parameters.srchPending);
 srchQueued=StringUtils.trimToEmpty(parameters.srchQueued);
 srchRunning=StringUtils.trimToEmpty(parameters.srchRunning);
 
-viewAll=StringUtils.trimToEmpty(parameters.viewall);
-viewbigfishonly=StringUtils.trimToEmpty(parameters.viewbigfishonly);
-
 context.srchAll=srchAll;
-context.viewAll=viewAll;
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
 
@@ -200,28 +202,6 @@ if(srchEndDateTo)
 	endDateTo=endDateTo.next();//includes the "To" date
 	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("finishDateTime"), EntityOperator.LESS_THAN_EQUAL_TO, endDateTo));
 	context.srchEndDateTo=srchEndDateTo;
-}
-//checkbox
-servicesList=FastList.newInstance();
-if(!viewAll)
-{
-	
-	if(viewbigfishonly)
-	{
-		//make a list, populated that list with globalContext.ADM_BF_SERVICES_AVAIL_FOR_SCHED  (tokenize(",") and replace it with the list below
-		services=globalContext.ADM_BF_SERVICES_AVAIL_FOR_SCHED;
-		if (UtilValidate.isNotEmpty(services))
-		{
-			services=services.replaceAll(" ", "");
-			serviceList=services.tokenize(",");
-			for(serviceName in serviceList)
-			{
-				servicesList.add(serviceName);
-			}
-			exprs.add(EntityCondition.makeCondition("serviceName", EntityOperator.IN, servicesList));
-		}
-	   context.viewbigfishonly=viewbigfishonly
-	}
 }
 
 if (UtilValidate.isNotEmpty(exprs)) 

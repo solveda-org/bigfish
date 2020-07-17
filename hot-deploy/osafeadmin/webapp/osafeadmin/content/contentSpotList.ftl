@@ -42,7 +42,9 @@
                      </td>
                      <#if contentTypeId?exists && libraryContentTypeId?exists && contentTypeId == libraryContentTypeId>
                      <td class="actionCol <#if !hasNext>lastRow</#if> lastCol">
-                         <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SyntaxHelperInfo}${thisContent.contentId}${uiLabelMap.EndTag}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                         <div class="infoIcon">
+                           <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SyntaxHelperInfo}${thisContent.contentId}${uiLabelMap.EndTag}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                         </div>
                      </td>
                      </#if>
             		<#-- ==== Content Name ===== -->

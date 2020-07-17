@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>OSafe Services</description>
+    <vendor/>
+    <version>1.0</version>
+    <service name="clientProductRatingUpdates" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientProductRatingUpdates" auth="false" transaction-timeout="7200" use-transaction="false">
+        <description>Import Client Product Ratings Template </description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsInRatingDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
+    </service>
+    <service name="clientProductUpdates" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientProductUpdates" auth="false" transaction-timeout="7200" use-transaction="false">
+        <description>Import Client Product Template</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsInProductDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
+    </service>
+    <service name="clientStoreUpdates" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientStoreUpdates" auth="false" transaction-timeout="7200" use-transaction="false">
+        <description>Import Client Store Template</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsInStoreDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
+    </service>
+    <service name="bigFishCustomerFeed" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="bigFishCustomerFeed" auth="false" transaction-timeout="7200">
+        <description>Export Bigfish Customers</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsOutCustomerDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsOutCustomerPrefix" mode="IN" type="String" optional="true" />
+    </service>
+    <service name="bigFishOrderFeed" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="bigFishOrderFeed" auth="false" transaction-timeout="7200">
+        <description>Export Bigfish Orders</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsOutOrderDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsOutOrderPrefix" mode="IN" type="String" optional="true" />
+    </service>
+    <service name="bigFishContactUsFeed" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="bigFishContactUsFeed" auth="false" transaction-timeout="7200">
+        <description>Export Bigfish Contact Us Events</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsOutContactUsDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsOutContactUsPrefix" mode="IN" type="String" optional="true" />
+    </service>
+    <service name="bigFishRequestCatalogFeed" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="bigFishRequestCatalogFeed" auth="false" transaction-timeout="7200">
+        <description>Export Bigfish Request Catalog Events</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsOutRequestCatalogDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsOutRequestCatalogPrefix" mode="IN" type="String" optional="true" />
+    </service>
+</services>

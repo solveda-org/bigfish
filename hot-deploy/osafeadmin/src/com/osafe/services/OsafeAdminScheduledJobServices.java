@@ -44,6 +44,7 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -60,6 +61,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelParam;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceDispatcher;
 import org.ofbiz.service.calendar.RecurrenceRule;
@@ -73,6 +75,7 @@ import org.ofbiz.service.ServiceUtil;
 import java.text.ParseException;
 
 import com.ibm.icu.util.Calendar;
+import com.osafe.util.OsafeAdminUtil;
 
 /**
  * OsafeAdminScheduledJobServices - WebApp Events Related To Framework pieces
@@ -117,7 +120,7 @@ public class OsafeAdminScheduledJobServices {
         String serviceCnt = (String) params.remove("SERVICE_COUNT");
         String retryCnt = (String) params.remove("SERVICE_MAXRETRY");
         
-        String prefDateFormat = (String) params.remove("FORMAT_DATE");
+        String prefDateFormat = (String) params.remove("preferredDateFormat");
         //default to -1
         retryCnt = "-1";
       //set default to DAILY
@@ -152,22 +155,71 @@ public class OsafeAdminScheduledJobServices {
         
         //validation
         //serviceName
+        ModelService modelService = null;
         if (serviceName.length() == 0) {
         	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingServiceNameError", locale));
         }
         else
         {
         	// lookup the service definition to see if this service is externally available, if not require the SERVICE_INVOKE_ANY permission
-            ModelService modelServices = null;
+            
             try {
-                modelServices = dispatcher.getDispatchContext().getModelService(serviceName);
+                modelService = dispatcher.getDispatchContext().getModelService(serviceName);
             } catch (GenericServiceException e) {
 
             }
-            if (modelServices == null) {
-                error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidServiceNameError", locale));
+            if (modelService == null) {
+                error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidServiceNameError1", locale));
             }
         }
+        
+        Map<String, Object> serviceContext = FastMap.newInstance();
+     // make the context valid; using the makeValid method from ModelService
+        if (UtilValidate.isNotEmpty(modelService)) {
+	        Iterator<String> ci = modelService.getInParamNames().iterator();
+	        List<String> modelParamRequired = modelService.getParameterNames("IN", false, false);
+
+	        while (ci.hasNext()) {
+	            String name = ci.next();
+	
+	            // don't include userLogin, that's taken care of below
+	            if ("userLogin".equals(name)) continue;
+	            // don't include locale, that is also taken care of below
+	            if ("locale".equals(name)) continue;
+	
+	            Object value = request.getParameter(name);
+	
+	            // if the parameter wasn't passed and no other value found, don't pass on the null
+	            if (value == null) {
+	                value = request.getAttribute(name);
+	            }
+	            if (value == null) {
+	                value = request.getSession().getAttribute(name);
+	            }
+	            if (value == null) {
+	            	if(modelParamRequired.contains(name)){	            		
+	            		Map<String, String> errorArgs = FastMap.newInstance();
+	            		errorArgs.put("serviceName", serviceName);
+	            		errorArgs.put("name", name);
+	            		error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingParamError", errorArgs, locale));
+	            	}
+	            }
+	
+	            // set even if null so that values will get nulled in the db later on
+	            serviceContext.put(name, value);
+	        }
+	        
+	
+	        if (userLogin != null) {
+	            serviceContext.put("userLogin", userLogin);
+	        }
+	
+	        if (locale != null) {
+	            serviceContext.put("locale", locale);
+	        }
+        }
+
+        
         //jobName
         if (jobName.length() == 0) {
         	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingJobNameError", locale));
@@ -184,8 +236,18 @@ public class OsafeAdminScheduledJobServices {
 	        SimpleDateFormat prefFormat = null;
 	        if(!UtilValidate.isNotEmpty(prefDateFormat)) //if FORMAT_DATE sys parm is empty, this is the format datepicker will use
 	        {
-	        	prefDateFormat = "mm/dd/y";
+	        	prefDateFormat = "MM/dd/y";
 	        }
+	        if(UtilValidate.isInteger(serviceTime))
+	        {
+	            serviceTime = serviceTime+":00";
+	        }
+	        if (serviceAMPMString.equals("1")) {
+	            serviceTime = serviceTime+" AM";
+	        } else if(serviceAMPMString.equals("2")) {
+	            serviceTime = serviceTime+" PM";
+	        }
+
 	        prefFormat = new SimpleDateFormat(prefDateFormat + " H:mm a");
 	        Date dateTime = null;
 	        try
@@ -317,78 +379,9 @@ public class OsafeAdminScheduledJobServices {
         int frequency = RecurrenceRule.DAILY;
 
         StringBuilder errorBuf = new StringBuilder();
-
-        // make sure we passed a service
-        if (serviceName == null) {
-            String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingServiceNameError", locale);
-            request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg);
-            return "error";
-        }
-
-        // lookup the service definition to see if this service is externally available, if not require the SERVICE_INVOKE_ANY permission
-        ModelService modelService = null;
-        try {
-            modelService = dispatcher.getDispatchContext().getModelService(serviceName);
-        } catch (GenericServiceException e) {
-            Debug.logError(e, "Error looking up ModelService for serviceName [" + serviceName + "]", module);
-            String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingServiceNameError", locale);
-            request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg + " [" + serviceName + "]: " + e.toString());
-            return "error";
-        }
-        if (modelService == null) {
-            String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.service_name_not_find", locale);
-            request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg + " [" + serviceName + "]");
-            return "error";
-        }
-
-        // make the context valid; using the makeValid method from ModelService
-        Map<String, Object> serviceContext = FastMap.newInstance();
-        Iterator<String> ci = modelService.getInParamNames().iterator();
-        while (ci.hasNext()) {
-            String name = ci.next();
-
-            // don't include userLogin, that's taken care of below
-            if ("userLogin".equals(name)) continue;
-            // don't include locale, that is also taken care of below
-            if ("locale".equals(name)) continue;
-
-            Object value = request.getParameter(name);
-
-            // if the parameter wasn't passed and no other value found, don't pass on the null
-            if (value == null) {
-                value = request.getAttribute(name);
-            }
-            if (value == null) {
-                value = request.getSession().getAttribute(name);
-            }
-            if (value == null) {
-                // still null, give up for this one
-                continue;
-            }
-
-            if (value instanceof String && ((String) value).length() == 0) {
-                // interpreting empty fields as null values for each in back end handling...
-                value = null;
-            }
-
-            // set even if null so that values will get nulled in the db later on
-            serviceContext.put(name, value);
-        }
+        
+        //serviceName exist and all needed params were passed
         serviceContext = modelService.makeValid(serviceContext, ModelService.IN_PARAM, true, null, timeZone, locale);
-
-        if (userLogin != null) {
-            serviceContext.put("userLogin", userLogin);
-        }
-
-        if (locale != null) {
-            serviceContext.put("locale", locale);
-        }
-
-        if (!modelService.export && !authz.hasPermission(request.getSession(), "SERVICE_INVOKE_ANY", null)) {
-            String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.not_authorized_to_call", locale);
-            request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg);
-            return "error";
-        }
 
         // some conversions
         if (UtilValidate.isNotEmpty(serviceDateTime)) {
@@ -519,8 +512,21 @@ public class OsafeAdminScheduledJobServices {
 	        SimpleDateFormat prefFormat = null;
 	        if(!UtilValidate.isNotEmpty(prefDateFormat)) //if FORMAT_DATE sys parm is empty, this is the format datepicker will use
 	        {
-	        	prefDateFormat = "mm/dd/y";
+	            prefDateFormat = "mm/dd/y";
 	        }
+	        if (!OsafeAdminUtil.isDateTime(serviceDate, prefDateFormat)) {
+	            return null;
+	        }
+	        if(UtilValidate.isInteger(serviceTime))
+	        {
+	            serviceTime = serviceTime+":00";
+	        }
+	        if (serviceAMPMString.equals("1")) {
+	            serviceTime = serviceTime+" AM";
+	        } else if(serviceAMPMString.equals("2")) {
+	            serviceTime = serviceTime+" PM";
+	        }
+
 	        prefFormat = new SimpleDateFormat(prefDateFormat + " H:mm a");
 	        Date dateTime = null;
 	        try

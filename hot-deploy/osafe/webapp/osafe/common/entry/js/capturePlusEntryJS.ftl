@@ -50,20 +50,29 @@
             </#if>
             if (company == null || company.length == 0) {
                 jQuery('#${fieldPurpose!}_ADDRESS1').val(line1);
+                jQuery('#${fieldPurpose!}_ADDRESS1').change();
                 jQuery('#${fieldPurpose!}_ADDRESS2').val(line2);
+                jQuery('#${fieldPurpose!}_ADDRESS2').change();
                 jQuery('#${fieldPurpose!}_ADDRESS3').val(line3);
+                jQuery('#${fieldPurpose!}_ADDRESS3').change();
             } else {
                 jQuery('#${fieldPurpose!}_ADDRESS1').val(company);
+                jQuery('#${fieldPurpose!}_ADDRESS1').change();
                 jQuery('#${fieldPurpose!}_ADDRESS2').val(line1);
+                jQuery('#${fieldPurpose!}_ADDRESS2').change();
                 jQuery('#${fieldPurpose!}_ADDRESS3').val(line2+" "+line3);
+                jQuery('#${fieldPurpose!}_ADDRESS3').change();
             }
             jQuery('#${fieldPurpose!}_CITY').val(city);
-            jQuery('#${fieldPurpose!}_POSTAL_CODE').val(postalCode);
+            jQuery('#${fieldPurpose!}_CITY').change();
             jQuery("#${fieldPurpose!}_STATE > option").each(function() {
                 if (this.value == provinceCode) {
                    jQuery(this).attr('selected', 'selected');
                 }
             });
+            jQuery('#${fieldPurpose!}_STATE').change();
+            jQuery('#${fieldPurpose!}_POSTAL_CODE').val(postalCode);
+            jQuery('#${fieldPurpose!}_POSTAL_CODE').change();
         }
     </script>
 </#if>

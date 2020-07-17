@@ -52,12 +52,10 @@
             <call-object-method obj-field="shoppingCart" method-name="getAttribute" ret-field="guestCheckoutAttr">
                 <string value="GUEST_CHECKOUT"/>
             </call-object-method>
-            <if-not-empty field="guestCheckoutAttr">
-                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
-                    <string value="IS_DOWNLOADED"/>
-                    <string value="N"/>
-                </call-object-method>
-            </if-not-empty>
+            <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                <string value="IS_DOWNLOADED"/>
+                <string value="N"/>
+            </call-object-method>
 	        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="checkoutConfirmCookies">
 	            <field field="request" type="javax.servlet.ServletRequest"/>
 	            <string value="CHECKOUT_CONFIRM_GET_COOKIE"/>
@@ -896,6 +894,58 @@
         <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
             <field field="shippingAddressPurposeContext.contactMechId"/>
         </call-object-method>
+    </simple-method>
+
+    <simple-method method-name="calcTax" short-description="calculate the tax" login-required="false">
+
+        <!--   make temp contact mech    -->
+        <make-value entity-name="ContactMech" value-field="contactMech"/>
+        <sequenced-id sequence-name="ContactMech" field="contactMech.contactMechId"/>
+        <set field="contactMech.contactMechTypeId" value="POSTAL_ADDRESS" />
+        <create-value value-field="contactMech"/>
+
+        <!--   make temp postal address    -->
+        <make-value entity-name="PostalAddress" value-field="postalAddress"/>
+        <set field="postalAddress.contactMechId" from-field="contactMech.contactMechId"/>
+        <if-not-empty field="parameters.address1">
+            <set field="postalAddress.address1" from-field="parameters.address1"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.address2">
+            <set field="postalAddress.address2" from-field="parameters.address2"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.address3">
+            <set field="postalAddress.address3" from-field="parameters.address3"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.city">
+            <set field="postalAddress.city" from-field="parameters.city"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.postalCode">
+            <set field="postalAddress.postalCode" from-field="parameters.postalCode"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.stateProvinceGeoId">
+            <set field="postalAddress.stateProvinceGeoId" from-field="parameters.stateProvinceGeoId"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.countryGeoId">
+            <set field="postalAddress.countryGeoId" from-field="parameters.countryGeoId"/>
+        </if-not-empty>
+        <create-value value-field="postalAddress"/>
+
+        <!--   call calc tax method     -->
+        <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+        <if-compare operator="not-equals" value="null" field="shoppingCart">
+	        <create-object class-name="org.ofbiz.order.shoppingcart.CheckOutHelper" field="checkOutHelper">
+	            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+	            <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+	            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+	        </create-object>
+	        <call-object-method method-name="calcAndAddTax" obj-field="checkOutHelper">
+	            <field field="postalAddress" type="org.ofbiz.entity.GenericValue"/>
+	        </call-object-method>
+        </if-compare>
+
+       <!--   remove temp contact mech and postal address     -->
+       <remove-value value-field="postalAddress"/>
+       <remove-value value-field="contactMech"/>
     </simple-method>
 
     <simple-method method-name="processpaymentFail" short-description="process payment fail" login-required="false">

@@ -76,5 +76,3 @@ if (shoppingCart.getShipmentMethodTypeId() && shoppingCart.getCarrierPartyId()) 
     context.chosenShippingMethod = shoppingCart.getShipmentMethodTypeId() + '@' + shoppingCart.getCarrierPartyId();
     context.chosenShippingMethodDescription = shoppingCart.getCarrierPartyId() + " " + shoppingCart.getShipmentMethodType(0).description;
 }
-//Add Order Attribute IS DOWNLOADED
-shoppingCart.setOrderAttribute("IS_DOWNLOADED","N");

@@ -69,6 +69,20 @@ if (UtilValidate.isNotEmpty(subscriberLastName))
 
 }
 
+if (UtilValidate.isNotEmpty(parameters.scheduledJobName))
+{
+  globalContext.put("SCHED_JOB_NAME",parameters.scheduledJobName);
+}
+
+if (UtilValidate.isNotEmpty(parameters.scheduledJobStatus))
+{
+  globalContext.put("SCHED_JOB_STATUS",parameters.scheduledJobStatus);
+}
+
+if (UtilValidate.isNotEmpty(parameters.scheduledJobMessage))
+{
+  globalContext.put("SCHED_JOB_INFO",parameters.scheduledJobMessage);
+}
 
 orderId=context.orderId;
 globalContext.put("EMAIL_TITLE",context.title);
@@ -156,6 +170,7 @@ if (UtilValidate.isNotEmpty(orderId))
        orderShipmentInfoSummaryList = delegator.findList("OrderShipmentInfoSummary", osisCond, osisFields, osisOrder, osisFindOptions, false);
 
        globalContext.put("ORDER_HELPER",orderReadHelper);
+       globalContext.put("ORDER_CURRENCY",orderReadHelper.getCurrency());
        globalContext.put("ORDER",orderHeader);
        globalContext.put("ORDER_ID",orderId);
        globalContext.put("ORDER_SUB_TOTAL",orderSubTotal);

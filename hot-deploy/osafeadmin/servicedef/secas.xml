@@ -29,4 +29,68 @@
         <action service="resetGrandTotal" mode="sync"/>
         <action service="sendOrderChangeNotification" mode="async" persist="true"/>
     </eca>
+    <!-- REMOVE THE TEST JOB  -->
+    <eca service="testJob" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="testJob"/>
+        <action service="sendScheduledJobNotification" mode="async"/>
+    </eca>
+   
+    
+    <eca service="genProductsIndex" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="genProductsIndex"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="abandonCartEmail" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="abandonCartEmail"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="shipReviewEmail" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="shipReviewEmail"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="reevooProductRatingUpdates" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="reevooProductRatingUpdates"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="clientProductRatingUpdates" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="clientProductRatingUpdates"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="clientProductUpdates" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="clientProductUpdates"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="clientStoreUpdates" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="clientStoreUpdates"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="bigFishCustomerFeed" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="bigFishCustomerFeed"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="bigFishOrderFeed" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="bigFishOrderFeed"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="bigFishContactUsFeed" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="bigFishContactUsFeed"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+    <eca service="bigFishRequestCatalogFeed" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="productStoreId" operator="is-not-empty"/>
+        <set field-name="scheduledJobName" value="bigFishRequestCatalogFeed"/>
+        <action service="sendScheduledJobNotification" mode="async" persist="true"/>
+    </eca>
+
 </service-eca>

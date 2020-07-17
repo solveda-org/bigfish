@@ -23,6 +23,7 @@ if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
     context.pageTitle = UtilProperties.getMessage("OSafeAdminUiLabels","OrderManagementOrderDetailTitle",messageMap, locale )
     context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderDetailInfoHeading",messageMap, locale )
     context.orderNoteInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderNoteHeading",messageMap, locale )
+	context.orderAttributeInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderAttributeHeading",messageMap, locale )
 
     pagingListSize=orderItems.size();
     context.pagingListSize=pagingListSize;

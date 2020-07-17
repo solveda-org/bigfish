@@ -402,5 +402,23 @@ under the License.
             </widgets>
         </section>
     </screen>
+    
+    <screen name="sendScheduledJobNotification">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="title" value="${uiLabelMap.ScheduledJobEmailTitle}"/>
+                <set field="contentEmailBodyId" value="${idMap.EMAIL_SCHEDULED_JOB}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
 
 </screens>

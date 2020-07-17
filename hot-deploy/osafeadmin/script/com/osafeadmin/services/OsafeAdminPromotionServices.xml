@@ -488,6 +488,9 @@
         </if>
         <check-errors/>
 
+        <if-compare field="parameters.inputParamEnumId" operator="not-equals" value="PPIP_ORDER_SHIPTOTAL">
+            <set field="parameters.otherValue" value="" set-if-null="true"/>
+        </if-compare>
         <set-service-fields service-name="createProductPromo" map="parameters" to-map="createProductPromoCtx"/>
 <!--        <call-service service-name="createProductPromo" in-map-name="createProductPromoCtx"/>-->
 
@@ -1074,6 +1077,10 @@
             </else-if>
         </if>
         <check-errors/>
+
+        <if-compare field="parameters.inputParamEnumId" operator="not-equals" value="PPIP_ORDER_SHIPTOTAL">
+            <set field="parameters.otherValue" value="" set-if-null="true"/>
+        </if-compare>
 
         <set-service-fields service-name="updateProductPromo" map="parameters" to-map="updateProductPromoCtx"/>
         <call-service service-name="updateProductPromo" in-map-name="updateProductPromoCtx"/>

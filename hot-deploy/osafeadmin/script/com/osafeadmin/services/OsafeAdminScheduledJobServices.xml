@@ -57,7 +57,7 @@
 	                <field field="parameters.SERVICE_DATE"/>
 	                <field field="parameters.SERVICE_TIME"/>
 	                <field field="parameters.SERVICE_AMPM"/>
-	                <field field="parameters.FORMAT_DATE"/>
+	                <field field="parameters.preferredDateFormat"/>
 	            </call-class-method>
 	            <if-empty field="ValidServTime">
 	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidStartDateError"/>
@@ -152,7 +152,7 @@
         <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
         <set from-field="parameters.JOB_NAME" field="lookedUpValue.jobName"/>
         <set from-field="parameters.SERVICE_NAME" field="lookedUpValue.serviceName"/>
-        <set from-field="parameters.SERVICE_TIME" field="lookedUpValue.runTime"/>
+        <set from-field="parameters.SERVICE_TIME" field="lookedUpValue.runTime" type="Timestamp"/>
         <store-value value-field="lookedUpValue"/>
         
         <!-- get reccurenceInfoId from JobSandbox -->
@@ -173,10 +173,30 @@
         <find-by-primary-key map="RecurrenceRuleLookupPKMap" value-field="RecurrenceRuleLookedUpValue"/>
         <!-- <set from-field="parameters.SERVICE_END_TIME" field="RecurrenceRuleLookedUpValue.lastUpdatedTxStamp"/>-->
         <set from-field="parameters.SERVICE_FREQUENCY" field="RecurrenceRuleLookedUpValue.frequency"/>
-        <set from-field="parameters.SERVICE_INTERVAL" field="RecurrenceRuleLookedUpValue.intervalNumber"/>
-        <set from-field="parameters.SERVICE_COUNT" field="RecurrenceRuleLookedUpValue.countNumber"/>
+        <set from-field="parameters.SERVICE_INTERVAL" field="RecurrenceRuleLookedUpValue.intervalNumber" type="Long"/>
+        <set from-field="parameters.SERVICE_COUNT" field="RecurrenceRuleLookedUpValue.countNumber" type="Long"/>
         <store-value value-field="RecurrenceRuleLookedUpValue"/>
         
+    </simple-method>
+    
+    <simple-method method-name="deleteScheduledJob" short-description="Delete a Scheduled Job">
+ 		<!-- check for bad or missing values --> 
+ 		<if-empty field="parameters.currentId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankJobIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+
+        <check-errors/>
+   
+        <!-- delete record in entities: JobSandbox  -->     
+        <entity-one entity-name="JobSandbox" value-field="JobSandboxLookedUpValue">
+                <field-map field-name="jobId" from-field="parameters.currentId"/>
+        </entity-one>
+        <if-not-empty field="JobSandboxLookedUpValue">
+            <remove-value value-field="JobSandboxLookedUpValue"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+            <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
     </simple-method>
    
 </simple-methods>

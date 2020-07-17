@@ -1,0 +1,678 @@
+@charset "utf-8";
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
+    font-size:inherit;
+}
+html {
+overflow-y:scroll; /* adds constant scroll bar to avoid skipping */
+}
+
+body {
+    font-family: 'calibri', Arial, Helvetica, sans-serif;
+    color: #000000;
+    /* Will make 1em = 10px */
+    font-size:62.5%;
+    background: #eaeaea;
+}
+
+a {
+	color: #666;
+	text-decoration: none;
+    font-size: 15px;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+ul,li {
+list-style: none;
+
+}
+
+h1 {
+	font-size: 2.6em;
+	margin: 10px 0 0 0;
+}
+
+h2 {
+
+}
+
+h3 {
+    font-size: 19px;
+    margin: 10px 0 0;
+}
+
+h4 {
+    font-size: 13px;
+    font-weight: 700;
+    margin: 10px 0 0;
+}
+
+code { /* for inline code example */
+	font-family: "Courier New", Courier, monospace;
+	font-size: 14px;
+	color: #800000;
+}
+
+/* Home Page Styels */
+
+#contentwrapper{
+float: left;
+width: 100%;
+min-height: 650px;
+    margin: 50px 0 0 0;
+}
+
+#contentcolumn{
+margin: 0 30% 0 30%; /*Margins for content column. Should be "0 RightColumnWidth 0 LeftColumnWidth*/
+}
+
+#contentcolumn .navContainer {
+	border: 1px solid #ccc;
+	background: #fff;
+	padding: 0 10px;
+	margin: 10px;
+}
+
+#leftcolumn{
+float: left;
+width: 30%; /*Width of left column in percentage*/
+margin: 50px 0 0  -100%;
+}
+
+#leftcolumn .navContainer {
+	border: 1px solid #ccc;
+	background: #fff;
+	padding: 0 10px;
+	margin: 10px;
+}
+
+#rightcolumn {
+float: left;
+width: 30%; /*Width of right column in pixels*/
+margin: 50px 0 0 -30%; /*Set margin to that of -(RightColumnWidth)*/
+}
+
+#rightcolumn .navContainer {
+	border: 1px solid #ccc;
+	background: #fff;
+	padding: 0 10px 10px 10px;
+	margin: 10px;
+}
+
+#rightcolumn .navContainer ul.guideList {
+	margin: 10px 0 0 0;
+}
+
+#rightcolumn .navContainer ul.guideList li {
+	margin: 5px 0 0 0;
+}
+
+
+#rightcolumn .navContainer p {
+    font-size: 13px;
+}
+
+#rightcolumn .navContainer a {
+    display: inline-block;
+    font-size: 15px;
+	border-bottom: 1px dotted;
+}
+
+#rightcolumn .navContainer a:hover {
+	border-bottom: 1px solid;
+	text-decoration: none;
+}
+
+#rightcolumn .navContainer label {
+    color: #404040;
+    display: block;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 15px 0 5px;
+}
+
+/* End Home */
+
+div#helpHeader {
+    background: none repeat scroll 0 0 #000000;
+    height: 25px;
+    margin: 0 0 15px;
+    overflow: hidden;
+    padding: 10px 0;
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+}
+
+div#helpHeader div#helpNavigation {
+    background: none repeat scroll 0 0 #000000;
+    overflow: hidden;
+    padding: 5px 0;
+    position: absolute;
+	margin: 0 0 0 25px;
+}
+
+div#helpHeader div#helpNavigation ul {
+    float: right;
+    margin: 0 5px 0 0;
+    padding: 0;
+}
+
+div#helpHeader div#helpNavigation ul li {
+	float: left;
+    margin: 0 10px 0 0;
+}
+
+div#helpHeader div#helpNavigation ul li a {
+	color: #666;
+}
+
+div#helpHeader div#helpNavigation ul li a:hover {
+	text-decoration: underline;
+}
+
+div#helpHeader a.homeHelpButton {
+	padding: 5px 0;
+	margin: 0;
+}
+
+div#helpHeader a.homeHelpButton span {
+	margin: 0 0 0 10px;
+}
+
+div#helpHeader a.homeHelpButton span {
+	margin: 0 0 0 10px;
+}
+
+div#helpHeader p.logo {
+    background: url("ico.png") no-repeat scroll right top transparent;
+    color: #FFFFFF;
+    float: right;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 5px 25px 0 0;
+    padding: 0 20px 0 0;
+}
+
+div#helpHeader a.contact {
+    background: url("email-icon.png") no-repeat scroll right top transparent;
+    color: #FFFFFF;
+    float: right;
+    font-size: 13px;
+    margin: 7px 25px 0 0;
+    padding: 0 20px 2px 0;
+	text-decoration: underline;
+}
+
+div#helpHomeWrapper {
+
+}
+
+div#helpHomeWrapper div#helpLeftColumn { 
+	width: 300px;
+	padding: 0 10px;
+	margin: 0!important;
+}
+
+div#contentwrapper div#helpLeftColumn .navContainer { 
+    float: left;
+    margin: -100%;
+    width: 320px;
+}
+
+div#helpWrapper {
+    margin: 0 auto;
+    overflow: auto;
+    max-width: 900px;
+}
+
+div#helpLeftColumn { 
+/*float: left;
+width: 30%; /*Width of left column in percentage
+margin-left: -100%; */
+    float: left;
+    margin-left: -100%;
+    width: 320px;
+}
+
+div#helpLeftColumn .navContainer { 
+	border: 1px solid #ccc;
+	background: #fff;
+	padding: 0 10px;
+	margin: 0 0 0 10px;
+}
+
+div#helpMiddleColumn {
+	width: 350px;
+	float: left;
+	margin: 0 10px;
+	border: 1px solid #ccc;
+	padding: 0 10px;
+	background: #ffffff;
+}
+
+
+
+div#helpFooter {
+    clear: left;
+    display: inline-block;
+    margin: 10px 0 0;
+    padding: 10px 0;
+    width: 100%;
+	float: left;
+}
+
+div#helpFooter p {
+    color: #666666;
+    float: right;
+    font-size: 13px;
+    margin: 0 10px 0 0;
+}
+
+div#helpFooter a {
+    color: #666666;
+    display: inline-block;
+    float: right;
+    font-size: 13px;
+    margin: 0 10px 0 5px;
+}
+
+ul.functionHelpNav, 
+ul.howDoNav, 
+ul.additionalHelpNav { 
+	margin: 10px 5px;
+	padding: 0;
+}
+
+ul.functionHelpNav>li, 
+ul.howDoNav>li,
+ul.additionalHelpNav>li { 
+
+
+}
+
+ul.functionHelpNav li.topLevel, 
+ul.howDoNav li.topLevel, 
+ul.additionalHelpNav li.topLevel { 
+
+}
+
+ul.functionHelpNav li.topLevel span, 
+ul.howDoNav li.topLevel span, 
+ul.additionalHelpNav li.topLevel span { 
+	padding: 5px;
+	background: #eaeaea;
+	display: block;
+}
+
+ul.functionHelpNav ul li, 
+ul.howDoNav ul li, 
+ul.additionalHelpNav ul li {
+	padding: 2px 0 2px 18px; 
+	display: block;
+    font-size: 15px;
+}
+
+ul.functionHelpNav li a, 
+ul.howDoNav li a, 
+ul.additionalHelpNav li a {
+    color: #404040;
+    display: inline-block;
+    font-size: 1.7em;
+    font-weight: 700;
+}
+
+ul.functionHelpNav li>a:hover, 
+ul.howDoNav li>a:hover,  
+ul.additionalHelpNav li>a:hover {
+	text-decoration: none;
+}
+
+ul.functionHelpNav ul, 
+ul.howDoNav ul, 
+ul.additionalHelpNav ul { 
+	margin: 0 0 0 15px;
+}
+
+ul.functionHelpNav ul li a, 
+ul.howDoNav ul li a, 
+ul.additionalHelpNav ul li a { 
+    border-bottom: 1px dotted #666666;
+    color: #666666 !important;
+    display: inline-block !important;
+    font-size: 15px;
+    text-decoration: none;
+}
+
+ul.functionHelpNav ul li a:hover, 
+ul.howDoNav ul li a:hover,  
+ul.additionalHelpNav ul li a:hover {
+    border-bottom: 1px solid #666666;
+	text-decoration: none;
+
+}
+
+.topLevel.last-child a.trigger {
+    border-bottom: 1px dotted;
+    display: inline-block !important;
+    font-size: 15px;
+}
+
+.topLevel.last-child a.trigger:hover {
+    border-bottom: 1px solid;
+}
+
+a.trigger {padding-left:20px; background-image: url(plus.png); background-repeat: no-repeat; background-position: 1px 50%;}
+
+a.trigger.open {background-image: url(minus.png)}
+
+.last-child a.trigger{padding-left:1px; background-image:none; font-weight:normal}
+
+div#contentcolumn #contentHelp {
+	margin: 0 10px!important;
+	border: 1px solid #ccc;
+	padding: 0 10px;
+	background: #fff;
+}
+
+div#contentHelp {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #CCCCCC;
+    margin: 60px 10px 0 10px;
+ /*   max-width: 100%;  */
+    padding: 0 10px 25px;
+    position: relative;
+}
+
+div#contentHelp:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+div#contentHelp h1 {
+	margin: 10px 0 20px 0;
+    padding: 0 0 5px 25px;
+	background: url("ico.png") no-repeat scroll 4px 8px transparent;
+}
+
+div#contentHelp h1+h2 {
+    margin: 0 0 10px 5px!important;
+}
+
+div#contentHelp h2 {
+    border-bottom: 2px dotted #666666;
+    color: #404040;
+    display: block;
+    font-size: 2em;
+    margin: 35px 0 10px 5px;
+    padding: 0 0 5px 0;
+	
+	
+}
+
+div#contentHelp h3 {
+    color: #404040;
+    font-size: 1.6em;
+    font-weight: 700;
+    margin: 30px 0 10px 5px;
+}
+
+span.access {
+	    font-size: 1.5em;
+		display: block;
+		margin: 0 0 0 5px;
+}
+
+span.access img {
+    margin: 0 4px;
+    position: relative;
+    top: 2px;
+}
+
+div#contentHelp p {
+ 	font-size: 15px;
+	display: block;
+	margin: 10px 5px;
+}
+
+img.helpLeft {
+	float: left;
+}
+
+img.helpRight {
+	float: right;
+}
+
+
+div#contentHelp ul {
+	margin: 20px 0 20px 20px;
+}
+
+div#contentHelp ul li {
+    background: url("main-bullet.png") no-repeat scroll left 5px transparent;
+    font-size: 15px;
+    margin: 8px 0;
+    padding: 0 0 0 15px;
+}
+
+div#contentHelp li a {
+	border-bottom: 1px dotted #666;
+}
+
+div#contentHelp li a:hover {
+	border-bottom: 1px solid #666;
+	text-decoration: none;
+}
+
+div#contentHelp ul li li {
+    background: none repeat scroll 0 0 transparent;
+    list-style: square outside none !important;
+    padding: 0;
+}
+
+div#contentHelp ul li.question {
+	list-style: none!important;
+	font-weight: 700;
+}
+
+div#contentHelp ul li.answer {
+	background: url("sub-bullet.png") no-repeat scroll left 5px transparent!important;
+	list-style: none!important;
+	margin: 0 0 25px 0;
+}
+
+div#contentHelp table.helpTable {
+    border-collapse: collapse;
+    margin: 5px auto;
+    max-width: 700px;
+}
+
+div#contentHelp table.helpTable thead tr {
+	background: #eaeaea;
+	border: 1px solid #666;
+}
+div#contentHelp table.helpTable tbody tr {
+	border: 1px solid #666;
+	border-top: none;
+}
+
+div#contentHelp table.helpTable tbody tr td:first-child {
+	border-right: 1px solid #666;
+}
+
+div#contentHelp table.helpTable thead tr td,
+div#contentHelp table.helpTable tbody tr td  {
+	padding: 4px;
+	font-size: 15px;
+}
+
+div#contentHelp table.cartExampleTable {
+	border-collapse: collapse;
+    margin: 5px 0;
+    width: 100%;
+}
+
+div#contentHelp table.cartExampleTable thead tr {
+	border-bottom: 1px solid #666;
+	font-weight: 700;
+}
+div#contentHelp table.cartExampleTable tbody tr {
+
+}
+
+div#contentHelp table.cartExampleTable tbody tr td:first-child {
+
+}
+
+div#contentHelp table.cartExampleTable thead tr td,
+div#contentHelp table.cartExampleTable tbody tr td  {
+	padding: 4px;
+	font-size: 15px;
+}
+
+div#contentHelp table.cartExampleTable tbody td.right {
+	text-align: right;
+}
+
+div#contentHelp table.orderConfirmation {
+	border-collapse: collapse;
+    margin: 5px 0;
+    width: 100%;
+}
+
+div#contentHelp table.orderConfirmation thead tr {
+	border: 1px solid #666;
+}
+
+div#contentHelp table.orderConfirmation thead tr td {
+	font-size: 17px
+}
+
+div#contentHelp table.orderConfirmation tbody tr {
+	border: 1px solid #666;
+	border-top: none;
+}
+
+div#contentHelp table.orderConfirmation tbody tr td{
+	font-size: 14px
+}
+
+div#contentHelp table.orderConfirmation tfoot tr {
+	border: 1px solid #666;
+	background: #ccffff;
+}
+
+div#contentHelp table.orderConfirmation thead tr td,
+div#contentHelp table.orderConfirmation tbody tr td, 
+div#contentHelp table.orderConfirmation tfoot tr td   {
+	padding: 4px;
+}
+
+div#contentHelp table.staticTable {
+	border-collapse: collapse;
+    margin: 5px 0;
+    width: 100%;
+}
+
+div#contentHelp table.staticTable thead tr {
+	border: 1px solid #666;
+	background: #ffffcc;
+}
+
+div#contentHelp table.staticTable tr.subheading {
+	background: #ffffcc;
+}
+
+div#contentHelp table.staticTable tr.subheadingAlt {
+	background: #e0e0e0;
+}
+
+div#contentHelp table.staticTable thead tr td {
+	font-size: 17px;
+}
+
+div#contentHelp table.staticTable tbody tr {
+	border: 1px solid #666;
+}
+
+div#contentHelp table.staticTable tbody tr td {
+	font-size: 14px;
+	border-right: 1px solid #666;
+}
+
+div#contentHelp table.staticTable tbody tr td.right {
+	text-align: right;
+}
+
+div#contentHelp table.staticTable tbody tr td.center {
+	text-align: center;
+}
+
+div#contentHelp table.staticTable tbody tr td.red {
+	color: #F00;
+}
+
+div#contentHelp table.staticTable tbody tr td.bold {
+	font-weight: 700;
+	font-size: large;
+}
+
+div#contentHelp table.staticTable thead tr td,
+div#contentHelp table.staticTable tbody tr td, 
+div#contentHelp table.staticTable tfoot tr td   {
+	padding: 4px;
+}
+
+div.warningBox {
+	padding: 5px 5px 5px 50px;
+	background: #ffffd5 url(warning.png) 7px 50% no-repeat;
+	border: 1px solid #ead21b;
+}
+
+div.warningBox p {
+	font-style: italic;
+}
+
+img.arrow {
+    position: relative;
+    top: 3px;	
+}
+
+a.backTop {
+    bottom: 0;
+    display: block;
+    margin: 15px 0 5px 5px;
+    position: absolute;
+}
+
+a.learnMore {
+	display: block;
+	margin: 0 0 0 5px;
+}
+
+a.backAdminTools{
+    bottom: 0;
+    display: block;
+    margin: 15px 0 5px 100px;
+    position: absolute;
+}

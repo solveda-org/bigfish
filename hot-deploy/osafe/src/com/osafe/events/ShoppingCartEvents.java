@@ -25,12 +25,17 @@ public class ShoppingCartEvents {
         ShoppingCart sc = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        String securityCode = request.getParameter("verificationNo");
         if (sc.items().size() > 0) {
 
             Map selectedPaymentMethods = new HashMap();
             Map paymentMethodInfo = FastMap.newInstance();
             List singleUsePayments = new ArrayList();
             paymentMethodInfo.put("amount", null);
+            if (UtilValidate.isNotEmpty(securityCode))
+            {
+                paymentMethodInfo.put("securityCode", securityCode);
+            }
             String paymentMethodId = (String) request.getAttribute("paymentMethodId");
             selectedPaymentMethods.put(paymentMethodId, paymentMethodInfo);
             sc.addPayment(paymentMethodId);

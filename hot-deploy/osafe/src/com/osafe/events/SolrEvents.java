@@ -82,7 +82,7 @@ public class SolrEvents {
 
             String catalogTopCategoryId = CatalogWorker.getCatalogTopCategoryId(request);
             
-            String solrServer = OSAFE_PROPS.getString("solr-server");
+            String solrServer = OSAFE_PROPS.getString("solr-search-server");
             CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
             solr.setRequestWriter(new BinaryRequestWriter());
 

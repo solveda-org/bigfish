@@ -1,5 +1,5 @@
-<#if priceMap.listPrice gt price>
 <div class="plpPriceList">
-<p class="price">${uiLabelMap.PlpListPriceLabel} <@ofbizCurrency amount=priceMap.listPrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+  <#if listPrice?has_content && listPrice gt price>
+    <p class="price">${uiLabelMap.PlpListPriceLabel} <@ofbizCurrency amount=listPrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+  </#if>
 </div>
-</#if>

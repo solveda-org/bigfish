@@ -7,8 +7,8 @@
 <div class="writeReviewRateOverallStars">
    <div class="entry">
       <label for="overallRate"><@required/>${uiLabelMap.OverallRatingCaption}</label>
-            <div id="BVoverallRatingRow">
-                <table cellspacing="0" cellpadding="0" class="BVratingsTable">
+            <div id="overallRatingRow">
+                <table cellspacing="0" cellpadding="0" class="ratingsTable">
                  <tbody>
                   <tr>
                     <td class="ratingWrapper">

@@ -49,6 +49,28 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankParamCategoryError"/>
             <string-to-list string="${tempErrorMessage}" message-field="PARMCATEGORY" list="error_list"/>
         </if-empty>
+        <if-not-empty field="parameters.parmValue">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countLessThan">
+                   <field field="parameters.parmValue" type="String"/>
+                   <string value="&lt;"/>
+            </call-class-method>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countGreaterThan">
+                   <field field="parameters.parmValue" type="String"/>
+                   <string value="&gt;"/>
+            </call-class-method>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countNewLine">
+                   <field field="parameters.parmValue" type="String"/>
+                   <string value="${sys:getProperty('line.separator')}"/>
+            </call-class-method>
+            <if-compare operator="not-equals" value="${countLessThan}" field="countGreaterThan">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueUnequalTagsError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            <if-compare operator="greater" value="0" field="countNewLine">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueNewLineError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
         <check-errors/>
         <make-value entity-name="XProductStoreParm" value-field="lookedUpValue"/>
         <set-pk-fields map="parameters" value-field="lookedUpValue"/>
@@ -85,6 +107,28 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategoryParameterError"/>
             <string-to-list string="${tempErrorMessage}" message-field="PARMCATEGORY" list="error_list"/>
         </if-empty>
+        <if-not-empty field="parameters.parmValue">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countLessThan">
+                   <field field="parameters.parmValue" type="String"/>
+                   <string value="&lt;"/>
+            </call-class-method>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countGreaterThan">
+                   <field field="parameters.parmValue" type="String"/>
+                   <string value="&gt;"/>
+            </call-class-method>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countNewLine">
+                   <field field="parameters.parmValue" type="String"/>
+                   <string value="${sys:getProperty('line.separator')}"/>
+            </call-class-method>
+            <if-compare operator="not-equals" value="${countLessThan}" field="countGreaterThan">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueUnequalTagsError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            <if-compare operator="greater" value="0" field="countNewLine">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueNewLineError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
         <check-errors/>
         <entity-one entity-name="XProductStoreParm" value-field="lookedUpValue"/>
         <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
@@ -109,28 +153,26 @@
            <set field="parameters.value" value=" "/>
        </if-empty> 
        <if-not-empty field="parameters.value">
-            <set field="lessThan" value="&lt;" type="String"/>
-            <set field="greaterThan" value="&gt;" type="String"/>
-            <call-class-method class-name="com.osafe.util.Util" method-name="isSubString" ret-field="hasSymbolLess">
-                   <field field="lessThan" type="String"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countLessThan">
                    <field field="parameters.value" type="String"/>
+                   <string value="&lt;"/>
             </call-class-method>
-            <call-class-method class-name="com.osafe.util.Util" method-name="isSubString" ret-field="hasSymbolGreat">
-                   <field field="greaterThan" type="String"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countGreaterThan">
                    <field field="parameters.value" type="String"/>
+                   <string value="&gt;"/>
             </call-class-method>
-            <if>
-                  <condition>
-                       <or>
-                            <if-compare operator="equals" value="true" field="hasSymbolLess" type="Boolean"/>
-                            <if-compare operator="equals" value="true" field="hasSymbolGreat" type="Boolean"/>
-                       </or>
-                  </condition>
-                  <then>
-                              <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadCaptionError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                  </then>
-            </if>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countNewLine">
+                   <field field="parameters.value" type="String"/>
+                   <string value="${sys:getProperty('line.separator')}"/>
+            </call-class-method>
+            <if-compare operator="not-equals" value="${countLessThan}" field="countGreaterThan">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueUnequalTagsError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            <if-compare operator="greater" value="0" field="countNewLine">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueNewLineError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
         </if-not-empty>
         <check-errors/>
         <set-service-fields service-name="updateLabelXml" map="parameters" to-map="updateLabelXmlCtx"/>
@@ -192,28 +234,26 @@
             <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
         </if-empty>
         <if-not-empty field="parameters.value">
-            <set field="lessThan" value="&lt;" type="String"/>
-            <set field="greaterThan" value="&gt;" type="String"/>
-            <call-class-method class-name="com.osafe.util.Util" method-name="isSubString" ret-field="hasSymbolLess">
-                   <field field="lessThan" type="String"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countLessThan">
                    <field field="parameters.value" type="String"/>
+                   <string value="&lt;"/>
             </call-class-method>
-            <call-class-method class-name="com.osafe.util.Util" method-name="isSubString" ret-field="hasSymbolGreat">
-                   <field field="greaterThan" type="String"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countGreaterThan">
                    <field field="parameters.value" type="String"/>
+                   <string value="&gt;"/>
             </call-class-method>
-            <if>
-                  <condition>
-                       <or>
-                            <if-compare operator="equals" value="true" field="hasSymbolLess" type="Boolean"/>
-                            <if-compare operator="equals" value="true" field="hasSymbolGreat" type="Boolean"/>
-                       </or>
-                  </condition>
-                  <then>
-                              <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadCaptionError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                  </then>
-            </if>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countNewLine">
+                   <field field="parameters.value" type="String"/>
+                   <string value="${sys:getProperty('line.separator')}"/>
+            </call-class-method>
+            <if-compare operator="not-equals" value="${countLessThan}" field="countGreaterThan">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueUnequalTagsError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            <if-compare operator="greater" value="0" field="countNewLine">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueNewLineError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
         </if-not-empty>
         <check-errors/>
         <set-service-fields service-name="addUiLabelXml" map="parameters" to-map="addUiLabelXmlCtx"/>
@@ -447,6 +487,18 @@
        <property-to-field resource="OSafeAdminUiLabels" property="solrReIndexSuccess" field="solrReIndexSuccess"/>
        <string-to-list string="${solrReIndexSuccess}" list="successMessageList"/>
     </simple-method>
+    
+    <!-- DELETE THIS IS FOR TEST JOB -->
+    <simple-method method-name="doTestJob" short-description="Re-Index solr">
+    	<set field="test.productStoreId" value="RNY_STORE"/>
+    	<set field="test.browseRootProductCategoryId" value="TestId_12"/>
+       <call-service service-name="testJob" in-map-name="test">
+           
+       </call-service>
+       <property-to-field resource="OSafeAdminUiLabels" property="solrReIndexSuccess" field="solrReIndexSuccess"/>
+       <string-to-list string="${solrReIndexSuccess}" list="successMessageList"/>
+    </simple-method>
+    <!-- DELETE -->
 
     <simple-method method-name="createContactUsReason" short-description="Create Contact Us Reason">
         <if-empty field="parameters.enumId">
@@ -1160,7 +1212,7 @@
                     </and>
                 </condition>
                 <then>
-                    <property-to-field resource="OSafeAdminUiLabels" property="ProductFileNotXLSError" field="tempErrorMessage"/>
+                    <property-to-field resource="OSafeAdminUiLabels" property="ProductFileNotXlsOrXmlError" field="tempErrorMessage"/>
                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
                 </then>
             </if>
@@ -1467,6 +1519,28 @@
         </if-compare>
         <field-to-result field="parameters.showDetail" result-name="showDetail"/>
         <check-errors/>
+
+        <if-not-empty field="parameters.groups">
+            <!-- sort the group map and make mutiple-->
+            <call-class-method method-name="setSequenceMap" class-name="com.osafe.util.OsafeAdminUtil" ret-field="parameters.groups">
+                <field field="parameters.groups" type="java.util.Map"/>
+            </call-class-method>
+            <!-- sort the sequence map and make mutiple-->
+            <set field="seqMutiple" value="10" type="Integer"/>
+            <call-class-method method-name="setSequenceMapByMultiple" class-name="com.osafe.util.OsafeAdminUtil" ret-field="parameters.values">
+                <field field="parameters.groups" type="java.util.Map"/>
+                <field field="seqMutiple" type="Integer"/>
+            </call-class-method>
+        <else>
+            <!-- sort the sequence map and make mutiple-->
+            <set field="seqMutiple" value="10" type="Integer"/>
+            <call-class-method method-name="setSequenceMapByMultiple" class-name="com.osafe.util.OsafeAdminUtil" ret-field="parameters.values">
+                <field field="parameters.values" type="java.util.Map"/>
+                <field field="seqMutiple" type="Integer"/>
+            </call-class-method>
+        </else>
+        </if-not-empty>
+
         <iterate-map key="key" value="keyValue" map="parameters.keys">
             <set field="updateDivSequenceXmlCtx.key" from-field="keyValue"/>
             <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.values">
@@ -1669,5 +1743,83 @@
         <property-to-field resource="OSafeAdminUiLabels" property="PaymentSettingSavedSuccess" field="paymentSettingSavedSuccess"/>
         <string-to-list string="${paymentSettingSavedSuccess}" list="successMessageList"/>
     </simple-method>
-
+    
+    <simple-method method-name="deleteFinishedJobs" short-description="Delete Finished jobs">
+        <now-timestamp field="nowStamp"/>
+        <!-- daysGap is the time interval from the current date to the date from which Admin wants to delete the Entity Rows  -->
+        <set field="daysGap" value="-30" type="Integer"/>
+        <call-class-method class-name="org.ofbiz.base.util.UtilDateTime"  method-name="addDaysToTimestamp" ret-field="daysBackTimeStamp">
+              <field field="nowStamp" type="java.sql.Timestamp"/>
+              <field field="daysGap" type="int"/>
+        </call-class-method>
+        <!-- isOld = Y will delete Rows Excluding the last 30 days-->
+        <if-compare operator="equals" value="Y" field="parameters.isOld">
+            <entity-condition list="finishedExclList" entity-name="JobSandbox">
+                <condition-list>
+                    <condition-expr field-name="statusId" operator="equals" value="SERVICE_FINISHED"/>
+                    <condition-expr field-name="finishDateTime" operator="less" value="${daysBackTimeStamp}"/>
+                </condition-list>
+            </entity-condition>
+            <call-object-method obj-field="finishedExclList" method-name="size" ret-field="ListSize"/>
+            <remove-list list="finishedExclList"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedJobsSuccessMessage" field="DeletedJobsSuccessMessage"/>
+            <string-append field="deleteSuccessMsg" string="${ListSize}"/>
+            <string-append field="deleteSuccessMsg" string=" "/>
+            <string-append field="deleteSuccessMsg" string="${DeletedJobsSuccessMessage}"/>
+            <string-to-list string="${deleteSuccessMsg}" list="successMessageList"/>
+        <else>
+        <!-- isOld = N will delete Rows Including the last 30 days-->
+            <entity-condition list="finishedWithinList" entity-name="JobSandbox">
+                <condition-list>
+                    <condition-expr field-name="statusId" operator="equals" value="SERVICE_FINISHED"/>
+                    <condition-expr field-name="finishDateTime" operator="greater" value="${daysBackTimeStamp}"/>
+                </condition-list>
+            </entity-condition>
+            <call-object-method obj-field="finishedWithinList" method-name="size" ret-field="ListSize"/>
+            <remove-list list="finishedWithinList"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedJobsSuccessMessage" field="DeletedJobsSuccessMessage"/>
+            <string-append field="deleteSuccessMsg" string="${ListSize}"/>
+            <string-append field="deleteSuccessMsg" string=" "/>
+            <string-append field="deleteSuccessMsg" string="${DeletedJobsSuccessMessage}"/>
+            <string-to-list string="${deleteSuccessMsg}" list="successMessageList"/>
+        </else>
+        </if-compare>
+    </simple-method>
+    
+    <simple-method method-name="deleteEntityRows" short-description="Delete Entity rows">
+        <now-timestamp field="nowStamp"/>
+        <!-- daysGap is the time interval from the current date to the date from which Admin wants to delete the Entity Rows  -->
+        <set field="daysGap" value="0" type="Integer"/>
+        <call-class-method class-name="org.ofbiz.base.util.UtilDateTime"  method-name="addDaysToTimestamp" ret-field="daysBackTimeStamp">
+              <field field="nowStamp" type="java.sql.Timestamp"/>
+              <field field="daysGap" type="int"/>
+        </call-class-method>
+        <set field="entityName" value="${parameters.entityDBName}"/>
+        <if-not-empty field="entityName">
+            <entity-condition list="entityRowsList" entity-name="${entityName}">
+                <condition-list>
+                    <condition-expr field-name="lastUpdatedStamp" operator="less" value="${daysBackTimeStamp}"/>
+                </condition-list>
+            </entity-condition>
+            <call-object-method obj-field="entityRowsList" method-name="size" ret-field="ListSize"/>
+            <if-compare operator="equals" value="Visit" field="parameters.entityDBName">
+                <iterate entry="entityRow" list="entityRowsList">
+                    <remove-related relation-name="CartAbandonedLine" value-field="entityRow"/>
+                    <remove-related relation-name="InventoryItemTempRes" value-field="entityRow"/>
+                    <remove-related relation-name="InventoryItemTempRes" value-field="entityRow"/>
+                    <remove-related relation-name="PartyDataSource" value-field="entityRow"/>
+                    <remove-related relation-name="PartyNeed" value-field="entityRow"/>
+                    <remove-related relation-name="ProductSearchResult" value-field="entityRow"/>
+                    <remove-related relation-name="ServerHit" value-field="entityRow"/>
+                    <remove-related relation-name="TrackingCodeVisit" value-field="entityRow"/>
+                    <remove-related relation-name="WorkEffortSearchResult" value-field="entityRow"/>
+                </iterate>
+            </if-compare>
+            <remove-list list="entityRowsList"/>
+            <set field="argListNames[]" from-field="ListSize"/>
+            <set field="argListNames[]" from-field="parameters.entityDBName"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedRowsSuccessMessage" field="deletedRowsSuccessMessage" arg-list-name="argListNames"/>
+            <string-to-list string="${deletedRowsSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+    </simple-method>
 </simple-methods>

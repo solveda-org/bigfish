@@ -38,9 +38,15 @@ currentCatalogId = CatalogWorker.getCurrentCatalogId(request);
 cart = ShoppingCartEvents.getCartObject(request);
 webSiteId = CatalogWorker.getWebSiteId(request);
 autoUserLogin = request.getSession().getAttribute("autoUserLogin");
+currencyUomId = Util.getProductStoreParm(request, "CURRENCY_UOM_DEFAULT");
+
 imagePlaceHolder="/osafe_theme/images/user_content/images/NotFoundImage.jpg";
 imageLargePlaceHolder="/osafe_theme/images/user_content/images/NotFoundImagePDPLarge.jpg";
 
+if(UtilValidate.isEmpty(currencyUomId))
+{
+	currencyUomId = UtilProperties.getPropertyValue("general.properties", "currency.uom.id.default", "USD"); 
+}
 selectOne = UtilProperties.getMessage("OSafeUiLabels", "SelectOneLabel", locale);
 jsBufDefault = new StringBuffer();
 jsBufDefault.append("<script language=\"JavaScript\" type=\"text/javascript\">jQuery(document).ready(function(){");    
@@ -178,7 +184,7 @@ String buildNextLi(Map map, List order, String current, String prefix, Map featu
     return buf.toString();
 }
 
-productCategoryId = "";
+//productCategoryId = "";
 
 if (UtilValidate.isNotEmpty(productId)) 
 {
@@ -547,12 +553,16 @@ if (UtilValidate.isNotEmpty(productId))
 	    context.put("decimals",decimals);
 	    context.put("rounding",rounding);
 	    // get the average rating
-	     averageRating= ProductWorker.getAverageProductRating(delegator,gvProduct.productId);
-         if (UtilValidate.isNotEmpty(averageRating) && averageRating > 0)
-         {
-	       averageCustomerRating= averageRating.setScale(1,rounding);
-	       context.put("averageStarRating", averageCustomerRating);
-         }
+ 	    productCalculatedInfo = delegator.findByPrimaryKey("ProductCalculatedInfo", UtilMisc.toMap("productId", gvProduct.productId));
+        if (UtilValidate.isNotEmpty(productCalculatedInfo))
+        {
+   	        averageRating= productCalculatedInfo.getBigDecimal("averageCustomerRating");
+            if (UtilValidate.isNotEmpty(averageRating) && averageRating > 0)
+            {
+     	       averageCustomerRating= averageRating.setScale(1,rounding);
+     	       context.put("averageStarRating", averageCustomerRating);
+            }
+        }
 	    
        reviewByAnd = UtilMisc.toMap("statusId", "PRR_APPROVED", "productStoreId", productStoreId,"productId", gvProduct.productId);
        reviews = delegator.findByAnd("ProductReview", reviewByAnd);
@@ -796,14 +806,14 @@ if (UtilValidate.isNotEmpty(productId))
                             amt.append("function checkAmtReq(sku) { ");
                             // Create the javascript to return the price for each variant
                             variantPriceJS = new StringBuffer();
-                            variantPriceJS.append("function getVariantPrice(sku) { ");
+                            variantPriceJS.append("function getVariantOnlinePrice(sku) { ");
                             // Format to apply the currency code to the variant price in the javascript
-                            if (productStore) {
+                            /*if (productStore) {
                                 localeString = productStore.defaultLocaleString;
                                 if (localeString) {
                                     locale = UtilMisc.parseLocale(localeString);
                                 }
-                            }
+                            }*/
                             numberFormat = NumberFormat.getCurrencyInstance(locale);
                             variants.each { variantAssoc ->
                                 variant = variantAssoc.getRelatedOne("AssocProduct");
@@ -817,7 +827,7 @@ if (UtilValidate.isNotEmpty(productId))
                                 }
                                 amt.append(" if (sku == \"" + variant.productId + "\") return \"" + (variant.requireAmount ?: "N") + "\"; ");
                                 if (variantPriceMap && variantPriceMap.basePrice) {
-                                    variantPriceJS.append("  if (sku == \"" + variant.productId + "\") return \"" + numberFormat.format(variantPriceMap.basePrice) + "\"; ");
+                                    variantPriceJS.append("  if (sku == \"" + variant.productId + "\") return \"" + UtilFormatOut.formatCurrency(variantPriceMap.basePrice, currencyUomId, locale) + "\"; ");
                                 }
                                 varProductContentWrapper = new ProductContentWrapper(variant, request);
                                 productVariantMap.put(variant.productId, varProductContentWrapper);

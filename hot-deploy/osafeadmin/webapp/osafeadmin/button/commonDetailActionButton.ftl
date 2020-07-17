@@ -14,16 +14,16 @@
     <#if ExportToXMLAction?exists && ExportToXMLAction?has_content>
             <a href="<@ofbizUrl>${ExportToXMLAction}?${detailParamKey}=${detailId}</@ofbizUrl>" target="Download XML" class="buttontext standardBtn action">${uiLabelMap.ExportToXMLBtn}</a>
         </#if>
+    <#if updateAction?exists && updateAction?has_content>
+        <a href="javascript:submitDetailForm(document.${detailFormName!""}, 'ED');" class="buttontext standardBtn action">${updateActionBtn!"${uiLabelMap.SaveBtn}"}</a>
+    <#elseif createAction?exists && createAction?has_content>
+        <a href="javascript:submitDetailForm(document.${detailFormName!""}, 'NE');" class="buttontext standardBtn action">${uiLabelMap.SaveBtn}</a>
+    </#if>
     <#if execAction?exists && execAction?has_content>
         <a href="<#if !execInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'EX');<#else><@ofbizUrl>${execAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execInNewTab?has_content>target="_${execInNewTab!}"</#if>>${execActionBtn!"${uiLabelMap.execActionBtn}"}</a>
     </#if>
     <#if execCacheAction?exists && execCacheAction?has_content>
         <a href="<#if !execCacheInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'EXC');<#else><@ofbizUrl>${execCacheAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execCacheInNewTab?has_content>target="_${execCacheInNewTab!}"</#if>>${execCacheActionBtn!"${uiLabelMap.execCacheActionBtn}"}</a>
-    </#if>
-    <#if updateAction?exists && updateAction?has_content>
-        <a href="javascript:submitDetailForm(document.${detailFormName!""}, 'ED');" class="buttontext standardBtn action">${updateActionBtn!"${uiLabelMap.SaveBtn}"}</a>
-    <#elseif createAction?exists && createAction?has_content>
-        <a href="javascript:submitDetailForm(document.${detailFormName!""}, 'NE');" class="buttontext standardBtn action">${uiLabelMap.SaveBtn}</a>
     </#if>
     <#if uploadAction?exists && uploadAction?has_content>
         <a href="javascript:submitDetailUploadForm(document.${detailFormName!""});" class="buttontext standardBtn action">${uiLabelMap.SaveBtn}</a>

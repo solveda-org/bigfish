@@ -15,6 +15,7 @@ import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.io.FileUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilIO;
 import org.ofbiz.base.util.UtilMisc;
@@ -192,7 +193,8 @@ public class ReevooServices {
         return gvTopMost;
     }
 
-    public static Map getReevooXmlFeed(DispatchContext dctx, Map context) {
+
+    public static Map reevooProductRatingUpdates(DispatchContext dctx, Map context) {
 
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Delegator delegator = dctx.getDelegator();
@@ -200,18 +202,84 @@ public class ReevooServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String productStoreId = (String) context.get("productStoreId");
-        String apiAccessUrl = (String) context.get("apiAccessUrl");
-        String apiCsvUrl = (String) context.get("apiCsvUrl");
-        String apiUserName = (String) context.get("apiUserName");
-        String apiPassword = (String) context.get("apiPassword");
+
+        String feedsInRatingDir = (String)context.get("feedsInRatingDir");
+        String feedsInSuccessSubDir = (String)context.get("feedsInSuccessSubDir");
+        String feedsInErrorSubDir = (String)context.get("feedsInErrorSubDir");
+
+        String reevooApiUrl = (String) context.get("reevooApiUrl");
+        String reevooApiCsvUrl = (String) context.get("reevooApiCsvUrl");
+        String reevooApiUserName = (String) context.get("reevooApiUserName");
+        String reevooApiPassword = (String) context.get("reevooApiPassword");
+        
+        try {
+            Map<String, Object> xmlInput = UtilMisc.toMap("userLogin", userLogin,
+                    "productStoreId", productStoreId, "reevooApiUrl", reevooApiUrl,
+                    "reevooApiCsvUrl", reevooApiCsvUrl, "reevooApiUserName", reevooApiUserName, "reevooApiPassword", reevooApiPassword);
+            try {
+               
+                Map<String, Object> xmlOutputMap = dispatcher.runSync("reevooGetProductRatingScores", xmlInput);
+                if (ModelService.RESPOND_ERROR.equals(xmlOutputMap.get(ModelService.RESPONSE_MESSAGE))) {
+                    return ServiceUtil.returnError((String) xmlOutputMap.get(ModelService.ERROR_MESSAGE));
+                } else {
+                    File xmlFile = (File) xmlOutputMap.get("xmlFile");
+
+                    // copy xml file in feed in rating directory
+                    if (UtilValidate.isNotEmpty(feedsInRatingDir)) {
+                        File baseDir = new File(feedsInRatingDir);
+                        if (baseDir.isDirectory() && baseDir.canWrite()) {
+                            try {
+                                FileUtils.copyFileToDirectory(xmlFile, baseDir);
+                                xmlFile.delete();
+                                //call import rating file service
+                                Map<String, Object> importInput = UtilMisc.toMap("userLogin", userLogin, "productStoreId", productStoreId, 
+                                        "feedsInRatingDir", feedsInRatingDir, "feedsInSuccessSubDir", feedsInSuccessSubDir, "feedsInErrorSubDir", feedsInErrorSubDir);
+                                Map<String, Object> importOutputMap = dispatcher.runSync("clientProductRatingUpdates", importInput);
+
+                                if (ModelService.RESPOND_ERROR.equals(importOutputMap.get(ModelService.RESPONSE_MESSAGE))) {
+                                    return ServiceUtil.returnError((String) importOutputMap.get(ModelService.ERROR_MESSAGE));
+                                }
+                            } catch (IOException e) {
+                                Debug.logError(e, "Error occured in import reevoo product rating", module);
+                                ServiceUtil.returnError("Error occured in import reevoo product rating");
+                            }
+                        } else {
+                            Debug.logError("Error occured while copy xml file feed In Rating Dir", module);
+                            ServiceUtil.returnError("Error occured while copy xml file feed In Rating Dir");
+                        }
+                    }
+                }
+            } catch (GenericServiceException e) {
+                Debug.logError(e, module);
+                return ServiceUtil.returnError(e.getMessage());
+            }
+        } catch (Exception e) {
+            Debug.logError(e, "Error occured in update reevoo product rating", module);
+            ServiceUtil.returnError("Error occured in update reevoo product rating");
+        }
+        return result;
+    }
+
+    public static Map reevooGetProductRatingScores(DispatchContext dctx, Map context) {
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Delegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+
+        String productStoreId = (String) context.get("productStoreId");
+        String reevooApiUrl = (String) context.get("reevooApiUrl");
+        String reevooApiCsvUrl = (String) context.get("reevooApiCsvUrl");
+        String reevooApiUserName = (String) context.get("reevooApiUserName");
+        String reevooApiPassword = (String) context.get("reevooApiPassword");
         
         try {
             File csvFile = null;
             File xmlFile = null;
             String xmlFileAsString = "";
             Map<String, Object> csvInput = UtilMisc.toMap("userLogin", userLogin,
-                    "productStoreId", productStoreId, "apiAccessUrl", apiAccessUrl,
-                    "apiCsvUrl", apiCsvUrl, "apiUserName", apiUserName, "apiPassword", apiPassword);
+                    "productStoreId", productStoreId, "reevooApiUrl", reevooApiUrl,
+                    "reevooApiCsvUrl", reevooApiCsvUrl, "reevooApiUserName", reevooApiUserName, "reevooApiPassword", reevooApiPassword);
             try {
                
                 Map<String, Object> outputMap = dispatcher.runSync("getReevooCsvFeed", csvInput);
@@ -248,27 +316,13 @@ public class ReevooServices {
         Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
         String productStoreId = (String) context.get("productStoreId");
-        String apiAccessUrl = (String) context.get("apiAccessUrl");
-        String apiCsvUrl = (String) context.get("apiCsvUrl");
-        String apiUserName = (String) context.get("apiUserName");
-        String apiPassword = (String) context.get("apiPassword");
-        // Check passed params
-        if (UtilValidate.isEmpty(apiAccessUrl)) {
-            apiAccessUrl = Util.getProductStoreParm(productStoreId, "REEVOO_API_URL");
-        }
-        if (UtilValidate.isEmpty(apiCsvUrl)) {
-            apiCsvUrl = Util.getProductStoreParm(productStoreId, "REEVOO_CSV_URL");
-        }
-        if (UtilValidate.isEmpty(apiUserName)) {
-            apiUserName = Util.getProductStoreParm(productStoreId, "REEVOO_USERNAME");
-        }
-        if (UtilValidate.isEmpty(apiPassword)) {
-            apiPassword = Util.getProductStoreParm(productStoreId, "REEVOO_PASSWORD");
-        }
-
+        String reevooApiUrl = (String) context.get("reevooApiUrl");
+        String reevooApiCsvUrl = (String) context.get("reevooApiCsvUrl");
+        String reevooApiUserName = (String) context.get("reevooApiUserName");
+        String reevooApiPassword = (String) context.get("reevooApiPassword");
         try {
-             String buildApiUrl = apiAccessUrl+"/"+apiUserName+"/"+apiCsvUrl;
-             String responseString = getHttpResponseAsString(getHttpAuthClient(apiUserName, apiPassword), getHttpGet(buildApiUrl));
+             String buildApiUrl = reevooApiUrl+"/"+reevooApiUserName+"/"+reevooApiCsvUrl;
+             String responseString = getHttpResponseAsString(getHttpAuthClient(reevooApiUserName, reevooApiPassword), getHttpGet(buildApiUrl));
              File csvFile = getCsvFile();
              UtilIO.writeString(csvFile, responseString);
              result.put("csvFile", csvFile);

@@ -30,7 +30,9 @@
             }
         });
       }
-
+    jQuery('.characterLimit').each(function(){
+            restrictTextLength(this);
+        });
   });
 
   function copyAddress(fromAddr, fromAddrContainer, toAddr, toAddrSection, triggerElt, isBlindup) {
@@ -142,5 +144,29 @@
     getAddressFormat(purpose);
     });
   }
-
+ function restrictTextLength(textArea){
+    var maxchar = jQuery(textArea).attr('maxlength');
+    var curLen = jQuery(textArea).val().length;
+    var regCharLen = lineBreakCount(jQuery(textArea).val());
+    jQuery(textArea).next('.textCounter').html("* "+maxchar+" ${uiLabelMap.CharactersLeftLabel} ("+(maxchar - (curLen+regCharLen))+" ${uiLabelMap.CharactersLeftLabel})");
+    jQuery(textArea).keyup(function() {
+        var cnt = jQuery(this).val().length;
+        var regCharLen = lineBreakCount(jQuery(this).val());
+        var remainingchar = maxchar - (cnt + regCharLen);
+        if(remainingchar < 0){
+            jQuery(this).next('.textCounter').html("* "+maxchar+' ${uiLabelMap.CharactersLeftLabel} (0 ${uiLabelMap.CharactersLeftLabel})');
+            jQuery(this).val(jQuery(this).val().slice(0, (maxchar-regCharLen)));
+        } else{
+            jQuery(this).next('.textCounter').html("* "+maxchar+' ${uiLabelMap.CharactersLeftLabel} ('+remainingchar+' ${uiLabelMap.CharactersLeftLabel})');
+        }
+    });
+ }
+  function lineBreakCount(str){
+        /* counts \n */
+        try {
+            return((str.match(/[^\n]*\n[^\n]*/gi).length));
+        } catch(e) {
+            return 0;
+        }
+    }
 </script>

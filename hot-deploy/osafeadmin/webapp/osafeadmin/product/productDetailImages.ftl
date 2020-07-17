@@ -22,9 +22,9 @@
                   <span class="noImage imageBorder"></span>
                 </#if>
               </div>
-              <div class="infoText">
-                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.LargePDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-              </div>
+          </div>
+          <div class="infoIcon">
+              <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.LargePDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
        </div>
        <hr/>
@@ -46,14 +46,16 @@
               <div class="infoValue">
                 <#if productThumbnailImage != "">
                   <img src="<@ofbizContentUrl>${productThumbnailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productThumbnailImage}" height="${IMG_SIZE_PDP_THUMB_H!""}" width="${IMG_SIZE_PDP_THUMB_W!""}" class="imageBorder"/>
-                  <a href="javascript:setProdContentTypeId('THUMBNAIL_IMAGE_URL');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>
               </div>
-              <div class="infoText">
-                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ThumbPDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-              </div>
+	          <div class="infoIcon">
+                <#if productThumbnailImage != "">
+	              <a class="helper" href="javascript:setProdContentTypeId('THUMBNAIL_IMAGE_URL');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
+	            </#if>
+	              <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ThumbPDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+	          </div>
           </div>
        </div>
      
@@ -76,14 +78,16 @@
               <div class="infoValue">
                 <#if productDetailImage != "">
                   <img src="<@ofbizContentUrl>${productDetailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productDetailImage}" height="${IMG_SIZE_PDP_POPUP_H!""}" width="${IMG_SIZE_PDP_POPUP_W!""}" class="imageBorder"/>
-                  <a href="javascript:setProdContentTypeId('DETAIL_IMAGE_URL');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>
               </div>
-              <div class="infoText">
-                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.DetailPOPUPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-              </div>
+	          <div class="infoIcon">
+                <#if productDetailImage != "">
+	              <a class="helper" href="javascript:setProdContentTypeId('DETAIL_IMAGE_URL');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
+	            </#if>
+	              <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.DetailPOPUPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+	          </div>
           </div>
        </div>
      
@@ -110,9 +114,9 @@
                   <span class="noImage imageBorder"></span>
                 </#if>
               </div>
-              <div class="infoText">
-                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SmallPLPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-              </div>
+          </div>
+          <div class="infoIcon">
+             <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SmallPLPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
        </div>
        
@@ -135,9 +139,9 @@
               <div class="infoValue">
                 <input type="text" name="plpTitleText" id="plpTitleText" class="medium" value="${parameters.plpTitleText!plpTitleText!""}" />
               </div>
-              <div class="infoText">
-                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PLPTitleTextInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-              </div>
+          </div>
+          <div class="infoIcon">
+            <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PLPTitleTextInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
        </div>
        
@@ -149,14 +153,16 @@
               <div class="infoValue">
                 <#if productSmallAltImage != "">
                   <img src="<@ofbizContentUrl>${productSmallAltImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productSmallAltImage}" height="${IMG_SIZE_PLP_H!""}" width="${IMG_SIZE_PLP_W!""}" class="imageBorder"/>
-                  <a href="javascript:setProdContentTypeId('SMALL_IMAGE_ALT_URL');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>
               </div>
-              <div class="infoText">
-                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SmallAltImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-              </div>
+          </div>
+          <div class="infoIcon">
+            <#if productSmallAltImage != "">
+             <a class="cross" href="javascript:setProdContentTypeId('SMALL_IMAGE_ALT_URL');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
+            </#if>
+             <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SmallAltImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
        </div>
      

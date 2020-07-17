@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>OSafe Services</description>
+    <vendor/>
+    <version>1.0</version>
+    <service name="genProductsIndex" engine="java" location="com.osafe.services.SolrServices" invoke="genProductsIndex" auth="false" transaction-timeout="7200">
+        <description>Create list of document for SOLR Indexing</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="documentListCount" type="Integer" mode="OUT" optional="false"/>
+    </service>
+    <service name="abandonCartEmail" engine="java" location="com.osafe.services.EmailServices" invoke="abandonCartEmail" auth="false" transaction-timeout="7200">
+        <description>Send Abandon Cart Emails </description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="intervalHours" mode="IN" type="Integer" optional="true"></attribute>
+        <attribute name="emailCount" mode="IN" type="Integer" optional="true"></attribute>
+    </service>
+    <service name="shipReviewEmail" engine="java" location="com.osafe.services.EmailServices" invoke="shipReviewEmail" auth="false" transaction-timeout="7200">
+        <description>Send Ship Review Emails </description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+    </service>
+    <service name="reevooProductRatingUpdates" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="reevooProductRatingUpdates" auth="false" transaction-timeout="7200">
+        <description>update reevoo product rating</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false" />
+        <attribute name="feedsInRatingDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
+        <attribute name="reevooApiUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiCsvUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiUserName" type="String" mode="IN" optional="true"/>
+        <attribute name="reevooApiPassword" type="String" mode="IN" optional="true"/>
+    </service>
+    <!-- REMOVE THE TEST JOB -->
+    <service name="testJob" engine="java" location="com.osafe.services.SolrServices" invoke="testJob" auth="false" transaction-timeout="7200">
+        <description>Test Job</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
+    </service> 
+    
+    <service name="sendScheduledJobNotificationInterface" engine="interface" location="" invoke="">
+        <description>Scheduled Job Notification Interface</description>
+        <attribute name="scheduledJobName" type="String" mode="IN" optional="true"/>
+        <attribute name="scheduledJobStatus" type="String" mode="IN" optional="true"/>
+        <attribute name="scheduledJobMessage" type="String" mode="IN" optional="true"/>
+    </service>
+</services>

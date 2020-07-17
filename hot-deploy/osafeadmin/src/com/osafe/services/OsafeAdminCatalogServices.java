@@ -492,6 +492,27 @@ public class OsafeAdminCatalogServices {
        return ServiceUtil.returnSuccess();
 }
    
+    public static Map<String, Object> createProductFeatureAppl(DispatchContext dctx, Map<String, ? extends Object> context)
+    {
+        Delegator delegator = DelegatorFactory.getDelegator("default-no-eca");
+        String productId = (String) context.get("productId");
+        String productFeatureId = (String) context.get("productFeatureId");
+        String productFeatureApplTypeId = (String) context.get("productFeatureApplTypeId");
+        Long sequenceNum = (Long) context.get("sequenceNum");
+        Timestamp fromDate = (Timestamp) context.get("fromDate");
+        Timestamp thruDate = (Timestamp) context.get("thruDate");
+        try {
+            // create the ProductFeatureAppl record
+            GenericValue productFeatureAppl = delegator.makeValue("ProductFeatureAppl", UtilMisc.toMap("productId", productId, "productFeatureId", productFeatureId, "productFeatureApplTypeId", productFeatureApplTypeId, "fromDate", fromDate));
+            productFeatureAppl.put("sequenceNum", sequenceNum);
+            productFeatureAppl.put("thruDate", thruDate);
+            productFeatureAppl.create();
+		} catch (GenericEntityException e) {
+			Debug.logError(e, module);
+		}
+        return ServiceUtil.returnSuccess();
+    }
+   
     public static Map<String, Object> updateProductFeatureAppl(DispatchContext dctx, Map<String, ? extends Object> context)
     {
         Delegator delegator = DelegatorFactory.getDelegator("default-no-eca");

@@ -19,9 +19,6 @@
     <menu-item name="PromotionNav" text="PromotionNav" href="promotionNavigation" entity="SPER_PROMO" action="_VIEW" sequenceNumber="3" className="topLevel" navigationCategory="PROMOTION">
         <sub-menu-item name="PromotionViewNav" text="PromotionViewNav" href="promotionManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="PromotionViewHeading" description="PromotionViewInfo"/>
         <sub-menu-item name="PromotionAddNav" text="PromotionAddNav" href="addPromotion" sequenceNumber="0" className="subLevel navfirstitem" heading="PromotionAddHeading" description="PromotionAddInfo"/>
-<!--        <sub-menu-item name="PromotionManageNav" text="PromotionManageNav" href="underConstruction" sequenceNumber="1" className="subLevel" heading="PromotionManageHeading" description="PromotionManageInfo"/>
-           <sub-menu-item name="PromotionConfigureNav" text="PromotionConfigureNav" href="underConstruction" sequenceNumber="2" className="subLevel" heading="PromotionConfigureHeading" description="PromotionConfigureInfo"/>
--->
     </menu-item>
     <menu-item name="RatingsReviewNav" text="RatingsReviewNav" href="reviewNavigation" entity="SPER_REVIEW" action="_VIEW" sequenceNumber="4" className="topLevel" navigationCategory="REVIEW">
         <sub-menu-item name="ReviewViewNav" text="ReviewViewNav" href="reviewManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="ReviewViewHeading" description="ReviewViewInfo"/>
@@ -48,26 +45,17 @@
         <sub-menu-item name="ShippingChargeNav" text="ShippingChargeNav" href="shippingChargeManagement" sequenceNumber="2" className="subLevel" heading="ShippingChargeHeading" description="ShippingChargeInfo"/>
     </menu-item>
     <menu-item name="AdminNav" text="AdminNav" href="adminNavigation" entity="SPER_ADMIN" action="_VIEW" sequenceNumber="8" className="topLevel" navigationCategory="ADMIN">
-        <!-- sub-menu-item text="AdminConfigNav" href="underConstruction" sequenceNumber="0" className="subLevel" heading="" description=""/>
-        <sub-menu-item name="AdminUserNav" text="AdminUserNav" href="underConstruction" sequenceNumber="0" className="subLevel" heading="AdminUserHeading" description="AdminUserInfo"/>-->
         <sub-menu-item name="AdminSystemParamNav" text="AdminSystemParamNav" href="parameterList" sequenceNumber="0" className="subLevel" heading="AdminSystemParamHeading" description="AdminParamInfo"/>
         <sub-menu-item name="AdminLabelCaptionNav" text="AdminLabelCaptionNav" href="manageUiLabel" sequenceNumber="1" className="subLevel" heading="AdminLabelCaptionHeading" description="AdminLabelCaptionInfo"/>
         <sub-menu-item name="ManageEmailNav" text="ManageEmailNav" href="manageEmailList" sequenceNumber="2" className="subLevel" heading="ManageEmailHeading" description="ManageEmailInfo"/>
         <sub-menu-item name="SolrConfigNav" text="SolrConfigNav" href="solrConfigList" sequenceNumber="3" className="subLevel" heading="SolrConfigHeading" description="SolrConfigInfo"/>
-        <sub-menu-item name="EntityMaintenanceNav" text="EntityMaintenanceNav" href="entityMaintenanceList" sequenceNumber="4" className="subLevel" heading="EntityMaintenanceHeading" description="EntityMaintenanceInfo"/>
+        <sub-menu-item name="LookupDataNav" text="LookupDataNav" href="lookupDataList" sequenceNumber="4" className="subLevel" heading="LookupDataHeading" description="LookupDataInfo"/>
         <sub-menu-item name="PDPVariantCaptionNav" text="PDPVariantCaptionNav" href="pdpVariantCaptionList" sequenceNumber="5" className="subLevel" heading="PDPVariantCaptionsHeading" description="PDPVariantCaptionsInfo"/>
         <sub-menu-item name="PaymentSettingsNav" text="PaymentSettingsNav" href="paymentSettingsList" sequenceNumber="6" className="subLevel" heading="PaymentSettingsHeading" description="PaymentSettingsInfo"/>
-        <sub-menu-item name="ReviewAgesNav" text="ReviewAgesNav" href="reviewAgesList" sequenceNumber="6" className="subLevel" heading="ReviewAgesHeading" description="ReviewAgesInfo"/>
         <sub-menu-item name="AdminPixelTrackingNav" text="AdminPixelTrackingNav" href="pixelTrackingManagement" sequenceNumber="7" className="subLevel" heading="AdminPixelTrackingHeading" description="AdminPixelTrackingInfo"/>
         <sub-menu-item name="JobNav" text="JobNav" href="scheduledJob" sequenceNumber="8" className="subLevel" heading="ScheduledJobHeading" description="ScheduledJobInfo"/>
-        <sub-menu-item name="ProductLoaderNav" text="ProductLoaderNav" href="productLoaderList" sequenceNumber="9" className="subLevel" heading="ProductLoaderHeading" description="ProductLoaderInfo"/>
-        <sub-menu-item name="FeedsNav" text="FeedsNav" href="feedsList" sequenceNumber="10" className="subLevel" heading="FeedsHeading" description="FeedsInfo"/>
-        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="11" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>
-<!--         <sub-menu-item name="AdminPayGatwayNav" text="AdminPayGatwayNav" href="underConstruction" sequenceNumber="9" className="subLevel" heading="AdminPayGatewayHeading" description="AdminPayGatewayInfo"/>
-        <sub-menu-item name="AdminSysConfigNav" text="AdminSysConfigNav" href="underConstruction" sequenceNumber="11" className="subLevel" heading="AdminSysConfigfHeading" description="AdminSysConfigInfo"/>
-        <sub-menu-item name="AdminDataLoderNav" text="AdminDataLoderNav" href="underConstruction" sequenceNumber="12" className="subLevel" heading="AdminDataLoaderHeading" description="AdminDataLoaderInfo"/>
-        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="13" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>
--->        
+        <sub-menu-item name="FeedsNav" text="FeedsNav" href="feedsList" sequenceNumber="9" className="subLevel" heading="FeedsHeading" description="FeedsInfo"/>
+        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="10" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>    
     </menu-item>
 
 </menus>

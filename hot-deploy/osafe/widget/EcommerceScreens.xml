@@ -290,6 +290,22 @@
             </widgets>
         </section>
     </screen>
+	
+	<screen name="eCommerceSubmitRatingsThankyou">
+        <section>
+            <actions>
+                <set field="confirmH1MapName" value="ConfirmH1Review" />
+                <set field="confirmH2MapName" value="ConfirmH2Review" />
+                <set field="confirmTextMapName" value="ConfirmTextReview" />
+				<set field="Client" value="${parameters.CLIENT}" />
+				<set field="productDescription" value="${parameters.productDescription}" /> 
+				<!--  <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceSubmitRatingsThankyou.groovy" />-->
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceConfirm" />
+            </widgets>
+        </section>
+    </screen>
     
     <screen name="eCommerceProductCustomerRatings">
         <section>
@@ -332,6 +348,9 @@
                                     <platform-specific>
                                         <html>
                                             <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                            <html-template-decorator-section name="entryFormJS">
+                                                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" /></html></platform-specific>
+                                            </html-template-decorator-section>
                                                 <html-template-decorator-section name="entryForm">
                                                     <include-screen name="productReviewSubmitForm" location="component://osafe/widget/EntryScreens.xml" />
                                                 </html-template-decorator-section>
@@ -373,9 +392,6 @@
                                             <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
                                                 <html-template-decorator-section name="entryForm">
                                                     <include-screen name="productReviewSubmitForm" location="component://osafe/widget/EntryScreens.xml" />
-                                                </html-template-decorator-section>
-                                                <html-template-decorator-section name="entryFormButtons">
-                                                    <include-screen name="formProductReviewSubmitButton" location="component://osafe/widget/EntryScreens.xml" />
                                                 </html-template-decorator-section>
                                             </html-template-decorator>
                                         </html>
@@ -1354,7 +1370,6 @@
     <screen name="confirmScreen">
         <section>
             <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceConfirmScreen.groovy" />
             </actions>
             <widgets>
                 <container id="eCommerceConfirmContainer">

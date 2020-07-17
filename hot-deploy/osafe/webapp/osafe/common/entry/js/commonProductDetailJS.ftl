@@ -1,15 +1,58 @@
 <script language="JavaScript" type="text/javascript">
 
+  function sortReviews() {
+      document.addform.sortReviewBy.value=document.getElementById('reviewSort').value;
+      var reviewParams = jQuery('.pdpReviewList').find('input.reviewParam').serialize();
+      jQuery.get('<@ofbizUrl>sortPdpReview?'+reviewParams+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+          var sortedList = jQuery(data).find('.pdpReviewList');
+          jQuery('.pdpReviewList').replaceWith(sortedList);
+      });
+  }
+
   jQuery(document).ready(function(){
     jQuery('.pdpFeatureSwatchImage').click(function() {
         if (jQuery('.seeItemDetail').length) {
             jQuery('#plpQuicklook_Container .seeItemDetail').attr('href', jQuery('#quicklook_Url_'+this.title).val());
         }
     }); 
+  
+  jQuery('.pdpUrl.review').click(function() {
+     var tabAnchor = jQuery('#productReviews').parents('.ui-tabs-panel').attr('id');
+     jQuery.find('a[href="#'+tabAnchor+'"]').each(function(elm){
+      jQuery(elm).click();
+     });
+    });
+
+  jQuery('#reviewSort').change(function() {
+     var tabAnchor = jQuery('#productReviews').parents('.ui-tabs-panel').attr('id');
+     jQuery.find('a[href="#'+tabAnchor+'"]').each(function(elm){
+      jQuery(elm).click();
+     });
+    });
+
+
 
     jQuery('.eCommerceRecentlyViewedProduct .plpFeatureSwatchImage').click(function() {
         var swatchVariant = jQuery(this).next('.swatchVariant').clone();
+        
+        var swatchVariantOnlinePrice = jQuery(this).nextAll('.swatchVariantOnlinePrice:first').clone().show();
+        swatchVariantOnlinePrice.removeClass('swatchVariantOnlinePrice').addClass('plpPriceOnline');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpRecentPriceOnlineSeq').find('.plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
+
+        var swatchVariantListPrice = jQuery(this).nextAll('.swatchVariantListPrice:first').clone().show();
+        swatchVariantListPrice.removeClass('swatchVariantListPrice').addClass('plpPriceList');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpRecentPriceListSeq').find('.plpPriceList').replaceWith(swatchVariantListPrice);
+        
+        var swatchVariantSaveMoney = jQuery(this).nextAll('.swatchVariantSaveMoney:first').clone().show();
+        swatchVariantSaveMoney.removeClass('swatchVariantSaveMoney').addClass('plpPriceSavingMoney');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpRecentPriceSavingMoneySeq').find('.plpPriceSavingMoney').replaceWith(swatchVariantSaveMoney);
+        
+        var swatchVariantSavingPercent = jQuery(this).nextAll('.swatchVariantSavingPercent:first').clone().show();
+        swatchVariantSavingPercent.removeClass('swatchVariantSavingPercent').addClass('plpPriceSavingPercent');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpRecentPriceSavingPercentSeq').find('.plpPriceSavingPercent').replaceWith(swatchVariantSavingPercent);
+        
         jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
+        
         jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
         jQuery(this).siblings('.plpFeatureSwatchImage').removeClass('selected');
         jQuery(this).addClass('selected');
@@ -18,6 +61,23 @@
     
     jQuery('.eCommerceComplementProduct .plpFeatureSwatchImage').click(function() {
         var swatchVariant = jQuery(this).next('.swatchVariant').clone();
+        
+        var swatchVariantOnlinePrice = jQuery(this).nextAll('.swatchVariantOnlinePrice:first').clone().show();
+        swatchVariantOnlinePrice.removeClass('swatchVariantOnlinePrice').addClass('plpPriceOnline');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpComplementPriceOnlineSeq').find('.plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
+
+        var swatchVariantListPrice = jQuery(this).nextAll('.swatchVariantListPrice:first').clone().show();
+        swatchVariantListPrice.removeClass('swatchVariantListPrice').addClass('plpPriceList');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpComplementPriceListSeq').find('.plpPriceList').replaceWith(swatchVariantListPrice);
+        
+        var swatchVariantSaveMoney = jQuery(this).nextAll('.swatchVariantSaveMoney:first').clone().show();
+        swatchVariantSaveMoney.removeClass('swatchVariantSaveMoney').addClass('plpPriceSavingMoney');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpComplementPriceSavingMoneySeq').find('.plpPriceSavingMoney').replaceWith(swatchVariantSaveMoney);
+        
+        var swatchVariantSavingPercent = jQuery(this).nextAll('.swatchVariantSavingPercent:first').clone().show();
+        swatchVariantSavingPercent.removeClass('swatchVariantSavingPercent').addClass('plpPriceSavingPercent');
+        jQuery(this).parents('.eCommerceListItem').find('.pdpComplementPriceSavingPercentSeq').find('.plpPriceSavingPercent').replaceWith(swatchVariantSavingPercent);
+        
         jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
         jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
         jQuery(this).siblings('.plpFeatureSwatchImage').removeClass('selected');
@@ -53,22 +113,20 @@
     }
     function setVariantPrice(sku) {
         if (sku == '' || sku == 'NULL' || isVirtual(sku) == true) {
-            var elem = document.getElementById('variant_price_display');
-            var txt = document.createTextNode('');
-            if(elem.hasChildNodes()) {
-                elem.replaceChild(txt, elem.firstChild);
-            } else {
-                elem.appendChild(txt);
-            }
+            return;
         }
         else {
-            var elem = document.getElementById('variant_price_display');
-            var price = getVariantPrice(sku);
-            var txt = document.createTextNode(price);
-            if(elem.hasChildNodes()) {
-                elem.replaceChild(txt, elem.firstChild);
-            } else {
-                elem.appendChild(txt);
+            
+            var elemOnlinePrice = document.getElementById('pdpPriceOnline');
+            var onlinePrice = getVariantOnlinePrice(sku);
+            var txtOnlinePrice = document.createTextNode(onlinePrice);
+            if(elemOnlinePrice != null)
+            {
+	            if(elemOnlinePrice.hasChildNodes()) {
+	                elemOnlinePrice.replaceChild(txtOnlinePrice, elemOnlinePrice.firstChild);
+	            } else {
+	                elemOnlinePrice.appendChild(txtOnlinePrice);
+	            }
             }
         }
     }
@@ -264,6 +322,27 @@
                     
                     var variantProductVideo360Link = jQuery('#productVideo360Link_'+VARMAP[mapKey]).html();
                     jQuery('#productVideo360Link').html(variantProductVideo360Link);
+                    
+                    var variantPdpPriceSavingMoney = jQuery('#pdpPriceSavingMoney_'+VARMAP[mapKey]).html();
+                    jQuery('#pdpPriceSavingMoney').html(variantPdpPriceSavingMoney);
+                    
+                    var variantPdpPriceSavingPercent = jQuery('#pdpPriceSavingPercent_'+VARMAP[mapKey]).html();
+                    jQuery('#pdpPriceSavingPercent').html(variantPdpPriceSavingPercent);
+                    
+                    var variantPdpPriceList = jQuery('#pdpPriceList_'+VARMAP[mapKey]).html();
+                    jQuery('#pdpPriceList').html(variantPdpPriceList);
+                    
+                    var variantPdpPriceOnLine = jQuery('#pdpPriceOnLine_'+VARMAP[mapKey]).html();
+                    jQuery('#pdpPriceOnLine').html(variantPdpPriceOnLine);
+                    
+                    var variantPdpLongDescription = jQuery('#pdpLongDescription_'+VARMAP[mapKey]).html();
+                    jQuery('#pdpLongDescription').html(variantPdpLongDescription);
+                    
+                    var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_'+VARMAP[mapKey]).html();
+                    jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
+                
+                    // set the variant price
+                    //setVariantPrice(VARMAP[mapKey]);
                 }
             }
             if (index == -1) {
@@ -293,8 +372,6 @@
             // set the product ID to NULL to trigger the alerts
             setAddProductId('NULL');
 
-            // set the variant price to NULL
-            setVariantPrice('NULL');
         }
         else 
         {
@@ -340,6 +417,24 @@
 	            
 	            var variantProductVideo360Link = jQuery('#productVideo360Link_'+varProductId).html();
 	            jQuery('#productVideo360Link').html(variantProductVideo360Link);
+	            
+	            var variantPdpPriceSavingMoney = jQuery('#pdpPriceSavingMoney_'+varProductId).html();
+                jQuery('#pdpPriceSavingMoney').html(variantPdpPriceSavingMoney);
+                
+                var variantPdpPriceSavingPercent = jQuery('#pdpPriceSavingPercent_'+varProductId).html();
+                jQuery('#pdpPriceSavingPercent').html(variantPdpPriceSavingPercent);
+                
+                var variantPdpPriceList = jQuery('#pdpPriceList_'+varProductId).html();
+                jQuery('#pdpPriceList').html(variantPdpPriceList);
+                
+                var variantPdpPriceOnLine = jQuery('#pdpPriceOnLine_'+varProductId).html();
+                jQuery('#pdpPriceOnLine').html(variantPdpPriceOnLine);
+                
+                var variantPdpLongDescription = jQuery('#pdpLongDescription_'+varProductId).html();
+                jQuery('#pdpLongDescription').html(variantPdpLongDescription);
+                
+                var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_'+varProductId).html();
+                jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
             }
         }
         activateZoom(detailImgUrl);

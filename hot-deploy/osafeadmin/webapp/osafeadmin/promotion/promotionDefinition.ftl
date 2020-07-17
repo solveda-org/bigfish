@@ -114,91 +114,101 @@
       <div class="infoValue small">
         <#if isPromotionDetail>
           <input type="text" class="textEntry" name="useLimitPerOrder" maxlength="20" value='${parameters.useLimitPerOrder!useLimitPerOrder!""}'/>
-          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerOrderHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
         <#else>
           ${useLimitPerOrder!""}
         </#if>
       </div>
-
-      <div>
+      <div class="infoIcon">
+        <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerOrderHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+      </div>
+   </div>
+    <div class="infoEntry long">
+      <div class="infoCaption">
         <label class="extraSmallLabel">${uiLabelMap.PromotionLimitPerCustomerCaption}</label>
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
           <input type="text"  class="textEntry" name="useLimitPerCustomer" maxlength="20" value='${parameters.useLimitPerCustomer!useLimitPerCustomer!""}'/>
-          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerCustomerHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
         <#else>
           ${useLimitPerCustomer!""}
         </#if>
       </div>
-
-      <div>
+      <div class="infoIcon">
+          <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerCustomerHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+      </div>
+   </div>
+    <div class="infoEntry long">
+      <div class="infoCaption">
         <label class="extraSmallLabel">${uiLabelMap.PromotionLimitPerPromotionCaption}</label>
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
           <input type="text"  class="textEntry" name="useLimitPerPromotion" maxlength="20" value='${parameters.useLimitPerPromotion!useLimitPerPromotion!""}'/>
-          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerPromotionHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
         <#else>
           ${useLimitPerCustomer!""}
         </#if>
       </div>
-    </div>
-  </div>
-
-  <div class="infoRow">
-    <div class="infoEntry long">
-      <div class="infoCaption">
-        <label>${uiLabelMap.PromotionUserEnterCaption}</label>
-      </div>
-      <div class="infoValue small">
-        <#if isPromotionDetail>
-          <input type="hidden" name="userEntered" value="${parameters.userEntered!userEntered!"Y"}" />${userEntered!"Y"}
-        <#else>
-          ${userEntered!""}
-        </#if>
-      </div>
-
-      <div>
-        <label class="extraSmallLabel">${uiLabelMap.PromotionShowToCustomerCaption}</label>
-      </div>
-      <div class="infoValue small">
-        <#if isPromotionDetail>
-          <input type="hidden" name="showToCustomer" value="${parameters.showToCustomer!showToCustomer!"Y"}" />${showToCustomer!"Y"}
-        <#else>
-          ${showToCustomer!""}
-        </#if>
+      <div class="infoIcon">
+          <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerPromotionHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
       </div>
     </div>
   </div>
 
   <div class="infoRow">
     <div class="infoEntry long">
-      <div class="infoCaption">
-        <label>${uiLabelMap.PromotionActiveFromCaption}</label>
-      </div>
-      <div class="infoValue small">
-        <div class="entryInput from">
-          <#if isPromotionDetail>
-            <input class="dateEntry" type="text" id="fromDate" name="fromDate" maxlength="40" value="${parameters.fromDate!fromDate!""}"/>
-            <#else>
-              ${fromDate!""}
-          </#if>
-        </div>
-      </div>
+	      <div class="infoCaption">
+	        <label>${uiLabelMap.PromotionUserEnterCaption}</label>
+	      </div>
+	      <div class="infoValue small">
+	        <#if isPromotionDetail>
+	          <input type="hidden" name="userEntered" value="${parameters.userEntered!userEntered!"Y"}" />${userEntered!"Y"}
+	        <#else>
+	          ${userEntered!""}
+	        </#if>
+	      </div>
+   </div>
+    <div class="infoEntry long">
+	      <div class="infoCaption">
+            <label class="extraSmallLabel">${uiLabelMap.PromotionShowToCustomerCaption}</label>
+	      </div>
+	      <div class="infoValue small">
+	        <#if isPromotionDetail>
+	          <input type="hidden" name="showToCustomer" value="${parameters.showToCustomer!showToCustomer!"Y"}" />${showToCustomer!"Y"}
+	        <#else>
+	          ${showToCustomer!""}
+	        </#if>
+	      </div>
+    </div>
+  </div>
 
-      <div>
-        <label class="extraSmallLabel">${uiLabelMap.PromotionActiveThruCaption}</label>
-      </div>
-      <div class="infoValue small">
-        <div class="entryInput from">
-          <#if isPromotionDetail>
-            <input class="dateEntry" type="text" id="thruDate" name="thruDate" maxlength="40" value="${parameters.thruDate!thruDate!""}"/>
-            <#else>
-            ${thruDate!""}
-          </#if>
-        </div>
-      </div>
+  <div class="infoRow">
+    <div class="infoEntry long">
+	      <div class="infoCaption">
+	        <label>${uiLabelMap.PromotionActiveFromCaption}</label>
+	      </div>
+	      <div class="infoValue small">
+	        <div class="entryInput from">
+	          <#if isPromotionDetail>
+	            <input class="dateEntry" type="text" id="fromDate" name="fromDate" maxlength="40" value="${parameters.fromDate!fromDate!nowTimestamp?string(preferredDateFormat)!""}"/>
+	            <#else>
+	              ${fromDate!""}
+	          </#if>
+	        </div>
+	      </div>
+    </div>
+    <div class="infoEntry long">
+	      <div class="infoCaption">
+	        <label class="extraSmallLabel">${uiLabelMap.PromotionActiveThruCaption}</label>
+	      </div>
+	      <div class="infoValue small">
+	        <div class="entryInput from">
+	          <#if isPromotionDetail>
+	            <input class="dateEntry" type="text" id="thruDate" name="thruDate" maxlength="40" value="${parameters.thruDate!thruDate!""}"/>
+	            <#else>
+	            ${thruDate!""}
+	          </#if>
+	        </div>
+	      </div>
     </div>
   </div>
 

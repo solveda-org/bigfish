@@ -26,10 +26,18 @@
             <a class="reevoomark" href="${reevooBadgeurl}">${uiLabelMap.ReevooProductReviewLabel}</a>
         </div>
     <#else>
-        <#assign averageCustomerRating = Static["org.ofbiz.product.product.ProductWorker"].getAverageProductRating(delegator,productId)>
-        <#if averageCustomerRating?has_content && (averageCustomerRating > 0)>
-            <#assign ratePercentage= ((averageCustomerRating / 5) * 100)>
-            <div class="rating_bar"><div style="width:${ratePercentage}%"></div></div>
+        <#assign productCalculatedInfo = delegator.findByPrimaryKeyCache("ProductCalculatedInfo", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", productId!""))?if_exists>
+        <#if productCalculatedInfo?has_content>
+            <#assign averageCustomerRating=productCalculatedInfo.getBigDecimal("averageCustomerRating")?if_exists/>
+           <#if averageCustomerRating?has_content>
+               <#assign averageCustomerRating=averageCustomerRating.setScale(decimals,rounding)/>
+           <#else>
+               <#assign averageCustomerRating=0/>
+           </#if>
+            <#if averageCustomerRating?has_content && (averageCustomerRating > 0)>
+                <#assign ratePercentage= ((averageCustomerRating / 5) * 100)>
+                <div class="rating_bar"><div style="width:${ratePercentage}%"></div></div>
+            </#if>
         </#if>
     </#if>
  </div>

@@ -21,6 +21,7 @@
 <#if mode?has_content>
   <#if productPromoCond?has_content>
     <#assign condValue = productPromoCond.condValue!"" />
+    <#assign otherValue = productPromoCond.otherValue!"" />
     <#assign inputParamEnumId = productPromoCond.inputParamEnumId!"" />
     <#assign operatorEnumId = productPromoCond.operatorEnumId!"" />
     <#assign productPromoCondSeqId = productPromoCond.productPromoCondSeqId!"" />
@@ -28,6 +29,7 @@
 
   <#assign selectedInputParamEnum = parameters.inputParamEnumId!inputParamEnumId!selectedInputParamEnum!""/>
   <#assign selectedCondOperEnum = parameters.operatorEnumId!operatorEnumId!selectedCondOperEnum!""/>
+  <#assign selectedShippingMethod = parameters.otherValue!otherValue!""/>
 
   <input type="hidden" name="productPromoCondSeqId" value="${parameters.productPromoCondSeqId!productPromoCondSeqId!""}" />
 
@@ -225,6 +227,32 @@
           </div>
       </div>
       
+    </div>
+  </div>
+
+  <div class="infoRow row promoConditionShippingMethod">
+    <div class="infoEntry long">
+      <div class="infoCaption">
+        <label>${uiLabelMap.PromotionCondShippingMethodCaption}</label>
+      </div>
+      <div class="infoValue small">
+        <#if productStoreShipmentMethList?has_content>
+          <select name="otherValue" id="otherValue" class="small">
+            <#list productStoreShipmentMethList as carrierShipmentMethod>
+              <#assign shippingMethod = "${carrierShipmentMethod.partyId?if_exists}@${carrierShipmentMethod.shipmentMethodTypeId?if_exists}">
+              <#assign carrierPartyGroupName = ""/>
+              <#if carrierShipmentMethod.partyId != "_NA_">
+                <#assign findCarrierShipMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", carrierShipmentMethod.shipmentMethodTypeId, "partyId", carrierShipmentMethod.partyId,"roleTypeId" ,"CARRIER")>
+                <#assign carrierShipMethod = delegator.findByPrimaryKeyCache("CarrierShipmentMethod", findCarrierShipMethodMap)>
+                <#assign carrierParty = carrierShipMethod.getRelatedOne("Party")/>
+                <#assign carrierPartyGroup = carrierParty.getRelatedOne("PartyGroup")/>
+                <#assign carrierPartyGroupName = carrierPartyGroup.groupName?trim/>
+              </#if>
+              <option value='${shippingMethod}' <#if selectedShippingMethod.equals(shippingMethod)>selected=selected</#if>><#if carrierPartyGroupName?has_content>${carrierPartyGroupName?if_exists}&nbsp;<#else>${carrierShipmentMethod.partyId?if_exists}&nbsp;</#if>${carrierShipmentMethod.description?if_exists}</option>
+            </#list>
+          </select>
+        </#if>
+      </div>
     </div>
   </div>
 <#else>

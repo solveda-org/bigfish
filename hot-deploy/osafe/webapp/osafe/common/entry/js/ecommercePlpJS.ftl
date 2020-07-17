@@ -13,6 +13,23 @@ jQuery(document).ready(function () {
 
     jQuery('.plpFeatureSwatchImage').click(function() {
         var swatchVariant = jQuery(this).next('.swatchVariant').clone();
+
+        var swatchVariantOnlinePrice = jQuery(this).nextAll('.swatchVariantOnlinePrice:first').clone().show();
+        swatchVariantOnlinePrice.removeClass('swatchVariantOnlinePrice').addClass('plpPriceOnline');
+        jQuery(this).parents('.eCommerceListItem').find('.plpPriceOnlineSeq').find('.plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
+
+        var swatchVariantListPrice = jQuery(this).nextAll('.swatchVariantListPrice:first').clone().show();
+        swatchVariantListPrice.removeClass('swatchVariantListPrice').addClass('plpPriceList');
+        jQuery(this).parents('.eCommerceListItem').find('.plpPriceListSeq').find('.plpPriceList').replaceWith(swatchVariantListPrice);
+        
+        var swatchVariantSaveMoney = jQuery(this).nextAll('.swatchVariantSaveMoney:first').clone().show();
+        swatchVariantSaveMoney.removeClass('swatchVariantSaveMoney').addClass('plpPriceSavingMoney');
+        jQuery(this).parents('.eCommerceListItem').find('.plpPriceSavingMoneySeq').find('.plpPriceSavingMoney').replaceWith(swatchVariantSaveMoney);
+        
+        var swatchVariantSavingPercent = jQuery(this).nextAll('.swatchVariantSavingPercent:first').clone().show();
+        swatchVariantSavingPercent.removeClass('swatchVariantSavingPercent').addClass('plpPriceSavingPercent');
+        jQuery(this).parents('.eCommerceListItem').find('.plpPriceSavingPercentSeq').find('.plpPriceSavingPercent').replaceWith(swatchVariantSavingPercent);
+        
         jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
         jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
         jQuery(this).siblings('.plpFeatureSwatchImage').removeClass("selected");
@@ -45,6 +62,22 @@ jQuery(document).ready(function () {
     
     function changeSwatchImg(elm) {
         var swatchVariant = jQuery(elm).next('.swatchVariant').clone();
+        var swatchVariantOnlinePrice = jQuery(elm).nextAll('.swatchVariantOnlinePrice:first').clone().show();
+        swatchVariantOnlinePrice.removeClass('swatchVariantOnlinePrice').addClass('plpPriceOnline');
+        jQuery(elm).parents('.eCommerceListItem').find('.plpPriceOnlineSeq').find('.plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
+
+        var swatchVariantListPrice = jQuery(elm).nextAll('.swatchVariantListPrice:first').clone().show();
+        swatchVariantListPrice.removeClass('swatchVariantListPrice').addClass('plpPriceList');
+        jQuery(elm).parents('.eCommerceListItem').find('.plpPriceListSeq').find('.plpPriceList').replaceWith(swatchVariantListPrice);
+        
+        var swatchVariantSaveMoney = jQuery(elm).nextAll('.swatchVariantSaveMoney:first').clone().show();
+        swatchVariantSaveMoney.removeClass('swatchVariantSaveMoney').addClass('plpPriceSavingMoney');
+        jQuery(elm).parents('.eCommerceListItem').find('.plpPriceSavingMoneySeq').find('.plpPriceSavingMoney').replaceWith(swatchVariantSaveMoney);
+        
+        var swatchVariantSavingPercent = jQuery(elm).nextAll('.swatchVariantSavingPercent:first').clone().show();
+        swatchVariantSavingPercent.removeClass('swatchVariantSavingPercent').addClass('plpPriceSavingPercent');
+        jQuery(elm).parents('.eCommerceListItem').find('.plpPriceSavingPercentSeq').find('.plpPriceSavingPercent').replaceWith(swatchVariantSavingPercent);
+        
         jQuery(elm).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
         jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
         jQuery(elm).siblings('.plpFeatureSwatchImage').removeClass("selected");

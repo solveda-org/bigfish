@@ -186,7 +186,7 @@ public class SagePayUtil
             postParameters.add(new BasicNameValuePair(key, value));
         }
 
-        Debug.log("SagePay PostParameters - " + postParameters);
+//        Debug.log("SagePay PostParameters - " + postParameters);
 
         HttpEntity postEntity = new UrlEncodedFormEntity(postParameters);
         httpPost.setEntity(postEntity);

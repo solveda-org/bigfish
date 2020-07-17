@@ -34,13 +34,9 @@ orderEmail = parameters.orderEmail;
 session = context.session;
 statusId = StringUtils.trimToEmpty(parameters.statusId);
 productPromoCodeId = StringUtils.trimToEmpty(parameters.productPromoCodeId);
+viewApproved = StringUtils.trimToEmpty(parameters.viewapproved);
 viewCompleted = StringUtils.trimToEmpty(parameters.viewcompleted);
 viewCancelled = StringUtils.trimToEmpty(parameters.viewcancelled);
-viewApproved = StringUtils.trimToEmpty(parameters.viewapproved);
-viewSent = StringUtils.trimToEmpty(parameters.viewsent);
-viewCreated = StringUtils.trimToEmpty(parameters.viewcreated);
-viewRejected = StringUtils.trimToEmpty(parameters.viewrejected);
-viewHold = StringUtils.trimToEmpty(parameters.viewhold);
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
 
@@ -131,59 +127,33 @@ if (orderEmail) {
 }
 
 if(statusId) {
+	if("ORDER_APPROVED".equals(statusId)) {
+		viewApproved=statusId;
+	}
     if("ORDER_COMPLETED".equals(statusId)) {
         viewCompleted=statusId;
     }
     if("ORDER_CANCELLED".equals(statusId)) {
         viewCancelled=statusId;
     }
-    if("ORDER_REJECTED".equals(statusId)) {
-        viewRejected=statusId;
-    }
-    if("ORDER_APPROVED".equals(statusId)) {
-        viewApproved=statusId;
-    }
-    if("ORDER_SENT".equals(statusId)) {
-        viewSent=statusId;
-    }
-    if("ORDER_CREATED".equals(statusId)) {
-        viewCreated=statusId;
-    }
-    if("ORDER_HOLD".equals(statusId)) {
-        viewHold=statusId;
-    }
 }
 
 
 List<String> orderStatusIds = FastList.newInstance();
+if(viewApproved) {
+	orderStatusIds.add("ORDER_APPROVED");
+	context.viewapproved=viewApproved;
+}
 if(viewCompleted) {
     orderStatusIds.add("ORDER_COMPLETED");
     context.viewcompleted=viewCompleted;
 }
 if(viewCancelled) {
     orderStatusIds.add("ORDER_CANCELLED");
-    context.viewcompleted=viewCancelled;
+    context.viewcancelled=viewCancelled;
 }
-if(viewRejected) {
-    orderStatusIds.add("ORDER_REJECTED");
-    context.viewrejected=viewRejected;
-}
-if(viewApproved) {
-    orderStatusIds.add("ORDER_APPROVED");
-    context.viewapproved=viewApproved;
-}
-if(viewSent) {
-    orderStatusIds.add("ORDER_SENT");
-    context.viewsent=viewSent;
-}
-if(viewCreated) {
-    orderStatusIds.add("ORDER_CREATED");
-    context.viewcreated=viewCreated;
-}
-if(viewHold) {
-    orderStatusIds.add("ORDER_HOLD");
-    context.viewhold=viewHold;
-}
+
+
 if(UtilValidate.isNotEmpty(orderStatusIds)) {
     svcCtx.put("orderStatusId", orderStatusIds);
 }

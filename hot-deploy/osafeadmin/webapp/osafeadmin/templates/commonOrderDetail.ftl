@@ -51,6 +51,14 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
         </div>
     </div>
 </#if>
+<#if orderAttributeInfoBoxHeading?exists && orderAttributeInfoBoxHeading?has_content>
+    <div class="displayListBox orderItemInfo">
+        <div class="header"><h2>${orderAttributeInfoBoxHeading!}</h2></div>
+        <div class="boxBody">
+            ${sections.render('orderAttributeBoxBody')!}
+        </div>
+    </div>
+</#if>
 <div class="displayBox footerInfo">
     <div class="boxBody">
         ${sections.render('footerBoxBody')!}

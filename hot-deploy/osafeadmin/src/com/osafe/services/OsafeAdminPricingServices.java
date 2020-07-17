@@ -65,12 +65,12 @@ public class OsafeAdminPricingServices {
         
         Timestamp fromDate = UtilDateTime.nowTimestamp();
         try {
-            variantList = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", productId, "productAssocTypeId", "PRODUCT_VARIANT"));
+            //variantList = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", productId, "productAssocTypeId", "PRODUCT_VARIANT"));
             if(UtilValidate.isNotEmpty(variantList)) {
                 productIdList = EntityUtil.getFieldListFromEntityList(variantList, "productIdTo", true);
             }
             productIdList.add(productId);
-        } catch (GenericEntityException e) {
+        } catch (Exception e) {
             Debug.logWarning(e, module);
         }
           //Delete all existing product price rules

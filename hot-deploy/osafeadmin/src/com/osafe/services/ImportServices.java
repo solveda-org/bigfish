@@ -78,6 +78,7 @@ import org.ofbiz.entity.jdbc.SQLProcessor;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.order.OrderReadHelper;
 import org.ofbiz.party.contact.ContactHelper;
+import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
@@ -3365,12 +3366,12 @@ public class ImportServices {
                      rowString.append("/>");
                      bwOutFile.write(rowString.toString());
                      bwOutFile.newLine();
-                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "DESCRIPTION", "shortDescription",loadImagesDirPath,imageUrl);
-                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "LONG_DESCRIPTION", "longDescription",loadImagesDirPath,imageUrl);
-                   addPartyContentRow(rowString, mRow, bwOutFile, "image", "PROFILE_IMAGE_URL", "manufacturerImage",loadImagesDirPath,imageUrl);
-                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "PROFILE_NAME", "manufacturerName",loadImagesDirPath,imageUrl);
-                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "PROFILE_FB_LIKE_URL", "profileFbUrl",loadImagesDirPath,imageUrl);
-                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "PROFILE_TWEET_URL", "profileTweetUrl",loadImagesDirPath,imageUrl);
+                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "DESCRIPTION", "shortDescription",loadImagesDirPath,imageUrl,"shortDescriptionThruDate");
+                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "LONG_DESCRIPTION", "longDescription",loadImagesDirPath,imageUrl,"longDescriptionThruDate");
+                   addPartyContentRow(rowString, mRow, bwOutFile, "image", "PROFILE_IMAGE_URL", "manufacturerImage",loadImagesDirPath,imageUrl, "manufacturerImageThruDate");
+                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "PROFILE_NAME", "manufacturerName",loadImagesDirPath,imageUrl,"manufacturerNameThruDate");
+                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "PROFILE_FB_LIKE_URL", "profileFbUrl",loadImagesDirPath,imageUrl,"profileFbUrlThruDate");
+                   addPartyContentRow(rowString, mRow, bwOutFile, "text", "PROFILE_TWEET_URL", "profileTweetUrl",loadImagesDirPath,imageUrl,"profileTweetUrlThruDate");
  	            	
 	            }
                 bwOutFile.flush();
@@ -3476,10 +3477,14 @@ public class ImportServices {
 	                         rowString.append("productDepth" + "=\"" + mRow.get("productDepth") + "\" ");
 	                     }
 	                     String isVirtual="N";
-	 	            	 if (UtilValidate.isNotEmpty(mRow.get("selectabeFeature_1")))
-	                     {
+	                     
+	                     if(UtilValidate.isNotEmpty(mRow.get("productId")) && !mRow.get("productId").equals(masterProductId)) {
 	                    	 isVirtual="Y";
 	                     }
+	 	            	 /*if (UtilValidate.isNotEmpty(mRow.get("selectabeFeature_1")))
+	                     {
+	                    	 isVirtual="Y";
+	                     }*/
 	                     rowString.append("isVirtual" + "=\"" + isVirtual + "\" ");
 	                     rowString.append("isVariant" + "=\"" + "N" + "\" ");
 	                     rowString.append("/>");
@@ -3640,8 +3645,12 @@ public class ImportServices {
               	    Map mRow = (Map)dataRows.get(i);
               	    String productId=(String)mRow.get("masterProductId");
       			    String featureProductId=(String)mRow.get("productId");
+         			String sFromDate = (String)mRow.get("fromDate");
+         			String sThruDate = (String)mRow.get("thruDate");
+         			 
       			    String sDescription = "";
       	            String sInternalName = "";
+      	            
               	    mFeatureTypeMap.clear();
               	    int iSeq = 0;
               	    
@@ -3693,7 +3702,7 @@ public class ImportServices {
 	                			    }
 	                		    }
 	            		    }
-	            		    addProductVariantRow(rowString, bwOutFile, mRow, loadImagesDirPath,imageUrl,productId, featureProductId, sDescription, sInternalName, iSeq);
+	            		    addProductVariantRow(rowString, bwOutFile, mRow, loadImagesDirPath,imageUrl,productId, featureProductId, sDescription, sInternalName,sFromDate,sThruDate, iSeq);
               	        }
               	      
 	            }
@@ -3817,9 +3826,10 @@ public class ImportServices {
        }
     
 
-    private static void addProductVariantRow(StringBuilder rowString,BufferedWriter bwOutFile,Map mRow,String loadImagesDirPath, String imageUrl, String masterProductId,String featureProductId,String description,String internalName,int iSeq) {
+    private static void addProductVariantRow(StringBuilder rowString,BufferedWriter bwOutFile,Map mRow,String loadImagesDirPath, String imageUrl, String masterProductId,String featureProductId,String description,String internalName,String sFromDate,String sThruDate,int iSeq) {
     	String currencyUomId = UtilProperties.getPropertyValue("general.properties", "currency.uom.id.default", "USD");
     	String priceFromDate = _sdf.format(UtilDateTime.nowTimestamp());
+    	String useVariantPricing = "false";
     	try {
     		
 		   rowString.setLength(0);
@@ -3830,6 +3840,24 @@ public class ImportServices {
            rowString.append("description" + "=\"" + description + "\" ");
            rowString.append("isVirtual" + "=\"" + "N" + "\" ");
            rowString.append("isVariant" + "=\"" + "Y" + "\" ");
+  		   if (UtilValidate.isNotEmpty(sFromDate))
+		   {
+             rowString.append("introductionDate" + "=\"" + sFromDate + "\" ");
+		   }
+		   else
+		   {
+             rowString.append("introductionDate" + "=\"" + "" + "\" ");
+		   }
+		  if (UtilValidate.isNotEmpty(sThruDate))
+			 {
+                 rowString.append("salesDiscontinuationDate" + "=\"" + sThruDate + "\" ");
+			 }
+			 else
+			 {
+                 rowString.append("salesDiscontinuationDate" + "=\"" + "" + "\" ");
+			 }
+           
+           
            rowString.append("/>");
            bwOutFile.write(rowString.toString());
            bwOutFile.newLine();
@@ -3852,7 +3880,10 @@ public class ImportServices {
            }
            
            String sPrice =(String)mRow.get("listPrice");
-           if (UtilValidate.isNotEmpty(sPrice))
+           if(UtilValidate.isNotEmpty(mRow.get("useVariantPricing"))) {
+        	   useVariantPricing = (String)mRow.get("useVariantPricing");
+           }
+           if (UtilValidate.isNotEmpty(sPrice) && useVariantPricing.equalsIgnoreCase("true"))
            {
         	   if(UtilValidate.isNotEmpty(mRow.get("listPriceCurrency"))) {
                    currencyUomId = (String) mRow.get("listPriceCurrency");
@@ -3889,7 +3920,7 @@ public class ImportServices {
            }
            
            sPrice =(String)mRow.get("defaultPrice");
-           if (UtilValidate.isNotEmpty(sPrice))
+           if (UtilValidate.isNotEmpty(sPrice) && useVariantPricing.equalsIgnoreCase("true"))
            {
         	   if(UtilValidate.isNotEmpty(mRow.get("defaultPriceCurrency"))) {
                    currencyUomId = (String) mRow.get("defaultPriceCurrency");
@@ -4063,8 +4094,14 @@ public class ImportServices {
                 
                 for (int i=0 ; i < dataRows.size() ; i++) {
                     StringBuilder  rowString = new StringBuilder();
-	            	 Map mRow = (Map)dataRows.get(i);
-	              	 String selectableFeature = (String)mRow.get("selectabeFeature_1");
+	            	Map mRow = (Map)dataRows.get(i);
+	              	 
+	              	String masterProductId=(String)mRow.get("masterProductId");
+	            	String productId=(String)mRow.get("productId");
+	              	if(UtilValidate.isNotEmpty(productId) && !productId.equals(masterProductId)) {
+	              		addProductContent(rowString, mRow, bwOutFile, productId,loadImagesDirPath, imageUrl);
+	              	}
+	              	/*String selectableFeature = (String)mRow.get("selectabeFeature_1");
 	              	 if (UtilValidate.isNotEmpty(selectableFeature))
 	              	 {
 		            	 String masterProductId=(String)mRow.get("masterProductId");
@@ -4075,7 +4112,7 @@ public class ImportServices {
             			 }
 	              		 addProductContent(rowString, mRow, bwOutFile, productId,loadImagesDirPath, imageUrl);
 	              		 
-	              	 }
+	              	 }*/
 
 	            }
                 bwOutFile.flush();
@@ -4101,67 +4138,67 @@ public class ImportServices {
     	
     	try 
     	{
-			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","SMALL_IMAGE_URL", "smallImage", loadImagesDirPath, imageUrl);
-             addProductContentRow(rowString, mRow, bwOutFile, productId,"image","SMALL_IMAGE_ALT_URL", "smallImageAlt", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PLP_SWATCH_IMAGE_URL", "plpSwatchImage", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_SWATCH_IMAGE_URL", "pdpSwatchImage", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","THUMBNAIL_IMAGE_URL", "thumbImage", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","LARGE_IMAGE_URL", "largeImage", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","DETAIL_IMAGE_URL", "detailImage", loadImagesDirPath, imageUrl);
+			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","SMALL_IMAGE_URL", "smallImage", loadImagesDirPath, imageUrl,"smallImageThruDate");
+             addProductContentRow(rowString, mRow, bwOutFile, productId,"image","SMALL_IMAGE_ALT_URL", "smallImageAlt", loadImagesDirPath, imageUrl,"smallImageAltThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PLP_SWATCH_IMAGE_URL", "plpSwatchImage", loadImagesDirPath, imageUrl,"plpSwatchImageThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_SWATCH_IMAGE_URL", "pdpSwatchImage", loadImagesDirPath, imageUrl,"pdpSwatchImageThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","THUMBNAIL_IMAGE_URL", "thumbImage", loadImagesDirPath, imageUrl,"thumbImageThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","LARGE_IMAGE_URL", "largeImage", loadImagesDirPath, imageUrl,"largeImageThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","DETAIL_IMAGE_URL", "detailImage", loadImagesDirPath, imageUrl,"detailImageThruDate");
 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_1", "addImage1", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_1_LARGE", "xtraLargeImage1", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_1_DETAIL", "xtraDetailImage1", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_1", "addImage1", loadImagesDirPath, imageUrl,"addImage1ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_1_LARGE", "xtraLargeImage1", loadImagesDirPath, imageUrl,"xtraLargeImage1ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_1_DETAIL", "xtraDetailImage1", loadImagesDirPath, imageUrl,"xtraDetailImage1ThruDate");
  			 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_2", "addImage2", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_2_LARGE", "xtraLargeImage2", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_2_DETAIL", "xtraDetailImage2", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_2", "addImage2", loadImagesDirPath, imageUrl,"addImage2ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_2_LARGE", "xtraLargeImage2", loadImagesDirPath, imageUrl,"xtraLargeImage2ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_2_DETAIL", "xtraDetailImage2", loadImagesDirPath, imageUrl,"xtraDetailImage2ThruDate");
  			 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_3", "addImage3", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_3_LARGE", "xtraLargeImage3", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_3_DETAIL", "xtraDetailImage3", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_3", "addImage3", loadImagesDirPath, imageUrl,"addImage3ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_3_LARGE", "xtraLargeImage3", loadImagesDirPath, imageUrl,"xtraLargeImage3ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_3_DETAIL", "xtraDetailImage3", loadImagesDirPath, imageUrl,"xtraDetailImage3ThruDate");
  			 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_4", "addImage4", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_4_LARGE", "xtraLargeImage4", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_4_DETAIL", "xtraDetailImage4", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_4", "addImage4", loadImagesDirPath, imageUrl,"addImage4ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_4_LARGE", "xtraLargeImage4", loadImagesDirPath, imageUrl,"xtraLargeImage4ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_4_DETAIL", "xtraDetailImage4", loadImagesDirPath, imageUrl,"xtraDetailImage4ThruDate");
  			 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_5", "addImage5", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_5_LARGE", "xtraLargeImage5", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_5_DETAIL", "xtraDetailImage5", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","ADDITIONAL_IMAGE_5", "addImage5", loadImagesDirPath, imageUrl,"addImage5ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_5_LARGE", "xtraLargeImage5", loadImagesDirPath, imageUrl,"xtraLargeImage5ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","XTRA_IMG_5_DETAIL", "xtraDetailImage5", loadImagesDirPath, imageUrl,"xtraDetailImage5ThruDate");
 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_6", "addImage6", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_6_LARGE", "xtraLargeImage6", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_6_DETAIL", "xtraDetailImage6", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_6", "addImage6", loadImagesDirPath, imageUrl,"addImage6ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_6_LARGE", "xtraLargeImage6", loadImagesDirPath, imageUrl,"xtraLargeImage6ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_6_DETAIL", "xtraDetailImage6", loadImagesDirPath, imageUrl,"xtraDetailImage6ThruDate");
 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_7", "addImage7", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_7_LARGE", "xtraLargeImage7", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_7_DETAIL", "xtraDetailImage7", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_7", "addImage7", loadImagesDirPath, imageUrl,"addImage7ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_7_LARGE", "xtraLargeImage7", loadImagesDirPath, imageUrl,"xtraLargeImage7ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_7_DETAIL", "xtraDetailImage7", loadImagesDirPath, imageUrl,"xtraDetailImage7ThruDate");
 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_8", "addImage8", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_8_LARGE", "xtraLargeImage8", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_8_DETAIL", "xtraDetailImage8", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_8", "addImage8", loadImagesDirPath, imageUrl,"addImage8ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_8_LARGE", "xtraLargeImage8", loadImagesDirPath, imageUrl,"xtraLargeImage8ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_8_DETAIL", "xtraDetailImage8", loadImagesDirPath, imageUrl,"xtraDetailImage8ThruDate");
 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_9", "addImage9", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_9_LARGE", "xtraLargeImage9", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_9_DETAIL", "xtraDetailImage9", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_9", "addImage9", loadImagesDirPath, imageUrl,"addImage9ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_9_LARGE", "xtraLargeImage9", loadImagesDirPath, imageUrl,"xtraLargeImage9ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_9_DETAIL", "xtraDetailImage9", loadImagesDirPath, imageUrl,"xtraDetailImage9ThruDate");
 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_10", "addImage10", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_10_LARGE", "xtraLargeImage10", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_10_DETAIL", "xtraDetailImage10", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ADDITIONAL_IMAGE_10", "addImage10", loadImagesDirPath, imageUrl,"addImage10ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_10_LARGE", "xtraLargeImage10", loadImagesDirPath, imageUrl,"xtraLargeImag10ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","XTRA_IMG_10_DETAIL", "xtraDetailImage10", loadImagesDirPath, imageUrl,"xtraDetailImage10ThruDate");
 
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","PRODUCT_NAME", "productName", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","SHORT_SALES_PITCH", "salesPitch", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","LONG_DESCRIPTION", "longDescription", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","SPECIALINSTRUCTIONS", "specialInstructions", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","DELIVERY_INFO", "deliveryInfo", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","DIRECTIONS", "directions", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","TERMS_AND_CONDS", "termsConditions", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","INGREDIENTS", "ingredients", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","WARNINGS", "warnings", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","PLP_LABEL", "plpLabel", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","PDP_LABEL", "pdpLabel", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_VIDEO_URL", "pdpVideoUrl", loadImagesDirPath, imageUrl);
- 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_VIDEO_360_URL", "pdpVideo360Url", loadImagesDirPath, imageUrl);
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","PRODUCT_NAME", "productName", loadImagesDirPath, imageUrl,"productNameThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","SHORT_SALES_PITCH", "salesPitch", loadImagesDirPath, imageUrl,"salesPitchThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","LONG_DESCRIPTION", "longDescription", loadImagesDirPath, imageUrl,"longDescriptionThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","SPECIALINSTRUCTIONS", "specialInstructions", loadImagesDirPath, imageUrl,"specialInstructionsThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","DELIVERY_INFO", "deliveryInfo", loadImagesDirPath, imageUrl,"deliveryInfoThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","DIRECTIONS", "directions", loadImagesDirPath, imageUrl,"smallImageAltThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","TERMS_AND_CONDS", "termsConditions", loadImagesDirPath, imageUrl,"smallImageAltThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","INGREDIENTS", "ingredients", loadImagesDirPath, imageUrl,"termsConditionsThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","WARNINGS", "warnings", loadImagesDirPath, imageUrl,"warningsThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","PLP_LABEL", "plpLabel", loadImagesDirPath, imageUrl,"plpLabelThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","PDP_LABEL", "pdpLabel", loadImagesDirPath, imageUrl,"pdpLabelThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_VIDEO_URL", "pdpVideoUrl", loadImagesDirPath, imageUrl,"pdpVideoUrlThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_VIDEO_360_URL", "pdpVideo360Url", loadImagesDirPath, imageUrl,"pdpVideo360UrlThruDate");
     		
     	}
     	 catch (Exception e)
@@ -4169,7 +4206,7 @@ public class ImportServices {
     		 
     	 }
     }
-    private static void addProductContentRow(StringBuilder rowString,Map mRow,BufferedWriter bwOutFile,String productId,String contentType,String productContentTypeId,String colName, String productImagesDirPath, String imageUrl) {
+    private static void addProductContentRow(StringBuilder rowString,Map mRow,BufferedWriter bwOutFile,String productId,String contentType,String productContentTypeId,String colName, String productImagesDirPath, String imageUrl,String colNameThruDate) {
 
 		String contentId=null;
 		String dataResourceId=null;
@@ -4181,7 +4218,8 @@ public class ImportServices {
 			{
 				return;
 			}
-	        List<GenericValue> lProductContent = _delegator.findByAnd("ProductContent", UtilMisc.toMap("productId",productId,"productContentTypeId",productContentTypeId),UtilMisc.toList("-fromDate"));
+			String contentValueThruDate=(String)mRow.get(colNameThruDate);
+			List<GenericValue> lProductContent = _delegator.findByAnd("ProductContent", UtilMisc.toMap("productId",productId,"productContentTypeId",productContentTypeId),UtilMisc.toList("-fromDate"));
 			if (UtilValidate.isNotEmpty(lProductContent))
 			{
 				GenericValue productContent = EntityUtil.getFirst(lProductContent);
@@ -4195,7 +4233,6 @@ public class ImportServices {
 				contentId=_delegator.getNextSeqId("Content");
 				dataResourceId=_delegator.getNextSeqId("DataResource");
 				contentTimestamp =UtilDateTime.nowTimestamp();
-				
 			}
 
 			if ("text".equals(contentType))
@@ -4269,6 +4306,14 @@ public class ImportServices {
             rowString.append("contentId" + "=\"" + contentId + "\" ");
             rowString.append("productContentTypeId" + "=\"" + productContentTypeId + "\" ");
             rowString.append("fromDate" + "=\"" + _sdf.format(contentTimestamp) + "\" ");
+			if (UtilValidate.isNotEmpty(contentValueThruDate))
+			{
+	            rowString.append("thruDate" + "=\"" + contentValueThruDate + "\" ");
+			}
+			else
+			{
+	            rowString.append("thruDate" + "=\"" + null + "\" ");
+			}
             rowString.append("/>");
             bwOutFile.write(rowString.toString());
             bwOutFile.newLine();
@@ -4532,11 +4577,12 @@ public class ImportServices {
     	
     }
 
-    private static void addPartyContentRow(StringBuilder rowString,Map mRow,BufferedWriter bwOutFile,String contentType,String partyContentType,String colName,String imagesDirPath, String imageUrl) {
+    private static void addPartyContentRow(StringBuilder rowString,Map mRow,BufferedWriter bwOutFile,String contentType,String partyContentType,String colName,String imagesDirPath, String imageUrl, String colNameThruDate) {
 
 		String contentId=null;
 		String partyId=null;
 		String dataResourceId=null;
+		Timestamp contentTimestamp = null;
     	try {
     		
 			String contentValue=(String)mRow.get(colName);
@@ -4545,6 +4591,7 @@ public class ImportServices {
 				return;
 			}
 			partyId=(String)mRow.get("partyId");
+			String contentValueThruDate=(String)mRow.get(colNameThruDate);
 	        List<GenericValue> lPartyContent = _delegator.findByAnd("PartyContent", UtilMisc.toMap("partyId",partyId,"partyContentTypeId",partyContentType),UtilMisc.toList("-fromDate"));
 			if (UtilValidate.isNotEmpty(lPartyContent))
 			{
@@ -4552,16 +4599,14 @@ public class ImportServices {
 				GenericValue content=partyContent.getRelatedOne("Content");
 				contentId=content.getString("contentId");
 				dataResourceId=content.getString("dataResourceId");
+				contentTimestamp =partyContent.getTimestamp("fromDate");
 			}
 			else
 			{
 				contentId=_delegator.getNextSeqId("Content");
 				dataResourceId=_delegator.getNextSeqId("DataResource");
-				
+				contentTimestamp =UtilDateTime.nowTimestamp();
 			}
-			contentId=_delegator.getNextSeqId("Content");
-			dataResourceId=_delegator.getNextSeqId("DataResource");
-    		
 
 			if ("text".equals(contentType))
 			{
@@ -4586,8 +4631,6 @@ public class ImportServices {
 	            rowString.append("/>");
 	            bwOutFile.write(rowString.toString());
 	            bwOutFile.newLine();
-	            
-	            
 			}
 			else
 			{
@@ -4627,17 +4670,21 @@ public class ImportServices {
             rowString.append("/>");
             bwOutFile.write(rowString.toString());
             bwOutFile.newLine();
-			String sFromDate = (String)mRow.get("fromDate");
-			if (UtilValidate.isEmpty(sFromDate))
-			{
-				sFromDate=_sdf.format(UtilDateTime.nowTimestamp());
-			}
+			
             rowString.setLength(0);
             rowString.append("<" + "PartyContent" + " ");
             rowString.append("partyId" + "=\"" + partyId + "\" ");
             rowString.append("contentId" + "=\"" + contentId + "\" ");
             rowString.append("partyContentTypeId" + "=\"" + partyContentType + "\" ");
-            rowString.append("fromDate" + "=\"" + sFromDate + "\" ");
+            rowString.append("fromDate" + "=\"" + _sdf.format(contentTimestamp) + "\" ");
+            if (UtilValidate.isNotEmpty(contentValueThruDate))
+			{
+	            rowString.append("thruDate" + "=\"" + contentValueThruDate + "\" ");
+			}
+			else
+			{
+	            rowString.append("thruDate" + "=\"" + null + "\" ");
+			}
             rowString.append("/>");
             bwOutFile.write(rowString.toString());
             bwOutFile.newLine();
@@ -5714,8 +5761,6 @@ public class ImportServices {
   	    	oh.setOrderTotalTax(taxAmount.toString());
   	    	oh.setOrderTotalNet(grandTotal.toString());
   	    	oh.setOrderTotalAdjustment(adjustmentTotal.toString());
-  	    	oh.setItemsToRemove("0");
-  	    	oh.setValidateWebTotals("TRUE");
   	    	order.setOrderHeader(oh);
   	    	
   	    	// Set Order Line Item detail 
@@ -5728,6 +5773,16 @@ public class ImportServices {
   	    		BigDecimal orderItemSubTotal = orderReadHelper.getOrderItemSubTotal(orderItem,orderReadHelper.getAdjustments());
   	    		BigDecimal orderItemShippingCharges = orderReadHelper.getOrderItemShipping(orderItem);
   	    		BigDecimal orderItemTax = orderReadHelper.getOrderItemTax(orderItem);
+  	    		BigDecimal orderItemAdjustmentTotal = orderReadHelper.getOrderItemAdjustmentsTotal(orderItem);
+  	    		BigDecimal offerPrice = null;
+  	    		if(orderItemAdjustmentTotal.compareTo(BigDecimal.ZERO) == -1) {
+  	    			try {
+  	    				int roundingMode = BigDecimal.ROUND_FLOOR;
+  	    			    offerPrice = ((BigDecimal) orderItem.get("unitPrice")).add((orderItemAdjustmentTotal.divide((BigDecimal) orderItem.get("quantity"), roundingMode)));
+  	    			} catch (ArithmeticException ae) {
+						// TODO: handle exception
+					}
+  	    		}
   	    		String shippingMethod = "";
   	    		List<GenericValue> orderItemShipGroupAssocs = orderReadHelper.getOrderItemShipGroupAssocs(orderItem);
   	    		if(UtilValidate.isNotEmpty(orderItemShipGroupAssocs)) {
@@ -5743,14 +5798,51 @@ public class ImportServices {
   	    		orderLine.setProductId((String)orderItem.get("productId"));
   	    		orderLine.setQuantity(UtilMisc.toInteger(orderItem.get("quantity")));
   	    		orderLine.setPrice(orderItem.get("unitPrice").toString());
+  	    		if(UtilValidate.isNotEmpty(offerPrice)) {
+  	    		    orderLine.setOfferPrice(offerPrice.toString());
+  	    		}
   	    		orderLine.setLineTotalGross(orderItemSubTotal.toString());
   	    		orderLine.setShippingCharge(orderItemShippingCharges.toString());
   	    		orderLine.setSalesTax(orderItemTax.toString());
   	    		orderLine.setCarrier(shippingMethod);
+  	    		
+  	    	    // Set Order Line Promotion Detail 
+  	    		List<GenericValue> orderItemAdjustments = orderReadHelper.getOrderItemAdjustments(orderItem);
+  	  	    	List orderLinePromotionList = orderLine.getOrderLinePromotion();
+  	  	    	if(UtilValidate.isNotEmpty(orderItemAdjustments)) {
+  	  	    	    for (GenericValue orderItemAdjustment : orderItemAdjustments) {
+  	  	    		    OrderLinePromotionType orderLinePromotion = factory.createOrderLinePromotionType();
+  	  	    		    GenericValue adjustmentType = orderItemAdjustment.getRelatedOneCache("OrderAdjustmentType");
+  	  	    		    GenericValue productPromo = orderItemAdjustment.getRelatedOneCache("ProductPromo");
+  	  	    		    String promoCodeText = "";
+  	  	    		    if(UtilValidate.isNotEmpty(productPromo)) {
+  	  	    			    List<GenericValue> productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
+  	  	    			    Set<String> promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
+  	  	    			    if(UtilValidate.isNotEmpty(promoCodesEntered)) {
+  	  	    				    for(String promoCodeEntered : promoCodesEntered) {
+  	  	    					    if(UtilValidate.isNotEmpty(productPromoCode)) {
+  	  	    						    for(GenericValue promoCode : productPromoCode) {
+  	  	    							    String promoCodeEnteredId = promoCodeEntered;
+  	  	    							    String promoCodeId = (String) promoCode.get("productPromoCodeId");
+  	  	    							    if(UtilValidate.isNotEmpty(promoCodeEnteredId)) {
+  	  	    								    if(promoCodeId.equals(promoCodeEnteredId)) {
+  	  	    									    promoCodeText = (String)promoCode.get("productPromoCodeId");
+  	  	    								    }
+  	  	    							    }
+  	  	    						    }
+  	  	    					    }
+  	  	    				    }
+  	  	    			    }
+  	  	    		    }
+  	  	    	        orderLinePromotion.setPromotionCode(promoCodeText);
+  	  	                BigDecimal promotionAmount = orderReadHelper.calcItemAdjustment(orderItemAdjustment, orderItem);
+  	  	    	        orderLinePromotion.setPromotionAmount(promotionAmount.toString());
+  	  	                orderLinePromotionList.add(orderLinePromotion);
+  	  	            }
+  	  	    	}
   	    		orderLineItemsList.add(orderLine);
   	    		lineNumber++;
   	    	}
-  	    	
   	    	order.setOrderLineItems(orderLineItems);
   	    	
   	    	// Set Cart Promotion Detail 
@@ -5888,6 +5980,20 @@ public class ImportServices {
   	    	    orderPayment.setCaptureAmount(captureAmount);
   	    	}
   	    	order.setOrderPayment(orderPayment);
+  	    	
+  	    	//Set Order Attribute Detail
+  	    	OrderAttributeType orderAttributeType = factory.createOrderAttributeType();
+  	    	List attributeList = orderAttributeType.getAttribute();
+  	    	List<GenericValue> orderAttributeList = delegator.findByAnd("OrderAttribute", UtilMisc.toMap("orderId", orderId));
+  	    	if(UtilValidate.isNotEmpty(orderAttributeList)) {
+  	    	    for(GenericValue orderAttribute : orderAttributeList) {
+  	    		    AttributeType attribute = factory.createAttributeType();
+  	    		    attribute.setName(orderAttribute.getString("attrName"));
+  	    		    attribute.setValue(orderAttribute.getString("attrValue"));
+  	    		    attributeList.add(attribute);
+  	    	    }
+  	    	}
+  	    	order.setOrderAttribute(orderAttributeType);
   	    	
   	    	orderList.add(order);
   	    	} catch (Exception e) {
@@ -6181,15 +6287,14 @@ public class ImportServices {
     	        //Set Customer Shipping Address
                 FeedsUtil.getCustomerShippingAddress(factory, customer, partyContactDetails,"SHIPPING_LOCATION", delegator);
     	        
-  	        
-    	        String gender = (String)person.get("gender");
-    	        if(UtilValidate.isEmpty(gender)) {
-    	        	gender = "";
-    	        }
-    	        if(gender.equalsIgnoreCase("M")) {
-    	        	gender = "MALE";
-    	        } else if (gender.equalsIgnoreCase("F")) {
-    	        	gender = "FEMALE";
+                GenericValue partyGenderAttr = delegator.findByPrimaryKey("PartyAttribute", UtilMisc.toMap("partyId", customerId,"attrName","GENDER"));
+    	        String gender = "";
+    	        if(UtilValidate.isNotEmpty(partyGenderAttr)) {
+    	        	if("M".equals(partyGenderAttr.getString("attrValue"))) {
+        	        	gender = "MALE";
+        	        } else if ("F".equals(partyGenderAttr.getString("attrValue"))) {
+        	        	gender = "FEMALE";
+        	        }
     	        }
     	        
     	        String allowSolicitation = (String)partyEmailDetail.get("allowSolicitation");
@@ -6211,7 +6316,12 @@ public class ImportServices {
     	        customer.setDateRegistered(party.get("createdDate").toString());
     	        customer.setEmailAddress((String)partyEmailDetail.get("infoString"));
     	        customer.setEmailOptIn(allowSolicitation);
-    	        customer.setEmailFormat((String)partyEmailFormatAttr.get("attrValue"));String homePhone = FeedsUtil.getPartyPhoneNumber(partyId, "PHONE_HOME", delegator);
+    	        if(UtilValidate.isNotEmpty(partyEmailFormatAttr)) {
+    	        	customer.setEmailFormat((String)partyEmailFormatAttr.get("attrValue"));
+    	        } else {
+    	        	customer.setEmailFormat("");
+    	        }
+    	        String homePhone = FeedsUtil.getPartyPhoneNumber(partyId, "PHONE_HOME", delegator);
     	        customer.setHomePhone(homePhone);
     	        String cellPhone = FeedsUtil.getPartyPhoneNumber(partyId, "PHONE_MOBILE", delegator);
     	        customer.setCellPhone(cellPhone);
@@ -6591,6 +6701,7 @@ public class ImportServices {
                 ManufacturerImageType manufacturerImage = productManufacturer.getManufacturerImage();
                 if(UtilValidate.isNotEmpty(manufacturerImage)) {
                 	mRows.put("manufacturerImage",manufacturerImage.getUrl());
+                	mRows.put("manufacturerImageThruDate",manufacturerImage.getThruDate());
                 }
                                 
                 mRows = formatProductXLSData(mRows);
@@ -6636,6 +6747,7 @@ public class ImportServices {
                 mRows.put("fromDate",product.getFromDate());
                 mRows.put("thruDate",product.getThruDate());
                 mRows.put("manufacturerId",product.getManufacturerId());
+                mRows.put("useVariantPricing",product.getUseVariantPricing());
                 
                 ProductPriceType productPrice = product.getProductPrice();
                 if(UtilValidate.isNotEmpty(productPrice)) {
@@ -6755,46 +6867,55 @@ public class ImportServices {
                 	PlpSwatchType plpSwatch = productImage.getPlpSwatch();
                 	if(UtilValidate.isNotEmpty(plpSwatch)) {
                 		mRows.put("plpSwatchImage",plpSwatch.getUrl());
+                		mRows.put("plpSwatchImageThruDate",plpSwatch.getThruDate());
                 	}
                     
                     PdpSwatchType pdpSwatch = productImage.getPdpSwatch();
                     if(UtilValidate.isNotEmpty(pdpSwatch)) {
                         mRows.put("pdpSwatchImage",pdpSwatch.getUrl());
+                        mRows.put("pdpSwatchImageThruDate",pdpSwatch.getThruDate());
                     }
                     
                     PlpSmallImageType plpSmallImage = productImage.getPlpSmallImage();
                     if(UtilValidate.isNotEmpty(plpSmallImage)) {
                     	mRows.put("smallImage",plpSmallImage.getUrl());
+                    	mRows.put("smallImageThruDate",plpSmallImage.getThruDate());
                     }
                     
                     PlpSmallAltImageType plpSmallAltImage = productImage.getPlpSmallAltImage();
                     if(UtilValidate.isNotEmpty(plpSmallAltImage)) {
                     	mRows.put("smallImageAlt",plpSmallAltImage.getUrl());
+                    	mRows.put("smallImageAltThruDate",plpSmallAltImage.getThruDate());
                     }
                     
                     PdpThumbnailImageType pdpThumbnailImage = productImage.getPdpThumbnailImage();
                     if(UtilValidate.isNotEmpty(pdpThumbnailImage)) {
                     	mRows.put("thumbImage",pdpThumbnailImage.getUrl());
+                    	mRows.put("thumbImageThruDate",pdpThumbnailImage.getThruDate());
                     }
                     
                     PdpLargeImageType plpLargeImage = productImage.getPdpLargeImage();
                     if(UtilValidate.isNotEmpty(plpLargeImage)) {
                     	mRows.put("largeImage",plpLargeImage.getUrl());
+                    	mRows.put("largeImageThruDate",plpLargeImage.getThruDate());
                     }
                     
                     PdpDetailImageType pdpDetailImage = productImage.getPdpDetailImage();
                     if(UtilValidate.isNotEmpty(pdpDetailImage)) {
                     	mRows.put("detailImage",pdpDetailImage.getUrl());
+                    	mRows.put("detailImageThruDate",pdpDetailImage.getThruDate());
                     }
                     
                     PdpVideoType pdpVideo = productImage.getPdpVideoImage();
                     if(UtilValidate.isNotEmpty(pdpVideo)) {
                     	mRows.put("pdpVideoUrl",pdpVideo.getUrl());
+                    	mRows.put("pdpVideoUrlThruDate",pdpVideo.getThruDate());
                     }
                     
                     PdpVideo360Type pdpVideo360 = productImage.getPdpVideo360Image();
                     if(UtilValidate.isNotEmpty(pdpVideo360)) {
                     	mRows.put("pdpVideo360Url",pdpVideo360.getUrl());
+                    	mRows.put("pdpVideo360UrlThruDate",pdpVideo360.getThruDate());
                     }
                     
                     PdpAlternateImageType pdpAlternateImage = productImage.getPdpAlternateImage();
@@ -6807,16 +6928,19 @@ public class ImportServices {
                         		PdpAdditionalThumbImageType pdpAdditionalThumbImage = pdpAdditionalImage.getPdpAdditionalThumbImage();
                         		if(UtilValidate.isNotEmpty(pdpAdditionalThumbImage)) {
                         			mRows.put("addImage"+(i+1),pdpAdditionalThumbImage.getUrl());
+                        			mRows.put("addImage"+(i+1)+"ThruDate",pdpAdditionalThumbImage.getThruDate());
                         		}
                         	    
                         	    PdpAdditionalLargeImageType pdpAdditionalLargeImage = pdpAdditionalImage.getPdpAdditionalLargeImage();
                         	    if(UtilValidate.isNotEmpty(pdpAdditionalLargeImage)) {
                         	    	mRows.put("xtraLargeImage"+(i+1),pdpAdditionalLargeImage.getUrl());
+                        	    	mRows.put("xtraLargeImage"+(i+1)+"ThruDate",pdpAdditionalLargeImage.getThruDate());
                         	    }
                         	    
                         	    PdpAdditionalDetailImageType pdpAdditionalDetailImage = pdpAdditionalImage.getPdpAdditionalDetailImage();
                         	    if(UtilValidate.isNotEmpty(pdpAdditionalDetailImage)) {
                         	    	mRows.put("xtraDetailImage"+(i+1),pdpAdditionalDetailImage.getUrl());
+                        	    	mRows.put("xtraDetailImage"+(i+1)+"ThruDate",pdpAdditionalDetailImage.getThruDate());
                         	    }
                         	}
                         }
@@ -6941,6 +7065,7 @@ public class ImportServices {
             	buildOrderHeader(dataRows, xmlDataDirPath);
             	buildOrderItem(dataRows, xmlDataDirPath);
             	buildOrderStatus(dataRows, xmlDataDirPath);
+            	buildOrderNote(dataRows, xmlDataDirPath, (GenericValue)context.get("userLogin"));
             	buildOrderItemShipGroup(dataRows, xmlDataDirPath);
         	} catch (Exception e) {
         		Debug.logError(e, module);
@@ -7024,6 +7149,7 @@ public class ImportServices {
                 mRows.put("orderShipCarrier",order.getOrderShipCarrier());
                 mRows.put("orderShipMethod",order.getOrderShipMethod());
                 mRows.put("orderTrackingNumber",order.getOrderTrackingNumber());
+                mRows.put("orderNote",order.getOrderNote());
                 
                 List orderItems = order.getOrderItem();
                 if(UtilValidate.isNotEmpty(orderItems)) {
@@ -7074,7 +7200,7 @@ public class ImportServices {
 		            	 rowString.append("statusId" + "=\"" + orderStatus + "\" ");
 		             } else {
 		                 if(mRow.get("orderStatus") != null) {
-		                     rowString.append("statusId" + "=\"" + (String)mRow.get("orderStatus") + "\" ");
+		                     rowString.append("statusId" + "=\"" + "ORDER_"+(String)mRow.get("orderStatus") + "\" ");
 		                 }
 		             }
 	                 rowString.append("/>");
@@ -7122,7 +7248,7 @@ public class ImportServices {
 		            		 rowString.append("<" + "OrderItem" + " ");
 				             rowString.append("orderId" + "=\"" + (String)mRow.get("orderId") + "\" ");
 				             rowString.append("orderItemSeqId" + "=\"" + (String)mRow.get("orderItemId_" + (orderItemNo + 1)) + "\" ");
-				             rowString.append("statusId" + "=\"" + (String)mRow.get("orderItemStatus_" + (orderItemNo + 1)) + "\" ");
+				             rowString.append("statusId" + "=\"" + "ITEM_"+(String)mRow.get("orderItemStatus_" + (orderItemNo + 1)) + "\" ");
 				             rowString.append("/>");
 				             bwOutFile.write(rowString.toString());
 			                 bwOutFile.newLine();
@@ -7135,7 +7261,7 @@ public class ImportServices {
 		            			 rowString.append("<" + "OrderItem" + " ");
 					             rowString.append("orderId" + "=\"" + (String)mRow.get("orderId") + "\" ");
 					             rowString.append("orderItemSeqId" + "=\"" + (String)orderItem.get("orderItemSeqId") + "\" ");
-					             rowString.append("statusId" + "=\"" + (String)mRow.get("orderStatus") + "\" ");
+					             rowString.append("statusId" + "=\"" + "ITEM_"+(String)mRow.get("orderStatus") + "\" ");
 					             rowString.append("/>");
 					             bwOutFile.write(rowString.toString());
 				                 bwOutFile.newLine();
@@ -7198,7 +7324,7 @@ public class ImportServices {
 		            		 rowString.setLength(0);
 		            		 rowString.append("<" + "OrderStatus" + " ");
 		            		 rowString.append("orderStatusId" + "=\"" + orderStatusId + "\" ");
-		            		 rowString.append("statusId" + "=\"" + (String)mRow.get("orderItemStatus_" + (orderItemNo + 1)) + "\" ");
+		            		 rowString.append("statusId" + "=\"" + "ITEM_"+(String)mRow.get("orderItemStatus_" + (orderItemNo + 1)) + "\" ");
 				             rowString.append("orderId" + "=\"" + (String)mRow.get("orderId") + "\" ");
 				             rowString.append("orderItemSeqId" + "=\"" + (String)mRow.get("orderItemId_" + (orderItemNo + 1)) + "\" ");
 				             rowString.append("statusDateTime" + "=\"" + _sdf.format(UtilDateTime.nowTimestamp()) + "\" ");
@@ -7210,7 +7336,7 @@ public class ImportServices {
 		            	 rowString.setLength(0);
 	            		 rowString.append("<" + "OrderStatus" + " ");
 	            		 rowString.append("orderStatusId" + "=\"" + orderStatusId + "\" ");
-	            		 rowString.append("statusId" + "=\"" + (String)mRow.get("orderStatus") + "\" ");
+	            		 rowString.append("statusId" + "=\"" + "ORDER_"+(String)mRow.get("orderStatus") + "\" ");
 			             rowString.append("orderId" + "=\"" + (String)mRow.get("orderId") + "\" ");
 			             rowString.append("statusDateTime" + "=\"" + _sdf.format(UtilDateTime.nowTimestamp()) + "\" ");
 			             rowString.append("/>");
@@ -7224,7 +7350,7 @@ public class ImportServices {
 			            		 rowString.setLength(0);
 			            		 rowString.append("<" + "OrderStatus" + " ");
 			            		 rowString.append("orderStatusId" + "=\"" + orderStatusId + "\" ");
-			            		 rowString.append("statusId" + "=\"" + (String)mRow.get("orderStatus") + "\" ");
+			            		 rowString.append("statusId" + "=\"" + "ITEM_"+(String)mRow.get("orderStatus") + "\" ");
 					             rowString.append("orderId" + "=\"" + (String)mRow.get("orderId") + "\" ");
 					             rowString.append("orderItemSeqId" + "=\"" + (String)orderItem.get("orderItemSeqId") + "\" ");
 					             rowString.append("statusDateTime" + "=\"" + _sdf.format(UtilDateTime.nowTimestamp()) + "\" ");
@@ -7261,7 +7387,7 @@ public class ImportServices {
         StringBuilder  rowString = new StringBuilder();
         
 		try {
-	        fOutFile = new File(xmlDataDirPath, "040-OrderItemShipGroup.xml");
+	        fOutFile = new File(xmlDataDirPath, "050-OrderItemShipGroup.xml");
             if (fOutFile.createNewFile()) {
             	bwOutFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fOutFile), "UTF-8"));
             	String priceFromDate = _sdf.format(UtilDateTime.nowTimestamp());
@@ -7273,113 +7399,141 @@ public class ImportServices {
 	            	 
 		             if(Integer.parseInt((String)mRow.get("totalOrderItems")) > 0) {
 		            	 for(int orderItemNo = 0; orderItemNo < Integer.parseInt((String)mRow.get("totalOrderItems")); orderItemNo++) {
-		            		 List<GenericValue> orderItemShipGroupAssocList = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId"), "orderItemSeqId", (String)mRow.get("orderItemId_" + (orderItemNo + 1))), UtilMisc.toList("+orderItemSeqId"));
-		            		 boolean sameShipment = false;
-		            		 if(UtilValidate.isNotEmpty(orderItemShipGroupAssocList)) {
-		            			 // check if another order items have the same shipment sequence id-->
-		            			 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
-		            				 List<GenericValue> orderItemShipGroupAssocCount = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")), UtilMisc.toList("+orderItemSeqId"));
-		            				 if(orderItemShipGroupAssocCount.size() > 1) {
-		            					 sameShipment = true;
-		            				 }
-		            			 }
-		            			 if(sameShipment) {
-		            				 Long maxShipGroupSeqId = Long.valueOf("1");
-		            				 List<GenericValue> allOrderItemShipGroupAssocList =  _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId")), UtilMisc.toList("+shipGroupSeqId"));
-		            				 for(GenericValue orderItemShipGroupAssoc : allOrderItemShipGroupAssocList) {
-		            					 Long curShipGroupSeqId = Long.parseLong(orderItemShipGroupAssoc.getString("shipGroupSeqId"));
-		            					 if(curShipGroupSeqId > maxShipGroupSeqId) {
-		            						 maxShipGroupSeqId = curShipGroupSeqId;
-		            					 }
-		            				 }
-		            				 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
-		            					 maxShipGroupSeqId = maxShipGroupSeqId + 1;
-		            					 GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
-		            					 GenericValue newOrderItemShipGroup = orderItemShipGroup.create(orderItemShipGroup);
-		            					 String shipGroupSeqId = UtilFormatOut.formatPaddedNumber(maxShipGroupSeqId.longValue(), 5);
-		            					 rowString.setLength(0);
-		    		            		 rowString.append("<" + "OrderItemShipGroup" + " ");
-		    				             rowString.append("orderId" + "=\"" + orderItemShipGroup.getString("orderId") + "\" ");
-		    				             rowString.append("shipGroupSeqId" + "=\"" + shipGroupSeqId + "\" ");
-		    				             rowString.append("shipmentMethodTypeId" + "=\"" + (String)mRow.get("orderItemShipMethod_" + (orderItemNo + 1)) + "\" ");
-		    				             rowString.append("supplierPartyId" + "=\"" + orderItemShipGroup.getString("supplierPartyId") + "\" ");
-		    				             rowString.append("vendorPartyId" + "=\"" + orderItemShipGroup.getString("vendorPartyId") + "\" ");
-		    				             rowString.append("carrierPartyId" + "=\"" + (String)mRow.get("orderItemCarrier_" + (orderItemNo + 1)) + "\" ");
-		    				             rowString.append("carrierRoleTypeId" + "=\"" + orderItemShipGroup.getString("carrierRoleTypeId") + "\" ");
-		    				             rowString.append("facilityId" + "=\"" + orderItemShipGroup.getString("facilityId") + "\" ");
-		    				             rowString.append("contactMechId" + "=\"" + orderItemShipGroup.getString("contactMechId") + "\" ");
-		    				             rowString.append("telecomContactMechId" + "=\"" + orderItemShipGroup.getString("telecomContactMechId") + "\" ");
-		    				             rowString.append("trackingNumber" + "=\"" + (String)mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)) + "\" ");
-		    				             rowString.append("shippingInstructions" + "=\"" + orderItemShipGroup.getString("shippingInstructions") + "\" ");
-		    				             rowString.append("maySplit" + "=\"" + orderItemShipGroup.getString("maySplit") + "\" ");
-		    				             rowString.append("giftMessage" + "=\"" + orderItemShipGroup.getString("giftMessage") + "\" ");
-		    				             rowString.append("isGift" + "=\"" + orderItemShipGroup.getString("isGift") + "\" ");
-		    				             rowString.append("shipAfterDate" + "=\"" + orderItemShipGroup.getString("shipAfterDate") + "\" ");
-		    				             rowString.append("shipByDate" + "=\"" + orderItemShipGroup.getString("shipByDate") + "\" ");
-		    				             rowString.append("estimatedShipDate" + "=\"" + (String)mRow.get("orderItemShipDate_" + (orderItemNo + 1)) + "\" ");
-		    				             rowString.append("estimatedDeliveryDate" + "=\"" + orderItemShipGroup.getString("estimatedDeliveryDate") + "\" ");
-		    				             rowString.append("/>");
-		    				             bwOutFile.write(rowString.toString());
-		    			                 bwOutFile.newLine();
-		    			                 
-		    			                 
-		    			                 rowString.setLength(0);
-		    		            		 rowString.append("<" + "OrderItemShipGroupAssoc" + " ");
-		    				             rowString.append("orderId" + "=\"" + orderItemShipGroupAssoc.getString("orderId") + "\" ");
-		    				             rowString.append("orderItemSeqId" + "=\"" + orderItemShipGroupAssoc.getString("orderItemSeqId") + "\" ");
-		    				             rowString.append("shipGroupSeqId" + "=\"" + shipGroupSeqId + "\" ");
-		    				             rowString.append("quantity" + "=\"" + orderItemShipGroupAssoc.getString("quantity") + "\" ");
-		    				             rowString.append("cancelQuantity" + "=\"" + orderItemShipGroupAssoc.getString("cancelQuantity") + "\" ");
-		    				             rowString.append("/>");
-		    				             bwOutFile.write(rowString.toString());
-		    			                 bwOutFile.newLine();
-		    			                 
-		    			                 // _delegator.removeValue(orderItemShipGroup);
-		            				 }
-		            			 } else {
-		    		                 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
-		    		            	     GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
-		    		            	     if(UtilValidate.isNotEmpty(orderItemShipGroup)) {
-		    		            	         if(!mRow.get("orderItemShipMethod_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderItemCarrier_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("carrierPartyId")) || !mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("trackingNumber"))) {
-		    		            			     rowString.setLength(0);
-		    		    		                 rowString.append("<" + "OrderItemShipGroup" + " ");
-		    		    				         rowString.append("orderId" + "=\"" + orderItemShipGroupAssoc.getString("orderId") + "\" ");
-		    		    				         rowString.append("shipGroupSeqId" + "=\"" + orderItemShipGroupAssoc.getString("shipGroupSeqId") + "\" ");
-		    		    				         rowString.append("shipmentMethodTypeId" + "=\"" + mRow.get("orderItemShipMethod_" + (orderItemNo + 1)) + "\" ");
-		    		    				         rowString.append("carrierPartyId" + "=\"" + mRow.get("orderItemCarrier_" + (orderItemNo + 1)) + "\" ");
-		    		    				         rowString.append("trackingNumber" + "=\"" + mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)) + "\" ");
-		    		    				         rowString.append("estimatedShipDate" + "=\"" + mRow.get("orderItemShipDate_" + (orderItemNo + 1)) + "\" ");
-		    		    				         rowString.append("/>");
-		    		    				         bwOutFile.write(rowString.toString());
-		    		    			             bwOutFile.newLine();
-		    		            		     }
-		    		            	     }
-		    		                 }
-		    		            }
-		            			 
-		            		 }
+		            		 if(((String)mRow.get("orderItemStatus_" + (orderItemNo + 1))).equalsIgnoreCase("COMPLETED"))
+			            	 {
+			            		 List<GenericValue> orderItemShipGroupAssocList = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId"), "orderItemSeqId", (String)mRow.get("orderItemId_" + (orderItemNo + 1))), UtilMisc.toList("+orderItemSeqId"));
+			            		 boolean sameShipment = false;
+			            		 if(UtilValidate.isNotEmpty(orderItemShipGroupAssocList)) {
+			            			 // check if another order items have the same shipment sequence id-->
+			            			 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
+			            				 List<GenericValue> orderItemShipGroupAssocCount = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")), UtilMisc.toList("+orderItemSeqId"));
+			            				 if(orderItemShipGroupAssocCount.size() > 1) {
+			            					 sameShipment = true;
+			            				 }
+			            			 }
+			            			 if(sameShipment) {
+			            				 Long maxShipGroupSeqId = Long.valueOf("1");
+			            				 List<GenericValue> allOrderItemShipGroupAssocList =  _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId")), UtilMisc.toList("+shipGroupSeqId"));
+			            				 for(GenericValue orderItemShipGroupAssoc : allOrderItemShipGroupAssocList) {
+			            					 Long curShipGroupSeqId = Long.parseLong(orderItemShipGroupAssoc.getString("shipGroupSeqId"));
+			            					 if(curShipGroupSeqId > maxShipGroupSeqId) {
+			            						 maxShipGroupSeqId = curShipGroupSeqId;
+			            					 }
+			            				 }
+			            				 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
+			            					 maxShipGroupSeqId = maxShipGroupSeqId + 1;
+			            					 GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+			            					 GenericValue newOrderItemShipGroup = orderItemShipGroup.create(orderItemShipGroup);
+			            					 String shipGroupSeqId = UtilFormatOut.formatPaddedNumber(maxShipGroupSeqId.longValue(), 5);
+			            					 rowString.setLength(0);
+			    		            		 rowString.append("<" + "OrderItemShipGroup" + " ");
+			    				             rowString.append("orderId" + "=\"" + orderItemShipGroup.getString("orderId") + "\" ");
+			    				             rowString.append("shipGroupSeqId" + "=\"" + shipGroupSeqId + "\" ");
+			    				             rowString.append("shipmentMethodTypeId" + "=\"" + (String)mRow.get("orderItemShipMethod_" + (orderItemNo + 1)) + "\" ");
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("supplierPartyId"))) {
+			    				            	 rowString.append("supplierPartyId" + "=\"" + orderItemShipGroup.getString("supplierPartyId") + "\" ");	 
+			    				             }
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("vendorPartyId"))) {
+			    				            	 rowString.append("vendorPartyId" + "=\"" + orderItemShipGroup.getString("vendorPartyId") + "\" ");	 
+			    				             }
+			    				             
+			    				             rowString.append("carrierPartyId" + "=\"" + (String)mRow.get("orderItemCarrier_" + (orderItemNo + 1)) + "\" ");
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("carrierRoleTypeId"))) {
+			    				            	 rowString.append("carrierRoleTypeId" + "=\"" + orderItemShipGroup.getString("carrierRoleTypeId") + "\" ");
+			    				             }
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("facilityId"))) {
+			    				            	 rowString.append("facilityId" + "=\"" + orderItemShipGroup.getString("facilityId") + "\" ");
+			    				             }
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("contactMechId"))) {
+			    				            	 rowString.append("contactMechId" + "=\"" + orderItemShipGroup.getString("contactMechId") + "\" ");
+			    				             }
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("telecomContactMechId"))) {
+			    				            	 rowString.append("telecomContactMechId" + "=\"" + orderItemShipGroup.getString("telecomContactMechId") + "\" ");
+			    				             }
+			    				             rowString.append("trackingNumber" + "=\"" + (String)mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)) + "\" ");
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("shippingInstructions"))) {
+			    				            	 rowString.append("shippingInstructions" + "=\"" + orderItemShipGroup.getString("shippingInstructions") + "\" ");
+			    				             }
+			    				             
+			    				             rowString.append("maySplit" + "=\"" + orderItemShipGroup.getString("maySplit") + "\" ");
+			    				             if(UtilValidate.isNotEmpty(orderItemShipGroup.getString("giftMessage"))) {
+			    				            	 rowString.append("giftMessage" + "=\"" + orderItemShipGroup.getString("giftMessage") + "\" ");
+			    				             }
+			    				             
+			    				             rowString.append("isGift" + "=\"" + orderItemShipGroup.getString("isGift") + "\" ");
+			    				             rowString.append("shipAfterDate" + "=\"" + orderItemShipGroup.getString("shipAfterDate") + "\" ");
+			    				             rowString.append("shipByDate" + "=\"" + orderItemShipGroup.getString("shipByDate") + "\" ");
+			    				             rowString.append("estimatedShipDate" + "=\"" + (String)mRow.get("orderItemShipDate_" + (orderItemNo + 1)) + "\" ");
+			    				             rowString.append("estimatedDeliveryDate" + "=\"" + orderItemShipGroup.getString("estimatedDeliveryDate") + "\" ");
+			    				             rowString.append("/>");
+			    				             bwOutFile.write(rowString.toString());
+			    			                 bwOutFile.newLine();
+			    			                 
+			    			                 
+			    			                 rowString.setLength(0);
+			    		            		 rowString.append("<" + "OrderItemShipGroupAssoc" + " ");
+			    				             rowString.append("orderId" + "=\"" + orderItemShipGroupAssoc.getString("orderId") + "\" ");
+			    				             rowString.append("orderItemSeqId" + "=\"" + orderItemShipGroupAssoc.getString("orderItemSeqId") + "\" ");
+			    				             rowString.append("shipGroupSeqId" + "=\"" + shipGroupSeqId + "\" ");
+			    				             rowString.append("quantity" + "=\"" + orderItemShipGroupAssoc.getString("quantity") + "\" ");
+			    				             rowString.append("cancelQuantity" + "=\"" + orderItemShipGroupAssoc.getString("cancelQuantity") + "\" ");
+			    				             rowString.append("/>");
+			    				             bwOutFile.write(rowString.toString());
+			    			                 bwOutFile.newLine();
+			    			                 
+			    			                // _delegator.removeValue(orderItemShipGroupAssoc);
+			            				 }
+			            			 } else {
+			            				 if(((String)mRow.get("orderItemStatus_" + (orderItemNo + 1))).equalsIgnoreCase("COMPLETED"))
+			            				 {
+				    		                 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
+				    		            	     GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+				    		            	     if(UtilValidate.isNotEmpty(orderItemShipGroup)) {
+				    		            	         if(!mRow.get("orderItemShipMethod_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderItemCarrier_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("carrierPartyId")) || !mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("trackingNumber"))) {
+				    		            			     rowString.setLength(0);
+				    		    		                 rowString.append("<" + "OrderItemShipGroup" + " ");
+				    		    				         rowString.append("orderId" + "=\"" + orderItemShipGroupAssoc.getString("orderId") + "\" ");
+				    		    				         rowString.append("shipGroupSeqId" + "=\"" + orderItemShipGroupAssoc.getString("shipGroupSeqId") + "\" ");
+				    		    				         rowString.append("shipmentMethodTypeId" + "=\"" + mRow.get("orderItemShipMethod_" + (orderItemNo + 1)) + "\" ");
+				    		    				         rowString.append("carrierPartyId" + "=\"" + mRow.get("orderItemCarrier_" + (orderItemNo + 1)) + "\" ");
+				    		    				         rowString.append("trackingNumber" + "=\"" + mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)) + "\" ");
+				    		    				         rowString.append("estimatedShipDate" + "=\"" + mRow.get("orderItemShipDate_" + (orderItemNo + 1)) + "\" ");
+				    		    				         rowString.append("/>");
+				    		    				         bwOutFile.write(rowString.toString());
+				    		    			             bwOutFile.newLine();
+				    		            		     }
+				    		            	     }
+				    		                 }
+			            				 }
+			    		            }
+			            		 }
+			                 }
 		            	 }
-		             } else {
-		            	 List<GenericValue> orderItemShipGroupAssocList = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId")), UtilMisc.toList("+orderItemSeqId"));
-		            	 if(UtilValidate.isNotEmpty(orderItemShipGroupAssocList)) {
-		            		 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
-		            			 GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
-		            			 if(UtilValidate.isNotEmpty(orderItemShipGroup)) {
-		            				 if(!mRow.get("orderShipMethod").equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderShipCarrier").equals(orderItemShipGroup.getString("carrierPartyId")) || !mRow.get("orderTrackingNumber").equals(orderItemShipGroup.getString("trackingNumber"))) {
-		            					 rowString.setLength(0);
-		    		            		 rowString.append("<" + "OrderItemShipGroup" + " ");
-		    				             rowString.append("orderId" + "=\"" + orderItemShipGroupAssoc.getString("orderId") + "\" ");
-		    				             rowString.append("shipGroupSeqId" + "=\"" + orderItemShipGroupAssoc.getString("shipGroupSeqId") + "\" ");
-		    				             rowString.append("shipmentMethodTypeId" + "=\"" + (String)mRow.get("orderShipMethod") + "\" ");
-		    				             rowString.append("carrierPartyId" + "=\"" + (String)mRow.get("orderShipCarrier") + "\" ");
-		    				             rowString.append("trackingNumber" + "=\"" + (String)mRow.get("orderTrackingNumber") + "\" ");
-		    				             rowString.append("estimatedShipDate" + "=\"" + (String)mRow.get("orderShipDate") + "\" ");
-		    				             rowString.append("/>");
-		    				             bwOutFile.write(rowString.toString());
-		    			                 bwOutFile.newLine();
-		            				 }
-		            			 }
-		            		 }
+		             } else 
+		             {
+		                 if(((String)mRow.get("orderStatus")).equalsIgnoreCase("COMPLETED"))
+		            	 {
+			            	 List<GenericValue> orderItemShipGroupAssocList = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId")), UtilMisc.toList("+orderItemSeqId"));
+			            	 if(UtilValidate.isNotEmpty(orderItemShipGroupAssocList)) {
+			            		 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) {
+			            			 GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+			            			 if(UtilValidate.isNotEmpty(orderItemShipGroup)) {
+			            				 if(!mRow.get("orderShipMethod").equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderShipCarrier").equals(orderItemShipGroup.getString("carrierPartyId")) || !mRow.get("orderTrackingNumber").equals(orderItemShipGroup.getString("trackingNumber"))) {
+			            					 rowString.setLength(0);
+			    		            		 rowString.append("<" + "OrderItemShipGroup" + " ");
+			    				             rowString.append("orderId" + "=\"" + orderItemShipGroupAssoc.getString("orderId") + "\" ");
+			    				             rowString.append("shipGroupSeqId" + "=\"" + orderItemShipGroupAssoc.getString("shipGroupSeqId") + "\" ");
+			    				             rowString.append("shipmentMethodTypeId" + "=\"" + (String)mRow.get("orderShipMethod") + "\" ");
+			    				             rowString.append("carrierPartyId" + "=\"" + (String)mRow.get("orderShipCarrier") + "\" ");
+			    				             rowString.append("trackingNumber" + "=\"" + (String)mRow.get("orderTrackingNumber") + "\" ");
+			    				             rowString.append("estimatedShipDate" + "=\"" + (String)mRow.get("orderShipDate") + "\" ");
+			    				             rowString.append("/>");
+			    				             bwOutFile.write(rowString.toString());
+			    			                 bwOutFile.newLine();
+			            				 }
+			            			 }
+			            		 }
+			            	 }
 		            	 }
 		             }
 	             }
@@ -7400,6 +7554,257 @@ public class ImportServices {
              }
          }
     }
+    
+    private static void buildOrderNote(List dataRows,String xmlDataDirPath, GenericValue userLogin ) {
+
+        File fOutFile =null;
+        BufferedWriter bwOutFile=null;
+        StringBuilder  rowString = new StringBuilder();
+        StringBuilder enteredNote = new StringBuilder();
+        StringBuilder insertNote = new StringBuilder();
+        String preferredDateFormat = OsafeAdminUtil.getProductStoreParm("FORMAT_DATE");
+        String partyId = (String)userLogin.getString("partyId");
+        String userLoginName = "";
+        if(UtilValidate.isNotEmpty(partyId)) {
+            try {
+				GenericValue userLoginParty = _delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", partyId));
+				if(UtilValidate.isNotEmpty(userLoginParty)) {
+					userLoginName = PartyHelper.getPartyName(userLoginParty);
+				}
+			} catch (GenericEntityException e) {
+				e.printStackTrace();
+			}	
+        }
+        if(UtilValidate.isEmpty(userLoginName)) {
+        	userLoginName = partyId;
+        }
+        if(UtilValidate.isEmpty(preferredDateFormat)) {
+        	preferredDateFormat = "MM/DD/YY";
+        }
+        String eol = System.getProperty("line.separator");
+        
+		try {
+	        fOutFile = new File(xmlDataDirPath, "040-OrderNote.xml");
+            if (fOutFile.createNewFile()) {
+            	bwOutFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fOutFile), "UTF-8"));
+                writeXmlHeader(bwOutFile);
+                
+                for (int i=0 ; i < dataRows.size() ; i++) 
+                {
+	            	 Map mRow = (Map)dataRows.get(i);
+	            	 
+		             if(Integer.parseInt((String)mRow.get("totalOrderItems")) > 0) 
+		             {
+		            	 enteredNote = enteredNote.append((String)(String)mRow.get("orderNote"));
+		            	 String updatedDate = OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(),preferredDateFormat);
+		            	 String updatedTime = OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(),"h:mma");
+		            	 insertNote = insertNote.append("On " + updatedDate + " at " + updatedTime + ", User " + userLoginName + ", modified Order# " + (String)mRow.get("orderId") + ":" + eol);
+		            	 
+		            	 for(int orderItemNo = 0; orderItemNo < Integer.parseInt((String)mRow.get("totalOrderItems")); orderItemNo++) {
+		            		 
+			            	 GenericValue orderItem = _delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", mRow.get("orderId"), "orderItemSeqId", mRow.get("orderItemId_" + (orderItemNo + 1))));
+			            	 
+			            	 GenericValue fromStatus = _delegator.findByPrimaryKey("StatusItem", UtilMisc.toMap("statusId", orderItem.getString("statusId")));
+			            	 GenericValue toStatus = _delegator.findByPrimaryKey("StatusItem", UtilMisc.toMap("statusId", "ITEM_"+mRow.get("orderItemStatus_" + (orderItemNo + 1))));
+			            	 insertNote = insertNote.append("Status: Product: " + orderItem.getString("productId") + " From: " + fromStatus.getString("description") + " To: " +toStatus.getString("description") + eol);
+			            	 
+			            	 
+			            	 String changeCarrierName = "";
+	                         String changeCarrierDesc = "";
+			            	 if(UtilValidate.isNotEmpty(mRow.get("orderItemShipMethod_" + (orderItemNo + 1))) && UtilValidate.isNotEmpty(mRow.get("orderItemCarrier_" + (orderItemNo + 1)))) {
+			            		 GenericValue carrierShipmentMethod = _delegator.findByPrimaryKey("CarrierShipmentMethod", UtilMisc.toMap("shipmentMethodTypeId", mRow.get("orderItemShipMethod_" + (orderItemNo + 1)), "partyId", mRow.get("orderItemCarrier_" + (orderItemNo + 1)), "roleTypeId", "CARRIER"));
+	                             if(UtilValidate.isNotEmpty(carrierShipmentMethod)) {
+	                            	 if(!carrierShipmentMethod.getString("partyId").equals("_NA_")) {
+	                                	 GenericValue carrierParty = carrierShipmentMethod.getRelatedOne("Party");
+	                                	 changeCarrierName = PartyHelper.getPartyName(carrierParty);
+	                                 }
+	                            	 GenericValue shipmentMethodType = carrierShipmentMethod.getRelatedOne("ShipmentMethodType");
+	                            	 changeCarrierDesc = (String)shipmentMethodType.getString("description");
+	                             }
+			            	 }
+			            	 
+		            		 if(((String)mRow.get("orderItemStatus_" + (orderItemNo + 1))).equalsIgnoreCase("COMPLETED"))
+			            	 {
+			            		 List<GenericValue> orderItemShipGroupAssocList = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId"), "orderItemSeqId", (String)mRow.get("orderItemId_" + (orderItemNo + 1))), UtilMisc.toList("+orderItemSeqId"));
+			            		 boolean sameShipment = false;
+			            		 if(UtilValidate.isNotEmpty(orderItemShipGroupAssocList)) 
+			            		 {
+		            				 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) 
+			    		                 {
+			    		            	     GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+			    		            	     if(UtilValidate.isNotEmpty(orderItemShipGroup)) 
+			    		            	     {
+			    		            	         if(!mRow.get("orderItemShipMethod_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderItemCarrier_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("carrierPartyId"))) 
+						            			 {
+						                             GenericValue carrierShipmentMethod = _delegator.findByPrimaryKey("CarrierShipmentMethod", UtilMisc.toMap("shipmentMethodTypeId", orderItemShipGroup.getString("shipmentMethodTypeId"), "partyId", orderItemShipGroup.getString("carrierPartyId"), "roleTypeId", "CARRIER"));
+						                             String carrierName = "";
+						                             String carrierDesc = "";
+						                             if(UtilValidate.isNotEmpty(carrierShipmentMethod)) {
+						                                 if(!carrierShipmentMethod.getString("partyId").equals("_NA_")) {
+							                                 GenericValue carrierParty = carrierShipmentMethod.getRelatedOne("Party");
+							                                 carrierName = PartyHelper.getPartyName(carrierParty);
+							                             }
+						                                 GenericValue shipmentMethodType = carrierShipmentMethod.getRelatedOne("ShipmentMethodType");
+						                                 carrierDesc = (String)shipmentMethodType.getString("description");
+						                             }
+						                             if(!mRow.get("orderItemShipMethod_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderItemCarrier_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("carrierPartyId"))) {
+						                                 insertNote = insertNote.append("Carrier: Product: " + orderItem.getString("productId") + " From: " + carrierName + " " + carrierDesc + " To: " + changeCarrierName + " " + changeCarrierDesc + eol);
+						                             }
+			                                         if(!mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)).equals(orderItemShipGroup.getString("trackingNumber"))) {
+			                                             insertNote = insertNote.append("Tracking#: Product: " + orderItem.getString("productId") + " From: " + (String)orderItemShipGroup.getString("trackingNumber") + " To: " + mRow.get("orderItemTrackingNumber_" + (orderItemNo + 1)) + eol);
+						                             }
+			                                         if(UtilValidate.isNotEmpty(mRow.get("orderItemShipDate_" + (orderItemNo + 1)))) {
+			                                             String fromShipDate = OsafeAdminUtil.convertDateTimeFormat(orderItemShipGroup.getTimestamp("estimatedShipDate"), preferredDateFormat);
+			                                             String newShipDate = OsafeAdminUtil.convertDateTimeFormat(new Timestamp(_sdf.parse((String) mRow.get("orderItemShipDate_" + (orderItemNo + 1))).getTime()), preferredDateFormat);
+			                                             insertNote = insertNote.append("Ship Date: From: " + fromShipDate + " To: " + newShipDate + eol);
+			                                         }
+						            					 
+						            			 }
+			    		            	         
+			    		            	         if(mRow.get("orderItemShipMethod_" + (orderItemNo + 1)).equals("NO_SHIPPING") && mRow.get("orderItemCarrier_" + (orderItemNo + 1)).equals("_NA_")) 
+					            				 {
+				            						 if(UtilValidate.isNotEmpty(mRow.get("orderItemShipDate_" + (orderItemNo + 1)))) {
+				            							 insertNote = insertNote.append("Carrier: STORE PICKUP");
+	                                                	 String newShipDate = OsafeAdminUtil.convertDateTimeFormat(new Timestamp(_sdf.parse((String) mRow.get("orderItemShipDate_" + (orderItemNo + 1))).getTime()), preferredDateFormat);
+	                                                	 insertNote = insertNote.append(" Pick Up Date: Product: " + orderItem.getString("productId") + " Set To: " + newShipDate + eol);
+	                                                 }
+					            				 }
+			    		            	         
+			    		            		 }
+			    		            	 }
+		            				 
+			            		 }
+			                 }
+		            	 }
+		             } 
+		             else 
+		             {
+		            	 enteredNote = enteredNote.append((String)(String)mRow.get("orderNote"));
+		            	 String updatedDate = OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(),preferredDateFormat);
+		            	 String updatedTime = OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(),"h:mma");
+		            	 insertNote = insertNote.append("On " + updatedDate + " at " + updatedTime + ", User " + userLoginName + ", modified Order# " + (String)mRow.get("orderId") + ":" + eol);
+		            	 
+		            	 GenericValue orderHeader = _delegator.findByPrimaryKey("OrderHeader", UtilMisc.toMap("orderId", mRow.get("orderId")));
+		            	 
+		            	 GenericValue fromStatus = _delegator.findByPrimaryKey("StatusItem", UtilMisc.toMap("statusId", orderHeader.getString("statusId")));
+		            	 GenericValue toStatus = _delegator.findByPrimaryKey("StatusItem", UtilMisc.toMap("statusId", "ORDER_"+mRow.get("orderStatus")));
+		            	 insertNote = insertNote.append("Status: From: " + fromStatus.getString("description") + " To: " +toStatus.getString("description") + eol);
+		            	 
+		            	 String changeCarrierName = "";
+                         String changeCarrierDesc = "";
+		            	 if(UtilValidate.isNotEmpty(mRow.get("orderShipMethod")) && UtilValidate.isNotEmpty(mRow.get("orderShipCarrier"))) {
+		            		 GenericValue carrierShipmentMethod = _delegator.findByPrimaryKey("CarrierShipmentMethod", UtilMisc.toMap("shipmentMethodTypeId", mRow.get("orderShipMethod"), "partyId", mRow.get("orderShipCarrier"), "roleTypeId", "CARRIER"));
+                             if(UtilValidate.isNotEmpty(carrierShipmentMethod)) {
+                            	 if(!carrierShipmentMethod.getString("partyId").equals("_NA_")) {
+                                	 GenericValue carrierParty = carrierShipmentMethod.getRelatedOne("Party");
+                                	 changeCarrierName = PartyHelper.getPartyName(carrierParty);
+                                 }
+                            	 GenericValue shipmentMethodType = carrierShipmentMethod.getRelatedOne("ShipmentMethodType");
+                            	 changeCarrierDesc = (String)shipmentMethodType.getString("description");
+                             }
+		            	 }
+		            	 
+		                 if(((String)mRow.get("orderStatus")).equalsIgnoreCase("COMPLETED"))
+		            	 {
+		                	 int orderStatusNoteCount = 0;
+			            	 List<GenericValue> orderItemShipGroupAssocList = _delegator.findByAnd("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", (String)mRow.get("orderId")), UtilMisc.toList("+orderItemSeqId"));
+			            	 if(UtilValidate.isNotEmpty(orderItemShipGroupAssocList)) 
+			            	 {
+			            		 for(GenericValue orderItemShipGroupAssoc : orderItemShipGroupAssocList) 
+			            		 {
+			            			 GenericValue orderItemShipGroup = _delegator.findByPrimaryKey("OrderItemShipGroup", UtilMisc.toMap("orderId", orderItemShipGroupAssoc.getString("orderId"), "shipGroupSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+			            			 if(UtilValidate.isNotEmpty(orderItemShipGroup)) 
+			            			 {
+			            				 if(!mRow.get("orderShipMethod").equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderShipCarrier").equals(orderItemShipGroup.getString("carrierPartyId"))) 
+			            				 {
+			            					 if(orderStatusNoteCount < 1) {
+			                                     GenericValue orderItem = _delegator.findByPrimaryKey("OrderItem", UtilMisc.toMap("orderId", mRow.get("orderId"), "orderItemSeqId", orderItemShipGroupAssoc.getString("shipGroupSeqId")));
+			                                     GenericValue carrierShipmentMethod = _delegator.findByPrimaryKey("CarrierShipmentMethod", UtilMisc.toMap("shipmentMethodTypeId", orderItemShipGroup.getString("shipmentMethodTypeId"), "partyId", orderItemShipGroup.getString("carrierPartyId"), "roleTypeId", "CARRIER"));
+			                                     String carrierName = "";
+			                                     String carrierDesc = "";
+			                                     if(UtilValidate.isNotEmpty(carrierShipmentMethod)) {
+			                                    	 if(!carrierShipmentMethod.getString("partyId").equals("_NA_")) {
+				                                    	 GenericValue carrierParty = carrierShipmentMethod.getRelatedOne("Party");
+				                                    	 carrierName = PartyHelper.getPartyName(carrierParty);
+				                                     }
+			                                    	 GenericValue shipmentMethodType = carrierShipmentMethod.getRelatedOne("ShipmentMethodType");
+			                                    	 carrierDesc = (String)shipmentMethodType.getString("description");
+			                                     }
+			                                     if(!mRow.get("orderShipMethod").equals(orderItemShipGroup.getString("shipmentMethodTypeId")) || !mRow.get("orderShipCarrier").equals(orderItemShipGroup.getString("carrierPartyId"))) {
+			                                    	 insertNote = insertNote.append("Carrier:  From: " + carrierName + " " + carrierDesc + " To: " + changeCarrierName + " " + changeCarrierDesc + eol);
+			                                     }
+                                                 if(!mRow.get("orderTrackingNumber").equals(orderItemShipGroup.getString("trackingNumber"))) {
+                                                	 insertNote = insertNote.append("Tracking#: From: " + (String)orderItemShipGroup.getString("trackingNumber") + " To: " + mRow.get("orderTrackingNumber") + eol);
+			                                     }
+                                                 if(UtilValidate.isNotEmpty(mRow.get("orderShipDate"))) {
+                                                	 String fromShipDate = OsafeAdminUtil.convertDateTimeFormat(orderItemShipGroup.getTimestamp("estimatedShipDate"), preferredDateFormat);
+                                                	 String newShipDate = OsafeAdminUtil.convertDateTimeFormat(new Timestamp(_sdf.parse((String) mRow.get("orderShipDate")).getTime()), preferredDateFormat);
+                                                	 insertNote = insertNote.append("Ship Date: From: " + fromShipDate + " To: " + newShipDate + eol);
+                                                 }
+                                                 orderStatusNoteCount = orderStatusNoteCount + 1;
+			            					 }
+			            					 
+			            				 }
+			            				 if(orderStatusNoteCount < 1) {
+			            					 if(mRow.get("orderShipMethod").equals("NO_SHIPPING") && mRow.get("orderShipCarrier").equals("_NA_")) 
+				            				 {
+			            						 if(UtilValidate.isNotEmpty(mRow.get("orderShipDate"))) {
+			            							 insertNote = insertNote.append("Carrier: STORE PICKUP");
+                                                	 String newShipDate = OsafeAdminUtil.convertDateTimeFormat(new Timestamp(_sdf.parse((String) mRow.get("orderShipDate")).getTime()), preferredDateFormat);
+                                                	 insertNote = insertNote.append(" Pick Up Date: Set To: " + newShipDate + eol);
+                                                	 orderStatusNoteCount = orderStatusNoteCount + 1;
+                                                 }
+				            				 }	 
+			            				 }
+			            				 
+			            			 }
+			            		 }
+			            	 }
+		            	 }
+		             }
+		             if(UtilValidate.isNotEmpty(enteredNote)) {
+		            	 insertNote = insertNote.append("Comment: " + enteredNote);
+		             }
+		             String noteId = _delegator.getNextSeqId("NoteData");
+		             
+		             rowString.setLength(0);
+            		 rowString.append("<" + "NoteData" + " ");
+		             rowString.append("noteId" + "=\"" + noteId + "\" ");
+		             rowString.append("noteInfo" + "=\"" + insertNote + "\" ");
+		             rowString.append("noteDateTime" + "=\"" + _sdf.format(UtilDateTime.nowTimestamp()) + "\" ");
+		             rowString.append("noteParty" + "=\"" +userLoginName + "\" ");
+		             rowString.append("/>");
+		             bwOutFile.write(rowString.toString());
+	                 bwOutFile.newLine();
+	                 
+	                 rowString.setLength(0);
+            		 rowString.append("<" + "OrderHeaderNote" + " ");
+		             rowString.append("orderId" + "=\"" + mRow.get("orderId") + "\" ");
+		             rowString.append("noteId" + "=\"" + noteId + "\" ");
+		             rowString.append("internalNote" + "=\"" + "Y" + "\" ");
+		             rowString.append("/>");
+		             bwOutFile.write(rowString.toString());
+	                 bwOutFile.newLine();
+		             
+	             }
+                 bwOutFile.flush();
+         	     writeXmlFooter(bwOutFile);
+             }
+    	 }
+      	 catch (Exception e) {
+      		e.printStackTrace();
+   	     }
+         finally {
+             try {
+                 if (bwOutFile != null) {
+                	 bwOutFile.close();
+                 }
+             } catch (IOException ioe) {
+                 Debug.logError(ioe, module);
+             }
+         }
+    }
+    
     
     private static String getOrderStatus(String OrderId, Map mRow) {
     	Map xmlOrderItems = FastMap.newInstance();
@@ -8227,6 +8632,7 @@ public class ImportServices {
                 	feature.setFromDate("");
                 	feature.setThruDate("");
                 	feature.setDescription("");
+                	feature.setSequenceNum("");
                 	selectableFeatureList.add(feature);
             	}
             productType.setProductSelectableFeature(selectableFeature);
@@ -8244,6 +8650,7 @@ public class ImportServices {
                 	feature.setFromDate("");
                 	feature.setThruDate("");
                 	feature.setDescription("");
+                	feature.setSequenceNum("");
                 	descriptiveFeatureList.add(feature);
             	}
             productType.setProductDescriptiveFeature(descriptiveFeature);
@@ -8904,7 +9311,7 @@ public class ImportServices {
             
             String productPrice="";
             ProductPriceType productPriceType = factory.createProductPriceType();
-            List<GenericValue> productPriceList = _delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE"));
+            List<GenericValue> productPriceList = _delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE"), UtilMisc.toList("-fromDate"));
             if(UtilValidate.isNotEmpty(productPriceList))
             {
             	ListPriceType listPrice = factory.createListPriceType();
@@ -8938,7 +9345,7 @@ public class ImportServices {
     	    }
 
             productPrice="";
-            productPriceList = _delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId",productId, "productPriceTypeId", "DEFAULT_PRICE"));
+            productPriceList = _delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId",productId, "productPriceTypeId", "DEFAULT_PRICE"), UtilMisc.toList("-fromDate"));
             if(UtilValidate.isNotEmpty(productPriceList))
             {
             	SalesPriceType salesPrice = factory.createSalesPriceType();
@@ -9358,10 +9765,155 @@ public class ImportServices {
                 productType.setThruDate("");
                 ProductCategoryMemberType productCategoryMemberType = factory.createProductCategoryMemberType();
                 productType.setProductCategoryMember(productCategoryMemberType);
-                ProductPriceType productPriceType = factory.createProductPriceType();
-                productType.setProductPrice(productPriceType);
+                
         	}
+            
+        	String productPrice ="";
+        	ProductPriceType productPriceType = factory.createProductPriceType();
+        	List<GenericValue> productPriceList = FastList.newInstance();
+        	if (bFirstVariant)
+        	{
+        		productPriceList = EntityUtil.filterByDate(_delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", variantProductId, "productPriceTypeId", "LIST_PRICE"), UtilMisc.toList("-fromDate")));
+        		if(UtilValidate.isEmpty(productPriceList)){
+        			productPriceList = EntityUtil.filterByDate(_delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "LIST_PRICE"), UtilMisc.toList("-fromDate")));
+        		}
+                if(UtilValidate.isNotEmpty(productPriceList))
+                {
+                	ListPriceType listPrice = factory.createListPriceType();
+        	        if(UtilValidate.isNotEmpty(productPriceList))
+        	        { 
+        	        	GenericValue gvProductPrice = EntityUtil.getFirst(productPriceList);
+        	        	productPrice=_df.format(gvProductPrice.getBigDecimal("price"));
+        	        	listPrice.setPrice(productPrice);
+        	        	listPrice.setCurrency(gvProductPrice.getString("currencyUomId"));
+        	        	Timestamp tsstamp = gvProductPrice.getTimestamp("fromDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	listPrice.setFromDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	listPrice.setFromDate("");
+                        }
+                        tsstamp = gvProductPrice.getTimestamp("thruDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	listPrice.setThruDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	listPrice.setThruDate("");
+                        }
+                        productPriceType.setListPrice(listPrice);
+        	        }
+        	    }
 
+                productPrice="";
+                productPriceList = EntityUtil.filterByDate(_delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId",variantProductId, "productPriceTypeId", "DEFAULT_PRICE"), UtilMisc.toList("-fromDate")));
+                if(UtilValidate.isEmpty(productPriceList)){
+        			productPriceList = EntityUtil.filterByDate(_delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", "DEFAULT_PRICE"), UtilMisc.toList("-fromDate")));
+        		}
+                if(UtilValidate.isNotEmpty(productPriceList))
+                {
+                	SalesPriceType salesPrice = factory.createSalesPriceType();
+        	        if(UtilValidate.isNotEmpty(productPriceList))
+        	        {
+        	        	GenericValue gvProductPrice = EntityUtil.getFirst(productPriceList);
+        	        	productPrice=_df.format(gvProductPrice.getBigDecimal("price"));
+        	        	salesPrice.setPrice(productPrice);
+        	        	salesPrice.setCurrency(gvProductPrice.getString("currencyUomId"));
+        	        	Timestamp tsstamp = gvProductPrice.getTimestamp("fromDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	salesPrice.setFromDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	salesPrice.setFromDate("");
+                        }
+                        tsstamp = gvProductPrice.getTimestamp("thruDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	salesPrice.setThruDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	salesPrice.setThruDate("");
+                        }
+                        productPriceType.setSalesPrice(salesPrice);
+        	        }
+        	    }
+        	}
+        	else
+        	{
+        		productPriceList = EntityUtil.filterByDate(_delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", variantProductId, "productPriceTypeId", "LIST_PRICE"), UtilMisc.toList("-fromDate")));
+
+        		if(UtilValidate.isNotEmpty(productPriceList))
+                {
+                	ListPriceType listPrice = factory.createListPriceType();
+        	        if(UtilValidate.isNotEmpty(productPriceList))
+        	        { 
+        	        	GenericValue gvProductPrice = EntityUtil.getFirst(productPriceList);
+        	        	productPrice=_df.format(gvProductPrice.getBigDecimal("price"));
+        	        	listPrice.setPrice(productPrice);
+        	        	listPrice.setCurrency(gvProductPrice.getString("currencyUomId"));
+        	        	Timestamp tsstamp = gvProductPrice.getTimestamp("fromDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	listPrice.setFromDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	listPrice.setFromDate("");
+                        }
+                        tsstamp = gvProductPrice.getTimestamp("thruDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	listPrice.setThruDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	listPrice.setThruDate("");
+                        }
+                        productPriceType.setListPrice(listPrice);
+        	        }
+        	    }
+
+                productPrice="";
+                productPriceList = EntityUtil.filterByDate(_delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId",variantProductId, "productPriceTypeId", "DEFAULT_PRICE"), UtilMisc.toList("-fromDate")));
+                if(UtilValidate.isNotEmpty(productPriceList))
+                {
+                	SalesPriceType salesPrice = factory.createSalesPriceType();
+        	        if(UtilValidate.isNotEmpty(productPriceList))
+        	        {
+        	        	GenericValue gvProductPrice = EntityUtil.getFirst(productPriceList);
+        	        	productPrice=_df.format(gvProductPrice.getBigDecimal("price"));
+        	        	salesPrice.setPrice(productPrice);
+        	        	salesPrice.setCurrency(gvProductPrice.getString("currencyUomId"));
+        	        	Timestamp tsstamp = gvProductPrice.getTimestamp("fromDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	salesPrice.setFromDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	salesPrice.setFromDate("");
+                        }
+                        tsstamp = gvProductPrice.getTimestamp("thruDate");
+                        if (UtilValidate.isNotEmpty(tsstamp))
+                        {
+                        	salesPrice.setThruDate(_sdf.format(new Date(tsstamp.getTime())));
+                        }
+                        else
+                        {
+                        	salesPrice.setThruDate("");
+                        }
+                        productPriceType.setSalesPrice(salesPrice);
+        	        }
+        	    }
+        	}
+        	productType.setProductPrice(productPriceType);
+        	
             List<GenericValue> lProductContent = _delegator.findByAnd("ProductContent", UtilMisc.toMap("productId",variantProductId),UtilMisc.toList("-fromDate"));
             lProductContent=EntityUtil.filterByDate(lProductContent, UtilDateTime.nowTimestamp());
             
@@ -9787,26 +10339,6 @@ public class ImportServices {
             }
         }
         
-     // ############################################
-        // call the service for remove entity data 
-        // if removeAll and autoLoad parameter are true 
-        // ############################################
-        if (removeAll) {
-            Map importRemoveEntityDataParams = UtilMisc.toMap();
-            try {
-            
-                Map result = dispatcher.runSync("importRemoveEntityData", importRemoveEntityDataParams);
-            
-                List<String> serviceMsg = (List)result.get("messages");
-                for (String msg: serviceMsg) {
-                    messages.add(msg);
-                }
-            } catch (Exception exc) {
-                Debug.logError(exc, module);
-                autoLoad = Boolean.FALSE;
-            }
-        }
-
         // ##############################################
         // move the generated xml files in done directory
         // ##############################################

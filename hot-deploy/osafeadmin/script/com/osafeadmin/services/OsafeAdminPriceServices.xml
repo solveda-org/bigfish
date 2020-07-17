@@ -4,41 +4,62 @@
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
 
     <simple-method method-name="updateProdPrice" short-description="This Service Update Product Simple Price">
-    <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
-        <if-empty field="parameters.listPrice">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductListPriceError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
-        <else>
-            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
-                <field field="parameters.listPrice"/>
-            </call-class-method>
-            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductListPriceError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
-            </if-compare>
-        </else>
-        </if-empty>
-        <if-empty field="parameters.defaultPrice">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDefaultPriceError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
-        <else>
-            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
-                <field field="parameters.defaultPrice"/>
-            </call-class-method>
-            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductDefaultPriceError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
-            </if-compare>
-        </else>
-        </if-empty>
-        <check-errors/>
+	    <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+	        <if-empty field="parameters.listPrice">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductListPriceError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+	        <else>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
+	                <field field="parameters.listPrice"/>
+	            </call-class-method>
+	            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductListPriceError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+	            </if-compare>
+	        </else>
+	        </if-empty>
+	        <if-empty field="parameters.defaultPrice">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDefaultPriceError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+	        <else>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
+	                <field field="parameters.defaultPrice"/>
+	            </call-class-method>
+	            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductDefaultPriceError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+	            </if-compare>
+	        </else>
+	        </if-empty>
+	    </if-compare>
+	    <if-compare field="parameters.isVariant" operator="equals" value="Y">
+	        <if-not-empty field="parameters.variantListPrice">
+		        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">
+		            <field field="parameters.variantListPrice"/>
+		        </call-class-method>
+		        <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductVariantListPriceError"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+		        </if-compare>
+		    </if-not-empty>
+		    <if-not-empty field="parameters.variantSalePrice">
+		        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">
+		            <field field="parameters.variantSalePrice"/>
+		        </call-class-method>
+		        <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductVariantSalePriceError"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+		        </if-compare>
+		    </if-not-empty>
+	    </if-compare>
+	    <check-errors/>
         
         <if-not-empty field="parameters.defaultPrice">
-            <entity-and entity-name="ProductPrice" list="prodDefaultPriceList">
+            <entity-and entity-name="ProductPrice" list="productDefaultPriceList" filter-by-date="true">
                 <field-map field-name="productId" from-field="parameters.productId"/>
                 <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
+                <order-by field-name="-fromDate"/>
             </entity-and>
-            <filter-list-by-date list="prodDefaultPriceList" to-list="productDefaultPriceList"/>
             <if-not-empty field="productDefaultPriceList">
                 <first-from-list entry="productDefaultPrice" list="productDefaultPriceList"/>
                 <set-service-fields service-name="updateProductPrice" to-map="productDefaultPriceCtx" map="productDefaultPrice"/>
@@ -47,11 +68,11 @@
             </if-not-empty>
         </if-not-empty>
         <if-not-empty field="parameters.listPrice">
-            <entity-and entity-name="ProductPrice" list="prodListPriceList">
+            <entity-and entity-name="ProductPrice" list="productListPriceList" filter-by-date="true">
                 <field-map field-name="productId" from-field="parameters.productId"/>
                 <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+                <order-by field-name="-fromDate"/>
             </entity-and>
-            <filter-list-by-date list="prodListPriceList" to-list="productListPriceList"/>
             <if-not-empty field="productListPriceList">
                 <first-from-list entry="productListPrice" list="productListPriceList"/>
                 <set-service-fields service-name="updateProductPrice" to-map="productListPriceCtx" map="productListPrice"/>
@@ -59,6 +80,91 @@
                 <call-service service-name="updateProductPrice" in-map-name="productListPriceCtx"/>
             </if-not-empty>
         </if-not-empty>
-      </if-compare>
+        
+        <if-compare field="parameters.isVariant" operator="equals" value="Y">
+        <entity-and list="productVariantListPriceList" entity-name="ProductPrice" filter-by-date="true">
+            <field-map field-name="productId" from-field="parameters.productId"/>
+            <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+            <field-map field-name="productPricePurposeId" value="PURCHASE"/>
+            <field-map field-name="currencyUomId" from-field="parameters.currencyUomId"/>
+            <field-map field-name="productStoreGroupId" value="_NA_"/>
+            <order-by field-name="-fromDate"/>
+        </entity-and>
+        <if-not-empty field="productVariantListPriceList">
+            <first-from-list entry="productVariantListPrice" list="productVariantListPriceList"/>
+        </if-not-empty>
+        
+        <if-not-empty field="productVariantListPrice">
+            <if-not-empty field="parameters.variantListPrice">
+                <set-service-fields service-name="updateProductPrice" to-map="productVariantListPriceCtx" map="productVariantListPrice"/>
+                <set field="productVariantListPriceCtx.price" from-field="parameters.variantListPrice" type="BigDecimal"/>
+                <call-service service-name="updateProductPrice" in-map-name="productVariantListPriceCtx"/>
+            <else>
+                <set field="deleteProductVariantListPriceCtx.productId" from-field="productVariantListPrice.productId"/>
+                <set field="deleteProductVariantListPriceCtx.productPriceTypeId" value="LIST_PRICE"/>
+                <set field="deleteProductVariantListPriceCtx.productPricePurposeId" value="PURCHASE"/>
+                <set field="deleteProductVariantListPriceCtx.currencyUomId" from-field="productVariantListPrice.currencyUomId"/>
+                <set field="deleteProductVariantListPriceCtx.productStoreGroupId" value="_NA_"/>
+                <set field="deleteProductVariantListPriceCtx.fromDate" from-field="productVariantListPrice.fromDate" type="Timestamp"/>
+                <call-service service-name="deleteProductPrice" in-map-name="deleteProductVariantListPriceCtx"/>
+            </else>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="parameters.variantListPrice">
+                <now-timestamp field="fromDate"/>
+                <set field="createProductVariantListPriceCtx.price" from-field="parameters.variantListPrice" type="BigDecimal"/>
+                <set field="createProductVariantListPriceCtx.productId" from-field="parameters.productId"/>
+                <set field="createProductVariantListPriceCtx.productPriceTypeId" value="LIST_PRICE"/>
+                <set field="createProductVariantListPriceCtx.productPricePurposeId" value="PURCHASE"/>
+                <set field="createProductVariantListPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+                <set field="createProductVariantListPriceCtx.productStoreGroupId" value="_NA_"/>
+                <set field="createProductVariantListPriceCtx.fromDate" from-field="fromDate" type="Timestamp"/>
+                <call-service service-name="createProductPrice" in-map-name="createProductVariantListPriceCtx"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+        
+        <entity-and list="productVariantSalePriceList" entity-name="ProductPrice" filter-by-date="true">
+            <field-map field-name="productId" from-field="parameters.productId"/>
+            <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
+            <field-map field-name="productPricePurposeId" value="PURCHASE"/>
+            <field-map field-name="currencyUomId" from-field="parameters.currencyUomId"/>
+            <field-map field-name="productStoreGroupId" value="_NA_"/>
+            <order-by field-name="-fromDate"/>
+        </entity-and>
+        <if-not-empty field="productVariantSalePriceList">
+            <first-from-list entry="productVariantSalePrice" list="productVariantSalePriceList"/>
+        </if-not-empty>
+        
+        <if-not-empty field="productVariantSalePrice">
+            <if-not-empty field="parameters.variantSalePrice">
+                <set-service-fields service-name="updateProductPrice" to-map="productVariantSalePriceCtx" map="productVariantSalePrice"/>
+                <set field="productVariantSalePriceCtx.price" from-field="parameters.variantSalePrice" type="BigDecimal"/>
+                <call-service service-name="updateProductPrice" in-map-name="productVariantSalePriceCtx"/>
+            <else>
+                <set field="deleteProductVariantSalePriceCtx.productId" from-field="productVariantSalePrice.productId"/>
+                <set field="deleteProductVariantSalePriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+                <set field="deleteProductVariantSalePriceCtx.productPricePurposeId" value="PURCHASE"/>
+                <set field="deleteProductVariantSalePriceCtx.currencyUomId" from-field="productVariantSalePrice.currencyUomId"/>
+                <set field="deleteProductVariantSalePriceCtx.productStoreGroupId" value="_NA_"/>
+                <set field="deleteProductVariantSalePriceCtx.fromDate" from-field="productVariantSalePrice.fromDate" type="Timestamp"/>
+                <call-service service-name="deleteProductPrice" in-map-name="deleteProductVariantSalePriceCtx"/>
+            </else>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="parameters.variantSalePrice">
+                <now-timestamp field="fromDate"/>
+                <set field="createProductVariantSalePriceCtx.price" from-field="parameters.variantSalePrice" type="BigDecimal"/>
+                <set field="createProductVariantSalePriceCtx.productId" from-field="parameters.productId"/>
+                <set field="createProductVariantSalePriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+                <set field="createProductVariantSalePriceCtx.productPricePurposeId" value="PURCHASE"/>
+                <set field="createProductVariantSalePriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+                <set field="createProductVariantSalePriceCtx.productStoreGroupId" value="_NA_"/>
+                <set field="createProductVariantSalePriceCtx.fromDate" from-field="fromDate" type="Timestamp"/>
+                <call-service service-name="createProductPrice" in-map-name="createProductVariantSalePriceCtx"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+        </if-compare>
     </simple-method>
 </simple-methods>
