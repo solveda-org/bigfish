@@ -17,6 +17,7 @@ import org.ofbiz.entity.condition.EntityOperator;
 import java.sql.Timestamp;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.*;
+import com.ibm.icu.util.Calendar;
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
@@ -107,6 +108,8 @@ if (UtilValidate.isNotEmpty(productStore))
 		{
 		    catContentWrappers = FastMap.newInstance();
 		    subCatRollUpMap = FastMap.newInstance();
+    	    currentCategories = FastList.newInstance();
+		    
 		    for (GenericValue categoryRollUp : categoryRollupList)
 		    {
 		        String mapKey = categoryRollUp.productCategoryId;
@@ -115,6 +118,8 @@ if (UtilValidate.isNotEmpty(productStore))
 	            	gvProductCategory = delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId",mapKey));
 	    	        CategoryContentWrapper productCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
 	    	        catContentWrappers.put(mapKey,productCategoryContentWrapper);
+	    	        currentCategories.add(gvProductCategory);
+	    	        
 	            	
 	            }
 		        paramsExpr = FastList.newInstance();
@@ -143,6 +148,7 @@ if (UtilValidate.isNotEmpty(productStore))
 			            	gvProductCategory = delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId",productCategoryId));
 			    	        CategoryContentWrapper productCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
 			    	        catContentWrappers.put(productCategoryId,productCategoryContentWrapper);
+			    	        currentCategories.add(gvProductCategory);
 			            	
 			            }
 				    	
@@ -151,6 +157,21 @@ if (UtilValidate.isNotEmpty(productStore))
 		        }
 		    }
 		    context.catContentWrappers = catContentWrappers;
+		    //Check if the catalog Active date is equal to the current date if so update the current categories in the session with this category list
+			if (UtilValidate.isEmpty(catalogActiveDateTs) && UtilValidate.isEmpty(showAll))
+			{
+    		    catActiveStartDate =UtilDateTime.getDayStart(catalogActiveDateTs); 
+    		    currentDayStartDate =UtilDateTime.getDayStart(UtilDateTime.nowTimestamp());
+    	    	Calendar cc= UtilDateTime.toCalendar(catActiveStartDate);
+    	    	Calendar cc2= UtilDateTime.toCalendar(currentDayStartDate);
+    		    if (cc.isEquivalentTo(cc2))
+    		    {
+    		  	    globalContext.currentCategories = currentCategories;
+    	    	    session.setAttribute("selectedCategories",currentCategories);
+    		    }
+				
+			}
+		    
 		}
 	}
 	

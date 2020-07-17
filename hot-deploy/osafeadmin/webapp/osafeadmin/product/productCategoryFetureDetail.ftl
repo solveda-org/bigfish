@@ -47,8 +47,14 @@
                            <select id="productFeatureId_${productFeatureCatGrpAppl_index}" name="productFeatureId_${productFeatureCatGrpAppl_index}" class="short" <#if  productFeatureApplTypeId?exists && productFeatureApplTypeId?string != "DISTINGUISHING_FEAT">style="display:none"</#if> <#if product?has_content>disabled="disabled"</#if>>
                                <option value="">Select</option>
                                <#assign selectedFeture = parameters.get("productFeatureId_${productFeatureCatGrpAppl_index}")!productFeatureId!"">
+                               <#assign productFeatureList = Static["javolution.util.FastList"].newInstance()/>
                                <#list productFeatureGroupAppls as productFeatureGroupAppl>
                                    <#assign productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature")/>
+                                   <#-- Prepared the list Product Feature to sort based on Description -->
+                                    <#assign changed = productFeatureList.add(productFeature)/>
+                               </#list>
+                               <#assign productFeatureList = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productFeatureList,Static["org.ofbiz.base.util.UtilMisc"].toList("description"))/>
+                               <#list productFeatureList as productFeature>
                                    <#assign productFeatureName = productFeature.description?trim/>
                                    <#assign optionValue = "${productFeature.productFeatureId!}">
                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>><#if productFeatureName?has_content>${productFeatureName?if_exists}<#else>${productFeature.productFeatureId?if_exists}</#if></option>

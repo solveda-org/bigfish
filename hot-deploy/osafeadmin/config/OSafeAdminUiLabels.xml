@@ -1099,6 +1099,13 @@
     <property key="OrderStatusSummaryListHeading">
         <value xml:lang="en">Order Status Summary</value>
     </property>
+    <property key="ProductDescriptionHeading">
+        <value xml:lang="en">Product Descriptions</value>
+    </property>
+    <property key="ProcessingAttributeHeading">
+        <value xml:lang="en">Processing Attributes</value>
+    </property>
+    
    <!-- *** Heading Ends*************************************** -->
 
     <!-- *** Caption Starts*************************************** -->
@@ -1771,6 +1778,9 @@
     <property key="WebSearchCaption">
         <value xml:lang="en">Web Search:</value>
     </property>
+    <property key="TypeOfProductCaption">
+        <value xml:lang="en">Type of Product:</value>
+    </property>
     
     <!-- Leave so if we want to specific verbage we do not have to change the key -->
     <property key="ActiveCaption">
@@ -2392,7 +2402,7 @@
         <value xml:lang="en">Disabled Date:</value>
     </property>
     <property key="SuccFailedLoginsCaption">
-        <value xml:lang="en">Succ Failed Logins:</value>
+        <value xml:lang="en">Successive Failed Logins:</value>
     </property>
 	<property key="SecurityGoupIdCaption">
         <value xml:lang="en">Security Group ID:</value>
@@ -3640,6 +3650,12 @@
     <property key="OrderListToXMLLabel">
         <value xml:lang="en">Export ALL Orders on this page to XML</value>
     </property>
+    <property key="CustomerListToPDFLabel">
+        <value xml:lang="en">Export ALL Customers on this page to PDF</value>
+    </property>
+    <property key="CustomerListToXMLLabel">
+        <value xml:lang="en">Export ALL Customers on this page to XML</value>
+    </property>
     <property key="ExportOrderToPDFLabel">
         <value xml:lang="en">Export Order to PDF</value>
     </property>
@@ -4346,6 +4362,15 @@
     </property>
     <property key="CommonForever">
         <value xml:lang="en">forever</value>
+    </property>
+    <property key="VirtualProductLabel">
+        <value xml:lang="en">Virtual Product</value>
+    </property>
+    <property key="FinishedGoodLabel">
+        <value xml:lang="en">Finished Good</value>
+    </property>
+    <property key="UnknownLabel">
+        <value xml:lang="en">Unknown</value>
     </property>
     <!-- **** Label Ends *************************************** -->
     
@@ -5564,7 +5589,7 @@
         <value xml:lang="en">Enabled will be set to NO if a Customer fails the login ${successFailedLoginsNumber} times. This is a parameter max.failed.logins in the security.properties.template configuration file</value>
     </property>
     <property key="SuccessFailedNumberMinutesHelpInfo">
-        <value xml:lang="en">By default, after failing logins, the account is disabled. A subsequent attempt can be made ${numberOfminutes} after the Disabled date/time. This is a parameter login.disabled.minutes in the security.properties.template configuration file</value>
+        <value xml:lang="en">By default, after failing logins, the account is disabled. A subsequent attempt can be made ${numberOfminutes} minutes after the Disabled date/time. This is a parameter login.disabled.minutes in the security.properties.template configuration file</value>
     </property>
     <property key="MaxFailedLoginsMapHelpInfo">
         <value xml:lang="en">If this value exceeds ${maxFailedLogins} attempts then the customer account will be disabled. This is a parameter max.failed.logins in the security.properties.template configuration file</value>
@@ -5671,6 +5696,12 @@
     </property>
     <property key="EditUiLabelKeySuccess">
         <value xml:lang="en">Your changes to ${editUiLabelKey} have been saved. You will need to reset cache in Admin/Tools for your changes to take effect.</value>
+    </property>
+    <property key="EditUserSecurityGroupSuccess">
+        <value xml:lang="en">Your Security Group changes for user ${editUser} have been saved</value>
+    </property>
+    <property key="EditSecurityGroupPermissionSuccess">
+        <value xml:lang="en">Your Security Group changes for user ${editGroup} have been saved</value>
     </property>
       <!-- ******* Success Messages  Ends*************************************** -->
       
@@ -6838,8 +6869,9 @@
     <property key="HelpBtn">
         <value xml:lang="en">Help</value>
     </property>
-    
-
+    <property key="ContextBtn">
+        <value xml:lang="en">Context</value>
+    </property>
 	<property key="AddShippingChargeBtn">
         <value xml:lang="en">Add Shipping Charge</value>
     </property>
@@ -7078,7 +7110,7 @@
         <value xml:lang="en">Job ${parameters.scheduledJobName} ran on ${parameters.nowDate} at ${parameters.nowTime} and returned ${parameters.responseMessage}.</value>
     </property>
     <property key="DeleteUserSecurityGroupConfirmText">
-        <value xml:lang="en">Are you sure you want to delete the Security Group _SECURITY_GROUP_ID_ for User: ${parameters.userLoginId}</value>
+        <value xml:lang="en">Are you sure you want to delete the Security Group _SECURITY_GROUP_ID_ for User: ${parameters.userLoginId}?</value>
     </property>
     <property key="DeleteSecurityGroupPermissionConfirmText">
         <value xml:lang="en">Are you sure you want to delete the Permission _PERMISSION_ID_ for Security Group: ${parameters.groupId}?</value>

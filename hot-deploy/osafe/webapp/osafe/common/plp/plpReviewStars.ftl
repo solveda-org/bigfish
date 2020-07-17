@@ -1,9 +1,9 @@
 <#assign reviewMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"REVIEW_METHOD")!""/>
 <#if reviewMethod?has_content >
-	<#if (reviewMethod != "NONE") && (reviewMethod != "")>
+	<#if (reviewMethod.toUpperCase() == "BIGFISH") || (reviewMethod.toUpperCase() == "REEVOO")>
 		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"REVIEW_SHOW_ON_PLP")>
 		 <div class="plpReviewStars">
-	    	<#if reviewMethod = "REEVOO">
+	    	<#if reviewMethod.toUpperCase() == "REEVOO">
 	    		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"REEVOO_SHOW_ON_PLP")>
 			        <#assign reevooBadgeurl = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_BADGE_URL")!""/>
 			        <#assign reevooTrkref = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_TRKREF")!""/>
@@ -20,12 +20,10 @@
 			        </div>
 		        </#if>
 	        </#if>
-	    	<#if reviewMethod = "BIGFISH">
-	    		<#if !(Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"REEVOO_SHOW_ON_PLP"))>
-			        <#if averageStarPLPRating?has_content>
-			            <#assign ratePercentage= ((averageStarPLPRating / 5) * 100)>
-			            <div class="rating_bar"><div style="width:${ratePercentage}%"></div></div>
-			        </#if>
+	    	<#if reviewMethod.toUpperCase() == "BIGFISH">
+		        <#if averageStarPLPRating?has_content>
+		            <#assign ratePercentage= ((averageStarPLPRating / 5) * 100)>
+		            <div class="rating_bar"><div style="width:${ratePercentage}%"></div></div>
 		        </#if>
 	        </#if>
 		 </div>

@@ -158,7 +158,7 @@ under the License.
             <property name="address" value="0.0.0.0"/>
             <property name="backlog" value="10"/>
             <property name="maxSpareThreads" value="50"/>
-            <property name="maxThreads" value="200"/>
+            <property name="maxThreads" value="256"/>
             <property name="minSpareThreads" value="4"/>
             <property name="port" value="@port.ajp@"/>
             <property name="tcpNoDelay" value="true"/>
@@ -192,7 +192,7 @@ under the License.
             <property name="maxHttpHeaderSize" value="4096"/>
             <property name="maxKeepAliveRequests" value="100"/>
             <property name="maxSpareThreads" value="50"/>
-            <property name="maxThreads" value="100"/>
+            <property name="maxThreads" value="256"/>
             <property name="minSpareThreads" value="4"/>
             <property name="noCompressionUserAgents" value=""/>
             <property name="port" value="@port.http@"/>
@@ -230,7 +230,7 @@ under the License.
             <property name="maxHttpHeaderSize" value="4096"/>
             <property name="maxKeepAliveRequests" value="100"/>
             <property name="maxSpareThreads" value="50"/>
-            <property name="maxThreads" value="100"/>
+            <property name="maxThreads" value="256"/>
             <property name="minSpareThreads" value="4"/>
             <property name="noCompressionUserAgents" value=""/>
             <property name="port" value="@port.https@"/>

@@ -47,7 +47,9 @@
 	        	<label>${uiLabelMap.ParentJobIdCaption}</label>
 	      </div>
 	      <div class="infoValue">
+	      	<#if parentJob?has_content>
 	        	<a href="<@ofbizUrl>scheduledJobDetail?jobId=${schedJob.parentJobId!""}&jobName=${parentJob.jobName}</@ofbizUrl>">${schedJob.parentJobId!""}</a>
+	        </#if>
 	      </div>
 	    </div>
    
@@ -80,7 +82,9 @@
 	        	<label>${uiLabelMap.PrevJobIdCaption}</label>
 	      </div>
 	      <div class="infoValue">
+	      	<#if prevJob?has_content>
 	        	<a href="<@ofbizUrl>scheduledJobDetail?jobId=${schedJob.previousJobId!""}&jobName=${prevJob.jobName!""}</@ofbizUrl>">${schedJob.previousJobId!""}</a>
+	        </#if>
 	      </div>
 	    </div>
    

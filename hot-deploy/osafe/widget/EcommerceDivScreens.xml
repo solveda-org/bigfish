@@ -451,8 +451,6 @@
         <section>
             <actions>
                 <set field="uiSequenceScreen" value="PDPComplement"/>
-                <set field="thumbImageHeight" from-field="IMG_SIZE_COMPLEMENT_H"/>
-                <set field="thumbImageWidth" from-field="IMG_SIZE_COMPLEMENT_W"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceComplementProduct.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
@@ -472,8 +470,6 @@
         <section>
             <actions>
                 <set field="uiSequenceScreen" value="PDPRecent"/>
-                <set field="thumbImageHeight" from-field="IMG_SIZE_RECENT_H"/>
-                <set field="thumbImageWidth" from-field="IMG_SIZE_RECENT_W"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
             </actions>
@@ -1092,8 +1088,6 @@
         <section>
             <actions>
                 <set field="uiSequenceScreen" value="PDPComplement"/>
-                <set field="thumbImageHeight" from-field="IMG_SIZE_COMPLEMENT_H"/>
-                <set field="thumbImageWidth" from-field="IMG_SIZE_COMPLEMENT_W"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceComplementProduct.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
@@ -1113,8 +1107,6 @@
         <section>
             <actions>
                 <set field="uiSequenceScreen" value="PDPRecent"/>
-                <set field="thumbImageHeight" from-field="IMG_SIZE_RECENT_H"/>
-                <set field="thumbImageWidth" from-field="IMG_SIZE_RECENT_W"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
             </actions>
@@ -1749,8 +1741,6 @@
         <section>
             <actions>
                 <set field="uiSequenceScreen" value="PDPComplement"/>
-                <set field="thumbImageHeight" from-field="IMG_SIZE_COMPLEMENT_H"/>
-                <set field="thumbImageWidth" from-field="IMG_SIZE_COMPLEMENT_W"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceComplementProduct.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
@@ -1770,8 +1760,6 @@
         <section>
             <actions>
                 <set field="uiSequenceScreen" value="PDPRecent"/>
-                <set field="thumbImageHeight" from-field="IMG_SIZE_RECENT_H"/>
-                <set field="thumbImageWidth" from-field="IMG_SIZE_RECENT_W"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <set field="showTertiaryInformation" value="Y" />
             </actions>
@@ -2100,6 +2088,10 @@
      <screen name="plpSwatchImage">
          <section>
              <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_W')}"/>
+                <set field="plpSwatchImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_H')}"/>
+                <set field="plpSwatchImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_W')}"/>
              </actions>
              <widgets>
                  <container style="plpSwatchImageSeq">
@@ -2176,6 +2168,8 @@
     <screen name="plpThumbImage">
         <section>
             <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_W')}"/>
             </actions>
             <widgets>
                 <container style="plpThumbImageSeq">
@@ -2376,6 +2370,10 @@
      <screen name="pdpComplementSwatchImage">
          <section>
              <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_W')}"/>
+                <set field="plpSwatchImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_H')}"/>
+                <set field="plpSwatchImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_W')}"/>
              </actions>
              <widgets>
                  <container style="pdpComplementSwatchImageSeq">
@@ -2452,6 +2450,8 @@
     <screen name="pdpComplementThumbImage">
         <section>
             <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_COMPLEMENT_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_COMPLEMENT_W')}"/>
             </actions>
             <widgets>
                 <container style="pdpComplementThumbImageSeq">
@@ -2652,6 +2652,10 @@
      <screen name="pdpRecentSwatchImage">
          <section>
              <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_W')}"/>
+                <set field="plpSwatchImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_H')}"/>
+                <set field="plpSwatchImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_W')}"/>
              </actions>
              <widgets>
                  <container style="pdpRecentSwatchImageSeq">
@@ -2728,6 +2732,8 @@
     <screen name="pdpRecentThumbImage">
         <section>
             <actions>
+                <set field="thumbImageHeight" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_RECENT_H')}"/>
+                <set field="thumbImageWidth" value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_RECENT_W')}"/>
             </actions>
             <widgets>
                 <container style="pdpRecentThumbImageSeq">

@@ -1,11 +1,9 @@
 <div class="plpThumbImage">
- <#assign IMG_SIZE_PLP_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PLP_H")!""/>
- <#assign IMG_SIZE_PLP_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PLP_W")!""/>
  <div class="eCommerceThumbNailHolder">
     <div class="swatchProduct">
     <!-- using class pdpUrl for preparing PDP URL according to the selected swatch. -->
         <a class="pdpUrl" title="${productName!""}" href="${productFriendlyUrl!"#"}" id="${productId!}">
-            <img alt="${productName!""}" title="${productName!""}" src="${productImageUrl}" class="productThumbnailImage" <#if IMG_SIZE_PLP_H?has_content> height="${thumbImageHeight!""}"</#if> <#if IMG_SIZE_PLP_W?has_content> width="${thumbImageWidth!""}"</#if> <#if productImageAltUrl?has_content && productImageAltUrl != ''> onmouseover="src='${productImageAltUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});" onmouseout="src='${productImageUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});"</#if> onerror="onImgError(this, 'PLP-Thumb');"/>
+            <img alt="${productName!""}" title="${productName!""}" src="${productImageUrl}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productImageAltUrl?has_content && productImageAltUrl != ''> onmouseover="src='${productImageAltUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});" onmouseout="src='${productImageUrl!""}'; jQuery(this).error(function(){onImgError(this, 'PLP-Thumb');});"</#if> onerror="onImgError(this, 'PLP-Thumb');"/>
         </a>
     </div>
 	<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"QUICKLOOK_ACTIVE") && uiSequenceScreen?has_content && uiSequenceScreen == 'PLP'>

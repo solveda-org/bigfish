@@ -562,7 +562,7 @@ label, .caption{
 #siteInfo #helperImages  {
     float: right;
     margin: 14px 0 0 0;
-    width: 175px;
+    width: auto;
 }
 #siteInfo #helperImages a {
     margin: 0 0 0 10px;
@@ -626,7 +626,7 @@ border-bottom: none;
 #navigationMenu ul {
     position:        absolute;
     top:            -999em;
-    width:          100%; /* left offset of submenus need to match (see below) */
+    width:          auto; /* left offset of submenus need to match (see below) */
     
 }
 
@@ -673,8 +673,23 @@ border-top-right-radius: 8px;
     top:            24px; /* match top ul list item height */
    top: 23px\9; /*IE8 and below */ 
     z-index:        99;
-
 }
+
+#navigationMenu li.lastItem ul,
+#navigationMenu li.lastItem ul {
+    left: -99px\9; /* For IE 8 and Below */
+}
+
+#navigationMenu li.lastItem:hover ul,
+#navigationMenu li.lastItem.sfHover ul {
+    top:            24px; /* match top ul list item height */
+    top: 23px\9; /* For IE 9 and Below */
+    left:            -111px;
+    left: -107px\9; /* For IE 9 and Below */
+    z-index:        99;
+}
+
+
 ul#navigationMenu li:hover li ul,
 ul#navigationMenu li.sfHover li ul {
     top:            -999em;
@@ -693,13 +708,14 @@ ul#navigationMenu li li li.sfHover ul {
 /* Size and Padding width of each Sub Navbar a Item*/
 
 #navigationMenu .subLevel a {
-    padding:        2px 0px 2px 2px;
+    padding:        2px 5px 2px 5px;
     font-size:      13px !important;
     font-weight: bold;
     border-radius: 0;
     border: none!important;
     background: #637b93!important;
     color: #fff!important;
+    white-space: nowrap;
 }
 
  /* basic Cloring of Navbar Item Text */
@@ -726,11 +742,11 @@ ul#navigationMenu li li li.sfHover ul {
 }
 /* Vertical bar to right of last top level item */
 #navigationMenu  li.topLevel.lastItem {
-    padding-left: 5px;
+
 }
 
 #navigationMenu li li a {
-    margin: 0 0 0 5px;
+   /* margin: 0 0 0 5px; */
 }
 #navigationMenu li li {
     background-color: #637b93; /* Background Color of flyout*/
@@ -1154,7 +1170,9 @@ categoryDetail:after {
     padding: .5em 0 .5em 0;
 }
 
-
+div.searchButton {
+    padding: 0 0 0 0.5em;
+}
 
 /****************************************************************
 * Information Display Box
@@ -1178,6 +1196,13 @@ categoryDetail:after {
     min-height: 20px;  /* Needed to accomodate input boxes that won't clear */
     min-height: 22px\9;  /* IE9- */
 
+}
+
+.infoRow.column .infoEntry {
+    float: left;
+    padding: 3px 0;
+    clear: left;
+    *float: none; /* IE7 only */
 }
 
 
@@ -1209,6 +1234,8 @@ categoryDetail:after {
     color: #445566;
     text-align: justify;
 }
+
+
 
 .infoRow #intervalUnit {
    margin: 0 0 0 5px;
@@ -2437,6 +2464,7 @@ td div.infoEntry input[type="text"] {
     clear:both;
     position: relative;
     top:-1px;
+    *width:100px;
 }
 
 .tooltipTopArrow{
@@ -2447,6 +2475,8 @@ td div.infoEntry input[type="text"] {
     clear:both;
     position: relative;
     top:2px;
+    *width:100px;
+    
 }
 
 .toolTipImg {
@@ -2798,6 +2828,58 @@ td div.infoEntry input[type="text"] {
     height:16px;
     display: inline-block;
 }
+
+
+.emailIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/emailIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+    position: relative;
+    top: 3px;
+}
+
+.exportToPdfIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/exportToPdfIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.exportToXmlIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/exportToXmlIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.detailIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/detailIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.addNoteIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/addNoteIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.statusUpdateIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/statusUpdateIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
 
 /****************************************************************
 * Detail Entry Table
@@ -3936,6 +4018,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     right: 15px;
     top: -19px;
     width: 315px;
+    *right: 35px; /* IE7 Only */
 
 }
 
@@ -3946,6 +4029,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     width: 315px;
     background-image: url("/osafe_admin_theme/images/gunmetal/tooltip/ToolTipArrowBottom.png");
     background-repeat: no-repeat;
+    *right: 35px; /* IE7 Only */
 }
 
 .actionIcon img.actionIconMenuImage {
@@ -4007,20 +4091,20 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 
 .context {
-       float: right;
+       display: inline-block;
+       /*float: right;*/
        *float: none; /*IE7 and below */
        *display: inline; /*IE7 and below */
 }
 
-.contextIcon {
+a.standardBtn.contextIcon {
     background-color: #8BA0B3;
     background-image: url("/osafe_admin_theme/images/gunmetal/icon/contextIcon.png");
+    background-position: 4px 50%;
     background-repeat: no-repeat;
-    background-position: 50%;
-    height: 16px;
-    width: 16px;
-    padding: 3px;
-    display: block;
+    display: inline-block;
+    font-size: 11px;
+    padding: 5px 5px 5px 25px;
   }
 
 .contextInfoBox{
@@ -4040,12 +4124,13 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 
 .contextInfoRow {
-
+    clear: left;
 }
 
 .contextInfoCaption {
-    display: inline-block;
+    float: left;
     width: 65px;
+    margin: 0 2px 0 0;
 }
 
 .contextInfoCaption label {
@@ -4062,7 +4147,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 
 .contextInfoValue .contextId a {
-    margin: 0 5px!important;
+    margin: 0 5px 0 0 !important;
     color: #637B93!important;
     text-decoration: none!important;
 }
@@ -4095,5 +4180,8 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     padding: 0 0 0 50px !important;
 }
 
+.generalInfo .infoRow div.infoValue p { /* Used for text with an icon; to flank icon to the right */
+   float: left; 
+}
 
 

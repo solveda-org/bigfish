@@ -138,7 +138,7 @@ public class OsafeAdminEvent {
                        }
                        
                    }
-                   else if(UtilValidate.isEmpty(categoryImageURL) || categoryImageURL.toString() == "")
+                   else if(UtilValidate.isEmpty(categoryImageURL))
                    {
                        Map<String, Object> categoryInfoMap = FastMap.newInstance();
                        categoryInfoMap.put("type",uiLabelMap.get("CategoryLabel"));
@@ -165,7 +165,7 @@ public class OsafeAdminEvent {
                                List<GenericValue> virtualProductAssocs = delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", productId, "productAssocTypeId", "PRODUCT_VARIANT"), UtilMisc.toList("-fromDate"));
                                for(GenericValue virtualProductAssoc : virtualProductAssocs) 
                                {
-                                   productList.add(virtualProductAssoc.getRelatedOneCache("AssocProduct"));
+                                   productList.add(virtualProductAssoc.getRelatedOne("AssocProduct"));
                                }
                            }
                            for(GenericValue productGV : productList) 
@@ -173,6 +173,8 @@ public class OsafeAdminEvent {
                                productId = productGV.getString("productId");
                                String productType = (String) uiLabelMap.get("ProductVirtualLabel");
                                String productName = ProductContentWrapper.getProductContentAsText(productGV, "PRODUCT_NAME", locale, dispatcher);
+                               String contentId = null;
+                               String productImageUrl =null;
                                if(productGV.getString("isVariant").equals("Y"))
                                {
                                     productType = (String) uiLabelMap.get("ProductVariantLabel");
@@ -181,34 +183,47 @@ public class OsafeAdminEvent {
                                }
                                //Verifying ASSET existence for a product (virtual or variant)
                                for(String ContentType : ProductContentTypeList)
-                               {
-                                   String productImageUrl = ProductContentWrapper.getProductContentAsText(productGV, ContentType, locale, dispatcher);
-                                   if (UtilValidate.isNotEmpty(productImageUrl) && productImageUrl.toString() !="")
-                                   {
-                                       String productImagePath =osafeThemeServerPath + productImageUrl;
-                                       if(!(new File(productImagePath).exists()))
+                               {   
+                                   List<GenericValue> productContent = productGV.getRelated("ProductContent");
+                                   productContent = EntityUtil.filterByDate(productContent,true);
+                                   List<GenericValue> productContentType = EntityUtil.filterByAnd(productContent,UtilMisc.toMap("productContentTypeId",ContentType));
+                                   //Verifying If the productContentTypeId exists for a particular product.
+                                   if (UtilValidate.isNotEmpty(productContentType))
+	                               {
+                                       GenericValue productImgContent = EntityUtil.getFirst(productContentType);
+                                       contentId = (String)productImgContent.get("contentId");
+                                       if (UtilValidate.isNotEmpty(contentId))
                                        {
-                                           Map<String, Object> productInfoMap = FastMap.newInstance();
-                                           productInfoMap.put("type",productType);
-                                           productInfoMap.put("assetID",productId+"_"+ContentType);
-                                           productInfoMap.put("ID",productId);
-                                           productInfoMap.put("description",productName);
-                                           productInfoMap.put("assetType",ContentType);
-                                           productInfoMap.put("imageURL",productImageUrl);
-                                           resultList.add(productInfoMap);
+                                           GenericValue content = productImgContent.getRelatedOne("Content");
+                                           productImageUrl = content.getRelatedOne("DataResource").getString("objectInfo");
                                        }
-                                   }
-                                   else if(UtilValidate.isEmpty(productImageUrl) || productImageUrl.toString() !="")
-                                   {
-                                       Map<String, Object> productInfoMap = FastMap.newInstance();
-                                       productInfoMap.put("type",productType);
-                                       productInfoMap.put("assetID",productId+"_"+ContentType);
-                                       productInfoMap.put("ID",productId);
-                                       productInfoMap.put("description",productName);
-                                       productInfoMap.put("assetType",ContentType);
-                                       productInfoMap.put("imageURL",uiLabelMap.get("BlankURLLabel"));
-                                       resultList.add(productInfoMap);
-                                   }
+	                                   if (UtilValidate.isNotEmpty(productImageUrl))
+	                                   {
+	                                       String productImagePath =osafeThemeServerPath + productImageUrl;
+	                                       if(!(new File(productImagePath).exists()))
+	                                       {
+	                                           Map<String, Object> productInfoMap = FastMap.newInstance();
+	                                           productInfoMap.put("type",productType);
+	                                           productInfoMap.put("assetID",productId+"_"+ContentType);
+	                                           productInfoMap.put("ID",productId);
+	                                           productInfoMap.put("description",productName);
+	                                           productInfoMap.put("assetType",ContentType);
+	                                           productInfoMap.put("imageURL",productImageUrl);
+	                                           resultList.add(productInfoMap);
+	                                       }
+	                                   }
+	                                   else if(UtilValidate.isEmpty(productImageUrl))
+	                                   {
+	                                       Map<String, Object> productInfoMap = FastMap.newInstance();
+	                                       productInfoMap.put("type",productType);
+	                                       productInfoMap.put("assetID",productId+"_"+ContentType);
+	                                       productInfoMap.put("ID",productId);
+	                                       productInfoMap.put("description",productName);
+	                                       productInfoMap.put("assetType",ContentType);
+	                                       productInfoMap.put("imageURL",uiLabelMap.get("BlankURLLabel"));
+	                                       resultList.add(productInfoMap);
+	                                   }
+	                               }
                                }
                            } 
                        }

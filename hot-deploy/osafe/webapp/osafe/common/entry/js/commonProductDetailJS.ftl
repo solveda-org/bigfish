@@ -192,6 +192,7 @@
             }
             jQuery('#productDetailsImageContainer').html(mainImages.html());
             activateZoom(detailImageUrl);
+            
         </#if>
         if (document.images['mainImage'] != null) {
             var detailimagePath;
@@ -209,6 +210,10 @@
     }
 
     function setDetailImage(detailImageUrl) {
+        if (typeof detailImageUrl == "undefined" || detailImageUrl == "NULL" || detailImageUrl == "") 
+        {
+            return;
+        }
         var image = new Image();
         image.src = detailImageUrl+ "?" + new Date().getTime();
         image.onerror = function () {
@@ -473,6 +478,10 @@
     </#if>
     
     function activateZoom(imgUrl) {
+        if (typeof imgUrl == "undefined" || imgUrl == "NULL" || imgUrl == "") 
+        {
+            return;
+        }
         var image = new Image();
         image.src = imgUrl+ "?" + new Date().getTime();
         image.onerror = function () {

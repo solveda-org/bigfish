@@ -75,7 +75,7 @@
     </#if>
     <#assign reviewMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"REVIEW_METHOD")!""/>
     <#if reviewMethod?has_content >
-	    <#if reviewMethod = "REEVOO" >
+	    <#if reviewMethod.toUpperCase() == "REEVOO" >
 	        <#assign reevooJsurl = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_JS_URL")!"">
 	        <#assign reevooTrkref = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_TRKREF")!"">
 	        <#assign reevooJsurl = reevooJsurl.concat("/").concat(reevooTrkref).concat(".js?async=true")>

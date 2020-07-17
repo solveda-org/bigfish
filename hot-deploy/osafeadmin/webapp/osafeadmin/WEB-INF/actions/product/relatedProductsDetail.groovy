@@ -32,7 +32,7 @@ if (UtilValidate.isNotEmpty(parameters.productId))
             context.productDetailHeading = productDetailHeading;
             context.productContentWrapper = productContentWrapper;
         }
-        productAssoc = product.getRelated("MainProductAssoc");
+        productAssoc = product.getRelated("AssocProductAssoc");
         productAssoc = EntityUtil.filterByDate(productAssoc,true);
         productAssoc = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId","PRODUCT_COMPLEMENT"));
 	    productAssoc = EntityUtil.orderBy(productAssoc,UtilMisc.toList("sequenceNum"));

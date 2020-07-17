@@ -22,6 +22,8 @@ String internalName = StringUtils.trimToEmpty(parameters.internalName);
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
 srchVirtualOnly=StringUtils.trimToEmpty(parameters.srchVirtualOnly);
+srchAll=StringUtils.trimToEmpty(parameters.srchall);
+srchFinishedGoodOnly=StringUtils.trimToEmpty(parameters.srchFinishedGoodOnly);
 srchCategoryId=StringUtils.trimToEmpty(parameters.srchCategoryId);
 categoryId = StringUtils.trimToEmpty(parameters.categoryId);
 notYetIntroduced = StringUtils.trimToEmpty(parameters.notYetIntroduced);
@@ -120,16 +122,35 @@ if(UtilValidate.isNotEmpty(searchText))
     }
  // Reterive Only Virtual Product with CheckBox implementation
     virtualExpr= FastList.newInstance();
-    if (UtilValidate.isNotEmpty(srchVirtualOnly))
+    finishedGoodExpr = FastList.newInstance();
+    srchCond = null;
+    mainCond = null;
+    //When Virtual is checked.
+    if (UtilValidate.isNotEmpty(srchVirtualOnly) && UtilValidate.isEmpty(srchFinishedGoodOnly) && UtilValidate.isEmpty(srchAll))
     {
-    	virtualExpr.add(EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, "Y"));
+        virtualExpr.add(EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, "Y"));
         context.srchVirtualOnly=srchVirtualOnly
     }
-    else 
+    //When Finished Good is checked.
+    else if(UtilValidate.isNotEmpty(srchFinishedGoodOnly) && UtilValidate.isEmpty(srchVirtualOnly) && UtilValidate.isEmpty(srchAll))
     {
-    	virtualExpr.add(EntityCondition.makeCondition("isVariant", EntityOperator.NOT_EQUAL, "Y"));
-    	virtualExpr.add(EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, null));
-    	virtualExpr.add(EntityCondition.makeCondition("isVariant", EntityOperator.EQUALS, null));
+    	virtualExpr.add(EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, "N"));
+    	virtualExpr.add(EntityCondition.makeCondition("isVariant", EntityOperator.EQUALS, "N"));
+    }
+    //When ALL is checked.
+    else if((UtilValidate.isNotEmpty(srchFinishedGoodOnly) && UtilValidate.isNotEmpty(srchVirtualOnly))||(UtilValidate.isNotEmpty(srchAll)))
+    {
+        virtualExpr.add(EntityCondition.makeCondition("isVariant", EntityOperator.NOT_EQUAL, "Y"));
+    }
+    //When None is checked.
+    else if(UtilValidate.isEmpty(srchFinishedGoodOnly) && UtilValidate.isEmpty(srchVirtualOnly) && UtilValidate.isEmpty(srchAll))
+    {
+        virtualExpr.add(EntityCondition.makeCondition("isVariant", EntityOperator.NOT_EQUAL, "Y"));
+    }
+    
+    if (UtilValidate.isNotEmpty(virtualExpr))
+    {
+    	srchCond = EntityCondition.makeCondition(virtualExpr, EntityOperator.AND);
     }
     dateExpr= FastList.newInstance();
     introDateExpr= FastList.newInstance();
@@ -159,16 +180,15 @@ if(UtilValidate.isNotEmpty(searchText))
     }
     
     paramCond=null;
-    if (UtilValidate.isNotEmpty(virtualExpr)) 
+    if (UtilValidate.isNotEmpty(srchCond)) 
     {
-    	virtCond = EntityCondition.makeCondition(virtualExpr, EntityOperator.OR);
    	   if (UtilValidate.isNotEmpty(prodCond))
    	   {
- 	      mainCond = EntityCondition.makeCondition([prodCond, virtCond], EntityOperator.AND);
+ 	      mainCond = EntityCondition.makeCondition([prodCond, srchCond], EntityOperator.AND);
    	   }
    	   else
    	   {
-   	     mainCond=virtCond;
+   	     mainCond=srchCond;
    	   }
     }
     if (UtilValidate.isNotEmpty(dateCond)) 

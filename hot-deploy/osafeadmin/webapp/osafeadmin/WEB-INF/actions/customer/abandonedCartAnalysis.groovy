@@ -58,7 +58,7 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
     {
         dateCond = EntityCondition.makeCondition(dateExpr, EntityOperator.AND);
     }
-    if (dateCond)
+    if (UtilValidate.isNotEmpty(dateCond))
     {
         mainCond = EntityCondition.makeCondition([mainCond, dateCond], EntityOperator.AND);
     }

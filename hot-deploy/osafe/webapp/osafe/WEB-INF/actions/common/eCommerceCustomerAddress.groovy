@@ -46,43 +46,45 @@ if (UtilValidate.isNotEmpty(partyId))
         partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
 
         partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
+        partyBillingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyBillingLocations);
+        partyBillingLocations = EntityUtil.filterByDate(partyBillingLocations,true);
+        partyBillingLocations = EntityUtil.orderBy(partyBillingLocations, UtilMisc.toList("fromDate DESC"));
         if (UtilValidate.isNotEmpty(partyBillingLocations)) 
         {
         	partyBillingLocation = EntityUtil.getFirst(partyBillingLocations);
         	billingPostalAddress = partyBillingLocation.getRelatedOneCache("PostalAddress");
             context.BILLINGPostalAddress = billingPostalAddress;
             context.billingContactMechId = billingPostalAddress.contactMechId;
-            billingContactMechList = EntityUtil.getRelatedByAnd("ContactMech", UtilMisc.toMap("contactMechTypeId", "POSTAL_ADDRESS"), partyBillingLocations);
+            billingContactMechList = EntityUtil.getRelated("ContactMech",partyBillingLocations);
             context.BILLINGContactMechList = billingContactMechList;
         }
         
         partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+        partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyShippingLocations);
+        partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
+        partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
         if (UtilValidate.isNotEmpty(partyShippingLocations)) 
         {
             partyShippingLocation = EntityUtil.getFirst(partyShippingLocations);
             shippingPostalAddress = partyShippingLocation.getRelatedOneCache("PostalAddress");
             context.SHIPPINGPostalAddress = shippingPostalAddress;
-            shippingContactMechList=EntityUtil.getRelatedByAnd("ContactMech", UtilMisc.toMap("contactMechTypeId", "POSTAL_ADDRESS"), partyShippingLocations);
+            shippingContactMechList=EntityUtil.getRelated("ContactMech",partyShippingLocations);
             context.SHIPPINGContactMechList = shippingContactMechList;
         }
         
         partyPurposeEmails = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL"));
+        partyPurposeEmails = EntityUtil.getRelatedCache("PartyContactMech", partyPurposeEmails);
+        partyPurposeEmails = EntityUtil.filterByDate(partyPurposeEmails,true);
+        partyPurposeEmails = EntityUtil.orderBy(partyPurposeEmails, UtilMisc.toList("fromDate DESC"));
         if (UtilValidate.isNotEmpty(partyPurposeEmails)) 
         {
         	partyPurposeEmail = EntityUtil.getFirst(partyPurposeEmails);
             contactMech = partyPurposeEmail.getRelatedOneCache("ContactMech");
             context.userEmailContactMech = contactMech;
             context.userEmailAddress = contactMech.infoString;
-            userEmailContactMechList= EntityUtil.getRelatedByAnd("ContactMech", UtilMisc.toMap("contactMechTypeId", "EMAIL_ADDRESS"), partyPurposeEmails);
+            userEmailContactMechList= EntityUtil.getRelated("ContactMech",partyPurposeEmails);
             context.userEmailContactMechList = userEmailContactMechList;
-            partyContactMechs = partyPurposeEmail.getRelatedCache("PartyContactMech");
-            partyContactMechs = EntityUtil.filterByAnd(partyContactMechs, UtilMisc.toMap("contactMechId", contactMech.contactMechId));
-            if (UtilValidate.isNotEmpty(partyContactMechs))
-            {
-            	partyContactMech = EntityUtil.getFirst(partyContactMechs);
-                context.userEmailAllowSolicitation= partyContactMech.allowSolicitation;
-            	
-            }
+            context.userEmailAllowSolicitation= partyPurposeEmail.allowSolicitation;
             
         }
         

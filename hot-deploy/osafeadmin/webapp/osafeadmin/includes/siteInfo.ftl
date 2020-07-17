@@ -21,8 +21,8 @@
    <div id="helperImages">
 		   <a class="standardBtn help" href="${ADM_HELP_URL!}${helperFileName!"index.htm"}" target="_blank" >${uiLabelMap.HelpBtn}</a>
 		   <a class="standardBtn logout" href="<@ofbizUrl>logout</@ofbizUrl>">${uiLabelMap.LogoutBtn}</a>
-           <div class="context"onMouseover="javascript:showContextInfotip(event, this, 'contextInfoBox');" onMouseout="hideContextInfotip(event, this, 'contextInfoBox')">
-               <a class="standardBtn contextIcon" href="javascript:void(0);"></a>
+           <div class="context" onMouseover="javascript:showContextInfotip(event, this, 'contextInfoBox');" onMouseout="hideContextInfotip(event, this, 'contextInfoBox')">
+               <a class="standardBtn contextIcon" href="javascript:void(0);">${uiLabelMap.ContextBtn}</a>
                <div class="contextInfoBox" style="display:none">
                    <#if adminContext?exists>
                        <#if adminContext.CONTEXT_PARTY_ID?has_content>

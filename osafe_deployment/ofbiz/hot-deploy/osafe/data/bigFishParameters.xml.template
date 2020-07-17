@@ -35,7 +35,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MAX_CHAR" description="The maximum number of characters allowed for a review. Zero indicates that a review may have unlimited characters." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AS_GUEST" description="TRUE indicates that the customer does NOT have to be logged in as a registered user. FALSE will force a login or registration" parmCategory="REVIEW"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_ACTIVE_FLAG" description="This defines whether the eCommerce site will support the Ratings and Reviews feature of REEVOO" parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_METHOD" description="Determines if reviews are active and which service is implemented. NONE indicates no reviews. BIGFISH indicates standard BF Reviews. REEVOO indicates the Reevoo service." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_SHOW_ON_PLP" description="Display Reevoo mark on the PLP page true or false" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_JS_URL" description="Request Url for instantiate the REEVOO mark processing" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_BADGE_URL" description="Request Url for showing REEVOO mark badge" parmCategory="REEVOO"/>

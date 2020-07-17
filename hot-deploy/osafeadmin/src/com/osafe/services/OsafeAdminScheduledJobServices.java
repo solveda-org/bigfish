@@ -157,30 +157,36 @@ public class OsafeAdminScheduledJobServices {
         //validation
         //serviceName
         ModelService modelService = null;
-        if (serviceName.length() == 0) {
+        if (serviceName.length() == 0) 
+        {
         	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingServiceNameError", locale));
         }
         else
         {
         	// lookup the service definition to see if this service is externally available, if not require the SERVICE_INVOKE_ANY permission
             
-            try {
+            try 
+            {
                 modelService = dispatcher.getDispatchContext().getModelService(serviceName);
-            } catch (GenericServiceException e) {
+            } catch (GenericServiceException e) 
+            {
 
             }
-            if (modelService == null) {
+            if (modelService == null) 
+            {
                 error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidServiceNameError1", locale));
             }
         }
         
         Map<String, Object> serviceContext = FastMap.newInstance();
      // make the context valid; using the makeValid method from ModelService
-        if (UtilValidate.isNotEmpty(modelService)) {
+        if (UtilValidate.isNotEmpty(modelService)) 
+        {
 	        Iterator<String> ci = modelService.getInParamNames().iterator();
 	        List<String> modelParamRequired = modelService.getParameterNames("IN", false, false);
 
-	        while (ci.hasNext()) {
+	        while (ci.hasNext()) 
+	        {
 	            String name = ci.next();
 	
 	            // don't include userLogin, that's taken care of below
@@ -191,14 +197,18 @@ public class OsafeAdminScheduledJobServices {
 	            Object value = request.getParameter(name);
 	
 	            // if the parameter wasn't passed and no other value found, don't pass on the null
-	            if (value == null) {
+	            if (value == null) 
+	            {
 	                value = request.getAttribute(name);
 	            }
-	            if (value == null) {
+	            if (value == null) 
+	            {
 	                value = request.getSession().getAttribute(name);
 	            }
-	            if (value == null) {
-	            	if(modelParamRequired.contains(name)){	            		
+	            if (value == null) 
+	            {
+	            	if(modelParamRequired.contains(name))
+	            	{	            		
 	            		Map<String, String> errorArgs = FastMap.newInstance();
 	            		errorArgs.put("serviceName", serviceName);
 	            		errorArgs.put("name", name);
@@ -211,18 +221,21 @@ public class OsafeAdminScheduledJobServices {
 	        }
 	        
 	
-	        if (userLogin != null) {
+	        if (userLogin != null) 
+	        {
 	            serviceContext.put("userLogin", userLogin);
 	        }
 	
-	        if (locale != null) {
+	        if (locale != null) 
+	        {
 	            serviceContext.put("locale", locale);
 	        }
         }
 
         
         //jobName
-        if (jobName.length() == 0) {
+        if (jobName.length() == 0) 
+        {
         	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingJobNameError", locale));
         }
  
@@ -230,34 +243,39 @@ public class OsafeAdminScheduledJobServices {
         //check start datetime
         long starterTime = (new Date()).getTime();
         long endingTime = 0;
-        //SERVICE_TIME manipulation (serviceDate + serviceTime + serviceAMPM --> serviceDatetime)
-        String serviceDateTime = getValidJobDate(serviceDate, serviceHour, serviceMinute, serviceAMPMString, prefDateFormat);
-        if (UtilValidate.isNotEmpty(serviceDateTime)) {
-            if (!checkPassedJobDate(serviceDateTime)) {
+        String serviceDateTime = "";
+        
+        
+        //check if input date is before today
+        String serviceDateEOD = getValidJobDate(serviceDate, "11", "59", "2", prefDateFormat);
+        if (UtilValidate.isNotEmpty(serviceDateEOD)) 
+        {
+            if (!checkPassedJobDate(serviceDateEOD)) 
+            {
                 error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
+            }
+            else
+            {
+            	if((OsafeAdminUtil.isNumber(serviceHour)) && (OsafeAdminUtil.isNumber(serviceHour)) && (OsafeAdminUtil.isNumber(serviceHour)))
+            	{
+            		//SERVICE_TIME manipulation (serviceDate + serviceTime + serviceAMPM --> serviceDatetime)
+                    serviceDateTime = getValidJobDate(serviceDate, serviceHour, serviceMinute, serviceAMPMString, prefDateFormat);
+                    if (UtilValidate.isNotEmpty(serviceDateTime)) 
+                    {
+                        if (!checkPassedJobDate(serviceDateTime)) 
+                        {
+                            error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
+                        }
+                    }
+            	}
+            	
             }
         }
         else
         {
         	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "BlankStartDateError", locale));
         }
-        //check end time
-        if (UtilValidate.isNotEmpty(serviceEndTime)) {
-            try {
-                Timestamp ts1 = Timestamp.valueOf(serviceEndTime);
-                endingTime = ts1.getTime();
-            } catch (IllegalArgumentException e) {
-                try {
-                	endingTime = Long.parseLong(serviceDateTime);
-                } catch (NumberFormatException nfe) {
-                	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidEndDateError", locale));
-                }
-            }
-            if (endingTime < (new Date()).getTime()) {
-            	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "EndTimePassedError", locale));
-            }
-        }
-        
+
         if(!OsafeAdminUtil.isNumber(serviceHour))
         {
         	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "HHNotSelectedError", locale));
@@ -276,17 +294,21 @@ public class OsafeAdminScheduledJobServices {
         //check interval
         int intervals = 1;
         boolean validNumInt = true;
-        if (UtilValidate.isNotEmpty(serviceIntr)) {
-            try {
+        if (UtilValidate.isNotEmpty(serviceIntr)) 
+        {
+            try 
+            {
                 intervals = Integer.parseInt(serviceIntr);
-            } catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) 
+            {
             	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidIntervalError", locale));
             	validNumInt = false;
             }
             //check if it is between 1 and 999
             if((!serviceFreq.equals("0")) && (validNumInt==true))
             {
-            	if(intervals < 1 || intervals > 999){
+            	if(intervals < 1 || intervals > 999)
+            	{
             		error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeIntervalError", locale));
             	}
             }
@@ -294,8 +316,10 @@ public class OsafeAdminScheduledJobServices {
         //check freq count
         int counter = 1;
         boolean validNumFreq = true;
-        if (UtilValidate.isNotEmpty(serviceCnt)) {
-            try {
+        if (UtilValidate.isNotEmpty(serviceCnt)) 
+        {
+            try 
+            {
                 counter = Integer.parseInt(serviceCnt);
             } catch (NumberFormatException nfe) {
             	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidFrequencyCountError", locale));
@@ -304,7 +328,8 @@ public class OsafeAdminScheduledJobServices {
           //check if it is between 1 and 999
             if((!serviceFreq.equals("0")) && (validNumFreq == true))
             {
-            	if(counter == -1 || ((counter > 0) && (counter < 1000))){
+            	if(counter == -1 || ((counter > 0) && (counter < 1000)))
+            	{
             		//do nothing
             	}
             	else
@@ -314,7 +339,8 @@ public class OsafeAdminScheduledJobServices {
             }
         }
         
-        if(error_list.size() != 0){//return error
+        if(error_list.size() != 0)
+        {//return error
         	request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
         	return "error";
         }
@@ -346,28 +372,37 @@ public class OsafeAdminScheduledJobServices {
         serviceContext = modelService.makeValid(serviceContext, ModelService.IN_PARAM, true, null, timeZone, locale);
 
         // some conversions
-        if (UtilValidate.isNotEmpty(serviceDateTime)) {
-            try {
+        if (UtilValidate.isNotEmpty(serviceDateTime)) 
+        {
+            try 
+            {
                 Timestamp ts1 = Timestamp.valueOf(serviceDateTime);
                 startTime = ts1.getTime();
-            } catch (IllegalArgumentException e) {
-                try {
+            } catch (IllegalArgumentException e) 
+            {
+                try 
+                {
                     startTime = Long.parseLong(serviceDateTime);
-                } catch (NumberFormatException nfe) {
+                } catch (NumberFormatException nfe) 
+                {
                     String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.invalid_format_time", locale);
                     errorBuf.append("<li>" + errMsg);
                 }
             }
-            if (startTime < (new Date()).getTime()) {
+            if (startTime < (new Date()).getTime()) 
+            {
                 String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.service_time_already_passed", locale);
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (UtilValidate.isNotEmpty(serviceEndTime)) {
-            try {
+        if (UtilValidate.isNotEmpty(serviceEndTime)) 
+        {
+            try 
+            {
                 Timestamp ts1 = Timestamp.valueOf(serviceEndTime);
                 endTime = ts1.getTime();
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException e) 
+            {
                 try {
                     endTime = Long.parseLong(serviceDateTime);
                 } catch (NumberFormatException nfe) {
@@ -375,78 +410,102 @@ public class OsafeAdminScheduledJobServices {
                     errorBuf.append("<li>" + errMsg);
                 }
             }
-            if (endTime < (new Date()).getTime()) {
+            if (endTime < (new Date()).getTime()) 
+            {
                 String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.service_time_already_passed", locale);
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (UtilValidate.isNotEmpty(serviceIntr)) {
-            try {
+        if (UtilValidate.isNotEmpty(serviceIntr)) 
+        {
+            try 
+            {
                 interval = Integer.parseInt(serviceIntr);
-            } catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) 
+            {
                 String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.invalid_format_interval", locale);
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (UtilValidate.isNotEmpty(serviceCnt)) {
+        if (UtilValidate.isNotEmpty(serviceCnt)) 
+        {
             try {
                 count = Integer.parseInt(serviceCnt);
-            } catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) 
+            {
                 String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.invalid_format_count", locale);
                 errorBuf.append("<li>" + errMsg);
             }
         }
-        if (UtilValidate.isNotEmpty(serviceFreq)) {
+        if (UtilValidate.isNotEmpty(serviceFreq)) 
+        {
             int parsedValue = 0;
 
-            try {
+            try 
+            {
                 parsedValue = Integer.parseInt(serviceFreq);
                 if (parsedValue > 0 && parsedValue < 8)
                     frequency = parsedValue;
-            } catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) 
+            {
                 parsedValue = 0;
             }
-            if (parsedValue == 0) {
-                if (!freqMap.containsKey(serviceFreq.toUpperCase())) {
+            if (parsedValue == 0) 
+            {
+                if (!freqMap.containsKey(serviceFreq.toUpperCase())) 
+                {
                     String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.invalid_format_frequency", locale);
                     errorBuf.append("<li>" + errMsg);
-                } else {
+                } else 
+                {
                     frequency = freqMap.get(serviceFreq.toUpperCase()).intValue();
                 }
             }
         }
-        if (UtilValidate.isNotEmpty(retryCnt)) {
+        if (UtilValidate.isNotEmpty(retryCnt)) 
+        {
             int parsedValue = -2;
 
-            try {
+            try 
+            {
                 parsedValue = Integer.parseInt(retryCnt);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException e) 
+            {
                 parsedValue = -2;
             }
-            if (parsedValue > -2) {
+            if (parsedValue > -2) 
+            {
                 maxRetry = parsedValue;
-            } else {
+            } else 
+            {
                 maxRetry = modelService.maxRetry;
             }
-        } else {
+        } 
+        else 
+        {
             maxRetry = modelService.maxRetry;
         }
 
         // return the errors
-        if (errorBuf.length() > 0) {
+        if (errorBuf.length() > 0) 
+        {
             request.setAttribute("_ERROR_MESSAGE_", errorBuf.toString());
             return "error";
         }
 
         Map<String, Object> syncServiceResult = null;
         // schedule service
-        try {
-            if (null!=request.getParameter("_RUN_SYNC_") && request.getParameter("_RUN_SYNC_").equals("Y")) {
+        try 
+        {
+            if (null!=request.getParameter("_RUN_SYNC_") && request.getParameter("_RUN_SYNC_").equals("Y")) 
+            {
                 syncServiceResult = dispatcher.runSync(serviceName, serviceContext);
-            } else {
+            } else 
+            {
                 dispatcher.schedule(jobName, poolName, serviceName, serviceContext, startTime, frequency, interval, count, endTime, maxRetry);
             }
-        } catch (GenericServiceException e) {
+        } catch (GenericServiceException e) 
+        {
             String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.service_dispatcher_exception", locale);
             request.setAttribute("_ERROR_MESSAGE_", "<li>" + errMsg + e.getMessage());
             return "error";
@@ -454,7 +513,8 @@ public class OsafeAdminScheduledJobServices {
 
         String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.service_scheduled", locale);
         request.setAttribute("_EVENT_MESSAGE_", errMsg);
-        if (null!=syncServiceResult) {
+        if (null!=syncServiceResult) 
+        {
             request.getSession().setAttribute("_RUN_SYNC_RESULT_", syncServiceResult);
             return "sync_success";
         }
@@ -472,11 +532,14 @@ public class OsafeAdminScheduledJobServices {
         if(UtilValidate.isNotEmpty(serviceDate) && UtilValidate.isNotEmpty(serviceHour) && UtilValidate.isNotEmpty(serviceMinute) && UtilValidate.isNotEmpty(serviceAMPMString))
         {
 	        Timestamp serviceDateTs = OsafeAdminUtil.toTimestamp(serviceDate, prefDateFormat);
-	        if (UtilValidate.isNotEmpty(serviceDateTs)) {
+	        if (UtilValidate.isNotEmpty(serviceDateTs)) 
+	        {
 	        	int hour = Integer.parseInt(serviceHour);
-		        if (serviceAMPMString.equals("1")) {
+		        if (serviceAMPMString.equals("1")) 
+		        {
 		        	hour = hour%12;
-		        } else if(serviceAMPMString.equals("2")) {
+		        } else if(serviceAMPMString.equals("2")) 
+		        {
 		        	hour = (hour%12)+12;
 		        }
 	        	int minute = Integer.parseInt(serviceMinute);
@@ -498,14 +561,15 @@ public class OsafeAdminScheduledJobServices {
              {
                  Timestamp ts1 = Timestamp.valueOf(date);
                  starterTime = ts1.getTime();
-             } catch (IllegalArgumentException e) 
+             } 
+             catch (IllegalArgumentException e) 
              {
                  try 
                  {
                  	starterTime = Long.parseLong(date);
                  } catch (NumberFormatException nfe) 
                  {
-                     
+                     return false;
                  }
              }
              if (starterTime < (new Date()).getTime()) 
@@ -544,7 +608,8 @@ public class OsafeAdminScheduledJobServices {
              try 
              {
                  intervals = Integer.parseInt(serviceIntr);
-             } catch (NumberFormatException nfe) {
+             } catch (NumberFormatException nfe) 
+             {
              	return false;
              }
          }
@@ -560,7 +625,8 @@ public class OsafeAdminScheduledJobServices {
              try 
              {
                  intervals = Integer.parseInt(serviceIntr);
-             } catch (NumberFormatException nfe) {
+             } catch (NumberFormatException nfe) 
+             {
              	validNumInt = false;
              }
              //check if it is between 1 and 999
@@ -579,16 +645,20 @@ public class OsafeAdminScheduledJobServices {
     {
     	int counter = 1;
         boolean validNumFreq = true;
-        if (UtilValidate.isNotEmpty(serviceCnt)) {
-            try {
+        if (UtilValidate.isNotEmpty(serviceCnt)) 
+        {
+            try 
+            {
                 counter = Integer.parseInt(serviceCnt);
-            } catch (NumberFormatException nfe) {
+            } catch (NumberFormatException nfe) 
+            {
             	validNumFreq = false;
             }
           //check if it is between 1 and 999
             if((!serviceFreq.equals("0")) && (validNumFreq == true))
             {
-            	if(counter == 0 || ((counter > 1) || (counter < 999))){
+            	if(counter == 0 || ((counter > 1) || (counter < 999)))
+            	{
             		//do nothing
             	}
             	else

@@ -883,13 +883,13 @@ under the License.
             <fo:table>
             <fo:table-column column-width=".6in"/>
             <fo:table-column column-width=".7in"/>
-            <fo:table-column column-width=".8in"/>
-            <fo:table-column column-width="1.3in"/>
+            <fo:table-column column-width="1.35in"/>
+            <fo:table-column column-width="1.35in"/>
             <fo:table-column column-width=".7in"/>
-            <fo:table-column column-width=".7in"/>
+            <fo:table-column column-width=".3in"/>
             <fo:table-column column-width=".68in"/>
             <fo:table-column column-width=".68in"/>
-            <fo:table-column column-width=".7in"/>
+            <fo:table-column column-width=".5in"/>
             <fo:table-column column-width=".62in"/>
             <fo:table-header font-size="8pt" font-weight="bold" background-color="#EEEEEE">
                 <fo:table-row >

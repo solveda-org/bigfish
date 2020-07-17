@@ -1,6 +1,6 @@
 <#assign reviewMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"REVIEW_METHOD")!""/>
 <#if reviewMethod?has_content >
-	<#if reviewMethod = "REEVOO" >
+	<#if reviewMethod.toUpperCase() == "REEVOO" >
 	        <#assign reevooBadgeurl = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_BADGE_URL")!""/>
 	        <#assign reevooTrkref = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_TRKREF")!""/>
 	        <#assign reevooSku = "">
@@ -22,7 +22,7 @@
 		        </div>
 	        </div> 
 	</#if>
-	<#if reviewMethod = "BIGFISH" >
+	<#if reviewMethod.toUpperCase() == "BIGFISH" >
 	      <div class="pdpReviewStars">
 	        <div id="productReviewCustomerRating">
 	          <#if averageStarRating?has_content>

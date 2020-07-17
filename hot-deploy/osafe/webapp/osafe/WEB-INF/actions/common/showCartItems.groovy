@@ -89,6 +89,9 @@ if(UtilValidate.isEmpty(shipmentMethodTypeId))
                     partyContactMechPurpose = EntityUtil.orderBy(partyContactMechPurpose,UtilMisc.toList("-fromDate"));
                     
                     partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+                    partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyShippingLocations);
+                    partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
+                    partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
                     if (UtilValidate.isNotEmpty(partyShippingLocations)) 
                     {
                             partyShippingLocation = EntityUtil.getFirst(partyShippingLocations);
@@ -168,21 +171,35 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
 	{
 	    sci = shoppingCart.findCartItem(0);
 		parentProduct = ProductWorker.getParentProduct(sci.getProductId(), delegator);
-        productId = parentProduct.productId;
+		cartItemProduct="";
+		if (UtilValidate.isNotEmpty(parentProduct))
+		{
+	        productId = parentProduct.productId;
+	        cartItemProduct=parentProduct;
+		}
+		else
+		{
+	        productId = sci.getProductId();
+	        cartItemProduct= sci.getProduct();
+		}
     	if (UtilValidate.isNotEmpty(sci.getProductCategoryId())) 
     	{
     		productCategoryId = sci.getProductCategoryId();
     	}
     	else
     	{
-	        productCategoryMemberList = parentProduct.getRelatedCache("ProductCategoryMember");
-            productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
-    	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
-	        if(UtilValidate.isNotEmpty(productCategoryMemberList))
-	        {
-	            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
-	            productCategoryId = productCategoryMember.productCategoryId; 
-	        }    
+    		if (UtilValidate.isNotEmpty(cartItemProduct))
+    		{
+    	        productCategoryMemberList = cartItemProduct.getRelatedCache("ProductCategoryMember");
+                productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
+        	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
+    	        if(UtilValidate.isNotEmpty(productCategoryMemberList))
+    	        {
+    	            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+    	            productCategoryId = productCategoryMember.productCategoryId; 
+    	        }    
+    			
+    		}
     	}
 	}
 	//set url as per productId and product category id

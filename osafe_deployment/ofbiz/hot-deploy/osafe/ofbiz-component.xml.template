@@ -95,7 +95,7 @@
 
     <!-- web applications; will be mounted when using the embedded container -->
     <webapp name="osafe"
-        title="BF Fashion"
+        title="BF Ofbiz"
         server="default-server"
         location="webapp/osafe"
         mount-point="/@localDispatcherName@"/>

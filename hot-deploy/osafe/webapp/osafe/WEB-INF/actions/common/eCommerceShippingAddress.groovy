@@ -2,7 +2,7 @@ package common;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-
+import javolution.util.FastList;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.contact.ContactHelper;
@@ -12,15 +12,43 @@ party = userLogin.getRelatedOneCache("Party");
 partyId = party.partyId;
 context.party = party;
 
-context.shippingContactMechList = ContactHelper.getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
-// This should return the current billing address
-context.billingContactMechList = ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false);
+context.shippingContactMechList = FastList.newInstance();
+context.billingContactMechList = FastList.newInstance();
+if (UtilValidate.isNotEmpty(party))
+{
+	partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
+	partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+
+	// This should return the current billing address
+	partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
+	partyBillingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyBillingLocations);
+	partyBillingLocations = EntityUtil.filterByDate(partyBillingLocations,true);
+	partyBillingLocations = EntityUtil.orderBy(partyBillingLocations, UtilMisc.toList("fromDate DESC"));
+    if (UtilValidate.isNotEmpty(partyBillingLocations)) 
+    {
+        billingContactMechList = EntityUtil.getRelated("ContactMech",partyBillingLocations);
+        context.billingContactMechList = billingContactMechList;
+    }
+	
+    partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+    partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyShippingLocations);
+    partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
+    partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
+    if (UtilValidate.isNotEmpty(partyShippingLocations)) 
+    {
+        shippingContactMechList=EntityUtil.getRelated("ContactMech",partyShippingLocations);
+        context.shippingContactMechList = shippingContactMechList;
+    }
+    
+}
+
 if(UtilValidate.isNotEmpty(context.billingContactMechList))
 {
     billingContactMech = context.billingContactMechList.get(0);
 
     // Moving the billing address to the front of the list
-    if(UtilValidate.isNotEmpty(context.shippingContactMechList)){
+    if(UtilValidate.isNotEmpty(context.shippingContactMechList))
+    {
         context.shippingContactMechList.remove(billingContactMech);
     }
     context.shippingContactMechList.add(0,billingContactMech);

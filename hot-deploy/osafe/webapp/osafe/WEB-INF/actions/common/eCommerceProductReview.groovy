@@ -18,7 +18,7 @@ import org.ofbiz.webapp.stats.VisitHandler;
 import com.osafe.util.Util;
 
 reviewMethod = Util.getProductStoreParm(request, "REVIEW_METHOD");
-if((UtilValidate.isNotEmpty(reviewMethod)) && !(reviewMethod.equals("NONE")))
+if((UtilValidate.isNotEmpty(reviewMethod)) && (reviewMethod.equalsIgnoreCase("BIGFISH")))
 {
 	dispatcher = request.getAttribute("dispatcher");
 	productStoreId = ProductStoreWorker.getProductStoreId(request);

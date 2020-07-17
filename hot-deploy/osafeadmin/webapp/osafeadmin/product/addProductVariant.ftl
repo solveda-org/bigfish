@@ -203,6 +203,7 @@
 
     <#if productSelectableFeatureTypes?has_content>
         <#list productSelectableFeatureTypes as productFeatureGroupView>
+            <#assign productSelectableFeatureList = Static["javolution.util.FastList"].newInstance()/>
             <#assign productFeatureGroupApplList = delegator.findByAnd("ProductFeatureGroupAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureGroupId" , productFeatureGroupView.productFeatureGroupId), Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum"))/>
             <#assign productFeatureGroupAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureGroupApplList!)/>
             <#if productFeatureGroupAppls?has_content>
@@ -218,9 +219,15 @@
                                 <#assign selectedFeture = parameters.get("selectableProductFeature_${productFeatureGroup.productFeatureGroupId}")?if_exists>
                                 <#list productFeatureGroupAppls as productFeatureGroupAppl>
                                     <#assign productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature")/>
+                                    <#-- Prepared the list Product Feature to sort based on Description -->
+                                    <#assign changed = productSelectableFeatureList.add(productFeature)/>
+                                 </#list>
+                                 <#-- Sort the Product Feature List based on Description -->
+                                 <#assign productSelectableFeatureList = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productSelectableFeatureList,Static["org.ofbiz.base.util.UtilMisc"].toList("description"))/>
+                                 <#list productSelectableFeatureList as productFeature>
                                     <#assign productFeatureName = productFeature.description?trim/>
                                     <#assign optionValue = "${productFeature.productFeatureId!}@SELECTABLE_FEATURE">
-                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>><#if productFeatureName?has_content>${productFeatureName?if_exists}<#else>${productFeature.productFeatureId?if_exists}</#if></option>
+                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>><#if productFeatureName?has_content>${productFeatureName?if_exists}<#else>${productFeature.productFeatureId?if_exists}</#if></option>                                     
                                  </#list>
                             </select>
                         </div>
@@ -236,6 +243,7 @@
 
     <#if productDistinguishingFeatureTypes?has_content>
         <#list productDistinguishingFeatureTypes as productFeatureGroupView>
+            <#assign productDescriptiveFeatureList = Static["javolution.util.FastList"].newInstance()/>
             <#assign productFeatureGroupApplList = delegator.findByAnd("ProductFeatureGroupAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureGroupId" , productFeatureGroupView.productFeatureGroupId), Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum"))/>
             <#assign productFeatureGroupAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureGroupApplList!)/>
             <#if productFeatureGroupAppls?has_content>
@@ -251,9 +259,15 @@
                                 <#assign selectedFeture = parameters.get("distinguishProductFeature_${productFeatureGroup.productFeatureGroupId}")?if_exists>
                                 <#list productFeatureGroupAppls as productFeatureGroupAppl>
                                     <#assign productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature")/>
+                                    <#-- Prepared the list Product Feature to sort based on Description -->
+                                    <#assign changed = productDescriptiveFeatureList.add(productFeature)/>
+                                 </#list>
+                                 <#-- Sort the Product Feature List based on Description -->
+                                 <#assign productDescriptiveFeatureList = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productDescriptiveFeatureList,Static["org.ofbiz.base.util.UtilMisc"].toList("description"))/>
+                                 <#list productDescriptiveFeatureList as productFeature>
                                     <#assign productFeatureName = productFeature.description?trim/>
                                     <#assign optionValue = "${productFeature.productFeatureId!}@DISTINGUISHING_FEAT">
-                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>><#if productFeatureName?has_content>${productFeatureName?if_exists}<#else>${productFeature.productFeatureId?if_exists}</#if></option>
+                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>><#if productFeatureName?has_content>${productFeatureName?if_exists}<#else>${productFeature.productFeatureId?if_exists}</#if></option>                                     
                                  </#list>
                             </select>
                         </div>

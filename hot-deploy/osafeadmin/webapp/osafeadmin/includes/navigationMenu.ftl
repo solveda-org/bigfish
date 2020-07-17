@@ -30,22 +30,3 @@
         </#list>
     </ul>
 </#if>
-
-<script>
-var ulTagList = jQuery('.topLevel ul');
-if (ulTagList.length > 0) {
-    ulTagList.each(function() {
-        var aTagList = jQuery(this).find('a');
-        var width = 0;
-        for (var cnt = 0; cnt < jQuery(aTagList).length; cnt++) {
-        var aTagTxtWidth= jQuery(aTagList[cnt]).html().length*10-10;
-            if(width < aTagTxtWidth) {
-                width  = aTagTxtWidth;
-            }
-        }
-        if (width > jQuery(this).width()){
-            jQuery(this).width(width+'px');
-        }
-    });
-}
-</script>

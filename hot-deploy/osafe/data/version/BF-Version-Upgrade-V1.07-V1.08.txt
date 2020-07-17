@@ -1,0 +1,139 @@
+//********************************************************************************************
+//RELEASE ITEMS
+//********************************************************************************************
+
+//********************************************************************************************
+//SQL UPDATES
+//********************************************************************************************
+
+11/28/2012 Issue#27549     
+delete from X_Product_Store_Parm where parm_Key='REEVOO_ACTIVE_FLAG';
+
+//********************************************************************************************
+//BIGFISH PARAMETERS UPDATES
+//FILE: bigFishParameters.xml
+//********************************************************************************************
+
+//Add
+
+11/28/2012 Issue#27549
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_METHOD" description="Determines if reviews are active and which service is implemented. NONE indicates no reviews. BIGFISH indicates standard BF Reviews. REEVOO indicates the Reevoo service." parmCategory="REVIEW"/>
+
+//Remove
+
+11/28/2012 Issue#27549
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_ACTIVE_FLAG" description="This defines whether the eCommerce site will support the Ratings and Reviews feature of REEVOO" parmCategory="REEVOO"/>
+
+//********************************************************************************************
+//LABEL UPDATES
+//FILE: OSafeUiLabels.xml
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+
+
+
+//********************************************************************************************
+//DIV SEQUENCE UPDATES
+//FILE: OSafeUiSequence.xml
+//********************************************************************************************
+
+//Add
+
+
+
+//Remove
+
+
+//********************************************************************************************
+//CLIENT DEPLOYMENT UPDATES
+//FILE: client-deployment.properties
+//********************************************************************************************
+
+//Add
+
+
+//Remove
+
+//Edit
+
+//********************************************************************************************
+//ECOMMERCE SEED UPDATES
+//FILE: eCommerceSeedData.xml
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+
+
+//********************************************************************************************
+//ECOMMERCE CSS UPDATES
+//FILE: bigFishClientSkin.css
+//********************************************************************************************
+
+//Add 
+
+
+
+//Remove
+
+
+//********************************************************************************************
+//OSAFE PROPERTIES UPDATE
+//FILE: osafe.properties.template
+//********************************************************************************************
+
+//Add
+
+//Remove
+ 
+
+//********************************************************************************************
+//EECAS XML TEMPLATE UPDATE
+//FILE: eecas.xml.template
+//********************************************************************************************
+
+
+//********************************************************************************************
+//OFBIZ COMPONENT XML UPDATES
+//FILE: ofbiz-component.xml.template
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//********************************************************************************************
+//CLIENT STORE SEED DATA XML UPDATES
+//FILE: clientStoreSeedData.xml.template
+//********************************************************************************************
+
+//Add
+
+11/28/2012 Issue#27549
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_METHOD" parmValue="BIGFISH" description="Determines if reviews are active and which service is implemented. NONE indicates no reviews. BIGFISH indicates standard BF Reviews. REEVOO indicates the Reevoo service." parmCategory="REVIEW"/>
+
+//Remove
+
+11/28/2012 Issue#27549
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_ACTIVE_FLAG" parmValue="FALSE" description="This defines whether the eCommerce site will support the Ratings and Reviews feature of REEVOO" parmCategory="REEVOO"/>
+
+//********************************************************************************************
+//CACHE PROPERTIES
+//FILE: cache.properties
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//Edit
+
+
+//comment out all services
+

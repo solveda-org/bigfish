@@ -658,6 +658,8 @@
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_CUSTOMER"/>
                 <set field="ExportToPdfAction" value ="AdminCustomer.pdf"/>
                 <set field="ExportToXMLAction" value ="exportCustomerXML"/>
+                <set field="ExportToPdfTooltipText" value ="${uiLabelMap.CustomerListToPDFLabel}"/>
+                <set field="ExportToXmlTooltipText" value ="${uiLabelMap.CustomerListToXMLLabel}"/>
                 <set field="helperFileName" value ="customerManagementHelp.htm"/>
                 <set field="activeTopMenuItem" value="CustomerMgmntNav"/>
                 <set field="activeSubMenuItem" value="CustomerViewNav"/>
@@ -679,6 +681,9 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="searchBoxBody">
                                              <include-screen name="customerManagementSearch"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonSearchButton">
                                              <include-screen name="commonSearchButton" location="component://osafeadmin/widget/CommonScreens.xml"/>

@@ -3,13 +3,6 @@
 
      <!-- DIV for Displaying ORDER COMPLETE info STARTS here -->
         ${screens.render("component://osafe/widget/EcommerceDivScreens.xmlcheckoutOrderCompleteDivSequence")}
-
-checkoutOrderCompleteThankYou
-checkoutOrderCompletePTS
-checkoutOrderCompletePickUpStore
-checkoutOrderCompleteShippingAddress
-checkoutOrderCompletePaymentInfo
-
     <#if showThankYouStatus?exists && showThankYouStatus == "Y">
         <p class="instructions">${OrderCompleteInfoMapped!""}</p>
     </#if>

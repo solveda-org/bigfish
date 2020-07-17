@@ -466,6 +466,10 @@
             // execute action
             form.action="<@ofbizUrl>${execAction!""}</@ofbizUrl>";
             form.submit();
+        }else if (mode == "CEX") {
+            // execute action
+            form.action="<@ofbizUrl>${conditionedExecAction!""}</@ofbizUrl>";
+            form.submit();
         }else if (mode == "EXC") {
             // execute cache action
             form.action="<@ofbizUrl>${execCacheAction!""}</@ofbizUrl>";

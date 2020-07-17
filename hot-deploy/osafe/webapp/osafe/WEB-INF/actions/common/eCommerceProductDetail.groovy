@@ -604,7 +604,7 @@ if (UtilValidate.isNotEmpty(productId))
         reviewMethod = Util.getProductStoreParm(request, "REVIEW_METHOD");
 		if(UtilValidate.isNotEmpty(reviewMethod))
 		{
-			if(reviewMethod.equals("BIGFISH"))
+			if(reviewMethod.equalsIgnoreCase("BIGFISH"))
 	        {
 	            reviews = gvProduct.getRelatedCache("ProductReview");
 	            if (UtilValidate.isNotEmpty(reviews))

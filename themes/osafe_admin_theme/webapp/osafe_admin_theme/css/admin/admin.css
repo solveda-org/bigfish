@@ -593,7 +593,7 @@ border-bottom: none;
 #navigationMenu ul {
     position:        absolute;
     top:            -999em;
-    width:          100%; /* left offset of submenus need to match (see below) */
+    width:          auto; /* left offset of submenus need to match (see below) */
     
 }
 
@@ -619,6 +619,26 @@ border-bottom: none;
     z-index:        99;
     border-top: 1px solid #000;
 }
+
+#navigationMenu li.lastItem ul,
+#navigationMenu li.lastItem ul {
+    left: -99px\9; /* For IE 8 and Below */
+}
+#navigationMenu li.lastItem:hover ul,
+#navigationMenu li.lastItem.sfHover ul {
+    border-top: 1px solid #000000;
+    left: -101px;
+    top: 23px;
+    top: 22px\9; /* For IE 8 and Below */
+    left: -99px\9; /* For IE 8 and Below */
+    z-index: 99;
+}
+
+:root #navigationMenu li.lastItem:hover ul,
+:root #navigationMenu li.lastItem.sfHover ul {
+
+}
+
 ul#navigationMenu li:hover li ul,
 ul#navigationMenu li.sfHover li ul {
     top:            -999em;
@@ -646,9 +666,10 @@ ul#navigationMenu li li li.sfHover ul {
 /* Size and Padding width of each Sub Navbar a Item*/
 
 #navigationMenu .subLevel a {
-    padding:        2px 0px 2px 2px;
+    padding:        2px 5px 2px 5px;
     font-size:      13px !important;
     font-weight: bold;
+    white-space: nowrap;
 }
 
  /* basic Cloring of Navbar Item Text */
@@ -671,7 +692,7 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
 #navigationMenu li li a {
-    margin: 0 0 0 5px;
+ /*   margin: 0 0 0 5px; */
 }
 #navigationMenu li li {
     background: #ecb564; /* Background Color of flyout*/
@@ -1087,12 +1108,12 @@ categoryDetail:after {
 
 .entryButtonRow{
     clear: left;
-    display: inline-block;
     margin: 3px 0 0;
-    padding: 0 0 0 10px;
 }
 
-
+div.searchButton {
+    padding: 0 0 0 0.5em;
+}
 
 /****************************************************************
 * Information Display Box
@@ -1119,6 +1140,13 @@ categoryDetail:after {
     min-height: 22px\9;  /* IE9- */
 }
 
+.infoRow.column .infoEntry {
+    float: left;
+    padding: 3px 0;
+    clear: left;
+    *float: none; /* IE7 only */
+}
+
 .infoRow.column div.infoValue input {
 
 }
@@ -1126,6 +1154,8 @@ categoryDetail:after {
 .infoRow label, .infoRow div.entry, .infoRow div.infoValue{
     float: left;
 }
+
+
 
 .infoRow div.infoCaption {
 float: left;
@@ -2076,7 +2106,7 @@ table.osafe tr.heading th {
 table.osafe tr.footer th {
     color: #A50000;
 /*    background-color: #fff;  */
-    padding: 0.5em 0;
+    padding: 0.5em;
 }
 
 table.osafe tr.footer th td:hover {
@@ -2399,6 +2429,7 @@ td div.infoEntry input[type="text"] {
     clear:both;
     position: relative;
     top:-1px;
+    *width: 100px; /* IE7 Only */
 }
 
 .tooltipTopArrow{
@@ -2409,6 +2440,7 @@ td div.infoEntry input[type="text"] {
     clear:both;
     position: relative;
     top:2px;
+    *width: 100px; /* IE7 Only */
 }
 
 .toolTipImg {
@@ -2764,6 +2796,57 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+.emailIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/emailIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+    position: relative;
+    top: 3px;
+}
+
+.exportToPdfIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/exportToPdfIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.exportToXmlIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/exportToXmlIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.detailIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/detailIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.addNoteIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/addNoteIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.statusUpdateIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/statusUpdateIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+
 /****************************************************************
 * Detail Entry Table
 ****************************************************************/
@@ -2961,6 +3044,7 @@ input[type="button"].standardBtn.productLoaderTab {
 #loginNavigation .displayBox {
     margin: 0!important;
     border: none!important;
+    width: auto;
 
 }
 
@@ -4000,6 +4084,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     right: 15px;
     top: -19px;
     width: 315px;
+    *right: 35px; /* IE7 Only */
 
 }
 
@@ -4010,6 +4095,7 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     width: 315px;
     background-image: url("/osafe_admin_theme/images/classic/tooltip/ToolTipArrowBottom.png");
     background-repeat: no-repeat;
+    *right: -35px; /* IE7 Only */
 }
 
 .actionIcon img.actionIconMenuImage {
@@ -4071,13 +4157,18 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
 }
 
 .context {
-    display: inline-block;
+       display: inline-block;
+       /*float: right;*/
+       *float: none; /*IE7 and below */
+       *display: inline; /*IE7 and below */
 }
 
 a.standardBtn.contextIcon {
     background: url("/osafe_admin_theme/images/classic/icon/contextIcon.gif") no-repeat scroll 0 0 transparent !important;
-    padding: 7px 0 2px 25px !important;
-
+    font-size: 10px;
+    font-weight: normal;
+    padding: 10px 0 2px 25px !important;
+    display: inline-block;
   }
 
 .contextInfoBox{
@@ -4097,12 +4188,13 @@ a.standardBtn.contextIcon {
 }
 
 .contextInfoRow {
-
+    clear: left;
 }
 
 .contextInfoCaption {
-    display: inline-block;
     width: 65px;
+    float: left;
+    margin: 0 2px 0 0;
 }
 
 .contextInfoCaption label {
@@ -4119,7 +4211,7 @@ a.standardBtn.contextIcon {
 }
 
 .contextInfoValue .contextId a {
-    margin: 0 5px!important;
+    margin: 0 5px 0 0 !important;
     color: #a50000!important;
     text-decoration: none!important;
 }
@@ -4155,6 +4247,11 @@ a.standardBtn.contextIcon {
 .nameCol.pendingReview {
     padding: 0 0 0 50px !important;
 }
+
+.generalInfo .infoRow div.infoValue p { /* Used for text with an icon; to flank icon to the right */
+   float: left; 
+}
+
 
 
 

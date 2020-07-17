@@ -30,7 +30,7 @@
   </div>
   
   <div class="entryRow">
-    <div class="entry.medium">
+    <div class="entry long">
       <label>${uiLabelMap.WebSearchCaption}</label>
       <div class="entryInput">
         <input class="xlarge" type="text" id="searchText" name="searchText" maxlength="40" value="${parameters.searchText!""}"/>
@@ -40,7 +40,7 @@
   
   <div class="entryRow">
     <div class="entry">
-    <label>${uiLabelMap.CategoryCaption}</label>
+      <label>${uiLabelMap.CategoryCaption}</label>
       <div class="entryInput select">
         <select id="srchCategoryId" name="srchCategoryId">
           <option value="all" <#if (parameters.srchCategoryId!"") == "all">selected</#if>>All</option>
@@ -61,28 +61,24 @@
             </#if>
           </select>
       </div>
-      </div>
+    </div>
     <div class="entry medium">
-              <label>${uiLabelMap.DatesCaption}</label>
-              <div class="entryInput checkbox medium">
-                 <input class="checkBoxEntry" type="checkbox" id="notYetIntroduced" name="notYetIntroduced" value="Y" <#if parameters.notYetIntroduced?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.IncludeNotYetIntroLabel}
-                 <input class="checkBoxEntry" type="checkbox" id="discontinued" name="discontinued" value="Y" <#if parameters.discontinued?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.IncludeDiscontinuedLabel}
-              </div>
-              </div>
+      <label>${uiLabelMap.DatesCaption}</label>
+      <div class="entryInput checkbox medium">
+         <input class="checkBoxEntry" type="checkbox" id="notYetIntroduced" name="notYetIntroduced" value="Y" <#if parameters.notYetIntroduced?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.IncludeNotYetIntroLabel}
+         <input class="checkBoxEntry" type="checkbox" id="discontinued" name="discontinued" value="Y" <#if parameters.discontinued?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.IncludeDiscontinuedLabel}
+      </div>
+    </div>
   </div>
   <div class="entryRow">
-	      <div class="entry">
-	          <#assign intiCb = "${initializedCB!}"/>
-	          <label>${uiLabelMap.VirtualProductsCaption}</label>
-	          <div class="entryInput checkbox short">
-                 <input class="checkBoxEntry" type="checkbox" id="srchVirtualOnly" name="srchVirtualOnly" value="Y" <#if parameters.srchVirtualOnly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.VirtualOnlyLabel}
-	          </div>
-	     </div>
-	     <div class="entry medium">
-           <label>${uiLabelMap.VariantCaption}</label>
-             <div class="entryInput">
-               <div class="entryValue">N</div>
-             </div>
-         </div>
+   <div class="entry medium">
+      <#assign intiCb = "${initializedCB!}"/>
+      <label>${uiLabelMap.VirtualProductsCaption}</label>
+      <div class="entryInput checkbox short">
+         <input class="checkBoxEntry" type="checkbox" id="srchAll" name="srchall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','srch')" <#if parameters.srchall?has_content>checked</#if>/>${uiLabelMap.AllLabel}
+         <input class="checkBoxEntry" type="checkbox" id="srchVirtualOnly" name="srchVirtualOnly" value="Y" <#if parameters.srchVirtualOnly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.VirtualLabel}
+         <input class="checkBoxEntry" type="checkbox" id="srchFinishedGoodOnly" name="srchFinishedGoodOnly" value="Y" <#if parameters.srchFinishedGoodOnly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.FinishedGoodLabel}
+      </div>
+   </div>
   </div>
 <!-- end searchBox -->

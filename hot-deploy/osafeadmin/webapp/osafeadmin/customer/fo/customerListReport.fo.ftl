@@ -184,32 +184,32 @@ under the License.
       </#if>
       
       <#-- Personal info --> 
-      <#assign title = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","TITLE"))/>
+      <#assign title = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","TITLE"))!""/>
       <#if title?has_content>
           <#assign title = title.attrValue!"" >
       </#if>
 
-      <#assign gender = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","GENDER"))/>
+      <#assign gender = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","GENDER"))!""/>
       <#if gender?has_content>
 			  <#assign gender = gender.attrValue!"" >
 	  </#if>
 	  
-	  <#assign dob_MMDD = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_MMDD"))/>
+	  <#assign dob_MMDD = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_MMDD"))!""/>
 	  <#if dob_MMDD?has_content>
 			  <#assign dob_MMDD = dob_MMDD.attrValue!"" >
 	  </#if>
 	  
-	  <#assign dob_MMDDYYYY = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_MMDDYYYY"))/>
+	  <#assign dob_MMDDYYYY = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_MMDDYYYY"))!""/>
 	  <#if dob_MMDDYYYY?has_content>
 			  <#assign dob_MMDDYYYY = dob_MMDDYYYY.attrValue!"" >
 	  </#if>
 
-      <#assign dob_DDMM = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_DDMM"))/>
+      <#assign dob_DDMM = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_DDMM"))!""/>
       <#if dob_DDMM?has_content>
               <#assign dob_DDMM = dob_DDMM.attrValue!"" >
       </#if>
       
-      <#assign dob_DDMMYYYY = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_DDMMYYYY"))/>
+      <#assign dob_DDMMYYYY = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_DDMMYYYY"))!""/>
       <#if dob_DDMMYYYY?has_content>
               <#assign dob_DDMMYYYY = dob_DDMMYYYY.attrValue!"" >
       </#if>

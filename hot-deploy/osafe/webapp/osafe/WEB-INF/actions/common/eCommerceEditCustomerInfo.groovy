@@ -56,6 +56,9 @@ if (UtilValidate.isNotEmpty(userLogin))
     
     
     partyPurposeEmails = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL"));
+    partyPurposeEmails = EntityUtil.getRelatedCache("PartyContactMech", partyPurposeEmails);
+    partyPurposeEmails = EntityUtil.filterByDate(partyPurposeEmails,true);
+    partyPurposeEmails = EntityUtil.orderBy(partyPurposeEmails, UtilMisc.toList("fromDate DESC"));
     if (UtilValidate.isNotEmpty(partyPurposeEmails)) 
     {
     	partyPurposeEmail = EntityUtil.getFirst(partyPurposeEmails);
@@ -75,6 +78,9 @@ if (UtilValidate.isNotEmpty(userLogin))
     
     
     partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
+    partyBillingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyBillingLocations);
+    partyBillingLocations = EntityUtil.filterByDate(partyBillingLocations,true);
+    partyBillingLocations = EntityUtil.orderBy(partyBillingLocations, UtilMisc.toList("fromDate DESC"));
     if (UtilValidate.isNotEmpty(partyBillingLocations))
     {
         contactMechBilling = EntityUtil.getFirst(partyBillingLocations);

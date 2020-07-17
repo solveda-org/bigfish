@@ -26,27 +26,27 @@
         <category>PDP</category>
         <description>SeeMainImageLabel</description>
     </property>
-    <property key="SelectSavedcardCaption">
+    <property key="SelectSavedCardCaption">
         <value xml:lang="en">Select One:</value>
         <category>CHECK_OUT</category>
-        <description>SelectSavedcardCaption</description>
+        <description>SelectSavedCardCaption</description>
     </property>
-    <property key="UseSavedCardlabel">
+    <property key="UseSavedCardLabel">
         <value xml:lang="en">Choose from a previously saved card:</value>
         <category>CHECK_OUT</category>
-        <description>UseSavedCardlabel</description>
+        <description>UseSavedCardLabel</description>
     </property>
    <property key="PaymentOptionsHeading">
         <value xml:lang="en">Pay Now or Pay in the Store?</value>
         <category>CHECK_OUT</category>
         <description>PaymentMethodCaption</description>
     </property>
-    <property key="PayNowlabel">
+    <property key="PayNowLabel">
         <value xml:lang="en">Pay Now</value>
         <category>CHECKOUT</category>
         <description>Pay Now</description>
     </property>
-    <property key="PayInStorelabel">
+    <property key="PayInStoreLabel">
         <value xml:lang="en">Pay in the Store</value>
         <category>CHECKOUT</category>
         <description>Pay in Store</description>
@@ -141,10 +141,10 @@
         <category>CONTACT_US</category>
         <description>CommentCaption</description>
     </property>
-    <property key="UsernameCaption">
+    <property key="UserNameCaption">
         <value xml:lang="en">User Name:</value>
         <category>CHANGE_PASSWORD</category>
-        <description>UsernameCaption</description>
+        <description>UserNameCaption</description>
     </property>
     <property key="PasswordCaption">
         <value xml:lang="en">Password:</value>
@@ -412,10 +412,10 @@
         <category>RATING_REVIEW</category>
         <description>OverallRatingCaption</description>
     </property>
-    <property key="YourNicknameCaption">
+    <property key="YourNickNameCaption">
         <value xml:lang="en">Your Nickname:</value>
         <category>RATING_REVIEW</category>
-        <description>YourNicknameCaption</description>
+        <description>YourNickNameCaption</description>
     </property>
     <property key="ReadLabel">
         <value xml:lang="en">Read</value>
@@ -718,6 +718,11 @@
         <value xml:lang="en">Shipping and Handling</value>
         <category>ORDER_STATUS</category>
         <description>ShippingAndHandlingLabel</description>
+    </property>
+    <property key="ShippingAddressDefaultNickNameLabel">
+        <value xml:lang="en">Home</value>
+        <category>MY_ACCOUNT</category>
+        <description>ShippingAddressDefaultNickNameLabel</description>
     </property>
     <property key="TaxLabel">
         <value xml:lang="en">Tax</value>
@@ -1976,10 +1981,10 @@
         <category>RATING_REVIEW</category>
         <description>TitleExampleInfo</description>
     </property>
-    <property key="SubmitRatingsThankyouInfo">
+    <property key="SubmitRatingsThankYouInfo">
         <value xml:lang="en">Thank you! You have successfully submitted your review for the product.  Please note that it may take up to 72 hours for your review to appear.</value>
         <category>RATING_REVIEW</category>
-        <description>SubmitRatingsThankyouInfo</description>
+        <description>SubmitRatingsThankYouInfo</description>
     </property>
     <!-- ******* Email Info Messages *************************************** -->
     <property key="SalutationEmailInfo">
@@ -2034,10 +2039,10 @@
         <category>MY_ACCOUNT</category>
         <description>CustomerPersonalInfo</description>
     </property>
-    <property key="CustomerAddressbookInfo">
+    <property key="CustomerAddressBookInfo">
         <value xml:lang="en">Need to add or update an address?  Click the link below:</value>
         <category>MY_ACCOUNT</category>
-        <description>CustomerAddressbookInfo</description>
+        <description>CustomerAddressBookInfo</description>
     </property>
     <property key="CustomerOrderStatusInfo">
         <value xml:lang="en">Need to view current or past orders?  Click the link below:</value>
@@ -2512,10 +2517,10 @@
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>OverallRatingMissingError</description>
     </property>
-    <property key="NicknameMissingError">
+    <property key="NickNameMissingError">
         <value xml:lang="en">You must enter a nickname.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
-        <description>NicknameMissingError</description>
+        <description>NickNameMissingError</description>
     </property>
     <property key="ReviewTitleMissingError">
         <value xml:lang="en">You must enter a review title.</value>

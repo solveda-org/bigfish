@@ -16,15 +16,25 @@
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
                     <else>
-				    	 <call-object-method obj-field="parameters.userLoginId" method-name="toLowerCase" ret-field="parameters.userLoginId"/>
-				    	 <entity-one entity-name="UserLogin" value-field="existingUserLoginId">
-                            <field-map field-name="userLoginId" from-field="parameters.userLoginId"/>
-                        </entity-one>
-                        <if-not-empty field="existingUserLoginId">
-                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIdExistError"/>
-                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                            <else></else>
-                        </if-not-empty>
+                    	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+                                    <field field="parameters.userLoginId"/>
+                        </call-class-method>
+                        <if-compare field="isValidId" operator="equals" value="true">
+                        	<call-object-method obj-field="parameters.userLoginId" method-name="toLowerCase" ret-field="parameters.userLoginId"/>
+					    	<entity-one entity-name="UserLogin" value-field="existingUserLoginId">
+	                            <field-map field-name="userLoginId" from-field="parameters.userLoginId"/>
+	                        </entity-one>
+	                        <if-not-empty field="existingUserLoginId">
+	                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIdExistError"/>
+	                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                            <else></else>
+	                        </if-not-empty>
+                        	<else>
+	                            <set field="errorKey" from-field="parameters.userLoginId"/>
+	                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+	                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            </else>
+                        </if-compare>
                     </else>
                 </if-compare-field>
                 <!-- check if userLoginId contains an @ symbol -->
@@ -241,17 +251,6 @@
 		            <string-to-list string="${tempErrorMessage}" list="error_list"/>
 		        </if-empty>
 		        
-		        
-		        
-		        
-		        
-		        
-		        
-		        
-		        
-		        
-		        
-		        
 		        <if-not-empty field="parameters.DISABLED_DATE">
 			        <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="getValidJobDate" ret-field="ValidDisabledDateTime">
 			            <field field="parameters.DISABLED_DATE"/>
@@ -276,19 +275,7 @@
 				        </else>
 			        </if-empty>
 		        </if-not-empty>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-		  
+		        
 		        <if-not-empty field="parameters.successiveFailedLogins">
 		            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
 		                <field field="parameters.successiveFailedLogins"/>
@@ -447,12 +434,12 @@
         
         <!-- delete all security groups from this user -->
         <set field="secGroupDeleteMap.userLoginId" from-field="parameters.userLoginId" />
-        <find-by-and entity-name="UserLoginSecurityGroup" map="userLoginSecurityGroupMap" list="userLoginSecurityGroupList" use-cache="true"/>
+        <find-by-and entity-name="UserLoginSecurityGroup" map="userLoginSecurityGroupMap" list="userLoginSecurityGroupList"/>
         <call-object-method obj-field="userLoginSecurityGroupList" method-name="size" ret-field="userLoginSecurityGroupListSize"/>
        	<if-compare field="userLoginSecurityGroupListSize" operator="greater" value="0" type="Integer">
        		<iterate entry="secGroup" list="userLoginSecurityGroupList">
        			<set field="secGroupDeleteMap.groupId" from-field="secGroup.groupId" />
-       			<find-by-and entity-name="UserLoginSecurityGroup" map="secGroupDeleteMap" list="secGroupDeleteList" use-cache="true"/>
+       			<find-by-and entity-name="UserLoginSecurityGroup" map="secGroupDeleteMap" list="secGroupDeleteList"/>
        			<call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="secGroupToDeleteValue">
 	               <field field="secGroupDeleteList" type="List"/>
 	            </call-class-method>
@@ -472,26 +459,11 @@
         
         <if-not-empty field="createUserLoginSecurityGroupEntity">
 	    	<set field="editUser" from-field="parameters.userLoginId"/>
-            <property-to-field resource="OSafeAdminUiLabels" property="EditUserSuccess" field="editUserSuccessMessage"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="EditUserSecurityGroupSuccess" field="editUserSuccessMessage"/>
             <string-to-list string="${editUserSuccessMessage}" list="successMessageList"/>
         </if-not-empty>
       
     </simple-method>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     <simple-method method-name="updateSecurityGroupPermission" short-description="Method to update security group permissions">
         <iterate-map key="permissionIdKey" value="permissionIdValue" map="parameters.relatedPermissionId">
@@ -513,12 +485,12 @@
         
         <!-- delete all permissions from this security group -->
         <set field="permissionDeleteMap.groupId" from-field="parameters.groupId" />
-        <find-by-and entity-name="SecurityGroupPermission" map="securityGroupPermissionMap" list="securityGroupPermissionList" use-cache="true"/>
+        <find-by-and entity-name="SecurityGroupPermission" map="securityGroupPermissionMap" list="securityGroupPermissionList"/>
         <call-object-method obj-field="securityGroupPermissionList" method-name="size" ret-field="securityGroupPermissionListSize"/>
        	<if-compare field="securityGroupPermissionListSize" operator="greater" value="0" type="Integer">
        		<iterate entry="perm" list="securityGroupPermissionList">
        			<set field="permissionDeleteMap.permissionId" from-field="perm.permissionId" />
-       			<find-by-and entity-name="SecurityGroupPermission" map="permissionDeleteMap" list="permDeleteList" use-cache="true"/>
+       			<find-by-and entity-name="SecurityGroupPermission" map="permissionDeleteMap" list="permDeleteList"/>
        			<call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="permToDeleteValue">
 	               <field field="permDeleteList" type="List"/>
 	            </call-class-method>
@@ -535,46 +507,13 @@
 	        <set-pk-fields map="securityGroupPermissionMap" value-field="createSecurityGroupPermissionEntity"/>
             <create-value value-field="createSecurityGroupPermissionEntity"/>
         </iterate-map>
+        
+        <if-not-empty field="createSecurityGroupPermissionEntity">
+	    	<set field="editGroup" from-field="parameters.groupId"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="EditSecurityGroupPermissionSuccess" field="editSecurityGroupSuccessMessage"/>
+            <string-to-list string="${editSecurityGroupSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
       
     </simple-method>
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-
-
     
 </simple-methods>

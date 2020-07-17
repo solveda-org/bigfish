@@ -29,7 +29,7 @@
       <div class="pdpLongDescription" id="pdpLongDescription_${key}" style="display:none">
         <div class="displayBox">
           <h3>${uiLabelMap.PDPLongDescriptionHeading}</h3>
-          <p>${key} <@renderContentAsText contentId="${LONG_DESCRIPTION}" ignoreTemplate="true"/></p>
+          <p><@renderContentAsText contentId="${LONG_DESCRIPTION}" ignoreTemplate="true"/></p>
         </div>
       </div>
     </#if>

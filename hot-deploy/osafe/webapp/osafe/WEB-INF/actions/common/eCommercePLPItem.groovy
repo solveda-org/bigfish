@@ -165,20 +165,34 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
  	       averageCustomerRating= averageRating.setScale(1,rounding);
  	       context.put("averageStarPLPRating", averageCustomerRating);
         }
+        else
+        {
+ 	       context.put("averageStarPLPRating", "");
+        	
+        }
+        
+    }
+    else
+    {
+	       context.put("averageStarPLPRating", "");
+    	
     }
 	reviewMethod = Util.getProductStoreParm(request, "REVIEW_METHOD");
+	reviewSize=0;
 	if(UtilValidate.isNotEmpty(reviewMethod))
 	{
-	    if(reviewMethod.equals("BIGFISH"))
+	    if(reviewMethod.equalsIgnoreCase("BIGFISH"))
 	    {
 	        reviews = product.getRelatedCache("ProductReview");
 	        if (UtilValidate.isNotEmpty(reviews))
 	        {
 	            reviews = EntityUtil.filterByAnd(reviews, UtilMisc.toMap("statusId", "PRR_APPROVED", "productStoreId", productStoreId));
-	     	    context.put("reviewPLPSize",reviews.size());
+	            reviewSize=reviews.size();
 	        }
+	        
 	    }
 	}
+    context.put("reviewPLPSize",reviewSize);
     
     // get the no of reviews
     
@@ -229,14 +243,13 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
 		           productSelectableFeatureAndAppl = EntityUtil.filterByDate(productSelectableFeatureAndAppl,true);
                    productSelectableFeatureAndAppl = EntityUtil.filterByAnd(productSelectableFeatureAndAppl, UtilMisc.toMap("productFeatureTypeId",plpFacetGroupVariantSwatch,"productFeatureApplTypeId","SELECTABLE_FEATURE"));
 		           productSelectableFeatureAndAppl = EntityUtil.orderBy(productSelectableFeatureAndAppl,UtilMisc.toList("sequenceNum"));
-		           context.productSelectableFeatureAndAppl = productSelectableFeatureAndAppl;
 		    }
         	
             for(GenericValue pAssoc : productAssoc)
             {
 		      productIdTo = pAssoc.productIdTo;
               isSellableVariant = ProductWorker.isSellable(delegator, productIdTo);
-	          if (isSellableVariant)
+	          if (UtilValidate.isNotEmpty(isSellableVariant))
 		      {
                 assocVariantProduct = pAssoc.getRelatedOneCache("AssocProduct");
                 variantProductFeatureAndAppls = assocVariantProduct.getRelatedCache("ProductFeatureAndAppl");
@@ -359,7 +372,6 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
 	            }
 		      }
             }
-            context.productVariantFeatureList  = productVariantFeatureList;            
         }
     
       if(UtilValidate.isEmpty(productFeatureSelectVariantId) && UtilValidate.isNotEmpty(productSelectableFeatureAndAppl))
@@ -435,6 +447,8 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId))
     }
     
 
+    context.productSelectableFeatureAndAppl = productSelectableFeatureAndAppl;
+    context.productVariantFeatureList  = productVariantFeatureList;            
     context.productFeatureSelectVariantProduct = productFeatureSelectVariantProduct;
     context.productFeatureSelectVariantId = productFeatureSelectVariantId;
     context.productFriendlyUrl = productFriendlyUrl;

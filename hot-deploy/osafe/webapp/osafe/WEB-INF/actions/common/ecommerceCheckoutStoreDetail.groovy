@@ -2,6 +2,8 @@ package common;
 
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.party.contact.ContactMechWorker;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilMisc;
 
 storeId = parameters.storeId;
 if (UtilValidate.isEmpty(storeId)) 
@@ -46,6 +48,9 @@ if (UtilValidate.isNotEmpty(storeId))
         partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
 
         partyGeneralLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
+        partyGeneralLocations = EntityUtil.getRelatedCache("PartyContactMech", partyGeneralLocations);
+        partyGeneralLocations = EntityUtil.filterByDate(partyGeneralLocations,true);
+        partyGeneralLocations = EntityUtil.orderBy(partyGeneralLocations, UtilMisc.toList("fromDate DESC"));
         if (UtilValidate.isNotEmpty(partyGeneralLocations)) 
         {
         	partyGeneralLocation = EntityUtil.getFirst(partyGeneralLocations);
@@ -53,10 +58,13 @@ if (UtilValidate.isNotEmpty(storeId))
         }
 
         partyPrimaryPhones = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_PHONE"));
+        partyPrimaryPhones = EntityUtil.getRelatedCache("PartyContactMech", partyPrimaryPhones);
+        partyPrimaryPhones = EntityUtil.filterByDate(partyPrimaryPhones,true);
+        partyPrimaryPhones = EntityUtil.orderBy(partyPrimaryPhones, UtilMisc.toList("fromDate DESC"));
         if (UtilValidate.isNotEmpty(partyPrimaryPhones)) 
         {
         	partyPrimaryPhone = EntityUtil.getFirst(partyPrimaryPhones);
-        	context.storePhone = partyPrimaryPhones.getRelatedOneCache("TelecomNumber");
+        	context.storePhone = partyPrimaryPhone.getRelatedOneCache("TelecomNumber");
         }
     }
 }

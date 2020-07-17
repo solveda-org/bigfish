@@ -1,6 +1,6 @@
 <#assign reviewMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"REVIEW_METHOD")!""/>
 <#if reviewMethod?has_content >
-	<#if (reviewMethod != "NONE") && (reviewMethod != "")>
+	<#if (reviewMethod.toUpperCase() == "BIGFISH")>
 		<div class="plpReviewWrite">
 			   <div class="customerRatingLinks">
 			      <#if reviewPLPSize?has_content && (reviewPLPSize > 0)>

@@ -99,7 +99,7 @@ if (retrieveProductStoreData && UtilValidate.isNotEmpty(productStore))
 	 {
 		 globalContext.webSite = webSite;
 		 globalContext.webSiteId =webSite.webSiteId;
-	     session.setAttribute("selectedWebsite",store);
+	     session.setAttribute("selectedWebsite",webSite);
 		 
 	 }
 	

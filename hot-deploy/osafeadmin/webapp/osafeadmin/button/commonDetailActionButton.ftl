@@ -38,7 +38,7 @@
     	<#assign showButton = true>
     </#if>
     <#if conditionedExecAction?exists && conditionedExecAction?has_content && (showButton=true)>
-        <a href="<#if !execInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'EX');<#else><@ofbizUrl>${conditionedExecAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execInNewTab?has_content>target="_${execInNewTab!}"</#if>>${conditionedExecActionBtn!"${uiLabelMap.execActionBtn}"}</a>
+        <a href="<#if !execInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'CEX');<#else><@ofbizUrl>${conditionedExecAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execInNewTab?has_content>target="_${execInNewTab!}"</#if>>${conditionedExecActionBtn!"${uiLabelMap.execActionBtn}"}</a>
     </#if>
     <!-- end of conditioned exec button-->
     <#if execCacheAction?exists && execCacheAction?has_content>
