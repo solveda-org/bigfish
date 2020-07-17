@@ -65,7 +65,6 @@
        <#assign plpFacetGroupVariantSwatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG")!""/>
        <#assign plpFacetGroupVariantSticky =  Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_PDP_MATCH")!""/>
        <#assign facetGroupMatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH")!""/>
-       
        ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_SWATCH",plpFacetGroupVariantSwatch)}
        <#if plpFacetGroupVariantSwatch?has_content>
           <#assign plpFacetGroupVariantSwatch=plpFacetGroupVariantSwatch.toUpperCase()/>
@@ -85,22 +84,11 @@
            ${setRequestAttribute("FACET_GROUP_VARIANT_MATCH",facetGroupMatch)}
        </#if>
        
-       <#if facetGroups?has_content && facetGroupMatch?has_content>
-          <#list facetGroups as facet>
-            <#if facetGroupMatch == facet.facet>
-                <#assign featureValueSelected=facet.facetValue!""/>
-                 ${setRequestAttribute("featureValueSelected",featureValueSelected)}
-                 <#break>
-            </#if>
-          </#list>
-       </#if>
-       
        <#if searchTextGroups?has_content && facetGroupMatch?has_content>
           <#list searchTextGroups as facet>
             <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                 ${setRequestAttribute("featureValueSelected",featureValueSelected)}
-                 <#break>
             </#if>
           </#list>
        </#if>
@@ -124,6 +112,15 @@
           ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpPagingControlsBottom")}
         </#if>
 </div>
+<!-- The section is displayed when there are no products for a particular filter. -->
+<#if (facetGroups?has_content && (facetGroups.size() gt 0) && !(documentList?has_content))>
+    <div class="facetNavNoResultMsg">
+      ${uiLabelMap.FacetNavNoResultsInfo}
+    </div>
+    <div class="facetNavNoResultSuggestionMsg">
+      ${uiLabelMap.FacetNavNoResultsSuggestionInfo} 
+    </div>
+</#if>
 <#if pageEndContentId?has_content>
 	<div id="eCommercePlpEspot_${categoryId}" class="plpEspot endContent">
 	  <@renderContentAsText contentId="${pageEndContentId}" ignoreTemplate="true"/>

@@ -12,6 +12,7 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import com.osafe.util.Util;
+import org.ofbiz.common.geo.GeoWorker;
 
 cart = session.getAttribute("shoppingCart");
 productStore = ProductStoreWorker.getProductStore(request);
@@ -21,24 +22,12 @@ context.userLogin = userLogin;
 context.productStoreId = productStore.productStoreId;
 context.productStore = productStore;
 
+
 if (UtilValidate.isNotEmpty(cart)) 
 {
 	if (UtilValidate.isNotEmpty(userLogin)) 
 	{
 	    party = userLogin.getRelatedOneCache("Party");
-	}
-
-	requestParams = UtilHttp.getParameterMap(request);
-	dummyContactMech = null;
-	dummyPostalAddress = null;
-	poatalCode = requestParams.get("postalCode") ?: request.getAttribute("postalCode");
-	if (UtilValidate.isNotEmpty(poatalCode)) 
-	{
-	    dummyContactMech = delegator.makeValue("ContactMech", [contactMechId:"dummyContactMechId", contactMechTypeId:"POSTAL_ADDRESS"]);
-	    dummyPostalAddress = delegator.makeValue("PostalAddress", [contactMechId : "dummyContactMechId", postalCode : poatalCode]);
-	    delegator.create(dummyContactMech);
-	    delegator.create(dummyPostalAddress);
-	    cart.setShippingContactMechId("dummyContactMechId");
 	}
 
 	shippingEstWpr = new ShippingEstimateWrapper(dispatcher, cart, 0);
@@ -87,6 +76,32 @@ if (UtilValidate.isNotEmpty(cart))
 	    }
 	}
 
+	//CHECK IF SHIPPING ADDRESS IS A PO BOX
+    gvCartShippingAddress = cart.getShippingAddress();
+	if (UtilValidate.isNotEmpty(gvCartShippingAddress))
+	{
+		if(UtilValidate.isNotEmpty(carrierShipmentMethodList))
+		{
+			// clone the list for concurrent modification
+	        returnShippingMethods = UtilMisc.makeListWritable(carrierShipmentMethodList);
+	        for (GenericValue method: carrierShipmentMethodList)
+			{
+	        	psShipmentMeth = delegator.findByPrimaryKeyCache("ProductStoreShipmentMeth", [productStoreShipMethId : method.productStoreShipMethId]);
+				allowPoBoxAddr = psShipmentMeth.getString("allowPoBoxAddr");
+				isPoBoxAddr = false;
+				if (!UtilValidate.isNotPoBox(gvCartShippingAddress.get("address1")) || !UtilValidate.isNotPoBox(gvCartShippingAddress.get("address2")) || !UtilValidate.isNotPoBox(gvCartShippingAddress.get("address3")) )
+				{
+					isPoBoxAddr = true;
+				}
+				if (UtilValidate.isNotEmpty(allowPoBoxAddr) && "N".equals(allowPoBoxAddr) && isPoBoxAddr) {
+	                returnShippingMethods.remove(method);
+	                continue;
+	            }
+			}
+	        carrierShipmentMethodList = returnShippingMethods;
+		}
+	}
+	
 	if (UtilValidate.isNotEmpty(carrierShipmentMethodList))
 	{
 	    context.carrierShipmentMethodList = carrierShipmentMethodList;
@@ -95,12 +110,6 @@ if (UtilValidate.isNotEmpty(cart))
 	if (cart.getShipmentMethodTypeId() && cart.getCarrierPartyId()) 
 	{
 	    context.chosenShippingMethod = cart.getShipmentMethodTypeId() + '@' + cart.getCarrierPartyId();
-	}
-	if (UtilValidate.isNotEmpty(dummyContactMech) && UtilValidate.isNotEmpty(dummyPostalAddress)) 
-	{
-	    cart.setShippingContactMechId("");
-	    delegator.removeValue(dummyPostalAddress);
-	    delegator.removeValue(dummyContactMech);
 	}
 }
 

@@ -3,7 +3,7 @@
   <#if pdpPriceMap?has_content>
 	  <#if (pdpPriceMap.listPrice?has_content) && (pdpPriceMap.price?has_content) && (pdpPriceMap.listPrice gt pdpPriceMap.price)>
 	    <label>${uiLabelMap.ListPriceCaption}</label>
-	    <span class="price"><@ofbizCurrency amount=pdpPriceMap.listPrice isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed! /></span>
+	    <span class="price"><@ofbizCurrency amount=pdpPriceMap.listPrice isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed! rounding=globalContext.currencyRounding/></span>
 	  </#if>
   </#if>
 </div>
@@ -15,7 +15,7 @@
       <#if (productPrice.listPrice?has_content) && (productPrice.basePrice?has_content) && (productPrice.listPrice gt productPrice.basePrice)>
         <div class="pdpPriceList" id="pdpPriceList_${key}" style="display:none">
           <label>${uiLabelMap.ListPriceCaption}</label>
-          <span class="price"><@ofbizCurrency amount=productPrice.listPrice isoCode=CURRENCY_UOM_DEFAULT!productPrice.currencyUsed /></span>
+          <span class="price"><@ofbizCurrency amount=productPrice.listPrice isoCode=CURRENCY_UOM_DEFAULT!productPrice.currencyUsed rounding=globalContext.currencyRounding/></span>
         </div>
       </#if>
     </#if>

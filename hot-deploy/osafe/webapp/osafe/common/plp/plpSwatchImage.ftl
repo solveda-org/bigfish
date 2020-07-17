@@ -61,18 +61,22 @@
           </#if>
         </#if>
         <div class="swatchVariant" style="display:none">
-          <a class="pdpUrl" title="${plpProductName}" href="${plpProductFriendlyUrl}">
-            <img alt="${plpProductName}" title="${plpProductName}" src="${productVariantSmallURL!}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productVariantSmallAltURL?string?has_content>onmouseover="src='${productVariantSmallAltURL}'"</#if> onmouseout="src='${productVariantSmallURL}'" onerror="onImgError(this, 'PLP-Thumb');"/>
+          <a class="pdpUrl" title="${plpProductName!}" href="${plpProductFriendlyUrl}">
+            <img alt="${plpProductName!}" title="${plpProductName!}" src="${productVariantSmallURL!}" class="productThumbnailImage" <#if thumbImageHeight?has_content> height="${thumbImageHeight!""}"</#if> <#if thumbImageWidth?has_content> width="${thumbImageWidth!""}"</#if> <#if productVariantSmallAltURL?string?has_content>onmouseover="src='${productVariantSmallAltURL}'"</#if> onmouseout="src='${productVariantSmallURL}'" onerror="onImgError(this, 'PLP-Thumb');"/>
           </a>
         </div>
 
+
         <div class="swatchVariantOnlinePrice" style="display:none">
-          <p class="price">${uiLabelMap.PlpPriceLabel} <@ofbizCurrency amount=variantOnlinePrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+          <label>${uiLabelMap.PlpPriceLabel}</label>
+          <span class="price"><@ofbizCurrency amount=variantOnlinePrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" rounding=globalContext.currencyRounding/></span>
         </div>
-        
+     
+  
         <div class="swatchVariantListPrice" style="display:none">
           <#if variantListPrice?has_content && variantListPrice gt variantOnlinePrice>
-            <p class="price">${uiLabelMap.PlpListPriceLabel} <@ofbizCurrency amount=variantListPrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+            <label>${uiLabelMap.PlpListPriceLabel}</label> 
+            <span class="price"><@ofbizCurrency amount=variantListPrice isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" rounding=globalContext.currencyRounding/></span>
           </#if>
         </div>
         
@@ -81,7 +85,8 @@
           <#if variantListPrice?has_content && variantOnlinePrice?has_content>
             <#assign youSaveMoney = (variantListPrice - variantOnlinePrice)/>
             <#if (youSaveMoney?has_content) && (youSaveMoney gt showSavingMoneyAbove?number)>  
-              <p class="price">${uiLabelMap.YouSaveCaption}<@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+              <label>${uiLabelMap.YouSaveCaption}</label>
+              <span class="price"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" rounding=globalContext.currencyRounding/></span>
             </#if>
           </#if>
         </div>
@@ -92,7 +97,8 @@
             <#assign showSavingPercentAbove = (showSavingPercentAbove?number)/100.0 />
             <#assign youSavePercent = ((variantListPrice - variantOnlinePrice)/variantListPrice) />
             <#if youSavePercent gt showSavingPercentAbove?number>  
-              <p class="price">${uiLabelMap.YouSaveCaption}${youSavePercent?string("#0%")}</p>
+              <label>${uiLabelMap.YouSaveCaption}</label>
+              <span class="price">${youSavePercent?string("#0%")}</span>
             </#if>
           </#if>
         </div>

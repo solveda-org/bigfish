@@ -51,7 +51,7 @@
                         </then>
                     </else-if>
                     <else>
-                        <set field="newItemStatusId" value="parameters.statusId"/>
+                        <set field="newItemStatusId" from-field="parameters.statusId"/>
                     </else>
                 </if>
                 <if-compare field="parameters.changeStatusAll" operator="equals" value="Y" type="String">
@@ -70,27 +70,29 @@
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
                         </if-empty>
                     </iterate>
-                    <!--  validate the order item input status -->
-                    <else>
+                <!--  validate the order item input status -->
+                <else>
                         <if-empty field="parameters.orderItemSeqIds">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderItemSelectionError"/>
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
                         </if-empty>
-                        <iterate-map key="orderItemSeqIdKey" value="orderItemSeqId" map="parameters.orderItemSeqIds">
-                            <set field="orderItemMap.orderId" from-field="parameters.orderId" />
-                            <set field="orderItemMap.orderItemSeqId" from-field="orderItemSeqId" />
-                            <find-by-primary-key entity-name="OrderItem" map="orderItemMap" value-field="orderItem"/>
-                            <set field="statusChangeMap.statusId" from-field="orderItem.statusId" />
-                            <set field="statusChangeMap.statusIdTo" from-field="newItemStatusId" />
-                            <find-by-primary-key entity-name="StatusValidChange" map="statusChangeMap" value-field="statusValidChange"/>
-                            <if-empty field="statusValidChange">
-                                <clear-field field="argListNames"/>
-                                <set field="argListNames[]" from-field="orderItem.productId"/>
-                                <property-to-field resource="OSafeAdminUiLabels" property="ValidStatusItemError" field="tempErrorMessage" arg-list-name="argListNames"/>
-                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                            </if-empty>
-                        </iterate-map>
-                    </else>
+                        <if-compare operator="not-equals" value="PRODUCT_RETURN" field="newItemStatusId">
+                            <iterate-map key="orderItemSeqIdKey" value="orderItemSeqId" map="parameters.orderItemSeqIds">
+	                            <set field="orderItemMap.orderId" from-field="parameters.orderId" />
+	                            <set field="orderItemMap.orderItemSeqId" from-field="orderItemSeqId" />
+	                            <find-by-primary-key entity-name="OrderItem" map="orderItemMap" value-field="orderItem"/>
+	                            <set field="statusChangeMap.statusId" from-field="orderItem.statusId" />
+	                            <set field="statusChangeMap.statusIdTo" from-field="newItemStatusId" />
+	                            <find-by-primary-key entity-name="StatusValidChange" map="statusChangeMap" value-field="statusValidChange"/>
+	                            <if-empty field="statusValidChange">
+	                                <clear-field field="argListNames"/>
+	                                <set field="argListNames[]" from-field="orderItem.productId"/>
+	                                <property-to-field resource="OSafeAdminUiLabels" property="ValidStatusItemError" field="tempErrorMessage" arg-list-name="argListNames"/>
+	                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                            </if-empty>
+                            </iterate-map>
+                        </if-compare>
+                </else>
                 </if-compare>
             </else>
         </if-empty>
@@ -216,12 +218,17 @@
                    <set field="orderItemShipGroupMap.orderId" from-field="orderItemShipGroupAssoc.orderId" />
                    <set field="orderItemShipGroupMap.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
                    <find-by-primary-key entity-name="OrderItemShipGroup" map="orderItemShipGroupMap" value-field="orderItemShipGroup"/>
+
+                   <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="shipmentEstimatedShipDate">
+                       <field field="orderItemShipGroup.estimatedShipDate" type="Timestamp"/>
+                       <field field="parameters.preferredDateFormat" type="String"/>
+                   </call-class-method>
                    <!--  check existing shipment is same or not -->
-                   <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}@${orderItemShipGroup.trackingNumber}"/>
+                   <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}@${orderItemShipGroup.trackingNumber}@${shipmentEstimatedShipDate}"/>
                    <if>
                        <condition>
                            <and>
-                               <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}@${parameters.trackingNumber}" type="String"/>
+                               <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}@${parameters.trackingNumber}@${parameters.estimatedShipDate}" type="String"/>
                            </and>
                        </condition>
                        <then>
@@ -324,8 +331,8 @@
                     </call-class-method>
                 </iterate>
             </if-compare>
-            <!--  update the order item status -->
-            <else>
+        <!--  update the order item status -->
+        <else>
                 <iterate-map key="orderItemSeqIdKey" value="orderItemSeqId" map="parameters.orderItemSeqIds">
                     <set field="orderItemMap.orderId" from-field="parameters.orderId" />
                     <set field="orderItemMap.orderItemSeqId" from-field="orderItemSeqId" />
@@ -414,15 +421,21 @@
                            <set field="orderItemShipGroupMap.orderId" from-field="orderItemShipGroupAssoc.orderId" />
                            <set field="orderItemShipGroupMap.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
                            <find-by-primary-key entity-name="OrderItemShipGroup" map="orderItemShipGroupMap" value-field="orderItemShipGroup"/>
-                           <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}@${orderItemShipGroup.trackingNumber}"/>
-                           <if>
-                               <condition>
-                                   <and>
-                                       <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}@${parameters.trackingNumber}" type="String"/>
-                                   </and>
-                               </condition>
-                               <then>
-                               		<set-service-fields map="parameters" to-map="updateOrderItemShipGroupContext" service-name="updateOrderItemShipGroup"/>
+
+		                   <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="shipmentEstimatedShipDate">
+		                       <field field="orderItemShipGroup.estimatedShipDate" type="Timestamp"/>
+		                       <field field="parameters.preferredDateFormat" type="String"/>
+		                   </call-class-method>
+		                   <!--  check existing shipment is same or not -->
+		                   <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}@${orderItemShipGroup.trackingNumber}@${shipmentEstimatedShipDate}"/>
+		                   <if>
+		                       <condition>
+		                           <and>
+		                               <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}@${parameters.trackingNumber}@${parameters.estimatedShipDate}" type="String"/>
+		                           </and>
+		                       </condition>
+		                       <then>
+                               	   <set-service-fields map="parameters" to-map="updateOrderItemShipGroupContext" service-name="updateOrderItemShipGroup"/>
                                    <set field="updateOrderItemShipGroupContext.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
                                    <call-service service-name="updateOrderItemShipGroup" in-map-name="updateOrderItemShipGroupContext"/>
 
@@ -497,14 +510,74 @@
                             <field field="orderAttribute.attrValue"/>
                         </call-class-method>
                     </if-compare>
+                    
                     <!-- update order item status-->
                     <if-not-empty field="newItemStatusId">
-                        <set field="changeOrderItemStatusMap.statusId" from-field="newItemStatusId"/>
-                        <set field="changeOrderItemStatusMap.orderId" from-field="parameters.orderId"/>
-                        <set field="changeOrderItemStatusMap.orderItemSeqId" from-field="orderItemSeqId"/>
-                        <call-service service-name="changeOrderItemStatus" in-map-name="changeOrderItemStatusMap"/>
+                        <if-compare operator="not-equals" value="PRODUCT_RETURN" field="newItemStatusId">
+                            <set field="changeOrderItemStatusMap.statusId" from-field="newItemStatusId"/>
+                            <set field="changeOrderItemStatusMap.orderId" from-field="parameters.orderId"/>
+                            <set field="changeOrderItemStatusMap.orderItemSeqId" from-field="orderItemSeqId"/>
+                            <call-service service-name="changeOrderItemStatus" in-map-name="changeOrderItemStatusMap"/>
+                        </if-compare>
                     </if-not-empty>
+                    
+                    
+                    <if-compare operator="equals" value="PRODUCT_RETURN" field="newItemStatusId">
+                        <set field="returnReasonIdMap" from-field="parameters.returnReasonId" />
+                        <set field="returnQuantityMap" from-field="parameters.returnQuantity" />
+                        <set field="returnPriceMap" from-field="parameters.returnPrice" />
+                        
+                        <set-service-fields service-name="createReturnAndItemOrAdjustment" map="parameters" to-map="createReturnAndItemOrAdjustmentCtx"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.returnReasonId" from-field="returnReasonIdMap.${orderItemSeqIdKey}"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.returnTypeId" value="RTN_REFUND"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.statusId" value="RETURN_REQUESTED"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.productId" from-field="orderItem.productId"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.description" from-field="orderItem.itemDescription"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.returnItemTypeId" value="RET_FPROD_ITEM"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.orderItemSeqId" from-field="orderItemSeqId"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.expectedItemStatus" value="INV_RETURNED"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.returnQuantity" from-field="returnQuantityMap.${orderItemSeqIdKey}" type="BigDecimal"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.receivedQuantity" from-field="returnQuantityMap.${orderItemSeqIdKey}" type="BigDecimal"/>
+                        <set field="createReturnAndItemOrAdjustmentCtx.returnPrice" from-field="returnPriceMap.${orderItemSeqIdKey}" type="BigDecimal"/>
+                        <call-service service-name="createReturnAndItemOrAdjustment" in-map-name="createReturnAndItemOrAdjustmentCtx">
+                            <result-to-field result-name="returnId" field="returnId"/>
+                        </call-service>
+                        
+                        <set field="parameters.returnId" from-field="returnId"/>
+                        
+                    </if-compare>
                 </iterate-map>
+                <if-not-empty field="parameters.returnId">
+                    
+                    <if-not-empty field="parameters.amount">
+                        <set-service-fields service-name="createReturnAndItemOrAdjustment" map="parameters" to-map="createReturnAdjustmentCtx"/>
+                        <set field="createReturnAdjustmentCtx.returnAdjustmentTypeId" from-field="parameters.returnAdjustmentTypeId"/>
+                        <set field="createReturnAdjustmentCtx.returnId" from-field="parameters.returnId"/>
+                        <set field="createReturnAdjustmentCtx.description" from-field="parameters.description"/>
+                        <set field="createReturnAdjustmentCtx.returnTypeId" value="RTN_REFUND"/>
+                        <set field="createReturnAdjustmentCtx.amount" from-field="parameters.amount" type="BigDecimal"/>
+                        
+                        <call-service service-name="createReturnAndItemOrAdjustment" in-map-name="createReturnAdjustmentCtx">
+                            <result-to-field result-name="returnId" field="returnId"/>
+                            <result-to-field result-name="returnAdjustmentId" field="parameters.returnAdjustmentId"/>
+                        </call-service>
+                    </if-not-empty>
+                
+	                <if-compare operator="equals" value="PRODUCT_RETURN" field="newItemStatusId">
+	                    <set field="updateReturnHeaderCtx.statusId" value="RETURN_ACCEPTED"/>
+	                    <set field="updateReturnHeaderCtx.returnId" from-field="parameters.returnId"/>
+	                    <call-service service-name="updateReturnHeader" in-map-name="updateReturnHeaderCtx"/>
+	                        
+	                    <set field="updateReturnHeaderCtx.statusId" value="RETURN_RECEIVED"/>
+	                    <call-service service-name="updateReturnHeader" in-map-name="updateReturnHeaderCtx"/>
+	                        
+	                    <set field="updateReturnHeaderCtx.statusId" value="RETURN_COMPLETED"/>
+	                    <call-service service-name="updateReturnHeader" in-map-name="updateReturnHeaderCtx"/>  
+	                </if-compare>
+	                
+                </if-not-empty>
+                
+                   
                 <!-- update order status as ORDER_APPROVED if any order item have approved status-->
                 <set field="orderHeaderMap.orderId" from-field="parameters.orderId" />
                 <find-by-primary-key entity-name="OrderHeader" map="orderHeaderMap" value-field="orderHeader" use-cache="false"/>
@@ -528,6 +601,72 @@
                 </if-compare>
             </else>
         </if-compare>
+
+       <!-- now go through each order item and call a service to issue and ship the item -->
+       <entity-and entity-name="OrderItem" list="orderItemList">
+           <field-map field-name="orderId" from-field="parameters.orderId"/>
+           <order-by field-name="+orderItemSeqId"/>
+       </entity-and>
+       <iterate list="orderItemList" entry="orderItem">
+            <entity-and list="itemIssuances" entity-name="ItemIssuance">
+                <field-map field-name="orderId" from-field="orderItem.orderId"/>
+                <field-map field-name="orderItemSeqId" from-field="orderItem.orderItemSeqId"/>
+                <order-by field-name="-issuedDateTime"/>
+            </entity-and>
+           <if-empty field="itemIssuances">
+               <if-compare field="orderItem.statusId" operator="equals" value="ITEM_COMPLETED" type="String">
+		       <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="inventoryMethod">
+		           <field field="parameters.productStoreId" type="String"/>
+		           <string value="INVENTORY_METHOD"/>
+		       </call-class-method>
+		       <if-not-empty field="inventoryMethod">
+		           <call-object-method method-name="toUpperCase" obj-field="inventoryMethod" ret-field="inventoryMethodInUpCase"/>
+		           <if>
+		              <condition>
+		                  <or>
+		                      <if-compare operator="equals" field="inventoryMethodInUpCase" type="String" value="BIGFISH"/>
+                              <if-compare operator="equals" field="inventoryMethodInUpCase" type="String" value="NONE"/>
+		                  </or>
+		              </condition>
+		              <then>
+                          <call-simple-method method-name="quickShipOrderItem"/>
+		              </then>
+		              <else>
+		                  <call-class-method method-name="determineSingleFacilityFromOrder" class-name="org.ofbiz.order.order.OrderServices" ret-field="facilityId">
+		                      <field field="orderHeader" type="org.ofbiz.entity.GenericValue"/>
+		                  </call-class-method>
+                          <set field="inventoryItemFindContext.facilityId" from-field="facilityId"/>
+                          <set field="inventoryItemFindContext.productId" from-field="orderItem.productId"/>
+                          <find-by-and entity-name="InventoryItem" map="inventoryItemFindContext" list="inventoryItems"/>
+                          <if-not-empty field="inventoryItems">
+                              <first-from-list entry="inventoryItem" list="inventoryItems"/>
+				              <entity-and entity-name="OrderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+				                  <field-map field-name="orderId" from-field="orderItem.orderId"/>
+				                  <field-map field-name="orderItemSeqId" from-field="orderItem.orderItemSeqId"/>
+				                  <order-by field-name="+shipGroupSeqId"/>
+				              </entity-and>
+				              <first-from-list entry="orderItemShipGroupAssoc" list="orderItemShipGroupAssocList"/>
+				              <get-related-one relation-name="OrderItemShipGroup" to-value-field="orderItemShipGroup" value-field="orderItemShipGroupAssoc"/>
+                              <set field="itemShip.orderItemSeqId" from-field="orderItem.orderItemSeqId" />
+                              <set field="itemShip.inventoryItemId" from-field="inventoryItem.inventoryItemId" />
+                              <set field="itemShip.qtyShipped" from-field="orderItem.quantity" />
+                              <set field="itemShip.trackingNum" from-field="orderItemShipGroup.trackingNumber" />
+                              <clear-field field="shipList"/>
+                              <call-class-method method-name="toList" class-name="org.ofbiz.base.util.UtilMisc" ret-field="shipList">
+                                  <field field="itemShip" type="Object"/>
+                              </call-class-method>
+					          <clear-field field="quickShipOrderByItemContext"/>
+					          <set field="quickShipOrderByItemContext.itemShipList" from-field="shipList"/>
+                              <set field="quickShipOrderByItemContext.orderId" from-field="orderItem.orderId"/>
+                              <set field="quickShipOrderByItemContext.shipGroupSeqId" from-field="orderItemShipGroup.shipGroupSeqId"/>
+					          <call-service service-name="quickShipOrderByItem" in-map-name="quickShipOrderByItemContext"/>
+                          </if-not-empty>
+		              </else>
+		           </if>
+		       </if-not-empty>
+		       </if-compare>
+           </if-empty>
+       </iterate>
 
         <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
             <field field="enteredNote" type="String"/>
@@ -626,6 +765,110 @@
                 <call-service-asynch service-name="sendOrderChangeNotification" in-map-name="sendOrderChangeNotificationCtx"/>
             </then>
         </if>
+        
+        <if-not-empty field="newItemStatusId">
+            <if-compare operator="equals" value="ITEM_CANCELLED" field="newItemStatusId">
+                <entity-and list="orderPaymentPreferenceList" entity-name="OrderPaymentPreference">
+                    <field-map field-name="orderId" from-field="parameters.orderId"/>
+                    <field-map field-name="statusId" value="PAYMENT_SETTLED"/>
+                    <field-map field-name="paymentMethodTypeId" value="CREDIT_CARD"/>
+                </entity-and>
+                            
+                <iterate entry="orderPaymentPreference" list="orderPaymentPreferenceList">
+                    <set field="refundOrderPaymentCtx.orderPaymentPreference" from-field="orderPaymentPreference"/>
+                    <set field="refundOrderPaymentCtx.refundAmount" from-field="parameters.totalRefundAmount" type="BigDecimal"/>
+                    <call-service service-name="refundPayment" in-map-name="refundOrderPaymentCtx">
+                        <result-to-field result-name="paymentId" field="refundMap.paymentId"/>
+                        <result-to-field result-name="refundAmount" field="refundMap.refundAmount"/>
+                    </call-service>
+                </iterate>
+            </if-compare>
+        </if-not-empty>
+        
+    </simple-method>
 
+    <simple-method method-name="quickShipOrderItem" short-description="Sub-method used by updateOrderStatus methods to create a shipment">
+        <if-compare field="orderItem.statusId" operator="equals" value="ITEM_COMPLETED" type="String">
+             <!-- lets gets shipment sequence id-->
+             <entity-and entity-name="OrderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                 <field-map field-name="orderId" from-field="orderItem.orderId"/>
+                 <field-map field-name="orderItemSeqId" from-field="orderItem.orderItemSeqId"/>
+                 <order-by field-name="+shipGroupSeqId"/>
+             </entity-and>
+             <first-from-list entry="orderItemShipGroupAssoc" list="orderItemShipGroupAssocList"/>
+             <get-related-one relation-name="OrderItemShipGroup" to-value-field="orderItemShipGroup" value-field="orderItemShipGroupAssoc"/>
+
+            <!-- create the shipment for ship group combination -->
+            <clear-field field="shipmentContext"/>
+            <set from-field="orderHeader.orderId" field="shipmentContext.primaryOrderId"/>
+            <set from-field="orderItemShipGroup.shipGroupSeqId" field="shipmentContext.primaryShipGroupSeqId"/>
+            <if-not-empty field="orderItemShipGroup.vendorPartyId">
+              <set field="partyIdFrom" from-field="orderItemShipGroup.vendorPartyId"/>
+            <else>
+              <if-empty field="partyIdFrom">
+                <entity-and entity-name="OrderRole" list="orderRoles">
+                  <field-map field-name="orderId" from-field="orderHeader.orderId"/>
+                  <field-map field-name="roleTypeId" value="SHIP_FROM_VENDOR"/>
+                </entity-and>
+                <if-not-empty field="orderRoles">
+                  <first-from-list list="orderRoles" entry="orderRole"/>
+                  <set field="partyIdFrom" from-field="orderRole.partyId"/>
+                <else>
+                  <entity-and entity-name="OrderRole" list="orderRoles">
+                    <field-map field-name="orderId" from-field="orderHeader.orderId"/>
+                    <field-map field-name="roleTypeId" value="BILL_FROM_VENDOR"/>
+                  </entity-and>
+                  <first-from-list list="orderRoles" entry="orderRole"/>
+                  <set field="partyIdFrom" from-field="orderRole.partyId"/>
+                </else>
+                </if-not-empty>
+              </if-empty>
+            </else>
+            </if-not-empty>
+            <set field="shipmentContext.partyIdFrom" from-field="partyIdFrom"/>
+            <set value="SHIPMENT_INPUT" field="shipmentContext.statusId"/>
+            <call-service service-name="createShipment" in-map-name="shipmentContext">
+                <result-to-field result-name="shipmentId" field="shipmentLookupMap.shipmentId"/>
+            </call-service>
+            <find-by-primary-key entity-name="Shipment" map="shipmentLookupMap" value-field="shipment"/>
+
+            <!-- Create shipment item -->
+            <clear-field field="shipItemContext"/>
+            <set field="shipItemContext.orderId" from-field="orderItem.orderId"/>
+            <set field="shipItemContext.orderItemSeqId" from-field="orderItem.orderItemSeqId"/>
+            <set field="shipItemContext.shipmentId" from-field="shipment.shipmentId"/>
+            <set field="shipItemContext.quantity" from-field="orderItem.quantity"/>
+            <set field="shipItemContext.shipGroupSeqId" from-field="orderItemShipGroup.shipGroupSeqId" />
+            <call-service service-name="addOrderShipmentToShipment" in-map-name="shipItemContext"/>
+
+            <set field="shipmentItemLookupMap.shipmentId" from-field="shipment.shipmentId"/>
+            <set field="shipmentItemLookupMap.productId" from-field="orderItem.productId"/>
+            <find-by-and entity-name="ShipmentItem" map="shipmentItemLookupMap" list="shipmentItems"/>
+            <first-from-list entry="shipmentItem" list="shipmentItems"/>
+
+            <!-- create the item issuance -->
+            <clear-field field="issueContext"/>
+            <set from-field="shipment.shipmentId" field="issueContext.shipmentId"/>
+            <set from-field="orderItem.orderId" field="issueContext.orderId"/>
+            <set from-field="orderItemShipGroup.shipGroupSeqId" field="issueContext.shipGroupSeqId"/>
+            <set from-field="orderItem.orderItemSeqId" field="issueContext.orderItemSeqId"/>
+            <set from-field="shipmentItem.shipmentItemSeqId" field="issueContext.shipmentItemSeqId"/>
+            <set from-field="orderItem.quantity" field="issueContext.quantity"/>
+            <set from-field="eventDate" field="issueContext.issuedDateTime"/>
+            <call-service service-name="createItemIssuance" in-map-name="issueContext"/>
+
+	        <!-- update the shipment status to packed -->
+            <clear-field field="packedContext"/>
+	        <set from-field="shipment.shipmentId" field="packedContext.shipmentId"/>
+	        <set value="SHIPMENT_PACKED" field="packedContext.statusId"/>
+	        <call-service service-name="updateShipment" in-map-name="packedContext"/>
+	
+	        <!-- update the shipment status to shipped -->
+	        <if-empty field="parameters.setPackedOnly">
+	            <set from-field="shipment.shipmentId" field="packedContext.shipmentId"/>
+	            <set value="SHIPMENT_SHIPPED" field="packedContext.statusId"/>
+	            <call-service service-name="updateShipment" in-map-name="packedContext"/>
+	        </if-empty>
+        </if-compare>
     </simple-method>
 </simple-methods>

@@ -1,13 +1,22 @@
-<div class="cartItemHeader">
-<h2><b>TEST CART HEADERS</b></h2>
-<#--  <thead>
-    <tr class="cart_headers">
-      <th class="product firstCol" scope="col" colspan="2">${uiLabelMap.Product}</th>
-      <th class="quantity" scope="col">${uiLabelMap.QuantityLabel}</th>
-      <th class="priceCol numberCol" scope="col">${uiLabelMap.PriceLabel}</th>
-      <th class="total numberCol" scope="col">${uiLabelMap.TotalLabel}</th>
-      <th class="actions lastCol" scope="col">&nbsp;</th>
-    </tr>
-  </thead>
--->
-</div>
+<#assign showHeaders = true >
+<#if shoppingCartTotalQuantity?exists && shoppingCartTotalQuantity == 0>
+  <#assign showHeaders = false >
+</#if>
+
+<#if showHeaders == true>
+  <div class="cartItemHeader">
+    <#if divSequenceList?has_content>
+      <#list divSequenceList as divSequenceItem>
+        <#assign sequenceNum = divSequenceItem.value!/>
+        <#if sequenceNum?has_content && sequenceNum?number !=0>
+          ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#cartHeader${divSequenceItem.div}")}
+        </#if>
+      </#list>
+    </#if>
+  </div>
+</#if>
+
+
+
+
+

@@ -1,14 +1,23 @@
 
 <div class="displaySearchBox">
-    <div class="header"><h2>${searchBoxHeading?if_exists}</h2></div>
+  <form action="<@ofbizUrl>${searchRequest!""}</@ofbizUrl>" method="post" name="${searchFormName!""}">
+    <div class="header">
+        <h2>${searchBoxHeading?if_exists}</h2>
+        <#if stores?has_content && (stores.size() > 1)>
+          <#if (useProductStoreSearch?has_content) && (useProductStoreSearch == 'Y')>
+            <div class="productStoreEntry">
+                <input type="checkbox" class="checkBoxEntry" name="productStoreall" id="productStoreall" value="Y" <#if parameters.productStoreall?has_content>checked</#if>/>${uiLabelMap.AllProductStoreLabel}
+            </div>
+          </#if>
+        </#if>
+    </div>
     <div class="boxBody">
-      <form action="<@ofbizUrl>${searchRequest!""}</@ofbizUrl>" method="post" name="${searchFormName!""}">
           <input type="hidden" name="initializedCB" value="Y"/>
           <input type="hidden" name="preRetrieved" value="Y"/>
           ${sections.render('searchBoxBody')?if_exists}
           ${sections.render('commonSearchButton')?if_exists}
-      </form>
     </div>
+  </form>
 </div>
 
 <div class="displayListBox">

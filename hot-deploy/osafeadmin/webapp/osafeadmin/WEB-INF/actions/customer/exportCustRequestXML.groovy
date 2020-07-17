@@ -6,24 +6,19 @@ import com.osafe.util.OsafeAdminUtil;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericValue;
 import javolution.util.FastMap;
+import javolution.util.FastList;
 import org.ofbiz.product.store.ProductStoreWorker;
 
-userLogin = session.getAttribute("userLogin");
-custRequestCond = session.getAttribute("custRequestCond");
-custRequestList = delegator.findList("CustRequest",custRequestCond, null, null, null, false);
 
-custRequest = EntityUtil.getFirst(custRequestList);;
+custRequestList=session.getAttribute("custRequestList");
 
-List custRequestIdsList = new ArrayList();
 List custRequestIdList = new ArrayList();
-
 if (UtilValidate.isNotEmpty(custRequestList)) 
 {
-    custRequestIdsList = EntityUtil.getFieldListFromEntityList(custRequestList, "custRequestId", true);
-    
-    for(String custRequestId : custRequestIdsList)
+    for(GenericValue custRequestInfo : custRequestList)
     {
-        custRequestIdList.add(custRequestId);
+        custRequest = custRequestInfo.CustRequest;
+        custRequestIdList.add(custRequest.custRequestId);
     }
-    context.exportIdList = custRequestIdList
 }
+context.exportIdList = custRequestIdList

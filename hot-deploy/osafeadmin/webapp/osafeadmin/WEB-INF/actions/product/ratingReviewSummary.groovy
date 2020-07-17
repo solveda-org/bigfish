@@ -21,6 +21,8 @@ fromDateShort = StringUtils.trimToEmpty(parameters.dateFrom);
 toDateShort = StringUtils.trimToEmpty(parameters.dateTo);
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
+List infoMsgList = FastList.newInstance();
+Boolean isValidDate = true;
 if (UtilValidate.isNotEmpty(preRetrieved))
 {
    context.preRetrieved=preRetrieved;
@@ -44,6 +46,7 @@ pendingOneToFiveReviews = FastList.newInstance();
 pendingSixToTenReviews= FastList.newInstance();
 pendingElevenToTwentyReviews = FastList.newInstance();
 pendingTwentyPlusReviews = FastList.newInstance();
+resultList = FastList.newInstance();
 dateCond = null;
 statusCond = null;
 mainCond = null;
@@ -51,26 +54,50 @@ reviewRatingList = FastList.newInstance();
 //Converting to TimeStamp and preparing entity condition.
 if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
 {   
-	//DATE CONDITION.
-    if(UtilValidate.isNotEmpty(fromDateShort) && Util.isDateTime(fromDateShort))
+    //DATE CONDITION.
+    if(UtilValidate.isNotEmpty(fromDateShort))
     {
-        fromDate = ObjectType.simpleTypeConvert(fromDateShort, "Timestamp", entryDateFormat, locale);
-        fromDate  = UtilDateTime.getDayStart(fromDate);
-        dateExpr.add(EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+        if(OsafeAdminUtil.isDateTime(fromDateShort, preferredDateFormat))
+        {
+            fromDate = ObjectType.simpleTypeConvert(fromDateShort, "Timestamp", entryDateFormat, locale);
+            fromDate  = UtilDateTime.getDayStart(fromDate);
+            dateExpr.add(EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+        }
+        else
+        {
+            infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidFromDateInfo",locale));
+        }
     }
-    if(UtilValidate.isNotEmpty(toDateShort) && Util.isDateTime(toDateShort))
+    if(UtilValidate.isNotEmpty(toDateShort))
     {
-        toDate = ObjectType.simpleTypeConvert(toDateShort, "Timestamp", entryDateFormat, locale);
-        toDate  = UtilDateTime.getDayEnd(toDate);
-        dateExpr.add(EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, toDate));
+        if(OsafeAdminUtil.isDateTime(toDateShort, preferredDateFormat))
+        {
+            toDate = ObjectType.simpleTypeConvert(toDateShort, "Timestamp", entryDateFormat, locale);
+            toDate  = UtilDateTime.getDayEnd(toDate);
+            dateExpr.add(EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, toDate));
+        }
+        else
+        {
+            infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidToDateInfo",locale));
+        }
     }
+    if(UtilValidate.isNotEmpty(infoMsgList))
+    {  
+        isValidDate = false;
+        request.setAttribute("_INFO_MESSAGE_LIST_", infoMsgList);
+    }
+    context.isValidDate = isValidDate;
+
     if(UtilValidate.isNotEmpty(dateExpr))
     {
         dateCond = EntityCondition.makeCondition(dateExpr, EntityOperator.AND);
     }
   
     //List of All the Review Rating.
-    reviewRatingList = delegator.findList("ProductReview", dateCond, UtilMisc.toSet("productId","statusId", "postedDateTime"), null, null, false);
+    if(isValidDate)
+    {
+        reviewRatingList = delegator.findList("ProductReview", dateCond, UtilMisc.toSet("productId","statusId", "postedDateTime"), null, null, false);
+    }
     //Approved Reviews
     approvedReviews = EntityUtil.filterByCondition(reviewRatingList, EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PRR_APPROVED"));
     //Pending Reviews
@@ -80,11 +107,11 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
     //Segregating Pending Reviews.
     if(UtilValidate.isNotEmpty(reviewRatingList))
     {
-    	if(UtilValidate.isNotEmpty(toDateShort) && Util.isDateTime(toDateShort))
-    	{
-    		toDate = ObjectType.simpleTypeConvert(toDate, "Timestamp", entryDateFormat, locale);
-    		toDate  = UtilDateTime.getDayEnd(toDate);
-    	}
+        if(UtilValidate.isNotEmpty(toDateShort) && OsafeAdminUtil.isDateTime(toDateShort, preferredDateFormat))
+        {
+            toDate = ObjectType.simpleTypeConvert(toDate, "Timestamp", entryDateFormat, locale);
+            toDate  = UtilDateTime.getDayEnd(toDate);
+        }
         Timestamp fiveDaysAgo = UtilDateTime.addDaysToTimestamp(toDate,-5);
         Timestamp tenDaysAgo = UtilDateTime.addDaysToTimestamp(toDate,-10);
         Timestamp twentyDaysAgo = UtilDateTime.addDaysToTimestamp(toDate,-20);
@@ -119,18 +146,18 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
     resultMap= FastMap.newInstance();
     resultMap.put("status",uiLabelMap.ApprovedLabel)
     resultMap.put("statusId","PRR_APPROVED")
-	resultMap.put("count",approvedReviews.size());
-	resultList.add(resultMap);
-	resultMap= FastMap.newInstance();
+    resultMap.put("count",approvedReviews.size());
+    resultList.add(resultMap);
+    resultMap= FastMap.newInstance();
     resultMap.put("status",uiLabelMap.PendingLabel)
-	resultMap.put("statusId","PRR_PENDING")
+    resultMap.put("statusId","PRR_PENDING")
     resultMap.put("count",pendingReviews.size());
-	resultList.add(resultMap);
-	resultMap= FastMap.newInstance();
+    resultList.add(resultMap);
+    resultMap= FastMap.newInstance();
     resultMap.put("status",uiLabelMap.DeletedLabel)
     resultMap.put("statusId","PRR_DELETED")
-	resultMap.put("count",deletedReviews.size());
-	resultList.add(resultMap);
+    resultMap.put("count",deletedReviews.size());
+    resultList.add(resultMap);
     context.resultList = resultList;
     
     context.total = reviewRatingList.size();

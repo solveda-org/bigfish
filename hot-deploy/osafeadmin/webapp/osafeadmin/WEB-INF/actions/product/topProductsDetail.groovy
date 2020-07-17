@@ -48,6 +48,9 @@ if (UtilValidate.isNotEmpty(srchShipTo) && UtilValidate.isEmpty(srchStorePickup)
 
 periodFromTs= context.periodFromTs
 periodToTs= context.periodToTs
+isValidDate = context.isValidDate;
+if(isValidDate)
+{
 // Top Products
     List <GenericValue> topProductsList  = FastList.newInstance();
     Map<String, GenericValue> allTopProductsMap = FastMap.newInstance();
@@ -464,3 +467,4 @@ periodToTs= context.periodToTs
     }
     context.topProductsList = topProductsList;
     context.allTopProductsOrderMap = allTopProductsOrderMap;
+}

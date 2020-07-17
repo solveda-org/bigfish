@@ -47,7 +47,7 @@
         <value xml:lang="en">Payment Settings</value>
     </property>
     <property key="AdminPixelTrackingNav">
-        <value xml:lang="en">Pixel Tracking</value>
+        <value xml:lang="en">Page Tagging</value>
     </property>
     <property key="CatalogAddProductNav">
         <value xml:lang="en">Add a Product</value>
@@ -217,6 +217,9 @@
     <property key="TaxesNav">
         <value xml:lang="en">View Taxes</value>
     </property>
+    <property key="ShipmentGatewaysNav">
+        <value xml:lang="en">Manage Shipment Gateways</value>
+    </property>
     <property key="CarrierNav">
         <value xml:lang="en">Manage Carriers</value>
     </property>
@@ -271,6 +274,15 @@
     <property key="DivSequenceDetailTitle">
         <value xml:lang="en">DIV Sequence</value>
     </property>
+    <property key="ShipmentGatewaysListTitle">
+        <value xml:lang="en">shipment gateway settings</value>
+    </property>
+    <property key="ShipmentGatewaysDetailsTitle">
+        <value xml:lang="en">shipment gateway config</value>
+    </property>
+    <property key="ShipmentGatewaysListHeading">
+        <value xml:lang="en">Shipment Gateways Settings</value>
+    </property>
     <property key="AddTopNavCatalogEntryDetailHeading">
         <value xml:lang="en">Add Top-Nav Catalog Entry</value>
     </property>
@@ -291,6 +303,9 @@
     </property>
     <property key="AdminEmailHeading">
         <value xml:lang="en">Email Templates</value>
+    </property>
+    <property key="AdminTxtMsgHeading">
+        <value xml:lang="en">Text Message Templates</value>
     </property>
     <property key="AdminEmailConfigHeading">
         <value xml:lang="en">Email Configuration</value>
@@ -359,7 +374,7 @@
         <value xml:lang="en">Payment settings</value>
     </property>
     <property key="AdminPixelTrackingHeading">
-        <value xml:lang="en">Pixel Tracking</value>
+        <value xml:lang="en">Page Tagging List</value>
     </property>
     <property key="BestReviewedHeading">
         <value xml:lang="en">Best Reviewed Products</value>
@@ -435,6 +450,9 @@
     </property>
     <property key="EmailSpotHeading">
         <value xml:lang="en">Email Content Templates</value>
+    </property>
+    <property key="TxtMsgSpotHeading">
+        <value xml:lang="en">Text Message Templates</value>
     </property>
     <property key="FacetGroupHeading">
         <value xml:lang="en">Facet Group</value>
@@ -671,10 +689,10 @@
         <value xml:lang="en">PDP Content</value>
     </property>
     <property key="PixelTrackingDetailHeading">
-        <value xml:lang="en">Pixel Tracking Detail: </value>
+        <value xml:lang="en">Page Tagging Detail: </value>
     </property>
     <property key="PixelTrackingListHeading">
-        <value xml:lang="en">Pixel Tracking</value>
+        <value xml:lang="en">Page Tagging</value>
     </property>
     <property key="PLPSpotDetailHeading">
         <value xml:lang="en">Catalog</value>
@@ -835,6 +853,9 @@
     <property key="EmailTestDetailHeading">
         <value xml:lang="en">Email Test</value>
     </property>
+    <property key="TxtMsgTestDetailHeading">
+        <value xml:lang="en">Text Message Test</value>
+    </property>
     <property key="ExportBigfishContentDetailHeading">
         <value xml:lang="en">Bigfish XML Exporter</value>
     </property>
@@ -910,6 +931,9 @@
     <property key="BigFishFeedExportsListHeading">
         <value xml:lang="en">BigFish Feed Exports</value>
     </property>
+    <property key="BlueDartFeedsImportListHeading">
+        <value xml:lang="en">BlueDart Feeds</value>
+    </property>
     <property key="BigFishSampleFileDetailHeading">
         <value xml:lang="en">Create BigFish Product Load (Template) XLS File</value>
     </property>
@@ -930,6 +954,9 @@
     </property>
     <property key="TaxesHeading">
         <value xml:lang="en">View Taxes</value>
+    </property>
+    <property key="ShipmentGatewaysHeading">
+        <value xml:lang="en">Manage Shipment Gateways</value>
     </property>
     <property key="CarrierHeading">
         <value xml:lang="en">Manage Carriers</value>
@@ -978,6 +1005,15 @@
     </property>
     <property key="BigFishFeedExportDetailHeading">
         <value xml:lang="en">BigFish Feed Export</value>
+    </property>
+    <property key="BlueDartImportDetailHeading">
+        <value xml:lang="en">BlueDart Import</value>
+    </property>
+    <property key="PrepaidPinCodesDetailHeading">
+        <value xml:lang="en">Pre Paid PIN Codes</value>
+    </property>
+    <property key="CoDDetailHeading">
+        <value xml:lang="en">CoD</value>
     </property>
     <property key="CustomerSetupFeedDetailHeading">
         <value xml:lang="en">Customer Setup Feed</value>
@@ -1138,7 +1174,30 @@
     <property key="UtilitiesHeading">
         <value xml:lang="en">Utilities</value>
     </property>
-    
+    <property key="CreditCardRefundHeadeing">
+        <value xml:lang="en">Credit Card Refund</value>
+    </property>
+    <property key="AdjustmentsHeading">
+        <value xml:lang="en">Adjustments</value>
+    </property>
+    <property key="NewChargeHeading">
+        <value xml:lang="en">New Charge</value>
+    </property>
+    <property key="OriginalChargeHeading">
+        <value xml:lang="en">Original Charge</value>
+    </property>
+    <property key="ManualReturnAdjustmentHeading">
+        <value xml:lang="en">Manual Return Adjustment</value>
+    </property>
+    <property key="RefundDetailsHeading">
+        <value xml:lang="en">Refund Details</value>
+    </property>
+    <property key="ManualReturnAdjustmentHeading">
+        <value xml:lang="en">Manual Return Adjustment</value>
+    </property>
+    <property key="RefundDetailsHeading">
+        <value xml:lang="en">Refund Details</value>
+    </property>
    <!-- *** Heading Ends*************************************** -->
 
     <!-- *** Caption Starts*************************************** -->
@@ -1181,11 +1240,20 @@
     <property key="ByCaption">
         <value xml:lang="en">By:</value>
     </property>
+    <property key="PagePositionCaption">
+        <value xml:lang="en">Page Position:</value>
+    </property>
     <property key="BCCCaption">
         <value xml:lang="en">BCC:</value>
     </property>
     <property key="CaptionCaption">
         <value xml:lang="en">Caption:</value>
+    </property>
+    <property key="PrivateCommentCaption">
+        <value xml:lang="en">Private Comment:</value>
+    </property>
+    <property key="ReviewResponseCaption">
+        <value xml:lang="en">Review Response:</value>
     </property>
     <property key="CaptionIDCaption">
         <value xml:lang="en">Caption ID:</value>
@@ -1198,6 +1266,9 @@
     </property>
     <property key="ChangeMediaCaption">
         <value xml:lang="en">Change Media:</value>
+    </property>
+    <property key="ChargeShippingCaption">
+        <value xml:lang="en">Charge for Shipping?</value>
     </property>
     <property key="CustomerIdCaption">
         <value xml:lang="en">Customer Id:</value>
@@ -1367,6 +1438,9 @@
     <property key="ContentIdCaption">
         <value xml:lang="en">Content ID:</value>
     </property>
+    <property key="BigFishContentIdCaption">
+        <value xml:lang="en">BF Content ID:</value>
+    </property>
     <property key="ImageCaption">
         <value xml:lang="en">Image:</value>
     </property>
@@ -1381,6 +1455,9 @@
     </property>
     <property key="ImportXmlFileCaption">
         <value xml:lang="en">Import XML File:</value>
+    </property>
+    <property key="ImportXlsFileCaption">
+        <value xml:lang="en">Import XLS File:</value>
     </property>
     <property key="IngredientsCaption">
         <value xml:lang="en">Ingredients:</value>
@@ -1545,13 +1622,16 @@
         <value xml:lang="en">Summary for Period:</value>
     </property>
     <property key="PixelCodeCaption">
-        <value xml:lang="en">Pixel Code:</value>
+        <value xml:lang="en">Tagging Code:</value>
     </property>
     <property key="PixelIdCaption">
-        <value xml:lang="en">Pixel Id:</value>
+        <value xml:lang="en">Id:</value>
     </property>
     <property key="PixelScopeCaption">
-        <value xml:lang="en">Pixel Scope:</value>
+        <value xml:lang="en">Scope:</value>
+    </property>
+    <property key="PagePositionCaption">
+        <value xml:lang="en">Page Position:</value>
     </property>
     <property key="PreviewCaption">
         <value xml:lang="en">Preview:</value>
@@ -1668,6 +1748,9 @@
         <value xml:lang="en">GEO Code:</value>
     </property>
     <property key="StoreCaption">
+        <value xml:lang="en">Store:</value>
+    </property>
+    <property key="ProductStoreInfoCaption">
         <value xml:lang="en">Store:</value>
     </property>
     <property key="ProductStoreCaption">
@@ -1947,6 +2030,12 @@
     </property>
     <property key="DescriptionCaption">
         <value xml:lang="en">Description:</value>
+    </property>
+    <property key="ShipmentGatewayConfigIDCaption">
+        <value xml:lang="en">Config ID</value>
+    </property>
+    <property key="TrackingUrlCaption">
+        <value xml:lang="en">Tracking URL:</value>
     </property>
     <property key="DescCaption">
         <value xml:lang="en">Desc:</value>
@@ -2374,6 +2463,9 @@
     <property key="ShippingMethodCaption">
         <value xml:lang="en">Shipping Method:</value>
     </property>
+    <property key="ShipmentGatewayCaption">
+        <value xml:lang="en">Shipment Gateway:</value>
+    </property>
     <property key="MinTotalCaption">
         <value xml:lang="en">Min Total:</value>
     </property>
@@ -2386,6 +2478,16 @@
     <property key="FlatRateCaption">
         <value xml:lang="en">Flat Rate:</value>
     </property>
+    <property key="DeliverPOBoxCaption">
+        <value xml:lang="en">Deliver to PO Box:</value>
+    </property>
+    <property key="IncludeCountryCaption">
+        <value xml:lang="en">Include Country:</value>
+    </property>
+    <property key="ExcludeCountryCaption">
+        <value xml:lang="en">Exclude Country:</value>
+    </property>
+    
     <property key="CarrierServiceCodeCaption">
         <value xml:lang="en">Carrier Service Code:</value>
     </property>
@@ -2464,7 +2566,7 @@
     <property key="DOB_Year">
         <value xml:lang="en">Year</value>
     </property>
-    <property key="EmailTestModeCaption">
+    <property key="TestModeCaption">
         <value xml:lang="en">Test Mode:</value>
     </property>
     <property key="EmailTemplateCaption">
@@ -2484,6 +2586,15 @@
     </property>
     <property key="EMAIL_SUBJECT_Caption">
         <value xml:lang="en">Subject:</value>
+    </property>
+    <property key="TxtMsgTemplateCaption">
+        <value xml:lang="en">Text Template:</value>
+    </property>
+    <property key="FROM_CELL_Caption">
+        <value xml:lang="en">From Cell:</value>
+    </property>
+    <property key="TO_CELL_Caption">
+        <value xml:lang="en">To Cell:</value>
     </property>
     <property key="ReviewAgesIdCaption">
         <value xml:lang="en">Review Age ID:</value>
@@ -2806,14 +2917,232 @@
     <property key="SelectOneCaption">
         <value xml:lang="en">Select One:</value>
     </property>
+    <property key="ManufacturerCaption">
+        <value xml:lang="en">Manufacturer:</value>
+    </property>
+    <property key="CardTypeCaption">
+        <value xml:lang="en">Card Type:</value>
+    </property>
+    <property key="OriginalChargeCaption">
+        <value xml:lang="en">Original Charge:</value>
+    </property>
+    <property key="TotalRefundsCaption">
+        <value xml:lang="en">Total Refunds:</value>
+    </property>
+    <property key="TotalOtherAdjustmentCaption">
+        <value xml:lang="en">Total Other Adjustment:</value>
+    </property>
+    <property key="AdjustedTotalChargeCaption">
+        <value xml:lang="en">Adjusted Total Charge:</value>
+    </property>
+    <property key="TotalForRemainingItemsCaption">
+        <value xml:lang="en">Total For Remaining Items:</value>
+    </property>
+    <property key="PromoCaption">
+        <value xml:lang="en">Promo</value>
+    </property>
+    <property key="ShippingCaption">
+        <value xml:lang="en">Shipping:</value>
+    </property>
+    <property key="TaxCaption">
+        <value xml:lang="en">Tax:</value>
+    </property>
+    <property key="NewChargeCaption">
+        <value xml:lang="en">New Charge:</value>
+    </property>
+    <property key="TotalRefundCaption">
+        <value xml:lang="en">Total Refund:</value>
+    </property>
+    <property key="ItemSeqNoCaption">
+        <value xml:lang="en">Item Seq#:</value>
+    </property>
+    <property key="QuantityUpperCaption">
+        <value xml:lang="en">QUANTITY</value>
+    </property>
+    <property key="OrderOrderedCaption">
+        <value xml:lang="en">Ordered:</value>
+    </property>
+    <property key="OrderCancelledCaption">
+        <value xml:lang="en">Cancelled:</value>
+    </property>
+    <property key="ItemStatusCaption">
+        <value xml:lang="en">Item Status:</value>
+    </property>
+    <property key="PickedQtyCaption">
+        <value xml:lang="en">Picked:</value>
+    </property>
+    <property key="PackedQtyCaption">
+        <value xml:lang="en">Packed:</value>
+    </property>
+    <property key="OrderReturnedCaption">
+        <value xml:lang="en">Returned:</value>
+    </property>
+    <property key="ShipGroupCaption">
+        <value xml:lang="en">Ship Group:</value>
+    </property>
+    <property key="OrderItemSubtotalCaption">
+        <value xml:lang="en">Sub Total:</value>
+    </property>
+    <property key="ShipmentPlannedCaption">
+        <value xml:lang="en">Shipment Planned:</value>
+    </property>
+    <property key="ShipmentIssuedCaption">
+        <value xml:lang="en">Shipment Issued:</value>
+    </property>
+    <property key="ShipDateCaption">
+        <value xml:lang="en">Ship Date:</value>
+    </property>
+    <property key="ConnectUrlCaption">
+        <value xml:lang="en">Connect URL:</value>
+    </property>
+    <property key="ConnectTimeoutCaption">
+        <value xml:lang="en">Connect Timeout:</value>
+    </property>
+    <property key="HeadVersionCaption">
+        <value xml:lang="en">Head version attribute:</value>
+    </property>
+    <property key="HeadActionCaption">
+        <value xml:lang="en">Head action attribute:</value>
+    </property>
+    <property key="AccessUserIdCaption">
+        <value xml:lang="en">Your DHL ShipIT User id:</value>
+    </property>
+    <property key="AccessPasswordCaption">
+        <value xml:lang="en">Your DHL ShipIT Access Password:</value>
+    </property>
+    <property key="AccessAccountNbrCaption">
+        <value xml:lang="en">Your DHL ShipIT Account Number:</value>
+    </property>
+    <property key="AccessShippingKeyCaption">
+        <value xml:lang="en">Your DHL ShipIT Shipping Key:</value>
+    </property>
+    <property key="LabelImageFormatCaption">
+        <value xml:lang="en">Label Image Format:</value>
+    </property>
+    <property key="RateEstimateTemplateCaption">
+        <value xml:lang="en">Rate Estimate API schema:</value>
+    </property>
+    <property key="ConnectSoapUrlCaption">
+        <value xml:lang="en">Connect Soap URL:</value>
+    </property>
+    <property key="AccessAccountNbrFedCaption">
+        <value xml:lang="en">Access Account Number:</value>
+    </property>
+    <property key="AccessMeterNumberCaption">
+        <value xml:lang="en">Access Meter Number:</value>
+    </property>
+    <property key="AccessUserKeyCaption">
+        <value xml:lang="en">Access User Key:</value>
+    </property>
+    <property key="AccessUserPwdCaption">
+        <value xml:lang="en">Access User Password:</value>
+    </property>
+    <property key="LabelImageTypeCaption">
+        <value xml:lang="en">Label Image Type:</value>
+    </property>
+    <property key="DropoffTypeCaption">
+        <value xml:lang="en">Dropoff Type:</value>
+    </property>
+    <property key="DefaultPackagingTypeCaption">
+        <value xml:lang="en">Packaging Type:</value>
+    </property>
+    <property key="TemplateShipmentCaption">
+        <value xml:lang="en">Shipment Template Location:</value>
+    </property>
+    <property key="TemplateSubscriptionCaption">
+        <value xml:lang="en">Subscription Template Location:</value>
+    </property>
+    <property key="RateEstimateTemplateFedCaption">
+        <value xml:lang="en">Rate Estimate Template Location:</value>
+    </property>    
+    <property key="ShipperNumberCaption">
+        <value xml:lang="en">Shipper Number:</value>
+    </property>
+    <property key="BillShipperAccountNumberCaption">
+        <value xml:lang="en">Bill Shipper Account Number:</value>
+    </property>    
+    <property key="AccessLicenseNumberCaption">
+        <value xml:lang="en">Access License Number:</value>
+    </property>
+    <property key="AccessUserIdUpsCaption">
+        <value xml:lang="en">Access User Id:</value>
+    </property>
+    <property key="AccessPasswordUpsCaption">
+        <value xml:lang="en">Access Password:</value>
+    </property>
+    <property key="SaveCertInfoCaption">
+        <value xml:lang="en">Save Cert Info:</value>
+    </property>
+    <property key="SaveCertPathCaption">
+        <value xml:lang="en">Save Cert Path:</value>
+    </property>
+    <property key="ShipperPickupTypeCaption">
+        <value xml:lang="en">Shipper Pickup Type:</value>
+    </property>
+    <property key="MaxEstimateWeightCaption">
+        <value xml:lang="en">Max Weight per package:</value>
+    </property>
+    <property key="MinEstimateWeightCaption">
+        <value xml:lang="en">Minimum Weight for a package:</value>
+    </property>
+    <property key="CodAllowCodCaption">
+        <value xml:lang="en">Allow COD:</value>
+    </property>
+    <property key="CodSurchargeAmountCaption">
+        <value xml:lang="en">Surcharge Amount for COD:</value>
+    </property>
+    <property key="CodSurchargeCurrencyUomIdCaption">
+        <value xml:lang="en">Surcharge Currency:</value>
+    </property>
+    <property key="CodSurchargeApplyToPackageCaption">
+        <value xml:lang="en">Surcharge Apply to Package:</value>
+    </property>
+    <property key="CodFundsCodeCaption">
+        <value xml:lang="en">Funds for COD:</value>
+    </property>
+    <property key="DefaultReturnLabelMemoCaption">
+        <value xml:lang="en">Default Return Label Memo:</value>
+    </property>
+    <property key="DefaultReturnLabelSubjectCaption">
+        <value xml:lang="en">Default Return Label Subject:</value>
+    </property>
+    <property key="MaxEstimateWeightUspsCaption">
+        <value xml:lang="en">Estimate split into packages:</value>
+    </property>
+    <property key="CustomerIdCaption">
+        <value xml:lang="en">Customer Id:</value>
+    </property>
+    <property key="CustomerLisenceKeyCaption">
+        <value xml:lang="en">Customer License Key:</value>
+    </property>
+        <property key="VersionNumCaption">
+        <value xml:lang="en">Version Number:</value>
+    </property>
+        <property key="ScanNumCaption">
+        <value xml:lang="en">Scan Number:</value>
+    </property>
+            <property key="FormatCaption">
+        <value xml:lang="en">Format:</value>
+    </property>
+    
+
     <!-- *** Caption Ends*************************************** -->
 
     <!-- *** Label Starts *************************************** -->
+    <property key="AllProductStoreLabel">
+        <value xml:lang="en">All Stores</value>
+    </property>
     <property key="IdLabel">
         <value xml:lang="en">ID</value>
     </property>
+    <property key="PagePositionLabel">
+        <value xml:lang="en">Pixel Position</value>
+    </property>
     <property key="BigFishConetentIdLabel">
         <value xml:lang="en">BigFish Content ID</value>
+    </property>
+    <property key="ConetentIdLabel">
+        <value xml:lang="en">Content ID</value>
     </property>
     <property key="BillingAddressDefaultNickNameLabel">
         <value xml:lang="en">Billing</value>
@@ -2836,11 +3165,26 @@
     <property key="LabelCaptionCacheLabel">
         <value xml:lang="en">Labels and Captions</value>
     </property>
+    <property key="HeadStartLabel">
+        <value xml:lang="en">HEAD_START</value>
+    </property>
+    <property key="BodyStartLabel">
+        <value xml:lang="en">BODY_START</value>
+    </property>
+    <property key="BodyEndLabel">
+        <value xml:lang="en">BODY_END</value>
+    </property>
+    <property key="HeadEndLabel">
+        <value xml:lang="en">HEAD_END</value>
+    </property>
     <property key="SEOFriendlyUrlCacheLabel">
         <value xml:lang="en">SEO Friendly URLs</value>
     </property>
     <property key="DivSequencingCacheLabel">
         <value xml:lang="en">DIV Sequencing</value>
+    </property>
+    <property key="CustomPartyAttributesCacheLabel">
+        <value xml:lang="en">Custom Party Attributes</value>
     </property>
     <property key="PixcelTrackingCacheLabel">
         <value xml:lang="en">Pixel Tracking</value>
@@ -2977,6 +3321,9 @@
     <property key="ExportContentEmailLabel">
         <value xml:lang="en">Email Templates</value>
     </property>
+    <property key="ExportContentTxtTemplateLabel">
+        <value xml:lang="en">Text Message Templates</value>
+    </property>
     <property key="BrowseAndUploadFileLabel">
         <value xml:lang="en">Browse and Upload File</value>
     </property>
@@ -3055,6 +3402,9 @@
     <property key="EmailTemplateLabel">
         <value xml:lang="en">Email Template</value>
     </property>
+    <property key="TextMessageTemplateLabel">
+        <value xml:lang="en">Text Message Template</value>
+    </property>
     <property key="ShipToDeliveryLabel">
         <value xml:lang="en">Ship To Customer</value>
     </property>
@@ -3129,6 +3479,12 @@
     </property>
     <property key="CustomerSetupFeedLabel">
         <value xml:lang="en">Customer Setup Feed</value>
+    </property>
+    <property key="PrepaidFileFeedLabel">
+        <value xml:lang="en">Pre Paid File</value>
+    </property>
+     <property key="CoDFileFeedLabel">
+        <value xml:lang="en">CoD File</value>
     </property>
     <property key="OneToFiveDaysLabel">
         <value xml:lang="en">0 - 5 days</value>
@@ -3235,7 +3591,7 @@
         <value xml:lang="en">Add Products in this Category to the Cart using Default Quantities</value>
     </property>
     <property key="AdjustAmountLabel">
-        <value xml:lang="en">Adj$</value>
+        <value xml:lang="en">Adj ${currencySymbol}</value>
     </property>
     <property key="AdminEditLabel">
         <value xml:lang="en">Edit</value>
@@ -3263,6 +3619,21 @@
     </property>
     <property key="ApplyToAllLabel">
         <value xml:lang="en">Apply to All</value>
+    </property>
+    <property key="OneStarLabel">
+        <value xml:lang="en">1</value>
+    </property>
+    <property key="TwoStarLabel">
+        <value xml:lang="en">2</value>
+    </property>
+    <property key="ThreeStarLabel">
+        <value xml:lang="en">3</value>
+    </property>
+    <property key="FourStarLabel">
+        <value xml:lang="en">4</value>
+    </property>
+    <property key="FiveStarLabel">
+        <value xml:lang="en">5</value>
     </property>
     <property key="ByLabel">
         <value xml:lang="en">By</value>
@@ -3372,11 +3743,14 @@
     <property key="EditLabel">
         <value xml:lang="en">Edit</value>
     </property>
-    <property key="EmailLabel">
+    <property key="EmailAddressLabel">
         <value xml:lang="en">Email Address</value>
     </property>
     <property key="EmailTypeLabel">
         <value xml:lang="en">Email Type</value>
+    </property>
+    <property key="EmailLabel">
+        <value xml:lang="en">Email</value>
     </property>
     <property key="EmailSubscriberLabel">
         <value xml:lang="en">Email Subscriber</value>
@@ -3467,6 +3841,12 @@
     </property>
     <property key="ItemNoLabel">
         <value xml:lang="en">Item#</value>
+    </property>
+    <property key="ItemSeqNoLabel">
+        <value xml:lang="en">Item Seq#</value>
+    </property>
+    <property key="InternalNameLabel">
+        <value xml:lang="en">Internal Name</value>
     </property>
     <property key="ItemStatusLabel">
         <value xml:lang="en">Item Status</value>
@@ -3888,6 +4268,9 @@
     <property key="EmailTestTooltip">
         <value xml:lang="en">Test Email</value>
     </property>
+    <property key="TxtMsgTestTooltip">
+        <value xml:lang="en">Test Text Message</value>
+    </property>
     <property key="ExportToXmlTooltip">
         <value xml:lang="en">Export Customer to XML</value>
     </property>
@@ -4149,6 +4532,9 @@
     <property key="ManufacturerIDLabel">
         <value xml:lang="en">Manufacturer ID</value>
     </property>
+    <property key="ManufacturerIdShortLabel">
+        <value xml:lang="en">Manu ID</value>
+    </property>
     <property key="ProductVideoLabel">
         <value xml:lang="en">Product Video</value>
     </property>
@@ -4205,6 +4591,9 @@
     </property>
     <property key="MasterProductIdLabel">
         <value xml:lang="en">Master Product ID (Virtual)</value>
+    </property>
+    <property key="ProductStoreIdLabel">
+        <value xml:lang="en">Product Store Id</value>
     </property>
     <property key="ProductIdVaraintLabel">
         <value xml:lang="en">Product ID (Variant)</value>
@@ -4302,6 +4691,9 @@
     <property key="CarrierDescriptionLabel">
         <value xml:lang="en">Description</value>
     </property>
+    <property key="CarrierTrackingUrlLabel">
+        <value xml:lang="en">Tracking URL</value>
+    </property>
     <property key="CarrierShipIdLabel">
         <value xml:lang="en">Carrier ID</value>
     </property>
@@ -4310,6 +4702,9 @@
     </property>
     <property key="CarrierShipMessageLabel">
         <value xml:lang="en">Message</value>
+    </property>
+    <property key="ShipmentGatewayLabel">
+        <value xml:lang="en">Shipment Gateway</value>
     </property>
     <property key="CanceledLabel">
         <value xml:lang="en">Cancelled</value>
@@ -4355,6 +4750,9 @@
     </property>
     <property key="EmailTestLabel">
         <value xml:lang="en">Email Test</value>
+    </property>
+    <property key="TxtMsgTestLabel">
+        <value xml:lang="en">Text Message Test</value>
     </property>
     <property key="BFXmlExportLabel">
         <value xml:lang="en">BigFish XML Exporter</value>
@@ -4649,6 +5047,48 @@
     <property key="CommonItems">
         <value xml:lang="en">Items</value>
     </property>
+    <property key="ProductStoreLabel">
+        <value xml:lang="en">Product Store</value>
+    </property>
+    <property key="OrderQtyLabel">
+        <value xml:lang="en">Order Qty</value>
+    </property>
+    <property key="ReturnedQtyLabel">
+        <value xml:lang="en">Returned Qty</value>
+    </property>
+    <property key="NewQtyLabel">
+        <value xml:lang="en">New Qty</value>
+    </property>
+    <property key="ReturningQtyLabel">
+        <value xml:lang="en">Returning Qty</value>
+    </property>
+    <property key="ReturnReasonLabel">
+        <value xml:lang="en">Return Reason</value>
+    </property>
+    <property key="CancelAnOrderLabel">
+        <value xml:lang="en">Cancel an Order</value>
+    </property>
+    <property key="ChangeOrderQtyLabel">
+        <value xml:lang="en">Change Ordered Qty</value>
+    </property>
+    <property key="CompleteAnOrderLabel">
+        <value xml:lang="en">Complete (Ship) an Order</value>
+    </property>
+    <property key="ProductReturnsLabel">
+        <value xml:lang="en">Product Returns</value>
+    </property>
+    <property key="SeePickListLabel">
+        <value xml:lang="en">see pick list</value>
+    </property>
+    <property key="SeePackingDetailsLabel">
+        <value xml:lang="en">see packing details</value>
+    </property>
+    <property key="SeeReturnsLabel">
+        <value xml:lang="en">see returns</value>
+    </property>
+    <property key="MultipleShipmentsLabel">
+        <value xml:lang="en">Multiple Shipments</value>
+    </property>
     
     <!-- **** Label Ends *************************************** -->
     
@@ -4733,6 +5173,12 @@
     </property>
     <property key="EmailSpotListTitle">
         <value xml:lang="en">email templates list</value>
+    </property>
+    <property key="TxtMsgSpotListTitle">
+        <value xml:lang="en">text message templates list</value>
+    </property>
+    <property key="TxtMsgSpotDetailTitle">
+        <value xml:lang="en">text message templates detail</value>
     </property>
     <property key="FooterSpotDetailTitle">
         <value xml:lang="en">manage footer</value>
@@ -4846,10 +5292,10 @@
         <value xml:lang="en">dynamic PDP additional content list</value>
     </property>
     <property key="PixelTrackingListTitle">
-        <value xml:lang="en">pixel tracking list</value>
+        <value xml:lang="en">page tagging list</value>
     </property>
     <property key="PixelTrackingDetailTitle">
-        <value xml:lang="en">pixel tracking detail</value>
+        <value xml:lang="en">Page Tagging Detail</value>
     </property>
     <property key="PLPContentDetailTitle">
         <value xml:lang="en">Product Category content detail</value>
@@ -4976,6 +5422,9 @@
     </property>
     <property key="EmailTestDetailTitle">
         <value xml:lang="en">Email Test</value>
+    </property>
+    <property key="TxtMsgTestDetailTitle">
+        <value xml:lang="en">Text Message Test</value>
     </property>
     <property key="ExportBigfishContentDetail">
         <value xml:lang="en">bigfish XML exporter</value>
@@ -5250,6 +5699,21 @@
     <property key="CheckoutTitle">
         <value xml:lang="en">checkout</value>
     </property>
+    <property key="ManufacturerSelectorTitle">
+        <value xml:lang="en">Manufacturer Picker</value>
+    </property>
+    <property key="OrderItemBoxHeading">
+        <value xml:lang="en">Order Item Seq# ${orderItemSeqId}</value>
+    </property>
+    <property key="OrderItemShippingInfoBoxHeading">
+        <value xml:lang="en">Shipping Information</value>
+    </property>
+    <property key="OrderItemNotesBoxHeading">
+        <value xml:lang="en">Notes</value>
+    </property>
+    <property key="OrderItemDetailTitle">
+        <value xml:lang="en">order item details</value>
+    </property>
     
     <!-- ******* Page Title Ends *************************************** -->
     
@@ -5265,6 +5729,9 @@
     </property>
     <property key="AdminEmailInfo">
         <value xml:lang="en">Manage Email Templates that are used in all outgoing emails.</value>
+    </property>
+    <property key="AdminTxtMsgInfo">
+        <value xml:lang="en">Manage Text Messaging Templates used in notifications to cell phones.</value>
     </property>
     <property key="AdminEmailConfigInfo">
         <value xml:lang="en">Manage the “From”, “To” and other attributes of outgoing emails.</value>
@@ -5291,7 +5758,8 @@
         <value xml:lang="en">This function provides the ability to associated various OFBiz payment functions to specific Payment Gateways.</value>
     </property>
     <property key="EntitySyncInfo">
-        <value xml:lang="en">Entity Sync.</value>
+        <value xml:lang="en">This function allows to sync data of Content Entities(ElectronicText, DataResource, Content, XContentXref, ProductPrice,
+        ProductContent, ProductCategoryContent) from Staging To Production.</value>
     </property>
     <property key="RatingReviewSummaryInfo">
         <value xml:lang="en">Quick snapshot of all Reviews summarized by Status</value>
@@ -5475,6 +5943,9 @@
     </property>
     <property key="EmailTestInfo">
         <value xml:lang="en">This function will use your OFBiz and BigFish properties and send out a test email.</value>
+    </property>
+    <property key="TxtMsgTestInfo">
+        <value xml:lang="en">This function will use your Text Messaging configurations and send out a test text message.</value>
     </property>
     <property key="BFXmlExportInfo">
         <value xml:lang="en">Various functions to export data, mainly focused on content, from the database to an XML format. These XML files will be suitable for load into another OFBiz database instance.</value>
@@ -5803,6 +6274,9 @@
     <property key="TaxesInfo">
         <value xml:lang="en">View all Sales, VAT or General Use Taxes that are setup in your implementation.</value>
     </property>
+    <property key="ShipmentGatewaysInfo">
+        <value xml:lang="en">Parameters and configuration options for the various supported Shipping Gateways. This will include all parameters, API references, access information etc.</value>
+    </property>
     <property key="CarrierInfo">
         <value xml:lang="en">View and maintain all available Carriers (Fedex, DHL, UPS).</value>
     </property>
@@ -5820,6 +6294,12 @@
     </property>
     <property key="ProductRatingsInfo">
         <value xml:lang="en">Import the Product Rating file</value>
+    </property>
+    <property key="PrepaidFileFeedInfo">
+        <value xml:lang="en">Import all Blue Dart Pre-Paid PIN codes</value>
+    </property>
+    <property key="CoDFileFeedInfo">
+        <value xml:lang="en">Import all Blue Dart Cash on Delivery PIN codes</value>
     </property>
     <property key="StoresInfo">
         <value xml:lang="en">Import the Store file</value>
@@ -5923,6 +6403,9 @@
     <property key="UserLoginInfo">
         <value xml:lang="en">User Login Info</value>
     </property>
+    <property key="ChangeManufacturerInfo">
+        <value xml:lang="en">Change Manufacturer</value>
+    </property>
     
      <!-- ******* Info Messages Ends*************************************** -->
    
@@ -6014,8 +6497,11 @@
     <property key="TestEmailNotificationNotEnableSuccessMsg">
         <value xml:lang="en">The Email was sent successfully. HOWEVER, the mail.notifications.enabled is set to ''N' in the client.properties file so the email content was stored as a COMMUNICATION_EVENT in the database and no real email was delivered.</value>
     </property>
-    <property key="TestEmailSuccessMsg">
-        <value xml:lang="en">The Email was sent successfully using the Email Template [{0}].</value>
+    <property key="TestTxtMsgWithTemplateSuccessMsg">
+        <value xml:lang="en">The Text Message was sent successfully using the Text Message Template [{0}].</value>
+    </property>
+    <property key="TestTxtMsgSuccessMsg">
+        <value xml:lang="en">The Text Message was sent successfully. HOWEVER, to fully confirm receipt it is recommended that you verify with the actual receiving device.</value>
     </property>
     <property key="EditSecurityGroupSuccess">
         <value xml:lang="en">Your changes to ${editGroup} have been saved</value>
@@ -6041,6 +6527,9 @@
     <property key="CheckoutAddProductSuccess">
         <value xml:lang="en">You have successfully added product ${add_product_name}. A single quantity was added, this can be modified during the Check Out process</value>
     </property>
+    <property key="TestEmailSuccessMsg">
+        <value xml:lang="en">The Email was sent successfully using the Email Template [{0}]. </value>
+    </property>
       <!-- ******* Success Messages  Ends*************************************** -->
       
     <!-- ******* Error Messages  Starts*************************************** -->
@@ -6059,17 +6548,29 @@
     <property key="BlankCategoryNameError">
         <value xml:lang="en">ERROR Row ${rowNo}: The Category-Name cannot be blank</value>
     </property>
+    <property key="BlankParentCategoryIdError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Parent Category ID must be specified and cannot be blank or empty</value>
+    </property>
+    <property key="BlankManuIdError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Manu ID must be specified and cannot be blank or empty</value>
+    </property>
     <property key="BlankCategoryError">
         <value xml:lang="en">The Category field cannot be blank.</value>
     </property>
     <property key="BlankCustomerIdError">
         <value xml:lang="en">The Customer field cannot be blank.</value>
     </property>
+    <property key="MessageMethodError">
+        <value xml:lang="en">This implementation is not setup to send text messages. Please review parameter TEXT_MESSAGE_METHOD.</value>
+    </property>
     <property key="BlankProductFeatureGroupIdError">
         <value xml:lang="en">The Facet Group Id field cannot be blank.</value>
     </property>
     <property key="CustomerIdExistError">
         <value xml:lang="en">The Customer# {0} cannot be found in the database. Please retry.</value>
+    </property>
+    <property key="TxtMsgCustomerTxtPreferenceError">
+        <value xml:lang="en">The Customer# {0} have not preference for Text Message. Please retry.</value>
     </property>
     <property key="OrderIdExistError">
         <value xml:lang="en">The Order# {0} cannot be found in the database. Please retry.</value>
@@ -6109,6 +6610,12 @@
     </property>
     <property key="BlankToEmailAddressError">
         <value xml:lang="en">The To Email Address field cannot be blank</value>
+    </property>
+    <property key="BlankFromCellError">
+        <value xml:lang="en">The From Cell field cannot be blank</value>
+    </property>
+    <property key="BlankToCellError">
+        <value xml:lang="en">The To Cell field cannot be blank</value>
     </property>
     <property key="BlankFromQtyError">
         <value xml:lang="en">The From Qty cannot be blank</value>
@@ -6257,6 +6764,9 @@
     <property key="BlankPixelScopeError">
         <value xml:lang="en">Pixel Scope must be selected</value>
     </property>
+    <property key="BlankPixelPagePostionError">
+        <value xml:lang="en">Page Position must be selected</value>
+    </property>
     <property key="BlankPixelCodeError">
         <value xml:lang="en">Pixel Code cannot be blank</value>
     </property>
@@ -6309,7 +6819,10 @@
         <value xml:lang="en">The Category field cannot be blank.</value>
     </property>
     <property key="CategoryIdMatchingError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Category ID must match to a new or existing Category ID</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Category ID [${categoryId}] must match to a new or existing Category ID</value>
+    </property>
+    <property key="ParentCategoryIdMatchingError">
+        <value xml:lang="en">ERROR Row ${rowNo}: A Parent-Category-ID [${parentCategoryId}] must match to a new or existing Category-ID</value>
     </property>
     <property key="CommonPhoneInvalidError">
         <value xml:lang="en">Please enter a valid Phone Number</value>
@@ -6375,8 +6888,20 @@
         <value xml:lang="en">GEO-Code information is not available. Please check that you have entered a valid address and try again.</value>
     </property>
     <property key="InValidIdError">
-        <value xml:lang="en">ERROR Row ${rowNo}: The ${idField} attribute must be alphanumeric. It may contain hyphens or underscores. Spaces and other special characters are not permitted.</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: The ${idField} [${idData}] attribute must be alphanumeric. It may contain hyphens or underscores. Spaces and other special characters are not permitted.</value>
     </property>
+    <property key="ProductFeatureMatchError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Feature [${featureId}] must match to a new or existing Feature (relationship to Product Tab: Selectable or Descriptive Feature).</value>
+    </property>
+    <property key="IdLengthExceedError">
+        <value xml:lang="en">ERROR Row ${rowNo}: ${idField} [${fieldData}] cannot exceed 20 characters in length</value>
+    </property>
+    <property key="DescLengthExceedError">
+        <value xml:lang="en">ERROR Row ${rowNo}: ${idField} [${fieldData}] cannot exceed 255 characters in length</value>
+    </property>
+    <property key="CatNameLengthExceedError">
+        <value xml:lang="en">ERROR Row ${rowNo}: ${idField} [${fieldData}] cannot exceed 100 characters in length</value>
+    </property>    
     <property key="NoRowSelectedDeleteError">
         <value xml:lang="en">A row must be selected in order to Delete a row.</value>
     </property>
@@ -6384,22 +6909,22 @@
         <value xml:lang="en">A row must be selected in order to Insert a new row.</value>
     </property>
     <property key="ParentCategoryIdAssociationError">
-        <value xml:lang="en">ERROR Row ${rowNo}: A Parent-Category-ID must have a corresponding Category-ID</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: A Parent-Category-ID [${parentCategoryId}] must have a corresponding Category-ID</value>
     </property>
     <property key="ProductDefaultPriceError">
         <value xml:lang="en">Please enter a Valid Product Sale Price. It should be a Number.</value>
     </property>
     <property key="ProductIdMatchingError">
-        <value xml:lang="en">ERROR Row ${rowNo}: The FROM-MASTER-Product-ID must match to a new or existing Product</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: The FROM-MASTER-Product-ID [${productId}] must match to a new or existing Product</value>
     </property>
     <property key="ProductIdToMatchingError">
-        <value xml:lang="en">ERROR Row ${rowNo}: The TO-MASTER-Product-ID must match to a new or existing Product</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: The TO-MASTER-Product-ID [${productIdTo}] must match to a new or existing Product</value>
     </property>
     <property key="ManufacturerIdMatchingError">
-        <value xml:lang="en">ERROR Row ${rowNo}: The Manufacturer-ID must match to a new or existing Manufacturer</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: The Manufacturer-ID [${manuId}] must match to a new or existing Manufacturer</value>
     </property>
     <property key="ValidVirtualProductReferenceError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Variant ${productId} must have a valid reference to a existing Virtual Product ${masterProductId}</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Variant [${productId}] must have a valid reference to a existing Virtual Product [${masterProductId}]</value>
     </property>
     <property key="MasterProductIdMissingError">
         <value xml:lang="en">ERROR Row ${rowNo}: Master Product ID must be specified and cannot be blank or empty</value>
@@ -6459,6 +6984,9 @@
         <value xml:lang="en">Accessory Error. The Seq# must be numeric and between 1 and 1000.</value>
     </property>
     <property key="PLPSequenceNumNotVaildNumError">
+        <value xml:lang="en">The Seq# must be numeric.</value>
+    </property>
+    <property key="SequenceNumInVaildError">
         <value xml:lang="en">The Seq# must be numeric.</value>
     </property>
     <property key="ValidGroupNumberError">
@@ -6602,6 +7130,9 @@
     <property key="ValidToEmailAddressError">
         <value xml:lang="en">The To Email Address field must contain a valid email address.</value>
     </property>
+    <property key="ValidToCellError">
+        <value xml:lang="en">The To Cell field must contain a valid phone.</value>
+    </property>
     <property key="ValidFromQtyError">
         <value xml:lang="en">Please enter a Valid From Qty. It should be a number.</value>
     </property>
@@ -6657,10 +7188,10 @@
         <value xml:lang="en">Please enter a Valid Product Short Description. It should not be blank.</value>
     </property>
     <property key="ValidSalesPriceError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price must be a valid number</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price [${salesPrice}] must be a valid number</value>
     </property>
     <property key="ValidListPriceError">
-        <value xml:lang="en">ERROR Row ${rowNo}: List-Price must be a valid number</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: List-Price [${listPrice}] must be a valid number</value>
     </property>
     <property key="ValidBFTotalInventoryRowError">
         <value xml:lang="en">ERROR Row ${rowNo}: BF Total Inventory must be a whole number and between -9999 and 99999</value>
@@ -6837,16 +7368,25 @@
         <value xml:lang="en">Limit Per Order can not be blank.</value>
     </property>
     <property key="UniqueItemNoWarning">
-        <value xml:lang="en">WARNING Row ${rowNo}: Item# is not unique</value>
+        <value xml:lang="en">WARNING Row ${rowNo}: Internal Name [${internalName}] is not unique</value>
     </property>
     <property key="PLPImageNotFoundWarning">
-        <value xml:lang="en">WARNING Row ${rowNo}: The PLP image not found</value>
+        <value xml:lang="en">WARNING Row ${rowNo}: The PLP image [${plpImageData}] not found</value>
     </property>
     <property key="DirectoryPLPImageNotFoundWarning">
         <value xml:lang="en">WARNING Row ${rowNo}: The ${osafeThemeImagePath} PLP image is not found</value>
     </property>
+    <property key="InvalidDateInfo">
+        <value xml:lang="en">Date field contains invalid data and is not recognized as a valid date. Please retry.</value>
+    </property>
+    <property key="InvalidFromDateInfo">
+        <value xml:lang="en">Date field [From Date] contains invalid data and is not recognized as a valid date. Please retry.</value>
+    </property>
+    <property key="InvalidToDateInfo">
+        <value xml:lang="en">Date field [To Date] contains invalid data and is not recognized as a valid date. Please retry.</value>
+    </property>
     <property key="PDPRegularImageNotFoundWarning">
-        <value xml:lang="en">WARNING Row ${rowNo}: The PDP regular image not found</value>
+        <value xml:lang="en">WARNING Row ${rowNo}: The PDP regular image [${pdpRegularImage}] not found</value>
     </property>
     <property key="ProductFeatureUpdateWarning">
         <value xml:lang="en">You may need to re-index SOLR in Admin/Tools for these changes to take effect</value>
@@ -6905,7 +7445,7 @@
         <value xml:lang="en">You must enter a value for Description</value>
     </property>
     <property key="ShipmentMethodTypeIdExistError">
-        <value xml:lang="en">The Shipping Method must be unique.</value>
+        <value xml:lang="en">The entry [${shippingMethodType}] must be unique value.</value>
     </property>
     <property key="ValidMinTotalError">
         <value xml:lang="en">Min Total must contain a numeric value.</value>
@@ -6914,7 +7454,7 @@
         <value xml:lang="en">Max Total must contain a numeric value.</value>
     </property>
     <property key="ValidFlatRateError">
-        <value xml:lang="en">Flat Rate must contain a numeric value.</value>
+        <value xml:lang="en">Flat Rate must be numeric.</value>
     </property>
     <property key="MinGreaterError">
         <value xml:lang="en">Max Total must be greater than Min Total.</value>
@@ -6933,7 +7473,7 @@
             characters.</value>
     </property>
     <property key="partyIdExistError">
-        <value xml:lang="en">Your entry [${parameters.partyId}] must be a unique value</value>
+        <value xml:lang="en">Your entry [${errorKey}] must be a unique value</value>
     </property>
     <property key="BadCarrierShipmentIdError">
         <value xml:lang="en">The Carrier [${carrierShipmentMethodMap.partyId}] and Shipment Method [${carrierShipmentMethodMap.shipmentMethodTypeId}] are not a 
@@ -7003,9 +7543,27 @@
         <value xml:lang="en">Run Date must be entered and for a Pending job it must be in the future</value>
     </property>
     <property key="TestEmailSendFailError">
-        <value xml:lang="en">An error occurred attempting to send an email. Error is [${errorMessage}]. Check the client.properties file. Specific email properties are listed in the 'General Properties' section. It is possible that these are not configured correctly. For more information check the Help function "How To Set Up BigFish Emails".</value>
+        <value xml:lang="en">An error occurred attempting to send an email. Error is [{0}]. Check the client.properties file. Specific email properties are listed in the 'General Properties' section. It is possible that these are not configured correctly. For more information check the Help function "How To Set Up BigFish Emails".</value>
     </property>
-    <property key="MissingParamError">        
+    <property key="TestTxtMsgSendFailError">
+        <value xml:lang="en">An error occurred attempting to send Txt Message. Error is [{0}].</value>
+    </property>
+    <property key="TxtMsgMethodNoneError">
+        <value xml:lang="en">This implementation is not setup to send text messages. Please review parameter TEXT_MESSAGE_METHOD.</value>
+    </property>
+    <property key="TxtMsgMethodUnknownError">
+        <value xml:lang="en">Please review parameter TXT_MESSAGE_METHOD.  The Method defined is not known </value>
+    </property>
+    <property key="TxtMsgTemplateNotFoundError">
+        <value xml:lang="en">The Txt Template was not found.</value>
+    </property>
+    <property key="TxtMsgTemplateStatusError">
+        <value xml:lang="en">The Txt Template is not Active.</value>
+    </property>
+    <property key="TxtMsgTemplateEmptyError">
+        <value xml:lang="en">The Txt Template is empty.</value>
+    </property>
+    <property key="MissingParamError">       
         <value xml:lang="en">The service [${serviceName}] cannot run without the parameter [${name}].</value>
     </property>
     <property key="ProductIntroDiscCompareError">
@@ -7206,6 +7764,24 @@
     <property key="OutOfStockAddToCartError">
         <value xml:lang="en">This item is currently out of stock.</value>
     </property>
+    <property key="LongProductNameError">
+        <value xml:lang="en">The Product Name cannot exceed 100 characters</value>
+    </property>
+    <property key="ProductNameLengthExceedRowError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Product Name is limited to 100 characters</value>
+    </property>
+    <property key="ProductNameInvalidRowError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Product Name is invalid, name fields are limited to alphanumeric and some special characters (! @  # $ % ? , - _ : ; . ')</value>
+    </property>
+    <property key="InternalNameExceedsLengthError">
+        <value xml:lang="en">The Item# cannot exceed 255 characters</value>
+    </property>
+    <property key="InternalNameLengthExceedRowError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Internal Name is limited to 255 characters</value>
+    </property>
+    <property key="InternalNameInvalidRowError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Internal Name is invalid, name fields are limited to alphanumeric and some special characters (! @  # $ % ? , - _ : ; . ')</value>
+    </property>
  <!-- ******* Error Messages  Ends*************************************** -->
  
  
@@ -7227,6 +7803,9 @@
     </property>
     <property key="EmailTestBtn">
         <value xml:lang="en">Send Test Email</value>
+    </property>
+    <property key="TxtMsgTestBtn">
+        <value xml:lang="en">Send Text Message</value>
     </property>
     <property key="EditGroupBtn">
         <value xml:lang="en">Edit Group</value>
@@ -7528,6 +8107,12 @@
     <property key="AddDayBtn">
         <value xml:lang="en">&gt;</value>
     </property>
+    <property key="UpdateBtn">
+        <value xml:lang="en">Update</value>
+    </property>
+    <property key="RemoveItemBtn">
+        <value xml:lang="en">Remove Item</value>
+    </property>
     <!-- **** Button Ends*************************************** -->
     
     <!-- =====  Labels for CONTENT Specific === -->
@@ -7675,6 +8260,9 @@
     <property key="ShowFinishedDetailTooltip">
         <value xml:lang="en">Edit Finished Good Product</value>
     </property>
+    <property key="FinishedGoodNoVarsTooltip">
+        <value xml:lang="en">Finished Good, No Variants</value>
+    </property>
     
     <!-- === Tooltip Ends ===== -->
 
@@ -7807,6 +8395,9 @@
     </property>
     <property key="IS_DOWNLOADED_Caption">
         <value xml:lang="en">Export Status:</value>
+    </property>
+    <property key="StarsCaption">
+        <value xml:lang="en">Stars:</value>
     </property>
     <property key="STATE_PROVINCE_Caption">
         <value xml:lang="en">State or Province:</value>
@@ -8004,5 +8595,29 @@
     <property key="PromoCodeAddedOnlyInfo">
         <value xml:lang="en">Added but does not apply</value>
     </property>
+    <property key="NoVariantsForSaleWarning">
+        <value xml:lang="en">WARNING: there are NO VARIANTS available for sale for the VIRTUAL Product {0}. For consistency you should also change the Introduced-Date or Discontinued-Date on the VIRTUAL product to properly reflect product availability</value>
+    </property>
+    <property key="VirtualSimplePricingHelpInfo">
+        <value xml:lang="en">Simple Pricing for the VIRTUAL product can be used to control pricing for all the VARIANTS. Modify the pricing on this page and leave VARIANT prices blank. If you have VARIANT override pricing simply modify the pricing for the specific VARIANTS.</value>
+    </property>
+    <property key="VirtualVolumePricingHelpInfo">
+        <value xml:lang="en">Volume Pricing for the VIRTUAL product needs to be duplicated on the VARIANT products. Volume Pricing does NOT filter down to the associated VARIANTS.</value>
+    </property>
+    <property key="VariantSimplePricingHelpInfo">
+        <value xml:lang="en">Leave the Simple Pricing blank for any VARIANT product that will use the pricing from the parent VIRTUAL product. In other words, only enter pricing if you want to override the VIRTUAL values.</value>
+    </property>
+    <property key="VariantVolumePricingHelpInfo">
+        <value xml:lang="en">Volume Pricing for the VARIANT is required, it will NOT filter down from the parent VIRTUAL product.</value>
+    </property>
+    <property key="ProdPricingSolrReIndexHelperInfo">
+        <value xml:lang="en">You may need to re-index SOLR in Admin/Tools for Product Prices and other changes to take effect. This is particularly true if the VIRTUAL pricing has been modified, since that is used by SOLR for the PLP. Pricing on the PDP is always retrieved dynamically.</value>
+    </property>
     <!-- === End of Helper info ===== -->
+    
+    <!-- === Info message  ===== -->
+    <property key="CssCompressedInfoMessage">
+        <value xml:lang="en">The CSS file has been optimized and compressed and cannot be edited</value>
+    </property>
+    <!-- === End of Info message ===== -->
 </resource>

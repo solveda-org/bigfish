@@ -34,7 +34,7 @@
                     <td class="idCol <#if !hasNext>lastRow</#if>" >${orderStatusDate[0]!""}</td>
                     <td class="dateCol <#if !hasNext>lastRow</#if>">${orderStatusDate[1]!""}</td>
                     <td class="nameCol<#if !hasNext>lastRow</#if>">${orderStatus.statusId!""}</td>
-                    <td class="nameCol <#if !hasNext>lastRow</#if>">${orderItem.orderItemSeqId!""}</td>
+                    <td class="nameCol <#if !hasNext>lastRow</#if>"><a href="<@ofbizUrl>orderItemDetail?orderId=${orderItem.orderId!}</@ofbizUrl>">${orderItem.orderItemSeqId!""}</a></td>
                     <td class="nameCol <#if !hasNext>lastRow</#if>">${orderItem.productId!""}</td>
                     <td class="nameCol <#if !hasNext>lastRow</#if>"><#if orderItem?exists && orderItem?has_content><#if product?exists && product?has_content>${product.internalName!""}</#if></#if></td>
                     <td class="nameCol <#if !hasNext>lastRow</#if>"><#if orderItem?exists && orderItem?has_content><#if product?exists && product?has_content>${productName!""}</#if></#if></td>

@@ -92,6 +92,11 @@
         <response name="success" type="view" value="orderManagement"/>
         <response name="error" type="view" value="orderStatusDetail"/>
     </request-map>
+    <request-map uri="getOrderStatusRefundDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="orderStatusRefundDetail"/>
+        <response name="error" type="view" value="orderStatusRefundDetail"/>
+    </request-map>
     <!-- Shipment Details -->
     <request-map uri="orderShipmentDetail">
         <security https="true" auth="true"/>
@@ -114,6 +119,10 @@
     <request-map uri="OrderStatusSummary">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="OrderStatusSummary"/>
+    </request-map>
+    <request-map uri="orderItemDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="orderItemDetail"/>
     </request-map>
 
     <request-map uri="promotionManagement">
@@ -264,6 +273,20 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="taxManagement"/>
     </request-map>
+    <request-map uri="shipmentGatewaysManagement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipmentGatewaysManagement"/>
+    </request-map> 
+    <request-map uri="shipmentGatewaysDetails">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipmentGatewaysDetails"/>
+    </request-map>   
+    <request-map uri="updateShipmentGateways">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateShipmentGatewaysGroup"/>
+        <response name="success" type="view" value="shipmentGatewaysManagement"/>
+        <response name="error" type="view" value="shipmentGatewaysDetails"/>
+    </request-map> 
     <request-map uri="searchTax">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="taxManagement"/>
@@ -279,8 +302,6 @@
         <response name="success" type="view" value="taxDetail"/>
     </request-map>
 
-
-    
     <request-map uri="scheduledJob">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="scheduledJob"/>
@@ -816,6 +837,15 @@
         <response name="success" type="view" value="emailSpotDetail"/>
     </request-map>
 
+    <request-map uri="txtMsgSpotList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="txtMsgSpotList"/>
+    </request-map>
+     <request-map uri="txtMsgSpotDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="txtMsgSpotDetail"/>
+    </request-map>
+
      <request-map uri="siteLogoDetail">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="siteLogoDetail"/>
@@ -871,6 +901,12 @@
         <event type="service" path="" invoke="updateTextContentGroup"/> 
         <response name="success" type="request-redirect" value="emailSpotList"/>
         <response name="error" type="view" value="emailSpotDetail"/>
+    </request-map>
+    <request-map uri="updateContentTxtMsgSpot">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateTextContentGroup"/> 
+        <response name="success" type="request-redirect" value="txtMsgSpotList"/>
+        <response name="error" type="view" value="txtMsgSpotDetail"/>
     </request-map>
     <request-map uri="updateContentSiteLogo">
         <security https="true" auth="true"/>
@@ -957,6 +993,7 @@
         <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminEvents.xml" invoke="createCategoryTextContent"/>
         <response name="success" type="request-redirect" value="plpCategoryContentDetail">
             <redirect-parameter name="parameters.contentId"/>
+            <redirect-parameter name="parameters.productCategoryId"/>
         </response>
     </request-map>
     
@@ -973,6 +1010,7 @@
         <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminEvents.xml" invoke="createCategoryTextContent"/>
         <response name="success" type="request-redirect" value="pdpContentDetail">
             <redirect-parameter name="parameters.contentId"/>
+            <redirect-parameter name="parameters.productCategoryId"/>
         </response>
     </request-map>
     <request-map uri="updateContentPDP">
@@ -1121,10 +1159,11 @@
     </request-map>
     <request-map uri="productVariantsGroup">
         <security https="true" auth="true"/>
-        <event type="groovy" invoke="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productVariantGroup.groovy"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/productVariantGroup.groovy"/>
         <response name="success" type="view" value="productVariantsGroup"/>
-        <response name="error" type="request" value="productVariants"/>
+		<response name="error" type="request" value="productVariants"/>
     </request-map>
+    
     <request-map uri="updateProductVariantsGroup">
         <security auth="true" https="true"/>
         <event type="service"  invoke="updateProductVariantsGroup"/>
@@ -1168,6 +1207,11 @@
         <event type="service" invoke="updateProductMetatagGroup"/>
         <response name="success" type="request-redirect" value="productManagement"/>
         <response name="error" type="view" value="productMetatagDetail"/>
+    </request-map>
+    
+    <request-map uri="lookupManufacturer">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="lookupManufacturer"/>
     </request-map>
 
     <request-map uri="addProduct">
@@ -1314,7 +1358,13 @@
     <request-map uri="sendEmailTest">
         <security https="true" auth="true"/>
         <event type="service" invoke="sendEmailTestGroup"/>
-        <response name="success" type="request-redirect" value="adminToolList"/>
+        <response name="success" type="view" value="adminToolDetail"/>
+        <response name="error" type="view" value="adminToolDetail"/>
+    </request-map>
+    <request-map uri="sendTxtMsgTest">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="sendTxtMessageTestGroup"/>
+        <response name="success" type="request-redirect" value="adminToolDetail"/>
         <response name="error" type="view" value="adminToolDetail"/>
     </request-map>
     <request-map uri="genSeoUrlMap">
@@ -1633,7 +1683,7 @@
     </request-map>
     <request-map uri="genSiteMap">
         <security https="true" auth="true"/>
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="siteMapDetail.groovy"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/siteMapDetail.groovy"/>
         <response name="success" type="none"/>
     </request-map>
 
@@ -1684,7 +1734,7 @@
     </request-map>
     <request-map uri="requestCatalog.csv">
         <security https="true" auth="true"/>
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/" invoke="custRequestCSVName.groovy"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/custRequestCSVName.groovy"/>
         <response name="success" type="request" value="custRequestCatalogCSV"/>
     </request-map>
     <request-map uri="custRequestCatalogCSV">
@@ -1693,7 +1743,7 @@
     </request-map>
     <request-map uri="contactUs.csv">
         <security https="true" auth="true"/>
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/" invoke="custRequestCSVName.groovy"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/custRequestCSVName.groovy"/>
         <response name="success" type="request" value="custRequestContactUsCSV"/>
     </request-map>
     <request-map uri="custRequestContactUsCSV">
@@ -1823,6 +1873,11 @@
         <response name="success" type="view" value="feedsImportDetail"/>
     </request-map>
     
+    <request-map uri="bluedartFeedsImportDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="bluedartFeedsImportDetail"/>
+    </request-map>
+    
     <request-map uri="feedsExportDetail">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="feedsExportDetail"/>
@@ -1840,6 +1895,20 @@
         <event type="service" invoke="importOrderStatusChangeXmlGroup"/>
         <response name="success" type="view" value="feedsList"/>
         <response name="error" type="view" value="feedsImportDetail"/>
+    </request-map>
+    
+    <request-map uri="importBluedartPrepaid">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="importBluedartPrepaidGroup"/>
+        <response name="success" type="view" value="feedsList"/>
+        <response name="error" type="view" value="bluedartFeedsImportDetail"/>
+    </request-map>
+    
+    <request-map uri="importBluedartCoD">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="importBluedartCoDGroup"/>
+        <response name="success" type="view" value="feedsList"/>
+        <response name="error" type="view" value="bluedartFeedsImportDetail"/>
     </request-map>
     
     <request-map uri="importCustomerXml">
@@ -1881,15 +1950,17 @@
         <response name="error" type="view" value="feedsExportDetail"/>
     </request-map>
     <request-map uri="downloadExportedFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="downloadExportedFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/downloadExportedFile.groovy"/>
         <response name="success" type="none"/>
         <response name="notDownload" type="view" value="feedsList"/>
     </request-map>
     <request-map uri="downloadFile">
         <security https="true" auth="true"/>
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="downloadFile.groovy"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/downloadFile.groovy"/>
         <response name="success" type="none"/>
     </request-map>
+    
     <!-- Product Loader FUNCTIONS -->
     <request-map uri="productLoaderDetail">
         <security https="true" auth="true"/>
@@ -1914,6 +1985,7 @@
         <response name="error" type="request" value="checkFileInSession"/>
     </request-map>
     <request-map uri="checkFileInSession">
+        <security https="true" auth="true"/>
         <event type="java" path="com.osafe.events.OsafeAdminEvent" invoke="checkProductFileInSession"/>
         <response name="success" type="view" value="xlsLoaderPreview"/>
         <response name="error" type="request-redirect" value="bigFishXlsLoader"/>
@@ -1925,28 +1997,32 @@
         <response name="success" type="view" value="bigFishXlsSampleDetail"/>
     </request-map>
     <request-map uri="buildSampleClientProductFile">
+        <security https="true" auth="true"/>
         <event type="service" invoke="exportClientProductTemplate"/>
         <response name="success" type="request-redirect" value="downloadBigFishSampleXls"/>
         <response name="error" type="view" value="bigFishXlsSampleDetail"/>
     </request-map>
     <request-map uri="downloadBigFishSampleXls">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="sampleProductFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/sampleProductFile.groovy"/>
         <response name="success" type="none"/>
     </request-map>
     
     <request-map uri="buildSampleClientProductXmlFile">
+        <security https="true" auth="true"/>
         <event type="service" invoke="exportClientProductTemplateXML"/>
         <response name="success" type="request-redirect" value="downloadBigFishSampleXml"/>
         <response name="error" type="view" value="bigFishXlsSampleDetail"/>
     </request-map>
     <request-map uri="downloadBigFishSampleXml">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="sampleProductFileXml.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/sampleProductFileXml.groovy"/>
         <response name="success" type="none"/>
     </request-map>
     
-    
     <request-map uri="exportCustRequestXML">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/" invoke="exportCustRequestXML.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/customer/exportCustRequestXML.groovy"/>
         <response name="success" type="none"/>
     </request-map>
     
@@ -1962,7 +2038,8 @@
         <response name="error" type="request" value="bigFishXlsFromDBDetail"/>
     </request-map>
     <request-map uri="downloadClientProductFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="clientProductFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/clientProductFile.groovy"/>
         <response name="success" type="none"/>
     </request-map>
     <request-map uri="buildClientProductXmlFile">
@@ -1972,7 +2049,8 @@
         <response name="error" type="request" value="bigFishXlsFromDBDetail"/>
     </request-map>
     <request-map uri="downloadClientProductXmlFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="clientProductXmlFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/clientProductXmlFile.groovy"/>
         <response name="success" type="none"/>
     </request-map>
     <!-- Big Fish XLS from eBay -->
@@ -1987,7 +2065,8 @@
         <response name="error" type="request" value="bigFishXlsFromEbayDetail"/>
     </request-map>
     <request-map uri="downloadClientProductEbayFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="clientProductEbayFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/clientProductEbayFile.groovy"/>
         <response name="success" type="none"/>
     </request-map>
     <request-map uri="imageLocationPreferencesDetail">
@@ -2217,7 +2296,7 @@
     </request-map>
     <request-map uri="exportBigfishContent">
         <security https="true" auth="true"/>
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/content/" invoke="exportBigfishContent.groovy"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/content/exportBigfishContent.groovy"/>
         <response name="success" type="none"/>
     </request-map>
     <!--System Health check screens -->
@@ -2268,7 +2347,8 @@
     </request-map>
     
     <request-map uri="downloadCustomerExportedFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="downloadExportedFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/downloadExportedFile.groovy"/>
         <response name="success" type="none"/>
         <response name="notDownload" type="request-redirect" value="customerManagement"/>
     </request-map>
@@ -2286,7 +2366,8 @@
     </request-map>
     
     <request-map uri="downloadOrderExportedFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="downloadExportedFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/downloadExportedFile.groovy"/>
         <response name="success" type="none"/>
         <response name="notDownload" type="request-redirect" value="orderManagement"/>
     </request-map>
@@ -2304,7 +2385,8 @@
     </request-map>
     
     <request-map uri="downloadContactUsExportedFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="downloadExportedFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/downloadExportedFile.groovy"/>
         <response name="success" type="none"/>
         <response name="notDownload" type="request-redirect" value="custRequestContactUsList"/>
     </request-map>
@@ -2323,7 +2405,8 @@
     </request-map>
     
     <request-map uri="downloadRequestCatalogExportedFile">
-        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="downloadExportedFile.groovy"/>
+        <security https="true" auth="true"/>
+        <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/downloadExportedFile.groovy"/>
         <response name="success" type="none"/>
         <response name="notDownload" type="request-redirect" value="custRequestCatalogList"/>
     </request-map>
@@ -2392,6 +2475,8 @@
         <response name="productCategoryMembershipDetail" type="request-redirect" value="productCategoryMembershipDetail"/>
         <response name="productAssociationDetail" type="request-redirect" value="productAssociationDetail"/>
         <response name="productVariants" type="request-redirect" value="productVariants"/>
+        <response name="productFeatures" type="request-redirect" value="productFeatures"/>
+        <response name="productFeatureDetail" type="request-redirect" value="productFeatureDetail"/>
         <response name="error" type="view-last"/>
     </request-map>
     
@@ -2460,7 +2545,7 @@
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="processPayment"/>
         <response name="success" type="request" value="adminProcessBigfishInventory"/>
         <response name="fail" type="request" value="adminProcesspaymentFail"/>
-        <response name="error" type="view" value="adminProcesspaymentError"/>
+        <response name="error" type="request" value="adminProcesspaymentError"/>
     </request-map>
     <request-map uri="adminProcesspaymentFail">
         <security https="true" auth="true"/>
@@ -2524,6 +2609,7 @@
         <response name="error" type="view" value="adminToolDetail"/>
     </request-map>
     
+    
     <!-- ==== Admin Checkout Screens ===== -->
     
     
@@ -2538,11 +2624,13 @@
     <view-map name="orderManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderManagement"/>
     <view-map name="orderDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderDetail"/>
     <view-map name="orderStatusDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderStatusDetail"/>
+    <view-map name="orderStatusRefundDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderStatusRefundDetail"/>
     <view-map name="orderShipmentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderShipmentDetail"/>
     <view-map name="statusUpdateList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#statusUpdateList"/>
     <view-map name="orderNotesList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderNotesList"/>
     <view-map name="visitDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#visitDetail"/>
     <view-map name="OrderStatusSummary" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#OrderStatusSummary"/>
+    <view-map name="orderItemDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#orderItemDetail"/>
 
     <view-map name="promotionManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#promotionManagement"/>
     <view-map name="addPromotion" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addPromotion"/>
@@ -2605,8 +2693,10 @@
 	<view-map name="shippingChargeDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#shippingChargeDetail"/>
 	<view-map name="addShippingCharge" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addShippingCharge"/>
 	<view-map name="taxManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#taxManagement"/>
-	<view-map name="taxDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#taxDetail"/>
-	
+	<view-map name="taxDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#taxDetail"/>	
+	<view-map name="shipmentGatewaysManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#shipmentGatewaysManagement"/>
+	<view-map name="shipmentGatewaysDetails" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#shipmentGatewaysDetails"/>
+
 	<view-map name="userManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#userManagement"/>
 	<view-map name="userDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#userDetail"/>
 	<view-map name="addUser" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addUser"/>
@@ -2640,6 +2730,8 @@
 	<view-map name="siteInfoDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#siteInfoContentDetail"/>
 	<view-map name="emailSpotList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#emailSpotList"/>
 	<view-map name="emailSpotDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#emailSpotContentDetail"/>
+	<view-map name="txtMsgSpotList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#txtMsgSpotList"/>
+	<view-map name="txtMsgSpotDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#txtMsgSpotContentDetail"/>
 	<view-map name="siteLogoDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#siteLogoDetail"/>
 	<view-map name="headerLinksDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#headerLinksDetail"/>
 	<view-map name="footerContentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#footerContentDetail"/>
@@ -2714,6 +2806,8 @@
     <view-map name="addProduct" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addProduct"/>
     <view-map name="productDetailFeature" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productDetailFeature"/>
     
+    <view-map name="lookupManufacturer" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#lookupManufacturer"/>
+    
     <view-map name="solrConfigList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#solrConfigList"/>
     <view-map name="facetValueList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#facetValueList"/>
     <view-map name="facetGroupList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#facetGroupList"/>
@@ -2747,6 +2841,7 @@
     <view-map name="feedsList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#feedsList"/>
     <view-map name="feedsImportDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#feedsImportDetail"/>
     <view-map name="feedsExportDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#feedsExportDetail"/>
+    <view-map name="bluedartFeedsImportDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#bluedartFeedsImportDetail"/>
     
     <view-map name="productLoaderDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productLoaderDetail"/>
     <view-map name="bigFishXlsSampleDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#bigFishXlsSampleDetail"/>
@@ -2827,6 +2922,7 @@
     <view-map name="shoppingCartBottom" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#shoppingCartBottom"/>
     <view-map name="reloadPromoCode" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#promotionOption"/>
     <view-map name="adminOrderConfirm" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#adminOrderConfirm"/>
+    
     
 </site-conf>
 

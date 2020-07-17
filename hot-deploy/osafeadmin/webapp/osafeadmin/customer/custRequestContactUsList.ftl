@@ -6,7 +6,7 @@
     <th class="nameCol">${uiLabelMap.LastNameLabel}</th>
     <th class="nameCol">${uiLabelMap.FirstNameLabel}</th>
     <th class="descCol">${uiLabelMap.ContactReasonLabel}</th>
-    <th class="addrCol">${uiLabelMap.EmailLabel}</th>
+    <th class="addrCol">${uiLabelMap.EmailAddressLabel}</th>
     <th class="dateCol">${uiLabelMap.RequestDateLabel}</th>
     <th class="statusCol">${uiLabelMap.ExportStatusLabel}</th>
     <th class="actionCol"></th>
@@ -15,10 +15,12 @@
   <#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
     
-    <#list resultList as contactUs>
-      <#assign hasNext = contactUs_has_next>
+    <#list resultList as custRequestInfo>
+      <#assign contactUs = custRequestInfo.CustRequest!>
+      <#assign custReqAttributeList = custRequestInfo.CustRequestAttributeList!>
+      <#assign hasNext = custRequestInfo_has_next>
       <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
-        <td class="idCol <#if !contactUs_has_next?if_exists>lastRow</#if> firstCol" >
+        <td class="idCol <#if !custRequestInfo_has_next?if_exists>lastRow</#if> firstCol" >
             <a href="<@ofbizUrl>custRequestContactUsDetail?custReqId=${contactUs.custRequestId?if_exists}<#if contactUs.fromPartyId?has_content>&partyId=${contactUs.fromPartyId?if_exists}</#if></@ofbizUrl>">${contactUs.custRequestId?if_exists}</a>
         </td>
         <td class="idCol <#if !reqCatalog_has_next?if_exists>lastRow</#if> firstCol" >
@@ -26,7 +28,6 @@
                 <a href="<@ofbizUrl>customerDetail?partyId=${contactUs.fromPartyId?if_exists}</@ofbizUrl>">${contactUs.fromPartyId?if_exists}</a>
             </#if>
         </td>
-        <#assign custReqAttributeList = delegator.findByAnd("CustRequestAttribute",Static["org.ofbiz.base.util.UtilMisc"].toMap("custRequestId", contactUs.custRequestId))>
         <#assign comment =""/>
         <#if custReqAttributeList?exists && custReqAttributeList?has_content>
           <#list custReqAttributeList as custReqAttribute>

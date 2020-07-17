@@ -1,74 +1,71 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <menus>
-    <menu-item name="CustomerMgmntNav" text="CustomerMgmntNav" href="customerNavigation" entity="SPER_PARTY_MGMT" action="_VIEW" sequenceNumber="0" className="topLevel firstItem" navigationCategory="CUSTOMER">
-        <sub-menu-item name="CustomerViewNav" text="CustomerViewNav" href="customerManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="CustomerViewHeading" description="CustomerViewInfo"/>
-        <sub-menu-item name="CustomerAddNav" text="CustomerAddNav" href="addCustomer" sequenceNumber="1" className="subLevel" heading="CustomerAddHeading" description="CustomerAddInfo"/>
-        <sub-menu-item name="ReqCatalogEventNav" text="ReqCatalogEventNav" href="custRequestCatalogList" sequenceNumber="2" className="subLevel" heading="ReqCatalogEventHeading" description="ReqCatalogEventInfo"/>
-        <sub-menu-item name="ContactUsEventNav" text="ContactUsEventNav" href="custRequestContactUsList" sequenceNumber="3" className="subLevel" heading="ContactUsEventHeading" description="ContactUsEventInfo"/>
-        <sub-menu-item name="AbandonedCartAnalysisNav" text="AbandonedCartAnalysisNav" href="abandonedCartAnalysis" sequenceNumber="4" className="subLevel" heading="AbandonedCartAnalysisHeading" description="AbandonedCartAnalysisInfo"/>
-    </menu-item>
-    <menu-item name="OrderMgmntNav" text="OrderMgmntNav" href="orderNavigation" entity="SPER_ORDER_MGMT" action="_VIEW" sequenceNumber="1" className="topLevel" navigationCategory="ORDER">
-        <sub-menu-item name="OrderViewNav" text="OrderViewNav" href="orderManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="OrderViewHeading" description="OrderViewInfo"/>
-        <sub-menu-item name="OrderAddNav" text="OrderAddNav" href="underConstruction" sequenceNumber="1" className="subLevel" heading="OrderAddHeading" description="OrderAddInfo"/>
-        <sub-menu-item name="OrderStatusSummaryNav" text="OrderStatusSummaryNav" href="OrderStatusSummary" sequenceNumber="2" className="subLevel" heading="OrderStatusSummaryHeading" description="OrderStatusSummaryInfo"/>
-    </menu-item>
-    <menu-item name="CatalogNav" text="CatalogNav" href="catalogNavigation" entity="CATALOG" action="_VIEW" sequenceNumber="2" className="topLevel" navigationCategory="CATALOG">
-        <sub-menu-item name="CatalogViewNav" text="CatalogViewNav" href="catalogManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="CatalogViewHeading" description="CatalogViewInfo"/>
-        <sub-menu-item name="CatalogProductNav" text="CatalogProductNav" href="productManagement" sequenceNumber="1" className="subLevel" heading="CatalogProductHeading" description="CatalogProductInfo"/>
-        <sub-menu-item name="CatalogAddProductNav" text="CatalogAddProductNav" href="addProduct" sequenceNumber="2" className="subLevel" heading="CatalogAddProductHeading" description="CatalogAddProductInfo"/>
-        <sub-menu-item name="CatalogPriceNav" text="CatalogPriceNav" href="underConstruction" sequenceNumber="3" className="subLevel" heading="CatalogPriceHeading" description="CatalogPriceInfo"/>
-    </menu-item>
-    <menu-item name="PromotionNav" text="PromotionNav" href="promotionNavigation" entity="SPER_PROMO" action="_VIEW" sequenceNumber="3" className="topLevel" navigationCategory="PROMOTION">
-        <sub-menu-item name="PromotionViewNav" text="PromotionViewNav" href="promotionManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="PromotionViewHeading" description="PromotionViewInfo"/>
-        <sub-menu-item name="PromotionAddNav" text="PromotionAddNav" href="addPromotion" sequenceNumber="0" className="subLevel navfirstitem" heading="PromotionAddHeading" description="PromotionAddInfo"/>
-    </menu-item>
-    <menu-item name="RatingsReviewNav" text="RatingsReviewNav" href="reviewNavigation" entity="SPER_REVIEW" action="_VIEW" sequenceNumber="4" className="topLevel" navigationCategory="REVIEW">
-        <sub-menu-item name="ReviewViewNav" text="ReviewViewNav" href="reviewManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="ReviewViewHeading" description="ReviewViewInfo"/>
-        <sub-menu-item name="ReviewAddNav" text="ReviewAddNav" href="underConstruction" sequenceNumber="1" className="subLevel" heading="ReviewAddHeading" description="ReviewAddInfo"/>
-        <sub-menu-item name="RatingReviewAnalysisNav" text="RatingReviewAnalysisNav" href="ratingReviewAnalysis" sequenceNumber="4" className="subLevel" heading="RatingReviewAnalysisHeading" description="RatingReviewAnalysisInfo"/>
-        <sub-menu-item name="RatingReviewSummaryNav" text="RatingReviewSummaryNav" href="ratingReviewSummary" sequenceNumber="3" className="subLevel" heading="ReviewSummaryHeading" description="RatingReviewSummaryInfo"/>
-    </menu-item>
-    <menu-item name="StoreNav" text="StoreNav" href="storeLocationNavigation" entity="SPER_STORE" action="_VIEW" sequenceNumber="5" className="topLevel" navigationCategory="STORE">
-        <sub-menu-item name="StoreViewNav" text="StoreViewNav" href="storeLocationManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="StoreLocationViewHeading" description="StoreLocationViewInfo"/>
-        <sub-menu-item name="StoreAddNav" text="StoreAddNav" href="addStoreLocation" sequenceNumber="1" className="subLevel" heading="StoreLocationAddHeading" description="StoreLocationAddInfo"/>
-    </menu-item>
-    <menu-item name="ContentNav" text="ContentNav" href="contentNavigation" entity="SPER_CONTENT" action="_VIEW" sequenceNumber="6" className="topLevel" navigationCategory="CONTENT">
-        <sub-menu-item name="MediaLibraryNav" text="MediaLibraryNav" href="mediaContentList" sequenceNumber="0" className="subLevel navfirstitem" heading="MediaLibraryHeading" description="MediaInfo"/>
-        <sub-menu-item name="ContentLibraryNav" text="ContentLibraryNav" href="contentLibraryList" sequenceNumber="1" className="subLevel navfirstitem" heading="ContentLibraryHeading" description="ContentLibraryInfo"/>
-        <sub-menu-item name="SiteInfoNav" text="SiteInfoNav" href="siteInfoList" sequenceNumber="2" className="subLevel" heading="SiteInfoHeading" description="SiteInfoInfo"/>
-        <sub-menu-item name="HomePageNav" text="HomePageNav" href="homeSpotList" sequenceNumber="3" className="subLevel" heading="ManageHomeSpotHeading" description="ManageHomePageInfo"/>
-        <sub-menu-item name="StaticPageNav" text="StaticPageNav" href="staticPageList" sequenceNumber="4" className="subLevel" heading="ManageStaticPageHeading" description="ManageStaticPageInfo"/>
-        <sub-menu-item name="PageContentSpotsNav" text="PageContentSpotsNav" href="ptsList" sequenceNumber="5" className="subLevel" heading="PageContentSpotsHeading" description="PageContentSpotsInfo"/>
-        <sub-menu-item name="GeneralPDPContentSpotsNav" text="GeneralPDPContentSpotsNav" href="generalPDPSpotList" sequenceNumber="6" className="subLevel" heading="GeneralPDPContentSpotsHeading" description="GeneralPDPContentSpotsInfo"/>
-        <sub-menu-item name="DynamicPLPContentSpotsNav" text="DynamicPLPContentSpotsNav" href="plpContentList" sequenceNumber="7" className="subLevel" heading="DynamicPLPContentSpotsHeading" description="DynamicPLPContentSpotsInfo"/>
-    </menu-item>
-
-    <menu-item name="ShippingNav" text="ShippingNav" href="shippingNavigation" entity="SPER_CONTENT" action="_VIEW" sequenceNumber="7" className="topLevel" navigationCategory="SHIPPING">
-    	<sub-menu-item name="CarrierNav" text="CarrierNav" href="carrierManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="CarrierHeading" description="CarrierInfo"/>
-        <sub-menu-item name="ShipmentMethodNav" text="ShipmentMethodNav" href="shipmentMethodManagement" sequenceNumber="1" className="subLevel" heading="ShipmentMethodHeading" description="ShipmentMethodInfo"/>
-        <sub-menu-item name="ShippingChargeNav" text="ShippingChargeNav" href="shippingChargeManagement" sequenceNumber="2" className="subLevel" heading="ShippingChargeHeading" description="ShippingChargeInfo"/>
-        <sub-menu-item name="TaxesNav" text="TaxesNav" href="taxManagement" sequenceNumber="3" className="subLevel" heading="TaxesHeading" description="TaxesInfo"/>
-    </menu-item>
-    
-    <menu-item name="UserNav" text="UserNav" href="userNavigation" entity="SPER_CONTENT" action="_VIEW" sequenceNumber="8" className="topLevel" navigationCategory="USER">
-    	<sub-menu-item name="UserManagementNav" text="UserManagementNav" href="userManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="UserManagementHeading" description="UserManagementInfo"/>
-        <sub-menu-item name="SecurityGroupNav" text="SecurityGroupNav" href="securityGroupManagement" sequenceNumber="1" className="subLevel" heading="SecurityGroupHeading" description="SecurityGroupInfo"/>
-        <sub-menu-item name="PermissionListNav" text="PermissionListNav" href="permissionList" sequenceNumber="2" className="subLevel" heading="PermissionListHeading" description="PermissionListInfo"/>
-    </menu-item> 
-    
-    <menu-item name="AdminNav" text="AdminNav" href="adminNavigation" entity="SPER_ADMIN" action="_VIEW" sequenceNumber="9" className="topLevel lastItem" navigationCategory="ADMIN">
-        <sub-menu-item name="AdminSystemParamNav" text="AdminSystemParamNav" href="parameterList" sequenceNumber="0" className="subLevel" heading="AdminSystemParamHeading" description="AdminParamInfo"/>
-        <sub-menu-item name="AdminLabelCaptionNav" text="AdminLabelCaptionNav" href="manageUiLabel" sequenceNumber="1" className="subLevel" heading="AdminLabelCaptionHeading" description="AdminLabelCaptionInfo"/>
-        <sub-menu-item name="ManageEmailNav" text="ManageEmailNav" href="manageEmailList" sequenceNumber="2" className="subLevel" heading="ManageEmailHeading" description="ManageEmailInfo"/>
-        <sub-menu-item name="SolrConfigNav" text="SolrConfigNav" href="solrConfigList" sequenceNumber="3" className="subLevel" heading="SolrConfigHeading" description="SolrConfigInfo"/>
-        <sub-menu-item name="LookupDataNav" text="LookupDataNav" href="lookupDataList" sequenceNumber="4" className="subLevel" heading="LookupDataHeading" description="LookupDataInfo"/>
-        <sub-menu-item name="PaymentSettingsNav" text="PaymentSettingsNav" href="paymentSettingsList" sequenceNumber="5" className="subLevel" heading="PaymentSettingsHeading" description="PaymentSettingsInfo"/>
-        <sub-menu-item name="AdminPixelTrackingNav" text="AdminPixelTrackingNav" href="pixelTrackingManagement" sequenceNumber="6" className="subLevel" heading="AdminPixelTrackingHeading" description="AdminPixelTrackingInfo"/>
-        <sub-menu-item name="JobNav" text="JobNav" href="scheduledJob" sequenceNumber="7" className="subLevel" heading="ScheduledJobHeading" description="ScheduledJobInfo"/>
-        <sub-menu-item name="FeedsNav" text="FeedsNav" href="feedsList" sequenceNumber="8" className="subLevel" heading="FeedsHeading" description="FeedsInfo"/>
-        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="9" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>    
-    </menu-item>
-    
-     
-
+	<menu sequenceNumber="0">
+	    <menu-item action="_VIEW" className="topLevel firstItem" entity="SPER_PARTY_MGMT" href="customerNavigation" name="CustomerMgmntNav" navigationCategory="CUSTOMER" sequenceNumber="0" text="CustomerMgmntNav">
+	        <sub-menu-item className="subLevel navfirstitem" description="CustomerViewInfo" heading="CustomerViewHeading" href="customerManagement" name="CustomerViewNav" sequenceNumber="0" text="CustomerViewNav"/>
+	        <sub-menu-item className="subLevel" description="CustomerAddInfo" heading="CustomerAddHeading" href="addCustomer" name="CustomerAddNav" sequenceNumber="1" text="CustomerAddNav"/>
+	        <sub-menu-item className="subLevel" description="ReqCatalogEventInfo" heading="ReqCatalogEventHeading" href="custRequestCatalogList" name="ReqCatalogEventNav" sequenceNumber="2" text="ReqCatalogEventNav"/>
+	        <sub-menu-item className="subLevel" description="ContactUsEventInfo" heading="ContactUsEventHeading" href="custRequestContactUsList" name="ContactUsEventNav" sequenceNumber="3" text="ContactUsEventNav"/>
+	        <sub-menu-item className="subLevel" description="AbandonedCartAnalysisInfo" heading="AbandonedCartAnalysisHeading" href="abandonedCartAnalysis" name="AbandonedCartAnalysisNav" sequenceNumber="4" text="AbandonedCartAnalysisNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="SPER_ORDER_MGMT" href="orderNavigation" name="OrderMgmntNav" navigationCategory="ORDER" sequenceNumber="1" text="OrderMgmntNav">
+	        <sub-menu-item className="subLevel navfirstitem" description="OrderViewInfo" heading="OrderViewHeading" href="orderManagement" name="OrderViewNav" sequenceNumber="0" text="OrderViewNav"/>
+	        <sub-menu-item className="subLevel" description="OrderAddInfo" heading="OrderAddHeading" href="underConstruction" name="OrderAddNav" sequenceNumber="1" text="OrderAddNav"/>
+	        <sub-menu-item className="subLevel" description="OrderStatusSummaryInfo" heading="OrderStatusSummaryHeading" href="OrderStatusSummary" name="OrderStatusSummaryNav" sequenceNumber="2" text="OrderStatusSummaryNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="CATALOG" href="catalogNavigation" name="CatalogNav" navigationCategory="CATALOG" sequenceNumber="2" text="CatalogNav">
+	        <sub-menu-item className="subLevel navfirstitem" description="CatalogViewInfo" heading="CatalogViewHeading" href="catalogManagement" name="CatalogViewNav" sequenceNumber="0" text="CatalogViewNav"/>
+	        <sub-menu-item className="subLevel" description="CatalogProductInfo" heading="CatalogProductHeading" href="productManagement" name="CatalogProductNav" sequenceNumber="1" text="CatalogProductNav"/>
+	        <sub-menu-item className="subLevel" description="CatalogAddProductInfo" heading="CatalogAddProductHeading" href="addProduct" name="CatalogAddProductNav" sequenceNumber="2" text="CatalogAddProductNav"/>
+	        <sub-menu-item className="subLevel" description="CatalogPriceInfo" heading="CatalogPriceHeading" href="underConstruction" name="CatalogPriceNav" sequenceNumber="3" text="CatalogPriceNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="SPER_PROMO" href="promotionNavigation" name="PromotionNav" navigationCategory="PROMOTION" sequenceNumber="3" text="PromotionNav">
+	        <sub-menu-item className="subLevel navfirstitem" description="PromotionViewInfo" heading="PromotionViewHeading" href="promotionManagement" name="PromotionViewNav" sequenceNumber="0" text="PromotionViewNav"/>
+	        <sub-menu-item className="subLevel navfirstitem" description="PromotionAddInfo" heading="PromotionAddHeading" href="addPromotion" name="PromotionAddNav" sequenceNumber="0" text="PromotionAddNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="SPER_REVIEW" href="reviewNavigation" name="RatingsReviewNav" navigationCategory="REVIEW" sequenceNumber="4" text="RatingsReviewNav">
+	        <sub-menu-item className="subLevel navfirstitem" description="ReviewViewInfo" heading="ReviewViewHeading" href="reviewManagement" name="ReviewViewNav" sequenceNumber="0" text="ReviewViewNav"/>
+	        <sub-menu-item className="subLevel" description="ReviewAddInfo" heading="ReviewAddHeading" href="underConstruction" name="ReviewAddNav" sequenceNumber="1" text="ReviewAddNav"/>
+	        <sub-menu-item className="subLevel" description="RatingReviewAnalysisInfo" heading="RatingReviewAnalysisHeading" href="ratingReviewAnalysis" name="RatingReviewAnalysisNav" sequenceNumber="4" text="RatingReviewAnalysisNav"/>
+	        <sub-menu-item className="subLevel" description="RatingReviewSummaryInfo" heading="ReviewSummaryHeading" href="ratingReviewSummary" name="RatingReviewSummaryNav" sequenceNumber="3" text="RatingReviewSummaryNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="SPER_STORE" href="storeLocationNavigation" name="StoreNav" navigationCategory="STORE" sequenceNumber="5" text="StoreNav">
+	        <sub-menu-item className="subLevel navfirstitem" description="StoreLocationViewInfo" heading="StoreLocationViewHeading" href="storeLocationManagement" name="StoreViewNav" sequenceNumber="0" text="StoreViewNav"/>
+	        <sub-menu-item className="subLevel" description="StoreLocationAddInfo" heading="StoreLocationAddHeading" href="addStoreLocation" name="StoreAddNav" sequenceNumber="1" text="StoreAddNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="SPER_CONTENT" href="contentNavigation" name="ContentNav" navigationCategory="CONTENT" sequenceNumber="6" text="ContentNav">
+	        <sub-menu-item className="subLevel navfirstitem" description="MediaInfo" heading="MediaLibraryHeading" href="mediaContentList" name="MediaLibraryNav" sequenceNumber="0" text="MediaLibraryNav"/>
+	        <sub-menu-item className="subLevel navfirstitem" description="ContentLibraryInfo" heading="ContentLibraryHeading" href="contentLibraryList" name="ContentLibraryNav" sequenceNumber="1" text="ContentLibraryNav"/>
+	        <sub-menu-item className="subLevel" description="SiteInfoInfo" heading="SiteInfoHeading" href="siteInfoList" name="SiteInfoNav" sequenceNumber="2" text="SiteInfoNav"/>
+	        <sub-menu-item className="subLevel" description="ManageHomePageInfo" heading="ManageHomeSpotHeading" href="homeSpotList" name="HomePageNav" sequenceNumber="3" text="HomePageNav"/>
+	        <sub-menu-item className="subLevel" description="ManageStaticPageInfo" heading="ManageStaticPageHeading" href="staticPageList" name="StaticPageNav" sequenceNumber="4" text="StaticPageNav"/>
+	        <sub-menu-item className="subLevel" description="PageContentSpotsInfo" heading="PageContentSpotsHeading" href="ptsList" name="PageContentSpotsNav" sequenceNumber="5" text="PageContentSpotsNav"/>
+	        <sub-menu-item className="subLevel" description="GeneralPDPContentSpotsInfo" heading="GeneralPDPContentSpotsHeading" href="generalPDPSpotList" name="GeneralPDPContentSpotsNav" sequenceNumber="6" text="GeneralPDPContentSpotsNav"/>
+	        <sub-menu-item className="subLevel" description="DynamicPLPContentSpotsInfo" heading="DynamicPLPContentSpotsHeading" href="plpContentList" name="DynamicPLPContentSpotsNav" sequenceNumber="7" text="DynamicPLPContentSpotsNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="SPER_CONTENT" href="shippingNavigation" name="ShippingNav" navigationCategory="SHIPPING" sequenceNumber="7" text="ShippingNav">
+	    	<sub-menu-item className="subLevel navfirstitem" description="CarrierInfo" heading="CarrierHeading" href="carrierManagement" name="CarrierNav" sequenceNumber="0" text="CarrierNav"/>
+	        <sub-menu-item className="subLevel" description="ShipmentMethodInfo" heading="ShipmentMethodHeading" href="shipmentMethodManagement" name="ShipmentMethodNav" sequenceNumber="1" text="ShipmentMethodNav"/>
+	        <sub-menu-item className="subLevel" description="ShippingChargeInfo" heading="ShippingChargeHeading" href="shippingChargeManagement" name="ShippingChargeNav" sequenceNumber="2" text="ShippingChargeNav"/>
+	        <sub-menu-item className="subLevel" description="TaxesInfo" heading="TaxesHeading" href="taxManagement" name="TaxesNav" sequenceNumber="3" text="TaxesNav"/>
+	        <sub-menu-item className="subLevel" description="ShipmentGatewaysInfo" heading="ShipmentGatewaysHeading" href="shipmentGatewaysManagement" name="ShipmentGatewaysNav" sequenceNumber="4" text="ShipmentGatewaysNav"/>
+	    </menu-item>
+	    <menu-item action="_VIEW" className="topLevel" entity="SPER_CONTENT" href="userNavigation" name="UserNav" navigationCategory="USER" sequenceNumber="8" text="UserNav">
+	    	<sub-menu-item className="subLevel navfirstitem" description="UserManagementInfo" heading="UserManagementHeading" href="userManagement" name="UserManagementNav" sequenceNumber="0" text="UserManagementNav"/>
+	        <sub-menu-item className="subLevel" description="SecurityGroupInfo" heading="SecurityGroupHeading" href="securityGroupManagement" name="SecurityGroupNav" sequenceNumber="1" text="SecurityGroupNav"/>
+	        <sub-menu-item className="subLevel" description="PermissionListInfo" heading="PermissionListHeading" href="permissionList" name="PermissionListNav" sequenceNumber="2" text="PermissionListNav"/>
+	    </menu-item> 
+	    <menu-item action="_VIEW" className="topLevel lastItem" entity="SPER_ADMIN" href="adminNavigation" name="AdminNav" navigationCategory="ADMIN" sequenceNumber="9" text="AdminNav">
+	        <sub-menu-item className="subLevel" description="AdminParamInfo" heading="AdminSystemParamHeading" href="parameterList" name="AdminSystemParamNav" sequenceNumber="0" text="AdminSystemParamNav"/>
+	        <sub-menu-item className="subLevel" description="AdminLabelCaptionInfo" heading="AdminLabelCaptionHeading" href="manageUiLabel" name="AdminLabelCaptionNav" sequenceNumber="1" text="AdminLabelCaptionNav"/>
+	        <sub-menu-item className="subLevel" description="ManageEmailInfo" heading="ManageEmailHeading" href="manageEmailList" name="ManageEmailNav" sequenceNumber="2" text="ManageEmailNav"/>
+	        <sub-menu-item className="subLevel" description="SolrConfigInfo" heading="SolrConfigHeading" href="solrConfigList" name="SolrConfigNav" sequenceNumber="3" text="SolrConfigNav"/>
+	        <sub-menu-item className="subLevel" description="LookupDataInfo" heading="LookupDataHeading" href="lookupDataList" name="LookupDataNav" sequenceNumber="4" text="LookupDataNav"/>
+	        <sub-menu-item className="subLevel" description="PaymentSettingsInfo" heading="PaymentSettingsHeading" href="paymentSettingsList" name="PaymentSettingsNav" sequenceNumber="5" text="PaymentSettingsNav"/>
+	        <sub-menu-item className="subLevel" description="AdminPixelTrackingInfo" heading="AdminPixelTrackingHeading" href="pixelTrackingManagement" name="AdminPixelTrackingNav" sequenceNumber="6" text="AdminPixelTrackingNav"/>
+	        <sub-menu-item className="subLevel" description="ScheduledJobInfo" heading="ScheduledJobHeading" href="scheduledJob" name="JobNav" sequenceNumber="7" text="JobNav"/>
+	        <sub-menu-item className="subLevel" description="FeedsInfo" heading="FeedsHeading" href="feedsList" name="FeedsNav" sequenceNumber="8" text="FeedsNav"/>
+	        <sub-menu-item className="subLevel" description="AdminToolsInfo" heading="AdminToolsHeading" href="adminToolList" name="AdminToolsNav" sequenceNumber="9" text="AdminToolsNav"/>    
+	    </menu-item>
+    </menu>
 </menus>

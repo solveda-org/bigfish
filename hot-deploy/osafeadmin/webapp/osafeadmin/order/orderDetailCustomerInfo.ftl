@@ -8,7 +8,20 @@
        <a href="<@ofbizUrl>customerDetail?partyId=${partyId!""}</@ofbizUrl>">${partyId!""}</a>
      </div>
    </div>
+ </div>
+ <#if displayParty?has_content>
+   <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "lastNameFirst","Y", "compareDate", orderHeader.orderDate, "userLogin", userLogin))/>
+  <div class="infoRow">
+   <div class="infoEntry">
+     <div class="infoCaption">
+      <label>${uiLabelMap.CustomerNameCaption}</label>
+     </div>
+     <div class="infoValue">
+       ${displayPartyNameResult.fullName?default("[${uiLabelMap.PartyNameNotFoundInfo}]")}
+     </div>
+   </div>
   </div>
+ </#if>
 <#if orderContactMechValueMaps?has_content>
 
     <#list orderContactMechValueMaps as orderContactMechValueMap>

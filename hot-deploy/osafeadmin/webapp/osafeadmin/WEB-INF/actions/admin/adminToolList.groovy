@@ -14,6 +14,7 @@ adminTool.put("toolDesc", uiLabelMap.BFXmlExportInfo);
 adminTool.put("toolDetail", "exportBigfishContentDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.BFXmlExportLabel).toUpperCase());
 adminToolsList.add(adminTool);
+
 //clear BigFish cache
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.ClrBigfishCacheLabel);
@@ -21,6 +22,7 @@ adminTool.put("toolDesc", uiLabelMap.ClrBigFishCacheInfo);
 adminTool.put("toolDetail", "clearCacheDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.ClrBigfishCacheLabel).toUpperCase());
 adminToolsList.add(adminTool);
+
 //CSS management tool
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.CSSManagementToolLabel);
@@ -28,6 +30,7 @@ adminTool.put("toolDesc", uiLabelMap.CSSManagementToolInfo);
 adminTool.put("toolDetail", "manageCssDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.CSSManagementToolLabel).toUpperCase());
 adminToolsList.add(adminTool);
+
 //manage <DIV> sequence
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.manageDivSequenceLabel);
@@ -35,6 +38,7 @@ adminTool.put("toolDesc", uiLabelMap.manageDivSequenceInfo);
 adminTool.put("toolDetail", "manageDivSequenceDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.manageDivSequenceLabel).toUpperCase());
 adminToolsList.add(adminTool);
+
 //solr re-index
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.SolrReIndxLabel);
@@ -44,12 +48,12 @@ adminTool.put("toolTypeUpperCase", (uiLabelMap.SolrReIndxLabel).toUpperCase());
 adminToolsList.add(adminTool);
 
 //entity Sync 
-adminTool = FastMap.newInstance();
+/*adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.EntitySyncLabel);
 adminTool.put("toolDesc", uiLabelMap.EntitySyncInfo);
 adminTool.put("toolDetail", "entitySyncDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.EntitySyncLabel).toUpperCase());
-adminToolsList.add(adminTool);
+adminToolsList.add(adminTool);*/
 
 context.adminToolsList = UtilMisc.sortMaps(adminToolsList, UtilMisc.toList("toolTypeUpperCase"));
 // END OF ADMIN TOOLS
@@ -64,6 +68,7 @@ adminTool.put("toolDesc", uiLabelMap.CompareDivSequenceFileInfo);
 adminTool.put("toolDetail", "compareDivSequenceFileDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.CompareDivSequenceFileLabel).toUpperCase());
 compareToolsList.add(adminTool);
+
 //compare tool: labels and captions
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.CompareLabelFileLabel);
@@ -71,6 +76,7 @@ adminTool.put("toolDesc", uiLabelMap.CompareLabelFileInfo);
 adminTool.put("toolDetail", "compareLabelFileDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.CompareLabelFileLabel).toUpperCase());
 compareToolsList.add(adminTool);
+
 //compare tool: System Parameters
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.CompareParametersLabel);
@@ -92,6 +98,7 @@ adminTool.put("toolDesc", uiLabelMap.SeoUrlMapInfo);
 adminTool.put("toolDetail", "seoUrlMapDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.SeoUrlMapLabel).toUpperCase());
 seoToolsList.add(adminTool);
+
 //sitemap xml generator: generate SiteMap.xml
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.SiteMapLabel);
@@ -113,6 +120,7 @@ adminTool.put("toolDesc", uiLabelMap.CatalogAssetCheckerInfo);
 adminTool.put("toolDetail", "catalogAssetCheckerDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.CatalogAssetCheckerLabel).toUpperCase());
 utilitiesList.add(adminTool);
+
 //email test
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.EmailTestLabel);
@@ -120,6 +128,15 @@ adminTool.put("toolDesc", uiLabelMap.EmailTestInfo);
 adminTool.put("toolDetail", "emailTestDetail");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.EmailTestLabel).toUpperCase());
 utilitiesList.add(adminTool);
+
+//Text Message test
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.TxtMsgTestLabel);
+adminTool.put("toolDesc", uiLabelMap.TxtMsgTestInfo);
+adminTool.put("toolDetail", "txtMsgTestDetail");
+adminTool.put("toolTypeUpperCase", (uiLabelMap.TxtMsgTestLabel).toUpperCase());
+utilitiesList.add(adminTool);
+
 //system configuration files
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.AdminSysConfigLabel);
@@ -127,6 +144,7 @@ adminTool.put("toolDesc", uiLabelMap.AdminSysConfigInfo);
 adminTool.put("toolDetail", "sysConfigFileList");
 adminTool.put("toolTypeUpperCase", (uiLabelMap.AdminSysConfigLabel).toUpperCase());
 utilitiesList.add(adminTool);
+
 //system health check
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.SysHealthCheckLabel);

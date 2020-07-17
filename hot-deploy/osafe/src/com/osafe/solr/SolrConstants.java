@@ -43,4 +43,14 @@ public class SolrConstants {
     public static final String SCHEMA_PRODUCT_FEATURE_DEST_ATTR = "dest";
     public static final String SCHEMA_PRODUCT_FEATURE_DEST_VALUE = "searchText";
 
+    public static final String EXTRACT_PRODUT_FACILTY = "productFacilityIds";
+
+    // Search
+	public static final String SEARCH_TERM_EQUALS = ":";
+	public static final String SEARCH_TERM_OR_OPERATOR = " ";
+
+    // session key
+	public static final String SEARCH_AVAILABLE_FACILITIES_SESSION_KEY = "SOLR_SEARCH_AVAILABLE_FACILITIES";
+	public static final String SEARCH_USER_ADDRESS_SESSION_KEY = "SOLR_SEARCH_USER_ADDRESS";
+
 }

@@ -20,6 +20,7 @@ under the License.
 <#if requestAttributes.errorMessageList?has_content><#assign errorMessageList=requestAttributes.errorMessageList></#if>
 <#if requestAttributes.osafeSuccessMessageList?has_content><#assign osafeSuccessMessageList=requestAttributes.osafeSuccessMessageList></#if>
 <#if requestAttributes.warningMessageList?has_content><#assign warningMessageList=requestAttributes.warningMessageList></#if>
+<#if requestAttributes.infoMessageList?has_content><#assign infoMessageList=requestAttributes.infoMessageList></#if>
 <#if requestAttributes.serviceValidationException?exists><#assign serviceValidationException = requestAttributes.serviceValidationException></#if>
 <#if requestAttributes.uiLabelMap?has_content><#assign uiLabelMap = requestAttributes.uiLabelMap></#if>
 
@@ -42,7 +43,12 @@ under the License.
 <#if !warningMessageList?has_content>
   <#assign warningMessageList = requestAttributes._WARNING_MESSAGE_LIST_?if_exists>
 </#if>
-
+<#if !infoMessage?has_content>
+  <#assign infoMessage = requestAttributes._INFO_MESSAGE_?if_exists>
+</#if>
+<#if !infoMessageList?has_content>
+  <#assign infoMessageList = requestAttributes._INFO_MESSAGE_LIST_?if_exists>
+</#if>
 <#assign responseMessage = requestAttributes.responseMessage!"">
 
 <#-- display the error messages -->
@@ -85,7 +91,7 @@ under the License.
 
 <#-- display the warning messages -->
 <#if (warningMessage?has_content || warningMessageList?has_content)>
-  <div class="content-messages eCommerceSuccessMessage">
+  <div class="content-messages eCommerceWarningMessage">
      <span class="checkMarkIcon warningImage"></span>
     <#if warningMessage?has_content>
       <p class="warningMessage">${warningMessage}</p>
@@ -93,6 +99,21 @@ under the License.
     <#if warningMessageList?has_content>
       <#list warningMessageList as warningMsg>
         <p class="warningMessage">${warningMsg}</p>
+      </#list>
+    </#if>
+  </div>
+</#if>
+
+<#-- display the info messages -->
+<#if (infoMessage?has_content || infoMessageList?has_content)>
+  <div class="content-messages eCommerceInfoMessage">
+     <span class="infoMessageIcon infoIcon"></span>
+    <#if infoMessage?has_content>
+      <p class="infoMessage">${infoMessage}</p>
+    </#if>
+    <#if infoMessageList?has_content>
+      <#list infoMessageList as infoMsg>
+        <p class="infoMessage">${infoMsg}</p>
       </#list>
     </#if>
   </div>

@@ -21,6 +21,19 @@
             </widgets>
         </section>
     </screen>
+    <screen name="creditCardInfoForm">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/creditCardInfoEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="addressShippingEntryForm">
         <section>
             <actions>
@@ -241,6 +254,19 @@
         </section>
     </screen>
     <screen name="formEntryContinueBackButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/formEntryContinueBackButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="formEntryAddPaymentMethodBackButton">
         <section>
             <actions>
             </actions>

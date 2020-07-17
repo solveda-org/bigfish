@@ -39,7 +39,9 @@ if (UtilValidate.isNotEmpty(filterGroup))
 {
   facetGroups = FastList.newInstance();
   filterGroupValues = FastList.newInstance();
+  removeFilterGroupValues = FastList.newInstance();
   filterGroupArr = StringUtil.split(filterGroup, "|");
+  
   for (int i = 0; i < filterGroupArr.size(); i++)
   {
         facetGroupName = filterGroupArr[i];
@@ -59,13 +61,21 @@ if (UtilValidate.isNotEmpty(filterGroup))
             // underscores can be replaced to get the description used for the breadcrumb
             facetGroupName =StringUtils.replace(facetGroupName, "_", " ");
         }
-
+        removeValueList = FastList.newInstance();
+        for(int j=0; j<filterGroupArr.size(); j++)
+        {
+            if(i != j)
+            {
+                removeValueList.add(filterGroupArr[j])
+            }
+        }
         facetGroups.add(facetGroupName);
-
         filterGroupValue = StringUtil.join(filterGroupArr.subList(0,i), "|");
         filterGroupValues.add(filterGroupValue);
+        removeFilterGroupValue = StringUtil.join(removeValueList.subList(0,removeValueList.size()), "|");
+        removeFilterGroupValues.add(removeFilterGroupValue);
   }
-
+  context.removeFilterGroupValues = removeFilterGroupValues;
   context.facetGroups = facetGroups;
   context.filterGroupValues = filterGroupValues;
 }

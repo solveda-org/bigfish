@@ -14,7 +14,7 @@
                      <#elseif styleFileList.size() gt 1>
                          <span class="spacer"></span>
                      </#if>
-                         <a href="<@ofbizUrl>adminToolDetail?detailScreen=${cssType!""}&fileName=${styleFile.getName()!""}</@ofbizUrl>" class="standardBtn secondary">${uiLabelMap.AdminEditCSSLabel}</a>
+                         <a href="<@ofbizUrl>${editAction!"adminToolDetail"}?detailScreen=${cssType!""}&fileName=${styleFile.getName()!""}</@ofbizUrl>" class="standardBtn secondary">${uiLabelMap.AdminEditCSSLabel}</a>
                      </div>
                  </#if>
             </div>

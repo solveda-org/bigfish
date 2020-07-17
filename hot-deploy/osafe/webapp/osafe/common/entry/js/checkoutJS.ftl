@@ -120,6 +120,18 @@
             updateShippingOption('N');
             calcTax();
           });
+          jQuery('#SHIPPING_ADDRESS1').change(function () {
+            updateShippingOption('N');
+          });
+          jQuery('#SHIPPING_ADDRESS2').change(function () {
+            updateShippingOption('N');
+          });
+          jQuery('#SHIPPING_ADDRESS3').change(function () {
+            updateShippingOption('N');
+          });
+          jQuery('#SHIPPING_COUNTRY').change(function () {
+            updateShippingOption('N');
+          });
         }
 
         // make first shipping option as selected
@@ -130,7 +142,18 @@
         // activate pick up store event listener
         pickupStoreEventListener();
     });
-
+    
+    //display payment options based on if a user selects pay now or pay in store
+    jQuery(document).ready(function () {
+    	jQuery('#payInStoreN').click(function(){
+		    jQuery('#checkoutPaymentOptions').show();
+		});
+		
+		jQuery('#payInStoreY').click(function(){
+		    jQuery('#checkoutPaymentOptions').hide();
+		});
+    });
+    
     function pickupStoreEventListener() {
         //selct store and close dialouge box
         jQuery('.pickupStore').submit(function(event) {
@@ -180,16 +203,25 @@
     function updateShippingOption(isOnLoad) {
         if (jQuery('#deliveryOptionBox').length) {
             if (jQuery('#SHIPPING_POSTAL_CODE').length) {
-                if (jQuery('#SHIPPING_POSTAL_CODE').val() == '') {
-                    postalcode = "dummy";
-                }else {
-                    postalcode = jQuery('#SHIPPING_POSTAL_CODE').val();
-                }
-                jQuery.get('<@ofbizUrl>${updateShippingOptionRequest?if_exists}?postalCode='+postalcode+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+                // get shipping address values
+                var address1 = (jQuery('#SHIPPING_ADDRESS1').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_ADDRESS1').val());
+                var address2 = (jQuery('#SHIPPING_ADDRESS2').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_ADDRESS2').val());
+                var address3 = (jQuery('#SHIPPING_ADDRESS3').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_ADDRESS3').val());
+                var city = (jQuery('#SHIPPING_CITY').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_CITY').val());
+                var postalCode = (jQuery('#SHIPPING_POSTAL_CODE').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_POSTAL_CODE').val());
+                var stateProvinceGeoId = (jQuery('#SHIPPING_STATE').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_STATE').val());
+                var countryGeoId = (jQuery('#SHIPPING_COUNTRY').val()== null)?'':encodeURIComponent(jQuery('#SHIPPING_COUNTRY').val());
+        
+                // make ajax request parameters
+                var reqParam = '?address1='+address1+'&address2='+address2+'&address3='+address3+'&city='+city;
+                reqParam = reqParam+'&postalCode='+postalCode+'&stateProvinceGeoId='+stateProvinceGeoId+'&countryGeoId='+countryGeoId;
+                
+                jQuery.get('<@ofbizUrl>${updateShippingOptionRequest?if_exists}'+reqParam+'&callback=Y&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
                     jQuery('#deliveryOptionBox').replaceWith(data);
                     if(jQuery('input.shipping_method:checked').val() != null) {
                         setShippingMethod(jQuery('input.shipping_method:checked').val(), isOnLoad);
                     } else {
+                        jQuery('input.shipping_method:first').attr("checked", true);
                         setShippingMethod(jQuery('input.shipping_method').val(), isOnLoad);
                     }
                 });
@@ -216,16 +248,16 @@
 
         //call ajax and update order item section
         if (jQuery('#SHIPPING_POSTAL_CODE').length) {
-            if (jQuery('.onePageCheckoutOrderItemsSeq').length) {
-                jQuery('.onePageCheckoutOrderItemsSeq').load('<@ofbizUrl>${calcTaxRequest?if_exists}'+reqParam+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+            if (jQuery('.onePageCheckoutOrderItemsSummarySeq').length) {
+                jQuery('.onePageCheckoutOrderItemsSummarySeq').load('<@ofbizUrl>${calcTaxRequest?if_exists}'+reqParam+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
             }
         }
     }
 
     // update the order item section
     function setShippingMethod(selectedShippingOption, isOnLoad) {
-        if (jQuery('.onePageCheckoutOrderItemsSeq').length) {
-            jQuery('.onePageCheckoutOrderItemsSeq').load('<@ofbizUrl>${setShippingOptionRequest?if_exists}?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
+        if (jQuery('.onePageCheckoutOrderItemsSummarySeq').length) {
+            jQuery('.onePageCheckoutOrderItemsSummarySeq').load('<@ofbizUrl>${setShippingOptionRequest?if_exists}?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
         }
         if((isOnLoad != null) && (isOnLoad =='N')) {
             //call ajax and update promotion info section

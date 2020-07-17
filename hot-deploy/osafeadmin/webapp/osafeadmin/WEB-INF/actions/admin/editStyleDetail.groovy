@@ -65,3 +65,24 @@ if(UtilValidate.isEmpty(context.textData)) {
     context.updateAction = "";
     context.replaceWithAction = "";
 }
+
+
+boolean isCompressed = false;
+//check if file is compressed
+if(UtilValidate.isNotEmpty(context.textData)) {
+	//check if there is a double space anywhere inside of the file "  ": If there is then it is NOT compressed
+	stringbufferTextData = context.textData;
+	int doubleSpace = stringbufferTextData.indexOf("  ");
+	if(doubleSpace == -1)
+	{
+		isCompressed = true;
+		context.infoMessage = UtilProperties.getMessage("OSafeAdminUiLabels","CssCompressedInfoMessage",locale);  
+		context.updateAction = "";
+		context.execAction = "";
+	}
+}
+context.isCompressed = isCompressed;
+
+
+
+

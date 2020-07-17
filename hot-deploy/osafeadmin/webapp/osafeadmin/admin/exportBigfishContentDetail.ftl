@@ -17,6 +17,7 @@
                  <input type="checkbox" class="checkBoxEntry" name="exportContentPDPSpot" id="exportContentPDPSpot" value="Y" <#if parameters.exportContentPDPSpot?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportContentPDPSpotLabel}</br>
                  <input type="checkbox" class="checkBoxEntry" name="exportContentProdCat" id="exportContentProdCat" value="Y" <#if parameters.exportContentProdCat?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportContentProductCategorySpotsLabel}</br>
                  <input type="checkbox" class="checkBoxEntry" name="exportContentEmail" id="exportContentEmail" value="Y" <#if parameters.exportContentEmail?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportContentEmailLabel}</br>
+                 <input type="checkbox" class="checkBoxEntry" name="exportContentTxtTemplate" id="exportContentTxtTemplate" value="Y" <#if parameters.exportContentTxtTemplate?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportContentTxtTemplateLabel}</br>
              </div>
         </div>
       </div>

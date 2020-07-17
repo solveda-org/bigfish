@@ -13,7 +13,7 @@ import org.ofbiz.base.util.string.*;
     response.setContentType("text/xml");
     response.setHeader("Content-Disposition","attachment; filename=ClientProductImport.xml");
     tempDir = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-import-data-path"), context);
-    String filePath = tempDir + "/ClientProductImport.xml"; 
+    String filePath = tempDir + "/clientProductImport.xml"; 
     InputStream inputStr = new FileInputStream(filePath);
     OutputStream out = response.getOutputStream();
     byte[] bytes = new byte[102400];

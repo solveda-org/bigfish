@@ -1,5 +1,5 @@
-<div class="pdpDistinguishingFeature" id="pdpDistinguishingFeature">
-  <#if disFeatureTypesList?has_content>
+<#if disFeatureTypesList?has_content>
+  <div class="pdpDistinguishingFeature" id="pdpDistinguishingFeature">
     <div class="displayBox">
       <h3>${uiLabelMap.FeaturesHeading}</h3>
         <ul class="pdpDistinguishingFeatureList">
@@ -36,8 +36,8 @@
           </#list>
         </ul>
     </div>
-  </#if>
-</div>
+  </div>
+</#if>
 
 <#if disFeatureDescription?has_content>
 	<div class="pdpDistinguishingFeature" id="pdpDistinguishingFeature_Virtual" style="display:none">

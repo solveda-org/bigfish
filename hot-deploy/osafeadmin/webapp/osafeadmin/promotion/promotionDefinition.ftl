@@ -145,7 +145,7 @@
         <#if isPromotionDetail>
           <input type="text"  class="textEntry" name="useLimitPerPromotion" maxlength="20" value='${parameters.useLimitPerPromotion!useLimitPerPromotion!""}'/>
         <#else>
-          ${useLimitPerCustomer!""}
+          ${useLimitPerPromotion!""}
         </#if>
       </div>
       <div class="infoIcon">

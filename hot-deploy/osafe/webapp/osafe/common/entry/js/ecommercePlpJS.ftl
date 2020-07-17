@@ -61,7 +61,7 @@ jQuery(document).ready(function () {
     });
     
     jQuery('.showHideFacetGroupLink').click(function() {
-        jQuery(this).siblings('ul').find('li.hideThem').slideToggle();
+        jQuery(this).siblings('ul').find('li').slideToggle();
         jQuery(this).toggleClass("seeMoreFacetGroupLink");
         jQuery(this).toggleClass("seeLessFacetGroupLink");
     });

@@ -19,4 +19,11 @@ adminTool.put("toolDesc", uiLabelMap.AdminEmailConfigInfo);
 adminTool.put("toolDetail", "emailConfigList");
 adminToolsList.add(adminTool);
 
+//txt message templates
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.AdminTxtMsgHeading);
+adminTool.put("toolDesc", uiLabelMap.AdminTxtMsgInfo);
+adminTool.put("toolDetail", "txtMsgSpotList");
+adminToolsList.add(adminTool);
+
 context.resultList = adminToolsList;

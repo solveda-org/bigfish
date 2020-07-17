@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 
-<!-- Product Store Parm count (189)-->
+<!-- Product Store Parm count (190)-->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MIN" description="Number of facet values to show; see less/More" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MAX" description="Max Number of facet values to show" parmCategory="SOLR"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_MULTI_SELECT" description="Indicates if multiple Facet VALUES can be selected from within one Facet GROUP" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_CAT_ON_PLP" description="Display categories as a facet group on the PLP page true or false" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_SHOW_ITEM_CNT" description="Determines whether the facets show the number of items in parenthesis" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_PRICE_ROUND" description="Control the number of decimal places to be displayed in the listed prices" parmCategory="SOLR"/>
@@ -67,7 +68,7 @@
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_MULTI" description="Does this client support multiple coutries. Value of TRUE or FALSE" parmCategory="COUNTRY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DEFAULT" description="The client's default country" parmCategory="COUNTRY"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DROPDOWN" description="If the client supports Multi-countries, this is the list of coutries supported." parmCategory="COUNTRY"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DROPDOWN" description="If the client supports Multi-countries, this is the list of countries supported. A value of ALL indicates all countries." parmCategory="COUNTRY"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_H" description="Height of PLP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_W" description="Width of PLP Image" parmCategory="IMAGE"/>
@@ -108,11 +109,11 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_360_W" description="Width of PDP Video 360" parmCategory="VIDEO"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_ADDRESS" description="This defines how Addresses are formatted within both the eCommerce and Admin modules." parmCategory="FORMAT"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_CURRENCY" description="This defines how currency is displayed within both the eCommerce and Admin modules." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_DATE" description="This defines how dates are displayed within both the eCommerce and Admin modules. CASE SENSITIVE. dd=Day, MM=Month yy=Year hh=Hour mm=Minute ss=Second." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_DATE_TIME" description="This defines how dates with time are displayed within both the eCommerce and Admin modules. CASE SENSITIVE. dd=Day, MM=Month yy=Year hh=Hour mm=Minute ss=Second." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_TELEPHONE_NO" description="This defines how Telephone Numbers are formatted within both the eCommerce and Admin modules." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CURRENCY_UOM_DEFAULT" description="Country currency UOM." parmCategory="FORMAT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CURRENCY_UOM_ROUNDING" description="This defines the rounding increment for currency amounts. 0 if no rounding is done (show full amounts). Default is 2." parmCategory="FORMAT"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REG_PWD_MIN_CHAR" description="Password Strength, specifies the minimum number of total characters." parmCategory="USER_PROFILE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REG_PWD_MIN_NUM" description="Password Strength, specifies the minimum number of numeric digits." parmCategory="USER_PROFILE"/>
@@ -137,6 +138,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SITEMAP_VARIANT_FEATURES" description="Defines a list of features that may be used to extend the SITEMAP and SEO-Friendly-URL functions to include variant products. For example: www.client.com/big-product-blue. Leave blank to include to primary (Virtual) products only." parmCategory="SITEMAP"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_AS_GUEST" description="Defines whether a customer can checkout as a Guest, without having to register." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_EMAIL_ALERT" description="The number of additional emails that can be entered on the Order Confirmation page. Should be a number from 0 to 10." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_SINGLE_PAGE" description="Defines whether the Single-Page checkout page is offered by default" parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_DELIVERY" description="Defines whether a customer is given a delivery option (with associated shipping charges)" parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_PICKUP" description="Defines whether the 'Pickup-in-Store' is an option during the check-out work flow" parmCategory="CHECKOUT"/>
@@ -154,6 +156,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CONTINUE_SHOPPING_LINK" description="The link from the Continue-Shopping button. Values are HOMEPAGE, PDP or PLP" parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_COD" description="Determines if COD (Cash on Delivery) is an option for checkout. This is used extensively in the Indian marketplace." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_GOOGLE" description="Determines if Google Checkout is an acceptable for of payment during the Check Out process." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_CC" description="Determines if Credit Cards are an acceptable form of payment during the Check Out process." parmCategory="CHECKOUT"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_ACTIVE" description="Display quick view on the PLP page for each product." parmCategory="QUICKLOOK"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_DELAY_MS" description="The time, in milliseconds, that the site will wait before displaying the Quick Look icon" parmCategory="QUICKLOOK"/>
@@ -224,6 +227,11 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CLP_HIDE_SUB_CATEGORIES" description="On the CLP (Category Listing Page) a value of TRUE will hide all standard sub-categories on the assumption that Content Spots will be displayed in order to manage the customer experience on every CLP." parmCategory="CLP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_METHOD" description="Indicates if Text Messaging (SMS) is an option and which service to use for delivery. Valid values are NONE, CLICKATELL" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_USER_ID" description="The user name of the SMS Gateway Account" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_PASSWORD" description="The user password of the SMS Gateway account" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_API_ID" description="The SMS Gateway API Id " parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_API_URL" description="The Request URL to access the SMS Gateway via API" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_API_MSG_URL" description="The Request URL which queries the SMS Gateway via API for the sent Txt Message Status" parmCategory="TEXT"/>
 
 </entity-engine-xml>

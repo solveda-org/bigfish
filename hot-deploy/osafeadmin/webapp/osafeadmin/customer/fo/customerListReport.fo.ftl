@@ -51,7 +51,7 @@ under the License.
     <#assign partyId=partyrow.get("partyId")>
     <#assign party =   delegator.findByPrimaryKey("Party",Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId))/>
     <#assign partyName= Static["org.ofbiz.party.party.PartyHelper"].getPartyName(delegator,partyId, true)!"">
-    <#assign partyRoles = delegator.findByAnd("PartyRole", {"partyId", partyId})>
+    <#assign partyRoles = delegator.findByAnd("ProductStoreRole", {"partyId", partyId})>
      <#if partyRoles?has_content>
       <#list partyRoles as partyRole>
          <#assign roleType = partyRole.getRelatedOne("RoleType")>

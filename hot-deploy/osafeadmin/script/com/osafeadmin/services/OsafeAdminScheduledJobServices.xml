@@ -130,7 +130,7 @@
          	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AMPMNotSelectedError"/>
 	        <string-to-list string="${tempErrorMessage}" list="error_list"/>
          </if-compare>
-
+         
         <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="0">
         	<set field="parameters.SERVICE_FREQUENCY" value="DAILY" type="String"/>
         </if-compare>
@@ -190,8 +190,8 @@
                 	<field field="parameters.SERVICE_FREQUENCY"/>
             	</call-class-method>
             	<if-compare field="OutofRangeCount" operator="equals" value="false">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OutRangeFreqError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OutRangeFreqError"/>
+	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
             	</if-compare>
                 </else>
             </if-compare>
@@ -210,27 +210,30 @@
         <store-value value-field="lookedUpValue"/>
         
         <!-- get reccurenceInfoId from JobSandbox -->
-        <make-value entity-name="JobSandbox" value-field="JobSandBoxValues"/>
-        <set from-field="parameters.jobId" field="JobSandBoxValues.jobId"/>
-        <find-by-primary-key map="JobSandBoxValues" value-field="JobSandBoxValuesMap"/>
-        <set from-field="JobSandBoxValuesMap.recurrenceInfoId" field="parameters.recurrenceInfoId"/>
+        <make-value entity-name="JobSandbox" value-field="JobSandBoxMap"/>
+        <set from-field="parameters.jobId" field="JobSandBoxMap.jobId"/>
+        <find-by-primary-key map="JobSandBoxMap" value-field="JobSandBoxValues"/>
+        <set from-field="JobSandBoxValues.recurrenceInfoId" field="parameters.recurrenceInfoId"/>
         
         <if-not-empty field="parameters.recurrenceInfoId">
 	        <!-- get the recurrenceInfo table using the recurrenceInfoId and then get the RecurrenceRuleId  -->
-	        <make-value entity-name="RecurrenceInfo" value-field="RecurrenceInfoValues"/>
-	        <set from-field="parameters.recurrenceInfoId" field="RecurrenceInfoValues.recurrenceInfoId"/>
-	        <find-by-primary-key map="RecurrenceInfoValues" value-field="RecurrenceInfoValuesMap"/>
-	        <set from-field="RecurrenceInfoValuesMap.recurrenceRuleId" field="parameters.recurrenceRuleId"/>
+	        <make-value entity-name="RecurrenceInfo" value-field="RecurrenceInfoMap"/>
+	        <set from-field="parameters.recurrenceInfoId" field="RecurrenceInfoMap.recurrenceInfoId"/>
+	        <find-by-primary-key map="RecurrenceInfoMap" value-field="RecurrenceInfoValues"/>
+	        <set from-field="RecurrenceInfoValues.recurrenceRuleId" field="parameters.recurrenceRuleId"/>
+	        <set from-field="parameters.SERVICE_DATE" field="RecurrenceInfoValues.startDateTime" type="Timestamp"/>
+	        <store-value value-field="RecurrenceInfoValues"/>
 	        
 	        <!-- get the recurrenceRule table and store the updated values using the recurrenceRuleId -->
-	        <make-value entity-name="RecurrenceRule" value-field="RecurrenceRuleLookupPKMap"/>
-	        <set-pk-fields map="parameters" value-field="RecurrenceRuleLookupPKMap"/>
-	        <find-by-primary-key map="RecurrenceRuleLookupPKMap" value-field="RecurrenceRuleLookedUpValue"/>
+	        <make-value entity-name="RecurrenceRule" value-field="RecurrenceRuleMap"/>
+	        <set-pk-fields map="parameters" value-field="RecurrenceRuleMap"/>
+	        <find-by-primary-key map="RecurrenceRuleMap" value-field="RecurrenceRuleValues"/>
 	        <!-- <set from-field="parameters.SERVICE_END_TIME" field="RecurrenceRuleLookedUpValue.lastUpdatedTxStamp"/>-->
-	        <set from-field="parameters.SERVICE_FREQUENCY" field="RecurrenceRuleLookedUpValue.frequency"/>
-	        <set from-field="parameters.SERVICE_INTERVAL" field="RecurrenceRuleLookedUpValue.intervalNumber" type="Long"/>
-	        <set from-field="parameters.SERVICE_COUNT" field="RecurrenceRuleLookedUpValue.countNumber" type="Long"/>
-	        <store-value value-field="RecurrenceRuleLookedUpValue"/>
+	        <set from-field="parameters.SERVICE_FREQUENCY" field="RecurrenceRuleValues.frequency"/>
+	        <set from-field="parameters.SERVICE_INTERVAL" field="RecurrenceRuleValues.intervalNumber" type="Long"/>
+	        <set from-field="parameters.SERVICE_COUNT" field="RecurrenceRuleValues.countNumber" type="Long"/>
+	        <store-value value-field="RecurrenceRuleValues"/>
+
         </if-not-empty>
     </simple-method>
     

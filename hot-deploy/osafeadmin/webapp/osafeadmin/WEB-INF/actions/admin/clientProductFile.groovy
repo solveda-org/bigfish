@@ -13,7 +13,7 @@ import org.ofbiz.base.util.string.*;
     response.setContentType("text/xls");
     response.setHeader("Content-Disposition","attachment; filename=ClientProductImport.xls");
     tempDir = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "ecommerce-import-data-path"), context);
-    String filePath = tempDir + "/ClientProductImport.xls"; 
+    String filePath = tempDir + "/clientProductImport.xls"; 
     InputStream inputStr = new FileInputStream(filePath);
     OutputStream out = response.getOutputStream();
     byte[] bytes = new byte[102400];

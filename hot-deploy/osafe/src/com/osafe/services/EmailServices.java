@@ -119,6 +119,8 @@ public class EmailServices {
         	
             String emailType = "PRDS_ABD_CART";
             sendMap.put("emailType",emailType);
+            sendMap.put("productStoreId",productStoreId);
+            
             GenericValue productStoreEmail = null;
             try {
                 productStoreEmail = delegator.findByPrimaryKeyCache("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
@@ -169,6 +171,7 @@ public class EmailServices {
                     if (UtilValidate.isNotEmpty(party)) 
                     {
                         String partyId = party.getString("partyId");
+                        sendMap.put("partyId", partyId);
                         GenericValue testShoppingListItem = EntityUtil.getFirst((List<GenericValue>) shoppingListItems);
                         Timestamp itemLastUpdatedStamp = testShoppingListItem.getTimestamp("lastUpdatedStamp");
     
@@ -316,6 +319,7 @@ public class EmailServices {
             GenericValue productStore = delegator.findByPrimaryKeyCache("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         	
             sendMap.put("emailType",emailType);
+            sendMap.put("productStoreId",productStoreId);
             GenericValue productStoreEmail = null;
             try 
             {
@@ -464,6 +468,7 @@ public class EmailServices {
         Locale locale = (Locale) serviceContext.get("locale");
         String sendFrom = (String) serviceContext.get("sendFrom");
         String subjectString = (String) serviceContext.get("subject");
+        String productStoreIdContext = (String) serviceContext.remove("productStoreId");
         System.out.println("sendfromscreen");
         Map<String, Object> bodyParameters = UtilGenerics.checkMap(serviceContext.remove("bodyParameters"));
         if (bodyParameters == null) {
@@ -546,6 +551,10 @@ public class EmailServices {
                     serviceContext.put("sendFrom", productStoreEmail.get("fromAddress"));
                 }
             	serviceContext.put("sendCc", productStoreEmail.get("ccAddress"));
+            	if(emailType.equals("PRDS_SCHED_JOB_ALERT"))
+                {
+                	serviceContext.put("sendCc", "");
+                }
             	serviceContext.put("sendBcc", productStoreEmail.get("bccAddress"));
                 String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
                 if (UtilValidate.isEmpty(bodyScreenLocation)) 
@@ -722,6 +731,14 @@ public class EmailServices {
         result.put("body", bodyWriter.toString());
         result.put("subject", subject);
         result.put("communicationEventId", sendMailResult.get("communicationEventId"));
+        if (UtilValidate.isNotEmpty(emailType)) 
+        {
+        	result.put("emailType", emailType);
+        }
+        if (UtilValidate.isNotEmpty(productStoreIdContext)) 
+        {
+            result.put("productStoreId", productStoreId);
+        }    
         if (UtilValidate.isNotEmpty(orderId)) {
             result.put("orderId", orderId);
         }            

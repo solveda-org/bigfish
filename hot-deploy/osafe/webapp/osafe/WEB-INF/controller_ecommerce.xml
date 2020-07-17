@@ -144,7 +144,7 @@
 
     <request-map uri="emailForgotPassword">
         <security https="true" auth="false"/>
-        <event type="java" path="org.ofbiz.securityext.login.LoginEvents" invoke="forgotPassword"/>
+        <event type="java" path="com.osafe.events.LoginEvents" invoke="forgotPassword"/>
         <response name="success" type="request" value="forgotPasswordEmailed"/>
         <response name="error" type="view" value="eCommerceForgotPassword"/>
     </request-map>
@@ -194,13 +194,6 @@
         <event type="simple" path="component://osafe/script/Event/EmailEvents.xml" invoke="clearSendEmailError"/>
          <response name="success" type="request" value="MyAccount"/>
     </request-map>
-
-    <request-map uri="validateUpdateCustomer">
-        <security https="true" auth="false"/>
-        <event type="simple" path="component://osafe/script/Event/UserProfileEvents.xml" invoke="updateCustomerPersonalInfo"/>
-         <response name="success" type="request" value="sendUpdatePersonalInfoEmailNotification"/>
-        <response name="error" type="view" value="eCommerceEditCustomerInfo"/>
-    </request-map>
     
     <request-map uri="sendUpdatePersonalInfoEmailNotification">
         <security https="true" auth="false"/>
@@ -217,15 +210,8 @@
     
     <request-map uri="validateCustomerLogin">
         <security https="true" auth="false"/>
-        <event type="simple" path="component://osafe/script/Validation/UserProfile.xml" invoke="validateLoginInfo"/>
-         <response name="success" type="request" value="eCommerceUpdateCustomerLogin"/>
-        <response name="error" type="view" value="eCommerceEditLoginInfo"/>
-    </request-map>
-
-    <request-map uri="eCommerceUpdateCustomerLogin">
-        <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Event/UserProfileEvents.xml" invoke="updateCustomerLogin"/>
-         <response name="success" type="view" value="MyAccount"/>
+         <response name="success" type="request" value="MyAccount"/>
         <response name="error" type="view" value="eCommerceEditLoginInfo"/>
     </request-map>
     
@@ -248,7 +234,58 @@
         <security https="true" auth="true" />
         <response name="success" type="view" value="eCommerceUpdateAddressBook" />
     </request-map>
-
+   <!-- Order Additional Email  -->
+    <request-map uri="eCommerceOrderAdditionalEmail">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setOrderAdditionalEmails"/>
+        <response name="success" type="request" value="eCommerceOrderComplete"/>
+        <response name="error" type="request" value="eCommerceOrderComplete"/>
+    </request-map>
+   <!-- Customer payment method screens -->
+    <request-map uri="eCommercePaymentMethodInfo">
+        <security https="true" auth="true" />
+        <response name="success" type="view" value="eCommercePaymentMethodInfo" />
+    </request-map>
+    <request-map uri="eCommerceEditCreditCardInfo">
+        <security https="true" auth="true"/>
+         <response name="success" type="view" value="eCommerceEditCreditCardInfo"/>
+    </request-map>
+    <request-map uri="eCommerceCreateCreditCardInfo">
+        <security https="true" auth="true"/>
+         <response name="success" type="view" value="eCommerceCreateCreditCardInfo"/>
+    </request-map>
+    <request-map uri="updateCreditCardInfo">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Validation/Payment.xml" invoke="updateCreditCardInfo"/>
+        <response name="success" type="view" value="eCommercePaymentMethodInfo"/>
+        <response name="error" type="view" value="eCommerceEditCreditCardInfo"/>
+    </request-map>
+    <request-map uri="updateDefaultPmtMethod">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Validation/Payment.xml" invoke="updateDefaultPmtMethod"/>
+        <response name="success" type="view" value="eCommercePaymentMethodInfo"/>
+        <response name="error" type="view" value="eCommercePaymentMethodInfo"/>
+    </request-map>
+    <request-map uri="createCreditCardInfo">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Validation/Payment.xml" invoke="createCreditCardInfo"/>
+        <response name="success" type="view" value="eCommercePaymentMethodInfo"/>
+        <response name="error" type="view" value="eCommerceCreateCreditCardInfo"/>
+    </request-map>
+    <request-map uri="deletePaymentMethod">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafe/script/Validation/Payment.xml" invoke="deletePaymentMethod"/>
+        <response name="success" type="view" value="eCommercePaymentMethodInfo"/>
+        <response name="error" type="view" value="eCommercePaymentMethodInfo"/>
+    </request-map>
+    
+    <request-map uri="addCreditCard">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://accounting/script/org/ofbiz/accounting/payment/PaymentMethodEvents.xml" invoke="createCreditCard"/>
+        <response name="success" type="request" value="eCommercePaymentMethodInfo"/>
+        <response name="error" type="view" value="eCommerceEditCreditCardInfo"/>
+    </request-map>
+    
     <request-map uri="deleteAddressBook">
         <security https="true" auth="true"/>
         <event type="simple" path="component://osafe/script/Event/AddressEvents.xml" invoke="deleteAddress"/>
@@ -323,7 +360,9 @@
 
     <!-- Dialog screens -->
     <request-map uri="eCommercePlpQuickLook">
+        <event type="groovy" path="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductScroller.groovy"/>
         <response name="success" type="view" value="eCommercePlpQuickLook"/>
+		<response name="error" type="view" value="eCommercePlpQuickLook"/>
     </request-map>
 
     <!-- CATEGORY/PRODUCT -->
@@ -339,6 +378,17 @@
     </request-map>
     
     <request-map uri="siteSearch">
+        <security https="false" auth="false"/>
+        <event type="java" path="com.osafe.events.SolrEvents" invoke="solrSearch"/>
+        <response name="success" type="view" value="eCommerceProductList"/>
+        <response name="error" type="request" value="addWildCardSearch"/>
+    </request-map>
+    <request-map uri="addWildCardSearch">
+        <security https="false" auth="false"/>
+        <event type="java" path="com.osafe.events.SolrEvents" invoke="addWildCardSearch"/>
+        <response name="success" type="request" value="solrWildCardSearch"/>
+    </request-map>
+    <request-map uri="solrWildCardSearch">
         <security https="false" auth="false"/>
         <event type="java" path="com.osafe.events.SolrEvents" invoke="solrSearch"/>
         <response name="success" type="view" value="eCommerceProductList"/>
@@ -363,11 +413,13 @@
         <response name="error" type="request" value="json"/>
     </request-map>
     
-    
     <request-map uri="eCommerceProductDetail">
         <security https="false" auth="false"/>
+        <event type="groovy" path="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductScroller.groovy"/>
         <response name="success" type="view" value="eCommerceProductDetail"/>
+		<response name="error" type="view" value="eCommerceProductDetail"/>
     </request-map>
+    
     <request-map uri="sortPdpReview">
         <security https="false" auth="false"/>
         <response name="success" type="view" value="sortPdpReview"/>
@@ -519,6 +571,16 @@
         <response name="viewcart" type="request-redirect" value="eCommerceShowcart"/>
         <response name="error" type="view" value="eCommerceShowcart"/>
     </request-map>
+    
+    <request-map uri="addMultiItemsToCart">
+        <security https="true" auth="false"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="addMultiItemsToCart"/>
+        <response name="success" type="request" value="resetPaymentMethod"/>
+        <response name="survey" type="view" value="survey"/>
+        <response name="product" type="view" value="product"/>
+        <response name="viewcart" type="request-redirect" value="eCommerceShowcart"/>
+        <response name="error" type="view" value="eCommerceShowcart"/>
+    </request-map>
 
     <request-map uri="setProductCategory">
         <security https="false" auth="false"/>
@@ -606,6 +668,7 @@
 
     <request-map uri="anonSinglePageUpdateShippingOption">
       <security https="true" auth="false"/>
+      <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setShippingAddressToCart"/>
       <response name="success" type="view" value="anonSinglePageShippingOptions"/>
       <response name="error" type="view" value="anonSinglePageShippingOptions"/>
     </request-map>
@@ -613,15 +676,15 @@
     <request-map uri="anonSinglePageSetShippingOption">
         <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setShippingOption"/>
-        <response name="success" type="view" value="anonSinglePageOrderDetail"/>
-        <response name="error" type="view" value="anonSinglePageOrderDetail"/>
+        <response name="success" type="view" value="anonSinglePageCheckoutOrderItemsSummary"/>
+        <response name="error" type="view" value="anonSinglePageCheckoutOrderItemsSummary"/>
     </request-map>
 
     <request-map uri="anonSinglePageCalcTaxAjax">
         <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="calcTax"/>
-        <response name="success" type="view" value="anonSinglePageOrderDetail"/>
-        <response name="error" type="view" value="anonSinglePageOrderDetail"/>
+        <response name="success" type="view" value="anonSinglePageCheckoutOrderItemsSummary"/>
+        <response name="error" type="view" value="anonSinglePageCheckoutOrderItemsSummary"/>
     </request-map>
 
     <request-map uri="anonSinglePagePromoCode">
@@ -657,6 +720,7 @@
       <response name="success" type="request" value="anonSinglePageSetPaymentMethodOnCart"/>
       <response name="cod" type="request" value="anonSinglePageCalcShipping"/>
       <response name="error" type="view" value="anonSinglePageCheckout"/>
+      <response name="paymentError" type="request" value="anonSinglePageProcesspaymentError"/>
     </request-map>
 
     <request-map uri="anonSinglePageSetPaymentMethodOnCart">
@@ -820,6 +884,7 @@
 
     <request-map uri="singlePageUpdateShippingOption">
       <security https="true" auth="false"/>
+      <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setShippingAddressToCart"/>
       <response name="success" type="view" value="singlePageShippingOptions"/>
       <response name="error" type="view" value="singlePageShippingOptions"/>
     </request-map>
@@ -827,15 +892,15 @@
     <request-map uri="singlePageSetShippingOption">
         <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setShippingOption"/>
-        <response name="success" type="view" value="singlePageOrderDetail"/>
-        <response name="error" type="view" value="singlePageOrderDetail"/>
+        <response name="success" type="view" value="singlePageCheckoutOrderItemsSummary"/>
+        <response name="error" type="view" value="singlePageCheckoutOrderItemsSummary"/>
     </request-map>
 
     <request-map uri="singlePageCalcTaxAjax">
         <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="calcTax"/>
-        <response name="success" type="view" value="singlePageOrderDetail"/>
-        <response name="error" type="view" value="singlePageOrderDetail"/>
+        <response name="success" type="view" value="singlePageCheckoutOrderItemsSummary"/>
+        <response name="error" type="view" value="singlePageCheckoutOrderItemsSummary"/>
     </request-map>
 
     <request-map uri="singlePagePromoCode">
@@ -878,6 +943,7 @@
       <response name="success" type="request" value="singlePageSetPaymentMethodOnCart"/>
       <response name="cod" type="request" value="singlePageCalcShipping"/>
       <response name="error" type="view" value="singlePageCheckout"/>
+      <response name="paymentError" type="request" value="singlePageProcesspaymentError"/>
     </request-map>
 
     <request-map uri="singlePageSetPaymentMethodOnCart">
@@ -958,7 +1024,7 @@
         <response name="success" type="request" value="singlePageClearcartfororder"/>
         <response name="error" type="view" value="singlePageCheckout"/>
     </request-map>
-
+    
     <request-map uri="singlePageClearcartfororder">
         <security direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="clearCart"/>
@@ -1063,6 +1129,7 @@
         <response name="success" type="request" value="anonMultiPageSetPaymentMethodOnCart"/>
         <response name="cod" type="request" value="anonMultiPageCalcShipping"/>
         <response name="error" type="view" value="anonMultiPageOrderSummary"/>
+        <response name="paymentError" type="request" value="anonMultiPageProcesspaymentError"/>
     </request-map>
 
     <request-map uri="anonMultiPageSetPaymentMethodOnCart">
@@ -1277,6 +1344,7 @@
         <response name="creditCard" type="request" value="multiPageSetPaymentMethodOnCart"/>
         <response name="cod" type="request" value="multiPageCalcShipping"/>
         <response name="error" type="view" value="multiPageOrderSummary"/>
+        <response name="paymentError" type="request" value="multiPageProcesspaymentError"/>
     </request-map>
 
     <request-map uri="multiPageSetPaymentMethodOnCart">
@@ -1495,7 +1563,8 @@
       <security https="true" auth="true"/>
       <response name="success" type="view" value="eCommerceOrderStatus"/>
     </request-map>
-
+    
+    
     <!-- Credit Card Requests -->
     <request-map uri="editcreditcard">
         <security https="true" auth="true"/>
@@ -1648,6 +1717,13 @@
         <response name="success" type="view" value="eCommerceStoreDetail"/>
     </request-map>
 
+    <request-map uri="pincodeSearch">
+        <security https="false" auth="false"/>
+        <event type="simple" path="component://osafe/script/Validation/PinCodeChecker.xml" invoke="validateBlueDartPinCode"/>
+        <response name="error" type="view" value="pincodeSearch"/>
+        <response name="success" type="view" value="pincodeSearch"/>
+    </request-map>
+    
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceHomePage"/>
     <view-map name="errorPage" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceErrorPage"/>
@@ -1660,10 +1736,13 @@
     <view-map name="eCommerceRequirePasswordChange" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceRequirePasswordChange"/>
     <view-map name="MyAccount" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceMyAccount"/>
     <view-map name="eCommerceEditCustomerInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditCustomerInfo"/>
+    <view-map name="eCommerceEditCreditCardInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditCreditCardInfo"/>
+    <view-map name="eCommerceCreateCreditCardInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceCreateCreditCardInfo"/>
     <view-map name="eCommerceEditLoginInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditLoginInfo"/>
     <view-map name="eCommerceEditAddressBook" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEditAddressBook"/>
     <view-map name="eCommerceOrderHistory" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceOrderHistory"/>
     <view-map name="eCommerceUpdateAddressBook" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceUpdateAddressBook"/>
+    <view-map name="eCommercePaymentMethodInfo" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommercePaymentMethodInfo"/>
     <view-map name="eCommerceEMailSubscriber" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceEMailSubscriber"/>
     <view-map name="eCommerceConfirmMailingList" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceConfirmMailingList"/>
 
@@ -1711,7 +1790,7 @@
     <!-- ANONYMOUS (GUEST) SINGLE PAGE CHECK OUT FLOW -->
     <view-map name="anonSinglePageCheckout" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePageCheckout"/>
     <view-map name="anonSinglePageShippingOptions" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePageShippingOptions"/>
-    <view-map name="anonSinglePageOrderDetail" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePageOrderDetail"/>
+    <view-map name="anonSinglePageCheckoutOrderItemsSummary" type="screen" page="component://osafe/widget/EcommerceDivScreens.xml#onePageCheckoutOrderItemsSummary"/>
     <view-map name="anonSinglePagePromoCode" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePagePromoCode"/>
     <view-map name="anonSinglePagePayPalOrderSummary" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePagePayPalOrderSummary"/>
     <!-- ANONYMOUS (GUEST) SINGLE PAGE CHECK OUT FLOW -->
@@ -1720,7 +1799,7 @@
     <view-map name="singlePageCheckout" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePageCheckout"/>
     <view-map name="singlePageNewCheckoutAddress" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePageNewCheckoutAddress"/>
     <view-map name="singlePageShippingOptions" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePageShippingOptions"/>
-    <view-map name="singlePageOrderDetail" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePageOrderDetail"/>
+    <view-map name="singlePageCheckoutOrderItemsSummary" type="screen" page="component://osafe/widget/EcommerceDivScreens.xml#onePageCheckoutOrderItemsSummary"/>
     <view-map name="singlePagePromoCode" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePagePromoCode"/>
     <view-map name="singlePagePayPalOrderSummary" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePagePayPalOrderSummary"/>
     <!-- RETURNING SINGLE PAGE CHECK OUT FLOW -->
@@ -1747,4 +1826,6 @@
 
     <!-- Dialog Screens -->
     <view-map name="eCommercePlpQuickLook" type="screen" page="component://osafe/widget/DialogScreens.xml#eCommercePlpQuickLook"/>
+    <view-map name="pincodeSearch" type="screen" page="component://osafe/widget/DialogScreens.xml#pincodeSearch"/>
+   
 </site-conf>

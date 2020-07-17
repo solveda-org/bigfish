@@ -47,7 +47,7 @@
       <#if showCustomerContactUsLink == 'true'>
            <#assign partyContactUs = delegator.findByAnd("CustRequest",  {"fromPartyId" : party.partyId, "custRequestTypeId" : "RF_CONTACT_US"})?if_exists/>
            <#if (partyContactUs?has_content)>
-               <a href="<@ofbizUrl>custRequestContactUsSearch?partyId=${party.partyId}&preRetrieved=Y</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.CustomerContactUsTooltip} [${partyContactUs.size()!}]');" onMouseout="hideTooltip()"><span class="contactUsIcon"></span></a>
+               <a href="<@ofbizUrl>custRequestContactUsSearch?partyId=${party.partyId}&preRetrieved=Y&productStoreall=Y</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.CustomerContactUsTooltip} [${partyContactUs.size()!}]');" onMouseout="hideTooltip()"><span class="contactUsIcon"></span></a>
            <#else>
                <span class="contactUsIcon" onMouseover="showTooltip(event,'${uiLabelMap.CustomerContactUsTooltip} [0]');" onMouseout="hideTooltip()"></span>
            </#if>
@@ -55,7 +55,7 @@
       <#if showCustomerCatalogReqLink == 'true'>
            <#assign partyCatalogReqs = delegator.findByAnd("CustRequest",  {"fromPartyId" : party.partyId, "custRequestTypeId" : "RF_CATALOG"})?if_exists/>
            <#if (partyCatalogReqs?has_content)>
-               <a href="<@ofbizUrl>custRequestCatalogSearch?partyId=${party.partyId}&preRetrieved=Y</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.CustomerCatalogRequestTooltip} [${partyCatalogReqs.size()!}]');" onMouseout="hideTooltip()"><span class="catalogRequestIcon"></span></a>
+               <a href="<@ofbizUrl>custRequestCatalogSearch?partyId=${party.partyId}&preRetrieved=Y&productStoreall=Y</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.CustomerCatalogRequestTooltip} [${partyCatalogReqs.size()!}]');" onMouseout="hideTooltip()"><span class="catalogRequestIcon"></span></a>
            <#else>
                <span class="catalogRequestIcon" onMouseover="showTooltip(event,'${uiLabelMap.CustomerCatalogRequestTooltip} [0]');" onMouseout="hideTooltip()"></span>
            </#if>

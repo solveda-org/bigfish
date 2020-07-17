@@ -25,6 +25,7 @@ partyExportNew = StringUtils.trimToEmpty(parameters.partyExportNew);
 partyExported = StringUtils.trimToEmpty(parameters.partyExported);
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
+productStoreall = StringUtils.trimToEmpty(parameters.productStoreall);
 
 if (UtilValidate.isNotEmpty(preRetrieved))
 {
@@ -57,6 +58,10 @@ svcCtx.put("partyTypeId", "ANY");
 svcCtx.put("statusId", "ANY");
 svcCtx.put("extInfo", "N");
 svcCtx.put("partyTypeId", "PERSON");
+if (UtilValidate.isEmpty(productStoreall))
+{
+    svcCtx.put("productStoreId", context.productStoreId);
+}
 
 if (UtilValidate.isNotEmpty(partyId))
  {

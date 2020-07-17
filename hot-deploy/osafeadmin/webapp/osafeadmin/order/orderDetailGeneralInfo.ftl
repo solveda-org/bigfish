@@ -13,21 +13,13 @@
      <div class="infoValue">
         <#if orderHeader?has_content>
             <#assign statusItem = orderHeader.getRelatedOne("StatusItem")>
-            ${statusItem.get("description",locale)?default(statusItem.statusId?default("N/A"))}
-            <#if orderItems?has_content>
-                <#list orderItems as orderItem>
-                    <#if orderItem.statusId == "ITEM_COMPLETED">
-                        <#assign orderShipmentIconVisible= "true"/>
-                        <#break>
-                    </#if>
-                </#list>
-                <#if showOrderShipmentIcon?has_content && showOrderShipmentIcon == "true" && orderShipmentIconVisible?has_content && orderShipmentIconVisible == "true">
-                    <a href="<@ofbizUrl>orderShipmentDetail?orderId=${parameters.orderId}</@ofbizUrl>"><span class="shipmentDetailIcon"></span></a>
-                </#if>
-            </#if>
+            <p>${statusItem.get("description",locale)?default(statusItem.statusId?default("N/A"))}</p>
+            
             <#assign statusId=orderHeader.statusId.trim()/>
-            <#if orderStatusChangeBtnVisible?has_content && orderStatusChangeBtnVisible =="Y" && statusId != "ORDER_CANCELLED" && statusId != "ORDER_REJECTED" && statusId != "ORDER_COMPLETED">
+            <#if orderStatusChangeBtnVisible?has_content && orderStatusChangeBtnVisible =="Y" && statusId != "ORDER_CANCELLED" && statusId != "ORDER_REJECTED">
+            <div class="orderStatusChangeDiv">
                 <a href="<@ofbizUrl>${orderStatusChangeAction}?orderId=${orderHeader.orderId!}</@ofbizUrl>" class="standardBtn secondary">${uiLabelMap.ChangeBtn}</a>
+            </div>
             </#if>
         </#if>
      </div>

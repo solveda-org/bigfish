@@ -62,16 +62,18 @@
   
   <#assign productAssocs = product.getRelated("MainProductAssoc")!""/>
   <#if showVariantLink == 'true'>
-    <#if product.isVariant?if_exists == 'N'>
+    <#if (product.isVirtual?if_exists == 'Y') && (product.isVariant?if_exists == 'N')>
       <#assign prodVariants = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_VARIANT'))/>
       <#assign prodVariantCount = prodVariants.size()!0/>
       <a href="<@ofbizUrl>productVariants?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductVariantsTooltip} [${prodVariantCount!}]');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
-    <#else>
+    <#elseif (product.isVariant?if_exists == 'Y')>
       <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
       <#assign productAssocs = virtualProduct.getRelated("MainProductAssoc")!""/>
       <#assign prodVariants = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_VARIANT'))/>
       <#assign prodVariantCount = prodVariants.size()!0/>
       <a href="<@ofbizUrl>productVariants?productId=${virtualProduct.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductVariantsTooltip} [${prodVariantCount!}]');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
+    <#else>
+      <a href="javascript:void(0)" onMouseover="showTooltip(event,'${uiLabelMap.FinishedGoodNoVarsTooltip}');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
     </#if>
   </#if>
   

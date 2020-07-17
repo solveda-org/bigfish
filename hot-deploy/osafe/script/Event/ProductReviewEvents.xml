@@ -20,10 +20,10 @@
                 <process field="REVIEW_GENDER"><copy to-field="reviewGender"/></process>
                 <process field="REVIEW_AGE"><copy to-field="reviewAge"/></process>
                 <process field="REVIEW_LOCATION"><copy to-field="reviewLocation"/></process>
+                <process field="REVIEW_PRIVATE_NOTE"><copy to-field="reviewPrivateNote"/></process>
              </simple-map-processor>
 
          </call-map-processor>
-         
          
         <if-not-empty field="parameters.REVIEW_TEXT">
 			<call-object-method method-name="length" obj-field="parameters.REVIEW_TEXT" ret-field="reviewTextLength"/>

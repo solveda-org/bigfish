@@ -11,9 +11,10 @@
 <!-- address zip entry -->
 <div class="addressInfoZipPostcode">
     <div class="entry">
-        <label for="${fieldPurpose?if_exists}_POSTAL_CODE"><@required/>
-            <span class="${fieldPurpose?if_exists}_USA">${uiLabelMap.ZipCodeCaption}</span>
-            <span class="${fieldPurpose?if_exists}_CAN ${fieldPurpose?if_exists}_OTHER">${uiLabelMap.PostalCodeCaption}</span>
+        <label for="${fieldPurpose?if_exists}_POSTAL_CODE">
+            <span class="${fieldPurpose?if_exists}_USA"><@required/>${uiLabelMap.ZipCodeCaption}</span>
+            <span class="${fieldPurpose?if_exists}_CAN"><@required/>${uiLabelMap.PostalCodeCaption}</span>
+            <span class="${fieldPurpose?if_exists}_OTHER"><@required/>${uiLabelMap.PostalCodeCaption}</span>
         </label>
         <input type="text" maxlength="60" class="postalCode" name="${fieldPurpose?if_exists}_POSTAL_CODE" id="${fieldPurpose?if_exists}_POSTAL_CODE" value="${requestParameters.get(fieldPurpose+"_POSTAL_CODE")!postalCode!""}" />
         <@fieldErrors fieldName="${fieldPurpose?if_exists}_POSTAL_CODE"/>

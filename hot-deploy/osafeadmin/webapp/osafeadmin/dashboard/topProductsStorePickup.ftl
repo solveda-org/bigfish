@@ -34,7 +34,7 @@
                 <tr class="<#if rowClass == "2">even</#if>">
                     <td class="boxCaption <#if !product_has_next>lastRow</#if> firstCol"><#if internalName?has_content>${internalName}:</#if>${productName}</td>
                     <td class="boxNumber <#if !product_has_next>lastRow</#if>">${quantityOrdered}</td>
-                    <td class="boxDollar <#if !product_has_next>lastRow</#if> lastCol"><@ofbizCurrency amount=unitPrice!0 isoCode=globalContext.defaultCurrencyUomId /></td>
+                    <td class="boxDollar <#if !product_has_next>lastRow</#if> lastCol"><@ofbizCurrency amount=unitPrice!0 isoCode=globalContext.defaultCurrencyUomId rounding=globalContext.currencyRounding/></td>
                 </tr>
 
                 <#-- toggle the row color -->

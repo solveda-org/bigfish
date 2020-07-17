@@ -13,7 +13,7 @@
     <input type="hidden" name="custRequestName" value="${custRequestName!""}" />
     <#if userLogin?has_content>
        <#assign emailLogin=userLogin.userLoginId>
-       <#assign person = userLogin.getRelatedOneCache("Person")>
+       <#assign person = userLogin.getRelatedOneCache("Person")!"" >
        <#if person?has_content>
          <#assign firstName=person.firstName>
          <#assign lastName=person.lastName>
@@ -66,11 +66,11 @@
     <div class="entry">
       <label for="content"><@required/>${uiLabelMap.CommentCaption}</label>
       <textarea name="content" id="content" class="content" cols="50" rows="5">${parameters.content!""}</textarea>
+      <@fieldErrors fieldName="content"/>
       <div class="entry">
         <label for="content">&nbsp;</label>
         <span class="textCounter" id="textCounter"></span>
       </div>
-      <@fieldErrors fieldName="content"/>
     </div>
   </fieldset>
 </div>

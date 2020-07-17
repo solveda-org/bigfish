@@ -40,7 +40,26 @@
         <fileset dir="../../applications/accounting/build/lib" includes="*.jar"/>
         
     </path>
-
+	<!-- ================================================================== -->
+    <!-- Minifies all JS and CSS files                            -->
+    <!-- ================================================================== -->
+    <target name="run-bigfish-compression">
+        <yuicompressor inFile="../../themes/osafe_admin_theme/webapp/osafe_admin_theme/css/admin/admin.css" outFile="../../themes/osafe_admin_theme/webapp/osafe_admin_theme/css/admin/admin.css"/>
+        <yuicompressor inFile="../../themes/osafe_admin_theme/webapp/osafe_admin_theme/css/admin/admin_gunmetal.css" outFile="../../themes/osafe_admin_theme/webapp/osafe_admin_theme/css/admin/admin_gunmetal.css"/>
+    </target>
+    
+    <macrodef name="yuicompressor" description="Runs the YUI JS/CSS compressor on the specified inFile and saves the output to outFile">
+      <attribute name="inFile"/>
+      <attribute name="outFile"/>
+      <sequential>
+        <echo message="Minify @{inFile}"/>
+          <java jar="${ofbiz.home.dir}/hot-deploy/osafe/lib/yuicompressor-2.4.2.jar" fork="true">
+            <arg value="-o"/>
+            <arg value="@{outFile}"/>
+            <arg value="@{inFile}"/>
+        </java>
+       </sequential>
+     </macrodef>
     <!-- ================================================================= -->
     <!-- Osafe Admin Deployment                                                  -->
     <!-- ================================================================= -->

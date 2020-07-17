@@ -44,19 +44,19 @@
                         ${storePickupOrderCount?default('0')}
                     </#if>
                 </td>
-                <td class="boxDollar lastCol"><#if storePickupTotalRevenue?has_content && storePickupTotalRevenue &gt; 0> <@ofbizCurrency amount=storePickupTotalRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupTotalRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastCol"><#if storePickupTotalRevenue?has_content && storePickupTotalRevenue &gt; 0> <@ofbizCurrency amount=storePickupTotalRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupTotalRevenue?default(0)}</#if></td>
             </tr>
             <tr class="even">
                 <td class="boxCaption firstCol">${uiLabelMap.AverageOrderCaption}</td>
                 <td class="boxNumber">&nbsp;</td>
                 <td class="boxNumber">&nbsp;</td>
-                <td class="boxDollar lastCol"><#if storePickupAverageRevenue?has_content && storePickupAverageRevenue &gt; 0> <@ofbizCurrency amount=storePickupAverageRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupAverageRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastCol"><#if storePickupAverageRevenue?has_content && storePickupAverageRevenue &gt; 0> <@ofbizCurrency amount=storePickupAverageRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupAverageRevenue?default(0)}</#if></td>
             </tr>
             <tr class="odd">
                 <td class="boxCaption firstCol">${uiLabelMap.DailyAverageCaption} (${diffDays!"0"} ${uiLabelMap.DaysLabel}):</td>
                 <td class="boxNumber">&nbsp;</td>
                 <td class="boxNumber">${storePickupDailyAvgOrderCount?default('0')}</td>
-                <td class="boxDollar lastCol"><#if storePickupDailyAvgRevenue?has_content && storePickupDailyAvgRevenue &gt; 0> <@ofbizCurrency amount=storePickupDailyAvgRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupDailyAvgRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastCol"><#if storePickupDailyAvgRevenue?has_content && storePickupDailyAvgRevenue &gt; 0> <@ofbizCurrency amount=storePickupDailyAvgRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupDailyAvgRevenue?default(0)}</#if></td>
             </tr>
             <tr class="even">
               <#if periodRecTrendRange?exists>
@@ -90,7 +90,7 @@
                 </#if>
                 <td class="boxDollar ${recentTrendClass!""}">${storePickupRecentTrendRevenue!"N/A"}<#if storePickupRecentTrendRevenue?has_content>%</#if></td>
                 <td class="boxNumber">${storePickupRecentOrderCount?default('0')}</td>
-                <td class="boxDollar lastRow lastCol ${recentTrendColorClass!""}"><#if storePickupRecentTrendTotalRevenue?has_content && storePickupRecentTrendTotalRevenue &gt; 0> <@ofbizCurrency amount=storePickupRecentTrendTotalRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupRecentTrendTotalRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastRow lastCol ${recentTrendColorClass!""}"><#if storePickupRecentTrendTotalRevenue?has_content && storePickupRecentTrendTotalRevenue &gt; 0> <@ofbizCurrency amount=storePickupRecentTrendTotalRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupRecentTrendTotalRevenue?default(0)}</#if></td>
             </tr>
             <tr class="odd">
               <#if periodPriorTrendRange?exists>
@@ -124,7 +124,7 @@
                 </#if>
                 <td class="boxDollar ${priorTrendClass!""}">${storePickupPriorTrendRevenue!"N/A"}<#if storePickupPriorTrendRevenue?has_content>%</#if></td>
                 <td class="boxNumber">${storePickupPriorOrderCount?default('0')}</td>
-                <td class="boxDollar lastRow lastCol ${priorTrendColorClass!""}"><#if storePickupPriorTrendTotalRevenue?has_content && storePickupPriorTrendTotalRevenue &gt; 0>  <@ofbizCurrency amount=storePickupPriorTrendTotalRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupPriorTrendTotalRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastRow lastCol ${priorTrendColorClass!""}"><#if storePickupPriorTrendTotalRevenue?has_content && storePickupPriorTrendTotalRevenue &gt; 0>  <@ofbizCurrency amount=storePickupPriorTrendTotalRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${storePickupPriorTrendTotalRevenue?default(0)}</#if></td>
             </tr>
         </table>
     </div>

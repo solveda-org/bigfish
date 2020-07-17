@@ -8,6 +8,8 @@ import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import javolution.util.FastList;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.party.contact.ContactHelper;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
@@ -19,6 +21,17 @@ if (UtilValidate.isNotEmpty(orderId))
 {
 	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
 	context.orderHeader = orderHeader;
+	
+	orderProductStore = orderHeader.getRelatedOne("ProductStore");
+	if (UtilValidate.isNotEmpty(orderProductStore.storeName))
+	{
+		productStoreName = orderProductStore.storeName;
+	}
+	else
+	{
+		productStoreName = orderHeader.productStoreId;
+	}
+	context.productStoreName = productStoreName;
 	
 	notes = orderHeader.getRelatedOrderBy("OrderHeaderNoteView", ["-noteDateTime"]);
 	context.orderNotes = notes;
@@ -50,6 +63,36 @@ if (UtilValidate.isNotEmpty(orderId))
 	pagingListSize=orderItems.size();
 	context.pagingListSize=pagingListSize;
 	context.pagingList = orderItems;
+	placingParty = orderReadHelper.getPlacingParty();
+	if(UtilValidate.isNotEmpty(placingParty))
+	{
+		context.partyId = placingParty.partyId;
+	}
+    if (UtilValidate.isNotEmpty(orderProductStore)) 
+    {
+        context.destinationFacilityId = ProductStoreWorker.determineSingleFacilityForStore(delegator, orderProductStore.productStoreId);
+        context.toPartyId = orderProductStore.payToPartyId;
+    }
+    if (orderProductStore.reqReturnInventoryReceive) 
+    {
+        context.needsInventoryReceive = orderProductStore.reqReturnInventoryReceive;
+    } 
+    else 
+    {
+        context.needsInventoryReceive = "Y";
+    }
+    if ("SALES_ORDER".equals(orderHeader.orderTypeId)) 
+    {
+        context.returnHeaderTypeId = "CUSTOMER_RETURN";
+    }
+    
+    ecl = EntityCondition.makeCondition([
+     									EntityCondition.makeCondition("orderId", EntityOperator.EQUALS, orderId),
+     									EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")],
+     								EntityOperator.AND);
+    orderPaymentPreferences = delegator.findList("OrderPaymentPreference", ecl, null, null, null, false);
+    orderPaymentPreference = EntityUtil.getFirst(orderPaymentPreferences);
+    context.orderPaymentPreference = orderPaymentPreference;
 }
 
 if(UtilValidate.isNotEmpty(orderId) && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
@@ -83,3 +126,8 @@ if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.
 		storeId = orderStoreLocationAttr.attrValue;
 	}
 }
+
+returnReasons = delegator.findList("ReturnReason", null, null, ["sequenceId"], null, false);
+context.returnReasons = returnReasons;
+
+context.shippingContactMechList = ContactHelper.getContactMech(placingParty, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);

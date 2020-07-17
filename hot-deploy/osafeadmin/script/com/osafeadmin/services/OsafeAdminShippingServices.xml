@@ -188,6 +188,10 @@
         <set from-field="carrier" field="createShipChargeEntity.roleTypeId"/>
         <set from-field="parameters.productStoreId" field="createShipChargeEntity.productStoreId"/>
         <set from-field="parameters.sequenceNum" field="createShipChargeEntity.sequenceNumber" type="Long"/>
+        <set field="createShipChargeEntity.allowPoBoxAddr" from-field="parameters.deliverToPOBox" type="String"/>
+        <set field="createShipChargeEntity.shipmentGatewayConfigId" from-field="parameters.shipmentGatewayConfigId" type="String"/>
+        <set field="createShipChargeEntity.includeGeoId" from-field="parameters.includeGeoId" type="String"/>
+        <set field="createShipChargeEntity.excludeGeoId" from-field="parameters.excludeGeoId" type="String"/>
         <create-value value-field="createShipChargeEntity"/>
                
         <make-value value-field="createShipmentCostEstimateEntity" entity-name="ShipmentCostEstimate"/>
@@ -300,7 +304,7 @@
         	<set field="parameters.sequenceNum" value="1" type="Long"/>
         	<else>
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
-                <field field="parameters.sequenceNum"/>
+                <field field="parameters.sequenceNum" />
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
@@ -349,7 +353,11 @@
         <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
         <set field="carrier" value="CARRIER" type="String"/>
         <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
+        <set from-field="parameters.shipmentGatewayConfigId" field="lookedUpValue.shipmentGatewayConfigId" type="String"/>
         <set from-field="parameters.sequenceNum" field="lookedUpValue.sequenceNumber" type="Long"/>
+        <set from-field="parameters.deliverToPOBox" field="lookedUpValue.allowPoBoxAddr" type="String"/>
+        <set from-field="parameters.includeGeoId" field="lookedUpValue.includeGeoId" type="String"/>
+        <set from-field="parameters.excludeGeoId" field="lookedUpValue.excludeGeoId" type="String"/>
         <store-value value-field="lookedUpValue"/>
 
         <make-value entity-name="ShipmentCostEstimate" value-field="anotherLookupPKMap"/>
@@ -430,6 +438,7 @@
                             <field-map field-name="partyId" from-field="partyId"/>
                         </entity-one>
                         <if-not-empty field="existingParty">
+                        	<set field="errorKey" from-field="parameters.carrierPartyId"/>
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="partyIdExistError"/>
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
                             <else>
@@ -500,6 +509,21 @@
         <set from-field="nowTimestamp" field="partyGroupEntity.lastUpdatedStamp"/>
         <create-value value-field="partyGroupEntity"/>
 
+		<!-- Create Tracking URL  -->
+        <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyTrackingUrlContentCtx"/>
+        <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextTrackingUrlContentCtx"/>
+        <set field="createTextTrackingUrlContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createTextTrackingUrlContentCtx.dataTemplateTypeId" value="FTL"/>
+        <set field="createTextTrackingUrlContentCtx.contentTypeId" value="DOCUMENT"/>
+        <set field="createTextTrackingUrlContentCtx.statusId" value="CTNT_PUBLISHED"/>
+        <set field="createTextTrackingUrlContentCtx.textData" from-field="parameters.trackingURL"/>
+        <call-service service-name="createTextContent" in-map-name="createTextTrackingUrlContentCtx">
+            <result-to-field result-name="contentId" field="createPartyTrackingUrlContentCtx.contentId"/>
+        </call-service>
+        <set field="createPartyTrackingUrlContentCtx.partyContentTypeId" value="TRACKING_URL"/>        
+        <call-service service-name="createPartyContent" in-map-name="createPartyTrackingUrlContentCtx"/>
+        <!-- End of Create Tracking URL -->
+        
     </simple-method>
     
     <simple-method method-name="createCarrierShip" short-description="Create a carrier shipment method">
@@ -670,13 +694,13 @@
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShipmentMethodTypeIdLengthError"/>
                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
                     <else>
-                        <entity-one entity-name="ShipmentMethodType" value-field="existingShipmentMethodType">
-                            <field-map field-name="shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
-                        </entity-one>
+                        <set field="shipmentMethodTypePK.shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
+                        <find-by-primary-key value-field="existingShipmentMethodType" map="shipmentMethodTypePK" entity-name="ShipmentMethodType"/>
                         <if-not-empty field="existingShipmentMethodType">
+                            <set field="shippingMethodType" from-field="shipmentMethodTypeId"/>
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShipmentMethodTypeIdExistError"/>
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                            <else>
+                        <else>
                                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
 					                <field field="parameters.shipmentMethodTypeId"/>
 					            </call-class-method>
@@ -686,7 +710,7 @@
 					                <string-to-list string="${tempErrorMessage}" list="error_list"/>
 					            </if-compare>
 					            <set field="parameters.shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
-                            </else>
+                        </else>
                         </if-not-empty>
                     </else>
                 </if-empty>
@@ -699,8 +723,8 @@
         </if-empty>
         <if-empty field="parameters.sequenceNum">
         	<set field="parameters.sequenceNum" value="1" type="Long"/>
-        	<else>
-            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+        <else>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isNumber" ret-field="isNumber">
                 <field field="parameters.sequenceNum"/>
             </call-class-method>
             <if-compare field="isNumber" operator="equals" value="false">
@@ -760,51 +784,113 @@
         <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedTxStamp"/>
         <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
         <store-value value-field="lookedUpValue"/>
+        
+        <!-- Update Tracking URL -->
+        <if-not-empty field="parameters.trackingUrlDataResourceId">
+            <if-not-empty field="parameters.trackingURL">
+              <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextContentCtx"/>
+              <set field="updateElectronicTextContentCtx.dataResourceId" from-field="parameters.trackingUrlDataResourceId"/>
+              <set field="updateElectronicTextContentCtx.textData" from-field="parameters.trackingURL"/>              
+              <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextContentCtx"/>
+            <else>
+              <set field="partyContentCtx.partyId" from-field="parameters.partyId"/>
+              <set field="partyContentCtx.contentId" from-field="parameters.contentId"/>
+              <set field="partyContentCtx.partyContentTypeId" from-field="parameters.partyContentTypeId"/>
+              <find-by-and entity-name="PartyContent" map="partyContentCtx" list="partyContentList" />
+              <if-not-empty field="partyContentList">
+                  <filter-list-by-date list="partyContentList"/>
+                  <first-from-list list="partyContentList" entry="partyContent"/>
+                  <set field="removePartyContentCtx.partyId" from-field="partyContent.partyId"/>
+                  <set field="removePartyContentCtx.contentId" from-field="partyContent.contentId"/>
+                  <set field="removePartyContentCtx.partyContentTypeId" from-field="partyContent.partyContentTypeId"/>
+                  <set field="removePartyContentCtx.fromDate" from-field="partyContent.fromDate"/>
+                  <call-service service-name="removePartyContent" in-map-name="removePartyContentCtx"/>
+              </if-not-empty>
+            </else>    
+            </if-not-empty>
+        <else>
+            <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyContentCtx"/>
+            <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
+            <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+            <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
+            <set field="createTextContentCtx.contentTypeId" value="DOCUMENT"/>
+            <set field="createTextContentCtx.statusId" value="CTNT_PUBLISHED"/>
+            <set field="createTextContentCtx.textData" from-field="parameters.trackingURL"/>
+            <call-service service-name="createTextContent" in-map-name="createTextContentCtx">
+                <result-to-field result-name="contentId" field="createPartyContentCtx.contentId"/>
+            </call-service>
+            <set field="createPartyContentCtx.partyContentTypeId" value="TRACKING_URL"/>
+            <call-service service-name="createPartyContent" in-map-name="createPartyContentCtx"/>
+        </else>
+        </if-not-empty>
+        <!-- End of Update Tracking URL -->
 
     </simple-method>
     
     <simple-method method-name="updateShipmentMethod" short-description="Update a shipment method">
-    	<!-- check for bad or missing values -->     
-    	<if-empty field="parameters.shipmentMethodTypeId">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipmentMethodTypeIdIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            <else>
-                <set field="maxLength" value="20" type="Integer"/>
-                <set field="spaceReplacement" value=" " type="String"/>
-                <set field="makeUpCase" value="true" type="Boolean"/>
-                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="shipmentMethodTypeId">
-                    <field field="parameters.shipmentMethodTypeId" type="String"/>
-                    <field field="maxLength" type="Integer"/>
-                    <field field="spaceReplacement" type="String"/>
-                    <field field="makeUpCase" type="boolean"/>
-                </call-class-method>
-                <if-empty field="shipmentMethodTypeId">
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="shipmentMethodTypeIdLengthError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    <else>
-                    	<set field="parameters.shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
-                    </else>
-                </if-empty>
-            </else>
-        </if-empty>
-          
         <if-empty field="parameters.description">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipmentMethodDescriptionError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
         </if-empty>
-        
+        <if-empty field="parameters.sequenceNum">
+        	<set field="parameters.sequenceNum" value="1" type="Long"/>
+        <else>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.sequenceNum"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            </else>
+        </if-empty>
         <check-errors/>
-        
         <!-- update record in entity: ShipmentMethodType -->     
-        <make-value entity-name="ShipmentMethodType" value-field="lookupPKMap"/>
-        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
-        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
-        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
-        <now-timestamp field="nowTimestamp"/>
-        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedTxStamp"/>
-        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
-        <store-value value-field="lookedUpValue"/>
-
-    </simple-method>
+        <set-service-fields service-name="updateShipmentMethodType" map="parameters" to-map="updateShipmentMethodTypeCtx"/>
+        <set from-field="parameters.sequenceNum" field="updateShipmentMethodTypeCtx.sequenceNum" type="Long"/>
+        <call-service service-name="updateShipmentMethodType" in-map-name="updateShipmentMethodTypeCtx" />
+    </simple-method>    
     
+    <simple-method method-name="updateShipmentGateway" short-description="Update shipment gateways">    
+     <entity-one entity-name="ShipmentGatewayDhl" value-field="shipmentGatewayDhl"/>     
+      <if-compare-field operator="equals" field="shipmentGatewayDhl.shipmentGatewayConfigId" to-field="parameters.shipmentGatewayConfigId"> 
+        <make-value entity-name="ShipmentGatewayDhl" value-field="shipmentGatewayDhl"/>         	
+        <set from-field="parameters.shipmentGatewayConfigId" field="pkValue.shipmentGatewayConfigId"/>        
+        <set-pk-fields map="pkValue" value-field="shipmentGatewayDhl"/>
+        <find-by-primary-key map="shipmentGatewayDhl" value-field="lookedUpValue"/> 
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/> 
+      </if-compare-field>
+    
+     <entity-one entity-name="ShipmentGatewayFedex" value-field="shipmentGatewayFedex"/>
+      <if-compare-field operator="equals" field="shipmentGatewayFedex.shipmentGatewayConfigId" to-field="parameters.shipmentGatewayConfigId">
+        <set-service-fields service-name="updateShipmentGatewayConfigFedex" map="parameters" to-map="updateShipmentGatewayCtx"/>
+        <set from-field="parameters.shipmentGatewayConfigId" field="updateShipmentGatewayCtx.shipmentGatewayConfigId" type="String"/>
+        <call-service service-name="updateShipmentGatewayConfigFedex" in-map-name="updateShipmentGatewayCtx" />      
+      </if-compare-field>
+        
+     <entity-one entity-name="ShipmentGatewayUps" value-field="shipmentGatewayUps"/>
+      <if-compare-field operator="equals" field="shipmentGatewayUps.shipmentGatewayConfigId" to-field="parameters.shipmentGatewayConfigId">
+        <set-service-fields service-name="updateShipmentGatewayConfigUps" map="parameters" to-map="updateShipmentGatewayCtx"/>
+        <set from-field="parameters.shipmentGatewayConfigId" field="updateShipmentGatewayCtx.shipmentGatewayConfigId" type="String"/>
+        <call-service service-name="updateShipmentGatewayConfigUps" in-map-name="updateShipmentGatewayCtx" /> 
+      </if-compare-field>
+      
+      <entity-one entity-name="ShipmentGatewayUsps" value-field="shipmentGatewayUsps"/>
+      <if-compare-field operator="equals" field="shipmentGatewayUsps.shipmentGatewayConfigId" to-field="parameters.shipmentGatewayConfigId">
+        <set-service-fields service-name="updateShipmentGatewayConfigUsps" map="parameters" to-map="updateShipmentGatewayCtx"/>
+        <set from-field="parameters.shipmentGatewayConfigId" field="updateShipmentGatewayCtx.shipmentGatewayConfigId" type="String"/>
+        <call-service service-name="updateShipmentGatewayConfigUsps" in-map-name="updateShipmentGatewayCtx" />        
+      </if-compare-field>
+      
+      <entity-one entity-name="ShipmentGatewayBlueDart" value-field="shipmentGatewayBlueDart"/>     
+      <if-compare-field operator="equals" field="shipmentGatewayBlueDart.shipmentGatewayConfigId" to-field="parameters.shipmentGatewayConfigId"> 
+        <make-value entity-name="ShipmentGatewayBlueDart" value-field="shipmentGatewayBlueDart"/>         	
+        <set from-field="parameters.shipmentGatewayConfigId" field="pkValue.shipmentGatewayConfigId"/>        
+        <set-pk-fields map="pkValue" value-field="shipmentGatewayBlueDart"/>
+        <find-by-primary-key map="shipmentGatewayBlueDart" value-field="lookedUpValue"/> 
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/> 
+      </if-compare-field>
+    </simple-method> 
 </simple-methods>

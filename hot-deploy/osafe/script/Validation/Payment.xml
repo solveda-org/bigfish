@@ -10,7 +10,7 @@
             <field-to-request field="fieldLevelErrors" />
         </if-compare>
 
-        <if-compare field="parameters.useSavedCard" operator="equals" value="Y" type="String">
+        <if-compare field="parameters.paymentOption" operator="equals" value="PAYOPT_CC_EXIST" type="String">
             <if-empty field="parameters.savedVerificationNo">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="savedVerificationNo" list="error_list"/>
@@ -110,4 +110,97 @@
             <field-to-request field="contactMechPurposeTypeId"/>
         </if-compare>
     </simple-method>
+    <simple-method method-name="updateCreditCardInfo" short-description="Update Credit Card">
+        <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <check-errors/>
+        <set field="creditCardContext.paymentMethodId" from-field="parameters.paymentMethodId"/>
+        <call-service service-name="updateCreditCard" in-map-name="creditCardContext">
+            <default-message>Credit Card Info successfully updated.</default-message>
+            <result-to-request result-name="paymentMethodId" request-name="paymentMethodId"/>
+            <result-to-field result-name="paymentMethodId"/>
+        </call-service>
+        <if-compare field="parameters.setAsDefaultCard" operator="equals" value="Y">
+           <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
+           <set field="partyProfileDefaultsCtx.defaultPayMeth" from-field="paymentMethodId"/>
+           <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
+           <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
+        <else>
+           <entity-one value-field="partyProfileDefaultVal" entity-name="PartyProfileDefault" auto-field-map="true">
+               <field-map field-name="partyId" from-field="userLogin.partyId"/>
+           </entity-one>
+           <if-not-empty field="partyProfileDefaultVal">
+               <if-compare-field operator="equals" field="partyProfileDefaultVal.defaultPayMeth" to-field="parameters.paymentMethodId">
+	               <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
+	               <set field="partyProfileDefaultsCtx.defaultPayMeth" value="0"/>
+	               <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
+	               <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
+               </if-compare-field>
+           </if-not-empty>
+        </else>
+        </if-compare>
+    </simple-method>
+    <simple-method method-name="createCreditCardInfo" short-description="Create Credit Card">
+        <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <check-errors/>
+        <set field="creditCardContext.firstNameOnCard" from-field="parameters.firstNameOnCard"/>
+        <set field="creditCardContext.lastNameOnCard" from-field="parameters.lastNameOnCard"/>
+        <set field="creditCardContext.cardType" from-field="parameters.cardType"/>
+        <set field="creditCardContext.expMonth" from-field="parameters.expMonth"/>
+        <set field="creditCardContext.expYear" from-field="parameters.expYear"/>
+        <set field="creditCardContext.cardNumber" from-field="parameters.cardNumber"/>
+        <call-service service-name="createCreditCard" in-map-name="creditCardContext">
+            <default-message>Credit Card successfully created.</default-message>
+            <result-to-request result-name="paymentMethodId"/>
+            <result-to-field result-name="paymentMethodId"/>
+        </call-service>
+        
+        <if-compare field="parameters.setAsDefaultCard" operator="equals" value="Y">
+           <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
+           <set field="partyProfileDefaultsCtx.defaultPayMeth" from-field="paymentMethodId"/>
+           <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
+           <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
+        </if-compare>
+        <if-compare field="parameters.contactMechId" operator="equals" value="_NEW_">
+            <set value="address" field="_response_code_"/>
+            <set value="POSTAL_ADDRESS" field="preContactMechTypeId"/>
+            <set value="BILLING_LOCATION" field="contactMechPurposeTypeId"/>
+            <field-to-request field="DONE_PAGE"/>
+            <field-to-request field="preContactMechTypeId"/>
+            <field-to-request field="contactMechPurposeTypeId"/>
+        </if-compare>
+    </simple-method>
+    <simple-method method-name="updateDefaultPmtMethod" short-description="Update default payment method">
+       <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+           <field field="request" type="javax.servlet.ServletRequest"/>
+       </call-class-method>
+       <if-not-empty field="parameters.paymentMethodId">
+           <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
+              <set field="partyProfileDefaultsCtx.defaultPayMeth" from-field="parameters.paymentMethodId"/>
+              <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
+              <set field="partyProfileDefaultsCtx.productStoreId" from-field="productStoreId"/>
+           <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
+       </if-not-empty>
+    </simple-method>
+    <simple-method method-name="deletePaymentMethod" short-description="Delete payment method">
+       <call-map-processor xml-resource="component://accounting/script/org/ofbiz/accounting/payment/PaymentMapProcs.xml"
+                processor-name="deletePaymentMethod" in-map-name="parameters" out-map-name="context"/>
+        <check-errors/>
+        <if-not-empty field="parameters.paymentMethodId">
+	        <entity-one value-field="partyProfileDefaultVal" entity-name="PartyProfileDefault" auto-field-map="true">
+	            <field-map field-name="partyId" from-field="userLogin.partyId"/>
+	        </entity-one>
+	        <if-not-empty field="partyProfileDefaultVal">
+		        <if-compare-field operator="equals" field="parameters.paymentMethodId" to-field="partyProfileDefaultVal.defaultPayMeth">
+	               <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
+	               <set field="partyProfileDefaultsCtx.defaultPayMeth" value="0"/>
+	               <set field="partyProfileDefaultsCtx.partyId" from-field="userLogin.partyId"/>
+	               <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
+		        </if-compare-field>
+            </if-not-empty>
+        </if-not-empty>
+        <call-service service-name="deletePaymentMethod" in-map-name="context">
+            <default-message>Payment Method successfully deleted.</default-message>
+        </call-service>
+    </simple-method>
+    
 </simple-methods>

@@ -1,0 +1,2498 @@
+//********************************************************************************************
+//RELEASE ITEMS
+//********************************************************************************************
+
+04/30/2013
+  - Extended entity ProductStoreShipmentMeth with attribute allowPoBoxAddr
+  - During checkout, the following processing is required:
+    -- If the Shipping Address is a PO Box then only offer Shipping Methods that allow deliveries to a PO Box.
+  
+05/06/2013
+  - Created entity 'BlueDartPrepaid' and 'BlueDartCodpin'. These entities are used in BlueDart PINCODE checker component.
+  
+05/07/2013
+  - Created entity 'ShipmentGatewayBlueDart'. This entity is used for shipment gateways settings.
+    
+//********************************************************************************************
+//SQL UPDATES
+//********************************************************************************************
+
+02/27/13 - changed from and bcc email from to bigfishdev@solveda.com and bigfish@solveda.com
+UPDATE Product_Store_Email_Setting SET from_address='bigfishdev@solveda.com', bcc_Address='bigfish@solveda.com';
+
+02/28/2013 #28792 
+INSERT INTO party_role (party_Id, role_Type_Id, last_Updated_Stamp) SELECT ul.party_Id, 'CONTENT_USER', ulsg.last_Updated_Stamp FROM user_login ul, User_Login_Security_Group ulsg where ul.user_login_id = ulsg.user_login_id and ulsg.group_Id = 'OSAFEADMIN';
+INSERT INTO product_store_role (party_Id, role_Type_Id, product_Store_Id, from_Date, last_Updated_Stamp, last_Updated_Tx_Stamp, created_Stamp, created_Tx_Stamp) SELECT party_Id, role_Type_Id, '@store.productStoreId@', last_Updated_Stamp, last_Updated_Stamp, last_Updated_Tx_Stamp, created_Stamp, created_Tx_Stamp FROM party_role where role_Type_Id = 'STORE_LOCATION' OR role_Type_Id = 'GUEST_CUSTOMER' OR role_Type_Id = 'EMAIL_SUBSCRIBER' OR role_Type_Id = 'CONTENT_USER';
+
+03/08/2013 Issue #28836
+    DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='TXT_CLNT_REPLY_TO';
+    
+03/11/13 issue#29014
+update X_PRODUCT_STORE_PARM set PARM_VALUE="http://bigfish.solveda.com/help/" where PARM_KEY="ADM_HELP_URL";
+
+03/12/2013 - Issue# 29029
+DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='FORMAT_CURRENCY';
+
+04/24/2013 - Issue# 29546
+update X_PIXEL_TRACKING set PIXEL_PAGE_POSITION = 'BODY_END' where PIXEL_PAGE_POSITION IS NULL;
+
+//********************************************************************************************
+//BIGFISH PARAMETERS UPDATES
+//FILE: bigFishParameters.xml
+//********************************************************************************************
+
+//Add
+03/04/2013 - Issue# 28836
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_METHOD" description="Indicates if Text Messaging (SMS) is an option and which service to use for delivery. Valid values are NONE, CLICKATELL" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_USER_ID" description="The user name of the SMS Gateway Account" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_PASSWORD" description="The user password of the SMS Gateway account" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_API_ID" description="The SMS Gateway API Id " parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_API_URL" description="The Request URL to access the SMS Gateway via API" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_CLNT_REPLY_TO" description="Client Texting address, referenced in text-templates" parmCategory="TEXT"/>
+03/05/2013 - Issue #28803
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_MULTI_SELECT" description="Indicates if multiple Facet VALUES can be selected from within one Facet GROUP" parmCategory="SOLR"/>
+5/06/2013 - Issue # 29569 
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_EMAIL_ALERT" description="The number of additional emails that can be entered on the Order Confirmation page. Should be a number from 0 to 10." parmCategory="CHECKOUT"/>
+
+03/13/2013 - Issue #29037
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CURRENCY_UOM_ROUNDING" description="This defines the rounding increment for currency amounts. 0 if no rounding is done (show full amounts). Default is 2." parmCategory="FORMAT"/>
+
+05/06/2013 - Issue#29741
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_CC" description="Determines if Credit Cards are an acceptable form of payment during the Check Out process." parmCategory="CHECKOUT"/>
+
+//Remove
+03/12/2013 - Issue# 29029
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_CURRENCY" description="This defines how currency is displayed within both the eCommerce and Admin modules." parmCategory="FORMAT"/>
+
+//********************************************************************************************
+//BIGFISH CONTENT MENU
+//FILE: bigFishContentMenu.xml
+//********************************************************************************************
+
+//Add
+02/27/13 - Update SequenceValueItem (avoids duplicate entry after installing seed) 
+<SequenceValueItem seqName="DataResource" seqId="900000"/>
+<SequenceValueItem seqName="Content" seqId="900000"/>
+<SequenceValueItem seqName="Product" seqId="900000"/>
+<SequenceValueItem seqName="ProductCategory" seqId="900000"/>
+
+03/04/2013 - Issue# 28836
+	<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ABANDON_CART" contentId="TXT_ABANDON_CART" contentTypeId="BF_TXT_TEMPLATE"/>
+	<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_NEW_CUSTOMER" contentId="TXT_NEW_CUSTOMER" contentTypeId="BF_TXT_TEMPLATE"/>
+	<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CHANGE" contentId="TXT_ORDER_CHANGE" contentTypeId="BF_TXT_TEMPLATE"/>
+	<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CONFIRM" contentId="TXT_ORDER_CONFIRM" contentTypeId="BF_TXT_TEMPLATE"/>
+	<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_FORGOT_PASSWORD" contentId="TXT_FORGOT_PASSWORD" contentTypeId="BF_TXT_TEMPLATE"/>
+	<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_SHIP_REVIEW" contentId="TXT_SHIP_REVIEW" contentTypeId="BF_TXT_TEMPLATE"/>
+	<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_CHANGE_CUSTOMER" contentId="TXT_CHANGE_CUSTOMER" contentTypeId="BF_TXT_TEMPLATE"/>
+04/01/2013 - Issue#29162
+    <DataResource dataResourceId="PTS_PMT_METHOD_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    <DataResource dataResourceId="PTS_PMT_METHOD_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    <DataResource dataResourceId="PES_PMT_METHOD_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    <DataResource dataResourceId="PES_PMT_METHOD_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    
+    <ElectronicText dataResourceId="PTS_PMT_METHOD_VIEW"/>
+    <ElectronicText dataResourceId="PTS_PMT_METHOD_EDIT"/>
+    <ElectronicText dataResourceId="PES_PMT_METHOD_VIEW"/>
+    <ElectronicText dataResourceId="PES_PMT_METHOD_EDIT"/>
+    
+    <ContentRole contentId="PTS_PMT_METHOD_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+    <ContentRole contentId="PTS_PMT_METHOD_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+    <ContentRole contentId="PES_PMT_METHOD_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+    <ContentRole contentId="PES_PMT_METHOD_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+    
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_VIEW" contentId="PTS_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_EDIT" contentId="PTS_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_VIEW" contentId="PES_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_END_SPOT"/>
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_EDIT" contentId="PES_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_END_SPOT"/>
+    
+    <Content contentId="PTS_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_METHOD_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)" contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    <Content contentId="PTS_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_METHOD_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)" contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    <Content contentId="PES_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PMT_METHOD_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)" contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    <Content contentId="PES_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PMT_METHOD_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)" contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    
+//Remove
+
+//Edit
+
+//********************************************************************************************
+//BIGFISH TYPES
+//FILE: bigFishTypes.xml
+//********************************************************************************************
+
+//Add
+03/04/2013 - Issue# 28836
+	<ContentType contentTypeId="BF_TXT_TEMPLATE" description="txt message template" hasTable="N" parentTypeId=""/>
+04/30/2013 - Issue# 29743
+	<PartyContentType partyContentTypeId="TRACKING_URL" description="Tracking URL" hasTable="N" parentTypeId=""/>
+
+//Remove
+
+
+//Edit
+
+
+//********************************************************************************************
+//BIGFISH EXTENDED STORE
+//FILE: bigFishExtendedStore.xml
+//********************************************************************************************
+
+//Add
+04/01/2013 - Issue#29162
+    <DataResource dataResourceId="PTS_PMT_MV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    <DataResource dataResourceId="PTS_PMT_ME@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    <DataResource dataResourceId="PES_PMT_MV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    <DataResource dataResourceId="PES_PMT_ME@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+    
+    <ElectronicText dataResourceId="PTS_PMT_MV@extendedStore.suffix@"/>
+    <ElectronicText dataResourceId="PTS_PMT_ME@extendedStore.suffix@"/>
+    <ElectronicText dataResourceId="PES_PMT_MV@extendedStore.suffix@"/>
+    <ElectronicText dataResourceId="PES_PMT_ME@extendedStore.suffix@"/>
+    
+    <Content contentId="PTS_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_MV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)"  contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    <Content contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_ME@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)"   contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    <Content contentId="PES_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT" dataResourceId="PES_PMT_MV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)"  contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    <Content contentId="PES_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT" dataResourceId="PES_PMT_ME@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)"  contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+    
+    <ContentRole contentId="PTS_PMT_MV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+    <ContentRole contentId="PTS_PMT_ME@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+    <ContentRole contentId="PES_PMT_MV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+    <ContentRole contentId="PES_PMT_ME@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+        
+    
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_VIEW" contentId="PTS_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_EDIT" contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_VIEW" contentId="PES_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT"/>
+    <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_EDIT" contentId="PES_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT"/>
+//Remove
+
+//Edit
+
+
+//********************************************************************************************
+//LABEL UPDATES
+//FILE: OSafeUiLabels.xml
+//********************************************************************************************
+
+//Add
+03/04/2013 - Issue #24397
+	<property key="UnitPriceCaption">
+        <value xml:lang="en">Unit Price:</value>
+        <category>MULTI_USE</category>
+        <description>Unit Price caption for shopping cart</description>
+    </property>
+    <property key="QtyCaption">
+        <value xml:lang="en">Qty:</value>
+        <category>MULTI_USE</category>
+        <description>Quantity Caption for shopping cart</description>
+    </property>
+03/5/2013 - Issue #28807
+    <property key="PrivateCommentCaption">
+        <value xml:lang="en">Private Comment:</value>
+        <category>PDP</category>
+        <description>PrivateCommentCaption</description>
+        
+    </property>
+    <property key="ReviewResponseCaption">
+        <value xml:lang="en">Review Response:</value>
+        <category>PDP</category>
+        <description>ReviewResponseCaption</description>
+    </property>
+    <property key="PrivateNoteDescInfo">
+        <value xml:lang="en">This section is for you to leave a private message, with contact information. Use this if you would like us to contact us.</value>
+        <category>RATING_REVIEW</category>
+        <description>FocusFeaturesInfo</description>
+    </property>
+    <property key="PrivateNoteContactInfo">
+        <value xml:lang="en">Please provide contact information so we have an opportunity to correct any negative experience you have had with our products.</value>
+        <category>RATING_REVIEW</category>
+        <description>FocusFeaturesInfo</description>
+    </property>
+    <property key="PrivateNotePrivacyInfo">
+        <value xml:lang="en">This commentary will NOT be made available on the website. It will be held in the strictest confidence.</value>
+        <category>RATING_REVIEW</category>
+        <description>FocusFeaturesInfo</description>
+    </property>
+    
+03/06/2013 - Issue# 28944
+    <property key="SolvedaLabel">
+        <value xml:lang="en">Solveda</value>
+        <category>MULTI_USE</category>
+        <description>SolvedaLabel</description>
+    </property>
+    
+    
+03/07/2013 - Issue# 28837    
+    <property key="RegistrationTextPreferenceYesLabel">
+    	<value xml:lang="en">Yes, send me notifications via text message</value>
+    	<category>MY_ACCOUNT</category>
+        <description>RegistrationTextPreferenceYesLabel</description>
+    </property>
+    <property key="RegistrationTextPreferenceNoLabel">
+        <value xml:lang="en">No, do not send me text notifications</value>
+        <category>MY_ACCOUNT</category>
+        <description>RegistrationTextPreferenceNoLabel</description>
+    </property> 
+    <property key="EmailMessageNotificationsCaption">
+    	<value xml:lang="en">Email Notifications:</value>
+    	<category>MY_ACCOUNT</category>
+        <description>EmailMessageNotificationsCaption</description>
+    </property>
+    <property key="CellPhoneNotificationLabel">
+        <value xml:lang="en">Required for text message notifications</value>
+        <category>MULTI_USE</category>
+        <description>CellPhoneNotificationLabel</description>
+    </property> 
+    <property key="HomePhoneNotificationLabel">
+        <value xml:lang="en">We may contact you by phone for delivery updates</value>
+        <category>MULTI_USE</category>
+        <description>HomePhoneNotificationLabel</description>
+    </property> 
+
+03/08/2013 - Issue #28987
+    <property key="PLPDeliveryInfoLabel">
+        <value xml:lang="en">Delivery</value>
+        <category>PLP</category>
+        <description>PLPDeliveryInfo</description>
+    </property>
+    <property key="PLPDirectionsLabel">
+        <value xml:lang="en">Directions</value>
+        <category>PLP</category>
+        <description>PLPDirections</description>
+    </property>
+    <property key="PLPIngredientsLabel">
+        <value xml:lang="en">Ingredients</value>
+        <category>PLP</category>
+        <description>PLPIngredients</description>
+    </property>
+    <property key="PLPLongDescriptionLabel">
+        <value xml:lang="en">Description</value>
+        <category>PLP</category>
+        <description>PLPLongDescription</description>
+    </property>
+    <property key="PLPSalesPitchLabel">
+        <value xml:lang="en">Sales Pitch</value>
+        <category>PLP</category>
+        <description>PLPSalesPitch</description>
+    </property>
+    <property key="PLPSpecialInstructionsLabel">
+        <value xml:lang="en">Instructions</value>
+        <category>PLP</category>
+        <description>PLPSpecialInstructions</description>
+    </property>
+    <property key="PLPTermsConditionsLabel">
+        <value xml:lang="en">Terms</value>
+        <category>PLP</category>
+        <description>PLPTermsConditions</description>
+    </property>
+    <property key="PLPWarningsLabel">
+        <value xml:lang="en">Warnings</value>
+        <category>PLP</category>
+        <description>PLPWarnings</description>
+    </property>
+
+03/12/2013- Issue#28989    
+    <property key="PDPTertiaryInfoCaption">
+        <value xml:lang="en">tertiaryInfo</value>
+        <category>PDP</category>
+        <description>PDPTertiaryInfoCaption</description>
+    </property> 
+    <property key="PLPTertiaryInfoLabel">
+        <value xml:lang="en">tertiaryInfo</value>
+        <category>PLP</category>
+        <description>PLPTertiaryInfoLabel</description>
+    </property>
+    
+03/13/2013- Issue#29088
+	<property key="PLPInternalNameLabel">
+        <value xml:lang="en">Internal Name</value>
+        <category>MULTI_USE</category>
+        <description>PLPInternalNameLabel</description>
+    </property>
+    <property key="PLPLabelNameLabel">
+        <value xml:lang="en">Product Label</value>
+        <category>MULTI_USE</category>
+        <description>PLPLabelNameLabel</description>
+    </property>
+    <property key="PDPInternalNameLabel">
+        <value xml:lang="en">Internal Name</value>
+        <category>MULTI_USE</category>
+        <description>PDPInternalNameLabel</description>
+    </property>
+    <property key="PDPLabelNameLabel">
+        <value xml:lang="en">Product Label</value>
+        <category>MULTI_USE</category>
+        <description>PDPLabelNameLabel</description>
+    </property>
+
+03/19/2013- Issue#29017    
+    <property key="RemoveLabel">
+        <value xml:lang="en">Remove</value>
+        <category>PLP</category>
+        <description>Remove</description>
+    </property>
+
+03/21/2013- Issue#24397
+    <property key="CartTotalNumberItems">
+        <value xml:lang="en">Total Number of Items:</value>
+        <category>MULTI_USE</category>
+        <description>CartTotalNumberItems</description>
+    </property>
+    
+03/28/2013 - Issue#24397
+	<property key="UpdateBtn">
+        <value xml:lang="en">Update</value>
+        <category>MULTI_USE</category>
+        <description>Update Button Label</description>
+    </property>
+    <property key="RemoveItemBtn">
+        <value xml:lang="en">Remove Item</value>
+        <category>MULTI_USE</category>
+        <description>Remove Item Button Label</description>
+    </property>
+04/01/2013 - Issue#29162
+    <property key="FirstNameOnCardCaption">
+        <value xml:lang="en">First Name On Card:</value>
+        <category>MY_ACCOUNT</category>
+        <description>First Name On Card</description>
+    </property>
+    <property key="LastNameOnCardCaption">
+        <value xml:lang="en">Last Name On Card:</value>
+        <category>MY_ACCOUNT</category>
+        <description>Last Name On Card</description>
+    </property>
+    <property key="SetAsDefaultCaption">
+        <value xml:lang="en">Set As Default:</value>
+        <category>MY_ACCOUNT</category>
+        <description>Set As Default</description>
+    </property>
+    <property key="CreditCardsLabel">
+        <value xml:lang="en">Credit Cards</value>
+        <category>MY_ACCOUNT</category>
+        <description>Credit Cards</description>
+    </property>
+    <property key="CardNumberLabel">
+        <value xml:lang="en">Card Number</value>
+        <category>MY_ACCOUNT</category>
+        <description>Card Number</description>
+    </property>
+    <property key="NameLabel">
+        <value xml:lang="en">Name</value>
+        <category>MY_ACCOUNT</category>
+        <description>Name</description>
+    </property>
+    <property key="ExpiresOnLabel">
+        <value xml:lang="en">Expires On</value>
+        <category>MY_ACCOUNT</category>
+        <description>Expires On</description>
+    </property>
+    <property key="YesLabel">
+        <value xml:lang="en">Yes</value>
+        <category>MY_ACCOUNT</category>
+        <description>Yes option</description>
+    </property>
+    <property key="NoLabel">
+        <value xml:lang="en">No</value>
+        <category>MY_ACCOUNT</category>
+        <description>No Option</description>
+    </property>
+    <property key="EditLabel">
+        <value xml:lang="en">Edit</value>
+        <category>MY_ACCOUNT</category>
+        <description>Edit</description>
+    </property>
+    <property key="DeleteLabel">
+        <value xml:lang="en">Delete</value>
+        <category>MY_ACCOUNT</category>
+        <description>Delete</description>
+    </property>
+    <property key="SetAsDefaultLabel">
+        <value xml:lang="en">Set As Default</value>
+        <category>MY_ACCOUNT</category>
+        <description>Set As Default</description>
+    </property>
+    <property key="MyPaymentInfoTitle">
+        <value xml:lang="en">My Payment Information</value>
+        <category>MY_ACCOUNT</category>
+        <description>My Payment Information</description>
+    </property>
+    <property key="ChangeCreditCardInfoTitle">
+        <value xml:lang="en">Credit Card</value>
+        <category>MY_ACCOUNT</category>
+        <description>Credit Card</description>
+    </property>
+    <property key="PaymentMethodsHeading">
+        <value xml:lang="en">Payment Methods</value>
+        <category>MY_ACCOUNT</category>
+        <description>Payment Methods</description>
+    </property>
+    <property key="CreditCardInfoHeading">
+        <value xml:lang="en">Change Credit Card</value>
+        <category>MY_ACCOUNT</category>
+        <description>Change Credit Card</description>
+    </property>
+    <property key="AddCardInfoHeading">
+        <value xml:lang="en">Add Credit Card</value>
+        <category>MY_ACCOUNT</category>
+        <description>Add Credit Card</description>
+    </property>
+    <property key="PaymentMethodsInfo">
+        <value xml:lang="en">Need to add or remove a Payment Method? Click the link below:</value>
+        <category>MESSAGE_INFO</category>
+        <description>Payment method info</description>
+    </property>
+    <property key="ClickViewPaymentMethodInfo">
+        <value xml:lang="en">Click here to edit your payment methods</value>
+        <category>MESSAGE_INFO</category>
+        <description>Click Payment method info</description>
+    </property>
+    <property key="DeletePmtMethodText">
+        <value xml:lang="en">Are you sure you want to delete Credit Card </value>
+        <category>MESSAGE_INFO</category>
+        <description>Delete Confirm Message</description>
+    </property>
+
+04/01/2013 - Issue#24397    
+    <property key="ShowCartBtn">
+        <value xml:lang="en">Show Cart</value>
+        <category>MULTI_USE</category>
+        <description>Show Cart Button Label</description>
+    </property>
+    
+04/02/2013 - Issue#29091
+	<property key="EcommerceApplication">
+        <value xml:lang="en">Big Fish Commerce</value>
+        <category></category>
+        <description>EcommerceApplication</description>
+    </property>
+	
+04/09/2013 - Issue#29017
+    <property key="FacetNavNoResultsInfo">
+        <value xml:lang="en">Products are not found for the selected filter</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Facet Navigation No Results Info</description>
+    </property>
+    <property key="FacetNavNoResultsSuggestionInfo">
+        <value xml:lang="en">Please try clearing the filter, or browse our products using the menu above</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Facet Nav No Results Suggestion Info</description>
+    </property>
+    
+04/15/2013 - Issue#29118
+	<property key="ManufacturerPLPProfileHeading">
+        <value xml:lang="en">Designer</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>PLP Manufacturer Heading</description>
+    </property>
+
+04/23/2013 - Issue#29586
+    <property key="PdpPrevProductScrollBtn">
+        <value xml:lang="en">&lt;&lt; Prev</value>
+        <category>BUTTON_TEXT</category>
+        <description>PdpPrevProductScrollBtn</description>
+    </property>
+    <property key="PdpNextProductScrollBtn">
+        <value xml:lang="en">Next &gt;&gt;</value>
+        <category>BUTTON_TEXT</category>
+        <description>PdpNextProductScrollBtn</description>
+    </property>
+    
+04/24/2013 - Issue#29537    
+    <property key="ShowingRowsLabel">
+        <value xml:lang="en">Page</value>
+        <category>PLP_PAGING</category>
+        <description>ShowingRowsLabel</description>
+    </property>
+    <property key="OfLabel">
+        <value xml:lang="en">of</value>
+        <category>PLP_PAGING</category>
+        <description>OfLabel</description>
+    </property>    
+04/26/2013 - Issue#29741
+    <property key="CreditCardlabel">
+        <value xml:lang="en">Credit Card</value>
+        <category>CHECK_OUT</category>
+        <description>CreditCardlabel</description>
+    </property>
+    
+04/26/2013 - Issue#29756
+    <property key="ManufacturerNameLabel">
+        <value xml:lang="en">Manufacturer Name</value>
+        <category>MULTI_USE</category>
+        <description>ManufacturerNameLabel</description>
+    </property>
+
+04/29/2013 - Issue#29740
+    <property key="DeliveryAndCoDAvailabilityTitle">
+        <value xml:lang="en">DELIVERY &amp; CoD AVAILABILITY</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>DeliveryAndCoDAvailabilityTitle</description>
+    </property>
+    <property key="DeliveryAvailableInfo">
+        <value xml:lang="en">We can deliver this product to your PIN Code</value>
+        <category>MESSAGE_INFO</category>
+        <description>DeliveryAvailableInfo</description>
+    </property>
+    <property key="DeliveryNotAvailableInfo">
+        <value xml:lang="en">Unfortunately, we do not ship to your PIN Code!  We are continually expanding our delivery network but there are still some parts of India that we cannot deliver to.  We will strive to be able to reach your PIN Code soon!</value>
+        <category>MESSAGE_INFO</category>
+        <description>DeliveryNotAvailableInfo</description>
+    </property>
+    <property key="CODLimitAvailableInfo">
+        <value xml:lang="en">Cash on Delivery is available for your PIN Code for orders up to ${codLimit}</value>
+        <category>MESSAGE_INFO</category>
+        <description>CODLimitAvailableInfo</description>
+    </property>
+    <property key="CODNotAvailableInfo">
+        <value xml:lang="en">We’re sorry but we cannot accept Cash on Delivery orders at this time. You may of course complete a Pre Paid order and we’ll be happy to deliver it to you</value>
+        <category>MESSAGE_INFO</category>
+        <description>CODNotAvailableInfo</description>
+    </property>
+    <property key="PinCodeSearchTxtInfo">
+        <value xml:lang="en">Please enter your PIN Code to check delivery time and Cash on Delivery availability</value>
+        <category>MESSAGE_INFO</category>
+        <description>PinCodeSearchTxtInfo</description>
+    </property>
+    <property key="CheckPinCodeBtn">
+        <value xml:lang="en">CHECK PIN CODE</value>
+        <category>BUTTON_TEXT</category>
+        <description>CheckPinCodeBtn</description>
+    </property>    
+    <property key="PinCodeCaption">
+        <value xml:lang="en">PIN CODE:</value>
+        <category>MULTI_USE</category>
+        <description>Pin Code</description>
+    </property>
+    <property key="BlueDartPinCodeError">
+        <value xml:lang="en">PIN Code must be entered and must be 6 numbers</value>
+        <category>MESSAGE_ERROR</category>
+        <description>BlueDartPinCodeError</description>
+    </property>
+
+04/30/2013 - Issue# 29162 
+
+    <property key="SaveBtn">
+        <value xml:lang="en">Save</value>
+        <category>BUTTON_TEXT</category>
+        <description>Save Btn</description>
+    </property>
+
+05/03/2013 - Issue# 29676
+	<!-- === Cart ===== -->
+    <property key="CartItemImageCaption">
+        <value xml:lang="en">Item Image:</value>
+        <category>CART</category>
+        <description>CartItemImageCaption</description>
+    </property>
+    <property key="CartItemDescriptionCaption">
+        <value xml:lang="en">Item Description:</value>
+        <category>CART</category>
+        <description>CartItemDescriptionCaption</description>
+    </property>
+    <property key="CartItemAddToCartButtonCaption">
+        <value xml:lang="en">Add To Cart:</value>
+        <category>CART</category>
+        <description>CartItemAddToCartButtonCaption</description>
+    </property>
+    <property key="CartItemAvailabilityCaption">
+        <value xml:lang="en">Item Availability:</value>
+        <category>CART</category>
+        <description>CartItemAvailabilityCaption</description>
+    </property>
+    <property key="CartItemNameCaption">
+        <value xml:lang="en">Item Name:</value>
+        <category>CART</category>
+        <description>CartItemNameCaption</description>
+    </property>
+    <property key="CartItemOfferPriceCaption">
+        <value xml:lang="en">Offer Price:</value>
+        <category>CART</category>
+        <description>CartItemOfferPriceCaption</description>
+    </property>
+    <property key="CartItemPriceCaption">
+        <value xml:lang="en">Item Price:</value>
+        <category>CART</category>
+        <description>CartItemPriceCaption</description>
+    </property>
+    <property key="CartItemPriceTotalCaption">
+        <value xml:lang="en">Item Price Total:</value>
+        <category>CART</category>
+        <description>CartItemPriceTotalCaption</description>
+    </property>
+    <property key="CartItemQuantityCaption">
+        <value xml:lang="en">Item Quantity:</value>
+        <category>CART</category>
+        <description>CartItemQuantityCaption</description>
+    </property>
+    <property key="CartItemRemoveBtnCaption">
+        <value xml:lang="en">Remove Item:</value>
+        <category>CART</category>
+        <description>CartItemRemoveBtnCaption</description>
+    </property>
+    <property key="CartItemUpdateBtnCaption">
+        <value xml:lang="en">Update Item:</value>
+        <category>CART</category>
+        <description>CartItemUpdateBtnCaption</description>
+    </property>
+    <property key="CartItemImageLabel">
+        <value xml:lang="en">Item Image</value>
+        <category>CART</category>
+        <description>CartItemImageLabel</description>
+    </property>
+    <property key="CartItemDescriptionLabel">
+        <value xml:lang="en">Item Description</value>
+        <category>CART</category>
+        <description>CartItemDescriptionLabel</description>
+    </property>
+    <property key="CartItemAddToCartButtonLabel">
+        <value xml:lang="en">Add To Cart</value>
+        <category>CART</category>
+        <description>CartItemAddToCartButtonLabel</description>
+    </property>
+    <property key="CartItemAvailabilityLabel">
+        <value xml:lang="en">Item Availability</value>
+        <category>CART</category>
+        <description>CartItemAvailabilityLabel</description>
+    </property>
+    <property key="CartItemNameLabel">
+        <value xml:lang="en">Item Name</value>
+        <category>CART</category>
+        <description>CartItemNameLabel</description>
+    </property>
+    <property key="CartItemOfferPriceLabel">
+        <value xml:lang="en">Offer Price</value>
+        <category>CART</category>
+        <description>CartItemOfferPriceLabel</description>
+    </property>
+    <property key="CartItemPriceLabel">
+        <value xml:lang="en">Item Price</value>
+        <category>CART</category>
+        <description>CartItemPriceLabel</description>
+    </property>
+    <property key="CartItemPriceTotalLabel">
+        <value xml:lang="en">Item Price Total</value>
+        <category>CART</category>
+        <description>CartItemPriceTotalLabel</description>
+    </property>
+    <property key="CartItemQuantityLabel">
+        <value xml:lang="en">Item Quantity</value>
+        <category>CART</category>
+        <description>CartItemQuantityLabel</description>
+    </property>
+    <property key="CartItemRemoveButtonLabel">
+        <value xml:lang="en">Remove Item</value>
+        <category>CART</category>
+        <description>CartItemRemoveButtonLabel</description>
+    </property>
+    <property key="CartItemRemoveWishlistButtonLabel">
+        <value xml:lang="en">Remove Item</value>
+        <category>CART</category>
+        <description>CartItemRemoveWishlistButtonLabel</description>
+    </property>
+    <property key="CartItemUpdateButtonLabel">
+        <value xml:lang="en">Update Item</value>
+        <category>CART</category>
+        <description>CartItemUpdateButtonLabel</description>
+    </property>
+    <property key="CartItemUpdateWishlistButtonLabel">
+        <value xml:lang="en">Update Item</value>
+        <category>CART</category>
+        <description>CartItemUpdateWishlistButtonLabel</description>
+    </property>
+5/06/2013 - Issue # 29569
+    <property key="EmailIdLabel">
+        <value xml:lang="en">Email</value>
+        <category>CHECK_OUT</category>
+        <description>Email</description>
+    </property>
+    <property key="SendEmailBtn">
+        <value xml:lang="en">Send Email Notication</value>
+        <category>BUTTON_TEXT</category>
+        <description>Send email Btn</description>
+    </property>
+    <property key="InvalidEmailError">
+        <value xml:lang="en">* Email Address must be in a valid format</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ProductStoreAbandonCartEmailError</description>
+    </property>
+    <property key="OrderAdditionalEmailInfo">
+        <value xml:lang="en">* You may enter additional email addresses so that your friends, relatives or spouse receives an email copy of the Order Confirmation notice.  Note that we do NOT use these email addresses for any other purpose than providing a copy of your current Order. </value>
+        <category>CHECK_OUT</category>
+        <description>OrderAdditionalEmailInfo</description>
+    </property>
+    <property key="EmailSentSuccess">
+        <value xml:lang="en">Email sent successfully</value>
+        <category>CHECK_OUT</category>
+        <description>EmailSentSuccess</description>
+    </property>
+
+//Remove
+
+03/06/2013 - Issue# 28944 
+	<property key="SalmonLLCLabel">
+        <value xml:lang="en">Salmon LLC</value>
+        <category>MULTI_USE</category>
+        <description>SalmonLLCLabel</description>
+    </property>
+    
+03/13/2013- Issue#29088
+	<property key="PDPTertiaryInfoCaption">
+        <value xml:lang="en">tertiaryInfo</value>
+        <category>PDP</category>
+        <description>PDPTertiaryInfoCaption</description>
+    </property> 
+    <property key="PLPTertiaryInfoLabel">
+        <value xml:lang="en">tertiaryInfo</value>
+        <category>PLP</category>
+        <description>PLPTertiaryInfoLabel</description>
+    </property>
+    
+04/02/2013 - Issue#29091
+	<property key="YourShoppingCartCurrentlyContains">
+        <value xml:lang="en">Your shopping cart currently contains &lt;em&gt; ${shoppingCartSize!} item(s) &lt;/em&gt;</value>
+        <category>CHECK_OUT</category>
+        <description>Your Shopping Cart Currently Contains</description>
+    </property>
+    <property key="ThankYouForShoppingEmailInfo">
+        <value xml:lang="en">Thank you for shopping with Up and Runway, below is a confirmation of your order.</value>
+        <category>MESSAGE_EMAIL</category>
+        <description>ThankYouForShoppingEmailInfo</description>
+    </property>
+    //Note: Removed duplicate AddressNickNameCaption
+    <property key="AddressNickNameCaption">
+        <value xml:lang="en">Address Nickname:</value>
+        <category>MY_ACCOUNT</category>
+        <description>AddressNickNameCaption</description>
+    </property>
+    <property key="GovermentRegulationsInfo">
+        <value xml:lang="en">Written reviews must be over XXX characters in length.</value>
+        <category>RATING_REVIEW</category>
+        <description>GovermentRegulationsInfo</description>
+    </property>
+
+04/10/2013 - Issue#29403
+    <property key="AddressIncompleteError">
+        <value xml:lang="en">Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province are required.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>AddressIncompleteError</description>
+    </property>
+    
+//Edit
+
+04/02/2013 - Issue#29091
+	<property key="PickupStoreInfo">
+        <value xml:lang="en">* We will contact you via email when your merchandise is available. This will typically be within XXX hours. You can pay at the time of pickup.</value>
+        <category>CHECK_OUT</category>
+        <description>PickupStoreInfo</description>
+    </property>
+    <property key="SocialMediaEmailToAFriendSubjectLabel">
+        <value xml:lang="en">Hi, I've seen this great product from XXX</value>
+        <category>SOCIAL_MEDIA</category>
+        <description>SocialMediaEmailToAFriendSubjectLabel</description>
+    </property>
+    <property key="SearchResultsCountsTitle">
+        <value xml:lang="en">Your Search for '${searchText}' produced the following results.</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>SearchResultsCountsTitle</description>
+    </property>
+    <property key="SearchResultsSpellCheckCountsTitle">
+        <value xml:lang="en">Your Search for '${searchText}' produced no results. Showing results for '${searchTextSpellCheck}' instead.</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>SearchResultsSpellCheckCountsTitle</description>
+    </property>
+    <property key="PassMinLengthInstructionsInfo">
+        <value xml:lang="en">Minimum XXX characters.</value>
+        <category>MESSAGE_INFO</category>
+        <description>PassMinLengthInstructionsInfo</description>
+    </property>
+    <property key="PassMinNumInstructionsInfo">
+        <value xml:lang="en">Minimum XXX numbers</value>
+        <category>MESSAGE_INFO</category>
+        <description>PassMinNumInstructionsInfo</description>
+    </property>
+    <property key="PasswordInstructionsInfo">
+        <value xml:lang="en">min XXX characters, at least one number.</value>
+        <category>MESSAGE_INFO</category>
+        <description>PasswordInstructionsInfo</description>
+    </property>
+    <property key="ShippingAddressInstructionsInfo">
+        <value xml:lang="en">Please select the delivery address for the items in your order.</value>
+        <category>MESSAGE_INFO</category>
+        <description>ShippingAddressInstructionsInfo</description>
+    </property>
+    <property key="ContactUsInstructionsInfo">
+        <value xml:lang="en">For more immediate attention you may call us at XXX during our normal business hours of operation 9:00 to 5:00 EST. For all online inquiries, we will do everything we can to respond within [2 business days].</value>
+        <category>MESSAGE_INFO</category>
+        <description>ContactUsInstructionsInfo</description>
+    </property>
+    <property key="OrderCompleteInfo">
+        <value xml:lang="en">Thank you for shopping with XXX below is a confirmation of your order</value>
+        <category>MESSAGE_INFO</category>
+        <description>OrderCompleteInfo</description>
+    </property>
+    <property key="RequestCatalogInstructionsInfo">
+        <value xml:lang="en">Fill out the form below to get your FREE XXX Product Catalog, we will do everything we can to respond within [2 business days]. &lt;br&gt;Please enter your contact details and comments below:</value>
+        <category>MESSAGE_INFO</category>
+        <description>RequestCatalogInstructionsInfo</description>
+    </property>
+    <property key="RequestCatalogReceivedInfo">
+        <value xml:lang="en">Your catalog request will be processed immediately. Thank you for your interest in XXX</value>
+        <category>MESSAGE_INFO</category>
+        <description>RequestCatalogReceivedInfo</description>
+    </property>
+    <property key="ReviewTextInfo">
+        <value xml:lang="en">Review text should be at least XXX characters.</value>
+        <category>RATING_REVIEW</category>
+        <description>ReviewTextInfo</description>
+    </property>
+    <property key="EnterOfferCodeInfo">
+        <value xml:lang="en">If you have an "Offer" code, please enter it here:</value>
+        <category>CHECK_OUT</category>
+        <description>EnterOfferCodeInfo</description>
+    </property>
+    <property key="NoStoreFoundError">
+        <value xml:lang="en">We are sorry - we do not have stores within proximity from the address / zip code you entered.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>NoStoreFoundError</description>
+    </property>
+    <property key="PasswordDigitError">
+        <value xml:lang="en">It must also include XXX numeric digits.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PasswordDigitError</description>
+    </property>
+    <property key="PasswordMinLengthError">
+        <value xml:lang="en">The password must contain at least XXX characters.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PasswordMinLengthError</description>
+    </property>
+    <property key="PasswordUpperCaseError">
+        <value xml:lang="en">It must also include XXX upper-case letters.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PasswordUpporCaseError</description>
+    </property>
+    <property key="PasswordWithNoDigitUpperCaseError">
+        <value xml:lang="en">It must also include XXX upper-case letters.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PasswordWithNoDigitUpperCaseError</description>
+    </property>
+    <property key="PasswordValidationError">
+        <value xml:lang="en">The password must contain at least XXX characters. It must also include XXX numeric digits and XXX upper-case letters.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PasswordValidationError</description>
+    </property>
+    <property key="PasswordLengthError">
+        <value xml:lang="en">Password must be at least XXX characters</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PasswordLengthError</description>
+    </property>
+    <property key="CreditCardNumberInvalidError">
+        <value xml:lang="en">A valid Credit Card number must be entered. Please try again.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CreditCardNumberInvalidError</description>
+    </property>
+    <property key="ReviewTextShortError">
+        <value xml:lang="en">Please enter a review with at least XXX characters</value>
+        <category>MESSAGE_REVIEW_ERROR</category>
+        <description>ReviewTextShortError</description>
+    </property>
+	<property key="ReviewTextLongError">
+        <value xml:lang="en">You have exceeded the maximum length allowed for a review. The maximum is XXX characters.</value>
+        <category>MESSAGE_REVIEW_ERROR</category>
+        <description>ReviewTextLongError</description>
+    </property>
+    <property key="OrderCannotChangeQuantityInPromotion">
+        <value xml:lang="en">Sorry, you can't change the quantity on the promotion item.</value>
+        <category>CHECK_OUT</category>
+        <description>OrderConfirmationFPLabel</description>
+    </property>
+    <property key="ConfirmTextRequestCatalog">
+        <value xml:lang="en">Your catalog request will be processed immediately. Thank you for your interest in XXX Products, we appreciate your business!</value>
+        <category>CONFIRM</category>
+        <description>Confirm Catalog Request Text</description>
+    </property>
+    <property key="ConfirmTextMailingList">
+        <value xml:lang="en">You have signed-up for our mailing list. We will be sending you special offers via email. Thank you for your interest in XXX Products, we appreciate your business!</value>
+        <category>CONFIRM</category>
+        <description>Confirm Mailing List Text</description>
+    </property>
+    <property key="ConfirmTextContactUs">
+        <value xml:lang="en">Your comments have been received. We will respond to any business query within XXX business days. Thank you for your interest in XXX, we appreciate your business!</value>
+        <category>CONFIRM</category>
+        <description>Confirm Contact Us Text</description>
+    </property>
+    <property key="ConfirmH1Review">
+        <value xml:lang="en">XXX Write a Review</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Page Title</description>
+    </property>
+     <property key="ConfirmTextReview">
+        <value xml:lang="en">Thank you for submitting your review to XXX</value>
+        <category>CONFIRM</category>
+        <description>Confirm Review Text</description>
+    </property>
+    <property key="ExpiredLabel">
+        <value xml:lang="en">Expired</value>
+        <category>MY_ACCOUNT</category>
+        <description>Expired</description>
+    </property>
+    <property key="CreditCardNumberInvalidSuggestError">
+        <value xml:lang="en">This is not a valid credit card number. Please enter a valid credit card number.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CreditCardNumberInvalidError</description>
+    </property>
+    <property key="PassMinUpperCaseInstructionsInfo">
+        <value xml:lang="en">Minimum XXX uppercase characters.</value>
+        <category>MESSAGE_INFO</category>
+        <description>PassMinUpperCaseInstructionsInfo</description>
+    </property>
+
+04/08/2013 - Issue # 29403
+    <property key="GenderMissingError">
+        <value xml:lang="en">Please select an option from the list</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Gender missing error message</description>
+    </property>
+    <property key="ValidDobDateError">
+        <value xml:lang="en">Please enter your date of birth</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Invalid DOB error message</description>
+    </property>
+    <property key="HomePhoneMissingError">
+        <value xml:lang="en">Please enter your Home or Primary Telephone Number</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Home Phone Misssing error message</description>
+    </property>
+    <property key="AddressNickNameMissingError">
+        <value xml:lang="en">Please enter a Nickname for this Address</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Address NickName Missing Error</description>
+    </property>
+    <property key="AddressLine1MissingError">
+        <value xml:lang="en">Please enter Address-1 information</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Address Line 1 Missing Error</description>
+    </property>
+    <property key="ZipCodeMissingError">
+        <value xml:lang="en">Please enter your Zip Code</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Zip Code Missing Error</description>
+    </property>
+    <property key="EmailAddressMissingError">
+        <value xml:lang="en">Please enter a valid email address</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Email Address Missing Error</description>
+    </property>
+    <property key="EmailAddressNotFormattedCorrectlyError">
+        <value xml:lang="en">Please enter a valid Email Address</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Email Address Not Formatted Correctly Error</description>
+    </property>
+
+
+//********************************************************************************************
+//eCommerce Id Map UPDATES
+//FILE: eCommerceIdMap.xml
+//********************************************************************************************
+
+//Add
+
+
+//Remove
+
+//Edit
+
+//********************************************************************************************
+//DIV SEQUENCE UPDATES
+//FILE: OSafeUiSequence.xml
+//********************************************************************************************
+//Add
+Issue # 29569 5/06/2013
+    <property key="emailAlert">
+        <value xml:lang="en">0</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmEmailAlert</div>
+        <description>Prompts for additional email addresses for the order confirmation to be sent to.   </description>
+    </property>
+03/04/2013 - Issue #24397
+<!-- *************************************** -->
+<!-- LightCart -->
+<!-- *************************************** -->
+    <property key="orderItems">
+        <value xml:lang="en">10</value>
+        <screen>LightCart</screen>
+        <div>lightBoxOrderItems</div>
+        <description>All the items that have been added to the shopping cart</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">100</value>
+        <screen>LightCart</screen>
+        <div>lightBoxContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the next step.</description>
+    </property>
+    <property key="totalNumberItems">
+        <value xml:lang="en">20</value>
+        <screen>LightCart</screen>
+        <div>lightBoxTotalNumberItems</div>
+        <description>Total number of items</description>
+    </property>
+    <property key="totalSubAmount">
+        <value xml:lang="en">30</value>
+        <screen>LightCart</screen>
+        <div>lightBoxTotalSubAmount</div>
+        <description>Sub total amount</description>
+    </property>
+    <property key="shippingMethod">
+        <value xml:lang="en">40</value>
+        <screen>LightCart</screen>
+        <div>lightBoxShippingMethod</div>
+        <description>Shipping Method, if available</description>
+    </property>
+    <property key="shippingAmount">
+        <value xml:lang="en">50</value>
+        <screen>LightCart</screen>
+        <div>lightBoxShippingAmount</div>
+        <description>Shipping Amount, if available</description>
+    </property>
+    <property key="taxAmount">
+        <value xml:lang="en">60</value>
+        <screen>LightCart</screen>
+        <div>lightBoxTaxAmount</div>
+        <description>Tax, if available</description>
+    </property>
+    <property key="totalAmount">
+        <value xml:lang="en">70</value>
+        <screen>LightCart</screen>
+        <div>lightBoxTotalAmount</div>
+        <description>Items + Shipping + Tax</description>
+    </property>
+    <property key="promoDiscount">
+        <value xml:lang="en">80</value>
+        <screen>LightCart</screen>
+        <div>lightBoxPromoDiscount</div>
+        <description>Discount from coupon or promo</description>
+    </property>
+    <property key="totalAdjustAmount">
+        <value xml:lang="en">90</value>
+        <screen>LightCart</screen>
+        <div>lightBoxTotalAdjustAmount</div>
+        <description>Total of items + shipping less promo</description>
+    </property>
+<!-- *************************************** -->
+<!-- LightCartOrderItems -->
+<!-- *************************************** -->
+    <property key="itemImage">
+        <value xml:lang="en">10</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemImage</div>
+        <description>The item image. </description>
+    </property>
+    <property key="itemName">
+        <value xml:lang="en">20</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemName</div>
+        <description>The item Name and Description</description>
+    </property>
+    <property key="itemQuantity">
+        <value xml:lang="en">30</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemQuantity</div>
+        <description>The item quantity (entry field)</description>
+    </property>
+    <property key="itemPrice">
+        <value xml:lang="en">40</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemPrice</div>
+        <description>The unit price of the item</description>
+    </property>
+    <property key="itemTotal">
+        <value xml:lang="en">50</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemTotal</div>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+    <property key="itemUpdateButton">
+        <value xml:lang="en">60</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemUpdateButton</div>
+        <description>The button that will update the quantity of the item.</description>
+    </property>
+    <property key="itemRemoveButton">
+        <value xml:lang="en">70</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemRemoveButton</div>
+        <description>The button that will remove the item from the cart</description>
+    </property>
+    03/18/2013 - Issue #28807
+    <property key="reviewerPrivateNote">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerPrivateNote</div>
+        <description>Private note</description>
+    </property>
+    <property key="reviewerPrivateNoteTip">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerPrivateNoteTip</div>
+        <description>Tip for Private Note</description>
+    </property>
+
+03/08/2013 - LS - Issue #28987
+    <property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpLongDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    
+03/13/2013- Issue#29088
+	<property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpInternalName</div>
+        <description>PDP Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpLabelName</div>
+        <description>PDP Label Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsInternalName</div>
+        <group>0</group>
+        <description>PDP Tabs Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsLabelName</div>
+        <group>0</group>
+        <description>PDP Tabs Label Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookInternalName</div>
+        <description>Quicklook Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookLabelName</div>
+        <description>Quicklook Label Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpInternalName</div>
+        <description>PLP Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <div>plpLabelName</div>
+        <description>PLP Label Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementInternalName</div>
+        <description>PDP Complement Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementLabelName</div>
+        <description>PDP Complement Label Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryInternalName</div>
+        <description>PDP Accessory Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryLabelName</div>
+        <description>PDP Accessory Label Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentInternalName</div>
+        <description>PDP Recent Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentLabelName</div>
+        <description>PDP Recent Label Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewInternalName</div>
+        <description>writeReview Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewLabelName</div>
+        <description>writeReview Label Name</description>
+    </property>
+
+03/18/2013- Issue#29118
+<!-- *************************************** -->
+<!-- Manufacturer -->
+<!-- *************************************** -->
+    <property key="manufacturerDescription">
+        <value xml:lang="en">10</value>
+        <screen>Manufacturer</screen>
+        <div>manufacturerDescription</div>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">20</value>
+        <screen>Manufacturer</screen>
+        <div>manufacturerHeading</div>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="manufacturerImage">
+        <value xml:lang="en">30</value>
+        <screen>Manufacturer</screen>
+        <div>manufacturerImage</div>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="manufacturerName">
+        <value xml:lang="en">40</value>
+        <screen>Manufacturer</screen>
+        <div>manufacturerName</div>
+        <description>Manufacturer Name</description>
+    </property>
+<!-- *************************************** -->
+<!-- ManufacturerProductList -->
+<!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">10</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemProductName</div>
+        <description>Product Name</description>
+    </property>
+    <property key="internalName">
+        <value xml:lang="en">20</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemInternalName</div>
+        <description>Product Internal Name</description>
+    </property>
+    <property key="labelName">
+        <value xml:lang="en">30</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemLabelName</div>
+        <description>Product Label</description>
+    </property>
+    <property key="detailLink">
+        <value xml:lang="en">40</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemDetailLink</div>
+        <description>Product Info Link (possibly replaced by plpSeeItemDetails)</description>
+    </property>
+    <property key="priceList">
+        <value xml:lang="en">50</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemPriceList</div>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
+    </property>
+    <property key="priceOnline">
+        <value xml:lang="en">60</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemPriceOnline</div>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration.</description>
+    </property>
+    <property key="priceSavingPercent">
+        <value xml:lang="en">70</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemPriceSavingPercent</div>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="priceSavingMoney">
+        <value xml:lang="en">80</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemPriceSavingMoney</div>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="swatchImage">
+        <value xml:lang="en">90</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemSwatchImage</div>
+        <description>Swatch Image</description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">100</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemReviewStars</div>
+        <description>RENAME from plpProdReview. Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="reviewRead">
+        <value xml:lang="en">110</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemReviewRead</div>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="reviewWrite">
+        <value xml:lang="en">120</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemReviewWrite</div>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="thumbImage">
+        <value xml:lang="en">130</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">140</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemDescription</div>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">150</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemHeading</div>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="manufacturerImage">
+        <value xml:lang="en">160</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemImage</div>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="manufacturerName">
+        <value xml:lang="en">170</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemName</div>
+        <description>Manufacturer Name</description>
+    </property>
+    <property key="seeItemDetails">
+        <value xml:lang="en">180</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemSeeItemDetails</div>
+        <description>See Item Details (maybe the same as plpDetailLink – in which case use this Key and remove plpDetailLink)</description>
+    </property> 
+
+04/01/2013 - Issue #24397
+	<property key="showCartButton">
+        <value xml:lang="en">100</value>
+        <screen>LightCart</screen>
+        <div>lightBoxShowCartButton</div>
+        <description>The button will direct to the ‘full’ version of the shopping cart.</description>
+    </property>
+    
+04/09/2013 - Issue #29118
+	<property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemLongDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>ManufacturerProductList</screen>
+        <div>manufacturerItemTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    
+04/18/2013 - Issue #29537
+    <property key="manufacturerProducts">
+        <value xml:lang="en">0</value>
+        <screen>Manufacturer</screen>
+        <div>manufacturerProductList</div>
+        <description>Manufacturer products</description>
+    </property>    
+
+04/23/2013 - Issue#29586
+<!-- *************************************** -->
+<!-- PDP -->
+<!-- *************************************** --> 
+    <property key="nextProductScroll">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpNextProductScroll</div>
+        <description>Scroll to next Product</description>
+    </property>
+    <property key="previousProductScroll">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpPreviousProductScroll</div>
+        <description>Scroll to previous Product</description>
+    </property>   
+<!-- *************************************** -->
+<!-- Quicklook -->
+<!-- *************************************** -->
+    <property key="nextProductScroll">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookNextProductScroll</div>
+        <description>Scroll to next Product</description>
+    </property>
+    <property key="previousProductScroll">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookPreviousProductScroll</div>
+        <description>Scroll to previous Product</description>
+    </property>
+<!-- *************************************** -->
+<!-- PDPTabs -->
+<!-- *************************************** -->
+    <property key="nextProductScroll">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsNextProductScroll</div>
+        <group>0</group>
+        <description>Scroll to next Product</description>
+    </property>
+    <property key="previousProductScroll">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsPreviousProductScroll</div>
+        <group>0</group>
+        <description>Scroll to previous Product</description>
+    </property>
+
+04/23/2013 - Issue#29701
+	<property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementLongDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property> 
+    
+    <property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryLongDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessorySalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessorySpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    
+    <property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentLongDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>  
+    
+05/03/2013 - Issue# 29676
+	<property key="itemHeader">
+        <value xml:lang="en">10</value>
+        <screen>ShowCart</screen>
+        <div>showCartOrderItemsHeader</div>
+        <description>The cart item headings</description>
+    </property>
+    <property key="orderItemsSummary">
+        <value xml:lang="en">30</value>
+        <screen>ShowCart</screen>
+        <div>showCartOrderItemsSummary</div>
+        <description>The Cart Items Summary attributes</description>
+    </property>
+<!-- *************************************** -->
+<!-- ShowCartOrderItems -->
+<!-- *************************************** -->
+    <property key="itemImage">
+        <value xml:lang="en">10</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemImage</div>
+        <description>The item image</description>
+    </property>
+    <property key="itemName">
+        <value xml:lang="en">20</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemName</div>
+        <description>The item Name</description>
+    </property>
+    <property key="itemDescription">
+        <value xml:lang="en">30</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemDescription</div>
+        <description>The item Description</description>
+    </property>
+    <property key="itemQuantity">
+        <value xml:lang="en">40</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemQuantity</div>
+        <description>The item quantity (entry field)</description>
+    </property>
+    <property key="itemUpdateButton">
+        <value xml:lang="en">50</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemUpdateButton</div>
+        <description>The button that will update the quantity of the item.</description>
+    </property>
+    <property key="itemPrice">
+        <value xml:lang="en">60</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemPrice</div>
+        <description>The unit price of the item</description>
+    </property>
+    <property key="itemOfferPrice">
+        <value xml:lang="en">70</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartOfferPrice</div>
+        <description>The offer price of the item</description>
+    </property>
+    <property key="itemAvailability">
+        <value xml:lang="en">80</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemAvailability</div>
+        <description>The items stock level  (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+    <property key="itemTotal">
+        <value xml:lang="en">90</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemTotal</div>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+    <property key="itemRemoveButton">
+        <value xml:lang="en">100</value>
+        <screen>ShowCartOrderItems</screen>
+        <div>showCartItemRemoveButton</div>
+        <description>The button that will remove the item from the cart</description>
+    </property>
+<!-- *************************************** -->
+<!-- ShowCartOrderItemsSummary -->
+<!-- *************************************** -->
+    <property key="totalNumberItems">
+        <value xml:lang="en">10</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartTotalNumberItems</div>
+        <description>Total number of items</description>
+    </property>
+    <property key="totalSubAmount">
+        <value xml:lang="en">20</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartTotalSubAmount</div>
+        <description>Sub total amount</description>
+    </property>
+    <property key="shippingMethod">
+        <value xml:lang="en">30</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartShippingMethod</div>
+        <description>Shipping Method, if available</description>
+    </property>
+    <property key="shippingAmount">
+        <value xml:lang="en">40</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartShippingAmount</div>
+        <description>Shipping Amount, if available</description>
+    </property>
+    <property key="taxAmount">
+        <value xml:lang="en">50</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartTaxAmount</div>
+        <description>Tax, if available</description>
+    </property>
+    <property key="totalAmount">
+        <value xml:lang="en">60</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartTotalAmount</div>
+        <description>Items + Shipping + Tax</description>
+    </property>
+    <property key="promoDiscount">
+        <value xml:lang="en">70</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartPromoDiscount</div>
+        <description>Discount from coupon or promo</description>
+    </property>
+    <property key="totalAdjustAmount">
+        <value xml:lang="en">80</value>
+        <screen>ShowCartOrderItemsSummary</screen>
+        <div>showCartTotalAdjustAmount</div>
+        <description>Total of items + shipping less promo</description>
+    </property>
+    <property key="itemHeader">
+        <value xml:lang="en">20</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryOrderItemsHeader</div>
+        <description>The cart item headings</description>
+    </property>
+    <property key="orderItemsSummary">
+        <value xml:lang="en">40</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryOrderItemsSummary</div>
+        <description>The Cart Items Summary attributes</description>
+    </property>
+<!-- *************************************** -->
+<!-- OrderSummaryOrderItems -->
+<!-- *************************************** -->
+    <property key="itemImage">
+        <value xml:lang="en">10</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryItemImage</div>
+        <description>The item image</description>
+    </property>
+    <property key="itemName">
+        <value xml:lang="en">20</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryItemName</div>
+        <description>The item Name</description>
+    </property>
+    <property key="itemDescription">
+        <value xml:lang="en">30</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryItemDescription</div>
+        <description>The item Description</description>
+    </property>
+    <property key="itemQuantity">
+        <value xml:lang="en">40</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryItemQuantity</div>
+        <description>The item quantity (entry field)</description>
+    </property>
+    <property key="itemPrice">
+        <value xml:lang="en">50</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryItemPrice</div>
+        <description>The unit price of the item</description>
+    </property>
+    <property key="itemOfferPrice">
+        <value xml:lang="en">60</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryOfferPrice</div>
+        <description>The offer price of the item</description>
+    </property>
+    <property key="itemAvailability">
+        <value xml:lang="en">70</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryItemAvailability</div>
+        <description>The items stock level  (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+    <property key="itemTotal">
+        <value xml:lang="en">80</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <div>orderSummaryItemTotal</div>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+<!-- *************************************** -->
+<!-- OrderSummaryOrderItemsSummary -->
+<!-- *************************************** -->
+    <property key="totalNumberItems">
+        <value xml:lang="en">10</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryTotalNumberItems</div>
+        <description>Total number of items</description>
+    </property>
+    <property key="totalSubAmount">
+        <value xml:lang="en">20</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryTotalSubAmount</div>
+        <description>Sub total amount</description>
+    </property>
+    <property key="shippingMethod">
+        <value xml:lang="en">30</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryShippingMethod</div>
+        <description>Shipping Method, if available</description>
+    </property>
+    <property key="shippingAmount">
+        <value xml:lang="en">40</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryShippingAmount</div>
+        <description>Shipping Amount, if available</description>
+    </property>
+    <property key="taxAmount">
+        <value xml:lang="en">50</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryTaxAmount</div>
+        <description>Tax, if available</description>
+    </property>
+    <property key="totalAmount">
+        <value xml:lang="en">60</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryTotalAmount</div>
+        <description>Items + Shipping + Tax</description>
+    </property>
+    <property key="promoDiscount">
+        <value xml:lang="en">70</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryPromoDiscount</div>
+        <description>Discount from coupon or promo</description>
+    </property>
+    <property key="totalAdjustAmount">
+        <value xml:lang="en">80</value>
+        <screen>OrderSummaryOrderItemsSummary</screen>
+        <div>orderSummaryTotalAdjustAmount</div>
+        <description>Total of items + shipping less promo</description>
+    </property>
+    <property key="itemHeader">
+        <value xml:lang="en">20</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmOrderItemsHeader</div>
+        <description>The cart item headings</description>
+    </property>
+    <property key="orderItemsSummary">
+        <value xml:lang="en">40</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmOrderItemsSummary</div>
+        <description>The Cart Items Summary attributes</description>
+    </property>
+<!-- *************************************** -->
+<!-- OrderConfirmOrderItems -->
+<!-- *************************************** -->
+    <property key="itemImage">
+        <value xml:lang="en">10</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmItemImage</div>
+        <description>The item image</description>
+    </property>
+    <property key="itemName">
+        <value xml:lang="en">20</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmItemName</div>
+        <description>The item Name</description>
+    </property>
+    <property key="itemDescription">
+        <value xml:lang="en">30</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmItemDescription</div>
+        <description>The item Description</description>
+    </property>
+    <property key="itemQuantity">
+        <value xml:lang="en">40</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmItemQuantity</div>
+        <description>The item quantity (entry field)</description>
+    </property>
+    <property key="itemPrice">
+        <value xml:lang="en">50</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmItemPrice</div>
+        <description>The unit price of the item</description>
+    </property>
+    <property key="itemOfferPrice">
+        <value xml:lang="en">60</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmOfferPrice</div>
+        <description>The offer price of the item</description>
+    </property>
+    <property key="itemAvailability">
+        <value xml:lang="en">70</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmItemAvailability</div>
+        <description>The items stock level  (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+    <property key="itemTotal">
+        <value xml:lang="en">80</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <div>orderConfirmItemTotal</div>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+<!-- *************************************** -->
+<!-- OrderConfirmOrderItemsSummary -->
+<!-- *************************************** -->
+    <property key="totalNumberItems">
+        <value xml:lang="en">10</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmTotalNumberItems</div>
+        <description>Total number of items</description>
+    </property>
+    <property key="totalSubAmount">
+        <value xml:lang="en">20</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmTotalSubAmount</div>
+        <description>Sub total amount</description>
+    </property>
+    <property key="shippingMethod">
+        <value xml:lang="en">30</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmShippingMethod</div>
+        <description>Shipping Method, if available</description>
+    </property>
+    <property key="shippingAmount">
+        <value xml:lang="en">40</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmShippingAmount</div>
+        <description>Shipping Amount, if available</description>
+    </property>
+    <property key="taxAmount">
+        <value xml:lang="en">50</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmTaxAmount</div>
+        <description>Tax, if available</description>
+    </property>
+    <property key="totalAmount">
+        <value xml:lang="en">60</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmTotalAmount</div>
+        <description>Items + Shipping + Tax</description>
+    </property>
+    <property key="promoDiscount">
+        <value xml:lang="en">70</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmPromoDiscount</div>
+        <description>Discount from coupon or promo</description>
+    </property>
+    <property key="totalAdjustAmount">
+        <value xml:lang="en">80</value>
+        <screen>OrderConfirmOrderItemsSummary</screen>
+        <div>orderConfirmTotalAdjustAmount</div>
+        <description>Total of items + shipping less promo</description>
+    </property>
+     <property key="itemHeader">
+        <value xml:lang="en">20</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutOrderItemsHeader</div>
+        <description>The cart item headings</description>
+    </property>
+    <property key="orderItemsSummary">
+        <value xml:lang="en">40</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutOrderItemsSummary</div>
+        <description>The Cart Items Summary attributes</description>
+    </property>
+    <property key="itemHeader">
+        <value xml:lang="en">10</value>
+        <screen>WishList</screen>
+        <div>showWishlistOrderItemsHeader</div>
+        <description>The cart item headings</description>
+    </property>
+    <property key="orderItemsSummary">
+        <value xml:lang="en">30</value>
+        <screen>WishList</screen>
+        <div>showWishlistOrderItemsSummary</div>
+        <description>The Cart Items Summary attributes</description>
+    </property>
+<!-- *************************************** -->
+<!-- ShowWishlistOrderItems -->
+<!-- *************************************** -->
+    <property key="itemImage">
+        <value xml:lang="en">10</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemImage</div>
+        <description>The item image</description>
+    </property>
+    <property key="itemName">
+        <value xml:lang="en">20</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemName</div>
+        <description>The item Name</description>
+    </property>
+    <property key="itemDescription">
+        <value xml:lang="en">30</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemDescription</div>
+        <description>The item Description</description>
+    </property>
+    <property key="itemQuantity">
+        <value xml:lang="en">40</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemQuantity</div>
+        <description>The item quantity (entry field)</description>
+    </property>
+    <property key="itemUpdateButton">
+        <value xml:lang="en">50</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemUpdateButton</div>
+        <description>The button that will update the quantity of the item.</description>
+    </property>
+    <property key="itemPrice">
+        <value xml:lang="en">60</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemPrice</div>
+        <description>The unit price of the item</description>
+    </property>
+    <property key="itemAvailability">
+        <value xml:lang="en">80</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemAvailability</div>
+        <description>The items stock level  (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+    <property key="itemTotal">
+        <value xml:lang="en">90</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemTotal</div>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+    <property key="itemRemoveButton">
+        <value xml:lang="en">100</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemRemoveButton</div>
+        <description>The button that will remove the item from the cart</description>
+    </property>
+    <property key="itemAddToCartButton">
+        <value xml:lang="en">110</value>
+        <screen>ShowWishlistOrderItems</screen>
+        <div>showWishlistItemAddToCartButton</div>
+        <description>The button that will add the item to the shopping cart.</description>
+    </property>
+<!-- *************************************** -->
+<!-- ShowWishlistOrderItemsSummary -->
+<!-- *************************************** -->
+    <property key="totalNumberItems">
+        <value xml:lang="en">10</value>
+        <screen>ShowWishlistOrderItemsSummary</screen>
+        <div>showWishlistTotalNumberItems</div>
+        <description>Total number of items</description>
+    </property>
+    <property key="totalSubAmount">
+        <value xml:lang="en">20</value>
+        <screen>ShowWishlistOrderItemsSummary</screen>
+        <div>showWishlistTotalSubAmount</div>
+        <description>Sub total amount</description>
+    </property>
+<!-- *************************************** -->
+<!-- LightBox -->
+<!-- *************************************** -->
+     <property key="itemOfferPrice">
+        <value xml:lang="en">50</value>
+        <screen>LightBoxOrderItems</screen>
+        <div>lightBoxOfferPrice</div>
+        <description>The offer price of the item</description>
+    </property>
+    <property key="itemAvailability">
+        <value xml:lang="en">70</value>
+        <screen>LightBoxOrderItems</screen>
+        <div>lightBoxItemAvailability</div>
+        <description>The items stock level  (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+
+
+//Remove
+03/13/2013- Issue#29088
+	<property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpTertiaryInfo</div>
+        <description>Tertiary Information</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsTertiaryInfo</div>
+        <group>0</group>
+        <description>Tertiary Information</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookTertiaryInfo</div>
+        <description>Tertiary Information</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">80</value>
+        <screen>PLP</screen>
+        <div>plpTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">80</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPAccessory</screen>
+        <div>pdpAccessoryTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">80</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewTertiaryInfo</div>
+        <description>Product Tertiary Information.</description>
+    </property>
+    
+04/01/2013 - Issue #24397
+	<property key="itemUpdateButton">
+        <value xml:lang="en">60</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemUpdateButton</div>
+        <description>The button that will update the quantity of the item.</description>
+    </property>
+    <property key="itemRemoveButton">
+        <value xml:lang="en">70</value>
+        <screen>LightCartOrderItems</screen>
+        <div>lightBoxItemRemoveButton</div>
+        <description>The button that will remove the item from the cart</description>
+    </property>
+
+//Edit
+
+05/03/2013 - Issue# 29676
+	<property key="orderItems">
+        <value xml:lang="en">10</value>
+        <screen>LightBox</screen>
+        <div>lightBoxOrderItems</div>
+        <description>All the items that have been added to the shopping cart</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">40</value>
+        <screen>LightBox</screen>
+        <div>lightBoxContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the next step.</description>
+    </property>
+    <property key="totalNumberItems">
+        <value xml:lang="en">10</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxTotalNumberItems</div>
+        <description>Total number of items</description>
+    </property>
+    <property key="totalSubAmount">
+        <value xml:lang="en">20</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxTotalSubAmount</div>
+        <description>Sub total amount</description>
+    </property>
+    <property key="shippingMethod">
+        <value xml:lang="en">30</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxShippingMethod</div>
+        <description>Shipping Method, if available</description>
+    </property>
+    <property key="shippingAmount">
+        <value xml:lang="en">40</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxShippingAmount</div>
+        <description>Shipping Amount, if available</description>
+    </property>
+    <property key="taxAmount">
+        <value xml:lang="en">50</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxTaxAmount</div>
+        <description>Tax, if available</description>
+    </property>
+    <property key="totalAmount">
+        <value xml:lang="en">60</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxTotalAmount</div>
+        <description>Items + Shipping + Tax</description>
+    </property>
+    <property key="promoDiscount">
+        <value xml:lang="en">70</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxPromoDiscount</div>
+        <description>Discount from coupon or promo</description>
+    </property>
+    <property key="totalAdjustAmount">
+        <value xml:lang="en">80</value>
+        <screen>LightBoxOrderItemsSummary</screen>
+        <div>lightBoxTotalAdjustAmount</div>
+        <description>Total of items + shipping less promo</description>
+    </property>
+    <property key="orderItemsHeader">
+        <value xml:lang="en">20</value>
+        <screen>LightBox</screen>
+        <div>lightBoxOrderItemsHeader</div>
+        <description>The cart summary totals</description>
+    </property>
+    <property key="orderItemsSummary">
+        <value xml:lang="en">30</value>
+        <screen>LightBox</screen>
+        <div>lightBoxOrderItemsSummary</div>
+        <description>The cart summary totals</description>
+    </property>
+
+//********************************************************************************************
+//CLIENT DEPLOYMENT UPDATES
+//FILE: client-deployment.properties
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//Edit
+
+//********************************************************************************************
+//ECOMMERCE SEED UPDATES
+//FILE: eCommerceSeedData.xml
+//********************************************************************************************
+
+//Add
+05/07/2013 - Issue #29744
+<ShipmentGatewayConfigType shipmentGatewayConfTypeId="BLUEDART" hasTable="N" description="BLUEDART Shipment Gateway"/>
+<ShipmentGatewayConfig shipmentGatewayConfigId="BLUEDART_CONFIG" shipmentGatewayConfTypeId="BLUEDART" description="BLUEDART Config"/>
+<ShipmentGatewayBlueDart shipmentGatewayConfigId="BLUEDART_CONFIG" connectUrl="http://www.bluedart.com/servlet/RoutingServlet" connectTimeout="60" customerId="REG111111" customerLisenceKey="REG111111" versionNum="1.3" scanNum="1" format="HTML" />
+    
+//Remove
+
+//********************************************************************************************
+//ECOMMERCE CONTENT SEED UPDATES
+//FILE: eCommerceContentSeedData.xml
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//Edit
+03/13/2013- Issue#29037
+- Update to add 'rounding=currencyRounding' option to all places where '@ofbizCurrency' is used.
+
+
+//********************************************************************************************
+//ECOMMERCE EMAIL DATA UPDATES
+//FILE: eCommerceContentEmailData.xml
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//Edit
+03/13/2013- Issue#29037
+- Update to add 'rounding=currencyRounding' option to all places where '@ofbizCurrency' is used.
+04/16/2013- Issue#29445
+- E_ORDER_DETAIL template : Added code to show payment details for COD.
+
+//********************************************************************************************
+//ECOMMERCE CSS UPDATES
+//FILE: bigFishClientSkin.css
+//********************************************************************************************
+
+//Add 
+
+
+
+//Remove
+
+
+//********************************************************************************************
+//OSAFE PROPERTIES UPDATE
+//FILE: osafe.properties.template
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//********************************************************************************************
+//EECAS XML TEMPLATE UPDATE
+//FILE: eecas.xml.template
+//********************************************************************************************
+
+
+//********************************************************************************************
+//OFBIZ COMPONENT XML UPDATES
+//FILE: ofbiz-component.xml.template
+//********************************************************************************************
+
+//Add
+04/09/2013 - Issue #29499
+<entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentEmailData.xml"/>
+
+//Remove
+04/09/2013 - Issue #29499
+<entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
+
+//********************************************************************************************
+//CLIENT STORE SEED DATA XML UPDATES
+//FILE: clientStoreSeedData.xml.template
+//********************************************************************************************
+
+//Add
+03/05/2013 - Issue #28803
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_MULTI_SELECT" parmValue="FALSE" description="Indicates if multiple Facet VALUES can be selected from within one Facet GROUP" parmCategory="SOLR"/>
+
+03/13/2013 - Issue #29037
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CURRENCY_UOM_ROUNDING" parmValue="2" description="This defines the rounding increment for currency amounts. 0 if no rounding is done (show full amounts). Default is 2." parmCategory="FORMAT"/>
+5/06/2013 - Issue # 29569 
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_EMAIL_ALERT" parmValue="0" description="The number of additional emails that can be entered on the Order Confirmation page. Should be a number from 0 to 10." parmCategory="CHECKOUT"/>
+
+05/06/2013 - Issue#29741
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_CC" parmValue="TRUE" description="Determines if Credit Cards are an acceptable form of payment during the Check Out process." parmCategory="CHECKOUT"/>
+
+//Remove
+03/12/2013 - Issue #29029
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_CURRENCY" parmValue="$n.nn" description="This defines how currency is displayed within both the eCommerce and Admin modules." parmCategory="FORMAT"/>
+
+//********************************************************************************************
+//CACHE PROPERTIES
+//FILE: cache.properties
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//Edit
+
+//********************************************************************************************
+//JS LIBRARIES
+//DIRECTORY: osafe-theme/js/lib
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//Edit
+04/01/2013 - Issue #29269- Upgrade jquery-ui.js v1.8.18 to v1.9.2
+In jquery-ui version 1.8.18 there was an issue in autocompleter to restrict typing in the entry field(search field) whilst the mouse was hovered over 'suggestion' text.
+
+//********************************************************************************************
+//VISUAL THEME RESOURCE
+//FILE: OsafeThemeData.xml.template
+//********************************************************************************************
+
+//Add
+
+
+//Remove
+
+//Edit
+
+//********************************************************************************************
+//ECOMMERCE SEED UPDATES
+//FILE: eCommerceSeedData.xml
+//********************************************************************************************
+
+//Add
+
+    
+
+//comment out all services   
+
+

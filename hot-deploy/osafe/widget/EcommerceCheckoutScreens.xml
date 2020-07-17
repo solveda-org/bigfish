@@ -19,7 +19,7 @@
                 <set field="addToCartFromWishListAction" value="addToCartFromWishList"/>
                 <set field="nextButtonUrl" value="main" />
                 <set field="nextButtonDescription" value="${uiLabelMap.ContinueShoppingBtn}"/>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/showWishListItems.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showWishListItems.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -62,19 +62,6 @@
             </widgets>
         </section>
     </screen>
-    <screen name="showWishListOrderItems">
-        <section>
-            <actions>
-            </actions>
-            <widgets>
-                <platform-specific>
-                    <html>
-                        <html-template location="component://osafe/webapp/osafe/common/cart/showWishListItems.ftl" />
-                    </html>
-                </platform-specific>
-            </widgets>
-        </section>
-    </screen>
 
     <!-- CART SCREENS -->
     <screen name="eCommerceShowcart">
@@ -99,7 +86,7 @@
                 <set field="doneAction" value="checkout" />
                 <set field="nextButtonVisible" value="${groovy:if(shoppingCartSize > 0)return 'Y' else return 'N';}"/>
                 <set field="nextButtonUrlDescription" value="${uiLabelMap.CheckoutBtn}"/>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/showCartItems.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -176,6 +163,10 @@
                 <set field="submitOrderAction" value="anonSinglePageSubmitOrder"/>
                 <set field="payPalAction" value="anonSinglePageSetPayPalCheckout"/>
                 <set field="ebsAction" value="anonSinglePageEBSCheckout"/>
+                
+                
+                
+                
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -759,7 +750,8 @@
                 <set field="nextButtonVisible" value="N" />
                 <set field="submitOrderButtonVisible" value="Y" />
                 <set field="submitOrderAction" value="multiPageSubmitOrder"/>
-                <set field="backAction" value="multiPageShippingOptions"/>
+                <set field="backAction" value="${groovy:if(shippingApplies == true)return 'multiPageShippingOptions' else return '';}"/>
+                <set field="prevButtonUrl" value="${groovy:if(shippingApplies == true)return '' else return 'eCommerceShowcart';}"/>
                 <set field="payPalAction" value="setPayPalCheckout"/>
                 <set field="ebsAction" value="multiPageEBSCheckout"/>
             </actions>
@@ -879,7 +871,7 @@
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.OrderConfirmationTitle}" />
+                <set field="pageTitle" value="${uiLabelMap.OrderConfirmationTitle} (#${parameters.orderId})" />
                 <set field="title" from-field="pageTitle" />
 
                 <!-- For the Google Analytics to know the order was generated -->
@@ -888,11 +880,12 @@
                 <!-- This set has to be before the groovy invocation -->
                 <set field="showThankYouStatus" value="Y" />
 
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderConfirm.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/eCommerceOrderConfirm.groovy" />
 
                 <set field="showCartFootprint" value="Y" />
                 <set field="useAvailability" value="N" />
                 <set field="prevButtonVisible" value="N" />
+                <set field="formName" value="orderCompleteForm" />
 
                 <set field="nextButtonUrl" value="main" />
                 <set field="nextButtonDescription" value="${uiLabelMap.ContinueShoppingBtn}" />
@@ -1105,7 +1098,8 @@
                 <set field="nextButtonVisible" value="N" />
                 <set field="submitOrderButtonVisible" value="Y" />
                 <set field="submitOrderAction" value="anonMultiPageSubmitOrder"/>
-                <set field="backAction" value="anonMultiPageShippingOptions"/>
+                <set field="backAction" value="${groovy:if(shippingApplies == true)return 'anonMultiPageShippingOptions' else return '';}"/>
+                <set field="prevButtonUrl" value="${groovy:if(shippingApplies == true)return '' else return 'eCommerceShowcart';}"/>
                 <set field="payPalAction" value="anonMultiPageSetPayPalCheckout"/>
                 <set field="ebsAction" value="anonMultiPageEBSCheckout"/>
             </actions>
@@ -1225,20 +1219,6 @@
 
 
 <!-- GENERAL CHECKOUT SCREENS -->
-    <!-- SHOW CART -->
-    <screen name="showCartOrderItems">
-        <section>
-            <actions>
-            </actions>
-            <widgets>
-                  <platform-specific>
-                       <html>
-                           <html-template location="component://osafe/webapp/osafe/common/cart/showCartItems.ftl" />
-                       </html>
-                   </platform-specific>
-            </widgets>
-        </section>
-    </screen>
     
     <!-- CHECKOUT INCLUDES -->
     <screen name="eCommerceEnterPromoCode">
@@ -1287,18 +1267,6 @@
                 <platform-specific>
                     <html>
                       <html-template location="component://osafe/webapp/osafe/common/entry/js/checkoutJS.ftl"/>
-                    </html>
-                </platform-specific>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="cartOrderItems">
-        <section>
-            <widgets>
-                <platform-specific>
-                    <html>
-                        <html-template location="component://osafe/webapp/osafe/common/orderItems.ftl" />
                     </html>
                 </platform-specific>
             </widgets>
@@ -1427,21 +1395,11 @@
             </widgets>
         </section>
     </screen>
-    <screen name="singlePageOrderDetail">
-        <section>
-            <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
-                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
-                <set field="useAvailability" value="Y" />
-            </actions>
-            <widgets>
-                    <include-screen name="orderItems" location="component://osafe/widget/EcommerceScreens.xml"/>
-            </widgets>
-        </section>
-    </screen>
     <screen name="singlePageOrderPayment">
         <section>
+	        <actions>
+	            <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePaymentMethods.groovy" />
+	        </actions>
             <widgets>
                 <platform-specific>
                     <html>
@@ -1544,22 +1502,11 @@
             </widgets>
         </section>
     </screen>
-    <screen name="anonSinglePageOrderDetail">
-        <section>
-            <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
-                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
-                <set field="useAvailability" value="Y" />
-            </actions>
-            <widgets>
-                    <include-screen name="orderItems" location="component://osafe/widget/EcommerceScreens.xml"/>
-            </widgets>
-        </section>
-    </screen>
-
     <screen name="anonSinglePageOrderPayment">
         <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePaymentMethods.groovy" />
+            </actions>
             <widgets>
                 <platform-specific>
                     <html>
@@ -1676,6 +1623,9 @@
 
     <screen name="multiPageOrderPayment">
         <section>
+	        <actions>
+	            <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePaymentMethods.groovy" />
+	        </actions>
             <widgets>
                 <platform-specific>
                     <html>

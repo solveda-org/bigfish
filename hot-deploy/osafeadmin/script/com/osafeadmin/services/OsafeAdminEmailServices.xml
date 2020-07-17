@@ -63,16 +63,16 @@
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
         <else>
             <if-compare field="parameters.simpleTest" operator="equals" value="N">
-                <if-empty field="parameters.emailTemplateId">
+                <if-empty field="parameters.templateId">
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTemplateIdError"/>
                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
                 <else>
                      <if>
                          <condition>
                              <or>
-                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_CHANGE_CUSTOMER"/>
-                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_NEW_CUSTOMER"/>
-                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_FORGOT_PASSWORD"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_CHANGE_CUSTOMER"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_NEW_CUSTOMER"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_FORGOT_PASSWORD"/>
                              </or>
                          </condition>
                          <then>
@@ -94,10 +94,11 @@
                      <else-if>
                          <condition>
                              <or>
-                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_ORDER_CHANGE"/>
-                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_ORDER_CONFIRM"/>
-                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_ORDER_DETAIL"/>
-                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_SHIP_REVIEW"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_ORDER_CHANGE"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_ORDER_CONFIRM"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_ORDER_DETAIL"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_SHIP_REVIEW"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="E_ABANDON_CART"/>
                              </or>
                          </condition>
                          <then>
@@ -111,42 +112,6 @@
                                  <if-empty field="orderHeader">
                                      <set field="argListNames[]" from-field="parameters.orderId"/>
                                      <property-to-field resource="OSafeAdminUiLabels" property="OrderIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
-                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                                 </if-empty>
-                             </else>
-                             </if-empty>
-                         </then>
-                     </else-if>
-                     <else-if>
-                         <condition>
-                             <if-compare field="parameters.emailTemplateId" operator="equals" value="E_ABANDON_CART"/>
-                         </condition>
-                         <then>
-                             <if-empty field="parameters.orderId">
-                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderIdError"/>
-                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                             <else>
-                                 <entity-one value-field="orderHeader" entity-name="OrderHeader">
-                                     <field-map field-name="orderId" from-field="parameters.orderId"/>
-                                 </entity-one>
-                                 <if-empty field="orderHeader">
-                                     <set field="argListNames[]" from-field="parameters.orderId"/>
-                                     <property-to-field resource="OSafeAdminUiLabels" property="OrderIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
-                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                                 </if-empty>
-                             </else>
-                             </if-empty>
-                             <if-empty field="parameters.customerId">
-                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCustomerIdError"/>
-                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                             <else>
-                                 <entity-one value-field="party" entity-name="Party">
-                                     <field-map field-name="partyId" from-field="parameters.customerId"/>
-                                 </entity-one>
-                                 <if-empty field="party">
-                                     <clear-field field="argListNames"/>
-                                     <set field="argListNames[]" from-field="parameters.customerId"/>
-                                     <property-to-field resource="OSafeAdminUiLabels" property="CustomerIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
                                      <string-to-list string="${tempErrorMessage}" list="error_list"/>
                                  </if-empty>
                              </else>
@@ -228,7 +193,7 @@
             <set field="emailType" value="PRDS_EMAIL_TEST"/>
             <set field="bodyParameters.productStoreId" from-field="parameters.productStoreId"/>
             <set field="bodyParameters.emailType" from-field="emailType"/>
-            <set field="bodyParameters.emailTemplateId" from-field="parameters.emailTemplateId"/>
+            <set field="bodyParameters.templateId" from-field="parameters.templateId"/>
             <set field="bodyParameters.partyId" from-field="parameters.customerId"/>
             <set field="bodyParameters.orderId" from-field="parameters.orderId"/>
             <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
@@ -244,7 +209,7 @@
                 <set field="emailParams.sendFrom" from-field="parameters.fromAddress"/>
                 <set field="emailParams.emailType" from-field="emailType"/>
                 <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
-                <call-service service-name="sendMailFromScreen" in-map-name="emailParams">
+                <call-service service-name="sendMailFromScreen" in-map-name="emailParams" break-on-error="false">
                     <result-to-field result-name="errorMessageList" field="mailSendErrorMessageList"/>
                     <result-to-field result-name="errorMessage" field="mailSendErrorMessage"/>
                 </call-service>
@@ -275,7 +240,7 @@
             </then>
         <else>
 	        <if-compare field="parameters.simpleTest" operator="equals" value="N">
-                <set field="argListNames[]" from-field="parameters.emailTemplateId"/>
+                <set field="argListNames[]" from-field="parameters.templateId"/>
                 <property-to-field resource="OSafeAdminUiLabels" property="TestEmailSuccessMsg" field="testEmailSuccessMsg" arg-list-name="argListNames"/>
                 <string-to-list string="${testEmailSuccessMsg}" list="successMessageList"/>
 	        <else>
@@ -380,13 +345,217 @@
         
         <!-- Send email-->
         <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
-            <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
-            <set field="emailParams.userLogin" from-field="systemUserLogin"/>
-            <set field="emptyToEmail" value=""/>
-            <set field="emailParams.sendTo" value="${emptyToEmail}"/> <!-- email will not send without a 'To' value, even if it is empty -->
-        	<set field="emailParams.emailType" from-field="bodyParameters.emailType"/>
-            <call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
+        	<!-- get the cc address (if it exists) and set it to the sendTo address -->
+        	<if-not-empty field="productStoreEmailSetting.ccAddress">
+        		<set field="emailParams.sendTo" from-field="productStoreEmailSetting.ccAddress"/>
+        		<set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+            	<set field="emailParams.userLogin" from-field="systemUserLogin"/>
+        		<set field="emailParams.emailType" from-field="bodyParameters.emailType"/>
+            	<call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
+        	</if-not-empty>
         </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="sendTxtMessageTest" short-description="This Service Validates and sends a Txt Message">
+
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="msgMethod">
+            <field field="parameters.productStoreId" type="String"/>
+            <string value="TXT_MESSAGE_METHOD"/>
+        </call-class-method>
+        <if-empty field="msgMethod">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MessageMethodError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        <else>
+            <call-object-method method-name="toUpperCase" obj-field="msgMethod" ret-field="msgMethodInUpCase"/>
+            <if-compare operator="equals" value="NONE" field="msgMethodInUpCase">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MessageMethodError"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+
+        <if-empty field="parameters.simpleTest">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTestModeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        <else>
+            <if-compare field="parameters.simpleTest" operator="equals" value="N">
+                <if-empty field="parameters.templateId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTemplateIdError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                     <if>
+                         <condition>
+                             <or>
+                                 <if-compare field="parameters.templateId" operator="equals" value="TXT_CHANGE_CUSTOMER"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="TXT_NEW_CUSTOMER"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="TXT_FORGOT_PASSWORD"/>
+                             </or>
+                         </condition>
+                         <then>
+                             <if-empty field="parameters.customerId">
+                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCustomerIdError"/>
+                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                             <else>
+                                 <entity-one value-field="party" entity-name="Party">
+                                     <field-map field-name="partyId" from-field="parameters.customerId"/>
+                                 </entity-one>
+                                 <if-empty field="party">
+					                 <set field="argListNames[]" from-field="parameters.customerId"/>
+					                 <property-to-field resource="OSafeAdminUiLabels" property="CustomerIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 </if-empty>
+                             </else>
+                             </if-empty>
+                         </then>
+                     <else-if>
+                         <condition>
+                             <or>
+                                 <if-compare field="parameters.templateId" operator="equals" value="TXT_ORDER_CHANGE"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="TXT_ORDER_CONFIRM"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="TXT_SHIP_REVIEW"/>
+                                 <if-compare field="parameters.templateId" operator="equals" value="TXT_ABANDON_CART"/>
+                             </or>
+                         </condition>
+                         <then>
+                             <if-empty field="parameters.orderId">
+                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderIdError"/>
+                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                             <else>
+                                 <entity-one value-field="orderHeader" entity-name="OrderHeader">
+                                     <field-map field-name="orderId" from-field="parameters.orderId"/>
+                                 </entity-one>
+                                 <if-empty field="orderHeader">
+                                     <set field="argListNames[]" from-field="parameters.orderId"/>
+                                     <property-to-field resource="OSafeAdminUiLabels" property="OrderIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 </if-empty>
+                             </else>
+                             </if-empty>
+                         </then>
+                     </else-if>
+                     </if>
+                </else>
+                </if-empty>
+            </if-compare>
+        </else>
+        </if-empty>
+
+        <if-empty field="parameters.toCell">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankToCellError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="TOCELL" list="error_list"/>
+        <else>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.toCell"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidToCellError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="TOCELL" list="error_list"/>
+            <else>
+                <call-object-method method-name="length" obj-field="parameters.toCell" ret-field="toCellLength"/>
+                <if>
+                    <condition>
+                        <not>
+	                        <and>
+	                            <if-compare operator="greater-equals" value="10" field="toCellLength"/>
+	                            <if-compare operator="less-equals" value="13" field="toCellLength"/>
+	                        </and>
+                        </not>
+                    </condition>
+                    <then>
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidToCellError"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="TOCELL" list="error_list"/>
+                    </then>
+                </if>
+            </else>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+
+        <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
+            <field-map field-name="userLoginId" value="system"/>
+        </entity-one>
+
+        <if-empty field="parameters.productStoreId">
+            <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                <field field="request" type="javax.servlet.ServletRequest"/>
+            </call-class-method>
+            <set field="parameters.productStoreId" from-field="productStoreId"/>
+        <else>
+            <set field="productStoreId" from-field="parameters.productStoreId"/>
+        </else>
+        </if-empty>
+
+        <!-- Create Communication Event-->
+        <set field="createComEventMap.userLogin" from-field="systemUserLogin"/>
+        <set field="createComEventMap.fromString" from-field="parameters.fromCell"/>
+        <set field="createComEventMap.toString" from-field="parameters.toCell"/>
+        <set field="createComEventMap.communicationEventTypeId" value="PHONE_COMMUNICATION"/>
+        <set field="createComEventMap.contactMechTypeId" value="TELECOM_NUMBER"/>
+        <call-service service-name="createCommunicationEventWithoutPermission" in-map-name="createComEventMap">
+            <result-to-field result-name="communicationEventId" field="communicationEventId"/>
+        </call-service>
+        <set field="txtMsgParams.communicationEventId" from-field="communicationEventId"/>
+        <set field="txtMsgParams.productStoreId" from-field="parameters.productStoreId"/>
+
+        <if-compare field="parameters.simpleTest" operator="equals" value="Y">
+            <set field="txtMsgParams.textMessage" from-field="parameters.textMessage"/>
+            <set field="txtMsgParams.userLogin" from-field="systemUserLogin"/>
+            <set field="txtMsgParams.toCell" from-field="parameters.toCell"/>
+            <set field="txtMsgParams.sendFrom" from-field="parameters.fromCell"/>
+            <call-service service-name="sendTxtMessage" in-map-name="txtMsgParams" break-on-error="false">
+                <result-to-field result-name="errorMessageList" field="txtMsgSendErrorMessageList"/>
+                <result-to-field result-name="errorMessage" field="txtMsgSendErrorMessage"/>
+            </call-service>
+        <else>
+            <set field="txtMsgParams.productStoreId" from-field="parameters.productStoreId"/>
+            <set field="txtMsgParams.templateId" from-field="parameters.templateId"/>
+            <set field="txtMsgParams.partyId" from-field="parameters.customerId"/>
+            <set field="txtMsgParams.orderId" from-field="parameters.orderId"/>
+            <set field="txtMsgParams.userLogin" from-field="systemUserLogin"/>
+            <set field="txtMsgParams.toCell" from-field="parameters.toCell"/>
+            <call-service service-name="sendTxtMessageFromTemplate" in-map-name="txtMsgParams" break-on-error="false">
+                <result-to-field result-name="errorMessageList" field="txtMsgSendErrorMessageList"/>
+                <result-to-field result-name="errorMessage" field="txtMsgSendErrorMessage"/>
+            </call-service>
+        </else>
+        </if-compare>
+
+        <if>
+            <condition>
+                <or>
+                <not><if-empty field="txtMsgSendErrorMessageList"/></not>
+                <not><if-empty field="txtMsgSendErrorMessage"/></not>
+                </or>
+            </condition>
+            <then>
+                 <if-not-empty field="txtMsgSendErrorMessage">
+	                 <set field="argListNames[]" from-field="txtMsgSendErrorMessage"/>
+	                 <set field="argListNames[]" from-field="txtMsgSendErrorMessage"/>
+	                 <property-to-field resource="OSafeAdminUiLabels" property="TestTxtMsgSendFailError" field="tempErrorMessage" arg-list-name="argListNames"/>
+	                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                  <else>
+	                  <if-not-empty field="txtMsgSendErrorMessageList">
+	                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestTxtMsgSendFailError" arg-list-name="txtMsgSendErrorMessageList"/>
+	                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                  </if-not-empty>
+                  </else>
+                  </if-not-empty>
+                  <check-errors/>
+            </then>
+        <else>
+            <if-compare field="parameters.simpleTest" operator="equals" value="N">
+	            <set field="argListNames[]" from-field="parameters.templateId"/>
+	            <property-to-field resource="OSafeAdminUiLabels" property="TestTxtMsgWithTemplateSuccessMsg" field="testEmailSuccessMsg" arg-list-name="argListNames"/>
+	            <string-to-list string="${testEmailSuccessMsg}" list="successMessageList"/>
+	        <else>
+                <property-to-field resource="OSafeAdminUiLabels" property="TestTxtMsgSuccessMsg" field="testEmailSuccessMsg"/>
+                <string-to-list string="${testEmailSuccessMsg}" list="successMessageList"/>
+	        </else>
+            </if-compare>
+        </else>
+        </if>
     </simple-method>
     
 </simple-methods>

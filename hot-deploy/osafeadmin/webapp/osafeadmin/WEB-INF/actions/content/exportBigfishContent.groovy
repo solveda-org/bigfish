@@ -50,6 +50,7 @@ exportContentPageTop = StringUtils.trimToEmpty(parameters.exportContentPageTop);
 exportContentPDPSpot = StringUtils.trimToEmpty(parameters.exportContentPDPSpot);
 exportContentEmail = StringUtils.trimToEmpty(parameters.exportContentEmail);
 exportContentProdCat = StringUtils.trimToEmpty(parameters.exportContentProdCat);
+exportContentTxt = StringUtils.trimToEmpty(parameters.exportContentTxtTemplate);
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 
@@ -61,43 +62,48 @@ if (UtilValidate.isNotEmpty(initializedCB))
 passedContentTypeIds = FastList.newInstance();
 passedProdCatContentTypeIds = FastList.newInstance();
 
-if(exportContentLibrary) 
+if(UtilValidate.isNotEmpty(exportContentLibrary)) 
 {
     passedContentTypeIds.add("BF_CONTENT_LIBRARY");
     context.exportContentLibrary=exportContentLibrary;
 }
-if(exportContentHomePage) 
+if(UtilValidate.isNotEmpty(exportContentHomePage)) 
 {
     passedContentTypeIds.add("BF_HOME_PAGE");
     context.exportContentHomePage=exportContentHomePage;
 }
-if(exportContentSiteInfo) 
+if(UtilValidate.isNotEmpty(exportContentSiteInfo)) 
 {
     passedContentTypeIds.add("BF_SITE_INFO");
     context.exportContentSiteInfo=exportContentSiteInfo;
 }
-if(exportContentStaticPage) 
+if(UtilValidate.isNotEmpty(exportContentStaticPage)) 
 {
     passedContentTypeIds.add("BF_STATIC_PAGE");
     context.exportContentStaticPage=exportContentStaticPage;
 }
-if(exportContentPageTop) 
+if(UtilValidate.isNotEmpty(exportContentPageTop)) 
 {
     passedContentTypeIds.add("BF_PAGE_TOP_SPOT");
     context.exportContentPageTop=exportContentPageTop;
 }
-if(exportContentPDPSpot) 
+if(UtilValidate.isNotEmpty(exportContentPDPSpot)) 
 {
     passedContentTypeIds.add("BF_PDP_SPOT");
     context.exportContentPDPSpot=exportContentPDPSpot;
 }
-if(exportContentEmail) 
+if(UtilValidate.isNotEmpty(exportContentEmail)) 
 {
     passedContentTypeIds.add("BF_EMAIL_TEMPLATE");
     context.exportContentEmail=exportContentEmail;
 }
+if(UtilValidate.isNotEmpty(exportContentTxt)) 
+{
+    passedContentTypeIds.add("BF_TXT_TEMPLATE");
+    context.exportContentTxt=exportContentTxt;
+}
 
-if(exportContentProdCat) 
+if(UtilValidate.isNotEmpty(exportContentProdCat)) 
 {
     passedProdCatContentTypeIds.add("PDP_ADDITIONAL");
     passedProdCatContentTypeIds.add("PLP_ESPOT_PAGE_TOP");
@@ -115,7 +121,7 @@ numberOfContentTypeIds = passedContentTypeIds?.size() ?: 0;
 context.numberOfContentTypeIds = numberOfContentTypeIds;
 
 numberWritten = 0;
-if (exportFile) 
+if (UtilValidate.isNotEmpty(exportFile)) 
 {
 
     writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(exportFile.getAbsolutePath()), "UTF-8")));

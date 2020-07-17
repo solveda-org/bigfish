@@ -6,7 +6,8 @@
   <#assign youSaveMoney = (plpListPrice - plpPrice)/>
   <div class="plpPriceSavingMoney">
     <#if youSaveMoney gt showSavingMoneyAbove?number>
-      <p class="price">${uiLabelMap.YouSaveCaption}<@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId /></p>
+      <label>${uiLabelMap.YouSaveCaption}</label>
+      <span class="price"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId rounding=globalContext.currencyRounding /></span>
     </#if>
   </div>
 </#if>

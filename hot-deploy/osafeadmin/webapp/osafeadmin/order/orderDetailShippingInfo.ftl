@@ -110,7 +110,7 @@
               <#else>
                     ${paymentMethodType.get("description","OSafeAdminUiLabels",locale)?if_exists}
               </#if>
-             <p><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) isoCode=currencyUomId/> - ${oppStatusItem.get("description","OSafeAdminUiLabels",locale)}</p>
+             <p><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) isoCode=currencyUomId rounding=globalContext.currencyRounding/> - ${oppStatusItem.get("description","OSafeAdminUiLabels",locale)}</p>
               <#if gatewayResponses?has_content>
                   <#list gatewayResponses as gatewayResponse>
                     <#assign transactionCode = gatewayResponse.getRelatedOne("TranCodeEnumeration")>

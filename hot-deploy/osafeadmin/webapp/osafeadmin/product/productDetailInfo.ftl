@@ -1,3 +1,4 @@
+<#assign chargeShipping = parameters.chargeShipping! />
 <#if currentProduct?has_content>
     <#assign productDetailName = ""/>
     <#if (PRODUCT_NAME?exists && PRODUCT_NAME?has_content)>
@@ -28,6 +29,7 @@
     </#if>
 
     <#assign internalName = currentProduct.internalName!"" />
+    
     <#if passedVariantProductIds?has_content || parameters.variantProductIds?has_content>
       <#assign isVariant = "Y" />
       <#assign isVirtual = "N" />
@@ -42,7 +44,12 @@
             </#if>
         </#list>
     </#if>
+    <#if !chargeShipping?has_content>
+      <#assign chargeShipping = currentProduct.chargeShipping!"">
+    </#if>
+    
 </#if>
+
 
 
     <input type="hidden" name="variantProductIds" value="${parameters.variantProductIds!variantProductIds!""}" />
@@ -85,7 +92,7 @@
            </div>
        </div>
    </div>
-    
+
     <#if (mode?has_content && mode == "add") && (!virtualProduct?has_content)>
         <#if rootProductCategoryId?has_content>
           <#assign topLevelList = delegator.findByAnd("ProductCategoryRollupAndChild", {"parentProductCategoryId" : rootProductCategoryId}, Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum')) />
@@ -151,7 +158,7 @@
 
     
 
-    <div class="infoRow <#if (mode?has_content && mode == "add")>row<#else>column</#if>">
+    <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
                 <label>${uiLabelMap.TypeOfProductCaption}</label>
@@ -183,6 +190,50 @@
             <div class="infoIcon">
               <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.TypeOfProductInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
+        </div>
+    </div>
+    
+     <div class="infoRow column">
+       <div class="infoEntry">
+           <div class="infoCaption">
+               <label>${uiLabelMap.ChargeShippingCaption}</label>
+           </div>
+           <div class="entry checkbox short">
+             <#if (mode?has_content)>
+                <input class="checkBoxEntry" type="radio" name="chargeShipping" value="Y" <#if chargeShipping?exists && (chargeShipping=="Y" ||chargeShipping=="y" || chargeShipping=="") >checked="checked"<#elseif !(chargeShipping?exists)>checked="checked"</#if>/>${uiLabelMap.YesLabel}
+                <input class="checkBoxEntry" type="radio" name="chargeShipping" value="N" <#if chargeShipping=="N"||chargeShipping=="n">checked="checked"</#if>/>${uiLabelMap.NoLabel}
+             </#if>
+           </div>
+       </div>
+   </div>
+   
+    <#if isVirtual?exists >
+      <#if isVirtual!='N' || isVariant!='N'>
+        <#assign manufacturerId = virtualProduct.manufacturerPartyId!currentProduct.manufacturerPartyId! />
+      <#elseif currentProduct.manufacturerPartyId?has_content >
+        <#assign manufacturerId = currentProduct.manufacturerPartyId! />
+      </#if>
+    </#if>
+
+     <div class="infoRow row">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.ManufacturerCaption}</label>
+            </div>
+            <div class="infoValue">
+            	<span id="productManufacturer" ><#if manufacturerId?has_content >${manufacturerId!}<#else>${uiLabelMap.NAInfo!}</#if></span>
+            	<input type="hidden" name="manufacturerPartyId" id="manufacturerPartyId" value="${manufacturerId!}" onchange="setManufacturerIdDisplay();"/>
+            	<input type="hidden" name="manufacturerPartyGroupName" id="manufacturerPartyGroupName" value=""/>
+            </div>
+            <#if (isVirtual?exists && ((isVirtual=='Y' && isVariant=='N') || (isVirtual=='N' && isVariant=='N'))) && (mode?has_content && mode == "edit")>
+              <div class="infoIcon">
+                <a href="javascript:openLookup(document.${detailFormName!}.manufacturerPartyId,document.${detailFormName!}.manufacturerPartyGroupName,'lookupManufacturer','500','700','center','true');" " onMouseover="showTooltip(event,'${uiLabelMap.ChangeManufacturerInfo!""}');" onMouseout="hideTooltip()"><span class="detailIcon"></span></a>
+              </div>
+            <#elseif (mode?has_content && mode == "add") && (!parameters.productId?has_content)>
+              <div class="infoIcon">
+                <a href="javascript:openLookup(document.${detailFormName!}.manufacturerPartyId,document.${detailFormName!}.manufacturerPartyGroupName,'lookupManufacturer','500','700','center','true');" " onMouseover="showTooltip(event,'${uiLabelMap.ChangeManufacturerInfo!""}');" onMouseout="hideTooltip()"><span class="detailIcon"></span></a>
+              </div>
+            </#if>
         </div>
     </div>
 

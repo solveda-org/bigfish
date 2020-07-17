@@ -14,13 +14,24 @@ import org.ofbiz.entity.condition.EntityOperator;
 if (UtilValidate.isNotEmpty(parameters.custReqId)) 
 {
     custRequest = delegator.findOne("CustRequest",["custRequestId":parameters.custReqId], false);
+    if (UtilValidate.isNotEmpty(custRequest))
+	{
+    	productStore = custRequest.getRelatedOne("ProductStore");
+        if (UtilValidate.isNotEmpty(productStore))
+    	{
+            if (UtilValidate.isNotEmpty(productStore.storeName))
+        	{
+                productStoreName = productStore.storeName;
+        	}
+            else
+            {
+            	productStoreName = productStore.productStoreId;
+            }
+        	context.productStoreName = productStoreName;
+    	}
+	}
     context.custRequest = custRequest;
-    paramsExpr = FastList.newInstance();
-    paramsExpr.add(EntityCondition.makeCondition("custRequestId", EntityOperator.EQUALS, parameters.custReqId));
-    if (UtilValidate.isNotEmpty(paramsExpr)) 
-    {
-        paramCond=EntityCondition.makeCondition(paramsExpr, EntityOperator.AND);
-        mainCond=paramCond;
-        session.setAttribute("custRequestCond", mainCond);
-    }
+    custReqAttributeList = custRequest.getRelated("CustRequestAttribute");
+    context.custReqAttributeList = custReqAttributeList;
+    session.setAttribute("custRequestList", UtilMisc.toList(UtilMisc.toMap("CustRequest", custRequest,"CustRequestAttributeList", custReqAttributeList)));
 }

@@ -6,7 +6,8 @@
   <#assign youSavePercent = ((plpListPrice - plpPrice)/plpListPrice) />
   <div class="plpPriceSavingPercent">
     <#if youSavePercent gt showSavingPercentAbove?number>
-      <p class="price">${uiLabelMap.YouSaveCaption}${youSavePercent?string("#0%")}</p>
+      <label>${uiLabelMap.YouSaveCaption}</label>
+      <span class="price">${youSavePercent?string("#0%")}</span>
     </#if>
   </div>
 </#if>

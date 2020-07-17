@@ -29,6 +29,13 @@ clearCache.put("cacheStore", "osafe.ManageXmlUrlCache");
 clearCache.put("cacheToClear", "osafe.ManageXmlUrlCache");
 cacheList.add(clearCache);
 
+//Custom Party Attribute Cache
+clearCache = FastMap.newInstance();
+clearCache.put("cacheType", uiLabelMap.CustomPartyAttributesCacheLabel);
+clearCache.put("cacheStore", "osafe.ManageXmlUrlCache");
+clearCache.put("cacheToClear", "osafe.ManageXmlUrlCache");
+cacheList.add(clearCache);
+
 //Pixcel Tracking Cache
 clearCache = FastMap.newInstance();
 clearCache.put("cacheType", uiLabelMap.PixcelTrackingCacheLabel);

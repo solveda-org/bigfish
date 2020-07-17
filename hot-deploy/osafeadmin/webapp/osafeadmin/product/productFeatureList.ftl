@@ -1,10 +1,11 @@
-<#if resultList?has_content>
+<table class="osafe">
     <thead>
       <tr class="heading">
         <th class="idCol firstCol">${uiLabelMap.FacetGroupLabel}</th>
         <th class="descCol">${uiLabelMap.FacetValueLabel}</th>
       </tr>
     </thead>
+<#if resultList?has_content>
     <tbody>
       <#assign rowClass = "1">
       <#list resultList as productFeatureType>
@@ -25,3 +26,5 @@
 <#else>
   ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ListNoResult")}
 </#if>
+
+</table>

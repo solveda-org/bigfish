@@ -134,3 +134,8 @@ if (UtilValidate.isNotEmpty(orderId))
     }
 
 }
+localDispatcherName = UtilProperties.getPropertyValue("client-deployment.properties", "localDispatcherName");
+if (UtilValidate.isNotEmpty(localDispatcherName))
+{
+	context.DISPATCHER_NAME = localDispatcherName;
+}

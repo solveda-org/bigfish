@@ -13,6 +13,13 @@
     <p class="instructions">${uiLabelMap.CustomerAddressBookInfo}</p>
     <p><a id="CustomerAddressBook" href="<@ofbizUrl>eCommerceEditAddressBook</@ofbizUrl>">${uiLabelMap.ClickAddressBookInfo}</a></p>
 </div>
+<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+    <div id="CustomerPaymentMethodInfo" class="displayBox">
+        <h3>${uiLabelMap.PaymentMethodsHeading?if_exists}</h3>
+        <p class="instructions">${uiLabelMap.PaymentMethodsInfo}</p>
+        <p><a id="CustomerOrderStatus" href="<@ofbizUrl>eCommercePaymentMethodInfo</@ofbizUrl>">${uiLabelMap.ClickViewPaymentMethodInfo}</a></p>
+    </div>
+</#if>
 <div id="CustomerOrderStatus" class="displayBox">
     <h3>${uiLabelMap.CustomerOrderStatusHeading?if_exists}</h3>
     <p class="instructions">${uiLabelMap.CustomerOrderStatusInfo}</p>

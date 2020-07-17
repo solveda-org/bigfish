@@ -2,7 +2,19 @@
 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
 <#if generalInfoBoxHeading?exists && generalInfoBoxHeading?has_content>
     <div class="displayBox generalInfo">
-        <div class="header"><h2>${generalInfoBoxHeading!}</h2></div>
+        <div class="header">
+	        <h2>${generalInfoBoxHeading!}</h2>
+	        <#if stores?has_content && (stores.size() > 1)>
+	          <#if (showProductStoreInfo?has_content) && (showProductStoreInfo == 'Y')>
+	            <div class="productStoreInfo">
+	                ${uiLabelMap.ProductStoreInfoCaption}
+	                <#if context.productStoreName?has_content>
+	                    ${context.productStoreName}
+	                </#if>
+	            </div>
+	          </#if>
+	        </#if>
+        </div>
         <div class="boxBody">
             ${sections.render('generalInfoBoxBody')!}
         </div>

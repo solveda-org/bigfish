@@ -2,6 +2,7 @@ import org.ofbiz.base.util.UtilValidate;
 import javolution.util.FastMap;
 import javolution.util.FastList;
 import java.lang.*;
+import org.ofbiz.entity.GenericValue;
 
 if (UtilValidate.isNotEmpty(context.enumTypeId)) 
 {
@@ -20,6 +21,7 @@ if (UtilValidate.isNotEmpty(context.enumTypeId))
                 }
             }
         }
+        context.enumTypes = processEnumTypes;
     }
-    context.enumTypes = processEnumTypes;
+    
 }

@@ -26,24 +26,11 @@
  </div>
 </div>
 </div>
-<div class="plpTertiaryInfoSeq">
- <#if plpLabel?has_content>
-	 <div class="plpTertiaryInfo">
-	   <p class="tertiaryInformation">${plpLabel!""}</p>
-	 </div>
- <#else>
-	  <div class="plpTertiaryInfo">
-	     <#if productInternalName?has_content>
-	       <p class="tertiaryInformation">${uiLabelMap.InternalNameLabel}&nbsp;${productInternalName!""}</p>
-	     </#if>
-	  </div>
-</#if>
-</div>
 <div class="plpPriceOnlineSeq">
 <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
 <div class="plpPriceOnline">
   <#if price?exists && price?has_content>
-    <p class="price">${uiLabelMap.PlpPriceLabel} <@ofbizCurrency amount=price isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+    <p class="price">${uiLabelMap.PlpPriceLabel} <@ofbizCurrency amount=price isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" rounding=globalContext.currencyRounding/></p>
   </#if>
 </div>
 </div>

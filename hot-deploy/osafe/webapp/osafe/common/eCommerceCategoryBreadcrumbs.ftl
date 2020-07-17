@@ -73,6 +73,7 @@ under the License.
      <#assign facetPart1 = facetParts[0]/>
      <#assign facetPart2 = facetParts[1]/>
      <#assign facetPart2Desc = facetPart2!""/>
+     
 
     <#-- Look up the "Product Category" name -->
     <#if productCategoryIdFacet?has_content && productCategoryIdFacet=="Y">
@@ -98,8 +99,8 @@ under the License.
         <#assign facetPart2Prices = facetPart2Desc?split(" ")/>
 
         <#-- Using special ftl syntax so we can call the ofbizCurrency macro -->
-        <#assign start><@ofbizCurrency amount=facetPart2Prices[0]?number isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() /></#assign>
-        <#assign end><@ofbizCurrency amount=facetPart2Prices[1]?number isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() /></#assign>
+        <#assign start><@ofbizCurrency amount=facetPart2Prices[0]?number isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() rounding=globalContext.currencyRounding/></#assign>
+        <#assign end><@ofbizCurrency amount=facetPart2Prices[1]?number isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() rounding=globalContext.currencyRounding/></#assign>
 
         <#assign facetPart2Desc = start + " to " + end/>
     </#if>
@@ -116,34 +117,35 @@ under the License.
     </#if>
 
       <li>
-
+         
            <#assign catOrSearchText = ""/>
+           <#assign removeFilterGroupValue = removeFilterGroupValues[index-1]?if_exists/>
+           <#assign filterGroupValue = filterGroupValues[index]?if_exists/>
+            <#if searchText?has_content>
+                <#assign catOrSearchText = "searchText=" + searchText/>
+                <#-- Add "Top Most Product Category" to url -->
+                <#if topMostProductCategoryIdFacet?has_content && topMostProductCategoryIdFacet=="Y">
+                    <#if facetPart2?has_content && facetPart2==curTopMostCategoryId>
+                        <#assign catOrSearchText = catOrSearchText + "&topMostProductCategoryId=" + curTopMostCategoryId/>
+                    </#if>
+                </#if>
+
+                <#-- Add "Top Most Product Category" and "Product Category" to url -->
+                <#if productCategoryIdFacet?has_content && productCategoryIdFacet=="Y">
+                    <#if facetPart2?has_content && facetPart2==curCategoryId>
+                        <#assign catOrSearchText = catOrSearchText + "&topMostProductCategoryId=" + curTopMostCategoryId/>
+                        <#assign catOrSearchText = catOrSearchText + "&productCategoryId=" + curCategoryId/>
+                    </#if>
+                </#if>
+            <#else>
+                <#assign catOrSearchText = "productCategoryId=" + curCategoryId/>
+            </#if>
            <#if index==listSize>
               ${facetPart2Desc}
             <#else>
-             <#assign filterGroupValue = filterGroupValues[index]/>
-                <#if searchText?has_content>
-                    <#assign catOrSearchText = "searchText=" + searchText/>
-
-                    <#-- Add "Top Most Product Category" to url -->
-                    <#if topMostProductCategoryIdFacet?has_content && topMostProductCategoryIdFacet=="Y">
-                        <#if facetPart2?has_content && facetPart2==curTopMostCategoryId>
-                            <#assign catOrSearchText = catOrSearchText + "&topMostProductCategoryId=" + curTopMostCategoryId/>
-                        </#if>
-                    </#if>
-
-                    <#-- Add "Top Most Product Category" and "Product Category" to url -->
-                    <#if productCategoryIdFacet?has_content && productCategoryIdFacet=="Y">
-                        <#if facetPart2?has_content && facetPart2==curCategoryId>
-                            <#assign catOrSearchText = catOrSearchText + "&topMostProductCategoryId=" + curTopMostCategoryId/>
-                            <#assign catOrSearchText = catOrSearchText + "&productCategoryId=" + curCategoryId/>
-                        </#if>
-                    </#if>
-                <#else>
-                    <#assign catOrSearchText = "productCategoryId=" + curCategoryId/>
-                </#if>
-             <a href="<@ofbizUrl>eCommerceProductList?${catOrSearchText}&filterGroup=${filterGroupValue?if_exists}</@ofbizUrl>">${facetPart2Desc}</a>
+             <a href="<@ofbizUrl><#if !searchText?has_content>eCommerceProductList<#else>siteSearch</#if>?${catOrSearchText}&filterGroup=${filterGroupValue?if_exists}</@ofbizUrl>">${facetPart2Desc}</a>
            </#if>
+           <a class="removeFacet" href="<@ofbizUrl><#if !searchText?has_content>eCommerceProductList<#else>siteSearch</#if>?${catOrSearchText}<#if removeFilterGroupValue?has_content>&filterGroup=${removeFilterGroupValue?if_exists}</#if></@ofbizUrl>" title="${uiLabelMap.RemoveLabel} ${facetPart2Desc}"><span class="removeFacetIcon"></span></a>
       </li>
 </#macro>
 

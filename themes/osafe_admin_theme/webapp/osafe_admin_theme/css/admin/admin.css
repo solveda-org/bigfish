@@ -90,6 +90,7 @@ input[type=text],input[type=password], select, textarea {
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
     color: #A50000;
     border: 1px solid #000000;
+    margin: 0; /* Establishes Default in Chrome */
 }
 input[type=text]:focus,input[type=password]:focus, select:focus, textarea:focus {
    background: #f5f2ec;
@@ -156,10 +157,12 @@ textarea.mediumArea {
 textarea.smallArea {
     width: 800px;
     height: 80px;
+    margin: 0 0 10px 0;
 }
 textarea.shortArea {
     width: 800px;
     height: 40px;
+    margin: 2px 0;
 }
 input[type="text"].regular {
     width: 110px;
@@ -184,6 +187,9 @@ input[type="text"].phone3 {
 }
 input[type="text"].phone4 {
     width: 4em;
+}
+input[type="text"]#phoneWorkExtOther {
+    width: 40px;
 }
 a {
     color: #A50000;
@@ -590,7 +596,7 @@ border-bottom: none;
 	z-index: 2;  /* needed to clear drop downs over content */
 }
 
-#navigationMenu ul {
+.navigationMenu ul {
     position:        absolute;
     top:            -999em;
     width:          auto; 
@@ -598,19 +604,19 @@ border-bottom: none;
     
 }
 
-#navigationMenu ul li {
+.navigationMenu ul li {
     width:            100%;
 }
-#navigationMenu li:hover {
+.navigationMenu li:hover {
     visibility:        inherit; /* fixes IE7 'sticky bug' */
 }
-#navigationMenu li {
+.navigationMenu li {
     float:            left;
     position:        relative;
 }
 
-#navigationMenu li:hover ul,
-#navigationMenu li.sfHover ul {
+.navigationMenu li:hover ul,
+.navigationMenu li.sfHover ul {
     left:            0;
     top:            23px; /* match top ul list item height */
     top: 22px\9; /* For IE 9 and Below */
@@ -618,12 +624,12 @@ border-bottom: none;
     border-top: 1px solid #000;
 }
 
-#navigationMenu li.lastItem ul,
-#navigationMenu li.lastItem ul {
+.navigationMenu li.lastItem ul,
+.navigationMenu li.lastItem ul {
     left: -99px\9; /* For IE 9 and Below */
 }
-#navigationMenu li.lastItem:hover ul,
-#navigationMenu li.lastItem.sfHover ul {
+.navigationMenu li.lastItem:hover ul,
+.navigationMenu li.lastItem.sfHover ul {
     border-top: 1px solid #000000;
     left: -102px;
     top: 23px;
@@ -632,21 +638,21 @@ border-bottom: none;
     z-index: 99;
 }
 
-ul#navigationMenu li:hover li ul,
-ul#navigationMenu li.sfHover li ul {
+ul.navigationMenu li:hover li ul,
+ul.navigationMenu li.sfHover li ul {
     top:            -999em;
 }
-ul#navigationMenu li li:hover li ul,
-ul#navigationMenu li li.sfHover li ul {
+ul.navigationMenu li li:hover li ul,
+ul.navigationMenu li li.sfHover li ul {
     top:            -999em;
 }
-ul#navigationMenu li li li:hover ul,
-ul#navigationMenu li li li.sfHover ul {
+ul.navigationMenu li li li:hover ul,
+ul.navigationMenu li li li.sfHover ul {
     left:           14em; /* match ul width */
     top:            0;
 }
 
-#navigationMenu a { 
+.navigationMenu a { 
     border-right: 1px solid #000000;
     font-size: 14.5px;
     font-weight: bold;
@@ -657,13 +663,13 @@ ul#navigationMenu li li li.sfHover ul {
     display: block;
 }
 
-#navigationMenu li.topLevel a {
+.navigationMenu li.topLevel a {
     border-bottom: medium none;
 }
 
 /* Size and Padding width of each Sub Navbar a Item*/
 
-#navigationMenu .subLevel a {
+.navigationMenu .subLevel a {
     border: medium none;
     font-size: 13px !important;
     font-weight: bold;
@@ -673,40 +679,40 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
  /* basic Cloring of Navbar Item Text */
-#navigationMenu a, #navigationMenu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+.navigationMenu a, .navigationMenu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
     color: #0c0c0c;
 }
 
-#navigationMenu li.topLevel {
+.navigationMenu li.topLevel {
     width: 10%; /* Ten Top Level Links */
 }
 /* Hide Vertical bar to left of first top level item */
-#navigationMenu  li.topLevel.firstItem {
+.navigationMenu  li.topLevel.firstItem {
 
 }
 /* Vertical bar to right of last top level item */
-#navigationMenu  li.topLevel.lastItem {
+.navigationMenu  li.topLevel.lastItem {
 
 }
 
-#navigationMenu li li a {
+.navigationMenu li li a {
  /*   margin: 0 0 0 5px; */
 }
-#navigationMenu li li {
+.navigationMenu li li {
     background: #ecb564; /* Background Color of flyout*/
     border-top:     1px solid #0c0c0c; /* Horizontal bar to on top of each sub level item */
 }
 
 /* Background Color of Top nav on Hover*/
 /* Color of Top nav text on Hover*/
-#navigationMenu li:hover, #navigationMenu li.sfHover, #navigationMenu a:focus, #navigationMenu a:hover, #navigationMenu a:active {
+.navigationMenu li:hover, .navigationMenu li.sfHover, .navigationMenu a:focus, .navigationMenu a:hover, .navigationMenu a:active {
     background: #ecb564;
     color: #a50000;
     outline: 0;
 }
 /* Background Color of Sub nav on Hover*/
 /* Color of Sub nav text on Hover*/
-#navigationMenu li li:hover, #navigationMenu li li.sfHover, #navigationMenu li li a:focus, #navigationMenu li li a:hover, #navigationMenu li li a:active {
+.navigationMenu li li:hover, .navigationMenu li li.sfHover, .navigationMenu li li a:focus, .navigationMenu li li a:hover, .navigationMenu li li a:active {
     background: #fff2de;
     color: #a50000;
     outline:0;
@@ -735,12 +741,15 @@ ul#navigationMenu li li li.sfHover ul {
     float: left;
     clear: both;
     width: 1066px;
+    padding: 0 0 10px 0;
     background: #ffffff;
 }
 
-.content-messages .errorImage, .content-messages .eventImage {
+.content-messages .errorImage,
+.content-messages .eventImage,
+.content-messages .infoMessageIcon {
     float: left;
-    margin: 10px;
+    margin: 10px 10px 0 10px;
     padding: 0.1em;
 }
 #setToZeroMessage{
@@ -761,8 +770,16 @@ ul#navigationMenu li li li.sfHover ul {
     border: 1px solid #000;
 }
 
+.eCommerceInfoMessage {
+    border: 1px solid #000;
+}
+
 .eCommerceSuccessMessage .eventImage {
     border: 1px solid #ccffcc;
+}
+
+.eCommerceInfoMessage {
+    border: 1px solid #ff9900;
 }
 
 .errorHeading, .eventHeading {
@@ -772,15 +789,17 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
 .errorMessage, .eventMessage {
-    padding: 0 0 0 2.5em
+
 }
 .fieldErrorMessage {
     font-size: 13px;
     color: #c00000;
 }
-.eCommerceErrorMessage p, .eCommerceSuccessMessage p {
-    margin: 10px 0 0 10px;
+.eCommerceErrorMessage p,
+.eCommerceSuccessMessage p,
+.eCommerceInfoMessage p {
     font-size: 13px;
+    margin: 10px 0 0 40px;
 }
 
 /****************************************************************
@@ -806,9 +825,12 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
 .displayBox .header, .displaySearchBox .header , .displayListBox .header {
-    background: #bf7400;
+    background: none repeat scroll 0 0 #BF7400;
     border-bottom: 1px solid #000000;
+    float: left;
     padding: 4px 0;
+    width: 100%;
+   
 
 }
 .displayBox .header {
@@ -819,6 +841,7 @@ ul#navigationMenu li li li.sfHover ul {
     text-align: left;
 }
 .displaySearchBox .header h2 , .displayListBox .header h2  , .displayBox .header h2 {
+    float: left;
     margin: 0 0 0 10px;
 }
 
@@ -855,9 +878,11 @@ ul#navigationMenu li li li.sfHover ul {
 .displayBox .boxBody,
 .displaySearchBox .boxBody,
 .displayListBox .boxBody {
-    background: none repeat scroll 0 0 #FEEACA; 
+    background: none repeat scroll 0 0 #FEEACA;
     clear: left;
+    float: left;
     font-size: 13px;
+    width: 100%;
 }
 
 .displayBox .boxBody,
@@ -1007,6 +1032,7 @@ categoryDetail:after {
     min-height: 25px; /* Set the same as infoRow for row uniformity */
     position: relative;   /*  so icons with can use absolute positioning  */
     width: 100%;
+    *float: none; /* IE7 Only */
 }
 
 .entryRow label, .entryRow div.entry, .entryRow div.entryInput {
@@ -1066,9 +1092,21 @@ categoryDetail:after {
 }
 
 .entryRow .entry.daterange {
-    width: 450px;
- /*   margin: 0 0 0 5px;  */
+    width: 445px;
+    /*width: 380px;*/
 }
+
+.periodBox .entryRow .entry.daterange {
+    *width: 400px; /* IE7 Only */
+}
+
+#scheduledJob .entryRow .entry.daterange,
+#custRequestList .entryRow .entry.daterange,
+#abandonedCartAnalysis .entryRow .entry.daterange,
+#orderManagement .entryRow .entry.daterange {
+    *width: 500px!important; /* IE7 Only */
+}
+
 .entryRow label{
     width: 130px;
 }
@@ -1138,6 +1176,7 @@ div.searchButton {
     background: #feeaca;
     min-height: 25px; /* Accommodates Icons and Input Fields */ 
     min-height: 25px\9;  /* IE9 */
+    /* *float: none; IE7 Only */
 }
 
 .infoRow.column {
@@ -1181,8 +1220,9 @@ float: left;
 }
 
 .infoRow div.infoValue {
+    color: #A50000;
     font-weight: normal;
-    color: #a50000;
+    min-height: 25px;  /* Need for empty DIVs and multiple infoValues in one infoRow */
     text-align: justify;
 }
 
@@ -1607,7 +1647,7 @@ float: left;
 
 }
 .periodBox .entryButtons input {
-    margin: 0 0 0 -75px;
+    margin: -3px 0 0 0;
 }
 
 .periodBox .entryButtons {
@@ -1849,7 +1889,7 @@ float: left;
 }
 
 #orderManagementOrderDetail .displayBox.paymentInfo div.infoValue p {
-    float: none;
+    float: left;
 }
 
 
@@ -1869,6 +1909,10 @@ float: left;
 }
 #orderManagementOrderDetail .displayBox.generalInfo .infoRow.firstRow {
     /*padding: 0.5em 0 0 0; */
+}
+
+#orderManagementOrderDetail .displayBox.generalInfo .infoRow div.infoValue p {
+    float: left;
 }
 /****************************************************************
 * Order Detail : Customer Information
@@ -1915,6 +1959,15 @@ div.totalOrdersBox{
 input[type="text"].promoCodeEntry {
     width: 100px;
 }
+
+.infoRow.promoConditionProduct {
+    padding: 10px 0 0;
+}
+
+.infoRow.promoActionProduct {
+    padding: 10px 0 0;
+}
+
 
 /****************************************************************
 * Product Reviews
@@ -2980,11 +3033,19 @@ a.standardBtn.adminCartIcon:hover {
     background-image: url("/osafe_admin_theme/images/classic/icon/shipmentDetailIcon.gif");
     background-repeat: no-repeat;
     display: block;
-    float: right;
+    float: left;
     height: 16px;
     margin: 0 0 0 5px;
     position: relative;
     width: 16px;
+}
+
+.eCommerceInfoMessage .infoMessageIcon {
+    background-image: url("/osafe_admin_theme/images/classic/icon/infoMessageIcon.png");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 15px;
+    width: 15px;
 }
 
 
@@ -3007,8 +3068,9 @@ a.standardBtn.adminCartIcon:hover {
     width: 100%;
 }
 .entryButton {
+    clear: left;
     float: left;
-    padding: .5em 0 .5em 10px;
+    padding: 0.5em 0 0.5em 10px;
 }
 
 .displayBox.footerInfo .entryButton {
@@ -3051,8 +3113,10 @@ table#sortTable tfoot tr {
     
 }
 .productLoaderTab {
-    margin: 0.5em;
-    padding: 10px 0 0 0;
+    float: left;
+    margin: 10px 0 0;
+    text-align: center;
+    width: 100%;
 }
 
 .displayBox.detailInfo.productLoaderData {
@@ -3070,26 +3134,31 @@ table#sortTable tfoot tr {
     font-weight: bold;
     padding: 2px 0 2px 10px;
 }
-input[type="button"].standardBtn.productLoaderTab.errorMark {
+.productLoaderTab input[type="button"].standardBtn.errorMark {
     background-image: url(/osafe_admin_theme/images/classic/icon/errorMark.jpg);
     background-repeat:no-repeat;
     background-position: 10px center;
-    padding-left: 15px; /* added to original .standardBtn styles */
+    padding-left: 30px; /* added to original .standardBtn styles */
 }
-input[type="button"].standardBtn.productLoaderTab.warningMark {
+.productLoaderTab input[type="button"].standardBtn.warningMark {
     background-image: url(/osafe_admin_theme/images/classic/icon/warningMark.jpg);
     background-repeat:no-repeat;
     background-position: 10px center;
-    padding-left: 15px;  /* added to original .standardBtn styles */
+    padding-left: 30px; /* added to original .standardBtn styles */
 }
-input[type="button"].standardBtn.productLoaderTab {
+.productLoaderTab input[type="button"].standardBtn {
     background: none repeat scroll 0 0 #FFF2DE;
     border: 1px solid black;
     color: #A50000;
     font-weight: normal;
     margin: 0 0 0 10px;
-    min-width: 115px;
     padding: 9px 5px;
+    display: inline-block;
+    *overflow: visible!important; /* IE7 Only */
+}
+
+.productLoaderTab input[type="button"].standardBtn:hover {
+   text-decoration: underline;
 }
 
 #rowOrderCount{
@@ -4412,6 +4481,10 @@ a.standardBtn.contextIcon {
    float: left; 
 }
 
+#productReviewArea {
+   margin: 0 0 10px 0;
+}
+
 
 /* Admin Checkout */ 
 
@@ -4436,7 +4509,7 @@ a.standardBtn.contextIcon {
 }
 
 .displayBox.paymentOption .entry.checkbox.medium {
-    margin: 0 0 10px 0;
+    margin: 0 0 5px 0;
 }
 
 /* Customers */
@@ -4488,4 +4561,27 @@ h2 span.addIcon {
 
 #productCategoryFetureDetail table.osafe td.radioCol {
     width: 650px;
+}
+
+/* Order Detail */
+
+.orderStatusChangeDiv {
+    float: left;
+    position: relative;
+    top: -3px;
+}
+
+/* All Stores */
+
+.productStoreEntry,
+.productStoreInfo {
+    color: #FFFFFF;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 10px 0 0;
+}
+
+.productStoreEntry #productStoreall {
+
 }

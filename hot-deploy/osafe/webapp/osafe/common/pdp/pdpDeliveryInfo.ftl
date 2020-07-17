@@ -2,7 +2,7 @@
   <div class="pdpDeliveryInfo">
        <div class="displayBox">
          <h3>${uiLabelMap.PDPDeliveryInfoHeading}</h3>
-        <p><@renderContentAsText contentId="${DELIVERY_INFO}" ignoreTemplate="true"/></p>
+         <p><@renderContentAsText contentId="${DELIVERY_INFO}" ignoreTemplate="true"/></p>
        </div>
   </div>
 </#if>

@@ -1,5 +1,3 @@
-<#assign shoppingCart = sessionAttributes.shoppingCart?if_exists>
-<#assign shoppingCartItems = shoppingCart.items() />
 <#if (orderItems?has_content && orderItems.size() > 0)>
  <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
  <div class="checkoutOrderItems">
@@ -17,31 +15,45 @@
             <div id="orderItemsWrap">
         <table id="cart_display" summary="CurrentOrder_TABLE_SUMMARY">
             <thead>
-                <tr class="cart_headers"><th class="firstCol lastCol" colspan="<#if (useAvailability?has_content) && useAvailability == "Y" >7<#else>6</#if>"><span class="headerCaption">${uiLabelMap.OrderDetailsHeading}</span></th></tr>
+                <#if (showStatusDetails?has_content && showStatusDetails == "Y") >
+                    <tr class="cart_headers"><th class="firstCol lastCol" colspan="<#if (useAvailability?has_content) && useAvailability == "Y" >11<#else>10</#if>"><span class="headerCaption">${uiLabelMap.OrderDetailsHeading}</span></th></tr>
+                <#else> 
+                    <tr class="cart_headers"><th class="firstCol lastCol" colspan="<#if (useAvailability?has_content) && useAvailability == "Y" >6<#else>5</#if>"><span class="headerCaption">${uiLabelMap.OrderDetailsHeading}</span></th></tr>
+                </#if>
                 <tr class="cart_headers">
-                    <th class="product firstCol" scope="col" colspan="2">${uiLabelMap.ProductLabel}</th>
-                    <th class="quantity" scope="col">${uiLabelMap.QuantityLabel}</th>
+                  <th class="product firstCol" scope="col" colspan="2">${uiLabelMap.ProductLabel}</th>
+                    <#if (showStatusDetails?has_content && showStatusDetails == "Y") > 
+                        <th class="statusCol" scope="col">${uiLabelMap.StatusLabel}</th>
+                        <th class="shipDateCol" scope="col">${uiLabelMap.ShippingDateLabel}</th>
+                        <th class="carrierCol" scope="col">${uiLabelMap.CarrierLabel}</th>
+                        <th class="trackingIdCol" scope="col">${uiLabelMap.TrackingIdLabel}</th>
+                    </#if>
+                  <th class="quantity" scope="col">${uiLabelMap.QuantityLabel}</th>
                     <#if (useAvailability?has_content) && useAvailability == "Y" >
                         <th class="availability" scope="col">${uiLabelMap.AvailabilityLabel}</th>
                     </#if>
-                    <th class="priceCol numberCol" scope="col">${uiLabelMap.PriceLabel}</th>
+                  <th class="priceCol numberCol" scope="col">${uiLabelMap.PriceLabel}</th>
                     <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >
                         <th class="priceCol numberCol" scope="col">${uiLabelMap.OfferPriceLabel}</th>
                     </#if>
-                    <th class="total numberCol lastCol" scope="col">${uiLabelMap.TotalLabel}</th>
+                  <th class="total numberCol lastCol" scope="col">${uiLabelMap.TotalLabel}</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
+                  <#if (showStatusDetails?has_content && showStatusDetails == "Y") >
+                    <td id="summaryCell" <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >colspan="11"<#else>colspan="10"</#if>>
+                  <#else> 
                     <td id="summaryCell" <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y" >colspan="7"<#else>colspan="6"</#if>>
+                  </#if>
                         <table class="summary">
                             <tr>
                               <th class="caption"><label>${uiLabelMap.SubTotalLabel}</label></th>
-                              <td class="value numberCol"><@ofbizCurrency amount=orderSubTotal rounding=2 isoCode=currencyUom/></td>
+                              <td class="value numberCol"><@ofbizCurrency amount=orderSubTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
                             </tr>
                             <#-- Shipping Method -->
-                            <#-- This section is for when we are on order status otherwsie shipping method will be on the shopping cart -->
-                            <#if orderItemShipGroups?has_content>
+                            <#if shippingApplies?exists && shippingApplies>
+                              <#if orderItemShipGroups?has_content>
                                 <#list orderItemShipGroups as shipGroup>
                                   <#if orderHeader?has_content>
                                     <#assign orderAttrPickupStoreList = orderHeader.getRelatedByAnd("OrderAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName", "STORE_LOCATION")) />
@@ -50,35 +62,28 @@
                                       <#assign selectedStoreId = (orderAttrPickupStore.attrValue)?if_exists />
                                     </#if>
                                     <#if !selectedStoreId?has_content >
-                                        <#assign shipmentMethodType = shipGroup.getRelatedOneCache("ShipmentMethodType")?if_exists>
-                                        <#assign carrierPartyId = shipGroup.carrierPartyId?if_exists>
-                                        <#if shipmentMethodType?has_content>
-                                            <#assign carrier =  delegator.findByPrimaryKeyCache("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
-                                            <#if carrier?has_content >
-                                              <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shipmentMethodType.description >
-                                            </#if>
+                                      <#assign shipmentMethodType = shipGroup.getRelatedOneCache("ShipmentMethodType")?if_exists>
+                                      <#assign carrierPartyId = shipGroup.carrierPartyId?if_exists>
+                                      <#if shipmentMethodType?has_content>
+                                        <#assign carrier =  delegator.findByPrimaryKeyCache("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
+                                        <#if carrier?has_content >
+                                          <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shipmentMethodType.description >
                                         </#if>
-                                    </#if>
-                                  <#elseif shoppingCartItems?has_content && (shoppingCartItems.size() &gt; 0)>
-                                    <#assign selectedStoreId = shoppingCart.getOrderAttribute("STORE_LOCATION")?if_exists />
-                                    <#if !selectedStoreId?has_content && shoppingCart.getShipmentMethodTypeId()?has_content && shoppingCart.getCarrierPartyId()?has_content>
-                                      <#assign carrier =  delegator.findByPrimaryKeyCache("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shoppingCart.getCarrierPartyId()))?if_exists />
-                                      <#if carrier?has_content >
-                                        <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shoppingCart.getShipmentMethodType(0).description />
                                       </#if>
                                     </#if>
                                   </#if>
                                 </#list><#-- end list of orderItemShipGroups -->
+                              </#if>
+                              <tr>
+                                <th class="caption"><label>${uiLabelMap.ShippingMethodLabel}</label></th>
+                                <td class="shippingMethod"><#if selectedStoreId?has_content>${uiLabelMap.StorePickupCaption} <#else> ${chosenShippingMethodDescription!""}</#if>
+                                </td>
+                              </tr>
+                              <tr>
+                                <th class="caption"><label>${uiLabelMap.ShippingAndHandlingLabel}</label></th>
+                                <td class="value numberCol"><@ofbizCurrency amount=orderShippingTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
+                              </tr>
                             </#if>
-                            <tr>
-                              <th class="caption"><label>${uiLabelMap.ShippingMethodLabel}</label></th>
-                              <td class="shippingMethod"><#if selectedStoreId?has_content>${uiLabelMap.StorePickupCaption} <#else> ${chosenShippingMethodDescription!""}</#if>
-                              </td>
-                            </tr>
-                            <tr>
-                              <th class="caption"><label>${uiLabelMap.ShippingAndHandlingLabel}</label></th>
-                              <td class="value numberCol"><@ofbizCurrency amount=orderShippingTotal rounding=2 isoCode=currencyUom/></td>
-                            </tr>
                             <#list headerAdjustmentsToShow as orderHeaderAdjustment>
                                       <#assign adjustmentType = orderHeaderAdjustment.getRelatedOneCache("OrderAdjustmentType")>
                                       <#assign productPromo = orderHeaderAdjustment.getRelatedOneCache("ProductPromo")!"">
@@ -86,11 +91,7 @@
                                       <#if productPromo?has_content>
                                          <#assign promoText = productPromo.promoText?if_exists/>
                                          <#assign productPromoCode = productPromo.getRelatedCache("ProductPromoCode")>
-                                         <#if shoppingCartItems?has_content && (shoppingCartItems.size() &gt; 0)>
-                                           <#assign promoCodesEntered = shoppingCart.getProductPromoCodesEntered()!"">
-                                         <#else>
-                                           <#assign promoCodesEntered = localOrderReadHelper.getProductPromoCodesEntered()!""/>
-                                         </#if>
+                                         <#assign promoCodesEntered = localOrderReadHelper.getProductPromoCodesEntered()!""/>
                                          <#if promoCodesEntered?has_content>
                                             <#list promoCodesEntered as promoCodeEntered>
                                               <#if productPromoCode?has_content>
@@ -109,13 +110,13 @@
                                       </#if>
                               <tr>
                                 <th class="caption"><label><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText})</#if><#else>${adjustmentType.get("description",locale)?if_exists}</#if></label></th>
-                                <td class="value numberCol"><@ofbizCurrency amount=localOrderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) rounding=2 isoCode=currencyUom/></td>
+                                <td class="value numberCol"><@ofbizCurrency amount=localOrderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
                               </tr>
                             </#list>
                             <#if (!Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO")) || (orderTaxTotal?has_content && (orderTaxTotal &gt; 0))>
                                 <tr>
                                   <th class="caption"><label>${uiLabelMap.SalesTaxLabel}</label></th>
-                                  <td class="value numberCol"><@ofbizCurrency amount=orderTaxTotal rounding=2 isoCode=currencyUom/></td>
+                                  <td class="value numberCol"><@ofbizCurrency amount=orderTaxTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
                                 </tr>
                             </#if>
                             <tr>
@@ -126,12 +127,12 @@
 	                  			<#if promoText?has_content>
 									<th class="caption"><label>${uiLabelMap.AdjustedTotalLabel}</label></th>
 		                            <td class="total numberCol">
-		                                <div class="adjustedTotalLabel"><@ofbizCurrency amount=orderGrandTotal rounding=2 isoCode=currencyUom/></div>
+		                                <div class="adjustedTotalLabel"><@ofbizCurrency amount=orderGrandTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></div>
 		                            </td>
 								<#else>
 									<th class="caption"><label>${uiLabelMap.TotalLabel}</label></th>
 	                              	<td class="total numberCol">
-	                                	<div class="adjustedTotalValue"><@ofbizCurrency amount=orderGrandTotal rounding=2 isoCode=currencyUom/></div>
+	                                	<div class="adjustedTotalValue"><@ofbizCurrency amount=orderGrandTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></div>
 	                              	</td>
 	                  			</#if>
                             </tr>
@@ -140,12 +141,57 @@
                </tr>
             </tfoot>
             <tbody>
-    
             <#list orderItems as orderItem>
               <#assign product = orderItem.getRelatedOneCache("Product")?if_exists/>
               <#assign urlProductId = product.productId>
               <#assign productCategoryId = product.primaryProductCategoryId!""/>
               <#assign productCategoryId = orderItem.productCategoryId!""/>
+              <#assign trackingURL = "">
+              <#assign trackingNumber = "">
+              <#if orderItem.orderId?exists && orderItem.orderId?has_content >
+              	<#assign shipGroupAssoc = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(delegator.findByAndCache("OrderItemShipGroupAssoc", {"orderId": orderItem.orderId, "orderItemSeqId": orderItem.orderItemSeqId}))/>
+              	<#if shipGroupAssoc?has_content>
+                  <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(delegator.findByAndCache("OrderItemShipGroup", {"orderId": orderItem.orderId, "shipGroupSeqId": shipGroupAssoc.shipGroupSeqId}))/>
+                  <#if shipGroup?has_content>
+                      <#assign shipDate = ""/>
+                      <#assign orderHeader = delegator.findByPrimaryKeyCache("OrderHeader", {"orderId": orderItem.orderId})/>
+                      <#if orderHeader?has_content && (orderHeader.statusId == "ORDER_COMPLETED" || orderItem.statusId == "ITEM_COMPLETED") >
+                          <#assign shipDate = shipGroup.estimatedShipDate!""/>
+                          <#if shipDate?has_content>
+                              <#assign shipDate = shipDate?string(preferredDateFormat)!""/>
+                          </#if>
+                      </#if>
+                      <#assign trackingNumber = shipGroup.trackingNumber!""/>
+                      <#assign findCarrierShipmentMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", shipGroup.shipmentMethodTypeId, "partyId", shipGroup.carrierPartyId,"roleTypeId" ,"CARRIER")>
+                      <#assign carrierShipmentMethod = delegator.findByPrimaryKeyCache("CarrierShipmentMethod", findCarrierShipmentMethodMap)>
+                      <#assign shipmentMethodType = carrierShipmentMethod.getRelatedOneCache("ShipmentMethodType")/>
+                      <#assign description = shipmentMethodType.description!""/>
+                      <#assign carrierPartyGroupName = ""/>
+                      <#if shipGroup.carrierPartyId != "_NA_">
+                          <#assign carrierParty = carrierShipmentMethod.getRelatedOneCache("Party")/>
+                          <#assign carrierPartyGroup = carrierParty.getRelatedOneCache("PartyGroup")/>
+                          <#assign carrierPartyGroupName = carrierPartyGroup.groupName/>
+                          <#assign trackingURLPartyContents = delegator.findByAndCache("PartyContent", {"partyId": shipGroup.carrierPartyId, "partyContentTypeId": "TRACKING_URL"})/>
+                          <#if trackingURLPartyContents?has_content>
+                              <#assign trackingURLPartyContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(trackingURLPartyContents)/>
+                              <#if trackingURLPartyContent?has_content>
+                                  <#assign content = trackingURLPartyContent.getRelatedOneCache("Content")/>
+                                  <#if content?has_content>
+                                      <#assign dataResource = content.getRelatedOneCache("DataResource")!""/>
+                                      <#if dataResource?has_content>
+                                          <#assign electronicText = dataResource.getRelatedOneCache("ElectronicText")!""/>
+                                          <#assign trackingURL = electronicText.textData!""/>
+                                          <#if trackingURL?has_content>
+                                              <#assign trackingURL = Static["org.ofbiz.base.util.string.FlexibleStringExpander"].expandString(trackingURL, {"TRACKING_NUMBER":trackingNumber})/>
+                                          </#if>
+                                      </#if>
+                                  </#if>
+                              </#if>
+                          </#if>
+                      </#if>
+                  </#if>
+              	</#if>
+              </#if>
               <#if !productCategoryId?has_content>
                   <#assign currentProductCategories = Static["org.ofbiz.product.product.ProductWorker"].getCurrentProductCategories(product)![]>
                   <#if currentProductCategories?has_content>
@@ -224,6 +270,15 @@
                             </#if>
                         </dl>
                     </td>
+                    <#if (showStatusDetails?has_content && showStatusDetails == "Y") >
+                        <#if orderHeader?has_content>
+                            <#assign status = orderHeader.getRelatedOneCache("StatusItem") />
+                            <td class="statusCol <#if !orderItem_has_next>lastRow</#if>">${status.get("description",locale)}</td>
+                        </#if>
+                        <td class="shipDateCol <#if !orderItem_has_next>lastRow</#if>">${shipDate!}</td>
+                        <td class="carrierCol <#if !orderItem_has_next>lastRow</#if>">${carrierPartyGroupName!} ${description!}</td>                    
+                        <td class="trackingIdCol <#if !orderItem_has_next>lastRow</#if>"><#if trackingURL?has_content><a href="JavaScript:newPopupWindow('${trackingURL!""}');">${trackingNumber!}</a><#else>${trackingNumber!}</#if></td>
+                    </#if>
                     <td class="quantity <#if !orderItem_has_next>lastRow</#if>">
                         ${orderItem.quantity?string.number}
                     </td>
@@ -238,7 +293,7 @@
                             <div id="priceelement">
                                 <ul>
                                     <li>
-                                        <span class="price"><@ofbizCurrency amount=displayPrice rounding=2 isoCode=currencyUom/></span>
+                                        <span class="price"><@ofbizCurrency amount=displayPrice rounding=globalContext.currencyRounding isoCode=currencyUom/></span>
                                     </li>
                                 </ul>
                             </div>
@@ -255,7 +310,7 @@
                                         <li>
                                             <span class="price">
                                             <#if offerPrice?exists && offerPrice?has_content>
-                                                <@ofbizCurrency amount=offerPrice rounding=2 isoCode=currencyUom/>
+                                                <@ofbizCurrency amount=offerPrice rounding=globalContext.currencyRounding isoCode=currencyUom/>
                                             </#if>
                                             </span>
                                         </li>
@@ -269,7 +324,7 @@
                     <td class="total numberCol lastCol <#if !orderItem_has_next>lastRow</#if>">
                         <ul>
                             <li>
-                                <span class="price"><@ofbizCurrency amount=localOrderReadHelper.getOrderItemSubTotal(orderItem,localOrderReadHelper.getAdjustments()) rounding=2 isoCode=currencyUom/></span>
+                                <span class="price"><@ofbizCurrency amount=localOrderReadHelper.getOrderItemSubTotal(orderItem,localOrderReadHelper.getAdjustments()) rounding=globalContext.currencyRounding isoCode=currencyUom/></span>
                             </li>
                         </ul>
                     </td>

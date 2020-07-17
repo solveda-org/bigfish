@@ -2,6 +2,7 @@ import org.ofbiz.base.util.UtilValidate;
 import javolution.util.FastMap;
 import javolution.util.FastList;
 import java.lang.*;
+import org.ofbiz.entity.GenericValue;
 
 personTitleList = delegator.findByAndCache("Enumeration", [enumTypeId : "PERSONAL_TITLE"], ["sequenceId"]);
 if(UtilValidate.isNotEmpty(personTitleList))

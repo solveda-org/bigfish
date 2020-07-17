@@ -110,7 +110,7 @@
         
         <set field="parameters.partyId" from-field="parameters.userLoginId"/>
         <set field="parameters.statusId" value="PARTY_ENABLED"/>
-        <set field="parameters.roleTypeId" value="_NA_"/>
+        <set field="parameters.roleTypeId" value="CONTENT_USER"/>
         
         <now-timestamp field="nowTimestamp"/>
         <set field="parameters.fromDate" from-field="nowTimestamp"/>
@@ -118,7 +118,7 @@
 
         <check-errors/>
       
-        <!-- create record in entities: Party, PartyRole, UserLogin, UserLoginSecurityGroup -->  
+        <!-- create record in entities: Party, PartyRole, UserLogin, UserLoginSecurityGroup, ProductStoreRole -->  
 	    <make-value value-field="createPartyEntity" entity-name="Party"/>
 	    <set-pk-fields map="parameters" value-field="createPartyEntity"/>
 	    <set-nonpk-fields map="parameters" value-field="createPartyEntity"/>
@@ -137,8 +137,13 @@
 	    <set-pk-fields map="parameters" value-field="createUserLoginSecurityGroupEntity"/>
 	    <set-nonpk-fields map="parameters" value-field="createUserLoginSecurityGroupEntity"/>
 	    <create-value value-field="createUserLoginSecurityGroupEntity"/>
-        
-        
+	    
+	    <make-value entity-name="ProductStoreRole" value-field="productStoreRole"/>
+        <set field="productStoreRole.partyId" from-field="parameters.partyId"/>
+        <set field="productStoreRole.roleTypeId" value="CONTENT_USER"/>
+        <set field="productStoreRole.productStoreId" from-field="parameters.productStoreId"/>
+        <now-timestamp field="productStoreRole.fromDate"/>  
+        <create-value value-field="productStoreRole"/>
 	    
 	    <if-not-empty field="createPartyEntity">
 	    	<if-not-empty field="createPartyRoleEntity">

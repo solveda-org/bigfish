@@ -28,6 +28,7 @@ under the License.
 
     <available file="applications/build.xml" property="applications.present"/>
     <available file="specialpurpose/build.xml" property="specialpurpose.present"/>
+	<dirname property="ofbiz.home.dir" file="${ant.file.Ant - Macros}"/>
 
     <!-- ================================================================== -->
     <!-- Initialization of all property settings                            -->
@@ -36,6 +37,20 @@ under the License.
     <target name="ofbiz-init">
         <property environment="env"/>
     </target>
+    
+    <!-- ================================================================== -->
+    <!-- Minifies all JS and CSS files                            -->
+    <!-- ================================================================== -->
+    
+	<target name="run-bigfish-compression">
+        <subant target="run-bigfish-compression" inheritall="false">
+            <fileset dir="${basedir}/hot-deploy" casesensitive="no">
+                <exclude name="disabled/**"/>
+                <include name="*/build.xml"/>
+            </fileset>
+        </subant>
+    </target>
+    
 
     <!-- ================================================================== -->
     <!-- Removes all created files and directories                          -->
@@ -326,7 +341,7 @@ under the License.
         </java>
     </target>
     <target name="run-deployement" depends="build" 
-    	    description="This will start OFBiz">
+            description="This will start OFBiz">
         <java jar="ofbiz.jar" fork="true">
             <jvmarg value="${memory.initial.param}"/>
             <jvmarg value="${pos.memory.max.param}"/>

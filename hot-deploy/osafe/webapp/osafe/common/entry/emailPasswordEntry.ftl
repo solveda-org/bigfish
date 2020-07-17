@@ -1,6 +1,7 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#assign partyDBAllowSolicit=allowSolicitation!""/>
 <#assign partyDBEmailPref=partyEmailPreference!""/>
+<#assign partyDBTextPref=partyTextPreference!""/>
 <div id="emailPasswordEntry" class="displayBox">
 <h3>${uiLabelMap.EmailAddressHeading}</h3>
   <fieldset class="col">
@@ -78,12 +79,34 @@
         </#if>
       </#if>
       <div class="entry">
-        <label>&nbsp;</label>
+        <label for="PARTY_EMAIL_PREFERENCE">${uiLabelMap.EmailMessageNotificationsCaption}</label>
         <input type="radio" id="PARTY_EMAIL_HTML" name="PARTY_EMAIL_PREFERENCE" value="HTML" ${partyEmailPreferenceHtml!""}/><span class="radioOptionText">${uiLabelMap.RegistrationEmailPreferenceHtmlLabel}</span>
       </div>
       <div class="entry">
         <label>&nbsp;</label>
         <input type="radio" id="PARTY_EMAIL_TEXT" name="PARTY_EMAIL_PREFERENCE" value="TEXT" ${partyEmailPreferenceText!""}/><span class="radioOptionText">${uiLabelMap.RegistrationEmailPreferenceTextLabel}</span>
       </div>
+      
+      <#assign txtMessageMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"TXT_MESSAGE_METHOD ")!""/>
+	  <#if txtMessageMethod?has_content && (txtMessageMethod.toUpperCase() != "NONE") >
+        <#assign partyTextPref=parameters.PARTY_TEXT_PREFERENCE!partyDBTextPref!""/>
+        <#assign partyTextPreferenceYes=""/>
+        <#assign partyTextPreferenceNo="checked"/>
+        <#if partyTextPref?has_content>
+          <#if partyTextPref == "Y">
+            <#assign partyTextPreferenceNo=""/>
+            <#assign partyTextPreferenceYes="checked"/>
+          <#else>
+             <#assign partyTextPreferenceYes=""/>
+             <#assign partyTextPreferenceNo="checked"/>
+          </#if>
+        </#if>
+        <div class="entry">
+          <label for="PARTY_TEXT_PREFERENCE">${uiLabelMap.TextMessageNotificationsCaption}</label>
+          <input type="radio" id="PARTY_TEXT_YES" name="PARTY_TEXT_PREFERENCE" value="Y" ${partyTextPreferenceYes!""}/><span class="radioOptionText">${uiLabelMap.RegistrationTextPreferenceYesLabel}</span>
+          <br/>
+          <input type="radio" id="PARTY_TEXT_NO" name="PARTY_TEXT_PREFERENCE" value="N" ${partyTextPreferenceNo!""}/><span class="radioOptionText">${uiLabelMap.RegistrationTextPreferenceNoLabel}</span>
+        </div>
+      </#if>
   </fieldset>
 </div>

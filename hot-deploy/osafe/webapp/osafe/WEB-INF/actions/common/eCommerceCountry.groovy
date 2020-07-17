@@ -20,23 +20,26 @@ if (UtilValidate.isNotEmpty(defaultCountry))
 
 if (Util.isProductStoreParmTrue(request,"COUNTRY_MULTI")) 
  {
-    if(countryDropDown.equals("All")) 
-      {
-          countryList = CommonWorkers.getCountryList(delegator);
-      }
-    else
-    {
-	  countryGeoCodeList = StringUtil.split(countryDropDown,",")
-	  for (List geoId: countryGeoCodeList) 
-	   {
-          countryGeoId = geoId;
-          countryGeoMap = Util.getCountryGeoInfo(delegator, countryGeoId.trim());
-          if(UtilValidate.isNotEmpty(countryGeoMap))
-          {
-            countryList.add(countryGeoMap);
-          }
-	   }
-     }
+	if (UtilValidate.isNotEmpty(countryDropDown))
+	{
+	    if (countryDropDown.equalsIgnoreCase("All")) 
+	      {
+	          countryList = CommonWorkers.getCountryList(delegator);
+	      }
+	    else
+	    {
+		  countryGeoCodeList = StringUtil.split(countryDropDown,",")
+		  for (List geoId: countryGeoCodeList) 
+		   {
+	          countryGeoId = geoId;
+	          countryGeoMap = Util.getCountryGeoInfo(delegator, countryGeoId.trim());
+	          if(UtilValidate.isNotEmpty(countryGeoMap))
+	          {
+	            countryList.add(countryGeoMap);
+	          }
+		   }
+	     }
+	}
  }
 
 if (UtilValidate.isEmpty(countryList))

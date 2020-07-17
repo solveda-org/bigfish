@@ -106,6 +106,8 @@ under the License.
       <#assign partyWorkPhoneExt = ''/>
      <#assign placingParty = orderReadHelper.getPlacingParty()/>
      <#if placingParty?has_content>
+
+         <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", placingParty.partyId, "lastNameFirst","Y", "compareDate", orderHeader.orderDate, "userLogin", userLogin))/>
          <#assign partyContactMechPurpose = placingParty.getRelated("PartyContactMechPurpose")/>
          <#assign partyContactMechPurpose = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyContactMechPurpose,true)/>
 
@@ -460,6 +462,15 @@ under the License.
                    </fo:table-cell>
                   </fo:table-row>
                   
+                  <fo:table-row height="20px">
+                   <fo:table-cell text-align="start" >
+                     <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CustomerNameCaption}</fo:block>
+                   </fo:table-cell>
+                   <fo:table-cell text-align="start">
+                     <fo:block font-size="8pt" start-indent="10pt">${displayPartyNameResult.fullName?default("[${uiLabelMap.PartyNameNotFoundInfo}]")}</fo:block>
+                   </fo:table-cell>
+                  </fo:table-row>
+
                   <fo:table-row>
                    <fo:table-cell number-columns-spanned="2">
                      <fo:block font-weight="bold" font-size="10pt" text-align="center"></fo:block>
@@ -742,7 +753,7 @@ under the License.
                         <fo:table-cell>
                            <fo:block font-size="7pt">
                             <#list orderPayments as orderPaymentPreference>
-                                <fo:block start-indent="10pt"><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) isoCode=globalContext.defaultCurrencyUomId/></fo:block>
+                                <fo:block start-indent="10pt"><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId/></fo:block>
                             </#list>
                            </fo:block>
                         </fo:table-cell>
@@ -997,16 +1008,16 @@ under the License.
                             <fo:block>${remainingQuantity}</fo:block>
                         </fo:table-cell>
                         <fo:table-cell >
-                            <fo:block><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></fo:block>
+                            <fo:block><@ofbizCurrency amount=orderItem.unitPrice rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                         </fo:table-cell>
                         <fo:table-cell >
-                            <fo:block><#if (itemPromoAdjustment < 0)><@ofbizCurrency amount=offerPrice isoCode=currencyUomId/></#if></fo:block>
+                            <fo:block><#if (itemPromoAdjustment < 0)><@ofbizCurrency amount=offerPrice rounding=globalContext.currencyRounding isoCode=currencyUomId/></#if></fo:block>
                         </fo:table-cell>
                         <fo:table-cell >
-                            <fo:block><@ofbizCurrency amount=itemAdjustment isoCode=currencyUomId/></fo:block>
+                            <fo:block><@ofbizCurrency amount=itemAdjustment rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                         </fo:table-cell>
                         <fo:table-cell>
-                            <fo:block><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].getOrderItemSubTotal(orderItem, orderAdjustments) isoCode=currencyUomId/></fo:block>
+                            <fo:block><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].getOrderItemSubTotal(orderItem, orderAdjustments) rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                         </fo:table-cell>
                     </fo:table-row>
                     <#if itemAdjustment != 0>
@@ -1014,7 +1025,7 @@ under the License.
                             <fo:table-cell>
                                 <fo:block >
                                     <fo:inline font-style="italic">${uiLabelMap.AdjustmentsCaption}</fo:inline>
-                                    <@ofbizCurrency amount=itemAdjustment isoCode=currencyUomId/>
+                                    <@ofbizCurrency amount=itemAdjustment rounding=globalContext.currencyRounding isoCode=currencyUomId/>
                                 </fo:block>
                             </fo:table-cell>
                         </fo:table-row>
@@ -1042,7 +1053,7 @@ under the License.
                         <fo:block text-align="right">${uiLabelMap.SubtotalCaption}</fo:block>
                     </fo:table-cell>
                     <fo:table-cell>
-                        <fo:block text-align="right"><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId/></fo:block>
+                        <fo:block text-align="right"><@ofbizCurrency amount=orderSubTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                     </fo:table-cell>
                   </fo:table-row>
                   <#list headerAdjustmentsToShow as orderHeaderAdjustment>
@@ -1074,7 +1085,7 @@ under the License.
                                 <fo:block text-align="right"><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText})</#if><#else>${adjustmentType.get("description",locale)?if_exists}</#if>:</fo:block>
                             </fo:table-cell>
                             <fo:table-cell>
-                                <fo:block text-align="right"><@ofbizCurrency amount=orderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) isoCode=currencyUomId/></fo:block>
+                                <fo:block text-align="right"><@ofbizCurrency amount=orderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                             </fo:table-cell>
                       </fo:table-row>
                   </#list>
@@ -1084,7 +1095,7 @@ under the License.
                         <fo:block text-align="right">${uiLabelMap.ShipHandleCaption}</fo:block>
                     </fo:table-cell>
                     <fo:table-cell>
-                        <fo:block text-align="right"><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId/></fo:block>
+                        <fo:block text-align="right"><@ofbizCurrency amount=shippingAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                     </fo:table-cell>
                   </fo:table-row>
                     <#if (!Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"")) || (taxAmount?has_content && (taxAmount &gt; 0))>
@@ -1094,7 +1105,7 @@ under the License.
                                 <fo:block text-align="right"><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></fo:block>
                             </fo:table-cell>
                             <fo:table-cell>
-                                <fo:block text-align="right"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></fo:block>
+                                <fo:block text-align="right"><@ofbizCurrency amount=taxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                             </fo:table-cell>
                         </fo:table-row>
                     </#if>
@@ -1104,7 +1115,7 @@ under the License.
                             <fo:block font-weight="bold" text-align="right">${uiLabelMap.OrderTotalCaption}</fo:block>
                          </fo:table-cell>
                          <fo:table-cell>
-                            <fo:block font-weight="bold" text-align="right"><@ofbizCurrency amount=grandTotal isoCode=currencyUomId/></fo:block>
+                            <fo:block font-weight="bold" text-align="right"><@ofbizCurrency amount=grandTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></fo:block>
                          </fo:table-cell>
                     </fo:table-row>
              </fo:table-body>

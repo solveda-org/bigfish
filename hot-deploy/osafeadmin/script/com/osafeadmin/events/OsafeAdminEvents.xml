@@ -255,6 +255,7 @@
          <set-service-fields service-name="createCategoryTextContent" to-map="createCategoryTextContentCtx" map="parameters"/>
          <call-service service-name="createCategoryTextContent" in-map-name="createCategoryTextContentCtx">
              <result-to-request result-name="contentId" />
+             <result-to-request result-name="productCategoryId" />
          </call-service>
     </simple-method>
 </simple-methods>

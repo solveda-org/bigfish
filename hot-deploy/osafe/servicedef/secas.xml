@@ -2,4 +2,44 @@
 <service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
 
+    <eca service="sendOrderConfirmation" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="emailType" operator="equals" value="PRDS_ODR_CONFIRM"/>
+        <set field-name="templateId" value="TXT_ORDER_CONFIRM"/>
+        <action service="sendTxtMessageFromTemplate" mode="async" persist="false"/>
+    </eca>
+    <eca service="sendOrderChangeNotification" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="emailType" operator="equals" value="PRDS_ODR_CHANGE"/>
+        <set field-name="templateId" value="TXT_ORDER_CHANGE"/>
+        <action service="sendTxtMessageFromTemplate" mode="async" persist="false"/>
+    </eca>
+    
+    <eca service="sendMailFromScreen" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="emailType" operator="equals" value="PRDS_SHIP_REVIEW"/>
+        <set field-name="templateId" value="TXT_SHIP_REVIEW"/>
+        <action service="sendTxtMessageFromTemplate" mode="async" persist="false"/>
+    </eca>
+    
+    <eca service="sendMailFromScreen" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="emailType" operator="equals" value="PRDS_ABD_CART"/>
+        <set field-name="templateId" value="TXT_ABANDON_CART"/>
+        <action service="sendTxtMessageFromTemplate" mode="async" persist="false"/>
+    </eca>
+    
+    <eca service="sendMailFromScreen" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="emailType" operator="equals" value="PRDS_CUST_REGISTER"/>
+        <set field-name="templateId" value="TXT_NEW_CUSTOMER"/>
+        <action service="sendTxtMessageFromTemplate" mode="async" persist="false"/>
+    </eca>
+    
+    <eca service="sendMailFromScreen" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="emailType" operator="equals" value="UPD_PRSNL_INF_CNFRM"/>
+        <set field-name="templateId" value="TXT_CHANGE_CUSTOMER"/>
+        <action service="sendTxtMessageFromTemplate" mode="async" persist="false"/>
+    </eca>
+    
+    <eca service="sendMailFromScreen" event="return" run-on-failure="true" run-on-error="true">
+        <condition field-name="emailType" operator="equals" value="PRDS_PWD_RETRIEVE"/>
+        <set field-name="templateId" value="TXT_FORGOT_PASSWORD"/>
+        <action service="sendTxtMessageFromTemplate" mode="async" persist="false"/>
+    </eca>
 </service-eca>

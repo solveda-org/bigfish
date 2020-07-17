@@ -5,6 +5,16 @@
          
     <simple-method method-name="updateCustomerPersonalInfo" short-description="Update Customer Personal Information" login-required="true">
         <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
+        <entity-one entity-name="PartyAttribute" value-field="partyAttributeValue">
+            <field-map field-name="attrName" value="PARTY_TEXT_PREFERENCE"/>
+            <field-map field-name="partyId" from-field="parameters.partyId"/>
+        </entity-one>
+        <if-compare operator="equals" value="Y" field="partyAttributeValue.attrValue">
+        	<set field="parameters.PHONE_MOBILE_REQUIRED" value="true" />
+        <else>
+        	<set field="parameters.PHONE_MOBILE_REQUIRED" value="false" />
+        </else>
+        </if-compare>
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
          <check-errors/>
          <call-simple-method method-name="createUpdatePartyAttributes"/>
@@ -113,6 +123,33 @@
     
     <simple-method method-name="updateCustomerLogin" short-description="Update Customer Login Information" login-required="true">
         <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
+        
+        <call-simple-method method-name="validateLoginInfo" xml-resource="component://osafe/script/Validation/UserProfile.xml" />
+        
+        <!-- mobile phone -->
+        <if-not-empty field="parameters.mobilePhoneContactMechId">
+            <set field="mobilePhoneContext.contactMechId" from-field="parameters.mobilePhoneContactMechId"/>
+            <if-not-empty field="mobilePhoneContext.contactNumber">
+                <call-service service-name="updatePartyTelecomNumber" in-map-name="mobilePhoneContext">
+                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
+                </call-service>
+            <else>
+                <call-service service-name="deletePartyContactMech" in-map-name="mobilePhoneContext"/>
+            </else>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="mobilePhoneContext.contactNumber">
+                <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
+                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
+                </call-service>
+                <set from-field="userLogin.partyId" field="mobilePhonePurposeContext.partyId"/>
+                <set from-field="mobilePhoneContext.contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
+                <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+        
         <!-- Update user's email address -->
         <if-not-empty field="parameters.emailAddressContactMechId">
             <set field="emailAddressContext.partyId" from-field="parameters.partyId"/>
@@ -139,7 +176,7 @@
             <call-object-method obj-field="parameters.OLD_PASSWORD" method-name="toLowerCase" ret-field="parameters.OLD_PASSWORD"/>
         </if-compare>
         <if-not-empty field="parameters.PASSWORD">
-            <call-map-processor in-map-name="parameters" out-map-name="passwordContext">
+            <call-map-processor in-map-name="parameters" out-map-name="updatePasswordContext">
                 <simple-map-processor name="newPassword">
                     <process field="USERNAME"><copy to-field="userLoginId"/></process>
                     <process field="PASSWORD"><copy to-field="newPassword"/></process>
@@ -153,7 +190,7 @@
                     </process>
                 </simple-map-processor>
             </call-map-processor>
-           <call-service service-name="updatePassword" in-map-name="passwordContext"></call-service>
+           <call-service service-name="updatePassword" in-map-name="updatePasswordContext"></call-service>
         </if-not-empty>
         <if-not-empty field="parameters.PARTY_EMAIL_PREFERENCE">
             <entity-one value-field="partyAttributeExists" entity-name="PartyAttribute">
@@ -173,7 +210,24 @@
             </if-not-empty>
         </if-not-empty>
         
-
+        <if-not-empty field="parameters.PARTY_TEXT_PREFERENCE">
+            <entity-one value-field="partyAttributeExists" entity-name="PartyAttribute">
+                <field-map field-name="attrName" value="PARTY_TEXT_PREFERENCE"/>
+                <field-map field-name="partyId" from-field="parameters.partyId"/>
+            </entity-one>
+            
+            <make-value entity-name="PartyAttribute" value-field="partyAttribute"/>
+            <set from-field="parameters.partyId" field="partyAttribute.partyId"/>
+            <set value="PARTY_TEXT_PREFERENCE" field="partyAttribute.attrName"/>
+            <set from-field="parameters.PARTY_TEXT_PREFERENCE" field="partyAttribute.attrValue"/>
+            <if-not-empty field="partyAttributeExists">
+                <store-value value-field="partyAttribute"/>
+            <else>
+                <create-value value-field="partyAttribute"/>
+            </else>
+            </if-not-empty>
+        </if-not-empty>
+        
         <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserLoginUpdatedSuccess"/>
         <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
         <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
@@ -235,6 +289,14 @@
                 <set field="createUpdateEmailPreferenceCtx.attrValue" from-field="parameters.PARTY_EMAIL_PREFERENCE"/>
                 <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateEmailPreferenceCtx"/>
             </if-compare-field>
+            
+            <!-- Create/Update Text preference -->
+            <if-compare-field field="parameters.PARTY_TEXT_PREFERENCE" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateTextPreferenceCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateTextPreferenceCtx.attrName" value="PARTY_TEXT_PREFERENCE"/>
+                <set field="createUpdateTextPreferenceCtx.attrValue" from-field="parameters.PARTY_TEXT_PREFERENCE"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateTextPreferenceCtx"/>
+            </if-compare-field>
 
             <!-- Create IS_DOWNLOADED if not exist -->
             <entity-one entity-name="PartyAttribute" value-field="partyAttribute">
@@ -247,5 +309,166 @@
                 <set field="createIsDownloadedCtx.attrValue" value="N"/>
                 <call-service service-name="createUpdatePartyAttribute" in-map-name="createIsDownloadedCtx"/>
             </if-empty>
+            
+            <!-- Create/Update Party Custom Attribute -->
+            <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="XmlFileStr">
+                <string value="osafe.properties"/>
+                <string value="ecommerce-UiSequence-xml-file"/>
+            </call-class-method>
+            <set field="XmlFilePath" value="${groovy: org.ofbiz.base.util.string.FlexibleStringExpander.expandString(XmlFileStr, context)}" type="String"/>
+            
+            <set field="searchRestrictionMap" type="NewMap"/>
+            <set field="searchRestrictionMap.screen" value="Y" />
+            <set field="searchIgnoreCase" value="true" type="Boolean"/>
+            <set field="searchPartial" value="false" type="Boolean"/>
+            <set field="useCache" value="true" type="Boolean"/>
+            <call-class-method class-name="com.osafe.services.OsafeManageXml" method-name="getSearchListFromXmlFile" ret-field="uiSequenceSearchList">
+                <field field="XmlFilePath" type="String"/>
+                <field field="searchRestrictionMap" type="Map"/>
+                <string value="PersonalInfo"/>
+                <field field="searchIgnoreCase"  type="boolean" />
+                <field field="searchPartial"  type="boolean" />
+                <field field="useCache"  type="boolean" />
+            </call-class-method>
+            <set field="partyCustomAttributeActive" value="false"/>
+            <iterate entry="uiSequenceSearchScreen" list="uiSequenceSearchList">
+                <if-compare operator="equals" value="customAttributes" field="uiSequenceSearchScreen.key">
+                    <if-compare operator="not-equals" value="0" field="uiSequenceSearchScreen.value">
+                        <set field="partyCustomAttributeActive" value="true"/>
+                    </if-compare>
+                </if-compare>
+            </iterate> 
+            
+            <if-compare operator="equals" value="true" field="partyCustomAttributeActive">
+                <call-class-method class-name="com.osafe.services.CustomPartyAttributeServices" method-name="getPartyCustomAttributeList" ret-field="customPartyAttributeList">
+                </call-class-method>
+                
+	            <iterate entry="customPartyAttribute" list="customPartyAttributeList">
+	                <set field ="attrValueStr" value="" />
+	                <if>
+                    <condition>
+                        <or>
+                            <if-compare value="CHECKBOX" operator="equals" field="customPartyAttribute.Type"></if-compare>
+                            <if-compare value="DROP_DOWN_MULTI" operator="equals" field="customPartyAttribute.Type"></if-compare>
+                        </or>
+                    </condition>
+                    <then>
+                              <set field ="attrValueList" from-field="parameters.${customPartyAttribute.AttrName}" />
+                              
+		                            <iterate list="attrValueList" entry="attrValue">
+								           <string-append string="${attrValue}," field="attrValueStr" /> 
+						              </iterate>
+
+						              <if-compare operator="contains" value="," field="attrValueList">
+						              <if-not-empty field="attrValueStr">
+								            <call-object-method obj-field="attrValueStr" method-name="length" ret-field="attrValueStrLength"/>
+								            <calculate field="attrValueStrLength">
+								                <calcop operator="subtract" >
+								                    <calcop operator="get" field="attrValueStrLength"/>
+								                    <number value="1"/>
+								                </calcop>
+								            </calculate>
+								            <set field="startIndex" value="0" type="Integer"/>
+								            <set field="endIndex" from-field="attrValueStrLength" type="Integer"/>
+								            <call-object-method obj-field="attrValueStr" method-name="substring" ret-field="attrValueStr">
+								                <field field="startIndex" type="int"/>
+								                <field field="endIndex" type="int"/>
+								            </call-object-method>
+	                                  </if-not-empty>
+	                                  <else>
+	                                      <set field="attrValueStr" from-field="attrValueList" type="String"/>
+	                                  </else>
+	                                  </if-compare>
+                    </then>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
+			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
+			                    <set field="shortMonth" from-field="parameters.${customPartyAttribute.AttrName}_MM"/>
+			                    <set field="shortDay" from-field="parameters.${customPartyAttribute.AttrName}_DD"/>
+			                    <string-append string="${shortMonth}" field="shortDateString"/>
+			                    <string-append string="/" field="shortDateString"/>
+			                    <string-append string="${shortDay}" field="shortDateString"/>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="shortDateString" set-if-null="true"/>
+                    </then>
+                    </else-if>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
+			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
+			                    <if-not-empty field="parameters.${customPartyAttribute.AttrName}_YYYY">
+				                    <set field="month" from-field="parameters.${customPartyAttribute.AttrName}_MM"/>
+				                    <set field="day" from-field="parameters.${customPartyAttribute.AttrName}_DD"/>
+				                    <set field="year" from-field="parameters.${customPartyAttribute.AttrName}_YYYY"/>
+				                    <string-append string="${month}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${day}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${year}" field="dateString"/>
+				                </if-not-empty>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="dateString" set-if-null="true"/>
+                    </then>
+                    </else-if>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
+			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
+			                    <set field="shortDay" from-field="parameters.${customPartyAttribute.AttrName}_DD"/>
+			                    <set field="shortMonth" from-field="parameters.${customPartyAttribute.AttrName}_MM"/>
+			                    <string-append string="${shortDay}" field="shortDateString"/>
+			                    <string-append string="/" field="shortDateString"/>
+			                    <string-append string="${shortMonth}" field="shortDateString"/>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="shortDateString" set-if-null="true"/>
+                    </then>
+                    </else-if>
+                    <else-if>
+                        <condition> 
+		                    <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttribute.Type"/>
+		                </condition>
+                    <then>
+                        <if-not-empty field="parameters.${customPartyAttribute.AttrName}_DD">
+			                <if-not-empty field="parameters.${customPartyAttribute.AttrName}_MM">
+			                    <if-not-empty field="parameters.${customPartyAttribute.AttrName}_YYYY">
+			                        <set field="day" from-field="parameters.${customPartyAttribute.AttrName}_DD"/>
+				                    <set field="month" from-field="parameters.${customPartyAttribute.AttrName}_MM"/>
+				                    <set field="year" from-field="parameters.${customPartyAttribute.AttrName}_YYYY"/>
+				                    <string-append string="${day}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${month}" field="dateString"/>
+				                    <string-append string="/" field="dateString"/>
+				                    <string-append string="${year}" field="dateString"/>
+				                </if-not-empty>
+			                </if-not-empty>
+			            </if-not-empty>
+			            <set field="attrValueStr" from-field="dateString" set-if-null="true"/>
+                    </then>
+                    </else-if>
+                    <else>
+                        <set field="attrValueStr" from-field="parameters.${customPartyAttribute.AttrName}"/>
+                    </else>
+                    </if>
+	                    
+                        <set field="createUpdateCustomPartyAttributeCtx.partyId" from-field="parameters.partyId"/>
+                        <set field="createUpdateCustomPartyAttributeCtx.attrName" value="${customPartyAttribute.AttrName}"/>
+                        <set field="createUpdateCustomPartyAttributeCtx.attrValue" from-field="attrValueStr"/>
+                        <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateCustomPartyAttributeCtx"/>
+                        <clear-field field="createUpdateCustomPartyAttributeCtx"/>
+	            </iterate>
+            </if-compare>
      </simple-method>
 </simple-methods>

@@ -1,5 +1,4 @@
 <#assign nowTimestamp=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
-<#assign defaultFromdate=Static["com.osafe.util.OsafeAdminUtil"].getMonthBackTimeStamp(1,preferredDateFormat)>
 <!-- start searchBox -->
 <div class="entryRow">
   <div class="entry short">
@@ -21,7 +20,7 @@
   <div class="entry daterange">
     <label>${uiLabelMap.FromDateCaption}</label>
     <div class="entryInput from">
-      <input class="dateEntry" type="text" name="contactUsDateFrom" maxlength="40" value="${parameters.contactUsDateFrom!periodFrom!defaultFromdate?string(preferredDateFormat)!""}"/>
+      <input class="dateEntry" type="text" name="contactUsDateFrom" maxlength="40" value="${parameters.contactUsDateFrom!periodFrom!nowTimestamp?string(preferredDateFormat)!""}"/>
     </div>
     <label class="tolabel">${uiLabelMap.ToCaption}</label>
     <div class="entryInput to">

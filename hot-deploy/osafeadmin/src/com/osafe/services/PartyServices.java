@@ -225,6 +225,7 @@ public class PartyServices {
             String lastName = (String) context.get("lastName");
             String groupName = (String) context.get("groupName");
             String groupNameLocal = (String) context.get("groupNameLocal");
+            String productStoreId = (String) context.get("productStoreId");
             
             String attrName = (String) context.get("attrName");
             String attrValue = (String) context.get("attrValue");
@@ -390,12 +391,70 @@ public class PartyServices {
                 }
                 if ((roleTypeId != null && !"ANY".equals(roleTypeId)) || (roleTypes != null && roleTypes.size() > 0)) 
                 {
-                    // add role to view
-                    dynamicView.addMemberEntity("PR", "PartyRole");
+                    // add role and productStoreId to view
+                    dynamicView.addMemberEntity("PR", "ProductStoreRole");
                     dynamicView.addAlias("PR", "roleTypeId");
+                    dynamicView.addAlias("PR", "productStoreId");
                     dynamicView.addViewLink("PT", "PR", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId"));
                 	
                 }
+
+                // ----
+                // QualType Fields
+                // ----
+
+                // filter on QualType
+                List qualTypes = (List) context.get("qualTypeIds");
+                if (qualTypes != null) {
+                    Iterator i = qualTypes.iterator();
+                    List orExprs = FastList.newInstance();
+                    while (i.hasNext()) {
+                        String qualTypesId = (String) i.next();
+                        orExprs.add(EntityCondition.makeCondition("partyQualTypeId", EntityOperator.EQUALS, qualTypesId));
+                    }
+                    andExprs.add(EntityCondition.makeCondition(orExprs, EntityOperator.OR));
+                }
+                
+                if (qualTypes != null && qualTypes.size() > 0) 
+                {
+                    // add QualType to view
+                    dynamicView.addMemberEntity("PQ", "PartyQual");
+                    dynamicView.addAlias("PQ", "partyQualTypeId");
+                    dynamicView.addViewLink("PT", "PQ", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId"));
+                	
+                }
+
+                // ----
+                // IdentificationType Fields
+                // ----
+
+                // filter on IdentificationType
+                List identificationTypes = (List) context.get("identificationTypeIds");
+                if (identificationTypes != null) {
+                    Iterator i = identificationTypes.iterator();
+                    List orExprs = FastList.newInstance();
+                    while (i.hasNext()) {
+                        String identificationTypesId = (String) i.next();
+                        orExprs.add(EntityCondition.makeCondition("partyIdentificationTypeId", EntityOperator.EQUALS, identificationTypesId));
+                    }
+                    andExprs.add(EntityCondition.makeCondition(orExprs, EntityOperator.OR));
+                }
+                
+                if (identificationTypes != null && identificationTypes.size() > 0) 
+                {
+                    // add IdentificationType view
+                    dynamicView.addMemberEntity("PI", "PartyIdentification");
+                    dynamicView.addAlias("PI", "partyIdentificationTypeId");
+                    dynamicView.addViewLink("PT", "PI", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId"));
+                	
+                }
+                
+                //filter by productStoreId
+                if (UtilValidate.isNotEmpty(productStoreId)) {
+                	paramList = paramList + "&productStoreId=" + productStoreId;
+                	andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productStoreId"), EntityOperator.EQUALS, EntityFunction.UPPER(productStoreId)));	
+                }
+
 
                 // ----
                 // InventoryItem Fields
@@ -552,7 +611,7 @@ public class PartyServices {
                     fieldsToSelect.add("contactNumber");
                     fieldsToSelect.add("areaCode");
                 }
-
+                
                 // ---- End of Dynamic View Creation
 
                 // build the main condition

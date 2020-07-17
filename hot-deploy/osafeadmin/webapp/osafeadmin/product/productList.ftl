@@ -47,13 +47,13 @@
         <#assign productListPrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, product.productId, "LIST_PRICE")!/>
         <td class="dollarCol <#if !hasNext?if_exists>lastRow</#if>">
         <#if productListPrice?has_content>
-          <@ofbizCurrency amount=productListPrice.price isoCode=productListPrice.currencyUomId />
+          <@ofbizCurrency amount=productListPrice.price isoCode=productListPrice.currencyUomId rounding=globalContext.currencyRounding/>
         </#if>
         </td>
         <#assign productDefaultPrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, product.productId, "DEFAULT_PRICE")!/>
         <td class="dollarCol <#if !hasNext?if_exists>lastRow</#if>">
           <#if productDefaultPrice?has_content>
-            <@ofbizCurrency amount=productDefaultPrice.price isoCode=productDefaultPrice.currencyUomId />
+            <@ofbizCurrency amount=productDefaultPrice.price isoCode=productDefaultPrice.currencyUomId rounding=globalContext.currencyRounding/>
           </#if>
         </td>
         <td class="actionCol <#if !hasNext?if_exists>lastRow</#if> <#if !hasNext?if_exists>bottomActionIconRow</#if>">
@@ -81,7 +81,9 @@
                     <#assign prodVariants = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_VARIANT'))/>
                     <#assign prodVariantCount = prodVariants.size()!0/>
                     <li><a href="<@ofbizUrl>productVariants?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="variantIcon"></span>${uiLabelMap.ProductVariantsTooltip} [${prodVariantCount!}]</a></li>
-                  </#if>
+                  <#else>
+			        <li><a href="javascript:void(0)"><span class="variantIcon"></span>${uiLabelMap.FinishedGoodNoVarsTooltip}</a></li>
+			      </#if>
                   <#if (product.isVariant?if_exists == 'N')>
                     <#assign prodRelatedComplement = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productAssocs,Static["org.ofbiz.base.util.UtilMisc"].toMap('productAssocTypeId','PRODUCT_COMPLEMENT'))/>
                     <#assign prodRelatedComplement = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(prodRelatedComplement) />

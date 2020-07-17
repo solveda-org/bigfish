@@ -110,7 +110,7 @@
                 widgets = [];
 
             this.defaults = {
-                cssHeader: "header",
+                cssHeader: "tableHeader",
                 cssAsc: "headerSortUp",
                 cssDesc: "headerSortDown",
                 cssChildRow: "expand-child",

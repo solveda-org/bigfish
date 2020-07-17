@@ -3,34 +3,30 @@
        <div class="infoRow">
          <div class="infoEntry">
             <div class="infoCaption">
-                <label>${uiLabelMap.EmailTestModeCaption}</label>
+                <label>${uiLabelMap.TestModeCaption}</label>
             </div>
             <div class="entry checkbox medium">
-              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="Y" <#if (!parameters.simpleTest?exists || (parameters.simpleTest?exists && parameters.simpleTest?string == "Y"))>checked="checked"</#if> onclick="getEmailTestFormat('Y', 'N')"/>${uiLabelMap.SimpleTestLabel}
-              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="N" <#if (parameters.simpleTest?exists && parameters.simpleTest?string == "N")>checked="checked"</#if> onclick="getEmailTestFormat('N', 'N')"/>${uiLabelMap.EmailTemplateLabel}
+              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="Y" <#if (!parameters.simpleTest?exists || (parameters.simpleTest?exists && parameters.simpleTest?string == "Y"))>checked="checked"</#if> onclick="getTestTemplateFormat('Y', 'N')"/>${uiLabelMap.SimpleTestLabel}
+              <input class="checkBoxEntry" type="radio" id="simpleTest" name="simpleTest" value="N" <#if (parameters.simpleTest?exists && parameters.simpleTest?string == "N")>checked="checked"</#if> onclick="getTestTemplateFormat('N', 'N')"/>${uiLabelMap.EmailTemplateLabel}
             </div>
         </div>
       </div>
-      <div class="infoRow emailTemplateDdDiv">
+      <div class="infoRow templateDdDiv">
         <div class="infoEntry">
             <div class="infoCaption">
                 <label>${uiLabelMap.EmailTemplateCaption}</label>
             </div>
              <div class="infoValue">
-                 <#assign selectedEmailTemplate = parameters.emailTemplateId!"">
-                 <select id="emailTemplateId" name="emailTemplateId" class="small">
-                     <option value="E_ABANDON_CART" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_ABANDON_CART")>selected</#if>>E_ABANDON_CART</option>
-                     <option value="E_CHANGE_CUSTOMER" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_CHANGE_CUSTOMER")>selected</#if>>E_CHANGE_CUSTOMER</option>
-                     <option value="E_CONTACT_US" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_CONTACT_US")>selected</#if>>E_CONTACT_US</option>
-                     <option value="E_FORGOT_PASSWORD" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_FORGOT_PASSWORD")>selected</#if>>E_FORGOT_PASSWORD</option>
-                     <option value="E_MAILING_LIST" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_MAILING_LIST")>selected</#if>>E_MAILING_LIST</option>
-                     <option value="E_NEW_CUSTOMER" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_NEW_CUSTOMER")>selected</#if>>E_NEW_CUSTOMER</option>
-                     <option value="E_ORDER_CHANGE" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_ORDER_CHANGE")>selected</#if>>E_ORDER_CHANGE</option>
-                     <option value="E_ORDER_CONFIRM" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_ORDER_CONFIRM")>selected</#if>>E_ORDER_CONFIRM</option>
-                     <option value="E_ORDER_DETAIL" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_ORDER_DETAIL")>selected</#if>>E_ORDER_DETAIL</option>
-                     <option value="E_REQUEST_CATALOG" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_REQUEST_CATALOG")>selected</#if>>E_REQUEST_CATALOG</option>
-                     <!--<option value="E_SCHED_JOB_ALERT" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_SCHED_JOB_ALERT")>selected</#if>>E_SCHED_JOB_ALERT</option>-->
-                     <option value="E_SHIP_REVIEW" <#if selectedEmailTemplate?has_content && selectedEmailTemplate.equals("E_SHIP_REVIEW")>selected</#if>>E_SHIP_REVIEW</option>
+                 <#assign selectedTemplate = parameters.templateId!"">
+                 <#assign templateList = delegator.findByAnd("XContentXref",Static["org.ofbiz.base.util.UtilMisc"].toMap("productStoreId", globalContext.productStoreId,"contentTypeId",contentTypeId),Static["org.ofbiz.base.util.UtilMisc"].toList("contentId"))/>
+                 <select id="templateId" name="templateId" class="small">
+	                 <#if templateList?has_content>
+	                   <#list templateList as template>
+	                    <#assign contentId= template.contentId!""/>
+	                    <#assign bfContentId= template.bfContentId!""/>
+	                     <option value="${bfContentId}" <#if selectedTemplate?has_content && selectedTemplate.equals(bfContentId!"")>selected</#if>>${bfContentId!""}</option>
+	                   </#list>
+	                 </#if>
                  </select>
              </div>
         </div>
@@ -88,7 +84,7 @@
       </div>
 
       <div class="infoRow">
-        <div class="infoEntry emailTextDiv">
+        <div class="infoEntry textDiv">
             <div class="infoCaption">
                 <label>${uiLabelMap.TextCaption!""}</label>
             </div>

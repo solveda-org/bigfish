@@ -38,7 +38,9 @@
         <set field="createProdCatContentCtx.contentId" from-field="contentId"/>
         <set field="createProdCatContentCtx.prodCatContentTypeId" from-field="parameters.prodCatContentTypeId"/>
         <set field="createProdCatContentCtx.productCategoryId" from-field="parameters.productCategoryId"/>
-        <call-service service-name="createCategoryContent" in-map-name="createProdCatContentCtx"/>
+        <call-service service-name="createCategoryContent" in-map-name="createProdCatContentCtx">
+            <result-to-result result-name="productCategoryId"/>
+        </call-service>
     </simple-method>
     
     <simple-method method-name="updateTextContent" short-description="Update Text Content">

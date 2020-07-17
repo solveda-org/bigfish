@@ -18,7 +18,7 @@
     <#if variantContentIdMap?has_content>
     	<#assign variantContentId = variantContentIdMap.get("DETAIL_IMAGE_URL")!""/>
         <#if variantContentId?has_content>
-           <#assign productDetailImageUrl = variantProdCtntWrapper.get("DETAIL_IMAGE_URL")!""/>
+           <#assign variantProductDetailImageUrl = variantProdCtntWrapper.get("DETAIL_IMAGE_URL")!""/>
         </#if>
     </#if>
     <#if (!variantProductDetailImageUrl?has_content || variantProductDetailImageUrl == '')  && (productDetailImageUrl?has_content && productDetailImageUrl != '')>

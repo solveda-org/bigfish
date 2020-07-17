@@ -2,7 +2,7 @@
 <#assign ownerId = context.userLoginId />
 <!-- start contentList.ftl -->
             <tr class="heading">
-                <th class="idCol firstCol">${uiLabelMap.ContentIDLabel}</th>
+                <th class="idCol firstCol">${uiLabelMap.ConetentIdLabel}</th>
                 <#if contentTypeId?exists && libraryContentTypeId?exists && contentTypeId == libraryContentTypeId>
                   <th class="actionCol"></th>
                 </#if>
@@ -22,7 +22,7 @@
                 </th>
             </tr>
             
-    	<#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
+    	<#assign now = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()/>
         <#if resultList?has_content>
         	<#assign defaultStatusId = "CTNT_IN_PROGRESS" /> 
         	<#assign defaultStatus = delegator.findOne("StatusItem", {"statusId" : defaultStatusId}, false)>
@@ -38,7 +38,7 @@
             	<tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
             	    <#-- Content Id-->
                     <td class="idCol firstCol" >
-                        <a href="<@ofbizUrl>${detailPage}?contentId=${thisContent.contentId}</@ofbizUrl>">${thisContent.contentId!"N/A"}</a>
+                        <a href="<@ofbizUrl>${detailPage}?contentId=${content.bfContentId}</@ofbizUrl>">${content.bfContentId!"N/A"}</a>
                      </td>
                      <#if contentTypeId?exists && libraryContentTypeId?exists && contentTypeId == libraryContentTypeId>
                      <td class="actionCol <#if !hasNext>lastRow</#if> lastCol">
@@ -121,8 +121,8 @@
                       <#if previewHomeSpotAction?exists>
                         <input type="checkbox" value="${thisContent.contentId?if_exists}" class="homeSpotCheck" name="contentId" />
                       </#if>
-                      <#if contentTypeId?exists && emailContentTypeId?exists && contentTypeId == emailContentTypeId>
-                          <a href="<@ofbizUrl>adminToolDetail?detailScreen=emailTestDetail&simpleTest=N&emailTemplateId=${thisContent.contentId}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.EmailTestTooltip}');" onMouseout="hideTooltip()"><span class="emailIcon"></span></a>
+                      <#if contentTypeId?exists && adminToolDetailScreen?exists>
+                          <a href="<@ofbizUrl>adminToolDetail?detailScreen=${adminToolDetailScreen}&simpleTest=N&templateId=${content.bfContentId}</@ofbizUrl>" onMouseover="showTooltip(event,'${adminToolDetailToolTip}');" onMouseout="hideTooltip()"><span class="emailIcon"></span></a>
                       </#if>
                     </td>
                 </tr>

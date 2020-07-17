@@ -7,7 +7,9 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.base.util.UtilMisc;
 
+productStoreId = context.productStoreId;
 //securityGroup drop down values for the search section
 securityGroups = delegator.findList("SecurityGroup", null, null, null, null, false);
 
@@ -42,9 +44,9 @@ if(UtilValidate.isNotEmpty(searchGroupId))
 	context.searchGroupId=searchGroupId;
 }
 
-osafeAdminList = delegator.findList("UserLoginSecurityGroup", EntityCondition.makeCondition([groupId : "OSAFEADMIN"]), null, null, null, false);
-osafeAdminListIds = EntityUtil.getFieldListFromEntityList(osafeAdminList, "userLoginId", true);
-exprs.add(EntityCondition.makeCondition("userLoginId", EntityOperator.IN, osafeAdminListIds));
+contentUserList = delegator.findList("ProductStoreRole", EntityCondition.makeCondition(UtilMisc.toMap("roleTypeId", "CONTENT_USER", "productStoreId", productStoreId)), null, null, null, false);
+contentUserListIds = EntityUtil.getFieldListFromEntityList(contentUserList, "partyId", true);
+exprs.add(EntityCondition.makeCondition("partyId", EntityOperator.IN, contentUserListIds));
 
 if (UtilValidate.isNotEmpty(exprs)) 
 {

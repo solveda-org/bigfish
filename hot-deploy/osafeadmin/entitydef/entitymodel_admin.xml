@@ -31,12 +31,13 @@
       <member-entity entity-alias="CO" entity-name="Content"/>
       <member-entity entity-alias="DR" entity-name="DataResource"/>
       <member-entity entity-alias="ET" entity-name="ElectronicText"/>
-      <alias-all entity-alias="PC"/>
-      <alias-all entity-alias="CO"/>
-      <alias-all entity-alias="DR" prefix="dr"/>
-      <alias-all entity-alias="ET">
-          <exclude field="dataResourceId"/>
-      </alias-all>
+       <alias entity-alias="PC" name="productId"/>
+      <alias entity-alias="PC" name="contentId"/>
+      <alias entity-alias="PC" name="productContentTypeId"/>
+      <alias entity-alias="PC" name="fromDate"/>
+      <alias entity-alias="PC" name="thruDate"/>
+      <alias entity-alias="CO" name="dataResourceId"/>
+      <alias entity-alias="ET" name="textData"/>
       <view-link entity-alias="PC" rel-entity-alias="CO">
         <key-map field-name="contentId"/>
       </view-link>
@@ -63,4 +64,68 @@
       </relation>
     </view-entity>
 
+    <entity entity-name="BlueDartPrepaid"
+            package-name="org.ofbiz.osafe.admin"
+            title="BlueDart Prepaid">
+      <field name="pincode" type="id-ne"></field>
+      <field name="carea" type="name"></field>
+      <field name="cscrcd" type="name"></field>
+      <field name="careadesc" type="description"></field>
+      <field name="city" type="name"></field>
+      <field name="bdelLoc" type="name"></field>
+      <field name="state" type="name"></field>
+      <field name="region" type="name"></field>
+      <field name="zone" type="name"></field>
+      <field name="cloctype" type="name"></field>
+      <field name="bembargo" type="name"></field>
+      <field name="domestic" type="name"></field>
+      <field name="apex" type="name"></field>
+      <field name="surface" type="name"></field>
+      <field name="cod" type="name"></field>
+      <field name="creditcard" type="name"></field>
+      <field name="tdd" type="name"></field>
+      <field name="tddapx1200" type="name"></field>
+      <field name="dstarcd" type="name"></field>
+      <field name="ccrcrdscr" type="name"></field>
+      <field name="csfczone" type="name"></field>
+      <field name="sfzonedesc" type="name"></field>
+      <field name="subregion" type="name"></field>
+      <field name="cservflag" type="name"></field>
+      <field name="ctel" type="name"></field>
+      <field name="cnt" type="name"></field>
+      <field name="newzone" type="name"></field>
+      <field name="dodApex" type="name"></field>
+      <field name="dodSfc" type="name"></field>
+      <field name="fodApex" type="name"></field>
+      <field name="fodSfc" type="name"></field>
+      <field name="blueDartlimit" type="name"></field>
+      <prim-key field="pincode"/>
+    </entity>
+    
+    <entity entity-name="BlueDartCodpin"
+            package-name="org.ofbiz.osafe.admin"
+            title="BlueDart Codpin">
+      <field name="pincode" type="id-ne"></field>
+      <field name="carea" type="name"></field>
+      <field name="cscrcd" type="name"></field>
+      <field name="city" type="name"></field>
+      <field name="bdelLoc" type="name"></field>
+      <field name="state" type="name"></field>
+      <field name="region" type="name"></field>
+      <field name="zone" type="name"></field>
+      <field name="cloctype" type="name"></field>
+      <field name="bembargo" type="name"></field>
+      <field name="domestic" type="name"></field>
+      <field name="apex" type="name"></field>
+      <field name="surface" type="name"></field>
+      <field name="cod" type="name"></field>
+      <field name="tdd" type="name"></field>
+      <field name="dstarcd" type="name"></field>
+      <field name="subregion" type="name"></field>
+      <field name="returnLoc" type="name"></field>
+      <field name="retLoc" type="name"></field>
+      <field name="newzone" type="name"></field>
+      <field name="blueDartlimit" type="name"></field>
+      <prim-key field="pincode"/>
+    </entity>
 </entitymodel>

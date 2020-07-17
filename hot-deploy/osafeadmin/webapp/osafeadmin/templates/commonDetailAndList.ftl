@@ -4,7 +4,19 @@ ${sections.render('tooltipBody')?if_exists}
   ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHiddenFields")}
   <#if detailInfoBoxHeading?exists && detailInfoBoxHeading?has_content>
     <div class="displayBox detailInfo">
-      <div class="header"><h2>${detailInfoBoxHeading!}</h2></div>
+      <div class="header">
+        <h2>${detailInfoBoxHeading!}</h2>
+        <#if stores?has_content && (stores.size() > 1)>
+          <#if (showProductStoreInfo?has_content) && (showProductStoreInfo == 'Y')>
+            <div class="productStoreInfo">
+                ${uiLabelMap.ProductStoreInfoCaption}
+                <#if context.productStoreName?has_content>
+                    ${context.productStoreName}
+                </#if>
+            </div>
+          </#if>
+        </#if>
+      </div>
       <div class="boxBody">
         ${sections.render('detailInfoBoxBody')?if_exists}
       </div>

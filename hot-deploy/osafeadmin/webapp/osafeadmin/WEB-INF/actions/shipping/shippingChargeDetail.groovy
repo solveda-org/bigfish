@@ -27,17 +27,34 @@ partysOps.setDistinct(true);
 Set<String> party = new TreeSet<String>();
 party.add("partyId");
 
+includeCountryOps = new EntityFindOptions();
+includeCountryOps.setDistinct(true);
 conditions = FastList.newInstance();
 conditions.add(EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "CARRIER"));
 mainCond = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
-partys = delegator.findList("PartyRole", mainCond, party, null, partysOps, false);
+cond = FastList.newInstance();
+cond.add(EntityCondition.makeCondition("geoTypeId", EntityOperator.EQUALS, "COUNTRY"));
+mainCondOfCountry = EntityCondition.makeCondition(cond, EntityOperator.AND);
 
+partys = delegator.findList("PartyRole", mainCond, party, null, partysOps, false);
+geoType=delegator.findList("Geo", mainCondOfCountry, null, ["geoName"], includeCountryOps, false);
+
+shipmentGatewayConfig=delegator.findList("ShipmentGatewayConfig", null, null,null, includeCountryOps, false);
 if (UtilValidate.isNotEmpty(partys))
 {
     context.partys = partys;
 }
 
+if (UtilValidate.isNotEmpty(geoType))
+{
+    context.geoType = geoType;
+}
+
+if (UtilValidate.isNotEmpty(shipmentGatewayConfig))
+{
+    context.shipmentGatewayConfig = shipmentGatewayConfig;
+}
 //Shipping Method
 
 shipmentMethodTypeOps = new EntityFindOptions();
@@ -59,18 +76,10 @@ if (UtilValidate.isNotEmpty(productStoreShipMethId))
     shipCharge = delegator.findByAnd("ProductStoreShipmentMeth", [productStoreShipMethId : productStoreShipMethId]);
     shipCharge = EntityUtil.getFirst(shipCharge);
     context.shipCharge = shipCharge;
-    
-}
-
-//get the flat rate 
-if (UtilValidate.isNotEmpty(productStoreShipMethId))
-{
     shipCostEst = delegator.findByAnd("ShipmentCostEstimate", [productStoreShipMethId : productStoreShipMethId]);
     shipCostEst = EntityUtil.getFirst(shipCostEst);
     context.shipCostEst = shipCostEst;
-    
 }
-
 
 
 

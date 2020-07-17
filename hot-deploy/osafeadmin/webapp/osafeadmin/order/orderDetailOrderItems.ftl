@@ -73,7 +73,7 @@
             <tbody>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd></#if>">
 
-		            <td class="seqCol <#if !hasNext>lastRow</#if>">${(orderItem.orderItemSeqId)!""}</td>
+		            <td class="seqCol <#if !hasNext>lastRow</#if>"><a href="<@ofbizUrl>orderItemDetail?orderId=${orderItem.orderId!}</@ofbizUrl>">${(orderItem.orderItemSeqId)!""}</a></td>
                     <td class="idCol <#if !hasNext>lastRow</#if> firstCol">
                       <#if itemProduct?has_content && itemProduct.isVirtual == 'Y'>
                         <a href="<@ofbizUrl>virtualProductDetail?productId=${itemProduct.productId!}</@ofbizUrl>">${itemProduct.productId!"N/A"}</a>
@@ -89,10 +89,10 @@
                     <td class="nameCol <#if !hasNext>lastRow</#if>">${productName?if_exists}</td>
                     <td class="statusCol <#if !hasNext>lastRow</#if>">${itemStatus.get("description",locale)}</td>
                     <td class="dollarCol <#if !hasNext>lastRow</#if>">${orderItem.quantity?string.number}</td>
-                    <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></td>
-                    <td class="dollarCol <#if !hasNext>lastRow</#if>"><#if (itemPromoAdjustment < 0)><a onMouseover="showTooltip(event,'${toolTipData}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></a><@ofbizCurrency amount=offerPrice isoCode=currencyUomId/></#if></td>
-                    <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemAdjustmentsTotal(orderItem) isoCode=currencyUomId/></td>
-                    <td class="dollarCol total <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemSubTotal(orderItem,orderReadHelper.getAdjustments()) isoCode=currencyUomId/></td>
+                    <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderItem.unitPrice rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
+                    <td class="dollarCol <#if !hasNext>lastRow</#if>"><#if (itemPromoAdjustment < 0)><a onMouseover="showTooltip(event,'${toolTipData}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></a><@ofbizCurrency amount=offerPrice rounding=globalContext.currencyRounding isoCode=currencyUomId/></#if></td>
+                    <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemAdjustmentsTotal(orderItem) rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
+                    <td class="dollarCol total <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemSubTotal(orderItem,orderReadHelper.getAdjustments()) rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                 </tr>
 
                 <#-- toggle the row color -->
@@ -109,7 +109,7 @@
                     <table class="osafe orderSummary">
                         <tr>
                           <td class="totalCaption"><label>${uiLabelMap.SubtotalCaption}</label></td>
-                          <td class="totalValue"><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId/></td>
+                          <td class="totalValue"><@ofbizCurrency amount=orderSubTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                         </tr>
                         <#list headerAdjustmentsToShow as orderHeaderAdjustment>
                                   <#assign adjustmentType = orderHeaderAdjustment.getRelatedOne("OrderAdjustmentType")>
@@ -137,23 +137,23 @@
                                   </#if>
                           <tr>
                             <td class="totalCaption"><label><#if promoText?has_content>${promoText!""} <#if promoCodeText?has_content><a href="<@ofbizUrl>promotionCodeDetail?productPromoCodeId=${promoCodeText}</@ofbizUrl>">(${promoCodeText!})</a></#if><#else>${adjustmentType.get("description",locale)?if_exists}</#if>:</label></td>
-                            <td class="totalValue"><@ofbizCurrency amount=orderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) isoCode=currencyUomId/></td>
+                            <td class="totalValue"><@ofbizCurrency amount=orderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                           </tr>
                         </#list>
                         <tr>
                           <td class="totalCaption"><label>${uiLabelMap.ShipHandleCaption}</label></td>
-                          <td class="totalValue"><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId/></td>
+                          <td class="totalValue"><@ofbizCurrency amount=shippingAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                         </tr>
                         <#if (!Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO")) || (taxAmount?has_content && (taxAmount &gt; 0))>
                             <tr>
                               <td class="totalCaption"><label><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></label></td>
-                              <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></td>
+                              <td class="totalValue"><@ofbizCurrency amount=taxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                             </tr>
                         </#if>
                         <tr>
                           <td class="totalCaption total"><label>${uiLabelMap.OrderTotalCaption}</label></td>
                           <td class="totalValue total">
-                            <@ofbizCurrency amount=grandTotal isoCode=currencyUomId/>
+                            <@ofbizCurrency amount=grandTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/>
                           </td>
                         </tr>
                     </table>

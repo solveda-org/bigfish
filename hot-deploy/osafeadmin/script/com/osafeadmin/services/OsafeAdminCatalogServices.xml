@@ -156,11 +156,17 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIdError"/>
             <string-to-list string="${tempErrorMessage}" message-field="PRODUCTID" list="error_list"/>
         </if-empty>
-        
         <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
 	        <if-empty field="parameters.productDetailName">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductNameError"/>
 	            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTDETAILNAME" list="error_list"/>
+	            <else>
+	            	<call-object-method method-name="length" obj-field="parameters.productDetailName" ret-field="productDetailNameLength"/>
+			        <if-compare operator="greater" value="100" field="productDetailNameLength" type="Integer">
+			        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongProductNameError"/>
+	            		<string-to-list string="${tempErrorMessage}" message-field="PRODUCTDETAILNAME" list="error_list"/>
+			        </if-compare>
+	        	</else>
 	        </if-empty>
 	        <if-empty field="parameters.longDescription">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDetailFieldError"/>
@@ -344,6 +350,19 @@
             </else>
             </if-not-empty>
         </if-compare>
+        
+        <if-empty field="parameters.internalName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankInternalNameError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+            <else>
+            	<call-object-method method-name="length" obj-field="parameters.internalName" ret-field="internalNameLength"/>
+		        <if-compare operator="greater" value="255" field="internalNameLength" type="Integer">
+		        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InternalNameExceedsLengthError"/>
+            		<string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+		        </if-compare>
+        	</else>
+        </if-empty>
+        
         <if-not-empty field="parameters.introductionDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.introductionDate"/>
@@ -360,6 +379,7 @@
                 </else>
             </if-compare>
         </if-not-empty>
+        
         <if-not-empty field="parameters.salesDiscontinuationDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.salesDiscontinuationDate"/>
@@ -764,6 +784,35 @@
 	    <set field="argListNames[]" from-field="productDetailNamehtml"/>
         <property-to-field resource="OSafeAdminUiLabels" property="ProductSavedSuccess" field="productSavedSuccess" arg-list-name="argListNames"/>
         <string-to-list string="${productSavedSuccess}" list="successMessageList"/>
+        
+        <!-- if this is a Variant, check if the Virtual product's Variants are all NOT sellable -->
+        <if-compare field="parameters.isVariant" operator="equals" value="Y">  
+        	<call-class-method class-name="org.ofbiz.product.product.ProductWorker" method-name="getParentProduct" ret-field="parentVirtualProduct">
+	            <field field="parameters.productId" type="String"/>
+	            <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+	        </call-class-method>
+	        <entity-and entity-name="ProductAssoc" list="productVariantList" filter-by-date="true">
+	            <field-map field-name="productId" from-field="parentVirtualProduct.productId"/>
+	            <field-map field-name="productAssocTypeId" value="PRODUCT_VARIANT"/>
+	        </entity-and>
+	        <set field="variantsSellable" value="false"/>
+	        <iterate entry="productVariant" list="productVariantList">
+	            <call-class-method class-name="org.ofbiz.product.product.ProductWorker" method-name="isSellable" ret-field="prodIsSellable">
+					<field field="delegator" type="org.ofbiz.entity.Delegator"/>
+		            <field field="productVariant.productIdTo" type="String"/>
+		        </call-class-method> 
+		        <if-compare operator="equals" value="true" field="prodIsSellable">
+		        	<set field="variantsSellable" value="true"/>
+		        </if-compare>
+	        </iterate>
+	        <if-compare operator="not-equals" value="true" field="variantsSellable">
+	        	<set field="argListIds[]" from-field="parentVirtualProduct.productId"/>
+	        	<property-to-field resource="OSafeAdminUiLabels" property="NoVariantsForSaleWarning" field="noVariantsForSaleWarning" arg-list-name="argListIds"/>
+        		<string-to-list string="${noVariantsForSaleWarning}" list="successMessageList"/>
+	        </if-compare>
+        </if-compare>
+        
+        
         
 	    <field-to-result field="parameters.productId" result-name="productId"/>
     </simple-method>
@@ -1353,15 +1402,10 @@
     </simple-method>
     
     <simple-method method-name="updateFacetGroup" short-description="Updates a facet groups" use-transaction="false">
-        <iterate-map key="descriptionKey" value="descriptionValue" map="parameters.description">
-            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidDesc" ret-field="isValidDesc">
-                <field field="descriptionValue"/>
-            </call-class-method>
-            <if-compare field="isValidDesc" operator="equals" value="false">
-                <set field="descriptionBlank" value="true"/>
-            </if-compare> 
-        </iterate-map>
-        <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+    
+        <iterate-map key="productFeatureGroupIdKey" value="productFeatureGroupIdValue" map="parameters.productFeatureGroupId">
+            <set field="sequenceNumMap" from-field="parameters.sequenceNum" />
+            <set field="sequenceNumValue" from-field="sequenceNumMap.${productFeatureGroupIdKey}"/>
             <if-not-empty field="sequenceNumValue">
                 <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
                     <string value="${sequenceNumValue}"></string>
@@ -1385,7 +1429,110 @@
                 </else>
                 </if-compare>
             </if-not-empty>
+            <set field="descriptionMap" from-field="parameters.description" />
+            <set field="descriptionValue" from-field="descriptionMap.${productFeatureGroupIdKey}"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidDesc" ret-field="isValidDesc">
+                <field field="descriptionValue"/>
+            </call-class-method>
+            <if-compare field="isValidDesc" operator="equals" value="false">
+                <set field="descriptionBlank" value="true"/>
+            </if-compare>
+            
+            <set field="invalidFacetValueMin" value="false"/>
+            <set field="invalidFacetValueMinRange" value="false"/>
+            <set field="invalidFacetValueMax" value="false"/>
+            <set field="invalidFacetValueMaxRange" value="false"/>
+            
+            <set field="facetValueMinMap" from-field="parameters.facetValueMin" />
+            <set field="facetValueMinValue" from-field="facetValueMinMap.${productFeatureGroupIdKey}"/>
+            <if-not-empty field="facetValueMinValue">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="facetValueMinVaild">
+                    <string value="${facetValueMinValue}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="facetValueMinVaild" type="Boolean">
+                    <set field="invalidFacetValueMin" value="true"/>
+                    <set field="invalidFacetValueMinError" value="true"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="0" field="facetValueMinValue" type="Long"/>
+                                <if-compare operator="less-equals" value="99" field="facetValueMinValue" type="Long"/>
+                            </and>
+                        </condition>
+                        <then>
+                        </then>
+                        <else>
+                            <set field="invalidFacetValueMinRange" value="true"/>
+                            <set field="invalidFacetValueMinRangeError" value="true"/>
+                        </else>
+                    </if>
+                </else>
+                </if-compare>
+            </if-not-empty>
+            
+            <set field="facetValueMaxMap" from-field="parameters.facetValueMax" />
+            <set field="facetValueMaxValue" from-field="facetValueMaxMap.${productFeatureGroupIdKey}"/>
+            <if-not-empty field="facetValueMaxValue">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="facetValueMaxVaild">
+                    <string value="${facetValueMaxValue}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="facetValueMaxVaild" type="Boolean">
+                    <set field="invalidFacetValueMax" value="true"/>
+                    <set field="invalidFacetValueMaxError" value="true"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="1" field="facetValueMaxValue" type="Long"/>
+                                <if-compare operator="less-equals" value="99" field="facetValueMaxValue" type="Long"/>
+                            </and>
+                        </condition>
+                        <then>
+                        </then>
+                        <else>
+                            <set field="invalidFacetValueMaxRange" value="true"/>
+                            <set field="invalidFacetValueMaxRangeError" value="true"/>
+                        </else>
+                    </if>
+                </else>
+                </if-compare>
+            </if-not-empty>
+            
+            <if>
+            <condition>
+                <and>
+                    <if-compare operator="equals" value="false" field="invalidFacetValueMin" type="Boolean"/>
+                    <if-compare operator="equals" value="false" field="invalidFacetValueMinRange" type="Boolean"/>
+                    <if-compare operator="equals" value="false" field="invalidFacetValueMax" type="Boolean"/>
+                    <if-compare operator="equals" value="false" field="invalidFacetValueMaxRange" type="Boolean"/>
+                </and>
+            </condition>
+            <then>
+                <set field="facetValueMin" from-field="facetValueMinMap.${productFeatureGroupIdKey}"/>
+		        <set field="facetValueMax" from-field="facetValueMaxMap.${productFeatureGroupIdKey}"/>
+		            
+		        <if-empty field="facetValueMax">
+		            <if-not-empty field="facetValueMin">
+		                <set field="validMinMaxValue" value="false"/>
+		            </if-not-empty>
+		        </if-empty>
+		        <if-empty field="facetValueMin">
+		            <if-not-empty field="facetValueMax">
+		                <set field="validMinMaxValue" value="false"/>
+		            </if-not-empty>
+		            <set field="facetValueMin" value="0" type="Long"/>
+		        </if-empty>
+		                    
+				<if-not-empty field="facetValueMax">
+				    <if-compare-field operator="greater-equals" field="facetValueMin" to-field="facetValueMax" type="Long">
+				        <set field="validFacetMaxValue" value="false"/>
+				    </if-compare-field>
+				</if-not-empty>
+            </then>
+        </if>
         </iterate-map>
+    
         <if-compare field="descriptionBlank" value="true" operator="equals">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidProductFeatureGroupDescError"/>
             <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
@@ -1402,41 +1549,11 @@
                 <string-to-list string="${tempErrorMessage}" message-field="SEQUENCENUM" list="error_list"/>
             </then>
         </if>
-        <set field="invalidFacetValueMin" value="false"/>
-        <set field="invalidFacetValueMinRange" value="false"/>
-        <set field="invalidFacetValueMax" value="false"/>
-        <set field="invalidFacetValueMaxRange" value="false"/>
-        
-        <iterate-map key="facetValueMinKey" value="facetValueMinValue" map="parameters.facetValueMin">
-            <if-not-empty field="facetValueMinValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="facetValueMinVaild">
-                    <string value="${facetValueMinValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="facetValueMinVaild" type="Boolean">
-                    <set field="invalidFacetValueMin" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="0" field="facetValueMinValue" type="Long"/>
-                                <if-compare operator="less-equals" value="99" field="facetValueMinValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidFacetValueMinRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-            </if-not-empty>
-        </iterate-map>
         <if>
             <condition>
                 <or>
-                    <if-compare operator="equals" value="true" field="invalidFacetValueMin" type="Boolean"/>
-                    <if-compare operator="equals" value="true" field="invalidFacetValueMinRange" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidFacetValueMinError" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidFacetValueMinRangeError" type="Boolean"/>
                 </or>
             </condition>
             <then>
@@ -1444,36 +1561,11 @@
                 <string-to-list string="${tempErrorMessage}" message-field="FACETVALUEMIN" list="error_list"/>
             </then>
         </if>
-        <iterate-map key="facetValueMaxKey" value="facetValueMaxValue" map="parameters.facetValueMax">
-            <if-not-empty field="facetValueMaxValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="facetValueMaxVaild">
-                    <string value="${facetValueMaxValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="facetValueMaxVaild" type="Boolean">
-                    <set field="invalidFacetValueMax" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="1" field="facetValueMaxValue" type="Long"/>
-                                <if-compare operator="less-equals" value="99" field="facetValueMaxValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidFacetValueMaxRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-            </if-not-empty>
-        </iterate-map>
         <if>
             <condition>
                 <or>
-                    <if-compare operator="equals" value="true" field="invalidFacetValueMax" type="Boolean"/>
-                    <if-compare operator="equals" value="true" field="invalidFacetValueMaxRange" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidFacetValueMaxError" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidFacetValueMaxRangeError" type="Boolean"/>
                 </or>
             </condition>
             <then>
@@ -1481,51 +1573,7 @@
                 <string-to-list string="${tempErrorMessage}" message-field="FACETVALUEMAX" list="error_list"/>
             </then>
         </if>
-        <set field="validFacetMaxValue" value="true"/>
-        <set field="validMinMaxValue" value="true"/>
-        <if>
-            <condition>
-                <and>
-                    <if-compare operator="equals" value="false" field="invalidFacetValueMin" type="Boolean"/>
-                    <if-compare operator="equals" value="false" field="invalidFacetValueMinRange" type="Boolean"/>
-                    <if-compare operator="equals" value="false" field="invalidFacetValueMax" type="Boolean"/>
-                    <if-compare operator="equals" value="false" field="invalidFacetValueMaxRange" type="Boolean"/>
-                </and>
-            </condition>
-            <then>
-		        <iterate-map key="productFeatureGroupIdKey" value="productFeatureGroupIdValue" map="parameters.productFeatureGroupId">
-		            <set field="productFeatureGroupId" from-field="productFeatureGroupIdValue"/>
-		            <iterate-map key="facetValueMinKey" value="facetValueMinValue" map="parameters.facetValueMin">
-		                <if-compare-field field="productFeatureGroupIdKey" to-field="facetValueMinKey" operator="equals">
-		                    <set field="facetValueMin" from-field="facetValueMinValue"/>
-		                </if-compare-field>
-		            </iterate-map>
-		            <iterate-map key="facetValueMaxKey" value="facetValueMaxValue" map="parameters.facetValueMax">
-		                <if-compare-field field="productFeatureGroupIdKey" to-field="facetValueMaxKey" operator="equals">
-		                    <set field="facetValueMax" from-field="facetValueMaxValue"/>
-		                    
-		                    <if-empty field="facetValueMax">
-		                        <if-not-empty field="facetValueMin">
-		                            <set field="validMinMaxValue" value="false"/>
-		                        </if-not-empty>
-		                    </if-empty>
-		                    <if-empty field="facetValueMin">
-		                        <if-not-empty field="facetValueMax">
-		                            <set field="validMinMaxValue" value="false"/>
-		                        </if-not-empty>
-		                        <set field="facetValueMin" value="0" type="Long"/>
-		                    </if-empty>
-		                    
-				            <if-not-empty field="facetValueMax">
-				                <if-compare-field operator="greater-equals" field="facetValueMin" to-field="facetValueMax" type="Long">
-				                    <set field="validFacetMaxValue" value="false"/>
-				                </if-compare-field>
-				            </if-not-empty>
-		                </if-compare-field>
-		            </iterate-map>
-		        </iterate-map>
-            </then>
-        </if>
+        
         <if-compare operator="equals" value="false" field="validMinMaxValue" type="Boolean">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidMinMaxValueError"/>
             <string-to-list string="${tempErrorMessage}" message-field="FACETVALUEMAX" list="error_list"/>
@@ -3049,9 +3097,8 @@
                 <field field="parameters.productId"/>
             </call-class-method>
             <if-compare field="isValidId" operator="equals" value="true">
-			    <entity-one entity-name="Product" value-field="existingProductId">
-	                <field-map field-name="productId" from-field="parameters.productId"/>
-	            </entity-one>
+                <set field="findProductCtx.productId" from-field="parameters.productId"/>
+                <find-by-primary-key value-field="existingProductId" entity-name="Product" map="findProductCtx"/>
 	            <if-not-empty field="existingProductId">
 	                <set field="errorKey" from-field="parameters.productId"/>
 	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductIdExistError"/>
@@ -3082,11 +3129,27 @@
         <if-empty field="parameters.productDetailName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductNameError"/>
             <string-to-list string="${tempErrorMessage}" message-field="PRODUCTNAME" list="error_list"/>
-        </if-empty>
+            <else>
+            	<call-object-method method-name="length" obj-field="parameters.productDetailName" ret-field="productDetailNameLength"/>
+		        <if-compare operator="greater" value="100" field="productDetailNameLength" type="Integer">
+		        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongProductNameError"/>
+            		<string-to-list string="${tempErrorMessage}" message-field="PRODUCTNAME" list="error_list"/>
+		        </if-compare>
+        	</else>
+	    </if-empty>
+	    
         <if-empty field="parameters.internalName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInternalNameError"/>
             <string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+            <else>
+            	<call-object-method method-name="length" obj-field="parameters.internalName" ret-field="internalNameLength"/>
+		        <if-compare operator="greater" value="255" field="internalNameLength" type="Integer">
+		        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InternalNameExceedsLengthError"/>
+            		<string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+		        </if-compare>
+        	</else>
         </if-empty>
+        
         <if-empty field="parameters.longDescription">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDetailFieldError"/>
             <string-to-list string="${tempErrorMessage}" message-field="LONGDESCRIPTION" list="error_list"/>
@@ -4195,24 +4258,23 @@
     <simple-method method-name="createNewProductVariant" short-description="Create Product Variant">
         <if-empty field="parameters.productIdTo">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductIdError"/>
-            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTID" list="error_list"/>
         <else>
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
                 <field field="parameters.productIdTo"/>
             </call-class-method>
             <if-compare field="isValidId" operator="equals" value="true">
-			    <entity-one entity-name="Product" value-field="existingProductId">
-	                <field-map field-name="productId" from-field="parameters.productIdTo"/>
-	            </entity-one>
+	            <set field="findProductCtx.productId" from-field="parameters.productIdTo"/>
+                <find-by-primary-key value-field="existingProductId" entity-name="Product" map="findProductCtx"/>
 	            <if-not-empty field="existingProductId">
 	                <set field="errorKey" from-field="parameters.productIdTo"/>
 	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductIdExistError"/>
-	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="PRODUCTID" list="error_list"/>
 	            </if-not-empty>
             <else>
 	            <set field="errorKey" from-field="parameters.productIdTo"/>
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
-	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTID" list="error_list"/>
             </else>
             </if-compare>
         </else>
@@ -4220,6 +4282,13 @@
         <if-empty field="parameters.internalName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInternalNameError"/>
             <string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+            <else>
+            	<call-object-method method-name="length" obj-field="parameters.internalName" ret-field="internalNameLength"/>
+		        <if-compare operator="greater" value="255" field="internalNameLength" type="Integer">
+		        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InternalNameExceedsLengthError"/>
+            		<string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+		        </if-compare>
+        	</else>
         </if-empty>
         <if-not-empty field="parameters.variantListPrice">
             <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">

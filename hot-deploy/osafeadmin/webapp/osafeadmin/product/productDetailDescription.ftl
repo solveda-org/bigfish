@@ -161,7 +161,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPLongDescriptionHeading}</label>
+                <label>${eCommerceUiLabel.PDPLongDescriptionHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>
@@ -187,7 +187,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPSalesPitchHeading}</label>
+                <label>${eCommerceUiLabel.PDPSalesPitchHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>
@@ -213,7 +213,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPSpecialInstructionsHeading}</label>
+                <label>${eCommerceUiLabel.PDPSpecialInstructionsHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>
@@ -238,7 +238,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPDeliveryInfoHeading}</label>
+                <label>${eCommerceUiLabel.PDPDeliveryInfoHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>
@@ -263,7 +263,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPDirectionsHeading}</label>
+                <label>${eCommerceUiLabel.PDPDirectionsHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>
@@ -288,7 +288,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPTermsConditionsHeading}</label>
+                <label>${eCommerceUiLabel.PDPTermsConditionsHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>
@@ -313,7 +313,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPIngredientsHeading}</label>
+                <label>${eCommerceUiLabel.PDPIngredientsHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>
@@ -338,7 +338,7 @@
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
-                <label>${uiLabelMap.PDPWarningsHeading}</label>
+                <label>${eCommerceUiLabel.PDPWarningsHeading}</label>
             </div>
             <div class="infoValue">
               <#if (mode?has_content && mode == "add")>

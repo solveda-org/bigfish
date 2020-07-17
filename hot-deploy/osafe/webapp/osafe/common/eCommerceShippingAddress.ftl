@@ -104,10 +104,10 @@ function toggleBillingAccount(box) {
                            </div>
 
                             <div class="buttons">
-                               <a href="javascript:submitForm(document.checkoutInfoForm, 'EA', ${shippingAddress.contactMechId});" class="standardBtn action">${uiLabelMap.UpdateAddressBtn}</a>
+                               <a href="javascript:submitForm(document.checkoutInfoForm, 'EA', ${shippingAddress.contactMechId});" class="standardBtn update">${uiLabelMap.UpdateAddressBtn}</a>
                                <#if showDelete?has_content && showDelete=="Y">
                                    <#if billingContactMechId?if_exists != shippingContactMech.contactMechId>
-                                    <a href="javascript:submitForm(document.checkoutInfoForm, 'DE', ${shippingAddress.contactMechId});" class="standardBtn action">${uiLabelMap.DeleteBtn}</a>
+                                    <a href="javascript:submitForm(document.checkoutInfoForm, 'DE', ${shippingAddress.contactMechId});" class="standardBtn delete">${uiLabelMap.DeleteBtn}</a>
                                    </#if>
                                </#if>
                             </div>

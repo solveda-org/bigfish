@@ -321,19 +321,16 @@ under the License.
     <screen name="BackorderNotice">
         <section>
             <actions>
-                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
-                <set field="title" value="${uiLabelMap.PageTitleOrderBackorderNotice}"/>
-                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
-
-                <set field="emailContentClass" value="orderEmailContent"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="allowAnonymousView" value="Y"/>  <!-- this field will instruction OrderStatus.groovy to allow an anonymous order to be viewed by anybody, so the email confirmation screen will work -->
+                <set field="title" value="${uiLabelMap.PageTitleOrderCompleteNotice}"/>
+                <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_BACK_ORDER}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator" location="component://osafe/widget/EmailScreens.xml">
-                    <decorator-section name="body">
-                        <platform-specific><html><html-template location="component://osafe/webapp/osafe/emails/orderNoticeEmail.ftl"/></html></platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -362,23 +359,19 @@ under the License.
     <screen name="ShipmentCompleteNotice">
         <section>
             <actions>
-                <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
-                <set field="title" value="${uiLabelMap.PageTitleShipmentCompleteNotice}"/>
-                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
-
-                <set field="emailContentClass" value="orderEmailContent"/>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="allowAnonymousView" value="Y"/>  <!-- this field will instruction OrderStatus.groovy to allow an anonymous order to be viewed by anybody, so the email confirmation screen will work -->
+                <set field="title" value="${uiLabelMap.PageTitleOrderCompleteNotice}"/>
+                <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_SHIP_COMPL}"/>
             </actions>
             <widgets>
-                <decorator-screen name="email-decorator" location="component://osafe/widget/EmailScreens.xml">
-                    <decorator-section name="body">
-                        <platform-specific><html><html-template location="component://osafe/webapp/osafe/emails/shipmentNotificationEmail.ftl"/></html></platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
                     </decorator-section>
                 </decorator-screen>
             </widgets>
-
         </section>
     </screen>
 
@@ -388,7 +381,7 @@ under the License.
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="title" value="${uiLabelMap.EmailTestTitle}"/>
-                <set field="contentEmailBodyId" from-field="emailTemplateId"/>
+                <set field="contentEmailBodyId" from-field="templateId"/>
             </actions>
             <widgets>
                 <decorator-screen name="email-decorator">

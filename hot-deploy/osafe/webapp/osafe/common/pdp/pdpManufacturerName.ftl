@@ -1,3 +1,5 @@
 <div class="pdpManufacturerName">
-    <p class="profileName">${pdpManufacturerProfileName!""}</p>
+<#if pdpManufacturerProfileName?has_content>
+    <a href="<@ofbizUrl>eCommerceManufacturerDetail?manufacturerPartyId=${manufacturerPartyId}</@ofbizUrl>"><span class="profileName">${pdpManufacturerProfileName!""}</span></a>
+</#if>    
 </div>

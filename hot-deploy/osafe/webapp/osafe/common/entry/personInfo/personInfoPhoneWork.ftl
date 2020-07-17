@@ -31,12 +31,12 @@
             <input type="hidden" id="PHONE_WORK_CONTACT" name="PHONE_WORK_CONTACT" value="${requestParameters.get("PHONE_WORK_CONTACT")!contactNumberWork!""}"/>
             <input type="text" class="phone3" id="PHONE_WORK_CONTACT3" name="PHONE_WORK_CONTACT3" value="${requestParameters.get("PHONE_WORK_CONTACT3")!contactNumber3Work!""}" maxlength="3"/>
             <input type="text" class="phone4" id="PHONE_WORK_CONTACT4" name="PHONE_WORK_CONTACT4" value="${requestParameters.get("PHONE_WORK_CONTACT4")!contactNumber4Work!""}" maxlength="4"/>
-            ${uiLabelMap.PhoneExtCaption}
+            <span class="innerLabel">${uiLabelMap.PhoneExtCaption}</span>
             <input type="text" class="phoneExt" id="PHONE_WORK_EXT" name="PHONE_WORK_EXT" value="${requestParameters.get("PHONE_WORK_EXT")!extensionWork!""}" maxlength="10"/>
         </span>
         <span style="display:none" class="USER_OTHER">
             <input type="text" class="address" id="PHONE_WORK_CONTACT_OTHER" name="PHONE_WORK_CONTACT_OTHER" value="${requestParameters.get("PHONE_WORK_CONTACT_OTHER")!contactNumberWork!""}" />
-            ${uiLabelMap.PhoneExtCaption}
+            <span class="innerLabel">${uiLabelMap.PhoneExtCaption}</span>
             <input type="text" class="phoneExt" id="PHONE_WORK_EXT_OTHER" name="PHONE_WORK_EXT_OTHER" value="${requestParameters.get("PHONE_WORK_EXT_OTHER")!extensionWork!""}" maxlength="10"/>
         </span>
         <@fieldErrors fieldName="PHONE_WORK_AREA"/>

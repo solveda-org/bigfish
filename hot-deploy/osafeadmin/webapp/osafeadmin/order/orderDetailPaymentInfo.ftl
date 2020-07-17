@@ -1,8 +1,8 @@
 <!-- start orderDetailPaymentInfo.ftl -->
+<#assign currencyUomId = orderReadHelper.getCurrency()>
 <#if shipGroups?has_content && orderHeader.salesChannelEnumId != "POS_SALES_CHANNEL">
   <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(shipGroups)/> 
   <#assign shipmentMethodType = shipGroup.getRelatedOne("ShipmentMethodType")?if_exists>
-
   <div class="infoRow">
    <div class="infoEntry">
      <div class="infoCaption">
@@ -37,8 +37,46 @@
 	          </div>
 	          <div class="infoValue">
 	              <#-- TODO: add links to UPS/FEDEX/etc based on carrier partyId  -->
-	              <#if shipGroup.trackingNumber?has_content>
-	                ${shipGroup.trackingNumber}
+	              <#if shipGroup.trackingNumber?has_content >
+	                <#if orderItems?has_content>
+		                <#list orderItems as orderItem>
+		                    <#if orderItem.statusId == "ITEM_COMPLETED">
+                                <#assign orderShipmentIconVisible= "true"/>
+                                <#break>
+		                    </#if>
+		                </#list>
+		                <#-- Fetching the carrier tracking URL -->
+                        <#if orderShipmentIconVisible?has_content && shipGroupsSize == 1>    
+                            <#assign trackingURLPartyContents = delegator.findByAnd("PartyContent", {"partyId": carrier.partyId, "partyContentTypeId": "TRACKING_URL"})/>
+                            <#if trackingURLPartyContents?has_content>
+                                <#assign trackingURLPartyContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(trackingURLPartyContents)/>
+                                <#if trackingURLPartyContent?has_content>
+                                    <#assign content = trackingURLPartyContent.getRelatedOne("Content")/>
+                                    <#if content?has_content>
+                                        <#assign dataResource = content.getRelatedOne("DataResource")!""/>
+                                        <#if dataResource?has_content>
+                                            <#assign electronicText = dataResource.getRelatedOne("ElectronicText")!""/>
+                                            <#assign trackingURL = electronicText.textData!""/>
+                                            <#if trackingURL?has_content>
+                                                <#assign trackingURL = Static["org.ofbiz.base.util.string.FlexibleStringExpander"].expandString(trackingURL, {"TRACKING_NUMBER":shipGroup.trackingNumber})/>
+                                            </#if>
+                                        </#if>
+                                    </#if>
+                                </#if>
+                            </#if>
+                        </#if>
+			        </#if>
+	              	<#if shipGroupsSize == 1 >
+	                	<p>${shipGroup.trackingNumber!}</p>
+		                <#if showOrderShipmentIcon?has_content && showOrderShipmentIcon == "true" && orderShipmentIconVisible?has_content && orderShipmentIconVisible == "true" && trackingURL?has_content>
+		                    <a href="JavaScript:newPopupWindow('${trackingURL!""}');"><span class="shipmentDetailIcon"></span></a>
+		                </#if>
+	                <#else>
+	                	<p>${uiLabelMap.MultipleShipmentsLabel}</p>
+	                	<#if showOrderShipmentIcon?has_content && showOrderShipmentIcon == "true" && orderShipmentIconVisible?has_content && orderShipmentIconVisible == "true">
+		                    <a href="<@ofbizUrl>orderItemDetail?orderId=${parameters.orderId}</@ofbizUrl>"><span class="shipmentDetailIcon"></span></a>
+		                </#if>
+	                </#if>
 	              </#if>
 	          </div>
 	        </#if>
@@ -144,7 +182,7 @@
          </div>
          <div class="infoValue">
            <#list orderPayments as orderPaymentPreference>
-              <p><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) isoCode=currencyUomId/></p>
+              <p><@ofbizCurrency amount=orderPaymentPreference.maxAmount?default(0.00) isoCode=currencyUomId rounding=globalContext.currencyRounding/></p>
            </#list>
          </div>
          <div class="infoCaption">

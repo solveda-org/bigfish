@@ -295,6 +295,58 @@
             </widgets>
         </section>
     </screen>
+    <screen name="PTS_PMT_METHOD_VIEW">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_PAYMENT_METHOD_VIEW}"/>
+                <set field="contentContainerId" value="ptsPmtMethod"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_PMT_METHOD_EDIT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_PAYMENT_METHOD_EDIT}"/>
+                <set field="contentContainerId" value="ptsPmtMethod"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_PMT_METHOD_VIEW">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_PAYMENT_METHOD_VIEW}"/>
+                <set field="contentContainerId" value="pesPmtMethod"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_PMT_METHOD_EDIT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_PAYMENT_METHOD_EDIT}"/>
+                <set field="contentContainerId" value="pesPmtMethod"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
     <screen name="PTS_ORDER_STATUS">
         <section>
             <actions>
@@ -457,6 +509,7 @@
             </actions>
             <widgets>
                 <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+                <include-screen name="lightCartDialog" location="component://osafe/widget/DialogScreens.xml"/>
             </widgets>
         </section>
     </screen>

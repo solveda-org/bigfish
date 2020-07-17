@@ -4,6 +4,8 @@
         <#assign pixelId = pixelTrack.pixelId!"" />
         <#assign pixelScope = pixelTrack.pixelScope!"" />
         <#assign description = pixelTrack.description!"" />
+        <#assign pixelPagePosition = pixelTrack.pixelPagePosition!"" />
+        <#assign pixelSequenceNum = pixelTrack.pixelSequenceNum!"" />
         <#if pixelContent?has_content>
             <#assign contentId = pixelContent.contentId?if_exists />
             <#assign statusId = pixelContent.statusId!"CTNT_DEACTIVATED" />
@@ -51,6 +53,30 @@
               </div>
             </div>
           </div>
+          <#-- ==== Pixel Page Postion === -->
+          <div class="infoRow">
+            <div class="infoEntry">
+              <div class="infoCaption"><label>${uiLabelMap.PagePositionCaption}</label></div>
+                <#-- ===== Pixel Page Postion ==== -->
+              <div class="infoValue">
+                <select name="pixelPagePosition" id="pixelPagePosition">
+                  <option value=""<#if !pixelPagePosition?has_content> selected=selected</#if>>${uiLabelMap.SelectOneLabel}</option>
+                  <option value="HEAD_START"<#if parameters.pixelPagePosition?default(pixelPagePosition!"") == "HEAD_START"> selected=selected</#if>>${uiLabelMap.HeadStartLabel}</option>
+                  <option value="HEAD_END"<#if parameters.pixelPagePosition?default(pixelPagePosition!"") == "HEAD_END"> selected=selected</#if>>${uiLabelMap.HeadEndLabel}</option>
+                  <option value="BODY_START"<#if parameters.pixelPagePosition?default(pixelPagePosition!"") == "BODY_START"> selected=selected</#if>>${uiLabelMap.BodyStartLabel}</option>
+                  <option value="BODY_END"<#if parameters.pixelPagePosition?default(pixelPagePosition!"") == "BODY_END"> selected=selected</#if>>${uiLabelMap.BodyEndLabel}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="infoRow">
+            <div class="infoEntry">
+                <div class="infoCaption"><label>${uiLabelMap.SeqNumberCaption}</label></div>
+                    <div class="infoValue">
+                        <input type="text" name="pixelSequenceNum" value="${parameters.pixelSequenceNum!pixelSequenceNum!""}" class="small"/>
+                    </div>
+            </div>
+        </div>
         <#-- ==== Spot Description === -->
         <div class="infoRow">
           <div class="infoEntry long">

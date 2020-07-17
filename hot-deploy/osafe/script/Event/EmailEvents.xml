@@ -44,6 +44,7 @@
                     </entity-one>
                     <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
                         <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
+                        <set field="emailParams.productStoreId" from-field="storeEmailLookup.productStoreId"/>
                         <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
                         <set field="emailParams.sendTo" from-field="emailAddress"/>
                         <!-- Put additional information into context for email generation-->
@@ -163,7 +164,7 @@
             <set field="emailParams.sendTo" from-field="partyEmailAddress"/>
             <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
             <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
-
+            <set field="emailParams.productStoreId" from-field="storeEmailLookup.productStoreId"/>
             <if-not-empty field="emailParams.sendTo">
                 <call-service service-name="sendMailFromScreen" in-map-name="emailParams"/>
                 <else>

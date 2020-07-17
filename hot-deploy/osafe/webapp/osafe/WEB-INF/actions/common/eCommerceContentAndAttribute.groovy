@@ -55,9 +55,3 @@ if (UtilValidate.isNotEmpty(context.contentId) && UtilValidate.isNotEmpty(contex
     }
 }
 
-if (UtilValidate.isNotEmpty(context.contentId)) 
-{
-    if (UtilValidate.isNotEmpty(context.content))
-    {
-    }
-}

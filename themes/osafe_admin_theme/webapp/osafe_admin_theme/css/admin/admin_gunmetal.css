@@ -104,6 +104,7 @@ input[type=text],input[type=password], select, textarea {
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
     color: #445566;
     border: 1px solid #000000;
+    margin: 0; /* Establishes Default in Chrome */
 }
 input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus {
    	background: #e5edf6;
@@ -165,10 +166,13 @@ textarea.mediumArea {
 textarea.smallArea {
     width: 800px;
     height: 80px;
+    margin: 0 0 10px 0;
 }
 textarea.shortArea {
     width: 800px;
     height: 40px;
+    margin: 2px 0;
+
 }
 input[type="text"].regular {
     width: 110px;
@@ -192,6 +196,9 @@ input[type="text"].phone3 {
     width: 30px;
 }
 input[type="text"].phone4 {
+    width: 40px;
+}
+input[type="text"]#phoneWorkExtOther {
     width: 40px;
 }
 a {
@@ -623,7 +630,7 @@ border-bottom: none;
 	z-index: 2;  /* needed to clear drop downs over content */
 }
 
-#navigationMenu ul {
+.navigationMenu ul {
     position:        absolute;
     top:            -999em;
     width:          auto; /* left offset of submenus need to match (see below) */
@@ -632,17 +639,17 @@ border-bottom: none;
     
 }
 
-#navigationMenu ul li {
+.navigationMenu ul li {
     width:            100%;
 }
-#navigationMenu li:hover {
+.navigationMenu li:hover {
     visibility:        inherit; /* fixes IE7 'sticky bug' */
 }
-#navigationMenu li {
+.navigationMenu li {
     float:            left;
     position:        relative;
 }
-#navigationMenu a {
+.navigationMenu a {
 background: none repeat scroll 0 0 #C0C0C0;
     display:        block;
     position:        relative;
@@ -662,14 +669,14 @@ background: none repeat scroll 0 0 #C0C0C0;
 border-top-left-radius: 8px;
 border-top-right-radius: 8px;
 }
-#navigationMenu>li.active a {
+.navigationMenu>li.active a {
     background: #DCDCDC;
     border-bottom: 1px solid #DCDCDC;
     color: #484848;
 
 }
-#navigationMenu li:hover ul,
-#navigationMenu li.sfHover ul {
+.navigationMenu li:hover ul,
+.navigationMenu li.sfHover ul {
 	position: absolute;
     /*background: #000;*/
     left:            5px;
@@ -678,13 +685,13 @@ border-top-right-radius: 8px;
     z-index:        99;
 }
 
-#navigationMenu li.lastItem ul,
-#navigationMenu li.lastItem ul {
+.navigationMenu li.lastItem ul,
+.navigationMenu li.lastItem ul {
     left: -99px\9; /* For IE 8 and Below */
 }
 
-#navigationMenu li.lastItem:hover ul,
-#navigationMenu li.lastItem.sfHover ul {
+.navigationMenu li.lastItem:hover ul,
+.navigationMenu li.lastItem.sfHover ul {
     top:            24px; /* match top ul list item height */
     top: 23px\9; /* For IE 9 and Below */
     left:            -111px;
@@ -693,16 +700,16 @@ border-top-right-radius: 8px;
 }
 
 
-ul#navigationMenu li:hover li ul,
-ul#navigationMenu li.sfHover li ul {
+ul.navigationMenu li:hover li ul,
+ul.navigationMenu li.sfHover li ul {
     top:            -999em;
 }
-ul#navigationMenu li li:hover li ul,
-ul#navigationMenu li li.sfHover li ul {
+ul.navigationMenu li li:hover li ul,
+ul.navigationMenu li li.sfHover li ul {
     top:            -999em;
 }
-ul#navigationMenu li li li:hover ul,
-ul#navigationMenu li li li.sfHover ul {
+ul.navigationMenu li li li:hover ul,
+ul.navigationMenu li li li.sfHover ul {
     left:           14em; /* match ul width */
     top:            0;
 
@@ -710,7 +717,7 @@ ul#navigationMenu li li li.sfHover ul {
 
 /* Size and Padding width of each Sub Navbar a Item*/
 
-#navigationMenu .subLevel a {
+.navigationMenu .subLevel a {
     padding:        2px 5px 2px 5px;
     font-size:      13px !important;
     font-weight: bold;
@@ -723,41 +730,40 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
  /* basic Cloring of Navbar Item Text */
-#navigationMenu a, #navigationMenu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
-    color: #FFFFFF;
-    /* text-shadow: 0 1px 1px #000000; */
+.navigationMenu a, .navigationMenu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+    color: #445566;
 }
 /* Vertical bar to left of each top level item */
-#navigationMenu li.topLevel {
+.navigationMenu li.topLevel {
     width: 10%;
 }
 /* Hide Vertical bar to left of first top level item */
-#navigationMenu  li.topLevel.firstItem {
+.navigationMenu  li.topLevel.firstItem {
 
 }
 /* Hide Vertical bar to right of last top level item */
-#navigationMenu li.topLevel {
+.navigationMenu li.topLevel {
 
 
 }
 /* Vertical bar to right of last top level item */
-#navigationMenu  li.topLevel.lastItem {
+.navigationMenu  li.topLevel.lastItem {
 
 }
 
-#navigationMenu li li a {
+.navigationMenu li li a {
    /* margin: 0 0 0 5px; */
 }
-#navigationMenu li li {
+.navigationMenu li li {
     background-color: #637b93; /* Background Color of flyout*/
     border-top:     1px solid #0c0c0c; /* Horizontal bar to on top of each sub level item */
 }
 
 /* Background Color of Top nav on Hover*/
 /* Color of Top nav text on Hover*/
-#navigationMenu a:focus,
-#navigationMenu a:hover,
-#navigationMenu a:active {
+.navigationMenu a:focus,
+.navigationMenu a:hover,
+.navigationMenu a:active {
     background: #637b93;
     outline: 0;
     color: #FFFFFF;
@@ -771,9 +777,9 @@ border-top-right-radius: 8px;
 }
 /* Background Color of Sub nav on Hover*/
 /* Color of Sub nav text on Hover*/
-#navigationMenu li li:hover, #navigationMenu li li.sfHover, #navigationMenu li li a:focus, #navigationMenu li li a:hover, #navigationMenu li li a:active {
+.navigationMenu li li:hover, .navigationMenu li li.sfHover, .navigationMenu li li a:focus, .navigationMenu li li a:hover, .navigationMenu li li a:active {
     background: #c0c0c0!important;
-    color: #fff!important;
+    color: #445566!important;
     outline: 0;
     border-radius: 0;
 }
@@ -796,17 +802,20 @@ border-top-right-radius: 8px;
 * Error Messages
 ****************************************************************/
 .content-messages {
-    margin: .5em 0 1em 0;
+    background: none repeat scroll 0 0 #FFFFFF;
+    clear: both;
     color: #000000;
     float: left;
-    clear: both;
+    margin: 0.5em 0 1em;
+    padding: 0 0 10px 0;
     width: 1066px;
-    background: #ffffff;
 }
 
-.content-messages .errorImage, .content-messages .eventImage {
+.content-messages .errorImage,
+.content-messages .eventImage,
+.content-messages .infoMessageIcon {
     float: left;
-    margin: 10px;
+    margin: 10px 10px 0 10px;
     padding: 0.1em;
 }
 #setToZeroMessage{
@@ -831,6 +840,10 @@ border-top-right-radius: 8px;
     border: 1px solid #ccffcc;
 }
 
+.eCommerceInfoMessage {
+    border: 1px solid #ff9900;
+}
+
 .errorHeading, .eventHeading {
     padding: 0 0 0 1.2em;
     font-weight: bold;
@@ -838,15 +851,18 @@ border-top-right-radius: 8px;
 }
 
 .errorMessage, .eventMessage {
-    padding: 0 0 0 2.5em
+
 }
 .fieldErrorMessage {
     font-size: 13px;
     color: #c00000;
 }
-.eCommerceErrorMessage p, .eCommerceSuccessMessage p {
-    margin: 10px 0 0 10px;
+
+.eCommerceErrorMessage p,
+.eCommerceSuccessMessage p,
+.eCommerceInfoMessage p {
     font-size: 13px;
+    margin: 10px 0 0 40px;
 }
 
 /****************************************************************
@@ -869,7 +885,9 @@ border-top-right-radius: 8px;
 .displayListBox .header {
     background: none repeat scroll 0 0 #637B93;
     border-bottom: 1px solid #000000;
+    float: left;
     padding: 3px 0;
+    width: 100%;
 }
 
 .displayBox .header {
@@ -880,6 +898,7 @@ border-top-right-radius: 8px;
     text-align: left;
 }
 .displaySearchBox .header h2 , .displayListBox .header h2  , .displayBox .header h2 {
+    float: left;
     margin: 0 0 0 10px;
 }
 
@@ -924,7 +943,9 @@ border-top-right-radius: 8px;
 .displayListBox .boxBody {
     background: none repeat scroll 0 0 #F5F5F5;
     clear: left;
+    float: left;
     font-size: 13px;
+    width: 100%;
 }
 
 .displayBox .boxBody,
@@ -986,7 +1007,6 @@ tr.odd{
 }
 
 .boxBody td.boxCaption {
-    font-size: 10px;
     width: 100%;
     color: #0c0c0c;
 }
@@ -1080,6 +1100,7 @@ categoryDetail:after {
    width: 100%;
    position: relative; /* so icons within can use absolute positioning */
    min-height: 25px; /* Set the same as infoRow for row uniformity */
+   /*    *float: none; IE7 Only */
 }
 
 .entryRow label, .entryRow div.entry, .entryRow div.entryInput {
@@ -1141,7 +1162,20 @@ categoryDetail:after {
 
 .entryRow .entry.daterange {
     width: 445px;
+    /*width: 380px;*/
 }
+
+.periodBox .entryRow .entry.daterange {
+    *width: 400px; /* IE7 Only */
+}
+
+#scheduledJob .entryRow .entry.daterange,
+#custRequestList .entryRow .entry.daterange,
+#abandonedCartAnalysis .entryRow .entry.daterange,
+#orderManagement .entryRow .entry.daterange {
+    *width: 500px!important; /* IE7 Only */
+}
+
 .entryRow label{
     width: 130px;
 }
@@ -1209,6 +1243,7 @@ div.searchButton {
     float: left;
     min-height: 25px; /* To accommodate button and input fields */
     width: 100%;
+    /* *float: none; IE7 Only */
 
 }
 
@@ -1248,8 +1283,9 @@ div.searchButton {
 }
 
 .infoRow div.infoValue {
-    font-weight: normal;
     color: #445566;
+    font-weight: normal;
+    min-height: 25px;  /* Need for empty DIVs and multiple infoValues in one infoRow */
     text-align: justify;
 }
 
@@ -1661,7 +1697,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 
 }
 .periodBox .entryButtons input {
-
+    margin: -3px 0 0 0;
 }
 
 .periodBox .entryButtons {
@@ -1917,6 +1953,11 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 #orderManagementOrderDetail .displayBox.generalInfo .infoRow.firstRow {
     padding: 0.5em 0 0 0; 
 }
+
+#orderManagementOrderDetail .displayBox.generalInfo .infoRow div.infoValue p {
+    float: left;
+}
+
 /****************************************************************
 * Order Detail : Customer Information
 ****************************************************************/
@@ -1962,6 +2003,14 @@ div.totalOrdersBox{
 
 input[type="text"].promoCodeEntry {
     width: 100px;
+}
+
+.infoRow.promoConditionProduct {
+    padding: 10px 0 0;
+}
+
+.infoRow.promoActionProduct {
+    padding: 10px 0 0;
 }
 
 /****************************************************************
@@ -3029,11 +3078,20 @@ a.standardBtn.adminCartIcon:hover {
     background-image: url("/osafe_admin_theme/images/gunmetal/icon/shipmentDetailIcon.gif");
     background-repeat: no-repeat;
     display: block;
-    float: right;
+    float: left;
     height: 16px;
     margin: 0 0 0 5px;
     position: relative;
     width: 16px;
+}
+
+
+.eCommerceInfoMessage .infoMessageIcon {
+    background-image: url("/osafe_admin_theme/images/gunmetal/icon/infoMessageIcon.png");
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 15px;
+    width: 15px;
 }
 
 
@@ -3055,12 +3113,13 @@ a.standardBtn.adminCartIcon:hover {
     width: 100%;
 }
 .entryButton {
+    clear: left;
     float: left;
-    padding: .5em 0 .5em 7px;
+    padding: 0.5em 0 0.5em 7px;
 }
 
 .infoDetailIcon {
-    display: inline-block;
+    display: block;
     float: right;
     margin: 7px 5px 0 0;
 }
@@ -3071,7 +3130,8 @@ a.standardBtn.adminCartIcon:hover {
 
 
 .linkButton{
-
+    display: inline-block;
+    float: right;
 }
 
 .mediaImage {
@@ -3091,8 +3151,10 @@ table#sortTable tfoot tr {
     
 }
 .productLoaderTab {
-    margin: 0.5em;
-    padding: 10px 0 0 0;
+    float: left;
+    margin: 10px 0 0;
+    text-align: center;
+    width: 100%
 }
 
 .displayBox.detailInfo.productLoaderData {
@@ -3110,26 +3172,30 @@ table#sortTable tfoot tr {
     font-weight: bold;
     padding: 2px 0 2px 10px;
 }
-input[type="button"].standardBtn.productLoaderTab.errorMark {
+.productLoaderTab input[type="button"].standardBtn.errorMark {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/errorMark.jpg);
     background-repeat:no-repeat;
     background-position: 10px center;
-    padding-left: 15px; /* add to original .standardBtn style */
+    padding-left: 30px; /* add to original .standardBtn style */
 }
-input[type="button"].standardBtn.productLoaderTab.warningMark {
+.productLoaderTab input[type="button"].standardBtn.warningMark {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/warningMark.jpg);
     background-repeat:no-repeat;
     background-position: 10px center;
-    padding-left: 15px;  /* add to original .standardBtn style */
+    padding-left: 30px;  /* add to original .standardBtn style */
 }
-input[type="button"].standardBtn.productLoaderTab {
+.productLoaderTab input[type="button"].standardBtn {
     background: none repeat scroll 0 0 #ffffff;
     border: 1px solid #445566;
     color: #445566;
     font-weight: normal;
     margin-left: 10px; /* added to .standardBtn */
-    min-width: 115px;
     padding: 9px 5px;  /* add to original .standardBtn style */
+    *overflow: visible!important; /* IE7 Only */
+}
+
+.productLoaderTab input[type="button"].standardBtn:hover {
+   text-decoration: underline;
 }
 
 #rowOrderCount{
@@ -3155,9 +3221,8 @@ input[type="button"].standardBtn.productLoaderTab {
 }
 
 .warningText {
-/*    clear: right;  */
     float: right;
-    margin: 7px 10px 0 0;
+    margin: 1px 5px 0 0;
 }
 
 .boxBody .helperText {
@@ -4347,6 +4412,11 @@ a.standardBtn.contextIcon {
    float: left; 
 }
 
+#productReviewArea {
+   margin: 0 0 10px 0;
+}
+
+
 /* Admin Checkout */
 
 .required {
@@ -4369,7 +4439,7 @@ a.standardBtn.contextIcon {
 }
 
 .displayBox.paymentOption .entry.checkbox.medium {
-    margin: 0 0 10px 0;
+    margin: 0 0 5px 0;
 }
 
 /* Customers */
@@ -4421,5 +4491,31 @@ h2 span.addIcon {
 #productCategoryFetureDetail table.osafe td.radioCol {
     width: 650px;
 }
+
+/* Order Detail */
+
+.orderStatusChangeDiv {
+    float: left;
+    position: relative;
+    top: -2px;
+}
+
+/* All Stores */
+
+.productStoreEntry,
+.productStoreInfo {
+    color: #FFFFFF;
+    float: right;
+    font-size: 14px;
+    font-weight: bold;
+    margin: 0 10px 0 0;
+}
+
+.productStoreEntry #productStoreall {
+
+}
+
+
+
 
 

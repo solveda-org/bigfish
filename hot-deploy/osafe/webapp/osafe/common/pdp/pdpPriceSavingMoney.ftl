@@ -8,7 +8,7 @@
     <div class="pdpPriceSavingMoney" id="pdpPriceSavingMoney">
       <#if youSaveMoney gt showSavingMoneyAbove?number>
         <label>${uiLabelMap.YouSaveCaption}</label>
-        <span class="savings"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed /></span>
+        <span class="savings"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed rounding=globalContext.currencyRounding /></span>
       </#if>
     </div>
   </#if>
@@ -24,7 +24,7 @@
         <#if youSaveMoney gt showSavingMoneyAbove?number>
           <div class="pdpPriceSavingMoney" id="pdpPriceSavingMoney_${key}" style="display:none">
             <label>${uiLabelMap.YouSaveCaption}</label>
-            <span class="savings"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productPrice.currencyUsed /></span>
+            <span class="savings"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productPrice.currencyUsed rounding=globalContext.currencyRounding /></span>
           </div>
         </#if>
       </#if>

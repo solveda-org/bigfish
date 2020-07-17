@@ -9,6 +9,7 @@ import org.ofbiz.base.util.*;
 
 context.allowSolicitation= "";
 context.partyEmailPreference="";
+context.partyTextPreference="";
 
 if (UtilValidate.isNotEmpty(userLogin)) 
 {
@@ -18,11 +19,21 @@ if (UtilValidate.isNotEmpty(userLogin))
     context.person=person;
     partyId=person.partyId
     context.partyId = partyId;
-    partyAttribute = delegator.findByAndCache("PartyAttribute", UtilMisc.toMap("partyId",partyId,"attrName","PARTY_EMAIL_PREFERENCE"));
-    if (UtilValidate.isNotEmpty(partyAttribute))
+    partyAttributes = party.getRelatedCache("PartyAttribute");
+    if (UtilValidate.isNotEmpty(partyAttributes))
     { 
-      partyAttribute=EntityUtil.getFirst(partyAttribute);
-      context.partyEmailPreference=partyAttribute.attrValue;
+    	partyAttributeEmailPrefList = EntityUtil.filterByAnd(partyAttributes, UtilMisc.toMap("attrName" , "PARTY_EMAIL_PREFERENCE"));
+        if (UtilValidate.isNotEmpty(partyAttributeEmailPrefList)) 
+        {
+        	partyAttributeEmailPref = EntityUtil.getFirst(partyAttributeEmailPrefList);
+        	context.partyEmailPreference=partyAttributeEmailPref.attrValue;
+        }
+        partyAttributeTextPrefList = EntityUtil.filterByAnd(partyAttributes, UtilMisc.toMap("attrName" , "PARTY_TEXT_PREFERENCE"));
+        if (UtilValidate.isNotEmpty(partyAttributeTextPrefList)) 
+        {
+        	partyAttributeTextPref = EntityUtil.getFirst(partyAttributeTextPrefList);
+        	context.partyTextPreference=partyAttributeTextPref.attrValue;
+        }
     }
 
     // get Party Phone Numbers

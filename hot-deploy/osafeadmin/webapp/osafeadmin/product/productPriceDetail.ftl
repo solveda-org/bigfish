@@ -1,5 +1,6 @@
 <#if product?has_content>
 <#assign isVariant = product.isVariant!"" />
+<#assign isVirtual = product.isVirtual!"" />
 <#assign priceType= parameters.PriceTypeRadio!""/>
   <div id="errorMessageInsert" class="fieldErrorMessage" style="display:none">${uiLabelMap.NoRowSelectedInsertError}</div>
   <div id="errorMessageDelete" class="fieldErrorMessage" style="display:none">${uiLabelMap.NoRowSelectedDeleteError}</div>
@@ -7,18 +8,40 @@
   <input type="hidden" name="isVariant" id="isVariant" value="${product.isVariant!""}"/>
   <#assign currencyUomId = CURRENCY_UOM_DEFAULT!currencyUomId />
   <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId!currencyUomId!}" />
-  
+  <#if isVirtual=='Y' || isVariant=='Y'>
+    <#if isVariant == 'Y'>
+      <#assign simplePricingHelperInfo = uiLabelMap.VariantSimplePricingHelpInfo! />
+      <#assign volumePricingHelperInfo = uiLabelMap.VariantVolumePricingHelpInfo! />
+    <#else>
+      <#assign simplePricingHelperInfo = uiLabelMap.VirtualSimplePricingHelpInfo! />
+      <#assign volumePricingHelperInfo = uiLabelMap.VirtualVolumePricingHelpInfo! />
+    </#if>
+  </#if>
   <div class="infoRow">
-    <div>
+    <div class="infoValue">
       <input type="radio" name="PriceTypeRadio" value="SimplePrice" <#if (!productPriceCondList?has_content && priceType=='') || (priceType=='SimplePrice')>checked="checked"</#if> onclick="javascript:hideVolumePricing('volumepricing');"/>
+    </div>
+    <div class="infoCaption">  
       ${uiLabelMap.SimplePricingLabel}
     </div>
+    <#if isVirtual=='Y' || isVariant=='Y'>
+      <div class="infoIcon">
+        <a href="javascript:void(0);" onMouseover="showTooltip(event,'${simplePricingHelperInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+      </div>
+    </#if>
   </div>
   <div class="infoRow">
-    <div>
+    <div class="infoValue">
       <input type="radio" name="PriceTypeRadio" value="VolumePrice" <#if (productPriceCondList?has_content && priceType=='') || (priceType=='VolumePrice')>checked="checked"</#if> onclick="javascript:showVolumePricing('volumepricing');"/>
+    </div>
+    <div class="infoCaption"> 
       ${uiLabelMap.VolumePricingLabel}
     </div>
+    <#if isVirtual=='Y' || isVariant=='Y'>
+      <div class="infoIcon">
+        <a href="javascript:void(0);" onMouseover="showTooltip(event,'${volumePricingHelperInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+      </div>
+    </#if>
   </div>
   <div class="infoRow column">
     <div class="infoEntry">

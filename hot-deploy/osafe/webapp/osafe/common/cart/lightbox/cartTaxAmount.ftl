@@ -1,1 +1,0 @@
-<div class="cartTaxAmount">${orderTaxTotal!}</div>

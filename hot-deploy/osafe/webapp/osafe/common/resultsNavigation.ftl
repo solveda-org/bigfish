@@ -46,19 +46,23 @@
 			  <#assign nextPrevUrl = "?productCategoryId=" + productCategoryId/>
 			  <#if filterGroup?exists && filterGroup?has_content>
 			    <#assign nextPrevUrl = nextPrevUrl+ "&filterGroup=" + filterGroup/>
-			    <#else>
-			    	<#-- if there is no filter group then get the SEO friendly 'base' URL -->
-			    	<#assign nextPrevUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>
+			  <#else>
+			    <#-- if there is no filter group then get the SEO friendly 'base' URL -->
+			    <#assign nextPrevUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>
 			  </#if>
 			  <#if sortResults?exists && sortResults?has_content>
 			  	<#if filterGroup?exists && filterGroup?has_content>
 			    	<#assign nextPrevUrl = nextPrevUrl+ "&sortResults=" + sortResults/>
-			    	<#else>
-			    		<#-- if there is no filter group then the SEO friendly 'base' URL is being used so make sure we have a '?' to start appending parameters-->
-			    		<#assign nextPrevUrl = nextPrevUrl+ "?sortResults=" + sortResults/>
+			    <#else>
+			        <#-- if there is no filter group then the SEO friendly 'base' URL is being used so make sure we have a '?' to start appending parameters-->
+			    	<#assign nextPrevUrl = nextPrevUrl+ "?sortResults=" + sortResults/>
 			    </#if>
 			  </#if>
-              <#assign nextPrevUrl = nextPrevUrl + "&sortResults=" + parameters.sortResults!"" >
+			  <#if nextPrevUrl?contains("?")>
+                <#assign nextPrevUrl = nextPrevUrl + "&sortResults=" + parameters.sortResults!"" >
+              <#else>
+                <#assign nextPrevUrl = nextPrevUrl + "?sortResults=" + parameters.sortResults!"" >
+              </#if>
               <#if filterGroup?exists && filterGroup?has_content>
               		<#-- if there is filter group then call makeCatalogFriendlyURL -->
 	          		<#assign nextPrevUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>

@@ -4,6 +4,7 @@ import org.ofbiz.base.util.string.*;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.entity.GenericValue;
 
 List customerList = new ArrayList();
 List<GenericValue> customerXMLList = null;

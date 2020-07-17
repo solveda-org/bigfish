@@ -2,7 +2,6 @@ package common;
 
 import javolution.util.FastMap;
 import javolution.util.FastList;
-import com.osafe.util.Util;
 import com.osafe.services.OsafeManageXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.base.util.UtilProperties;

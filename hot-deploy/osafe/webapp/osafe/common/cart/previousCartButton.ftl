@@ -1,5 +1,9 @@
     <#assign localPrevButtonVisible = prevButtonVisible!"Y">
-    <#assign localPrevButtonUrl = prevButtonUrl!"javascript:submitCheckoutForm(document.${formName!}, 'BK', '');">
+    <#if prevButtonUrl?exists && prevButtonUrl?has_content >
+      <#assign localPrevButtonUrl = prevButtonUrl! >
+    <#else>
+      <#assign localPrevButtonUrl = "javascript:submitCheckoutForm(document.${formName!}, 'BK', '');">
+    </#if>
     <#assign localPrevButtonClass = prevButtonClass!"standardBtn negative">
     <#assign localPrevButtonDescription = prevButtonDescription!uiLabelMap.PreviousBtn>
     <#if localPrevButtonVisible == "Y">

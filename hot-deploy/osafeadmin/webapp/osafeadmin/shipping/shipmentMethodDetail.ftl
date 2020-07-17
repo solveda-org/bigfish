@@ -26,7 +26,7 @@
         <label>${uiLabelMap.DescriptionCaption}</label>
       </div>
       <div class="infoValue">
-          <input name="description" type="text" id="description" maxlength="60" value="${description!parameters.description!""}"/>
+          <input name="description" type="text" id="description" maxlength="60" value="${parameters.description!description!""}"/>
       </div>
     </div>
   </div>
@@ -37,7 +37,7 @@
         <label>${uiLabelMap.SequenceCaption}</label>
       </div>
       <div class="infoValue">
-          <input name="sequenceNum" type="text" id="sequenceNum" maxlength="20" value="${sequenceNum!parameters.sequenceNum!""}"/>
+          <input name="sequenceNum" type="text" id="sequenceNum" maxlength="20" value="${parameters.sequenceNum!sequenceNum!""}"/>
       </div>
     </div>
   </div>

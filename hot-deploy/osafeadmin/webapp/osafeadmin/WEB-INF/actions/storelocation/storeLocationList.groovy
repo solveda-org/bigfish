@@ -54,6 +54,7 @@ svcCtx.put("statusId", "ANY");
 svcCtx.put("extInfo", "N");
 svcCtx.put("partyTypeId", "PARTY_GROUP");
 svcCtx.put("roleTypeId", "STORE_LOCATION");
+svcCtx.put("productStoreId", context.productStoreId);
 
 if (UtilValidate.isNotEmpty(partyGroupName))
 {
@@ -72,6 +73,10 @@ if (UtilValidate.isNotEmpty(statusEnabled) && UtilValidate.isEmpty(statusDisable
 if (UtilValidate.isNotEmpty(statusDisabled) && UtilValidate.isEmpty(statusEnabled))
 {
     svcCtx.put("statusId", "PARTY_DISABLED");
+}
+if (UtilValidate.isNotEmpty(partyGroupName))
+{
+   svcCtx.put("groupName", partyGroupName.toUpperCase());
 }
 
 Map<String, Object> svcRes;

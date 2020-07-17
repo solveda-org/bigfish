@@ -32,9 +32,9 @@
            		</#if>
 		        <#if adminContext?exists>
 		            <#if adminContext.CONTEXT_PARTY_ID?has_content && (cartCount?if_exists > 0) >
-		                 <a class="standardBtn adminCartIcon" href="<@ofbizUrl>adminCheckout</@ofbizUrl>">${cartCount!} <#if cartCount == 1 >${uiLabelMap.CommonItem}<#else>${uiLabelMap.CommonItems}</#if> <@ofbizCurrency amount=cartSubTotal rounding=2 isoCode=currencyUom/></a>
+		                 <a class="standardBtn adminCartIcon" href="<@ofbizUrl>adminCheckout</@ofbizUrl>">${cartCount!} <#if cartCount == 1 >${uiLabelMap.CommonItem}<#else>${uiLabelMap.CommonItems}</#if> <@ofbizCurrency amount=cartSubTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></a>
 		            <#else>
-		                 <a class="standardBtn adminCartIcon" href="javascript:void(0);javascript:<#if !adminContext.CONTEXT_PARTY_ID?has_content>alert('${uiLabelMap.CheckoutNoCustomerError}');</#if><#if !(cartCount?if_exists > 0)>alert('${uiLabelMap.CheckoutNoItemsInCartError}');</#if>">${cartCount!} <#if cartCount == 1 >${uiLabelMap.CommonItem}<#else>${uiLabelMap.CommonItems}</#if> <@ofbizCurrency amount=cartSubTotal rounding=2 isoCode=currencyUom/></a>
+		                 <a class="standardBtn adminCartIcon" href="javascript:void(0);javascript:<#if !adminContext.CONTEXT_PARTY_ID?has_content>alert('${uiLabelMap.CheckoutNoCustomerError}');</#if><#if !(cartCount?if_exists > 0)>alert('${uiLabelMap.CheckoutNoItemsInCartError}');</#if>">${cartCount!} <#if cartCount == 1 >${uiLabelMap.CommonItem}<#else>${uiLabelMap.CommonItems}</#if> <@ofbizCurrency amount=cartSubTotal rounding=globalContext.currencyRounding isoCode=currencyUom/></a>
 		            </#if>
 		        </#if>
 		   </div>

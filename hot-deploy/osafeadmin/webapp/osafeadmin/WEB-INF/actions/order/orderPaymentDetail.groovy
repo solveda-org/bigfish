@@ -15,6 +15,18 @@ if (UtilValidate.isNotEmpty(orderId))
 {
 	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
 	context.orderHeader = orderHeader;
+	
+	orderProductStore = orderHeader.getRelatedOne("ProductStore");
+	if (UtilValidate.isNotEmpty(orderProductStore.storeName))
+	{
+		productStoreName = orderProductStore.storeName;
+	}
+	else
+	{
+		productStoreName = orderHeader.productStoreId;
+	}
+	context.productStoreName = productStoreName;
+	
 }
 
 if(UtilValidate.isNotEmpty(orderId))

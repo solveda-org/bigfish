@@ -1,3 +1,4 @@
 <div class="plpManufacturerName">
-    <p class="profileName">${manufacturerProfileName!""}</p>
+     <label>${uiLabelMap.ManufacturerNameLabel}</label>
+    <span>${plpManufacturerProfileName!""}</span>
 </div>

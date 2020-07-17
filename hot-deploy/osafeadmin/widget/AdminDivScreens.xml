@@ -198,6 +198,23 @@
         </section>
     </screen>
 
+    <screen name="personalInfoCustomAttributes">
+		<section>
+			<actions>
+			    <script location="component://osafe/webapp/osafe/WEB-INF/actions/personalInfo/personalInfoCustomAttributes.groovy" />
+			</actions>
+			<widgets>
+				<container style="personalInfoCustomAttributesSeq">
+					<platform-specific>
+						<html>
+							<html-template
+								location="component://osafeadmin/webapp/osafeadmin/customer/personalInfo/personalInfoCustomAttributes.ftl" />
+						</html>
+					</platform-specific>
+				</container>
+			</widgets>
+		</section>
+	</screen>
 <!-- **********************************************************************  -->     
 <!-- Sequence Screen : Address  
      Sequencer Type  : AddressInfo -->

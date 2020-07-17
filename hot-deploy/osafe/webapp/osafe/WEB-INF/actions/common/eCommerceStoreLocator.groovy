@@ -12,6 +12,8 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.party.contact.ContactMechWorker;
 import com.osafe.util.Util;
 import com.osafe.geo.OsafeGeo;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 
 address = StringUtils.trimToEmpty(parameters.address);
 latitude = StringUtils.trimToEmpty(parameters.latitude);
@@ -66,8 +68,11 @@ else
 {
 	if(UtilValidate.isNotEmpty(showMap) && "Y".equals(showMap)) 
 	{
-	     storePartyList = delegator.findByAndCache("PartyRoleAndPartyDetail", UtilMisc.toMap("partyTypeId", "PARTY_GROUP","roleTypeId","STORE_LOCATION","statusId","PARTY_ENABLED"));
-	 	 searchOsafeGeo = new OsafeGeo(latitude, longitude);
+		storeList = delegator.findList("ProductStoreRole", EntityCondition.makeCondition([roleTypeId : "STORE_LOCATION"]), null, null, null, false);
+		storeListIds = EntityUtil.getFieldListFromEntityList(storeList, "partyId", true);
+		storePartyList = delegator.findList("PartyRoleAndPartyDetail", EntityCondition.makeCondition("partyId", EntityOperator.IN, storeListIds), null, null, null, false);
+	    storePartyList = EntityUtil.filterByAnd(storePartyList, UtilMisc.toMap("statusId","PARTY_ENABLED"));
+	 	searchOsafeGeo = new OsafeGeo(latitude, longitude);
 	}
 	
 }

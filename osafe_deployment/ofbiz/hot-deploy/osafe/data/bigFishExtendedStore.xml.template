@@ -149,6 +149,10 @@
 <!-- ESPOTS -->
 <DataResource dataResourceId="PTS_ADDR_BV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_ADDR_BE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_PMT_MV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_PMT_ME@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_PMT_MV@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_PMT_ME@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_ACCOUNT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_ORD_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_ORD_STATUS@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
@@ -194,6 +198,10 @@
 <DataResource dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
 <ElectronicText dataResourceId="PTS_ADDR_BV@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_ADDR_BE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_PMT_MV@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_PMT_ME@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_PMT_MV@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_PMT_ME@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_ACCOUNT@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_ORD_CONFIRM@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_ORD_STATUS@extendedStore.suffix@"/>
@@ -239,6 +247,10 @@
 <ElectronicText dataResourceId="PDP_CONTENT_05@extendedStore.suffix@"/>
 <Content contentId="PTS_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BE@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_MV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)"  contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_ME@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)"   contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT" dataResourceId="PES_PMT_MV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)"  contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT" dataResourceId="PES_PMT_ME@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)"  contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_ACCOUNT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ACCOUNT@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORD_CONFIRM@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_ORD_STATUS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORD_STATUS@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
@@ -284,6 +296,10 @@
 <Content contentId="PDP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
 <ContentRole contentId="PTS_ADDR_BV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ADDR_BE@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_PMT_MV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_PMT_ME@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_PMT_MV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_PMT_ME@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ACCOUNT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ORD_CONFIRM@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ORD_STATUS@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -463,6 +479,43 @@
 <Content contentId="E_SCHD_JOB_ALRT@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
 <!-- **************END EMAIL CONTENT******************* -->
 
+<!-- TXT MESSAGES CONTENT-->
+<DataResource dataResourceId="TXT_ABANDON_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_NEW_CUSTOMER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_ORDER_CHANGE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_ORDER_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_FORGOT_PASSWORD@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_SHIP_REVIEW@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_CHANGE_CUSTOMER@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<ElectronicText dataResourceId="TXT_ABANDON_CART@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_NEW_CUSTOMER@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_ORDER_CHANGE@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_ORDER_CONFIRM@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_FORGOT_PASSWORD@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_SHIP_REVIEW@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="TXT_CHANGE_CUSTOMER@extendedStore.suffix@"/>
+<Content contentId="TXT_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Abandoned Cart Text Message template" contentName="Abandoned Cart" dataResourceId="TXT_ABANDON_CART@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="New Customer Text Message template" contentName="New Customer" dataResourceId="TXT_NEW_CUSTOMER@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Order Change Text Message template" contentName="Order Change" dataResourceId="TXT_ORDER_CHANGE@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Order Confirm Text Message template" contentName="Order Confirm" dataResourceId="TXT_ORDER_CONFIRM@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_FORGOT_PASSWORD@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Forgot Password Text Message template" contentName="Forgot Password" dataResourceId="TXT_FORGOT_PASSWORD@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Ship Review Text Message template" contentName="Review" dataResourceId="TXT_SHIP_REVIEW" localeString="en_US@extendedStore.suffix@"/>
+<Content contentId="TXT_CHANGE_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE" description="Change Customer Text Message template" contentName="Change Customer" dataResourceId="TXT_CHANGE_CUSTOMER@extendedStore.suffix@"/>
+<ContentPurpose contentId="TXT_ABANDON_CART@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_FORGOT_PASSWORD@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_CHANGE_CUSTOMER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<Content contentId="TXT_ABANDON_CART@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_FORGOT_PASSWORD@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_CHANGE_CUSTOMER@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<!-- **************END TXT MESSAGES CONTENT******************* -->
 
 <!-- XContentXref content product store reference -->
 <!-- SITE INFO-->
@@ -496,6 +549,10 @@
 <!-- ESPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_VIEW" contentId="PTS_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_EDIT" contentId="PTS_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_VIEW" contentId="PTS_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_EDIT" contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_VIEW" contentId="PES_PMT_MV@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_EDIT" contentId="PES_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_END_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_MY_ACCOUNT" contentId="PTS_ACCOUNT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_CONFIRM" contentId="PTS_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_STATUS" contentId="PTS_ORD_STATUS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -571,6 +628,15 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_DETAIL" contentId="E_ORD_DETAIL@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_MAILING_LIST" contentId="E_MAILING@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHD_JOB_ALRT@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+
+<!-- TXT CONTENT-->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ABANDON_CART" contentId="TXT_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_NEW_CUSTOMER" contentId="TXT_NEW_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CHANGE" contentId="TXT_ORDER_CHANGE@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CONFIRM" contentId="TXT_ORDER_CONFIRM@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_FORGOT_PASSWORD" contentId="TXT_FORGOT_PASSWORD@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_SHIP_REVIEW" contentId="TXT_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_CHANGE_CUSTOMER" contentId="TXT_CHANGE_CUSTOMER@extendedStore.suffix@" contentTypeId="BF_TXT_TEMPLATE"/>
 
 <!-- END XContentXref content product store reference -->
 

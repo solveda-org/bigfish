@@ -44,6 +44,7 @@ jQuery(document).ready(function(){
     <#assign productLargeImageUrl = context.get("productLargeImageUrl")!""/>
     <#assign productDetailImageUrl = context.get("productDetailImageUrl")!""/>
     <#assign productThumbImageUrl = context.get("productThumbImageUrl")!""/>
+    
     <#if variantContentIdMap?has_content>
     	<#assign variantContentId = variantContentIdMap.get("LARGE_IMAGE_URL")!""/>
         <#if variantContentId?has_content>

@@ -9,7 +9,7 @@
   </xsd:complexType>
   <xsd:complexType name="CustomerType">
     <xsd:sequence>
-      <xsd:element name="ProductStore" type="xsd:string" default=""/>
+      <xsd:element name="ProductStoreId" type="xsd:string" default=""/>
       <xsd:element name="CustomerId" type="xsd:string" default=""/>
       <xsd:element name="FirstName" type="xsd:string" default=""/>
       <xsd:element name="LastName" type="xsd:string" default=""/>
@@ -73,7 +73,7 @@
   </xsd:complexType>
   <xsd:complexType name="OrderType">
     <xsd:sequence>
-      <xsd:element name="ProductStore" type="xsd:string" />
+      <xsd:element name="ProductStoreId" type="xsd:string" />
       <xsd:element name="Customer" type="CustomerType" />
       <xsd:element name="OrderHeader" type="OrderHeaderType" />
       <xsd:element maxOccurs="unbounded" name="CartPromotion" type="CartPromotionType" />
@@ -168,7 +168,8 @@
   </xsd:complexType>
   <xsd:complexType name="ContactUsType">
     <xsd:sequence>
-      <xsd:element name="ProductStore" type="xsd:string" />
+      <xsd:element name="ProductStoreId" type="xsd:string" />
+      <xsd:element name="ProductStoreName" type="xsd:string" />
       <xsd:element name="ContactUsId" type="xsd:string" />
       <xsd:element name="FirstName" type="xsd:string" />
       <xsd:element name="LastName" type="xsd:string" />
@@ -188,7 +189,8 @@
   </xsd:complexType>
   <xsd:complexType name="RequestCatalogType">
     <xsd:sequence>
-      <xsd:element name="ProductStore" type="xsd:string" />
+      <xsd:element name="ProductStoreId" type="xsd:string" />
+      <xsd:element name="ProductStoreName" type="xsd:string" />
       <xsd:element name="RequestCatalogId" type="xsd:string" />
       <xsd:element name="FirstName" type="xsd:string" />
       <xsd:element name="LastName" type="xsd:string" />
@@ -256,7 +258,6 @@
     <xsd:sequence>
       <xsd:element type="xsd:string" name="MasterProductId" default=""/>
       <xsd:element type="xsd:string" name="ProductId" default=""/>
-      <xsd:element type="xsd:string" name="ProductStoreId" default=""/>
       <xsd:element type="xsd:string" name="InternalName" default=""/>
       <xsd:element type="xsd:string" name="ProductName" default=""/>
       <xsd:element type="xsd:string" name="SalesPitch" default=""/>
@@ -561,7 +562,7 @@
   
   <xsd:complexType name="OrderStatusType">
     <xsd:sequence>
-      <xsd:element type="xsd:string" name="ProductStore"/>
+      <xsd:element type="xsd:string" name="ProductStoreId"/>
       <xsd:element type="xsd:string" name="OrderId"/>
       <xsd:element type="xsd:string" name="OrderStatus"/>
       <xsd:element type="xsd:string" name="OrderShipDate" default=""/>
@@ -596,7 +597,7 @@
   
   <xsd:complexType name="StoreType">
     <xsd:sequence>
-      <xsd:element type="xsd:string" name="ProductStore" default=""/>
+      <xsd:element type="xsd:string" name="ProductStoreId" default=""/>
       <xsd:element type="xsd:string" name="StoreId" default=""/>
       <xsd:element type="xsd:string" name="StoreCode" default=""/>
       <xsd:element type="xsd:string" name="StoreName" default=""/>
@@ -632,6 +633,7 @@
   </xsd:complexType>
   <xsd:complexType name="ProductRatingType">
     <xsd:sequence>
+      <xsd:element type="xsd:string" name="ProductStoreId" default=""/>
       <xsd:element name="ProductId" type="xsd:string" default=""/>
       <xsd:element name="Sku" type="xsd:string" default=""/>
       <xsd:element name="ProductRatingScore" type="xsd:string" default=""/>

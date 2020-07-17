@@ -41,17 +41,20 @@
                         <html-template location="component://osafe/webapp/osafe/common/eCommerceHtmlOpen.ftl"/>
                     </html>
                 </platform-specific>
+                <container id="scrollerPageTop"></container>
                 <container id="eCommeceOuterBasicWrap">
                     <container id="eCommerceInnerBasicWrapper">
                         <container id="eCommerceContent" style="${contentPanelStyle}">
                             <!-- header -->
                             <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
+                            <include-screen name="pincodeCheckDialog" location="component://osafe/widget/DialogScreens.xml"/>
                             <include-screen name="eCommerceHeaderLinks" location="${parameters.eCommerceScreensLocation}"/>
                             <include-screen name="eCommerceHeader" location="${parameters.eCommerceScreensLocation}"/>
 
                             <include-screen name="eCommerceNavBar" location="${parameters.eCommerceScreensLocation}"/>
 
                             <container id="eCommercePageBody">
+                                <include-screen name="PageScroller"/>
                                 <section>
                                     <condition>
                                         <not>
@@ -102,7 +105,6 @@
                     </container>
                 </container>
                 <include-screen name="googleAnalytics"/>
-                <include-screen name="pixelTracking"/>
                 <!-- closing tags for body and html -->
                 <platform-specific>
                     <html>
@@ -151,6 +153,7 @@
                         <html-template location="component://osafe/webapp/osafe/common/eCommerceHtmlOpen.ftl"/>
                     </html>
                 </platform-specific>
+                <container id="scrollerPageTop"></container>
                 <container id="eCommerceOuterBasicBevelWrap">
                     <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
                     <container id="eCommerceHeaderLinksBevelWrapper">
@@ -162,6 +165,7 @@
                             <include-screen name="eCommerceHeader" location="${parameters.eCommerceScreensLocation}"/>
                             <include-screen name="eCommerceNavBar" location="${parameters.eCommerceScreensLocation}"/>
                             <container id="eCommercePageBody">
+                                <include-screen name="PageScroller"/>
                                 <section>
                                     <condition>
                                         <not>
@@ -225,6 +229,19 @@
         </section>
     </screen>
     
+    <screen name="PageScroller">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafe/webapp/osafe/common/eCommercePageScroller.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="PageMessages">
         <section>
             <actions>
@@ -300,6 +317,7 @@
     <screen name="pixelTracking">
         <section>
             <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/pixelTracking.groovy"/>
             </actions>
             <widgets>

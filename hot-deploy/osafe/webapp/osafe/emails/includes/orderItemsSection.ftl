@@ -89,8 +89,8 @@ under the License.
                 </table>
                 </td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${orderItem.quantity?string.number}</td>
-                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></td>
-                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=localOrderReadHelper.getOrderItemTotal(orderItem) isoCode=currencyUomId/></td>
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=localOrderReadHelper.getOrderItemTotal(orderItem) isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
             </tr>
             </#list>
             <#-- Footer Rows -->
@@ -99,29 +99,29 @@ under the License.
             </tr>
             <tr>
                 <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.CommonSubtotal}</span></td>
-                <td><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId/></td>
+                <td><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                 <td>&nbsp;</td>
             </tr>
             <#list headerAdjustmentsToShow as orderHeaderAdjustment>
             <tr>
                 <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${localOrderReadHelper.getAdjustmentType(orderHeaderAdjustment)}</span></td>
-                <td><@ofbizCurrency amount=localOrderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) isoCode=currencyUomId/></td>
+                <td><@ofbizCurrency amount=localOrderReadHelper.getOrderAdjustmentTotal(orderHeaderAdjustment) isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                 <td>&nbsp;</td>
             </tr>
             </#list>
             <tr>
                 <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.ShippingAndHandlingLabel}</span></td>
-                <td><@ofbizCurrency amount=orderShippingTotal isoCode=currencyUomId/></td>
+                <td><@ofbizCurrency amount=orderShippingTotal isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
-                <td><@ofbizCurrency amount=orderTaxTotal isoCode=currencyUomId/></td>
+                <td><@ofbizCurrency amount=orderTaxTotal isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                 <td>&nbsp;</td>
             </tr>
             <tr>
                 <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TotalLabel}</span></td>
-                <td><span style="font-weight: bold;"><@ofbizCurrency amount=orderGrandTotal isoCode=currencyUomId/></span></td>
+                <td><span style="font-weight: bold;"><@ofbizCurrency amount=orderGrandTotal isoCode=currencyUomId rounding=globalContext.currencyRounding/></span></td>
                 <td>&nbsp;</td>
             </tr>
         </table>

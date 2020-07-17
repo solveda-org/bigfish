@@ -28,13 +28,13 @@
           <div class="mapLoading">${uiLabelMap.GeoLocationLoadingInfo}</div>
         </div>
         <div class="mapDirection" style="height:${geoChart.height};">
-          <div id="closeDirection" class="closeDirection">
-            <a href="javascript:void(0);" class="standardBtn action" onclick="hideDirection();">${uiLabelMap.CloseBtn}</a>
-          </div>
           <div id="noDirection" class="noDirection">
             <span>${uiLabelMap.NoDirectionRouteFoundError}</span>
           </div>
           <div id="routeDirection" class="routeDirection" style="height:${geoChart.height};"></div>
+          <div id="closeDirection" class="closeDirection">
+            <a href="javascript:void(0);" class="standardBtn action" onclick="hideDirection();">${uiLabelMap.CloseBtn}</a>
+          </div>
         </div>
         <script src="${geoChart.GeoMapRequestUrl}" type="text/javascript"></script>
         <script type="text/javascript"><!--

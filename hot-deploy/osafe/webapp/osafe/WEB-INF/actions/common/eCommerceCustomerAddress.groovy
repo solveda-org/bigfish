@@ -98,4 +98,6 @@ if (UtilValidate.isNotEmpty(shoppingCart))
     {
         context.isSameAsBilling = isSameAsBilling;
     }
+	shippingApplies = shoppingCart.shippingApplies();
+	context.shippingApplies = shippingApplies;
 }

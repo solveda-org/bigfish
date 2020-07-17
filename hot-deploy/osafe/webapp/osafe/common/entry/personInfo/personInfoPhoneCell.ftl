@@ -28,11 +28,14 @@
         <span class="USER_USA USER_CAN">
             <input type="text" class="phone3" id="PHONE_MOBILE_AREA" name="PHONE_MOBILE_AREA" maxlength="3" value="${requestParameters.get("PHONE_MOBILE_AREA")!areaCodeMobile!""}" />
             <input type="hidden" id="PHONE_MOBILE_CONTACT" name="PHONE_MOBILE_CONTACT" value="${requestParameters.get("PHONE_MOBILE_CONTACT")!contactNumberMobile!""}"/>
+            <input type="hidden" id="PHONE_MOBILE_REQUIRED" name="PHONE_MOBILE_REQUIRED" value="true"/>
             <input type="text" class="phone3" id="PHONE_MOBILE_CONTACT3" name="PHONE_MOBILE_CONTACT3" value="${requestParameters.get("PHONE_MOBILE_CONTACT3")!contactNumber3Mobile!""}" maxlength="3"/>
             <input type="text" class="phone4" id="PHONE_MOBILE_CONTACT4" name="PHONE_MOBILE_CONTACT4" value="${requestParameters.get("PHONE_MOBILE_CONTACT4")!contactNumber4Mobile!""}" maxlength="4"/>
+            <span class="instructions" >${uiLabelMap.CellPhoneNotificationLabel}</span>
         </span>
         <span style="display:none" class="USER_OTHER">
             <input type="text" class="address" id="PHONE_MOBILE_CONTACT_OTHER" name="PHONE_MOBILE_CONTACT_OTHER" value="${requestParameters.get("PHONE_MOBILE_CONTACT_OTHER")!contactNumberMobile!""}" />
+            <span class="instructions" >${uiLabelMap.CellPhoneNotificationLabel}</span>
         </span>
         <@fieldErrors fieldName="PHONE_MOBILE_AREA"/>
         <@fieldErrors fieldName="PHONE_MOBILE_CONTACT"/>

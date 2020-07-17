@@ -29,14 +29,7 @@ if (UtilValidate.isEmpty(showThankYouStatus))
 
 if("Y".equals (showThankYouStatus)) 
 {
-
-    ResourceBundle orderNumberCaptionBundle = UtilProperties.getResourceBundle ("OSafeUiLabels", locale);
-    String orderNumberCaption = orderNumberCaptionBundle.getString("OrderNumberCaption");
-    messageMap=[:];
-    messageMap.put("orderNumberCaption", orderNumberCaption);
-    messageMap.put("orderId", context.orderHeader["orderId"]);
-
-    context.OrderCompleteInfoMapped = UtilProperties.getMessage("OSafeUiLabels","OrderCompleteInfo",messageMap, locale )
+    context.OrderCompleteInfoMapped = UtilProperties.getMessage("OSafeUiLabels","OrderCompleteInfo", locale )
 }
 
 party = context.party;
@@ -174,6 +167,7 @@ if (orderId) {
     }
 }
 
+shippingApplies = true;
 if (orderHeader) {
     productStore = orderHeader.getRelatedOneCache("ProductStore");
     if (productStore) isDemoStore = !"N".equals(productStore.isDemoStore);
@@ -185,6 +179,7 @@ if (orderHeader) {
     orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
     orderItemShipGroups = orderReadHelper.getOrderItemShipGroups();
     headerAdjustmentsToShow = orderReadHelper.getOrderHeaderAdjustmentsToShow();
+	shippingApplies = orderReadHelper.shippingApplies();
 
     orderShippingTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, false, true);
     orderShippingTotal = orderShippingTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
@@ -282,6 +277,8 @@ if (orderHeader) {
 
     orderItemChangeReasons = delegator.findByAnd("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
     context.orderItemChangeReasons = orderItemChangeReasons;
+	
+	context.shippingApplies = shippingApplies;
 }
 
 

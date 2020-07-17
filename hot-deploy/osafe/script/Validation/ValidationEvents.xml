@@ -237,9 +237,15 @@
                         <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
                             <field field="parameters.PHONE_MOBILE_AREA"/>
                             <field field="contactMobilePhoneMap.contactMobilePhoneContact"/>
-                            <string value="false"/>
+                            <field field="parameters.PHONE_MOBILE_REQUIRED"/>
                         </call-class-method>
                         <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                        	<if-compare field="parameters.PHONE_MOBILE_REQUIRED" operator="equals" value="true">
+                        		<if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+	                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
+	                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
+	                            </if-compare>
+                        	</if-compare>
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
                                 <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
@@ -247,20 +253,24 @@
                         </if-compare>
                     </then>
                     <else>
-                        <if-not-empty field="parameters.PHONE_MOBILE_CONTACT_OTHER">
-                            <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.PHONE_MOBILE_CONTACT_OTHER"/>
-                            <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
-                                <string value=""/>
-                                <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
-                                <string value="false"/>
-                            </call-class-method>
-                            <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
-                                <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
-                                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                        <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.PHONE_MOBILE_CONTACT_OTHER"/>
+                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                            <string value=""/>
+                            <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+                            <field field="parameters.PHONE_MOBILE_REQUIRED"/>
+                        </call-class-method>
+                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                            <if-compare field="parameters.PHONE_MOBILE_REQUIRED" operator="equals" value="true">
+                                <if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
                                     <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
-                                </if-compare>
+                                </if-empty>
                             </if-compare>
-                        </if-not-empty>
+                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
+                            </if-compare>
+                        </if-compare>
                     </else>
                 </if>
     
@@ -602,6 +612,373 @@
                 </else>
                 </if-not-empty>
             </if-compare-field>
+            
+            
+            <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="XmlFileStr">
+                <string value="osafe.properties"/>
+                <string value="ecommerce-UiSequence-xml-file"/>
+            </call-class-method>
+            <set field="XmlFilePath" value="${groovy: org.ofbiz.base.util.string.FlexibleStringExpander.expandString(XmlFileStr, context)}" type="String"/>
+            
+            <set field="searchRestrictionMap" type="NewMap"/>
+            <set field="searchRestrictionMap.screen" value="Y" />
+            <set field="searchIgnoreCase" value="true" type="Boolean"/>
+            <set field="searchPartial" value="false" type="Boolean"/>
+            <set field="useCache" value="true" type="Boolean"/>
+            <call-class-method class-name="com.osafe.services.OsafeManageXml" method-name="getSearchListFromXmlFile" ret-field="uiSequenceSearchList">
+                <field field="XmlFilePath" type="String"/>
+                <field field="searchRestrictionMap" type="Map"/>
+                <string value="PersonalInfo"/>
+                <field field="searchIgnoreCase"  type="boolean" />
+                <field field="searchPartial"  type="boolean" />
+                <field field="useCache"  type="boolean" />
+            </call-class-method>
+            <set field="partyCustomAttributeActive" value="false"/>
+            <iterate entry="uiSequenceSearchScreen" list="uiSequenceSearchList">
+                <if-compare operator="equals" value="customAttributes" field="uiSequenceSearchScreen.key">
+                    <if-compare operator="not-equals" value="0" field="uiSequenceSearchScreen.value">
+                        <set field="partyCustomAttributeActive" value="true"/>
+                    </if-compare>
+                </if-compare>
+            </iterate> 
+            
+            <if-compare operator="equals" value="true" field="partyCustomAttributeActive">
+                <call-class-method class-name="com.osafe.services.CustomPartyAttributeServices" method-name="getPartyCustomAttributeList" ret-field="customPartyAttributeList">
+                </call-class-method>
+                
+	            
+	            <set field="attrNo" value="0" type="Integer"/>
+	            
+	            <iterate entry="customPartyAttributeMap" list="customPartyAttributeList">
+	                <set field="errorOnField" value="false"/>
+	                <clear-field field="dateString"/>
+	                <if-compare operator="equals" value="Y" field="customPartyAttributeMap.Required">
+	                    <if>
+		                <condition> 
+		                    <if-compare operator="equals" value="DATE_MMDD" field="customPartyAttributeMap.Type"/>
+		                </condition>
+		                <then>
+		                    
+		                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_MM">
+			                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_DD">
+			                        <set field="shortMonth" from-field="parameters.${customPartyAttributeMap.AttrName}_MM"/>
+			                        <set field="shortDay" from-field="parameters.${customPartyAttributeMap.AttrName}_DD"/>
+			                        <set field="tempYear" value="1972"/>
+			                        <string-append string="${shortMonth}" field="dateString"/>
+			                        <string-append string="/" field="dateString"/>
+			                        <string-append string="${shortDay}" field="dateString"/>
+			                        <string-append string="/" field="dateString"/>
+			                        <string-append string="${tempYear}" field="dateString"/>
+			                        <!-- validates date -->
+			                        
+			                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
+			                            <field field="dateString" type = "String" />
+			                        </call-class-method>
+			                        <if-compare operator="equals" value="true" field="isValidDate" type="Boolean">
+			                        <else>
+			                            <set field="errorOnField" value="true"/>
+			                        </else>
+			                        </if-compare>
+			                    <else>
+			                        <set field="errorOnField" value="true"/>
+			                    </else>
+			                    </if-not-empty>
+			                <else>
+			                    <set field="errorOnField" value="true"/>
+			                </else>
+			                </if-not-empty>
+		                </then>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_MMDDYYYY" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_MM">
+			                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_DD">
+			                      <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_YYYY">
+			                        <set field="month" from-field="parameters.${customPartyAttributeMap.AttrName}_MM"/>
+			                        <set field="day" from-field="parameters.${customPartyAttributeMap.AttrName}_DD"/>
+			                        <set field="year" from-field="parameters.${customPartyAttributeMap.AttrName}_YYYY"/>
+			                        <string-append string="${month}" field="longDateString"/>
+			                        <string-append string="/" field="longDateString"/>
+			                        <string-append string="${day}" field="longDateString"/>
+			                        <string-append string="/" field="longDateString"/>
+			                        <string-append string="${year}" field="longDateString"/>
+			                        <!-- validates date -->
+			                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
+			                            <field field="longDateString" type = "String" />
+			                        </call-class-method>
+			                        <if-compare operator="equals" value="true" field="isValidLongDate" type="Boolean">
+			                        <else>
+			                            <set field="errorOnField" value="true"/>
+			                        </else>
+			                        </if-compare>
+			                       <else>
+			                           <set field="errorOnField" value="true"/>
+			                       </else>
+			                    </if-not-empty>
+			                    <else>
+			                        <set field="errorOnField" value="true"/>
+			                    </else>
+			                    </if-not-empty>
+			                <else>
+			                    <set field="errorOnField" value="true"/>
+			                </else>
+			                </if-not-empty>
+		                </then>
+		                </else-if>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_DDMM" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_DD">
+			                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_MM">
+			                        <set field="shortDay" from-field="parameters.${customPartyAttributeMap.AttrName}_DD"/>
+			                        <set field="shortMonth" from-field="parameters.${customPartyAttributeMap.AttrName}_MM"/>
+			                        <set field="tempYear" value="1972"/>
+			                        <string-append string="${shortDay}" field="dateString"/>
+			                        <string-append string="/" field="dateString"/>
+			                        <string-append string="${shortMonth}" field="dateString"/>
+			                        <string-append string="/" field="dateString"/>
+			                        <string-append string="${tempYear}" field="dateString"/>
+			                        <!-- validates date -->
+			                        
+			                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
+			                            <field field="dateString" type = "String" />
+			                        </call-class-method>
+			                        <if-compare operator="equals" value="true" field="isValidDate" type="Boolean">
+			                        <else>
+			                            <set field="errorOnField" value="true"/>
+			                        </else>
+			                        </if-compare>
+			                    <else>
+			                        <set field="errorOnField" value="true"/>
+			                    </else>
+			                    </if-not-empty>
+			                <else>
+			                    <set field="errorOnField" value="true"/>
+			                </else>
+			                </if-not-empty>
+		                </then>
+		                </else-if>
+		                <else-if>
+		                    <condition>
+		                        <if-compare operator="equals" value="DATE_DDMMYYYY" field="customPartyAttributeMap.Type"/>
+		                    </condition>
+		                <then>
+		                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_DD">
+			                    <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_MM">
+			                      <if-not-empty field="parameters.${customPartyAttributeMap.AttrName}_YYYY">
+			                        <set field="day" from-field="parameters.${customPartyAttributeMap.AttrName}_DD"/>
+			                        <set field="month" from-field="parameters.${customPartyAttributeMap.AttrName}_MM"/>
+			                        <set field="year" from-field="parameters.${customPartyAttributeMap.AttrName}_YYYY"/>
+			                        <string-append string="${day}" field="longDateString"/>
+			                        <string-append string="/" field="longDateString"/>
+			                        <string-append string="${month}" field="longDateString"/>
+			                        <string-append string="/" field="longDateString"/>
+			                        <string-append string="${year}" field="longDateString"/>
+			                        <!-- validates date -->
+			                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
+			                            <field field="longDateString" type = "String" />
+			                        </call-class-method>
+			                        <if-compare operator="equals" value="true" field="isValidLongDate" type="Boolean">
+			                        <else>
+			                            <set field="errorOnField" value="true"/>
+			                        </else>
+			                        </if-compare>
+			                       <else>
+			                           <set field="errorOnField" value="true"/>
+			                       </else>
+			                    </if-not-empty>
+			                    <else>
+			                        <set field="errorOnField" value="true"/>
+			                    </else>
+			                    </if-not-empty>
+			                <else>
+			                    <set field="errorOnField" value="true"/>
+			                </else>
+			                </if-not-empty>
+		                </then>
+		                </else-if>
+		                <else>
+		                    <if-empty field="parameters.${customPartyAttributeMap.AttrName}">
+		                        <set field="errorOnField" value="true"/>
+		                    </if-empty>
+		                </else>
+		                </if>
+		                <if-compare operator="equals" value="true" field="errorOnField">
+		                    <if>
+		                        <condition> 
+		                            <if-compare operator="equals" value="0" field="attrNo"/>
+		                        </condition>
+		                        <then>
+		                            <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_0" list="error_list"/>
+		                        </then>
+		                        <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="1" field="attrNo"/>
+				                    </condition>
+			                    <then>
+			                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_1" list="error_list"/>
+			                    </then>
+				                </else-if>
+		                        <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="2" field="attrNo"/>
+				                    </condition>
+			                    <then>
+			                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_2" list="error_list"/>
+			                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="3" field="attrNo"/>
+				                    </condition>
+				                <then>
+				                    <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_3" list="error_list"/>
+				                </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="4" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_4" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="5" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_5" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="6" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_6" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="7" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_7" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="8" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_8" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="9" field="attrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_9" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="10" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_10" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="11" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_11" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="12" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_12" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="13" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_13" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="14" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_14" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="15" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_15" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="16" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_16" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="17" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_17" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="18" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_18" list="error_list"/>
+				                    </then>
+				                </else-if>
+				                <else-if>
+				                    <condition> 
+				                        <if-compare operator="equals" value="19" field="attrNoattrNo"/>
+				                    </condition>
+				                    <then>
+				                        <string-to-list string="${customPartyAttributeMap.ReqMessage}" message-field="FIELD_ERROR_19" list="error_list"/>
+				                    </then>
+				                </else-if>
+		                    </if>
+		                </if-compare>
+		            </if-compare>            
+	                
+	                <calculate field="attrNo">
+                        <calcop operator="add" >
+                            <calcop operator="get" field="attrNo"/>
+                            <number value="1"/>
+                        </calcop>
+                    </calculate>
+	            </iterate>
+            </if-compare>
     </simple-method>
 
     <simple-method method-name="validateBillingAddress" short-description="validate Customer/Billing Address" login-required="false">
@@ -669,8 +1046,29 @@
                     <string-to-list string="${tempErrorMessage}" message-field="BILLING_STATE" list="billing_error_list"/>
                 </if-empty>
             </then>
+            <!-- Validating Address fields for NON-US,NON-CANADIAN countries -->
             <else>
-                <set field="fieldCounter" value="0" type="Integer"/>
+                <if-empty field="parameters.BILLING_CITY">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_CITY" list="billing_error_list"/>
+                </if-empty>
+                <!-- if a country has States than state is mandatory. -->
+                <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
+                    <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+                    <field field="parameters.BILLING_COUNTRY"/>
+                </call-class-method>
+                <if-not-empty field="statesList">
+	                <if-empty field="parameters.BILLING_STATE">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_STATE" list="billing_error_list"/>
+	                </if-empty>
+                </if-not-empty>
+                <if-empty field="parameters.BILLING_POSTAL_CODE">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="billing_error_list"/>
+                </if-empty>
+                <!-- Commented logic that mandates user to input any of the 2 address fields besides address-1 -->
+                <!-- <set field="fieldCounter" value="0" type="Integer"/>
                 <if-not-empty field="parameters.BILLING_ADDRESS2">
                     <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                 </if-not-empty>
@@ -703,7 +1101,7 @@
                 <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="billing_error_list"/>
-                </if-compare>
+                </if-compare> -->
             </else>
         </if>
         
@@ -836,7 +1234,26 @@
                     </if-empty>
                 </then>
                 <else>
-                    <set field="fieldCounter" value="0" type="Integer"/>
+                    <if-empty field="parameters.SHIPPING_CITY">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_CITY" list="shipping_error_list"/>
+                    </if-empty>
+                    <!-- if a country has States than state is mandatory. -->
+	                <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
+	                    <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+	                    <field field="parameters.SHIPPING_COUNTRY"/>
+	                </call-class-method>
+	                <if-not-empty field="statesList">
+	                    <if-empty field="parameters.SHIPPING_STATE">
+	                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+	                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_STATE" list="shipping_error_list"/>
+	                    </if-empty>
+	                </if-not-empty>
+                    <if-empty field="parameters.SHIPPING_POSTAL_CODE ">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="shipping_error_list"/>
+                    </if-empty>
+                    <!-- <set field="fieldCounter" value="0" type="Integer"/>
                     <if-not-empty field="parameters.SHIPPING_ADDRESS2">
                         <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                     </if-not-empty>
@@ -869,7 +1286,7 @@
                     <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="shipping_error_list"/>
-                    </if-compare>
+                    </if-compare> -->
                 </else>
         </if>
 
@@ -1017,7 +1434,26 @@
                 
             </then>
                 <else>
-                    <set field="fieldCounter" value="0" type="Integer"/>
+                    <if-empty field="parameters.REQ_CATALOG_CITY">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_CITY" list="error_list"/>
+                    </if-empty>
+                    <!-- if a country has States than state is mandatory. -->
+	                <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
+	                    <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+	                    <field field="parameters.REQ_CATALOG_COUNTRY"/>
+	                </call-class-method>
+	                <if-not-empty field="statesList">
+	                    <if-empty field="parameters.REQ_CATALOG_STATE">
+	                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+	                        <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_STATE" list="error_list"/>
+	                    </if-empty>
+                    </if-not-empty>
+                    <if-empty field="parameters.REQ_CATALOG_POSTAL_CODE">
+		                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_POSTAL_CODE" list="error_list"/>
+			        </if-empty>
+                   <!--  <set field="fieldCounter" value="0" type="Integer"/>
                     <if-not-empty field="parameters.address2">
                         <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                     </if-not-empty>
@@ -1046,7 +1482,7 @@
                     <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_ADDRESS_ERROR" list="error_list"/>
-                    </if-compare>
+                    </if-compare> -->
                 </else>
 
         </if>
@@ -1186,18 +1622,17 @@
     <simple-method method-name="validateAddress" short-description="Validate Address" login-required="false">
         <set field="fieldCounter" value="0" type="Integer"/>
         <!-- Check address fields on the Postal Address -->
-         <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY">
+         <!-- if a country has States than state is mandatory. -->
+         <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
+             <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+             <field field="parameters.CUSTOMER_COUNTRY"/>
+         </call-class-method>
+         <if-not-empty field="statesList">
              <if-empty field="parameters.CUSTOMER_STATE">
                  <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
                  <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_STATE" list="error_list"/>
              </if-empty>
-         </if-compare>
-         <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY">
-             <if-empty field="parameters.CUSTOMER_STATE">
-                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
-                 <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_STATE" list="error_list"/>
-             </if-empty>
-         </if-compare>
+         </if-not-empty>
          <call-map-processor in-map-name="parameters" out-map-name="addressContext">
              <simple-map-processor name="address">
                 <make-in-string field="fullName">
@@ -1257,6 +1692,14 @@
                     </if-empty>
                 </then>
                 <else>
+                    <if-empty field="parameters.CUSTOMER_CITY">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_CITY" list="error_list"/>
+                    </if-empty>
+                    <if-empty field="parameters.CUSTOMER_POSTAL_CODE">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ZipCodeMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_POSTAL_CODE" list="error_list"/>
+                    </if-empty>
                     <if-not-empty field="parameters.CUSTOMER_ADDRESS2">
                         <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                     </if-not-empty>
@@ -1276,10 +1719,10 @@
                     <if-not-empty field="parameters.CUSTOMER_POSTAL_CODE">
                         <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                     </if-not-empty>
-                    <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                    <!-- <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
-                    </if-compare>
+                    </if-compare> -->
                 </else>
         </if>
 
@@ -1343,7 +1786,7 @@
             <field-to-request field="fieldLevelErrors" />
         </if-compare>
 
-        <if-compare field="parameters.useSavedCard" operator="equals" value="Y" type="String">
+        <if-compare field="parameters.paymentOption" operator="equals" value="PAYOPT_CC_EXIST" type="String">
             <if-compare-field field="parameters.savedVerificationNo" operator="not-equals" to-field="nullValue">
                 <if-empty field="parameters.savedVerificationNo">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
@@ -1503,5 +1946,5 @@
         </if-not-empty>
         <check-errors/>
     </simple-method>
-
+    
 </simple-methods>

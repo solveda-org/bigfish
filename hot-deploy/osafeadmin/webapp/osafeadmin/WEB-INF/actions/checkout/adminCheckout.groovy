@@ -10,11 +10,9 @@ import org.ofbiz.order.shoppingcart.shipping.ShippingEstimateWrapper;
 import org.ofbiz.party.party.PartyHelper;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
 
 
-
-//shopCart = ShoppingCartEvents.getCartObject(request);
-//context.shoppingCart =shopCart;
 adminContext = session.getAttribute("ADMIN_CONTEXT");
 
 if (UtilValidate.isNotEmpty(adminContext))
@@ -225,9 +223,11 @@ if (UtilValidate.isNotEmpty(adminContext))
 		    }
 		    
 			//Get CURRENT SHOPPING CART
-		    shopCart = ShoppingCartEvents.getCartObject(request);
+		    ShoppingCart shopCart = ShoppingCartEvents.getCartObject(request);
+			shippingApplies = shopCart.shippingApplies();
 		    context.shoppingCartSize = shopCart.size();
 		    context.shoppingCart = shopCart;
+			context.shippingApplies = shippingApplies;
 			shopCart.setOrderPartyId(partyId);
 			//Get CART SHIPPING ESTIMATES
 			shippingEstWpr = new ShippingEstimateWrapper(dispatcher, shopCart, 0);
@@ -251,10 +251,6 @@ if (UtilValidate.isNotEmpty(adminContext))
 			context.orderShippingTotal = shopCart.getTotalShipping();
 			context.orderTaxTotal = shopCart.getTotalSalesTax();
 			context.orderGrandTotal = shopCart.getGrandTotal();
-		    
-
-		
-
 		}		
 	}
 }

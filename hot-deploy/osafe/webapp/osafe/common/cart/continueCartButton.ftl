@@ -10,6 +10,6 @@
     </#if>
     <#assign localSubmitOrderButtonVisible = submitOrderButtonVisible!"N">
     <#if localSubmitOrderButtonVisible == "Y">
-        <input type="button" id="submitOrderBtn" name="submitOrderBtn" value="${uiLabelMap.SubmitOrderBtn}" onclick="javascript:submitCheckoutForm(document.${formName!}, 'SO', '');" class="${localNextButtonClass}" />
+        <input type="button" id="submitOrderBtn" name="submitOrderBtn" value="${uiLabelMap.SubmitOrderBtn}" onclick="javascript:submitCheckoutForm(document.${formName!}, 'SO', '');" class="standardBtn submitOrder" />
     </#if>
     

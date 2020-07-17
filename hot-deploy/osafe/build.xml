@@ -41,7 +41,33 @@
     	<fileset dir="../../applications/accounting/lib" includes="*.jar"/>
         <fileset dir="../solr/webapp/solr/WEB-INF/lib" includes="*.jar"/>
     </path>
-
+	<!-- ================================================================== -->
+    <!-- Minifies all JS and CSS files                            -->
+    <!-- ================================================================== -->
+	
+    <target name="run-bigfish-compression">
+        <yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishClientSkin.css" outFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishClientSkin.css"/>
+    	<yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishSmallDevice.css" outFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishSmallDevice.css"/>
+    	<yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/css/print.css" outFile="../../themes/osafe_theme/webapp/osafe_theme/css/print.css"/>
+        <yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/jquery-ui.js" outFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/jquery-ui.js"/>
+        <yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/prototypejs/prototype.js" outFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/prototypejs/prototype.js"/>
+        <yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/jquery.aw-showcase.js" outFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/jquery.aw-showcase.js"/>
+        <yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/jquery.jqzoom-core.js" outFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/jquery.jqzoom-core.js"/>
+        <yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/prototypejs/prototype.domReady.js" outFile="../../themes/osafe_theme/webapp/osafe_theme/js/lib/prototypejs/prototype.domReady.js"/>
+    </target>
+	
+	<macrodef name="yuicompressor" description="Runs the YUI JS/CSS compressor on the specified inFile and saves the output to outFile">
+      <attribute name="inFile"/>
+      <attribute name="outFile"/>
+      <sequential>
+        <echo message="Minify @{inFile}"/>
+          <java jar="${ofbiz.home.dir}/hot-deploy/osafe/lib/yuicompressor-2.4.2.jar" fork="true">
+            <arg value="-o"/>
+            <arg value="@{outFile}"/>
+            <arg value="@{inFile}"/>
+        </java>
+       </sequential>
+     </macrodef>
     <!-- ================================================================= -->
     <!-- Osafe Clean                                                       -->
     <!-- ================================================================= -->
@@ -160,18 +186,6 @@
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
-    	
-    	<!-- BIGFISH Types -->
-        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishTypes.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishTypes.xml">
-            <filterset >
-              <filter token="store.storePrefix" value="${store.storePrefix}"/>
-              <filter token="store.webSiteId" value="${store.webSiteId}"/>
-              <filter token="store.productStoreId" value="${store.productStoreId}"/>
-              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
-              <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
-            </filterset>
-        </copy>
-        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishTypes.xml" todir="../../hot-deploy/osafe/data/seed/" overwrite="true" failonerror="false"/>
     	
     	<!-- BIGFISH Content Menu -->
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/bigFishContentMenu.xml">
@@ -351,9 +365,9 @@
             </fileset>
         </copy>
 
-        <!-- Copy any client specific osafe files over existing files -->
-        <copy todir="../../hot-deploy/osafe" failonerror="true" overwrite="true">
-            <fileset dir="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe" >
+        <!-- Copy any client specific hot-deploy files over existing files -->
+        <copy todir="../../hot-deploy" failonerror="true" overwrite="true">
+            <fileset dir="${osafe.deployemt.home}/ofbiz/hot-deploy" >
                    <exclude name="**/*.svn"/>
                    <exclude name="**/*.patch"/>
                    <exclude name="**/*.template"/>

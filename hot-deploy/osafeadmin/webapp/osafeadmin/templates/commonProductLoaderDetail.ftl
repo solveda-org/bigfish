@@ -51,6 +51,18 @@ ${sections.render('tooltipBody')?if_exists}
 </div>
 </#if>
 
+<#if productFeatureSwatchErrorList?has_content>
+<div id="productFeatureSwatchError" class="content-messages eCommerceErrorMessage commonDivHide" style="display:none">
+  <span class="errorImageIcon errorImage"></span>
+  <p class="errorMessage">${uiLabelMap.FollowingErrorsOccurredError}</p>
+  <#if productFeatureSwatchErrorList?exists && productFeatureSwatchErrorList?has_content>
+    <#list productFeatureSwatchErrorList as productFeatureSwatchError>
+      <p class="errorMessage">${productFeatureSwatchError!}</p>
+    </#list>
+  </#if>
+</div>
+</#if>
+
 <#if productManufacturerErrorList?has_content>
 <div id="productManufacturerError" class="content-messages eCommerceErrorMessage commonDivHide" style="display:none">
   <span class="errorImageIcon errorImage"></span>

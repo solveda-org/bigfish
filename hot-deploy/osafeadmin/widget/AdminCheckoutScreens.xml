@@ -6,6 +6,7 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="OSafeUiLabels" map-name="eCommerceUiLabel" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
                 <set field="title" from-field="pageTitle"/>
                 <set field="submitFormAction" value="validateCheckout"/>
@@ -257,6 +258,7 @@
                 <set field="showOrderDetailLink" value = "true"/>
                 <set field="showOrderAttributeHeading" value = "true"/>
                 <set field="showOrderItemsPaging" value = "true"/>
+                <set field="showProductStoreInfo" value ="Y"/>
                 <!-- This set has to be before the groovy invocation -->
                 <set field="showThankYouStatus" value="Y" />
             </actions>

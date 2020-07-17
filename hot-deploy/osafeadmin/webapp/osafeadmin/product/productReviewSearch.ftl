@@ -1,6 +1,6 @@
 <!-- start promotionsSearch.ftl -->
     <#assign nowTimestamp=Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp()>
-    <#assign defaultFromDate=Static["com.osafe.util.OsafeAdminUtil"].getMonthBackTimeStamp(1,preferredDateFormat)>
+    <#assign defaultFromDate=Static["com.osafe.util.OsafeAdminUtil"].getMonthBackTimeStamp(1)>
     <div class="entryRow">
       <div class="entry">
         <label>${uiLabelMap.FromDateCaption}</label>
@@ -43,6 +43,21 @@
             <input class="textEntry" type="text" id="srchProductId" name="srchProductId" maxlength="40" value="${parameters.srchProductId!srchProductId!""}"/>
           </div>
       </div>
+      <div class="entry medium">
+          <label>${uiLabelMap.StarsCaption}</label>
+          <#assign intiCb = "${parameters.initializedCB!initializedCB}"/>
+          <#if parameters.status?has_content>
+              <#assign intiCb = "Y"/>
+          </#if>
+          <div class="entryInput checkbox medium">
+             <input type="checkbox" class="checkBoxEntry" name="searchall" id="searchall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','search')" <#if parameters.searchall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CommonAll}
+             <input class="searchOneStar" type="checkbox" id="searchOneStar" name="searchOneStar" value="1" <#if parameters.searchOneStar?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.OneStarLabel}
+             <input class="searchTwoStars" type="checkbox" id="searchTwoStars" name="searchTwoStars" value="2" <#if parameters.searchTwoStars?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.TwoStarLabel}
+             <input class="searchThreeStars" type="checkbox" id="searchThreeStars" name="searchThreeStars" value="3" <#if parameters.searchThreeStars?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.ThreeStarLabel}
+             <input class="searchFourStars" type="checkbox" id="searchFourStars" name="searchFourStars" value="4" <#if parameters.searchFourStars?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.FourStarLabel}
+             <input class="searchFiveStars" type="checkbox" id="searchFiveStars" name="searchFiveStars" value="5" <#if parameters.searchFiveStars?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.FiveStarLabel}
+          </div>
+     </div>
      </div>
 <!-- end promotionsSearch.ftl -->
 

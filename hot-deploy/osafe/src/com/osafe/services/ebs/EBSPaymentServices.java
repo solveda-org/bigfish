@@ -80,7 +80,7 @@ public class EBSPaymentServices {
         	EBSPaymentUtil.validateParam(parameters, "mode", props.get("ebsMode"), true);
         	EBSPaymentUtil.validateParam(parameters, "description", "Ebs Payment", true);
         	EBSPaymentUtil.validateParam(parameters, "return_url", props.get("returnUrl"), true);
-        	EBSPaymentUtil.validateParam(parameters, "secure_hash", EBSPaymentUtil.getSecureHash(parameters), true);
+        	EBSPaymentUtil.validateParam(parameters, "secure_hash", EBSPaymentUtil.getSecureHash(props.get("secretKey"), parameters), true);
         } catch (Exception e) {
             Debug.logError(e, module);
             return ServiceUtil.returnError("An error occurred while retreiving cart details");

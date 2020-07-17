@@ -615,10 +615,10 @@
                     <if-not-empty field="parameters.customer_postalCode">
                         <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                     </if-not-empty>
-                    <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                    <!-- <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddressIncompleteError"/>
                         <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
+                    </if-compare> -->
                 </else>
         </if>
         <check-errors/>
@@ -1065,10 +1065,10 @@
                     <if-not-empty field="parameters.billing_postalCode">
                         <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                     </if-not-empty>
-                    <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                    <!-- <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BillingAddressIncompleteError"/>
                         <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    </if-compare>
+                    </if-compare> -->
                 </else>
         </if>
 
@@ -1137,10 +1137,10 @@
                         <if-not-empty field="parameters.shipping_postalCode">
                             <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                         </if-not-empty>
-                        <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                        <!-- <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingAddressIncompleteError"/>
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                        </if-compare>
+                        </if-compare> -->
                     </else>
             </if>
         </if-empty>
@@ -1228,6 +1228,7 @@
         <set-pk-fields map="parameters" value-field="createPartyEntity"/>
         <set-nonpk-fields map="parameters" value-field="createPartyEntity"/>
         <set field="createPartyEntity.partyTypeId" value="PERSON"/>
+        <now-timestamp field="createPartyEntity.createdDate"/> 
         <create-value value-field="createPartyEntity"/>
 
         <!-- create person -->

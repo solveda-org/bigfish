@@ -17,18 +17,17 @@
 <ElectronicText dataResourceId="E_COMMON_HEADER">
  <textData>
     <![CDATA[
-<#if baseEcommerceUrl?exists><#assign urlPrefix = baseEcommerceUrl/></#if>
 <#if EMAIL_CLNT_LOGO?exists && EMAIL_CLNT_LOGO?has_content>
-<a title="${EMAIL_CLNT_NAME!""}" href="<@ofbizUrl fullPath="true">main</@ofbizUrl>">
-<img alt="${EMAIL_CLNT_NAME!""}" src="${baseUrl}/${EMAIL_CLNT_LOGO!""}">
+<a title="${EMAIL_CLNT_NAME!""}" href="${HTTP_HOST}">
+<img alt="${EMAIL_CLNT_NAME!""}" src="${HTTP_HOST}${EMAIL_CLNT_LOGO!""}">
 </a>
 </#if>
 <#if contentEmailBodyId?exists && contentEmailBodyId?has_content>
-            <#if contentEmailBodyId !="E_SCHED_JOB_ALERT">
-<div class="emailTitle" style="font-family:${EMAIL_FONT_FAMILY!""};">
-                <h1>${EMAIL_CLNT_NAME!""}: ${EMAIL_TITLE!""}</h1>
-</div>
-      </#if>
+ <#if contentEmailBodyId !="E_SCHED_JOB_ALERT">
+   <div class="emailTitle" style="font-family:${EMAIL_FONT_FAMILY!""};">
+    <h1>${EMAIL_CLNT_NAME!""}: ${EMAIL_TITLE!""}</h1>
+    </div>
+ </#if>
 </#if>
             ]]>
  </textData>
@@ -174,7 +173,7 @@
 <p>We have generated a new password for you.</p>
 <p>Your password has been changed to: ${password!""}</p>
 <p>Use this password next time you log in.</p>
-<p>You can change the password from the MY ACCOUNT page.</p>
+<p>You can change the password from the <a href="${HTTPS_HOST!}/${DISPATCHER_NAME!}/control/MyAccount">MY ACCOUNT</a> page.</p>
 </div>
      
 
@@ -236,15 +235,15 @@
                        <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
                    </#if>
                    <tr>
-                       <td <#if !cartItem_has_next><#-- Last Row Logic--></#if>><a href="${baseEcommerceUrl!""}/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
-                           <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${baseUrl}/${productImageUrl}">
+                       <td <#if !cartItem_has_next><#-- Last Row Logic--></#if>><a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
+                           <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${HTTP_HOST}${productImageUrl}">
                            </a>
                        </td>
                        <td <#if !cartItem_has_next><#-- Last Row Logic--></#if>>
                      <dl>
                      
                         <dd class="description">
-                          <a href="${baseEcommerceUrl!""}/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(productName)}</a>
+                          <a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(productName)}</a>
                         </dd>
                         <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" , product.productId)) />
                         <#if productFeatureAndAppls?has_content>
@@ -477,6 +476,8 @@
 <ElectronicText dataResourceId="E_ORDER_DETAIL">
   <textData>
             <![CDATA[
+           
+            
 <table id="outerEmailLayout" cellpadding="0" cellspacing="0" style="font-family:${EMAIL_FONT_FAMILY};">
     <tr id="orderHeaderRow">
         <td style="padding-bottom:20px;">
@@ -505,7 +506,10 @@
                                             <#if ORDER_HELPER?exists && ORDER?has_content>
                                               <#assign displayParty = ORDER_HELPER.getPlacingParty()?if_exists/>
                                               <#if displayParty?has_content>
-                                                <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "compareDate", ORDER.orderDate, "userLogin", USER_LOGIN))/>
+<#if !userLogin?exists || !userLogin?has_content>
+                                              	<#assign userLogin = USER_LOGIN! />
+                                              </#if>
+                                                <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "compareDate", ORDER.orderDate, "userLogin", userLogin))/>
                                               </#if>
                                             <tr>
                                                 <td>${uiLabelMap.NameCaption}</td>
@@ -536,7 +540,7 @@
                                 <tr>
                                     <td style="border-top: 1px solid black;">
                                         <table cellpadding="0" cellspacing="0"style="width: 90%; margin: 10px; font-family:${EMAIL_FONT_FAMILY};">
-                                        <!-- handling 'Pay in the Store' case. --> 
+										<!-- handling 'Pay in the Store' case. --> 
                                         <#if ((ORDER_PAYMENT_TYPE.paymentMethodTypeId?has_content) && (ORDER_PAYMENT_TYPE.paymentMethodTypeId == "EXT_COD"))>
                                             <#if ORDER?has_content>
                                                 <#assign orderAttrPickupStore = ORDER.getRelatedByAnd("OrderAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName", "STORE_LOCATION"))>
@@ -595,20 +599,6 @@
                                             </#if>
 
                                             <#assign outputted = true>
-                                            
-                                             <#--sagepay token-->
-                                            <#if "SAGEPAY_TOKEN" == paymentMethod.paymentMethodTypeId>
-                                                   <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>
-                                                   <#if creditCard?has_content>
-                                                   <tr>
-                                                        <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.CreditCardCaption}</td>
-                                                        <td>
-                                                            <#if creditCard.cardType?has_content><p> ${creditCard.cardType!""}</p></#if>
-                                                        </td>
-                                                   </tr>
-                                                   </#if>
-                                            </#if>
-                                            <#--end of sagepay token-->
                                         </#list>
                                         </table>
                                     </td>
@@ -634,7 +624,7 @@
                                     <td style="border-top: 1px solid black;">
                                         <#-- shipping address -->
                                         <#assign groupIdx = 0>
-                                        <#assign shipGroup = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(ORDER_ITEM_SHIP_GROUP) />
+                                        <#list ORDER_ITEM_SHIP_GROUP as shipGroup>
                                           <#if ORDER?has_content>
                                             <#assign shippingAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
                                             <#assign groupNumber = shipGroup.shipGroupSeqId?if_exists>
@@ -696,8 +686,11 @@
                                             </tr>
                                             </#if>
 
+                                            <#if shipGroup_has_next>
+                                            </#if>
                                         </table>
                                         <#assign groupIdx = groupIdx + 1>
+                                        </#list><#-- end list of ORDER_ITEM_SHIP_GROUP-->
                             </#if>
                                     </td>
                                 </tr>
@@ -718,7 +711,6 @@
     </tr>
 </table>
 
-<#if baseEcommerceUrl?exists><#assign urlPrefix = baseEcommerceUrl/></#if>
 <#-- Order Items Table-->
 <table cellpadding="0" cellspacing="0" style="width: 100%; border: #000000 solid 1px; border-collapse: collapse; font-family:${EMAIL_FONT_FAMILY};">
     <tr>
@@ -730,7 +722,6 @@
             <#-- Heading Row -->
             <tr>
                 <td colspan="2" style="font-weight: bold;">${uiLabelMap.ProductLabel}</td>
-                <td style="font-weight: bold;" align="center">Status</td>
                 <td style="font-weight: bold;">${uiLabelMap.QuantityLabel}</td>
                 <td style="font-weight: bold;">${uiLabelMap.PriceLabel}</td>
                 <td style="font-weight: bold;">${uiLabelMap.TotalLabel}</td>
@@ -763,20 +754,16 @@
                 <#if !productName?has_content && virtualProduct?has_content>
                     <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
                 </#if>
-                <#-- ITEM STATUS -->
-                <#assign itemStatus = orderItem.getRelatedOne("StatusItem")/>
-                <#assign itemOrderStatus = delegator.findByAnd("OrderStatus", Static["org.ofbiz.base.util.UtilMisc"].toMap("orderId",orderItem.orderId,"statusId",orderItem.statusId,"orderItemSeqId",orderItem.orderItemSeqId))/>
-                <#assign itemOrderStatus = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(itemOrderStatus)/>
             <tr>
-                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductDetail?productId=${urlProductId}</@ofbizUrl>" id="image_${urlProductId}">
-                    <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${baseUrl}/${productImageUrl}">
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
+                    <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${HTTP_HOST}${productImageUrl}">
                 </a>
                 </td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>
                 <table cellpadding="0" cellspacing="0" style="width: 100%; font-family:${EMAIL_FONT_FAMILY};">
                     <tr>
                         <td>
-                            <a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductDetail?productId=${urlProductId}</@ofbizUrl>">${StringUtil.wrapString(productName)}</a>
+                            <a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(productName)}</a>
                         </td>
                     </tr>
                    <#assign features = "">
@@ -795,8 +782,6 @@
                    </#if>
                 </table>
                 </td>
-                <#-- ITEM STATUS -->
-                <td align="center" <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${itemStatus.get("description",locale)} <br> ${itemOrderStatus.statusDatetime?string("yyyy-MM-dd")}</td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${orderItem.quantity?string.number}</td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></td>
                 <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=ORDER_HELPER.getOrderItemSubTotal(orderItem,ORDER_HELPER.getAdjustments()) isoCode=currencyUomId/></td>
@@ -804,11 +789,12 @@
             </#list>
             <#-- Footer Rows -->
             <tr>
-                <td colspan="6"></td>
+                <td colspan="5"></td>
             </tr>
             <tr>
-                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.CommonSubtotal}</span></td>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.CommonSubtotal}</span></td>
                 <td><@ofbizCurrency amount=ORDER_SUB_TOTAL isoCode=currencyUomId/></td>
+                <td>&nbsp;</td>
             </tr>
             <#list ORDER_ADJUSTMENTS as orderHeaderAdjustment>
             <tr>
@@ -835,28 +821,34 @@
                        </#list>
                    </#if>
                 </#if>
-                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;"><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText} )</#if><#else>${ORDER_HELPER.getAdjustmentType(orderHeaderAdjustment)}</#if></span></td>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;"><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText} )</#if><#else>${ORDER_HELPER.getAdjustmentType(orderHeaderAdjustment)}</#if></span></td>
                 <td><@ofbizCurrency amount=ORDER_HELPER.getOrderAdjustmentTotal(orderHeaderAdjustment) isoCode=currencyUomId/></td>
+                <td>&nbsp;</td>
             </tr>
             </#list>
             <tr>
-                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.ShippingAndHandlingLabel}</span></td>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.ShippingAndHandlingLabel}</span></td>
                 <td><@ofbizCurrency amount=ORDER_SHIP_TOTAL isoCode=currencyUomId/></td>
+                <td>&nbsp;</td>
             </tr>
+
             <#if (!Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"")) || (ORDER_TAX_TOTAL?has_content && (ORDER_TAX_TOTAL &gt; 0))>
                 <tr>
-                    <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
+                    <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
                     <td><@ofbizCurrency amount=ORDER_TAX_TOTAL isoCode=currencyUomId/></td>
+                    <td>&nbsp;</td>
                 </tr>
             </#if>
             <tr>
-                <td colspan="5" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TotalLabel}</span></td>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TotalLabel}</span></td>
                 <td><span style="font-weight: bold;"><@ofbizCurrency amount=ORDER_TOTAL isoCode=currencyUomId/></span></td>
+                <td>&nbsp;</td>
             </tr>
         </table>
         </td>
     </tr>
 </table>
+
 
 ]]>
   </textData>
@@ -866,12 +858,13 @@
 <ElectronicText dataResourceId="E_SHIP_REVIEW">
   <textData>
      <![CDATA[
-        <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
+             
+
+<div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
         <p>${uiLabelMap.SalutationEmailInfo} ${FIRST_NAME!""} ${LAST_NAME!""},</p>
             <p>We recently shipped items to you - we certainly hope you are enjoying our products.</p>
             <p>We'd love to get your feedback!! Simply click on the Review link below and you will have an opportunity to post a review on our site.</p>
         </div>
-        <#if baseEcommerceUrl?exists><#assign urlPrefix = baseEcommerceUrl/></#if>
         <table cellpadding="0" cellspacing="0" style="width: 100%; border: #000000 solid 1px; border-collapse: collapse; font-family:${EMAIL_FONT_FAMILY};">
             <tr>
                 <td style="text-align: center; padding-left: 10px; font-size: ${EMAIL_TBL_FONT_SIZE}; background-color: ${EMAIL_TBL_HEAD_COLOR}">${uiLabelMap.OrderItemsHeading}</td>
@@ -912,13 +905,13 @@
                        <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
                    </#if>
                    <tr>
-                       <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductDetail?productId=${urlProductId}</@ofbizUrl>" id="image_${urlProductId}">
-                           <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${baseUrl}/${productImageUrl}">
+                       <td><a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
+                           <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${HTTP_HOST}${productImageUrl}">
                            </a>
                        </td>
-                       <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${prodDescription}</td>
-                       <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>
-                          <a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductReviewSubmit?productId=${urlProductId}</@ofbizUrl>">${uiLabelMap.ReviewLabel}</a>
+                       <td>${prodDescription}</td>
+                       <td>
+                          <a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductReviewSubmit?productId=${urlProductId}">${uiLabelMap.ReviewLabel}</a>
                        </td>
                    </tr>
                </#list>
@@ -926,6 +919,10 @@
            </td>
        </tr>
     </table>
+
+
+
+
 ]]>
    </textData>
 </ElectronicText>

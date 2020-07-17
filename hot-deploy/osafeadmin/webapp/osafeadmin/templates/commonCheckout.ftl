@@ -24,18 +24,22 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
              ${sections.render('billingAddressBoxBody')!}
         </div>
     </div>
-    <div class="displayBox shippingAddress entry">
+    
+    <#if shoppingCart?has_content && shippingApplies>
+      <div class="displayBox shippingAddress entry">
         <div class="header"><h2>${uiLabelMap.ShippingAddressHeading!}</h2></div>
         <div class="boxBody">
              ${sections.render('shippingAddressBoxBody')!}
         </div>
-    </div>
-    <div class="displayBox shippingOption">
+      </div>
+      <div class="displayBox shippingOption">
         <div class="header"><h2>${uiLabelMap.ShippingOptionHeading!}</h2></div>
         <div class="boxBody">
              ${sections.render('shippingOptionBoxBody')!}
         </div>
-    </div>
+      </div>
+    </#if>
+    
     <div class="displayBox promotionOption">
         <div class="header"><h2>${uiLabelMap.PromotionOptionHeading!}</h2></div>
         <div class="boxBody">

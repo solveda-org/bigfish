@@ -103,6 +103,26 @@
 <div class="infoRow">
    <div class="infoEntry long">
      <div class="infoCaption">
+      <label>${uiLabelMap.PrivateCommentCaption}</label>
+     </div>
+     <div class="infoValue">
+        <textarea class="smallArea" name="reviewPrivateNote" id="privateCommentArea" cols="50" rows="3">${parameters.reviewPrivateNote!review.reviewPrivateNote!""}</textarea>
+     </div>
+   </div>
+</div>
+<div class="infoRow">
+   <div class="infoEntry long">
+     <div class="infoCaption">
+      <label>${uiLabelMap.ReviewResponseCaption}</label>
+     </div>
+     <div class="infoValue">
+        <textarea class="smallArea" name="reviewResponse" id="reviewResponseArea" cols="50" rows="3">${parameters.reviewResponse!review.reviewResponse!""}</textarea>
+     </div>
+   </div>
+</div>
+<div class="infoRow">
+   <div class="infoEntry long">
+     <div class="infoCaption">
       <label>${uiLabelMap.StatusCaption}</label>
      </div>
      <div class="infoValue statusItem">

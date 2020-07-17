@@ -99,16 +99,16 @@ under the License.
   </div>
 </#if>
 
-<#-- display the info messages -->
+<#-- Treating info messages the same as warnings -->
 <#if (infoMessage?has_content || infoMessageList?has_content)>
-  <div class="content-messages eCommerceInfoMessage">
+  <div class="content-messages eCommerceWarningMessage">
     <div class="infoImage"></div>
     <#if infoMessage?has_content>
-      <p class="infoMessage">${infoMessage}</p>
+      <p class="warningMessage">${infoMessage}</p>
     </#if>
     <#if infoMessageList?has_content>
       <#list infoMessageList as infoMsg>
-        <p class="infoMessage">${infoMsg}</p>
+        <p class="warningMessage">${infoMsg}</p>
       </#list>
     </#if>
   </div>

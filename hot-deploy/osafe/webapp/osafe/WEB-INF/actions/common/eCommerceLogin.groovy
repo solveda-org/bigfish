@@ -1,8 +1,8 @@
 package common;
 
-import org.ofbiz.base.util.*;
-import org.ofbiz.common.CommonWorkers;
-import org.ofbiz.webapp.control.*;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilHttp;
 
 context.autoUserLogin = session.getAttribute("autoUserLogin");
 
@@ -19,6 +19,5 @@ context.previousParams = previousParams;
 
 if (UtilValidate.isNotEmpty(parameters.review) && "review".equals(parameters.review)) 
 {
-    messageMap=[:];
-    context.infoMessage = UtilProperties.getMessage("OSafeUiLabels","ReviewLoginInfo",messageMap, locale );
+    context.infoMessage = UtilProperties.getMessage("OSafeUiLabels","ReviewLoginInfo", locale );
 }

@@ -5,7 +5,7 @@
       <span class="pricingCaption">${uiLabelMap.VolumePricingLabel}</span>
       <#list volumePricingRule as priceRule>
         <#assign volumePrice = volumePricingRuleMap.get(priceRule.productPriceRuleId)/>
-        <p><span class="priceRule">${priceRule.description!}&nbsp;</span><span class="price"><@ofbizCurrency amount=volumePrice isoCode=CURRENCY_UOM_DEFAULT/></span></p>
+        <p><span class="priceRule">${priceRule.description!}&nbsp;</span><span class="price"><@ofbizCurrency amount=volumePrice isoCode=CURRENCY_UOM_DEFAULT rounding=globalContext.currencyRounding/></span></p>
       </#list>
     </div>
   </#if>
@@ -21,7 +21,7 @@
             <span class="pricingCaption">${uiLabelMap.VolumePricingLabel}</span>
             <#list volumePricingRule as priceRule>
               <#assign volumePrice = volumePricingRuleMap.get(priceRule.productPriceRuleId)/>
-              <p><span class="priceRule">${priceRule.description!}&nbsp;</span><span class="price"><@ofbizCurrency amount=volumePrice isoCode=CURRENCY_UOM_DEFAULT/></span></p>
+              <p><span class="priceRule">${priceRule.description!}&nbsp;</span><span class="price"><@ofbizCurrency amount=volumePrice isoCode=CURRENCY_UOM_DEFAULT rounding=globalContext.currencyRounding/></span></p>
             </#list>
           </div>
         </div>

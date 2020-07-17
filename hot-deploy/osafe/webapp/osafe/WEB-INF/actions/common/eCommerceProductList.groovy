@@ -26,7 +26,7 @@ GenericValue gvProductCategory =  delegator.findOne("ProductCategory", UtilMisc.
 String searchText = com.osafe.util.Util.stripHTML(parameters.searchText);
 String searchTextSpellCheck = com.osafe.util.Util.stripHTML(parameters.searchTextSpellCheck);
 
-if (gvProductCategory) 
+if (UtilValidate.isNotEmpty(gvProductCategory)) 
 {
     CategoryContentWrapper currentProductCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
     context.currentProductCategory = gvProductCategory;
@@ -35,44 +35,50 @@ if (gvProductCategory)
     String categoryName = "";
     categoryName = gvProductCategory.categoryName;
 
-    if(UtilValidate.isNotEmpty(categoryName)) {
+    if(UtilValidate.isNotEmpty(categoryName)) 
+    {
         context.metaTitle = categoryName;
         context.pageTitle = categoryName;
     }
-    if(UtilValidate.isNotEmpty(gvProductCategory.description)) {
+    if(UtilValidate.isNotEmpty(gvProductCategory.description)) 
+    {
         context.metaKeywords = gvProductCategory.description;
     }
-    if(UtilValidate.isNotEmpty(gvProductCategory.longDescription)) {
+    if(UtilValidate.isNotEmpty(gvProductCategory.longDescription)) 
+    {
         context.metaDescription = gvProductCategory.longDescription;
     }
     //override Meta title, Description and Keywords
     String metaTitle = currentProductCategoryContentWrapper.get("HTML_PAGE_TITLE");
-    if(UtilValidate.isNotEmpty(metaTitle)) {
+    if(UtilValidate.isNotEmpty(metaTitle)) 
+    {
         context.metaTitle = metaTitle;
     }
     String metaKeywords = currentProductCategoryContentWrapper.get("HTML_PAGE_META_KEY");
-    if(UtilValidate.isNotEmpty(metaKeywords)) {
+    if(UtilValidate.isNotEmpty(metaKeywords)) 
+    {
         context.metaKeywords = metaKeywords;
     }
     String metaDescription = currentProductCategoryContentWrapper.get("HTML_PAGE_META_DESC");
-    if(UtilValidate.isNotEmpty(metaDescription)) {
+    if(UtilValidate.isNotEmpty(metaDescription)) 
+    {
         context.metaDescription = metaDescription;
     }
  
- } else 
+ } 
+ else 
  {
     searchResultsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsTitle", locale);
     if(request.getAttribute("completeDocumentList"))
     {
-        searchResultCount = request.getAttribute("completeDocumentList").size();
         String SearchResultsCountsTitle = "";
         if(UtilValidate.isEmpty(searchTextSpellCheck))
         {
-        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsCountsTitle", UtilMisc.toMap("searchText", searchText,"searchResultCount",searchResultCount), locale)
+        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsCountsTitle", UtilMisc.toMap("searchText", searchText), locale)
         }
         else
         {
-        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsSpellCheckCountsTitle", UtilMisc.toMap("searchText", searchText,"searchResultCount",searchResultCount, "searchTextSpellCheck", searchTextSpellCheck), locale)
+        	SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsSpellCheckCountsTitle", UtilMisc.toMap("searchText", searchText, "searchTextSpellCheck", searchTextSpellCheck), locale)
         }
         context.pageTitle = SearchResultsCountsTitle;
     }
@@ -82,7 +88,7 @@ if (gvProductCategory)
 previousParamsMap = {};
 previousParamsList = [];
 previousParams = request.getQueryString();
-if (previousParams) 
+if (UtilValidate.isNotEmpty(previousParams)) 
 {
     previousParams = UtilHttp.stripNamedParamsFromQueryString(previousParams, ["start", "rows", "sortResults" , "sortBtn"]);
     previousParams = "?" + previousParams;
@@ -127,7 +133,24 @@ if (UtilValidate.isNotEmpty(filterGroup))
 
   context.facetGroups = facetGroups;
 }
+
+//GET THE LIST OF FACET VALUES.
+facetValueList = FastList.newInstance();
+facetGroups = context.facetGroups;
 facetGroupMatch = Util.getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH");
+
+if(UtilValidate.isNotEmpty(facetGroups) && UtilValidate.isNotEmpty(facetGroupMatch))
+{ 
+	for(Map facet : facetGroups)
+	{
+		if(facetGroupMatch.toUpperCase() == facet.facet)
+		{
+			facetValueList.add(facet.facetValue);
+		}
+	}
+}
+context.facetValueList = facetValueList;
+
 if (UtilValidate.isNotEmpty(facetGroupMatch))
 {
 	searchText = parameters.searchText ?: "";
@@ -141,10 +164,10 @@ if (UtilValidate.isNotEmpty(facetGroupMatch))
    
 	  searchTextArr = StringUtil.split(searchText, " ");
       for (List textSearched: searchTextArr) 
-       {
+      {
           text =textSearched.trim().toUpperCase();
           exprListForParameters.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("description"), EntityOperator.LIKE, EntityFunction.UPPER(text + "%")));
-       }
+      }
       paramCond = EntityCondition.makeCondition(exprListForParameters, EntityOperator.OR); 
       featureTypeCond = EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.EQUALS, facetGroupMatch.toUpperCase());
       paramCond = EntityCondition.makeCondition([paramCond, featureTypeCond], EntityOperator.AND);
@@ -176,7 +199,9 @@ for(Map uiSequenceScreenMap : uiSequenceSearchList)
          if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) 
          {
              uiSequenceScreenMap.value = Integer.parseInt(uiSequenceScreenMap.value);
-         } else {
+         } 
+		 else 
+		 {
              uiSequenceScreenMap.value = 0;
          }
      }

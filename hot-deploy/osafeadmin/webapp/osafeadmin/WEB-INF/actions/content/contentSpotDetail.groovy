@@ -1,46 +1,50 @@
 package content;
 import org.ofbiz.base.util.UtilHttp;
-import org.apache.commons.lang.StringUtils;
-import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.order.order.OrderReadHelper;
-import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.entity.*
-import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilValidate;
-import javolution.util.FastList;
-import javolution.util.FastMap;
-import java.sql.Date;
-import java.sql.Timestamp;
+
 userLogin = session.getAttribute("userLogin");
 requestParams = UtilHttp.getParameterMap(request);
 context.userLogin=userLogin;
 content="";
-contentId="";
+bfContentId="";
 
-contentId = requestParams.get("contentId");
-if (!contentId) 
-  {
-    contentId = parameters.contentId;
-  }
-
-if(UtilValidate.isNotEmpty(contentId))
+bfContentId = requestParams.get("contentId");
+if (UtilValidate.isEmpty(bfContentId)) 
 {
-    content = delegator.findOne("Content",UtilMisc.toMap("contentId", contentId), false);
+	bfContentId = parameters.contentId;
 }
-if (UtilValidate.isNotEmpty(content))
- {
-    dataResource = content.getRelatedOne("DataResource");
-    if (UtilValidate.isNotEmpty(dataResource))
-     {
-        electronicText = dataResource.getRelatedOne("ElectronicText");
-        context.eText = electronicText.textData;
-     }
- }
+
+if(UtilValidate.isNotEmpty(bfContentId))
+{
+	if (UtilValidate.isEmpty(parameters.productCategoryId))
+	{
+	    xContentXref =delegator.findOne("XContentXref",UtilMisc.toMap("bfContentId", bfContentId, "productStoreId", productStoreId), false);
+		if (UtilValidate.isNotEmpty(xContentXref))
+		{
+			content = xContentXref.getRelatedOne("Content");
+		}
+		else
+		{
+			//for the case of ProductCategoryContent
+			contentId = bfContentId;
+			content = delegator.findOne("Content",UtilMisc.toMap("contentId", contentId), false);
+		}
+	}
+	else
+	{
+	    content =delegator.findOne("Content",UtilMisc.toMap("contentId", bfContentId), false);
+	}
+	if (UtilValidate.isNotEmpty(content))
+	{
+	    dataResource = content.getRelatedOne("DataResource");
+	    if (UtilValidate.isNotEmpty(dataResource))
+	    {
+	        electronicText = dataResource.getRelatedOne("ElectronicText");
+	        context.eText = electronicText.textData;
+	    }
+	 }
+}
 context.content = content;
-context.contentId = contentId;
+context.bfContentId = bfContentId;
  

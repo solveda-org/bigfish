@@ -6,6 +6,7 @@
     <simple-method method-name="validateCheckout" short-description="Validate Admin Order and setup shopping cart" login-required="false">
         
         <session-to-field field="shoppingCart"/>
+        <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
         <call-object-method method-name="items" obj-field="shoppingCart" ret-field="shoppingCartItems"/>
         <if-empty field="parameters.salesChannel">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SalesChannelMissingError"/>
@@ -19,15 +20,18 @@
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BillingAddressMissingError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS" list="error_list"/>
         </if-empty>
-        <if-empty field="parameters.SHIPPING_SELECT_ADDRESS">
+        <if-compare operator="equals" value="true" field="shippingApplies">
+        	<if-empty field="parameters.SHIPPING_SELECT_ADDRESS">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingAddressMissingError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS" list="error_list"/>
-        </if-empty>
+        	</if-empty>
+        </if-compare>
         <if-empty field="parameters.paymentOption">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PaymentMethodMissingError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="PAYMENT_METHOD" list="error_list"/>
         </if-empty>
-        <if-empty field="parameters.shipping_method">
+        <if-compare operator="equals" value="true" field="shippingApplies">
+        	<if-empty field="parameters.shipping_method">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingMethodMissingError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_METHOD" list="error_list"/>
                         <else>
@@ -47,7 +51,8 @@
 						        </if-not-empty>
 	                        </if-compare>
                         </else>
-        </if-empty>
+        	</if-empty>
+        </if-compare>
         
         <if-compare operator="equals" value="CCExist" field="parameters.paymentOption">
             <if-compare-field field="parameters.savedVerificationNo" operator="not-equals" to-field="nullValue">
@@ -213,40 +218,52 @@
             <string value="BILLING_LOCATION"/>
             <field field="parameters.BILLING_SELECT_ADDRESS"/>
         </call-object-method>
-        <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
-            <field field="parameters.SHIPPING_SELECT_ADDRESS"/>
-        </call-object-method>
+        <if-compare operator="equals" value="true" field="shippingApplies">
+        	<call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
+            	<field field="parameters.SHIPPING_SELECT_ADDRESS"/>
+        	</call-object-method>
+        </if-compare>
         <call-object-method obj-field="shoppingCart" method-name="setChannelType">
             <field field="parameters.salesChannel"/>
         </call-object-method>
-
-        <call-bsh><![CDATA[
-            shippingMethod = parameters.get("shipping_method");
-            if(shippingMethod != null) {
-                shipmentMethodTypeId = shippingMethod.substring(0, shippingMethod.indexOf("@"));
-                if (shippingMethod.indexOf(":") != -1) {
-                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1, shippingMethod.indexOf(":"));
-                    productStoreShipMethId =  shippingMethod.substring(shippingMethod.indexOf(":")+1);
-                    parameters.put("productStoreShipMethId", productStoreShipMethId);
-                } else {
-                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1);
-                }
-                parameters.put("shipmentMethodTypeId", shipmentMethodTypeId);
-                parameters.put("carrierPartyId", carrierPartyId);
-            }
-        ]]></call-bsh>
-        <set field="shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
-        <set field="carrierPartyId" from-field="parameters.carrierPartyId"/>
-        <set field="productStoreShipMethId" from-field="parameters.productStoreShipMethId"/>
-        <call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
-            <field field="shipmentMethodTypeId"/>
-        </call-object-method>
-        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
-            <field field="carrierPartyId"/>
-        </call-object-method>
-        <call-object-method obj-field="shoppingCart" method-name="setProductStoreShipMethId">
-            <field field="productStoreShipMethId"/>
-        </call-object-method>
+        
+        <if-compare operator="equals" value="true" field="shippingApplies">
+	        <call-bsh><![CDATA[
+	            shippingMethod = parameters.get("shipping_method");
+	            if(shippingMethod != null) {
+	                shipmentMethodTypeId = shippingMethod.substring(0, shippingMethod.indexOf("@"));
+	                if (shippingMethod.indexOf(":") != -1) {
+	                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1, shippingMethod.indexOf(":"));
+	                    productStoreShipMethId =  shippingMethod.substring(shippingMethod.indexOf(":")+1);
+	                    parameters.put("productStoreShipMethId", productStoreShipMethId);
+	                } else {
+	                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1);
+	                }
+	                parameters.put("shipmentMethodTypeId", shipmentMethodTypeId);
+	                parameters.put("carrierPartyId", carrierPartyId);
+	            }
+	        ]]></call-bsh>
+	        <set field="shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
+	        <set field="carrierPartyId" from-field="parameters.carrierPartyId"/>
+	        <set field="productStoreShipMethId" from-field="parameters.productStoreShipMethId"/>
+	        <call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
+	            <field field="shipmentMethodTypeId"/>
+	        </call-object-method>
+	        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
+	            <field field="carrierPartyId"/>
+	        </call-object-method>
+	        <call-object-method obj-field="shoppingCart" method-name="setProductStoreShipMethId">
+	            <field field="productStoreShipMethId"/>
+	        </call-object-method>
+	        <else>
+	        	<call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
+		            <string value="NO_SHIPPING" />
+		        </call-object-method>
+		        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
+		            <string value="_NA_" />
+		        </call-object-method>
+	        </else>
+        </if-compare>
         
         <call-object-method  obj-field="shoppingCart" method-name="getCurrency" ret-field="isoCode"/>
         <set field="dispatcher" from-field="parameters.dispatcher" type="Object"/>
@@ -292,6 +309,7 @@
 
     <simple-method method-name="processCartAttribute" short-description="process Cart Attribute" login-required="false">
         <session-to-field field="shoppingCart"/>
+        <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
         <if-not-empty field="shoppingCart">
             <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="storeId">
                 <string value="STORE_LOCATION"/>
@@ -302,10 +320,18 @@
                     <string value="STORE_PICKUP"/>
                 </call-object-method>
             <else>
-                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
-                    <string value="DELIVERY_OPTION"/>
-                    <string value="SHIP_TO"/>
-                </call-object-method>
+            	<if-compare operator="equals" value="true" field="shippingApplies">
+                	<call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+	                    <string value="DELIVERY_OPTION"/>
+	                    <string value="SHIP_TO"/>
+	                </call-object-method>
+                <else>
+                	<call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+	                    <string value="DELIVERY_OPTION"/>
+	                    <string value="NO_SHIPPING"/>
+	                </call-object-method>
+                </else>
+                </if-compare>
             </else>
             </if-not-empty>
             <call-object-method obj-field="shoppingCart" method-name="getAttribute" ret-field="guestCheckoutAttr">
@@ -547,6 +573,7 @@
     
     <simple-method method-name="processBigfishInventory" short-description="process Cart Attribute" login-required="false">
         <session-to-field field="shoppingCart"/>
+        <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
         <if-not-empty field="shoppingCart">
             <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="storeId">
                 <string value="STORE_LOCATION"/>
@@ -558,7 +585,12 @@
             <if-not-empty field="storeId">
                <set field="deliveryOption" value="STORE_PICKUP"/>
             <else>
-                <set field="deliveryOption" value="SHIP_TO"/>
+            	<if-compare operator="equals" value="true" field="shippingApplies">
+                	<set field="deliveryOption" value="SHIP_TO"/>
+                <else>
+                	<set field="deliveryOption" value="NO_SHIPPING"/>
+                </else>
+                </if-compare>
             </else>
             </if-not-empty>
                 

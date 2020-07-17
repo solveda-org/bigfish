@@ -16,6 +16,7 @@ import java.nio.charset.CodingErrorAction;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -714,6 +715,10 @@ public class Util {
         return (s.indexOf(subString) != -1); 
     }
 
-    
+    public static void removeDuplicates(List list) {
+        HashSet set = new HashSet(list);
+        list.clear();
+        list.addAll(set);
+    }
 }
 

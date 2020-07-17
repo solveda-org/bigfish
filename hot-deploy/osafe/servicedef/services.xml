@@ -89,49 +89,6 @@
         <attribute name="results" type="List" mode="OUT" optional="false"/>
     </service>
 
-    <service name="createCustomer" engine="simple" auth="false"
-            location="component://osafe/script/services/OsafeCheckoutServices.xml" invoke="createCustomer">
-        <implements service="createUserLogin"/>
-        <implements service="updatePassword"/>
-        <implements service="createUpdatePerson"/>
-        <implements service="createPartyRole"/>
-        <implements service="createUpdatePartyPostalAddress"/>
-        <implements service="createUpdatePartyTelecomNumber"/>
-        <implements service="createUpdatePartyEmailAddress"/>
-        <implements service="createUpdateCreditCard"/>
-        <attribute name="billingHomePhoneCtx" type="Map" mode="IN" optional="true"/>
-        <attribute name="billingMobilePhoneCtx" type="Map" mode="IN" optional="true"/>
-        <attribute name="allowEmailSolicitation" type="String" mode="IN" optional="true"/>
-        <attribute name="partyEmailPreference" type="String" mode="IN" optional="true"/>
-        <attribute name="isSameAsBilling" type="String" mode="IN" optional="true"/>
-        <attribute name="shippingAddressCtx" type="Map" mode="IN" optional="true"/>
-        <attribute name="shippingHomePhoneCtx" type="Map" mode="IN" optional="true"/>
-        <attribute name="shippingMobilePhoneCtx" type="Map" mode="IN" optional="true"/>
-        <attribute name="paymentMethodTypeId" type="String" mode="IN" optional="false"/>
-        <attribute name="billingAddressContactMechId" type="String" mode="IN" optional="true"/>
-<!--         <attribute name="shippingAddressContactMechId" type="String" mode="IN" optional="true"/> -->
-        <attribute name="emailContactMechId" type="String" mode="OUT" optional="false"/>
-        <attribute name="billingAddressContactMechId" type="String" mode="OUT" optional="false"/>
-        <attribute name="shippingAddressContactMechId" type="String" mode="OUT" optional="false"/>
-        <attribute name="billingHomePhoneContactMechId" type="String" mode="OUT" optional="false"/>
-        <attribute name="billingMobilePhoneContactMechId" type="String" mode="OUT" optional="true"/>
-        <attribute name="shippingHomePhoneContactMechId" type="String" mode="OUT" optional="true"/>
-        <attribute name="shippingMobilePhoneContactMechId" type="String" mode="OUT" optional="true"/>
-        <attribute name="newUserLogin" type="org.ofbiz.entity.GenericValue" mode="OUT" optional="true"/>
-        <attribute name="existingUserLogin" type="org.ofbiz.entity.GenericValue" mode="OUT" optional="true"/>
-        <override name="userLoginId" optional="true"/>
-        <override name="updatedUserLogin" optional="true"/>
-        <override name="currentPassword" optional="true"/>
-        <override name="currentPasswordVerify" optional="true"/>
-        <override name="cardNumber" optional="true"/>
-        <override name="cardType" optional="true"/>
-        <override name="expMonth" optional="true"/>
-        <override name="expYear" optional="true"/>
-        <override name="firstNameOnCard" optional="true"/>
-        <override name="lastNameOnCard" optional="true"/>
-        <override name="paymentMethodId" optional="true"/>
-    </service>
-
     <service name="createUpdatePartyEmailAddress" engine="simple"
         location="component://party/script/org/ofbiz/party/contact/PartyContactMechServices.xml" invoke="createUpdatePartyEmailAddress" auth="false">
         <description>Create and Update email address</description>
@@ -157,8 +114,34 @@
         <attribute name="webSiteId" type="String" mode="IN" optional="true"/>
         <attribute name="subject" type="String" mode="OUT" optional="true"/>
         <attribute name="body" type="String" mode="OUT" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="INOUT" optional="true"/>
     </service>
 
+    <service name="sendTxtMessage" max-retry="3" engine="java"
+        location="com.osafe.services.TxtMessageServices" invoke="sendTxtMessage">
+        <description>Send Txt Message Service</description>
+        <attribute name="textMessage" type="String" mode="IN" optional="true" allow-html="safe"/>
+        <attribute name="toCell" type="String" mode="IN" optional="true"/>
+        <attribute name="sendFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="communicationEventId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="templateId" type="String" mode="IN" optional="true"/>
+        <attribute name="webSiteId" type="String" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="orderId" type="String" mode="INOUT" optional="true"/>
+    </service>
+    <service name="sendTxtMessageFromTemplate" max-retry="3" engine="java"
+        location="com.osafe.services.TxtMessageServices" invoke="sendTxtMessageFromTemplate">
+        <description>Send Txt Message Service</description>
+        <attribute name="textMessage" type="String" mode="IN" optional="true" allow-html="safe"/>
+        <attribute name="toCell" type="String" mode="IN" optional="true"/>
+        <attribute name="communicationEventId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="templateId" type="String" mode="IN" optional="true"/>
+        <attribute name="webSiteId" type="String" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="orderId" type="String" mode="INOUT" optional="true"/>
+    </service>
     <service name="genReevooProductsFeed" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="genReevooProductsFeed" auth="false" transaction-timeout="7200">
         <description>Create A text filr for Reevoo Products feed</description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" />

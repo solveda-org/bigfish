@@ -101,10 +101,10 @@
                 getDisplayFormat('#inputParamEnumId');
             });
         }
-        getOrderItemCheckDisplay('changeStatusAll');
-        jQuery('input:radio[name=changeStatusAll]').click(function(event) {
+        //getOrderItemCheckDisplay('changeStatusAll');
+        /* jQuery('input:radio[name=changeStatusAll]').click(function(event) {
             getOrderItemCheckDisplay('changeStatusAll');
-        });
+        }); */
 
         paymentOptionDisplay('paymentOption');
         jQuery('input:radio[name=paymentOption]').click(function(event) {
@@ -122,7 +122,8 @@
            jQuery("#${focusField!""}").focus();
        </#if>
 
-       jQuery('input:checkbox.homeSpotCheck').change(function(){
+       jQuery('input:checkbox.homeSpotCheck').change(function()
+       {
            if (jQuery('input:checkbox[name=contentId]:checked').length) {
                jQuery('#previewHomeSpot').attr("target","_new");
                var url = jQuery('#previewHomeSpotAction').val()+"?"+jQuery('input:checkbox[name=contentId]:checked').serialize();
@@ -132,12 +133,38 @@
                jQuery('#previewHomeSpot').attr("target","");
            }
        });
-       if (jQuery('#statusId').length){
-           getOrderStatusChangeDisplay('#statusId');
-           jQuery('#statusId').change(function(){
-               getOrderStatusChangeDisplay('#statusId');
+       
+       /* jQuery('input:checkbox.checkBoxEntry').change(function()
+       {
+           alert("Hii2222222222");
+	        var url = "<@ofbizUrl>getOrderStatusRefundDetail</@ofbizUrl>";
+           jQuery.ajax(
+           {
+               type: "POST",
+               url: url,
+               data: jQuery("#orderStatusForm").serialize(), // serializes the form's elements.
+               success: function(data)
+               {
+                   jQuery('#orderRefundInfoBox').replaceWith(data);
+               }
            });
-       }
+
+           return false; 
+
+       }); */
+       
+       getOrderStatusChangeDisplay('#actionId');
+       jQuery('input:radio[name=actionId]').click(function(event) {
+            getOrderStatusChangeDisplay('#actionId');
+        });
+        
+       /* if (jQuery('#actionId').length){
+           alert("Hiii");
+           getOrderStatusChangeDisplay('#actionId');
+           jQuery('#actionId').click(function(){
+               getOrderStatusChangeDisplay('#actionId');
+           });
+       } */
        <#if review?has_content>
            updateReview("${parameters.statusId!review.statusId}");
            setStars("${parameters.productRating!review.productRating}");
@@ -152,11 +179,11 @@
            });
        }
         if (jQuery('#simpleTest').length){
-            getEmailTestFormat(jQuery('input:radio[name=simpleTest]:checked').val(), 'Y');
+            getTestTemplateFormat(jQuery('input:radio[name=simpleTest]:checked').val(), 'Y');
         }
-        if (jQuery('#emailTemplateId').length){
-            jQuery('#emailTemplateId').change(function(){
-                getEmailTemplateFormat('#emailTemplateId');
+        if (jQuery('#templateId').length){
+            jQuery('#templateId').change(function(){
+                showTestTemplateDiv('#templateId');
             });
         }
         if (jQuery('#USER_country').length)
@@ -173,39 +200,78 @@
        });
     });
 
-    function getEmailTestFormat(simpleTestValue, isPageLoad) {
-        if (simpleTestValue == "N") {
-            jQuery('.emailTextDiv').hide();
-            jQuery('.emailTemplateDdDiv').show();
-            getEmailTemplateFormat('#emailTemplateId');
-        } else {
-            jQuery('.emailTextDiv').show();
-            jQuery('.emailTemplateDdDiv').hide();
+    function getOrderRefundData()
+    {
+        if (jQuery('input:radio[name=actionId]:checked').val() == "cancelOrder" || jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
+        {
+           var url = "<@ofbizUrl>getOrderStatusRefundDetail</@ofbizUrl>";
+           jQuery.ajax(
+           {
+               type: "POST",
+               url: url,
+               data: jQuery("#orderStatusForm").serialize(), // serializes the form's elements.
+               success: function(data)
+               {
+                   jQuery('#orderRefundInfoBox').html('');
+                   jQuery('#orderRefundInfoBox').html(data);
+               }
+           });
+        }  
+    }
+    // Popup window code
+    function newPopupWindow(url) {
+        popupWindow = window.open(
+            url,'popUpWindow','height=350,width=500,left=400,top=200,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+    }
+
+    function getTestTemplateFormat(simpleTestValue, isPageLoad) {
+        if (simpleTestValue == "N") 
+        {
+            jQuery('.textDiv').hide();
+            jQuery('.templateDdDiv').show();
+            showTestTemplateDiv('#templateId');
+        } else 
+        {
+            jQuery('.textDiv').show();
+            jQuery('.templateDdDiv').hide();
             jQuery('.customerIdDiv').hide();
             jQuery('.orderIdDiv').hide();
         }
-        if (isPageLoad == "N") {
+        if (isPageLoad == "N") 
+        {
             $('toAddress').value = "";
         }
     }
 
-    function getEmailTemplateFormat(emailTemplateId) {
-        var templateId = jQuery(emailTemplateId).val();
-        if ((templateId == "E_SCHED_JOB_ALERT")) {
+    function showTestTemplateDiv(templateId) {
+        var templateIdValue = jQuery(templateId).val();
+        if ((templateIdValue == "E_SCHED_JOB_ALERT")) 
+        {
             //TBD;
-        } else if ((templateId == "E_ABANDON_CART")) {
-            jQuery('.customerIdDiv').show();
-            jQuery('.orderIdDiv').show();
-        } else if ((templateId == "E_CHANGE_CUSTOMER") || (templateId == "E_NEW_CUSTOMER") || (templateId == "E_FORGOT_PASSWORD") ) {
+        } 
+        else if ((templateIdValue == "E_CHANGE_CUSTOMER") || (templateIdValue == "E_NEW_CUSTOMER") || (templateIdValue == "E_FORGOT_PASSWORD") ) {
             jQuery('.customerIdDiv').show();
             jQuery('.orderIdDiv').hide();
-        } else if ((templateId == "E_ORDER_CHANGE") || (templateId == "E_ORDER_CONFIRM") || (templateId == "E_ORDER_DETAIL") || (templateId == "E_SHIP_REVIEW")) {
+        }
+        else if ((templateIdValue == "E_ORDER_CHANGE") || (templateIdValue == "E_ORDER_CONFIRM") || (templateIdValue == "E_ORDER_DETAIL") || (templateIdValue == "E_SHIP_REVIEW") || (templateIdValue == "E_ABANDON_CART")) 
+        {
             jQuery('.customerIdDiv').hide();
             jQuery('.orderIdDiv').show();
-        } else if ((templateId == "E_CONTACT_US") || (templateId == "E_REQUEST_CATALOG") || (templateId == "E_MAILING_LIST")) {
+        }
+        else if ((templateIdValue == "E_CONTACT_US") || (templateIdValue == "E_REQUEST_CATALOG") || (templateIdValue == "E_MAILING_LIST")) 
+        {
             jQuery('.customerIdDiv').hide();
             jQuery('.orderIdDiv').hide();
         }
+        else if ((templateIdValue == "TXT_CHANGE_CUSTOMER") || (templateIdValue == "TXT_NEW_CUSTOMER") || (templateIdValue == "TXT_FORGOT_PASSWORD") ) {
+            jQuery('.customerIdDiv').show();
+            jQuery('.orderIdDiv').hide();
+        }
+        else if ((templateIdValue == "TXT_ORDER_CHANGE") || (templateIdValue == "TXT_ORDER_CONFIRM") || (templateIdValue == "TXT_SHIP_REVIEW") || (templateIdValue == "TXT_ABANDON_CART")) 
+        {
+            jQuery('.customerIdDiv').hide();
+            jQuery('.orderIdDiv').show();
+        } 
     }
     function setDateRange(dateFrom,dateTo,formName) {
         var form = jQuery(formName);
@@ -280,22 +346,83 @@
         });
     }
     
-    function getOrderItemCheckDisplay(changeStatusAll) {
-        if (jQuery('input:radio[name=changeStatusAll]:checked').val() == "Y") {
+    /* function getOrderItemCheckDisplay(changeStatusAll) {
+        if (jQuery('input:radio[name=changeStatusAll]:checked').val() == "Y") 
+        {
             jQuery('input:checkbox[name^=orderItemSeqId]:checked').removeAttr('checked');
             jQuery('.selectOrderItem').hide();
-        } else if (jQuery('input:radio[name=changeStatusAll]:checked').val() == "N") {
+        } 
+        else if (jQuery('input:radio[name=changeStatusAll]:checked').val() == "N") 
+        {
             jQuery('.selectOrderItem').show();
-        } else {
+        } 
+        else 
+        {
             jQuery('.selectOrderItem').hide();
         }
-    }
-    function getOrderStatusChangeDisplay(statusId) {
-        if (jQuery(statusId).val() == "ORDER_COMPLETED") {
+    }*/
+    
+    function getOrderStatusChangeDisplay(actionId) 
+    {
+        if (jQuery('input:radio[name=actionId]:checked').val() == "completeOrder") 
+        {
             jQuery('.COMPLETED').show();
-        } else {
+        }
+        else 
+        {
             jQuery('.COMPLETED').hide();
         }
+        if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
+        {
+            jQuery('.productReturnOrderCheckbox').show();
+            jQuery('.statusChangeOrderCheckbox').hide();
+        }
+        else 
+        {
+            jQuery('.productReturnOrderCheckbox').hide();
+            jQuery('.statusChangeOrderCheckbox').show();
+        }
+        if (jQuery('input:radio[name=actionId]:checked').val() == "changeOrderQty") 
+        {
+            jQuery('.orderItemNewQty').show();
+        }
+        else 
+        {
+            jQuery('.orderItemNewQty').hide();
+        }
+        if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
+        {
+            jQuery('.orderItemReturningQty').show();
+        }
+        else 
+        {
+            jQuery('.orderItemReturningQty').hide();
+        }
+        if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
+        {
+            jQuery('.orderItemReturnReason').show();
+        }
+        else 
+        {
+            jQuery('.orderItemReturnReason').hide();
+        }
+        
+        if (jQuery('input:radio[name=actionId]:checked').val() == "cancelOrder") 
+        {
+            jQuery('#statusId').val("ORDER_CANCELLED");
+        }
+        else if (jQuery('input:radio[name=actionId]:checked').val() == "changeOrderQty") 
+        {
+            jQuery('#statusId').val("ORDER_CANCELLED");
+        }
+        else if (jQuery('input:radio[name=actionId]:checked').val() == "completeOrder") 
+        {
+            jQuery('#statusId').val("ORDER_COMPLETED");
+        }
+        else if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
+        {
+            jQuery('#statusId').val("PRODUCT_RETURN");
+        } 
     }
     function showPostalAddress(contactMechId,divType) {
         jQuery('.'+divType).hide();
@@ -629,21 +756,23 @@
           var quantity = jQuery('#update_'+i).val();
           if(quantity != 0) 
           {
+          	<#if eCommerceUiLabel?exists >
 	          if(quantity < lowerLimit)
 	          {
-	              alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMinQtyError,'\"','\\"'))}");
+	              alert("${StringUtil.wrapString(StringUtil.replaceString(eCommerceUiLabel.PDPMinQtyError,'\"','\\"'))}");
 	              return false;
 	          }
 	          if(upperLimit!= 0 && quantity > upperLimit)
 	          {
-	              alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMaxQtyError,'\"','\\"'))}");
+	              alert("${StringUtil.wrapString(StringUtil.replaceString(eCommerceUiLabel.PDPMaxQtyError,'\"','\\"'))}");
 	              return false;
 	          }
 	          if(!isWhole(quantity))
 	          {
-	              alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPQtyDecimalNumberError,'\"','\\"'))}");
+	              alert("${StringUtil.wrapString(StringUtil.replaceString(eCommerceUiLabel.PDPQtyDecimalNumberError,'\"','\\"'))}");
 	              return false;
 	          }
+	        </#if>
           } 
           else
           {
@@ -656,8 +785,6 @@
       }
       return true;
     }
-    
-    
     
 	
 	function submitDetailUploadForm(form) {
@@ -1626,4 +1753,43 @@ function setRowNo(rowNo) {
         jQuery('.confirmTxt').html(textConfirmClear);
         displayDialogBox();
     }
+    
+    function setManufacturerIdDisplay() 
+	{
+	    var manufacturerId = jQuery("#manufacturerPartyId").val();
+	    jQuery("#productManufacturer").text(manufacturerId);
+	}
+	
+	
+	var flag = "false";
+	function activateService()
+	{
+	    
+	    jQuery.post("<@ofbizUrl>solrReIndexAjax</@ofbizUrl>", jQuery('input:hidden').serialize(), function(data) {
+	        flag = "true";
+        });
+	                 var img = new Image();
+                     jQuery(img).attr('src','<@ofbizContentUrl>/osafe_theme/images/user_content/images/loading.gif</@ofbizContentUrl>');
+                     jQuery('#loadingImg').html(img);
+	
+	(function keepBrowserAlive()
+	{
+	    setTimeout(function() 
+	         {
+                 if (flag != "true") 
+                 {
+                     var img = new Image();
+                     jQuery(img).attr('src','<@ofbizContentUrl>/osafe_theme/images/user_content/images/loading.gif</@ofbizContentUrl>');
+                     jQuery('#loadingImg').html(img);
+                     keepBrowserAlive();
+                 }
+                 else
+                 {
+                     jQuery('#loadingImg').hide();
+                 }
+             }, 5000);
+	   
+	})();
+	
+	}
 </script>

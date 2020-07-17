@@ -102,4 +102,5 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
       ${sections.render('commonDetailWarningIcon')?if_exists}
     </div>
 </div>
+${sections.render('commonLookup')!}
 </form>

@@ -1,6 +1,19 @@
 package com.osafe.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CharsetEncoder;
+import java.nio.charset.CodingErrorAction;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +27,7 @@ import com.ibm.icu.util.Currency;
 import javax.servlet.ServletRequest;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.UtilDateTime;
@@ -33,6 +47,8 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.common.CommonWorkers;
+import org.w3c.tidy.Tidy;
+
 import com.ibm.icu.util.Calendar;
 import com.osafe.services.OsafeManageXml;
 
@@ -92,11 +108,11 @@ public class OsafeAdminUtil {
         return id;
     }
     
-   	/** 
-	 * Checks Multiple email addresses separated by delimiter
-	 */
+       /** 
+     * Checks Multiple email addresses separated by delimiter
+     */
     public static Boolean checkMultiEmailAddress(String emailId, String delimiter) {
-    	  if (UtilValidate.isEmpty(delimiter)) {
+          if (UtilValidate.isEmpty(delimiter)) {
               delimiter = ";";
           }
           if (UtilValidate.isEmpty(emailId)) {
@@ -108,33 +124,58 @@ public class OsafeAdminUtil {
           }
           return true;
     }
+
+    public static String filterNonAscii(String inString) {
+        // from http://www.velocityreviews.com/forums/t140837-convert-utf-8-to-ascii.html
+        // Create the encoder and decoder for the character encoding
+        Charset charset = Charset.forName("US-ASCII");
+        CharsetDecoder decoder = charset.newDecoder();
+        CharsetEncoder encoder = charset.newEncoder();
+        // This line is the key to removing "unmappable" characters.
+        encoder.onUnmappableCharacter(CodingErrorAction.IGNORE);
+        String result = inString;
+
+        try {
+            // Convert a string to bytes in a ByteBuffer
+            ByteBuffer bbuf = encoder.encode(CharBuffer.wrap(inString));
+
+            // Convert bytes in a ByteBuffer to a character ByteBuffer and then to a string.
+            CharBuffer cbuf = decoder.decode(bbuf);
+            result = cbuf.toString();
+        } catch (CharacterCodingException cce) {
+            String errorMessage = "Exception during character encoding/decoding: " + cce.getMessage();
+            Debug.logError(cce, errorMessage, module);
+        }
+
+        return result;
+    }
     
     /** 
      * Returns a Generic Product Price for given ProductId and ProductPriceTypeId
      */
     public static GenericValue getProductPrice(ServletRequest request, String productId, String productPriceTypeId) {
-    	Delegator delegator = (Delegator) request.getAttribute("delegator");
-    	List<GenericValue> productPriceList = FastList.newInstance();
-    	List<GenericValue> productPriceListFiltered = FastList.newInstance();
-    	GenericValue productPrice = null;
-    	if(UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productPriceTypeId))
-    	{
-    		try {
-    	        productPriceList = delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", productPriceTypeId), UtilMisc.toList("-fromDate"));
-    	        if(UtilValidate.isNotEmpty(productPriceList))
-    	        {
-    	            productPriceListFiltered = EntityUtil.filterByDate(productPriceList);
-    		        if(UtilValidate.isNotEmpty(productPriceListFiltered))
-    		        {
-    		            productPrice = EntityUtil.getFirst(productPriceListFiltered);
-    		        }
-    		    }
-    		}
-    		catch (Exception e) {
-    		    Debug.logWarning(e, module);
-			}
-    	}
-    	return productPrice;
+        Delegator delegator = (Delegator) request.getAttribute("delegator");
+        List<GenericValue> productPriceList = FastList.newInstance();
+        List<GenericValue> productPriceListFiltered = FastList.newInstance();
+        GenericValue productPrice = null;
+        if(UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productPriceTypeId))
+        {
+            try {
+                productPriceList = delegator.findByAnd("ProductPrice", UtilMisc.toMap("productId", productId, "productPriceTypeId", productPriceTypeId), UtilMisc.toList("-fromDate"));
+                if(UtilValidate.isNotEmpty(productPriceList))
+                {
+                    productPriceListFiltered = EntityUtil.filterByDate(productPriceList);
+                    if(UtilValidate.isNotEmpty(productPriceListFiltered))
+                    {
+                        productPrice = EntityUtil.getFirst(productPriceListFiltered);
+                    }
+                }
+            }
+            catch (Exception e) {
+                Debug.logWarning(e, module);
+            }
+        }
+        return productPrice;
     }
 
     public static boolean isValidDateFormat(String format) {
@@ -237,14 +278,14 @@ public class OsafeAdminUtil {
     public static long daysBetween(Timestamp from, Timestamp thru) {  
         Calendar startDate = UtilDateTime.toCalendar(from, TimeZone.getDefault(), Locale.getDefault());
         Calendar endDate = UtilDateTime.toCalendar(thru, TimeZone.getDefault(), Locale.getDefault());
-    	  Calendar date = (Calendar) startDate.clone();  
-    	  long daysBetween = 0;  
-    	  while (date.before(endDate)) {  
-    	    date.add(Calendar.DAY_OF_MONTH, 1);  
-    	    daysBetween++;  
-    	  }  
-    	  return daysBetween;  
-    	}      
+          Calendar date = (Calendar) startDate.clone();  
+          long daysBetween = 0;  
+          while (date.before(endDate)) {  
+            date.add(Calendar.DAY_OF_MONTH, 1);  
+            daysBetween++;  
+          }  
+          return daysBetween;  
+        }      
 
     public static boolean isFloat(String s) {
         if (UtilValidate.isEmpty(s)) return defaultEmptyOK;
@@ -375,28 +416,28 @@ public class OsafeAdminUtil {
     }
 
     private static Map<String, ?> context = FastMap.newInstance();
-	
+    
     public static String buildProductImagePathExt(String productContentTypeId) 
     {
-    	String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "image-location-preference-file"), context);
-    	
-    	List<Map<Object, Object>> imageLocationPrefList = OsafeManageXml.getListMapsFromXmlFile(XmlFilePath);
-    	
+        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "image-location-preference-file"), context);
+        
+        List<Map<Object, Object>> imageLocationPrefList = OsafeManageXml.getListMapsFromXmlFile(XmlFilePath);
+        
         Map<Object, Object> imageLocationMap = new HashMap<Object, Object>();
         
-    	for(Map<Object, Object> imageLocationPref : imageLocationPrefList) {
-    		imageLocationMap.put(imageLocationPref.get("key"), imageLocationPref.get("value"));
-    	}
-    	String defaultImageDirectory = (String)imageLocationMap.get("DEFAULT_IMAGE_DIRECTORY");
-    	if(UtilValidate.isEmpty(defaultImageDirectory)) {
-    		defaultImageDirectory = "";
-    	}
-    	StringBuffer sbDefaultImageDirectory = new StringBuffer(defaultImageDirectory);
-    	String imageLocationSubDir = (String)imageLocationMap.get(productContentTypeId);
-    	if(UtilValidate.isNotEmpty(imageLocationSubDir)) {
-    		sbDefaultImageDirectory.append(imageLocationSubDir);
-    	}
-    	return sbDefaultImageDirectory.toString();
+        for(Map<Object, Object> imageLocationPref : imageLocationPrefList) {
+            imageLocationMap.put(imageLocationPref.get("key"), imageLocationPref.get("value"));
+        }
+        String defaultImageDirectory = (String)imageLocationMap.get("DEFAULT_IMAGE_DIRECTORY");
+        if(UtilValidate.isEmpty(defaultImageDirectory)) {
+            defaultImageDirectory = "";
+        }
+        StringBuffer sbDefaultImageDirectory = new StringBuffer(defaultImageDirectory);
+        String imageLocationSubDir = (String)imageLocationMap.get(productContentTypeId);
+        if(UtilValidate.isNotEmpty(imageLocationSubDir)) {
+            sbDefaultImageDirectory.append(imageLocationSubDir);
+        }
+        return sbDefaultImageDirectory.toString();
     }
     
     /** Formats a double into a properly currency symbol string based on isoCode and Locale
@@ -495,6 +536,26 @@ public class OsafeAdminUtil {
         }
         return isValid;
     }
+
+    public static String checkDateRange(String fromDate, String toDate, String format) {
+
+        if (UtilValidate.isEmpty(format) || !isDateTime(fromDate, format) || !isDateTime(toDate, format)) {
+            return "invalidFormat";
+        }
+
+        try {
+            Timestamp convertedFromDate = (Timestamp) ObjectType.simpleTypeConvert(fromDate, "Timestamp", format, null);
+            Timestamp convertedToDate = (Timestamp) ObjectType.simpleTypeConvert(toDate, "Timestamp", format, null);
+            if (convertedToDate.before(convertedFromDate)) {
+                return "invalidRange";
+            }
+        } catch (GeneralException e) {
+            Debug.logError(e, module);
+            return "error";
+        }
+
+        return "success";
+    }
     
     public static boolean isValidId(String id) 
     {
@@ -507,7 +568,7 @@ public class OsafeAdminUtil {
         {
             if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_')) 
             {
-            	return false;
+                return false;
             }
         }
         return true;
@@ -524,9 +585,29 @@ public class OsafeAdminUtil {
         {
             if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_')) 
             {
-            	if(!(c == ' '))
+                if(!(c == ' '))
                 {
-            		return false;
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public static boolean isValidName(String desc) 
+    {
+        if (UtilValidate.isEmpty(desc)) 
+        {
+            return false;
+        }
+        char[] chars = desc.toCharArray();
+        for (char c: chars) 
+        {
+            if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_') && (c!='!') && (c!='@') && (c!='#') && (c!='$') && (c!='%') && (c!=':') && (c!='?') && (c!=',') && (c!=';') && (c!='.') && (c!='&') && (c!='\'') && (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.LATIN_1_SUPPLEMENT)) 
+            {
+                if(!(c == ' '))
+                {
+                    return false;
                 }
             }
         }
@@ -560,20 +641,20 @@ public class OsafeAdminUtil {
     
     //If you update this method also update Util.formatTelephone.
     public static String formatTelephone(String areaCode, String contactNumber, String numberFormat) {
-    	String sAreaCode="";
-    	String sContactNumber="";
-    	String sFullPhone="";
-    	if (UtilValidate.isNotEmpty(areaCode)) 
-    	{
-    		sAreaCode=areaCode;
+        String sAreaCode="";
+        String sContactNumber="";
+        String sFullPhone="";
+        if (UtilValidate.isNotEmpty(areaCode)) 
+        {
+            sAreaCode=areaCode;
         }
-    	if (UtilValidate.isNotEmpty(contactNumber)) 
-    	{
+        if (UtilValidate.isNotEmpty(contactNumber)) 
+        {
             sContactNumber=contactNumber;
         }
         sFullPhone = sAreaCode + sContactNumber;
-    	if(UtilValidate.isNotEmpty(numberFormat) && UtilValidate.isNotEmpty(sFullPhone))
-    	{
+        if(UtilValidate.isNotEmpty(numberFormat) && UtilValidate.isNotEmpty(sFullPhone))
+        {
             String sFullPhoneNum = sFullPhone.replaceAll("[^0-9]", "");
             //get count of how many digits in phone number
             int digitsCount =sFullPhoneNum.length();
@@ -584,34 +665,34 @@ public class OsafeAdminUtil {
             //if number of digits equal the number of pounds 
             if(digitsCount == poundsCount)
             {
-            	for(int i=0; i<digitsCount; i++)
-            	{
-            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
-            	}
-            	sFullPhone=numberFormat;
+                for(int i=0; i<digitsCount; i++)
+                {
+                    numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+                }
+                sFullPhone=numberFormat;
             }
             else if(digitsCount < poundsCount)
             {
-            	for(int i=0; i<digitsCount; i++)
-            	{
-            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
-            	}
-            	//remove all extra #'s
-            	numberFormat=numberFormat.replaceAll("[#]", "");
-            	sFullPhone=numberFormat;
+                for(int i=0; i<digitsCount; i++)
+                {
+                    numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+                }
+                //remove all extra #'s
+                numberFormat=numberFormat.replaceAll("[#]", "");
+                sFullPhone=numberFormat;
             }
             else if(digitsCount > poundsCount)
             {
-            	int i = 0;
-            	for(i=0; i<poundsCount; i++)
-            	{
-            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
-            	}
-            	//add extra numbers to the end
-            	numberFormat=numberFormat + sFullPhoneNum.substring(i);
-            	sFullPhone=numberFormat;
+                int i = 0;
+                for(i=0; i<poundsCount; i++)
+                {
+                    numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+                }
+                //add extra numbers to the end
+                numberFormat=numberFormat + sFullPhoneNum.substring(i);
+                sFullPhone=numberFormat;
             }
-    	}
+        }
         return sFullPhone;
     }
     
@@ -685,11 +766,11 @@ public class OsafeAdminUtil {
             {
                 if (UtilValidate.isNotEmpty(entry.getValue()) && UtilValidate.isInteger(entry.getValue().toString()))
                 {
-                	sequenceSortedMap.put(entry.getKey(), Integer.parseInt(entry.getValue().toString()));
+                    sequenceSortedMap.put(entry.getKey(), Integer.parseInt(entry.getValue().toString()));
                 }
                 else
                 {
-                	sequenceSortedMap.put(entry.getKey(), -1);
+                    sequenceSortedMap.put(entry.getKey(), -1);
                 }
             }
 
@@ -736,8 +817,8 @@ public class OsafeAdminUtil {
     }
     /** Trims all the trailing white spaces of a String. */
     public static String trimTrailSpaces(String str) {
-    	String trimmedStr = null;
-    	if (UtilValidate.isNotEmpty(str)){
+        String trimmedStr = null;
+        if (UtilValidate.isNotEmpty(str)){
             int i;  
             for ( i = str.length()-1; i > 0; i--){  
                 char c = str.charAt(i);  
@@ -747,7 +828,7 @@ public class OsafeAdminUtil {
             }
         trimmedStr = str.substring(0, i+1);  
         }
-    	return trimmedStr;
+        return trimmedStr;
     }
     
     public static boolean isValidURL(String url) 
@@ -885,7 +966,97 @@ public class OsafeAdminUtil {
         }
         return "success";
     }
+
+    public static String stripHTML(String content) {
+        return stripHTML(content,800);
+    }
+
+    public static String stripHTML(String content,int wrapLen) {
+        
+        if (content == null) {
+            return "";
+        }
+        String cleanContent = content;//StringUtil.wrapString(content).toString();
+        Tidy tidy = new Tidy();
+        InputStream inStream = null;
+        try {
+            cleanContent = filterNonAscii(cleanContent);
+            inStream = new ByteArrayInputStream(cleanContent.getBytes("UTF-8"));
+
+            ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+            if (inStream != null) {
+
+                PrintWriter pw = new PrintWriter(new StringWriter());
+                tidy.setWraplen(wrapLen);
+                tidy.setErrout(pw);
+                tidy.setShowWarnings(false);
+                tidy.setMakeClean(true);
+                tidy.parse(inStream, outStream);
+                if (outStream != null) {
+                    cleanContent = outStream.toString("UTF-8");
+                    cleanContent = cleanContent.replaceAll("\\<.*?>", "");
+                    String[] split = StringUtils.split(cleanContent, "\n\r");
+                    cleanContent  = StringUtils.join(split," ");
+                }
+
+            }
+        } catch (UnsupportedEncodingException e) {
+            Debug.logError(e, e.getMessage(), module);
+        }
+        return cleanContent;
+    }
+
+    public static String stripHTMLInLength(String content) {
+        return stripHTMLInLength(content, "800");
+    }
+
+    public static String stripHTMLInLength(String content, String length) {
+        int maxLength = 800;
+        if (isNumber(length)) {
+            maxLength = Integer.parseInt(length);
+        }
+        String stripHTMLStr = stripHTML(content);
+        return getStringInLength(stripHTMLStr, maxLength);
+    }
     
+    /** String with in the given limit
+     * @param String that need to refector
+     * @param Int length
+     * @return A String with in the given limit
+     */
+    public static String getStringInLength(String str, int length) {
+        String strInLength = null;
+        if (UtilValidate.isNotEmpty(str))
+        { 
+            int leng = length - 1;
+            if (str.length() > leng)
+            {
+                if (str.charAt(leng) == ' ')
+                {
+                    strInLength = str.substring(0, leng);
+                }
+                else
+                {
+                    String strWithHalfWord = str.substring(0, leng);
+                    try 
+                    {
+                        strInLength = strWithHalfWord.substring(0, strWithHalfWord.lastIndexOf(" "));
+                    }
+                    catch (Exception e)
+                    {
+                        strInLength = strWithHalfWord;
+                        Debug.logError(e, e.getMessage(), module);
+                    }
+                }
+            }
+            else
+            {
+                strInLength = str;
+            }
+        }
+        return strInLength;
+    }
+
     public static String htmlSpecialChars(String html) {
         html = StringUtil.replaceString(html, "&", "&amp;");
         html = StringUtil.replaceString(html, "<", "&lt;");
@@ -897,18 +1068,17 @@ public class OsafeAdminUtil {
         return html;
     }
     // Method to reduce currenttimeStamp by 1 month.
-    public static Timestamp getMonthBackTimeStamp(int reduceMonth, String prefFormat) {
-    	Timestamp defaultFromdate = null;
-    	try {
-    	    Calendar c = Calendar.getInstance(); 
-    	    c.setTime(new Date()); 
-    	    c.add(Calendar.MONTH, -reduceMonth);
-    	    Date dateTime = c.getTime();
-    	    defaultFromdate = (Timestamp) ObjectType.simpleTypeConvert(dateTime, "Timestamp", prefFormat, null);
-    	}
-    	catch (Exception e){
-    		
-    	}
-        return defaultFromdate;
+    public static Timestamp getMonthBackTimeStamp(int monthsBack) {
+        Timestamp retStamp = null;
+        try {
+            Calendar tempCal = UtilDateTime.toCalendar(UtilDateTime.nowTimestamp()); 
+            tempCal.add(Calendar.MONTH, -monthsBack);
+            retStamp = new Timestamp(tempCal.getTimeInMillis());
+            retStamp.setNanos(0);
+        }
+        catch (Exception e){
+            
+        }
+        return retStamp;
     }
 }

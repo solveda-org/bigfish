@@ -3,7 +3,6 @@
     <#assign createdDate =(Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(custRequest.createdDate, preferredDateFormat).toLowerCase())!"N/A" />
   </#if>
   
-  <#assign custReqAttributeList = delegator.findByAnd("CustRequestAttribute",Static["org.ofbiz.base.util.UtilMisc"].toMap("custRequestId", custRequest.custRequestId))>
   <#assign comment =""/>
   <#assign caption = "_Caption" />
   <#if custReqAttributeList?exists && custReqAttributeList?has_content>
@@ -82,6 +81,20 @@
       </div>
       <div class="infoValue">
         ${custRequest.custRequestId!""}
+      </div>
+    </div>
+  </div>
+  
+  <div class="infoRow row">
+    <div class="infoEntry long">
+      <div class="infoCaption">
+        <label>${uiLabelMap.ProductStoreCaption}</label>
+      </div>
+      <div class="infoValue">
+        <#assign productStore = delegator.findOne("ProductStore", {"productStoreId" : custRequest.productStoreId}, false)!""/>
+        <#if productStore?has_content>
+           ${productStore.storeName!""}
+        </#if>
       </div>
     </div>
   </div>

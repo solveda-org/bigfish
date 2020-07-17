@@ -33,6 +33,8 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import com.ibm.icu.util.Calendar;
+import com.osafe.util.OsafeAdminUtil;
+import com.osafe.util.Util;
 
 import org.ofbiz.base.util.ObjectType;
 
@@ -61,7 +63,8 @@ srchFinished=StringUtils.trimToEmpty(parameters.srchFinished);
 srchPending=StringUtils.trimToEmpty(parameters.srchPending);
 srchQueued=StringUtils.trimToEmpty(parameters.srchQueued);
 srchRunning=StringUtils.trimToEmpty(parameters.srchRunning);
-
+List infoMsgList = FastList.newInstance();
+Boolean isValidDate = true;
 context.srchAll=srchAll;
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
@@ -95,7 +98,7 @@ statusCond=null;
 endDateCond=null;
 
 // Job Id
-if(srchJobId)
+if(UtilValidate.isNotEmpty(srchJobId))
 {
     jobId=srchJobId;
     findJobCond = EntityCondition.makeCondition(EntityFunction.UPPER(EntityFieldValue.makeFieldValue("jobId")), EntityOperator.EQUALS, srchJobId.toUpperCase());
@@ -111,7 +114,7 @@ if(srchJobId)
 }
 
 // Job Name
-if(srchJobName)
+if(UtilValidate.isNotEmpty(srchJobName))
 {
     jobName=srchJobName;
     exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("jobName"), EntityOperator.LIKE, "%" + jobName.toUpperCase() + "%"));
@@ -119,90 +122,136 @@ if(srchJobName)
 }
 
 // Service Name
-if(srchServiceName)
+if(UtilValidate.isNotEmpty(srchServiceName))
 {
     serviceName=srchServiceName;
     exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("serviceName"), EntityOperator.LIKE, "%" + serviceName.toUpperCase() + "%"));
     context.srchServiceName=srchServiceName;
 }
-
 //handle all the dates 
 if (UtilValidate.isNotEmpty(srchRunDateFrom))
 {
-	try {
-		  srchRunDateFrom = ObjectType.simpleTypeConvert(srchRunDateFrom, "Timestamp", preferredDateFormat, locale);
-	} catch (Exception e) {
-		errMsg = "Parse Exception srchRunDateFrom: " + srchRunDateFrom;
-		Debug.logError(e, errMsg, "scheduledJobList.groovy");
-	}
-	runDateFrom=srchRunDateFrom;
-	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("runTime"), EntityOperator.GREATER_THAN_EQUAL_TO, runDateFrom));
-	context.srchRunDateFrom=srchRunDateFrom;
+    if (OsafeAdminUtil.isDateTime(srchRunDateFrom, preferredDateFormat))
+    {
+        try {
+              srchRunDateFrom = ObjectType.simpleTypeConvert(srchRunDateFrom, "Timestamp", preferredDateFormat, locale);
+        } catch (Exception e) {
+            errMsg = "Parse Exception srchRunDateFrom: " + srchRunDateFrom;
+            Debug.logError(e, errMsg, "scheduledJobList.groovy");
+        }
+    }
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidFromDateInfo",locale));
+    }
+    runDateFrom=srchRunDateFrom;
+    exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("runTime"), EntityOperator.GREATER_THAN_EQUAL_TO, runDateFrom));
+    context.srchRunDateFrom=srchRunDateFrom;
 }
 if (UtilValidate.isNotEmpty(srchRunDateTo))
 {
-	try {
-		  srchRunDateTo = ObjectType.simpleTypeConvert(srchRunDateTo, "Timestamp", preferredDateFormat, locale);
-	} catch (Exception e) {
-		errMsg = "Parse Exception srchRunDateTo: " + srchRunDateTo;
-		Debug.logError(e, errMsg, "scheduledJobList.groovy");
-	}
-	runDateTo=srchRunDateTo;
-	runDateTo=runDateTo.next();//includes the "To" date
-	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("runTime"), EntityOperator.LESS_THAN_EQUAL_TO, runDateTo));
-	context.srchRunDateTo=srchRunDateTo;
+    if (OsafeAdminUtil.isDateTime(srchRunDateTo, preferredDateFormat))
+    {
+        try {
+              srchRunDateTo = ObjectType.simpleTypeConvert(srchRunDateTo, "Timestamp", preferredDateFormat, locale);
+        } catch (Exception e) {
+            errMsg = "Parse Exception srchRunDateTo: " + srchRunDateTo;
+            Debug.logError(e, errMsg, "scheduledJobList.groovy");
+        }
+    }
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidToDateInfo",locale));
+    }
+    runDateTo=srchRunDateTo;
+    runDateTo=runDateTo.next();//includes the "To" date
+    exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("runTime"), EntityOperator.LESS_THAN_EQUAL_TO, runDateTo));
+    context.srchRunDateTo=srchRunDateTo;
 }
 if (UtilValidate.isNotEmpty(srchStartDateFrom))
 {
-	try {
-		  srchStartDateFrom = ObjectType.simpleTypeConvert(srchStartDateFrom, "Timestamp", preferredDateFormat, locale);
-	} catch (Exception e) {
-		errMsg = "Parse Exception srchStartDateFrom: " + srchStartDateFrom;
-		Debug.logError(e, errMsg, "scheduledJobList.groovy");
-	}
-	startDateFrom=srchStartDateFrom;
-	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("startDateTime"), EntityOperator.GREATER_THAN_EQUAL_TO, startDateFrom));
-	context.srchStartDateFrom=srchStartDateFrom;
+    if (OsafeAdminUtil.isDateTime(srchStartDateFrom, preferredDateFormat))
+    {
+        try {
+              srchStartDateFrom = ObjectType.simpleTypeConvert(srchStartDateFrom, "Timestamp", preferredDateFormat, locale);
+        } catch (Exception e) {
+            errMsg = "Parse Exception srchStartDateFrom: " + srchStartDateFrom;
+            Debug.logError(e, errMsg, "scheduledJobList.groovy");
+        }
+    }
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidFromDateInfo",locale));
+    }
+    startDateFrom=srchStartDateFrom;
+    exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("startDateTime"), EntityOperator.GREATER_THAN_EQUAL_TO, startDateFrom));
+    context.srchStartDateFrom=srchStartDateFrom;
 }
 if (UtilValidate.isNotEmpty(srchStartDateTo))
 {
-	try {
-		  srchStartDateTo = ObjectType.simpleTypeConvert(srchStartDateTo, "Timestamp", preferredDateFormat, locale);
-	} catch (Exception e) {
-		errMsg = "Parse Exception srchStartDateTo: " + srchStartDateTo;
-		Debug.logError(e, errMsg, "scheduledJobList.groovy");
-	}
-	startDateTo=srchStartDateTo;
-	startDateTo=startDateTo.next();//includes the "To" date
-	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("startDateTime"), EntityOperator.LESS_THAN_EQUAL_TO, startDateTo));
-	//exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("startDateTime"), EntityOperator.EQUALS, startDateTo));
-	context.srchStartDateTo=srchStartDateTo;
+    if (OsafeAdminUtil.isDateTime(srchStartDateTo, preferredDateFormat))
+    {
+        try {
+              srchStartDateTo = ObjectType.simpleTypeConvert(srchStartDateTo, "Timestamp", preferredDateFormat, locale);
+        } catch (Exception e) {
+            errMsg = "Parse Exception srchStartDateTo: " + srchStartDateTo;
+            Debug.logError(e, errMsg, "scheduledJobList.groovy");
+        }
+    }
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidToDateInfo",locale));
+    }
+    startDateTo=srchStartDateTo;
+    startDateTo=startDateTo.next();//includes the "To" date
+    exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("startDateTime"), EntityOperator.LESS_THAN_EQUAL_TO, startDateTo));
+    //exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("startDateTime"), EntityOperator.EQUALS, startDateTo));
+    context.srchStartDateTo=srchStartDateTo;
 }
 
 if (UtilValidate.isNotEmpty(srchEndDateFrom))
 {
-	try {
-		  srchEndDateFrom = ObjectType.simpleTypeConvert(srchEndDateFrom, "Timestamp", preferredDateFormat, locale);
-	} catch (Exception e) {
-		errMsg = "Parse Exception srchEndDateFrom: " + srchEndDateFrom;
-		Debug.logError(e, errMsg, "scheduledJobList.groovy");
-	}
-	endDateFrom=srchEndDateFrom;
-	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("finishDateTime"), EntityOperator.GREATER_THAN_EQUAL_TO, endDateFrom));
-	context.srchEndDateFrom=srchEndDateFrom;
+    if (OsafeAdminUtil.isDateTime(srchEndDateFrom, preferredDateFormat))
+    {
+        try {
+              srchEndDateFrom = ObjectType.simpleTypeConvert(srchEndDateFrom, "Timestamp", preferredDateFormat, locale);
+        } catch (Exception e) {
+            errMsg = "Parse Exception srchEndDateFrom: " + srchEndDateFrom;
+            Debug.logError(e, errMsg, "scheduledJobList.groovy");
+        }
+    }
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidFromDateInfo",locale));
+    }
+    endDateFrom=srchEndDateFrom;
+    exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("finishDateTime"), EntityOperator.GREATER_THAN_EQUAL_TO, endDateFrom));
+    context.srchEndDateFrom=srchEndDateFrom;
 }
 if (UtilValidate.isNotEmpty(srchEndDateTo))
 {
-	try {
-		  srchEndDateTo = ObjectType.simpleTypeConvert(srchEndDateTo, "Timestamp", preferredDateFormat, locale);
-	} catch (Exception e) {
-		errMsg = "Parse Exception srchEndDateTo: " + srchEndDateTo;
-		Debug.logError(e, errMsg, "scheduledJobList.groovy");
-	}
-	endDateTo=srchEndDateTo;
-	endDateTo=endDateTo.next();//includes the "To" date
-	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("finishDateTime"), EntityOperator.LESS_THAN_EQUAL_TO, endDateTo));
-	context.srchEndDateTo=srchEndDateTo;
+    if (OsafeAdminUtil.isDateTime(srchEndDateTo, preferredDateFormat))
+    {
+        try {
+              srchEndDateTo = ObjectType.simpleTypeConvert(srchEndDateTo, "Timestamp", preferredDateFormat, locale);
+        } catch (Exception e) {
+            errMsg = "Parse Exception srchEndDateTo: " + srchEndDateTo;
+            Debug.logError(e, errMsg, "scheduledJobList.groovy");
+        }
+    }
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidToDateInfo",locale));
+    }
+    endDateTo=srchEndDateTo;
+    endDateTo=endDateTo.next();//includes the "To" date
+    exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("finishDateTime"), EntityOperator.LESS_THAN_EQUAL_TO, endDateTo));
+    context.srchEndDateTo=srchEndDateTo;
+}
+if (UtilValidate.isNotEmpty(infoMsgList)) 
+{
+    isValidDate = false;
+    request.setAttribute("_INFO_MESSAGE_LIST_", infoMsgList);
 }
 
 if (UtilValidate.isNotEmpty(exprs)) 
@@ -230,22 +279,22 @@ if (UtilValidate.isNotEmpty(srchFailed))
 }
 if (UtilValidate.isNotEmpty(srchFinished))
 {
-	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_FINISHED"));
+    statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_FINISHED"));
    context.srchFinished=srchFinished
 }
 if (UtilValidate.isNotEmpty(srchPending))
 {
-	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_PENDING"));
+    statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_PENDING"));
    context.srchPending=srchPending
 }
-if(srchQueued)
+if(UtilValidate.isNotEmpty(srchQueued))
 {
-	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_QUEUED"));
+    statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_QUEUED"));
    context.srchQueued=srchQueued
 }
 if (UtilValidate.isNotEmpty(srchRunning))
 {
-	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_RUNNING"));
+    statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_RUNNING"));
    context.srchRunning=srchRunning
 }
 
@@ -253,7 +302,7 @@ if (UtilValidate.isNotEmpty(srchRunning))
 if (UtilValidate.isNotEmpty(statusExpr))
 {
    statusCond = EntityCondition.makeCondition(statusExpr, EntityOperator.OR);
-   if (prodCond) {
+   if (UtilValidate.isNotEmpty(prodCond)) {
       mainCond = EntityCondition.makeCondition([prodCond, statusCond], EntityOperator.AND);
    }
    else
@@ -265,9 +314,9 @@ if (UtilValidate.isNotEmpty(statusExpr))
 //orderBy = ["runTime"];
 
 scheduledJobs=FastList.newInstance();
-if (UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") 
+if (UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N" && isValidDate) 
 {
-	scheduledJobs = delegator.findList("JobSandbox",mainCond, null, ["runTime DESC"], null, false); 
+    scheduledJobs = delegator.findList("JobSandbox",mainCond, null, ["runTime DESC"], null, false); 
 }
  
 

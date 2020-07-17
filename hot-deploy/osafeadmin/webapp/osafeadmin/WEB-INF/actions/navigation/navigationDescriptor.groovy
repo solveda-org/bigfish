@@ -10,38 +10,51 @@ adminTopMenuXmlFilePath = FlexibleStringExpander.expandString(UtilProperties.get
 adminTopMenuList = OsafeManageXml.getMapListFromXmlFile(adminTopMenuXmlFilePath);
 
 navigationCategory = context.navigationCategory;
-if (UtilValidate.isEmpty(navigationCategory)) {
+if (UtilValidate.isEmpty(navigationCategory)) 
+{
     requestParameters = UtilHttp.getParameterMap(request);
     navigationCategory = requestParameters.navigationCategory;
 }
 
 adminTopMenuList.each { adminTopMenuItem ->
-    if (UtilValidate.isInteger(adminTopMenuItem.sequenceNumber)){
-        if (UtilValidate.isNotEmpty(adminTopMenuItem.sequenceNumber)) {
+    if (UtilValidate.isInteger(adminTopMenuItem.sequenceNumber))
+    {
+        if (UtilValidate.isNotEmpty(adminTopMenuItem.sequenceNumber)) 
+        {
             adminTopMenuItem.sequenceNumber = Integer.parseInt(adminTopMenuItem.sequenceNumber);
-        } else {
+        } else 
+        {
             adminTopMenuItem.sequenceNumber = 0;
-        }
-    }
-    if (UtilValidate.isNotEmpty(navigationCategory)) {
-        if (adminTopMenuItem.navigationCategory.equals(navigationCategory)) {
-            context.topMenuItem = adminTopMenuItem;
         }
     }
     subMenuItemList = adminTopMenuItem.child;
     subMenuItemList.each { subMenuItem ->
-        if (context.activeSubMenuItem && UtilValidate.isNotEmpty(activeSubMenuItem) && subMenuItem.name.equals(activeSubMenuItem)) {
-            subMenuItem.className = subMenuItem.className + " active";
+
+       if (UtilValidate.isNotEmpty(navigationCategory)) 
+       {
+        if (subMenuItem.navigationCategory.equals(navigationCategory)) 
+        {
+            context.topMenuItem = subMenuItem;
         }
-        if (UtilValidate.isInteger(subMenuItem.sequenceNumber)){
-            if (UtilValidate.isNotEmpty(subMenuItem.sequenceNumber)) {
+       }
+       if (context.activeSubMenuItem && UtilValidate.isNotEmpty(activeSubMenuItem) && subMenuItem.name.equals(activeSubMenuItem)) 
+       {
+            subMenuItem.className = subMenuItem.className + " active";
+       }
+       if (UtilValidate.isInteger(subMenuItem.sequenceNumber))
+       {
+            if (UtilValidate.isNotEmpty(subMenuItem.sequenceNumber)) 
+            {
                 subMenuItem.sequenceNumber = Integer.parseInt(subMenuItem.sequenceNumber);
-            } else {
+            } 
+            else 
+            {
                 subMenuItem.sequenceNumber = 0;
             }
         }
     }
-    if (context.activeTopMenuItem && UtilValidate.isNotEmpty(activeTopMenuItem) && adminTopMenuItem.name.equals(activeTopMenuItem)) {
+    if (context.activeTopMenuItem && UtilValidate.isNotEmpty(activeTopMenuItem) && adminTopMenuItem.name.equals(activeTopMenuItem)) 
+    {
         adminTopMenuItem.className = adminTopMenuItem.className + " active";
     }
     

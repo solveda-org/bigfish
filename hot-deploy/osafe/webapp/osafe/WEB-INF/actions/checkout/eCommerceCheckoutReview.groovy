@@ -25,25 +25,45 @@ import org.ofbiz.order.order.*;
 import org.ofbiz.party.contact.*;
 import org.ofbiz.product.catalog.*;
 import org.ofbiz.product.store.*;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
+import com.osafe.util.Util;
 
-cart = session.getAttribute("shoppingCart");
+ShoppingCart cart = session.getAttribute("shoppingCart");
 context.cart = cart;
 
 orderItems = cart.makeOrderItems();
 context.orderItems = orderItems;
 
+//Get the Sub Total
+shoppingCartSubTotal = cart.getSubTotal();
+
 orderAdjustments = cart.makeAllAdjustments();
 
+shoppingCartSize = cart?.size() ?: 0;
+
+shippingApplies = shoppingCart.shippingApplies();
+
 orderItemShipGroupInfo = cart.makeAllShipGroupInfos();
-if (orderItemShipGroupInfo) {
-    orderItemShipGroupInfo.each { valueObj ->
-        if ("OrderAdjustment".equals(valueObj.getEntityName())) {
+if (orderItemShipGroupInfo) 
+{
+    orderItemShipGroupInfo.each 
+	{ valueObj ->
+        if ("OrderAdjustment".equals(valueObj.getEntityName())) 
+		{
             // shipping / tax adjustment(s)
             orderAdjustments.add(valueObj);
         }
     }
 }
 context.orderAdjustments = orderAdjustments;
+
+//Get currency
+CURRENCY_UOM_DEFAULT = Util.getProductStoreParm(request,"CURRENCY_UOM_DEFAULT");
+currencyUom = CURRENCY_UOM_DEFAULT;
+if(UtilValidate.isEmpty(currencyUom))
+{
+	currencyUom = cart.getCurrency();
+}
 
 workEfforts = cart.makeWorkEfforts();   // if required make workefforts for rental fixed assets too.
 context.workEfforts = workEfforts;
@@ -61,7 +81,8 @@ context.paymentMethods = cart.getPaymentMethods();
 paymentMethodTypeIds = cart.getPaymentMethodTypeIds();
 paymentMethodType = null;
 paymentMethodTypeId = null;
-if (paymentMethodTypeIds) {
+if (paymentMethodTypeIds) 
+{
     paymentMethodTypeId = paymentMethodTypeIds[0];
     paymentMethodType = delegator.findByPrimaryKey("PaymentMethodType", [paymentMethodTypeId : paymentMethodTypeId]);
     context.paymentMethodType = paymentMethodType;
@@ -107,3 +128,13 @@ context.orderGrandTotal = cart.getGrandTotal();
 
 // nuke the event messages
 request.removeAttribute("_EVENT_MESSAGE_");
+//Get currency
+context.currencyUom = currencyUom;
+
+//Sub Total
+context.shoppingCartSubTotal = shoppingCartSubTotal;
+context.cartSubTotal = shoppingCartSubTotal;
+//cart size
+context.shoppingCartTotalQuantity = shoppingCartSize;
+
+context.shippingApplies = shippingApplies;

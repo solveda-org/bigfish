@@ -46,6 +46,8 @@ public class ProductDocument implements Serializable {
 	private List<String> productFeatureTypes;
     private Map<String, List<String>> productFeatures;
 
+    private String productFacilityIds;
+
     public ProductDocument() {
         super();
         productFeatureTypes = FastList.newInstance();
@@ -300,4 +302,12 @@ public class ProductDocument implements Serializable {
 	public void setTotalQuantityOrdered(Double totalQuantityOrdered) {
 		this.totalQuantityOrdered = totalQuantityOrdered;
 	}
+    
+    public String getProductFacilityIds() {
+        return productFacilityIds;
+    }
+
+    public void setProductFacilityIds(String productFacilityIds) {
+        this.productFacilityIds = productFacilityIds;
+    }
 }

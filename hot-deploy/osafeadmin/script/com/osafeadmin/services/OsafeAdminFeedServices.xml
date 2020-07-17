@@ -393,7 +393,6 @@
         <!-- Export Contact Us Events to Xml Feeds -->
         <if-not-empty field="parameters.custRequestIdList">
             <set field="exportCustRequestContactUsXMLCtx.custRequestIdList" from-field="parameters.custRequestIdList"/>
-            <set field="exportCustRequestContactUsXMLCtx.productStoreId" from-field="parameters.productStoreId"/>
             <call-service service-name="exportCustRequestContactUsXML" in-map-name="exportCustRequestContactUsXMLCtx">
                 <result-to-field result-name="feedsDirectoryPath" field="feedsDirectoryPath"/>
                 <result-to-field result-name="feedsFileName" field="feedsFileName"/>
@@ -500,7 +499,6 @@
         <!-- Export Request Catalog Events to Xml Feeds -->
         <if-not-empty field="parameters.custRequestIdList">
             <set field="exportCustRequestCatalogXMLCtx.custRequestIdList" from-field="parameters.custRequestIdList"/>
-            <set field="exportCustRequestCatalogXMLCtx.productStoreId" from-field="parameters.productStoreId"/>
             <call-service service-name="exportCustRequestCatalogXML" in-map-name="exportCustRequestCatalogXMLCtx">
                 <result-to-field result-name="feedsDirectoryPath" field="feedsDirectoryPath"/>
                 <result-to-field result-name="feedsFileName" field="feedsFileName"/>

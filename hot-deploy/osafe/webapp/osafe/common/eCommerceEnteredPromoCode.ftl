@@ -1,8 +1,5 @@
 <#assign shoppingCart = sessionAttributes.shoppingCart?if_exists />
 <#if (shoppingCart.size() > 0)>
- <div class="checkoutOrderPromoCode">
-  <div class="ecommercePromocode">
-
     <#assign productPromoCodesEntered = shoppingCart.getProductPromoCodesEntered().clone()/>
     <#assign productPromoUseInfoList = Static["javolution.util.FastList"].newInstance()/>
     <#list shoppingCart.getProductPromoUseInfoIter() as productPromoUsed>
@@ -60,6 +57,4 @@
      </div>
      </div>
     </#list>
-  </div>
- </div>
 </#if>

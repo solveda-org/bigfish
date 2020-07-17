@@ -25,6 +25,8 @@ import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.UtilMisc;
+import com.osafe.util.Util;
+import com.osafe.util.OsafeAdminUtil;
 
 orderId = StringUtils.trimToEmpty(parameters.orderId);
 orderDateFrom = StringUtils.trimToEmpty(parameters.orderDateFrom);
@@ -36,6 +38,10 @@ orderEmail = parameters.orderEmail;
 session = context.session;
 statusId = StringUtils.trimToEmpty(parameters.statusId);
 productPromoCodeId = StringUtils.trimToEmpty(parameters.productPromoCodeId);
+productStoreall = StringUtils.trimToEmpty(parameters.productStoreall);
+
+List infoMsgList = FastList.newInstance();
+Boolean isValidDate = true;
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
@@ -47,72 +53,72 @@ orderStatusIncSearch = globalContext.get("ORDER_STATUS_INC_SEARCH");
 if(UtilValidate.isNotEmpty(orderStatusIncSearch))
 {
     orderStatusIncSearchList = StringUtil.split(orderStatusIncSearch, ",");
-	for (String orderStatus : orderStatusIncSearchList) 
-	{
-	    statusItem = delegator.findByPrimaryKey("StatusItem", UtilMisc.toMap("statusId", orderStatus.trim()));
-	    statusDescription = "";
-	    if(UtilValidate.isNotEmpty(statusItem))
-	    {
-	        statusDescription = statusItem.description;
-	    }
-	    context.put('view'+statusDescription.toLowerCase(), StringUtils.trimToEmpty(parameters.get('view'+statusDescription.toLowerCase())));
-	    if(UtilValidate.isNotEmpty(statusId)) 
-	    {
-	        if((orderStatus.trim()).equals(statusId)) 
-	        {
-	            context.put('view'+statusDescription.toLowerCase(), statusId);
-         	}
+    for (String orderStatus : orderStatusIncSearchList) 
+    {
+        statusItem = delegator.findByPrimaryKey("StatusItem", UtilMisc.toMap("statusId", orderStatus.trim()));
+        statusDescription = "";
+        if(UtilValidate.isNotEmpty(statusItem))
+        {
+            statusDescription = statusItem.description;
         }
-	    if(UtilValidate.isNotEmpty(context.get('view'+statusDescription.toLowerCase())))
-	    { 
-	        orderStatusIds.add(orderStatus.trim());
-	    }
+        context.put('view'+statusDescription.toLowerCase(), StringUtils.trimToEmpty(parameters.get('view'+statusDescription.toLowerCase())));
+        if(UtilValidate.isNotEmpty(statusId)) 
+        {
+            if((orderStatus.trim()).equals(statusId)) 
+            {
+                context.put('view'+statusDescription.toLowerCase(), statusId);
+             }
+        }
+        if(UtilValidate.isNotEmpty(context.get('view'+statusDescription.toLowerCase())))
+        { 
+            orderStatusIds.add(orderStatus.trim());
+        }
     }
 }
 
 //if the statusId is not defined in the system param, but a specific status is being searched
 if (UtilValidate.isEmpty(context.viewcreated))
 {
-	if(UtilValidate.isNotEmpty(statusId))
-	{
-		if("ORDER_CREATED".equals(statusId))
-		{
-			orderStatusIds.add(statusId);
-		}
-	}	
+    if(UtilValidate.isNotEmpty(statusId))
+    {
+        if("ORDER_CREATED".equals(statusId))
+        {
+            orderStatusIds.add(statusId);
+        }
+    }    
 }
 
 if (UtilValidate.isEmpty(context.viewapproved))
 {
-	if(UtilValidate.isNotEmpty(statusId))
-	{
-		if("ORDER_APPROVED".equals(statusId))
-		{
-			orderStatusIds.add(statusId);
-		}
-	}	
+    if(UtilValidate.isNotEmpty(statusId))
+    {
+        if("ORDER_APPROVED".equals(statusId))
+        {
+            orderStatusIds.add(statusId);
+        }
+    }    
 }
 
 if (UtilValidate.isEmpty(context.viewprocessing))
 {
-	if(UtilValidate.isNotEmpty(statusId))
-	{
-		if("ORDER_PROCESSING".equals(statusId))
-		{
-			orderStatusIds.add(statusId);
-		}
-	}
+    if(UtilValidate.isNotEmpty(statusId))
+    {
+        if("ORDER_PROCESSING".equals(statusId))
+        {
+            orderStatusIds.add(statusId);
+        }
+    }
 }
 
 if (UtilValidate.isEmpty(context.viewsent))
 {
-	if(UtilValidate.isNotEmpty(statusId))
-	{
-		if("ORDER_SENT".equals(statusId))
-		{
-			orderStatusIds.add(statusId);
-		}
-	}
+    if(UtilValidate.isNotEmpty(statusId))
+    {
+        if("ORDER_SENT".equals(statusId))
+        {
+            orderStatusIds.add(statusId);
+        }
+    }
 }
 
 if (UtilValidate.isNotEmpty(preRetrieved))
@@ -137,9 +143,12 @@ viewSize = Integer.valueOf(parameters.viewSize ?: UtilProperties.getPropertyValu
 Map<String, Object> svcCtx = FastMap.newInstance();
 userLogin = session.getAttribute("userLogin");
 svcCtx.put("userLogin", userLogin);
-List<String> lProductStoreId = FastList.newInstance();
-lProductStoreId.add(globalContext.productStoreId);
-svcCtx.put("productStoreId",lProductStoreId);
+if (UtilValidate.isEmpty(productStoreall))
+{
+	List<String> lProductStoreId = FastList.newInstance();
+	lProductStoreId.add(globalContext.productStoreId);
+	svcCtx.put("productStoreId",lProductStoreId);
+}
 
 if(UtilValidate.isNotEmpty(orderId))
 {
@@ -148,15 +157,22 @@ if(UtilValidate.isNotEmpty(orderId))
 
 if(UtilValidate.isNotEmpty(orderDateFrom))
 {
-    try 
+    if (OsafeAdminUtil.isDateTime(orderDateFrom, preferredDateFormat))
     {
-          orderDateFrom = ObjectType.simpleTypeConvert(orderDateFrom, "Timestamp", preferredDateFormat, locale);
-    } catch (Exception e) 
-    {
-        errMsg = "Parse Exception orderDateFrom: " + orderDateFrom;
-        Debug.logError(e, errMsg, "orderManagementOrderList.groovy");
+        try 
+        {
+              orderDateFrom = ObjectType.simpleTypeConvert(orderDateFrom, "Timestamp", preferredDateFormat, locale);
+        } catch (Exception e) 
+        {
+            errMsg = "Parse Exception orderDateFrom: " + orderDateFrom;
+            Debug.logError(e, errMsg, "orderManagementOrderList.groovy");
+        }
+        svcCtx.put("minDate", orderDateFrom.toString());
     }
-    svcCtx.put("minDate", orderDateFrom.toString());
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidFromDateInfo",locale));
+    }
 }
 
 if(UtilValidate.isNotEmpty(productPromoCodeId))
@@ -166,18 +182,29 @@ if(UtilValidate.isNotEmpty(productPromoCodeId))
 
 if(UtilValidate.isNotEmpty(orderDateTo))
 {
-    try
+    if (OsafeAdminUtil.isDateTime(orderDateTo, preferredDateFormat))
     {
-         orderDateTo = ObjectType.simpleTypeConvert(orderDateTo, "Timestamp", preferredDateFormat, locale);
-	} 
-	catch (Exception e) 
-	{
-        errMsg = "Parse Exception orderDateTo: " + orderDateTo;
-        Debug.logError(e, errMsg, "orderManagementOrderList.groovy");
+        try
+        {
+             orderDateTo = ObjectType.simpleTypeConvert(orderDateTo, "Timestamp", preferredDateFormat, locale);
+        } 
+        catch (Exception e) 
+        {
+            errMsg = "Parse Exception orderDateTo: " + orderDateTo;
+            Debug.logError(e, errMsg, "orderManagementOrderList.groovy");
+        }
+        svcCtx.put("maxDate", orderDateTo.toString());
     }
-    svcCtx.put("maxDate", orderDateTo.toString());
+    else
+    {
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidToDateInfo",locale));
+    }
 }
-
+if (UtilValidate.isNotEmpty(infoMsgList)) 
+{
+    isValidDate = false;
+    request.setAttribute("_INFO_MESSAGE_LIST_", infoMsgList);
+}
 if(UtilValidate.isNotEmpty(partyId))
 {
     svcCtx.put("partyId", partyId);
@@ -197,20 +224,20 @@ if (UtilValidate.isNotEmpty(srchStorePickup))
 List orderContactMechIds = FastList.newInstance();
 if (UtilValidate.isNotEmpty(orderEmail)) 
 {
-	context.orderEmail = orderEmail;
+    context.orderEmail = orderEmail;
     contactMechs = delegator.findByAnd("PartyContactWithPurpose", [infoString : orderEmail, contactMechTypeId : "EMAIL_ADDRESS", contactMechPurposeTypeId : "PRIMARY_EMAIL"]);
     if (UtilValidate.isNotEmpty(contactMechs)) 
-	{
-		for(GenericValue contactMech : contactMechs)
-		{
-			orderContactMechIds.add(contactMech.contactMechId);
-		}
-		svcCtx.put("orderContactMechIds", orderContactMechIds);
+    {
+        for(GenericValue contactMech : contactMechs)
+        {
+            orderContactMechIds.add(contactMech.contactMechId);
+        }
+        svcCtx.put("orderContactMechIds", orderContactMechIds);
     } 
     else
-	{
-		//if no contactMechs are found, add a dummy Id of '0' so that no results will be displayed
-		orderContactMechIds.add("0");
+    {
+        //if no contactMechs are found, add a dummy Id of '0' so that no results will be displayed
+        orderContactMechIds.add("0");
         svcCtx.put("orderContactMechIds", orderContactMechIds);
     }
 }
@@ -242,7 +269,7 @@ Map<String, Object> svcRes;
 
 List<GenericValue> orderList = FastList.newInstance();
 
-if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") 
+if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N" && isValidDate) 
 {
      svcRes = dispatcher.runSync("searchOrders", svcCtx);
 

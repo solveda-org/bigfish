@@ -60,13 +60,8 @@
     });
     
     jQuery('.eCommerceComplementProduct .plpFeatureSwatchImage').click(function() {
-    	<#assign imgSizeCompH = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_COMPLEMENT_H")!""/>
-    	<#assign imgSizeCompW = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_COMPLEMENT_W")!""/>
         var swatchVariant = jQuery(this).next('.swatchVariant').clone();
-        var swatchVarImage = jQuery(swatchVariant).find('img');
-        jQuery(swatchVarImage).attr('height', '${imgSizeCompH}');
-        jQuery(swatchVarImage).attr('width', '${imgSizeCompW}');
-        
+                
         var swatchVariantOnlinePrice = jQuery(this).nextAll('.swatchVariantOnlinePrice:first').clone().show();
         swatchVariantOnlinePrice.removeClass('swatchVariantOnlinePrice').addClass('plpPriceOnline');
         jQuery(this).parents('.eCommerceListItem').find('.pdpComplementPriceOnlineSeq').find('.plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
@@ -205,6 +200,84 @@
        }
     }
     
+    function addMultiItems(pdpSelectMultiVariant) 
+    {
+    	var submitToCart = "true";
+    	var atleastOneItemGreaterThanZero = "false";
+    	<#assign PDP_QTY_MIN = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MIN")!"1"/>
+		<#assign PDP_QTY_MAX = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"PDP_QTY_MAX")!"99"/> 
+		var lowerLimit = ${PDP_QTY_MIN!"1"};
+		var upperLimit = ${PDP_QTY_MAX!"99"};
+    	//loop through each variant
+    	var count = 0;
+    	jQuery('.add_multi_product_quantity').each(function () 
+    	{
+    		if(pdpSelectMultiVariant == "CHECKBOX")
+    		{
+    			variantIsChecked = jQuery('#add_multi_product_id_'+count).is(":checked");
+    		}
+    		else
+    		{
+    			//does not apply
+    			variantIsChecked = true;
+    		}
+    		if(variantIsChecked)
+    		{
+	    		var quantity = jQuery(this).val();
+	    		if(quantity == "")
+	    		{
+	    			qauntity = 0;
+	    		}
+	    		var add_productId = jQuery('#add_multi_product_id_'+count).val();
+	    		
+	    		//check for valid numbers within range of sys params
+	        	if(quantity != 0) 
+				{
+			        if(quantity < lowerLimit)
+			        {
+			            alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMinQtyError,'\"','\\"'))}");
+			            submitToCart = "false";
+			            return false;
+			        }
+			        if(upperLimit!= 0 && quantity > upperLimit)
+			        {
+			            alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMaxQtyError,'\"','\\"'))}");
+			            submitToCart = "false";
+			            return false;
+			        }
+			        if(!isWhole(quantity))
+			        {
+			            alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPQtyDecimalNumberError,'\"','\\"'))}");
+			            submitToCart = "false";
+			            return false;
+			        }
+			    }
+			    if(quantity > 0)
+			    {
+			    	atleastOneItemGreaterThanZero = "true";
+			    } 
+		  }
+		  count = count + 1;
+			
+		});   		
+		
+		if(submitToCart == "true" && atleastOneItemGreaterThanZero == "true")
+		{
+	    	// add to cart action
+	        document.addform.action="<@ofbizUrl>${addMultiItemsToCartAction!""}</@ofbizUrl>";
+	        document.addform.submit();
+        }
+        else
+        {
+        	alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMinQtyError,'\"','\\"'))}");
+        }
+    }
+    
+    var isWhole_re = /^\s*\d+\s*$/;
+    function isWhole (s) {
+        return String(s).search (isWhole_re) != -1
+    } 	
+ 
     function replaceDetailImage(largeImageUrl, detailImageUrl) {
         if (!jQuery('#mainImages').length) {
             var mainImages = jQuery('#mainImageDiv').clone();
@@ -350,7 +423,7 @@ var firstNoSelection = "false";
                     var variantPdpVolumePricing = jQuery('#pdpVolumePricing_'+VARMAP[mapKey]).html();
                     jQuery('#pdpVolumePricing').html(variantPdpVolumePricing);              
                     
-                    var variantLargeImages = jQuery('#largeImageUrl_Virtual').clone();
+                    var variantLargeImages = jQuery('#largeImageUrl_'+VARMAP[mapKey]).clone();
             		var variantPdpLongDescription = jQuery('#pdpLongDescription_Virtual').html();
             		var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_Virtual').html();
             	

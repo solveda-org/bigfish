@@ -51,10 +51,12 @@
     <#if orderAttrPickupStore?has_content>
         ${screens.render("component://osafe/widget/EcommerceScreens.xml#storeDetail")}
     </#if>
-
-    <#-- Shipping Box -->
-    ${screens.render("component://osafe/widget/EcommerceScreens.xml#shippingAddress")}
-
+	
+	<#if shippingApplies?exists && shippingApplies>
+      <#-- Shipping Box -->
+      ${screens.render("component://osafe/widget/EcommerceScreens.xml#shippingAddress")}
+	</#if>
+	
     <#-- Payment Information -->
     ${screens.render("component://osafe/widget/EcommerceScreens.xml#paymentInformation")}
 

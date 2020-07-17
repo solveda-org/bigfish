@@ -8,9 +8,9 @@
 <!-- address city entry -->
 <div class="addressInfoCityTown">
     <div id="city" class="entry">
-        <label for="${fieldPurpose?if_exists}_CITY"><@required/>
-            <span class="${fieldPurpose?if_exists}_USA ${fieldPurpose?if_exists}_CAN">${uiLabelMap.CityCaption}</span>
-            <span class="${fieldPurpose?if_exists}_OTHER">${uiLabelMap.TownOrCityCaption}</span>
+        <label for="${fieldPurpose?if_exists}_CITY">
+            <span class="${fieldPurpose?if_exists}_USA ${fieldPurpose?if_exists}_CAN"><@required/>${uiLabelMap.CityCaption}</span>
+            <span class="${fieldPurpose?if_exists}_OTHER"><@required/>${uiLabelMap.TownOrCityCaption}</span>
         </label>
         <input type="text" maxlength="100" class="city" name="${fieldPurpose?if_exists}_CITY" id="${fieldPurpose?if_exists}_CITY" value="${requestParameters.get(fieldPurpose+"_CITY")!city!""}" />
         <@fieldErrors fieldName="${fieldPurpose?if_exists}_CITY"/>

@@ -33,9 +33,11 @@
           <input type="hidden" id="PHONE_HOME_REQUIRED" name="PHONE_HOME_REQUIRED" value="true"/>
           <input type="text" class="phone3" id="PHONE_HOME_CONTACT3" name="PHONE_HOME_CONTACT3" value="${requestParameters.get("PHONE_HOME_CONTACT3")!contactNumber3Home!""}" maxlength="3" />
           <input type="text" class="phone4" id="PHONE_HOME_CONTACT4" name="PHONE_HOME_CONTACT4" value="${requestParameters.get("PHONE_HOME_CONTACT4")!contactNumber4Home!""}" maxlength="4" />
+          <span class="instructions" >${uiLabelMap.HomePhoneNotificationLabel}</span>
       </span>
       <span style="display:none" class="USER_OTHER">
           <input type="text" class="address" id="PHONE_HOME_CONTACT_OTHER" name="PHONE_HOME_CONTACT_OTHER" value="${requestParameters.get("PHONE_HOME_CONTACT_OTHER")!contactNumberHome!""}" />
+          <span class="instructions" >${uiLabelMap.HomePhoneNotificationLabel}</span>
       </span>
       ${addressHomePhoneInfo!""}
       <@fieldErrors fieldName="PHONE_HOME_AREA"/>

@@ -2,6 +2,7 @@
 <#assign shoppingCart = Static["org.ofbiz.order.shoppingcart.ShoppingCartEvents"].getCartObject(request) />
 
 <#if (shoppingCart?exists && shoppingCart.size() > 0)>
+ <#assign shippingApplies = shoppingCart.shippingApplies() />
  <div class="showCartItems">
   <#assign offerPriceVisible= "N"/>
   <#list shoppingCart.items() as cartLine>
@@ -105,15 +106,15 @@
             	<a href="javascript:refreshFromBottomCart();"><span class="refreshIcon"></span></a>
             </#if>
           </td>
-          <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=displayPrice rounding=2 isoCode=currencyUom/></td>
+          <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=displayPrice rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
           <#if (offerPriceVisible?has_content) && offerPriceVisible == "Y">
            <td class="dollarCol <#if !hasNext>lastRow</#if>">
              <#if (offerPrice?exists && offerPrice?has_content)>
-               <@ofbizCurrency amount=offerPrice rounding=2 isoCode=currencyUom/>
+               <@ofbizCurrency amount=offerPrice rounding=globalContext.currencyRounding isoCode=currencyUom/>
              </#if>
            </td>
           </#if>
-          <td class="dollarCol total <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=cartLine.getDisplayItemSubTotal() rounding=2 isoCode=currencyUom/></td>
+          <td class="dollarCol total <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=cartLine.getDisplayItemSubTotal() rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
           <td class="actionColSmall <#if !hasNext?if_exists>lastRow</#if>">
             <#if !cartLine.getIsPromo()>
             	<#assign productIdStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("PRODUCT_NO", product.productId!)>
@@ -136,29 +137,31 @@
              <table class="osafe orderSummary">
                 <tr>
                   <td class="totalCaption"><label>${uiLabelMap.SubTotalLabel}</label></td>
-                  <td class="totalValue"><@ofbizCurrency amount=shoppingCart.getSubTotal() rounding=2 isoCode=currencyUom/></td>
+                  <td class="totalValue"><@ofbizCurrency amount=shoppingCart.getSubTotal() rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
                 </tr>
-                <tr>
-                  <td class="totalCaption"><label>${uiLabelMap.ShippingMethodCaption}</label></td>
-                  <td class="totalValue">
-                   <#if (shoppingCart.getShipmentMethodTypeId()?has_content)>
-                     <#assign selectedStoreId = shoppingCart.getOrderAttribute("STORE_LOCATION")?if_exists />
-                     <#if !selectedStoreId?has_content && shoppingCart.getShipmentMethodTypeId()?has_content && shoppingCart.getCarrierPartyId()?has_content>
-                         <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shoppingCart.getCarrierPartyId()))?if_exists />
-                         <#if carrier.groupName?has_content && carrier.partyId?has_content>
+                <#if shippingApplies>
+                  <tr>
+                    <td class="totalCaption"><label>${uiLabelMap.ShippingMethodCaption}</label></td>
+                    <td class="totalValue">
+                      <#if (shoppingCart.getShipmentMethodTypeId()?has_content)>
+                        <#assign selectedStoreId = shoppingCart.getOrderAttribute("STORE_LOCATION")?if_exists />
+                        <#if !selectedStoreId?has_content && shoppingCart.getShipmentMethodTypeId()?has_content && shoppingCart.getCarrierPartyId()?has_content>
+                          <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shoppingCart.getCarrierPartyId()))?if_exists />
+                          <#if carrier.groupName?has_content && carrier.partyId?has_content>
                          	<#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shoppingCart.getShipmentMethodType(0).description />
-                         </#if>
-                     <#else>   
-                     	<#assign chosenShippingMethodDescription = uiLabelMap.PickupInStoreLabel />    
-                     </#if>
-                     ${chosenShippingMethodDescription!}
-                   </#if>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="totalCaption"><label>${uiLabelMap.EstimatedShippingCaption}</label></td>
-                  <td class="totalValue"><@ofbizCurrency amount=shoppingCart.getTotalShipping() isoCode=currencyUomId/></td>
-                </tr>
+                          </#if>
+                        <#else>   
+                     	  <#assign chosenShippingMethodDescription = uiLabelMap.PickupInStoreLabel />    
+                        </#if>
+                        ${chosenShippingMethodDescription!}
+                      </#if>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="totalCaption"><label>${uiLabelMap.EstimatedShippingCaption}</label></td>
+                    <td class="totalValue"><@ofbizCurrency amount=shoppingCart.getTotalShipping() isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
+                  </tr>
+                </#if>
                 <#if shoppingCart.getAdjustments()?has_content>
                   <#list shoppingCart.getAdjustments() as cartAdjustment>
                     <#assign promoCodeText = ""/>
@@ -188,7 +191,7 @@
                     </#if>
                      <tr>
 	                   <td class="totalCaption"><label><#if promoText?has_content>${promoText!""} <#if promoCodeText?has_content><a href="<@ofbizUrl>promotionCodeDetail?productPromoCodeId=${promoCodeText}</@ofbizUrl>">(${promoCodeText!})</a></#if><#elseif adjustmentType?has_content>${adjustmentType.get("description",locale)?if_exists}</#if>:</label></td>
-	                   <td class="totalValue"><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustment(cartAdjustment, shoppingCart.getSubTotal()) rounding=2 isoCode=currencyUom/></td>
+	                   <td class="totalValue"><@ofbizCurrency amount=Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustment(cartAdjustment, shoppingCart.getSubTotal()) rounding=globalContext.currencyRounding isoCode=currencyUom/></td>
 	                 </tr>
                   </#list>
                 </#if>
@@ -196,13 +199,13 @@
                 <#if (!Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO")) || (taxAmount?has_content && (taxAmount &gt; 0))>
                     <tr>
                       <td class="totalCaption"><label><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></label></td>
-                      <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></td>
+                      <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                     </tr>
                 </#if>
                 <tr>
                   <td class="totalCaption total"><label>${uiLabelMap.OrderTotalCaption}</label></td>
                   <td class="totalValue total">
-                    <@ofbizCurrency amount=shoppingCart.getGrandTotal() isoCode=currencyUomId/>
+                    <@ofbizCurrency amount=shoppingCart.getGrandTotal() isoCode=currencyUomId rounding=globalContext.currencyRounding/>
                   </td>
                 </tr>
              </table>

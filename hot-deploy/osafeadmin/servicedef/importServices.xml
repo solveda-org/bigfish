@@ -206,4 +206,21 @@
         <attribute name="messages" type="List" mode="OUT" optional="true"/>
     </service>
 
+    <service name="importBlueDartPrepaidTemplate" engine="java" location="com.osafe.services.BlueDartImportServices" invoke="importBlueDartPrePaidXls" auth="false" use-transaction="false">
+        <description>Import xls tabs, generate xml files in given directory using importDefinitionNames</description>
+        <attribute name="xlsDataFile" mode="IN" type="String" optional="false"/>
+        <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
+        <attribute name="removeAll" mode="IN" type="Boolean" optional="true" />
+        <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="messages" type="List" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="importBlueDartCoDTemplate" engine="java" location="com.osafe.services.BlueDartImportServices" invoke="importBlueDartCoDXls" auth="false" use-transaction="false">
+        <description>Import xls tabs, generate xml files in given directory using importDefinitionNames</description>
+        <attribute name="xlsDataFile" mode="IN" type="String" optional="false"/>
+        <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
+        <attribute name="removeAll" mode="IN" type="Boolean" optional="true" />
+        <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="messages" type="List" mode="OUT" optional="false"/>
+    </service>
 </services>

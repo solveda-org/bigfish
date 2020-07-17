@@ -1,0 +1,23 @@
+<xs:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xs:element name="BigFishCustomPartyAttribute">
+	    <xs:complexType>
+		    <xs:sequence>
+		        <xs:element name="CustomPartyAttribute" maxOccurs="unbounded">
+		            <xs:complexType>
+		                <xs:sequence>
+		                    <xs:element name="AttrName" type="xs:string"/>
+		                    <xs:element name="SequenceNum" type="xs:string"/>
+		                    <xs:element name="Caption" type="xs:string"/>
+		                    <xs:element name="Type" type="xs:string"/>
+		                    <xs:element name="EntryFormat" type="xs:string"/>
+		                    <xs:element name="MaxLength" type="xs:string"/>
+		                    <xs:element name="ValueList" type="xs:string"/>
+		                    <xs:element name="Required" type="xs:string"/>
+		                    <xs:element name="ReqMessage" type="xs:string"/>
+		                </xs:sequence>
+		            </xs:complexType>
+		        </xs:element>
+		    </xs:sequence>
+	    </xs:complexType>
+    </xs:element>
+</xs:schema>

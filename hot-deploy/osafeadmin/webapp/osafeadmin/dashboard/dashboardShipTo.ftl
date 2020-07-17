@@ -42,19 +42,19 @@
                         ${orderCount?default('0')}
                     </#if>
                 </td>
-                <td class="boxDollar lastCol"><#if totalRevenue?has_content && totalRevenue &gt; 0> <@ofbizCurrency amount=totalRevenue!0 rounding=0 isoCode=globalContext.globalContext.defaultCurrencyUomId /><#else>${totalRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastCol"><#if totalRevenue?has_content && totalRevenue &gt; 0> <@ofbizCurrency amount=totalRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.globalContext.defaultCurrencyUomId /><#else>${totalRevenue?default(0)}</#if></td>
             </tr>
             <tr class="even">
                 <td class="boxCaption firstCol">${uiLabelMap.AverageOrderCaption}</td>
                 <td class="boxNumber">&nbsp;</td>
                 <td class="boxNumber">&nbsp;</td>
-                <td class="boxDollar lastCol"><#if averageRevenue?has_content && averageRevenue &gt; 0> <@ofbizCurrency amount=averageRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${averageRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastCol"><#if averageRevenue?has_content && averageRevenue &gt; 0> <@ofbizCurrency amount=averageRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${averageRevenue?default(0)}</#if></td>
             </tr>
             <tr class="odd">
                 <td class="boxCaption firstCol">${uiLabelMap.DailyAverageCaption} (${diffDays!"0"} ${uiLabelMap.DaysLabel}):</td>
                 <td class="boxNumber">&nbsp;</td>
                 <td class="boxNumber">${dailyAverageOrderCount?default('0')}</td>
-                <td class="boxDollar lastCol"><#if dailyAverageRevenue?has_content && dailyAverageRevenue &gt; 0> <@ofbizCurrency amount=dailyAverageRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${dailyAverageRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastCol"><#if dailyAverageRevenue?has_content && dailyAverageRevenue &gt; 0> <@ofbizCurrency amount=dailyAverageRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${dailyAverageRevenue?default(0)}</#if></td>
             </tr>
             <tr class="even">
               <#if periodRecTrendRange?exists>
@@ -88,7 +88,7 @@
                 </#if>
                 <td class="boxDollar ${recentTrendClass!""}">${recentTrendRevenue!"N/A"}<#if recentTrendRevenue?has_content>%</#if></td>
                 <td class="boxNumber">${recentOrderCount?default('0')}</td>
-                <td class="boxDollar lastRow lastCol ${recentTrendColorClass!""}"><#if recentTrendTotalRevenue?has_content && recentTrendTotalRevenue &gt; 0> <@ofbizCurrency amount=recentTrendTotalRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${recentTrendTotalRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastRow lastCol ${recentTrendColorClass!""}"><#if recentTrendTotalRevenue?has_content && recentTrendTotalRevenue &gt; 0> <@ofbizCurrency amount=recentTrendTotalRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${recentTrendTotalRevenue?default(0)}</#if></td>
             </tr>
             <tr class="odd">
               <#if periodPriorTrendRange?exists>
@@ -122,7 +122,7 @@
                 </#if>
                 <td class="boxDollar ${priorTrendClass!""}">${priorTrendRevenue!"N/A"}<#if priorTrendRevenue?has_content>%</#if></td>
                 <td class="boxNumber">${priorOrderCount?default('0')}</td>
-                <td class="boxDollar lastRow lastCol ${priorTrendColorClass!""}"><#if priorTrendTotalRevenue?has_content && priorTrendTotalRevenue &gt; 0>  <@ofbizCurrency amount=priorTrendTotalRevenue!0 rounding=0 isoCode=globalContext.defaultCurrencyUomId /><#else>${priorTrendTotalRevenue?default(0)}</#if></td>
+                <td class="boxDollar lastRow lastCol ${priorTrendColorClass!""}"><#if priorTrendTotalRevenue?has_content && priorTrendTotalRevenue &gt; 0>  <@ofbizCurrency amount=priorTrendTotalRevenue!0 rounding=globalContext.currencyRounding isoCode=globalContext.defaultCurrencyUomId /><#else>${priorTrendTotalRevenue?default(0)}</#if></td>
             </tr>
         </table>
     </div>

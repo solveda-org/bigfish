@@ -68,6 +68,11 @@
                       <div class="reviewTextSection">
                          <span class="reviewText">${Static["com.osafe.util.Util"].getFormattedText(productReview.productReview!)}</span>
                       </div>
+                      <#if (productReview.reviewResponse)?has_content>
+                        <div class="reviewResponseSection">
+                            <span class="reviewResponse"><label>${uiLabelMap.ReviewResponseCaption} </label>${Static["com.osafe.util.Util"].getFormattedText(productReview.reviewResponse!)}</span>
+                        </div>
+                      </#if>
                  </div>       
              </#list>
             </div>

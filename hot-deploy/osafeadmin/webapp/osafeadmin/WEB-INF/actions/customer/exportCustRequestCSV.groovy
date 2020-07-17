@@ -6,11 +6,66 @@ import com.osafe.util.OsafeAdminUtil;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.GenericValue;
 import javolution.util.FastMap;
+import javolution.util.FastList;
 
 userLogin = session.getAttribute("userLogin");
+custRequestList=FastList.newInstance();
 custRequestCond = session.getAttribute("custRequestCond");
-custRequestList = delegator.findList("CustRequest",custRequestCond, null, null, null, false);
-
+isDownloaded = session.getAttribute("custRequestCondIsDownload");
+lastName = session.getAttribute("custRequestCondLastName");
+lCustRequest = delegator.findList("CustRequest",custRequestCond, null, null, null, false);
+if (UtilValidate.isNotEmpty(lCustRequest))
+{
+    if (UtilValidate.isNotEmpty(isDownloaded) || UtilValidate.isNotEmpty(lastName))
+    {
+    	for (GenericValue custRequest: lCustRequest) 
+    	{
+           custRequestAttrList = custRequest.getRelated("CustRequestAttribute");
+           custRequestAttrMap = FastMap.newInstance();
+           if (UtilValidate.isNotEmpty(custRequestAttrList))
+           {
+              attrlIter = custRequestAttrList.iterator();
+              while (attrlIter.hasNext()) 
+              {
+                  attr = (GenericValue) attrlIter.next();
+                  custRequestAttrMap.put(attr.getString("attrName"),attr.getString("attrValue"));
+              }
+              
+       		 attrLastName =custRequestAttrMap.get("LAST_NAME");
+       		 if (UtilValidate.isNotEmpty(attrLastName))
+    		 {
+    			attrLastName = attrLastName.toUpperCase();
+    		 }
+       		 attrDownloaded =custRequestAttrMap.get("IS_DOWNLOADED");
+        	 if (UtilValidate.isNotEmpty(isDownloaded) && UtilValidate.isNotEmpty(lastName))
+        	 {
+        		if (isDownloaded.equals(attrDownloaded) && attrLastName.contains(lastName.toUpperCase()))
+        		{
+        			custRequestList.add(custRequest);
+        		}
+        	 }else if (UtilValidate.isNotEmpty(lastName))
+        	 {
+          		if (attrLastName.contains(lastName.toUpperCase()))
+        		{
+          			custRequestList.add(custRequest);
+        		}
+        	 }else if (UtilValidate.isNotEmpty(isDownloaded))
+        	 {
+         		if (isDownloaded.equals(attrDownloaded))
+        		{
+         			custRequestList.add(custRequest);
+        		}
+        		 
+        	 }
+           }
+    	}
+    }
+    else
+    {
+    	custRequestList = lCustRequest;
+    	
+    }
+}
 if (UtilValidate.isNotEmpty(custRequestList)) 
 {
     if (UtilValidate.isNotEmpty(custRequestCSVName)) 

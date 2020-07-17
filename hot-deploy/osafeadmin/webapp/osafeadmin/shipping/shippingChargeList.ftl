@@ -7,6 +7,7 @@
                 <th class="nameCol">${uiLabelMap.ShipMethodTypeLabel}</th>
                 <th class="nameCol">${uiLabelMap.CarrierServCodeLabel}</th>
                 <th class="descCol">${uiLabelMap.CarrierShipMessageLabel}</th>
+                <th class="nameCol">${uiLabelMap.ShipmentGatewayLabel}</th>
                 <th class="numberCol">${uiLabelMap.ShipMinTotalLabel}</th>
                 <th class="numberCol">${uiLabelMap.ShipMaxTotalLabel}</th>
                 <th class="numberCol">${uiLabelMap.ShipFlatRateLabel}</th>
@@ -18,6 +19,12 @@
               <#assign hasNext = shipCharge_has_next>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
                 <#assign shipmentCostEstimateList = delegator.findByAnd("ShipmentCostEstimate", Static["org.ofbiz.base.util.UtilMisc"].toMap("productStoreShipMethId",shipCharge.productStoreShipMethId!))/>
+                <#assign shipmentGatewayList = delegator.findByAnd("ShipmentGatewayConfig", Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentGatewayConfigId",shipCharge.shipmentGatewayConfigId!))/>
+                <#assign shipmentGatewayConfig = "" />
+                <#if shipmentGatewayList?has_content>                    
+	              	<#assign shipmentGateway = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(shipmentGatewayList)/>
+	              	<#assign shipmentGatewayConfig = shipmentGateway.shipmentGatewayConfTypeId!""/>
+	            </#if>
                 <#if shipmentCostEstimateList?has_content>
 	              	<#assign shipmentCostEstimate = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(shipmentCostEstimateList)/>
 	              	<#assign flatPrice = shipmentCostEstimate.orderFlatPrice!""/>
@@ -32,6 +39,7 @@
                     <td class="nameCol <#if !hasNext>lastRow</#if>">${shipCharge.shipmentMethodTypeId!""}</td>
                     <td class="nameCol <#if !hasNext>lastRow</#if>">${carrierShipmentMethod.carrierServiceCode!""}</td>
                     <td class="descCol <#if !hasNext>lastRow</#if>">${carrierShipmentMethod.optionalMessage!""}</td>
+                    <td class="nameCol <#if !hasNext>lastRow</#if>">${shipmentGatewayConfig!""}</td>
                     <td class="numberCol <#if !hasNext>lastRow</#if>">${shipCharge.minTotal!""}</td>
                     <td class="numberCol <#if !hasNext>lastRow</#if>">${shipCharge.maxTotal!""}</td>
                     <td class="numberCol <#if !hasNext>lastRow</#if>">${flatPrice!""}</td>

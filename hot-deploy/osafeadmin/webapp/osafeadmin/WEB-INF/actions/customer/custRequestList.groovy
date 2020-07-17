@@ -16,17 +16,25 @@ import com.osafe.util.OsafeAdminUtil;
 import java.sql.Timestamp;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.*;
+import org.ofbiz.entity.GenericValue;
+import com.osafe.util.Util;
+
 
 String partyId = StringUtils.trimToEmpty(parameters.partyId);
 String lastName = StringUtils.trimToEmpty(parameters.lastName);
 contactUsDateFrom = StringUtils.trimToEmpty(parameters.contactUsDateFrom);
 contactUsDateTo = StringUtils.trimToEmpty(parameters.contactUsDateTo);
+productStoreall = StringUtils.trimToEmpty(parameters.productStoreall);
 String entryDateFormat = preferredDateFormat;
+List infoMsgList = FastList.newInstance();
+Boolean isValidDate = true;
 String isDownloaded = "";
-if(UtilValidate.isEmpty(parameters.downloadnew) & UtilValidate.isNotEmpty(parameters.downloadloaded)) {
+if(UtilValidate.isEmpty(parameters.downloadnew) & UtilValidate.isNotEmpty(parameters.downloadloaded)) 
+{
     isDownloaded = "Y";
 }
-if(UtilValidate.isNotEmpty(parameters.downloadnew) & UtilValidate.isEmpty(parameters.downloadloaded)) {
+if(UtilValidate.isNotEmpty(parameters.downloadnew) & UtilValidate.isEmpty(parameters.downloadloaded)) 
+{
     isDownloaded = "N";
 }
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
@@ -48,58 +56,46 @@ if (UtilValidate.isNotEmpty(initializedCB))
 
 Timestamp contactUsDateFromTs = null;
 Timestamp contactUsDateToTs = null;
-
-attrExpr = FastList.newInstance();
-attrNameExpr = FastList.newInstance();
-attrExportExpr = FastList.newInstance();
-custReqAttrList = FastList.newInstance();
-
-if(UtilValidate.isNotEmpty(lastName)){
-    attrNameExpr.add(EntityCondition.makeCondition("attrName", EntityOperator.EQUALS, "LAST_NAME"));
-    attrNameExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("attrValue"),
-            EntityOperator.LIKE, "%"+lastName.toUpperCase()+"%"));
-    custReqAttrList = delegator.findList("CustRequestAttribute",EntityCondition.makeCondition(attrNameExpr, EntityOperator.AND), null, null, null, false);
-}
-
-if(UtilValidate.isNotEmpty(isDownloaded)){
-    attrExportExpr.add(EntityCondition.makeCondition("attrName", EntityOperator.EQUALS, "IS_DOWNLOADED"));
-    attrExportExpr.add(EntityCondition.makeCondition("attrValue", EntityOperator.EQUALS, isDownloaded));
-    if(UtilValidate.isNotEmpty(custReqAttrList)) {
-        custRequestIdList = EntityUtil.getFieldListFromEntityList(custReqAttrList, "custRequestId", true);
-        attrExportExpr.add(EntityCondition.makeCondition("custRequestId", EntityOperator.IN, custRequestIdList));
-    }
-    custReqAttrList = delegator.findList("CustRequestAttribute",EntityCondition.makeCondition(attrExportExpr, EntityOperator.AND), null, null, null, false);
-} else if (UtilValidate.isEmpty(lastName) && UtilValidate.isNotEmpty(parameters.downloadnew) && UtilValidate.isNotEmpty(parameters.downloadloaded)) {
-    custReqAttrList = delegator.findList("CustRequestAttribute",null, null, null, null, false);
-}
-
 paramsExpr = FastList.newInstance();
 contactUsSearchList=FastList.newInstance();
+lCustRequest=FastList.newInstance();
 dateExpr= FastList.newInstance();
+
 dateCond = null;
 mainCond = null;
-if(UtilValidate.isNotEmpty(partyId)) {
+if(UtilValidate.isNotEmpty(partyId)) 
+{
     mainCond = EntityCondition.makeCondition("fromPartyId", EntityOperator.EQUALS, partyId);
 }
-
-if(UtilValidate.isNotEmpty(custReqAttrList)) {
-    custRequestIdList = EntityUtil.getFieldListFromEntityList(custReqAttrList, "custRequestId", true);
-    paramsExpr.add(EntityCondition.makeCondition("custRequestId", EntityOperator.IN, custRequestIdList));
-    if (mainCond) {
-    	mainCond = EntityCondition.makeCondition([mainCond, EntityCondition.makeCondition(paramsExpr, EntityOperator.AND)], EntityOperator.AND);
-    } else {
-        mainCond=EntityCondition.makeCondition(paramsExpr, EntityOperator.AND);
+if(UtilValidate.isNotEmpty(contactUsDateFrom))
+{
+    if(OsafeAdminUtil.isDateTime(contactUsDateFrom, preferredDateFormat))
+    {
+        contactUsDateFromTs = ObjectType.simpleTypeConvert(contactUsDateFrom, "Timestamp", entryDateFormat, locale);
+        dateExpr.add(EntityCondition.makeCondition("createdDate", EntityOperator.GREATER_THAN_EQUAL_TO, contactUsDateFromTs));
+    }
+    else
+    {   
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidFromDateInfo",locale));
     }
 }
-
-if(UtilValidate.isNotEmpty(contactUsDateFrom)){
-    contactUsDateFromTs = ObjectType.simpleTypeConvert(contactUsDateFrom, "Timestamp", entryDateFormat, locale);
-    dateExpr.add(EntityCondition.makeCondition("createdDate", EntityOperator.GREATER_THAN_EQUAL_TO, contactUsDateFromTs));
+if(UtilValidate.isNotEmpty(contactUsDateTo))
+{
+    if(OsafeAdminUtil.isDateTime(contactUsDateTo, preferredDateFormat))
+    {
+        contactUsDateToTs = ObjectType.simpleTypeConvert(contactUsDateTo, "Timestamp", entryDateFormat, locale);
+        contactUsDateToTs = UtilDateTime.getDayEnd(contactUsDateToTs);
+        dateExpr.add(EntityCondition.makeCondition("createdDate", EntityOperator.LESS_THAN_EQUAL_TO, contactUsDateToTs));
+    }
+    else
+    {   
+        infoMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","InvalidToDateInfo",locale));
+    }
 }
-if(UtilValidate.isNotEmpty(contactUsDateTo)){
-    contactUsDateToTs = ObjectType.simpleTypeConvert(contactUsDateTo, "Timestamp", entryDateFormat, locale);
-    contactUsDateToTs = UtilDateTime.getDayEnd(contactUsDateToTs);
-    dateExpr.add(EntityCondition.makeCondition("createdDate", EntityOperator.LESS_THAN_EQUAL_TO, contactUsDateToTs));
+if(UtilValidate.isNotEmpty(infoMsgList))
+{
+	isValidDate = false;
+	request.setAttribute("_INFO_MESSAGE_LIST_", infoMsgList);
 }
 if(UtilValidate.isNotEmpty(dateExpr))
 {
@@ -108,20 +104,79 @@ if(UtilValidate.isNotEmpty(dateExpr))
 
 if (dateCond)
 {
-    if (mainCond) {
+    if (mainCond) 
+    {
         mainCond = EntityCondition.makeCondition([mainCond, dateCond], EntityOperator.AND);
-    } else {
+    } else 
+    {
         mainCond=dateCond;
     }
 }
 
 orderBy = ["lastName"];
-if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N" && UtilValidate.isNotEmpty(mainCond)) 
+if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N" && UtilValidate.isNotEmpty(mainCond)&& isValidDate) 
 {
+	if (UtilValidate.isEmpty(productStoreall))
+	{
+	    mainCond = EntityCondition.makeCondition([mainCond, EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId)], EntityOperator.AND);
+	}
     mainCond = EntityCondition.makeCondition([mainCond, EntityCondition.makeCondition("custRequestTypeId", EntityOperator.EQUALS, custRequestType)], EntityOperator.AND);
-    contactUsSearchList = delegator.findList("CustRequest",mainCond, null, null, null, false);
-    session.setAttribute("custRequestCond", mainCond);
+    lCustRequest = delegator.findList("CustRequest",mainCond, null, null, null, false);
+    if (UtilValidate.isNotEmpty(lCustRequest))
+    {
+        for (GenericValue custRequest: lCustRequest) 
+        {
+            custRequestAttrList = custRequest.getRelated("CustRequestAttribute");
+            if (UtilValidate.isNotEmpty(isDownloaded) || UtilValidate.isNotEmpty(lastName))
+            {
+               custRequestAttrMap = FastMap.newInstance();
+               if (UtilValidate.isNotEmpty(custRequestAttrList))
+               {
+                  attrlIter = custRequestAttrList.iterator();
+                  while (attrlIter.hasNext()) 
+                  {
+                      attr = (GenericValue) attrlIter.next();
+                      custRequestAttrMap.put(attr.getString("attrName"),attr.getString("attrValue"));
+                  }
+                  
+                    attrLastName =custRequestAttrMap.get("LAST_NAME");
+                    if (UtilValidate.isNotEmpty(attrLastName))
+                 {
+                    attrLastName = attrLastName.toUpperCase();
+                 }
+                    attrDownloaded =custRequestAttrMap.get("IS_DOWNLOADED");
+                 if (UtilValidate.isNotEmpty(isDownloaded) && UtilValidate.isNotEmpty(lastName))
+                 {
+                    if (isDownloaded.equals(attrDownloaded) && attrLastName.contains(lastName.toUpperCase()))
+                    {
+                        contactUsSearchList.add(UtilMisc.toMap("CustRequest", custRequest,"CustRequestAttributeList", custRequestAttrList));
+                    }
+                 }else if (UtilValidate.isNotEmpty(lastName))
+                 {
+                      if (attrLastName.contains(lastName.toUpperCase()))
+                    {
+                        contactUsSearchList.add(UtilMisc.toMap("CustRequest", custRequest,"CustRequestAttributeList", custRequestAttrList));
+                    }
+                 }else if (UtilValidate.isNotEmpty(isDownloaded))
+                 {
+                     if (isDownloaded.equals(attrDownloaded))
+                    {
+                        contactUsSearchList.add(UtilMisc.toMap("CustRequest", custRequest,"CustRequestAttributeList", custRequestAttrList));
+                    }
+                     
+                 }
+               }
+            }
+            else
+            {
+                contactUsSearchList.add(UtilMisc.toMap("CustRequest", custRequest,"CustRequestAttributeList", custRequestAttrList));
+            }
+        }
+    }
 }
 pagingListSize=contactUsSearchList.size();
 context.pagingListSize=pagingListSize;
 context.pagingList = contactUsSearchList;
+session.setAttribute("custRequestList", contactUsSearchList);
+
+

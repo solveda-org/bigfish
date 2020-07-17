@@ -1,5 +1,9 @@
     <#assign localPrevButtonVisible = prevButtonVisible!"Y">
-    <#assign localPrevButtonUrl = prevButtonUrl!"javascript:submitCheckoutForm(document.${formName!}, 'BK', '');">
+    <#if prevButtonUrl?exists && prevButtonUrl?has_content >
+      <#assign localPrevButtonUrl = prevButtonUrl! >
+    <#else>
+      <#assign localPrevButtonUrl = "javascript:submitCheckoutForm(document.${formName!}, 'BK', '');">
+    </#if>
     <#assign localPrevButtonClass = prevButtonClass!"standardBtn negative">
     <#assign localPrevButtonDescription = prevButtonDescription!uiLabelMap.PreviousBtn>
 
@@ -13,5 +17,5 @@
     <#if localPrevButtonVisible == "Y"><a href="${localPrevButtonUrl}" class="${localPrevButtonClass}">${localPrevButtonDescription}</a></#if>
     <#if localNextButtonVisible == "Y"><a href="${localNextButtonUrl}" class="${localNextButtonClass}">${localNextButtonDescription}</a></#if>
     <#if localSubmitOrderButtonVisible == "Y">
-        <input type="button" id="submitOrderBtn" name="submitOrderBtn" value="${uiLabelMap.SubmitOrderBtn}" onclick="javascript:submitCheckoutForm(document.${formName!}, 'SO', '');" class="${localNextButtonClass}" />
+        <input type="button" id="submitOrderBtn" name="submitOrderBtn" value="${uiLabelMap.SubmitOrderBtn}" onclick="javascript:submitCheckoutForm(document.${formName!}, 'SO', '');" class="standardBtn submitOrder" />
     </#if>

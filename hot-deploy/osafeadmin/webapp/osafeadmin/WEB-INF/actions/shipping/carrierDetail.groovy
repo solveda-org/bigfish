@@ -1,11 +1,10 @@
-package promotion;
+package shipping;;
 
 import java.util.List;
 import java.util.Map;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.product.store.ProductStoreWorker;
@@ -29,7 +28,20 @@ if (UtilValidate.isNotEmpty(partyId))
     context.carrier = carrier;
     
 }
-
+partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "TRACKING_URL"]));
+if (UtilValidate.isNotEmpty(partyContent)) 
+{
+	content = partyContent.getRelatedOne("Content");
+	if (UtilValidate.isNotEmpty(content))
+	{
+	   context.trackingUrlId = content.contentId;
+	   dataResource = content.getRelatedOne("DataResource");
+	   if (UtilValidate.isNotEmpty(dataResource))
+	   {
+		  context.trackingUrlDataResourceId = dataResource.dataResourceId;
+	   }
+	}
+}
 
 
 

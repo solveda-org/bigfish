@@ -109,7 +109,7 @@
       <td class="descCol" colspan="0">&nbsp;</td>
       <td class="actionPromoCol">
         <#if megaMenuContentId?has_content && (megaMenuMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${megaMenuContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${megaMenuContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -121,7 +121,7 @@
       <td>&nbsp;</td>
       <td class="actionPromoCol">
         <#if pageTopContentId?has_content && (pageTopMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageTopContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageTopContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -132,7 +132,7 @@
       </td>
       <td class="actionPromoCol">
         <#if pageEndContentId?has_content && (pageEndMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageEndContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageEndContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -143,7 +143,7 @@
       </td>
       <td class="actionPromoCol">
         <#if facetTopContentId?has_content && (facetTopMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetTopContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetTopContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -154,7 +154,7 @@
       </td>
       <td class="actionPromoCol">
         <#if facetEndContentId?has_content && (facetEndMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetEndContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetEndContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -239,7 +239,7 @@
       <td class="actionPromoCol">&nbsp;</td>  
       <td class="actionPromoCol">
         <#if PDPAddlSubContentId?has_content && (PDPAddlMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${PDPAddlSubContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${PDPAddlSubContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -250,7 +250,7 @@
       </td>   
       <td class="actionPromoCol">
         <#if pageTopSubContentId?has_content && (pageTopMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageTopSubContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageTopSubContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -261,7 +261,7 @@
       </td>
       <td class="actionPromoCol">
         <#if pageEndSubContentId?has_content && (pageEndMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageEndSubContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageEndSubContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -272,7 +272,7 @@
       </td>
       <td class="actionPromoCol">
         <#if facetTopSubContentId?has_content && (facetTopMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetTopSubContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetTopSubContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>
@@ -283,7 +283,7 @@
       </td>
       <td class="actionPromoCol">
         <#if facetEndSubContentId?has_content && (facetEndMode != "Add")>
-          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetEndSubContentId?if_exists}</@ofbizUrl>">
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${facetEndSubContentId?if_exists}&productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>">
             <span class="previewIcon"></span>
           </a>
         <#else>

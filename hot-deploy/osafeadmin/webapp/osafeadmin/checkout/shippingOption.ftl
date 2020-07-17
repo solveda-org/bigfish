@@ -50,7 +50,7 @@
           <#if shippingEst?has_content>              
             <span class="shippingOptionEstimate">
               <#if (shippingEst > -1)>
-                <@ofbizCurrency amount=shippingEst isoCode=shoppingCart.getCurrency()/>
+                <@ofbizCurrency amount=shippingEst isoCode=shoppingCart.getCurrency() rounding=globalContext.currencyRounding/>
               <#else>
                 ${uiLabelMap.ShippingEstimateCalculatedOffline}
               </#if>

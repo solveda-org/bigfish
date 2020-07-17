@@ -26,8 +26,8 @@ public class EBSPaymentUtil
 {
     public static final String module = EBSPaymentUtil.class.getName();
 
-    public static String getSecureHash(Map<String, Object> parameters) throws Exception{
-		String md5HashData = "ebskey";
+    public static String getSecureHash(String secretKey, Map<String, Object> parameters) throws Exception{
+		String md5HashData = secretKey;
         String account_id = (String) parameters.get("account_id");
         String amount = (String) parameters.get("amount");
         String reference_no = (String) parameters.get("reference_no");

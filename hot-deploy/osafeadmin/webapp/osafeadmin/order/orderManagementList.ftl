@@ -7,7 +7,7 @@
                 <th class="dateCol">${uiLabelMap.OrderDateLabel}</th>
                 <th class="idCol">${uiLabelMap.CustomerNoLabel}</th>
                 <th class="nameCol">${uiLabelMap.CustomerNameLabel}</th>
-                <th class="nameCol">${uiLabelMap.EmailLabel}</th>
+                <th class="nameCol">${uiLabelMap.EmailAddressLabel}</th>
                 <th class="statusCol">${uiLabelMap.OrderStatusLabel}</th>
                 <th class="statusCol">${uiLabelMap.ExportStatusLabel}</th>
                 <th class="dollarCol">${uiLabelMap.ItemDollarLabel}</th>
@@ -51,7 +51,8 @@
                 <#assign taxAmount = orh.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal!"0.00">
                 <#assign totalTaxAmount = totalTaxAmount + taxAmount />
                 <#assign grandTotal = orh.getOrderGrandTotal(orh.getValidOrderItems(), orderAdjustments)>
-
+                
+                <#assign orderEmail=""/>
 				<#if orderSearchEmail?exists && orderSearchEmail?has_content>
 					<#assign orderEmail=orderSearchEmail/>
 				<#else>
@@ -99,19 +100,19 @@
                         ${uiLabelMap.DownloadNewInfo}
                       </#if>
                     </td>
-                    <td class="dollarCol"><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId/></td>
+                    <td class="dollarCol"><@ofbizCurrency amount=orderSubTotal isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                     <#assign adjAmount = 0/>
                     <#list headerAdjustmentsToShow as orderHeaderAdjustment>
                       <#assign adjAmount = adjAmount + orh.getOrderAdjustmentTotal(orderHeaderAdjustment)/>
                     </#list>
                     <#assign totalAdjAmount = totalAdjAmount + adjAmount />
-                    <td class="dollarCol"><#if (adjAmount < 0)><@ofbizCurrency amount=adjAmount isoCode=currencyUomId/></#if></td>
-                    <td class="dollarCol"><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId/></td>
-                    <td class="dollarCol"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></td>
+                    <td class="dollarCol"><#if (adjAmount < 0)><@ofbizCurrency amount=adjAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></#if></td>
+                    <td class="dollarCol"><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
+                    <td class="dollarCol"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                     <#assign grdTotal = orderHeader.grandTotal!""/>
                     <#assign totOrders = totOrders + grdTotal />
                     <#assign crrcyUomId = orh.getCurrency() />
-                    <td class="dollarCol <#if !orderHeader_has_next>lastRow</#if> lastCol"><@ofbizCurrency amount=orderHeader.grandTotal isoCode=orh.getCurrency()/></td>
+                    <td class="dollarCol <#if !orderHeader_has_next>lastRow</#if> lastCol"><@ofbizCurrency amount=orderHeader.grandTotal isoCode=orh.getCurrency() rounding=globalContext.currencyRounding/></td>
                 </tr>
 
                 <#-- toggle the row color -->
@@ -128,32 +129,32 @@
                     <tr>
                       <td class="totalCaption total"><label>${uiLabelMap.ItemsTotalDollarCaption}</label></td>
                       <td class="totalValue total">
-                        <@ofbizCurrency amount=totalItemAmount isoCode=currencyUomId/>
+                        <@ofbizCurrency amount=totalItemAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/>
                       </td>
                     </tr>
                     <tr>
                       <td class="totalCaption total"><label>${uiLabelMap.AdjTotalDollarCaption}</label></td>
                       <td class="totalValue total">
-                        <@ofbizCurrency amount=totalAdjAmount isoCode=currencyUomId/>
+                        <@ofbizCurrency amount=totalAdjAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/>
                       </td>
                     </tr>
                     <tr>
                       <td class="totalCaption total"><label>${uiLabelMap.ShipTotalDollarCaption}</label></td>
                       <td class="totalValue total">
-                        <@ofbizCurrency amount=totalShipAmount isoCode=currencyUomId/>
+                        <@ofbizCurrency amount=totalShipAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/>
                       </td>
                     </tr>
                     <tr>
                       <td class="totalCaption total"><label>${uiLabelMap.TaxTotalDollarCaption}</label></td>
                       <td class="totalValue total">
-                        <@ofbizCurrency amount=totalTaxAmount isoCode=currencyUomId/>
+                        <@ofbizCurrency amount=totalTaxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/>
                       </td>
                     </tr>
 
                     <tr>
                       <td class="totalCaption total"><label>${uiLabelMap.ListTotalCaption}</label></td>
                       <td class="totalValue total">
-                        <@ofbizCurrency amount=totOrders isoCode=currencyUomId/>
+                        <@ofbizCurrency amount=totOrders isoCode=currencyUomId rounding=globalContext.currencyRounding/>
                       </td>
                     </tr>
                 </table>

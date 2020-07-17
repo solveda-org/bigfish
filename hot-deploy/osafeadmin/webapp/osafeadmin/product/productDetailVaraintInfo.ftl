@@ -34,7 +34,7 @@
             </div>
             <div class="infoValue">
                 <#if productListPrice?has_content>
-                    <@ofbizCurrency amount=productListPrice.price! isoCode=productListPrice.currencyUomId!/>
+                    <@ofbizCurrency amount=productListPrice.price! isoCode=productListPrice.currencyUomId! rounding=globalContext.currencyRounding/>
                 </#if>
             </div>
         </div>
@@ -47,7 +47,7 @@
             </div>
             <div class="infoValue">
                 <#if productDefaultPrice?has_content>
-                    <@ofbizCurrency amount=productDefaultPrice.price! isoCode=productDefaultPrice.currencyUomId!/>
+                    <@ofbizCurrency amount=productDefaultPrice.price! isoCode=productDefaultPrice.currencyUomId! rounding=globalContext.currencyRounding/>
                 </#if>
                 <#if virtualProductPriceCondList?has_content><span class="pricingInfo">${uiLabelMap.PricingRulesApplyInfo}</span></#if>
             </div>

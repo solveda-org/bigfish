@@ -20,6 +20,11 @@
 <DataResource dataResourceId="SI_SEARCH" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="SI_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="SI_HEAD_TAG_CONTENT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_PMT_METHOD_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_PMT_METHOD_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_PMT_METHOD_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_PMT_METHOD_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+
 <ElectronicText dataResourceId="SI_HEADER_CONTENT"/>
 <ElectronicText dataResourceId="SI_FOOTER_CONTENT"/>
 <ElectronicText dataResourceId="SI_LOGO"/>
@@ -27,6 +32,11 @@
 <ElectronicText dataResourceId="SI_SEARCH"/>
 <ElectronicText dataResourceId="SI_MAILING_LIST"/>
 <ElectronicText dataResourceId="SI_HEAD_TAG_CONTENT"/>
+<ElectronicText dataResourceId="PTS_PMT_METHOD_VIEW"/>
+<ElectronicText dataResourceId="PTS_PMT_METHOD_EDIT"/>
+<ElectronicText dataResourceId="PES_PMT_METHOD_VIEW"/>
+<ElectronicText dataResourceId="PES_PMT_METHOD_EDIT"/>
+
 <Content contentId="SI_HEADER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER_CONTENT" localeString="en_US"/>
 <Content contentId="SI_FOOTER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER_CONTENT" localeString="en_US"/>
 <Content contentId="SI_LOGO" contentTypeId="BF_SITE_INFO"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO" localeString="en_US"/>
@@ -34,6 +44,11 @@
 <Content contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH" localeString="en_US"/>
 <Content contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING_LIST" localeString="en_US"/>
 <Content contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG_CONTENT" localeString="en_US"/>
+<Content contentId="PTS_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_METHOD_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)" contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_METHOD_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)" contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PMT_METHOD_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)" contentName="View Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PMT_METHOD_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Payment-Information page (part of My-Account)" contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+
 <ContentPurpose contentId="SI_HEADER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_FOOTER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_LOGO" contentPurposeTypeId="SECTION"/>
@@ -234,6 +249,10 @@
 <Content contentId="PDP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05" localeString="en_US"/>
 <ContentRole contentId="PTS_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_PMT_METHOD_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_PMT_METHOD_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_PMT_METHOD_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_PMT_METHOD_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_MY_ACCOUNT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ORDER_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ORDER_STATUS" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -412,6 +431,43 @@
 <Content contentId="E_SCHED_JOB_ALERT" statusId="CTNT_PUBLISHED" localeString="en_US"/>
 <!-- **************END EMAIL CONTENT******************* -->
 
+<!-- TXT MESSAGES CONTENT-->
+<DataResource dataResourceId="TXT_ABANDON_CART" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_NEW_CUSTOMER" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_ORDER_CHANGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_ORDER_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_FORGOT_PASSWORD" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_SHIP_REVIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="TXT_CHANGE_CUSTOMER" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<ElectronicText dataResourceId="TXT_ABANDON_CART"/>
+<ElectronicText dataResourceId="TXT_NEW_CUSTOMER"/>
+<ElectronicText dataResourceId="TXT_ORDER_CHANGE"/>
+<ElectronicText dataResourceId="TXT_ORDER_CONFIRM"/>
+<ElectronicText dataResourceId="TXT_FORGOT_PASSWORD"/>
+<ElectronicText dataResourceId="TXT_SHIP_REVIEW"/>
+<ElectronicText dataResourceId="TXT_CHANGE_CUSTOMER"/>
+<Content contentId="TXT_ABANDON_CART" contentTypeId="BF_TXT_TEMPLATE" description="Abandoned Cart Text Message template" contentName="Abandoned Cart" dataResourceId="TXT_ABANDON_CART" localeString="en_US"/>
+<Content contentId="TXT_NEW_CUSTOMER" contentTypeId="BF_TXT_TEMPLATE" description="New Customer Text Message template" contentName="New Customer" dataResourceId="TXT_NEW_CUSTOMER" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CHANGE" contentTypeId="BF_TXT_TEMPLATE" description="Order Change Text Message template" contentName="Order Change" dataResourceId="TXT_ORDER_CHANGE" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CONFIRM" contentTypeId="BF_TXT_TEMPLATE" description="Order Confirm Text Message template" contentName="Order Confirm" dataResourceId="TXT_ORDER_CONFIRM" localeString="en_US"/>
+<Content contentId="TXT_FORGOT_PASSWORD" contentTypeId="BF_TXT_TEMPLATE" description="Forgot Password Text Message template" contentName="Forgot Password" dataResourceId="TXT_FORGOT_PASSWORD" localeString="en_US"/>
+<Content contentId="TXT_SHIP_REVIEW" contentTypeId="BF_TXT_TEMPLATE" description="Ship Review Text Message template" contentName="Review" dataResourceId="TXT_SHIP_REVIEW" localeString="en_US"/>
+<Content contentId="TXT_CHANGE_CUSTOMER" contentTypeId="BF_TXT_TEMPLATE" description="Change Customer Text Message template" contentName="Change Customer" dataResourceId="TXT_CHANGE_CUSTOMER"/>
+<ContentPurpose contentId="TXT_ABANDON_CART" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_NEW_CUSTOMER" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_ORDER_CHANGE" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_ORDER_CONFIRM" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_FORGOT_PASSWORD" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_SHIP_REVIEW" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="TXT_CHANGE_CUSTOMER" contentPurposeTypeId="SECTION"/>
+<Content contentId="TXT_ABANDON_CART" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_NEW_CUSTOMER" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CHANGE" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_ORDER_CONFIRM" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_FORGOT_PASSWORD" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_SHIP_REVIEW" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="TXT_CHANGE_CUSTOMER" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<!-- **************END TXT MESSAGES CONTENT******************* -->
 
 <!-- XContentXref content product store reference -->
 <!-- SITE INFO-->
@@ -445,6 +501,10 @@
 <!-- ESPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_VIEW" contentId="PTS_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ADDR_BOOK_EDIT" contentId="PTS_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_VIEW" contentId="PTS_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_EDIT" contentId="PTS_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_VIEW" contentId="PES_PMT_METHOD_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_PMT_METHOD_EDIT" contentId="PES_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_MY_ACCOUNT" contentId="PTS_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_CONFIRM" contentId="PTS_ORDER_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ORDER_STATUS" contentId="PTS_ORDER_STATUS" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -521,7 +581,16 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_MAILING_LIST" contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHED_JOB_ALERT" contentTypeId="BF_EMAIL_TEMPLATE"/>
 
-<!-- END XContentXref content product store reference -->
+<!-- TXT CONTENT-->
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ABANDON_CART" contentId="TXT_ABANDON_CART" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_NEW_CUSTOMER" contentId="TXT_NEW_CUSTOMER" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CHANGE" contentId="TXT_ORDER_CHANGE" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_ORDER_CONFIRM" contentId="TXT_ORDER_CONFIRM" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_FORGOT_PASSWORD" contentId="TXT_FORGOT_PASSWORD" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_SHIP_REVIEW" contentId="TXT_SHIP_REVIEW" contentTypeId="BF_TXT_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="TXT_CHANGE_CUSTOMER" contentId="TXT_CHANGE_CUSTOMER" contentTypeId="BF_TXT_TEMPLATE"/>
+
+<!-- XContentXref content product store reference -->
 
 <!-- Update SequenceValueItem (avoids duplicate entry after installing seed) -->
 <SequenceValueItem seqName="DataResource" seqId="900000"/>

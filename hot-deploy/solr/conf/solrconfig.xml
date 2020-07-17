@@ -714,9 +714,9 @@
         <str name="df">spell</str>
         <str name="spellcheck.dictionary">default</str> 
         <str name="spellcheck">on</str>
-        <str name="spellcheck.extendedResults">true</str> 
-        <str name="spellcheck.count">10</str>
-        <str name="spellcheck.collate">true</str>
+        <str name="spellcheck.extendedResults">true</str><!-- true: SOLR returns the suggestion and the frequency of use false: SOLR returns just the suggestion  -->         
+        <str name="spellcheck.count">10</str><!-- The number of suggestions to return -->
+        <str name="spellcheck.collate">true</str> <!-- true – SOLR returns a collated phrase -->
         <str name="spellcheck.maxCollationTries">10</str>
         <str name="spellcheck.maxCollations">5</str> 
     </lst>
@@ -739,11 +739,8 @@
 <searchComponent class="solr.SpellCheckComponent" name="suggest">
     <lst name="spellchecker">
         <str name="name">suggest</str>
-        <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-        <str name="lookupImpl">org.apache.solr.spelling.suggest.fst.FSTLookup</str>     
         <str name="storeDir">suggest</str>
         <str name="field">autocomplete_text</str>
-        <bool name="exactMatchFirst">true</bool>
         <float name="threshold">0.005</float>
         <str name="buildOnCommit">true</str>
         <str name="buildOnOptimize">true</str>
@@ -754,7 +751,7 @@
 <requestHandler class="org.apache.solr.handler.component.SearchHandler" name="/suggest" startup="lazy">
     <lst name="defaults">
       <str name="spellcheck">true</str>
-      <str name="spellcheck.dictionary">default</str>
+      <str name="spellcheck.dictionary">suggest</str>
       <str name="spellcheck.extendedResults">true</str>
       <str name="spellcheck.count">10</str>
       <str name="spellcheck.collate">true</str>

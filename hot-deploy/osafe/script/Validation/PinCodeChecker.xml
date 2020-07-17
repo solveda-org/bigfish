@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="validateBlueDartPinCode" short-description="Validate the PinCode for India" login-required="false">
+        <if-empty field="parameters.pincode">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="BlueDartPinCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        <else>
+            <call-class-method class-name="com.osafe.util.Util" method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.pincode" type="String"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="BlueDartPinCodeError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <call-object-method method-name="length" obj-field="parameters.pincode" ret-field="pincodeLength"/>
+			    <if-compare operator="not-equals" value="6" field="pincodeLength" type="Integer">
+			        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="BlueDartPinCodeError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+			    </if-compare>
+            </else>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+    </simple-method>
+</simple-methods>

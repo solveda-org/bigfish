@@ -1,4 +1,5 @@
 <#if emailConfiguration?has_content>
+      <#assign enumDetail = emailConfiguration.getRelatedOne("Enumeration")/>
       <input type="hidden" name="emailType" id="emailType" value="${emailConfiguration.emailType!""}"/>
       <input type="hidden" name="bodyScreenLocation" id="bodyScreenLocation" value="${emailConfiguration.bodyScreenLocation!""}"/>
       
@@ -13,7 +14,6 @@
         <div class="infoEntry">
           <div class="infoCaption"><label>${uiLabelMap.DescriptionCaption}</label></div>
             <div class="infoValue">
-            <#assign enumDetail = emailConfiguration.getRelatedOne("Enumeration")/>
               <textarea class="smallArea characterLimit" maxlength="255" name="description" cols="50" rows="1">${parameters.description!enumDetail.description!""}</textarea>
               <span class="textCounter"></span>
              </div>

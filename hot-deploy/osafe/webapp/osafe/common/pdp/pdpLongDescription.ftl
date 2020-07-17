@@ -1,6 +1,6 @@
 <#assign pdpLongDescription = StringUtil.wrapString(pdpLongDescription!"") />
 <div class="pdpLongDescription" id="pdpLongDescription">
-  <#if (LONG_DESCRIPTION?exists && LONG_DESCRIPTION?has_content)>
+  <#if pdpLongDescription?has_content>
     <div class="displayBox">
       <h3>${uiLabelMap.PDPLongDescriptionHeading}</h3>
       <p>${pdpLongDescription!}</p>

@@ -12,7 +12,7 @@
                     <field field="parameters.storeId" type="String"/>
                 </call-object-method>
                 <set field="parameters.shipMethod" value="NO_SHIPPING@_NA_"/>
-                <call-simple-method method-name="setShippingOption" xml-resource="component://ecommerce/script/org/ofbiz/ecommerce/customer/CustomerEvents.xml"/>
+                <call-simple-method method-name="setShippingOption"/>
             </if-not-empty>
         </if-not-empty>
     </simple-method>
@@ -197,9 +197,16 @@
     <simple-method method-name="anonMultiPageSubmitOrder" short-description="submit order for anon multi page" login-required="false">
         <!-- Validate Billing and shipping Postal Address information -->
         <call-simple-method method-name="checkPaymentMethodType" />
-        <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
+        <if-compare operator="equals" value="false" field="failedProcessPayment" >
+	         <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
             <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         </if-compare>
+	    <else>
+        	<return response-code="paymentError"/>
+        </else>
+        </if-compare>
+       
+        <!-- <call-simple-method method-name="setOrderAdditionalEmails"/> -->
         <!-- Validate user login information -->
         <if-not-empty field="parameters.PASSWORD">
             <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
@@ -233,6 +240,7 @@
             <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
             <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         </if-not-empty>
+        <!-- call-simple-method method-name="setOrderAdditionalEmails"/>  -->
         <check-errors/>
         <set field="userLoginContext.partyId" from-field="userLogin.partyId"/>
 
@@ -306,9 +314,17 @@
     
     <simple-method method-name="multiPageSubmitOrder" short-description="submit order for multi page" login-required="false">
         <call-simple-method method-name="checkPaymentMethodType" />
+        <if-compare operator="equals" value="false" field="failedProcessPayment" >
+	        <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
+	            <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        </if-compare>
+	    <else>
+        	<return response-code="paymentError"/>
+        </else>
+        </if-compare>
+        <!-- call-simple-method method-name="setOrderAdditionalEmails"/ -->
+        <check-errors/>
             <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
-                <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-                <check-errors/>
                 <set field="creditCardContext.partyId" from-field="userLogin.partyId"/>
                 <call-simple-method method-name="createCreditCardPayment"/>
                 <return response-code="creditCard"/>
@@ -327,6 +343,12 @@
     </simple-method>
     
     <simple-method method-name="checkPaymentMethodType" short-description="sets the paymentMethodTypeId" login-required="false">
+    	<call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="allowCC">
+            <field field="request" type="javax.servlet.ServletRequest"/>
+            <string value="CHECKOUT_ALLOW_CC"/>
+        </call-class-method>
+        <set field="failedProcessPayment" value="false" type="Boolean"/>
+                     
         <session-to-field field="shoppingCart"/>
         <if-not-empty field="shoppingCart">
             <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="storeId">
@@ -346,6 +368,10 @@
                     <if-compare operator="equals" value="true" field="isCCRequired">
                         <set field="parameters.paymentMethodTypeId" value="CREDIT_CARD"/>
                         <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
+                        <!-- If the use of a credit card is required, check if the CC info input is being displayed -->
+                        <if-compare operator="not-equals" value="true" field="allowCC">
+                        	<set field="failedProcessPayment" value="true" type="Boolean"/>
+                        </if-compare>
                     <!-- CASE 2 : show = True ,Req = False -->
                     <else>
                         <set field="payInStore" from-field="parameters.payInStore"/>
@@ -366,43 +392,73 @@
                 </else>
                 </if-validate-method>
             <else>
-                <if-not-empty field="parameters.codPayment">
-                    <set field="parameters.paymentMethodTypeId" value="EXT_COD"/>
-                    <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
-                <else>
-                    <set field="parameters.paymentMethodTypeId" value="CREDIT_CARD"/>
-                    <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
-                </else>
+            	<!-- check if paymentOption was selected -->
+            	<if-not-empty field="parameters.paymentOption">
+	                <if-compare operator="equals" value="PAYOPT_COD" field="parameters.paymentOption">
+	                    <set field="parameters.paymentMethodTypeId" value="EXT_COD"/>
+	                    <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
+	                <else>
+	                    <set field="parameters.paymentMethodTypeId" value="CREDIT_CARD"/>
+	                    <field-to-request field="parameters.paymentMethodTypeId" request-name="paymentMethodTypeId"/>
+	                </else>
+	                </if-compare>
+	            <else>
+	            	<set field="failedProcessPayment" value="true" type="Boolean"/>
+	            </else>
                 </if-not-empty>
             </else>
             </if-not-empty>
         </if-not-empty>
     </simple-method>
     <simple-method method-name="anonSinglePageSubmitOrder" short-description="submit order for anon single page" login-required="false">
-
+    
+    	<session-to-field field="shoppingCart"/>
+        <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
+        
         <!-- Validate Billing and shipping Postal Address information -->
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         <call-simple-method method-name="validateBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-        <if-empty field="parameters.isSameAsBilling">
-            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        
+        <if-compare operator="equals" value="true" field="shippingApplies">
+            <if-empty field="parameters.isSameAsBilling">
+	            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        <else>
+	            <map-to-map map="addressContext" to-map="shippingAddressContext"/>
+	            <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+	        </else>
+	        </if-empty>
         <else>
             <map-to-map map="addressContext" to-map="shippingAddressContext"/>
             <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+            
+            <call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
+	            <string value="NO_SHIPPING" />
+	        </call-object-method>
+	        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
+	            <string value="_NA_" />
+	        </call-object-method>
         </else>
-        </if-empty>
-
-        <call-simple-method method-name="checkPaymentMethodType" />
-        <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
-            <set field="parameters.firstNameOnCard" from-field="personContext.firstName"/>
-<!--        <set field="parameters.middleNameOnCard" from-field="personContext.middleName"/> -->
-            <set field="parameters.lastNameOnCard" from-field="personContext.lastName"/>
-            <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         </if-compare>
+        
+        <call-simple-method method-name="checkPaymentMethodType" />
+        <if-compare operator="equals" value="false" field="failedProcessPayment" >
+	        <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
+	            <set field="parameters.firstNameOnCard" from-field="personContext.firstName"/>
+	<!--        <set field="parameters.middleNameOnCard" from-field="personContext.middleName"/> -->
+	            <set field="parameters.lastNameOnCard" from-field="personContext.lastName"/>
+	            <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        </if-compare>
+	    <else>
+        	<return response-code="paymentError"/>
+        </else>
+        </if-compare>
+        
         <!-- Validate user login information -->
         <if-not-empty field="parameters.PASSWORD">
             <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
             <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         </if-not-empty>
+        <!-- <call-simple-method method-name="setOrderAdditionalEmails"/> -->
         <check-errors/>
 
         <call-simple-method method-name="createUpdatePerson"/>
@@ -434,6 +490,7 @@
             <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
             <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         </if-not-empty>
+        <!-- call-simple-method method-name="setOrderAdditionalEmails"/ > -->
         <check-errors/>
 
         <set field="userLoginContext.partyId" from-field="userLogin.partyId"/>
@@ -505,17 +562,42 @@
     </simple-method>
 
     <simple-method method-name="singlePageSubmitOrder" short-description="submit order for anon single page" login-required="false">
+    	<session-to-field field="shoppingCart"/>
+        <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
+        
         <!-- Validate Billing and shipping Postal Address information -->
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         <call-simple-method method-name="validateBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-        <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-        <call-simple-method method-name="checkPaymentMethodType" />
-        <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
-            <set field="parameters.firstNameOnCard" from-field="personContext.firstName"/>
-<!--        <set field="parameters.middleNameOnCard" from-field="personContext.middleName"/> -->
-            <set field="parameters.lastNameOnCard" from-field="personContext.lastName"/>
-            <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        
+        <if-compare operator="equals" value="true" field="shippingApplies">
+            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <else>
+            <map-to-map map="addressContext" to-map="shippingAddressContext"/>
+            <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+            
+            <call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
+	            <string value="NO_SHIPPING" />
+	        </call-object-method>
+	        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
+	            <string value="_NA_" />
+	        </call-object-method>
+        </else>
         </if-compare>
+        
+        <call-simple-method method-name="checkPaymentMethodType" />
+        <if-compare operator="equals" value="false" field="failedProcessPayment" >
+	        <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
+	            <set field="parameters.firstNameOnCard" from-field="personContext.firstName"/>
+	<!--        <set field="parameters.middleNameOnCard" from-field="personContext.middleName"/> -->
+	            <set field="parameters.lastNameOnCard" from-field="personContext.lastName"/>
+	            <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        </if-compare>
+	    <else>
+        	<return response-code="paymentError"/>
+        </else>
+        </if-compare>
+        
+        <!-- call-simple-method method-name="setOrderAdditionalEmails"/> -->
         <check-errors/>
 
         <call-simple-method method-name="createUpdatePerson"/>
@@ -698,7 +780,7 @@
     </simple-method>
 
     <simple-method method-name="createUpdateCustomerInfo" short-description="Create or Update Customer Info" login-required="false">
-
+        <log level="info" message="#############################${personContext}##################################" />
         <if-not-empty field="personContext.emailAddress">
             <set-service-fields service-name="createPartyEmailAddress" to-map="emailContext" map="personContext"/>
             <call-service service-name="createPartyEmailAddress" in-map-name="emailContext">
@@ -745,7 +827,7 @@
             <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
         </else>
         </if-not-empty>
-
+                
         <if>
            <condition>
               <and>
@@ -792,6 +874,31 @@
                 <call-service service-name="createPartyContactMechPurpose" in-map-name="shippingAddressPurposeContext"/>
            </else>
         </if>
+
+         <!-- if checkout is single page them remove the cart shipping address-->
+        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="isCheckoutSinglePage">
+            <field field="request" type="javax.servlet.ServletRequest"/>
+            <string value="CHECKOUT_SINGLE_PAGE"/>
+        </call-class-method>
+        <if-validate-method class="com.osafe.util.Util" field="isCheckoutSinglePage" method="isProductStoreParmTrue">
+            <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+            <!--   Get shipping contact mech Id from cart     -->
+            <call-object-method obj-field="shoppingCart" method-name="getShippingContactMechId" ret-field="shippingContactMechId"/>
+            <if-not-empty field="shippingContactMechId">
+	            <!--   check shipping contact mech Id association with party     -->
+	            <set field="contactMechMap.contactMechId" from-field="shippingContactMechId"/>
+	            <find-by-and list="partyContactMechList" map="contactMechMap" entity-name="PartyContactMech"/>
+                <!--	if shipping contact mech Id have not any association check method setShippingAddressToCart            -->
+                <if-empty field="partyContactMechList">
+                    <!--     remove postal address               -->
+                    <find-by-primary-key value-field="postalAddress" map="contactMechMap" entity-name="PostalAddress"/>
+                    <remove-value value-field="postalAddress"/>
+                    <!--     remove contact mech               -->
+                    <find-by-primary-key value-field="contactMech" map="contactMechMap" entity-name="ContactMech"/>
+                    <remove-value value-field="contactMech"/>
+                </if-empty>
+            </if-not-empty>
+        </if-validate-method>
 
         <!-- make Billing and shipping Postal Address for order-->
         <session-to-field field="shoppingCart" session-name="shoppingCart"/>
@@ -972,17 +1079,27 @@
     <simple-method method-name="setShippingOption" short-description="Set shipping method" login-required="false">
         <call-bsh><![CDATA[
             shippingMethod = parameters.get("shipMethod");
-            if(shippingMethod != null) {
-                shipmentMethodTypeId = shippingMethod.substring(0, shippingMethod.indexOf("@"));
-                if (shippingMethod.indexOf(":") != -1) {
+            shipmentMethodTypeId = "";
+            carrierPartyId = "";
+            if(shippingMethod != null && shippingMethod != "") 
+            {
+            	if (shippingMethod.indexOf("@") != -1) 
+                {
+                	shipmentMethodTypeId = shippingMethod.substring(0, shippingMethod.indexOf("@"));
+                   	carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1);
+	                parameters.put("shipmentMethodTypeId", shipmentMethodTypeId);
+	                parameters.put("carrierPartyId", carrierPartyId);
+                }
+                else
+                {
+                  if (shippingMethod.indexOf(":") != -1) 
+                  {
                     carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1, shippingMethod.indexOf(":"));
                     productStoreShipMethId =  shippingMethod.substring(shippingMethod.indexOf(":")+1);
                     parameters.put("productStoreShipMethId", productStoreShipMethId);
-                } else {
-                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1);
-                }
-                parameters.put("shipmentMethodTypeId", shipmentMethodTypeId);
-                parameters.put("carrierPartyId", carrierPartyId);
+                    parameters.put("carrierPartyId", carrierPartyId);
+                  }
+                } 
             }
         ]]></call-bsh>
         <set field="shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
@@ -1048,4 +1165,236 @@
         <log level="info" message="Cart Grand total is : ${parameters.cartGrandTotal}"/>
         <log level="info" message="Total sale tax is : ${parameters.totalSalesTax}"/>
     </simple-method>
+
+    <simple-method method-name="setShippingAddressToCart" short-description="Set shipping address to cart" login-required="false">
+
+        <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+        <!--   Get shipping contact mech Id from cart     -->
+        <call-object-method obj-field="shoppingCart" method-name="getShippingContactMechId" ret-field="shippingContactMechId"/>
+
+        <if-empty field="shippingContactMechId">
+            <!--   If shipping contact mech id not exist create the new contact mech     -->
+	        <make-value entity-name="ContactMech" value-field="contactMech"/>
+	        <sequenced-id sequence-name="ContactMech" field="contactMech.contactMechId"/>
+	        <set field="contactMech.contactMechTypeId" value="POSTAL_ADDRESS" />
+	        <create-value value-field="contactMech"/>
+            <set field="shippingContactMechId" from-field="contactMech.contactMechId" />
+            <!--   make the postal address    -->
+            <make-value entity-name="PostalAddress" value-field="postalAddress"/>
+            <set field="postalAddress.contactMechId" from-field="shippingContactMechId"/>
+            <set-nonpk-fields map="parameters" value-field="postalAddress"/>
+            <create-value value-field="postalAddress"/>
+        <else>
+            <!--   If shipping contact mech id exist update the postal address     -->
+	        <make-value entity-name="PostalAddress" value-field="postalAddress"/>
+            <set field="postalAddress.contactMechId" from-field="shippingContactMechId"/>
+	        <find-by-primary-key map="postalAddress" value-field="lookedUpValue"/>
+	        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+	        <store-value value-field="lookedUpValue"/>
+        </else>
+        </if-empty>
+
+        <if-not-empty field="shippingContactMechId">
+            <!--   Set shipping contact mech Id to cart     -->
+	        <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
+	            <field field="shippingContactMechId"/>
+	        </call-object-method>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="setOrderAdditionalEmails" short-description="Validate and Set Order Additional Emails To Cart" login-required="false">
+        <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+        <call-object-method obj-field="shoppingCart" method-name="getOrderId" ret-field="orderId"/>
+        <call-class-method method-name="getParameterMap" class-name="org.ofbiz.base.util.UtilHttp" ret-field="paramMap">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+        </call-class-method>
+        <set field="orderAdditionalEmailIds" value=""/>
+        
+        <!-- Iterating the list of Email Ids -->
+        <iterate-map map="paramMap" key="parameterName" value="parameterValue">
+            <call-object-method obj-field="parameterName" method-name="lastIndexOf" ret-field="underscorePos">
+                <string value="_"/>
+            </call-object-method>
+            <if-compare operator="greater-equals" value="0" field="underscorePos" type="Integer">
+                <call-object-method obj-field="parameterName" method-name="toUpperCase" ret-field="parameterNameUpper"/>
+                <call-object-method obj-field="parameterNameUpper" method-name="startsWith" ret-field="isParameterNameUpperStartWith" >
+                    <string value="ORDERADDITIONALEMAIL"/>
+                </call-object-method>
+                <if-compare operator="equals" value="true" field="isParameterNameUpperStartWith" type="Boolean">
+                    <set field="emailValid" value="true"/>
+                    <set field="emailAddress" from-field="parameterValue"/>
+                    
+                    <call-object-method obj-field="parameterName" method-name="length" ret-field="parameterNameLength"/>
+                    <calculate field="underscorePos">
+                        <calcop operator="add" >
+                            <calcop operator="get" field="underscorePos"/>
+                            <number value="1"/>
+                        </calcop>
+                    </calculate>
+                    <set field="parameterNameStartIndex" from-field="underscorePos" type="Integer" />
+                    <set field="parameterNameEndIndex" from-field="parameterNameLength" type="Integer" />
+                    <call-object-method obj-field="parameterName" method-name="substring" ret-field="parameterNameIndex">
+                        <field field="parameterNameStartIndex" type="int"/>
+                        <field field="parameterNameEndIndex" type="int"/>
+                    </call-object-method>
+                    <if-not-empty field="emailAddress">
+                        <call-class-method method-name="isEmail" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isEmailValid">
+                            <field field="emailAddress" type="String"/>
+                        </call-class-method>
+                        <if-compare field="isEmailValid" operator="equals" value="false">
+                            <set field="emailValid" value="false"/>
+                        </if-compare>
+                    </if-not-empty>
+                    
+                    <!-- Logic to display Inline error message for invalid email -->
+                    <if-compare operator="equals" value="false" field="emailValid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidEmailError"/>
+                        <if>
+                            <condition> 
+                                <if-compare operator="equals" value="1" field="parameterNameIndex"/>
+                            </condition>
+                             <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_1" list="error_list"/>
+                            </then>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="2" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_2" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="3" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_3" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="4" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_4" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="5" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_5" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="6" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_6" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="7" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_7" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="8" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_8" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="9" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_9" list="error_list"/>
+                            </then>
+                        </else-if>
+                        <else-if>
+                            <condition> 
+                                <if-compare operator="equals" value="10" field="parameterNameIndex"/>
+                            </condition>
+                            <then>
+                                <string-to-list string="${tempErrorMessage}" message-field="orderAdditionalEmail_10" list="error_list"/>
+                            </then>
+                        </else-if>
+                        </if>
+                    <else>
+                    <!-- if Email address is valid, add it to a list -->
+                        <if-not-empty field="emailAddress">
+                            <string-to-list string="${emailAddress}" list="validEmailAddressList"/>
+                         </if-not-empty>
+                    </else>
+                    </if-compare>
+                </if-compare>
+            </if-compare>
+        </iterate-map>
+        <check-errors/>
+        <if-not-empty field="validEmailAddressList">
+            <iterate list="validEmailAddressList" entry="toAddress">
+                <!-- user login -->
+                <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
+                    <field-map field-name="userLoginId" value="system"/>
+                </entity-one>
+                <!-- ProductStoreID -->
+                <if-empty field="parameters.productStoreId">
+                    <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                        <field field="request" type="javax.servlet.ServletRequest"/>
+                    </call-class-method>
+                    <set field="parameters.productStoreId" from-field="productStoreId"/>
+                <else>
+                    <set field="productStoreId" from-field="parameters.productStoreId"/>
+                </else>
+                </if-empty>
+                <!-- Create Communication Event-->
+                <set field="createComEventMap.userLogin" from-field="systemUserLogin"/>
+                <set field="createComEventMap.toString" from-field="toAddress"/>
+                <set field="createComEventMap.communicationEventTypeId" value="EMAIL_COMMUNICATION"/>
+                <set field="createComEventMap.contactMechTypeId" value="EMAIL_ADDRESS"/>
+                <call-service service-name="createCommunicationEventWithoutPermission" in-map-name="createComEventMap">
+                    <result-to-field result-name="communicationEventId" field="communicationEventId"/>
+                </call-service>
+                <set field="emailParams.communicationEventId" from-field="communicationEventId"/>
+                <set field="emailType" value="PRDS_ODR_CONFIRM"/>
+                <set field="bodyParameters.productStoreId" from-field="parameters.productStoreId"/>
+                <set field="bodyParameters.emailType" from-field="emailType"/>
+                <set field="bodyParameters.templateId" value="E_ORDER_CONFIRM"/>
+                <set field="bodyParameters.partyId" from-field="parameters.customerId"/>
+                <set field="bodyParameters.orderId" from-field="parameters.orderId"/>
+                <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
+                    <field-map field-name="productStoreId" from-field="parameters.productStoreId"/>
+                    <field-map field-name="emailType" value="PRDS_EMAIL_TEST"/>
+                </entity-one>
+                <!-- Send email-->
+                <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+                    <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+                    <set field="emailParams.userLogin" from-field="systemUserLogin"/>
+                    <set field="emailParams.sendTo" from-field="toAddress"/>
+                    <set field="emailParams.subject" from-field="parameters.emailSubject"/>
+                    <set field="emailParams.sendFrom" from-field="parameters.fromAddress"/>
+                    <set field="emailParams.emailType" from-field="emailType"/>
+                    <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
+                    <call-service service-name="sendMailFromScreen" in-map-name="emailParams" break-on-error="false">
+                        <result-to-field result-name="errorMessageList" field="mailSendErrorMessageList"/>
+                        <result-to-field result-name="errorMessage" field="mailSendErrorMessage"/>
+                    </call-service>
+                </if-not-empty>
+            </iterate>
+                <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="EmailSentSuccess"/>
+                <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
+                <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
+        </if-not-empty>
+    </simple-method>
+
+    
 </simple-methods>

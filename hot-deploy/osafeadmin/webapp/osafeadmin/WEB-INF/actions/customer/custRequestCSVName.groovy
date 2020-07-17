@@ -5,16 +5,18 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.base.util.UtilValidate;
 import com.osafe.util.OsafeAdminUtil;
+import javolution.util.FastList;
+import javolution.util.FastMap;
 
-custRequestCond = session.getAttribute("custRequestCond");
-custRequestList = delegator.findList("CustRequest",custRequestCond, null, null, null, false);
+custRequestList=session.getAttribute("custRequestList");
 custRequestName = "CustRequest_";
 custRequestTypeId = "";
 
 if (UtilValidate.isNotEmpty(custRequestList)) 
 {
-    for(GenericValue custRequest : custRequestList)
+    for(GenericValue custRequestInfo : custRequestList)
     {
+    	custRequest = custRequestInfo.CustRequest;
         if(UtilValidate.isEmpty(custRequestTypeId))
         {
         	custRequestTypeId = custRequest.custRequestTypeId;

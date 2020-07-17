@@ -3,6 +3,8 @@
 <tr class="heading">
   <th class="idCol firstCol">${uiLabelMap.IdLabel}</th>
   <th class="statusCol">${uiLabelMap.StatusLabel}</th>
+  <th class="nameCol">${uiLabelMap.PagePositionLabel}</th>
+  <th class="seqIdCol">${uiLabelMap.SeqNumberLabel}</th>
   <th class="descCol">${uiLabelMap.DescriptionLabel}</th>
   <th class="actionColSmall"></th>
   <th class="dateCol">${uiLabelMap.ActiveDateLabel}</th>
@@ -31,6 +33,12 @@
             ${statusItem.description!statusItem.get("description",locale)!statusItem.statusId}
           </#if>
         </#if>
+      </td>
+      <td class="nameCol <#if !hasNext>lastRow</#if>">
+        ${pixelTracking.pixelPagePosition!""}
+      </td>
+      <td class="seqIdCol <#if !hasNext>lastRow</#if>">
+        ${pixelTracking.pixelSequenceNum!""}
       </td>
       <td class="descCol <#if !hasNext>lastRow</#if>">
         ${pixelTracking.description}

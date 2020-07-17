@@ -30,7 +30,7 @@
                    <#if mode?has_content && mode == "add">
                        <input name="contentId" type="text" id="contentId" value="${parameters.contentId?default("")}"/>
                    <#elseif mode?has_content && mode == "edit">
-                       <input type="hidden" name="contentId" value="${contentId!""}" />${contentId!""}
+                       <input type="hidden" name="contentId" value="${contentId!""}" />${bfContentId!""}
                    </#if>
                </div>
          </div>
@@ -50,7 +50,7 @@
     			<div class="infoCaption"><label>${uiLabelMap.DescriptionCaption}</label></div>
      			<#-- ===== Spot Description ==== -->
       		    <div class="infoValue">
-      		     <textarea class="smallArea characterLimit" name="description" cols="50" rows="1" maxlength="255">${parameters.description!description!""}</textarea>
+      		     <textarea class="smallArea characterLimit" name="description" cols="50" rows="1" maxlength="${maxLengthDescription!255}">${parameters.description!description!""}</textarea>
       		     <span class="textCounter"></span>
       		     </div>
      		</div>
@@ -60,7 +60,10 @@
 	   		<div class="infoEntry long">
 	      		<div class="infoCaption"><label>${uiLabelMap.ContentCaption}</label></div>
 	     		    <div class="infoValue">
-	        		     <textarea class="largeArea" name="textData" cols="50" rows="5">${parameters.textData!eText!""}</textarea>
+	        		     <textarea class="largeArea <#if maxLengthContent?has_content>characterLimit</#if>" name="textData" cols="50" rows="5" <#if maxLengthContent?has_content> maxlength="${maxLengthContent}"</#if>>${parameters.textData!eText!""}</textarea>
+                         <#if maxLengthContent?has_content>
+            		       <span class="textCounter"></span>
+            		     </#if>
 	     		    </div>
 	 		</div>
 	    </div>

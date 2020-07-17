@@ -15,6 +15,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.GenericValue;
 import com.osafe.util.Util;
 import org.ofbiz.entity.condition.EntityCondition;
+import org.apache.commons.lang.StringEscapeUtils;
 
 productId = request.getAttribute("plpItemId");
 cart = session.getAttribute("shoppingCart");
@@ -36,6 +37,7 @@ if(UtilValidate.isNotEmpty(productId))
     listPrice = "";
     plpLabel = "";
     plpProductFeatureType = "";
+    productLongDesc = "";
     
     ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
     productStore = ProductStoreWorker.getProductStore(request);
@@ -53,6 +55,8 @@ if(UtilValidate.isNotEmpty(productId))
             for (GenericValue productContent: productContentList) 
             {
     		   productContentTypeId = productContent.productContentTypeId;
+    		   //Prefix the Content by "PLP" to distinguish content when groovy file is used in PDP
+    		   context.put("PLP_" + productContent.productContentTypeId,productContent.contentId);
                productContentIdMap.put(productContent.productContentTypeId,productContent.contentId);
             }
 		}
@@ -76,6 +80,13 @@ if(UtilValidate.isNotEmpty(productId))
         if (UtilValidate.isNotEmpty(productContentId))
         {
         	plpLabel = productContentWrapper.get("PLP_LABEL");
+        }
+        productContentId = productContentIdMap.get("LONG_DESCRIPTION");
+        if (UtilValidate.isNotEmpty(productContentId))
+        {
+        	productLongDesc = productContentWrapper.get("LONG_DESCRIPTION");
+        	productLongDesc = StringEscapeUtils.unescapeHtml(productLongDesc.toString());
+     	    productLongDesc = productLongDesc;
         }
         
         
@@ -146,13 +157,69 @@ if(UtilValidate.isNotEmpty(productId))
 	        
 	    }
 	}
-    // get the no of reviews
+
+    //GET PRODUCT CONTENT LIST AND SET INTO CONTEXT
+    Map productContentIdMap = FastMap.newInstance();
+	productContentList = product.getRelatedCache("ProductContent");
+	productContentList = EntityUtil.filterByDate(productContentList,true);
+	if (UtilValidate.isNotEmpty(productContentList))
+	{
+        for (GenericValue productContent: productContentList) 
+        {
+		   productContentTypeId = productContent.productContentTypeId;
+		    //Prefix the Content by "PLP" to distinguish content when groovy file is used in PDP
+		   context.put("PLP_" + productContent.productContentTypeId,productContent.contentId);
+           productContentIdMap.put(productContent.productContentTypeId,productContent.contentId);
+        }
+	}
     
+    plpLabelContent = productContentIdMap.get("PLP_LABEL");
+	if (UtilValidate.isNotEmpty(plpLabelContent))
+	{
+	    	plpLabel = productContentWrapper.get("PLP_LABEL");
+	}
+	
 
    
 	productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
     pdpUrl = 'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId;
     
+    // GET PRODUCT FEATURE AND APPLS: DISTINGUISHING FEATURES
+    // Using findByAndCache Call since the ProductService(Service getProductVariantTree call) will make the same findByAndCache Call.
+    productDistinguishingFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "DISTINGUISHING_FEAT"), UtilMisc.toList("sequenceNum"));
+    productDistinguishingFeatures = EntityUtil.filterByDate(productDistinguishingFeatures, true);
+
+    // GET PRODUCT FEATURE AND APPLS : DISTINGUISHING FEATURES BY FEATURE TYPE
+    productFeatureTypes = FastList.newInstance();
+    productFeaturesByType = new LinkedHashMap();
+    for (GenericValue feature: productDistinguishingFeatures) 
+    {
+        featureType = feature.getString("productFeatureTypeId");
+        if (!productFeatureTypes.contains(featureType)) 
+        {
+            productFeatureTypes.add(featureType);
+        }
+        features = productFeaturesByType.get(featureType);
+        if (UtilValidate.isEmpty(features)) 
+        {
+            features = FastList.newInstance();
+            productFeaturesByType.put(featureType, features);
+        }
+        features.add(feature);
+    }
+    
+    // GET PRODUCT FEATURE TYPE
+    Map plpProductFeatureTypesMap = FastMap.newInstance();
+    productFeatureTypesList = delegator.findList("ProductFeatureType", null, null, null, null, true);
+    if(UtilValidate.isNotEmpty(productFeatureTypesList))
+    {
+        for (GenericValue productFeatureType : productFeatureTypesList)
+        {
+        	plpProductFeatureTypesMap.put(productFeatureType.productFeatureTypeId,productFeatureType.description);
+        }
+        
+    }
+
     List productSelectableFeatureAndAppl = FastList.newInstance();
     List productVariantFeatureList = FastList.newInstance();
     List productAssoc= FastList.newInstance();
@@ -464,6 +531,18 @@ if(UtilValidate.isNotEmpty(productId))
 	  }
     }
     
+	//Get Manufacturer info
+	partyManufacturer=product.getRelatedOneCache("ManufacturerParty");
+	if (UtilValidate.isNotEmpty(partyManufacturer))
+	{
+	  context.plpManufacturerPartyId = partyManufacturer.partyId;
+	  PartyContentWrapper partyContentWrapper = new PartyContentWrapper(partyManufacturer, request);
+	  context.plpManufacturerPartyContentWrapper = partyContentWrapper;
+	  context.plpManufacturerDescription = partyContentWrapper.get("DESCRIPTION");
+	  context.plpManufacturerProfileName = partyContentWrapper.get("PROFILE_NAME");
+	  context.plpManufacturerProfileImageUrl = partyContentWrapper.get("PROFILE_IMAGE_URL");
+	}
+	
 
     context.plpProductName = productName;
     context.plpProductId = productId;
@@ -478,6 +557,7 @@ if(UtilValidate.isNotEmpty(productId))
     context.plpProductFriendlyUrl = productFriendlyUrl;
     context.plpProductImageAltUrl = productImageAltUrl;
     context.featureValueSelected = featureValueSelected;
+    context.plpLongDescription = productLongDesc;
 
     //Ratings
     context.decimals = decimals;
@@ -491,5 +571,8 @@ if(UtilValidate.isNotEmpty(productId))
     context.plpProductVariantContentWrapperMap = productVariantContentWrapperMap;
     context.plpProductFeatureFirstVariantIdMap = productFeatureFirstVariantIdMap;
     context.plpProductVariantProductContentIdMap = productVariantProductContentIdMap;
+    context.plpDisFeatureTypesList = productFeatureTypes;
+    context.plpDisFeatureByTypeMap = productFeaturesByType;
+    context.plpProductFeatureTypesMap = plpProductFeatureTypesMap;
   }
 }

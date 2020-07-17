@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilValidate;
 
 import com.osafe.services.ImportServices;
 
@@ -90,4 +91,29 @@ public class OsafeProductLoaderHelper {
       	catch (Exception e) {}
       	return dataRows;
         }
+    
+        private static Map buildFeatureMap(Map featureTypeMap,String parseFeatureType) 
+        {
+	    	if (UtilValidate.isNotEmpty(parseFeatureType))
+	    	{
+	        	int iFeatIdx = parseFeatureType.indexOf(':');
+	        	if (iFeatIdx > -1)
+	        	{
+	            	String featureType = parseFeatureType.substring(0,iFeatIdx).trim();
+	            	String sFeatures = parseFeatureType.substring(iFeatIdx +1);
+	                String[] featureTokens = sFeatures.split(",");
+	            	Map mFeatureMap = FastMap.newInstance();
+	                for (int f=0;f < featureTokens.length;f++)
+	                {
+	                	mFeatureMap.put(""+featureTokens[f].trim(),""+featureTokens[f].trim());
+	                	
+	                }
+	        		featureTypeMap.put(featureType, mFeatureMap);
+	        	}
+	    		
+	    	}
+	    	return featureTypeMap;
+        }
     }
+
+

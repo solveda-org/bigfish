@@ -23,6 +23,17 @@ partyId = null;
 if (UtilValidate.isNotEmpty(orderId)) 
 {
 	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
+	
+	orderProductStore = orderHeader.getRelatedOne("ProductStore");
+	if (UtilValidate.isNotEmpty(orderProductStore.storeName))
+	{
+		productStoreName = orderProductStore.storeName;
+	}
+	else
+	{
+		productStoreName = orderHeader.productStoreId;
+	}
+	context.productStoreName = productStoreName;
 }
 
 if (UtilValidate.isNotEmpty(orderHeader)) 
@@ -160,6 +171,7 @@ if (UtilValidate.isNotEmpty(orderHeader))
 	// ship groups
 	shipGroups = orderHeader.getRelatedOrderBy("OrderItemShipGroup", ["-shipGroupSeqId"]);
 	context.shipGroups = shipGroups;
+	context.shipGroupsSize = shipGroups.size();
 
 
 	customerPoNumber = null;

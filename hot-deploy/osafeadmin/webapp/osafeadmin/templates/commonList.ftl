@@ -9,5 +9,8 @@ ${sections.render('commonFormJS')}
             ${sections.render('listBoxBody')?if_exists}
         </table>
         ${sections.render('commonListButton')?if_exists}
+         <div class="infoDetailIcon">
+          ${sections.render('commonListLinkButton')!}
+         </div>
     </div>
 </div>

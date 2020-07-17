@@ -1,9 +1,11 @@
 package com.osafe.services;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,8 +17,12 @@ import javax.xml.bind.Unmarshaller;
 
 import javolution.util.FastList;
 import javolution.util.FastMap;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
@@ -1056,6 +1062,241 @@ public class OsafeAdminFeedServices {
 		try {
 			dispatcher.runSync("importCustomerXMLTemplate", importCustomerXMLTemplateCtx);
 		} catch (GenericServiceException e) {
+			e.printStackTrace();
+		}
+        return ServiceUtil.returnSuccess();
+    }
+    
+    
+    
+    public static Map<String, Object> importBluedartPrepaid(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
+        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
+        List<String> error_list = new ArrayList<String>();
+        if(UtilValidate.isEmpty(uploadedFileName)) 
+        {
+        	error_list.add(UtilProperties.getMessage(resource, "BlankFeedFileError", locale));
+        }
+        Map result = FastMap.newInstance();
+        if(UtilValidate.isNotEmpty(uploadedFileName)) 
+        {
+        	if(!((uploadedFileName.toUpperCase()).endsWith("XLS") || (uploadedFileName.toUpperCase()).endsWith("XLSX"))) 
+        	{
+        		error_list.add(UtilProperties.getMessage(resource, "BlueDartFeedFileNotXlsError", locale));	
+        	} 
+        	else 
+        	{
+        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
+                uploadFileCtx.put("userLogin",userLogin);
+                uploadFileCtx.put("uploadedFile",uploadBytes);
+                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
+                
+                try 
+                {
+        			result = dispatcher.runSync("uploadFile", uploadFileCtx);
+        		} 
+                catch (GenericServiceException e) 
+                {
+        			e.printStackTrace();
+        		}
+        	}
+        }
+        
+        if(UtilValidate.isNotEmpty(result.get("uploadFilePath")) && UtilValidate.isNotEmpty(result.get("uploadFileName"))) 
+        {
+        	try 
+        	{
+        		File inputWorkbook = new File((String)result.get("uploadFilePath") + (String)result.get("uploadFileName"));
+        		if (inputWorkbook != null) 
+                {
+        			WorkbookSettings ws = new WorkbookSettings();
+                    ws.setLocale(new Locale("en", "EN"));
+                    Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
+                    for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) 
+                    {
+                        BufferedWriter bw = null; 
+                        try 
+                        {
+                            Sheet s = wb.getSheet(sheet);
+                            String sTabName=s.getName();
+                            
+                            if (sheet == 0)
+                            {
+                            	List dataRows = BlueDartImportServices.buildDataRows(BlueDartImportServices.buildBlueDartPrepaidHeader(),s);
+                            	List<String> duplicates = new ArrayList();
+                                HashSet uniques = new HashSet();
+                            	for (int i=0 ; i < dataRows.size() ; i++) 
+                                {
+                            		Map<String, String> mRow = (Map<String, String>)dataRows.get(i);
+                            		String pinCode = (String)mRow.get("pincode");
+                                     if (uniques.contains(pinCode))
+                                     {
+                                    	 duplicates.add(pinCode);
+                                     }
+                                     else
+                                     {
+                                         uniques.add(pinCode);
+                                     }
+                                }
+                            	for(String pincode : duplicates)
+                            	{
+                            		error_list.add(UtilProperties.getMessage(resource, "PinCodeUniqueError",  UtilMisc.toMap("pincode", pincode), locale));
+                            	}
+                            }
+                        } 
+                        catch (Exception exc) 
+                        {
+                            Debug.logError(exc, module);
+                        } 
+                    }
+                }
+        	}
+        	catch(Exception e)
+        	{
+        		
+        	}
+        }
+        
+        if(error_list.size() > 0) 
+        {
+            return ServiceUtil.returnError(error_list);
+        }
+        
+		
+		Map<String, Object> importBlueDartPrepaidTemplateCtx = FastMap.newInstance();
+		importBlueDartPrepaidTemplateCtx.put("userLogin",userLogin);
+		importBlueDartPrepaidTemplateCtx.put("xlsDataFile",(String)result.get("uploadFilePath") + (String)result.get("uploadFileName"));
+		importBlueDartPrepaidTemplateCtx.put("xmlDataDir",(String)result.get("uploadFilePath"));
+		importBlueDartPrepaidTemplateCtx.put("autoLoad",Boolean.TRUE);
+		try 
+		{
+			dispatcher.runSync("importBlueDartPrepaidTemplate", importBlueDartPrepaidTemplateCtx);
+		} 
+		catch (GenericServiceException e) 
+		{
+			e.printStackTrace();
+		}
+        return ServiceUtil.returnSuccess();
+    }
+    
+    
+    public static Map<String, Object> importBluedartCoD(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Locale locale = (Locale) context.get("locale");
+        
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String uploadedFileName = (String)context.get("_uploadedFile_fileName");
+        ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
+        List<String> error_list = new ArrayList<String>();
+        if(UtilValidate.isEmpty(uploadedFileName)) 
+        {
+        	error_list.add(UtilProperties.getMessage(resource, "BlueDartFeedFileNotXlsError", locale));
+        }
+        Map result = FastMap.newInstance();
+        if(UtilValidate.isNotEmpty(uploadedFileName)) 
+        {
+        	if(!((uploadedFileName.toUpperCase()).endsWith("XLS") || (uploadedFileName.toUpperCase()).endsWith("XLSX"))) 
+        	{
+        		error_list.add(UtilProperties.getMessage(resource, "FeedFileNotXlsError", locale));	
+        	} 
+        	else 
+        	{
+        		Map<String, Object> uploadFileCtx = FastMap.newInstance();
+                uploadFileCtx.put("userLogin",userLogin);
+                uploadFileCtx.put("uploadedFile",uploadBytes);
+                uploadFileCtx.put("_uploadedFile_fileName",uploadedFileName);
+                
+                try 
+                {
+        			result = dispatcher.runSync("uploadFile", uploadFileCtx);
+        		} 
+                catch (GenericServiceException e) 
+                {
+        			e.printStackTrace();
+        		}
+        	}
+        }
+        
+        if(UtilValidate.isNotEmpty(result.get("uploadFilePath")) && UtilValidate.isNotEmpty(result.get("uploadFileName"))) 
+        {
+        	try 
+        	{
+        		File inputWorkbook = new File((String)result.get("uploadFilePath") + (String)result.get("uploadFileName"));
+        		if (inputWorkbook != null) 
+                {
+        			WorkbookSettings ws = new WorkbookSettings();
+                    ws.setLocale(new Locale("en", "EN"));
+                    Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
+                    for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) 
+                    {
+                        BufferedWriter bw = null; 
+                        try 
+                        {
+                            Sheet s = wb.getSheet(sheet);
+                            String sTabName=s.getName();
+                            
+                            if (sheet == 0)
+                            {
+                            	List dataRows = BlueDartImportServices.buildDataRows(BlueDartImportServices.buildBlueDartCoDHeader(),s);
+                            	List<String> duplicates = new ArrayList();
+                                HashSet uniques = new HashSet();
+                            	for (int i=0 ; i < dataRows.size() ; i++) 
+                                {
+                            		Map<String, String> mRow = (Map<String, String>)dataRows.get(i);
+                            		String pinCode = (String)mRow.get("pincode");
+                                     if (uniques.contains(pinCode))
+                                     {
+                                    	 duplicates.add(pinCode);
+                                     }
+                                     else
+                                     {
+                                         uniques.add(pinCode);
+                                     }
+                                }
+                            	for(String pincode : duplicates)
+                            	{
+                            		error_list.add(UtilProperties.getMessage(resource, "PinCodeUniqueError",  UtilMisc.toMap("pincode", pincode), locale));
+                            	}
+                            }
+                        } 
+                        catch (Exception exc) 
+                        {
+                            Debug.logError(exc, module);
+                        } 
+                    }
+                }
+        	}
+        	catch(Exception e)
+        	{
+        		
+        	}
+        }
+        
+        if(error_list.size() > 0) 
+        {
+            return ServiceUtil.returnError(error_list);
+        }
+        
+		
+		Map<String, Object> importBlueDartCoDTemplateCtx = FastMap.newInstance();
+		importBlueDartCoDTemplateCtx.put("userLogin",userLogin);
+		importBlueDartCoDTemplateCtx.put("xlsDataFile",(String)result.get("uploadFilePath") + (String)result.get("uploadFileName"));
+		importBlueDartCoDTemplateCtx.put("xmlDataDir",(String)result.get("uploadFilePath"));
+		importBlueDartCoDTemplateCtx.put("autoLoad",Boolean.TRUE);
+		try 
+		{
+			dispatcher.runSync("importBlueDartCoDTemplate", importBlueDartCoDTemplateCtx);
+		} 
+		catch (GenericServiceException e) 
+		{
 			e.printStackTrace();
 		}
         return ServiceUtil.returnSuccess();

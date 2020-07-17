@@ -9,7 +9,7 @@
 	1.2 Default Labels, Captions
 	1.3 Standard Table
 	1.4 Buttons
-	1.5 Body and Miscellaneous
+	1.5 Miscellaneous
 	
 2.  Layout Containers
 	2.1 Basic Layout
@@ -41,6 +41,14 @@
 	5.12 OrderConfirm Section
 	5.13 OnePageCheckout Section
 	5.14 PersonalInfo Section
+	5.15 Write a Review Section
+	5.16 PDP Accessories Section
+	5.17 PDP ComplementAccessories Section
+	5.18 LightCart Section
+		5.18.1 LightCart Order Items Section
+	5.19 Wishlist Section
+	5.20 Manufacture Section
+		5.20.1 Manufacture List Items Section
 	
 6. 	eCommerce Pages
 	6.1 eCommerce Default Styles
@@ -51,12 +59,14 @@
 		6.3.2 PLP Results Navigation
 		6.3.3 PLP Quicklook
 	6.4	PDP Product Detail Pages
-		6.4.2 Social Media Footer
+	6.5 Manufacturer Detail Page
 		
-7. 	Boxes
+7. Boxes
 	7.1 Display Boxes
+	7.2 Dialog Boxes
+    7.3 LightCart Boxes
 
-8. 	Entry Forms	
+8. Entry Forms	
 
 9. Error Messages
 
@@ -67,24 +77,28 @@
 		11.1.1 Forgot Password
 		11.1.2 Change Password
 		11.1.3 Guest Checkout
+		11.1.4 Account Registration
 	11.2 Show Cart
 	11.3 Shipping Address
 		11.3.1 Edit Shipping Address
 	11.4 Shipping Options and Delivery Times
 	11.5 Order Summary / Payment
 	11.6 Order Confirmation
-11.7 One Page Checkout
-11.8 Personal Info
-	11.9 Order History
+	11.7 One Page Checkout
+	11.8 Personal Info
+	11.9 Order History / Order Detail
+	11.10 Wishlist Page
 	
 12. Static Pages
 	12.1 Contact Us
 	12.2 Store Locater
 	12.3 Request Catalog
-	12.4 My Account
-	12.5 Site Map
-	12.6 Static Pages (About Us, Privacy Policy, Terms and Conditions, etc.
-	12.7 Miscellaneous Static Content
+	12.4 Mailing List Sign Up
+	12.5 My Account
+	12.6 Site Map
+	12.7 Static Pages (About Us, Privacy Policy, Terms and Conditions, etc.)
+	12.8 Miscellaneous Static Content
+        12.9 Manufacturer Page
 	
 13. Styles for Product Review
 	13.1 Review List
@@ -102,6 +116,10 @@
 
 /* === 1. Reset and Default HTML Settings  === */	
 
+.smallDevice {
+	display: none; /* Hides Mobile Elements in Default Site */
+}
+
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -117,31 +135,59 @@ table, caption, tbody, tfoot, thead, tr, th, td {
     font-weight: inherit;
     font-style: inherit;
     font-family: inherit;
-    font-size:inherit;
+    font-size: inherit;
+}
+
+body {
+    color: #000000;
+    font-size:62.5%;     /* Will make 1em = 10px */
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-text-size-adjust: 100%; /* for iPad font-size rendering issue */
+    background: url("/osafe_theme/images/user_content/images/bodyBackground.png") repeat-x 0 -20px;
+}
+
+p,
+span,
+input {
+    font-size: 13px; /* Default Font Size */
 }
 
 input, select, option, textarea {
+    color: #333333;
+    border: 1px solid #006699;
+    font-family: Arial, Helvetica, sans-serif; /* To over ride text area defaults */
+    font-size: 13px;
+    padding: 2px;
+}
 
+select {
+    padding: 1px!important; /* select default heights are different then other inputs */
 }
 
 option {
+    border: none!important;
+    padding: 0!important;      
+}
 
+input[type="checkbox"],
+input[type="radio"] {
+    border: none;
 }
 
 input[type="text"],
 input[type="password"] {
-
-}
-
-textarea {
-
+    width: 200px;
 }
 
 input:focus,
 select:focus,
 textarea:focus { /* Default Input Focus Styles */
+    border: 1px solid #333333;
+}
 
-
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+    border: none;
 }
 
 :focus { /* remember to define focus styles! */
@@ -178,10 +224,19 @@ q {
 }
 
 em {
-    font-weight: bold;
+    font-style: italic;
+}
+
+strong {
+    font-weight: 700;
 }
 
 a {
+    color: #0753A1;
+    text-decoration: none;
+}
+
+a:hover {
 
 }
 
@@ -189,18 +244,35 @@ a {
 
 
 h1 {
-
+    background: url("/osafe_theme/images/user_content/images/diagonal.png") repeat-x scroll 0 100% transparent;
+    color: #0753A1;
+    display: block;
+    float: left;
+    font-size: 24px;
+    font-weight: 700;
+    margin: 10px 0;
+    padding: 0 0 10px;
+    text-transform: uppercase;
+    width: 100%;
 }
 
 h2 {
-
+	font-size: 20px;
 }
 
 h3 {
-
+	font-size: 18px;
 }
 
 h4 {
+	font-size: 10px;
+}
+
+h5 {
+
+}
+
+h6 {
 
 }
 
@@ -208,113 +280,205 @@ h4 {
 
 
 label,
-.caption {
-
-}
-
-.headerCaption {
-
+.caption,
+label span {
+    font-size: 15px; /* Default Font Size; Label Span used in alternate labels like USA/Canada Address */
 }
 
 /* === 1.3 Standard Table  === */	
 
 
 table.standardTable {
-
+    width: 880px;
 }
 
 table.standardTable thead tr {
-
+    background-color: #afafaf;
 }
 
 table.standardTable th,
 table.standardTable td {
-
+    font-size: 1.5em;
 }
 
 table.standardTable th {
-
+    font-weight: 700;
+    padding: 5px 0 5px 0;
 }
 
 table.standardTable th.firstCol,
 table.standardTable td.firstCol {
-
+    padding: 0 0 0 10px;
 }
 
 table.standardTable th.lastCol,
 table.standardTable td.lastCol {
-
+    padding: 0 10px 0 0;
 }
 
 /* === 1.4 Buttons === */	
 
+/* ---- Standard Button ---- */
 
-input[type="submit"].standardBtn,
-input[type="button"].standardBtn,
+input.standardBtn[type="submit"],
+input.standardBtn[type="button"], 
 a.standardBtn {
-
+    background: #f5f5f5;
+    border: 1px solid #666666;
+    border-radius: 5px 5px 5px 5px;
+    color: #666666;
+    display: inline-block;
+    font-size: 12px;
+    padding: 5px 10px;
+    white-space: nowrap;
 }
 
-input[type="submit"].standardBtn:hover,
-input[type="button"].standardBtn:hover,
+input.standardBtn[type="submit"]:hover,
+input.standardBtn[type="button"]:hover,
 a.standardBtn:hover {
+    background: #cecece;
+}
+
+input.standardBtn[type="submit"]:active,
+input.standardBtn[type="button"]:active,
+a.standardBtn:active {
 
 }
 
-input[type="submit"].standardBtn:active,
-input[type="button"].standardBtn:active,
-a.standardBtn:active  {
+/* ---- Positive Button ---- */
 
+input.positive[type="submit"],
+input.positive[type="button"],
+a.positive{
+    background: none repeat scroll 0 0 #FFF5B2;
+    border: 1px solid #FCDC00;
+    color: #525252;
+    text-shadow: 0 1px 0 #FDF9DE;
 }
 
-input.action[type="submit"],
-input.action[type="button"],
-a.action {
-
-}
-
-input.action[type="submit"]:hover,
-input.action[type="button"]:hover,
-a.action:hover {
-
-}
-
-input[type="submit"].positive,
-input[type="button"].positive,
-a.positive {
-
-}
-
-input[type="submit"].positive:hover,
-input[type="button"].positive:hover,
+input.positive[type="submit"]:hover,
+input.positive[type="button"]:hover,
 a.positive:hover {
+    background: none repeat scroll 0 0 #FFE682;
+    border: 1px solid #FCDC00;
+    text-shadow: 0 1px 0 #FDF9DE;
+}
+
+input.positive[type="submit"]:active,
+input.positive[type="button"]:active,
+a.positive:active {
 
 }
 
-input[type="submit"].negative,
-input[type="button"].negative,
-a.negative {
+/* ---- Negative Button ---- */
 
+input.negative[type="submit"],
+input.negative[type="button"],
+a.negative {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #002073;
+    color: #525252;
 }
 
 input.negative[type="submit"]:hover,
 input.negative[type="button"]:hover,
 a.negative:hover {
+    background: none repeat scroll 0 0 #F5F5F5;
+}
+
+input.negative[type="submit"]:active,
+input.negative[type="button"]:active,
+a.negative:active {
 
 }
 
-/* ---- Active Cart Button ---- */
+/* ---- Action Button ---- */
 
-input[type="submit"].addToCart,
-input[type="button"].addToCart,
+input.action[type="submit"],
+input.action[type="button"],
+a.action {
+    background: none repeat scroll 0 0 #3D5FA7;
+    border: 1px solid #002073;
+    color: #F5F5F5;
+}
+
+input.action[type="submit"]:hover,
+input.action[type="button"]:hover,
+a.action:hover {
+     background: #1F3C80;
+     cursor: pointer;
+}
+
+input.action[type="submit"]:active,
+input.action[type="button"]:active,
+a.action:active {
+
+}
+
+/* ---- Update Button ---- */
+
+input.update[type="submit"],
+input.update[type="button"],
+a.update{
+    background: none repeat scroll 0 0 #D4E7FA;
+    border: 1px solid #002073;
+    color: #002073;
+}
+
+input.update[type="submit"]:hover,
+input.update[type="button"]:hover,
+a.update:hover {
+    background: none repeat scroll 0 0 #BFD0E0;
+    color: #002073;
+    cursor: pointer;
+}
+
+input.update[type="submit"]:active,
+input.update[type="button"]:active,
+a.action:update{
+
+}
+
+/* ---- Delete Button ---- */
+
+input.delete[type="submit"],
+input.delete[type="button"],
+a.delete {
+    background: none repeat scroll 0 0 #FBE7E8;
+    border: 1px solid #FF0000;
+    color: #000000;
+}
+
+input.delete[type="submit"]:hover,
+input.delete[type="button"]:hover,
+a.delete:hover {
+     background: #f5cbcd;
+     cursor: pointer;
+}
+
+input.delete[type="submit"]:active,
+input.delete[type="button"]:active,
+a.delete:update {
+
+}
+
+/* ---- Add To Cart Button ---- */
+
+input.addToCart[type="submit"],
+input.addToCart[type="button"],
 a.addToCart {
-
+    background: none repeat scroll 0 0 #FFF5B2;
+    border: 1px solid #FCDC00;
+    color: #525252;
+    font-size: 16px;
+    font-weight: 700;
+    text-shadow: 0 1px 0 #FDF9DE;
 }
 
 input.addToCart[type="submit"]:hover,
 input.addToCart[type="button"]:hover,
 a.addToCart:hover {
-
+    background: none repeat scroll 0 0 #ffe682;
 }
 
 input.addToCart[type="submit"]:active,
@@ -323,32 +487,104 @@ a.addToCart:active {
 
 }
 
-/* ---- Inactive Cart Button ---- */
+/* ---- Add To Wish List Button ---- */
+
+input.addToWishlist[type="submit"],
+input.addToWishlist[type="button"],
+a.addToWishlist{
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #FCDC00;
+    color: #525252;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+input.addToWishlist[type="submit"]:hover,
+input.addToWishlist[type="button"]:hover,
+a.addToWishlist:hover {
+    background: none repeat scroll 0 0 #ffe682;
+}
+
+input.addToWishlist[type="submit"]:active,
+input.addToWishlist[type="button"]:active,
+a.addToWishlist:active {
+
+}
+
+/* ---- Inactive Cart & Wish List Button ---- */
 
 input[type="submit"].addToCart.inactiveAddToCart,
 input[type="button"].addToCart.inactiveAddToCart,
-a.addToCart.inactiveAddToCart {
-
+a.addToCart.inactiveAddToCart,
+input[type="submit"].addToWishlist.inactiveAddToWishlist,
+input[type="button"].addToWishlist.inactiveAddToWishlist,
+a.addToWishlist.inactiveAddToWishlist {
+	background: #EBEBEB;
+	color: #a6a6a6;
+	border: 1px solid #ebebeb;
 }
 
 input[type="submit"].addToCart.inactiveAddToCart:hover,
 input[type="button"].addToCart.inactiveAddToCart:hover,
-a.addToCart.inactiveAddToCart:hover {
+a.addToCart.inactiveAddToCart:hover,
+input[type="submit"].addToWishlist.inactiveAddToWishlist:hover,
+input[type="button"].addToWishlist.inactiveAddToWishlist:hover,
+a.addToWishlist.inactiveAddToWishlist:hover {
+	background: #EBEBEB!important;
+	color: #a6a6a6!important;
+	border: 1px solid #ebebeb!important;
+	cursor: default!important;
+}
+
+
+/* ---- Submit Order Button ---- */
+
+input.submitOrder[type="submit"],
+input.submitOrder[type="button"],
+a.submitOrder {
+    border: 1px solid #FEB645;
+    color: #525252;
+    font-size: 16px;
+    font-weight: 700;
+    text-shadow: 0 1px 0 #FDF9DE;
+background: #f1e767; /* Old browsers */
+/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YxZTc2NyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZWI2NDUiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+background: -moz-linear-gradient(top,  #f1e767 0%, #feb645 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f1e767), color-stop(100%,#feb645)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  #f1e767 0%,#feb645 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  #f1e767 0%,#feb645 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  #f1e767 0%,#feb645 100%); /* IE10+ */
+background: linear-gradient(to bottom,  #f1e767 0%,#feb645 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1e767', endColorstr='#feb645',GradientType=0 ); /* IE6-8 */
+
+}
+
+input.submitOrder[type="submit"]:hover,
+input.submitOrder[type="button"]:hover,
+a.submitOrder:hover {
+    background: none repeat scroll 0 0 #ffe682;
+}
+
+input.submitOrder[type="submit"]:active,
+input.submitOrder[type="button"]:active,
+a.submitOrder:active {
 
 }
 
 form div.entryButtons {
-
+    clear: left;
+    float: right;
+    margin: 1em 0 1em 0;
 }
 
-/* === 1.5 Body and Miscellaneous === */	
-
-body {
-
-}
+/* === 1.5 Miscellaneous === */	
 
 * html #eCommerceHeader,* html #eCommercePageBody, * html #eCommerceFooter ,* html #eCommerceProductDetailContainer { zoom: 1; } /* IE6 */
-*:first-child + html #eCommerceHeader, *:first-child + html #eCommercePageBody: , *:first-child + html #eCommerceFooter:, *:first-child + html #eCommerceProductDetailContainer:{ zoom: 1; } /*IE7*/
+*:first-child + html #eCommerceHeader, *:first-child + html #eCommercePageBody: , *:first-child + html #eCommerceFooter:, *:first-child + html #eCommerceProductDetailContainer:{ 
+	zoom: 1;
+} /*IE7*/
+
 #eCommerceHeader:after, #eCommercePageBody:after, #eCommerceFooter:after, #eCommerceProductDetailContainer:after { /* everything else */
 	visibility: hidden;
 	display: block;
@@ -363,31 +599,51 @@ body {
 /* === 2.1 Basic Layout === */
 	
 #eCommeceOuterBasicWrap {
-
+    margin: 0 auto;
+    width: 960px;
+    padding: 0;
+    position: relative;
+   box-shadow: 6px 0 4px 4px #222 ;
 }
 
 #eCommerceInnerBasicWrapper {
-
+    width: 100%
+    position: relative;
+    z-index: 10;
+    zoom: 1;
 }
 
 /* === 2.2 Basic Bevel Layout === */
 	
 #eCommerceOuterBasicBevelWrap {
-
+    border: 1px solid #858585;
+    border-top: none;
+    box-shadow: 0 0 10px 0 #535353;
+    margin: 0 auto;
+    width: 1024px; /* From 960px */
+    padding: 0;
+    overflow: hidden;
 }
 
 #eCommerceInnerBasicBevelWrapper {
-
+      width: 100%;
 }
 
 #eCommerceOuterBasicBevelWrap:after {
-
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
 
 /* === 3. eCommerceContent and Descendant Sections === */
 
 #eCommerceContent {
-
+	width: 100%;
+    background: none repeat scroll 0 0 #FFFFFF;
+        
 }
 
 #eCommerceContent.mainPanel {
@@ -409,37 +665,47 @@ body {
 /* === 3.1 Header Links === */
 	
 #eCommerceHeaderLinks {
- 
+    float: right;
+    margin: 5px 0 5px 0 !important;
 }
 
 #eCommerceHeaderLinks ul {
-
+	margin:0;
 }
 
 #eCommerceHeaderLinks ul li {
-
+    border-right: 1px dotted;
+    display: inline-block;
+    margin: 0 4px;
+    padding: 0 9px 0 0;
 }
 
 #eCommerceHeaderLinks li:first-child {
-
+	border-left: none;
 }
 
-#eCommerceHeaderLinks li:last-child {
-
+#eCommerceHeaderLinks li.last {
+	border-right: none;
 }
 
 #eCommerceHeaderLinks a {
-
+    color: #2A4A93;
+    font-size: 10px;
+    text-transform: uppercase;
 }
 
 #eCommerceHeaderLinks a:hover {
-
+    text-decoration: underline;
 }
 
 /* === 3.2 Header  === */
 
 #eCommerceHeader {
-
+    background: #FFCA08;
+    float: left;
+    position: relative;
+    width: 100%; 
+    zoom: 1;
 }
 
 #eCommerceHeader a {
@@ -455,11 +721,18 @@ body {
 }
 
 #eCommerceHeader #siteShoppingCart {
-
+    position: absolute;
+    /* right: 250px; */
+    top: 85px;
+    right: 20px;
 }
 
 #eCommerceHeader #siteShoppingCart p {
-
+    float: left;
+    font-size: 1.3em;
+    font-weight: 700;
+    margin: -2px 10px 0 0;
+    display: none;
 }
 
 #eCommerceHeader #siteShoppingCart #shoppingCartCaption {
@@ -472,11 +745,22 @@ body {
 }
 
 #eCommerceHeader #siteShoppingCart .action {
-
+	margin: 0;
 }
 
 #eCommerceHeader #siteCartStats {
+    background: none repeat scroll 0 0 #FFFFFF;
+    display: inline-block;
+    padding: 20px 10px 10px;
+    position: relative;
+    text-align: center;
 
+-webkit-border-top-left-radius: 10px;
+-webkit-border-top-right-radius: 10px;
+-moz-border-radius-topleft: 10px;
+-moz-border-radius-topright: 10px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
 }
 
 #eCommerceHeader #siteCartStats .highlightGroup {
@@ -484,45 +768,93 @@ body {
 }
 
 #eCommerceHeader #siteCartStats a#siteShoppingCartSize {
-
-       
+    background: url("/osafe_theme/images/user_content/images/courseBook.png") no-repeat scroll left 50% transparent;
+    color: #2E2E2E;
+    font-size: 1.1em;
+    letter-spacing: 1px;
+    padding: 10px 3px 10px 30px;
+    position: relative;
+    text-transform: uppercase;
 }
 
 #eCommerceHeader #siteCartStats a#siteShoppingCartSize:hover {
-
+	text-decoration: underline;
 }
 
 #eCommerceHeader #siteCartStats .price {
 
 }
 
+
 #eCommerceHeader #siteSearch {
-  
+    /* bottom: 10px; */
+    position: absolute;
+    right: 15px;
+    top: 20px;
 }
 
-span#searchInputContainer {
+#searchContainer {
+    width: 210px;
+}
+#searchContainer input[type="text"] {
+    border: medium none;
+    border-radius: 10px 0 0 10px;
+    color: #000000;
+    display: inline-block;
+    float: left;
+    height: 17px;
+    margin: 0;
+    padding: 8px 10px;
+    vertical-align: middle;
+    width: 150px;
+}
+
+#searchContainer input[type="text"]:focus {
+ 
+}
+
+#searchContainer input.searchSubmit {
+    background: url("/osafe_theme/images/user_content/images/search-field.png") 50% 50% no-repeat #ffffff;
+    border: medium none;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+    float: right;
+    height: 33px;
+    margin: 0;
+    padding: 0;
+    width: 40px;
+}
+
+#searchAutoComplete {
+   display: none!important;
+}
+
+#searchAutoComplete ul.ui-autocomplete {
+    z-index: 3!important;
+}
+
+#searchAutoComplete ul.ui-autocomplete li  {
 
 }
 
-#siteSearch input[type="image"],
-#eCommerceHeader #siteSearch input[type="submit"] {
+#searchAutoComplete ul.ui-autocomplete li a {
 
 }
 
-#siteSearch input[type="text"] {
+#searchAutoComplete ul.ui-autocomplete li a:hover {
 
 }
 
-#eCommerceHeader #searchBtn {
 
+
+
+#eCommerceHeader #siteShoppingCart a {
+    color: #A50000;
+    font-size: 12px;
 }
-#eCommerceHeader #searchBtn:hover{
 
-}
-
-#eCommerceHeader #siteShoppingCart a,
-#siteSearch a {
-
+#eCommerceHeader #siteShoppingCart a:hover {
+    text-decoration: underline;
 }
 
 #eCommerceHeader #siteCartStats #viewCartSmallImage {
@@ -530,7 +862,7 @@ span#searchInputContainer {
 }
 
 #eCommerceHeader #viewCartButton {
-
+	display: none;
 }
 
 #eCommerceHeader #siteSearch span {
@@ -538,50 +870,105 @@ span#searchInputContainer {
 }
 
 #siteMailingList {
-
+    position: absolute;
+    right: 15px;
+    top: 20px;
 }
 
 #siteMailingList a { 
-   
+    background: url("/osafe_theme/images/user_content/images/requestInfo.png") no-repeat scroll 143px 50% #FFA518;
+    border: 1px solid #E59515;
+    border-radius: 8px 8px 8px 8px;
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 8px 35px 8px 10px;
+    text-shadow: 0 1px 0 #CC8410;
+    width: 210px;
 }
 
 #siteMailingList a:hover {
-
+    background: url("/osafe_theme/images/user_content/images/requestInfo.png") no-repeat scroll 143px 50% #ffbf00;
 }
 
 /* === 3.3 Navigation Bar  === */
 	
 #eCommerceNavBar {
-  
-
-}
-#eCommerceNavBarMenu ul {
-
-}
-
-#eCommerceNavBarMenu ul li {
-
+    background: url("/osafe_theme/images/user_content/images/nav-bg.png") repeat-x 0 0;
+    float: left;
+    position: relative;
+    width: 100%;
+    z-index: 2;
 }
 
-#eCommerceNavBarMenu li:hover {
-    visibility: inherit; /* fixes IE7 'sticky bug' */
+#eCommerceNavBar ul#eCommerceNavBarMenu {
+    float: left;
+    width: 100%;
 }
 
 #eCommerceNavBarMenu li {
+    float: left;
+    margin: 0 0 0 20px;
+}
+
+#eCommerceNavBarMenu li.topLevel {
+    height: 40px;
+}
+
+
+#eCommerceNavBarMenu li.topLevel.navlastitem a.topLevel {
 
 }
+
+#eCommerceNavBarMenu li.topLevel.navfirstitem a {
+
+}
+
+#eCommerceNavBarMenu li.subLevel.navfirstitem a { /* Psuedo class selector for first subnav item */
+
+}
+
+#eCommerceNavBarMenu li.topLevel.navlastitem{
+
+}
+
+#eCommerceNavBarMenu>li:hover {
+    visibility: inherit;
+}
+#eCommerceNavBarMenu li:hover>a {
+
+}
+
 #eCommerceNavBarMenu li:hover ul,
 #eCommerceNavBarMenu li.sfHover ul {
-
+	top: 40px; /* match top ul list item height */
+border-top:0px;
 }
 
 #eCommerceNavBarMenu li:hover li ul,
 #eCommerceNavBarMenu li.sfHover li ul {
-
+   
 }
+
+#eCommerceNavBarMenu ul {
+        background: none repeat scroll 0 0 #FFFFFF;
+	position: absolute;
+	top: -999em;
+        padding: 0 0 5px 0;
+	/* width: 180px;  left offset of submenus need to match (see below) */
+	z-index: 999; /* Keeps submenus from disappearing behind content */
+        border: 1px solid #c1c1c1;
+
+-webkit-border-bottom-right-radius: 5px;
+-webkit-border-bottom-left-radius: 5px;
+-moz-border-radius-bottomright: 5px;
+-moz-border-radius-bottomleft: 5px;
+border-bottom-right-radius: 5px;
+border-bottom-left-radius: 5px;
+}
+
 #eCommerceNavBarMenu li li:hover li ul,
 #eCommerceNavBarMenu li li.sfHover li ul {
-
+   
 }
 
 #eCommerceNavBarMenu li li:hover ul,
@@ -590,71 +977,56 @@ span#searchInputContainer {
 
 ul#eCommerceNavBarMenu li li:hover ul,
 ul#eCommerceNavBarMenu li li.sfHover ul {
-
+	left: 21em; /* match ul width */
+	top: 0px;
 }
 
-/* If the drop-down menus disappear unexpectedly the bottom padding value may not be large enough */
 #eCommerceNavBarMenu a {
 
 }
 
+#eCommerceNavBarMenu a:visited {
+
+}
+
 #eCommerceNavBarMenu .subLevel a {
-
-}
-
-#eCommerceNavBarMenu a, #eCommerceNavBarMenu a:visited { /* visited pseudo selector so IE6 applies text color*/
-
-}
-#eCommerceNavBarMenu li.topLevel {
-
+    border-bottom: 1px dotted #c1c1c1;
+    color: #27448E;
+    display: inline-block;
+    font-size: 12px;
+    padding: 1px 0;
+    text-transform: uppercase;
 }
 
 #eCommerceNavBarMenu a.topLevel {
-
-}
-
-#eCommerceNavBarMenu li.topLevel.navlastitem a.topLevel {
-
-}
-
-#eCommerceNavBarMenu li.topLevel.navfirstitem a {
-	
-}
-
-#eCommerceNavBarMenu li.subLevel.navfirstitem a { /* Psuedo class selector for first subnav item */
-
-}
-
-#eCommerceNavBarMenu li.topLevel.navlastitem {
-
-}
-
-#eCommerceNavBarMenu li:hover {
-	
+    background: url("/osafe_theme/images/user_content/images/navArrow.png") no-repeat scroll 0 50% transparent;
+    color: #FFFFFF;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 12px 15px 9px;
+    position: relative;
+    text-align: center;
+    text-transform: uppercase;
 }
 
 #eCommerceNavBarMenu a.topLevel:hover {
-	
+    position:relative;
 }
 
-#eCommerceNavBarMenu li li a {	
+#eCommerceNavBarMenu li li a {
 
 }
-
 #eCommerceNavBarMenu li li {
-
+    float: none;
+    margin: 5px 10px 0 10px;
 }
 
 #eCommerceNavBarMenu li:hover,
 #eCommerceNavBarMenu li.sfHover,
-#eCommerceNavBarMenu a:focus, #eCommerceNavBarMenu a:hover,
+#eCommerceNavBarMenu a:focus,
+#eCommerceNavBarMenu a:hover,
 #eCommerceNavBarMenu a:active {
-
-}
-
-#eCommerceNavBarMenu li li a:focus,
-#eCommerceNavBarMenu li li a:hover,
-#eCommerceNavBarMenu li li a:active {
 
 }
 
@@ -665,90 +1037,137 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 #eCommerceNavBarMenu li li a:focus,
 #eCommerceNavBarMenu li li a:hover,
 #eCommerceNavBarMenu li li a:active {
+    border-bottom: 1px solid;
+
+}
+
+#eCommerceNavBarMenu li.topLevel.navlastitem {
 
 }
 
 /* === 3.3.1 Mega Menu (Custom for Each Instance)  === */
 
 #eCommerceNavBarMenu .ecommerceMegaMenu {
-
+    background-color: #ffffff;
+     width: 960px;
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu ul {
+#eCommerceNavBarMenu .megaMenu {
+    float: left;
+    width: 100%;
+}
 
+#eCommerceNavBarMenu .megaMenu .megaMenuContainer {
+    float: left;
+    margin: 10px 0 0;
+    width: 100%;
+}
+
+
+#eCommerceNavBarMenu .ecommerceMegaMenu ul {
+   border: none; /* Keeps ULs in MegaMenu from getting borders and breaking parent */
+}
+
+#eCommerceNavBarMenu .ecommerceMegaMenu h2 {
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 5px 10px;
 }
 
 #eCommerceNavBarMenu .ecommerceMegaMenu ul.topLevel {
-
+    margin: 0 auto;
+    position: static;
+    width: 825px;
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu ul.topLevel li {
-
+#eCommerceNavBarMenu .ecommerceMegaMenu li strong {/*for nav group heading */
+    color: #666666;
+    display: block;
+    font-size: 1.3em;
+    font-weight: 700;
+    padding: 3px 0 3px 6px;
+}
+#eCommerceNavBarMenu .ecommerceMegaMenu li a {/*for nav group heading */
+    display: inline-block;
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu li strong {
-
+#eCommerceNavBarMenu .ecommerceMegaMenu li a:hover {/*for nav group heading */
+    color: #cb1c45;
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu li strong:hover {
-
+#eCommerceNavBarMenu .ecommerceMegaMenu ul li ul li.subLevel {/*for nav group heading */
+    display: inline-block;
+}
+#eCommerceNavBarMenu .ecommerceMegaMenu li strong:hover { /* cancels out hover state of headings */
+   text-decoration: none;
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu li + li strong {
-
+#eCommerceNavBarMenu .ecommerceMegaMenu li+li strong {/* targets child strong items only  */
+   padding: 13px 0 0 6px;
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel.navfirstitem {
-
-}
-
-#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel,
-#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel a {
-
-}
-
-#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel:hover {
-
-}
 
 /* === 4. eCommercePageBody and Descendant Sections  === */
 
 #eCommercePageBody {
-
+    display: block;
+    clear: both;
+    zoom: 1;
+    z-index: 1;
+    _padding-bottom: 10px;/* IE homepage bug fix */
+    min-height: 420px;
 }
 
 #eCommerceMainPanel {
-
+   float: left;
+   width: 100%;
 }
 
 #eCommerceMainPanel.mainPanel {
-
+    float: left;
+    margin: 0 15px;
+    padding: 0 0 10px;
+    width: 994px;
 }
 
 #eCommerceMainPanel.homePage {
-	
+	float: left;
 }
 
 #eCommerceMainPanel.leftPanel { /* Main Content area used with #eCommerceLeftPanel (CLP) jS2 */
-
+    float: left;
+    display: inline;
+    z-index: 0;
+    width: 774px;
+    background-color: #fff;
 }
 
 #eCommerceLeftPanel { /* Left Section for Facet Menu Container (CLP); Search/Find "Facet Navigation" for specific styles jS2 */
+    float: left;
+    display: inline;
+    padding: 10px 0 0 0;
+    width: 250px;
+}
+#eCommerceConfirmContainer {
 
 }
 
 /* === 4.1 Home Page  === */
 	
 #eCommerceHomeSpots .homePage {
-
+   background: #00f;
 }
 	
 #eCommerceHomeSpots {
-
+    margin: 0!important;
+    padding: 0;
+    float: left;
+    display: inline;
 }
 
 .eCommerceHotSpot {
-
+    display: inline;
+    float: left; 
 }
 
 .eCommerceHomeSpotContent {
@@ -756,7 +1175,7 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 }
 
 #eCommerceHomeSpot_1 {
-
+ /* Width Needed for floating purposes in IE */
 }
 
 #eCommerceHomeSpot_2 {
@@ -822,62 +1241,120 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 /* === 4.2 Breadcrumb  === */
 	
 .breadcrumbs {
-
+    display: inline-block;
+    float: left;
+    margin: 17px 0 0;
+    width: 100%;
 }
 
 #breadcrumb {
-
+    float: left;
+    font-size: 1.4em;
+    height: 15px;
+    margin: 5px 0;
+    width: 100%;
 }
 
 #breadcrumb .intro {
-
+    display: inline;
+    float: left;
+    width: auto;
+    font-weight: 700;
+    margin: 0 6px 0 0;
+    padding: 2px 0 0 0;
 }
 
 #breadcrumb li {
-	
+    display: inline;
+    float: left;
+    background: url("/osafe_theme/images/user_content/images/breadcrumbBullet.png") no-repeat scroll 1px 5px transparent;
+    margin: 0 6px 0 0;
+    padding: 0 0 0 14px;
+    color: #7E7D7D;
 }
 
 #breadcrumb li.first {
-
+    background: none;
+    text-transform: capitalize;
+    padding: 0;
 }
 
 #breadcrumb li.home a {
-
+    float: left;
+    width: auto;
+    margin: 0 6px 0 0;
 }
 
 #breadcrumb li.home span.here {
-
+    float: left;
+    width: auto;
+    color: #332A23;
+    padding: 2px 0 0 0;
 }
 
 #breadcrumb li.active {
-
+    font-weight: bold;
 }
 
 #breadcrumb li a,
 #breadcrumb li a:link,
 #breadcrumb li a:visited {
-
+    color: #03041E;
+    font-weight: normal;
+    text-decoration: none;
 }
 
 #breadcrumb li a:hover,
 #breadcrumb li a:active {
+    background-color: transparent;
+    text-decoration: none;
+    border-bottom: 1px solid #666666;
+}
 
+#breadcrumb li a.removeFacet {
+    background: url("/osafe_theme/images/user_content/images/removeFacetIcon.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    display: inline-block;
+    height: 8px;
+    position: relative;
+    top: -7px;
+    width: 8px;
+}
+
+#breadcrumb li a.removeFacet:hover {
+    background-position: 0 -37px;
+}
+
+#breadcrumb li a.removeFacet .removeFacetIcon {
+
+}
+
+.facetNavNoResultMsg {
+    font-size: 22px;
+}
+
+.facetNavNoResultSuggestionMsg {
+    font-size: 18px;
 }
 
 /* === 4.3 Search Results  === */
 
 h1 span.searchText {
-
+    text-transform: lowercase;
 }
 
 h1 span.searchCount {
 
 }
 
+h1 span.searchTextSpellCheck {
+    text-transform: lowercase;
+}
+
 /* === 5.  Div Sequences  === */
 
 /* .eCommerceListItem is a co-class designated to items appearing on the CLP, PLP, PDP, 
-	PDP-Complementary, and PDP-Recently viewed intances.  Use this class to apply uniform styles
+	PDP-Complementary, PDP-Recently and PDP-Accessory instances.  Use this class to apply uniform styles
 	to each item and use the the adjacent co-class (ie .productListItem) for overiding styles 
 	if necessary. */
 	
@@ -889,11 +1366,11 @@ h1 span.searchCount {
 }
 
 .pdpMainImageSeq {
-	
+
 }
 
 .pdpSeeLargerImageSeq {
-	
+
 }
 
 .pdpAlternateImageSeq {
@@ -917,7 +1394,7 @@ h1 span.searchCount {
 }
 
 .pdpPriceOnLineSeq {
-	
+
 }
 
 .pdpPriceSavingPercentSeq {
@@ -941,7 +1418,7 @@ h1 span.searchCount {
 }
 
 .pdpReviewListSeq {
-	
+
 }
 
 .pdpSelectableFeatureSeq {
@@ -949,7 +1426,7 @@ h1 span.searchCount {
 }
 
 .pdpAddToCartSeq {
-	
+   float: left;
 }
 
 .pdpVolumePricingSeq {
@@ -961,7 +1438,7 @@ h1 span.searchCount {
 }
 
 .pdpDistinguishingFeatureSeq {
-
+ 
 }
 
 .pdpSalesPitchSeq {
@@ -973,7 +1450,7 @@ h1 span.searchCount {
 }
 
 .pdpDeliveryInfoSeq {
-	
+
 }
 
 .pdpDirectionsSeq {
@@ -981,7 +1458,7 @@ h1 span.searchCount {
 }
 
 .pdpIngredientsSeq {
-	
+
 }
 
 .pdpWarningsSeq {
@@ -1001,7 +1478,7 @@ h1 span.searchCount {
 }
 
 .pdpRecentlyViewedSeq {
-	
+    clear: both;
 }
 
 .pdpStockLegendSeq {
@@ -1009,19 +1486,20 @@ h1 span.searchCount {
 }
 
 .pdpSeeMainImageSeq {
-	
+
 }
 
 .pdpAdditionalSeq {
-	
+
 }
 
 .pdpContent01Seq {
-	
+    clear: both;
+    float: left;
 }
 
 .pdpContent02Seq {
-	
+
 }
 
 .pdpContent03Seq {
@@ -1037,24 +1515,41 @@ h1 span.searchCount {
 }
 
 .pdpManufacturerDescriptionSeq {
-	
+    clear: right;
+    float: right;	
 }
 
 .pdpManufacturerHeadingSeq {
-	
+    clear: right;
+    float: right;
 }
 
 .pdpManufacturerImageSeq {
-	
+    clear: right;
+    float: right;
 }
 
 .pdpManufacturerNameSeq {
-	
+    clear: right;
+    float: right;
 }
 
-.pdpTertiaryInformationSeq {
-	
+.pdpAccessorySeq {
+
 }
+
+.pdpAddToWishlistSeq {
+    float: left;
+}
+
+.pdpInternalNameSeq {
+    clear: left;
+}
+
+.pdpLabelNameSeq {
+
+}
+
 
 /* === 5.2 PDPTabs Section  === */
 
@@ -1222,9 +1717,22 @@ pdpTabsMainImageSeq {
 	
 }
 
-.pdpTabsTertiaryInformationSeq {
+.pdpTabsAccessorySeq {
 	
 }
+
+.pdpTabsAddToWishlistSeq {
+	
+}
+
+.pdpTabsInternalNameSeq {
+
+}
+
+.pdpTabsLabelNameSeq {
+
+}
+
 
 /* === 5.3 Quicklook Section  === */
 
@@ -1237,7 +1745,7 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookSeeLargerImageSeq {
-
+	
 }
 
 .quicklookAlternateImageSeq {
@@ -1289,11 +1797,11 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookSelectableFeatureSeq {
-	
+
 }
 
 .quicklookAddToCartSeq {
-	
+
 }
 
 .quicklookVolumePricingSeq {
@@ -1301,11 +1809,11 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookLongDescriptionSeq {
-	
+
 }
 
 .quicklookDistinguishingFeatureSeq {
-
+	
 }
 
 .quicklookSalesPitchSeq {
@@ -1345,7 +1853,7 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookRecentlyViewedSeq {
-
+	
 }
 
 .quicklookStockLegendSeq {
@@ -1361,7 +1869,7 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookContent01Seq {
-	
+
 }
 
 .quicklookContent02Seq {
@@ -1400,9 +1908,27 @@ pdpTabsMainImageSeq {
 
 }
 
-.quicklookTertiaryInformationSeq {
-	
+
+.quicklookAccessorySeq {
+
 }
+
+.quicklookComplementAccessorySeq {
+
+}
+
+.quicklookAddToWishlistSeq {
+
+}
+
+.quicklookInternalNameSeq {
+
+}
+
+.quicklookLabelNameSeq {
+
+}
+
 
 /* === 5.4 PLP Section  === */
 
@@ -1411,7 +1937,8 @@ pdpTabsMainImageSeq {
 }
 
 .plpDetailLinkSeq {
-	
+    clear: left;
+    float: left;
 }
 
 .plpPriceListSeq {
@@ -1419,7 +1946,7 @@ pdpTabsMainImageSeq {
 }
 
 .plpPriceOnlineSeq {
-	
+    float: right;
 }
 
 .plpPriceSavingPercentSeq {
@@ -1432,10 +1959,6 @@ pdpTabsMainImageSeq {
 
 .plpSwatchImageSeq {
 	
-}
-
-.plpTertiaryInfoSeq {
-
 }
 
 .plpReviewStarsSeq {
@@ -1459,7 +1982,8 @@ pdpTabsMainImageSeq {
 }
 
 .plpManufacturerHeadingSeq {
-	
+        clear: left;
+	float: left;
 }
 
 .plpManufacturerImageSeq {
@@ -1467,14 +1991,67 @@ pdpTabsMainImageSeq {
 }
 
 .plpManufacturerNameSeq {
-	
+    float: left;
 }
 
 .plpSeeItemDetailsSeq {
 	
 }
 
-/* === 5.5 PDPComplement Section  === */
+.plpSpecialInstructionsSeq {
+    clear: left;
+    float: left;	
+}
+
+.plpDeliveryInfoSeq {
+    clear: left;
+    float: left;
+}
+
+.plpSalesPitchSeq {
+    clear: left;
+    float: left;
+}
+
+.plpDistinguishingFeatureSeq {
+    clear: left;
+    float: left;
+}
+
+.plpSpecialInstructionsSeq {
+
+}
+
+.plpDirectionsSeq {
+
+}
+
+.plpIngredientsSeq {
+
+}
+
+.plpWarningsSeq {
+
+}
+
+.plpTermsAndConditionsSeq {
+
+}
+
+.plpLongDescriptionSeq {
+
+}
+
+.plpInternalNameSeq {
+    clear: left;
+    float: left;
+}
+
+.plpLabelNameSeq {
+
+}
+
+/* === 5.5 PDP Complement Section  === */
 
 .pdpComplementProductNameSeq {
 	
@@ -1501,10 +2078,6 @@ pdpTabsMainImageSeq {
 }
 
 .pdpComplementSwatchImageSeq {
-	
-}
-
-.pdpComplementTertiaryInfoSeq {
 	
 }
 
@@ -1544,7 +2117,16 @@ pdpTabsMainImageSeq {
 	
 }
 
-/* === 5.6 PDPRecent Section  === */
+.pdpComplementInternalNameSeq {
+
+}
+
+.pdpComplementLabelNameSeq {
+
+}
+
+
+/* === 5.6 PDP Recent Section  === */
 	
 .pdpRecentProductNameSeq {
 	
@@ -1571,10 +2153,6 @@ pdpTabsMainImageSeq {
 }
 
 .pdpRecentSwatchImageSeq {
-	
-}
-
-.pdpRecentTertiaryInfoSeq {
 	
 }
 
@@ -1613,6 +2191,15 @@ pdpTabsMainImageSeq {
 .pdpRecentSeeItemDetailsSeq {
 	
 }
+
+.pdpRecentInternalNameSeq {
+
+}
+
+.pdpRecentLabelNameSeq {
+
+}
+
 	
 /* === 5.7 CLP Section  === */
 
@@ -1642,12 +2229,12 @@ pdpTabsMainImageSeq {
 	
 }
 
-.showCartPreviousButtonSeq {
-
+.showCartPreviousButtonSeq { 
+    float: left;
 }
 
 .showCartContinueButtonSeq {
-
+    float: right;
 }
 
 /* === 5.9 ShippingAddress  === */
@@ -1665,11 +2252,11 @@ pdpTabsMainImageSeq {
 }
 
 .shippingAddressPreviousButtonSeq {
-
+    float: left;
 }
 
 .shippingAddressContinueButtonSeq {
-
+    float: right;
 }
 
 /* === 5.10 Shipping Options Section  === */
@@ -1687,11 +2274,11 @@ pdpTabsMainImageSeq {
 }
 
 .shippingOptionsPreviousButtonSeq {
-
+    float: left;
 }
 
 .shippingOptionsContinueButtonSeq {
-
+    float: right;
 }
 
 /* === 5.11 OrderSummary Section  === */
@@ -1701,39 +2288,47 @@ pdpTabsMainImageSeq {
 }
 
 .orderSummaryOrderItemsSeq {
-	
+    clear: left;
+    float: left;
+    width: 100%;
 }
 
 .orderSummaryPromoCodeSeq {
-	
+    float: left;
+    width: 100%	
 }
 
 .orderSummaryBillingAddressSeq {
-
+    float: left;
+    width: 100%;
 }
 
 .orderSummaryShippingAddressSeq {
-
+    float: left;
+    width: 100%;	
 }
 
 .orderSummaryStorePickupSeq {
-	
+    float: left;
+    width: 100%;
 }
 
 .orderSummaryPaymentOptionsSeq {
-
+    float: left;
+    width: 100%;
 }
 
 .orderSummaryCreateAccountSeq {
-	
+    float: left;
+    width: 100%;
 }
 
 .orderSummaryPreviousButtonSeq {
-
+    float: left;
 }
 
 .orderSummaryContinueButtonSeq {
-
+    float: right;
 }
 
 /* === 5.12 OrderConfirm Section  === */
@@ -1747,19 +2342,20 @@ pdpTabsMainImageSeq {
 }
 
 .orderConfirmBillingAddressSeq {
-
+	float: left;
 }
 
 .orderConfirmShippingAddressSeq {
-
+     float: left;
 }
 
 .orderConfirmStorePickupSeq {
-	
+    float: left;
 }
 
 .orderConfirmPaymentOptionsSeq {
-	
+    clear: left;
+    float: left;
 }
 
 .orderConfirmPreviousButtonSeq {
@@ -1767,7 +2363,8 @@ pdpTabsMainImageSeq {
 }
 
 .orderConfirmContinueButtonSeq {
-
+	clear: right;
+    float: right;
 }
 
 /* === 5.13 OnePageCheckout Section  === */
@@ -1777,7 +2374,7 @@ pdpTabsMainImageSeq {
 }
 
 .onePageCheckoutOrderItemsSeq {
-
+	clear: left; /* In order to collapse 'same as billing' function */
 }
 
 .onePageCheckoutPromoCodeSeq {
@@ -1813,7 +2410,7 @@ pdpTabsMainImageSeq {
 }
 
 .onePageCheckoutContinueButtonSeq {
-
+    float: right;
 }
 
 /* === 5.14 PersonalInfo Section  === */
@@ -1842,9 +2439,11 @@ pdpTabsMainImageSeq {
 	
 }
 
+
 .personalInfoDateOfBirthDDMMYYYYSeq {
 	
 }
+
 
 .personalInfoDateOfBirthDDMMSeq {
 	
@@ -1862,6 +2461,471 @@ pdpTabsMainImageSeq {
 	
 }
 
+/* === 5.15 Write a Review Section  === */
+
+.writeReviewProductSeq {
+    float: left;	
+}
+
+.writeReviewRatingSeq {
+    clear: left;
+    float: left;
+}
+
+.writeReviewDetailSeq {
+    clear: left;
+    float: left;
+}
+
+.writeReviewAboutYouSeq {
+    clear: left;
+    float: left;
+}
+
+.writeReviewLinkSeq {
+    clear: left;
+    float: left;
+}
+
+.writeReviewButtonSeq {
+    clear: left;
+}
+
+.writeReviewProductNameSeq {
+	
+}
+
+.writeReviewThumbImageSeq {
+    float: left;
+    clear: left;
+
+}
+
+.writeReviewReviewStarsSeq {
+	
+}
+
+.writeReviewDescriptionSeq {
+	
+}
+
+.writeReviewDistinguishingFeatureSeq {
+	
+}
+
+.writeReviewSalesPitchSeq {
+	
+}
+
+.writeReviewSpecialInstructionsSeq {
+	
+}
+
+.writeReviewDeliveryInfoSeq {
+	
+}
+
+.writeReviewDirectionsSeq {
+	
+}
+
+.writeReviewIngredientsSeq {
+	
+}
+
+.writeReviewWarningsSeq {
+	
+}
+
+.writeReviewTermsAndConditionsSeq {
+	
+}
+
+.writeReviewRateOverallStarsSeq {
+	
+}
+
+.writeReviewRateQualityStarsSeq {
+	
+}
+
+.writeReviewRateEffectivenessStarsSeq {
+	
+}
+
+.writeReviewRateSatisfactionStarsSeq {
+	
+}
+
+.writeReviewReviewerNicknameSeq {
+	
+}
+
+.writeReviewReviewerTitleSeq {
+	
+}
+
+.writeReviewReviewerTextSeq {
+
+}
+
+.writeReviewReviewerTipSeq {
+    float: left;
+}
+
+.writeReviewReviewerLocationSeq {
+	
+}
+
+.writeReviewReviewerAgeSeq {
+	
+}
+
+.writeReviewReviewerGenderSeq {
+	
+}
+
+.writeReviewReviewTermsCondLinkSeq {
+	
+}
+
+.writeReviewReviewGuidelinesLinkSeq {
+	
+}
+
+.writeReviewSubmitButtonSeq {
+    float: right;	
+}
+
+.writeReviewCancelButtonSeq {
+    float: left;	
+}
+
+.writeReviewReviewerPrivateNoteSeq {
+    float: right;
+}
+
+.writeReviewReviewerPrivateNoteTipSeq {
+    float: right;
+}
+
+.writeReviewInternalNameSeq {
+
+}
+
+.writeReviewLabelNameSeq {
+
+}
+
+/* === 5.16 PDP Accessories Section  === */
+
+.pdpAccessoryProductNameSeq {
+	
+}
+
+.pdpAccessoryDetailLinkSeq {
+	
+}
+
+.pdpAccessoryPriceListSeq {
+	
+}
+
+.pdpAccessoryPriceOnlineSeq {
+	
+}
+
+.pdpAccessoryPriceSavingPercentSeq {
+	
+}
+
+.pdpAccessoryPriceSavingMoneySeq {
+	
+}
+
+.pdpAccessorySwatchImageSeq {
+	
+}
+
+.pdpAccessoryReviewStarsSeq {
+	
+}
+
+.pdpAccessoryReviewReadSeq {
+	
+}
+
+.pdpAccessoryReviewWriteSeq {
+	
+}
+
+.pdpAccessoryThumbImageSeq {
+	
+}
+
+.pdpAccessoryManufacturerDescriptionSeq {
+	
+}
+
+.pdpAccessoryManufacturerHeadingSeq {
+	
+}
+
+.pdpAccessoryManufacturerImageSeq {
+	
+}
+
+.pdpAccessoryManufacturerNameSeq {
+	
+}
+
+.pdpAccessorySeeItemDetailsSeq {
+	
+}
+
+.pdpAccessoryInternalNameSeq {
+
+}
+
+.pdpAccessoryLabelNameSeq {
+
+}
+
+
+/* === 5.17 PDP ComplementAccessories Section  === */
+/* This is a single container that has both the Complement and Accessories DIVs in them. 
+    Use the CSS for the specific DIVs accordingly */
+
+.pdpComplementAccessorySeq {
+
+}
+
+/* === 5.18 LightCart Section  === */
+
+/* The following DIVs are for the LightCart feature when hovering of the shopping cart */
+
+
+.lightBoxOrderItemsSeq {
+    clear: right;
+    float: right;
+}
+.lightBoxTotalNumberItemsSeq {
+    clear: right;
+    float: right;
+}
+
+.lightBoxTotalSubAmountSeq {
+    clear: right;
+    float: right;
+}
+.lightBoxShippingMethodSeq {
+
+}
+
+.lightBoxShippingAmountSeq {
+    clear: right;
+    float: right;
+}
+
+.lightBoxTaxAmountSeq {
+    clear: right;
+    float: right;
+}
+
+.lightBoxTotalAmountSeq {
+    clear: right;
+    float: right;
+}
+
+.lightBoxPromoDiscountSeq {
+    clear: right;
+    float: right;
+}
+
+.lightBoxTotalAdjustAmountSeq {
+    clear: right;
+    float: right;
+}
+
+.lightBoxContinueButtonSeq {
+    clear: right;
+    float: right;
+}
+
+/* === 5.18.1 LightCart Order Items Section  === */
+
+/* The following DIVs are for the LightCart Order Items Section */
+
+.lightBoxItemImageSeq {
+    clear: both;
+    float: left;
+}
+
+.lightBoxItemNameSeg {
+    float: right;
+}
+
+.lightBoxItemQuantitySeq {
+    float: left;
+}
+
+.lightBoxItemPriceSeq {
+    float: left;
+}
+
+.lightBoxItemTotalSeq {
+    float: right;
+}
+
+/* === 5.19 Wishlist Section  === */
+
+.showWishlistOrderItemsSeq {
+
+}
+
+.showWishlistContinueButtonSeq {
+    float: left;
+}
+
+/* === 5.20 Manufacturer  === */
+
+.manufacturerHeadingSeq {
+
+}
+
+.manufacturerImageSeq {
+    float: left;
+}
+
+.manufacturerNameSeq {
+
+}
+
+.manufacturerDescriptionSeq {
+    float: right;
+}
+
+
+/* === 5.20.1 Manufacturer List Item Section  === */
+
+.manufacturerItemProductNameSeq {
+	
+}
+
+.manufacturerItemDetailLinkSeq {
+    clear: left;
+    float: left;	
+}
+
+.manufacturerItemPriceListSeq {
+	
+}
+
+.manufacturerItemPriceOnlineSeq {
+    float: right;	
+}
+
+.manufacturerItemPriceSavingPercentSeq {
+	
+}
+
+.manufacturerItemPriceSavingMoneySeq {
+	
+}
+
+.manufacturerItemSwatchImageSeq {
+	
+}
+
+.manufacturerItemReviewStarsSeq {
+	
+}
+
+.manufacturerItemReviewReadSeq {
+	
+}
+
+.manufacturerItemReviewWriteSeq {
+	
+}
+
+.manufacturerItemThumbImageSeq {
+	
+}
+
+.manufacturerItemDescriptionSeq {
+	
+}
+
+.manufacturerItemHeadingSeq {
+    clear: left;
+    float: left;	
+}
+
+.manufacturerItemImageSeq {
+	
+}
+
+.manufacturerItemNameSeq {
+    float: left;	
+}
+
+.manufacturerItemSeeItemDetailsSeq {
+	
+}
+
+.manufacturerItemSpecialInstructionsSeq {
+	
+}
+
+.manufacturerItemDeliveryInfoSeq {
+    clear: left;
+    float: left;
+}
+
+.manufacturerItemSalesPitchSeq {
+    clear: left;
+    float: left;
+}
+
+.manufacturerItemDistinguishingFeatureSeq {
+ 
+}
+
+.manufacturerItemSpecialInstructionsSeq {
+
+}
+
+.manufacturerItemDirectionsSeq {
+
+}
+
+.manufacturerItemIngredientsSeq {
+
+}
+
+.manufacturerItemWarningsSeq {
+
+}
+
+.manufacturerItemTermsAndConditionsSeq {
+
+}
+
+.manufacturerItemLongDescriptionSeq {
+
+}
+
+.manufacturerItemInternalNameSeq {
+    clear: left;
+    float: left;
+}
+
+.manufacturerItemLabelNameSeq {
+
+}
+
+	
 /* === 6. eCommerce Pages  === */
 
 /*	This section contains all the necessary selectors to style the CLP, PLP, PDP, PDPComplement, and PDPRecent pages and sections.
@@ -1870,24 +2934,40 @@ pdpTabsMainImageSeq {
 	
 /* === 6.1 eCommerce Default Styles  === */
 
+/* Default Label Styles for PLP, Manufacturer, Recent, and Complimentary List Items
+    !important is used to override PDP page default labels  */
+
+.eCommerceListItem label { 
+    color: #666666!important;
+    display: inline-block!important;
+    font-size: 13px!important;
+    font-weight: 700!important;
+    text-align: right!important;
+    width: 125px!important;
+}
+
 .plpProductName {
-	
+
 }
 
 .plpProductName span {
-	
+
 }
 
 .plpDetailLink {
-	
+    margin: 0 0 5px 0;	
 }
 
 .plpDetailLink a.eCommerceProductLink {
-
+    border-bottom: 1px dotted;
+    color: #0753A1;
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .plpDetailLink a.eCommerceProductLink:hover {
-
+    border-bottom: 1px solid;
+    text-decoration: none;
 }
 
 .plpDetailLink a.eCommerceProductLink span {
@@ -1895,35 +2975,63 @@ pdpTabsMainImageSeq {
 }
 
 .plpPriceList {
-	
+
+}
+
+.plpPriceList label {
 }
 
 .plpPriceList .price {
-
+	display: block;
+    font-size: 15px;
+    font-weight: 700;	
 }
 
 .plpPriceOnline {
+
+}
 	
+.plpPriceOnline label {
+
 }
 
 .plpPriceOnline .price {
-
+    color: #666666;
+    font-weight: 700;
+    display: inline;
+    text-align: left !important;
 }
 
 .plpPriceSavingPercent {
+
+}
 	
+.plpPriceSavingPercent label {
+ 
 }
 
 .plpPriceSavingPercent .price {
-
+	clear: left;
+    margin: 5px 0 5px 0;
+    color: #AAAAAA;
+    font-weight: 700;
+    font-size: 1.7em;	
 }
 
 .plpPriceSavingMoney {
 	
 }
 
-.plpPriceSavingMoney .price {
+.plpPriceSavingMoney label {
+	
+}
 
+.plpPriceSavingMoney .price {
+	clear: left;
+    margin: 5px 0 5px 0;
+    color: #AAAAAA;
+    font-weight: 700;
+    font-size: 1.7em;
 }
 
 .plpSwatchImage {
@@ -1934,16 +3042,9 @@ pdpTabsMainImageSeq {
 	
 }
 
-.plpTertiaryInfo {
-	
-}
-
-.plpTertiaryInfo .tertiaryInformation {
-	
-}
-
 .plpReviewStars {
-	
+    clear: both;
+    width: 85px;	
 }
 
 .plpReviewStars .rating_bar {
@@ -1986,13 +3087,14 @@ pdpTabsMainImageSeq {
 	
 }
 
-
 .plpThumbImage .eCommerceThumbNailHolder {
-
+	position: relative;
+	z-index: 1;
 }
 
 .plpThumbImage .eCommerceThumbNailHolder img {
-	
+    display: block;
+    margin: 0 auto;	
 }
 
 .plpManufacturerDescription {
@@ -2007,8 +3109,16 @@ pdpTabsMainImageSeq {
 	
 }
 
-.plpManufacturerHeading h2 {
-	
+.plpManufacturerHeading h2 { /* In lieu of a label, manufacturer h2 is styled as other labels + margin */
+    color: #666666;
+    display: inline-block;
+    float: left;
+    font-size: 13px;
+    font-weight: 700;
+    margin: 0 2px 0 0;
+    padding: 0 2px 0 0;
+    text-align: right;
+    width: 125px;
 }
 
 .plpManufacturerImage {
@@ -2028,28 +3138,133 @@ pdpTabsMainImageSeq {
 }
 
 .plpSeeItemDetails {
-	
+
 }
 
 .plpSeeItemDetails a.seeItemDetail {
-
+	
 }
 
 .plpSeeItemDetails a.seeItemDetail:hover {
 	
 }
 
+.plpDeliveryInfo {
+	
+}
+
+
+.plpDeliveryInfo span {
+	
+}
+
+.plpSalesPitch {
+	
+}
+
+.plpSalesPitch span {
+
+}
+
+.plpDistinguishingFeature {
+	
+}
+
+.plpDistinguishingFeature ul {
+	
+}
+
+.plpDistinguishingFeature ul li {
+	
+}
+
+.plpSpecialInstructions {
+	
+}
+
+.plpSpecialInstructions span {
+
+}
+
+.plpDirections {
+	
+}
+
+.plpDirections span {
+
+}
+
+.plpIngredients {
+	
+}
+
+.plpIngredients span {
+	
+}
+
+.plpWarnings {
+
+}
+
+.plpWarnings span {
+
+}
+
+.plpTermsAndConditions {
+
+}
+
+.plpTermsAndConditions span {
+
+}
+
+.plpLongDescription {
+
+}
+
+.plpLongDescription span {
+
+}
+
+.plpInternalName {
+	
+}
+
+.plpInternalName label {
+	
+}
+
+.plpInternalName .internalName{
+    color: #000A4D;
+}
+
+.plpLabelName {
+
+}
+
+.plpLabelName label {
+
+}
+
+.plpLabelName .labelName {
+
+}
+
 /* === 6.2 CLP: Category List Pages  === */
 
 	
 #eCommerceCategoryListContainer {
-	
+    float: right;
+    margin: 0 15px 0 0;
+    overflow: auto;
+    width: 759px;
 }
 #eCommerceCategoryListContainer h1 {
 
 }
 
 #eCommerceCategoryListContainer .resultCategoryListContainer {
+    width: 100%;
 }
 
 
@@ -2062,11 +3277,17 @@ pdpTabsMainImageSeq {
 }
 
 #eCommerceCategoryList {
-
+    float: left;
+    clear: left;
+    position: relative;
 }
 
 .categoryListItem { /* Container for items on the CLP */
-
+    border: 1px solid #c1c1c1;
+    float: left;
+    margin: 0 10px 20px 0;
+    /*width: 190px; */
+    width: 367px;
 }
 
 .clpLongDescription { 
@@ -2078,7 +3299,9 @@ pdpTabsMainImageSeq {
 }
 
 .clpLongDescription .categorySupportingText span { 
-
+    display: block;
+    font-size: 11px;
+    text-align: center;
 }
 
 .clpProductListLink { 
@@ -2086,15 +3309,22 @@ pdpTabsMainImageSeq {
 }
 
 .clpProductListLink a.eCommerceProductLink { 
-
+    color: #006699;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: center;
 }
 
 .clpProductListLink a.eCommerceProductLink:hover { 
 
-
 }
 
 .clpThumbImage { 
+
+}
+
+.clpThumbImage:hover { 
 
 }
 
@@ -2106,19 +3336,37 @@ pdpTabsMainImageSeq {
 	
 #eCommerceRefineByCategoryContainer,
 #eCommerceCategoryFacetContainer {
-
+    padding:0;
 }
 
 h3.CategoryFacetTitle {
-
+    display: none;
+    font-size: 13.5px;
+    font-weight: bold;
+    margin: 0 0 0 15px;
 }
 
 h3.facetGroup {
+    color: #0753A1;
+    font-size: 13.5px;
+    font-weight: bold;
+    line-height: 1.3em;
+    margin: 10px 0 0;
+    padding: 0 0 0 15px;
+}
 
+h3.facetGroup.seeMoreFacetGroupLink {
+    cursor: pointer;
+    background: url("/osafe_theme/images/user_content/images/facetCollapseArrow.png") no-repeat scroll left 50% transparent
+}
+
+h3.facetGroup.seeLessFacetGroupLink {
+    cursor: pointer;
+    background: url("/osafe_theme/images/user_content/images/facetExpandArrow.png") no-repeat scroll left 50% transparent
 }
 
 ul.facetGroup {
-
+    margin: 5px 0 0 15px;
 }
 
 ul.facetGroup li {
@@ -2126,60 +3374,86 @@ ul.facetGroup li {
 }
 
 li.facetValue {
+	line-height: 0.9em;
+	font-size: 1.35em;
+	padding: 2px 0 2px 0px;
 
+	margin: .2em 0;
+	text-transform: capitalize;
 }
 
 a.facetValueLink {
-
+	color: #666;
+	text-transform:capitalize;
 }
 
 a.facetValueLink:hover {
-
+    color: #0753a1;
+    text-decoration: underline;
 }
 
 a.seeMoreLink,
 a.seeLessLink {
-	
+    border-bottom: 1px dotted;
+    color: #0753a1;
+    padding: 0 0 1px 0;
 }
 
 a.seeMoreLink:hover,
 a.seeLessLink:hover {
-
+    border-bottom: 1px solid!important;
 }
 
 img.customerRatingIcon {
-
+	width: 71px;
+	height: 15px;
+	position: relative;
+	top: 2px;
 }
 
 #eCommerceFacetCategories ul {
-
+    background-color:#eaeaea;
 }
 
 /* === 6.3 PLP Product List Pages  === */
 
 
 #eCommerceProductListContainer {
-
+    float: right;
+    padding: 0 15px 0 0;
+    width: 759px;
 }
 
 #eCommerceProductListContainer h1 {
-
+	
 }
 
 #eCommerceProductList {
-
+    clear: left;
+    display: inline-block;
+    position: relative;
+    width: 100%;
 }
 
-#eCommerceProductList .spacer { /*Adds space bewteen the end of the list of items and before the after the resultsNavigation */
+#eCommerceProductList .spacer { /*Adds space between the end of the list of items and before the after the resultsNavigation */
 
 }
 
 .productListItem {  /* Container for items on the PLP */
+    background: none repeat scroll 0 0 #FFF5B2;
+    border: 1px solid #FCDC00;
+    float: left;
+    margin: 0 0 15px 0;
+    padding: 10px;
+    width: 100%;
 
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+     box-sizing: border-box;
 }
 
 .productListItem:hover {
-
+    background: none repeat scroll 0 0 #fcea77;
 }
 
      /* ----- .eCommerceListItem Overides ('!important' as necessary) ----- */
@@ -2189,7 +3463,7 @@ img.customerRatingIcon {
 }
 
 .productListItem .plpProductName span {
-	
+
 }
 
 .productListItem .plpDetailLink {
@@ -2197,7 +3471,7 @@ img.customerRatingIcon {
 }
 
 .productListItem .plpDetailLink a.eCommerceProductLink {
-	
+
 }
 
 .productListItem .plpDetailLink a.eCommerceProductLink:hover {
@@ -2209,6 +3483,10 @@ img.customerRatingIcon {
 }
 
 .productListItem .plpPriceList {
+
+}
+
+.productListItem .plpPriceList label {
 	
 }
 
@@ -2217,15 +3495,24 @@ img.customerRatingIcon {
 }
 
 .productListItem .plpPriceOnline {
+    margin: 5px 0 0;	
+}
 	
+.productListItem .plpPriceOnline label {
 }
 
 .productListItem .plpPriceOnline .price {
-	
+    color: #666666;
+    display: inline;
+    text-align: left !important;  
 }
 
 .productListItem .plpPriceSavingPercent {
-	
+
+}
+
+.productListItem .plpPriceSavingPercent label {
+
 }
 
 .productListItem .plpPriceSavingPercent .price{
@@ -2233,6 +3520,10 @@ img.customerRatingIcon {
 }
 
 .productListItem .plpPriceSavingMoney {
+	
+}
+
+.productListItem .plpPriceSavingMoney label {
 	
 }
 
@@ -2250,14 +3541,6 @@ img.customerRatingIcon {
 
 .productListItem .plpSwatchImage .swatch img {
 
-}
-
-.productListItem .plpTertiaryInfo {
-
-}
-
-.productListItem .plpTertiaryInfo .tertiaryInformation {
-	
 }
 
 .productListItem .plpReviewStars {
@@ -2348,86 +3631,228 @@ img.customerRatingIcon {
 	
 }
 
+.productListItem .plpDeliveryInfo {
+	
+}
+
+.productListItem .plpDeliveryInfo span {
+    color: #000A4D;
+    font-size: 13px;	
+}
+
+.productListItem .plpSalesPitch {
+	
+}
+
+.productListItem .plpSalesPitch span {
+    color: #000A4D;
+    font-size: 13px;	
+}
+
+.productListItem .plpDistinguishingFeature {
+	
+}
+
+.productListItem .plpDistinguishingFeature span {
+	
+}
+
+.productListItem .plpSpecialInstructions {
+	
+}
+
+.productListItem .plpSpecialInstructions span {
+    color: #000A4D;
+    display: inline-block;
+    float: right;
+    font-size: 13px;
+    width: 610px;	
+}
+
+.productListItem .plpDirections {
+	
+}
+
+.productListItem .plpDirections span {
+
+}
+
+.productListItem .plpIngredients {
+	
+}
+
+.productListItem .plpIngredients span {
+
+}
+
+.productListItem .plpWarnings {
+
+}
+
+.productListItem .plpWarnings span {
+
+}
+
+.productListItem .plpTermsAndConditions {
+
+}
+
+.productListItem .plpTermsAndConditions span {
+
+}
+
+.productListItem .plpLongDescription {
+
+}
+
+.productListItem .plpLongDescription span {
+
+}
+
+.productListItem .plpInternalName {
+	font-size: 11px;
+}
+
+.productListItem .plpInternalName label {
+
+}
+
+.productListItem .plpInternalName .internalName{
+	
+}
+
+.productListItem .plpLabelName {
+
+}
+
+.productListItem .plpLabelName label {
+
+}
+
+.productListItem .plpLabelName .labelName {
+
+}
+
 /* === 6.3.1 PLP Espots   === */
 
 /* Page Top E-spots */
 
 #eCommerceProductListContainer .plpEspot {
-
+   display: block;
+   width:780px;
+   padding:5px 10px 15px 0px;  
 }
 
 #eCommerceProductListContainer .plpEspot p {
-
+   display: block;
+   font-size:12px;
+   color:#666666;
 }
 
 /* Facet E-spots */
 
 #eCommerceCategoryFacetContainer .plpEspot img {
-
+   display: block;
+   margin: 0 0 0 0;
 }
+
 
 
 .PLPCategoryContent {
-
+    background: #ddcbb5;
+    border: 1px solid #8d7561;
+    margin: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 0 5px 5px 5px;
 }
 
 .PLPCategoryContent img {
-
+   	float: left;
+   	margin: -6px 0 0 10px;
 }
 
 .PLPCategoryContent span {
-
+    clear: left;
+    display: block;
+    float: left;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 5px 0 0;
+    text-align: center;
+    width: 230px;
 }
 
 .PLPCategoryContent .PLPcontentContainer {
-
+   margin: 0 0 0 250px;
 }
 
 .PLPCategoryContent .PLPcontentContainer h3 {
-
+    color: #552E41;
+    font-size: 2.1em;
+    font-weight: 700;
+    line-height: 14px;
+    text-align: center;
+    text-shadow: 0 1px 1px #FFFFFF;
+    text-transform: uppercase;
 }
 
 .PLPCategoryContent .PLPcontentContainer p {
-
+  	text-align: center;
+  	font-size: 1.4em;
 }
 
 
 /* === 6.3.2 PLP Results Navigation  === */
 
 .resultListContainer {
-
+    float: left;
+    width: 100%;
 }
 
 .resultsNavigation {
-
+	font-size: 11px;
+	position: relative;
 }
 
 #resultsNavigationTop {
-
+    float: left;
+    margin: 10px 0;
+    width: 100%;
 }
 
 #resultsNavigationBottom {
-
+    clear: both;
+    float: left;
+    margin: 0 0 10px 0;
+    width: 100%;
 }
 
 .resultsNavigation a {
-
+    color: #000000;
 }
 
 .resultsNavigation a:hover {
-
+    text-decoration: underline;
 }
 
 .sortingOptions {
-
+    float: left;
 }
 
+.sortingOptions label {
+    color: #0753A1;
+    float: left;
+    font-weight: 700;
+    margin: 0 5px 0 0;
+}
 .sortingOptions select {
-
+   font-size: 11px;
 }
 
 .pagingLinks {
-
+    float:right;
 }
 
 .pagingBtn {
@@ -2467,38 +3892,45 @@ img.customerRatingIcon {
 }
 
 .pagingBtn a {
-
+     border-bottom: 1px dotted; 
 }
 
 .pagingBtn a:hover {
-
+     border-bottom: 1px solid; 
+     text-decoration: none;
 }
 
 .pagingLinks li {
-
+    display: inline;
+    margin: 0 0 0 10px;
+    padding: 2px;
 }
 
 label.sortBy {
-
+    color: #000000;
 }
 
 .pagingLinks li.pages{
-
+    font-weight: bold;
 }
 
 .pagingLinks li.disabled {
-
+    color: #CCCCCC;
 }
 
 
 /* === 6.3.3 PLP Quicklook  === */
 
 .productListItem .plpQuicklook { /* Quick Look Icon on PLP Pate */
-
+    background: none repeat scroll 0 0 transparent;
+    position: absolute;
+    top: 210px;
+    right: 0;
 }
 	
 #plpQuicklook_displayDialog {
-
+     width: 600px!important;  /* Needed to override JS Styles / Parent container width = auto */
+     overflow: auto;
 }
 
 #plpQuicklook_displayDialog:after {
@@ -2510,24 +3942,263 @@ label.sortBy {
 }
 
 #plpQuicklook_Container {
-
+    margin: 5px 0; 
 }
 
 #loadingImg {
+    background-image: url("/osafe_theme/images/user_content/images/loading.gif");
+    display: block;
+    height: 32px;
+    margin: auto;
+    width: 32px;
+}
+
+
+     /* ----- Quicklook Overides ('!important' as necessary) ----- */
+
+#plpQuicklook_Container .pdpProductName,
+#plpQuicklook_Container .pdpPriceOnLine,
+#plpQuicklook_Container .pdpLongDescription,
+#plpQuicklook_Container .pdpDistinguishingFeature,
+#plpQuicklook_Container .pdpSelectableFeature,
+#plpQuicklook_Container .pdpAddToCart,
+#plpQuicklook_Container .pdpTabs.ui-widget-content,
+#plpQuicklook_Container .pdpTabs.ui-widget-content {
+     width: 250px!important;
+}
+
+#plpQuicklook_Container #pdpContent01 {
 
 }
 
 /* === 6.4 PDP Product Detail Pages  === */
-	
+
 #productdetails.rightPanel {
-
-}
-
-#eCommercePageBody h1 {
-
+	width: 700px;
+    background-color: #fff;
+    margin: 0 0 0 10px;
 }
 
 #eCommerceProductDetailContainer {
+    float: left;
+    display: inline;
+    width: 100%;
+    position: relative;
+    margin: 5px 0 0 0;
+}
+
+#eCommerceProductDetailContainer label { /* Default Label Styles for PDP page */
+    color: #0753A1;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+}
+
+#eCommerceProductDetailContainer .displayBox  h3 { /* Default PDP h3; often styled the same as labels */
+    color: #0753A1;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left;
+}
+
+	/* ----- .pdpAccessory ----- */
+
+.pdpAccessory {
+    border-top: 1px solid #DEDEDE;
+    margin: 10px 0 0;
+    padding: 20px 0 0;
+}
+
+.pdpAccessory h2 {
+    color: #2B2B2B;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    text-align: center;
+}
+
+.pdpAccessory .eCommerceAccessoryProduct {
+    float: left;
+    margin: 0 10px 10px 10px;
+    width: 100px;
+}
+
+     /* ----- .pdpAccessory Overides ('!important' as necessary) ----- */
+ 
+.eCommerceAccessoryProduct .plpProductName {
+	
+}
+
+.eCommerceAccessoryProduct .plpProductName span {
+    color: #666666;
+}
+
+.eCommerceAccessoryProduct .plpDetailLink {
+	
+}
+
+.eCommerceAccessoryProduct .plpDetailLink a.eCommerceProductLink {
+	
+}
+
+.eCommerceAccessoryProduct .plpDetailLink a.eCommerceProductLink:hover {
+	
+}
+
+.eCommerceAccessoryProduct .plpDetailLink a.eCommerceProductLink span {
+	
+}
+
+.eCommerceAccessoryProduct .plpPriceList {
+	
+}
+
+.eCommerceAccessoryProduct .plpPriceList .price {
+	
+}
+
+.eCommerceAccessoryProduct .plpPriceOnline {
+
+}
+
+.eCommerceAccessoryProduct .plpPriceOnline .price {
+    font-size: 11px;
+    color: #000000;
+    margin: 0!important;	
+}
+
+.eCommerceAccessoryProduct .plpPriceSavingPercent {
+	
+}
+
+.eCommerceAccessoryProduct .plpPriceSavingPercent .price{
+	
+}
+
+.eCommerceAccessoryProduct .plpPriceSavingMoney {
+	
+}
+
+.eCommerceAccessoryProduct .plpPriceSavingMoney .price {
+	
+}
+
+.eCommerceAccessoryProduct .plpSwatchImage {
+	
+}
+
+.eCommerceAccessoryProduct .plpSwatchImage .swatch {
+	
+}
+
+.eCommerceAccessoryProduct .plpReviewStars {
+	
+}
+
+.eCommerceAccessoryProduct .plpReviewStars .rating_bar {
+	
+}
+
+.eCommerceAccessoryProduct .plpReviewRead {
+	
+}
+
+.eCommerceAccessoryProduct .plpReviewRead .customerRatingLinks {
+	
+}
+
+.eCommerceAccessoryProduct .plpReviewRead .customerRatingLinks a.review {
+	
+}
+
+.eCommerceAccessoryProduct .pdpReviewWrite {
+	
+}
+
+.eCommerceAccessoryProduct .pdpReviewWrite .customerRatingLinks {
+	
+}
+
+.eCommerceAccessoryProduct .pdpReviewWrite .customerRatingLinks a#submitPageReview {
+	
+}
+
+.eCommerceAccessoryProduct .plpThumbImage {
+	
+}
+
+.eCommerceAccessoryProduct .plpThumbImage .eCommerceThumbNailHolder {
+     border: 1px solid #dedede;
+	
+}
+
+.eCommerceAccessoryProduct .plpThumbImage .eCommerceThumbNailHolder img {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerDescription {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerDescription .profileDescription {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerHeading {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerHeading h2 {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerImage {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerImage img {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerName {
+	
+}
+
+.eCommerceAccessoryProduct .plpManufacturerName .profileName {
+	
+}
+
+.eCommerceAccessoryProduct .plpSeeItemDetails {
+	
+}
+
+.eCommerceAccessoryProduct .plpSeeItemDetails a.seeItemDetail {
+	
+}
+
+.eCommerceAccessoryProduct .plpInternalName {
+
+}
+
+.eCommerceAccessoryProduct .plpInternalName label {
+
+}
+
+.eCommerceAccessoryProduct .internalName {
+
+}
+
+.eCommerceAccessoryProduct .plpLabelName {
+
+}
+
+.eCommerceAccessoryProduct .plpLabelName label {
+
+}
+
+.eCommerceAccessoryProduct .plpLabelName .labelName {
 
 }
 
@@ -2540,23 +4211,24 @@ label.sortBy {
 	/* ----- .pdpAddtoCart ----- */
 
 .pdpAddToCart {
-
+    display: block;
 }
 
-.pdpAddToCart .addToCart {
-
+.pdpAddToCart label {
+    color: #0753A1;
+    display: none;
+    font-size: 15px;
+    font-weight: 700;
 }
 
-.pdpAddToCart .addToCart label {
-
-}
-
-.pdpAddToCart .addToCart input {
-
+.pdpAddToCart input {
+    border: 1px solid #666666;
+    display: none;
+    text-align: center;
+    width: 20px;
 }
 
 .pdpAddToCart .addToCart span {
-
 }
 
 	/* ----- .pdpAlternateImage ----- */
@@ -2566,19 +4238,28 @@ label.sortBy {
 }
 
 .pdpAlternateImage #eCommerceProductAddImage ul  {
+    float: left;
 
 }
 
 .pdpAlternateImage #eCommerceProductAddImage ul li  {
-
+    float: left;
 }
 
 .pdpAlternateImage #eCommerceProductAddImage a {
-
+    display: block;
+    opacity: 0.5;
+    filter: alpha(opacity=50);
+    transition: opacity 1s;
+    -moz-transition: opacity 1s; /* Firefox 4 */
+    -webkit-transition: opacity 1s; /* Safari and Chrome */
+    -o-transition: opacity 1s; /* Opera */
 }
 
 .pdpAlternateImage #eCommerceProductAddImage a:hover {
-
+    margin: 0;
+    opacity: 1.0;
+    filter: alpha(opacity=100);
 }
 
 .pdpAlternateImage .jcarousel-container {
@@ -2590,8 +4271,8 @@ label.sortBy {
 }
 
 .pdpAlternateImage .jcarousel-container-horizontal {
-    width: 245px;
-    padding: 20px 0px;
+    width: 201px;
+    padding: 0 22px;
 }
 
 .pdpAlternateImage .jcarousel-container-vertical {
@@ -2605,8 +4286,8 @@ label.sortBy {
 }
 
 .pdpAlternateImage .jcarousel-clip-horizontal {
-    width:  245px;
-    height: 75px;
+    width:  201px;
+    height: 80px;
 }
 
 .pdpAlternateImage .jcarousel-clip-vertical {
@@ -2617,8 +4298,8 @@ label.sortBy {
 
 .pdpAlternateImage .jcarousel-item,
 .pdpAlternateImage .imageScroller li {
-    width: 75px;
-    height: 75px;
+    width: 60px;
+    height: 80px;
 }
 
 .pdpAlternateImage .jcarousel-item-horizontal {
@@ -2642,27 +4323,27 @@ label.sortBy {
 
 .pdpAlternateImage .jcarousel-next-horizontal {
     position: absolute;
-    top: 43px;
-    right: 5px;
-    width: 32px;
-    height: 32px;
+    top: 0px;
+    right: 0px;
+    width: 22px;
+    height:80px;
     cursor: pointer;
-    background: transparent url(next-horizontal.png) no-repeat 0 0;
+    background: url("/osafe_theme/images/user_content/images/altScroller-buttons-horizontal.png") no-repeat 0 50%;
 }
 
 .pdpAlternateImage .jcarousel-direction-rtl .jcarousel-next-horizontal {
     left: 5px;
     right: auto;
-    background-image: url(prev-horizontal.png);
+    background: url("/osafe_theme/images/user_content/images/altScroller-buttons-horizontal.png") no-repeat 0 0;
 }
 
 .pdpAlternateImage .jcarousel-next-horizontal:hover,
 .pdpAlternateImage .jcarousel-next-horizontal:focus {
-    background-position: -32px 0;
+    background-position: -22px 50%;
 }
 
 .pdpAlternateImage .jcarousel-next-horizontal:active {
-    background-position: -64px 0;
+
 }
 
 .pdpAlternateImage .jcarousel-next-disabled-horizontal,
@@ -2675,27 +4356,27 @@ label.sortBy {
 
 .pdpAlternateImage .jcarousel-prev-horizontal {
     position: absolute;
-    top: 43px;
-    left: 5px;
-    width: 32px;
-    height: 32px;
+    top: 0px;
+    left: 0px;
+    width: 22px;
+    height: 80px;
     cursor: pointer;
-    background: transparent url(prev-horizontal.png) no-repeat 0 0;
+    background: url("/osafe_theme/images/user_content/images/altScroller-buttons-horizontal.png") no-repeat -44px 50%;
 }
 
 .pdpAlternateImage .jcarousel-direction-rtl .jcarousel-prev-horizontal {
     left: auto;
     right: 5px;
-    background-image: url(next-horizontal.png);
+    background: url("/osafe_theme/images/user_content/images/altScroller-buttons-horizontal.png") no-repeat 0 0;
 }
 
 .pdpAlternateImage .jcarousel-prev-horizontal:hover, 
 .pdpAlternateImage .jcarousel-prev-horizontal:focus {
-    background-position: -32px 0;
+    background-position: -66px 50%;
 }
 
 .pdpAlternateImage .jcarousel-prev-horizontal:active {
-    background-position: -64px 0;
+
 }
 
 .pdpAlternateImage .jcarousel-prev-disabled-horizontal,
@@ -2767,25 +4448,31 @@ label.sortBy {
 }
 
 .pdpComplement h2 {
-
+    color: #2B2B2B;
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    text-align: center;
 }
 
 .pdpComplement .eCommerceComplementProduct {
-
+    float: left;
+    margin: 0 10px 10px 10px;
+    width: 100px;
 }
 
 .pdpComplement .eCommerceComplementProduct.first {
-
+	margin-top: 0;
 }
 
      /* ----- .pdpComplement Overides ('!important' as necessary) ----- */
  
 .eCommerceComplementProduct .plpProductName {
-	
+     margin: 2px 0 0;	
 }
 
 .eCommerceComplementProduct .plpProductName span {
-	
+     color: #666666;	
 }
 
 .eCommerceComplementProduct .plpDetailLink {
@@ -2817,7 +4504,9 @@ label.sortBy {
 }
 
 .eCommerceComplementProduct .plpPriceOnline .price {
-	
+     font-size: 11px;
+     color: #000000;
+     margin: 0!important;	
 }
 
 .eCommerceComplementProduct .plpPriceSavingPercent {
@@ -2841,14 +4530,6 @@ label.sortBy {
 }
 
 .eCommerceComplementProduct .plpSwatchImage .swatch {
-	
-}
-
-.eCommerceComplementProduct .plpTertiaryInfo {
-	
-}
-
-.eCommerceComplementProduct .plpTertiaryInfo .tertiaryInformation {
 	
 }
 
@@ -2889,7 +4570,7 @@ label.sortBy {
 }
 
 .eCommerceComplementProduct .plpThumbImage .eCommerceThumbNailHolder {
-	
+     border: 1px solid #dedede;	
 }
 
 .eCommerceComplementProduct .plpThumbImage .eCommerceThumbNailHolder img {
@@ -2936,16 +4617,111 @@ label.sortBy {
 	
 }
 
-	/* ----- .pdpContent01 ----- */
+.eCommerceComplementProduct .plpInternalName {
+
+}
+
+.eCommerceComplementProduct .plpInternalName label {
+
+}
+
+.eCommerceComplementProduct .internalName {
+
+}
+
+.eCommerceComplementProduct .plpLabelName {
+
+}
+
+.eCommerceComplementProduct .plpLabelName label {
+
+}
+
+.eCommerceComplementProduct .plpLabelName .labelName {
+
+}
+
+
+	/* ----- #pdpContent Class Styles ----- */
+
+.pdpContent {
+
+}
+
+.pdpContent h2 {
+     font-weight: 700;
+}
+
+.pdpContent p {
+    display: block;
+    font-size: 11px;
+    margin: 5px 0;
+}
+
+	/* ----- #pdpContent01 ----- */
+
+#pdpContent01 {
+    background: url("/osafe_theme/images/user_content/images/diagonal.png") repeat-x scroll 0 0 transparent;
+    display: inline-block;
+    margin: 10px 0;
+    padding: 20px 0 0;
+    width: 994px;
+}
+
+#pdpContent01 h4 {
+    color: #0753A1;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+#pdpContent01 p {
+    color: #666666;
+    font-size: 13px;
+    margin: 8px 4px 0 0;
+}
+
+#pdpContent01 span {
+    display: inline-block;
+    font-weight: 700;
+    margin: 0 5px 0 0;
+    text-align: right;
+    width: 80px;
+}
+
+#pdpContent01 ul {
+margin: 10px 10px 10px 86px;
+}
+
+#pdpContent01 ul li {
+    color: #666666;
+    font-size: 13px;
+}
+
+#pdpContent01 a {
+    border-bottom: 1px dotted;
+    color: #0753A1;
+    padding: 0 0 1px;
+}
+
+#pdpContent01 a:hover {
+    border-bottom: 1px solid;
+}
+
+
+
 
 
 	/* ----- .pdpContent02 ----- */
 
 
+
 	/* ----- .pdpDeliveryInfo ----- */
 
 .pdpDeliveryInfo {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpDeliveryInfo .displayBox {
@@ -2955,7 +4731,10 @@ label.sortBy {
 	/* ----- .pdpDirections ----- */
 
 .pdpDirections {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpDirections  .displayBox {
@@ -2965,11 +4744,14 @@ label.sortBy {
 	/* ----- .pdpDistinguishingFeature ----- */
 
 .pdpDistinguishingFeature {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpDistinguishingFeature .displayBox {
-	
+
 }
 
 .pdpDistinguishingFeature .displayBox h3 {
@@ -2981,28 +4763,43 @@ label.sortBy {
 }
 
 .pdpDistinguishingFeature .displayBox ul li {
-
+    display: block;
+    font-size: 15px;
+    margin: 0 0 5px;
 }
 .pdpDistinguishingFeature .displayBox ul li label {
-
+    color: #666666;
+    display: block;
+    float: left;
+    margin: 0 5px 0 0;
+    text-align: right!important;
+    width: 100px;
 }
 
 .pdpDistinguishingFeature .displayBox ul ul {
-
+    display: inline-block;
+    margin: 0;
+    padding: 0;
 }
 
-.pdpDistinguishingFeature .displayBox ul ul li {
 
+.pdpDistinguishingFeature .displayBox ul ul li {
+    display: block;
+    margin: 0;
 }
 
 .pdpDistinguishingFeature .displayBox ul ul li span {
-
+    color: #666666;
+    font-size: 12px;
 }
 
 	/* ----- .pdpIngredients ----- */
 
 .pdpIngredients {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 	/* ----- .pdpIntroDiscoContent ----- */
@@ -3014,7 +4811,10 @@ label.sortBy {
 	/* ----- .pdpLongDescription ----- */
 
 .pdpLongDescription {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpLongDescription .displayBox {
@@ -3026,33 +4826,19 @@ label.sortBy {
 }
 
 .pdpLongDescription .displayBox p {
-
-}
-
-.pdpLongDescription .displayBox ul.PDPUnorderedList { 
-
-}
-
-.pdpLongDescription .displayBox ul.PDPUnorderedList li { 
-
-}
-
-.pdpLongDescription .displayBox ul.PDPUnorderedList ul {
-
-}
-
-.pdpLongDescription .displayBox ul.PDPUnorderedList ul li { 
-
+    margin: 0;
+    padding: 0;
 }
 
 	/* ----- .pdpMainImage ----- */
 
 .pdpMainImage {
-
+    height: auto; /*  IMG_SIZE_PDP_REG_H; to keep dimensions consistent for other media */
+    width: auto;  /*  IMG_SIZE_PDP_REG_W; to keep dimensions consistent for other media */
 }
 
 .pdpMainImage #productDetailsImageContainer {
-
+    display: inline;
 }
 
 .pdpMainImage #productDetailsImageContainer #MainImage {
@@ -3060,104 +4846,155 @@ label.sortBy {
 }
 
 .pdpMainImage #productDetailsImageContainer .productLargeImage {
-
+    display: block;
+    margin: 0 auto;
 }
 
 .pdpMainImage #productDetailsImageContainer #mainImageLink{
-
+    display: block;
+    text-align: center;
 }
 
 .pdpMainImage #productDetailsImageContainer #mainImageLink:hover{
-
+    text-decoration: underline;
 }
 
 .pdpMainImage #productDetailsImageContainer .productAdditionalImage {
-
+    border: 2px #cecece;
+    margin: 5px 0 0 0;
 }
 
 .pdpMainImage #productDetailsImageContainer #eCommerceProductAddImage {
-
+	clear: left;
 }
 
 .pdpMainImage #productDetailsImageContainer img {
-
+    margin: 0 auto;
+    display: block;
 }
 
 	/* ----- .pdpManufacturerDescription ----- */
 
 .pdpManufacturerDescription {
-
+    width: 275px;
 }
 
 .pdpManufacturerDescription .profileDescription {
-
+    color: #666666;
+    font-size: 12px;
+    font-weight: normal;
 }
 
 	/* ----- .pdpManufacturerHeading ----- */
 
 .pdpManufacturerHeading {
-
+    width: 275px;
 }
 
 .pdpManufacturerHeading h2 {
-
+    color: #0753A1;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
 }
 
 	/* ----- .pdpManufacturerImage ----- */
 
 .pdpManufacturerImage {
-
+    width: 275px;
 }
 
 .pdpManufacturerImage img {
-
+    display: block;
+    margin: 0 auto;
 }
 
 	/* ----- .pdpManufacturerName ----- */
 
 .pdpManufacturerName {
+    margin: 5px 0;
+    text-align: center;
+    width: 275px;
 
 }
 
+.pdpManufacturerName a {
+    color: #0753A1;
+}
+
+.pdpManufacturerName a:hover {
+    text-decoration: underline;
+}
+
 .pdpManufacturerName .profileName {
+    color: #0753A1;
+    font-size: 13px;
+    padding: 5px 0;
 }
 
 	/* ----- .pdpPriceList ----- */
 
 .pdpPriceList {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpPriceList label {
-
+    display: inline-block;
+    font-size: 1.5em;
+    margin: 5px 0 5px 0;
+    text-align: right;
+    width: 100px;
+    color: #aaaaaa;
 }
 
 .pdpPriceList .price {
-
+	font-size: 1.7em;
+	text-decoration: line-through;
+	color: #aaaaaa;
+	margin: 0 0 0 0;	
 }
 
 	/* ----- .pdpPriceOnLine ----- */
 
 .pdpPriceOnLine {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpPriceOnLine label {
-
+    color: #0753A1;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left!important;
 }
 
 .pdpPriceOnLine .price {
-
+    color: #2B2B2B;
+    font-size: 1.5em;
+    font-weight: 700;
 }
 
 	/* ----- .pdpPriceSavingMoney ----- */
 
 .pdpPriceSavingMoney {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpPriceSavingMoney label {
-
+    display: inline-block;
+    font-size: 1.5em;
+    margin: 5px 0 5px 0;
+    text-align: right;
+    width: 100px;
 }
 
 .pdpPriceSavingMoney .savings {
@@ -3167,11 +5004,18 @@ label.sortBy {
 	/* ----- .pdpPriceSavingMoneyPercent ----- */
 
 .pdpPriceSavingPercent {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 .pdpPriceSavingPercent label {
-
+    display: inline-block;
+    font-size: 1.5em;
+    margin: 5px 0 5px 0;
+    text-align: right;
+    width: 100px;
 }
 
 .pdpPriceSavingPercent .savings {
@@ -3181,25 +5025,31 @@ label.sortBy {
 	/* ----- .pdpProductName ----- */
 
 .pdpProductName {
-
+    float: left;
+    margin: 0 0 10px;
+    width: 100%;
 }
 
 .pdpProductName h1 {
-
+    text-transform: none;
 }
 
 	/* ----- .RecentlyViewed ----- */
 
 .pdpRecentlyViewed {
-
+    display: block;
+    width: 100%;
 }
 
 .pdpRecentlyViewed h2 {
-
+    color: #666666;
+    font-size: 1.8em;
+    margin: 5px 0;
 }
 
 .pdpRecentlyViewed .eCommerceRecentlyViewedProduct {
-
+    display: inline-block;
+    margin: 10px 0 0;
 }
 
      /* ----- .eCommerceRecentlyViewedProduct Overides ('!important' as necessary) ----- */
@@ -3213,7 +5063,8 @@ label.sortBy {
 }
 
 .eCommerceRecentlyViewedProduct .plpDetailLink {
-
+    display: block;
+    margin: 0;
 }
 
 .eCommerceRecentlyViewedProduct .plpDetailLink a.eCommerceProductLink {
@@ -3233,15 +5084,15 @@ label.sortBy {
 }
 
 .eCommerceRecentlyViewedProduct .plpPriceList .price {
-	
+
 }
 
 .eCommerceRecentlyViewedProduct .plpPriceOnline {
-	
+
 }
 
 .eCommerceRecentlyViewedProduct .plpPriceOnline .price {
-	
+
 }
 
 .eCommerceRecentlyViewedProduct .plpPriceSavingPercent {
@@ -3265,14 +5116,6 @@ label.sortBy {
 }
 
 .eCommerceRecentlyViewedProduct .plpSwatchImage .swatch {
-	
-}
-
-.eCommerceRecentlyViewedProduct .plpTertiaryInfo {
-	
-}
-
-.eCommerceRecentlyViewedProduct .plpTertiaryInfo .tertiaryInformation {
 	
 }
 
@@ -3360,6 +5203,31 @@ label.sortBy {
 .eCommerceRecentlyViewedProduct .plpSeeItemDetails a.seeItemDetail {
 	
 }
+
+.eCommerceRecentlyViewedProduct .plpInternalName {
+
+}
+
+.eCommerceRecentlyViewedProduct .plpInternalName label {
+
+}
+
+.eCommerceRecentlyViewedProduct .internalName {
+    color: #666666;
+    font-weight: 700; /* is 'normal' on PLP */
+}
+
+.eCommerceRecentlyViewedProduct .plpLabelName {
+
+}
+
+.eCommerceRecentlyViewedProduct .plpLabelName label {
+
+}
+
+.eCommerceRecentlyViewedProduct .plpLabelName .labelName {
+
+}
 	/* ----- .ReviewList ----- */
 
 /* === .pdpReviewList {} pdpReviewList is styled in detail in Section 14.1 === */
@@ -3385,7 +5253,7 @@ label.sortBy {
 	/* ----- .ReviewStars ----- */
 
 .pdpReviewStars {
-
+    display: inline-block;
 }
 
 .pdpReviewStars #productReviewCustomerRating {
@@ -3393,11 +5261,16 @@ label.sortBy {
 }
 
 .pdpReviewStars #productReviewCustomerRating label {
-
+    display: inline-block;
+    font-size: 1.8em;
+    margin: 5px 0;
+    text-align: right;
+    width: auto;
+    float: left;
 }
 
 .pdpReviewStars #productReviewCustomerRating .reviewCustomerRating {
-
+    float: left;
 }
 
 .pdpReviewStars #productReviewCustomerRating .reviewCustomerRating .rating_bar {
@@ -3405,13 +5278,19 @@ label.sortBy {
 }
 
 .pdpReviewStars #productReviewCustomerRating .reviewCustomerRating .ratingSummaryFinal {
-
+    color: #333333;
+    display: block;
+    font-size: 12px;
+    margin: 3px 0 0;
+    text-align: center;
 }
 
 	/* ----- .ReviewWrite ----- */
 
 .pdpReviewWrite {
-
+    display: inline-block;
+    margin: 0 0 0 125px;
+    text-align: center;
 }
 
 .pdpReviewWrite .customerRatingLinks {
@@ -3419,77 +5298,99 @@ label.sortBy {
 }
 
 .pdpReviewWrite .customerRatingLinks a#submitPageReview {
-
+    font-size: 13px;
 }
 
 .pdpReviewWrite .customerRatingLinks a#submitPageReview:hover {
-
+    text-decoration: underline;
 }
 
 	/* ----- .SalesPitch ----- */
 
 .pdpSalesPitch {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
 	/* ----- .pdpSeeLargerImage ----- */
 
 .pdpSeeLargerImage {
-
+   width: 90px;
 }
 
 .pdpSeeLargerImage a {
-
+    background: url("/osafe_theme/images/user_content/images/zoom_inactive.gif") no-repeat scroll 50% 50% #EBEBEB;
+    display: block;
+    height: 29px;
 }
 
 .pdpSeeLargerImage a:hover {
+    background: url("/osafe_theme/images/user_content/images/zoom_active.gif") no-repeat scroll 50% 50% #EBEBEB;
+}
 
+.pdpSeeLargerImage span {
+   display: none;
 }
 
 	/* ----- .pdpSeeMainImage ----- */
 
 .pdpSeeMainImage {
-
+   width: 90px;
+   background: none repeat scroll 0 0 #EBEBEB;
+   margin: 2px 0 0 
 }
 
 .pdpSeeMainImage a {
-
+    background: #EBEBEB url("/osafe_theme/images/user_content/images/image_inactive.gif") 50% 50% no-repeat;
+    display: block;
+    height: 29px; 
 }
 
 .pdpSeeMainImage a:hover {
-
+    background: #EBEBEB url("/osafe_theme/images/user_content/images/image_active.gif") 50% 50% no-repeat;
 }
 
 .pdpSeeMainImage span {
-
+    display: none;
 }
 
 	/* ----- .pdpSelectableFeature  ----- */
 
 .pdpSelectableFeature {
-
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
 
-.pdpSelectableFeature .selectableFeatures.COLOR {    
-
+.pdpSelectableFeature .selectableFeatures.COLOR {
+    width: 100%;
 }
 
 .pdpSelectableFeature .selectableFeatures.COLOR label {
-
+    float: left;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 5px 5px 5px 15px;
+    text-align: right;
+    width: 70px;
 }
 
 /* ===== Alert: PDP pages should implement a UL or a selectbox but not both.  Apply Display:None; to the feature you wish to disable. ===== */
 
 .pdpSelectableFeature .selectableFeatures.COLOR select {
-  
+    display: none; /*Hides Select Box because this PDP uses a UL (see below) */
 
 }
 .pdpSelectableFeature .selectableFeatures.COLOR ul {
-
+    float: left;
 }
 
 .pdpSelectableFeature .selectableFeatures.COLOR ul li {
-
+   float: left;
+   margin: -2px 10px 0 0;
 }
 
 .pdpSelectableFeature .selectableFeatures.COLOR ul li a {  
@@ -3497,81 +5398,176 @@ label.sortBy {
 }
 
 .pdpSelectableFeature .selectableFeatures.COLOR ul li a:hover, 
-.pdpSelectableFeature .selectableFeatures.COLOR ul li.selected a {
+.pdpSelectableFeature .selectableFeatures.SIZE ul li.selected a {
 	
 }
 
 .pdpSelectableFeature .selectableFeatures.COLOR ul li img {
-
+    margin: 1px; /* To offset the border in the selected state */
 }
 
 .pdpSelectableFeature .selectableFeatures.COLOR ul li.selected img {
-
+    border: 1px solid #000000;
+ 	margin: 0px; /* To offset by above border */
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE {
-
+    clear: left;
+    float: left;
+    margin: 10px 0 0;
+    width: 100%;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE label {
-
+    float: left;
+    font-size: 1.4em;
+    font-weight: 700;
+    margin: 5px 5px 5px 15px;
+    text-align: right;
+    width: 70px;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE select {
-
+    display: none; /* Hides Select Box because this PDP uses a UL (see below) */
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul {
-
+    float: left;
+    margin: 5px 0 0 0;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li {
-
+   float: left;
+   margin: 0 10px 0 0;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li a {
-
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #eaeaea;
+    display: block;
+    font-size: 1.3em;
+    padding: 2px;
+    min-width: 20px;   /* adds space when numbers are used */
+    text-align: center;	
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li a:hover, 
-.pdpSelectableFeature .selectableFeatures.SIZE ul li.selected a, 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li.inStock a,
 .pdpStockLegend ul.stockKey li span.inStock {
-
+    border: 1px solid #2b2b2b!important;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li.inStock a:hover {
-
+       background: #eaeaea;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li.lowStock a,
 .pdpStockLegend ul.stockKey li span.lowStock {
+        border: 1px solid #D0975F;
+		background: #FAB67C;
+		background-image: linear-gradient(bottom, rgb(208,151,95) 3%, rgb(250,182,124) 52%);
+		background-image: -o-linear-gradient(bottom, rgb(208,151,95) 3%, rgb(250,182,124) 52%);
+		background-image: -moz-linear-gradient(bottom, rgb(208,151,95) 3%, rgb(250,182,124) 52%);
+		background-image: -webkit-linear-gradient(bottom, rgb(208,151,95) 3%, rgb(250,182,124) 52%);
+		background-image: -ms-linear-gradient(bottom, rgb(208,151,95) 3%, rgb(250,182,124) 52%);
+		
+		background-image: -webkit-gradient(
+			linear,
+			left bottom,
+			left top,
+			color-stop(0.03, rgb(208,151,95)),
+			color-stop(0.52, rgb(250,182,124))
+		);
 
+		color: #fff;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li.outOfStock a,
 .pdpStockLegend ul.stockKey li span.outOfStock {
-
+    background: none repeat scroll 0 0 #EBEBEB;
+    border: 1px solid #A6A6A6;
+    color: #A6A6A6;
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li.selected a {
-
+        background: none repeat scroll 0 0 #EAEAEA;
 }
 
+.pdpSelectableFeature ul.multiVariantList {
+    float: left;
+    margin: 10px 0;
+}
+
+.pdpSelectableFeature ul.multiVariantList li {
+    display: inline;
+}
+
+.pdpSelectableFeature .entry.multiVariantQty,
+.pdpSelectableFeature .entry.multiVariantCheckbox {
+    margin: 0;
+    padding: 5px 0;
+    width: 240px;
+} 
+
+.pdpSelectableFeature .entry.multiVariantQty span,
+.pdpSelectableFeature .entry.multiVariantCheckbox span {
+    font-size: 18px;
+    margin: 0 0 0 5px;
+    text-align: right;
+}
+
+
+.pdpSelectableFeature .entry.multiVariantQty input.add_multi_product_quantity {
+    text-align: center;
+    width: 20px;
+}
+
+.pdpSelectableFeature .entry.multiVariantCheckbox input.add_multi_product_id {
+
+}
 	/* ----- .pdpSpecialInstructions ----- */
 
 .pdpSpecialInstructions {
-	
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
 }
+
 
 .pdpSpecialInstructions .displayBox {
 
 }
 
+.pdpSpecialInstructions .displayBox h2 {
+    font-weight: 700;
+}
+
+.pdpSpecialInstructions .displayBox p {
+    color: #666666;
+    font-size: 1.4em;
+}
+
+
+.pdpSpecialInstructions .displayBox ul {
+
+}
+
+.pdpSpecialInstructions .displayBox ul li {
+    font-size: 11px;
+    list-style: square inside none;
+    margin: 0 0 5px;
+}
+
 	/* ----- .pdpStockLegend ----- */
 
 .pdpStockLegend {
-
+    border: 1px dotted #ccc;
+    margin: 0 0 0 255px;
+    padding: 0 0 2px 10px;
+    width: 360px\9; /* IE8 and below */ 
+    margin: 0 0 20px 300px\9; /* IE8 and below */ 
+    width: 375px;
 }
 
 .pdpStockLegend ul.stockKey {
@@ -3579,11 +5575,18 @@ label.sortBy {
 }
 
 .pdpStockLegend ul.stockKey li {
-
+    display: inline-block;
+	font-size: 16px;
+	margin: 0 25px 0 0;
 }
 
 .pdpStockLegend ul.stockKey li span {
-
+    width: 10px;
+	height: 10px;
+	border: 1px solid #666;
+	display: block;
+	float: left;
+	margin: 4px 8px 0 0;
 }
 
 .pdpStockLegend ul.stockKey li span.inStock {
@@ -3602,11 +5605,15 @@ label.sortBy {
 	/* ----- .pdpTabs ----- */
 
 .pdpTabs {
-
+    display: inline-block;
+    width: 375px;
 }
 
 .pdpTabs .displayBox {
-
+    clear: none;
+    float: none;
+    margin: none;
+    width: auto;
 }
 
     /* The Following Styles Override Default jQuery Interface styles needed for other elements */
@@ -3620,7 +5627,10 @@ label.sortBy {
 .pdpTabs .ui-corner-left,
 .pdpTabs.ui-corner-tl,
 .pdpTabs .ui-corner-tl { 
-
+     -moz-border-radius-topleft: 0px!important;
+     -webkit-border-top-left-radius: 0px!important;
+     -khtml-border-top-left-radius: 0px!important;
+     border-top-left-radius: 0px!important;
 }
 
 .pdpTabs.ui-corner-all,
@@ -3631,18 +5641,25 @@ label.sortBy {
 .pdpTabs .ui-corner-right,
 .pdpTabs.ui-corner-tr,
 .pdpTabs.ui-corner-tr { 
-
+     -moz-border-radius-topright: 0px!important;
+     -webkit-border-top-right-radius: 0px!important;
+     -khtml-border-top-right-radius: 0px!important;
+     border-top-right-radius: 0px!important; 
 }
 
 .pdpTabs.ui-corner-all,
 .pdpTabs .ui-corner-all,
 .pdpTabs.ui-corner-bottom,
 .pdpTabs .ui-corner-bottom,
+
 .pdpTabs.ui-corner-left,
 .pdpTabs .ui-corner-left,
 .pdpTabs.ui-corner-bl,
 .pdpTabs .ui-corner-bl {
-
+     -moz-border-radius-bottomleft: 0px!important;
+     -webkit-border-bottom-left-radius: 0px!important;
+     -khtml-border-bottom-left-radius: 0px!important;
+     border-bottom-left-radius: 0px!important;
 }
 
 .pdpTabs.ui-corner-all,
@@ -3653,91 +5670,580 @@ label.sortBy {
 .pdpTabs .ui-corner-right,
 .pdpTabs.ui-corner-br,
 .pdpTabs .ui-corner-br {
-
+     -moz-border-radius-bottomright: 0px!important;
+     -webkit-border-bottom-right-radius: 0px!important;
+     -khtml-border-bottom-right-radius: 0px!important;
+     border-bottom-right-radius: 0px!important;
 }
 
 .pdpTabs.ui-widget-content {
-
+     border: none!important;
+     background: none!important;
+     color: #222222;
+     margin: 20px 0 0 15px;
+    width: 385px;
 }
 
 .pdpTabs .ui-widget-header {
-
+     border: none!important;
+     background: none!important;
+     color: #222222;
+     font-weight: bold;
 }
 .pdpTabs.ui-tabs .ui-tabs-nav {
-
+    margin: 0!important;
+    padding: 0!important;
 }
 
 .pdpTabs.ui-tabs .ui-tabs-nav li {
+     /* border: none!important; */
+     /* top: 0!important; */ 
+     border-bottom: none;
+     color: #343434!important;
+     font-size: 14px!important;
+}
+.pdpTabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+    border: 1px solid #c3c3c3!important;
+    margin-bottom: 0!important;
+    padding-bottom: 1px!important;
+    top: 1px!important;
+    border-bottom: none!important; 
+    /*background: #ebebeb!important; */
+}
+
+
+	/* ----- .pdpTermsAndConditions ----- */
+
+.pdpTermsAndConditions {
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
+}
+
+
+.pdpTermsAndConditions .displayBox {
 
 }
 
-.pdpTabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
+.pdpTermsAndConditions .displayBox h3 {
+
+}
+
+.pdpTermsAndConditions .displayBox p {
 
 }
 
 	/* ----- .pdpVideo ----- */
 
 .pdpVideo {
-
+   margin: 2px 2px 0 0;
+   width: 151px;
+   background: none repeat scroll 0 0 #EBEBEB;
 }
 
 .pdpVideo #productVideoLink a {
-
+    background: #EBEBEB url("/osafe_theme/images/user_content/images/video_inactive.gif") 50% 50% no-repeat;
+    display: block;
+    height: 29px; 
 }
 
 .pdpVideo #productVideoLink a:hover {
-
+    background: #EBEBEB url("/osafe_theme/images/user_content/images/video_active.gif") 50% 50% no-repeat;
 }
 
 .pdpVideo #productVideoLink a span {
-
+    display: none;
 }
 
 	/* ----- .pdpVideo360 ----- */
 
 .pdpVideo360 {
-
+   margin: 2px 2px 0 0;
+   background: #ebebeb;
+   width: 151px;
 }   
 
 .pdpVideo360 #productVideo360Link a {
-
+    background: #EBEBEB url("/osafe_theme/images/user_content/images/360_inactive.gif") 50% 50% no-repeat;
+    display: block;
+    height: 29px;
 }
 
 .pdpVideo360 #productVideo360Link a:hover {
-
+    background: #EBEBEB url("/osafe_theme/images/user_content/images/360_active.gif") 50% 50% no-repeat;
 }
 
 .pdpVideo360 #productVideo360Link a span {
-
+    display: none;
 }
 
 	/* ----- .pdpVolumePricing ----- */
 
 .pdpVolumePricing {
+    margin: 0 0 0 250px;
 }
 
 .volumePricing h2 {
-
+    font-size: 1.5em;
+    margin: 0 100px 0 100px;
+    width: 100px;
  }
  
 .volumePricing p {
-
+    line-height: 1.5em;
+    font-size: 12px;
+    border-bottom: 1px dotted #4E2C3D;
+    margin: 0 10px 10px 10px;
+    color: #666666;
 }
  
 .volumePricing .pricingCaption {
+    color: #666666;
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    margin: 0 0 5px 0;
+    padding: 0 0 0 10px;
 }
 
 .volumePricing .priceRule {
-
-}
+    margin: 0;
+    font-size: 1.2em;
+ }
  
 .volumePricing .price {
-
-}
+    margin: 0;
+    clear: left;
+    float: right;
+    font-size: 1.2em;
+    color: #666666;
+ }
  
  	/* ----- .pdpWarnings ----- */
 
 .pdpWarnings {
+   display: inline-block;
+}
+
+	/* ----- .pdpAddToWishlist ----- */
+
+.pdpAddToWishlist {
+    display: inline-block;
+    margin: 16px 0 0 10px; /* Top margin compensates for add to cart label */
+}
+
+.pdpAddToWishlist .addToWishlist {
+    border: 1px solid #CECECE;
+    border-radius: 5px 5px 5px 5px;
+    color: #AAAAAA;
+    display: inline-block;
+    font-size: 1.6em;
+    font-weight: 700;
+    padding: 5px 10px;
+}
+
+.pdpAddToWishlist .addToWishlist:hover {
+    background: none repeat scroll 0 0 #E3E3E3;
+    border-bottom: 1px solid;
+    color: #666666;
+}
+
+.pdpAddToWishlist .addToWishlist span {
+}
+
+	/* ----- .pdpInternalName ----- */
+
+.pdpInternalName {
+    display: block;
+    margin: 0 275px 10px 0;
+    padding: 0 30px 0 0;
+    width: 689px;
+}
+
+.pdpInternalName label {
+    color: #0753A1;
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    text-align: left!important;
+}
+
+.pdpInternalName .internalName {
+    color: #666666;
+    font-size: 1.4em;
+}
+
+	/* ----- .pdpLabelName ----- */
+
+.pdpLabelName {
+
+}
+
+.pdpLabelName label {
+
+}
+
+.pdpLabelName .labelName {
+
+}
+
+/* === 6.5 Manufacturer Detail Page  === */
+
+#eCommerceManufacturerContainer {
+    float: left;
+    padding: 10px 0 0;
+    width: 100%;
+}
+
+#eCommerceManufacturerContainer:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+#eCommerceManufacturerContainer .resultListContainer {
+    margin: 20px 0 0;
+}
+
+.manufacturerDetail {
+
+}
+
+.manufacturerHeading {
+}
+
+.manufacturerHeading h1 {
+
+}
+
+.manufacturerImage {
+    margin: 0 15px 15px 0;
+}
+
+.manufacturerImage .profileImage {
+}
+
+.manufacturerImage .profileImage img {
+}
+
+.manufacturerName {
+}
+
+.manufacturerName .profileName {
+    color: #0753A1;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.manufacturerDescription {
+    width: 828px;
+}
+
+.manufacturerDescription .profileDescription {
+    font-size: 14px;
+    line-height: 22px;
+    margin: 10px 0 0;
+}
+
+#eCommerceManufacturerProductList {
+    clear: left;
+    display: inline-block;
+    margin: 20px 0 0;
+}
+#eCommerceManufacturerProductList h2 {
+    color: #0753A1;
+    font-size: 16px;
+    font-weight: 700;
+
+}
+.manufacturerListItem  {  /* Container for items on the PLP */
+    background: none repeat scroll 0 0 #FFF5B2;
+    border: 1px solid #FCDC00;
+    display: block;
+    margin: 0 auto 15px;
+    overflow: auto;
+    padding: 10px;
+    width: 650px;
+
+    -moz-box-sizing: border-box; 
+    -webkit-box-sizing: border-box; 
+     box-sizing: border-box;
+}
+
+.manufacturerListItem:hover {
+    background: none repeat scroll 0 0 #fcea77;
+}
+
+     /* ----- .eCommerceListItem Overides ('!important' as necessary) ----- */
+
+.manufacturerListItem .plpProductName {
+	
+}
+
+.manufacturerListItem .plpProductName span {
+	
+}
+
+.manufacturerListItem .plpDetailLink {
+	
+}
+
+.manufacturerListItem .plpDetailLink a.eCommerceProductLink {
+	
+
+}
+
+.manufacturerListItem .plpDetailLink a.eCommerceProductLink:hover {
+	
+}
+
+.manufacturerListItem .plpDetailLink a.eCommerceProductLink span {
+	
+}
+
+.manufacturerListItem .plpPriceList {
+}
+
+.manufacturerListItem .plpPriceList label {
+	
+}
+
+.manufacturerListItem .plpPriceList .price {
+	
+}
+
+.manufacturerListItem .plpPriceOnline {
+
+}
+	
+.manufacturerListItem .plpPriceOnline label {
+}
+
+.manufacturerListItem .plpPriceOnline .price {
+	
+}
+
+.manufacturerListItem .plpPriceSavingPercent {
+
+}
+
+.manufacturerListItem .plpPriceSavingPercent label {
+
+}
+
+.manufacturerListItem .plpPriceSavingPercent .price{
+	
+}
+
+.manufacturerListItem .plpPriceSavingMoney {
+	
+}
+
+.manufacturerListItem .plpPriceSavingMoney label {
+	
+}
+
+.manufacturerListItem .plpPriceSavingMoney .price {
+	
+}
+
+.manufacturerListItem .plpSwatchImage {
+	
+}
+
+.manufacturerListItem .plpSwatchImage .swatch {
+	
+}
+
+.manufacturerListItem .plpSwatchImage .swatch img {
+
+}
+
+.manufacturerListItem .plpReviewStars {
+	
+}
+
+.manufacturerListItem .plpReviewStars .rating_bar {
+	
+}
+
+.manufacturerListItem .plpReviewRead {
+	
+}
+
+.manufacturerListItem .plpReviewRead .customerRatingLinks {
+	
+}
+
+.manufacturerListItem .plpReviewRead .customerRatingLinks a.review {
+	
+}
+
+.manufacturerListItem .plpReviewWrite {
+	
+}
+
+.manufacturerListItem .plpReviewWrite .customerRatingLinks {
+	
+}
+
+.manufacturerListItem .plpReviewWrite .customerRatingLinks a#submitPageReview {
+	
+}
+
+.manufacturerListItem .plpReviewWrite .customerRatingLinks a#submitPageReview:hover {
+	
+}
+
+.manufacturerListItem .plpThumbImage {
+	
+}
+
+.manufacturerListItem .plpThumbImage .eCommerceThumbNailHolder {
+	
+}
+
+.manufacturerListItem .plpThumbImage .eCommerceThumbNailHolder img {
+	
+}
+
+.manufacturerListItem .plpManufacturerDescription {
+	
+}
+
+.manufacturerListItem .plpManufacturerDescription .profileDescription {
+	
+}
+
+.manufacturerListItem .plpManufacturerHeading {
+	
+}
+
+.manufacturerListItem .plpManufacturerHeading h2 {
+	
+}
+
+.manufacturerListItem .plpManufacturerImage {
+	
+}
+
+.manufacturerListItem .plpManufacturerImage img {
+	
+}
+
+.manufacturerListItem .plpManufacturerName {
+	
+}
+
+.manufacturerListItem .plpManufacturerName .profileName {
+	
+}
+
+.manufacturerListItem .plpSeeItemDetails {
+	
+}
+
+.manufacturerListItem .plpSeeItemDetails a.seeItemDetail {
+	
+}
+
+.manufacturerListItem .plpDeliveryInfo {
+	
+}
+
+.manufacturerListItem .plpDeliveryInfo span {
+	
+}
+
+.manufacturerListItem .plpSalesPitch {
+	
+}
+
+.manufacturerListItem .plpSalesPitch span {
+
+}
+
+.manufacturerListItem .plpDistinguishingFeature {
+	
+}
+
+.manufacturerListItem .plpDistinguishingFeature span {
+	
+}
+
+.manufacturerListItem .plpSpecialInstructions {
+	
+}
+
+.manufacturerListItem .plpSpecialInstructions span {
+
+}
+
+.manufacturerListItem .plpDirections {
+	
+}
+
+.manufacturerListItem .plpDirections span {
+
+}
+
+.manufacturerListItem .plpIngredients {
+	
+}
+
+.manufacturerListItem .plpIngredients span {
+
+}
+
+.manufacturerListItem .plpWarnings {
+
+}
+
+.manufacturerListItem .plpWarnings span {
+
+}
+
+.manufacturerListItem .plpTermsAndConditions {
+
+}
+
+.manufacturerListItem .plpTermsAndConditions span {
+
+}
+
+.manufacturerListItem .plpLongDescription {
+
+}
+
+.manufacturerListItem .plpLongDescription span {
+
+}
+
+.manufacturerListItem .plpInternalName {
+
+}
+
+.manufacturerListItem .plpInternalName label {
+
+}
+
+.manufacturerListItem .plpInternalName .internalName{
+
+}
+
+.manufacturerListItem .plpLabelName {
+
+}
+
+.manufacturerListItem .plpLabelName label {
+
+}
+
+.manufacturerListItem .plpLabelName .labelName {
 
 }
 
@@ -3754,43 +6260,294 @@ label.sortBy {
 }
 
 .displayBox h3 {
-
+    color: #0753A1;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 .displayBox h4 {
-
+    color: #666;
+    font-size: 14px;
 }
     
 .displayBox p {
-
-}
-
-.displayBox div.entry li.fieldErrorMessage {
-	
+    color: #666666;
+    font-size: 1.4em;
 }
 
 .displayBox.confirmDialog {
+	margin:0;
+}
+
+.displayBox.confirmDialog h3 {
+
+}
+
+.displayBox.confirmDialog .confirmBtn {
 
 }
 
 .pdpDisplayBox {
+    clear: left;
+    text-align: center;
+    border: 0px;
+    margin: 2em 0 2em 0;
+    border: 1px solid #000000; 
+}
 
+.displayBox ul.PDPUnorderedList { 
+
+}
+
+.displayBox ul.PDPUnorderedList li { 
+	background: url("/osafe_theme/images/user_content/images/listBullet.png") no-repeat scroll 0 50% transparent;
+    margin: 0 0 8px 1em;
+    padding: 0 0 0 20px;
+    color: #666666;
+}
+
+.displayBox ul.PDPUnorderedList ul {
+	margin: 8px 0 8px 20px;
+}
+
+.displayBox ul.PDPUnorderedList ul li { 
+	background: url("/osafe_theme/images/user_content/images/listBulletAlt.png") 0 50% no-repeat;
+    padding: 0 0 0 20px;
 }
 
 /* === 7.2 Dialog  Boxes  === */
 
-#storePickup_displayDialog #eCommerceStoreLocatorContainer {
+#storePickup_displayDialog {
+    background: none repeat scroll 0 0 transparent!important;
+    border: 0 none!important;
+    margin: 0 0 15px!important;
+    max-height: 500px!important;
+    overflow: auto!important;
+    padding: 0 30px 10px 10px!important;
+}
 
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer {
+width: 700px;     /* need to prevent select store popup resizing on map load */
+}
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer .mapCanvas {
+    border:1px solid #979797; 
+    background-color:#e5e3df;
+    padding: 15px;
+    margin: 7px auto 7px auto;
+}
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer .mapCanvasWithDirection {
+    float: left;
+    width: 360px !important;
+}
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer .mapLoading {
+    padding:1em;
+    color: #666666;
+}
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer .mapClosure {
+    width:210px;
+    padding: 0 10px 0 0;
+    font-size: 1.5em;
+}
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer .mapDirection {
+    display: none;
+    float: right;
+    height: auto !important;
+    width: 300px;
+}
+
+#storePickup_displayDialog div.storeDirectionIcon {
+    width: auto;
+}
+
+#storePickup_displayDialog div.commonButtons {
+    margin: 10px 0 0 0;
+}
+
+/* === 7.3 LightCart  Boxes  === */
+
+#lightCart_displayDialog { /* main dialog box */
+    max-height: 500px !important;
+    padding: 10px 20px;
+
+}
+
+#lightCart_displayDialog .ui-resizable-se { 
+    display: none;
+}
+
+#lightCart_Container {
+    width: 400px !important;
+}
+
+.lightCart {
+    font-family: arial;
+    font-size: 12px;
+}
+
+.lightCart .labelText {
+    float: left;
+}
+
+.lightCart .labelText label {
+
+}
+
+.lightCart .labelValue {
+    float: right;
+}
+
+
+
+.lightBoxOrderItems {
+
+}
+
+.lightBoxOrderItems #cart_wrap {
+    border-bottom: 1px solid #A4A4A4;
+    float: left;
+    margin: 0 0 10px 0;
+    padding: 0 0 10px 0;
+    position: relative;
+    width: 400px;
+}
+
+.lightBoxOrderItems .labelText {
+    display: inline;
+}
+
+.lightBoxOrderItems .labelValue {
+    display: inline;
+}
+
+.lightBoxOrderItems .lightBoxItemImage {
+   margin: 0 10px 0 0;
+}
+
+.lightBoxOrderItems .lightBoxItemName {
+    background: none repeat scroll 0 0 #E3E3E3;
+    border: 1px solid #AFAFAF;
+    margin: 0 0 5px;
+    padding: 5px;
+    width: 303px;
+}
+
+.lightBoxOrderItems .lightBoxItemName .cartItemProdFeature {
+
+}
+
+.lightBoxOrderItems .lightBoxItemQuantity {
+    margin: 0 10px 0 0;
+}
+
+.lightBoxOrderItems .lightBoxItemQuantity .labelText label {
+    font-weight: 700;
+}
+
+.lightBoxOrderItems .lightBoxItemPrice {
+    margin: 0 10px 0 0;
+}
+
+.lightBoxOrderItems .lightBoxItemPrice .labelText label  {
+    font-weight: 700;
+}
+
+
+.lightBoxOrderItems .lightBoxItemTotal {
+    font-weight: 700;
+}
+
+.lightBoxOrderItems .lightBoxItemTotal .labelText label {
+    font-weight: 700;
+}
+
+.lightBoxTotalNumberItems {
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxTotalNumberItems .labelValue {
+    width: 90px;
+}
+
+.lightBoxTotalSubAmount {
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxTotalSubAmount .labelValue {
+    width: 90px;
+}
+
+.lightBoxShippingMethod {
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxShippingMethod .labelValue {
+    width: 90px;
+}
+
+.lightBoxShippingAmount {
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxShippingAmount .labelValue {
+    width: 90px;
+}
+
+.lightBoxTaxAmount {
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxTaxAmount .labelValue {
+    width: 90px;
+}
+
+.lightBoxTotalAmount {
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxTotalAmount .labelValue {
+    width: 90px;
+}
+
+.lightBoxPromoDiscount {
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxPromoDiscount label {
+      color: #990000;
+}
+
+.lightBoxPromoDiscount .labelValue {
+    width: 90px;
+    color: #990000;
+}
+
+.lightBoxTotalAdjustAmount {
+    font-weight: 700;
+    *width: 250px; /*IE7 Only */
+}
+
+.lightBoxTotalAdjustAmount .labelValue {
+    width: 90px;
+}
+
+.lightBoxContinueButton {
+    margin: 10px 0;
 }
 
 /* === 8. Entry Forms  === */
 
 .desc {
-
+    margin:0 0 0 25px;
 }
 
 .required {
-
+    color: #F00;
 }
 
 fieldset p {
@@ -3798,25 +6555,42 @@ fieldset p {
 }
 
 .instructions {
-
+   font-size: 12px!important;
+   margin: 5px 0!important;
 }
 
 .entry {
+    float: left;
+    margin: 0 0 5px 0;
+    padding: 5px 0;
+    width: 100%;
+}
 
+.entry .instructions {
+    float: left;
+    margin: 2px 5px 0 0 !important;
 }
 
 .capturePlus {
-
+    margin-bottom: 30px;
+    margin-left: 180px;
 }
 
 .entry label {
-
+    clear: left;
+    color: #666666;
+    float: left;
+    margin: 0 5px 0 0;
+    text-align: right;
+    width: 160px;
 }
 
-.entry input,
+.entry input[type="text"],
+.entry input[type="password"],
 .entry select,
 .entry textarea {
-
+    float: left;
+    margin: 0 10px 0 0;
 }
 
 .entry input[type="text"],
@@ -3825,23 +6599,40 @@ fieldset p {
 }
 
 .entry input[type="text"].cardNumber {
+    width: 132px;
+}
 
+.entry span {
+
+}
+
+.innerLabel {
+    font-size: 13px;
+    margin: 0 5px 0 0;
+    padding: 0 2px 0 0;
+    text-transform: lowercase;
+}
+
+.personalInfoPhoneWork span.innerLabel,
+.personalInfoPhoneCell span.innerLabel,
+.personalInfoPhoneHome span.innerLabel {
+    float: left;
 }
 
 input[type="text"].phone3 {
-
+    width:3em;
 }
 
 input[type="text"].phone4 {
-
+    width:4em;
 }
 
 input[type="text"].phoneExt {
-
+    width:3em;
 }
 
 .entry select {
-
+    width: auto;
 }
 
 .entry a {
@@ -3849,68 +6640,98 @@ input[type="text"].phoneExt {
 }
 
 .entry input[type="radio"] {
-
+    font-size: 1.5em;
+    border: none;
+    margin: 0;
 }
 
 .entry .radioOptionText {
-
+    font-size: 14px;
+    margin:0 0 0 10px;
 }
 
 .entry .radioOptionTextAdditional {
-
+    float: right;
+    font-size: 17px;
+    display: inline;
 }
 
 .entry.paypal {
-
+    margin: 1em 0 0 0;
 }
 .entry #isSameAsBilling {
+    margin: 5px 0 0 0;
+    border: none;
+}
 
+.entry #BILLING_SKIP_VERIFICATION {
+    margin: 0.9em 0 0.5em 10px;
+    border: none;
 }
 
 /* === 9. Error Messages  === */
 
 .content-messages {
-
+    clear: left;
+    color: #000000;
+    float: left;
+    margin: 10px 0;
+    width: 100%;
 }
 
 .content-messages p {
-
+    display: inline-block;
+    font-size: 14px;
+    margin: 10px;
 }
 
 .content-messages .errorImage,
 .content-messages .eventImage,
 .content-messages .warningImage {
-
+    float: left;
+    margin: 10px;
+    width: 14px;
+    height: 14px;
 }
 
 .eCommerceErrorMessage {
-
+    border: 1px solid #F00;
+    background-color: #FBE7E8; /* Light Red */
 }
 
 .eCommerceErrorMessage .errorImage {
-
+	background-image: url("/osafe_theme/images/user_content/images/red_x_image.png");
+	background-repeat:no-repeat;
 }
 
 .eCommerceSuccessMessage {
-
+	border: 1px solid #000;
+	background-color: #CCFFCC; /* Green */
 }
 
 .eCommerceSuccessMessage .eventImage {
-
+	border: 1px solid #000000;
+	background-image: url("/osafe_theme/images/user_content/images/checkmark.png");
+    background-repeat:no-repeat;
 }
 
 .eCommerceWarningMessage {
-
+	border: 1px solid #FF0000;
+	background-color: #FBE7E8; /* Light Red */
 }
 
 .eCommerceWarningMessage .warningImage {
-
+	border: 1px solid #FF0000;
+	background-image: url("/osafe_theme/images/user_content/images/warningmark.png");
+	background-repeat:no-repeat;
 }
 
 .errorHeading,
 .eventHeading,
 .warningHeading {
-
+	padding: 0 0 0 1.2em;
+	font-weight: bold;
+	margin: 0.5em;
 }
 
 .errorMessage,
@@ -3920,12 +6741,13 @@ input[type="text"].phoneExt {
 }
 
 .fieldErrorMessage {
-
+    color: #FF0000;
+    font-size: 12px;
+    float: left;
+    margin: 3px 0 0 0;	
 }
 
-.eCommerceErrorMessage p,
-.eCommerceSuccessMessage p,
-.eCommerceWarningMessage p  {
+.entry .fieldErrorMessage {
 
 }
 
@@ -3941,48 +6763,66 @@ input[type="text"].phoneExt {
 
 #eCommerceCartButtons,
 #eCommerceAddressBookButtons {
-
+    margin: 4em 0 8em 0;
+    padding: 1px;
+    float: left;
+    width: 100%;
 }
 
 #eCommerceOrderSummaryContainer #eCommerceCartButtons {
-
+	clear: both;
 }
 
 #eCommerceAddressBookButtons {
-
+    clear: left;
 }
 
 #eCommerceCartButtons .negative,
 #eCommerceAddressBookButtons .negative {
-
+    float: left;
+    margin: 0;
 }
 
 #eCommerceCartButtons .positive {
-
+    float: right;
 }
 
 #cart_wrap {
-
+    position:relative;
+    margin: 1em 0 1em 0;
+    clear:both;
+    zoom:1;
 }
 
 #cart_display {
-
+	width: 100%;
+    font-size: 1.5em; 
 }
 
 #cart_display caption {
-
+    display: none;
 }
 
 tr.cart_headers {
-
+	background-color: #CCCCCC;
+    font-size: 1em;
+    font-weight: bold; 
 }
 
 tr.cart_contents {
-
+    background: url("/osafe_theme/images/user_content/images/dotted-border.png") repeat-x bottom;
 }
 
-#cart_display tr.cart_headers th {
-
+#cart_display tr.cart_headers th{
+    background-image:none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid  #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    border-left: 1px solid #eaeaea;
+    font-weight: normal;
+    white-space: nowrap;  /* Keep th from breaking Js2 */
+    text-align: center;
  }
 
 #cart_display tr.cart_contents {
@@ -3991,24 +6831,26 @@ tr.cart_contents {
 
 #cart_display tr.cart_headers th.firstCol,
 #cart_display tr.cart_contents td.firstCol {
-
+    border-left: 1px solid #eaeaea;
+    border-right: none; /* Combines Image and Description in Product Section */
 }
 
 #cart_display tr.cart_headers th.firstCol.lastCol {
-
+    border-bottom: none;
+    padding: 5px 0 5px 0;
 }
 
 #cart_display tr.cart_headers th.firstCol.lastCol .headerCaption {
-
+    font-size: 1.3em;
 }
 
 #cart_display tr.cart_headers th.lastCol,
 #cart_display tr.cart_contents td.lastCol {
-
+    border-right: 1px solid #eaeaea;
 }
 
 #cart_display tr.cart_contents td.lastRow {
-
+    border-bottom: 1px solid #eaeaea;
 }
 
 #cart_display tr.cart_contents td.description {
@@ -4016,7 +6858,10 @@ tr.cart_contents {
 }
 
 #cart_display tr.cart_contents td {
-
+    vertical-align: middle;
+    border-right: 1px solid #EAEAEA;
+    text-align: center;
+    padding: 5px;    
 }
 
 #cart_display tr.cart_headers th.image,
@@ -4029,43 +6874,51 @@ tr.cart_contents {
 }
 
 #cart_display tr.cart_contents td.description dl dt {
-
+    display: none;
 }
 
 #cart_display tr.cart_contents td.description dl dd {
-
+    font-size: 12px;
+    margin: 0;
+    padding: 0 10px;
+    text-align: left;
+    width: 165px;
 }
 
 #cart_display tr.cart_contents td.description dl dd.discount {
-
+    margin: 15px 0 0 0;
 }
 
 #cart_display tr.cart_contents td.description a {
-
+    border-bottom: 1px dotted #666666;
 }
 
 #cart_display tr.cart_contents td.description a:hover { 
-
+	border-bottom: 1px solid #666666;
 }
 
 td.quantity input[type="text"] {
-
+    margin: 2px 5px 2px 0;
+    padding: 3px 0;
+    text-align: center;
+    width: 25px;
 }
 
 #cart_display tr.cart_contents td.options dl dt {
-
+    display: none;
 }
 
 #cart_display tr.cart_contents td.options dl dd {
-
+    margin: 0;
+    padding-left: 0;
 }
 
 #cart_display tr.cart_contents td.options dl dd.attribute span.label {
-
+    margin: 0 10px 0 0;
 }
 
 #cart_display tr.cart_contents td.description dl dd.discount {
-
+    margin: 15px 0 0 0;
 }
 
 #cart_display tr.cart_contents td.quantity span.action {
@@ -4073,11 +6926,16 @@ td.quantity input[type="text"] {
 }
 
 #cart_display tr.cart_contents td .price  {
-
+	clear: left;
+    color: #666666;
+    font-weight: bold;
+    margin: 2px 0;
+	font-size: 16px;
 }
 
 .basket #cart_display tr.cart_headers th.price {
-
+    text-align: right;
+    padding-right: 0px
 }
 
 * html .basket #cart_display tr.cart_headers th.price {
@@ -4085,7 +6943,7 @@ td.quantity input[type="text"] {
 }
 
 html>body .quick_order #cart_display tr.cart_headers th.price {
-
+    *padding-right: 0 !important; /* IE7 */
 }
 
 #cart_display tr.cart_contents td.actions li {
@@ -4093,35 +6951,41 @@ html>body .quick_order #cart_display tr.cart_headers th.price {
 }
 
 .cart_contents dl dt {
-
+    display: none;
 }
 
 #cart_information {
-
+    width: 100%;
 }
 
 #postage_packaging {
-
+    float: left;
+    display: inline;
+    margin: 0 0 0 5px;
 }
 
 #cart_information #cart_summary {
-
+    float: right;
+    display: inline;
+    margin: 0 15px 0 0;
 }
 
 #quick_order_actions {
-
+    float: right;
+    display: inline;
 }
 
 #cart_display .summary {
-
+	float: right;
 }
 
 #cart_display tfoot {
-
+    float: none!important;
 }
 
 #cart_wrap #cart_display .summary {
-
+    width: 200px;
+    padding: 0 15px 0 0;
 }
 
 #cart_wrap #cart_display .summary span {
@@ -4129,47 +6993,80 @@ html>body .quick_order #cart_display tr.cart_headers th.price {
 }
 
 #cart_wrap #cart_display .summary td .footContainer {
-
+    -moz-border-bottom-colors: none;
+    -moz-border-image: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background: none repeat scroll 0 0 #F7F7F7;
+    border-color: -moz-use-text-color #EAEAEA #EAEAEA;
+    border-right: 1px solid #EAEAEA;
+    border-style: none solid solid;
+    border-width: medium 1px 1px;
+    display: inline-block;
+    float: right !important;
+    padding: 5px;
 }
 
 #cart_wrap #cart_display .summary td .footContainer li {
-
+    clear: both;
+    display: inline-block;
+    float: right;
+    padding: 0 0 0 3px;
 }
 
 #cart_wrap #cart_display .summary td .footContainer li div.labelText {
+    float:left;
+}
 
+#cart_wrap #cart_display .summary td .footContainer li div.labelText .adjustedTotalLabel label {
+   font-weight: bold;
+   font-size: larger;
 }
 
 #cart_wrap #cart_display .summary td .footContainer li div.labelValue {
+    float: left;
+    width: 120px;
+    padding: 0 0 0 15px;
+}
 
+#cart_wrap #cart_display .summary td .footContainer li div.labelValue .adjustedTotalValue span {
+   font-weight: bold;
+   font-size: larger;
 }
 
 #cart_wrap #cart_display .summary td .footContainer li div.labelValue span {
-
+    margin: 0 25px 0 0;
 }
 
 #cart_wrap #cart_display .summary td {
-
+    padding:0; 
 }
 
 #cart_wrap #summaryCell {
-
+    padding-right: 0;
+    width: 400px;
 }
 
 #cart_display .summary span.amount {
-
+    float: right;
+    display: inline;
 }
 
 #cart_display .summary .subtotal span.vat {
-
+    margin: 5px;
+    display: inline;
+    font-weight:normal;
 }
 
 #cart_display .summary .caption {
-
+    text-align: right;
 }
 
 #cart_display .summary .value {
-
+    color: #000000;
+    font-size: 15px;
+    width: 110px;
 }
 
 #cart_display .summary .shippingMethod {
@@ -4177,40 +7074,128 @@ html>body .quick_order #cart_display tr.cart_headers th.price {
 }
 
 #cart_actions ul.buttons {
-
+    float: right;
 }
 
 #cart_information .summary li ul.buttons  li.action {
-
+    line-height: 3em;
+    clear: right;
+    float: right;
 }
 
 #cart_information .summary li {
-
+    list-style-type: none;
+    line-height: 1.5em;
 }
 
 div.action {
-
+    height:2.5em;
 }
 
 .quick_order #cart_actions div.action {
-
+    clear: right;
+    float: right;
+    margin: 0 15px 0 0;
 }
 
 #cart_display .summary label {
-
+    display: inline;
+    font-weight:bold;
+    font-size: 12px;
 }
 
 #cart_display .summary .discount_subtotal span.amount {
-
+    display: inline;
+    font-size: 1em;
+    color: #000000;
+    font-weight:normal;
+    font-size: 14px;
 }
 
 #cart_display .summary .subtotal span.amount {
-
+    display: inline;
+    font-weight: bold;
 }
 
 #cart_display tr.cart_totals td {
+    vertical-align: middle;
+}
+
+	/* ---- Default Promo code Styles --- */
+
+#eCommerceEnterPromoCode {
+    float: left;
+    margin: 1em 0;
+    width: 100%;
+}
+
+#eCommerceEnterPromoCode h3 {
 
 }
+
+#ecommercePromocodeEntry {
+    clear: left;
+    float: left;
+    margin: 0 0 10px;
+    width: 100%;
+}
+
+#ecommercePromocodeEntry label {
+    padding: 5px 0;  /* 5px padding mirrors the padding on the promocode button */
+    width: auto;
+}
+
+#ecommercePromocodeEntry input {
+    font-size: 13px;
+    margin: 2px 5px 2px 0;
+    padding: 3px 0; /* 5px padding+margins mirrors the padding on the promocode button */
+    width: auto;
+}
+
+#eCommerceEnteredPromoCode {
+
+}
+
+.ecommercePromocodeDetail {
+    float: left;
+    width: 100%;
+}
+
+.ecommercePromocodeName {
+    float: left;
+    font-size: 14px;
+    margin: 0 10px 0 0;
+    width: 120px;
+}
+
+.ecommercePromocodeDesc {
+    color: #FF0000;
+    float: left;
+    font-size: 14px;
+    margin: 0 10px 0 0;
+    width: 250px;
+}
+
+.ecommercePromocodeStatus {
+    float: left;
+    font-size: 14px;
+    margin: 0 10px 0 0;
+    width: 200px;
+}
+
+.ecommercePromocodeAction {
+
+}
+
+.ecommercePromocodeAction a {
+    font-size: 14px;
+}
+
+.ecommercePromocodeAction a:hover {
+
+}
+
+
 
 /* === 11. Checkout Phases  === */
 
@@ -4220,18 +7205,17 @@ div.action {
     display: inline-block;
     font-size: 1.5em;
     margin: 1em 0;
-    width: 895px;
-	background: #666;
+    width: 100%;
+    display: none;
 }
 #eCommerceCartFootprintContainer li {
-    color: #fff;
     float: left;
-    height: 23px;
-    margin: 0;
-    padding-left: 30px;
-    padding-top: 5px;
-    width: 146px;
-    font-size: 16px;
+    height: 70px;
+    width: 192px;
+}
+
+#eCommerceCartFootprintContainer li span {
+    display: none;
 }
 
 #eCommerceCartFootprintContainer li a {
@@ -4244,43 +7228,157 @@ div.action {
 }
 
 #eCommerceCartFootprintContainer li.first {
-    background: url("/osafe_theme/images/user_content/images/first.png") no-repeat scroll 0 0 transparent;
+
 }
 
-#eCommerceCartFootprintContainer li.on,
+#eCommerceCartFootprintContainer li.on {
+
+}
+
 #eCommerceCartFootprintContainer li.current {
-    background: url("/osafe_theme/images/user_content/images/current-on.png") no-repeat scroll 0 0 transparent;
+
 }
 
 #eCommerceCartFootprintContainer li.next {
-    background: url("/osafe_theme/images/user_content/images/next.png") no-repeat scroll 0 0 transparent;
+
 }
 
 #eCommerceCartFootprintContainer li.off,
 #eCommerceCartFootprintContainer li.last {
-    background: url("/osafe_theme/images/user_content/images/off.png") no-repeat scroll 0 0 transparent;
+
 }
 
 #eCommerceCartFootprintContainer li#confirmation.off,
 #eCommerceCartFootprintContainer li#confirmation.last { 
-	padding-right: 15px;
-    background: url("/osafe_theme/images/user_content/images/last-off.png") no-repeat scroll 0 0 transparent;
+
 }
 
 #eCommerceCartFootprintContainer li#confirmation.next { 
-	padding-right: 15px;
-    background: url("/osafe_theme/images/user_content/images/last-next.png") no-repeat scroll 0 0 transparent;
+
 }
 
 #eCommerceCartFootprintContainer li#confirmation.current { 
-	padding-right: 15px;
-    background: url("/osafe_theme/images/user_content/images/last-on.png") no-repeat scroll 0 0 transparent;
+
 }
+
+/* === Custom Footprint Container Style per Page  === */
+
+/* My Cart / Step One */
+
+.showCartFootPrintSeq #cart {
+    background: url("/osafe_theme/images/user_content/images/step1on.png") top center no-repeat;
+}
+
+.showCartFootPrintSeq #shippingAddress {
+    background: url("/osafe_theme/images/user_content/images/step2off.png") top center no-repeat;
+}
+
+.showCartFootPrintSeq #shippingMethod {
+    background: url("/osafe_theme/images/user_content/images/step3off.png") top center no-repeat;
+}
+
+.showCartFootPrintSeq #payment {
+    background: url("/osafe_theme/images/user_content/images/step4off.png") top center no-repeat;
+}
+
+.showCartFootPrintSeq #confirmation {
+    background: url("/osafe_theme/images/user_content/images/step5off.png") top center no-repeat;
+}
+
+/* Shipping Address / Step Two */
+
+.shippingAddressFootPrintSeq #cart {
+    background: url("/osafe_theme/images/user_content/images/step1off.png") top center no-repeat;
+}
+
+.shippingAddressFootPrintSeq #shippingAddress {
+    background: url("/osafe_theme/images/user_content/images/step2on.png") top center no-repeat;
+}
+
+.shippingAddressFootPrintSeq #shippingMethod {
+    background: url("/osafe_theme/images/user_content/images/step3off.png") top center no-repeat;
+}
+
+.shippingAddressFootPrintSeq #payment {
+    background: url("/osafe_theme/images/user_content/images/step4off.png") top center no-repeat;
+}
+
+.shippingAddressFootPrintSeq #confirmation {
+    background: url("/osafe_theme/images/user_content/images/step5off.png") top center no-repeat;
+}
+
+/* Shipping Option / Step Three */
+
+.shippingOptionsFootPrintSeq #cart {
+    background: url("/osafe_theme/images/user_content/images/step1off.png") top center no-repeat;
+}
+
+.shippingOptionsFootPrintSeq #shippingAddress {
+    background: url("/osafe_theme/images/user_content/images/step2off.png") top center no-repeat;
+}
+
+.shippingOptionsFootPrintSeq #shippingMethod {
+    background: url("/osafe_theme/images/user_content/images/step3on.png") top center no-repeat;
+}
+
+.shippingOptionsFootPrintSeq #payment {
+    background: url("/osafe_theme/images/user_content/images/step4off.png") top center no-repeat;
+}
+
+.shippingOptionsFootPrintSeq #confirmation {
+    background: url("/osafe_theme/images/user_content/images/step5off.png") top center no-repeat;
+}
+
+/* Order Summary / Step Four */
+
+.orderSummaryFootPrintSeq #cart {
+    background: url("/osafe_theme/images/user_content/images/step1off.png") top center no-repeat;
+}
+
+.orderSummaryFootPrintSeq #shippingAddress {
+    background: url("/osafe_theme/images/user_content/images/step2off.png") top center no-repeat;
+}
+
+.orderSummaryFootPrintSeq #shippingMethod {
+    background: url("/osafe_theme/images/user_content/images/step3off.png") top center no-repeat;
+}
+
+.orderSummaryFootPrintSeq #payment {
+    background: url("/osafe_theme/images/user_content/images/step4on.png") top center no-repeat;
+}
+
+.orderSummaryFootPrintSeq #confirmation {
+    background: url("/osafe_theme/images/user_content/images/step5off.png") top center no-repeat;
+}
+
+/* Order Confirmation / Step Five */
+
+.orderConfirmFootPrintSeq #cart {
+    background: url("/osafe_theme/images/user_content/images/step1off.png") top center no-repeat;
+}
+
+.orderConfirmFootPrintSeq #shippingAddress {
+    background: url("/osafe_theme/images/user_content/images/step2off.png") top center no-repeat;
+}
+
+.orderConfirmFootPrintSeq #shippingMethod {
+    background: url("/osafe_theme/images/user_content/images/step3off.png") top center no-repeat;
+}
+
+.orderConfirmFootPrintSeq #payment {
+    background: url("/osafe_theme/images/user_content/images/step4off.png") top center no-repeat;
+}
+
+.orderConfirmFootPrintSeq #confirmation {
+    background: url("/osafe_theme/images/user_content/images/step5on.png") top center no-repeat;
+}
+
+
 
 /* === 11.1 Login  === */
 
 #eCommerceLoginContainer {
-
+    clear: both;
 }
 
 #eCommerceLoginContainer .entryButtons {
@@ -4306,20 +7404,37 @@ div.action {
 #returningCustomer.withGuestCheckoutOption,
 #newCustomer.withGuestCheckoutOption,
 #guestCheckoutBox.withGuestCheckoutOption {
-
+    clear: none;
+    width: 295px;
+    float: left;
+    margin: 10px 24px 240px 0;
+    min-height: 340px;
+    padding: 0 0 15px 0;
 }
 
-#eCommerceLoginContainer .withGuestCheckoutOption label {
+#guestCheckoutBox.withGuestCheckoutOption {
+    clear: none;
+    width: 295px;
+    float: left;
+    margin: 25px 0 240px 0;
+    min-height: 340px;
+}
 
+
+#eCommerceLoginContainer .withGuestCheckoutOption label {
+    width: 100px;
 }
 
 #eCommerceLoginContainer .withGuestCheckoutOption input[type="text"],
 #eCommerceLoginContainer .withGuestCheckoutOption input[type="password"] {
-
+    width: 150px;
 }
 
 #returningCustomer {
-
+    width: 400px;
+    float: left;
+    margin: 10px 0 240px 0;
+    min-height: 300px; /* Added by Js2 to unify this container and #newCustomer */
 }
 
 #returningCustomer h3,
@@ -4330,19 +7445,24 @@ div.action {
 
 #returningCustomer .infoAndEntrysec .entry label,
 #newCustomer .infoAndEntrysec .entry label {
-
+    width: 75px;
 }
 
-#returningCustomer .infoAndEntrysec p {
-
+#returningCustomer .infoAndEntrysec p,
+#newCustomer .infoAndEntrysec p,
+#guestCheckoutBox .infoAndEntrysec p {
+     min-height: 100px;
 }
 
 #returningCustomer #forgottenPassword {
-
+    clear: both;
+    display: block;
+    color: #666666;
+    font-size: 14px;
 }
 
 #returningCustomer #forgottenPassword:hover {
-
+    text-decoration: underline;
 }
 
 #returningCustomer p.loginTip {
@@ -4350,54 +7470,73 @@ div.action {
 }
 
 #newCustomer {
- 
+    width: 400px;
+    clear: right;
+    float: right;
+    margin: 10px 0 0 0;
+	min-height: 300px; /* Added by Js2 to unify this container and #returningCustomer */
 }
 
 /* === 11.1.1 Forgot Password  === */
 
 #forgotPassword {
-
+    width: 880px;
+    margin: 25px 0 240px 0;
 }
 
 #forgotPassword .entryButtons {
-
+    margin: 0 0 0 107px;
 }
 
 /* === 11.1.2 Change Password  === */
 
 #changePassword {
-
+	width: 400px;
+	margin: 25px 0 240px 0;
 }
 
 /* === 11.1.3 Guest Checkout  === */
 
 #guestCheckout #createAccountEntry {
-
+    float: left;
+    height: auto;
+    min-height: 340px;
+    margin: 10px 0 0 0;
+    padding: 0 0 20px 0;
+    width: 450px;
 }
 
 #guestCheckout #createAccountEntry input[type="text"],
 #guestCheckout #createAccountEntry input[type="password"] { 
-
+    width: 190px;
 }
 
 #guestCheckout .shippingOptions {
-
+    width: 100%;
 }
 
 #guestCheckout #paymentMethods {
-
+    clear:none;
+    height: auto;
+    min-height: 340px;
+    width: 450px;
 }
 
 form div.entryButtons.submitOrder {
-
+    clear: both;
+    float: right;
+    margin: 1em 0 1em 0;
 }
 
 .boxTopMessage {
+    display: block;
+    font-size: 1.2em;
+    padding: 0 10px 0 10px;
 
 }
 
 #createAccountEntry .entry .radioOptionText {
-
+    margin: 0 0 0 10px;
 }
 
 #guestCheckout .entry label {
@@ -4405,12 +7544,35 @@ form div.entryButtons.submitOrder {
 }
 
 #createAccountEntry .entry {
-
+    clear:both;
 }
 
 .withGuestCheckoutOption div.infoAndEntrysec, 
 div.infoAndEntrysec  {
+    height: 160px;
+}
 
+
+/* === 11.1.4 Account Registration  === */
+
+#aboutYouEntry {
+    float: left;
+    width: 100%;
+}
+
+.checkoutOrderBillingAddress {
+    float: left;
+    width: 100%;
+}
+
+.checkoutOrderShippingAddress {
+    float: left;
+    width: 100%;
+}
+
+#emailPasswordEntry {
+    float: left;
+    width: 100%;
 }
 
 /* === 11.2 Show Cart  === */
@@ -4431,7 +7593,8 @@ div.infoAndEntrysec  {
 	/* ----- Show Cart / Cart Items -----*/
 
 #eCommerceShowcart .showCartItems {
-	
+    float: left;
+    width: 100%;	
 }
 
 	/* ----- Show Cart / Promotional Code -----*/
@@ -4440,64 +7603,43 @@ div.infoAndEntrysec  {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox {
+#eCommerceShowcart #eCommerceEnterPromoCode h3 {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox h3 {
+#eCommerceShowcart #ecommercePromocodeEntry {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry {
+#eCommerceShowcart #ecommercePromocodeEntry label {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry label {
+#eCommerceShowcart #ecommercePromocodeEntry input {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input {
+#eCommerceShowcart #eCommerceEnteredPromoCode {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a.standardBtn {
+#eCommerceShowcart .ecommercePromocodeDetail {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a.standardBtn:hover {
+#eCommerceShowcart .ecommercePromocodeName {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode {
+#eCommerceShowcart .ecommercePromocodeDesc {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode {
+#eCommerceShowcart .ecommercePromocodeStatus {
 
 }
 
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode {
-	
-}
-
-
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeName {
-
-}
-
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeDesc {
-	
-}
-
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeStatus {
-
-}
-
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a {
-
-}
-
-#eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a:hover {
+#eCommerceShowcart .ecommercePromocodeAction {
 
 }
 
@@ -4516,7 +7658,7 @@ div.infoAndEntrysec  {
 /* Post Code Anywhere Style Overrides (Applied to All PCA Instances) */
 
 .pcaAutoComplete .inputArea {
-
+     width: 350px !important;
 }
 
 #multiPageCustomerAddress {
@@ -4535,21 +7677,21 @@ div.infoAndEntrysec  {
 	/* ----- Shipping Address / Billing Address -----*/
 
 #multiPageCustomerAddress .billingAddress .displayBox {
-
+     width: 100%;
 }
 
 #multiPageCustomerAddress .billingAddress .displayBox h3 {
-
+     display: block;
 }
 
 	/* ----- Shipping Address / Shipping Address -----*/
 
 #multiPageCustomerAddress .shippingAddress .displayBox {
-
+     width: 100%;
 }
 
 #multiPageCustomerAddress .shippingAddress .displayBox h3 {
-
+     display: block;
 }
 
 	/* ----- Shipping Address / Previous and Continue Buttons -----*/
@@ -4573,7 +7715,7 @@ div.infoAndEntrysec  {
 }
 
 #CUSTOMER_ADDRESS_ENTRY p.instructions {
-
+	padding: 1em;
 }
 
 #CUSTOMER_ADDRESS_ENTRY .entry {
@@ -4581,7 +7723,7 @@ div.infoAndEntrysec  {
 }
 
 #CUSTOMER_ADDRESS_ENTRY .entry label {
-
+    width: 180px;
 }
 
 #CUSTOMER_ADDRESS_ENTRY .entry input {
@@ -4589,7 +7731,8 @@ div.infoAndEntrysec  {
 }
 
 .editShippingAddress .entry ul li {
-
+    /* Used to push field level errors under associated edit js2 */
+    margin: 0 0 0 196px;
 }
 
 /* === 11.4 Shipping Options and Delivery Times  === */
@@ -4619,21 +7762,76 @@ div.infoAndEntrysec  {
 }
 
 #multiPageShippingOptions #deliveryOptionBox .displayBox .shippingMethodsContainer {
-
+    border-bottom: 2px dotted #CCCCCC;
+    margin: 0 0 20px 0;
 }
 
 #multiPageShippingOptions #deliveryOptionBox .displayBox .shippingMethodsContainer .col {
 
 }
+ 
+#multiPageShippingOptions #deliveryOptionBox { 
 
-	/* ----- Shipping Options / Store Pickup -----*/
-
-#multiPageShippingOptions .shippingOptionsStorePickup {
+}
+	
+#multiPageShippingOptions #deliveryOptionBox .displayBox { 
 
 }
 
-#multiPageShippingOptions .shippingOptionsStorePickup span {
+#multiPageShippingOptions #deliveryOptionBox .displayBox h3 { 
 
+}
+
+#multiPageShippingOptions #deliveryOptionBox #customerStorePickup {  /* Appears when customer selects 'Store Pickup' */
+
+}
+
+#multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow { 
+    float: left;
+    width: 100%;
+}
+
+#multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow .entry { 
+    float: left;
+    width: 100%;
+}
+ 
+#multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel { 
+
+}
+
+#multiPageShippingOptions #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span { 
+    float: left;
+    font-size: 1.6em;
+    margin: 9px 0 0 10px;
+
+}
+
+#multiPageShippingOptions #deliveryOptionBox #customerStorePickup p { 
+    display: inline-block;
+    margin: 10px 0;
+}
+
+
+#multiPageShippingOptions #deliveryOptionBox .deliveryOption { 
+    display: inline-block;
+    margin: 10px 0 20px;
+    width: 100%;
+}
+
+ 
+#multiPageShippingOptions #deliveryOptionBox .deliveryOption span { 
+    font-size: 1.6em;
+}
+
+#multiPageShippingOptions .shippingOptionsStorePickup {
+    display: inline-block;
+    margin: 10px 0 20px;
+    width: 100%;
+}
+
+#multiPageShippingOptions .shippingOptionsStorePickup>span {
+    font-size: 1.6em;
 }
 
 	/* ----- Shipping Options / Previous and Continue Buttons -----*/
@@ -4661,68 +7859,86 @@ div.infoAndEntrysec  {
 	height: 0;
 }
 
+
+#multiPageOrderSummary h3 { 
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+#multiPageOrderSummary .entry h3 { /* For Paypal and Credit Card H3s */
+     font-size: 16px;
+     font-weight: 700;
+}
+
+
+
 	/* ----- Order Summary / Promo Code -----*/
 
 #multiPageOrderSummary #eCommerceEnterPromoCode {
+
+}
+
+#multiPageOrderSummary #eCommerceEnterPromoCode h3 {
+
+}
+
+#multiPageOrderSummary #ecommercePromocodeEntry {
+
+}
+
+#multiPageOrderSummary #ecommercePromocodeEntry label {
+
+}
+
+#multiPageOrderSummary #ecommercePromocodeEntry input {
 	
 }
 
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox {
-	
-}
-
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox h3 {
-	
-}
-
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry {
-	
-}
-
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry label {
+#multiPageOrderSummary #eCommerceEnteredPromoCode {
 
 }
 
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input {
-	
-}
-
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a.standardBtn {
+#multiPageOrderSummary .ecommercePromocodeDetail {
 
 }
 
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a.standardBtn:hover {
+#multiPageOrderSummary .ecommercePromocodeName {
 
 }
 
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode {
-	
+#multiPageOrderSummary .ecommercePromocodeDesc {
+
 }
 
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode {
-	
+#multiPageOrderSummary .ecommercePromocodeStatus {
+
 }
 
-#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode {
-	
+#multiPageOrderSummary .ecommercePromocodeAction {
+
 }
 
 	/* ----- Order Summary / Billing Address -----*/
 
 #multiPageOrderSummary .checkoutOrderBillingAddress {  /* .checkoutOrderBillingAddress is a reuseable class */
-
+     width: 240px;
+     margin: 10px 0;
 }
 
 #multiPageOrderSummary .checkoutOrderBillingAddress .displayBox {
-
+    margin: 0 30px 0 0;
+    width: auto;
 }
 
 #multiPageOrderSummary .checkoutOrderBillingAddress .displayBox p {
-
+    margin: 0;
 }
 
 #multiPageOrderSummary .checkoutOrderBillingAddress .displayBox h3 {
-
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
 }
 
 #multiPageOrderSummary .checkoutOrderBillingAddress .displayBox .address {
@@ -4732,11 +7948,11 @@ div.infoAndEntrysec  {
 	/* ----- Order Summary / Order Items -----*/
 
 #multiPageOrderSummary .checkoutOrderItems {  /* .checkoutOrderItems is a reuseable class */
-
+    margin: 0 0 20px 0;
 }
 
 #multiPageOrderSummary .checkoutOrderItems .orderDetails {
-
+    width: 100%;
 }
 
 #multiPageOrderSummary .checkoutOrderItems .orderDetails #orderItemsWrap {
@@ -4751,7 +7967,7 @@ div.infoAndEntrysec  {
 
 
 #multiPageOrderSummary .checkoutOrderPayments {  /* .checkoutOrderPayments is a reuseable class */
-
+    margin: 20px 0;
 }
 
 #multiPageOrderSummary .checkoutOrderPayments #orderPayment {
@@ -4759,11 +7975,15 @@ div.infoAndEntrysec  {
 }
 
 #multiPageOrderSummary .checkoutOrderPayments #orderPayment .displayBox {
+    width: auto;
 
 }
 
 #multiPageOrderSummary .checkoutOrderPayments #orderPayment .displayBox h3 {
-
+    color: #666666;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
 }
 
 #multiPageOrderSummary .checkoutOrderPayments #orderPayment .displayBox label {
@@ -4778,19 +7998,23 @@ div.infoAndEntrysec  {
 
 
 #multiPageOrderSummary .checkoutOrderShippingAddress {  /* .checkoutOrderShippingAddress is a reuseable class */
-
+	width: 240px;
 }
 
 #multiPageOrderSummary .checkoutOrderShippingAddress .displayBox {
-
+	margin: 0 30px 0 0;
+	width: auto;
 }
 
 #multiPageOrderSummary .checkoutOrderShippingAddress .displayBox p {
-
+    margin: 0;
 }
 
 #multiPageOrderSummary .checkoutOrderShippingAddress .displayBox h3 {
-
+	display: block;
+    font-size: 1.2em;
+    font-weight: 700;
+	margin: 10px 0 0 0;
 }
 
 #multiPageOrderSummary .checkoutOrderShippingAddress .displayBox .address {
@@ -4799,24 +8023,32 @@ div.infoAndEntrysec  {
 
 	/* ----- Order Summary / Store Pickup -----*/ 
 
-#multiPageOrderSummary .checkoutOrderStorePickup {  
+#multiPageOrderSummary .checkoutOrderStorePickup {
+    margin: 10px 100px 10px 0;  
+    width: 350px;
+}
+
+#multiPageOrderSummary .checkoutOrderStorePickup .entryRow label {  
+    margin: 0 !important;
+    width: 90px;
 }
 
 	/* ----- Order Summary / Create Account -----*/ 
 
-#multiPageOrderSummary .checkoutOrderCreateAccount {  
+#multiPageOrderSummary #createAccountEntry {  
+    margin: 0 0 20px 0;
+    width: 550px;
+}
+
+#multiPageOrderSummary #createAccountEntry .displayBox {  
 
 }
 
-#multiPageOrderSummary .checkoutOrderCreateAccount .displayBox {  
+#multiPageOrderSummary #createAccountEntry .displayBox h3 {  
 
 }
 
-#multiPageOrderSummary .checkoutOrderCreateAccount .displayBox h3 {  
-
-}
-
-#multiPageOrderSummary .checkoutOrderCreateAccount .displayBox h3 .boxTopMessage {  
+#multiPageOrderSummary #createAccountEntry .displayBox h3 .boxTopMessage {  
 
 }
 
@@ -4835,6 +8067,31 @@ div.infoAndEntrysec  {
     /* 	Order Confirmation page use the checkoutOrder divs from the previous section.
 		Use the styles below for any overrides. */
 
+#multiPageOrderConfirm {
+
+}
+
+#multiPageOrderConfirm:after {
+    visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
+
+#multiPageOrderConfirm h3 { 
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+#multiPageOrderConfirm .entry h3 { /* For Paypal and Credit Card H3s */
+     font-size: 16px;
+     font-weight: 700;
+}
+
 	/* ----- Order Confirm / Order Thank You -----*/ 
 
 #multiPageOrderConfirm .orderConfirmThankyou {
@@ -4842,13 +8099,14 @@ div.infoAndEntrysec  {
 }
 
 #multiPageOrderConfirm .orderConfirmThankyou p {
-
+    display: block;
+    margin: 0 0 10px;	
 }
 
 	/* ----- Order Confirm / Order Items -----*/ 
 
 #multiPageOrderConfirm .checkoutOrderItems {
-
+	margin: 0 0 25px 0;
 }
 
 #multiPageOrderConfirm .checkoutOrderItems .orderDetails {
@@ -4862,16 +8120,20 @@ div.infoAndEntrysec  {
 	/* ----- Order Confirm / Billing Address -----*/ 
 
 #multiPageOrderConfirm .checkoutOrderBillingAddress  {
-
+    margin: 10px 0;
+    width: 240px;
 }
 	
 
 #multiPageOrderConfirm .checkoutOrderBillingAddress .displayBox {
-
+    margin: 0 30px 0 0;
+    width: auto;
 }
 
 #multiPageOrderConfirm .checkoutOrderBillingAddress .displayBox h3 {
-	
+    display: block;
+    font-size: 1.2em;
+    font-weight: 700;
 }
 
 #multiPageOrderConfirm .checkoutOrderBillingAddress .displayBox .address {
@@ -4885,15 +8147,19 @@ div.infoAndEntrysec  {
 	/* ----- Order Confirm / Shipping Address -----*/ 
 
 #multiPageOrderConfirm .checkoutOrderShippingAddress {
-
+    margin: 10px 0;
+    width: 240px;
 }
 
 #multiPageOrderConfirm .checkoutOrderShippingAddress .displayBox {
-
+    margin: 0 30px 0 0;
+    width: auto;
 }
 
 #multiPageOrderConfirm .checkoutOrderShippingAddress .displayBox h3 {
-	
+display: block;
+    font-size: 1.2em;
+    font-weight: 700;
 }
 
 #multiPageOrderConfirm .checkoutOrderShippingAddress .displayBox .address {
@@ -4907,6 +8173,7 @@ div.infoAndEntrysec  {
 	/* ----- Order Confirm / Payment Options -----*/ 
 
 #multiPageOrderConfirm .checkoutOrderPaymentInformation {
+    margin: 15px 0;
 
 }
 
@@ -4928,8 +8195,14 @@ div.infoAndEntrysec  {
 
 	/* ----- Order Confirm / Store Pickup -----*/ 
 
-#multiPageOrderConfirm .orderConfirmStorePickup {
-	
+#multiPageOrderConfirm .checkoutOrderStorePickup {
+    margin: 10px 100px 10px 0;
+    width: 350px;
+}
+
+#multiPageOrderConfirm .checkoutOrderStorePickup .entryRow label {
+    margin: 0 !important;
+    width: 90px;
 }
 
 	/* ----- Order Confirm / Continue Button -----*/ 
@@ -4946,7 +8219,8 @@ div.infoAndEntrysec  {
 	
 div#anonSinglePageCheckout, 
 div#singlePageCheckout {
-
+    margin: 0 auto;
+    width: 900px;
 }
 
 div#anonSinglePageCheckout:after, 
@@ -4966,7 +8240,7 @@ div#singlePageCheckout h3 {
 
 div#anonSinglePageCheckout .entry h3, 
 div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
-
+     font-size: 14px;
 }
 
 
@@ -4974,14 +8248,16 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #aboutYouEntry, 
 #singlePageCheckout #aboutYouEntry {
-
+    margin: 0 auto;
+    width: 100%;
 }
 
 	/* ----- One Page Checkout / Billing Address -----*/ 
 
 #anonSinglePageCheckout .checkoutOrderBillingAddress, 
 #singlePageCheckout .checkoutOrderBillingAddress { 
-
+    margin: 15px auto 0 auto;
+    width: 100%;
 }
 
 #anonSinglePageCheckout .checkoutOrderBillingAddress .displayBox, 
@@ -5008,7 +8284,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout .checkoutOrderItems, 
 #singlePageCheckout .checkoutOrderItems  { 
-
+    margin: 15px 0 0 0;
 }
 
 #anonSinglePageCheckout .checkoutOrderItems .orderDetails , 
@@ -5030,6 +8306,8 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 	
 #anonSinglePageCheckout .checkoutOrderPayments, 
 #singlePageCheckout .checkoutOrderPayments { 
+    width: 100%;
+    margin: 25px auto 0 auto;
 
 }
 
@@ -5060,11 +8338,12 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout .checkoutOrderPayments .paymentOptions, 
 #singlePageCheckout .checkoutOrderPayments .paymentOptions { 
-
+    margin: 10px 0;
 }
 
 #anonSinglePageCheckout .checkoutOrderPayments .paymentOptions h3, 
 #singlePageCheckout .checkoutOrderPayments .paymentOptions h3 { 
+    font-size: 14px;
 
 }
 	/* ----- One Page Checkout / Promo Code -----*/ 
@@ -5074,78 +8353,53 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox {
+#anonSinglePageCheckout #eCommerceEnterPromoCode h3, 
+#singlePageCheckout #eCommerceEnterPromoCode h3 {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox h3, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox h3 {
+#anonSinglePageCheckout  #ecommercePromocodeEntry, 
+#singlePageCheckout  #ecommercePromocodeEntry {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry {
+#anonSinglePageCheckout #ecommercePromocodeEntry label, 
+#singlePageCheckout #ecommercePromocodeEntry label {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry label, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry label {
+#anonSinglePageCheckout #ecommercePromocodeEntry input, 
+#singlePageCheckout #ecommercePromocodeEntry input {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input {
+#anonSinglePageCheckout #eCommerceEnteredPromoCode, 
+#singlePageCheckout #eCommerceEnteredPromoCode {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input#manualOfferCode, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input#manualOfferCode {
+#anonSinglePageCheckout .ecommercePromocodeDetail, 
+#singlePageCheckout .ecommercePromocodeDetail {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode {
+#anonSinglePageCheckout .ecommercePromocodeName,
+#singlePageCheckout .ecommercePromocodeName  {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode {
+#anonSinglePageCheckout .ecommercePromocodeDesc,
+#singlePageCheckout .ecommercePromocodeDesc {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeName,
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeName  {
+#anonSinglePageCheckout .ecommercePromocodeStatus,
+#singlePageCheckout .ecommercePromocodeStatus {
 
 }
 
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeDesc,
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeDesc {
-
-}
-
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeStatus,
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeStatus {
-
-}
-
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction,
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction {
-
-}
-
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a,
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a {
-
-}
-
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a {
-
-}
-
-#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a:hover, 
-#singlePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a:hover {
+#anonSinglePageCheckout .ecommercePromocodeAction,
+#singlePageCheckout .ecommercePromocodeAction {
 
 }
 
@@ -5153,6 +8407,8 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 	
 #anonSinglePageCheckout .checkoutOrderShippingAddress, 
 #singlePageCheckout .checkoutOrderShippingAddress { 
+    margin: 15px auto 0 auto;
+    width: 100%;
     
 }
 
@@ -5180,7 +8436,8 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #deliveryOptionBox, 
 #singlePageCheckout #deliveryOptionBox { 
-
+    width: 100%;
+    margin: 15px auto 0 auto;
 }
 	
 #anonSinglePageCheckout #deliveryOptionBox .displayBox, 
@@ -5200,12 +8457,14 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow, 
 #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow { 
-
+    float: left;
+    width: 100%;
 }
 
 #anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry, 
 #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry { 
-
+    float: left;
+    width: 100%;
 }
 
 #anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel, 
@@ -5215,12 +8474,16 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span, 
 #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span { 
+    float: left;
+    font-size: 1.6em;
+    margin: 9px 0 0 10px;
 
 }
 
 #anonSinglePageCheckout #deliveryOptionBox #customerStorePickup p, 
 #singlePageCheckout #deliveryOptionBox #customerStorePickup p { 
-
+    display: inline-block;
+    margin: 10px 0;
 }
 
 #anonSinglePageCheckout #deliveryOptionBox .deliveryOption, /* 'Deliver My Items' Button */
@@ -5231,18 +8494,20 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #deliveryOptionBox .deliveryOption span, 
 #singlePageCheckout #deliveryOptionBox .deliveryOption span { 
-
+    font-size: 1.6em;
 }
 
 	/* ----- One Page Checkout / Store Pickup -----*/ 
 
 #anonSinglePageCheckout .shippingOptionsStorePickup, 
 #singlePageCheckout .shippingOptionsStorePickup { 
-
+    width: 100%;
+    margin: 0 auto;
 }
 	
 #anonSinglePageCheckout .shippingOptionsStorePickup span, 
 #singlePageCheckout .shippingOptionsStorePickup span { 
+    font-size: 15px;
 
 }
 
@@ -5260,6 +8525,8 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 	
 #anonSinglePageCheckout #createAccountEntry.displayBox, 
 #singlePageCheckout #createAccountEntry.displayBox { 
+    margin: 15px auto 0 auto;
+    width: 100%;
 
 }
 
@@ -5270,7 +8537,9 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #createAccountEntry.displayBox .boxTopMessage,
 #singlePageCheckout #createAccountEntry.displayBox .boxTopMessage { 
-
+    color: #666666;
+    font-size: 14px;
+    padding: 0;
 }
 
 	/* ----- One Page Checkout / Submit Order -----*/ 
@@ -5304,7 +8573,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .personalInfoGender select {
-;
+	width: auto!important;
 }
 
 .personalInfoDateOfBirthMMDDYYYY {
@@ -5312,7 +8581,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .personalInfoDateOfBirthMMDDYYYY select {
-
+	width: auto!important;
 }
 
 .personalInfoDateOfBirthMMDD {
@@ -5320,7 +8589,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .personalInfoDateOfBirthMMDD select {
-
+	width: auto!important;
 }
 
 .personalInfoDateOfBirthDDMMYYYY {
@@ -5328,7 +8597,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .personalInfoDateOfBirthDDMMYYYY select {
-
+	width: auto!important;
 }
 
 .personalInfoDateOfBirthDDMM {
@@ -5336,7 +8605,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .personalInfoDateOfBirthDDMM select {
-
+	width: auto!important;
 }
 
 .personalInfoPhoneHome {
@@ -5351,25 +8620,84 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 }
 
-/* === 11.9 Order History  === */
+/* === 11.9 Order History / Order Detail === */
 
 #orderSalesHistory {
-
+    margin: 0 0 2em 0;
 }
 
 #orderSalesHistory .orderNumber {
-
+    text-align: left;
 }
 
 #orderSalesHistory .orderDate {
-
+    text-align: center;
 }
 
 #orderSalesHistory .orderStatus {
-
+    text-align: center;
 }
 
 #orderSalesHistory .totalPrice {
+    text-align: right;
+}
+
+#eCommerceOrderStatusContainer {
+    float: left;
+    width: 100%;
+}
+
+#orderStatusBlock {
+    width: 100%;
+}
+
+#orderStatusGrid {
+    width: 100%;
+}
+
+#orderStatusGrid #orderNumberCap {
+    font-weight: 700;
+    padding: 4px;
+    width: 125px;
+}
+
+#orderStatusGrid #orderNumber {
+
+}
+
+#orderStatusGrid #customerCap {
+    font-weight: 700;
+    padding: 4px;
+    width: 125px;
+}
+
+#orderStatusGrid #customer {
+
+}
+
+#orderStatusGrid #orderStatusCap {
+    font-weight: 700;
+    padding: 4px;
+    width: 125px;
+}
+
+#orderStatusGrid #orderStatus {
+
+}
+
+#orderStatusGrid #orderDateCap {
+    font-weight: 700;
+    padding: 4px;
+    width: 125px;
+}
+
+#orderStatusGrid #orderDate {
+
+}
+
+/* === 11.10 Wishlist Page   === */
+
+#eCommerceShowWishList {
 
 }
 
@@ -5378,241 +8706,441 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 /* === 12.1 Contact Us  === */
 
 .contactUsPhone {
-
+	width: 500px; 
+	background: url("/osafe_theme/images/user_content/images/contact-phone.png") no-repeat 0 50%;
+	padding: 15px;
 }
 .contactUsPhone .contactRow {  
-
+    margin: 0 0 0 20px;
 }
 
 .contactUsPhone .contactRow label {
-
+    float: left;
+    clear: left;
+    font-size: 1.8em; 
+    width: 70px; 
+    margin: 0 5px 0 0;
 }
 
 .contactUsPhone .contactRow p {  
- 
+    font-size: 1.8em; 
 }
 
 .contactUsFax {
-
+	width: 500px; 
+	background: url("/osafe_theme/images/user_content/images/contact-fax.png") no-repeat 0 50%;
+	padding: 15px;
 }
 
 .contactUsFax .contactRow {  
-
+    margin: 0 0 0 20px;
 }
 
 .contactUsFax .contactRow label {
-
+    float: left;
+    clear: left;
+    font-size: 1.8em; 
+    width: 70px; 
+    margin: 0 5px 0 0;
 }
 
 .contactUsFax .contactRow p {  
-
+    font-size: 1.8em;
 }
 
 .contactUsEmail {
-
+	width: 500px; 
+	background: url("/osafe_theme/images/user_content/images/contact-email.png") no-repeat 0 50%;
+	padding: 15px;
 }
 
 .contactUsEmail .contactRow {  
-
+    margin: 0 0 0 20px;
 }
 
 .contactUsEmail .contactRow label {
-
+    float: left;
+    clear: left;
+    font-size: 1.8em; 
+    width: 70px; 
+    margin: 0 5px 0 0;
 }
 
 .contactUsEmail .contactRow p { 
-
+    display: inline-block;
+    font-size: 1.8em;
 }
 
 .contactUsEmail .contactRow a {  
+    font-size: 1.8em; 
 }
 
 .contactUsEmail .contactRow a:hover {  
-
+    text-decoration: underline;
 }
 
 .contactUsMail {
-
+     width: 330px; 
+     padding: 15px;
 }
 
 .contactUsMail .contactRow {  
-
+    margin: 0 0 0 20px;
 }
 
 .contactUsMail .contactRow label {
-
+    float: left;
+    clear: left;
+    font-size: 1.8em; 
+    width: 100px; 
+    margin: 0 5px 0 0;
 }
 
 .contactUsMail .contactRow ul { 
-
+	float: right;
 }
 
 .contactUsMail .contactRow ul li {  
-
+    font-size: 1.8em; 
 }
 
 /* === 12.2 Store Locater   === */
 
 .mapCanvas {
-
+    border:1px solid #979797; 
+    background-color:#e5e3df;
+    padding: 15px;
+    margin: 7px auto 7px auto;
 }
 
 .mapCanvasWithDirection {
-
+    float: left;
+    width: 590px !important;
 }
 
 .mapLoading {
-
+    padding:1em;
+    color: #666666;
 }
 
 .mapClosure {
-
+    width:210px;
+    padding: 0 10px 0 0;
+    font-size: 1.5em;
 }
 
 .mapDirection {
-
+    display: none;
+    float: right;
+    height: auto !important;
+    width: 300px;
 }
 
 .closeDirection {
-
+    float: right;
+    margin: 5px;
 }
 
 .noDirection {
-
+    float: left;
+    clear: both;
+    display:none;
 }
 
 .noDirection span {
-
+    color: red;
+    font-size: 1.5em;
 }
 
 .routeDirection {
+    clear: both;
+    overflow-y: auto;
+    font-size: 1.3em;
+}
 
+.storeDetailIcon {
+    background-image: url(/osafe_theme/images/user_content/images/storeDetailIcon.png);
+    font-size: 1.5em;
+    background-repeat:no-repeat;
+    width: 29px;
+    height:23px;
+    display: block;
 }
 
 .drivingDirectionIcon {
-
+    background-image: url(/osafe_theme/images/user_content/images/drivingDirection.png);
+    font-size: 1.5em;
+    background-repeat:no-repeat;
+    width: 29px;
+    height:23px;
+    display: block;
 }
 
 .walkingDirectionIcon {
-
+    background-image: url(/osafe_theme/images/user_content/images/walkingDirection.png);
+    font-size: 1.5em;
+    background-repeat:no-repeat;
+    width: 29px;
+    height:23px;
+    display: block;
 }
 
 .bicyclingDirectionIcon {
-
+    background-image: url(/osafe_theme/images/user_content/images/bicyclingDirection.png);
+    font-size: 1.5em;
+    background-repeat:no-repeat;
+    width: 29px;
+    height:23px;
+    display: block;
 }
 
 #eCommerceStoreLocatorContainer .displayBox {
-
+    clear: none;
+    float: none;
+    font-size: 12px;
+    margin: 1em 0;
+    width: auto;
 }
 
 .displayBox div.storeLocator {
-
+    width: 100%;
 }
 
 .storeLocator div.storeSearch {
 }
 
 .storeSearch div.entry {
-
+    margin: 0;
 }
 
 .storeSearch div.entry label {
-
+    width: auto;
 }
 
 .storeSearch div.entry input.standardBtn {
-
+    margin: 0 0 0 20px;
+    padding: 0;
 }
 
 .storeSearch div.entry input[type="text"]{
-
+    width: 300px;
 }
 
 .storeLocator div.storeMap {
-
+    border-top: 1px solid #DDDDDD;
+    border-bottom: 1px solid #DDDDDD;
+    width: 100%;
+    display: inline-block;
 }
 
 .storeLocator div.storeList {
 
 }
 
-.storeList div.store {
+div.storeDetail .label  {
+         display: inline; 
+         font-weight: 700;  
+}
 
+div.storeDetail .value {
+    display: inline-block;
+    margin: 0 0 0 3px;
+}
+
+.storeList div.store {
+    border-bottom: 1px solid #DDDDDD;
+    display: inline-block;
+    margin: 0 0 10px 0;
+    width: 100%;
+    padding: 10px 0;
 }
 
 .store div.storeDist {
+    display: block;
+    float: left;
+    margin: 0 20px 0 0;
+    text-align: center;
+    width: 200px;
+}
 
+.store div.storeDist p.distance {
+     padding: 0;
 }
 
 .store div.storeDetail {
+    display: inline-block;
+    float: left;
+    width: 300px;
+    font-size: 14px;
+}
 
+.store div.storeDetail a {
+    color: #7E7D7D;
+}
+
+.store div.storeDetail a:hover {
+    color: #990000;
+    text-decoration: underline;
 }
 
 .storeDetail .storeName {
-
+    font-weight: bold;
+    color: #333333;
 }
 
 .storeDetail .storeAddress {
-	
+
+}
+
+.storeDetail .storehours {
+
+}
+
+.storeDetail .storephone {
 }
 
 .store div.storeDirectionIcon {
-
+    display: block;
+    float: right;
+    right: 0;
+    text-align: right;
+    width: 200px;
 }
 
 .store div.storeDirectionIcon a {
-
+    color: #000000;
+    margin: 0 5px;
+    display: inline-block;
 }
 
 .storeDetailsBubble {
-
+    float: left;
+    list-style: none outside none;
+    margin: 0 0 0.5em 0; 
+    padding: 0;
+    width: 380px;
 }
 
 .storeDetailsBubble li {
-
+    clear: both;
+    float: left;
+    margin: 0 0 0.3em 0;
+    width: 100%;
 }
 
 .storeDetailsBubble .label {
-
+    //color: #808080;
+    display: block;
+    float: left;
+    font-size: 11px;
+    min-width: 90px;
 }
 
 .storeDetailsBubble .value {
-
+    float: left;
+    width: 280px;
 }
 
 .storeDetailsBubble .storeName {
-
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .storeDetailsBubble .addressLine2 {
+    text-indent: 30px;
+}
+
+.storeDetailPageInfo {
 
 }
+
+.storeDetailPageInfo label {
+    text-align: right;
+    width: 90px !important;
+}
+
+.storeDetailPageInfo span{
+    display: inline-block;
+    font-weight: 700;
+    margin: 4px 0 0 5px;
+    font-size: 12px;
+}
+
 
 /* === 12.3 Request Catalog  === */
 
 .requestCatalog {
-
+    width: 878px;
+    margin: 10px 0 50px 0;
 }
 
 .requestCatalog .entry ul li {
-
+    /* Used to push field level errors under associated edit*/
+    margin: 0 0 0 167px;
 }
 
 .textCounter {
 
 }
 
-/* === 12.4 My Account  === */
+
+/* === 12.4 Mailing List Sign Up  === */
+
+
+.emailSubscriber {
+	background-color:#f0f0f0;
+	padding:15px;
+	width: 640px;
+	margin:auto;
+}
+
+.emailSubscriber:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+
+.emailSubscriber h3 {
+	font-size:14px;
+	background:url("/osafe_theme/images/user_content/images/dotted-border.png") repeat-x scroll center bottom transparent;
+	margin:0;
+	padding: 5px 0;	
+}
+
+#emailSubscriberEntry .col {
+	padding-top:20px;
+}
+
+/* === 12.5 My Account  === */
 
 #eCommerceMyAccountContainer {
 
 }
 
-#eCommerceMyAccountContainer .displayBox {
+#eCommerceMyAccountContainer h3 {
 
 }
 
-#eCommerceMyAccountContainer .displayBox h3 {
+#eCommerceMyAccountContainer .displayBox {
+     margin: 25px 0;
+}
+
+#Customerpersonalinfo {
+
+}
+
+#Customerlogininfo {
+
+}
+
+#CustomerAddressBook {
+
+}
+
+#CustomerOrderStatus {
 
 }
 
@@ -5620,16 +9148,18 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 #Customerlogininfo a,
 #CustomerAddressBook a,
 #CustomerOrderStatus a,
-#CustomerOrderStatus a {
-
+#CustomerOrderStatus a,
+#CustomerPaymentMethodInfo a {
+     border-bottom: 1px dotted;
 }
 
 #Customerpersonalinfo a:hover,
 #Customerlogininfo a:hover,
 #CustomerAddressBook a:hover,
 #CustomerOrderStatus a:hover,
-#CustomerOrderStatus a:hover {
-
+#CustomerOrderStatus a:hover,
+#CustomerPaymentMethodInfo a:hover {
+     border-bottom: 1px solid;
 }
 
 /* ---- Personal Information ---- */
@@ -5647,7 +9177,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 #eCommerceEditCustomerInfoContainer #ptsLoginInfo p {
-
+    font-size: 15px;
 }
 
 #eCommerceEditCustomerInfoContainer #pesLoginInfo {
@@ -5655,7 +9185,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 #eCommerceEditCustomerInfoContainer #pesLoginInfo p {
-
+    font-size: 15px;
 }
 
 /* ---- Address Book Information ---- */
@@ -5669,31 +9199,33 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 #eCommerceEditAddressBookContainer .shippingAddress .addressContainer {
-
+    float: left;
+    width: 100%;
 }
 
 #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle {
+    clear: none;
+    float: left;
+    width: 230px;
+    min-height: 200px;
+    margin: 10px 0 10px 0;
+    padding: 0;
+}
+
+#eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle h3 {
 
 }
 
 #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle p {
-
+    margin: 0;
 }
 
-#eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle .buttons {
-
+#eCommerceEditAddressBookContainer .buttons {
+    margin: 10px 0 0 0;
 }
 
-#eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle .buttons a {
-
-}
-
-#eCommerceEditAddressBookContainer .shippingAddress .addressContainer .newAddressButtons {
-
-}
-
-#eCommerceEditAddressBookContainer .shippingAddress .addressContainer .newAddressButtons a {
-
+#eCommerceEditAddressBookContainer .newAddressButtons {
+    clear: both;
 }
 
 /* ---- Order Status Information ---- */
@@ -5719,7 +9251,16 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 table#orderSalesHistory {
+    border: 1px solid #eaeaea;
+    width: 100%;
+}
 
+table#orderSalesHistory tr {
+
+}
+
+table#orderSalesHistory td {
+     padding: 3px 5px;
 }
 
 table#orderSalesHistory thead tr {
@@ -5731,7 +9272,7 @@ table#orderSalesHistory thead tr th {
 }
 
 table#orderSalesHistory tbody tr {
-
+    border-bottom: 1px solid #eaeaea;
 }
 
 table#orderSalesHistory tbody tr th {
@@ -5746,29 +9287,82 @@ table#orderSalesHistory thead tr th {
 }
 
 table#orderSalesHistory tbody tr {
-
 }
 
 table#orderSalesHistory tbody tr th {
 
 }
 
-/* === 12.5 Site Map === */
+/* ---- My Payment Information ---- */
+
+table#paymentInformation {
+    border: 1px solid #eaeaea;
+    width: 100%;
+}
+
+table#paymentInformation tr {
+
+}
+
+table#paymentInformation td {
+     padding: 3px 5px;
+}
+
+table#paymentInformation thead tr {
+
+}
+
+table#paymentInformation thead tr th {
+
+}
+
+table#paymentInformation tbody tr {
+    border-bottom: 1px solid #eaeaea;
+}
+
+table#paymentInformation tbody tr th {
+}
+
+table#paymentInformation thead tr {
+
+}
+
+table#paymentInformation thead tr th {
+
+}
+
+table#paymentInformation tbody tr {
+}
+
+table#paymentInformation tbody tr th {
+
+}
+
+table#paymentInformation tbody td.expiresOn label {
+    color: #A50000;
+    font-size: small;
+    font-weight: 700;
+    margin: 0 0 0 10px;
+}
+/* === 12.6 Site Map === */
 
 .siteMap {
-
+    margin: 0 0 50px 0;   
+	font-size: 14px;
 }
 
 .siteMap a {
-
+   color: #66384E;
 }
 
 .siteMap a:hover {
-
+   text-decoration: underline;
 }
 
 .siteMap li.topLevel.head {
-
+   background: none!important;
+   margin: 8px 0 8px 0;
+   font-weight: 700;
 }
 
 .siteMap li.topLevel {
@@ -5776,39 +9370,125 @@ table#orderSalesHistory tbody tr th {
 }
 
 .siteMap ul.subLevel {
-
+    margin: 12px 0 12px 50px; /* indents sub items */
 }
 
 .siteMap ul.subLevel li {
-
+   padding: 2px 0 2px 20px;
 }
 
 .siteMap li.subLevel {
+    margin: 0 0 0 25px; /* indents sub items */
+}
+
+/* === 12.7 Static Pages (About Us, Privacy Policy, Terms and Conditions, etc. === */
+
+.staticContent {
 
 }
 
-/* === 12.6 Static Pages (About Us, Privacy Policy, Terms and Conditions, etc. === */
+.staticContent h1 {
 
-/* === 12.7 Miscellaneous Static Content === */
+}
+
+.staticContent h2 {
+    color: #666666;
+    font-weight: 700;
+    margin: 15px 0;
+}
+
+.staticContent p {
+    display: block;
+    margin: 0 0 5px;
+}
+
+.staticContent a {
+
+}
+
+.staticContent a:hover {
+    text-decoration: underline;
+}
+
+.staticContent ul {
+    margin: 0 0 10px 20px;
+}
+
+.staticContent ul li {
+    font-size: 15px;
+    margin: 0 0 2px;
+}
+
+
+/* === 12.8 Miscellaneous Static Content === */
+
+.ptsSpot {
+
+}
+ 
+.ptsSpot h2 {
+    font-size: 19px;
+}
+
+.ptsSpot p {
+
+}
+
+#ptsOrderConfirm {
+    background: none repeat scroll 0 0 #CB1C45;
+    padding: 10px 10px 14px;
+
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   border-radius: 5px;
+}
+
+#ptsOrderConfirm h2 {
+    color: #FFFFFF;
+    float: left;
+    margin: 0 0 0 140px;
+    text-shadow: 0 2px 0 #80122B;
+}
+
+#ptsOrderConfirm .fb-like {
+    margin: 0 0 0 40px;
+    top: 3px;
+}
+
+.uiIconText span {
+	color: #ffffff!important;
+}
 
 /* === 13. Styles for Product Review === */
+
+#eCommerceConfirmContainer h2 {
+    color: #0753A1;
+    clear: left;
+}
+
+#eCommerceConfirmContainer p {
+    float: left;
+}
 
 /* === 13.1 Review List === */
 
 .pdpReviewList {
-
+    width: 100%;
+    display: inline-block;
+    margin: 20px 0 0 0;
 }
 
 #productReviewDisplay.displayBox {
-
+    float: left;
+    width: 100%;
 }
 
 #productReviewDisplay.displayBox h3 {
-
+    float: left;
 }
 
 #reviewSortOptions {
-
+    float: right;
 }
 
 #reviewSortOptions label {
@@ -5816,136 +9496,477 @@ table#orderSalesHistory tbody tr th {
 }
 
 #productReviewDisplay .reviewBody {
- 
+    float: left;
+    width: 100%;
 }
 
 .reviewHeaderRow {
-
+     text-align: left;
+    float: left;
+    background: none repeat scroll 0 0 #FFFFCC;
+    border-bottom: 1px solid black;
+    margin: 0 0 10px 0;
+    width: 100%;  
 }
 
 .reviewHeader {
-
+    float: left;
+    font-size: 2.2em;
+    padding: .2em 6px .2em 6px;
 }
 
 .reviewRow {
-
+    border-top: 1px solid #C1C1C1;
+    clear: left;
+    float: left;
+    margin: 10px 0 0;
+    padding: 10px 0;
+    width: 100%;
 }
 
 .reviewRow .reviewRatingSection {
-
+    float: left;
 }
 
 .reviewRatingSection .ratingSummary {
-
+    display: table;
+    font-size: 12px;
+    margin: 0 auto;
+    text-align: center;
 }
 
 .reviewRow .reviewDataSection {
-
+    clear: both;
+    float: left;
+    margin: 10px 0 0;
 }
 
 .reviewDataSection .ratingNickname {
-
+    font-size: 1.3em;
+    font-weight: 700;
+    text-transform: capitalize;
 }
 
 .reviewDataSection .ratingTitle {
-
+    color: #666666;
+    display: block;
+    font-weight: 700;
+    margin: 5px 0 0;
+    text-transform: capitalize;
 }
 
 .reviewPostDateSection .reviewDate {
-
+    font-size: 12px;
 }
 
 .reviewRow .reviewTextSection {
-
+    clear: left;
+    float: left;
+    margin: 15px 0px 0px 10px;
 }
 
 .reviewTextSection .reviewText {
-
+    color: #333333;
+    font-size: 17px;
 }
 
 .reviewRow .reviewPostDateSection {
-	
+    clear: left;
+    float: left;
+    margin: 5px 0 0 0;
+}
+
+.reviewRow .reviewResponseSection {
+    clear: left;
+    float: left;
+    margin: 15px 0 0 10px;
+}
+
+.reviewRow .reviewResponse {
+    color: #990000;
+    font-size: 18px;
+}
+
+.pagingContainer {
+    float: left;
+    margin: 10px 0 0;
+    width: 100%;
+}
+
+.paginationContainer {
+    float: right;
+    font-size: 14px;
+}
+
+#pageLink a {
+    border-bottom: 1px dotted;
+}
+
+#pageLink a:hover {
+    border-bottom: 1px solid;
+}
+
+#nextPageLink a {
+    border-bottom: 1px dotted;
+    margin: 0 0 0 5px;
+}
+
+
+#nextPageLink a:hover {
+    border-bottom: 1px solid;
+}
+
+#prevPageLink a {
+    border-bottom: 1px dotted;
+    margin: 0 5px 0 0;
+}
+
+
+#prevPageLink a:hover {
+    border-bottom: 1px solid;
 }
 
 /* === 13.2 Write a Review  === */
 
-#eCommerceProductReviewSubmit {
-	
+.writeReview { /* Write Review Container */
+
 }
+
+.writeReview .entry label { 
+
+}
+
+/* ---- Review Product ---- */
 
 #productReviewDetails.displayBox {
 	
 }
 
-#productReviewDetails.displayBox h3 {
+.productReviewHeaderRow {
 	
 }
 
-#productReviewDetails.displayBox #productReviewHeaderRow {
+.writeReviewProduct .pdpProductName {
+     margin: 0 5px 0 0;	
+}
+
+.writeReviewProduct .pdpProductName h1 {  /* Write Review has two h1 tags; this style should emulate an h2 */
+    background: none repeat scroll 0 0 transparent;
+    font-size: 19px;
+    margin: 0;
+    padding: 0;
+}
+
+.writeReviewProduct .pdpMainImage {
+    margin: 10px 10px 0 0;	
+}
+
+.writeReviewProduct .pdpReviewStars {
 	
 }
 
-#productReviewDetails.displayBox #productReviewHeaderRow .productReviewHeader {
+.writeReviewProduct .pdpLongDescription {
+    margin: 10px 0 20px;
+}
+
+.writeReviewProduct .pdpDistinguishingFeature {
+	margin: 0;	
+}
+
+.writeReviewProduct .pdpSalesPitch {
 	
 }
 
-#productReviewDetails.displayBox #productReviewHeaderRow .productReviewHeader img {
+.writeReviewProduct .pdpSpecialInstructions {
+
+}
+
+.writeReviewProduct .pdpDeliveryInfo {
 	
 }
 
-#productReviewDetails.displayBox #productReviewHeaderRow .productReviewHeader span {
+.writeReviewProduct .pdpDirections {
 	
+}
+
+.writeReviewProduct .pdpIngredients {
+	
+}
+
+.writeReviewProduct .pdpWarnings {
+	
+}
+
+.writeReviewProduct .pdpTermsAndConditions {
+	
+}
+
+.writeReviewProduct .plpInternalName {
+
+}
+
+.writeReviewProduct .plpInternalName label {
+
+}
+
+.writeReviewProduct .internalName {
+    font-size: 2.4em;
+    padding: 0;	
+}
+
+.writeReviewProduct .internalName:before {
+    content: "by ";
+}
+
+
+
+.writeReviewProduct .plpLabelName {
+
+}
+
+.writeReviewProduct .plpLabelName label {
+
+}
+
+.writeReviewProduct .plpLabelName .labelName {
+
+}
+
+
+/* ---- Review Rating ---- */
+
+.writeReviewRating {
+    margin: 10px 0 0;
+    width: 620px;
 }
 
 #productRatingEntry.displayBox {
-
+	
 }
 
-#productRatingEntry.displayBox h3 {
-
+.writeReviewRateOverallStars {
+	float: left;
+        width: 100%;
 }
 
-#productRatingEntry.displayBox #qualityRatingEntry {
-
+#overallRatingRow {
+	display: inline-block;
+        margin: 0 0 0 5px;
 }
 
-#productRatingEntry.displayBox #effectivenessRatingEntry {
-
+.writeReviewRateQualityStars {
+	float: left;
+        width: 100%;
 }
 
-#productRatingEntry.displayBox #satisfactionRatingEntry {
-
+#qualityRatingRow {
+	display: inline-block;
+        margin: 0 0 0 5px;
 }
 
-#productRatingEntry.displayBox #productRatingTellOtherEntry {
+.writeReviewRateEffectivenessStars {
+	float: left;
+        width: 100%;	
+}
 
+#effectRatingRow {
+	display: inline-block;
+        margin: 0 0 0 5px;	
+}
+.writeReviewRateSatisfactionStars {
+	float: left;
+        width: 100%;	
+}
+
+#satisfactionRatingRow {
+	display: inline-block;
+        margin: 0 0 0 5px;	
+}
+
+/* ---- Review Details ---- */
+
+.writeReviewDetail {
+     margin: 20px 0 0 0;
 }
 
 #productRatingShareEntry.displayBox {
+	margin: 20px 0 0 0;
+}
+
+.writeReviewReviewerNickname {
 	
 }
 
-#productRatingShareEntry.displayBox h3 {
+.writeReviewReviewerNickname .instructions {
+
+}
+
+.writeReviewReviewerTitle {
 	
 }
 
-#productRatingShareEntry.displayBox textarea#REVIEW_TEXT {
+.writeReviewReviewerTitle .instructions {
+
+}
+
+.writeReviewReviewerText {
 	
 }
 
-#productRatingShareEntry.displayBox #reviewTextHelper {
+.writeReviewReviewerText textarea {
+    overflow: auto;
+    width: 375px;
+}
+
+.writeReviewReviewerText .textCounter {
+    clear: left;
+    float: left;
+    margin: 5px 0 0 167px;
+}
+
+
+
+.writeReviewReviewerTip {
+    margin: 10px 0 0 167px;
+}
+
+.writeReviewReviewerTip .tipBoxListHeader {
+	font-size: 15px;
+        font-weight: 700;
+        margin: 5px 0 5px 0;
+        color: #666;
+
+}
+
+.writeReviewReviewerTip .tipBoxTips {
+	font-size: 13px;	
+}
+
+.writeReviewReviewerTip .tipBoxTips li {
+    color: #666666;
+    font-size: 14px;
+    margin: 0 0 3px;
+}
+
+.writeReviewReviewerTip .tipBoxTips li a {
+    color: #0753A1;
+    display: inline-block;
+    margin: 0 0 0 4px;
+    border-bottom: 1px dotted;
+}
+
+.writeReviewReviewerTip .tipBoxTips li a:hover {
+    border-bottom: 1px solid;
+}
+
+.writeReviewReviewerTip .tipBoxTips .tipBoxTips_sub {
+      margin: 5px 0 0 0;
 	
 }
 
-#productRatingShareEntry.displayBox #reviewTextHelper #reviewTipsHeaderDiv {
+.writeReviewReviewerPrivateNote {
+    margin: 20px 0 0;
+    width: 610px;
+}
+
+.writeReviewReviewerPrivateNoteTip {
+    width: 610px;
+}
+
+.writeReviewReviewerPrivateNoteTip .tipBoxListHeader {
+    color: #666666;
+    font-size: 15px;
+    font-weight: 700;
+    margin: 5px 0;
+}
+
+.writeReviewReviewerPrivateNoteTip .tipBoxTips {
+     font-size: 13px;
+}
+
+.writeReviewReviewerPrivateNoteTip .tipBoxTips li {
+    color: #666666;
+    font-size: 14px;
+    margin: 0 0 3px;
+}
+
+
+/* ---- Review Links ---- */
+
+.writeReviewLink {
+    display: inline-block;
+    margin: 10px 0 0;
+    text-align: right;
+}
+
+.writeReviewReviewTermsCondLink {
 	
 }
 
-#productRatingShareEntry.displayBox #reviewTextHelper #reviewTipsContentDiv {
+.writeReviewReviewTermsCondLink a {
+    font-size: 11px;	
+}
+
+.writeReviewReviewTermsCondLink a:hover {
+    text-decoration: underline;
+}
+
+.writeReviewReviewGuidelinesLink {
+	
+}
+
+.writeReviewReviewGuidelinesLink a {
+    font-size: 11px;
+}
+
+.writeReviewReviewGuidelinesLink a:hover {
+    text-decoration: underline;
+}
+
+/* ---- Review About You ---- */
+
+#productRatingTellOtherEntry.displayBox {
+     margin: 20px 170px 0 0;
+}
+
+.writeReviewReviewerLocation {
+	
+}
+
+.writeReviewReviewerLocation .instructions {
+     font-size: 12px;	
+}
+
+.writeReviewReviewerAge {
+	
+}
+
+.writeReviewReviewerGender {
+	
+}
+
+/* ---- Review Buttons ---- */
+
+.writeReviewButton {
+	
+}
+
+.writeReviewSubmitButton {
+	
+}
+
+.writeReviewCancelButton {
 	
 }
 
 /* === 13.3 Review Rating Bar / Review Facet Rating Bar === */
+
+.ratingDisplayValue, .ratingLegendValue {
+    color: #666666;
+    display: inline-block;
+    font-size: 14px;
+    padding: 0 0 0 3px;
+}
 
 table#overallRatingBar {
 	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
@@ -6024,6 +10045,7 @@ table#rateObj2Filled {
   height: 18px;
 }
 
+
 .rating_bar_submit_3 {
   width: 51px;
   height: 18px;
@@ -6042,79 +10064,139 @@ table#rateObj2Filled {
 /* === 14. Footer Styles === */
 
 #eCommerceFooter {
- 
+     background: #7d7d7d;
+     float: left;
+     padding: 15px 0 0 0;
+     width: 100%;   
 }
 
 #eCommerceFooterLinks {
- 
+	margin: 1em 0 0 0;
+	color:#7e7d7d;
+	font-size: 11px;
 }
 
 #eCommerceFooter .footerCaption {
-
+	color:#7e7d7d;
+        display: block;
+	font-size: 14px;
+	text-decoration: none;
+        text-align: center;
+	text-transform: uppercase;
 }
 
 .firstfooterColumn {
-
+	float: left;
+    margin: 0 20px 0 0;
+    position: relative;
+   /*  width: 450px; */
+   width: 219px;
 }
 
 .footerColumn {
+	
 	/* 960px / 5 columns = 192px per col*/
     /* 960px / 4 columns = 240px per col*/
     /* 960px / 3 columns = 320px per col*/
-
 	/* 980px / 5 columns = 196px per col*/
     /* 980px / 4 columns = 244px per col*/
     /* 980px / 3 columns = 326px per col*/
 
-
-}
-.footerColumn h2 {
-
+    display: table;
+    margin: 0 auto 10px auto;
 }
 
-#footerLinks ul {
+.footerColumn.last {
+    border: none;
+    width: 240px;
+}
+
+.footerColumn img {
+    display: block;
+    margin: 0 auto;
+}
+
+.footerLinks {
 
 }
 
-#footerLinks li {
+.footerLinks p {
+    display: block;
+    font-size: 13px;
+    margin: 0 0 5px 0;
+    text-align: center;
+}
+
+
+.footerLinks a {
+    color: #FFFFFF;
+    font-size: 11px;
+}
+
+.footerLinks a:hover {
+    text-decoration: underline;
+}
+
+.footerLinks ul {
 
 }
 
-#footerLinks li a {
+.footerLinks li {
+    border-right: 1px dotted;
+    display: inline;
+    margin: 0 3px;
+    padding: 0 7px 0 0;
+}
+
+.footerLinks li:last-child {
+    border-right: none;
+}
+
+.footerLinks li a {
 
 }
 
-#footerLinks li a:hover {
+.footerLinks li a:hover {
 
 }
 
 /* === 14.1 Built By === */
 
 #eCommerceBuiltByBevelWrapper{
-
+	width: 100%;
 }
 
 #eCommerceBuiltBy {
-
+    background: none repeat scroll 0 0 #7D7D7D;
+    float: left;
+    font-size: 1.2em;
+    padding: 5px 0;
+    text-align: right;
+    width: 100%;
 }
 
 #eCommerceBuiltBy p {
-
+    color: #535353;
+    font-size: 11px;
+    margin: 0 14px 0 0;
+    text-align: right;
 }
 
 #eCommerceBuiltBy a {
-
+    color: #535353;
 }
 
 #eCommerceBuiltBy a:hover {
-
+color: #DEDEDE !important;
+    
+	text-decoration: underline;
 }
 
 /* === 15. Miscellaneous Styles === */
 
 /* === 15.1 jQuery UI Theme Style Tabs, Dialog Boxes, Date Picker, ect.  === */
 
-/*!
+/*
  * jQuery UI CSS Framework 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6160,7 +10242,7 @@ table#rateObj2Filled {
 }
 
 
-/*!
+/*
  * jQuery UI CSS Framework 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6259,6 +10341,7 @@ table#rateObj2Filled {
 .ui-icon-arrowthick-1-e { background-position: -32px -48px; }
 .ui-icon-arrowthick-1-se { background-position: -48px -48px; }
 .ui-icon-arrowthick-1-s { background-position: -64px -48px; }
+
 .ui-icon-arrowthick-1-sw { background-position: -80px -48px; }
 .ui-icon-arrowthick-1-w { background-position: -96px -48px; }
 .ui-icon-arrowthick-1-nw { background-position: -112px -48px; }
@@ -6323,6 +10406,7 @@ table#rateObj2Filled {
 .ui-icon-star { background-position: -224px -112px; }
 .ui-icon-link { background-position: -240px -112px; }
 .ui-icon-cancel { background-position: 0 -128px; }
+
 .ui-icon-plus { background-position: -16px -128px; }
 .ui-icon-plusthick { background-position: -32px -128px; }
 .ui-icon-minus { background-position: -48px -128px; }
@@ -6406,7 +10490,8 @@ table#rateObj2Filled {
 
 /* Overlays */
 .ui-widget-overlay { background: #aaaaaa url("/osafe_theme/images/user_content/images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); }
-.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #aaaaaa url("/osafe_theme/images/user_content/images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }/*!
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; background: #aaaaaa url("/osafe_theme/images/user_content/images/ui-bg_flat_0_aaaaaa_40x100.png") 50% 50% repeat-x; opacity: .30;filter:Alpha(Opacity=30); -moz-border-radius: 8px; -khtml-border-radius: 8px; -webkit-border-radius: 8px; border-radius: 8px; }
+/*
  * jQuery UI Resizable 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6425,7 +10510,8 @@ table#rateObj2Filled {
 .ui-resizable-se { cursor: se-resize; width: 12px; height: 12px; right: 1px; bottom: 1px; }
 .ui-resizable-sw { cursor: sw-resize; width: 9px; height: 9px; left: -5px; bottom: -5px; }
 .ui-resizable-nw { cursor: nw-resize; width: 9px; height: 9px; left: -5px; top: -5px; }
-.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}/*!
+.ui-resizable-ne { cursor: ne-resize; width: 9px; height: 9px; right: -5px; top: -5px;}
+/*
  * jQuery UI Selectable 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6435,7 +10521,7 @@ table#rateObj2Filled {
  * http://docs.jquery.com/UI/Selectable#theming
  */
 .ui-selectable-helper { position: absolute; z-index: 100; border:1px dotted black; }
-/*!
+/*
  * jQuery UI Accordion 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6454,7 +10540,7 @@ table#rateObj2Filled {
 .ui-accordion .ui-accordion-header .ui-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
 .ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; margin-top: -2px; position: relative; top: 1px; margin-bottom: 2px; overflow: auto; display: none; zoom: 1; }
 .ui-accordion .ui-accordion-content-active { display: block; }
-/*!
+/*
  * jQuery UI Autocomplete 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6505,9 +10591,9 @@ table#rateObj2Filled {
 .ui-menu .ui-menu-item a.ui-state-hover,
 .ui-menu .ui-menu-item a.ui-state-active {
 	font-weight: normal;
-	margin: -1px;
+	/* margin: -1px; */
 }
-/*!
+/*
  * jQuery UI Button 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6545,7 +10631,7 @@ input.ui-button { padding: .4em 1em; }
 
 /* workarounds */
 button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra padding in Firefox */
-/*!
+/*
  * jQuery UI Dialog 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6555,7 +10641,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  * http://docs.jquery.com/UI/Dialog#theming
  */
 .ui-dialog { position: absolute; padding: .2em; width: 300px; overflow: hidden; }
-.ui-dialog .ui-dialog-titlebar { padding: .4em 1em; position: relative;  }
+.ui-dialog .ui-dialog-titlebar { padding: .4em 1em; position: relative; width: auto!important;}
 .ui-dialog .ui-dialog-title { float: left; margin: .1em 16px .1em 0;} 
 .ui-dialog .ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 19px; margin: -10px 0 0 0; padding: 1px; height: 18px; }
 .ui-dialog .ui-dialog-titlebar-close span { display: block; margin: 1px; }
@@ -6566,7 +10652,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-dialog .ui-dialog-buttonpane button { margin: .5em .4em .5em 0; cursor: pointer; }
 .ui-dialog .ui-resizable-se { width: 14px; height: 14px; right: 3px; bottom: 3px; }
 .ui-draggable .ui-dialog-titlebar { cursor: move; }
-/*!
+/*
  * jQuery UI Slider 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6589,7 +10675,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-slider-vertical .ui-slider-handle { left: -.3em; margin-left: 0; margin-bottom: -.6em; }
 .ui-slider-vertical .ui-slider-range { left: 0; width: 100%; }
 .ui-slider-vertical .ui-slider-range-min { bottom: 0; }
-.ui-slider-vertical .ui-slider-range-max { top: 0; }/*!
+.ui-slider-vertical .ui-slider-range-max { top: 0; }
+/*
  * jQuery UI Tabs 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6604,10 +10691,11 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-tabs .ui-tabs-nav li a { float: left; padding: .5em 1em; text-decoration: none; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected { margin-bottom: 0; padding-bottom: 1px; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a, .ui-tabs .ui-tabs-nav li.ui-state-disabled a, .ui-tabs .ui-tabs-nav li.ui-state-processing a { cursor: text; }
+.ui-tabs .ui-tabs-nav li.ui-tabs-active {padding-bottom: 1px; margin-bottom: -1px;}
 .ui-tabs .ui-tabs-nav li a, .ui-tabs.ui-tabs-collapsible .ui-tabs-nav li.ui-tabs-selected a { cursor: pointer; } /* first selector in group seems obsolete, but required to overcome bug in Opera applying cursor: text overall if defined elsewhere... */
-.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
-.ui-tabs .ui-tabs-hide { display: none !important; }
-/*!
+.ui-tabs .ui-tabs-panel { display: block; border-width: 0; padding: 10px; background: none;border: 1px solid #cecece;height: 170px;overflow-y: auto; }
+/*.ui-tabs .ui-tabs-hide { display: none !important; }*/
+/*
  * jQuery UI Datepicker 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6674,7 +10762,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
     left: -4px; /*must have*/
     width: 200px; /*must have*/
     height: 200px; /*must have*/
-}/*!
+}
+/*
  * jQuery UI Progressbar 1.8.21
  *
  * Copyright 2012, AUTHORS.txt (http://jqueryui.com/about)
@@ -6685,6 +10774,15 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  */
 .ui-progressbar { height:2em; text-align: left; overflow: hidden; }
 .ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
+
+
+/* --- Scroll to Top Feature  ---*/
+
+#scrollToTop {
+    position: fixed;
+    right: 20px;
+    top: 40%;
+}
 
 /* === 15.2 Carousel Styles  === */
 
@@ -6705,8 +10803,9 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 /* Showcase
 -------------*/
 
-#awOnePageButton .view-slide {
-	display: none;
+#awOnePageButton,
+#awOnePageButton .view-slide { /* Hides view-slide button */
+     display: none;
 }
 
 /* This class is removed after the showcase is loaded */
@@ -6767,13 +10866,16 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 	/* Content */
 	
 .showcase-content {
-	text-align: center;
+	text-align: center;       
+}
+.showcase-content img {
+
 }
 		
 .showcase-content-wrapper { /* size is equal to image and hotspot size */
-	text-align: center;
-	height: 391px;
-	width: 960px;
+ 	text-align: center;
+	height: 411px;
+	width: 411px;
 	display: table-cell;
 	vertical-align: middle;
 }
@@ -7017,7 +11119,7 @@ display: none;
 .zoomPad {
 	position:relative;
 	float:left;
-	z-index:99;
+	/* z-index:99; */
 	cursor:crosshair;
 }
 
@@ -7088,7 +11190,7 @@ display: none;
 	z-index:110;
 }
 .zoomWrapperTitle {
-	display:block;
+	display:none!important;
 	background:#999;
 	color:#FFF;
 	height:18px;
@@ -7135,3 +11237,217 @@ display: none;
 
 /* === 15.4 Custom Site Specific CSS For unique selectors, divs, markup for each Instance.  Not to be put in Trunk === */
 
+
+/* Mobile Elements that are disabled in standard style sheet */
+
+
+
+.mobile {
+    display: none;
+}
+
+a.mobileShowCart {
+     display: none;
+}
+
+#eCommerceFooter .content {
+    min-height: 110px;
+    overflow: auto;
+}
+
+.footerColumn.quickLinks {
+
+}
+
+.footerColumn.quickLinks h3 {
+   background: #FDDE00;
+   font-size: 22px;
+   padding: 5px 0;
+   text-align: center;
+
+-webkit-border-top-left-radius: 10px;
+-webkit-border-top-right-radius: 10px;
+-moz-border-radius-topleft: 10px;
+-moz-border-radius-topright: 10px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+   
+}
+
+.footerColumn.quickLinks .content {
+     background: none repeat scroll 0 0 #DFDFDE;
+}
+ 
+.footerColumn.quickLinks ul {
+
+}
+
+.footerColumn.quickLinks ul li {
+    border-top: 2px solid #878788;
+}
+
+.footerColumn.quickLinks ul li a {
+    background: none repeat scroll 0 0 #DFDFDE;
+    border-top: 1px solid #FFFFFF;
+    color: #006699;
+    display: block;
+    font-size: 12px;
+    padding: 5px 0 5px 5px;
+}
+
+.footerColumn.regsiter {
+
+}
+
+.footerColumn.regsiter h3 {
+   background: #444444;
+   color: #ffffff;
+   font-size: 22px;
+   padding: 5px 0;
+   text-align: center;
+
+-webkit-border-top-left-radius: 10px;
+-webkit-border-top-right-radius: 10px;
+-moz-border-radius-topleft: 10px;
+-moz-border-radius-topright: 10px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+}
+
+.footerColumn.regsiter .content {
+     background: none repeat scroll 0 0 #D5D5D5;
+}
+
+.footerColumn.regsiter h4 {
+    color: #2D4C93;
+    font-size: 15px;
+    margin: 5px 0 0 10px;
+}
+
+.footerColumn.regsiter ul {
+    margin: 5px 0 0 10px;
+}
+
+.footerColumn.regsiter ul li {
+    list-style: square inside none;
+    margin: 0 0 3px;
+}
+
+.footerColumn.regsiter ul li a {
+
+}
+
+.footerColumn.openHouse {
+
+}
+
+.footerColumn.openHouse h3 {
+   background: #375699;
+   color: #ffffff;
+   font-size: 22px;
+   padding: 5px 0;
+   text-align: center;
+
+-webkit-border-top-left-radius: 10px;
+-webkit-border-top-right-radius: 10px;
+-moz-border-radius-topleft: 10px;
+-moz-border-radius-topright: 10px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+}
+
+.footerColumn.openHouse .content {
+      background: none repeat scroll 0 0 #FFFFFF;
+}
+
+.footerColumn.openHouse ul {
+
+}
+
+.footerColumn.openHouse ul li {
+
+}
+
+.footerColumn.openHouse ul li a {
+
+}
+
+.footerColumn.connect {
+
+}
+
+.footerColumn.connect #findGraduates {
+
+}
+
+.footerColumn.connect h3 {
+   background: #375699;
+   color: #ffffff;
+   font-size: 22px;
+   padding: 5px 0;
+   text-align: center;
+
+-webkit-border-top-left-radius: 10px;
+-webkit-border-top-right-radius: 10px;
+-moz-border-radius-topleft: 10px;
+-moz-border-radius-topright: 10px;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+}
+
+.footerColumn.connect .socialMedia {
+
+}
+
+ul.socialMediaList {
+    float: right;
+    margin: 0 10px 0 0;
+}
+ul.socialMediaList li {
+    display: inline-block;
+    margin: 0 5px;
+}
+ul.socialMediaList li a {
+    display: block;
+    height: 32px;
+    width: 32px;
+}
+.fb_edge_widget_with_comment {
+    top: -3px !important;
+}
+a.facebook {
+    background-image: url("/osafe_theme/images/user_content/images/facebook.png");
+}
+a.facebook:hover {
+    background-image: url("/osafe_theme/images/user_content/images/facebook-hover.png");
+}
+a.twitter {
+    background-image: url("/osafe_theme/images/user_content/images/twitterSmall.png");
+}
+a.twitter:hover {
+    background-image: url("/osafe_theme/images/user_content/images/twitterSmall-hover.png");
+}
+a.pinterest {
+    background-image: url("/osafe_theme/images/user_content/images/pinterestSmall.png");
+}
+a.pinterest:hover {
+    background-image: url("/osafe_theme/images/user_content/images/pinterestSmall-hover.png");
+}
+a.googlePlus {
+    background-image: url("/osafe_theme/images/user_content/images/google.png");
+}
+a.googlePlus:hover {
+    background-image: url("/osafe_theme/images/user_content/images/google-hover.png");
+}
+
+.staticCellPadTop {
+    padding: 10px 0 0 0;
+}
+
+.staticCellPadBottom {
+    padding: 0 0 10px 0;
+}
+
+.staticContent ul.address {
+
+}

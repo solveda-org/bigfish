@@ -64,7 +64,7 @@
                     <td class="nameCol <#if !product_has_next>lastRow</#if>"><#if deliveryOption! == "SHIP_TO">${uiLabelMap.DeliveryShipToInfo}<#elseif deliveryOption! == "STORE_PICKUP">${uiLabelMap.DeliveryStorePickupInfo}</#if></td>
                     <td class="statusCol <#if !product_has_next>lastRow</#if>">${quantityOrdered?if_exists} </td>
                     <td class="statusCol <#if !product_has_next>lastRow</#if>">${totOrder?if_exists} </td>
-                    <td class="dollarCol <#if !product_has_next>lastRow</#if> lastCol"><@ofbizCurrency amount=unitPrice!0 isoCode=globalContext.defaultCurrencyUomId /></td>
+                    <td class="dollarCol <#if !product_has_next>lastRow</#if> lastCol"><@ofbizCurrency amount=unitPrice!0 isoCode=globalContext.defaultCurrencyUomId rounding=globalContext.currencyRounding/></td>
                 </tr>
 
                 <#-- toggle the row color -->
@@ -78,7 +78,7 @@
             <tr>
               <th class="idCol firstCol footerColor" colspan="5">Total</th>
               <th class="statusCol footerColor">${totItem?if_exists}</th>
-              <th class="dollarCol footerColor" colspan="2"><@ofbizCurrency amount=totSales!0 isoCode=globalContext.defaultCurrencyUomId /></th>
+              <th class="dollarCol footerColor" colspan="2"><@ofbizCurrency amount=totSales!0 isoCode=globalContext.defaultCurrencyUomId rounding=globalContext.currencyRounding/></th>
             </tr>
             </tfoot>
         <#else>

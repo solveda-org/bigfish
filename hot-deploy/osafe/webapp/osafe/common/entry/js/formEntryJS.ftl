@@ -140,6 +140,7 @@
     jQuery("#"+purpose+"_ADDRESS3").val(data.address3);
     jQuery("#"+purpose+"_CITY").val(data.city);
     jQuery("#"+purpose+"_POSTAL_CODE").val(data.postalCode);
+    jQuery("#"+purpose+"_POSTAL_CODE").change();
     getAddressFormat(purpose);
     });
   }
@@ -168,4 +169,31 @@
             return 0;
         }
     }
+    
+    
+    //set cell phone number to required based on user text messaging options
+    jQuery(document).ready(function () {
+        //when page first loads
+        txtPreferenceSelected = jQuery("input[name='PARTY_TEXT_PREFERENCE']:checked").val();
+        if(txtPreferenceSelected == "Y")
+        {
+            jQuery("#PHONE_MOBILE_REQUIRED").val("true");
+        }
+        else
+        {
+            jQuery("#PHONE_MOBILE_REQUIRED").val("false");
+        }
+        //when user changes preference
+        jQuery("input[name='PARTY_TEXT_PREFERENCE']").change(function(){
+            txtPreferenceSelected = jQuery(this).val();
+            if(txtPreferenceSelected == "Y")
+            {
+                jQuery("#PHONE_MOBILE_REQUIRED").val("true");
+            }
+            else
+            {
+                jQuery("#PHONE_MOBILE_REQUIRED").val("false");
+            }
+        });
+    });
 </script>

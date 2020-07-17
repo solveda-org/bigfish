@@ -1582,6 +1582,17 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelScopeError"/>
             <string-to-list string="${tempErrorMessage}" message-field="pixelScope" list="error_list"/>
         </if-empty>
+        <if-empty field="parameters.pixelPagePosition">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelPagePostionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="pixelPagePosition" list="error_list"/>
+        </if-empty>
+        <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+            <string value="${parameters.pixelSequenceNum}"></string>
+        </call-class-method>
+        <if-compare field="sequenceNumVaild" type="Boolean" operator="equals" value="false" >
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumInVaildError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-compare>
         <if-empty field="parameters.textData">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelCodeError"/>
             <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
@@ -1630,6 +1641,17 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelScopeError"/>
             <string-to-list string="${tempErrorMessage}" message-field="pixelScope" list="error_list"/>
         </if-empty>
+        <if-empty field="parameters.pixelPagePosition">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelPagePostionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="pixelPagePosition" list="error_list"/>
+        </if-empty>
+        <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+            <string value="${parameters.pixelSequenceNum}"></string>
+        </call-class-method>
+        <if-compare field="sequenceNumVaild" type="Boolean" operator="equals" value="false" >
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumInVaildError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-compare>
         <if-empty field="parameters.textData">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelCodeError"/>
             <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>

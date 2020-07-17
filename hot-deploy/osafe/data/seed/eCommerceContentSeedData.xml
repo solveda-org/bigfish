@@ -16,6 +16,7 @@
     <#else/>
         <li><a href="<@ofbizUrl>checkLogin</@ofbizUrl>">Sign In</a></li>
     </#if>
+    <li><a class="checkDelivery" href="javaScript:void(0);">Check Delivery Options for your PIN Code</a></li>
 </ul>]]>
   </textData>
 </ElectronicText>
@@ -117,17 +118,19 @@
          Items
       </#if>
     </a>
+    <#assign currencyRounding = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_ROUNDING")!2 />
+    
     <#if (shoppingCartSize gt 0)>
     <a href="<@ofbizUrl>eCommerceShowcart</@ofbizUrl>" class="price">
 
       <@ofbizCurrency amount=shoppingCart.getGrandTotal() 
-                   isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency()/>
+                   isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() rounding=currencyRounding/>
     </a>
     <#else>
        <a href="<@ofbizUrl>eCommerceShowcart</@ofbizUrl>" class="price">
 
       <@ofbizCurrency
-                   isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency()/>
+                   isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() rounding=currencyRounding/>
     </a>
     
     </#if>
@@ -139,12 +142,27 @@
 
 <!-- Search -->
 <ElectronicText dataResourceId="SI_SEARCH">
-  <textData><![CDATA[<form method="get" id="frmSearchForm" name="frmSearchForm" action="siteSearch">
-     <fieldset title="Search this site..." class="formstyle">
-            <span>${uiLabelMap.SearchCaption}</span>
-            <input type="text" name="searchText" class="input placeholder" id="searchText" value="" maxlength="60" >
-            <input type="submit" id="searchBtn" class="standardBtn action" name="searchBtn" value="${uiLabelMap.HeaderSearchBtn}" />
+  <textData><![CDATA[function clearIt(what)
+{
+if(what.value == what.defaultValue) what.value = '';
+}
+function setIt(what)
+{
+if(what.value == '') what.value = what.defaultValue;
+}
+</script>
+<form id="frmSearchForm" onsubmit="return submitSearchForm(document.frmSearchForm);" action="siteSearch" name="frmSearchForm" method="get">
+        <fieldset class="formstyle" title="Search this site...">
+            <div id="searchContainer" class="targetMobile">
+                <div id="searchField">
+                    <input type="text" value="${SEARCH_DEFAULT_TEXT}" name="searchText" id="searchText" onblur="setIt(this)" onfocus="clearIt(this)" />
+                </div>
+                <div id="searchButton">
+                    <input type="submit" class="searchSubmit" value="" />
+                </div>
+            </div>
         </fieldset>
+	<div class="searchAutoComplete" id="searchAutoComplete"></div>
     </form>]]>
 </textData>
 </ElectronicText>

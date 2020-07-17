@@ -6,7 +6,7 @@
             <#assign productStoreId = session.getAttribute("productStoreId")?if_exists>
             <#if productStore?has_content>
 	            <#if pageTitle?has_content>
-	               <#assign titleOfPage = Static["com.osafe.util.Util"].stripHTML(pageTitle)>
+	               <#assign titleOfPage = Static["com.osafe.util.OsafeAdminUtil"].stripHTML(pageTitle)>
 	            </#if>
 	            <title>${productStore.storeName!""}&nbsp;:&nbsp;${uiLabelMap.eCommerceAdminModuleTitle}
 	            <#if pageTitle?has_content>, ${StringUtil.wrapString(titleOfPage)}</#if>
@@ -48,7 +48,7 @@
             </#list>
         </#if>
 
-        <#assign addressVerificationMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"ADDRESS_VERIFICATION_METHOD")!""/>
+        <#assign addressVerificationMethod = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request,"ADDRESS_VERIFICATION_METHOD")!""/>
         <#if addressVerificationMethod?has_content && loadPca?has_content && loadPca == "Y">
             <#if addressVerificationMethod.toUpperCase() == "PCA">
                 <#assign osafeCapturePlus = Static["com.osafe.captureplus.OsafeCapturePlus"].getInstance(globalContext.productStoreId!) />
@@ -72,9 +72,9 @@
                     <#if showLastOrder?has_content && showLastOrder =="Y">
                         ${sections.render('lastOrder')}
                     </#if>
+                    <#if hideMainPageMessages?has_content && hideMainPageMessages =="Y">
+                    <#else>
                      ${sections.render('messages')}
-                    <#if showPeriod?has_content && showPeriod =="Y">
-                        ${sections.render('periodRange')}
                     </#if>
                      ${sections.render('commonJquery')}
                      ${sections.render('body')}

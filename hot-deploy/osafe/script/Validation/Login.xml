@@ -73,9 +73,6 @@
             <call-object-method obj-field="shoppingCart" method-name="setOrderPartyId">
                 <field field="existingUserLogin.partyId"/>
             </call-object-method>
-            <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
-                <string value=""/>
-            </call-object-method>
         </if-not-empty>
     </simple-method>
 

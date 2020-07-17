@@ -28,6 +28,15 @@ ${sections.render('tooltipBody')?if_exists}
         </table>
     </div>
 </div>
+<div class="displayBox">
+    <div class="header"><h2>${bluedartFeedsImportListBoxHeading!}</h2>
+    </div>
+    <div class="boxBody">
+        <table class="osafe">
+            ${sections.render('bluedartFeedsImportListBoxBody')?if_exists}
+        </table>
+    </div>
+</div>
 <div class="displayBox footerInfo">
     ${sections.render('commonListButton')?if_exists}
 </div>

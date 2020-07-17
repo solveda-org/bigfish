@@ -1,3 +1,4 @@
+<#if !userLogin?has_content || userLogin.userLoginId == "anonymous">
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#assign partyDBAllowSolicit=allowSolicitation!""/>
 <#assign partyDBEmailPref=partyEmailPreference!""/>
@@ -57,3 +58,4 @@
       </div>
   </fieldset>
 </div>
+</#if>

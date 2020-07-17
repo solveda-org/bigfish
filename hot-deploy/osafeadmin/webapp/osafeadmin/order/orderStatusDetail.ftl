@@ -10,13 +10,35 @@
         </#if>
     </#if>
 </#if>
+
+<input type="hidden" name="fromPartyId" value="${partyId?if_exists}"/>
+<input type="hidden" name="toPartyId" value="${toPartyId?if_exists}"/>
+<input type="hidden" name="needsInventoryReceive" value="${parameters.needsInventoryReceive?default("Y")}"/>
+<input type="hidden" name="destinationFacilityId" value="${destinationFacilityId?if_exists}"/>
+<input type="hidden" name="returnHeaderTypeId" value="${returnHeaderTypeId}"/>
+<#if (orderHeader?has_content) && (orderHeader.currencyUom?has_content)>
+  <input type="hidden" name="currencyUomId" value="${orderHeader.currencyUom}"/>
+</#if>
+
+<#if orderPaymentPreference?has_content>
+  <input type="hidden" name="paymentMethodId" value="${orderPaymentPreference.paymentMethodId!}"/>
+</#if>
+
+<#list shippingContactMechList as shippingContactMech>
+  <#assign shippingAddress = shippingContactMech.getRelatedOne("PostalAddress")>
+  <input type="hidden" name="originContactMechId" value="${shippingAddress.contactMechId!}" />
+  <#break>
+</#list>
+
+<input type="hidden" id="changeStatusAll" name="changeStatusAll" value="N"/>
+<input type="hidden" id="statusId" name="statusId" value=""/>
 <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>&nbsp;</label>
         </div>
         <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry" type="radio" id="changeStatusAll" name="changeStatusAll"  value="Y" checked="checked" />${uiLabelMap.ChangeStatusAllOrderItemLabel}
+            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId"  value="cancelOrder" checked="checked" />${uiLabelMap.CancelAnOrderLabel}
         </div>
     </div>
 </div>
@@ -27,14 +49,37 @@
             <label>&nbsp;</label>
         </div>
         <div class="entryInput checkbox medium">
-            <input class="checkBoxEntry" type="radio" id="changeStatusAll" name="changeStatusAll" value="N" <#if (parameters.changeStatusAll?exists && parameters.changeStatusAll?string == "N")>checked="checked"</#if> />${uiLabelMap.ChangeStatusSelectedOrderItemLabel}
+            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId" value="changeOrderQty" <#if (parameters.actionId?exists && parameters.actionId?string == "changeOrderQty")>checked="checked"</#if> />${uiLabelMap.ChangeOrderQtyLabel}
+        </div>
+    </div>
+</div>
+
+<div class="infoRow row">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>&nbsp;</label>
+        </div>
+        <div class="entryInput checkbox medium">
+            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId" value="completeOrder" <#if (parameters.actionId?exists && parameters.actionId?string == "completeOrder")>checked="checked"</#if> />${uiLabelMap.CompleteAnOrderLabel}
+        </div>
+    </div>
+</div>
+
+<div class="infoRow row">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>&nbsp;</label>
+        </div>
+        <div class="entryInput checkbox medium">
+            <input class="checkBoxEntry" type="radio" id="actionId" name="actionId" value="productReturn" <#if (parameters.actionId?exists && parameters.actionId?string == "productReturn")>checked="checked"</#if> />${uiLabelMap.ProductReturnsLabel}
         </div>
     </div>
 </div>
 <input type="hidden" name="orderId" value="${parameters.orderId!orderHeader.orderId!}" />
 <input type="hidden" name="internalNote" value="Y"/>
 <input type="hidden" name="shipGroupSeqId" value="${shipGroupSeqId!}"/>
-<div class="infoRow row">
+
+<#-- <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>${uiLabelMap.OrderNewStatusCaption}</label>
@@ -50,7 +95,7 @@
             </select>
         </div>
     </div>
-</div>
+</div> -->
 
 <div class="infoRow row COMPLETED">
     <div class="infoEntry long">

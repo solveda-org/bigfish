@@ -78,6 +78,12 @@
     <property key="PAGE_TOP_SPOT_ADDRESS_BOOK_EDIT">
         <value xml:lang="en">PTS_ADDR_BOOK_EDIT</value>
     </property>
+    <property key="PAGE_TOP_SPOT_PAYMENT_METHOD_VIEW">
+        <value xml:lang="en">PTS_PMT_METHOD_VIEW</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_PAYMENT_METHOD_EDIT">
+        <value xml:lang="en">PTS_PMT_METHOD_EDIT</value>
+    </property>
     <property key="PAGE_TOP_SPOT_MY_ACCOUNT">
         <value xml:lang="en">PTS_MY_ACCOUNT</value>
     </property>
@@ -141,6 +147,12 @@
     </property>
     <property key="PAGE_END_SPOT_ADDRESS_BOOK_EDIT">
         <value xml:lang="en">PES_ADDR_BOOK_EDIT</value>
+    </property>
+    <property key="PAGE_END_SPOT_PAYMENT_METHOD_VIEW">
+        <value xml:lang="en">PES_PMT_METHOD_VIEW</value>
+    </property>
+    <property key="PAGE_END_SPOT_PAYMENT_METHOD_EDIT">
+        <value xml:lang="en">PES_PMT_METHOD_EDIT</value>
     </property>
     <property key="PAGE_END_SPOT_MY_ACCOUNT">
         <value xml:lang="en">PES_MY_ACCOUNT</value>

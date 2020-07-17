@@ -4,6 +4,9 @@
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
     <simple-method method-name="createCustomer" short-description="Create Customer" login-required="false">
+    
+    	<session-to-field field="shoppingCart"/>
+        <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
 
         <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
         <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
@@ -16,14 +19,19 @@
         <set field="partyRoleContext.roleTypeId" from-field="parameters.roleTypeId"/>
 
         <call-simple-method method-name="validateBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-
-        <if-empty field="parameters.isSameAsBilling">
-            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <if-compare operator="equals" value="true" field="shippingApplies">
+            <if-empty field="parameters.isSameAsBilling">
+	            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+	        <else>
+	            <map-to-map map="addressContext" to-map="shippingAddressContext"/>
+	            <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+	        </else>
+	        </if-empty>
         <else>
             <map-to-map map="addressContext" to-map="shippingAddressContext"/>
             <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
         </else>
-        </if-empty>
+        </if-compare>
         <!-- Create the email address -->
 
         <!-- Check for required E-Mail -->
@@ -608,6 +616,14 @@
             <create-value value-field="partyAttribute"/>
         </if-not-empty>
         
+        <if-not-empty field="parameters.PARTY_TEXT_PREFERENCE">
+            <make-value entity-name="PartyAttribute" value-field="partyAttribute"/>
+            <set from-field="tempMap.partyId" field="partyAttribute.partyId"/>
+            <set value="PARTY_TEXT_PREFERENCE" field="partyAttribute.attrName"/>
+            <set from-field="parameters.PARTY_TEXT_PREFERENCE" field="partyAttribute.attrValue"/>
+            <create-value value-field="partyAttribute"/>
+        </if-not-empty>
+        
         <make-value entity-name="ProductStoreRole" value-field="productStoreRole"/>
         <set field="productStoreRole.partyId" from-field="tempMap.partyId"/>
         <set field="productStoreRole.roleTypeId" value="EMAIL_SUBSCRIBER"/>
@@ -923,86 +939,6 @@
         </iterate>
          <set field="parameters.shippingOptions" from-field="shippingOptions"/>
          <field-to-request field="parameters.shippingOptions" request-name="shippingOptions"/>
-    </simple-method>
-
-    <simple-method method-name="setShippingOption" short-description="Set shipping method" login-required="false">
-        <call-bsh><![CDATA[
-            shippingMethod = parameters.get("shipMethod");
-            if(shippingMethod != null) {
-                shipmentMethodTypeId = shippingMethod.substring(0, shippingMethod.indexOf("@"));
-                if (shippingMethod.indexOf(":") != -1) {
-                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1, shippingMethod.indexOf(":"));
-                    productStoreShipMethId =  shippingMethod.substring(shippingMethod.indexOf(":")+1);
-                    parameters.put("productStoreShipMethId", productStoreShipMethId);
-                } else {
-                    carrierPartyId = shippingMethod.substring(shippingMethod.indexOf("@")+1);
-                }
-                parameters.put("shipmentMethodTypeId", shipmentMethodTypeId);
-                parameters.put("carrierPartyId", carrierPartyId);
-            }
-        ]]></call-bsh>
-        <set field="shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
-        <set field="carrierPartyId" from-field="parameters.carrierPartyId"/>
-        <set field="productStoreShipMethId" from-field="parameters.productStoreShipMethId"/>
-        <log level="info" message=" shipmentMethodTypeId is ${shipmentMethodTypeId} "/>
-        <log level="info" message=" carrierPartyId is ${carrierPartyId}"/>
-        <log level="info" message=" productStoreShipMethId is ${productStoreShipMethId}"/>
-
-        <entity-one entity-name="CarrierAndShipmentMethod" value-field="shipmentMethod">
-            <field-map field-name="shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
-            <field-map field-name="partyId" from-field="carrierPartyId"/>
-            <field-map field-name="roleTypeId" value="CARRIER"/>
-        </entity-one>
-        <field-to-request field="shipmentMethod.description" request-name="shippingDescription"/>
-
-        <set field="shoppingCart" from-field="parameters.shoppingCart"/>
-        <if-empty field="shoppingCart">
-            <session-to-field field="shoppingCart"/>
-        </if-empty>
-        <call-object-method obj-field="shoppingCart" method-name="setShipmentMethodTypeId">
-            <field field="shipmentMethodTypeId"/>
-        </call-object-method>
-        <call-object-method obj-field="shoppingCart" method-name="setCarrierPartyId">
-            <field field="carrierPartyId"/>
-        </call-object-method>
-        <call-object-method obj-field="shoppingCart" method-name="setProductStoreShipMethId">
-            <field field="productStoreShipMethId"/>
-        </call-object-method>
-        <call-object-method  obj-field="shoppingCart" method-name="getCurrency" ret-field="isoCode"/>
-        <set field="dispatcher" from-field="parameters.dispatcher" type="Object"/>
-        <set field="delegator" from-field="parameters.delegator" type="Object"/>
-        <set field="locale" from-field="parameters.locale" type="Object"/>
-
-        <call-bsh><![CDATA[
-            Map shipCost = org.ofbiz.order.shoppingcart.shipping.ShippingEvents.getShipGroupEstimate(dispatcher, delegator, shoppingCart, 0);
-            shippingTotal = shipCost.get("shippingTotal");
-            if (shippingTotal == null) {
-                shippingTotal = java.math.BigDecimal.ZERO;
-            }
-            shoppingCart.setItemShipGroupEstimate(shippingTotal, 0);
-            parameters.put("shippingTotal", org.ofbiz.base.util.UtilFormatOut.formatCurrency(shippingTotal, isoCode, locale));
-
-            checkOutHelper = new org.ofbiz.order.shoppingcart.CheckOutHelper(dispatcher, delegator, shoppingCart);
-            // Calculate and add the tax adjustments
-            checkOutHelper.calcAndAddTax();
-
-            salesTax = shoppingCart.getTotalSalesTax();
-            totalSalesTax = org.ofbiz.base.util.UtilFormatOut.formatCurrency(salesTax, isoCode, locale);
-            parameters.put("totalSalesTax", totalSalesTax);
-
-            cartGrandTotal = org.ofbiz.base.util.UtilFormatOut.formatCurrency(shoppingCart.getGrandTotal(), isoCode, locale);
-            parameters.put("cartGrandTotal", cartGrandTotal);
-        ]]></call-bsh>
-        <call-class-method method-name="doPromotions" class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker">
-            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
-            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
-        </call-class-method>
-        <field-to-request field="parameters.shippingTotal" request-name="shippingTotal"/>
-        <field-to-request field="parameters.cartGrandTotal" request-name="cartGrandTotal"/>
-        <field-to-request field="parameters.totalSalesTax" request-name="totalSalesTax"/>
-        <log level="info" message="Shipping total is : ${parameters.shippingTotal}"/>
-        <log level="info" message="Cart Grand total is : ${parameters.cartGrandTotal}"/>
-        <log level="info" message="Total sale tax is : ${parameters.totalSalesTax}"/>
     </simple-method>
 
     <simple-method method-name="createCustomerProfile" short-description="create a customer profile" login-required="false">

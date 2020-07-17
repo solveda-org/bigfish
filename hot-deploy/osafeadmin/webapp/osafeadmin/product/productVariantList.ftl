@@ -57,7 +57,7 @@
 	  	</#if>
         <td class="dollarCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
         	<#if productListPrice?has_content>
-	          <@ofbizCurrency amount=listPrice isoCode=productListPrice.currencyUomId />
+	          <@ofbizCurrency amount=listPrice isoCode=productListPrice.currencyUomId rounding=globalContext.currencyRounding/>
 	        </#if>
         </td>
         <#assign productVariantSalePrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, variantProdDetail.productId, "DEFAULT_PRICE")!>
@@ -72,7 +72,7 @@
 	  	</#if>
         <td class="dollarCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
         	<#if productListPrice?has_content>
-	          <@ofbizCurrency amount=defaultPrice isoCode=productListPrice.currencyUomId />
+	          <@ofbizCurrency amount=defaultPrice isoCode=productListPrice.currencyUomId rounding=globalContext.currencyRounding/>
 	        </#if>
         </td>
         <td class="actionCol">

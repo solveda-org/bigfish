@@ -31,8 +31,27 @@ if (UtilValidate.isNotEmpty(partyId))
         person = party.getRelatedOne("Person");
         context.person=person;
 
-		partyRoles = party.getRelated("PartyRole");
+		partyRoles = party.getRelated("ProductStoreRole");
         context.partyRoles=partyRoles;
+        // set party product store name in context
+        if (UtilValidate.isNotEmpty(partyRoles))
+    	{
+        	partyRoles = EntityUtil.filterByDate(partyRoles,true);
+        	partyRole = EntityUtil.getFirst(partyRoles);
+        	partyProductStore = partyRole.getRelatedOne("ProductStore");
+            if (UtilValidate.isNotEmpty(partyProductStore))
+        	{
+                if (UtilValidate.isNotEmpty(partyProductStore.storeName))
+            	{
+                    productStoreName = partyProductStore.storeName;
+            	}
+                else
+                {
+                	productStoreName = partyProductStore.productStoreId;
+                }
+            	context.productStoreName = productStoreName;
+        	}
+    	}
         
         userLogins = party.getRelated("UserLogin");
         context.userLogins=userLogins;

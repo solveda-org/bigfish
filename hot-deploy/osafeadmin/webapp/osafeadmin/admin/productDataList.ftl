@@ -5,7 +5,7 @@
     <th class="idCol firstCol">${uiLabelMap.MasterProductIdLabel}</th>
     <th class="idCol">${uiLabelMap.ProductIdVaraintLabel}</th>
     <th class="nameCol">${uiLabelMap.CategoryIdLabel}</th>
-    <th class="descCol">${uiLabelMap.ItemNoLabel}</th>
+    <th class="descCol">${uiLabelMap.InternalNameLabel}</th>
     <th class="descCol">${uiLabelMap.ProductNameLabel}</th>
     <th class="nameCol">${uiLabelMap.SalesPitchLabel}</th>
     <th class="descCol">${uiLabelMap.LongDescLabel}</th>

@@ -38,6 +38,8 @@ import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.GenericTransactionException;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.category.CategoryContentWrapper;
@@ -89,6 +91,7 @@ public class SolrServices {
         headerColumns.addAll(UtilMisc.toList("productFeatureGroupId", "productFeatureGroupDescription","productCategoryFacetGroups"));
         headerColumns.addAll(UtilMisc.toList("listPrice","price", "customerRating","sequenceNum"));
         headerColumns.addAll(UtilMisc.toList("totalTimesViewed","totalQuantityOrdered"));
+        headerColumns.addAll(UtilMisc.toList("productFacilityIds"));
 
         List<CellProcessor> cellProcessors = FastList.newInstance();
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(null), new ConvertNullTo("product"), new ConvertNullTo(""), new ConvertNullTo("")));
@@ -99,6 +102,7 @@ public class SolrServices {
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""),new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
         
         List<String> prodFeatureColNames = FastList.newInstance();
         ProductContentWrapper productContentWrapper = null;
@@ -354,6 +358,17 @@ public class SolrServices {
                                        totalTimesViewed = 0L;
                                    }
                                    productDocument.setTotalTimesViewed(totalTimesViewed);
+
+                                   // Product Facilities
+                                   List<GenericValue>  productFacilityList = delegator.findList("ProductFacility", EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId), UtilMisc.toSet("facilityId"), null, null, false);
+                                   List productFacilityIdList = FastList.newInstance();
+                                   for (GenericValue productFacility : productFacilityList)
+                                   {
+                                	   productFacilityIdList.add(productFacility.getString("facilityId"));
+                                   }
+                                   String productFacilityIds = StringUtils.join(productFacilityIdList, " ");
+                                   productDocument.setProductFacilityIds(productFacilityIds);
+
                                     // Product Categories of product
                                     
                                     GenericValue gvTopMostCategory = getTopMostParentProductCategory(delegator, productCategoryMember.getString("productCategoryId"), browseRootProductCategoryId);

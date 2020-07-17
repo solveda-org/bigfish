@@ -214,3 +214,9 @@ if (UtilValidate.isNotEmpty(shoppingListId))
 	shoppingCartInfoList = delegator.findByAndCache("ShoppingListItem", [shoppingListId : shoppingListId]);
 	globalContext.put("CART_ITEMS",shoppingCartInfoList);
 }
+
+localDispatcherName = UtilProperties.getPropertyValue("client-deployment.properties", "localDispatcherName");
+if (UtilValidate.isNotEmpty(localDispatcherName))
+{
+  globalContext.put("DISPATCHER_NAME",localDispatcherName);
+}

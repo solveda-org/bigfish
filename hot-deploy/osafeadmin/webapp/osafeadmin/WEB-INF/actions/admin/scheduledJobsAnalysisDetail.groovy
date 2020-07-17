@@ -118,5 +118,4 @@ jobStatusAnalysis.put("statusId","SERVICE_RUNNING");
 jobStatusAnalysis.put("rowCount",jobsRunningList.size());
 jobStatusAnalysisList.add(jobStatusAnalysis);
 
-println(jobStatusAnalysisList);
 context.jobStatusAnalysisList = jobStatusAnalysisList;
