@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ofbiz-component name="solr"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+    <!-- define resource loaders; most common is to use the component resource loader -->
+    <resource-loader name="main" type="component"/>
+
+    <!-- load single or multiple external libraries -->
+    <classpath type="jar" location="webapp/solr/WEB-INF/lib/*"/>
+
+    <!-- web applications; will be mounted when using the embedded container -->
+    <webapp name="solr"
+        title="solr"
+        server="default-server"
+        location="webapp/solr"
+        app-bar-display="false"
+        mount-point="/solr"/>
+</ofbiz-component>

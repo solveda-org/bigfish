@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/service-eca.xsd">
+    <eca service="updateLabelXml" event="commit">
+        <action service="copyLabelXml" mode="sync"/>
+    </eca>
+    <eca service="addUiLabelXml" event="commit">
+        <action service="copyLabelXml" mode="sync"/>
+    </eca>
+    <eca service="deleteUiLabelXml" event="commit">
+        <action service="copyLabelXml" mode="sync"/>
+    </eca>
+    <eca service="updateDivSequenceXml" event="commit">
+        <action service="copyDivSequenceXml" mode="sync"/>
+    </eca>
+    <eca service="modifyImageLocationPreferencesXml" event="commit">
+        <action service="copyImageLocationPreferencesXml" mode="sync"/>
+    </eca>
+    <eca service="changeOrderStatus" event="global-commit" run-on-error="false">
+        <condition field-name="statusId" operator="not-equals" value="ORDER_COMPLETED"/>
+        <condition field-name="statusId" operator="not-equals" value="ORDER_APPROVED"/>
+        <condition-field field-name="statusId" operator="not-equals" to-field-name="oldStatusId"/>
+        <action service="resetGrandTotal" mode="sync"/>
+        <action service="sendOrderChangeNotification" mode="async" persist="true"/>
+    </eca>
+</service-eca>

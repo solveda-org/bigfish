@@ -1,0 +1,142 @@
+#############################
+# Solr
+#############################
+solr-server=http://localhost:@port.http@/solr
+solr-product-index-file=${sys:getProperty('ofbiz.home')}/hot-deploy/solr/import/productsToIndex.csv
+solr-page-size=20
+product-category-facet-description=Category
+product-category-facet-cat-list-description=Refine by Category
+solr-schema-xml-file=${sys:getProperty('ofbiz.home')}/hot-deploy/solr/conf/schema.xml
+solr-schema-constantField-xml-file=${sys:getProperty('ofbiz.home')}/hot-deploy/solr/conf/schema-ConstantField.xml
+
+#############################
+# App Path
+#############################
+osafe-app-path=/@localDispatcherName@/control
+url.catalog.prefix=@url.catalog.prefix@
+
+#######################################
+# Store Settings
+#######################################
+store.storePrefix=@store.storePrefix@
+store.webSiteId=@store.webSiteId@
+store.productStoreId=@store.productStoreId@
+store.productCategoryRootId=@store.productCategoryRootId@
+
+#############################
+# PDP
+#############################
+show-saving-percent-above=5
+
+#############################
+# Abandoned Cart
+#############################
+abandon-cart-email.interval-hours=48
+abandon-cart-email.email-count=1
+
+#############################
+# Social Media Links
+#############################
+url.facebook=http://www.facebook.com/bigfish
+url.twitter=http://www.twitter.com/bigfish
+url.youtube=http://www.youtube.com/bigfish
+url.wikipedia=http://en.wikipedia.org/wiki/bigfish
+
+#############################
+# Social Media Share Links
+#############################
+url.socialMedia.share=true
+url.facebook.share=http://www.facebook.com/sharer.php?u=
+url.twitter.share=http://www.twitter.com/?status=
+
+
+#############################
+# -- Google Map key (by domain, see http://code.google.com/intl/en/apis/maps/signup.html, note that it works for http://localhost)
+#############################
+google-site-verification=ABQIAAAAtt0d8djaYFkk8N5LJVcDSBQN-clGH2vvMMwJjYtcwF78UzZgEBTN70S6uIgRoAtXRkADNoesbw5etg
+google-tracker=UA-21734186-1
+google-geopt-request-url=http://maps.googleapis.com/maps/api/geocode/xml?sensor=false
+
+#############################
+# Facets
+#############################
+facet.product-list.show-value-count=5
+facet.category-list.show-value-count=99
+
+#############################
+# Customer Rating
+#############################
+customer-rating-start=4
+customer-rating-end=1
+customer-rating-max=5
+
+#############################
+# Emails
+#############################
+client-logo-path=/osafe_theme/images/logo/siteLogo.gif
+email-font-family='Calibri', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif
+email-table-width=350px
+email-table-heading-color=#FFFFCC
+email-table-heading-font-size=22px
+
+#############################
+# Image Paths
+#############################
+product-review.images-path=/osafe_theme/images/productReview/
+product-review.facet-icon-name=rating.gif
+product.images-path=@product.images.path@
+product-category.images-path=@productCategory.images.path@
+manufacturer.images-path=@manufacturer.images.path@
+osafe.theme.server=${sys:getProperty('ofbiz.home')}/themes/osafe_theme/webapp
+
+#############################
+# Media Content
+#############################
+user-content.image-path=/osafe_theme/images/user_content/
+
+#############################
+# Import/Export Directories
+#############################
+import.dir=[ofbiz.home]/hot-deploy/osafe/import/
+export.dir=[ofbiz.home]/hot-deploy/osafe/import/len/export/
+
+######################################################
+# Import Excel Sheet Tab Name mapping with Entity name
+######################################################
+import.xls.ProdCatalog=Prod Catalog
+import.xls.ProductStoreCatalog=Product Store Catalog
+import.xls.ProductCategory=Product Category
+import.xls.ProdCatalogCategory=Prod Catalog Category
+import.xls.ProductCategoryRollup=Product Category Rollup
+import.xls.ProductFeatureCategory=Product Feature Category
+import.xls.ProductFeatureCategoryAppl=Product Feature Category Application
+import.xls.ProductFeature=Product Feature
+import.xls.Product=Product
+import.xls.ProductAssoc=Product Assoc
+import.xls.ProductFeatureAppl=Product Feature Application
+import.xls.ProductPrice=Product Price
+import.xls.ProductCategory=Product Category
+import.xls.Content=Content
+import.xls.DataResource=Data Resource
+import.xls.ProductContent=Product Content
+import.xls.ElectronicText=Electronic Text
+import.xls.ProductFeaturegroup=Product Feature Group
+import.xls.ProductFeatureGroupAppl=Product Feature Group Appl
+import.xls.ProductFeatureCatGrpAppl=Product Feature Cat Grp Appl
+import.xls.Party=Party
+import.xls.Person=Person
+import.xls.PartyGroup=Party Group
+import.xls.PartyRole=Party Role
+import.xls.ContactMech=Contact Mech
+import.xls.PartyContactMech=Party Contact Mech
+import.xls.PartyContactMechPurpose=Party Contact Mech Purpose
+import.xls.PostalAddress=Postal Address
+import.xls.TelecomNumber=Telecom Number
+import.xls.ProductStore=Product Store
+import.xls.ProductStoreEmailSetting=Product Store Email Setting
+import.xls.ProductStoreRole=Product Store Role
+import.xls.WebSite=Web Site
+import.xls.CarrierShipmentMethod=Carrier Shipment Method
+import.xls.ProductStoreShipmentMeth=Product Store Shipment Meth
+import.xls.ShipmentCostEstimate=Shipment Cost Estimate
+import.xls.ProductStorePaymentSetting=Product Store Payment Setting

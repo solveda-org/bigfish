@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createProductStoreParm" short-description="Create a Product Store Parm">
+        <if-empty field="parameters.parmKey">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankParamKeyError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+            <else>
+                <set field="idLength" value="60" type="Integer"/>
+                <set field="spaceReplacement" value="_" type="String"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="parameters.parmKey">
+                    <field field="parameters.parmKey" type="String"/>
+                    <field field="idLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="parameters.parmKey">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidParamKeyError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+                    <else>
+                        <entity-one entity-name="XProductStoreParm" value-field="lookedUpValue"/>
+                        <if-not-empty field="lookedUpValue">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ParamKeyExistError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionParameterError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.parmCategory">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankParamCategoryError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARMCATEGORY" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <make-value entity-name="XProductStoreParm" value-field="lookedUpValue"/>
+        <set-pk-fields map="parameters" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <create-value value-field="lookedUpValue"/>
+        <field-to-result field="parameters.productStoreId" result-name="productStoreId"/>
+        <field-to-result field="parameters.parmKey" result-name="parmKey"/>
+    </simple-method>
+
+    <simple-method method-name="deleteProductStoreParm" short-description="Create a Product Store Parm">
+        <if-empty field="parameters.parmKey">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankParamKeyError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <entity-one entity-name="XProductStoreParm" value-field="lookedUpValue"/>
+        <if-not-empty field="lookedUpValue">
+            <remove-value value-field="lookedUpValue"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+            <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="updateProductStoreParm" short-description="Update a ProductStoreParm">
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionParameterError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <!-- <if-empty field="parameters.parmValue">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidValueParameterError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARMVALUE" list="error_list"/>
+        </if-empty> -->
+        <if-empty field="parameters.parmCategory">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategoryParameterError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARMCATEGORY" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <entity-one entity-name="XProductStoreParm" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+        <if-compare field="parameters.parmKey" operator="equals" value="CURRENCY_UOM_DEFAULT">
+            <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="setPropertyValue">
+                <string value="general.properties" />
+                <string value="currency.uom.id.default" />
+                <field field="parameters.parmValue" type="String" />
+            </call-class-method>
+        </if-compare>
+        <field-to-result field="parameters.productStoreId" result-name="productStoreId"/>
+        <field-to-result field="parameters.parmKey" result-name="parmKey"/>
+    </simple-method>
+
+    <simple-method method-name="updateUiLabel" short-description="Update a uilabel">
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.value">
+           <set field="parameters.value" value=" "/>
+       </if-empty> 
+        <check-errors/>
+        <set-service-fields service-name="updateLabelXml" map="parameters" to-map="updateLabelXmlCtx"/>
+        <call-service service-name="updateLabelXml" in-map-name="updateLabelXmlCtx"/>
+        <field-to-result field="parameters.key" result-name="key"/>
+    </simple-method>
+    
+    <simple-method method-name="createUiLabel" short-description="Create a uilabel">
+        <if-empty field="parameters.key">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankKeyError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="KEY" list="error_list"/>
+        <else>
+            <set field="spaceReplacement" value="" type="String"/>
+            <set field="makeUpCase" value="false" type="Boolean"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="parameters.key">
+                <field field="parameters.key" type="String"/>
+                <string value="${spaceReplacement}"/>
+                <field field="makeUpCase" type="boolean"/>
+            </call-class-method>
+            <if-empty field="parameters.key">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidKeyError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="KEY" list="error_list"/>
+                <else>
+                    <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="XmlFileStr">
+                        <string value="osafeAdmin.properties"/>
+                        <string value="ecommerce-UiLabel-xml-file"/>
+                    </call-class-method>
+                    <set field="XmlFilePath" value="${groovy: org.ofbiz.base.util.string.FlexibleStringExpander.expandString(XmlFileStr, context)}" type="String"/>
+                    <call-class-method class-name="com.osafe.services.OsafeManageXml" method-name="findByKeyFromXmlFile" ret-field="uiLabelEntry">
+                        <field field="XmlFilePath" type="String"/>
+                        <string value="key"/>
+                        <field field="parameters.key" type="String"/>
+                    </call-class-method>
+                    <if-not-empty field="uiLabelEntry">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="KeyExistError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="KEY" list="error_list"/>
+                    </if-not-empty>
+                </else>
+            </if-empty>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.category">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCategoryError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="KEY" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="addUiLabelXml" map="parameters" to-map="addUiLabelXmlCtx"/>
+        <call-service service-name="addUiLabelXml" in-map-name="addUiLabelXmlCtx"/>
+        <field-to-result field="parameters.key" result-name="key"/>
+    </simple-method>
+
+    <simple-method method-name="deleteUiLabel" short-description="Delete UiLabel from xml file">
+        <if-empty field="parameters.key">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankKeyError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="deleteUiLabelXml" map="parameters" to-map="deleteUiLabelXmlCtx"/>
+        <call-service service-name="deleteUiLabelXml" in-map-name="deleteUiLabelXmlCtx"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+        <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="clearLabelCache" short-description="clear label cache">
+        <if-not-empty field="parameters.cacheName">
+            <set field="cacheName" from-field="parameters.cacheName"/>
+            <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="findCache" ret-field="utilCache" >
+                <field field="cacheName" type="String"/>
+            </call-class-method>
+            <if-not-empty field="utilCache">
+                <call-object-method method-name="clear" obj-field="utilCache"></call-object-method>
+                <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheSuccess" field="clearLabelCacheSuccess"/>
+                <string-to-list string="${clearLabelCacheSuccess}" list="successMessageList"/>
+                <else>
+                    <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheError" field="clearLabelCacheError"/>
+                    <string-to-list string="${clearLabelCacheError}" list="error_list"/>
+                </else>
+            </if-not-empty>
+            <else>
+                <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheError" field="clearLabelCacheError"/>
+                <string-to-list string="${clearLabelCacheError}" list="error_list"/>
+            </else>
+        </if-not-empty>
+        <check-errors/>
+    </simple-method>
+
+    <simple-method method-name="solrReIndex" short-description="Re-Index solr">
+       <set-service-fields service-name="genProductsIndex" map="parameters" to-map="genProductsIndexCtx"/>
+       <call-service service-name="genProductsIndex" in-map-name="genProductsIndexCtx">
+           <result-to-result result-name="documentListCount"/>
+       </call-service>
+       <property-to-field resource="OSafeAdminUiLabels" property="solrReIndexSuccess" field="solrReIndexSuccess"/>
+       <string-to-list string="${solrReIndexSuccess}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="createNewEnum" short-description="create an enumeration">
+        <if-empty field="parameters.enumId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="IdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="ENUMID" list="error_list"/>
+        <else>
+                <set field="IdLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value="_" type="String"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="enumId">
+                    <field field="parameters.enumId" type="String"/>
+                    <field field="IdLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="enumId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="IdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="ENUMID" list="error_list"/>
+                <else>
+                        <set field="parameters.enumId" from-field="enumId"/>
+                        <entity-one entity-name="Enumeration" value-field="existingEnum"/>
+                        <if-not-empty field="existingEnum">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="IdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="ENUMID" list="error_list"/>
+                        </if-not-empty>
+                </else>
+                </if-empty>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.sequenceId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="SEQUENCEID" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                <string value="${parameters.sequenceId}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceIdNotVaildNumError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SEQUENCEID" list="error_list"/>
+            </if-compare>        
+        </else>
+        </if-empty>
+        <check-errors/>
+        <make-value entity-name="Enumeration" value-field="newEntity"/>
+        <set field="newEntity.enumId" from-field="parameters.enumId"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
+        <field-to-result field="parameters.enumId" result-name="enumId"/>
+    </simple-method>
+
+    <simple-method method-name="updateEnum" short-description="Update Enumeration">
+            <if-empty field="parameters.enumId">
+               <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="IdError"/>
+               <string-to-list string="${tempErrorMessage}" message-field="ENUMID" list="error_list"/>
+            </if-empty>
+            <if-empty field="parameters.enumTypeId">
+               <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="IdError"/>
+               <string-to-list string="${tempErrorMessage}" message-field="ENUMID" list="error_list"/>
+            </if-empty>
+            <if-empty field="parameters.description">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+            </if-empty>
+            <if-empty field="parameters.sequenceId">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceIdError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SEQUENCEID" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${parameters.sequenceId}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceIdNotVaildNumError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="SEQUENCEID" list="error_list"/>
+                </if-compare>        
+            </else>
+            </if-empty>
+            <check-errors/>
+            <set-service-fields service-name="updateEnumeration" map="parameters" to-map="updateEnumerationCtx"/>
+            <call-service service-name="updateEnumeration" in-map-name="updateEnumerationCtx"/>
+    </simple-method>
+    <simple-method method-name="deleteEnum" short-description="delete enumeration">
+        <make-value entity-name="Enumeration" value-field="lookupKeyValue"/>
+        <set-pk-fields map="parameters" value-field="lookupKeyValue"/>
+        <find-by-primary-key entity-name="Enumeration" map="lookupKeyValue" value-field="lookedUpValue"/>
+        <remove-value value-field="lookedUpValue"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+        <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+        
+    </simple-method>
+
+    <!-- Product Attribute Services -->
+    <simple-method method-name="createOrderAttribute" short-description="create a OrderAttribute">
+        <make-value entity-name="OrderAttribute" value-field="newEntity"/>
+        <set-pk-fields map="parameters" value-field="newEntity"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
+    </simple-method>
+    <simple-method method-name="updateOrderAttribute" short-description="update a OrderAttribute">
+        <entity-one entity-name="OrderAttribute" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
+    <simple-method method-name="deleteOrderAttribute" short-description="delete a OrderAttribute">
+        <entity-one entity-name="OrderAttribute" value-field="lookedUpValue"/>
+        <remove-value value-field="lookedUpValue"/>
+    </simple-method>
+
+    <simple-method method-name="updateStyle" short-description="update style css file">
+       <if-empty field="parameters.textData">
+           <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStyleTextDataError"/>
+           <string-to-list string="${tempErrorMessage}" list="error_list"/>
+       </if-empty>
+       <check-errors/>
+       <set-service-fields service-name="getStyleFilePath" map="parameters" to-map="getStyleFilePathCtx"/>
+       <call-service service-name="getStyleFilePath" in-map-name="getStyleFilePathCtx">
+           <result-to-field result-name="styleFilePath" field="styleFilePath"/>
+       </call-service>
+       <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
+           <field field="styleFilePath" type="String"/>
+       </call-class-method>
+       <if-compare field="isNotEmpty" operator="equals" value="true">
+           <create-object class-name="java.io.File" field="styleFile">
+               <field field="styleFilePath" type="String"/>
+           </create-object>
+           <call-class-method class-name="java.lang.System" method-name="getProperty" ret-field="encoding">
+               <string value="file.encoding"/>
+           </call-class-method>
+           <call-class-method class-name="org.ofbiz.base.util.FileUtil" method-name="writeString">
+               <field field="encoding" type="String"/>
+               <field field="parameters.textData" type="String"/>
+               <field field="styleFile" type="java.io.File"/>
+           </call-class-method>
+       </if-compare>
+       <property-to-field resource="OSafeAdminUiLabels" property="UpdateStyleSuccess" field="updateStyleSuccess"/>
+       <string-to-list string="${updateStyleSuccess}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="loadNewStyle" short-description="upload the css file and save file in current theme directory">
+        <if-empty field="parameters._uploadedFile_fileName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UploadedFileExistError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <call-object-method method-name="toUpperCase" obj-field="parameters._uploadedFile_fileName" ret-field="uploadedStyleFileNameUpperCase"/>
+                <call-object-method method-name="endsWith" obj-field="uploadedStyleFileNameUpperCase" ret-field="isCSSFile">
+                    <string value=".CSS"/>
+                </call-object-method>
+                <if-compare field="isCSSFile" operator="equals" value="false">
+                    <set field="argListNames[]" from-field="parameters._uploadedFile_fileName"/>
+                    <property-to-field resource="OSafeAdminUiLabels" property="UploadedFileNotCssError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="getStyleFilePath" map="parameters" to-map="getStyleFilePathCtx"/>
+        <call-service service-name="getStyleFilePath" in-map-name="getStyleFilePathCtx">
+             <result-to-field result-name="styleFilePath" field="styleFilePath"/>
+        </call-service>
+        <if-not-empty field="styleFilePath">
+            <create-object class-name="java.io.File" field="styleFile">
+                <field field="styleFilePath" type="String"/>
+            </create-object>
+            <call-object-method obj-field="styleFile" method-name="getParentFile" ret-field="parentDirectoryFile"/>
+            <set-service-fields service-name="uploadFile" map="parameters" to-map="uploadFileCtx"/>
+            <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+                <result-to-field result-name="uploadFileName" field="uploadFileName"/>
+                <result-to-field result-name="uploadFilePath" field="uploadFilePath"/>
+            </call-service>
+            <string-append field="uploadFilePath" string="${uploadFileName}"/>
+            <create-object class-name="java.io.File" field="tempUploadedStyleFile">
+                <field field="uploadFilePath" type="String"/>
+            </create-object>
+            <create-object class-name="java.io.File" field="uploadedStyleFile">
+                <field field="parentDirectoryFile" type="java.io.File"/>
+                <field field="uploadFileName" type="String"/>
+            </create-object>
+            <call-class-method method-name="copyFile" class-name="org.apache.commons.io.FileUtils">
+                <field field="tempUploadedStyleFile" type="java.io.File"/>
+                <field field="uploadedStyleFile" type="java.io.File"/>
+            </call-class-method>
+            <call-object-method obj-field="tempUploadedStyleFile" method-name="delete"/>
+        </if-not-empty>
+        <property-to-field resource="OSafeAdminUiLabels" property="LoadNewStyleSuccess" field="loadNewStyleSuccess"/>
+        <string-to-list string="${loadNewStyleSuccess}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="updateStyleVisualTheme" short-description="update visual theme for style file">
+       <set field="productStoreMap.productStoreId" from-field="parameters.productStoreId" />
+       <find-by-primary-key entity-name="ProductStore" map="productStoreMap" value-field="productStore" use-cache="true"/>
+       <set field="visualThemeResourceMap.visualThemeId" from-field="productStore.visualThemeId" />
+       <if-not-empty field="parameters.visualThemeId">
+           <set field="visualThemeResourceMap.visualThemeId" from-field="parameters.visualThemeId" />
+       </if-not-empty>
+       <set field="visualThemeResourceMap.resourceTypeEnumId" value="VT_STYLESHEET" />
+       <find-by-and entity-name="VisualThemeResource" map="visualThemeResourceMap" list="themeValueList" use-cache="true"/>
+       <call-object-method obj-field="themeValueList" method-name="size" ret-field="themeValueListSize"/>
+       <if-compare field="themeValueListSize" operator="greater" value="0" type="Integer">
+           <call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="themeValue">
+               <field field="themeValueList" type="List"/>
+           </call-class-method>
+           <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
+               <field field="themeValue.resourceValue" type="String"/>
+           </call-class-method>
+           <call-object-method obj-field="themeValue.resourceValue" method-name="lastIndexOf" ret-field="lastSlash">
+                  <string value="/"/>
+           </call-object-method>
+           <if>
+               <condition>
+                   <if-compare field="lastSlash" operator="not-equals" value="-1" type="Integer" />
+               </condition>
+               <then>
+                   <calculate field="lastSlash">
+                       <calcop operator="add" >
+                           <calcop operator="get" field="lastSlash"/>
+                           <number value="1"/>
+                       </calcop>
+                   </calculate>
+                   <set field="startIndex" value="0" type="Integer"/>
+                   <set field="endIndex" from-field="lastSlash" type="Integer"/>
+                   <call-object-method obj-field="themeValue.resourceValue" method-name="substring" ret-field="newResourceValue">
+                       <field field="startIndex" type="int"/>
+                       <field field="endIndex" type="int"/>
+                   </call-object-method>
+                   <string-append field="newResourceValue" string="${parameters.styleFileName}" />
+                   <set-service-fields service-name="updateVisualThemeResource" map="themeValue" to-map="updateVisualThemeResourceCtx" />
+                   <set field="updateVisualThemeResourceCtx.resourceValue" from-field="newResourceValue" />
+                   <call-service service-name="updateVisualThemeResource" in-map-name="updateVisualThemeResourceCtx" />
+               </then>
+           </if>
+        </if-compare>
+    </simple-method>
+
+    <simple-method method-name="loadProductFileAndImages" short-description="Method to load product xls file and images.">
+        <if-empty field="parameters._productFile_fileName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductFileError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTFILE" list="error_list"/>
+        </if-empty>
+        <if-not-empty field="parameters._productFile_fileName">
+            <call-object-method method-name="toUpperCase" obj-field="parameters._productFile_fileName" ret-field="productFileNameUpperCase"/>
+            <call-object-method method-name="endsWith" obj-field="productFileNameUpperCase" ret-field="isXLSFile">
+                <string value=".XLS"/>
+            </call-object-method>
+            <if-compare field="isXLSFile" operator="equals" value="false">
+                    <property-to-field resource="OSafeAdminUiLabels" property="ProductFileNotXLSError" field="tempErrorMessage"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+        <set-service-fields service-name="uploadFile" map="parameters" to-map="uploadFileCtx"/>
+        <if-not-empty field="parameters._productFile_fileName">
+            <set field="uploadFileCtx.uploadedFile" from-field="parameters.productFile"/>
+            <set field="uploadFileCtx._uploadedFile_fileName" from-field="parameters._productFile_fileName"/>
+            <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+                <result-to-field result-name="uploadFileName" field="parameters.productFileName"/>
+                <result-to-field result-name="uploadFilePath" field="parameters.productFilePath"/>
+            </call-service>
+            <clear-field field="uploadFileCtx"/>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.imageLocation">
+            <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="osafeThemeServerPath">
+                <string value="osafe.properties"/>
+                <string value="osafe.theme.server"/>
+            </call-class-method>
+            
+            <!-- For Media Library Zip File -->
+            <if-compare field="parameters.imageLocation" operator="equals" value="mediaLibraryZip" type="String">
+                <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="userContentImagePath">
+                    <string value="osafe.properties"/>
+                    <string value="user-content.image-path"/>
+                </call-class-method>
+                <set field="zipFileName" value="${osafeThemeServerPath}${userContentImagePath}${parameters.mediaLibraryZipFile}"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="unzipZipFile">
+                    <field field="zipFileName"/>
+                    <field field="parameters.productFilePath"/>
+                </call-class-method>
+                <set field="parameters.productLoadImagesDir" from-field="parameters.productFilePath"/>
+            </if-compare>
+            
+            <!-- For Media Library individual images -->
+            <if-compare field="parameters.imageLocation" operator="equals" value="mediaLibraryIndividual" type="String">
+                <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="userContentImagePath">
+                    <string value="osafe.properties"/>
+                    <string value="user-content.image-path"/>
+                </call-class-method>
+                <set field="parameters.productLoadImagesDir" value="${osafeThemeServerPath}${userContentImagePath}images"/>
+            </if-compare>
+            
+            <!-- For Server Zip File -->
+            <if-compare field="parameters.imageLocation" operator="equals" value="serverZip" type="String">
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="unzipZipFile">
+                    <field field="parameters.serverZipFile"/>
+                    <field field="parameters.productFilePath"/>
+                </call-class-method>
+                <set field="parameters.productLoadImagesDir" from-field="parameters.productFilePath"/>
+            </if-compare>
+            
+            <!-- For Server individual images -->
+            <if-compare field="parameters.imageLocation" operator="equals" value="serverIndividual" type="String">
+                <set field="parameters.productLoadImagesDir" from-field="parameters.serverDir"/>
+            </if-compare>
+            
+            <!-- For Local Zip File -->
+            <if-compare field="parameters.imageLocation" operator="equals" value="localZip" type="String">
+                <if-not-empty field="parameters._localZipFile_fileName">
+                    <set field="uploadFileCtx.uploadedFile" from-field="parameters.localZipFile"/>
+                    <set field="uploadFileCtx._uploadedFile_fileName" from-field="parameters._localZipFile_fileName"/>
+                    <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+                        <result-to-field result-name="uploadFileName" field="parameters.localZipFileName"/>
+                        <result-to-field result-name="uploadFilePath" field="parameters.localZipFilePath"/>
+                    </call-service>
+                    <clear-field field="uploadFileCtx"/>
+                    <set field="zipFileName" value="${parameters.localZipFilePath}${parameters.localZipFileName}"/>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="unzipZipFile">
+                        <field field="zipFileName"/>
+                        <field field="parameters.localZipFilePath"/>
+                    </call-class-method>
+                    <set field="parameters.productLoadImagesDir" from-field="parameters.localZipFilePath"/>
+                </if-not-empty>
+            </if-compare>
+            
+            <!-- For URL -->
+            <if-compare field="parameters.imageLocation" operator="equals" value="url" type="String">
+                <field-to-result field="parameters.imageUrl" result-name="imageUrl"/>
+            </if-compare>
+        </if-not-empty>
+        
+        <field-to-result field="parameters.productFileName" result-name="uploadedXLSFile"/>
+        <field-to-result field="parameters.productFilePath" result-name="uploadedXLSPath"/>
+        <field-to-result field="parameters.productLoadImagesDir" result-name="productLoadImagesDir"/>
+    </simple-method>
+
+    <simple-method method-name="updatePDPVariantCaption" short-description="Update PDP Variant Caption">
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCaptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="updateProductFeatureType" to-map="updateProductFeatureTypeMap" map="parameters"/>
+        <call-service service-name="updateProductFeatureType" in-map-name="updateProductFeatureTypeMap"/>
+    </simple-method>
+
+    <simple-method method-name="getStyleFilePath" short-description="get style css file path for specific product store id or visual theme id">
+
+       <set field="returnFilePath" value="" type="String"/>
+       <set field="productStoreMap.productStoreId" from-field="parameters.productStoreId" />
+       <find-by-primary-key entity-name="ProductStore" map="productStoreMap" value-field="productStore" use-cache="true"/>
+       <set field="visualThemeResourceMap.visualThemeId" from-field="productStore.visualThemeId" />
+       <if-not-empty field="parameters.visualThemeId">
+           <set field="visualThemeResourceMap.visualThemeId" from-field="parameters.visualThemeId" />
+       </if-not-empty>
+       <set field="visualThemeResourceMap.resourceTypeEnumId" value="VT_STYLESHEET" />
+       <find-by-and entity-name="VisualThemeResource" map="visualThemeResourceMap" list="themeValueList" use-cache="true"/>
+       <call-object-method obj-field="themeValueList" method-name="size" ret-field="themeValueListSize"/>
+       <if-compare field="themeValueListSize" operator="greater" value="0" type="Integer">
+           <call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="themeValue">
+               <field field="themeValueList" type="List"/>
+           </call-class-method>
+           <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
+               <field field="themeValue.resourceValue" type="String"/>
+           </call-class-method>
+           <if-compare field="isNotEmpty" operator="equals" value="true">
+              <call-object-method obj-field="themeValue.resourceValue" method-name="indexOf" ret-field="firstSlash">
+                  <string value="/"/>
+              </call-object-method>
+              <calculate field="firstSlash">
+                  <calcop operator="add" >
+                      <calcop operator="get" field="firstSlash"/>
+                      <number value="1"/>
+                  </calcop>
+              </calculate>
+              <set field="endIndex" from-field="firstSlash" type="Integer"/>
+              <call-object-method obj-field="themeValue.resourceValue" method-name="indexOf" ret-field="secondSlash">
+                  <string value="/"/>
+                  <field field="endIndex" type="int"/>
+              </call-object-method>
+              <if>
+                  <condition>
+                      <and>
+                          <if-compare field="firstSlash" operator="equals" value="1" type="Integer" />
+                          <if-compare field="secondSlash" operator="not-equals" value="-1" type="Integer" />
+                      </and>
+                  </condition>
+                  <then>
+                      <set field="startIndex" from-field="firstSlash" type="Integer"/>
+                      <set field="endIndex" from-field="secondSlash" type="Integer"/>
+                      <call-object-method obj-field="themeValue.resourceValue" method-name="substring" ret-field="componentName">
+                          <field field="startIndex" type="int"/>
+                          <field field="endIndex" type="int"/>
+                      </call-object-method>
+                      <set field="styleFilePath" value="component://" type="String"/>
+                      <string-append field="styleFilePath" string="${componentName}"/>
+                      <string-append field="styleFilePath" string="/webapp"/>
+                      <string-append field="styleFilePath" string="${themeValue.resourceValue}"/>
+                      <call-class-method class-name="org.ofbiz.base.util.FileUtil" method-name="getFile" ret-field="styleFile">
+                          <field field="styleFilePath" type="String"/>
+                      </call-class-method>
+                      <call-object-method obj-field="styleFile" method-name="exists" ret-field="isExist"/>
+                      <if-compare field="isExist" operator="equals" value="true">
+                          <call-object-method obj-field="styleFile" method-name="getPath" ret-field="returnFilePath"/>
+                      </if-compare>
+                  </then>
+              </if>
+           </if-compare>
+       </if-compare>
+       <field-to-result field="returnFilePath" result-name="styleFilePath"/>
+    </simple-method>
+    
+    <simple-method method-name="getSysConfigFiles" short-description="get system config file list">
+       <set field="sysConfigFileList" type="List" />
+       <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="sysConfigComponentNames">
+           <string value="osafeAdmin.properties"/>
+           <string value="system-configuration-componentnames"/>
+       </call-class-method>
+       <if-not-empty field="sysConfigComponentNames">
+           <call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="sysConfigComponentNameList">
+               <field field="sysConfigComponentNames" type="String"/>
+               <string value="," />
+           </call-class-method>
+           <call-object-method obj-field="sysConfigComponentNameList" method-name="size" ret-field="sysConfigComponentNameListSize"/>
+           <if-compare field="sysConfigComponentNameListSize" operator="greater" value="0" type="Integer">
+               <iterate entry="sysConfigComponentName" list="sysConfigComponentNameList">
+                   <set field="componentConfigDir" value="component://" type="String"/>
+                   <string-append field="componentConfigDir" string="${sysConfigComponentName}"/>
+                   <string-append field="componentConfigDir" string="/config"/>
+                   <call-class-method class-name="org.ofbiz.base.util.FileUtil" method-name="getFile" ret-field="componentConfigDirFile">
+                       <field field="componentConfigDir" type="String"/>
+                   </call-class-method>
+                    <call-object-method obj-field="componentConfigDirFile" method-name="exists" ret-field="isExist"/>
+                    <if-compare field="isExist" operator="equals" value="true">
+                        <call-object-method obj-field="componentConfigDirFile" method-name="getAbsolutePath" ret-field="componentConfigDirFilePath"/>
+                        <call-class-method class-name="org.ofbiz.base.util.FileUtil" method-name="findFiles" ret-field="componentConfigFileList">
+                            <string value="properties"/>
+                            <field field="componentConfigDirFilePath" type="String"/>
+                            <field field=""/>
+                            <field field=""/>
+                        </call-class-method>
+                        <list-to-list to-list="sysConfigFileList" list="componentConfigFileList"/>
+                    </if-compare>
+               </iterate>
+           </if-compare>
+       </if-not-empty>
+       <field-to-result field="sysConfigFileList" result-name="sysConfigFileList"/>
+    </simple-method>
+    
+    <simple-method method-name="updateDivSequence" short-description="Updates a div Sequence">
+        <set field="invalidSeqNum" value="false"/>
+        <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.values">
+            <if-not-empty field="sequenceNumValue">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${sequenceNumValue}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <set field="invalidSeqNum" value="true"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="0" field="sequenceNumValue" type="Long"/>
+                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
+                            </and>
+                        </condition>
+                        <then></then>
+                        <else>
+                            <set field="invalidSeqNum" value="true"/>
+                        </else>
+                    </if>
+                </else>
+                </if-compare>
+            </if-not-empty>
+        </iterate-map>
+        <if-compare field="invalidSeqNum" type="Boolean" operator="equals" value="true" >
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <set field="parameters.showDetail" value="true"/>
+        </if-compare>
+        <field-to-result field="parameters.showDetail" result-name="showDetail"/>
+        <check-errors/>
+        <iterate-map key="key" value="keyValue" map="parameters.keys">
+            <set field="updateDivSequenceXmlCtx.key" from-field="keyValue"/>
+            <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.values">
+                <if-compare-field field="key" to-field="sequenceNumKey" operator="equals">
+                    <if-empty field="sequenceNumValue">
+                        <set field="sequenceNumValue" value="0" type="String"/>
+                    </if-empty>
+                    <set field="updateDivSequenceXmlCtx.value" from-field="sequenceNumValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="screenKey" value="screenValue" map="parameters.screens">
+                <if-compare-field field="key" to-field="screenKey" operator="equals">
+                    <set field="updateDivSequenceXmlCtx.screen" from-field="screenValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="descriptionKey" value="descriptionValue" map="parameters.descriptions">
+                <if-compare-field field="key" to-field="descriptionKey" operator="equals">
+                    <set field="updateDivSequenceXmlCtx.description" from-field="descriptionValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <call-service service-name="updateDivSequenceXml" in-map-name="updateDivSequenceXmlCtx"/>
+        </iterate-map>
+        <property-to-field resource="OSafeAdminUiLabels" property="DivSequenceSuccess" field="divSequenceSuccessMessage"/>
+        <string-to-list string="${divSequenceSuccessMessage}" list="successMessageList"/>
+        <field-to-result field="parameters.screenType" result-name="screenType"/>
+     </simple-method>
+    
+    <simple-method method-name="updateImageLocationPreferences" short-description="Update Image Location Preferences">
+        <iterate-map key="key" value="keyValue" map="parameters.key">
+            <set field="modifyImageLocationPreferencesXmlCtx.key" from-field="keyValue"/>
+            <iterate-map key="imageLocationKey" value="imageLocationValue" map="parameters.imageLocation">
+                <if-compare-field field="imageLocationKey" to-field="key" operator="equals">
+                    <set field="modifyImageLocationPreferencesXmlCtx.value" from-field="imageLocationValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <call-service service-name="modifyImageLocationPreferencesXml" in-map-name="modifyImageLocationPreferencesXmlCtx"/>
+        </iterate-map>
+        <property-to-field resource="OSafeAdminUiLabels" property="ImageLocationPreferencesSuccess" field="imageLocationPreferencesSuccessMessage"/>
+        <string-to-list string="${imageLocationPreferencesSuccessMessage}" list="successMessageList"/>
+     </simple-method>
+
+    <simple-method method-name="createPixelTracking" short-description="Create Pixel Tracking">
+        <if-empty field="parameters.pixelId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="pixelId" list="error_list"/>
+            <else>
+                <set field="idLength" value="60" type="Integer"/>
+                <set field="spaceReplacement" value="_" type="String"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="parameters.pixelId">
+                    <field field="parameters.pixelId" type="String"/>
+                    <field field="idLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="parameters.pixelId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelIdError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="pixelId" list="error_list"/>
+                    <else>
+                        <entity-one entity-name="XPixelTracking" value-field="lookedUpValue"/>
+                        <if-not-empty field="lookedUpValue">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PixelIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="pixelId" list="error_list"/>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.pixelScope">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelScopeError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="pixelScope" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+
+        <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
+        <set field="createTextContentCtx.contentTypeId" value="DOCUMENT"/>
+        <set field="createTextContentCtx.contentPurposeTypeId" value="SECTION"/>
+        <set field="createTextContentCtx.textData" from-field="parameters.textData"/>
+        <set field="createTextContentCtx.statusId" from-field="parameters.statusId"/>
+        <set field="createTextContentCtx.contentName" from-field="parameters.pixelId"/>
+        
+        <call-service service-name="createTextContent" in-map-name="createTextContentCtx">
+            <result-to-field field="parameters.contentId" result-name="contentId"/>
+        </call-service>
+
+        <make-value entity-name="XPixelTracking" value-field="newEntity"/>
+        <set-pk-fields map="parameters" value-field="newEntity"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <set field="newEntity.contentId" from-field="parameters.contentId"/>
+        <create-value value-field="newEntity"/>
+
+        <field-to-result field="newEntity.pixelId" result-name="pixelId"/>
+        <field-to-result field="newEntity.productStoreId" result-name="productStoreId"/>
+    </simple-method>
+
+    <simple-method method-name="updatePixelTracking" short-description="Update Pixel Tracking">
+        <if-empty field="parameters.pixelId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+            <else>
+                <entity-one entity-name="XPixelTracking" value-field="lookedUpValue"/>
+                <if-empty field="lookedUpValue">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PixelIdNotExistError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+                </if-empty>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.pixelScope">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelScopeError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+
+        <set-service-fields service-name="updateTextContent" map="parameters" to-map="updateTextContentCtx"/>
+        <set field="updateTextContentCtx.contentName" from-field="parameters.pixelId"/>
+        <set field="updateTextContentCtx.textData" from-field="parameters.pixelCode"/>
+        <set field="updateTextContentCtx.contentId" from-field="parameters.contentId"/>
+        <call-service service-name="updateTextContent" in-map-name="updateTextContentCtx">
+            <result-to-field field="parameters.contentId" result-name="contentId"/>
+        </call-service>
+
+        <set-service-fields service-name="updateXPixelTracking" map="parameters" to-map="updateXPixelTrackingCtx"/>
+        <set field="updateXPixelTrackingCtx.contentId" from-field="parameters.contentId"/>
+        <call-service service-name="updateXPixelTracking" in-map-name="updateXPixelTrackingCtx">
+            <result-to-result result-name="pixelId"/>
+            <result-to-result result-name="productStoreId"/>
+        </call-service>
+    </simple-method>
+    
+    <simple-method method-name="deletePixelTracking" short-description="delete Pixel Tracking">
+        <if-empty field="parameters.pixelId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+            <else>
+                <entity-one entity-name="XPixelTracking" value-field="lookedUpValue"/>
+                <if-empty field="lookedUpValue">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PixelIdNotExistError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+                </if-empty>
+            </else>
+        </if-empty>
+        <check-errors/>
+        <set field="contentId" from-field="lookedUpValue.contentId"/>
+        <remove-value value-field="lookedUpValue"/>
+        <if-not-empty field="contentId">
+            <set field="deleteTextContentCtx.contentId" from-field="contentId"/>
+            <call-service service-name="deleteTextContent" in-map-name="deleteTextContentCtx"/>
+        </if-not-empty>
+    </simple-method>
+
+</simple-methods>

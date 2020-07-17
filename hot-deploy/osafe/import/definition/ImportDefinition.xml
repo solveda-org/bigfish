@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<data-files xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/datafiles.xsd">
+    <data-file name="Product Assoc Variant" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="ProductAssoc" limit="many">
+      <field name="productId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productIdTo" type="String" ignored="false" prim-key="true"></field>
+      <field name="productAssocTypeId" type="String" ignored="false" default-value="PRODUCT_VARIANT"></field>
+      <field name="fromDate" type="String" ignored="false"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+      <field name="reason" type="String" ignored="false"></field>
+      <field name="quantity" type="String" ignored="false"></field>
+      <field name="scrapFactor" type="String" ignored="false"></field>
+      <field name="instruction" type="String" ignored="false"></field>
+      <field name="routingWorkEffortId" type="String" ignored="false"></field>
+      <field name="estimateCalcMethod" type="String" ignored="false"></field>
+      <field name="recurrenceInfoId" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Assoc Compliment" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="ProductAssoc" limit="many">
+      <field name="productId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productIdTo" type="String" ignored="false" prim-key="true"></field>
+      <field name="productAssocTypeId" ignored="false" type="String" default-value="PRODUCT_COMPLIMENT"></field>
+      <field name="fromDate" type="String" ignored="false"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+      <field name="reason" type="String" ignored="false"></field>
+      <field name="quantity" type="String" ignored="false"></field>
+      <field name="scrapFactor" type="String" ignored="false"></field>
+      <field name="instruction" type="String" ignored="false"></field>
+      <field name="routingWorkEffortId" type="String" ignored="false"></field>
+      <field name="estimateCalcMethod" type="String" ignored="false"></field>
+      <field name="recurrenceInfoId" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="Product" limit="many">
+      <field name="productId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productTypeId" type="String" ignored="false" default-value="FINISHED_GOOD"/>
+      <field name="primaryProductCategoryId" type="String" ignored="false"/>
+      <field name="manufacturerPartyId" type="String" ignored="false"/>
+      <field name="facilityId" type="String" ignored="false"/>
+      <field name="introductionDate" type="String" ignored="false"/>
+      <field name="releaseDate" type="String" ignored="false"/>
+      <field name="supportDiscontinuationDate" type="String" ignored="false"/>
+      <field name="salesDiscontinuationDate" type="String" ignored="false"/>
+      <field name="salesDiscWhenNotAvail" type="String" ignored="false"/>
+      <field name="internalName" type="String" ignored="false"/>
+      <field name="brandName" type="String" ignored="false"/>
+      <field name="comments" type="String" ignored="false"/>
+      <field name="productName" type="String" ignored="false"/>
+      <field name="description" type="String" ignored="false"/>
+      <field name="longDescription" type="String" ignored="false"/>
+      <field name="priceDetailText" type="String" ignored="false"/>
+      <field name="smallImageUrl" type="String" ignored="false"/>
+      <field name="mediumImageUrl" type="String" ignored="false"/>
+      <field name="largeImageUrl" type="String" ignored="false"/>
+      <field name="detailImageUrl" type="String" ignored="false"/>
+      <field name="originalImageUrl" type="String" ignored="false"/>
+      <field name="detailScreen" type="String" ignored="false"/>
+      <field name="inventoryMessage" type="String" ignored="false"/>
+      <field name="requireInventory" type="String" ignored="false"/>
+      <field name="quantityUomId" type="String" ignored="false"/>
+      <field name="quantityIncluded" type="String" ignored="false"/>
+      <field name="piecesIncluded" type="String" ignored="false"/>
+      <field name="requireAmount" type="String" ignored="false"/>
+      <field name="fixedAmount" type="String" ignored="false"/>
+      <field name="amountUomTypeId" type="String" ignored="false"/>
+      <field name="weightUomId" type="String" ignored="false"/>
+      <field name="weight" type="String" ignored="false"/>
+      <field name="productWeight" type="String" ignored="false"/>
+      <field name="heightUomId" type="String" ignored="false"/>
+      <field name="productHeight" type="String" ignored="false"/>
+      <field name="shippingHeight" type="String" ignored="false"/>
+      <field name="widthUomId" type="String" ignored="false"/>
+      <field name="productWidth" type="String" ignored="false"/>
+      <field name="shippingWidth" type="String" ignored="false"/>
+      <field name="depthUomId" type="String" ignored="false"/>
+      <field name="productDepth" type="String" ignored="false"/>
+      <field name="shippingDepth" type="String" ignored="false"/>
+      <field name="diameterUomId" type="String" ignored="false"/>
+      <field name="productDiameter" type="String" ignored="false"/>
+      <field name="productRating" type="String" ignored="false"/>
+      <field name="ratingTypeEnum" type="String" ignored="false"/>
+      <field name="returnable" type="String" ignored="false"/>
+      <field name="taxable" type="String" ignored="false"/>
+      <field name="chargeShipping" type="String" ignored="false"/>
+      <field name="autoCreateKeywords" type="String" ignored="false"/>
+      <field name="includeInPromotions" type="String" ignored="false"/>
+      <field name="isVirtual" type="String" ignored="false"/>
+      <field name="isVariant" type="String" ignored="false"/>
+      <field name="virtualVariantMethodEnum" type="String"/>
+      <field name="originGeoId" type="String" ignored="false"/>
+      <field name="requirementMethodEnumId" type="String" ignored="false"/>
+      <field name="billOfMaterialLevel" type="String" ignored="false"/>
+      <field name="reservMaxPersons" type="String" ignored="false"/>
+      <field name="reserv2ndPPPerc" type="String" ignored="false"/>
+      <field name="reservNthPPPerc" type="String" ignored="false"/>
+      <field name="configId" type="String" ignored="false"/>
+      <field name="createdDate" type="String" ignored="false"/>
+      <field name="createdByUserLogin" type="String" ignored="false"/>
+      <field name="lastModifiedDate" type="String" ignored="false"/>
+      <field name="lastModifiedByUserLogin" type="String" ignored="false"/>
+      <field name="inShippingBox" type="String" ignored="false"/>
+      <field name="defaultShipmentBoxTypeId" type="String" ignored="false"/>
+     </record>
+    </data-file>
+    <data-file name="Product Price" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductPrice" limit="many">
+      <field name="productId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productPriceTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productPricePurposeId" type="String" ignored="false" prim-key="true" default-value="_NA_"></field>
+      <field name="currencyUomId" type="String" ignored="false" prim-key="true" default-value="USD"></field>
+      <field name="productStoreGroupId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="price" type="String" ignored="false"></field>
+      <field name="termUomId" type="String" ignored="false"></field>
+      <field name="customPriceCalcService" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Category Member" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductCategoryMember" limit="many">
+        <field name="productCategoryId" type="String" ignored="false" prim-key="true"></field>
+        <field name="productId" type="String" ignored="false" prim-key="true"></field>
+        <field name="fromDate" type="String" ignored="false" prim-key="true"></field>
+        <field name="thruDate" type="String" ignored="false"></field>
+        <field name="comments" type="String" ignored="false"></field>
+        <field name="sequenceNum" type="String" ignored="false"></field>
+        <field name="quantity" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Feature Type" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="ProductFeatureType" limit="many">
+      <field name="productFeatureTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="parentTypeId" type="String" ignored="false"></field>
+      <field name="hasTable" type="String" ignored="false"></field>
+      <field name="description" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Feature Category" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="ProductFeatureCategory" limit="many">
+      <field name="productFeatureCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="parentCategoryId" type="String" ignored="false"></field>
+      <field name="description" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Feature" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductFeature" limit="many">
+      <field name="productFeatureId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productFeatureTypeId" type="String" ignored="false"></field>
+      <field name="productFeatureCategoryId" type="String" ignored="false"></field>
+      <field name="description" type="String" ignored="false"></field>
+      <field name="uomId" type="String" ignored="false"></field>
+      <field name="numberSpecified" type="String" ignored="false"></field>
+      <field name="defaultAmount" type="String" ignored="false"></field>
+      <field name="defaultSequenceNum" type="String" ignored="false"></field>
+      <field name="abbrev" type="String" ignored="false"></field>
+      <field name="idCode" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Feature Application" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductFeatureAppl" limit="many">
+      <field name="productId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productFeatureId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productFeatureApplTypeId" type="String" ignored="false"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+      <field name="amount" type="String" ignored="false"></field>
+      <field name="recurringAmount" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Feature Category Application" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductFeatureCategoryAppl" limit="many">
+      <field name="productCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productFeatureCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Content" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductContent" limit="many">
+      <field name="productId" type="String" ignored="false" prim-key="true"></field>
+      <field name="contentId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productContentTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" default-value="2011-01-01"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="purchaseFromDate" type="String" ignored="false"></field>
+      <field name="purchaseThruDate" type="String" ignored="false"></field>
+      <field name="useCountLimit" type="String" ignored="false"></field>
+      <field name="useTime" type="String" ignored="false"></field>
+      <field name="useTimeUomId" type="String" ignored="false"></field>
+      <field name="useRoleTypeId" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+
+    <data-file name="Prod Catalog" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProdCatalog" limit="many">
+      <field name="prodCatalogId" type="String" ignored="false" prim-key="true"></field>
+      <field name="catalogName" type="String" ignored="false"></field>
+      <field name="useQuickAdd" type="String" ignored="false" default-value="N"></field>
+      <field name="styleSheet" type="String" ignored="false"></field>
+      <field name="headerLogo" type="String" ignored="false"></field>
+      <field name="contentPathPrefix" type="String" ignored="false"></field>
+      <field name="templatePathPrefix" type="String" ignored="false"></field>
+      <field name="viewAllowPermReqd" type="String" ignored="false"></field>
+      <field name="purchaseAllowPermReqd" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Store Catalog" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductStoreCatalog" limit="many">
+      <field name="productStoreId" type="String" ignored="false" prim-key="true"></field>
+      <field name="prodCatalogId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Category" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductCategory" limit="many">
+      <field name="productCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productCategoryTypeId" type="String" ignored="false"></field>
+      <field name="primaryParentCategoryId" type="String" ignored="false"></field>
+      <field name="categoryName" type="String" ignored="false"></field>
+      <field name="description" type="String" ignored="false"></field>
+      <field name="longDescription" type="String" ignored="false"></field>
+      <field name="categoryImageUrl" type="String" ignored="false"></field>
+      <field name="linkOneImageUrl" type="String" ignored="false"></field>
+      <field name="linkTwoImageUrl" type="String" ignored="false"></field>
+      <field name="detailScreen" type="String" ignored="false"></field>
+      <field name="showInSelect" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Category Rollup" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductCategoryRollup" limit="many">
+      <field name="productCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="parentProductCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Prod Catalog Category" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProdCatalogCategory" limit="many">
+      <field name="prodCatalogId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="prodCatalogCategoryTypeId" type="String" ignored="false" prim-key="true" default-value="PCCT_BROWSE_ROOT"></field>
+      <field name="fromDate" type="String" ignored="false"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Party" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="Party" limit="many">
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="partyTypeId" type="String" ignored="false"></field>
+      <field name="externalId" type="String" ignored="false"></field>
+      <field name="preferredCurrencyUomId" type="String" ignored="false"></field>
+      <field name="description" type="String" ignored="false"></field>
+      <field name="statusId" type="String" ignored="false" default-value="PARTY_ENABLED"></field>
+      <field name="createdDate" type="String" ignored="false"></field>
+      <field name="createdByUserLogin" type="String" ignored="false"></field>
+      <field name="lastModifiedDate" type="String" ignored="false"></field>
+      <field name="lastModifiedByUserLogin" type="String" ignored="false"></field>
+      <field name="dataSourceId" type="String" ignored="false"></field>
+      <field name="isUnread" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Party Role" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="PartyRole" limit="many">
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="roleTypeId" type="String" ignored="false" prim-key="true"></field>
+     </record>
+    </data-file>
+    <data-file name="User Login" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="UserLogin" limit="many">
+      <field name="userLoginId" type="String" ignored="false" prim-key="true"></field>
+      <field name="partyId" type="String" ignored="false"></field>
+      <field name="currentPassword" type="String" ignored="false" default-value="ofbiz"></field>
+      <field name="passwordHint" type="String" ignored="false"></field>
+      <field name="isSystem" type="String" ignored="false" default-value="N"></field>
+      <field name="enabled" type="String" ignored="false" default-value="Y"></field>
+      <field name="hasLoggedOut" type="String" ignored="false"></field>
+      <field name="requirePasswordChange" type="String" ignored="false"></field>
+      <field name="lastCurrencyUom" type="String" ignored="false"></field>
+      <field name="lastLocale" type="String" ignored="false"></field>
+      <field name="lastTimeZone" type="String" ignored="false"></field>
+      <field name="disabledDateTime" type="String" ignored="false"></field>
+      <field name="successiveFailedLogins" type="String" ignored="false"></field>
+      <field name="externalAuthId" type="String" ignored="false"></field>
+      <field name="userLdapDn" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="User Login Security Group" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="UserLoginSecurityGroup" limit="many">
+      <field name="userLoginId" type="String" ignored="false" prim-key="true"></field>
+      <field name="groupId" type="String" ignored="false"></field>
+      <field name="fromDate" type="String" ignored="false" default-value="2011-01-01 00:00:00.0"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Contact Mech" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ContactMech" limit="many">
+      <field name="contactMechId" type="String" ignored="false" prim-key="true"></field>
+      <field name="contactMechTypeId" type="String" ignored="false"></field>
+      <field name="infoString" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Party Contact Mech" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="PartyContactMech" limit="many">
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="contactMechId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true" default-value="2011-01-01 00:00:00.0"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="roleTypeId" type="String" ignored="false"></field>
+      <field name="allowSolicitation" type="String" ignored="false" default-value="N"></field>
+      <field name="extension" type="String" ignored="false"></field>
+      <field name="verified" type="String" ignored="false"></field>
+      <field name="comments" type="String" ignored="false"></field>
+      <field name="yearsWithContactMech" type="String" ignored="false"></field>
+      <field name="monthsWithContactMech" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Party Contact Mech Purpose" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="PartyContactMechPurpose" limit="many">
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="contactMechId" type="String" ignored="false" prim-key="true"></field>
+      <field name="contactMechPurposeTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true" default-value="2011-01-01 00:00:00.0"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Postal Address" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="PostalAddress" limit="many">
+      <field name="contactMechId" type="String" ignored="false" prim-key="true"></field>
+      <field name="toName" type="String" ignored="false"></field>
+      <field name="attnName" type="String" ignored="false"></field>
+      <field name="address1" type="String" ignored="false"></field>
+      <field name="address2" type="String" ignored="false"></field>
+      <field name="directions" type="String" ignored="false"></field>
+      <field name="city" type="String" ignored="false"></field>
+      <field name="stateProvinceGeoId" type="String" ignored="false"></field>
+      <field name="postalCode" type="String" ignored="false"></field>
+      <field name="postalCodeExt" type="String" ignored="false"></field>
+      <field name="countryGeoId" type="String" ignored="false" default-value="USA"></field>
+      <field name="countyGeoId" type="String" ignored="false"></field>
+      <field name="postalCodeGeoId" type="String" ignored="false"></field>
+      <field name="geoPointId" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Telecom Number" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="TelecomNumber" limit="many">
+      <field name="contactMechId" type="String" ignored="false" prim-key="true"></field>
+      <field name="countryCode" type="String" ignored="false"></field>
+      <field name="areaCode" type="String" ignored="false"></field>
+      <field name="contactNumber" type="String" ignored="false"></field>
+      <field name="askForName" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Person" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="Person" limit="many">
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="salutation" type="String" ignored="false"></field>
+      <field name="firstName" type="String" ignored="false"></field>
+      <field name="middleName" type="String" ignored="false"></field>
+      <field name="lastName" type="String" ignored="false"></field>
+      <field name="personalTitle" type="String" ignored="false"></field>
+      <field name="suffix" type="String" ignored="false"></field>
+      <field name="nickname" type="String" ignored="false"></field>
+      <field name="firstNameLocal" type="String" ignored="false"></field>
+      <field name="middleNameLocal" type="String" ignored="false"></field>
+      <field name="lastNameLocal" type="String" ignored="false"></field>
+      <field name="otherLocal" type="String" ignored="false"></field>
+      <field name="memberId" type="String" ignored="false"></field>
+      <field name="gender" type="String" ignored="false"></field>
+      <field name="birthDate" type="String" ignored="false"></field>
+      <field name="deceasedDate" type="String" ignored="false"></field>
+      <field name="height" type="String" ignored="false"></field>
+      <field name="weight" type="String" ignored="false"></field>
+      <field name="mothersMaidenName" type="String" ignored="false"></field>
+      <field name="maritalStatus" type="String" ignored="false"></field>
+      <field name="socialSecurityNumber" type="String" ignored="false"></field>
+      <field name="passportNumber" type="String" ignored="false"></field>
+      <field name="passportExpireDate" type="String" ignored="false"></field>
+      <field name="totalYearsWorkExperience" type="String" ignored="false"></field>
+      <field name="comments" type="String" ignored="false"></field>
+      <field name="employmentStatusEnumId" type="String" ignored="false"></field>
+      <field name="residenceStatusEnumId" type="String" ignored="false"></field>
+      <field name="occupation" type="String" ignored="false"></field>
+      <field name="yearsWithEmployer" type="String" ignored="false"></field>
+      <field name="monthsWithEmployer" type="String" ignored="false"></field>
+      <field name="existingCustomer" type="String" ignored="false"></field>
+      <field name="cardId" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Party Group" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="PartyGroup" limit="many">
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="groupName" type="String" ignored="false"></field>
+      <field name="groupNameLocal" type="String" ignored="false"></field>
+      <field name="officeSiteName" type="String" ignored="false"></field>
+      <field name="annualRevenue" type="String" ignored="false"></field>
+      <field name="numEmployees" type="String" ignored="false"></field>
+      <field name="tickerSymbol" type="String" ignored="false"></field>
+      <field name="comments" type="String" ignored="false"></field>
+      <field name="logoImageUrl" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Store" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductStore" limit="one">
+      <field name="productStoreId" type="String" ignored="false" prim-key="true"></field>
+      <field name="primaryStoreGroupId" type="String" ignored="false"></field>
+      <field name="storeName" type="String" ignored="false"></field>
+      <field name="companyName" type="String" ignored="false"></field>
+      <field name="title" type="String" ignored="false"></field>
+      <field name="subtitle" type="String" ignored="false"></field>
+      <field name="payToPartyId" type="String" ignored="false" ></field>
+      <field name="daysToCancelNonPay" type="String" ignored="false"></field>
+      <field name="manualAuthIsCapture" type="String" ignored="false"></field>
+      <field name="prorateShipping" type="String" ignored="false" default-value="Y"></field>
+      <field name="prorateTaxes" type="String" ignored="false" default-value="Y"></field>
+      <field name="viewCartOnAdd" type="String" ignored="false" default-value="N"></field>
+      <field name="autoSaveCart" type="String" ignored="false" default-value="Y"></field>
+      <field name="autoApproveReviews" type="String" ignored="false" default-value="N"></field>
+      <field name="isDemoStore" type="String" ignored="false" default-value="N"></field>
+      <field name="isImmediatelyFulfilled" type="String" ignored="false" default-value="Y"></field>
+      <field name="inventoryFacilityId" type="String" ignored="false"></field>
+      <field name="oneInventoryFacility" type="String" ignored="false"></field>
+      <field name="checkInventory" type="String" ignored="false"></field>
+      <field name="reserveInventory" type="String" ignored="false"></field>
+      <field name="reserveOrderEnumId" type="String" ignored="false" default-value="INVRO_FIFO_REC"></field>
+      <field name="requireInventory" type="String" ignored="false" default-value="N"></field>
+      <field name="balanceResOnOrderCreation" type="String" ignored="false" default-value="Y"></field>
+      <field name="requirementMethodEnumId" type="String" ignored="false"></field>
+      <field name="orderNumberPrefix" type="String" ignored="false"></field>
+      <field name="defaultLocaleString" type="String" ignored="false"></field>
+      <field name="defaultCurrencyUomId" type="String" ignored="false"></field>
+      <field name="defaultSalesChannelEnumId" type="String" ignored="false"></field>
+      <field name="allowPassword" type="String" ignored="false"></field>
+      <field name="defaultPassword" type="String" ignored="false"></field>
+      <field name="explodeOrderItems" type="String" ignored="false"></field>
+      <field name="checkGcBalance" type="String" ignored="false"></field>
+      <field name="retryFailedAuths" type="String" ignored="false"></field>
+      <field name="headerApprovedStatus" type="String" ignored="false"></field>
+      <field name="itemApprovedStatus" type="String" ignored="false"></field>
+      <field name="digitalItemApprovedStatus" type="String" ignored="false"></field>
+      <field name="headerDeclinedStatus" type="String" ignored="false"></field>
+      <field name="itemDeclinedStatus" type="String" ignored="false"></field>
+      <field name="headerCancelStatus" type="String" ignored="false"></field>
+      <field name="itemCancelStatus" type="String" ignored="false"></field>
+      <field name="authDeclinedMessage" type="String" ignored="false"></field>
+      <field name="authFraudMessage" type="String" ignored="false"></field>
+      <field name="authErrorMessage" type="String" ignored="false"></field>
+      <field name="visualThemeId" type="String" ignored="false"></field>
+      <field name="storeCreditAccountEnumId" type="String" ignored="false"></field>
+      <field name="usePrimaryEmailUsername" type="String" ignored="false"></field>
+      <field name="requireCustomerRole" type="String" ignored="false"></field>
+      <field name="autoInvoiceDigitalItems" type="String" ignored="false"></field>
+      <field name="reqShipAddrForDigItems" type="String" ignored="false"></field>
+      <field name="showCheckoutGiftOptions" type="String" ignored="false"></field>
+      <field name="selectPaymentTypePerItem" type="String" ignored="false"></field>
+      <field name="showPricesWithVatTax" type="String" ignored="false"></field>
+      <field name="showTaxIsExempt" type="String" ignored="false" default-value="Y"></field>
+      <field name="vatTaxAuthGeoId" type="String" ignored="false"></field>
+      <field name="vatTaxAuthPartyId" type="String" ignored="false"></field>
+      <field name="enableAutoSuggestionList" type="String" ignored="false" default-value="Y"></field>
+      <field name="enableDigProdUpload" type="String" ignored="false"></field>
+      <field name="prodSearchExcludeVariants" type="String" ignored="false" default-value="Y"></field>
+      <field name="digProdUploadCategoryId" type="String" ignored="false"></field>
+      <field name="autoOrderCcTryExp" type="String" ignored="false"></field>
+      <field name="autoOrderCcTryOtherCards" type="String" ignored="false"></field>
+      <field name="autoOrderCcTryLaterNsf" type="String" ignored="false"></field>
+      <field name="autoOrderCcTryLaterMax" type="String" ignored="false"></field>
+      <field name="storeCreditValidDays" type="String" ignored="false"></field>
+      <field name="autoApproveInvoice" type="String" ignored="false"></field>
+      <field name="autoApproveOrder" type="String" ignored="false"></field>
+      <field name="shipIfCaptureFails" type="String" ignored="false"></field>
+      <field name="setOwnerUponIssuance" type="String" ignored="false"></field>
+      <field name="reqReturnInventoryReceive" type="String" ignored="false" default-value="N"></field>
+      <field name="addToCartRemoveIncompat" type="String" ignored="false" default-value="N"></field>
+      <field name="addToCartReplaceUpsell" type="String" ignored="false" default-value="N"></field>
+      <field name="splitPayPrefPerShpGrp" type="String" ignored="false" default-value="N"></field>
+      <field name="showOutOfStockProducts" type="String" ignored="false" default-value="Y"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Store Email Setting" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductStoreEmailSetting" limit="many">
+      <field name="productStoreId" type="String" ignored="false" prim-key="true"></field>
+      <field name="emailType" type="String" ignored="false"  prim-key="true"></field>
+      <field name="bodyScreenLocation" type="String" ignored="false"></field>
+      <field name="xslfoAttachScreenLocation" type="String" ignored="false"></field>
+      <field name="fromAddress" type="String" ignored="false" default-value="system@company.com"></field>
+      <field name="ccAddress" type="String" ignored="false"></field>
+      <field name="bccAddress" type="String" ignored="false" default-value="system@company.com"></field>
+      <field name="subject" type="String" ignored="false"></field>
+      <field name="contentType" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Store Role" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductStoreRole" limit="many">
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="roleTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productStoreId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true" default-value="2011-01-01 00:00:00.0"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Carrier Shipment Method" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="CarrierShipmentMethod" limit="many">
+      <field name="shipmentMethodTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="partyId" type="String" ignored="false" prim-key="true"></field>
+      <field name="roleTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="sequenceNumber" type="String" ignored="false"></field>
+      <field name="carrierServiceCode" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Store Shipment Meth" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductStoreShipmentMeth" limit="many">
+      <field name="productStoreShipMethId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productStoreId" type="String" ignored="false"></field>
+      <field name="shipmentMethodTypeId" type="String" ignored="false"></field>
+      <field name="partyId" type="String" ignored="false"></field>
+      <field name="roleTypeId" type="String" ignored="false"></field>
+      <field name="companyPartyId" type="String" ignored="false"></field>
+      <field name="minWeight" type="String" ignored="false"></field>
+      <field name="maxWeight" type="String" ignored="false"></field>
+      <field name="minSize" type="String" ignored="false"></field>
+      <field name="maxSize" type="String" ignored="false"></field>
+      <field name="minTotal" type="String" ignored="false"></field>
+      <field name="maxTotal" type="String" ignored="false"></field>
+      <field name="allowUspsAddr" type="String" ignored="false"></field>
+      <field name="requireUspsAddr" type="String" ignored="false"></field>
+      <field name="allowCompanyAddr" type="String" ignored="false"></field>
+      <field name="requireCompanyAddr" type="String" ignored="false"></field>
+      <field name="includeNoChargeItems" type="String" ignored="false"></field>
+      <field name="includeFeatureGroup" type="String" ignored="false"></field>
+      <field name="excludeFeatureGroup" type="String" ignored="false"></field>
+      <field name="includeGeoId" type="String" ignored="false"></field>
+      <field name="excludeGeoId" type="String" ignored="false"></field>
+      <field name="serviceName" type="String" ignored="false"></field>
+      <field name="configProps" type="String" ignored="false"></field>
+      <field name="shipmentCustomMethodId" type="String" ignored="false"></field>
+      <field name="shipmentGatewayConfigId" type="String" ignored="false"></field>
+      <field name="sequenceNumber" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Shipment Cost Estimate" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ShipmentCostEstimate" limit="many">
+      <field name="shipmentCostEstimateId" type="String" ignored="false" prim-key="true"></field>
+      <field name="shipmentMethodTypeId" type="String" ignored="false"></field>
+      <field name="carrierPartyId" type="String" ignored="false"></field>
+      <field name="carrierRoleTypeId" type="String" ignored="false"></field>
+      <field name="productStoreShipMethId" type="String" ignored="false"></field>
+      <field name="productStoreId" type="String" ignored="false"></field>
+      <field name="partyId" type="String" ignored="false"></field>
+      <field name="roleTypeId" type="String" ignored="false"></field>
+      <field name="geoIdTo" type="String" ignored="false"></field>
+      <field name="geoIdFrom" type="String" ignored="false"></field>
+      <field name="weightBreakId" type="String" ignored="false"></field>
+      <field name="weightUomId" type="String" ignored="false"></field>
+      <field name="weightUnitPrice" type="String" ignored="false"></field>
+      <field name="quantityBreakId" type="String" ignored="false"></field>
+      <field name="quantityUomId" type="String" ignored="false"></field>
+      <field name="quantityUnitPrice" type="String" ignored="false"></field>
+      <field name="priceBreakId" type="String" ignored="false"></field>
+      <field name="priceUomId" type="String" ignored="false"></field>
+      <field name="priceUnitPrice" type="String" ignored="false"></field>
+      <field name="orderFlatPrice" type="String" ignored="false"></field>
+      <field name="orderPricePercent" type="String" ignored="false"></field>
+      <field name="orderItemFlatPrice" type="String" ignored="false"></field>
+      <field name="shippingPricePercent" type="String" ignored="false"></field>
+      <field name="productFeatureGroupId" type="String" ignored="false"></field>
+      <field name="oversizeUnit" type="String" ignored="false"></field>
+      <field name="oversizePrice" type="String" ignored="false"></field>
+      <field name="featurePercent" type="String" ignored="false"></field>
+      <field name="featurePrice" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Store Payment Setting" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductStorePaymentSetting" limit="many">
+      <field name="productStoreId" type="String" ignored="false" prim-key="true"></field>
+      <field name="paymentMethodTypeId" type="String" ignored="false" prim-key="true"></field>
+      <field name="paymentServiceTypeEnumId" type="String" ignored="false" prim-key="true"></field>
+      <field name="paymentService" type="String" ignored="false"></field>
+      <field name="paymentCustomMethodId" type="String" ignored="false"></field>
+      <field name="paymentGatewayConfigId" type="String" ignored="false"></field>
+      <field name="paymentPropertiesPath" type="String" ignored="false"></field>
+      <field name="applyToAllProducts" type="String" ignored="false" default-value="N"></field>
+     </record>
+    </data-file>
+    <data-file name="Web Site" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="WebSite" limit="one">
+      <field name="webSiteId" type="String" ignored="false" prim-key="true"></field>
+      <field name="siteName" type="String" ignored="false" default-value=""></field>
+      <field name="httpHost" type="String" ignored="false" default-value=""></field>
+      <field name="httpPort" type="String" ignored="false" default-value=""></field>
+      <field name="httpsHost" type="String" ignored="false" default-value=""></field>
+      <field name="httpsPort" type="String" ignored="false" default-value=""></field>
+      <field name="enableHttps" type="String" ignored="false" default-value=""></field>
+      <field name="standardContentPrefix" type="String" ignored="false" default-value=""></field>
+      <field name="secureContentPrefix" type="String" ignored="false" default-value=""></field>
+      <field name="cookieDomain" type="String" ignored="false" default-value=""></field>
+      <field name="visualThemeSetId" type="String" ignored="false" default-value="ECOMMERCE"></field>
+      <field name="productStoreId" type="String" ignored="false"></field>
+      <field name="allowProductStoreChange" type="String" ignored="false" default-value="N"></field>
+     </record>
+    </data-file>
+    <data-file name="Content" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="Content" limit="many">
+      <field name="contentId" type="String" ignored="false" prim-key="true"></field>
+      <field name="contentTypeId" type="String" ignored="false"></field>
+      <field name="ownerContentId" type="String" ignored="false"></field>
+      <field name="decoratorContentId" type="String" ignored="false"></field>
+      <field name="instanceOfContentId" type="String" ignored="false"></field>
+      <field name="dataResourceId" type="String" ignored="false"></field>
+      <field name="templateDataResourceId" type="String" ignored="false"></field>
+      <field name="dataSourceId" type="String" ignored="false"></field>
+      <field name="statusId" type="String" ignored="false"></field>
+      <field name="privilegeEnumId" type="String" ignored="false"></field>
+      <field name="serviceName" type="String" ignored="false"></field>
+      <field name="contentName" type="String" ignored="false"></field>
+      <field name="description" type="String" ignored="false"></field>
+      <field name="localeString" type="String" ignored="false"></field>
+      <field name="mimeTypeId" type="String" ignored="false"></field>
+      <field name="characterSetId" type="String" ignored="false"></field>
+      <field name="childLeafCount" type="String" ignored="false"/>
+      <field name="childBranchCount" type="String" ignored="false"/>
+     </record>
+    </data-file>
+    <data-file name="Data Resource" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="DataResource" limit="many">
+      <field name="dataResourceId" type="String" ignored="false" prim-key="true"></field>
+      <field name="dataResourceTypeId" type="String" ignored="false"></field>
+      <field name="dataTemplateTypeId" type="String" ignored="false"></field>
+      <field name="dataCategoryId" type="String" ignored="false"></field>
+      <field name="dataSourceId" type="String" ignored="false"></field>
+      <field name="statusId" type="String" ignored="false"></field>
+      <field name="dataResourceName" type="String" ignored="false"></field>
+      <field name="localeString" type="String" ignored="false"></field>
+      <field name="mimeTypeId" type="String" ignored="false"></field>
+      <field name="characterSetId" type="String" ignored="false"></field>
+      <field name="objectInfo" type="String" ignored="false"></field>
+      <field name="surveyId" type="String" ignored="false"></field>
+      <field name="surveyResponseId" type="String" ignored="false"></field>
+      <field name="relatedDetailId" type="String" ignored="false"></field>
+      <field name="isPublic" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Electronic Text" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ElectronicText" limit="many">
+      <field name="dataResourceId" type="String" ignored="false" prim-key="true"></field>
+      <field name="textData" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    
+    <data-file name="AdditionalFacets" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="AdditionalFacets" limit="many">
+      <field name="productFeatureTypeId" type="String" ignored="false" ></field>
+      <field name="idCode" type="String" ignored="false"></field>
+      <field name="description" type="String" ignored="false" ></field>
+      <field name="defaultSequenceNum" type="String" ignored="false" ></field>
+     </record>
+    </data-file>
+    
+    <data-file name="SubCategoryFacets" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="SubCategoryFacets" limit="many">
+      <field name="productCategoryId" type="String" ignored="false" ></field>
+      <field name="productFeatureTypeId" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Assoc" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="ProductAssoc" limit="many">
+      <field name="productId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productIdTo" type="String" ignored="false" prim-key="true"></field>
+      <field name="productAssocTypeId" type="String" ignored="false" default-value="PRODUCT_VARIANT"></field>
+      <field name="fromDate" type="String" ignored="false"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+      <field name="reason" type="String" ignored="false"></field>
+      <field name="quantity" type="String" ignored="false"></field>
+      <field name="scrapFactor" type="String" ignored="false"></field>
+      <field name="instruction" type="String" ignored="false"></field>
+      <field name="routingWorkEffortId" type="String" ignored="false"></field>
+      <field name="estimateCalcMethod" type="String" ignored="false"></field>
+      <field name="recurrenceInfoId" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+	<data-file name="Product Feature Group" separator-style="delimited" type-code="text" delimiter=",">
+     <record name="ProductFeatureGroup" limit="many">
+      <field name="productFeatureGroupId" type="String" ignored="false" prim-key="true"></field>
+      <field name="description" type="String" ignored="false"></field>
+      <field name="lastUpdatedStamp" type="String" ignored="false"></field>
+      <field name="lastUpdatedTxStamp" type="String" ignored="false"></field>
+       <field name="createdStamp" type="String" ignored="false"></field>
+        <field name="createdTxStamp" type="String" ignored="false"></field>
+     </record>
+    </data-file>
+    <data-file name="Product Feature Group Appl" separator-style="delimited" type-code="text" delimiter=",">
+	  <record name="ProductFeatureGroupAppl" limit="many">
+	  <field name="productFeatureGroupId" type="String" ignored="false" prim-key="true" /> 
+	  <field name="productFeatureId" type="String" ignored="false" prim-key="true" /> 
+	  <field name="fromDate" type="String" ignored="false" prim-key="true" /> 
+	  <field name="thruDate" type="String" ignored="false" /> 
+	  <field name="sequenceNum" type="String" ignored="false" /> 
+	  </record>
+  	</data-file>
+   <data-file name="Product Feature Cat Grp Appl" separator-style="delimited" type-code="text" delimiter="," >
+     <record name="ProductFeatureCatGrpAppl " limit="many">
+      <field name="productCategoryId" type="String" ignored="false" prim-key="true"></field>
+      <field name="productFeatureGroupId" type="String" ignored="false" prim-key="true"></field>
+      <field name="fromDate" type="String" ignored="false" prim-key="true"></field>
+      <field name="thruDate" type="String" ignored="false"></field>
+      <field name="sequenceNum" type="String" ignored="false"></field>
+      <field name="facetValueMin" type="java.lang.Long" ignored="false"></field>
+      <field name="facetValueMax" type="java.lang.Long" ignored="false"></field>
+      </record>
+    </data-file>
+</data-files>

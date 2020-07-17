@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    If this file is changed, please make sure the database has new
+    settings.  The change will not take effect until database has it.
+
+-->
+
+<entity-engine-xml>
+
+    <!-- Osafe admin -->
+    <SecurityGroup description="oSAFE Admin"                  groupId="OSAFEADMIN"/>
+    <SecurityPermission description="oSAFE Admin Activity"    permissionId="OSAFEADMIN_VIEW"/>
+    <SecurityGroupPermission groupId="OSAFEADMIN"            permissionId="OSAFEADMIN_VIEW"/>
+
+    <!-- All Groups List -->
+    <SecurityGroup description="Manager"         groupId="SGRP_MANAGER"/>
+    <SecurityGroup description="Operations"      groupId="SGRP_OPERATIONS"/>
+    <SecurityGroup description="Marketing"       groupId="SGRP_MARKETING"/>
+    <SecurityGroup description="Content"         groupId="SGRP_CONTENT"/>
+    <SecurityGroup description="Admin"           groupId="SGRP_ADMIN"/>
+
+    <!-- All permissions list -->
+    <SecurityPermission description="User View"                                permissionId="SPER_USER_VIEW"/>
+    <SecurityPermission description="Analysis Dashboard"                       permissionId="SPER_ANAL_DASH_VIEW"/>
+    <SecurityPermission description="Operations Dashboard"                     permissionId="SPER_OPER_DASH_VIEW"/>
+    <SecurityPermission description="Order Activity"                           permissionId="SPER_ORDER_MGMT_VIEW"/>
+    <SecurityPermission description="Party Activity"                           permissionId="SPER_PARTY_MGMT_VIEW"/>
+    <SecurityPermission description="Promotional Activity"                     permissionId="SPER_PROMO_VIEW"/>
+    <SecurityPermission description="Review Activity"                         permissionId="SPER_REVIEW_VIEW"/>
+    <SecurityPermission description="Store Activity"                          permissionId="SPER_STORE_VIEW"/>
+    <SecurityPermission description="Config Activity"                          permissionId="SPER_CONFIG_VIEW"/>
+    <SecurityPermission description="Marketing Activity"                       permissionId="SPER_MARKET_VIEW"/>
+    <SecurityPermission description="Content Activity"                         permissionId="SPER_CONTENT_VIEW"/>
+    <SecurityPermission description="Admin Activity"                           permissionId="SPER_ADMIN_VIEW"/>
+
+    <!-- This block set the permissions for SGRP_MANAGER group -->
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="OSAFEADMIN_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_ANAL_DASH_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_ORDER_MGMT_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_PARTY_MGMT_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_PROMO_VIEW"/>
+<!--    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_REVIEW_VIEW"/>-->
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_STORE_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_CONFIG_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_CONTENT_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_MANAGER" permissionId="SPER_ADMIN_VIEW"/>
+
+    <!-- This block set the permissions for SGRP_OPERATIONS group -->
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="OSAFEADMIN_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_OPER_DASH_VIEW"/>
+<!--    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_ORDER_MGMT_VIEW"/>-->
+<!--    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_PARTY_MGMT_VIEW"/>-->
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_PROMO_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_REVIEW_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_STORE_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_CONFIG_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_CONTENT_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_OPERATIONS" permissionId="SPER_ADMIN_VIEW"/>
+
+    <!-- This block set the permissions for SGRP_ADMIN group -->
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="OSAFEADMIN_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_ANAL_DASH_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_OPER_DASH_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_ORDER_MGMT_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_PARTY_MGMT_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_PROMO_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_REVIEW_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_STORE_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_CONFIG_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_CONTENT_VIEW"/>
+    <SecurityGroupPermission groupId="SGRP_ADMIN" permissionId="SPER_ADMIN_VIEW"/>
+
+
+    <!-- Admin -->
+    <!-- Adding minimum amount of data to complete relationship -->
+    <Party partyId="admin" statusId="PARTY_ENABLED"  />    
+    <UserLogin userLoginId="admin" partyId="admin"/>
+    <!-- Give the default Ofbiz admin all access -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="OSAFEADMIN" fromDate="2011-01-01 15:23:34.497"/>
+    <UserLoginSecurityGroup userLoginId="admin" groupId="SGRP_ADMIN" fromDate="2011-01-01 15:23:34.497"/>
+
+    
+    <!-- BF Admin -->
+    <Party partyId="bfadministrator" partyTypeId="PERSON" statusId="PARTY_ENABLED" createdByUserLogin="admin" />
+    <PartyRole partyId="bfadministrator" roleTypeId="_NA_"/>
+    <PartyRole partyId="bfadministrator" roleTypeId="EMPLOYEE"/>
+    <PartyRole partyId="bfadministrator" roleTypeId="ADMIN"/>
+    <Person partyId="bfadministrator" firstName="BF" lastName="Administrator"/>
+    <ContactMech contactMechId="993000" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="993000" address1="200 Administrator Drive" city="Mineola" postalCode="11503" postalCodeExt="1234" countryGeoId="USA" stateProvinceGeoId="NY"/>
+    <ContactMech contactMechId="993010" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="993010" areaCode="516" contactNumber="7427888"/>
+    <ContactMech contactMechId="993020" contactMechTypeId="EMAIL_ADDRESS" infoString="manager@salmonllc.com"/>
+    <PartyContactMechPurpose partyId="bfadministrator" contactMechId="993000" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2007-12-03 10:26:54.677"/>
+    <PartyContactMechPurpose partyId="bfadministrator" contactMechId="993000" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2007-12-03 10:26:54.66"/>
+    <PartyContactMechPurpose partyId="bfadministrator" contactMechId="993000" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2007-12-03 10:26:54.66"/>
+    <PartyContactMechPurpose partyId="bfadministrator" contactMechId="993010" contactMechPurposeTypeId="PHONE_HOME" fromDate="2007-12-03 10:26:54.707"/>
+    <PartyContactMechPurpose partyId="bfadministrator" contactMechId="993020" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2007-12-03 10:26:54.723"/>
+    <PartyContactMech partyId="bfadministrator" contactMechId="993000" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <PartyContactMech partyId="bfadministrator" contactMechId="993010" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <PartyContactMech partyId="bfadministrator" contactMechId="993020" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <UserLogin userLoginId="bfadministrator" currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a" requirePasswordChange="N" partyId="bfadministrator"/>
+    <UserLoginSecurityGroup userLoginId="bfadministrator" groupId="OSAFEADMIN" fromDate="2011-01-01 15:23:34.497"/>
+    <UserLoginSecurityGroup userLoginId="bfadministrator" groupId="SGRP_ADMIN" fromDate="2011-01-01 15:23:34.497"/>
+    <UserLoginSecurityGroup userLoginId="bfadministrator" groupId="FULLADMIN" fromDate="2011-01-01 15:23:34.497"/>
+
+    <!-- BF Manager -->
+    <Party partyId="bfmanager" partyTypeId="PERSON" statusId="PARTY_ENABLED" createdByUserLogin="admin" />
+    <PartyRole partyId="bfmanager" roleTypeId="_NA_"/>
+    <PartyRole partyId="bfmanager" roleTypeId="EMPLOYEE"/>
+    <PartyRole partyId="bfmanager" roleTypeId="MANAGER"/>
+    <Person partyId="bfmanager" firstName="BF" lastName="Manager"/>
+    <ContactMech contactMechId="992000" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="992000" address1="200 Manager Drive" city="Mineola" postalCode="11503" postalCodeExt="1234" countryGeoId="USA" stateProvinceGeoId="NY"/>
+    <ContactMech contactMechId="992010" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="992010" areaCode="516" contactNumber="7427888"/>
+    <ContactMech contactMechId="992020" contactMechTypeId="EMAIL_ADDRESS" infoString="manager@salmonllc.com"/>
+    <PartyContactMechPurpose partyId="bfmanager" contactMechId="992000" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2007-12-03 10:26:54.677"/>
+    <PartyContactMechPurpose partyId="bfmanager" contactMechId="992000" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2007-12-03 10:26:54.66"/>
+    <PartyContactMechPurpose partyId="bfmanager" contactMechId="992000" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2007-12-03 10:26:54.66"/>
+    <PartyContactMechPurpose partyId="bfmanager" contactMechId="992010" contactMechPurposeTypeId="PHONE_HOME" fromDate="2007-12-03 10:26:54.707"/>
+    <PartyContactMechPurpose partyId="bfmanager" contactMechId="992020" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2007-12-03 10:26:54.723"/>
+    <PartyContactMech partyId="bfmanager" contactMechId="992000" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <PartyContactMech partyId="bfmanager" contactMechId="992010" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <PartyContactMech partyId="bfmanager" contactMechId="992020" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <UserLogin userLoginId="bfmanager" currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a" requirePasswordChange="N" partyId="bfmanager"/>
+    <UserLoginSecurityGroup userLoginId="bfmanager" groupId="OSAFEADMIN" fromDate="2011-01-01 15:23:34.497"/>
+    <UserLoginSecurityGroup userLoginId="bfmanager" groupId="SGRP_MANAGER" fromDate="2011-01-01 15:23:34.497"/>
+
+    <!-- BF Operator -->
+    <Party partyId="bfoperator" partyTypeId="PERSON" statusId="PARTY_ENABLED" createdByUserLogin="admin" />
+    <PartyRole partyId="bfoperator" roleTypeId="_NA_"/>
+    <PartyRole partyId="bfoperator" roleTypeId="EMPLOYEE"/>
+    <PartyRole partyId="bfoperator" roleTypeId="ORDER_CLERK"/>
+    <Person partyId="bfoperator" firstName="BF" lastName="Operator"/>
+    <ContactMech contactMechId="991000" contactMechTypeId="POSTAL_ADDRESS"/>
+    <PostalAddress contactMechId="991000" address1="200 Operator Drive" city="Mineola" postalCode="11503" postalCodeExt="1234" countryGeoId="USA" stateProvinceGeoId="NY"/>
+    <ContactMech contactMechId="991010" contactMechTypeId="TELECOM_NUMBER"/>
+    <TelecomNumber contactMechId="991010" areaCode="516" contactNumber="7427888"/>
+    <ContactMech contactMechId="991020" contactMechTypeId="EMAIL_ADDRESS" infoString="operator@salmonllc.com"/>
+    <PartyContactMechPurpose partyId="bfoperator" contactMechId="991000" contactMechPurposeTypeId="BILLING_LOCATION" fromDate="2007-12-03 10:26:54.677"/>
+    <PartyContactMechPurpose partyId="bfoperator" contactMechId="991000" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2007-12-03 10:26:54.66"/>
+    <PartyContactMechPurpose partyId="bfoperator" contactMechId="991000" contactMechPurposeTypeId="SHIPPING_LOCATION" fromDate="2007-12-03 10:26:54.66"/>
+    <PartyContactMechPurpose partyId="bfoperator" contactMechId="991010" contactMechPurposeTypeId="PHONE_HOME" fromDate="2007-12-03 10:26:54.707"/>
+    <PartyContactMechPurpose partyId="bfoperator" contactMechId="991020" contactMechPurposeTypeId="PRIMARY_EMAIL" fromDate="2007-12-03 10:26:54.723"/>
+    <PartyContactMech partyId="bfoperator" contactMechId="991000" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <PartyContactMech partyId="bfoperator" contactMechId="991010" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <PartyContactMech partyId="bfoperator" contactMechId="991020" fromDate="2008-01-04 11:53:39.12" thruDate="2008-01-14 17:15:41.943" roleTypeId="EMPLOYEE"/>
+    <UserLogin userLoginId="bfoperator" currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a" requirePasswordChange="N" partyId="bfoperator"/>
+    <UserLoginSecurityGroup userLoginId="bfoperator" groupId="OSAFEADMIN" fromDate="2011-01-01 15:23:34.497"/>
+    <UserLoginSecurityGroup userLoginId="bfoperator" groupId="SGRP_OPERATIONS" fromDate="2011-01-01 15:23:34.497"/>
+
+</entity-engine-xml>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="updateNoteData" short-description="Update Note Data">
+        <if-empty field="parameters.noteInfo">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankNoteError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="NOTEINFO" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <entity-one entity-name="NoteData" value-field="noteData"/>
+        <set-nonpk-fields value-field="noteData" map="parameters"/>
+        <now-timestamp field="nowDateTime"/>
+        <set field="noteData.noteDateTime" from-field="nowDateTime"/>
+        <store-value value-field="noteData"/>
+    </simple-method>
+    
+    <simple-method method-name="createOrderNoteData" short-description="Create Order Header Note and Note Data">
+        <if-empty field="parameters.noteInfo">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankNoteError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="NOTEINFO" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="createOrderNote" map="parameters" to-map="orderNoteCtx"/>
+        <set field="orderNoteCtx.note" from-field="parameters.noteInfo"/>
+        <call-service service-name="createOrderNote" in-map-name="orderNoteCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="createCustomerNoteData" short-description="Create Party Note and Note Data">
+        <if-empty field="parameters.noteInfo">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankNoteError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="NOTEINFO" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="createPartyNote" map="parameters" to-map="partyNoteCtx"/>
+        <set field="partyNoteCtx.note" from-field="parameters.noteInfo"/>
+        <call-service service-name="createPartyNote" in-map-name="partyNoteCtx"/>
+    </simple-method>
+</simple-methods>

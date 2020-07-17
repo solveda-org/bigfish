@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<Content contentId="PTS_ORDER_SUMMARY" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="PTS_ORDER_SUMMARY">
+  <textData><![CDATA[
+          <div class="instructions">
+            <div id="acceptMsg">
+                <p>Please select your method of payment.  We accept all major credit cards.</p>
+            </div>
+            <div id="ccImageBlock">
+                <a href="#" onclick="selectPaymentMethod('AmericanExpress');return false;"><img alt="American Express" src="/osafe_theme/images/icon/americanExpress.gif" class="paymentMethodImg" ></a>
+                <a href="#" onclick="selectPaymentMethod('Visa');return false;"><img alt="Visa" src="/osafe_theme/images/icon/visa.gif" class="paymentMethodImg"></a>
+                <a href="#" onclick="selectPaymentMethod('Discover');return false;"><img alt="Discover" src="/osafe_theme/images/icon/discover.gif" class="paymentMethodImg"></a>
+                <a href="#" onclick="selectPaymentMethod('MasterCard');return false;"><img alt="Mastercard" src="/osafe_theme/images/icon/mastercard.gif" class="paymentMethodImg"></a>
+                <a href="#" onclick="selectPaymentMethod('PayPal');return false;"><img alt="PayPal" src="/osafe_theme/images/icon/paypal.gif" class="paymentMethodImg"></a>
+            </div>
+        </div>]]>
+  </textData>
+</ElectronicText>
+<ElectronicText dataResourceId="PTS_CONFIRM">
+  <textData><![CDATA[
+    PTS_CONFIRM Confirm content will come here.
+  ]]></textData>
+</ElectronicText>
+
+<ElectronicText dataResourceId="PTS_SEARCH_NO_RESULT">
+  <textData><![CDATA[
+    PTS_SEARCH_NO_RESULT content will come here.
+  ]]></textData>
+</ElectronicText>
+<ElectronicText dataResourceId="PTS_ONE_STEP_CHKOUT">
+  <textData><![CDATA[
+    PTS_ONE_STEP_CHKOUT content will come here.
+  ]]></textData>
+</ElectronicText>
+</entity-engine-xml>

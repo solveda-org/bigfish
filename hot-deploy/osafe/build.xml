@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="OFBiz - OSafe Component" default="osafe-deployment" basedir=".">
+    <import file="../../common.xml"/>
+
+    <!-- ================================================================== -->
+    <!-- Initialization of all property settings                            -->
+    <!-- ================================================================== -->
+
+    <property environment="env"/>
+    <property name="desc" value="OSafe Component"/>
+    <property name="name" value="ofbiz-osafe"/>
+    <property name="component-name" value="ofbiz-osafe"/>
+    <property name="ofbiz.home.dir" value="../.."/>
+    <property name="src.dir" value="src"/>
+    <property name="dtd.dir" value="dtd"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="build.dir" value="build"/>
+
+    <path id="local.class.path">
+        <fileset dir="${lib.dir}" includes="*.jar"/>
+        <fileset dir="../../framework/base/lib" includes="*.jar"/>
+        <fileset dir="../../framework/base/lib/j2eespecs" includes="*.jar"/>
+        <fileset dir="../../framework/base/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/common/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/datafile/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/entity/lib" includes="*.jar"/>
+        <fileset dir="../../framework/entity/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/security/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/service/lib" includes="*.jar"/>
+        <fileset dir="../../framework/service/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/minilang/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/widget/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/webapp/lib" includes="*.jar"/>
+        <fileset dir="../../framework/webapp/build/lib" includes="*.jar"/>
+        <fileset dir="../../framework/base/lib/commons" includes="*.jar"/>
+        <fileset dir="../../applications/product/build/lib" includes="*.jar"/>
+        <fileset dir="../../applications/order/build/lib" includes="*.jar"/>
+        <fileset dir="../../applications/party/build/lib" includes="*.jar"/>
+        <fileset dir="../../applications/accounting/build/lib" includes="*.jar"/>
+    	<fileset dir="../../applications/accounting/lib" includes="*.jar"/>
+        <fileset dir="../solr/webapp/solr/WEB-INF/lib" includes="*.jar"/>
+    </path>
+
+    <!-- ================================================================= -->
+    <!-- Osafe Clean                                                       -->
+    <!-- ================================================================= -->
+    <target name="clean">
+        <echo message="[osafe-clean] ========== Start Cleaning =========="/>
+        <delete>
+            <fileset dir="../../hot-deploy/osafe/data" includes="*.xml"/>
+        </delete>
+        <delete dir="../../hot-deploy/osafe/build" includeemptydirs="true" failonerror="false">
+
+        </delete>
+        <echo message="[osafe-clean] ========== Done Cleaning =========="/>
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Osafe Deployment                                                  -->
+    <!-- ================================================================= -->
+
+    <target name="osafe-deployment" description="Deploy client specific OSafe files">
+        <echo message="[osafe-deployment] ========== Start Deploying OSafe Files (Deploy) =========="/>
+
+        <property name="osafe.deployemt.home" value="../../osafe_deployment"></property>
+
+        <!-- Load client specific property values -->
+        <property file="${osafe.deployemt.home}/client-deployment.properties"></property>
+        <copy file="${osafe.deployemt.home}/client-deployment.properties" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/client-deployment.properties"/>
+
+    	<!-- paypal jar -->
+        <!-- Copy any client specific osafe files over existing files -->
+        <copy  todir="../../hot-deploy/osafe/lib/" failonerror="true" overwrite="true">
+            <fileset dir="${osafe.deployemt.home}/ofbiz/applications/accounting/lib" >
+            	<exclude name="**/*.svn"/>
+            	<include name="**/*.jar"/>
+            </fileset>
+        </copy>
+      <!-- Startup batch-->
+        <copy file="${osafe.deployemt.home}/ofbiz/startofbiz.bat.template" tofile="${osafe.deployemt.home}/ofbiz/startofbiz.bat">
+            <filterset>
+              <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
+              <filter token="service.name" value="${service.name}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/startofbiz.bat" todir="../../" overwrite="true" failonerror="false"/>
+        <!-- eecas.xml template-->
+          <copy file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml.template" tofile="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml">
+          </copy>
+          <move file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml" todir="../../applications/product/entitydef" overwrite="true" failonerror="false"/>
+
+        <!-- Startup sh -->
+        <copy file="${osafe.deployemt.home}/ofbiz/startofbizsh.template" tofile="${osafe.deployemt.home}/ofbiz/startofbiz.sh">
+            <filterset>
+              <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
+              <filter token="service.name" value="${service.name}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/startofbiz.sh" todir="../../" overwrite="true" failonerror="false"/>
+
+        <!-- Server Ports  -->
+        <copy file="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml.template" tofile="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml">
+            <filterset >
+              <filter token="port.jndi" value="${port.jndi}"/>
+              <filter token="port.https" value="${port.https}"/>
+              <filter token="port.http" value="${port.http}"/>
+              <filter token="port.ajp" value="${port.ajp}"/>
+              <filter token="port.beanshell" value="${port.beanshell}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml" todir="../../framework/base/config" overwrite="true" failonerror="false"/>
+
+        <copy file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties.template" tofile="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties">
+            <filterset >
+              <filter token="port.https" value="${port.https}"/>
+              <filter token="port.http" value="${port.http}"/>
+              <filter token="https.host" value="${https.host}"/>
+              <filter token="http.host" value="${http.host}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties" todir="../../framework/webapp/config" overwrite="true" failonerror="false"/>
+
+        <!-- Osafe Seed Data -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml">
+            <filterset >
+              <filter token="store.storePrefix" value="${store.storePrefix}"/>
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
+              <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+              <filter token="port.https" value="${port.https}"/>
+              <filter token="port.http" value="${port.http}"/>
+              <filter token="https.host" value="${https.host}"/>
+              <filter token="http.host" value="${http.host}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml" todir="../../hot-deploy/osafe/data/seed" overwrite="true" failonerror="false"/>
+
+        <!-- BIGFISH Parameters -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml">
+            <filterset >
+              <filter token="store.storePrefix" value="${store.storePrefix}"/>
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="store.productStoreId" value="${store.productStoreId}"/>
+              <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
+              <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/bigFishParameters.xml" todir="../../hot-deploy/osafe/data" overwrite="true" failonerror="false"/>
+        <!-- Osafe Properties -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties">
+            <filterset >
+              <filter token="port.http" value="${port.http}"/>
+              <filter token="localDispatcherName" value="${localDispatcherName}"/>
+			  <filter token="product.images.path" value="${product.images.path}"/>
+              <filter token="productCategory.images.path" value="${productCategory.images.path}"/>
+              <filter token="productFeature.images.path" value="${productFeature.images.path}"/>
+  			  <filter token="manufacturer.images.path" value="${manufacturer.images.path}"/>
+    		  <filter token="url.catalog.prefix" value="${url.catalog.prefix}"/>
+              <filter token="goodIdentificationTypes" value="${goodIdentificationTypes}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/osafe.properties" todir="../../hot-deploy/osafe/config" overwrite="true" failonerror="false"/>
+
+        <!-- Osafe web.xml -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml">
+            <filterset >
+              <filter token="store.webSiteId" value="${store.webSiteId}"/>
+              <filter token="localDispatcherName" value="${localDispatcherName}"/>
+              <filter token="eCommerceDecoratorName" value="${eCommerceDecoratorName}"/>
+              <filter token="url.catalog.prefix" value="${url.catalog.prefix}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml" todir="../../hot-deploy/osafe/webapp/osafe/WEB-INF" overwrite="true" failonerror="false"/>
+
+        <!-- Osafe ofbiz-component.xml -->
+        <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml">
+            <filterset >
+              <filter token="localDispatcherName" value="${localDispatcherName}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml" todir="../../hot-deploy/osafe" overwrite="true" failonerror="false"/>
+
+
+        <!-- Entity Engine -->
+        <copy file="${osafe.deployemt.home}/ofbiz/framework/entity/config/entityengine.xml.template"
+              tofile="${osafe.deployemt.home}/ofbiz/framework/entity/config/entityengine.xml">
+            <filterset>
+              <filter token="main.datasource.name" value="${main.datasource.name}"/>
+              <filter token="database.name" value="${database.name}"/>
+              <filter token="database.server" value="${database.server}"/>
+              <filter token="database.serverPort" value="${database.serverPort}"/>
+              <filter token="jdbc.driver" value="${jdbc.driver}"/>
+              <filter token="jdbc.username" value="${jdbc.username}"/>
+              <filter token="jdbc.password" value="${jdbc.password}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/framework/entity/config/entityengine.xml" todir="../../framework/entity/config" overwrite="true" failonerror="false"/>
+
+        <!-- General Properties -->
+         <copy file="${osafe.deployemt.home}/ofbiz/framework/common/config/general.properties.template"
+               tofile="${osafe.deployemt.home}/ofbiz/framework/common/config/general.properties">
+             <filterset>
+               <filter token="defaultFromEmailAddress" value="${defaultFromEmailAddress}"/>
+               <filter token="mail.notifications.enabled" value="${mail.notifications.enabled}"/>
+               <filter token="mail.smtp.relay.host" value="${mail.smtp.relay.host}"/>
+               <filter token="mail.smtp.auth.user" value="${mail.smtp.auth.user}"/>
+               <filter token="mail.smtp.auth.password" value="${mail.smtp.auth.password}"/>
+               <filter token="mail.notifications.redirectTo" value="${mail.notifications.redirectTo}"/>
+               <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+			   <filter token="country.geo.id.default" value="${country.geo.id.default}"/>
+             </filterset>
+         </copy>
+         <move file="${osafe.deployemt.home}/ofbiz/framework/common/config/general.properties" todir="../../framework/common/config" overwrite="true" failonerror="false"/>
+
+        <!-- Security Properties -->
+         <copy file="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties.template"
+               tofile="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties">
+             <filterset>
+               <filter token="username.lowercase" value="${username.lowercase}"/>
+               <filter token="password.lowercase" value="${password.lowercase}"/>
+               <filter token="password.encrypt" value="${password.encrypt}"/>
+             </filterset>
+         </copy>
+         <move file="${osafe.deployemt.home}/ofbiz/framework/security/config/security.properties" todir="../../framework/security/config" overwrite="true" failonerror="false"/>
+    	
+         <!-- widget Properties -->
+         <copy file="${osafe.deployemt.home}/ofbiz/framework/widget/config/widget.properties.template"
+                tofile="${osafe.deployemt.home}/ofbiz/framework/widget/config/widget.properties">
+             <filterset>
+                 <filter token="widget.verbose" value="${widget.verbose}"/>
+             </filterset>
+         </copy>
+         <move file="${osafe.deployemt.home}/ofbiz/framework/widget/config/widget.properties" todir="../../framework/widget/config" overwrite="true" failonerror="false"/>
+
+        <!-- Accounting Properties -->
+         <copy file="${osafe.deployemt.home}/ofbiz/applications/accounting/ofbiz-component.xml" todir="../../applications/accounting" overwrite="true" failonerror="false"/>
+    	
+        <!-- Shipment Properties -->
+         <copy file="${osafe.deployemt.home}/ofbiz/applications/product/config/shipment.properties.template"
+               tofile="${osafe.deployemt.home}/ofbiz/applications/product/config/shipment.properties">
+             <filterset>
+               <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
+             </filterset>
+         </copy>
+         <move file="${osafe.deployemt.home}/ofbiz/applications/product/config/shipment.properties" todir="../../applications/product/config" overwrite="true" failonerror="false"/>
+
+		<!-- ProdSearch Properties -->
+        <copy file="${osafe.deployemt.home}/ofbiz/applications/product/config/prodsearch.properties.template"
+            tofile="${osafe.deployemt.home}/ofbiz/applications/product/config/prodsearch.properties">
+            <filterset>
+                <filter token="indexProductContentTypes" value="${indexProductContentTypes}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/applications/product/config/prodsearch.properties" todir="../../applications/product/config" overwrite="true" failonerror="false"/>
+    		 
+        <!-- Windows Install Service -->
+        <copy file="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat.template"
+              tofile="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat">
+            <filterset>
+              <filter token="service.name" value="${service.name}"/>
+              <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat" todir="../../JavaService" overwrite="true" failonerror="false"/>
+
+        <!-- Windows Uninstall Service -->
+        <copy file="${osafe.deployemt.home}/ofbiz/JavaService/Uninstall_Osafe_Service.bat.template"
+              tofile="${osafe.deployemt.home}/ofbiz/JavaService/Uninstall_Osafe_Service.bat">
+            <filterset>
+              <filter token="service.name" value="${service.name}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/JavaService/Uninstall_Osafe_Service.bat" todir="../../JavaService" overwrite="true" failonerror="false"/>
+
+        <!-- Copy client JDBC Jars -->
+        <copy todir="../../framework/entity/lib/jdbc" failonerror="true" overwrite="true">
+            <fileset dir="${osafe.deployemt.home}/ofbiz/framework/entity/lib/jdbc" >
+                   <exclude name="**/*.svn"/>
+                   <include name="**/*.jar"/>
+            </fileset>
+        </copy>
+
+        <!-- Copy any client specific osafe files over existing files -->
+        <copy todir="../../hot-deploy/osafe" failonerror="true" overwrite="true">
+            <fileset dir="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe" >
+                   <exclude name="**/*.svn"/>
+                   <exclude name="**/*.patch"/>
+                   <exclude name="**/*.template"/>
+            </fileset>
+        </copy>
+        
+		<!-- Osafe OsafeThemeData.xml -->
+		<copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/OsafeThemeData.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/OsafeThemeData.xml">
+            <filterset >
+                <filter token="fav-icon" value="${fav-icon}"/>
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/OsafeThemeData.xml" todir="../../themes/osafe_theme/data" overwrite="true" failonerror="false"/>
+        <!-- Start properties-->
+        <copy file="${osafe.deployemt.home}/ofbiz/framework/start/src/org/ofbiz/base/start/start.properties.template" tofile="${osafe.deployemt.home}/ofbiz/framework/start/src/org/ofbiz/base/start/start.properties">
+            <filterset>
+            	<filter token="ofbiz.locale.default" value="${ofbiz.locale.default}"/>
+              <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
+              
+            </filterset>
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/framework/start/src/org/ofbiz/base/start/start.properties" todir="../../framework/start/src/org/ofbiz/base/start/" overwrite="true" failonerror="false"/>
+  
+        <!-- Call original default target -->
+        <antcall target="jar"></antcall>
+
+        <echo message="[osafe-deployment] ========== Done Deploying OSafe Files (Deploy) =========="/>
+    </target>
+
+    <!-- ================================================================= -->
+    <!-- Targets to create  patch files                                    -->
+    <!-- ================================================================= -->
+
+    <target name="create-ofbiz-patches" description="Creates patch for framework, application, specialpurpose components">
+        <exec executable="svn" output="patches/framework.patch" dir="${ofbiz.home.dir}">
+            <arg value="diff"/>
+            <arg value="framework"/>
+        </exec>
+        <exec executable="svn" output="patches/applications.patch" dir="${ofbiz.home.dir}">
+            <arg value="diff"/>
+            <arg value="applications"/>
+        </exec>
+        <exec executable="svn" output="patches/specialpurpose.patch" dir="${ofbiz.home.dir}">
+            <arg value="diff"/>
+            <arg value="specialpurpose"/>
+        </exec>
+    </target>
+
+    <target name="revert-ofbiz-patches" description="Remove any local change in the files or any previously applied local patch.">
+        <exec executable="svn" dir="${ofbiz.home.dir}">
+            <arg value="revert"/>
+            <arg value="-R"/>
+            <arg value="framework"/>
+        </exec>
+        <exec executable="svn" dir="${ofbiz.home.dir}">
+            <arg value="revert"/>
+            <arg value="-R"/>
+            <arg value="applications"/>
+        </exec>
+        <exec executable="svn" dir="${ofbiz.home.dir}">
+            <arg value="revert"/>
+            <arg value="-R"/>
+            <arg value="specialpurpose"/>
+        </exec>
+    </target>
+
+    <target name="apply-ofbiz-patches" description="Apply the patch to framework, application, specialpurpose components.">
+        <fail message="Patch files not found.">
+            <condition>
+                <or>
+                    <not><isset property="component-name"/></not>
+                    <not>
+                        <resourcecount count="3">
+                            <fileset dir="patches" includes="*.patch"/>
+                        </resourcecount>
+                    </not>
+                </or>
+            </condition>
+        </fail>
+        <patch strip="0" patchfile="patches/framework.patch" dir="${ofbiz.home.dir}"/>
+        <patch strip="0" patchfile="patches/applications.patch" dir="${ofbiz.home.dir}"/>
+        <patch strip="0" patchfile="patches/specialpurpose.patch" dir="${ofbiz.home.dir}"/>
+    </target>
+
+    <target name="reapply-ofbiz-patches" description="First removes any previously applied patch and then applies the new patch">
+        <fail message="Patch files not found.">
+            <condition>
+                <or>
+                    <not><isset property="component-name"/></not>
+                    <not>
+                        <resourcecount count="3">
+                            <fileset dir="patches" includes="*.patch"/>
+                        </resourcecount>
+                    </not>
+                </or>
+            </condition>
+        </fail>
+        <antcall target="revert-ofbiz-patches"/>
+        <antcall target="apply-ofbiz-patches"/>
+    </target>
+</project>

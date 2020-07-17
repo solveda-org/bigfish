@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+Licensed to the Apache Software Foundation (ASF) under one
+or more contributor license agreements.  See the NOTICE file
+distributed with this work for additional information
+regarding copyright ownership.  The ASF licenses this file
+to you under the Apache License, Version 2.0 (the
+"License"); you may not use this file except in compliance
+with the License.  You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+-->
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+
+
+    <simple-method method-name="sendContactUsEmailToCompany" short-description="Create communication event and send mail to company" login-required="false">
+        <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
+            <field-map field-name="userLoginId" value="system"/>
+        </entity-one>
+        <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting"/>
+
+        <call-map-processor in-map-name="parameters" out-map-name="contactPhoneMap">
+            <simple-map-processor name="newTelecomNumber">
+                    <make-in-string field="contactNumber">
+                        <in-field field="contactPhoneContact3"/>
+                        <in-field field="contactPhoneContact4"/>
+                    </make-in-string>
+                    <process field="contactNumber"><copy to-field="contactPhoneContact"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+
+        <set field="bodyParameters.partyId" from-field="parameters.partyIdTo"/>
+        <set field="bodyParameters.productStoreId" from-field="parameters.productStoreId"/>
+        <set field="bodyParameters.email" from-field="parameters.emailAddress"/>
+        <set field="bodyParameters.firstName" from-field="parameters.firstName"/>
+        <set field="bodyParameters.lastName" from-field="parameters.lastName"/>
+        <set field="bodyParameters.address1" from-field="parameters.address1"/>
+        <set field="bodyParameters.address2" from-field="parameters.address2"/>
+        <set field="bodyParameters.city" from-field="parameters.city"/>
+        <set field="bodyParameters.countryCode" from-field="parameters.countryCode"/>
+        <set field="bodyParameters.stateCode" from-field="parameters.stateCode"/>
+        <set field="bodyParameters.postalCode" from-field="parameters.postalCode"/>
+        <set field="bodyParameters.countryCode" from-field="parameters.countryCode"/>
+        <set field="bodyParameters.contactReason" from-field="parameters.contactReason"/>
+        <set field="bodyParameters.contactPhoneArea" from-field="parameters.contactPhoneArea"/>
+        <set field="bodyParameters.contactPhoneContact" from-field="contactPhoneMap.contactPhoneContact"/>
+        <set field="bodyParameters.orderIdNumber" from-field="parameters.orderIdNumber"/>
+        <set field="bodyParameters.catalogName" from-field="parameters.catalogName"/>
+        <set field="bodyParameters.message" from-field="parameters.content"/>
+
+        <!-- Get party email address -->
+        <set field="getPartyEmailMap.partyId" from-field="parameters.partyIdTo"/>
+        <set field="getPartyEmailMap.userLogin" from-field="systemUserLogin"/>
+        <call-service service-name="getPartyEmail" in-map-name="getPartyEmailMap">
+            <result-to-field result-name="emailAddress"/>
+        </call-service>
+
+        <log level="info" message="Email Type: ${parameters.emailType}"/>
+
+        <!-- Create Customer Request -->
+        <if-not-empty field="parameters.custRequestTypeId">
+	        <set field="custRequest.userLogin" from-field="systemUserLogin"/>
+	        <set field="custRequest.custRequestTypeId" from-field="parameters.custRequestTypeId"/>
+	        <if-not-empty field="parameters.custRequestName">
+		        <set field="custRequest.custRequestName" from-field="parameters.custRequestName"/>
+	        </if-not-empty>
+	        <set field="custRequest.productStoreId" from-field="parameters.productStoreId"/>
+	        <set field="custRequest.statusId" value="CRQ_DRAFT"/>
+	        <call-service service-name="createCustRequest" in-map-name="custRequest">
+	            <result-to-field result-name="custRequestId"/>
+	        </call-service>
+        </if-not-empty>
+
+        <!-- Create Customer Request Attributes-->
+        <if-not-empty field="custRequestId">
+            <set field="custRequestAttr.custRequestId" from-field="custRequestId"/>
+	        <set field="custRequestAttr.userLogin" from-field="systemUserLogin"/>
+            <set field="custRequestAttr.attrName" value="IS_DOWNLOADED"/>
+            <set field="custRequestAttr.attrValue" value="N"/>
+	        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+           <if-not-empty field="parameters.content">
+	            <set field="custRequestAttr.attrName" value="COMMENT"/>
+	            <set field="contentValue" from-field="parameters.content"/>
+	            <call-object-method method-name="length" obj-field="parameters.content" ret-field="contentLen"/>
+	            <call-bsh><![CDATA[
+	                if(contentLen > 255) {
+                      content = contentValue.replaceAll("\\n","");
+                      parameters.put("content", content);
+                    }
+                  ]]>
+                </call-bsh>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.content"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.emailAddress">
+	            <set field="custRequestAttr.attrName" value="EMAIL_ADDRESS"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.emailAddress"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.firstName">
+	            <set field="custRequestAttr.attrName" value="FIRST_NAME"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.firstName"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.lastName">
+	            <set field="custRequestAttr.attrName" value="LAST_NAME"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.lastName"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.address1">
+	            <set field="custRequestAttr.attrName" value="ADDRESS1"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.address1"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.address2">
+	            <set field="custRequestAttr.attrName" value="ADDRESS2"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.address2"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.address3">
+	            <set field="custRequestAttr.attrName" value="ADDRESS3"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.address3"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.city">
+	            <set field="custRequestAttr.attrName" value="CITY"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.city"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.stateCode">
+	            <set field="custRequestAttr.attrName" value="STATE_PROVINCE"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.stateCode"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.postalCode">
+	            <set field="custRequestAttr.attrName" value="ZIP_POSTAL_CODE"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.postalCode"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.countryCode">
+	            <set field="custRequestAttr.attrName" value="COUNTRY"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.countryCode"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.contactReason">
+	            <set field="custRequestAttr.attrName" value="REASON_FOR_CONTACT"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.contactReason"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.orderIdNumber">
+	            <set field="custRequestAttr.attrName" value="ORDER_NUMBER"/>
+	            <set field="custRequestAttr.attrValue" from-field="parameters.orderIdNumber"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="parameters.contactPhoneArea">
+		        <call-map-processor in-map-name="parameters" out-map-name="contactFullPhoneMap">
+		            <simple-map-processor name="newFullTelecomNumber">
+		                    <make-in-string field="fullContactNumber">
+		                        <in-field field="contactPhoneArea"/>
+		                        <in-field field="contactPhoneContact3"/>
+		                        <in-field field="contactPhoneContact4"/>
+		                    </make-in-string>
+		                    <process field="fullContactNumber"><copy to-field="contactFullPhoneContact"/></process>
+		            </simple-map-processor>
+		        </call-map-processor>
+	            <set field="custRequestAttr.attrName" value="CONTACT_PHONE"/>
+	            <set field="custRequestAttr.attrValue" from-field="contactFullPhoneMap.contactFullPhoneContact"/>
+		        <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            <else>
+		        <if-not-empty field="parameters.phoneNumber">
+                    <set field="custRequestAttr.attrName" value="CONTACT_PHONE"/>
+	                <set field="custRequestAttr.attrValue" from-field="parameters.phoneNumber"/>
+		            <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+	            </if-not-empty>
+		    </else>
+            </if-not-empty>
+        </if-not-empty>
+
+
+
+        <!-- Create Communication Event-->
+        <set-service-fields service-name="createCommunicationEventWithoutPermission" map="parameters" to-map="createComEventMap"/>
+        <set field="createComEventMap.userLogin" from-field="systemUserLogin"/>
+        <set field="createComEventMap.reasonEnumId" from-field="parameters.emailType"/>
+        <set field="createComEventMap.note" from-field="parameters.content"/>
+        <set field="createComEventMap.fromString" from-field="parameters.emailAddress"/>
+        <if-not-empty field="parameters.custRequestName">
+  		      <set field="createComEventMap.subject" from-field="parameters.custRequestName"/>
+        </if-not-empty>
+         <if-not-empty field="custRequestId">
+        <set field="createComEventMap.custRequestId" from-field="custRequestId"/>
+        </if-not-empty>
+        <if-not-empty field="productStoreEmailSetting">
+           <set field="createComEventMap.toString" from-field="productStoreEmailSetting.fromAddress"/>
+        </if-not-empty>
+        <call-service service-name="createCommunicationEventWithoutPermission" in-map-name="createComEventMap"/>
+
+
+        <!-- Send email-->
+        <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+            <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+            <set field="emailParams.userLogin" from-field="systemUserLogin"/>
+            <if-not-empty field="emailAddress">
+                <set field="emailParams.sendTo" from-field="emailAddress"/>
+            <else>
+                <set field="emailParams.sendTo" from-field="productStoreEmailSetting.fromAddress"/>
+            </else>
+            </if-not-empty>
+            <set field="emailParams.subject" from-field="productStoreEmailSetting.subject"/>
+            <set field="emailParams.sendFrom" from-field="parameters.emailAddress"/>
+            <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
+            <set field="emailParams.bodyScreenUri" from-field="productStoreEmailSetting.bodyScreenLocation"/>
+            <call-service service-name="sendMailFromScreen" in-map-name="emailParams"/>
+        </if-not-empty>
+    </simple-method>
+</simple-methods>

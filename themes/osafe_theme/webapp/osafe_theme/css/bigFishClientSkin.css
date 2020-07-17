@@ -1,0 +1,2983 @@
+/* clientSkin.css */
+
+/* CSS Reset*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
+    font-size:inherit;
+}
+
+/* RULES FROM BASE */
+
+body {
+    color: black;
+    background: white;
+    /* Will make 1em = 10px */
+    font-size:62.5%;
+    font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+}
+
+/*************************************************************************************************************
+***************************************************** RULES FROM BASE.CSS ************************************
+*************************************************************************************************************/
+
+/****************************************************************
+* Layout Containers
+****************************************************************/
+
+/****************************************************************
+* Basic Layout
+****************************************************************/
+#eCommeceOuterBasicWrap {
+    margin: 0 auto;
+    width: 960px;
+    padding: 0;
+    position: relative;
+    background-color: white;
+}
+
+#eCommerceInnerBasicWrapper {
+    width: 960px;
+    position: relative;
+    margin-top:1%;
+    z-index: 10;
+    zoom: 1;
+}
+
+
+/****************************************************************
+* Basic Bevel  Layout
+****************************************************************/
+#eCommerceOuterBasicBevelWrap {
+    margin: 0 auto;
+    width: 960px;
+    padding: 0;
+    position: relative;
+   background-color: white;
+}
+
+#eCommerceInnerBasicBevelWrapper {
+    width: 960px;
+    position: relative;
+    margin: 0 auto;
+    z-index: 10;
+    zoom: 1;
+    border: 1px solid black;
+}
+
+#eCommerceHeaderLinksBevelWrapper{
+    width: 960px;
+    position: relative;
+    margin: 0 auto;
+}
+
+
+#eCommerceHeader {
+	position: relative;
+	float: left;
+        height: 65px;
+        zoom: 1;
+        z-index: 2;
+}
+
+#eCommerceContent {
+	background-color: white;
+}
+#eCommerceContent.leftPanel {
+	background-color: #fff;
+}
+#eCommerceHeaderLinks {
+	background: url("/osafe_theme/images/user_content/images/header-links-bg.gif") repeat-x; /* white */
+	color: #000000;
+	margin: 0;
+        text-align: right;
+}
+#eCommercePageBody {
+	background-color: #fff;
+	width:100%;
+	margin-top:1%;
+    display: block;
+    clear: both;
+    zoom: 1;
+    z-index: 1;
+    _padding-bottom: 10px;/* IE homepage bug fix */
+}
+
+#eCommercePanel {
+	background-color: #fff;
+}
+#eCommerceMainPanel.mainPanel {
+	margin: 0 40px 0 40px;
+}
+#eCommerceMainPanel.leftPanel {
+	width:auto;
+	background-color: #fff;
+	margin:0;
+    float: left;
+    display: inline;
+    z-index: 0;
+}
+#eCommerceLeftPanel {
+	width: 180px;
+	margin: 0;
+    float: left;
+    display: inline;
+}
+#eCommerceMainPanel.rightPanel {
+	width: 700px;
+	background-color: #fff;
+    display: inline;
+    float: left;
+	margin: 0;
+}
+#eCommerceRightPanel {
+	background-color: #fff;
+	width: 180px;
+	margin-right:0px;
+	display: inline;
+	float: right;
+}
+
+
+#eCommerceBuiltByBevelWrapper{
+    width: 960px;
+    position: relative;
+    margin: 0 auto;
+}
+
+#eCommerceHeader:after, #eCommercePageBody:after, #eCommerceFooter:after, #eCommerceProductDetailContainer:after {
+    clear: both;
+    content: " ";
+    display: block;
+    font-size: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+
+/****************************************************************
+* Standard HTML Tags
+****************************************************************/
+ol, ul {
+    list-style: none;
+}
+input, select, option, textarea {
+    font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+}
+
+input, select, textarea {
+    color: rgb(12,12,12);
+    border: 1px solid rgb(12,12,12);
+}
+
+/* remember to define focus styles! */
+:focus {
+    outline: 0;
+}
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: "";
+}
+blockquote, q {
+    quotes: "" "";
+}
+
+em{
+    font-weight: bold;
+}
+
+input[type="text"], input[type="password"] {
+    width: 211px;
+}
+
+textarea {
+    width: 500px;
+    height: 100px;
+}
+
+a{
+	color:#666;
+    text-decoration: none;
+}
+
+/****************************************************************
+* Navigation Bar
+****************************************************************/
+#eCommerceNavBar {
+	height:	33px; /* match sub ul list item height (see below)*/
+	position: relative;
+	clear:both;
+	width: 100%;
+	margin:0;
+	border-top:1px solid #afafaf;
+	border-bottom:1px solid #afafaf;
+        background-color:none;
+}
+#eCommerceNavBarMenu ul {
+	width: 21em; /* left offset of submenus need to match (see below) */
+        position:        absolute;
+        top:            -999em;
+}
+
+#eCommerceNavBarMenu ul li {
+    width:            100%;
+}
+#eCommerceNavBarMenu li:hover {
+    visibility:        inherit; /* fixes IE7 'sticky bug' */
+}
+#eCommerceNavBarMenu a {
+    display:        block;
+    position:        relative;
+}
+
+#eCommerceNavBarMenu li {
+    float:            left;
+    position:        relative;
+}
+#eCommerceNavBarMenu li:hover ul, #eCommerceNavBarMenu li.sfHover ul {
+	top: 33px; /* match top ul list item height */
+}
+ul#eCommerceNavBarMenu li li:hover ul, ul#eCommerceNavBarMenu li li.sfHover ul {
+	left:    21em; /* match ul width */
+	top:     0px;
+}
+/* If the drop-down menus disappear unexpectedly the bottom padding value may not be large enough */
+#eCommerceNavBarMenu a {
+	margin: 0px;
+	padding: 8px 8px 0px 0px;
+	text-decoration:none;
+	font-size: 1.4em;
+	text-transform: uppercase;
+	line-height: 1.4em;
+	padding-bottom:5px\0/;
+	*padding-bottom:5px;
+}
+#eCommerceNavBarMenu .subLevel a {
+	padding: 2px 0px 2px 6px;
+	font-size: 1.1em;
+	text-transform: uppercase;
+	background-color: rgb(255,255,255);
+}
+#eCommerceNavBarMenu a, #eCommerceNavBarMenu a:visited { /* visited pseudo selector so IE6 applies text colour*/
+	color: #898989;
+}
+#eCommerceNavBarMenu li.topLevel {
+	border-left: medium none;
+	padding: 0px 2px 5px 8px;
+}
+/* == Add borders on a ==== */
+#eCommerceNavBarMenu a.topLevel {
+	background-attachment: fixed;
+    background-color: transparent;
+    background-image: url("/osafe_theme/images/user_content/images/bkg_navBar_li_separator.png");
+    background-position: right center;
+    background-repeat: no-repeat;
+    background-size: auto 12px;
+    border-left: medium none;
+	margin: 0px 0px 5px 2px;
+}
+#eCommerceNavBarMenu li.topLevel.navlastitem a.topLevel {
+	border:none;
+}
+#eCommerceNavBarMenu li.topLevel.navfirstitem a{
+}
+#eCommerceNavBarMenu li.subLevel.navfirstitem a{ /* Psuedo class selector for first subnav item */
+	border-top:none;
+}
+#eCommerceNavBarMenu li.topLevel.navlastitem{
+	padding-left: 7px;
+}
+#eCommerceNavBarMenu li:hover {
+}
+#eCommerceNavBarMenu a.topLevel:hover {
+}
+#eCommerceNavBarMenu li li a {
+    margin-left: 5px;
+	border-top: 1px solid #afafaf;
+}
+#eCommerceNavBarMenu li li {
+    background-color: rgb(255,255,255); /* Background Color of flyout*/
+ 	border-top: 0px #afafaf solid; /* Horizontal bar to on top of each sub level item */
+}
+#eCommerceNavBarMenu li:hover, #eCommerceNavBarMenu li.sfHover, #eCommerceNavBarMenu a:focus, #eCommerceNavBarMenu a:hover, #eCommerceNavBarMenu a:active {
+	 /* Background Color of Top nav on Hover*/
+	color: rgb(198,8,8); /* Color of Top nav text on Hover*/
+	outline: 0;
+}
+#eCommerceNavBarMenu li li:hover, #eCommerceNavBarMenu li li.sfHover, #eCommerceNavBarMenu li li a:focus, #eCommerceNavBarMenu li li a:hover, #eCommerceNavBarMenu li li a:active {
+	background: #ccc; /* Background Color of Sub nav on Hover*/
+	color: #000; /* Color of Sub nav text on Hover*/
+}
+#eCommerceNavBarMenu li.topLevel.navlastitem {
+	Background-image: none;
+}
+
+/****************************************************************
+* Headings
+****************************************************************/
+h1 {
+	font-size: 24px;
+	margin: .5em 0;
+	font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+	color:#666;
+	text-transform:uppercase;
+}
+/* Tertiary Information inside a H1 heading */
+h1 .tertiaryInformation {
+	font-size: .7em;
+	margin: 0 0 0 20px;
+	color: #ccc;
+}
+.tertiaryInformation {
+	/* font is sized absolute on purpose */
+    font-size: 11px;
+	color: #aaa;
+}
+h2 {
+	font-size: 1.2em;
+}
+h3 {
+	font-size: 1.1em;
+	color: #333;
+}
+h4 {
+	font-size: 1em;
+}
+
+
+/****************************************************************
+* Labels, Captions
+****************************************************************/
+label, .caption{
+    text-align: right;
+    padding-right: 2px;
+    text-transform: capitalize;
+    font-size: 1.2em;
+}
+label, .caption {
+	font-weight: normal;
+	color: #666;
+}
+.headerCaption {
+	font-size: 1.5em;
+}
+
+/****************************************************************
+* Buttons
+****************************************************************/
+
+input[type="submit"].standardBtn, input[type="button"].standardBtn, a.standardBtn{
+    font-family:'Calibri','Helvetica Neue','Lucida Sans Unicode',sans-serif;
+    font-weight:bold;
+    font-size:1.6em;
+    margin-left: 10px;
+
+    /* Makes text on buttons all UPPERCASE */
+    text-transform:uppercase;
+
+    /* top right bottom left */
+    padding: 1px 5px 1px 5px;
+}
+input[type="submit"].standardBtn:hover, input[type="button"].standardBtn:hover, a.standardBtn:hover {
+    color: black;
+}
+
+
+input[type="submit"].standardBtn, input[type="button"].standardBtn, a.standardBtn {
+	color: #666;
+	border: 1px solid #666;
+	background:none;
+	font-size: 1.2em;
+}
+ input[type="submit"].standardBtn:hover,, input[type="button"].standardBtn:hover a.standardBtn:hover {
+ 	background: #9b0000;
+}
+input[type="submit"].negative, input[type="button"].negative, a.negative {
+	color: white;
+	border: 1px solid black;
+	background: #900;
+	font-size: 1.2em;
+}
+input[type="submit"].negative:hover, input[type="button"].negative:hover, a.negative:hover {
+	color: gray;
+}
+input[type="submit"].addToCart, input[type="button"].addToCart, a.addToCart {
+	float: right;
+	margin-top: 1em;
+	line-height: 1em;
+}
+input[type="submit"].addToCart:hover, input[type="button"].addToCart:hover, a.addToCart:hover {
+	float:right;
+}
+
+form div.entryButtons {
+    clear: left;
+    float: left;
+    margin: 1em 0 1em 0;
+    }
+
+
+/****************************************************************
+* Standard Table
+****************************************************************/
+table.standardTable {
+	width: 880px;
+}
+table.standardTable thead tr {
+	background-color: #ccc;
+}
+table.standardTable th, table.standardTable td {
+	font-size: 1.3em;
+	color:#666;
+}
+table.standardTable th {
+	font-weight: bold;
+	padding: 5px 0;
+}
+table.standardTable th.firstCol, table.standardTable td.firstCol {
+	padding: 0 0 0 10px;
+}
+table.standardTable th.lastCol, table.standardTable td.lastCol {
+	padding: 0 10px 0 0;
+}
+
+
+/****************************************************************
+* Header Links
+****************************************************************/
+#eCommerceHeaderLinks ul {
+	/* 15px aligns with the left of GO button + 5px for a margin */
+	margin:0;
+}
+#eCommerceHeaderLinks ul li {
+	display: inline;
+	margin: 0 0 0 0;
+}
+#eCommerceHeaderLinks li {
+	border-right:1px solid #7e7d7d;
+}
+#eCommerceHeaderLinks li:first-child {
+	border-left: none;
+}
+#eCommerceHeaderLinks li:last-child {
+	border-right: none;
+}
+#eCommerceHeaderLinks a {
+	text-decoration: none;
+	color: rgb(125,125,125); /* Grey */
+	font-size: 1.3em;
+	/* === RUNWAY === */
+    font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+	color: #7e7d7d;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	text-transform: uppercase;
+	margin: 0 5px 0 5px;
+}
+#eCommerceHeaderLinks a:hover {
+	text-decoration: underline;
+	color: #990000;
+}
+/****************************************************************
+* Header Content
+****************************************************************/
+#eCommerceHeader a {
+	/*margin-top: 1em;*/
+}
+#siteLogo {
+	float:left;
+	width:215px;
+	padding: 0px 50px 10px 0px;
+	/* Move logo up to top */
+    margin: 0px 222px 0 0;
+}
+#siteTitleImage {
+	position: relative;
+	width: 150px;
+	float: left;
+	left: 10px;
+	top: 20px;
+}
+#siteShoppingCart:before {
+	content: 'CART';
+	font-size: 12px;
+}
+#siteShoppingCart {
+	float: left;
+    margin: 0px;
+	width: 280px;
+	position: absolute\0/;
+	color: #5e5e5e;
+	top: 13px;
+        margin-left:450px\0/;
+}
+#siteShoppingCart #shoppingCartCaption {
+	display: none;
+}
+#siteShoppingCart span, #siteSearch span {
+	font-size: 1.5em;
+	color: black;
+}
+#siteShoppingCart .action {
+	margin: 0;
+}
+#siteCartStats {
+	position: relative;
+	display: inline-block;
+	text-align: center;
+	width: 110px;
+	top: 4px;
+}
+#siteCartStats:hover {
+	text-decoration: underline;
+	color: black;
+}
+#siteCartStats #siteShoppingCartSize, #siteCartStats .price {
+	font-weight: normal;
+	font-size: 1.1em;
+	position: relative;
+	top: -5px;
+}
+/* === make this div larger === */
+DIV#siteCartStats {
+	width: 150px;
+}
+.highlightGroup #siteShoppingCartSize {
+	font-family: 'Arial Bold', Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	color: #900;
+	padding-bottom: 2px;
+	padding-top: 1px;
+	margin-bottom: 0;
+	text-transform: uppercase;
+	margin: 0 1em 0 2px;
+}
+#siteCartStats .price {
+	visibility: hidden;
+	color: #900;
+}
+#siteSearch {
+	float: left;
+	position: relative;
+	top: 23px;
+        margin-left:260px\0/;
+}
+/* == */
+#searchBtn {
+	background: #fff;
+	border: 1px solid #7e7d7d;
+	color: #000;
+	padding: 3px;
+	font-weight: normal;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 1em;
+	padding-top:4px;
+	margin-left: 5px;
+}
+#searchBtn:hover{
+	background:#9b0000;
+	color:#fff;
+}
+#siteSearch input[type="text"] {
+	width: 145px;
+	font-size: 1.5em;
+}
+#siteShoppingCart a, #siteSearch a {
+	color: black;
+}
+#siteCartStats #viewCartSmallImage {
+}
+#siteCartStats .price {
+	font-weight: normal;
+}
+#viewCartButton {
+	float: right;
+	position: relative;
+	top: 1px;
+	right: 11px;
+}
+#viewCartButton {
+	display: none;
+}
+#siteSearch span {
+	float: left;
+	position: relative;
+	top: 4px;
+	display: none;
+}
+#siteSearch input[type="text"] {
+	float: left;
+	width: 145px;
+	font-size: 1.5em;
+	margin: 0 0 0 10px;
+	position: relative;
+}
+#siteSearch input[type="submit"] {
+	float: left;
+}
+/****************************************************************
+* Footer, Final Footer
+****************************************************************/
+#eCommerceFooter {
+	font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+	width:100%;
+	padding-top:1%;
+	border-top:1px solid #cccccc;
+	margin-top:1%;
+}
+#eCommerceFooterLinks {
+    margin: 1em 0 0 0;
+	color:#7e7d7d;
+	font-size: 11px;
+}
+#eCommerceFooter .footerCaption {
+	color:#7e7d7d;
+	font-size: 1.3em;
+	text-decoration: none;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+/****************************************************************
+* Footer Links
+****************************************************************/
+.footerColumn {
+	/* 960px / 5 columns = 192px per col*/
+    /* 960px / 4 columns = 240px per col*/
+    /* 960px / 3 columns = 320px per col*/
+    width:220px;
+	position: relative;
+	margin: 0 20px 0 0;
+}
+#eCommerceFooter ul#footerLinks li {
+	line-height: 1.6em; /* .2em larger then the font size */
+}
+#footerLinks a {
+	color: #7e7d7d;
+	font-size: 1.3em;
+}
+#footerLinks a:hover {
+	text-decoration: underline;
+	color: #990000;
+}
+/****************************************************************
+* Social Media Footer
+****************************************************************/
+
+#eCommerceSocialMediaFooter {
+	background: white;
+	width: 960px;
+	width: 800px;
+	margin: 0 auto;
+	padding: 3em 0 2em 0;
+	text-align: center;
+}
+#socialMediaGrid {
+	margin: 0 auto;
+}
+/****************************************************************
+* Final Footer Links
+****************************************************************/
+
+#eCommerceFooterLinks ul li {
+	display: inline;
+	margin-right: 1em;
+}
+#eCommerceFooterLinks a {
+	text-decoration: none;
+	color: #7e7d7d;
+}
+#eCommerceFooterLinks a:hover {
+	text-decoration: underline;
+}
+#eCommerceBuiltBy {
+	color: gray;
+}
+#eCommerceBuiltBy a {
+	color: gray;
+}
+.footerColumn {
+    margin: 0 20px 0 0;
+    position: relative;
+    width: 220px;
+    float:left;
+}
+#eCommerceBuiltBy {
+    font-size: 1.2em;
+    text-align: right;
+}
+#breadcrumb {
+    width: 100%;
+}
+#breadcrumb li {
+    display: inline;
+    float: left;
+}
+#breadcrumb li.first {
+    background: none repeat scroll 0 0 transparent;
+    padding-left: 0;
+}
+
+
+/****************************************************************
+* Breadcrumb
+****************************************************************/
+
+.breadcrumbs {
+    margin:0;
+}
+#breadcrumb {
+	font-size: 11px;
+	height: 25px;
+}
+#breadcrumb .intro {
+	font-weight: bold;
+	margin-right: 6px;
+}
+#breadcrumb li {
+	background: url("/osafe_theme/images/user_content/images/arrow_breadcrumb.gif") no-repeat scroll 1px 5px transparent;
+	margin-right: 6px;
+	padding-left: 14px;
+	padding-top: 0px;
+	color: #333;
+}
+#breadcrumb li.first {
+	background: none repeat scroll 0 0 transparent;
+	padding-left: 0;
+	text-transform: capitalize;
+}
+#breadcrumb li.home a {
+	margin-right: 6px;
+}
+#breadcrumb li.home span.here {
+	padding-top: 2px;
+}
+#breadcrumb li.active {
+	font-weight: bold;
+	color:#000;
+}
+#breadcrumb li a, #breadcrumb li a:link, #breadcrumb li a:visited {
+	color: #666;
+	font-weight: normal;
+	text-decoration: underline;
+}
+#breadcrumb li a:hover, #breadcrumb li a:active {
+	background-color: transparent;
+	text-decoration: none;
+	color: #990000;
+}
+/****************************************************************
+* Facet Navigation
+****************************************************************/
+#eCommerceRefineByCategoryContainer, #eCommerceCategoryFacetContainer {
+	padding:0;
+}
+h3.CategoryFacetTitle {
+	font-size: 13.5px;
+	font-weight: bold;
+}
+h3.facetGroup {
+	font-size: 13.5px;
+	font-weight: bold;
+	margin-top: 1em;
+	line-height: 1.3em;
+}
+ul.facetGroup {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+a.facetValueLink {
+	color: #666;
+	text-transform:capitalize;
+}
+a.facetValueLink:hover {
+	color: #990000;
+	
+}
+li.facetValue {
+	line-height: 0.9em;
+	font-size: 1.35em;
+	padding: 2px 0 2px 0px;
+	margin: .2em 0;
+	text-transform: capitalize;
+}
+img.customerRatingIcon {
+	width: 71px;
+	height: 15px;
+	position: relative;
+	top: 2px;
+}
+
+/****************************************************************
+* Dialogue Box
+****************************************************************/
+.dialogOverlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #000000;
+    opacity: .50;
+    filter: alpha(opacity=15);
+    -moz-opacity: .50;
+    z-index: 101;
+    display: none;
+}
+.dialogBox {
+    display: none;
+    position: fixed;
+    width: auto;
+    height: auto;
+    top: 30%;
+    left: 50%;
+    margin-left: -190px;
+    margin-top: -100px;
+    padding: 0px;
+    z-index: 102;
+}
+.dialogClose {
+    float: right;
+    margin-right: -15px;
+    width: 25px;
+    height: 25px;
+    position: relative;
+    background-image: url(/osafe_theme/images/user_content/images/close_square.png);
+    background-repeat: no-repeat;
+}
+.confirmDialog {
+    width: 400px!important;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #FFFFFF;
+}
+.confirmTxt {
+    font-weight: bold;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-left: 10px;
+    font-size: 1.3em;
+}
+.confirmBtn {
+    margin-bottom: 10px;
+    padding-left: 10px;
+    font-size: 10px;
+}
+
+/****************************************************************
+* Display Box
+****************************************************************/
+.displayBox {
+	margin: 1em 0;
+	margin-left: 1.6em;
+}
+.displayBox .displayBoxHeader {
+	color: #666;
+	/*background: rgb(255,255,255);
+	border-bottom: 1px solid #999;*/
+	width: 100%;
+	font-size:11px;
+	font-weight:normal;
+}
+.displayBox .displayBoxHeaderCaption {
+	font-size: 1.6em;
+	margin:0;
+}
+
+.displayBox p {
+	margin-left: 0.5em;
+	font-size: 1.35em;
+	color:#666;
+	padding-top: .5em;
+}
+
+.displayBox div.entry li.fieldErrorMessage {
+	padding: 2px 0 0 167px;
+}
+/****************************************************************
+* Entry Forms
+****************************************************************/
+
+.desc {
+    margin-left: 25px;
+}
+.required {
+    color: red;
+}
+
+fieldset p{
+    margin: 0 .5em;
+}
+
+.instructions {
+   font-size: 1.3em;
+   margin: 0 0 .5em 0;
+}
+
+.entry {
+   margin: .2em 0;
+}
+
+
+.entry label {
+    display: block;
+    float: left;
+    width: 150px;
+    margin: .5em 0 0 10px;
+    clear:left;
+    font-size: 1.5em;
+}
+
+.entry input, .entry select, .entry textarea {
+    margin: .5em 0px .5em 10px;
+    color: #000000;
+    border: 1px solid #000000;
+
+    /* width should not be assigned to this style */
+}
+
+
+.entry input[type="text"], .entry input[type="password"] {
+    width: 211px;
+    font-size: 1.5em;
+}
+
+.entry input[type="text"].cardNumber {
+    width: 132px;
+}
+
+input[type="text"].phone3{
+    width:3em;
+}
+
+input[type="text"].phone4{
+    width:4em;
+}
+
+.entry select {
+    width: 175px;
+}
+
+.entry a {
+  margin: .5em 0 0 5px;
+}
+
+.entry input[type="radio"]{
+    font-size: 1.5em;
+}
+
+
+.entry .radioOptionText{
+    font-size: 1.5em;
+    margin:0 0 0 30px;
+}
+.entry .radioOptionTextAdditional{
+    font-size: 1.5em;
+    float: right;
+    margin:0 10px 0 0;
+}
+
+
+.entry h3 {
+    background-color: #E6E6E6;
+    font-size: 1.5em;
+    font-weight: bold;
+    padding: 4px;
+    margin: 0 0 .3em 0;
+}
+.entry.paypal {
+    margin: 1em 0 0 0;
+}
+
+/****************************************************************
+* Geo Map
+****************************************************************/
+
+.mapCanvas {
+    border:1px solid #979797; 
+    background-color:#e5e3df;
+    padding: 15px;
+    margin: 7px auto;
+}
+.mapCanvasWithDirection {
+    width: 65%!important;
+    float: left;
+}
+.mapLoading {
+    padding:1em;
+    color:gray;
+}
+.mapClosure {
+    width:210px;
+    padding-right:10px;
+    font-size: 1.35em;
+}
+
+.mapDirection {
+    float: right;
+    display: none;
+    width: 30%;
+}
+.closeDirection {
+    float: right;
+}
+.routeDirection {
+    clear: both;
+    overflow-y: auto;
+}
+.drivingDirectionIcon {
+    background-image: url(/osafe_theme/images/user_content/images/drivingDirection.png);
+    font-size: 1.5em;
+    background-repeat:no-repeat;
+    width: 29px;
+    height:23px;
+     display: block;
+}
+.walkingDirectionIcon {
+    background-image: url(/osafe_theme/images/user_content/images/walkingDirection.png);
+    font-size: 1.5em;
+    background-repeat:no-repeat;
+    width: 29px;
+    height:23px;
+    display: block;
+}
+.bicyclingDirectionIcon {
+    background-image: url(/osafe_theme/images/user_content/images/bicyclingDirection.png);
+    font-size: 1.5em;
+    background-repeat:no-repeat;
+    width: 29px;
+    height:23px;
+    display: block;
+}
+.displayBox table#storeLocator {
+    width: 100%;
+}
+
+.displayBox table#storeLocator .entry {
+    margin: 0;
+}
+
+.displayBox table#storeLocator .entry label {
+    margin: 0;
+    padding: 7px;
+    width: auto;
+}
+.displayBox table#storeLocator input.standardBtn {
+    margin-bottom: 0;
+    margin-left: 20px;
+    padding-bottom: 0;
+}
+.displayBox table#storeLocator .entry input[type="text"]{
+    width: 300px;
+    margin-bottom: 0px;
+}
+.displayBox table#storeLocator a {
+    color: #000000;
+    margin: 5px;
+    display: inline-block;
+}
+
+.displayBox table#storeLocator .storeList td.lastCol {
+    text-align: right;
+}
+
+.displayBox table#storeLocator td {
+    border-bottom: 1px solid #ababab;
+}
+.displayBox table#storeLocator .storeList td {
+    min-width: 100px;
+}
+.adp-directions, .adp-summary, .adp-placemark {
+    font-size: 1.3em;
+}
+.displayBox table#storeLocator .storeList td {
+    min-width: 100px;
+}
+.storeDetailsBubble {
+    float: left;
+    list-style: none outside none;
+    margin: 0 0 0.5em;
+    padding: 0;
+    width: 380px;
+}
+.storeDetailsBubble li {
+    clear: both;
+    float: left;
+    margin-bottom: 0.3em;
+    width: 100%;
+}
+.storeDetailsBubble .label {
+    //color: #808080;
+    display: block;
+    float: left;
+    font-size: 13.5px;
+    min-width: 90px;
+}
+.storeDetailsBubble .value {
+    float: left;
+    width: 280px;
+}
+.storeDetailsBubble .storeName {
+    //color: #00439C;
+    font-size: 15px;
+    font-weight: bold;
+}
+.storeDetailsBubble .addressLine2 {
+    text-indent: 30px;
+}
+
+/****************************************************************
+* Error Messages
+****************************************************************/
+.content-messages {
+	margin: 0 0 0 0;
+	font-size: 1.6em;
+	color: black;
+}
+.content-messages .errorImage, .content-messages .eventImage, .content-messages .warningImage {
+	float: left;
+	margin: 10px;
+	padding: 0.1em;
+}
+.eCommerceErrorMessage {
+	border: 1px solid #F00;
+	background-color: rgb(251,231,232); /* Light Red */
+}
+.eCommerceErrorMessage .errorImage {
+	border: 1px solid #F00;
+	background-image: url("/osafe_theme/images/user_content/images/red_x_image.png");
+    background-repeat:no-repeat;
+    height: 12px;
+    width: 12px;
+}
+.eCommerceSuccessMessage {
+	border: 1px solid black;
+	background-color: rgb(204,255,204); /* Green */
+}
+.eCommerceSuccessMessage .eventImage {
+	border: 1px solid black;
+	background-image: url("/osafe_theme/images/user_content/images/checkmark.png");
+    background-repeat:no-repeat;
+    height: 12px;
+    width: 12px;
+}
+.eCommerceWarningMessage {
+	border: 1px solid #F00;
+	background-color: rgb(251,231,232); /* Light Red */
+}
+.eCommerceWarningMessage .warningImage {
+	border: 1px solid #F00;
+	background-image: url("/osafe_theme/images/user_content/images/warningmark.png");
+	background-repeat:no-repeat;
+    height: 12px;
+    width: 12px;
+}
+
+.errorHeading, .eventHeading, .warningHeading {
+	padding: 0 0 0 1.2em;
+	font-weight: bold;
+	margin-bottom: 0.5em;
+}
+.errorMessage, .eventMessage, .warningMessage {
+	padding: 0 0 0 2.5em;
+}
+.fieldErrorMessage {
+	font-size: 1.5em;
+	color: red;
+}
+.eCommerceErrorMessage p, .eCommerceSuccessMessage p, .eCommerceWarningMessage p  {
+	margin: 0.5em 0 0.2em 1em;
+}
+/****************************************************************
+* Prices
+****************************************************************/
+
+.price, .savingsPercent {
+	color: #666;
+	clear: left;
+	margin: 2px 0;
+	font-weight: bold;
+}
+.listPrice {
+	text-decoration: line-through;
+	color:#cccccc;
+}
+/****************************************************************
+* Home Page
+****************************************************************/
+#eCommerceHomeSpots {
+    display: inline;
+    float: left;
+    margin: 0 !important;
+    padding: 0;
+}
+
+
+/****************************************************************
+* Thumbnail Holder
+****************************************************************/
+.eCommerceThumbNailHolder {
+	padding-bottom: 2%;
+}
+/****************************************************************
+* Product Images
+****************************************************************/
+
+.categoryImage {
+}
+.productRecommendImage {
+}
+.productThumbnailImage {
+}
+.productAdditionalImage {
+}
+/* 75% of productSmallImage */
+.productCartListImage {
+	padding: 6px 0px;
+}
+.productSmallImage {
+}
+.productMediumImage {
+}
+.productLargeImage {
+}
+.productLargeDetailImage {
+	width: 450px;
+	height: 600px;	
+}
+
+/****************************************************************
+* Category
+****************************************************************/
+
+#eCommerceCategoryList {
+	margin-bottom: 10px;
+	left: -6px;
+	width: 780px;
+}
+.eCommerceListItem {
+	float: left;
+	margin:0 6px 5px 0; /* only thing that should be defined here, if needed is right and bottom (2nd and 3rd numbers respectively) */
+	width: 160px;
+	text-align:left;
+	line-height: 12px;
+}
+.categoryListItem {
+	width: 170px;
+	height: 257px;
+	/* Centers items left to right */
+    margin: 0 0 20px 16px;
+}
+.categorySupportingText {
+	font-size: 1.2em;
+}
+/****************************************************************
+* PLP Product List
+****************************************************************/
+
+#eCommerceProductList {
+	margin: 1em 0 0 0;
+	/*BS: top and left values should only be used when absolute positioning is used, why are they here? */
+	/* Changing top value will allow movement top to bottom */
+    /* top: 0px;*/
+    left: 0px; /* was 5px wasted space */
+}
+/*Adds space bewteen the end of the list of items and before the after the resultsNavigation */
+#eCommerceProductList .spacer {
+	clear: both;
+	height: 20px;
+}
+#eCommerceProductList .rating_bar {
+	margin: 3px 0px;
+}
+#eCommerceProductList a.eCommerceProductLink {
+	text-decoration: none;
+	color:#666;
+}
+#eCommerceProductList a.eCommerceProductLink:hover {
+	color: #800;
+}
+.eCommerceProductLink, .productListItem .price, .eCommerceRecommendProduct .price {
+	font-size: 13.5px;
+	line-height: 15px;
+}
+.productListItem {
+	width: 180px;
+	height: 310px;
+}
+#eCommerceCategoryListContainer h1 {
+	padding: 0 0 0 0;
+}
+/****************************************************************
+* PLP Results Navigation
+****************************************************************/
+
+.resultListContainer {
+	margin-bottom: 2em;
+	width: 750px;
+}
+.resultsNavigation {
+	font-size: 1.3em;
+	position: relative;
+	height: 2.5em;
+	width: 100%;
+}
+#resultsNavigationTop, #resultsNavigationBottom {
+	background-color: #ffffff;
+}
+#resultsNavigationTop {
+	margin-top: 12px;/*border-bottom: 1px solid gray;*/
+}
+#resultsNavigationBottom {
+	margin-bottom: 4em;/*border-top: 1px solid gray;*/
+}
+.resultsNavigation a {
+	color: #666;
+}
+.resultsNavigation a:hover {
+	text-decoration: underline;
+	color: #990000
+}
+.sortingOptions {
+	float: left;
+	margin: 0 0 0 12px;
+}
+.sortingOptions select {
+	margin: .5em 0;
+}
+.pagingLinks {
+	float:right;
+	margin-top: .8em;
+	margin-right: 12px;
+}
+.pagingBtn {
+/* border: 1px solid #999;*/
+}
+.pagingBtn.first {
+	background-image: url("/osafe_theme/images/user_content/images/results-nav-first.png");
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 14px;
+}
+.pagingBtn.previous {
+	background-image: url("/osafe_theme/images/user_content/images/results-nav-prev.png");
+	background-position: left;
+	background-repeat: no-repeat;
+	padding-left: 7px;
+}
+.pagingBtn.next {
+	background-image: url("/osafe_theme/images/user_content/images/results-nav-next.png");
+	background-position: right;
+	background-repeat: no-repeat;
+	padding-right: 7px;
+}
+.pagingBtn.last {
+	background-image: url("/osafe_theme/images/user_content/images/results-nav-last.png");
+	background-position: right;
+	background-repeat: no-repeat;
+	padding-right: 14px;
+}
+.pagingBtn.showall {
+/* Place Holder */
+}
+.pagingLinks li {
+	display: inline;
+	margin-left: 10px;
+	padding: 2px;
+}
+label.sortBy {
+	color: #333;
+}
+.pagingLinks li.pages {
+	color: rgb(102,102,102);
+	font-weight: bold;
+}
+.pagingLinks li.disabled {
+	color: gray;
+}
+/****************************************************************
+* PDP Product Detail
+****************************************************************/
+#eCommerceProductDetailContainer {
+	float: left;
+	display: inline;
+	width: 100%;
+	margin-top: .5em;
+}
+#eCommerceProductDetailPopupContainer {
+	margin: 0.5em;
+}
+#productDetailsContainer {
+	border: 0px solid lightgray;
+	display: inline;
+	float: left;
+	margin:0;
+	padding: 2em 0 17px 0px; /* Spaces captions and features out */
+	width: 340px;
+}
+#productDetailsContainer .internalName, #productDetailsContainer .price, #productDetailsContainer .savingsPercent {
+	font-size: 1.5em;
+}
+#productDetailsImageContainer {
+	border: 0px solid lightgray;
+	float: left;
+	padding: 1.5em; /* Spaces images out */
+	display: inline;
+	width: 300px;
+	margin-bottom: 2em;
+}
+#productDetailsImageContainer .productLargeImage {
+	padding-left: 0;
+	float: right;
+}
+#productDetailsImageContainer #mainImageLink {
+	float: right;
+	font-size: 1.5em;
+}
+#productDetailsImageContainer .productAdditionalImage {
+	border: 2px solid lightGrey;
+	margin: 2.5em 0px 0px 0px;
+}
+#productDetailsImageContainer .productAdditionalImage:hover {
+	border: 2px solid rgb(198,8,8);
+	margin: 2.5em 0px 0px 0px;
+}
+#productDetailsImageContainer #eCommerceProductAddImage {
+	clear: left;
+	float: left;
+}
+#productDetailsContainer p, #selectableFeatures, #addToCart {
+	clear: left;
+	line-height: 3em;
+}
+#productDetailsContainer label {
+	font-size: 1.6em;
+}
+#productDetailsContainer input, #productDetailsContainer select {
+	font-size: 1.6em;
+}
+#productDetailsContainer #selectableFeatures {
+}
+#productDetailsContainer .internalName {
+	margin: 0 0 0 8px;
+}
+#productDetailsContainer .listPrice {
+	font-size: 1.8em;
+	float:right;
+	margin:0;
+}
+#productDetailsContainer .displayPrice {
+	font-size: 2.2em;
+	margin:0;
+	float:right;
+}
+#productDetailsContainer .savingsPercent {
+	font-size: 1.8em;
+	margin:0;
+	float:right;
+}
+#productDetailsContainer select.colorFeature {
+	margin:0;
+	float:right;
+}
+#productDetailsContainer select.sizeFeature {
+	margin:0;
+	float:right;
+}
+#productDetailsContainer select.typeFeature {
+	margin: 0 0 0 74px;
+}
+#productDetailsContainer input.quantity {
+	margin:0;
+	float:right;
+	width: 102px;
+}
+#productDetailsContainer #volumePricing {
+	border: 1px solid lightgrey;
+	padding: .5em;
+	width: 280px;
+	margin: .5em 0 0 0;
+}
+#eCommercePlpEspot_APPAREL img {
+	margin: 0px 0px 24px 0px;
+}
+#pdpDiscontinued {
+    color: #ff0000;
+    float:left;
+    font-size: 14px;
+}
+#pdpIntroduced {
+    color: #ff0000;
+    float:left;
+    font-size: 14px;
+}
+
+.pdpDisplayBox {
+	clear: left;
+	text-align: center;
+	border: 0px;
+	margin: 2em 0;
+	border: 1px solid black;
+}
+
+/****************************************************************
+* PDP Product Detail : Volume Pricing
+****************************************************************/
+
+#volumePricing .pricingCaption {
+	font-size: 1.5em;
+	margin: 0 100px;
+	width: 100px;
+}
+#volumePricing p {
+	line-height: 1.5em;
+	margin: 0;
+}
+#volumePricing .priceRule {
+	margin: 0;
+	font-size: 1.2em;
+}
+#volumePricing .price {
+	margin: 0;
+	clear: left;
+	float: right;
+	font-size: 1.2em;
+}
+/****************************************************************
+* PDP Product Detail : Distinguishing Features
+****************************************************************/
+div.distinguishingFeatures {
+	display: inline;
+	float: left;
+	margin: .5em 1em 0 1.6em;
+	width: 330px;
+	color: #666;
+	font-size: 1.1em;
+	padding-bottom: 10px;
+}
+div.distinguishingFeatures h3 {
+	font-size: 1.4em;
+	display: none;
+}
+div.distinguishingFeatures ul {
+	font-size: 1.3em;
+}
+div.distinguishingFeatures ul li {
+}
+
+#productDetailsSelectableFeaturesContainer {
+	clear: left;
+}
+
+/****************************************************************
+* Product Recommend
+****************************************************************/
+
+#eCommerceRecommendProductContainer {
+	margin-top: 83px;
+}
+.eCommerceRecommendProduct {
+	clear: left;
+	float: left;
+	margin: 1em;
+	border: 1px solid lightgray;
+	padding-top: 6px;
+	line-height: 12px;
+	text-align: center;
+	width: 160px;
+}
+.eCommerceRecommendProduct.first {
+	margin-top: 0;
+}
+#eCommerceRecommendProductContainer h2 {
+	margin-bottom: 10px;
+	font-size: 1.3em;
+}
+.eCommerceRecommendProductLink {
+	font-size: 1.5em;
+}
+.eCommerceRecommendProductLink:hover {
+	text-decoration: none;
+}
+/****************************************************************
+* PDP Product Detail : Manufacturer
+****************************************************************/
+
+#eCommerceProductManufacturerContainer {
+}
+#productDetailManufacturer {
+    font-size: 1.2em;
+    font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+	color: #666;
+	font-weight: normal;
+	margin-left: 8px;
+		
+}
+#productDetailManufacturer h2 {
+	font-size: 1.5em;
+	letter-spacing: 0.3em;
+	font-weight: normal;
+}
+.eCommerceManufacturer {
+}
+
+/****************************************************************
+* Manufacturer
+****************************************************************/
+#eCommerceManufacturerContainer {
+}
+
+#eCommerceManufacturerDetail {
+    font-size: 1.5em;
+    font-family: Arial, Helvetica, sans-serif;
+	color: #666;
+}
+
+#eCommerceManufacturerDetail img {
+    float: left;
+	padding-right: 12px;
+}
+
+#eCommerceManufacturerDetail p {
+    width: 600px;
+    margin: 0 0 0 0;
+}
+
+#eCommerceManufacturerDetail .profileName{
+    font-weight: bold;
+    margin: 0 250px 1em 0;
+}
+
+#eCommerceManufacturerProductList {
+    clear: left;
+    float: left;
+    margin: 20px 50px 0;
+}
+
+#eCommerceManufacturerProductList h2{
+	clear: left;
+}
+
+#eCommerceManufacturerProductList h2 {
+    margin: 10px 267px;
+}
+.profileImage {
+}
+.profileName {
+	font-size: 1em;
+	font-weight: normal;
+	padding-bottom: 1em;
+}
+.profileDescription {
+	font-size: 12px;
+	font-weight: normal;
+}
+
+.manufacturerImage {
+	padding: 0px 6px 6px 0px;
+	float:left; 
+}
+/****************************************************************
+* Social media Share Links
+****************************************************************/
+#eCommerceSocialMediaShareLinksContainer {
+	float: right;
+	margin: 1em 8px 0 0;
+}
+#socialMediaShareLinks {
+	border: 1px solid lightgray;
+	width: 160px;
+}
+#socialMediaShareLinks h3, #socialMediaButtonBar, #socialMediaEmailToAFriend {
+	text-align: center;
+}
+#socialMediaShareLinks h3 {
+	font-size: 1.5em;
+}
+#socialMediaShareLinks a {
+	font-size: 1.5em;
+}
+#socialMediaShareLinks a:hover {
+	text-decoration: none;
+}
+#socialMediaShareLinks .socialMediaIcon {
+	width: 15px;
+	height: 15px;
+}
+/* eCommerce Cart CSS */
+/****************************************************************
+* Page Specific : Shopping Cart
+****************************************************************/
+#shoppingCartEspot {
+}
+
+#eCommerceEnterPromoCode {
+        clear: left;
+	margin: 1em 0 1em 0;
+	font-size: 1.4em;
+}
+#checkoutOrderDetailAndPromoCodeSec #eCommerceEnterPromoCode {
+    //margin: 20px 0 20px 20px;
+    display: inline-block;
+}
+
+#eCommerceEnterPromoCode .standardBtn {
+	font-size: .8em;
+}
+#eCommerceEnterPromoCode input[type="text"] {
+	width: 100px;
+}
+.ecommercePromocodeEntry {
+
+}
+.ecommercePromocodeEntry div.ecommercePromoCodeCaption{
+    float:left;
+    width:300px;
+}
+.ecommercePromocodeEntry div.ecommercePromoCodeEntryInput{
+    float:left;
+}
+.ecommercePromocodeEntry div.ecommercePromoCodeEntryButton{
+    float:left;
+    margin-left:25px;
+}
+.ecommercePromocode{
+    font-size: 1.5em;
+}
+.ecommercePromocodeClear{
+    clear: both;
+}
+.ecommercePromocode div.ecommercePromocodeDetail{
+    float:left;
+    width:300px;
+    margin-top: 10px;
+}
+.ecommercePromocode div.ecommercePromocodeName{
+    float:left; 
+    margin-right:25px; 
+    width:50px;
+}
+.ecommercePromocode div.ecommercePromocodeDesc{
+    float:left;
+}
+.ecommercePromocode div.ecommercePromocodeStatus{
+    float:left;
+    margin-top: 10px;
+}
+.ecommercePromocode div.ecommercePromocodeAction{
+    float:left;
+    margin-left:25px;
+    margin-top: 10px;
+}
+
+/****************************************************************
+* Redefines Button inside show cart list
+****************************************************************/
+.cart_contents .standardBtn.action {
+	color: black;
+	font-size: .8em;
+	background:none;
+	background-color:#ccc;
+	font-weight: normal;
+}
+
+#eCommerceCartFootprintContainer {
+	display:inline-block; /* Set so "Page Titles" are on a new line*/
+	width: 880px;
+	font-size: 1.5em;
+	margin: 1em 0;
+}
+#eCommerceCartFootprintContainer li {
+	float: left;
+	background: url("/osafe_theme/images/user_content/images/arrow_right_checkout.gif") no-repeat scroll 1px 5px transparent;
+	padding: 0 12px 0 20px;
+}
+#eCommerceCartFootprintContainer li.first.selected {
+	background: none repeat scroll 0 0 transparent;
+	padding: 0 12px 0 0;
+}
+#eCommerceCartFootprintContainer li.first.inactive {
+	background: none repeat scroll 0 0 transparent;
+	padding: 0 0 0 0;
+}
+#eCommerceCartFootprintContainer li.selected {
+	font-weight: bold;
+}
+#eCommerceCartFootprintContainer li.inactive {
+/* Place Holder */
+}
+#eCommerceCartFootprintContainer li.inactive.next {
+	color: rgb(102, 102, 102);
+}
+#eCommerceCartFootprintContainer li.last.selected {
+/* Place Holder */
+}
+#eCommerceCartFootprintContainer li.last.inactive {
+/* Place Holder */
+}
+#eCommerceCartButtons, #eCommerceAddressBookButtons {
+	margin-top: 4em;
+	margin-bottom: 8em;
+	padding: 1px;
+	float: left;
+	width: 100%;
+}
+#eCommerceOrderSummaryContainer #eCommerceCartButtons {
+	clear: both;
+}
+#eCommerceAddressBookButtons {
+	clear: left;
+}
+#eCommerceCartButtons .negative, #eCommerceAddressBookButtons .negative {
+	float: left;
+	margin: 0 0 0 0;
+}
+#eCommerceCartButtons .positive {
+	float: right;
+}
+#cart_wrap {
+	position:relative;
+	margin: 1em 0;
+	clear:both;
+	zoom:1;
+}
+#cart_display {
+	width: 880px;
+	font-size: 1.5em;
+}
+#cart_display caption {
+	display: none;
+}
+tr.cart_headers {
+	position:relative;
+	background-color: #ccc;
+	font-size: .9em;
+	font-weight: bold;
+}
+/* Cart Header : Text Color */
+#cart_display tr.cart_headers th {
+	margin: 0;
+	padding: 0 0;
+	font-size: 1em; /* hould be same size as display box h2 */
+	color:#666;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	text-align: left;
+}
+/* Adds border to left side of table */
+#cart_display tr.cart_headers th.firstCol, #cart_display tr.cart_contents td.firstCol {
+	border-left: 1px solid #ccc;
+}
+/* Adds border to right side of table */
+#cart_display tr.cart_headers th.lastCol, #cart_display tr.cart_contents td.lastCol {
+	border-right: 1px solid #ccc;
+}
+/* Adds bottom border to last row in table */
+#cart_display tr.cart_contents td.lastRow {
+	border-bottom: 1px solid #ccc;
+	padding-bottom: 1em;
+}
+#cart_display tr.cart_contents td {
+	vertical-align: middle;
+	line-height: 1.5em;
+	padding-top: 1em;
+	text-align: left;
+}
+#cart_display tr.cart_headers th.image, #cart_display tr.cart_contents td.image {
+	width: 130px;
+	padding: 0 0 0 1em;
+}
+#cart_display tr.cart_headers th.product {
+	text-align: left;
+	padding: 0px 6px;
+}
+/* table description styles */
+
+#cart_display tr.cart_contents td.description dl dt {
+	display: none;
+}
+#cart_display tr.cart_contents td.description dl dd {
+	margin: 0 0 0 0;
+	padding: 0 10px;
+	color: #666;
+}
+#cart_display tr.cart_contents td.description dl dd.discount {
+	margin-top: 15px;
+}
+td.quantity input[type="text"] {
+	width: 40px;
+}
+/* table options styles */
+
+#cart_display tr.cart_contents td.options dl dt {
+	display: none;
+}
+#cart_display tr.cart_contents td.options dl dd {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+}
+#cart_display tr.cart_contents td.options dl dd.attribute span.label {
+	margin-right: 10px;
+}
+#cart_display tr.cart_contents td.description dl dd.discount {
+	margin-top: 15px;
+}
+/* table quantity styles */
+
+/* Cart Action Link */
+#cart_display tr.cart_contents td.quantity span.action {
+	margin: 0 0 0 10px;
+	font-weight: bold;
+}
+/* table price styles */
+
+.basket #cart_display tr.cart_headers th.price {
+	text-align: right;
+	padding-right: 0px;
+}
+* html .basket #cart_display tr.cart_headers th.price {
+	padding-right: 7px; /* IE6 */
+}
+html>body .quick_order #cart_display tr.cart_headers th.price {
+ *padding-right: 0 !important; /* IE7 */
+}
+/* table actions styles */
+
+#cart_display tr.cart_contents td.actions ul {
+	float: right;
+	text-align: left;
+	margin-right: 15px;
+ *margin-right: 8px;
+}
+.cart_contents dl dt {
+	display: none;
+}
+/*  Start Cart summary styles */
+
+#cart_information {
+	width: 100%;
+}
+#postage_packaging {
+	float: left;
+	display: inline;
+	margin-left:5px;
+}
+#cart_information #cart_summary {
+	float: right;
+	display: inline;
+	margin-right: 15px;
+}
+#quick_order_actions {
+	float: right;
+	display: inline;
+}
+#cart_display .summary {
+	float: right;
+}
+#cart_wrap #cart_display .summary {
+	background: #ccc;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+	width: 265px;
+	padding-right: 2px;
+}
+#cart_wrap #summaryCell {
+	padding-right: 0;
+	width: 400px;
+}
+#cart_display .summary span.amount {
+	float: right;
+	display: inline;
+}
+#cart_display .summary .subtotal span.vat {
+	margin-left: 5px;
+	display: inline;
+	font-weight:normal;
+}
+#cart_display .summary .caption {
+	text-align: right;
+}
+#cart_display .summary .value {
+	width: 110px;
+}
+#cart_display .summary .shippingMethod {
+	text-align: right;
+}
+#cart_actions ul.buttons {
+	float: right;
+}
+#cart_information .summary li ul.buttons li.action {
+	line-height: 3em;
+	clear: right;
+	float: right;
+}
+#cart_information .summary li {
+	list-style-type: none;
+	line-height: 1.5em;
+}
+div.action {
+	height:2.5em;
+}
+.quick_order #cart_actions div.action {
+	clear: right;
+	float: right;
+	margin-right: 15px;
+}
+/* Cart Summary : Label */
+#cart_display .summary label {
+	display: inline;
+	font-weight:bold;
+	color: #666;
+}
+/* Cart Summary : Sub Total */
+#cart_display .summary .discount_subtotal span.amount {
+	display: inline;
+	font-size: 1em;
+	color: #000000;
+	font-weight:normal;
+}
+/* Cart Summary : Total */
+#cart_display .summary .subtotal span.amount {
+	display: inline;
+	color: #000;
+	font-weight: bold;
+}
+/*  End cart summary styles */
+
+/* Cart totals styles */
+
+
+#cart_display tr.cart_totals td {
+	vertical-align: middle;
+}
+
+#cart_display .summary .footContainer {
+  margin-left: 3px;
+}
+
+#cart_display .summary .footContainer .labelText {
+  clear: left;
+  float: left;
+  font-size: .8em;
+}
+
+#cart_display .summary .footContainer .labelValue {
+  float: right;
+  font-size: .8em;
+  margin-left: 5px;
+}
+
+/* End Cart totals styles */
+/****************************************************************
+* Login
+****************************************************************/
+#eCommerceLoginContainer {
+	clear: both;
+}
+#returningCustomer {
+	width: 400px;
+	float: left;
+	margin-top: 25px;
+	margin-bottom: 240px;
+}
+#newCustomer {
+	width: 400px;
+	clear: right;
+	float: right;
+	margin-top: 25px;
+	padding-bottom: 71px;  /*Used to push box outline down */
+}
+#returningCustomer.withGuestCheckoutOption, #newCustomer.withGuestCheckoutOption, #guestCheckoutBox.withGuestCheckoutOption {
+    clear: none;
+    width: 284px;
+    float: left;
+    margin: 25px 0 240px 0;
+    min-height: 305px;
+    padding-bottom: 10px; 
+}
+
+#newCustomer.withGuestCheckoutOption {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#eCommerceLoginContainer .withGuestCheckoutOption label{
+    width: 100px;
+}
+#eCommerceLoginContainer .withGuestCheckoutOption input[type="text"], #eCommerceLoginContainer .withGuestCheckoutOption input[type="password"] {
+    width: 150px;
+}
+
+.withGuestCheckoutOption div.infoAndEntrysec {
+    height: 160px;
+}
+
+#createAccountEntry .entry .radioOptionText {
+    font-size: 1.5em;
+    margin: 0 0 0 10px;
+}
+
+
+/****************************************************************
+* Change Password
+****************************************************************/
+
+#changePassword {
+	width: 400px;
+	margin-top: 25px;
+	margin-bottom: 240px;
+}
+/****************************************************************
+* Checkout
+****************************************************************/
+#guestCheckout #emailPasswordEntry {
+    float: left;
+    margin-top: 10px;
+    padding-bottom: 20px;
+    width: 385px;
+}
+
+#guestCheckout #emailPasswordEntry input[type="text"], #guestCheckout #emailPasswordEntry input[type="password"] { 
+    width: 190px;;
+}
+
+#guestCheckout .shippingOptions {
+    width: 100%;
+}
+#guestCheckout #paymentMethods {
+    clear:none;
+}
+
+#guestCheckout #createAccountEntry {
+    float: left;
+    height: auto;
+    min-height: 300px;
+    margin-top: 10px;
+    padding-bottom: 20px;
+    width: 430px;
+}
+
+#guestCheckout #createAccountEntry input[type="text"], #guestCheckout #createAccountEntry input[type="password"] { 
+    width: 190px;;
+}
+
+#guestCheckout .shippingOptions {
+    width: 100%;
+}
+#guestCheckout #paymentMethods {
+    clear:none;
+    height: auto;
+    min-height: 300px;
+    width: 430px;
+}
+
+form div.entryButtons.submitOrder {
+    clear: both;
+    float: right;
+    margin: 1em 0;
+}
+
+
+
+/****************************************************************
+* Shipping Address
+****************************************************************/
+.shippingAddress, .shippingOptions {
+	margin-top: 10px;
+	margin-bottom: 20px;
+}
+.shippingAddress {
+	width: 880px;
+}
+.shippingOptions {
+	width: 500px;
+}
+.shippingAddress p {
+	margin: 0 0 0 0;
+}
+.addressContainer {
+	margin-top: 25px;
+}
+.addressTitle {
+	clear: none;
+	float: left;
+	width: 246px;
+	margin: 0 0 0 10px;
+}
+.addressTitle.first {
+	margin: 0 0 0 0;
+}
+.address {
+	width: 246px;
+	margin: 0px 0 2px 0;
+}
+.address p {
+	margin: 0 0 0 10px;
+}
+.addressContainer .buttons {
+	clear: left;
+	margin: 0 0 0 15px;
+	padding: 30px 0 10px 0;
+}
+.addressContainer .newAddressButtons {
+	clear: left;
+	margin-left: 0;
+	padding-top: 20px;
+	padding-bottom: 10px;
+}
+.addressContainer .newAddressButtons .standardBtn {
+	margin-left: 0;
+}
+/****************************************************************
+* Edit Shipping Address
+****************************************************************/
+.editShippingAddress {
+	width: 878px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+}
+.editShippingAddress .instructions {
+	padding-bottom: 1em;
+	padding: 0 0 0 1em;
+}
+/****************************************************************
+* Shipping Methods
+****************************************************************/
+#shippingMethodEspot {
+}
+#shippingMethodEspot ul {
+	list-style: circle;
+	margin: 0 0 0 48px;
+}
+.note {
+}
+#shippingMethodEspot .instructions {
+	margin-bottom: 1em;
+}
+#deliveryInstructions {
+	margin: 0 0 0 12px;
+}
+#nextDayInstructions {
+	margin: 0 0 0 12px;
+	padding: 1em 0 0 0;
+}
+.shippingMethodsContainer {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+/****************************************************************
+* Order Summary
+****************************************************************/
+
+#acceptMsg {
+	float: left;
+	width: 209px;
+}
+#ccImageBlock {
+	float: left;
+}
+.paymentMethodImg {
+	height: 70px;
+	width: 100px;
+}
+#orderSummaryEspot {
+	margin-bottom: 24px;
+	clear: left;
+}
+#orderSummaryEspot .instructions p:first-child {
+	padding-bottom: 1em;
+	margin: 0 0 0 0;
+}
+#billingAddress {
+	width: 385px;
+	float:left;
+	margin-top: 10px;
+	margin-bottom: 0px;
+	/* When the error section shows this makes sure we still align to the left*/
+    clear: left;
+}
+#billingAddress .address {
+}
+#shippingAddressDisplay {
+}
+#eCommerceOrderSummaryContainer #shippingAddressDisplay {
+	width: 385px;
+	padding-top: 15px;
+	float:left;
+	clear: left; /* add so it sides to the left */
+}
+#eCommerceOrderSummaryContainer #shippingAddressDisplay .address {
+}
+/*******************************
+Payment methods Display
+******************************* */
+#paymentMethods .paymentMethodImg {
+	height: 45px;
+	width: 131px;
+}
+#paymentMethods {
+	width: 385px;
+	float:right;
+	margin-top: 10px;
+	/*    margin-bottom: 50px;*/
+    padding-bottom: 20px;
+}
+#cardType {
+	width: 10em;
+}
+#expMonth {
+	width: 7em;
+}
+#expYear {
+	width: 7em;
+}
+#eCommerceOrderSummaryContainer {
+	margin-bottom: 400px;
+}
+/****************************************************************
+* Order Items
+****************************************************************/
+
+.orderDetails {
+	float: left;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+.numberCol {
+	text-align: right;
+}
+#orderItemsWrap {
+	margin-top: 10px;
+}
+.orderDetails .orderItemFooter th, .orderDetails .orderItemFooter td {
+	text-align: right;
+}
+#orderItemsWrap th.quantity, #orderItemsWrap th.availability, #orderItemsWrap td.availability {
+	text-align: center;
+}
+#orderItemsWrap td.quantity {
+	font-weight: bold;
+	text-align: center;
+}
+td.availability, td.total {
+	color: #900;
+	font-weight: bold;
+	font-size: 1em;
+}
+#orderItemsWrap tr.cart_headers th.lastCol, #orderItemsWrap tr.cart_contents td.lastCol {
+	padding-right: 10px;
+}
+#orderItemsWrap #cart_display .summary {
+	background: #ccc;
+	border-left: 1px solid #666;
+	border-right: 1px solid #666;
+	border-bottom: 1px solid #666;
+	padding-right: 5px;
+	width: 450px;
+}
+#orderItemsWrap #summaryCell {
+	padding-right: 0;
+}
+/****************************************************************
+* Order Confirmation
+****************************************************************/
+
+#shippingAddressDisplay {
+	width: 385px;
+	height:160px;
+	float:left;
+}
+#shippingAddressDisplay .address {
+}
+#paymentInformation {
+	width: 385px;
+	float:right;
+	clear: right;
+	height: 160px;
+}
+.payPalInfo .payPalImg {
+	width: 131px;
+	height: 45px;
+}
+.creditCardInfo {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	height: 5em;
+}
+.creditCardInfo p {
+	margin: 0 0 0 10px;
+}
+/****************************************************************
+* Order History
+****************************************************************/
+
+#orderSalesHistory {
+	margin-bottom: 2em;
+}
+#orderSalesHistory .orderNumber {
+	text-align: left;
+}
+#orderSalesHistory .orderDate {
+	text-align: center;
+	color: #666;
+}
+#orderSalesHistory .orderStatus {
+	text-align: center;
+	color: #666;
+}
+#orderSalesHistory .totalPrice {
+	text-align: right;
+}
+
+/****************************************************************
+* Order Status (Order History Detail)
+****************************************************************/
+#eCommerceOrderStatusContainer .orderDetails {
+	margin-bottom: 2em;
+}
+/* "Thank You" message shown whe coming from "Order Summary" */
+#orderSucessThankYou {
+}
+#orderStatusGrid {
+	width: 880px; /* width matches order items width*/
+	margin-bottom: 2em;
+	font-size: 1.5em;
+}
+#orderStatusGrid .caption {
+	text-align: left;
+}
+#orderNumberCap {
+	width: 150px;
+}
+#orderNumber {
+	padding: 0 0 0 1em;
+	width: 125px;
+}
+#customerCap {
+	width: 125px;
+}
+#customer {
+	padding: 0 0 0 1em;
+}
+#orderStatusCap {
+}
+#orderStatus {
+	padding: 0 0 0 1em;
+}
+#orderDateCap {
+}
+#orderDate {
+	padding: 0 0 0 1em;
+}
+/****************************************************************
+* Static Content
+****************************************************************/
+
+.clearfix {
+	clear: both;
+}
+.staticContent {
+	font-size: 1.5em;
+}
+.staticContent p {
+	margin: .5em 1em;
+}
+/****************************************************************
+* Site Map
+****************************************************************/
+.siteMap {
+	margin-bottom: 50px;
+}
+.siteMap li.topLevel {
+/* This should be used to push the whole list to the left on the page */
+}
+.siteMap li.subLevel {
+	margin: 0 0 0 25px; /* indents sub items */
+}
+/******************************
+* Product review PDP
+******************************* */
+#productReviewDisplay {
+	width: 698px;
+	float: left;
+	margin: 1em 0 !important;
+}
+#reviewSortOptions {
+	float: right;
+	margin: 5px 5px 5px 0;
+}
+#reviewSortOptions label {
+	font-size: 1.3em;
+}
+.reviewRow {
+	clear: left;
+	padding: .5em 0;
+	float: left;
+	width: 100%;
+}
+.reviewRow .reviewRatingSection {
+	float: left;
+}
+.reviewRatingSection .ratingSummary {
+	margin: 0 0 0 20px;
+	font-size: 1.3em;
+}
+.reviewRow .reviewDataSection {
+	float: left;
+	margin: 0 0 0 10px;
+}
+.reviewDataSection .ratingNickname, .ratingTitle {
+	font-size: 1.5em;
+}
+.reviewRow .reviewTextSection {
+	clear: left;
+	float: left;
+	margin: 0 0 0 95px;
+}
+.reviewTextSection .reviewText {
+	color: #800000;
+	font-style: italic;
+	font-size: 1.5em;
+}
+.reviewRow .reviewPostDateSection {
+	float: right;
+	margin: 0 5px 0 0;
+}
+.reviewPostDateSection .reviewDate {
+	font-size: 1.5em;
+}
+/****************************************
+* Product Review Paging
+****************************************/
+
+.pagingContainer {
+	clear: left;
+}
+.paginationContainer {
+	text-align: center;
+	margin-top: .5em;
+	vertical-align: bottom;
+	width: 100%;
+	font-size: 1.5em;
+}
+/**********************
+* Customer Ratings PDP
+************************/
+#productReviewCustomerRating {
+	clear: left;
+	float:left;
+	margin: 10px 0;
+}
+.reviewRatedLabel {
+	font-size: 1.6em;
+	float: left;
+	color:#666666;
+}
+.customerRating {
+	float: right;
+	margin-right:50px;
+}
+.customerRatingLinks {
+	clear: left;
+	float:right;
+	width:200px;
+	font-size:11px;
+	margin-left:139px;
+	
+}
+.customerRatingLinks a:hover{
+	color:#9b0000;
+	
+}
+.ratingSummaryFinal {
+	font-size: 1.3em;
+	float: left;
+	margin:0 0 0 15px;
+}
+#productRatings {
+	clear: left;
+	width: 350px;
+	line-height: 3em;
+}
+/****************************************
+* Review Rating Bar / Review Facet Rating Bar
+****************************************/
+table#overallRatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+table#overallHover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+table#overallFilled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj0RatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+table#rateObj0Hover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+table#rateObj0Filled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+table#rateObj1RatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+table#rateObj1Hover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+table#rateObj1Filled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+table#rateObj2RatingBar {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+table#rateObj2Hover {
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+table#rateObj2Filled {
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+
+.rating_bar {
+	width: 85px;
+	background: url("/osafe_theme/images/user_content/images/starOff.gif") 0 0 repeat-x;
+}
+.rating_bar div {
+	height: 18px;
+	background: url("/osafe_theme/images/user_content/images/starOn.gif") 0 0 repeat-x;
+}
+.ratingFacetBar {
+	width: 65px;
+}
+/**********************
+* Product Review Submit Styles
+************************/
+/****************************
+* As part of the client configuration, turn client specifications on/off
+* by removing the display:none
+*********************************/
+#qualityRatingEntry {
+	display: none;
+}
+#effectivenessRatingEntry {
+	display: none;
+}
+#satisfactionRatingEntry {
+	display: none;
+}
+#productRatingTellOtherEntry {
+	display: none;
+}
+/**************************** */
+
+
+/****************************
+* Display the rating bars by their px width
+* The below styles are used to display the selected stars
+* when returning to the review submit page after a submit
+*********************************/
+
+.rating_bar_submit_ {
+	height: 18px;
+	width: 0px;
+}
+.rating_bar_submit_1 {
+	height: 18px;
+	width: 17px;
+}
+.rating_bar_submit_2 {
+	width: 34px;
+	height: 18px;
+}
+.rating_bar_submit_3 {
+	width: 51px;
+	height: 18px;
+}
+.rating_bar_submit_4 {
+	width: 68px;
+	height: 18px;
+}
+.rating_bar_submit_5 {
+	width: 85px;
+	height: 18px;
+}
+#productReviewHeaderRow {
+	margin-bottom: 1em;
+	height: auto;
+	margin: 0;
+	overflow: hidden;
+	padding: 5px 0;
+	text-align: left;
+	width: 100%;
+}
+.productReviewHeader {
+	padding: 10px;
+}
+.productReviewHeader img {
+	float: left;
+	margin: 0 2em 1em 0;
+	padding: 0;
+}
+.productReviewHeader p {
+	clear: none;
+}
+.reviewCopy {
+	display: block;
+	font-weight: normal;
+	padding: 0;
+}
+.ratingWrapper {
+	padding: 1em 0 1em 10px;
+}
+.ratingDisplayValue {
+	font-size: 1.5em;
+	font-weight: bold;
+	padding: 0 0 0 15px;
+	width: 50px;
+}
+.ratingLegendValue {
+	font-size: 1.5em;
+	font-weight: normal;
+	padding: 0 0 0 15px;
+}
+.reviewTextField {
+	border: 1px solid #000000;
+	height: 22em;
+	margin: 0;
+	width: 400px;
+}
+#reviewTextHelper {
+	display: inline;
+	float: right;
+	font-size: 1.2em;
+	padding-right: 10px;
+	padding-top: 5px;
+	width: 258px;
+}
+.reviewTipsHeaderDiv {
+	-moz-border-bottom-colors: none;
+	-moz-border-image: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background-color: #FFFFFF;
+	border-color: #000000 #000000 -moz-use-text-color;
+	border-style: solid solid none;
+	border-width: 1px 1px medium;
+	height: 1.2em;
+	padding: 1px 10px;
+}
+.tipBoxHeader {
+	float: left;
+	font-weight: bold;
+}
+.tipBoxContentDiv {
+	-moz-border-bottom-colors: none;
+	-moz-border-image: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background: url("histogram_bck.gif") repeat-x scroll center bottom #FFFFFF;
+	border-color: -moz-use-text-color #000000 #000000;
+	border-right: 1px solid #000000;
+	border-style: none solid solid;
+	border-width: medium 1px 1px;
+	padding: 10px;
+}
+.tipBoxTips, .tipBoxTips * {
+	font-weight: normal;
+	list-style: disc outside none;
+	margin: 0 0 0 6px;
+}
+.tipBoxTips_sub {
+	list-style: disc outside none;
+	margin: 0 0 0 15px;
+}
+.productReviewBarLinks {
+	margin: 0 0 0 10px;
+}
+.previewBarLink {
+	padding: 0 0 0 5px;
+}
+.highlightGroup #viewCartSmallImage {
+}
+.productReviewHeader {
+	padding: 10px;
+}
+.productReviewHeader img {
+	float: left;
+	margin: 0 2em 1em 0;
+	padding: 0;
+}
+.productReviewHeader p {
+	clear: none;
+}
+.reviewCopy {
+	display: block;
+	font-weight: normal;
+	padding: 0;
+}
+.ratingWrapper {
+	padding: 1em 0 1em 10px;
+}
+.ratingDisplayValue {
+	font-size: 1.5em;
+	font-weight: bold;
+	padding: 0 0 0 15px;
+	width: 50px;
+}
+.ratingLegendValue {
+	font-size: 1.5em;
+	font-weight: normal;
+	padding: 0 0 0 15px;
+}
+.reviewTextField {
+	border: 1px solid #000000;
+	height: 22em;
+	margin: 0;
+	width: 400px;
+}
+#reviewTextHelper {
+	display: inline;
+	float: right;
+	font-size: 1.2em;
+	padding-right: 10px;
+	padding-top: 5px;
+	width: 258px;
+}
+.reviewTipsHeaderDiv {
+	-moz-border-bottom-colors: none;
+	-moz-border-image: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background-color: #FFFFFF;
+	border-color: #000000 #000000 -moz-use-text-color;
+	border-style: solid solid none;
+	border-width: 1px 1px medium;
+	height: 1.2em;
+	padding: 1px 10px;
+}
+.tipBoxHeader {
+	float: left;
+	font-weight: bold;
+}
+.tipBoxContentDiv {
+	-moz-border-bottom-colors: none;
+	-moz-border-image: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background: url("histogram_bck.gif") repeat-x scroll center bottom #FFFFFF;
+	border-color: -moz-use-text-color #000000 #000000;
+	border-right: 1px solid #000000;
+	border-style: none solid solid;
+	border-width: medium 1px 1px;
+	padding: 10px;
+}
+.tipBoxTips, .tipBoxTips * {
+	font-weight: normal;
+	list-style: disc outside none;
+	margin: 0 0 0 6px;
+}
+.tipBoxTips_sub {
+	list-style: disc outside none;
+	margin: 0 0 0 15px;
+}
+.productReviewBarLinks {
+	margin: 0 0 0 10px;
+}
+.previewBarLink {
+	padding: 0 0 0 5px;
+}
+.highlightGroup #viewCartSmallImage {
+}
+#salesDiscontinuationContentESpot {
+    color: #ff0000;
+    float:left;
+    font-size: 14px;
+}
+#introductionContentESpot {
+    color: #ff0000;
+    float:left;
+    font-size: 14px;
+}
+div.distinguishingFeatures ul li span{
+	margin-left: 10px;
+}
+
+div.distinguishingFeatures ul li label{
+    font-weight: normal;
+}
+
+#siteMailingList {
+    clear: left;
+    float: right;
+    margin: -65px 0 0 110px;
+    font-size: 1.3em;
+}
+
+/****************************************
+* Store Pickup
+****************************************/
+.storePickup div.entry span {
+    font-size: 15px;
+    margin: 0.5em 0 0 10px;
+    display: inline-block;
+}
+.storePickup div.entry {
+    display: inline-block;
+    width: 100%;
+}
+
+#storePickup_displayDialog {
+    background-color: #FFFFFF;
+    left: 15%;
+    margin: 0;
+    top: 5%;
+}
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer {
+    height: auto;
+    max-height: 550px;
+    overflow: auto;
+    margin: 10px;
+    width: 880px;
+}
+
+.deliveryOption {
+    text-align: right;
+}
+
+.deliveryOption span {
+    font-size: 1.4em;
+}
+

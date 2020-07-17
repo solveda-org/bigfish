@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<ProductAssoc productId="100006" productIdTo="100001" productAssocTypeId="PRODUCT_COMPLEMENT" fromDate="2012-03-23 12:17:20" thruDate="2012-03-23 12:17:20" sequenceNum="10" />
+<ProductAssoc productId="100007" productIdTo="100001" productAssocTypeId="PRODUCT_COMPLEMENT" fromDate="2012-03-23 12:17:20" thruDate="2012-03-23 12:17:20" sequenceNum="20" />
+<ProductAssoc productId="100008" productIdTo="100001" productAssocTypeId="PRODUCT_COMPLEMENT" fromDate="2012-03-23 12:17:20" thruDate="2012-03-23 12:17:20" sequenceNum="30" />
+<ProductAssoc productId="100009" productIdTo="100001" productAssocTypeId="PRODUCT_COMPLEMENT" fromDate="2012-03-23 12:17:20" thruDate="2012-03-23 12:17:20" sequenceNum="40" />
+<ProductAssoc productId="100016" productIdTo="100001" productAssocTypeId="PRODUCT_COMPLEMENT" fromDate="2012-03-23 12:17:20" thruDate="2012-03-23 12:17:20" sequenceNum="50" />
+</entity-engine-xml>

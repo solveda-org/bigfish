@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<Product productId="100001-1" productTypeId="FINISHED_GOOD" internalName="L2001_Beige-Tan X-Small" description="Beige-Tan X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100001" productIdTo="100001-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100001-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="220.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100001-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="220.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100001-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100001-2" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan Small" description="Beige-Tan Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100001" productIdTo="100001-2" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-2" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-2" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100001-3" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan Medium" description="Beige-Tan Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100001" productIdTo="100001-3" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-3" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-3" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100001-4" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan Large" description="Beige-Tan Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100001" productIdTo="100001-4" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-4" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-4" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100001-5" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan X-Large" description="Beige-Tan X-Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100001" productIdTo="100001-5" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-5" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001-5" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100001" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100006-1" productTypeId="FINISHED_GOOD" internalName="S2011_Beige-Tan Small" description="Beige-Tan Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100006" productIdTo="100006-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100006-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="235.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100006-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="235.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100006-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100006-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100006" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100006" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100007-1" productTypeId="FINISHED_GOOD" internalName="V2021_Beige-Tan Medium" description="Beige-Tan Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100007" productIdTo="100007-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100007-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="228.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100007-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="228.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100007-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100007-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100007" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100007" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100008-1" productTypeId="FINISHED_GOOD" internalName="L2031_Multi X-Large" description="Multi X-Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100008" productIdTo="100008-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100008-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="179.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100008-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="179.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100008-1" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100008-1" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100008" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100008" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100009-1" productTypeId="FINISHED_GOOD" internalName="S2041_Multi X-Small" description="Multi X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100009" productIdTo="100009-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100009-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="495.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100009-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="495.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100009-1" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100009-2" productTypeId="FINISHED_GOOD" internalName="_Multi Small" description="Multi Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100009" productIdTo="100009-2" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-2" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-2" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100009-3" productTypeId="FINISHED_GOOD" internalName="_Multi Medium" description="Multi Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100009" productIdTo="100009-3" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-3" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-3" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100009-4" productTypeId="FINISHED_GOOD" internalName="_Multi Large" description="Multi Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100009" productIdTo="100009-4" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-4" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-4" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100009-5" productTypeId="FINISHED_GOOD" internalName="_Multi X-Large" description="Multi X-Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100009" productIdTo="100009-5" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-5" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009-5" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100009" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100016-1" productTypeId="FINISHED_GOOD" internalName="V2051_Red X-Small" description="Red X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100016" productIdTo="100016-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100016-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="215.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100016-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="215.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100016-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100016-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100016" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100016" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100017-1" productTypeId="FINISHED_GOOD" internalName="L2061_Brown Medium" description="Brown Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100017" productIdTo="100017-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100017-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="3900.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100017-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="3900.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100017-1" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100017-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100017" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100017" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100018-1" productTypeId="FINISHED_GOOD" internalName="S2071_Pink X-Small" description="Pink X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100018" productIdTo="100018-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100018-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="33.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100018-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="33.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100018-1" productFeatureId="COLOR_PINK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100018-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100018" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100018" productFeatureId="COLOR_PINK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100019-1" productTypeId="FINISHED_GOOD" internalName="V2081_Black Large" description="Black Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100019" productIdTo="100019-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100019-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="250.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100019-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="250.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100019-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100019-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100019" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100019" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100020-1" productTypeId="FINISHED_GOOD" internalName="L2091_White Medium" description="White Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100020" productIdTo="100020-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100020-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="132.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100020-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="132.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100020-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100020-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100020" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100020" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100021-1" productTypeId="FINISHED_GOOD" internalName="S2101_White Small" description="White Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100021" productIdTo="100021-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100021-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1995.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100021-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1995.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100021-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100021-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100021" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100021" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100022-1" productTypeId="FINISHED_GOOD" internalName="V2111_Cream Off White Small" description="Cream Off White Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100022" productIdTo="100022-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100022-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="590.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100022-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="590.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100022-1" productFeatureId="COLOR_CREAMOFFWHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100022-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100022" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100022" productFeatureId="COLOR_CREAMOFFWHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100023-1" productTypeId="FINISHED_GOOD" internalName="L2121_Grey Small" description="Grey Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100023" productIdTo="100023-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100023-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="374.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100023-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="374.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100023-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100023-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100023" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100023" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100024-1" productTypeId="FINISHED_GOOD" internalName="S2131_Olive Large" description="Olive Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100024" productIdTo="100024-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100024-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="330.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100024-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="330.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100024-1" productFeatureId="COLOR_OLIVE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100024-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100024" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100024" productFeatureId="COLOR_OLIVE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100025-1" productTypeId="FINISHED_GOOD" internalName="V2141_Grey Large" description="Grey Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100025" productIdTo="100025-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100025-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="253.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100025-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="253.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100025-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100025-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100025" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100025" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100026-1" productTypeId="FINISHED_GOOD" internalName="S2151_Grey Medium" description="Grey Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100026" productIdTo="100026-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100026-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="286.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100026-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="286.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100026-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100026-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100026" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100026" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100027-1" productTypeId="FINISHED_GOOD" internalName="S2161_White X-Small" description="White X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100027" productIdTo="100027-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100027-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="225.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100027-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="225.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100027-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100027-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100027" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100027" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100028-1" productTypeId="FINISHED_GOOD" internalName="V2171_Red X-Small" description="Red X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100028" productIdTo="100028-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100028-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="970.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100028-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="970.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100028-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100028-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100028" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100028" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100029-1" productTypeId="FINISHED_GOOD" internalName="L2181_Orange Medium" description="Orange Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100029" productIdTo="100029-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100029-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="206.50" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100029-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="206.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100029-1" productFeatureId="COLOR_ORANGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100029-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100029" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100029" productFeatureId="COLOR_ORANGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100030-1" productTypeId="FINISHED_GOOD" internalName="S2191_Grey Small" description="Grey Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100030" productIdTo="100030-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100030-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="185.50" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100030-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="185.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100030-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100030-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100030" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100030" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100031-1" productTypeId="FINISHED_GOOD" internalName="V2201_Red Large" description="Red Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100031" productIdTo="100031-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100031-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="295.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100031-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="295.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100031-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100031-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100031" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100031" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-1" productTypeId="FINISHED_GOOD" internalName="L2211_Grey X-Small" description="Grey X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100032-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="185.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100032-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="185.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100032-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-2" productTypeId="FINISHED_GOOD" internalName="_Grey Small" description="Grey Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-2" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-2" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-2" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-3" productTypeId="FINISHED_GOOD" internalName="_Grey Medium" description="Grey Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-3" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-3" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-3" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-4" productTypeId="FINISHED_GOOD" internalName="_Grey Large" description="Grey Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-4" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-4" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-4" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-5" productTypeId="FINISHED_GOOD" internalName="_White X-Small" description="White X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-5" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-5" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-5" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-6" productTypeId="FINISHED_GOOD" internalName="_White Small" description="White Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-6" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-6" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-6" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-7" productTypeId="FINISHED_GOOD" internalName="_White Medium" description="White Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-7" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-7" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-7" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100032-8" productTypeId="FINISHED_GOOD" internalName="_White Large" description="White Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100032" productIdTo="100032-8" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-8" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032-8" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100032" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100042-1" productTypeId="FINISHED_GOOD" internalName="S2221_Black Medium" description="Black Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100042" productIdTo="100042-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100042-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="396.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100042-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="396.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100042-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100042-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100042" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100042" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100043-1" productTypeId="FINISHED_GOOD" internalName="V2231_Blue Medium" description="Blue Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100043" productIdTo="100043-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100043-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="110.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100043-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="110.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100043-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100043-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100043" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100043" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100044-1" productTypeId="FINISHED_GOOD" internalName="L2241_Black Medium" description="Black Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100044" productIdTo="100044-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100044-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="895.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100044-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="895.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100044-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100044-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100044" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100044" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100045-1" productTypeId="FINISHED_GOOD" internalName="L2251_Navy Medium" description="Navy Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100045" productIdTo="100045-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100045-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="168.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100045-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="168.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100045-1" productFeatureId="COLOR_NAVY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100045-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100045" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100045" productFeatureId="COLOR_NAVY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100046-1" productTypeId="FINISHED_GOOD" internalName="V2261_Blue Medium" description="Blue Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100046" productIdTo="100046-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100046-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="225.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100046-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="225.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100046-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100046-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100046" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100046" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100047-1" productTypeId="FINISHED_GOOD" internalName="L2271_Blue Medium" description="Blue Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100047" productIdTo="100047-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100047-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="169.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100047-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="169.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100047-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100047-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100047" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100047" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100048-1" productTypeId="FINISHED_GOOD" internalName="S2281_Navy Medium" description="Navy Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100048" productIdTo="100048-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100048-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="191.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100048-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="191.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100048-1" productFeatureId="COLOR_NAVY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100048-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100048" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100048" productFeatureId="COLOR_NAVY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100049-1" productTypeId="FINISHED_GOOD" internalName="V2291_Blue Medium" description="Blue Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100049" productIdTo="100049-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100049-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="198.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100049-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="198.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100049-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100049-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100049" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100049" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100050-1" productTypeId="FINISHED_GOOD" internalName="L2301_Red Medium" description="Red Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100050" productIdTo="100050-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100050-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="185.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100050-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="185.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100050-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100050-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100050" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100050" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100051-1" productTypeId="FINISHED_GOOD" internalName="S2311_White Medium" description="White Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100051" productIdTo="100051-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100051-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="169.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100051-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="169.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100051-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100051-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100051" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100051" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100052-1" productTypeId="FINISHED_GOOD" internalName="V2321_Blue Medium" description="Blue Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100052" productIdTo="100052-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100052-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="110.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100052-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="110.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100052-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100052-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100052" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100052" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100053-1" productTypeId="FINISHED_GOOD" internalName="L2331_Blue Medium" description="Blue Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100053" productIdTo="100053-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100053-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="225.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100053-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="225.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100053-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100053-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100053" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100053" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100054-1" productTypeId="FINISHED_GOOD" internalName="L2341_Black Small" description="Black Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100054" productIdTo="100054-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100054-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1250.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100054-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1250.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100054-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100054-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100054" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100054" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100055-1" productTypeId="FINISHED_GOOD" internalName="L2351_Multi Small" description="Multi Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100055" productIdTo="100055-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100055-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="325.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100055-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="325.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100055-1" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100055-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100055" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100055" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100056-1" productTypeId="FINISHED_GOOD" internalName="L2361_Grey X-Small" description="Grey X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100056" productIdTo="100056-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100056-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1295.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100056-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1295.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100056-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100056-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100056" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100056" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100057-1" productTypeId="FINISHED_GOOD" internalName="S2371_Black Small" description="Black Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100057" productIdTo="100057-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100057-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="495.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100057-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="495.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100057-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100057-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100057" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100057" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100058-1" productTypeId="FINISHED_GOOD" internalName="V2381_Yellow Large" description="Yellow Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100058" productIdTo="100058-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100058-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="340.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100058-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="340.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100058-1" productFeatureId="COLOR_YELLOW" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100058-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100058" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100058" productFeatureId="COLOR_YELLOW" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100059-1" productTypeId="FINISHED_GOOD" internalName="L2391_Multi Small" description="Multi Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100059" productIdTo="100059-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100059-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="620.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100059-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="620.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100059-1" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100059-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100059" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100059" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100059-1" productTypeId="FINISHED_GOOD" internalName="L2391_Striped Small" description="Striped Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100059" productIdTo="100059-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100059-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="620.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100059-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="620.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100059-1" productFeatureId="COLOR_STRIPED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100059-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100059" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100059" productFeatureId="COLOR_STRIPED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100060-1" productTypeId="FINISHED_GOOD" internalName="V2401_Blue Medium" description="Blue Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100060" productIdTo="100060-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100060-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="665.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100060-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="665.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100060-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100060-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100060" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100060" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100061-1" productTypeId="FINISHED_GOOD" internalName="V2411_Beige-Tan Small" description="Beige-Tan Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100061" productIdTo="100061-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100061-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="335.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100061-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="335.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100061-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100061-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100061" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100061" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100062-1" productTypeId="FINISHED_GOOD" internalName="L2421_Beige-Tan Small" description="Beige-Tan Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100062" productIdTo="100062-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100062-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1495.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100062-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1495.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100062-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100062-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100062" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100062" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100063-1" productTypeId="FINISHED_GOOD" internalName="S2431_Brown Small" description="Brown Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100063" productIdTo="100063-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100063-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="775.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100063-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="775.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100063-1" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100063-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100063" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100063" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100064-1" productTypeId="FINISHED_GOOD" internalName="V2441_Brown Medium" description="Brown Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100064" productIdTo="100064-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100064-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="2065.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100064-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="2065.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100064-1" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100064-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100064" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100064" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-1" productTypeId="FINISHED_GOOD" internalName="L2451_Pink Small" description="Pink Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100065-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="280.50" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100065-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="280.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100065-1" productFeatureId="COLOR_PINK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_PINK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-2" productTypeId="FINISHED_GOOD" internalName="_Pink Medium" description="Pink Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-2" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-2" productFeatureId="COLOR_PINK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-2" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_PINK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-3" productTypeId="FINISHED_GOOD" internalName="_Pink Large" description="Pink Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-3" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-3" productFeatureId="COLOR_PINK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-3" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_PINK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-4" productTypeId="FINISHED_GOOD" internalName="_Pink X-Large" description="Pink X-Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-4" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-4" productFeatureId="COLOR_PINK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-4" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_PINK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-5" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan Small" description="Beige-Tan Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-5" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-5" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-5" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-6" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan Medium" description="Beige-Tan Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-6" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-6" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-6" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-7" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan Large" description="Beige-Tan Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-7" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-7" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-7" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100065-8" productTypeId="FINISHED_GOOD" internalName="_Beige-Tan X-Large" description="Beige-Tan X-Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100065" productIdTo="100065-8" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-8" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065-8" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="SIZE_X-LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100065" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100073-1" productTypeId="FINISHED_GOOD" internalName="S2461_Beige-Tan Medium" description="Beige-Tan Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100073" productIdTo="100073-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100073-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1795.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100073-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1795.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100073-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100073-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100073" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100073" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100074-1" productTypeId="FINISHED_GOOD" internalName="V2471_Red Medium" description="Red Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100074" productIdTo="100074-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100074-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="94.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100074-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="56.40" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100074-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100074-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100074" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100074" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100075-1" productTypeId="FINISHED_GOOD" internalName="L2481_Beige-Tan Medium" description="Beige-Tan Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100075" productIdTo="100075-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100075-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="240.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100075-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="144.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100075-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100075-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100075" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100075" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100076-1" productTypeId="FINISHED_GOOD" internalName="S2491_White Small" description="White Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100076" productIdTo="100076-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100076-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="255.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100076-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="153.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100076-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100076-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100076" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100076" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100077-1" productTypeId="FINISHED_GOOD" internalName="V2501_Yellow Large" description="Yellow Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100077" productIdTo="100077-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100077-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="68.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100077-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="40.80" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100077-1" productFeatureId="COLOR_YELLOW" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100077-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100077" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100077" productFeatureId="COLOR_YELLOW" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100078-1" productTypeId="FINISHED_GOOD" internalName="L2511_Grey Small" description="Grey Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100078" productIdTo="100078-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100078-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="132.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100078-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="79.20" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100078-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100078-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100078" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100078" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100079-1" productTypeId="FINISHED_GOOD" internalName="S2521_Pink Medium" description="Pink Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100079" productIdTo="100079-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100079-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="50.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100079-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="30.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100079-1" productFeatureId="COLOR_PINK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100079-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100079" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100079" productFeatureId="COLOR_PINK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100080-1" productTypeId="FINISHED_GOOD" internalName="V2531_Multi Stripe Small" description="Multi Stripe Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100080" productIdTo="100080-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100080-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="124.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100080-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="74.40" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100080-1" productFeatureId="COLOR_MULTISTRIPE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100080-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100080" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100080" productFeatureId="COLOR_MULTISTRIPE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100081-1" productTypeId="FINISHED_GOOD" internalName="L2541_Black Large" description="Black Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100081" productIdTo="100081-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100081-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="84.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100081-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="50.40" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100081-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100081-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100081" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100081" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100082-1" productTypeId="FINISHED_GOOD" internalName="S2551_Black Medium" description="Black Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100082" productIdTo="100082-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100082-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="44.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100082-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="26.40" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100082-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100082-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100082" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100082" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100083-1" productTypeId="FINISHED_GOOD" internalName="V2561_Silver One Size" description="Silver One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100083" productIdTo="100083-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100083-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="850.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100083-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="637.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100083-1" productFeatureId="COLOR_SILVER" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100083-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100083" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100083" productFeatureId="COLOR_SILVER" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100084-1" productTypeId="FINISHED_GOOD" internalName="L2571_Brown One Size" description="Brown One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100084" productIdTo="100084-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100084-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="3450.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100084-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="2587.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100084-1" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100084-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100084" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100084" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100085-1" productTypeId="FINISHED_GOOD" internalName="S2581_Metallic One Size" description="Metallic One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100085" productIdTo="100085-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100085-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="418.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100085-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="313.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100085-1" productFeatureId="COLOR_METALLIC" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100085-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100085" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100085" productFeatureId="COLOR_METALLIC" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100086-1" productTypeId="FINISHED_GOOD" internalName="V2591_Burgundy One Size" description="Burgundy One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100086" productIdTo="100086-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100086-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="395.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100086-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="296.25" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100086-1" productFeatureId="COLOR_BURGUNDY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100086-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100086" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100086" productFeatureId="COLOR_BURGUNDY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100087-1" productTypeId="FINISHED_GOOD" internalName="L2601_Beige-Tan One Size" description="Beige-Tan One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100087" productIdTo="100087-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100087-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="295.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100087-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="221.25" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100087-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100087-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100087" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100087" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100088-1" productTypeId="FINISHED_GOOD" internalName="S2611_Beige-Tan One Size" description="Beige-Tan One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100088" productIdTo="100088-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100088-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="136.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100088-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="102.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100088-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100088-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100088" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100088" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100089-1" productTypeId="FINISHED_GOOD" internalName="V2621_Multi One Size" description="Multi One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100089" productIdTo="100089-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100089-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="385.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100089-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="288.75" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100089-1" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100089-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100089" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100089" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100090-1" productTypeId="FINISHED_GOOD" internalName="L2631_Brown One Size" description="Brown One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100090" productIdTo="100090-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100090-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="68.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100090-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="51.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100090-1" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100090-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100090" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100090" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100091-1" productTypeId="FINISHED_GOOD" internalName="S2641_Beige-Tan One Size" description="Beige-Tan One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100091" productIdTo="100091-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100091-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="198.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100091-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="148.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100091-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100091-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100091" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100091" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100092-1" productTypeId="FINISHED_GOOD" internalName="V2651_Grey One Size" description="Grey One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100092" productIdTo="100092-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100092-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="295.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100092-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="221.25" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100092-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100092-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100092" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100092" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100093-1" productTypeId="FINISHED_GOOD" internalName="L2661_Grey Medium" description="Grey Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100093" productIdTo="100093-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100093-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="150.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100093-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="112.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100093-1" productFeatureId="COLOR_GREY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100093-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100093" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100093" productFeatureId="COLOR_GREY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100094-1" productTypeId="FINISHED_GOOD" internalName="S2671_Black 6" description="Black 6" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100094" productIdTo="100094-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100094-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1250.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100094-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="937.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100094-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100094-1" productFeatureId="SIZE_6" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100094" productFeatureId="SIZE_6" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100094" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100095-1" productTypeId="FINISHED_GOOD" internalName="V2681_Black 6.5" description="Black 6.5" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100095" productIdTo="100095-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100095-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="175.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100095-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="131.25" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100095-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100095-1" productFeatureId="SIZE_6.5" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100095" productFeatureId="SIZE_6.5" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100095" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100096-1" productTypeId="FINISHED_GOOD" internalName="L2691_Red 6" description="Red 6" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100096" productIdTo="100096-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100096-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="139.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100096-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="104.25" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100096-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100096-1" productFeatureId="SIZE_6" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100096" productFeatureId="SIZE_6" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100096" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100097-1" productTypeId="FINISHED_GOOD" internalName="L2871_Black 6.5" description="Black 6.5" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100097" productIdTo="100097-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100097-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="225.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100097-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="168.75" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100097-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100097-1" productFeatureId="SIZE_6.5" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100097" productFeatureId="SIZE_6.5" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100097" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100098-1" productTypeId="FINISHED_GOOD" internalName="V2881_Cream Off White 7" description="Cream Off White 7" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100098" productIdTo="100098-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100098-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="285.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100098-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="213.75" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100098-1" productFeatureId="COLOR_CREAMOFFWHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100098-1" productFeatureId="SIZE_7" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100098" productFeatureId="SIZE_7" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100098" productFeatureId="COLOR_CREAMOFFWHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100099-1" productTypeId="FINISHED_GOOD" internalName="L2891_Blue 7" description="Blue 7" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100099" productIdTo="100099-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100099-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="130.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100099-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="97.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100099-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100099-1" productFeatureId="SIZE_7" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100099" productFeatureId="SIZE_7" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100099" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100100-1" productTypeId="FINISHED_GOOD" internalName="S2901_Red 6.5" description="Red 6.5" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100100" productIdTo="100100-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100100-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="150.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100100-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="112.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100100-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100100-1" productFeatureId="SIZE_6.5" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100100" productFeatureId="SIZE_6.5" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100100" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100101-1" productTypeId="FINISHED_GOOD" internalName="V2911_Gold One Size" description="Gold One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100101" productIdTo="100101-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100101-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="155.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100101-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="155.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100101-1" productFeatureId="COLOR_GOLD" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100101-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100101" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100101" productFeatureId="COLOR_GOLD" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100102-1" productTypeId="FINISHED_GOOD" internalName="L2921_Silver One Size" description="Silver One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100102" productIdTo="100102-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100102-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="29.50" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100102-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="29.50" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100102-1" productFeatureId="COLOR_SILVER" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100102-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100102" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100102" productFeatureId="COLOR_SILVER" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100103-1" productTypeId="FINISHED_GOOD" internalName="S2931_Gold One Size" description="Gold One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100103" productIdTo="100103-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100103-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="145.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100103-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="145.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100103-1" productFeatureId="COLOR_GOLD" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100103-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100103" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100103" productFeatureId="COLOR_GOLD" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100104-1" productTypeId="FINISHED_GOOD" internalName="V2941_Multi One Size" description="Multi One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100104" productIdTo="100104-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100104-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="725.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100104-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="725.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100104-1" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100104-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100104" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100104" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100105-1" productTypeId="FINISHED_GOOD" internalName="L2951_Bronze Medium" description="Bronze Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100105" productIdTo="100105-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100105-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="310.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100105-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="310.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100105-1" productFeatureId="COLOR_BRONZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100105-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100105" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100105" productFeatureId="COLOR_BRONZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100106-1" productTypeId="FINISHED_GOOD" internalName="S2961_Red One Size" description="Red One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100106" productIdTo="100106-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100106-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="25.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100106-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="25.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100106-1" productFeatureId="COLOR_RED" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100106-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100106" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100106" productFeatureId="COLOR_RED" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100107-1" productTypeId="FINISHED_GOOD" internalName="V2971_Brown Small" description="Brown Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100107" productIdTo="100107-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100107-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="88.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100107-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="88.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100107-1" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100107-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100107" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100107" productFeatureId="COLOR_BROWN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100108-1" productTypeId="FINISHED_GOOD" internalName="L2981_White X-Small" description="White X-Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100108" productIdTo="100108-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100108-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="495.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100108-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="495.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100108-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100108-1" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100108" productFeatureId="SIZE_X-SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100108" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100109-1" productTypeId="FINISHED_GOOD" internalName="S2991_Black One Size" description="Black One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100109" productIdTo="100109-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100109-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="125.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100109-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="125.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100109-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100109-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100109" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100109" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100110-1" productTypeId="FINISHED_GOOD" internalName="S3001_White One Size" description="White One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100110" productIdTo="100110-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100110-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="65.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100110-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="65.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100110-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100110-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100110" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100110" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100111-1" productTypeId="FINISHED_GOOD" internalName="V3011_Animal Print One Size" description="Animal Print One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100111" productIdTo="100111-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100111-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="75.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100111-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="75.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100111-1" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100111-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100111" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100111" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100112-1" productTypeId="FINISHED_GOOD" internalName="L3021_Multi One Size" description="Multi One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100112" productIdTo="100112-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100112-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="45.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100112-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="45.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100112-1" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100112-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100112" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100112" productFeatureId="COLOR_MULTI" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100112-1" productTypeId="FINISHED_GOOD" internalName="L3021_Animal Print One Size" description="Animal Print One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100112" productIdTo="100112-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100112-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="45.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100112-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="45.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100112-1" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100112-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100112" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100112" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100113-1" productTypeId="FINISHED_GOOD" internalName="S3031_Animal Print One Size" description="Animal Print One Size" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100113" productIdTo="100113-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100113-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="58.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100113-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="58.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100113-1" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100113-1" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100113" productFeatureId="SIZE_ONESIZE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100113" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100114-1" productTypeId="FINISHED_GOOD" internalName="V3041_Leopard 6" description="Leopard 6" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100114" productIdTo="100114-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100114-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="245.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100114-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="245.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100114-1" productFeatureId="COLOR_LEOPARD" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100114-1" productFeatureId="SIZE_6" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100114" productFeatureId="SIZE_6" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100114" productFeatureId="COLOR_LEOPARD" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100115-1" productTypeId="FINISHED_GOOD" internalName="L3051_Burgundy Small" description="Burgundy Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100115" productIdTo="100115-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100115-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="330.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100115-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="330.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100115-1" productFeatureId="COLOR_BURGUNDY" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100115-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100115" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100115" productFeatureId="COLOR_BURGUNDY" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100116-1" productTypeId="FINISHED_GOOD" internalName="S3061_Animal Print Large" description="Animal Print Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100116" productIdTo="100116-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100116-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="242.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100116-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="242.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100116-1" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100116-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100116" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100116" productFeatureId="COLOR_ANIMALPRINT" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100116-1" productTypeId="FINISHED_GOOD" internalName="S3061_Snake Print Large" description="Snake Print Large" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100116" productIdTo="100116-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100116-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="242.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100116-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="242.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100116-1" productFeatureId="COLOR_SNAKEPRINT" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100116-1" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100116" productFeatureId="SIZE_LARGE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100116" productFeatureId="COLOR_SNAKEPRINT" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100117-1" productTypeId="FINISHED_GOOD" internalName="V3071_White Medium" description="White Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100117" productIdTo="100117-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100117-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="955.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100117-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="955.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100117-1" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100117-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100117" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100117" productFeatureId="COLOR_WHITE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100118-1" productTypeId="FINISHED_GOOD" internalName="L3081_Purple Small" description="Purple Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100118" productIdTo="100118-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100118-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="455.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100118-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="455.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100118-1" productFeatureId="COLOR_PURPLE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100118-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100118" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100118" productFeatureId="COLOR_PURPLE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100119-1" productTypeId="FINISHED_GOOD" internalName="S3091_Beige-Tan Medium" description="Beige-Tan Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100119" productIdTo="100119-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100119-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1875.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100119-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="1875.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100119-1" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100119-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100119" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100119" productFeatureId="COLOR_BEIGE-TAN" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100120-1" productTypeId="FINISHED_GOOD" internalName="V3101_Black Small" description="Black Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100120" productIdTo="100120-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100120-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="368.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100120-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="368.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100120-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100120-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100120" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100120" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100121-1" productTypeId="FINISHED_GOOD" internalName="L3111_Black Medium" description="Black Medium" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100121" productIdTo="100121-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100121-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="650.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100121-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="650.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100121-1" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100121-1" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100121" productFeatureId="SIZE_MEDIUM" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100121" productFeatureId="COLOR_BLACK" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<Product productId="100122-1" productTypeId="FINISHED_GOOD" internalName="S3121_Blue Small" description="Blue Small" isVirtual="N" isVariant="Y" />
+<ProductAssoc productId="100122" productIdTo="100122-1" productAssocTypeId="PRODUCT_VARIANT" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductPrice productId="100122-1" productPriceTypeId="LIST_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="322.00" fromDate="2012-03-23 12:13:57" />
+<ProductPrice productId="100122-1" productPriceTypeId="DEFAULT_PRICE" productPricePurposeId="PURCHASE" currencyUomId="USD" productStoreGroupId="_NA_" price="322.00" fromDate="2012-03-23 12:13:57" />
+<ProductFeatureAppl productId="100122-1" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100122-1" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="STANDARD_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100122" productFeatureId="SIZE_SMALL" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+<ProductFeatureAppl productId="100122" productFeatureId="COLOR_BLUE" productFeatureApplTypeId="SELECTABLE_FEATURE" fromDate="2012-03-23 12:13:57" sequenceNum="10" />
+</entity-engine-xml>

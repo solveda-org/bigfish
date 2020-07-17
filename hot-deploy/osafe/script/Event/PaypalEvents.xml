@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="cancelPaypalCheckout" short-description="Cancel Paypal Checkout" login-required="false">
+        <call-class-method method-name="expressCheckoutCancel" class-name="org.ofbiz.order.thirdparty.paypal.ExpressCheckoutEvents" ret-field="response">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+            <field field="response" type="javax.servlet.http.HttpServletResponse"/>
+        </call-class-method>
+        <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+        <if-compare operator="not-equals" value="null" field="shoppingCart">
+            <call-object-method obj-field="shoppingCart" method-name="getAttribute" ret-field="guestCheckoutAttr">
+                 <string value="GUEST_CHECKOUT"/>
+            </call-object-method>
+	        <if-not-empty field="guestCheckoutAttr">
+	           <call-object-method obj-field="shoppingCart" method-name="removeAttribute">
+	                <string value="GUEST_CHECKOUT"/>
+	           </call-object-method>
+	           <return response-code="successGuest"/>
+	        </if-not-empty>
+        </if-compare>
+        
+       <return response-code="success"/>
+    </simple-method>
+</simple-methods>

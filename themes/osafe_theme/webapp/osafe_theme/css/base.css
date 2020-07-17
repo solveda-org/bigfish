@@ -1,0 +1,625 @@
+/* base.css */
+
+/* DR ADDED CSS*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-family: inherit;
+    font-size:inherit;
+}
+
+
+/****************************************************************
+* Background, Font Family, Default Text
+****************************************************************/
+body {
+    color: black;
+    background: white;
+    /* Will make 1em = 10px */
+    font-size:62.5%;
+    font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;
+}
+
+/****************************************************************
+* Standard HTML Tags
+****************************************************************/
+input, select, option, textarea {
+    font-family: Didot, "Didot LT STD", "Hoefler Text", Garamond, "Times New Roman", serif;}
+
+/* remember to define focus styles! */
+:focus {
+    outline: 0;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+    content: "";
+}
+blockquote, q {
+    quotes: "" "";
+}
+
+em{
+    font-weight: bold;
+}
+
+input, select, textarea {
+    color: #000000;
+    border: 1px solid #000000;
+
+    /* width should not be assigned to this style */
+}
+
+input[type="text"], input[type="password"] {
+    width: 211px;
+}
+
+textarea {
+    width: 500px;
+    height: 100px;
+}
+
+a{
+	color:#666;
+    text-decoration: none;
+}
+
+
+/****************************************************************
+* Labels, Captions
+****************************************************************/
+label, .caption{
+    text-align: right;
+    padding-right: 2px;
+    //text-transform: capitalize;
+    font-size: 1.2em;
+}
+
+/****************************************************************
+* Buttons
+****************************************************************/
+
+input[type="submit"].standardBtn, input[type="button"].standardBtn, a.standardBtn{
+    font-family:'Calibri','Helvetica Neue','Lucida Sans Unicode',sans-serif;
+    font-weight:bold;
+    font-size:1.6em;
+    margin-left: 10px;
+
+    /* Makes text on buttons all UPPERCASE */
+    text-transform:uppercase;
+
+    /* top right bottom left */
+    padding: 1px 5px 1px 5px;
+}
+input[type="submit"].standardBtn:hover, input[type="button"].standardBtn:hover, a.standardBtn:hover {
+    color: black;
+}
+
+
+form div.entryButtons {
+    clear: left;
+    float: left;
+    margin: 1em 0 1em 0;
+    }
+
+/****************************************************************
+* Layout Containers
+****************************************************************/
+/****************************************************************
+* Basic Layout
+****************************************************************/
+#eCommeceOuterBasicWrap {
+    margin: 0 auto;
+    width: 960px;
+    padding: 0;
+    position: relative;
+}
+
+#eCommerceInnerBasicWrapper {
+    width: 960px;
+    position: relative;
+    margin: 0 auto;
+    z-index: 10;
+    zoom: 1;
+}
+
+/****************************************************************
+* Basic Bevel  Layout
+****************************************************************/
+#eCommerceOuterBasicBevelWrap {
+    margin: 0 auto;
+    width: 960px;
+    padding: 0;
+    position: relative;
+}
+#eCommerceInnerBasicBevelWrapper {
+    width: 960px;
+    position: relative;
+    margin: 0 auto;
+    z-index: 10;
+    zoom: 1;
+}
+
+#eCommerceHeaderLinksBevelWrapper{
+    width: 960px;
+    position: relative;
+    margin: 0 auto;
+}
+
+#eCommerceBuiltByBevelWrapper{
+    width: 960px;
+    position: relative;
+    margin: 0 auto;
+}
+
+#eCommerceContent.leftPanel {
+    /* Place Holder */
+}
+
+
+
+#eCommerceHeaderLinks{
+    text-align: right;
+    margin:0;
+}
+
+#eCommerceHeader {
+    zoom: 1;
+    z-index: 2;
+    position: relative;
+    height: 110px;
+}
+
+#eCommercePageBody {
+    display: block;
+    clear: both;
+    zoom: 1;
+    z-index: 1;
+    _padding-bottom: 10px;/* IE homepage bug fix */
+}
+
+#eCommerceMainPanel.leftPanel {
+    float: left;
+    display: inline;
+    z-index: 0;
+}
+
+#eCommerceLeftPanel {
+    float: left;
+    display: inline;
+}
+
+#eCommerceMainPanel.rightPanel {
+    display: inline;
+    float: left;
+    width: 740px;
+}
+#eCommerceRightPanel {
+    display: inline;
+    float: right;
+    width: 219px;
+}
+
+
+/****************************************************************
+* Header Links
+****************************************************************/
+
+#eCommerceHeaderLinks ul li{
+    display: inline;
+    margin-right: 1em;
+}
+
+#eCommerceHeaderLinks a{
+    text-decoration: none;
+    font-size: 1.3em;
+}
+#eCommerceHeaderLinks a:hover {
+    text-decoration: underline;
+}
+
+/****************************************************************
+* Footer, Final Footer
+****************************************************************/
+#eCommerceFooter {
+    margin: 0 auto;
+}
+
+.footerColumn {
+    /* 960px / 5 columns = 192px per col*/
+    /* 960px / 4 columns = 240px per col*/
+    /* 960px / 3 columns = 320px per col*/
+    float: left;
+    position: relative;
+}
+
+
+#eCommerceFooter ul#footerLinks li {
+    line-height: 1.6em; /* .2em larger then the font size */
+}
+
+#footerLinks a{
+    color: black;
+    font-size: 1.3em;
+}
+#footerLinks a:hover{
+  text-decoration: underline;
+}
+
+#eCommerceFooter .footerCaption {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#eCommerceFooterLinks{
+    text-align: center;
+    height: 20px;
+    margin: 0 auto;
+    font-size: 1.3em;
+}
+
+#eCommerceFooterLinks ul li{
+    display: inline;
+    margin-right: 1em;
+}
+
+#eCommerceFooterLinks a{
+    text-decoration: none;
+
+}
+#eCommerceFooterLinks a:hover {
+    text-decoration: underline;
+}
+
+#eCommerceBuiltBy {
+    text-align: right;
+    font-size:1.2em;
+}
+
+#eCommerceBuiltBy a {
+    /* Place Holder */
+}
+
+/****************************************************************
+* Footer Links
+****************************************************************/
+.footerColumn {
+    /* 960px / 5 columns = 192px per col*/
+    /* 960px / 4 columns = 240px per col*/
+    /* 960px / 3 columns = 320px per col*/
+    float: left;
+    position: relative;
+}
+
+
+#eCommerceFooter ul#footerLinks li {
+    line-height: 1.6em; /* .2em larger then the font size */
+}
+
+#footerLinks a{
+    color: black;
+    font-size: 1.3em;
+}
+#footerLinks a:hover{
+  text-decoration: underline;
+}
+
+#eCommerceFooter h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+#eCommerceFooterLinks ul li{
+    display: inline;
+    margin-right: 1em;
+}
+
+#eCommerceFooterLinks a{
+    text-decoration: none;
+}
+#eCommerceFooterLinks a:hover {
+    text-decoration: underline;
+}
+
+#eCommerceBuiltBy {
+    text-align: right;
+    font-size:1.2em;
+}
+
+#eCommerceBuiltBy a {
+    /* Place Holder */
+}
+
+
+
+
+
+/****************************************************************
+* Navigation Bar
+****************************************************************/
+#eCommerceNavBar {
+    border-top:0px;
+    border-bottom:0px;
+    background-color:none;
+    clear: both;
+}
+
+#eCommerceNavBarMenu ul {
+    position:        absolute;
+    top:            -999em;
+    width:          14em; /* left offset of submenus need to match (see below) */
+}
+
+#eCommerceNavBarMenu ul li {
+    width:            100%;
+}
+#eCommerceNavBarMenu li:hover {
+    visibility:        inherit; /* fixes IE7 'sticky bug' */
+}
+#eCommerceNavBarMenu li {
+    float:            left;
+    position:        relative;
+}
+#eCommerceNavBarMenu a {
+    display:        block;
+    position:        relative;
+}
+#eCommerceNavBarMenu li:hover ul,
+#eCommerceNavBarMenu li.sfHover ul {
+    left:            0;
+    top:            42px; /* match top ul list item height */
+    z-index:        99;
+}
+ul#eCommerceNavBarMenu li:hover li ul,
+ul#eCommerceNavBarMenu li.sfHover li ul {
+    top:            -999em;
+}
+ul#eCommerceNavBarMenu li li:hover li ul,
+ul#eCommerceNavBarMenu li li.sfHover li ul {
+    top:            -999em;
+}
+ul#eCommerceNavBarMenu li li li:hover ul,
+ul#eCommerceNavBarMenu li li li.sfHover ul {
+    left:           14em; /* match ul width */
+    top:            0;
+}
+
+#eCommerceNavBarMenu a {
+    padding:        8px 10px 12px 0px;
+}
+#eCommerceNavBarMenu .subLevel a {
+    padding:        2px 0px 2px 2px;
+}
+#eCommerceNavBarMenu a, #eCommerceNavBarMenu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+ /* basic Coloring of Navbar Text */
+}
+#eCommerceNavBarMenu li.topLevel {
+	padding-right:10px;
+}
+#eCommerceNavBarMenu  li.topLevel.navfirstitem {
+	padding-left:0;
+}
+#eCommerceNavBarMenu  li.topLevel.navlastitem {
+    padding-right:0;
+}
+
+#eCommerceNavBarMenu li li a {
+    margin-left: 5px;
+}
+#eCommerceNavBarMenu li li {
+    border-top:     1px solid #000; /* Horizontal bar to on top of each sub level item */
+}
+
+#eCommerceNavBarMenu li:hover, #eCommerceNavBarMenu li.sfHover, #eCommerceNavBarMenu a:focus, #eCommerceNavBarMenu a:hover, #eCommerceNavBarMenu a:active {
+    outline:        0;
+}
+#eCommerceNavBarMenu li li:hover, #eCommerceNavBarMenu li li.sfHover, #eCommerceNavBarMenu li li a:focus, #eCommerceNavBarMenu li li a:hover, #eCommerceNavBarMenu li li a:active {
+    outline:        0;
+}
+
+/****************************************************************
+* Breadcrumb
+****************************************************************/
+
+#breadcrumb {
+    width: 100%;
+}
+#breadcrumb .intro {
+    display: inline;
+    float: left;
+    width: auto;
+}
+#breadcrumb li {
+    display: inline;
+    float: left;
+}
+#breadcrumb li.first {
+    background: none repeat scroll 0 0 transparent;
+    padding-left: 0;
+}
+#breadcrumb li.home a {
+    float: left;
+    width: auto;
+}
+#breadcrumb li.home span.here {
+    float: left;
+    width: auto;
+}
+
+/****************************************************************
+* Facet Navigation
+****************************************************************/
+#eCommerceRefineByCategoryContainer, #eCommerceCategoryFacetContainer {
+    /* Place Holder */
+}
+
+/****************************************************************
+* Entry Forms
+****************************************************************/
+.desc{
+    margin-left: 25px;
+}
+.required{
+    color: red;
+}
+
+fieldset p{
+    margin: 0 .5em;
+}
+
+.instructions {
+   font-size: 1.3em;
+   margin: 0 0 .5em 0;
+}
+
+.entry {
+   margin: .2em 0;
+}
+
+
+.entry label {
+    display: block;
+    float: left;
+    width: 150px;
+    margin: .5em 0 0 10px;
+    clear:left;
+    font-size: 1.5em;
+}
+
+.entry input, .entry select, .entry textarea {
+    margin: .5em 0px .5em 10px;
+    color: #000000;
+    border: 1px solid #000000;
+
+    /* width should not be assigned to this style */
+}
+
+
+.entry input[type="text"], .entry input[type="password"] {
+    width: 211px;
+    font-size: 1.5em;
+}
+
+.entry input[type="text"].cardNumber {
+    width: 132px;
+}
+
+input[type="text"].phone3{
+    width:3em;
+}
+
+input[type="text"].phone4{
+    width:4em;
+}
+
+.entry select {
+    width: 175px;
+}
+
+.entry a {
+  margin: .5em 0 0 5px;
+}
+
+.entry input[type="radio"]{
+    font-size: 1.5em;
+}
+
+
+.entry .radioOptionText{
+    font-size: 1.5em;
+    margin:0 0 0 30px;
+}
+.entry .radioOptionTextAdditional{
+    font-size: 1.5em;
+    float: right;
+    margin:0 10px 0 0;
+}
+
+/****************************************************************
+* Home Page
+****************************************************************/
+#eCommerceHomeSpots {
+    margin: 0!important;
+    padding: 0;
+    float: left;
+    display: inline;
+}
+.eCommerceHotSpot
+{
+    display: inline;
+    float: left;
+    height:520px;
+    margin:0;
+    padding:0;
+    width:320px;
+}
+
+/****************************************************************
+* Category List
+****************************************************************/
+
+#eCommerceCategoryList {
+    float: left;
+    clear: left;
+    position: relative;
+}
+/****************************************************************
+* PLP Product List
+****************************************************************/
+
+#eCommerceProductList {
+    clear: left;
+    position: relative;
+}
+
+/*Adds space bewteen the end of the list of items and before the after the resultsNavigation */
+#eCommerceProductList .spacer{
+    clear: both;
+    height: 20px;
+}
+
+/* float clear rules */
+
+/*
+Ben Hull:
+    Where xxxxxx is the selector for the box you want to expand
+    (in this case, #eCommerceHeader). You can put this down at the end
+    of your stylesheet, and add to the selectors with grouping
+     as you need to - this becomes your global 'float clear'
+     rule set.
+*/
+* html #eCommerceHeader,* html #eCommercePageBody, * html #eCommerceFooter ,* html #eCommerceProductDetailContainer{ zoom: 1; } /* IE6 */
+*:first-child + html #eCommerceHeader, *:first-child + html #eCommercePageBody: , *:first-child + html #eCommerceFooter:, *:first-child + html #eCommerceProductDetailContainer:{ zoom: 1; } /*IE7*/
+#eCommerceHeader:after, #eCommercePageBody:after, #eCommerceFooter:after, #eCommerceProductDetailContainer:after { /* everything else */
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: " ";
+  clear: both;
+  height: 0;
+}
+

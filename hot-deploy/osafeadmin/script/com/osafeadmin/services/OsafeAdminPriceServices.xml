@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="updateProdPrice" short-description="This Service Update Product Simple Price">
+    <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+        <if-empty field="parameters.listPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductListPriceError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+        <else>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
+                <field field="parameters.listPrice"/>
+            </call-class-method>
+            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductListPriceError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.defaultPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDefaultPriceError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+        <else>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isFloat" ret-field="checkFloatResult">
+                <field field="parameters.defaultPrice"/>
+            </call-class-method>
+            <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductDefaultPriceError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+        
+        <if-not-empty field="parameters.defaultPrice">
+            <entity-and entity-name="ProductPrice" list="prodDefaultPriceList">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
+            </entity-and>
+            <filter-list-by-date list="prodDefaultPriceList" to-list="productDefaultPriceList"/>
+            <if-not-empty field="productDefaultPriceList">
+                <first-from-list entry="productDefaultPrice" list="productDefaultPriceList"/>
+                <set-service-fields service-name="updateProductPrice" to-map="productDefaultPriceCtx" map="productDefaultPrice"/>
+                <set field="productDefaultPriceCtx.price" from-field="parameters.defaultPrice" type="BigDecimal"/>
+                <call-service service-name="updateProductPrice" in-map-name="productDefaultPriceCtx"/>
+            </if-not-empty>
+        </if-not-empty>
+        <if-not-empty field="parameters.listPrice">
+            <entity-and entity-name="ProductPrice" list="prodListPriceList">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+            </entity-and>
+            <filter-list-by-date list="prodListPriceList" to-list="productListPriceList"/>
+            <if-not-empty field="productListPriceList">
+                <first-from-list entry="productListPrice" list="productListPriceList"/>
+                <set-service-fields service-name="updateProductPrice" to-map="productListPriceCtx" map="productListPrice"/>
+                <set field="productListPriceCtx.price" from-field="parameters.listPrice" type="BigDecimal"/>
+                <call-service service-name="updateProductPrice" in-map-name="productListPriceCtx"/>
+            </if-not-empty>
+        </if-not-empty>
+      </if-compare>
+    </simple-method>
+</simple-methods>

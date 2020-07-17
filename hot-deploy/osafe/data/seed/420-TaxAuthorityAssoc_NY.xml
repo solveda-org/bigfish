@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Albany" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Allegany" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Broome" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Cattaraugus" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Cayuga" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Chautauqua" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Chemung" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Chenango" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Clinton" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Columbia" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Cortland" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Delaware" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Dutchess" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Erie" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Essex" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Franklin" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Fulton" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Genesee" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Greene" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Hamilton" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Herkimer" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Jefferson" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Kings" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Lewis" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Livingston" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Madison" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Monroe" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Montgomery" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Nassau" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-New York" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Niagara" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Oneida" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Onondaga" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Ontario" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Orange" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Orleans" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Oswego" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Otsego" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Putnam" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Queens" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Rensselaer" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Richmond" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Rockland" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Saint Lawrence" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Saratoga" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Schenectady" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Schoharie" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Schuyler" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Seneca" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Steuben" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Suffolk" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Sullivan" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Tioga" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Tompkins" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Ulster" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Warren" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Washington" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Wayne" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Westchester" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Wyoming" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Yates" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+    <TaxAuthorityAssoc taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" toTaxAuthGeoId="NY-Yonkers" toTaxAuthPartyId="NY_DTF" fromDate="2005-01-01 00:00:00.0" taxAuthorityAssocTypeId="EXEMPT_INHER"/>
+</entity-engine-xml>

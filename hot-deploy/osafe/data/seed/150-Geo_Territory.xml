@@ -1,0 +1,2 @@
+    <Geo geoId="AU-ACT" geoTypeId="TERRITORY" geoName="Australian Capital Territory" geoCode="ACT" abbreviation="ACT" lastUpdatedStamp="2011-07-19 14:36:33.64" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.317" createdTxStamp="2008-05-07 11:45:36.317"/>
+    <Geo geoId="AU-NT" geoTypeId="TERRITORY" geoName="Northern Territory" geoCode="NT" abbreviation="NT" lastUpdatedStamp="2011-07-19 14:36:33.687" lastUpdatedTxStamp="2011-07-19 14:36:32.877" createdStamp="2008-05-07 11:45:36.32" createdTxStamp="2008-05-07 11:45:36.317"/>

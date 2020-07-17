@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="updateOrderStatus" short-description="update order status">
+        <set field="orderHeaderMap.orderId" from-field="parameters.orderId" />
+        <find-by-primary-key entity-name="OrderHeader" map="orderHeaderMap" value-field="orderHeader"/>
+        <if-empty field="parameters.statusId">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderStatusIdError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <!--  validate the order input status -->
+                <if>
+                    <condition>
+                        <if-compare field="parameters.statusId" operator="equals" value="ORDER_APPROVED" type="String"/>
+                    </condition>
+                    <then>
+                        <set field="newItemStatusId" value="ITEM_APPROVED"/>
+                    </then>
+                    <else-if>
+                        <condition>
+                            <if-compare field="parameters.statusId" operator="equals" value="ORDER_COMPLETED" type="String"/>
+                        </condition>
+                        <then>
+                            <set field="newItemStatusId" value="ITEM_COMPLETED"/>
+                        </then>
+                    </else-if>
+                    <else-if>
+                        <condition>
+                            <if-compare field="parameters.statusId" operator="equals" value="ORDER_CANCELLED" type="String"/>
+                        </condition>
+                        <then>
+                            <set field="newItemStatusId" value="ITEM_CANCELLED"/>
+                        </then>
+                    </else-if>
+                    <else-if>
+                        <condition>
+                            <if-compare field="parameters.statusId" operator="equals" value="ORDER_REJECTED" type="String"/>
+                        </condition>
+                        <then>
+                            <set field="newItemStatusId" value="ITEM_REJECTED"/>
+                        </then>
+                    </else-if>
+                    <else-if>
+                        <condition>
+                            <if-compare field="parameters.statusId" operator="equals" value="ORDER_CREATED" type="String"/>
+                        </condition>
+                        <then>
+                            <set field="newItemStatusId" value="ITEM_CREATED"/>
+                        </then>
+                    </else-if>
+                    <else>
+                        <set field="newItemStatusId" value="parameters.statusId"/>
+                    </else>
+                </if>
+                <if-compare field="parameters.changeStatusAll" operator="equals" value="Y" type="String">
+                    <entity-and entity-name="OrderItem" list="OrderItemList">
+                        <field-map field-name="orderId" from-field="parameters.orderId"/>
+                        <order-by field-name="+orderItemSeqId"/>
+                    </entity-and>
+                    <iterate entry="orderItem" list="OrderItemList">
+                        <set field="statusChangeMap.statusId" from-field="orderItem.statusId"/>
+                        <set field="statusChangeMap.statusIdTo" from-field="newItemStatusId"/>
+                        <find-by-primary-key entity-name="StatusValidChange" map="statusChangeMap" value-field="statusValidChange"/>
+                        <if-empty field="statusValidChange">
+                            <clear-field field="argListNames"/>
+                            <set field="argListNames[]" from-field="orderItem.productId"/>
+                            <property-to-field resource="OSafeAdminUiLabels" property="ValidStatusItemError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        </if-empty>
+                    </iterate>
+                    <!--  validate the order item input status -->
+                    <else>
+                        <if-empty field="parameters.orderItemSeqIds">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderItemSelectionError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        </if-empty>
+                        <iterate-map key="orderItemSeqIdKey" value="orderItemSeqId" map="parameters.orderItemSeqIds">
+                            <set field="orderItemMap.orderId" from-field="parameters.orderId" />
+                            <set field="orderItemMap.orderItemSeqId" from-field="orderItemSeqId" />
+                            <find-by-primary-key entity-name="OrderItem" map="orderItemMap" value-field="orderItem"/>
+                            <set field="statusChangeMap.statusId" from-field="orderItem.statusId" />
+                            <set field="statusChangeMap.statusIdTo" from-field="newItemStatusId" />
+                            <find-by-primary-key entity-name="StatusValidChange" map="statusChangeMap" value-field="statusValidChange"/>
+                            <if-empty field="statusValidChange">
+                                <clear-field field="argListNames"/>
+                                <set field="argListNames[]" from-field="orderItem.productId"/>
+                                <property-to-field resource="OSafeAdminUiLabels" property="ValidStatusItemError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            </if-empty>
+                        </iterate-map>
+                    </else>
+                </if-compare>
+            </else>
+        </if-empty>
+
+        <!--  validate the ship date -->
+        <if-not-empty field="parameters.estimatedShipDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.estimatedShipDate"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidShipDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="estimatedShipDateTs">
+                        <field field="parameters.estimatedShipDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                    <call-class-method class-name="org.ofbiz.base.util.UtilDateTime" method-name="getDayEnd" ret-field="estimatedShipDateTs">
+                        <field field="estimatedShipDateTs" type="Timestamp"/>
+                    </call-class-method>
+                     <set field="fieldName" value="orderDate" type="String"/>
+                     <call-object-method obj-field="orderHeader" method-name="getTimestamp" ret-field="orderDate">
+                         <field field="fieldName" type="String"/>
+                     </call-object-method>
+                     <call-object-method obj-field="orderDate" method-name="before" ret-field="isBefore">
+                         <field field="estimatedShipDateTs" type="Timestamp"/>
+                     </call-object-method>
+                     <if-compare field="isBefore" operator="equals" value="false">
+                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShipDateBeforeOrderDateError"/>
+                         <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                         <else>
+                             <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.estimatedShipDate">
+                                 <field field="parameters.estimatedShipDate"/>
+                                 <field field="parameters.preferredDateFormat"/>
+                             </call-class-method>
+                         </else>
+                     </if-compare>
+                </else>
+            </if-compare>
+            <else>
+                <if-compare field="parameters.statusId" operator="equals" value="ORDER_COMPLETED" >
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipDateError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-not-empty>
+        <check-errors/>
+
+        <!--   create order note -->
+        <set field="enteredNote" from-field="parameters.note"/>
+        <now-timestamp field="nowTimestamp"/>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="updatedDate">
+            <field field="nowTimestamp" type="Timestamp"/>
+            <field field="parameters.preferredDateFormat" type="String"/>
+        </call-class-method>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="updatedTime">
+            <field field="nowTimestamp" type="Timestamp"/>
+            <string value="h:mma"/>
+        </call-class-method>
+        <set field="partyMap.partyId" from-field="userLogin.partyId" />
+        <find-by-primary-key entity-name="Party" map="partyMap" value-field="userLoginParty"/>
+        <call-class-method class-name="org.ofbiz.party.party.PartyHelper" method-name="getPartyName" ret-field="userLoginName">
+            <field field="userLoginParty" type="org.ofbiz.entity.GenericValue"/>
+        </call-class-method>
+        <if-empty field="userLoginName">
+            <set field="userLoginName" from-field="userLogin.partyId"/>
+        </if-empty>
+        <set field="eol" value="${sys:getProperty('line.separator')}"/>
+        <set field="insertNote" value="On ${updatedDate} at ${updatedTime}, User ${userLoginName}, modified Order# ${parameters.orderId}:${eol}"/>
+
+        <call-bsh><![CDATA[
+            shipmentMethod = parameters.get("shipmentMethod");
+            if(shipmentMethod != null){
+               parameters.put("shipmentMethodTypeId", shipmentMethod.substring(0, shipmentMethod.indexOf("@")));
+               parameters.put("carrierPartyId", shipmentMethod.substring(shipmentMethod.indexOf("@")+1));
+            }
+        ]]></call-bsh>
+        <set field="carrierShipmentMethodMap.shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
+        <set field="carrierShipmentMethodMap.partyId" from-field="parameters.carrierPartyId"/>
+        <set field="carrierShipmentMethodMap.roleTypeId" value="CARRIER"/>
+        <find-by-primary-key entity-name="CarrierShipmentMethod" map="carrierShipmentMethodMap" value-field="carrierShipmentMethod"/>
+        <set field="carrierName" value=""/>
+        <if-compare field="carrierShipmentMethod.partyId" operator="not-equals" value="_NA_" >
+            <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="carrierParty">
+                <string value="Party"/>
+            </call-object-method>
+            <call-class-method class-name="org.ofbiz.party.party.PartyHelper" method-name="getPartyName" ret-field="changeCarrierName">
+                <field field="carrierParty" type="org.ofbiz.entity.GenericValue"/>
+            </call-class-method>
+        </if-compare>
+        <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="shipmentMethodType">
+            <string value="ShipmentMethodType"/>
+        </call-object-method>
+        <set field="changeCarrierDesc" from-field="shipmentMethodType.description"/>
+
+        <!--  update the order status -->
+        <if-compare field="parameters.changeStatusAll" operator="equals" value="Y" type="String">
+            <set field="changeOrderItemStatusMap.statusId" from-field="newItemStatusId"/>
+            <set field="changeOrderItemStatusMap.orderId" from-field="parameters.orderId"/>
+            <call-service service-name="changeOrderItemStatus" in-map-name="changeOrderItemStatusMap"/>
+            <set field="statusItemMap.statusId" from-field="orderHeader.statusId" />
+            <find-by-primary-key entity-name="StatusItem" map="statusItemMap" value-field="fromStatus"/>
+            <set field="statusItemMap.statusId" from-field="parameters.statusId" />
+            <find-by-primary-key entity-name="StatusItem" map="statusItemMap" value-field="toStatus"/>
+            <string-append field="insertNote" string="Status:  From: ${fromStatus.description}  To:  ${toStatus.description}${eol}"/>
+
+            <if-compare field="parameters.statusId" operator="equals" value="ORDER_COMPLETED" type="String">
+                <set field="orderStatusNoteCount" value="0" type="Integer"/>
+                <entity-and entity-name="OrderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                    <field-map field-name="orderId" from-field="parameters.orderId"/>
+                    <order-by field-name="+orderItemSeqId"/>
+                </entity-and>
+                <iterate entry="orderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                   <set field="orderItemShipGroupMap.orderId" from-field="orderItemShipGroupAssoc.orderId" />
+                   <set field="orderItemShipGroupMap.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
+                   <find-by-primary-key entity-name="OrderItemShipGroup" map="orderItemShipGroupMap" value-field="orderItemShipGroup"/>
+                   <!--  check existing shipment is same or not -->
+                   <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}@${orderItemShipGroup.trackingNumber}"/>
+                   <if>
+                       <condition>
+                           <and>
+                               <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}@${parameters.trackingNumber}" type="String"/>
+                           </and>
+                       </condition>
+                       <then>
+                           <set-service-fields map="parameters" to-map="updateOrderItemShipGroupContext" service-name="updateOrderItemShipGroup"/>
+                           <set field="updateOrderItemShipGroupContext.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
+                           <call-service service-name="updateOrderItemShipGroup" in-map-name="updateOrderItemShipGroupContext"/>
+    
+                          <if-compare field="orderStatusNoteCount" operator="less" value="1" type="Integer">
+                              <!--  insert note about carrier -->
+                              <set field="orderItemMap.orderId" from-field="parameters.orderId" />
+                              <set field="orderItemMap.orderItemSeqId" from-field="orderItemShipGroupAssoc.orderItemSeqId" />
+                              <find-by-primary-key entity-name="OrderItem" map="orderItemMap" value-field="orderItem"/>
+                              <set field="carrierShipmentMethodMap.shipmentMethodTypeId" from-field="orderItemShipGroup.shipmentMethodTypeId"/>
+                              <set field="carrierShipmentMethodMap.partyId" from-field="orderItemShipGroup.carrierPartyId"/>
+                              <set field="carrierShipmentMethodMap.roleTypeId" value="CARRIER"/>
+                              <find-by-primary-key entity-name="CarrierShipmentMethod" map="carrierShipmentMethodMap" value-field="carrierShipmentMethod"/>
+                              <set field="carrierName" value=""/>
+                              <if-compare field="carrierShipmentMethod.partyId" operator="not-equals" value="_NA_" >
+                                  <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="carrierParty">
+                                      <string value="Party"/>
+                                  </call-object-method>
+                                  <call-class-method class-name="org.ofbiz.party.party.PartyHelper" method-name="getPartyName" ret-field="carrierName">
+                                      <field field="carrierParty" type="org.ofbiz.entity.GenericValue"/>
+                                  </call-class-method>
+                              </if-compare>
+                              <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="shipmentMethodType">
+                                  <string value="ShipmentMethodType"/>
+                              </call-object-method>
+                              <set field="carrierDesc" from-field="shipmentMethodType.description"/>
+    
+                              <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}"/>
+                              <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}" type="String">
+                                  <string-append field="insertNote" string="Carrier:  From:  ${carrierName} ${carrierDesc} To:  ${changeCarrierName} ${changeCarrierDesc}${eol}"/>
+                              </if-compare>
+                              <if-compare field="orderItemShipGroup.trackingNumber" operator="not-equals" value="${parameters.trackingNumber}" type="String">
+                                  <string-append field="insertNote" string="Tracking#:  From:  ${orderItemShipGroup.trackingNumber}  To:  ${parameters.trackingNumber}${eol}"/>
+                              </if-compare>
+                              <if-not-empty field="parameters.estimatedShipDate">
+                                  <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="fromShipDate">
+                                      <field field="orderItemShipGroup.estimatedShipDate" type="Timestamp"/>
+                                      <field field="parameters.preferredDateFormat" type="String"/>
+                                  </call-class-method>
+                                  <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="newShipDate">
+                                      <field field="parameters.estimatedShipDate" type="Timestamp"/>
+                                      <field field="parameters.preferredDateFormat" type="String"/>
+                                  </call-class-method>
+                                  <string-append field="insertNote" string="Ship Date:  From:  ${fromShipDate}  To:  ${newShipDate}${eol}"/>
+                              </if-not-empty>
+                              <calculate field="orderStatusNoteCount">
+                                  <calcop operator="add" >
+                                      <calcop operator="get" field="orderStatusNoteCount"/>
+                                      <number value="1"/>
+                                  </calcop>
+                              </calculate>
+                          </if-compare>
+                       </then>
+                   </if>
+                </iterate>
+            </if-compare>
+            <!--  update the order item status -->
+            <else>
+                <iterate-map key="orderItemSeqIdKey" value="orderItemSeqId" map="parameters.orderItemSeqIds">
+                    <set field="orderItemMap.orderId" from-field="parameters.orderId" />
+                    <set field="orderItemMap.orderItemSeqId" from-field="orderItemSeqId" />
+                    <find-by-primary-key entity-name="OrderItem" map="orderItemMap" value-field="orderItem"/>
+                    <set field="statusItemMap.statusId" from-field="orderItem.statusId" />
+                    <find-by-primary-key entity-name="StatusItem" map="statusItemMap" value-field="fromStatus"/>
+                    <set field="statusItemMap.statusId" from-field="parameters.statusId" />
+                    <find-by-primary-key entity-name="StatusItem" map="statusItemMap" value-field="toStatus"/>
+                    <string-append field="insertNote" string="Status: Product: ${orderItem.productId} From: ${fromStatus.description}  To:  ${toStatus.description}${eol}"/>
+
+                    <if-compare field="newItemStatusId" operator="equals" value="ITEM_COMPLETED" type="String">
+                        <entity-and entity-name="OrderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                            <field-map field-name="orderId" from-field="parameters.orderId"/>
+                            <field-map field-name="orderItemSeqId" from-field="orderItemSeqId"/>
+                            <order-by field-name="+shipGroupSeqId"/>
+                        </entity-and>
+                        <!--  check if another order items have the same shipment sequence id-->
+                        <set field="sameShipment" value="false" type="Boolean"/>
+                        <iterate entry="orderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                            <!-- get no. of OrderItemShipGroupAssoc for this  shipGroupSeqId-->
+                            <entity-count entity-name="OrderItemShipGroupAssoc" count-field="orderItemShipGroupAssocCount">
+                                <condition-list combine="and">
+                                    <condition-expr field-name="orderId" from-field="parameters.orderId"/>
+                                    <condition-expr field-name="shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId"/>
+                                </condition-list>
+                            </entity-count>
+                            <if-compare field="orderItemShipGroupAssocCount" operator="greater" value="1" type="Integer">
+                                <set field="sameShipment" value="true" type="Boolean"/>
+                            </if-compare>
+                        </iterate>
+    
+                       <!-- if another order items have the same shipment sequence id create new shipment for this -->
+                       <if-compare field="sameShipment" operator="equals" value="true" type="Boolean">
+                            <!-- get maximum existing shipGroupSeqId-->
+                            <set field="maxShipGroupSeqId" value="1" type="Long"/>
+                            <entity-and entity-name="OrderItemShipGroupAssoc" list="allOrderItemShipGroupAssocList">
+                                <field-map field-name="orderId" from-field="parameters.orderId"/>
+                                <order-by field-name="+shipGroupSeqId"/>
+                            </entity-and>
+                            <iterate entry="orderItemShipGroupAssoc" list="allOrderItemShipGroupAssocList">
+                                <call-class-method class-name="java.lang.Long" method-name="parseLong" ret-field="curShipGroupSeqId">
+                                    <field field="orderItemShipGroupAssoc.shipGroupSeqId" type="String"/>
+                                </call-class-method>
+                                <if-compare-field field="curShipGroupSeqId" operator="greater" to-field="maxShipGroupSeqId">
+                                    <set field="maxShipGroupSeqId" from-field="curShipGroupSeqId"/>
+                                </if-compare-field>
+                            </iterate>
+    
+                            <iterate entry="orderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                                <calculate field="maxShipGroupSeqId">
+                                    <calcop operator="add" >
+                                        <calcop operator="get" field="maxShipGroupSeqId"/>
+                                        <number value="1"/>
+                                    </calcop>
+                                </calculate>
+                                <!--   create OrderItemShipGroup      -->
+                                <set field="orderItemShipGroupMap.orderId" from-field="orderItemShipGroupAssoc.orderId" />
+                                <set field="orderItemShipGroupMap.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
+                                <find-by-primary-key entity-name="OrderItemShipGroup" map="orderItemShipGroupMap" value-field="orderItemShipGroup"/>
+                                <clone-value value-field="orderItemShipGroup" new-value-field="newOrderItemShipGroup"/>
+                                <!--   create new shipGroupSeqId      -->
+                                <call-bsh><![CDATA[
+                                String shipGroupSeqId = org.ofbiz.base.util.UtilFormatOut.formatPaddedNumber(maxShipGroupSeqId.longValue(), 5);
+                                parameters.put("shipGroupSeqId", shipGroupSeqId);
+                                ]]></call-bsh>
+                                <set from-field="parameters.shipGroupSeqId" field="newOrderItemShipGroup.shipGroupSeqId"/>
+                                <create-value value-field="newOrderItemShipGroup"/>
+    
+                                <!--   create OrderItemShipGroupAssoc      -->
+                                <clone-value value-field="orderItemShipGroupAssoc" new-value-field="newOrderItemShipGroupAssoc"/>
+                                <set from-field="parameters.shipGroupSeqId" field="newOrderItemShipGroupAssoc.shipGroupSeqId"/>
+                                <create-value value-field="newOrderItemShipGroupAssoc"/>
+                                <remove-value value-field="orderItemShipGroupAssoc"/>
+                            </iterate>
+                       </if-compare>
+    
+                        <!-- lets gets new shipment sequence id-->
+                        <entity-and entity-name="OrderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                            <field-map field-name="orderId" from-field="parameters.orderId"/>
+                            <field-map field-name="orderItemSeqId" from-field="orderItemSeqId"/>
+                            <order-by field-name="+shipGroupSeqId"/>
+                        </entity-and>
+                        <!-- update order item shipment-->
+                        <iterate entry="orderItemShipGroupAssoc" list="orderItemShipGroupAssocList">
+                           <set field="orderItemShipGroupMap.orderId" from-field="orderItemShipGroupAssoc.orderId" />
+                           <set field="orderItemShipGroupMap.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
+                           <find-by-primary-key entity-name="OrderItemShipGroup" map="orderItemShipGroupMap" value-field="orderItemShipGroup"/>
+                           <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}@${orderItemShipGroup.trackingNumber}"/>
+                           <if>
+                               <condition>
+                                   <and>
+                                       <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}@${parameters.trackingNumber}" type="String"/>
+                                   </and>
+                               </condition>
+                               <then>
+                                   <set-service-fields map="parameters" to-map="updateOrderItemShipGroupContext" service-name="updateOrderItemShipGroup"/>
+                                   <set field="updateOrderItemShipGroupContext.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
+                                   <call-service service-name="updateOrderItemShipGroup" in-map-name="updateOrderItemShipGroupContext"/>
+
+                                   <set field="carrierShipmentMethodMap.shipmentMethodTypeId" from-field="orderItemShipGroup.shipmentMethodTypeId"/>
+                                   <set field="carrierShipmentMethodMap.partyId" from-field="orderItemShipGroup.carrierPartyId"/>
+                                   <set field="carrierShipmentMethodMap.roleTypeId" value="CARRIER"/>
+                                   <find-by-primary-key entity-name="CarrierShipmentMethod" map="carrierShipmentMethodMap" value-field="carrierShipmentMethod"/>
+                                   <set field="carrierName" value=""/>
+                                   <if-compare field="carrierShipmentMethod.partyId" operator="not-equals" value="_NA_" >
+                                       <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="carrierParty">
+                                           <string value="Party"/>
+                                       </call-object-method>
+                                       <call-class-method class-name="org.ofbiz.party.party.PartyHelper" method-name="getPartyName" ret-field="carrierName">
+                                           <field field="carrierParty" type="org.ofbiz.entity.GenericValue"/>
+                                       </call-class-method>
+                                   </if-compare>
+                                   <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="shipmentMethodType">
+                                       <string value="ShipmentMethodType"/>
+                                   </call-object-method>
+                                   <set field="carrierDesc" from-field="shipmentMethodType.description"/>
+    
+                                   <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}"/>
+                                   <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}" type="String">
+                                       <string-append field="insertNote" string="Carrier:  Product: ${orderItem.productId} From:  ${carrierName} ${carrierDesc} To:  ${changeCarrierName} ${changeCarrierDesc}${eol}"/>
+                                   </if-compare>
+                                   <if-compare field="orderItemShipGroup.trackingNumber" operator="not-equals" value="${parameters.trackingNumber}" type="String">
+                                       <string-append field="insertNote" string="Tracking#:  Product: ${orderItem.productId} From:  ${orderItemShipGroup.trackingNumber}  To:  ${parameters.trackingNumber}${eol}"/>
+                                   </if-compare>
+                                   <if-not-empty field="parameters.estimatedShipDate">
+                                       <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="fromShipDate">
+                                           <field field="orderItemShipGroup.estimatedShipDate" type="Timestamp"/>
+                                           <field field="parameters.preferredDateFormat" type="String"/>
+                                       </call-class-method>
+                                       <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="newShipDate">
+                                           <field field="parameters.estimatedShipDate" type="Timestamp"/>
+                                           <field field="parameters.preferredDateFormat" type="String"/>
+                                       </call-class-method>
+                                       <string-append field="insertNote" string="Ship Date:   Product: ${orderItem.productId} From:  ${fromShipDate}  To:  ${newShipDate}${eol}"/>
+                                   </if-not-empty>
+                               </then>
+                           </if>
+                        </iterate>
+                    </if-compare>
+                    <!-- update order item status-->
+                    <if-not-empty field="newItemStatusId">
+                        <set field="changeOrderItemStatusMap.statusId" from-field="newItemStatusId"/>
+                        <set field="changeOrderItemStatusMap.orderId" from-field="parameters.orderId"/>
+                        <set field="changeOrderItemStatusMap.orderItemSeqId" from-field="orderItemSeqId"/>
+                        <call-service service-name="changeOrderItemStatus" in-map-name="changeOrderItemStatusMap"/>
+                    </if-not-empty>
+                </iterate-map>
+                <!-- update order status as ORDER_APPROVED if any order item have approved status-->
+                <set field="orderHeaderMap.orderId" from-field="parameters.orderId" />
+                <find-by-primary-key entity-name="OrderHeader" map="orderHeaderMap" value-field="orderHeader" use-cache="false"/>
+                <if-compare field="orderHeader.statusId" operator="not-equals" value="ORDER_APPROVED" type="String">
+                    <entity-and entity-name="OrderItem" list="orderItemList">
+                        <field-map field-name="orderId" from-field="parameters.orderId"/>
+                        <order-by field-name="+orderItemSeqId"/>
+                    </entity-and>
+                    <set field="changeOrderStatus" value="false" type="Boolean"/>
+                    <iterate entry="orderItem" list="orderItemList">
+                        <if-compare field="orderItem.statusId" operator="equals" value="ITEM_APPROVED" type="String">
+                            <set field="changeOrderStatus" value="true"/>
+                        </if-compare>
+                    </iterate>
+                    <if-compare field="changeOrderStatus" operator="equals" value="true" type="Boolean">
+                        <set field="changeOrderStatusMap.statusId" value="ORDER_APPROVED"/>
+                        <set field="changeOrderStatusMap.orderId" from-field="parameters.orderId"/>
+                        <set field="changeOrderStatusMap.setItemStatus" value="N"/>
+                        <call-service service-name="changeOrderStatus" in-map-name="changeOrderStatusMap"/>
+                    </if-compare>
+                </if-compare>
+            </else>
+        </if-compare>
+
+        <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
+            <field field="enteredNote" type="String"/>
+        </call-class-method>
+        <if-compare field="isNotEmpty" operator="equals" value="true">
+            <string-append field="insertNote" string="Comment:  ${enteredNote}"/>
+        </if-compare>
+        <set field="parameters.note" from-field="insertNote"/>
+        <set-service-fields service-name="createOrderNote" map="parameters" to-map="orderNoteCtx"/>
+        <call-service service-name="createOrderNote" in-map-name="orderNoteCtx"/>
+
+        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="reviewActiveFlag">
+            <field field="parameters.productStoreId" type="String"/>
+            <string value="REVIEW_ACTIVE_FLAG"/>
+        </call-class-method>
+        <call-class-method class-name="com.osafe.util.Util" method-name="isProductStoreParmTrue" ret-field="isReviewActive">
+            <field field="reviewActiveFlag"/>
+        </call-class-method>
+        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="reviewSendEmail">
+            <field field="parameters.productStoreId" type="String"/>
+            <string value="REVIEW_SEND_EMAIL"/>
+        </call-class-method>
+        <call-class-method class-name="com.osafe.util.Util" method-name="isProductStoreParmTrue" ret-field="isReviewSendEmailActive">
+            <field field="reviewSendEmail"/>
+        </call-class-method>
+        <if>
+            <condition>
+                <and>
+                    <if-compare field="isReviewActive" operator="equals" value="true" type="Boolean"/>
+                    <if-compare field="isReviewSendEmailActive" operator="equals" value="true" type="Boolean"/>
+                </and>
+            </condition>
+            <then>
+                <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="reviewShipDays">
+                    <field field="parameters.productStoreId" type="String"/>
+                    <string value="EMAIL_REVIEW_SHP_DYS"/>
+                </call-class-method>
+                <!--    get email address        -->
+                <set field="orderEmail" value=""/>
+                <entity-and entity-name="OrderContactMech" list="orderContactMechList">
+                    <field-map field-name="orderId" from-field="parameters.orderId" />
+                    <field-map field-name="contactMechPurposeTypeId" value="ORDER_EMAIL"/>
+                </entity-and>
+                <iterate entry="orderContactMech" list="orderContactMechList">
+                    <call-object-method obj-field="orderContactMech" method-name="getRelatedOne" ret-field="contactMech">
+                        <string value="ContactMech"/>
+                    </call-object-method>
+                    <call-object-method obj-field="contactMech" method-name="getRelated" ret-field="partyContactMechPurposeList">
+                        <string value="PartyContactMechPurpose"/>
+                    </call-object-method>
+                    <iterate entry="partyContactMechPurpose" list="partyContactMechPurposeList">
+                        <if-compare field="partyContactMechPurpose.contactMechPurposeTypeId" operator="equals" value="PRIMARY_EMAIL" type="String">
+                            <set field="orderEmail" from-field="contactMech.infoString"/>
+                        </if-compare>
+                    </iterate>
+                </iterate>
+                <set field="argListNames[]" from-field="orderEmail"/>
+                <set field="argListNames[]" from-field="reviewShipDays"/>
+                <property-to-field resource="OSafeAdminUiLabels" property="UpdateOrderStatusReviewMsgSuccess" field="updateOrderStatusReviewMsgSuccess" arg-list-name="argListNames"/>
+                <string-to-list string="${updateOrderStatusReviewMsgSuccess}" list="successMessageList"/>
+            </then>
+            <else>
+                <property-to-field resource="OSafeAdminUiLabels" property="UpdateOrderStatusSuccess" field="updateOrderStatusSuccess"/>
+                <string-to-list string="${updateOrderStatusSuccess}" list="successMessageList"/>
+            </else>
+        </if>
+        <field-to-result field="parameters.statusId" result-name="oldStatusId"/>
+    </simple-method>
+</simple-methods>

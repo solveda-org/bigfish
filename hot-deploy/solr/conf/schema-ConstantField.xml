@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+ This is the Solr schema support file. This file should be named "schema-ConstantField.xml" and
+ should be in the conf directory under the solr home
+ the main use of this file is updated the schema.xml with below these entry.
+ -->
+<schema name="example" version="1.2">
+ <fields>
+   <!-- Valid attributes for fields:
+     name: mandatory - the name for the field
+     type: mandatory - the name of a previously defined type from the
+       <types> section
+     indexed: true if this field should be indexed (searchable or sortable)
+     stored: true if this field should be retrievable
+     compressed: [false] if this field should be stored using gzip compression
+       (this will only apply if the field type is compressable; among
+       the standard field types, only TextField and StrField are)
+     multiValued: true if this field may contain multiple values per document
+     omitNorms: (expert) set to true to omit the norms associated with
+       this field (this disables length normalization and index-time
+       boosting for the field, and saves some memory).  Only full-text
+       fields or fields that need an index-time boost need norms.
+     termVectors: [false] set to true to store the term vector for a
+       given field.
+       When using MoreLikeThis, fields used for similarity should be
+       stored for best performance.
+     termPositions: Store position information with the term vector.
+       This will increase storage costs.
+     termOffsets: Store offset information with the term vector. This
+       will increase storage costs.
+     default: a value that should be used if no value is specified
+       when adding a document.
+   -->
+   <field name="id" type="string" indexed="true" stored="true" required="true"/>
+   <field name="rowType" type="string" indexed="true" stored="true" required="true"/>
+   <field name="productId" type="string" indexed="true" stored="true" required="false"/>
+   <field name="name" type="string" indexed="true" stored="true" required="false"/>
+   <field name="internalName" type="string" indexed="true" stored="true" required="false"/>
+   <field name="description" type="text" indexed="true" stored="true" required="false"/>
+   <field name="productCategoryId" type="text_ws" indexed="true" stored="true" multiValued="true" required="false"/>
+   <field name="topMostProductCategoryId" type="text_ws" indexed="true" stored="true" multiValued="true" required="false"/>
+   <field name="categoryLevel" type="int" indexed="true" stored="true" required="false"/>
+   <field name="categoryName" type="text" indexed="true" stored="true" required="false"/>
+    <field name="categoryDescription" type="text" indexed="true" stored="true" required="false"/>
+    <field name="categoryPdpDescription" type="text" indexed="true" stored="true" required="false"/>
+   <field name="categoryImageUrl" type="string" indexed="false" stored="true" required="false"/>
+   <field name="productImageSmallUrl" type="string" indexed="false" stored="true" required="false"/>
+   <field name="productImageMediumUrl" type="string" indexed="false" stored="true" required="false"/>
+   <field name="productImageLargeUrl" type="string" indexed="false" stored="true" required="false"/>
+   <field name="price" type="float" indexed="true" stored="true" required="false"/>
+   <field name="customerRating" type="float" indexed="true" stored="true" required="false"/>
+   <field name="sequenceNum" type="string" indexed="true" stored="true" multiValued="true" required="false"/>
+   <!-- fields for finding facet grouping  -->
+   <field name="productFeatureGroupId" type="string" indexed="true" stored="true" required="false"/>
+   <field name="productFeatureGroupDescription" type="string" indexed="false" stored="true" required="false"/>
+   <field name="productFeatureGroupFacetSort" type="string" indexed="false" stored="true" required="false"/>
+   <field name="productCategoryFacetGroups" type="text_ws" indexed="true" stored="true" required="false" multiValued="true" omitNorms="true"/>
+
+   <!-- catchall field, containing all other searchable text fields (implemented
+        via copyField further on in this schema  -->
+   <field name="searchText" type="text" indexed="true" stored="false" required="false" multiValued="true" />
+ </fields>
+ <copyField source="name" dest="searchText"/>
+ <copyField source="internalName" dest="searchText"/>
+ <copyField source="description" dest="searchText"/>
+ <copyField source="price" dest="searchText"/>
+ <copyField source="categoryPdpDescription" dest="searchText"/>
+ <copyField source="categoryDescription" dest="searchText"/>
+</schema>

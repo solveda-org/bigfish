@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+
+    <screen name="main-decorator">
+        <section>
+            <actions>
+                <!-- base/top/specific map first, then more common map added for shared labels -->
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="ManufacturingUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="WorkEffortUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/prototypejs/resize.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/validation.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.domReady.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/bigfishFieldLookup.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/calendarDateSelect/calendar_date_select.js" global="true"/>
+                <set field="initialLocale" type="String" value="${groovy:parameters?.userLogin?.lastLocale?.substring(0,2)}" default-value="${groovy:locale?.toString()?.substring(0,2)?:'en'}"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/calendarDateSelect/locale/${initialLocale}.js" global="true"/>
+                <!-- datepicker css merged into admin.css ticket #25796
+                <set field="layoutSettings.styleSheets[+0]" value="/osafe_admin_theme/css/admin/ui-lightness/jquery.ui.datepicker.css" global="true"/>
+                <set field="layoutSettings.styleSheets[+0]" value="/osafe_admin_theme/css/admin/ui-lightness/jquery-ui-1.8.13.custom.css" global="true"/>
+                -->
+                
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/jquery/jquery-1.7.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/sort/jquery.tablesorter.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/jquery/jquery.noConflict.js" global="true"/>
+                <!-- including jquery for datepicker -->
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/jquery/datetimepicker/jquery.ui.datepicker.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/jquery/datetimepicker/jquery-ui-1.8.16.custom.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/jquery/datetimepicker/jquery-ui-timepicker-addon-0.9.7.js" global="true"/>
+                
+                <!-- Get the store VisualTheme -->
+
+                <set field="visualThemeId" value="OSAFE_ADMIN_DEFAULT"/>
+                <service service-name="getVisualThemeResources">
+                    <field-map field-name="visualThemeId"/>
+                    <field-map field-name="themeResources" from-field="layoutSettings"/>
+                </service>
+
+                <set field="layoutSettings.companyName" from-field="uiLabelMap.eCommerceCompanyName" global="true"/>
+                <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.eCommerceCompanySubtitle" global="true"/>
+
+                <set field="activeApp" value="osafe-admin" global="true"/>
+                <set field="applicationTitle" value="${uiLabelMap.eCommerceAdminApplicationTitle}" global="true"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/setup/AdminSetup.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/previousSearchCriteria.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/dashboard/dailySalesCounter.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/common.ftl">
+                            <html-template-decorator-section name="siteLogo">
+                                 <include-screen name="SiteLogoMenu"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="siteInfo">
+                                 <include-screen name="SiteInfoMenu"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="dailySalesCounter">
+                                 <include-screen name="DailySalesMenu"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="navigationBar">
+                                 <include-screen name="NavigationMenu"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="pageHeading">
+                                 <include-screen name="PageTitle"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="lastOrder">
+                                 <include-screen name="LastOrderedDate"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="messages">
+                                 <include-screen name="PageMessages"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="periodRange">
+                                 <include-screen name="PeriodRange"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="commonJquery">
+                                <include-screen name="commonJquery"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="body">
+                                <decorator-section-include name="body"/>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="login-decorator">
+        <section>
+            <actions>
+                <!-- base/top/specific map first, then more common map added for shared labels -->
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/login.ftl">
+                            <html-template-decorator-section name="messages">
+                                 <include-screen name="LoginMessages"/>
+                            </html-template-decorator-section>
+                            <html-template-decorator-section name="body">
+                                <decorator-section-include name="body"/>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="login">
+        <section>
+            <actions>
+                <set field="layoutSettings.styleSheets[]" value="/osafe_admin_theme/css/admin/admin.css" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="login-decorator">
+                    <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://osafeadmin/webapp/osafeadmin/login.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="LoginMessages">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/includes/pageMessages.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SiteLogoMenu">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container id="siteLogoContainer">
+                    <platform-specific>
+                        <html>
+                           <html-template location="component://osafeadmin/webapp/osafeadmin/includes/siteLogo.ftl"/>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SiteInfoMenu">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container id="siteInfoContainer">
+                    <platform-specific>
+                        <html>
+                           <html-template location="component://osafeadmin/webapp/osafeadmin/includes/siteInfo.ftl"/>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="DailySalesMenu">
+        <section>
+            <widgets>
+                <container id="dailySalesCounter">
+                    <platform-specific>
+                        <html>
+                           <html-template location="component://osafeadmin/webapp/osafeadmin/includes/dailySalesCounter.ftl"/>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="NavigationMenu">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/navigation/navigationDescriptor.groovy"/>
+            </actions>
+            <widgets>
+                <container id="navigation">
+                    <platform-specific>
+                        <html>
+                           <html-template location="component://osafeadmin/webapp/osafeadmin/includes/navigationMenu.ftl"/>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PageMessages">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/includes/pageMessages.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PageTitle">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="PageTitle">
+                    <platform-specific>
+                        <html>
+                           <html-template location="component://osafeadmin/webapp/osafeadmin/templates/pageTitle.ftl"/>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PageHelper">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="PageHelper">
+                    <platform-specific>
+                        <html>
+                           <html-template location="component://osafeadmin/webapp/osafeadmin/templates/pageHelper.ftl"/>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="LastOrderedDate">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/dashboard/lastOrderedDate.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/lastOrderedDate.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PeriodRange">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/periodRange.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ListPaging">
+        <section>
+        <actions>
+            <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+            <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/commonPaging.groovy"/>
+            <set field="resultList" from-field="resultList" type="List" global="true"/>
+            <set field="confirmAction" from-field="confirmAction" global="true"/>
+            <set field="detailFormName" from-field="searchFormName" default-value="detailFormName" global="true"/>
+            <set field="confirmDialogText" value="${uiLabelMap.ShowAllError}" global="true" />
+            <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/previousSearchCriteria.groovy"/>
+        </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonPaging.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="selectorListPaging">
+        <section>
+        <actions>
+            <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/commonPaging.groovy"/>
+            <set field="resultList" from-field="resultList" type="List" global="true"/>
+        </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonSelectorPaging.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="FoReportDecorator">
+        <section>
+            <actions>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="logoImageUrl" value="/images/ofbiz_logo.gif"/>
+                <!--<set field="defaultFontFamily" value="Arial"/>-->
+            </actions>
+            <widgets>
+                <platform-specific><xsl-fo><html-template location="component://osafeadmin/webapp/osafeadmin/templates/fo/reportTemplate.fo.ftl"/></xsl-fo></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="ListNoResult">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonNoResult.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commonConfirm">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="commonConfirmDialogTitle" from-field="confirmDialogTitle" default-value="${uiLabelMap.commonConfirmDialogTitle}"/>
+                <set field="commonConfirmDialogText" from-field="confirmDialogText" default-value="${uiLabelMap.commonConfirmDialogText}"/>
+                <set field="commonConfirmDialogYesBtn" from-field="confirmDialogYesBtnText" default-value="${uiLabelMap.YesBtn}"/>
+                <set field="commonConfirmDialogNoBtn" from-field="confirmDialogNoBtnText" default-value="${uiLabelMap.NoBtn}"/>
+                <set field="confirmAction" from-field="confirmAction" global="true"/>
+            </actions>
+            <widgets>
+                <container id="commonConfirm">
+                    <platform-specific>
+                        <html>
+                            <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDialog.ftl">
+                                <html-template-decorator-section name="dialogBox">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonConfirm.ftl"/>
+                                        </html>
+                                     </platform-specific>
+                                </html-template-decorator-section>
+                            </html-template-decorator>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="commonDetailActionButton">
+        <section>
+            <actions>
+                <set field="backHref" value="javascript:history.go(-1)"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonDetailActionButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="commonDetailButton">
+        <section>
+            <actions>
+                <set field="backHref" value="javascript:history.go(-1)"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonDetailButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <screen name="commonSearchButton">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonSearchButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commonListButton">
+        <section>
+            <actions>
+                <set field="backHref" value="javascript:history.go(-1)"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonListButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="tooltip">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonTooltip.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="commonJS">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonFormJS.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="commonJquery">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonJquery.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="commonDetailEntryButton">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonDetailEntryButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="commonProductLinkButton">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonProductLinkButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="commonProductCategoryLinkButton">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonProductCategoryLinkButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="navigationDescriptor">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/navigation/navigationDescriptor.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                  <html>
+                     <html-template location="component://osafeadmin/webapp/osafeadmin/navigation/navigationDescriptor.ftl"/>
+                  </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="export-csv-decorator">
+        <section>
+            <widgets>
+                <decorator-section-include name="expCSVHeader" />
+                <decorator-section-include name="expCSVList" />
+            </widgets>
+        </section>
+    </screen>
+    
+    <!-- Global decorator for Lookup pop-up windows -->
+    <screen name="LookupDecorator">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/setup/AdminSetup.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/previousSearchCriteria.groovy"/>
+            </actions>
+            <widgets>
+                <decorator-section-include name="body"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="selectorListNoResult">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonSelectorNoResult.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="previewContentDecorator">
+        <section>
+            <actions>
+                <!-- base/top/specific map first, then more common map added for shared labels -->
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/setup/AdminSetup.groovy"/>
+                <set field="layoutSettings" type="NewMap" global="true"/>
+                <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
+                <service service-name="getVisualThemeResources">
+                    <field-map field-name="visualThemeId"/>
+                    <field-map field-name="themeResources" from-field="layoutSettings"/>
+                </service>
+                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/content/previewContent.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonPreview.ftl">
+                            <html-template-decorator-section name="body">
+                                <decorator-section-include name="body"/>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commonContentLinkButton">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonContentLinkButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commonFormHiddenFields">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/includes/commonFormHiddenFields.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

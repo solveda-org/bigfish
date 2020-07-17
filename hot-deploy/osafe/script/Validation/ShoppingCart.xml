@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="validateCartPromoCode" short-description="Validate Address" login-required="false">
+
+        <!-- Check that a "Promo Code" has been entered -->
+         <call-map-processor in-map-name="parameters" out-map-name="promoCodeContext">
+             <simple-map-processor name="promoCode">
+
+                <process field="productPromoCodeId">
+                    <copy to-field="productPromoCodeId"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="OfferCodeMissingError"/></not-empty>
+                </process>
+
+             </simple-map-processor>
+             
+         </call-map-processor>
+
+        <!-- Check that a "Promo Code" exists -->
+        <if-not-empty field="promoCodeContext.productPromoCodeId">
+            <call-object-method obj-field="promoCodeContext.productPromoCodeId" method-name="toUpperCase" ret-field="productPromoCodeUpperCase"/>
+            <set from-field="productPromoCodeUpperCase" field="promoCodeExistsMap.productPromoCodeId"/>
+            <find-by-primary-key entity-name="ProductPromoCode" map="promoCodeExistsMap" value-field="existingPromoCode"/>
+            <if-empty field="existingPromoCode">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeNotFoundError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+            <else>
+                <session-to-field field="shoppingCart"/>
+                <call-object-method obj-field="shoppingCart" method-name="getProductPromoCodesEntered" ret-field="promoCodesEntered"/>
+                <call-object-method obj-field="promoCodesEntered" method-name="contains" ret-field="promoCodeInUse">
+                     <field field="existingPromoCode.productPromoCodeId" type="Object"/>
+                </call-object-method>
+                <if-compare field="promoCodeInUse" operator="equals" value="true" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="OfferCodeInUseError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+                <else>
+                   <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="useOnlyOnePromoCode">
+                       <field field="request" type="javax.servlet.ServletRequest"/>
+                       <string value="CHECKOUT_PROMO_MANUAL_ONE_ONLY"/>
+                   </call-class-method>
+                   <call-class-method class-name="com.osafe.util.Util" method-name="isProductStoreParmTrue" ret-field="isTrue">
+                       <field field="useOnlyOnePromoCode"/>
+                   </call-class-method>
+                   <if-compare field="isTrue" operator="equals" value="true">
+                       <call-object-method obj-field="shoppingCart" method-name="getProductPromoCodesEntered" ret-field="promoCodesEntered"/>
+                       <call-object-method obj-field="shoppingCart" method-name="clearAllPromotionInformation"/>
+                       <call-object-method obj-field="promoCodesEntered" method-name="clear"/>
+                   </if-compare>
+                </else>
+                </if-compare>
+            </else>
+            </if-empty>
+        </if-not-empty>
+        <set field="fieldLevelErrors" value="Y"/>
+        <field-to-request field="fieldLevelErrors" />
+        <check-errors/>
+
+    </simple-method>
+
+    <simple-method method-name="removeCartPromoCode" short-description="remove applied Promo Code" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <call-object-method obj-field="shoppingCart" method-name="getProductPromoCodesEntered" ret-field="promoCodesEntered"/>
+        <call-object-method obj-field="promoCodesEntered" method-name="remove">
+            <field field="parameters.productPromoCodeId" type="Object"/>
+        </call-object-method>
+        <call-class-method class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker" method-name="doPromotions">
+            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+        </call-class-method>
+        <check-errors/>
+    </simple-method>
+</simple-methods>

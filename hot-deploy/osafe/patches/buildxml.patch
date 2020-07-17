@@ -1,0 +1,180 @@
+Index: build.xml
+===================================================================
+--- build.xml	(revision 1203960)
++++ build.xml	(working copy)
+@@ -321,6 +321,18 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${pos.memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
++        </java>
++    </target>
++    <target name="run-deployement" depends="build" 
++            description="This will start OFBiz">
++        <java jar="ofbiz.jar" fork="true">
++            <jvmarg value="${memory.initial.param}"/>
++            <jvmarg value="${pos.memory.max.param}"/>
++            <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+         </java>
+     </target>
+     <target name="run-pos" 
+@@ -329,6 +341,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="pos"/>
+         </java>
+     </target>
+@@ -338,6 +352,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+         </java>
+     </target>
+@@ -347,12 +363,16 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+         </java>
+         <java jar="ofbiz.jar" fork="true">
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+             <arg value="delegator=default#DEMO1"/>
+         </java>
+@@ -360,6 +380,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+             <arg value="delegator=default#DEMO2"/>
+         </java>
+@@ -370,6 +392,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+             <arg value="readers=seed"/>
+         </java>
+@@ -380,6 +404,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+             <arg value="readers=seed,seed-initial,ext"/>
+         </java>
+@@ -390,16 +416,40 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+             <arg value="readers=seed,seed-initial,ext,ext-test"/>
+         </java>
+     </target>
++    <target name="run-install-demodata" depends="build"
++        description="This loads demo data; meant for adding data for BigFish OFBiz">
++        <java jar="ofbiz.jar" fork="true">
++            <jvmarg value="${memory.initial.param}"/>
++            <jvmarg value="${memory.max.param}"/>
++            <jvmarg value="${memory.maxpermsize.param}"/>
++            <arg value="install"/>
++            <arg value="readers=demodata,proj_data"/>
++        </java>
++    </target>
++    <target name="run-install-proddata" depends="build"
++            description="This loads prod data; meant for adding data for BigFish OFBiz">
++        <java jar="ofbiz.jar" fork="true">
++            <jvmarg value="${memory.initial.param}"/>
++            <jvmarg value="${memory.max.param}"/>
++            <jvmarg value="${memory.maxpermsize.param}"/>
++            <arg value="install"/>
++            <arg value="readers=proddata"/>
++        </java>
++    </target>
+     <target name="run-install-readers" depends="build"
+             description="This loads data using the command line argument 'data-readers' that takes a comma separated list of readers (seed, seed-initial, demo, ext, ext-test, ext-demo)">
+         <java jar="ofbiz.jar" fork="true" >
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+             <arg value="readers=${data-readers}"/>
+         </java>
+@@ -410,6 +460,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="install"/>
+             <arg value="delegator=default"/>
+             <arg value="file=${data-file}"/>
+@@ -444,6 +496,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <jvmarg value="-Xnoagent"/>
+             <jvmarg value="-Djava.compiler=NONE"/>
+             <jvmarg value="-Xdebug"/>
+@@ -456,6 +510,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="test"/>
+         </java>
+         <mkdir dir="runtime/logs/test-results/html"/>
+@@ -482,6 +538,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="testlist"/>
+             <arg file="runtime/test-list-build.xml"/>
+             <arg value="-ant"/>
+@@ -493,6 +551,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="test"/>
+             <arg value="-component=${test.component}"/>
+             <arg value="-case=${test.case}"/>
+@@ -516,6 +576,8 @@
+             <jvmarg value="${memory.initial.param}"/>
+             <jvmarg value="${memory.max.param}"/>
+             <jvmarg value="${memory.maxpermsize.param}"/>
++            <jvmarg value="-Dsolr.solr.home=${ofbiz.home.dir}/hot-deploy/solr"/>
++            <jvmarg value="-Dsolr.data.dir=${ofbiz.home.dir}/hot-deploy/solr/data"/>
+             <arg value="test"/>
+             <arg value="-component=${test.component}"/>
+             <arg value="-suitename=${test.suiteName}"/>

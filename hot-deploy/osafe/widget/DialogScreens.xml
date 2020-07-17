@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+
+    <screen name="commonConfirmDialog">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="commonConfirmDialogTitle" from-field="confirmDialogTitle" default-value="${uiLabelMap.commonConfirmDialogTitle}"/>
+                <set field="commonConfirmDialogText" from-field="confirmDialogText" default-value="${uiLabelMap.commonConfirmDialogText}"/>
+                <set field="commonConfirmDialogYesBtn" from-field="confirmDialogYesBtnText" default-value="${uiLabelMap.YesBtn}"/>
+                <set field="commonConfirmDialogNoBtn" from-field="confirmDialogNoBtnText" default-value="${uiLabelMap.NoBtn}"/>
+                <set field="commonConfirmDialogForm" from-field="confirmDialogForm" default-value="detailForm"/>
+                <set field="commonConfirmDialogAction" from-field="confirmDialogAction" default-value="confirmAction"/>
+            </actions>
+            <widgets>
+                <container id="commonConfirmDialog">
+                    <platform-specific>
+                        <html>
+                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                                <html-template-decorator-section name="confirm_DialogBox">
+                                     <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonJS.ftl" />
+                                        </html>
+                                     </platform-specific>
+                                     <platform-specific>
+                                         <html>
+                                             <html-template location="component://osafe/webapp/osafe/templates/commonConfirmDialog.ftl"/>
+                                         </html>
+                                     </platform-specific>
+                                </html-template-decorator-section>
+                            </html-template-decorator>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="searchDialog">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="searchDialogTitle" value="${uiLabelMap.searchDialogTitle}"/>
+                <set field="searchDialogText" from-field="SEARCH_NO_ENTRY_ERROR"/>
+                <set field="searchDialogOkBtn" value="${uiLabelMap.OkBtn}"/>
+                <set field="dialogPurpose" value="search_"/>
+            </actions>
+            <widgets>
+                <container id="commonSearchDialog">
+                    <platform-specific>
+                        <html>
+                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                                <html-template-decorator-section name="search_DialogBox">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonJS.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                     <platform-specific>
+                                         <html>
+                                             <html-template location="component://osafe/webapp/osafe/templates/searchDialog.ftl"/>
+                                         </html>
+                                     </platform-specific>
+                                </html-template-decorator-section>
+                            </html-template-decorator>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="plpQuickLookDialog">
+        <section>
+            <actions>
+                <set field="dialogPurpose" from-field="dialogPurpose" default-value="dialogPurpose_"/>
+                <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
+            </actions>
+            <widgets>
+               <platform-specific>
+                 <html>
+                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                            <html-template-decorator-section name="plpQuickLook_DialogBox">
+                              <container id="plpQuickLook_Container">
+                              </container>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+	             </html>
+	           </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="eCommercePlpQuickLook">
+        <section>
+            <actions>
+                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                <set field="uiSequenceScreen" value="Quicklook"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductDetail.groovy" />
+                <set field="dialogPurpose" value="plpQuickLook_" global="true"/>
+                <set field="showHeadingTertiaryInformation" value="Y" />
+            </actions>
+            <widgets>
+                 <container id="plpQuickLook_Container">
+                   <platform-specific>
+                       <html>
+                           <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductDetailJS.ftl" />
+                       </html>
+                   </platform-specific>
+                   <platform-specific>
+                     <html>
+                      <html-template location="component://osafe/webapp/osafe/common/eCommerceProductDetail.ftl"/>
+                     </html>
+                   </platform-specific>
+                 </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="viewLargeImageDialog">
+        <section>
+            <actions>
+                <set field="dialogPurpose" from-field="dialogPurpose" default-value="dialogPurpose_"/>
+                <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
+                <set field="largeImageUrl" value="${groovy:request.getAttribute(&quot;largeImageUrl&quot;)}"/>
+                <set field="dialogPurpose" value="largeImage_" />
+            </actions>
+            <widgets>
+               <platform-specific>
+                 <html>
+                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                            <html-template-decorator-section name="largeImage_DialogBox">
+                                <container id="largeImage_Container">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceProductLargerImage.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                 </html>
+               </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="storePickupDialog">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.StoreLocatorTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="dataSourceId" value="GEOPT_GOOGLE" />
+                <set field="searchStoreFormName" value="searchStoreLocator" />
+                <set field="searchStoreFormAction" value="searchStorePickup" />
+                <set field="storePickupFormAction" value="setStorePickup" />
+                <set field="pickupStoreButtonVisible" value="Y"/>
+                <set field="displayInitialStores" value="N" />
+                <set field="cancelButtonVisible" value="Y"/>
+                <set field="cancelButtonClass" value="standardBtn positive cancelPickupStore"/>
+                <set field="cancelButtonUrl" value="storeInfoOrShippingOption"/>
+                <set field="cancelButtonDescription" value="${uiLabelMap.CancelStoreSelectBtn}"/>
+                <set field="CancelStoreSelectInfo" value="${uiLabelMap.CancelStoreSelectInfo}"/>
+                <set field="dialogPurpose" value="storePickup_"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceStoreLocator.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                            <html-template-decorator-section name="storePickup_DialogBox">
+                                <container id="eCommerceStoreLocatorContainer">
+                                    <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
+                                    <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
+                                    <include-screen name="PTS_STORE_LOCATOR" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <platform-specific>
+                                        <html>
+                                            <html-template-decorator  location="component://osafe/webapp/osafe/common/commonGeoLocation.ftl" >
+                                                <html-template-decorator-section name="searchBoxBody">
+                                                    <include-screen name="storeLocatorSearch" location="component://osafe/widget/EcommerceScreens.xml"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="commonGeoLocationChart">
+                                                    <platform-specific>
+                                                        <html>
+                                                            <html-template location="component://osafe/webapp/osafe/common/checkoutGeoLocationChart.ftl"/>
+                                                        </html>
+                                                    </platform-specific>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="listBoxBody">
+                                                    <include-screen name="storeLocatorList" location="component://osafe/widget/EcommerceScreens.xml"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="ecommerceCommonButtons">
+                                                    <include-screen name="ecommerceCommonButtons" location="component://osafe/widget/CommonScreens.xml"/>
+                                                </html-template-decorator-section>
+                                            </html-template-decorator >
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="storePickupSearchResult">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.StoreLocatorTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="dataSourceId" value="GEOPT_GOOGLE" />
+                <set field="searchStoreFormName" value="searchStoreLocator" />
+                <set field="searchStoreFormAction" value="searchStorePickup" />
+                <set field="storePickupFormAction" value="setStorePickup" />
+                <set field="pickupStoreButtonVisible" value="Y"/>
+                <set field="displayInitialStores" value="Y" />
+                <set field="cancelButtonVisible" value="Y"/>
+                <set field="cancelButtonClass" value="standardBtn positive cancelPickupStore"/>
+                <set field="cancelButtonUrl" value="storeInfoOrShippingOption"/>
+                <set field="cancelButtonDescription" value="${uiLabelMap.CancelStoreSelectBtn}"/>
+                <set field="CancelStoreSelectInfo" value="${uiLabelMap.CancelStoreSelectInfo}"/>
+                <set field="dialogPurpose" value="storePickup_"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceStoreLocator.groovy"/>
+            </actions>
+            <widgets>
+                <container id="eCommerceStoreLocatorContainer">
+                    <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
+                    <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
+                    <include-screen name="PTS_STORE_LOCATOR" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                    <platform-specific>
+                        <html>
+                            <html-template-decorator  location="component://osafe/webapp/osafe/common/commonGeoLocation.ftl" >
+                                <html-template-decorator-section name="searchBoxBody">
+                                    <include-screen name="storeLocatorSearch" location="component://osafe/widget/EcommerceScreens.xml"/>
+                                </html-template-decorator-section>
+                                <html-template-decorator-section name="commonGeoLocationChart">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/checkoutGeoLocationChart.ftl"/>
+                                        </html>
+                                    </platform-specific>
+                                </html-template-decorator-section>
+                                <html-template-decorator-section name="listBoxBody">
+                                    <include-screen name="storeLocatorList" location="component://osafe/widget/EcommerceScreens.xml"/>
+                                </html-template-decorator-section>
+                                <html-template-decorator-section name="ecommerceCommonButtons">
+                                    <include-screen name="ecommerceCommonButtons" location="component://osafe/widget/CommonScreens.xml"/>
+                                </html-template-decorator-section>
+                            </html-template-decorator >
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

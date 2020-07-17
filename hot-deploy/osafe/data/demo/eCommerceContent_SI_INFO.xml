@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<Content contentId="SI_HEADER_CONTENT" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="SI_HEADER_CONTENT">
+   <textData>
+      <![CDATA[<ul>
+
+    <li><a href="<@ofbizUrl>main</@ofbizUrl>">Home</a></li>
+
+    <li><a href="<@ofbizUrl>contactUs</@ofbizUrl>">Contact Us</a></li>
+
+    <li><a href="<@ofbizUrl>MyAccount</@ofbizUrl>">My Account</a></li>
+
+    <#if userLogin?has_content && userLogin.userLoginId != "anonymous">
+        <li><a href="<@ofbizUrl>logout</@ofbizUrl>">Logout</a></li>
+    <#else/>
+        <li><a href="<@ofbizUrl>checkLogin</@ofbizUrl>">Sign In</a></li>
+    </#if>
+
+</ul>
+]]>
+  </textData>
+</ElectronicText>
+
+<Content contentId="SI_LOGO" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="SI_LOGO">
+ <textData>
+      <![CDATA[<a class="logo" href="<@ofbizUrl>main</@ofbizUrl>"><img alt="Home" src="/osafe_theme/images/logo/fashion house logo.gif"></a>]]>
+ </textData>
+</ElectronicText>
+
+<Content contentId="SI_SEARCH" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="SI_SEARCH">
+  <textData><![CDATA[
+<script type="text/javascript">
+function clearIt(what)
+{
+if(what.value == what.defaultValue) what.value = '';
+}
+function setIt(what)
+{
+if(what.value == '') what.value = what.defaultValue;
+}
+</script>
+
+<form method="get" id="frmSearchForm" name="frmSearchForm" action="siteSearch" onsubmit="return submitSearchForm(document.frmSearchForm);">
+    <fieldset title="Search this site..." class="formstyle">
+        <!-- <label for="searchText">${uiLabelMap.SearchCaption}</label> -->
+        <span id="searchInputContainer">
+            <input type="text" name="searchText" class="input placeholder" id="searchText" value="${StringUtil.wrapString(SEARCH_DEFAULT_TEXT!)}" maxlength="60" onfocus="clearIt(this)" onblur="setIt(this)" />
+            <input type="image" src="/osafe_theme/images/user_content/images/search-field-bg-2.png" name="searchBtn" value="${uiLabelMap.HeaderSearchBtn}" />
+        </span>
+    </fieldset>
+</form>]]>
+</textData>
+</ElectronicText>
+
+<Content contentId="SI_MAILING_LIST" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="SI_MAILING_LIST">
+  <textData>
+      <![CDATA[<a href="<@ofbizUrl>eCommerceMailingList</@ofbizUrl>">Join Mailing List</a>]]>
+  </textData>
+</ElectronicText>
+
+<Content contentId="SI_SHOPPING_CART" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="SI_SHOPPING_CART">
+  <textData><![CDATA[<a href="<@ofbizUrl>eCommerceShowcart</@ofbizUrl>">
+       <span id="shoppingCartCaption">${uiLabelMap.ShoppingCartCaption}</span>
+        <div id="siteCartStats">
+            <div class="highlightGroup">
+                <img id="viewCartSmallImage" alt="View Cart" src="/osafe_theme/images/cart/viewCart_small.gif">
+                <span id="siteShoppingCartSize">${shoppingCartSize} Items</span> <span class="price"><@ofbizCurrency amount=shoppingCart.getSubTotal() isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency()/></span>
+            </div>
+        </div>
+        <#--<input type="button" id="viewCartButtonImage" name="viewCartButtonImage" value=""  />-->
+        <input type="button" id="viewCartButton" class="standardBtn action" name="viewCartButton" value="${uiLabelMap.ViewCartBtn}"  />
+</a>]]>
+  </textData>
+</ElectronicText>
+
+<Content contentId="SI_FOOTER_CONTENT" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="SI_FOOTER_CONTENT">
+<textData>
+  <![CDATA[<div class="footerColumn"><span class="footerCaption">OUR PRODUCTS</span><ul id="footerLinks"><li><a href="<@ofbizUrl>eCommerceCategoryList?productCategoryId=APPAREL</@ofbizUrl>">Women's Apparel</a></li><li><a href="<@ofbizUrl>eCommerceCategoryList?productCategoryId=HANDBAGSANDSHOES</@ofbizUrl>">Handbags / Shoes</a></li><li><a href="<@ofbizUrl>eCommerceCategoryList?productCategoryId=JEWELRYACCESSORIES</@ofbizUrl>">Jewelry / Accessories</a></li><li><a href="<@ofbizUrl>eCommerceProductList?productCategoryId=SAMPLE SALE</@ofbizUrl>">Sample Sale</a></li><li><a href="<@ofbizUrl>eCommerceCategoryList?productCategoryId=TOPTRENDS</@ofbizUrl>">Top Trends</a></li></ul></div>
+<div class="footerColumn"><span class="footerCaption">MY ACCOUNT</span><ul id="footerLinks"><li><a href="<@ofbizUrl>eCommerceOrderHistory</@ofbizUrl>">Check Order Status</a></li><li><a href="<@ofbizUrl>eCommerceEditAddressBook</@ofbizUrl>">Edit Shipping Address</a></li><li><a href="<@ofbizUrl>eCommerceEditCustomerInfo</@ofbizUrl>">Edit eMail Preferences</a></li></ul></div>
+<div class="footerColumn"><span class="footerCaption">ABOUT US</span><ul id="footerLinks"><li><a href="<@ofbizUrl>contactUs</@ofbizUrl>">Contact Us</a></li><li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_ABOUT_US</@ofbizUrl>">About Us</a></li><li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_RETURN_POLICY</@ofbizUrl>">Return Policy</a></li><li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_PRIVACY_POLICY</@ofbizUrl>">Privacy Policy</a></li></ul></div>
+<div class="footerColumn"><ul id="footerLinks"><li><a target="facebook" href="http://www.facebook.com"><img src="/osafe_theme/images/media/facebookIcon.gif" alt="Facebook"></a></li><li><a target="twitter" href="http://www.twitter.com"><img src="/osafe_theme/images/media/twitterIcon.gif" alt="Twitter"></a></li></ul></div>
+  ]]>
+  </textData>
+</ElectronicText>
+
+</entity-engine-xml>

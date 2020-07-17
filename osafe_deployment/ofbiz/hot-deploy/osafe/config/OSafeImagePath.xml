@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+        To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+        Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+    --><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <!-- *** Caption *************************************** -->
+    <property key="DEFAULT_IMAGE_DIRECTORY">
+        <value>/osafe_theme/images/catalog/</value>
+    </property>
+    <property key="SMALL_IMAGE_URL">
+        <value>products/small/</value>
+    </property>
+    <property key="SMALL_IMAGE_ALT_URL">
+        <value>products/small/</value>
+    </property>
+    <property key="THUMBNAIL_IMAGE_URL">
+        <value>products/thumb/</value>
+    </property>
+    <property key="LARGE_IMAGE_URL">
+        <value>products/large/</value>
+    </property>
+    <property key="DETAIL_IMAGE_URL">
+        <value>products/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_1">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_1_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_1_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_2">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_2_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_2_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_3">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_3_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_3_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_4">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_4_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_4_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_5">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_5_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_5_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_6">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_6_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_6_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_7">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_7_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_7_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_8">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_8_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_8_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_9">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_9_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_9_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="ADDITIONAL_IMAGE_10">
+        <value>products/additional/</value>
+    </property>
+    <property key="XTRA_IMG_10_LARGE">
+        <value>products/additional/large/</value>
+    </property>
+    <property key="XTRA_IMG_10_DETAIL">
+        <value>products/additional/detail/</value>
+    </property>
+    <property key="PLP_SWATCH_IMAGE_URL">
+        <value>products/swatch/</value>
+    </property>
+    <property key="PDP_SWATCH_IMAGE_URL">
+        <value>products/swatch/</value>
+    </property>
+    <property key="FEATURE_SWATCH_IMAGE_URL">
+        <value>products/feature/</value>
+    </property>
+    <property key="PDP_VIDEO_URL">
+        <value>products/video/</value>
+    </property>
+    <property key="PDP_VIDEO_360_URL">
+        <value>products/video/</value>
+    </property>
+    <property key="CATEGORY_IMAGE_URL">
+        <value>categories/</value>
+    </property>
+    <property key="PROFILE_IMAGE_URL">
+        <value>manufacturer/</value>
+    </property>
+</resource>

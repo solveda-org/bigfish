@@ -1,0 +1,792 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<Content contentId="E_COMMON_HEADER" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_COMMON_STYLES" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_COMMON_FOOTER" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_NEW_CUSTOMER" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_CHANGE_CUSTOMER" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_FORGOT_PASSWORD" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_ABANDON_CART" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_CONTACT_US" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_REQUEST_CATALOG" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_ORDER_CONFIRM" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_ORDER_CHANGE" statusId="CTNT_PUBLISHED"/>
+<!-- COMMON CLIENT EMAIL HEADER -->
+<ElectronicText dataResourceId="E_COMMON_HEADER">
+ <textData>
+    <![CDATA[
+    
+<#if baseEcommerceUrl?exists><#assign urlPrefix = baseEcommerceUrl/></#if>
+<#if EMAIL_CLNT_LOGO?exists && EMAIL_CLNT_LOGO?has_content>
+<a title="${EMAIL_CLNT_NAME!""}" href="<@ofbizUrl fullPath="true">main</@ofbizUrl>">
+<img alt="${EMAIL_CLNT_NAME!""}" src="${baseUrl}/${EMAIL_CLNT_LOGO!""}">
+</a>
+</#if>
+<div class="emailTitle" style="font-family:${EMAIL_FONT_FAMILY!""};">
+                <h1>${EMAIL_CLNT_NAME!""}: ${EMAIL_TITLE!""}</h1>
+</div>
+            ]]>
+ </textData>
+</ElectronicText>
+
+<!-- COMMON CLIENT EMAIL STYLES  -->
+<ElectronicText dataResourceId="E_COMMON_STYLES">
+   <textData>
+     <![CDATA[
+            
+        <style type="text/css">
+            html, body, div, span, applet, object, iframe,
+            h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+            a, abbr, acronym, address, big, cite, code,
+            del, dfn, em, font, img, ins, kbd, q, s, samp,
+            small, strike, strong, sub, sup, tt, var,
+            dl, dt, dd, ol, ul, li,
+            fieldset, form, label, legend,
+            table, caption, tbody, tfoot, thead, tr, th, td {
+                margin: 0;
+                padding: 0;
+                border: 0;
+                outline: 0;
+                font-weight: inherit;
+                font-style: inherit;
+                font-family: inherit;
+                font-size:inherit;
+            }
+
+            a, body, th {
+                font-style: normal;
+                font-weight: normal;
+                text-decoration: none;
+            }
+
+            body, th {
+                text-align: left;
+            }
+
+            body {
+                background: white;
+                font-size: 15px;
+                position: relative;
+                line-height: 1;
+                color: black;
+                font-family: ${EMAIL_FONT_FAMILY};
+            }
+
+            h1 {
+                font-size: 26px;
+                font-weight: normal;
+                color: black;
+                background-color: none;
+            }
+
+            h3 {
+                font-size: 11px;
+                font-weight: bold;
+            }
+
+            /* IE7 fix */
+            table {
+                font-size: 15px;
+            }
+
+           div.emailContent p, div.thankYouContent {
+                font-size: 15px;
+            }
+
+            div.emailTitle, div.emailContent, div.thankYouContent {
+                margin-left: 10px;
+                margin-top: 15px;
+            }
+
+            div.emailContent p{
+                margin-top: 15px;
+                margin-bottom: 15px;
+            }
+
+        </style>
+]]>
+   </textData>
+ </ElectronicText>
+
+<!-- COMMON CLIENT EMAIL FOOTER -->
+<ElectronicText dataResourceId="E_COMMON_FOOTER">
+  <textData>
+            <![CDATA[
+<div class="thankYouContent" style="font-family:${EMAIL_FONT_FAMILY};">
+<p>Thank you,</p>
+<p>The ${EMAIL_CLNT_NAME!""} Team<br><a href="mailto:${EMAIL_CLNT_REPLY_TO!""}?subject=${EMAIL_CLNT_NAME!""} Customer Service Team">${EMAIL_CLNT_REPLY_TO!""}</a>
+</p>
+<p>Visit us at: <a href="${EMAIL_CLNT_URL_LINK!""}">${EMAIL_CLNT_URL_DISP!""}</a>
+</p>
+</div>
+]]>
+  </textData>
+ </ElectronicText>
+<Content contentId="E_COMMON_FOOTER" statusId="CTNT_PUBLISHED"/>
+
+ 
+<!-- CREATE PARTY EMAIL -->
+<ElectronicText dataResourceId="E_NEW_CUSTOMER">
+  <textData>
+    <![CDATA[
+<div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY!""};">
+<p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
+<p>Thank you for registering your account with ${EMAIL_CLNT_NAME!""}.</p>
+<p>Your login id is the Email address you supplied when you registered:</p>
+<p>${LOGIN_EMAIL!""}</p>
+</div>
+]]>
+  </textData>
+ </ElectronicText>
+
+<!-- CREATE PARTY EMAIL -->
+<ElectronicText dataResourceId="E_NEW_CUSTOMER">
+  <textData>
+    <![CDATA[
+<div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY!""};">
+<p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
+<p>Thank you for registering your account with ${EMAIL_CLNT_NAME!""}.</p>
+<p>Your login id is the Email address you supplied when you registered:</p>
+<p>${LOGIN_EMAIL!""}</p>
+</div>
+]]>
+  </textData>
+ </ElectronicText>
+
+<!-- FORGOT PASSWORD EMAIL -->
+<ElectronicText dataResourceId="E_FORGOT_PASSWORD">
+  <textData>
+    <![CDATA[
+<div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
+<p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
+<p>We have generated a new password for you.</p>
+<p>Your password has been changed to: "${password}".</p>
+<p>Use this password next time you log in.</p>
+<p>You can change the password from the <a href="<@ofbizUrl>MyAccount</@ofbizUrl>">MY ACCOUNT</a> page.</p>
+</div>
+        ]]>
+  </textData>
+ </ElectronicText>
+
+<!-- ABANDON CART EMAIL -->
+<ElectronicText dataResourceId="E_ABANDON_CART">
+  <textData>
+     <![CDATA[
+<div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
+<#assign discountPercent = "10%"/>
+<#assign promoCode = "TENOFF"/>
+<p>${uiLabelMap.SalutationEmailInfo} ${FIRST_NAME!""} ${LAST_NAME!""},</p>
+<p>Thanks for recently visiting ${EMAIL_CLNT_URL_DISP!""} Just a reminder - the items we're holding in your shopping cart will expire in a few days.
+</p>
+<p>To purchase the items in your cart now, just <a href="${EMAIL_CLNT_URL_LINK}">login to your account</a>. You can also review your selections, add more items, change what you've already picked, and place your order by proceeding to checkout.
+</p>
+<p>We will even sweeten the deal by offering you an additional ${discountPercent?if_exists} discount if you purchase these items today! Just enter the discount code ${promoCode?if_exists} during checkout.
+</p>
+<p>If you have any questions about our products, or need help with your purchase, please call our Customer Care Center at ${EMAIL_CLNT_TEL_NO!""}
+</p>
+<p>Happy Shopping!</p>
+</div>
+]]>
+   </textData>
+</ElectronicText>
+
+<!-- CONTACT US EMAIL -->
+<ElectronicText dataResourceId="E_CONTACT_US">
+  <textData>
+     <![CDATA[
+     
+            <style type="text/css">
+            .emailTable{
+                margin: 15px 0 0 10px;
+            }
+
+            .emailTable td.infoCaption {
+                width: 150px;
+                vertical-align:top;
+            }
+
+            .emailTable td.infoValue {
+                margin: 0 0 0 3px;
+                font-weight: bold;
+                width: 350px;
+            }
+            </style>
+
+            <table class="emailTable" style="font-family:${EMAIL_FONT_FAMILY!""};">
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.ReasonForContactCaption}</td>
+                    <td class="infoValue">
+                           ${parameters.contactReason?if_exists}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.FirstNameCaption}</td>
+                    <td class="infoValue">
+                           ${parameters.firstName?if_exists}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.LastNameCaption}</td>
+                    <td class="infoValue">
+                           ${parameters.lastName?if_exists}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.EmailAddressCaption}</td>
+                    <td class="infoValue">
+                           ${parameters.email?if_exists}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.ContactPhoneCaption}</td>
+                    <td class="infoValue">
+                         <#assign areaCode = parameters.contactPhoneArea!"">
+                         <#assign contactPhoneContact = parameters.contactPhoneContact!"">
+                         <#assign fullPhone = areaCode + contactPhoneContact>
+                         <#if fullPhone?has_content && fullPhone?length == 10>
+                            <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(3)>
+                            <#assign fullPhone = areaCode + "-" + contactPhoneContact>
+                         </#if>
+                           ${fullPhone!""}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.OrderNumberCaption}</td>
+                    <td class="infoValue">
+                           ${parameters.orderIdNumber?if_exists}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.CommentCaption}</td>
+                    <td class="infoValue">
+                        ${parameters.message?if_exists}
+                    </td>
+                </tr>
+            </table>
+         ]]>
+    </textData>
+</ElectronicText>
+
+<!-- REQUEST CATALOG EMAIL -->
+<ElectronicText dataResourceId="E_REQUEST_CATALOG">
+        <textData>
+            <![CDATA[
+            
+
+            <style type="text/css">
+            .emailTable{
+                margin: 15px 0 0 10px;
+            }
+
+            .emailTable td.infoCaption {
+                width: 150px;
+                vertical-align:top;
+            }
+
+            .emailTable td.infoValue {
+                margin: 0 0 0 3px;
+                font-weight: bold;
+                width: 350px;
+            }
+             p.info {
+                font-size: 15px;
+            }
+            </style>
+
+            <p class="info" style="font-family:${EMAIL_FONT_FAMILY};">You have requested a catalog and we will process this request as quickly as possible. The catalog will be mailed to:</p>
+
+            <table class="emailTable" style="font-family:${EMAIL_FONT_FAMILY};">
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.FirstNameCaption}</td>
+                    <td class="infoValue">
+                           ${parameters.firstName?if_exists}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.LastNameCaption}</td>
+                    <td class="infoValue">
+                           ${parameters.lastName?if_exists}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.AddressCaption}</td>
+                    <td class="infoValue">
+                                    <p>${parameters.address1?if_exists}</p>
+                                    <p>${parameters.address2?if_exists}</p>
+                                    <p>${parameters.city?if_exists}, ${parameters.stateCode?if_exists}&nbsp;${parameters.postalCode?if_exists}</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.ContactPhoneCaption}</td>
+                    <td class="infoValue">
+                         <#assign areaCode = parameters.contactPhoneArea!"">
+                         <#assign contactPhoneContact = parameters.contactPhoneContact!"">
+                         <#assign fullPhone = areaCode + contactPhoneContact>
+                         <#if fullPhone?has_content && fullPhone?length == 10>
+                            <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(3)>
+                            <#assign fullPhone = areaCode + "-" + contactPhoneContact>
+                         </#if>
+                           ${fullPhone!""}
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.CommentCaption}</td>
+                    <td class="infoValue">
+                        ${parameters.message?if_exists}
+                    </td>
+                </tr>
+            </table>
+]]>
+  </textData>
+</ElectronicText>
+
+<!-- ORDER CONFIRM EMAIL -->
+<ElectronicText dataResourceId="E_ORDER_CONFIRM">
+  <textData>
+     <![CDATA[
+     
+            <style type="text/css">
+                p.info{
+                    margin-top: 15px;
+                }
+            </style>
+<p class="info" style="font-family:${EMAIL_FONT_FAMILY};">${uiLabelMap.ThankYouForShoppingEmailInfo}</p>
+${EMAIL_TITLE!""}
+<div style="font-family:${EMAIL_FONT_FAMILY}; margin-top:15px;">
+<p>Thank you for placing your order with ${EMAIL_CLNT_NAME}.  This message is to confirm that your order has been received and is now being processed by our shipping department.  If your items are in stock it will usually ship by 3pm of the following business day. Occasionally it takes 2 business days.</p>
+<br>
+<p>If you would like to contact customer service for questions about your order, the best way is to send your e-mail to <a href="mailto:${EMAIL_CLNT_REPLY_TO}?subject=${EMAIL_CLNT_NAME}:#${ORDER_ID} Thank you for Order!!">${EMAIL_CLNT_REPLY_TO}</a>
+.</p>
+<br>
+</div>
+<@renderContentAsText contentId="E_ORDER_DETAIL" ignoreTemplate="true"/>
+]]>
+   </textData>
+ </ElectronicText>
+ 
+  <!-- ORDER NOTICE EMAIL -->
+ <ElectronicText dataResourceId="E_ORDER_CHANGE">
+   <textData>
+            <![CDATA[
+            <style type="text/css">
+                p.info{
+                    margin-top: 15px;
+                }
+            </style>
+
+                <p class="info" style="font-family:${EMAIL_FONT_FAMILY!""};">${uiLabelMap.ThankYouForShoppingEmailInfo}</p>
+            ]]>
+   </textData>
+</ElectronicText>
+
+<!-- ORDER DETAIL -->
+<ElectronicText dataResourceId="E_ORDER_DETAIL">
+  <textData>
+            <![CDATA[
+<table id="outerEmailLayout" cellpadding="0" cellspacing="0" style="font-family:${EMAIL_FONT_FAMILY};">
+    <tr id="orderHeaderRow">
+        <td style="padding-bottom:20px;">
+        <table cellpadding="0" cellspacing="0">
+            <tr>
+                <td id="headerLeft"  style="vertical-align: top;">
+                <table cellpadding="0" cellspacing="0">
+                    <tr> <!-- row 1 -->
+                        <td style="vertical-align: top;">
+                            <table cellpadding="0" cellspacing="0"style="width: ${EMAIL_TBL_WIDTH}; border: 1px solid black; font-family:${EMAIL_FONT_FAMILY};">
+                                <tr>
+                                    <td style="padding-left:10px; font-size:${EMAIL_TBL_FONT_SIZE!""}; background-color: ${EMAIL_TBL_HEAD_COLOR!""};">${uiLabelMap.OrderInformationHeading}</td>
+                                </tr>
+                                <#-- placing customer information -->
+                                <tr>
+                                    <td style="border-top: 1px solid black;">
+                                        <table cellpadding="0" cellspacing="0"style="width: 90%; margin: 10px; font-family:${EMAIL_FONT_FAMILY};">
+                                            <#-- order number -->
+                                            <#if ORDER?has_content>
+                                            <tr>
+                                                <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.OrderNumberCaption}</td>
+                                                <td>${ORDER.orderId}</td>
+                                            </tr>
+                                            </#if>
+                                            <#-- user information -->
+                                            <#if ORDER_HELPER?exists && ORDER?has_content>
+                                              <#assign displayParty = ORDER_HELPER.getPlacingParty()?if_exists/>
+                                              <#if displayParty?has_content>
+                                                <#assign displayPartyNameResult = dispatcher.runSync("getPartyNameForDate", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", displayParty.partyId, "compareDate", ORDER.orderDate, "userLogin", userLogin))/>
+                                              </#if>
+                                            <tr>
+                                                <td>${uiLabelMap.NameCaption}</td>
+                                                <td >${(displayPartyNameResult.fullName)?default("[Name Not Found]")}</td>
+                                            </tr>
+                                            </#if>
+                                            <#-- ordered date -->
+                                            <#if ORDER?has_content>
+                                            <tr>
+                                                <td>${uiLabelMap.OrderDateCaption}</td>
+                                                <td>${ORDER.orderDate?string("yyyy-MM-dd")}</td>
+                                            </tr>
+                                            </#if>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr> <!-- row 2 -->
+                        <td style="vertical-align: top; padding-top: 20px">
+                            <#if ORDER_PAYMENTS?has_content || ORDER_PAYMENT_TYPE?has_content || billingAccount?has_content>
+                                <#-- credit card info -->
+                            <table cellpadding="0" cellspacing="0"style="width: ${EMAIL_TBL_WIDTH}; border: 1px solid black; font-family:${EMAIL_FONT_FAMILY};">
+                                <tr>
+                                    <td style="padding-left:10px; font-size:${EMAIL_TBL_FONT_SIZE!""}; background-color: ${EMAIL_TBL_HEAD_COLOR!""};">${uiLabelMap.PaymentInformationHeading}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid black;">
+                                        <table cellpadding="0" cellspacing="0"style="width: 90%; margin: 10px; font-family:${EMAIL_FONT_FAMILY};">
+                                        <#list ORDER_PAYMENTS as paymentMethod>
+                                          <#if "CREDIT_CARD" == paymentMethod.paymentMethodTypeId>
+                                            <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>
+                                            <#assign cardType = creditCard.cardType!"">
+
+                                            <#assign cardNumber = creditCard.cardNumber!"">
+                                            <#assign cardNumber = cardNumber?substring(cardNumber?length - 4)>
+
+                                            <#assign expireDate = creditCard.expireDate!"">
+                                          </#if>
+                                            <#-- credit card info -->
+                                            <#if "CREDIT_CARD" == paymentMethod.paymentMethodTypeId && creditCard?has_content>
+                                                <#if outputted?default(false)>
+                                                </#if>
+                                                <#assign pmBillingAddress = creditCard.getRelatedOne("PostalAddress")?if_exists>
+                                            <tr>
+                                                <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.CreditCardCaption}</td>
+                                                <td>
+                                                    ${cardType?if_exists}<br>
+                                                    ${cardNumber?if_exists}<br>
+                                                    ${expireDate?if_exists}<br>
+                                                </td>
+                                            </tr>
+                                            </#if>
+
+                                            <#assign outputted = true>
+                                        </#list>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            </#if>
+                        </td>
+                    </tr>
+
+                </table>
+                </td>
+                <td style="padding-left: 20px;"> &nbsp;<!--  Gutter column --></td>
+                <td id="headerRight"  style="vertical-align: top;">
+                <table cellpadding="0" cellspacing="0">
+                    <tr> <!-- row 1 -->
+                        <td style="vertical-align: top;">
+                            <#if ORDER_ITEM_SHIP_GROUP?has_content>
+                            <table cellpadding="0" cellspacing="0"style="width: ${EMAIL_TBL_WIDTH}; border: 1px solid black; font-family:${EMAIL_FONT_FAMILY!""};">
+                                <tr>
+                                    <td style="padding-left:10px; font-size:${EMAIL_TBL_FONT_SIZE!""}; background-color: ${EMAIL_TBL_HEAD_COLOR!""};">${uiLabelMap.ShippingInformationHeading}</td>
+                                </tr>
+                                <tr>
+                                    <td style="border-top: 1px solid black;">
+                                        <#-- shipping address -->
+                                        <#assign groupIdx = 0>
+                                        <#list ORDER_ITEM_SHIP_GROUP as shipGroup>
+                                          <#if ORDER?has_content>
+                                            <#assign shippingAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
+                                            <#assign groupNumber = shipGroup.shipGroupSeqId?if_exists>
+                                          <#else>
+                                            <#assign shippingAddress = cart.getShippingAddress(groupIdx)?if_exists>
+                                            <#assign groupNumber = groupIdx + 1>
+                                          </#if>
+                                            <table cellpadding="0" cellspacing="0"style="width: 90%; margin: 10px;font-family:${EMAIL_FONT_FAMILY!""};">
+                                            <#if shippingAddress?has_content>
+                                            <tr>
+                                                <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.DestinationCaption}</td>
+                                                <td>
+                                                <#if shippingAddress.toName?has_content>${shippingAddress.toName}<br></#if>
+                                                ${shippingAddress.address1}<br>
+                                                <#if shippingAddress.address2?has_content>${shippingAddress.address2}<br></#if>
+                                                <#assign shippingStateGeo = (delegator.findOne("Geo", {"geoId", shippingAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
+                                                ${shippingAddress.city}<#if shippingStateGeo?has_content>, ${shippingStateGeo.geoName?if_exists}</#if> ${shippingAddress.postalCode?if_exists}<br>
+                                                <#assign shippingCountryGeo = (delegator.findOne("Geo", {"geoId", shippingAddress.countryGeoId?if_exists}, false))?if_exists />
+                                                <#if shippingCountryGeo?has_content>${shippingCountryGeo.geoName?if_exists}<br></#if>
+                                                </td>
+                                            </tr>
+                                            </#if>
+                                            <tr>
+                                                <td  style="padding-top: 10px;">${uiLabelMap.ShippingMethodCaption}</td>
+                                                <td  style="padding-top: 10px;">
+                                                  <#if ORDER?has_content>
+                                                    <#assign orderAttrPickupStore = ORDER.getRelatedByAnd("OrderAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName", "STORE_LOCATION"))>
+                                                    <#if orderAttrPickupStore?has_content>
+                                                        ${uiLabelMap.StorePickupCaption}
+                                                    <#else>
+                                                      <#assign shipmentMethodType = shipGroup.getRelatedOne("ShipmentMethodType")?if_exists>
+                                                      <#assign carrierPartyId = shipGroup.carrierPartyId?if_exists>
+                                                    </#if>
+                                                  <#else>
+                                                    <#assign shipmentMethodType = cart.getShipmentMethodType(groupIdx)?if_exists>
+                                                    <#assign carrierPartyId = cart.getCarrierPartyId(groupIdx)?if_exists>
+                                                  </#if>
+                                                  <#if carrierPartyId?exists && carrierPartyId != "_NA_">${carrierPartyId?if_exists}</#if>
+                                                  <#if shipmentMethodType?exists>${(shipmentMethodType.description)?default("N/A")}</#if>
+                                                </td>
+                                            </tr>
+                                            <#-- tracking number -->
+                                            <#if shipGroup.trackingNumber?has_content || ORDER_SHIPPING_INFO?has_content>
+                                            <tr>
+                                                <td>${uiLabelMap.TrackingNumberCaption}</td>
+                                                <td>
+                                                    <#if shipGroup.trackingNumber?has_content>
+                                                      ${shipGroup.trackingNumber}
+                                                    </#if>
+                                                    <#if ORDER_SHIPPING_INFO?has_content>
+                                                      <#list ORDER_SHIPPING_INFO as orderShipmentInfoSummary>
+                                                        <#if (ORDER_SHIPPING_INFO?size > 1)>${orderShipmentInfoSummary.shipmentPackageSeqId}: </#if>
+                                                        Code: ${orderShipmentInfoSummary.trackingCode?default("[Not Yet Known]")}
+                                                        <#if orderShipmentInfoSummary.boxNumber?has_content>${uiLabelMap.OrderBoxNumber}${orderShipmentInfoSummary.boxNumber}</#if>
+                                                        <#if orderShipmentInfoSummary.carrierPartyId?has_content>(${uiLabelMap.ProductCarrier}: ${orderShipmentInfoSummary.carrierPartyId})</#if>
+                                                      </#list>
+                                                    </#if>
+                                                </td>
+                                            </tr>
+                                            </#if>
+
+                                            <#if shipGroup_has_next>
+                                            </#if>
+                                        </table>
+                                        <#assign groupIdx = groupIdx + 1>
+                                        </#list><#-- end list of ORDER_ITEM_SHIP_GROUP-->
+                            </#if>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                    <tr> <!-- row 2 -->
+                        <td>
+                            <!-- Row 2 right col-->
+                        </td>
+                    </tr>
+                </table>
+                </td>
+            </tr>
+        </table>
+        </td>
+    </tr>
+</table>
+
+<#if baseEcommerceUrl?exists><#assign urlPrefix = baseEcommerceUrl/></#if>
+<#-- Order Items Table-->
+<table cellpadding="0" cellspacing="0" style="width: 100%; border: #000000 solid 1px; border-collapse: collapse; font-family:${EMAIL_FONT_FAMILY};">
+    <tr>
+        <td style="padding-left: 10px; font-size: ${EMAIL_TBL_FONT_SIZE}; background-color: ${EMAIL_TBL_HEAD_COLOR}">${uiLabelMap.OrderItemsHeading}</td>
+    </tr>
+    <tr>
+        <td style="border-top: #000000 solid 1px; border-collapse: collapse;">
+        <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 10px; font-family:${EMAIL_FONT_FAMILY};">
+            <#-- Heading Row -->
+            <tr>
+                <td colspan="2" style="font-weight: bold;">${uiLabelMap.ProductLabel}</td>
+                <td style="font-weight: bold;">${uiLabelMap.QuantityLabel}</td>
+                <td style="font-weight: bold;">${uiLabelMap.PriceLabel}</td>
+                <td style="font-weight: bold;">${uiLabelMap.TotalLabel}</td>
+            </tr>
+
+            <#-- Body Rows -->
+            <#list ORDER_ITEMS as orderItem>
+                <#assign product = orderItem.getRelatedOneCache("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
+                <#assign urlProductId = product.productId>
+                <#if product.isVariant?if_exists?upper_case == "Y">
+                    <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+                    <#assign urlProductId=virtualProduct.productId>
+                </#if>
+                <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
+                <#if (!productImageUrl?has_content && !(productImageUrl == "null")) && virtualProduct?has_content>
+                    <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
+                </#if>
+                <#-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
+                <#if (productImageUrl?string?has_content && (productImageUrl == "null"))>
+                    <#assign productImageUrl = "">
+                </#if>
+                <#if !productImageUrl?has_content>
+                    <#assign productImageUrl = "/osafe_theme/images/user_content/image/place_holder_small.jpg">
+                </#if>
+                <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "DESCRIPTION", locale, dispatcher)?if_exists>
+                <#if !prodDescription?has_content && virtualProduct?has_content>
+                    <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "DESCRIPTION", locale, dispatcher)?if_exists>
+                </#if>
+                <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher)?if_exists>
+                <#if !productName?has_content && virtualProduct?has_content>
+                    <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
+                </#if>
+            <tr>
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductDetail?productId=${urlProductId}</@ofbizUrl>" id="image_${urlProductId}">
+                    <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${baseUrl}/${productImageUrl}">
+                </a>
+                </td>
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>
+                <table cellpadding="0" cellspacing="0" style="width: 100%; font-family:${EMAIL_FONT_FAMILY};">
+                    <tr>
+                        <td>
+                            <a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductDetail?productId=${urlProductId}</@ofbizUrl>">${StringUtil.wrapString(productName)}</a>
+                        </td>
+                    </tr>
+                   <#assign features = "">
+                   <#assign standardFeatureList = product.getRelated("ProductFeatureAndAppl")/>
+                   <#assign standardFeatureList = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(standardFeatureList,Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureApplTypeId","STANDARD_FEATURE"))![]>
+                   <#if standardFeatureList?has_content>
+                       <#assign features = standardFeatureList>
+                   </#if>
+                   <#if features?has_content>
+                     <#list features as feature>
+                        <#assign productFeatureType = feature.getRelatedOne("ProductFeatureType")>
+                        <tr>
+                            <td>${productFeatureType.description!""}: ${feature.description?default("")}</td>
+                        </tr>
+                     </#list>
+                   </#if>
+                </table>
+                </td>
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${orderItem.quantity?string.number}</td>
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></td>
+                <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><@ofbizCurrency amount=ORDER_HELPER.getOrderItemSubTotal(orderItem,ORDER_HELPER.getAdjustments()) isoCode=currencyUomId/></td>
+            </tr>
+            </#list>
+            <#-- Footer Rows -->
+            <tr>
+                <td colspan="5"></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.CommonSubtotal}</span></td>
+                <td><@ofbizCurrency amount=ORDER_SUB_TOTAL isoCode=currencyUomId/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <#list ORDER_ADJUSTMENTS as orderHeaderAdjustment>
+            <tr>
+                <#assign adjustmentType = orderHeaderAdjustment.getRelatedOneCache("OrderAdjustmentType")>
+                <#assign productPromo = orderHeaderAdjustment.getRelatedOneCache("ProductPromo")!"">
+                <#assign promoCodeText = ""/>
+                <#if productPromo?has_content>
+                   <#assign promoText = productPromo.promoText?if_exists/>
+                   <#assign productPromoCode = productPromo.getRelated("ProductPromoCode")>
+                   <#assign promoCodesEntered = ORDER_HELPER.getProductPromoCodesEntered()!""/>
+                   <#if promoCodesEntered?has_content>
+                      <#list promoCodesEntered as promoCodeEntered>
+                          <#if productPromoCode?has_content>
+                          <#list productPromoCode as promoCode>
+                            <#assign promoCodeEnteredId = promoCodeEntered/>
+                            <#assign promoCodeId = promoCode.productPromoCodeId!""/>
+                            <#if promoCodeEnteredId?has_content>
+                                <#if promoCodeId == promoCodeEnteredId>
+                                   <#assign promoCodeText = promoCode.productPromoCodeId?if_exists/>
+                                </#if>
+                            </#if>
+                          </#list>
+                        </#if>
+                       </#list>
+                   </#if>
+                </#if>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;"><#if promoText?has_content>${promoText}<#if promoCodeText?has_content> (${promoCodeText} )</#if><#else>${ORDER_HELPER.getAdjustmentType(orderHeaderAdjustment)}</#if></span></td>
+                <td><@ofbizCurrency amount=ORDER_HELPER.getOrderAdjustmentTotal(orderHeaderAdjustment) isoCode=currencyUomId/></td>
+                <td>&nbsp;</td>
+            </tr>
+            </#list>
+            <tr>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.ShippingAndHandlingLabel}</span></td>
+                <td><@ofbizCurrency amount=ORDER_SHIP_TOTAL isoCode=currencyUomId/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
+                <td><@ofbizCurrency amount=ORDER_TAX_TOTAL isoCode=currencyUomId/></td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TotalLabel}</span></td>
+                <td><span style="font-weight: bold;"><@ofbizCurrency amount=ORDER_TOTAL isoCode=currencyUomId/></span></td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
+        </td>
+    </tr>
+</table>
+
+]]>
+  </textData>
+ </ElectronicText>
+ 
+ <!-- SHIP REVIEW EMAIL -->
+<ElectronicText dataResourceId="E_SHIP_REVIEW">
+  <textData>
+     <![CDATA[
+        <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
+            <p>${uiLabelMap.SalutationEmailInfo} ${FIRST_NAME!""} ${LAST_NAME!""},</p>
+            <p>We recently shipped items to you - we certainly hope you are enjoying our products.</p>
+            <p>We'd love to get your feedback!! Simply click on the Review link below and you will have an opportunity to post a review on our site.</p>
+        </div>
+        <#if baseEcommerceUrl?exists><#assign urlPrefix = baseEcommerceUrl/></#if>
+        <table cellpadding="0" cellspacing="0" style="width: 100%; border: #000000 solid 1px; border-collapse: collapse; font-family:${EMAIL_FONT_FAMILY};">
+            <tr>
+                <td style="text-align: center; padding-left: 10px; font-size: ${EMAIL_TBL_FONT_SIZE}; background-color: ${EMAIL_TBL_HEAD_COLOR}">${uiLabelMap.OrderItemsHeading}</td>
+            </tr>
+            <tr>
+                <td style="border-top: #000000 solid 1px; border-collapse: collapse;">
+                <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 10px; font-family:${EMAIL_FONT_FAMILY};">
+                <#-- Heading Row -->
+                <tr>
+                    <td style="font-weight: bold;">${uiLabelMap.ProductLabel}</td>
+                    <td style="font-weight: bold;">${uiLabelMap.DescriptionLabel}</td>
+                    <td style="font-weight: bold;">&nbsp;</td>
+                </tr>
+                <#list ORDER_ITEMS as orderItem>
+                   <#assign product = orderItem.getRelatedOneCache("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
+                    <#assign urlProductId = product.productId>
+                    <#if product.isVariant?if_exists?upper_case == "Y">
+                        <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+                        <#assign urlProductId=virtualProduct.productId>
+                   </#if>
+                   <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
+                   <#if (!productImageUrl?has_content && !(productImageUrl == "null")) && virtualProduct?has_content>
+                       <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
+                   </#if>
+                   <#-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
+                   <#if (productImageUrl?string?has_content && (productImageUrl == "null"))>
+                       <#assign productImageUrl = "">
+                   </#if>
+                   <#if !productImageUrl?has_content>
+                       <#assign productImageUrl = "/osafe_theme/images/user_content/image/place_holder_small.jpg">
+                   </#if>
+                   <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "DESCRIPTION", locale, dispatcher)?if_exists>
+                   <#if !prodDescription?has_content && virtualProduct?has_content>
+                       <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "DESCRIPTION", locale, dispatcher)?if_exists>
+                   </#if>
+                   <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher)?if_exists>
+                   <#if !productName?has_content && virtualProduct?has_content>
+                       <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
+                   </#if>
+                   <tr>
+                       <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>><a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductDetail?productId=${urlProductId}</@ofbizUrl>" id="image_${urlProductId}">
+                           <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${baseUrl}/${productImageUrl}">
+                           </a>
+                       </td>
+                       <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>${prodDescription}</td>
+                       <td <#if !orderItem_has_next><#-- Last Row Logic--></#if>>
+                          <a href="<@ofbizUrl fullPath="true" secure="false">eCommerceProductReviewSubmit?productId=${urlProductId}</@ofbizUrl>">${uiLabelMap.ReviewLabel}</a>
+                       </td>
+                   </tr>
+               </#list>
+           </table>
+           </td>
+       </tr>
+    </table>
+]]>
+   </textData>
+</ElectronicText>
+ 
+
+</entity-engine-xml>

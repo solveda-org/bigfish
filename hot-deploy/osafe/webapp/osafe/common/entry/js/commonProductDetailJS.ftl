@@ -1,0 +1,452 @@
+<script language="JavaScript" type="text/javascript">
+
+
+  jQuery(document).ready(function(){
+
+    jQuery('.pdpFeatureSwatchImage').click(function() {
+        if (jQuery('.seeItemDetail').length) {
+            jQuery('.seeItemDetail').attr('href', jQuery('#pdpUrl').val()+this.title);
+        }
+    });
+
+    jQuery('.plpFeatureSwatchImage').click(function() {
+        var swatchVariant = jQuery(this).next('.swatchVariant').clone();
+        jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
+        jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
+        jQuery(this).siblings('.plpFeatureSwatchImage').removeClass('selected');
+        jQuery(this).addClass('selected');
+        makePDPUrl(this);
+    });
+    activateInitialZoom();
+
+    var selectedSwatch = '${StringUtil.wrapString(parameters.productFeatureType)!""}';
+    if(selectedSwatch != '') {
+        var featureArray = selectedSwatch.split(":");
+        jQuery('.'+featureArray[1]).click();
+    }
+  });
+
+    var detailImageUrl = null;
+    function setAddProductId(name) {
+        document.addform.add_product_id.value = name;
+        if (document.addform.quantity == null) return;
+    }
+    function setProductStock(name) {
+        var elm = document.getElementById("addToCart");
+        if(VARSTOCK[name]=="outOfStock")
+        {
+            elm.setAttribute("onClick","javascript:void(0)");
+            jQuery('#addToCart').addClass("inactiveAddToCart");
+        } else {
+            jQuery('#addToCart').removeClass("inactiveAddToCart");
+            elm.setAttribute("onClick","javascript:addItem()");
+        }
+    }
+    function setVariantPrice(sku) {
+        if (sku == '' || sku == 'NULL' || isVirtual(sku) == true) {
+            var elem = document.getElementById('variant_price_display');
+            var txt = document.createTextNode('');
+            if(elem.hasChildNodes()) {
+                elem.replaceChild(txt, elem.firstChild);
+            } else {
+                elem.appendChild(txt);
+            }
+        }
+        else {
+            var elem = document.getElementById('variant_price_display');
+            var price = getVariantPrice(sku);
+            var txt = document.createTextNode(price);
+            if(elem.hasChildNodes()) {
+                elem.replaceChild(txt, elem.firstChild);
+            } else {
+                elem.appendChild(txt);
+            }
+        }
+    }
+    function isVirtual(product) {
+        var isVirtual = false;
+        <#if virtualJavaScript?exists>
+        for (i = 0; i < VIR.length; i++) {
+            if (VIR[i] == product) {
+                isVirtual = true;
+            }
+        }
+        </#if>
+        return isVirtual;
+    }
+    function addItem() {
+       if (document.addform.add_product_id.value == 'NULL' || document.addform.add_product_id.value == '') {
+           for (i = 0; i < OPT.length; i++) {
+            var optionName = OPT[i];
+            var indexSelected = document.forms["addform"].elements[optionName].selectedIndex;
+            if(indexSelected <= 0)
+            {
+                // Trim the FT prefix and convert to title case
+                var properName = OPT[i].substr(2);
+
+                // capitalize comes from prototype, do capitalize to each part
+                var parts = properName.split('_');
+                parts.each(function(element,index){
+                    parts[index] = element.capitalize();
+                });
+                properName = parts.join(" ");
+                alert("Please select a " + properName);
+                break;
+            }
+           }
+           return;
+       } else {
+           var quantity = document.addform.quantity.value;
+           var lowerLimit = ${PDP_QTY_MIN!"1"};
+           var upperLimit = ${PDP_QTY_MAX!"99"};
+           if(quantity < lowerLimit)
+           {
+                alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMinQtyError,'\"','\\"'))}");
+                return false;
+           }
+           if(upperLimit!= 0 && quantity > upperLimit)
+           {
+                alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMaxQtyError,'\"','\\"'))}");
+                return false;
+           }
+           if(!isWhole(quantity))
+           {
+                alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPQtyDecimalNumberError,'\"','\\"'))}");
+                return false;
+           }
+           if (isVirtual(document.addform.add_product_id.value)) {
+               document.location = '<@ofbizUrl>product?category_id=${categoryId?if_exists}&product_id=</@ofbizUrl>' + document.addform.add_product_id.value;
+               return;
+           } else {
+               document.addform.submit();
+           }
+       }
+    }
+    
+    function replaceDetailImage(largeImageUrl, detailImageUrl) {
+        if (!jQuery('#mainImages').length) {
+            var mainImages = jQuery('#mainImageDiv').clone();
+            jQuery(mainImages).find('img.productLargeImage').attr('id', 'mainImage');
+            jQuery('#productDetailsImageContainer').html(mainImages.html());
+            jQuery('#seeMainImage a').attr("href", "javascript:replaceDetailImage('"+largeImageUrl+"', '"+detailImageUrl+"');");
+        }
+        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(PDP_IMG_ZOOM_ACTIVE_FLAG!"")>
+            var mainImages = jQuery('#mainImageDiv').clone();
+            jQuery(mainImages).find('img.productLargeImage').attr('id', 'mainImage');
+            jQuery(mainImages).find('img.productLargeImage').attr('src', largeImageUrl+ "?" + new Date().getTime());
+            jQuery(mainImages).find('a').attr('class', 'innerZoom');
+            if(detailImageUrl != "") {
+              jQuery(mainImages).find('a').attr('href', detailImageUrl);
+            } else {
+                jQuery(mainImages).find('a').attr('href', 'javaScript:void(0);');
+            }
+            jQuery('#productDetailsImageContainer').html(mainImages.html());
+            activateZoom(detailImageUrl);
+        </#if>
+        if (document.images['mainImage'] != null) {
+            var detailimagePath;
+            document.getElementById("mainImage").setAttribute("src",largeImageUrl);
+            if(document.getElementById('largeImage')) {
+                setDetailImage(detailImageUrl);
+            }
+            document.getElementById("mainImage").setAttribute("class","productLargeImage<#if !IMG_SIZE_PDP_REG_W?has_content> productLargeImageDefaultWidth</#if>");
+            detailimagePath = "javascript:displayDialogBox('largeImage_')";
+            if (jQuery('#mainImageLink').length) {
+                jQuery('#mainImageLink').attr("href",detailimagePath);
+            }
+        }
+    }
+
+    function setDetailImage(detailImageUrl) {
+      if (detailImageUrl == '') {
+        detailImageUrl = "/osafe_theme/images/user_content/images/NotFoundImagePDPDetail.jpg";
+      }
+      document.images['largeImage'].src = detailImageUrl;
+      var image = new Image();
+        image.src = detailImageUrl+ "?" + new Date().getTime();
+        image.onerror = function () {
+          jQuery('#largeImage').attr('src', '/osafe_theme/images/user_content/images/NotFoundImagePDPDetail.jpg');
+      };
+    }
+    
+    function popupDetail(detailImageUrl) {
+        extraWidth = 100;
+        height = ${IMG_SIZE_PDP_POPUP_H!} + extraWidth;
+        width = ${IMG_SIZE_PDP_POPUP_W!} + extraWidth;
+        popUp("<@ofbizUrl>popupDetailImage?detail=" + detailImageUrl + "</@ofbizUrl>", 'detailImage', height, width);
+    }
+
+    function toggleAmt(toggle) {
+        if (toggle == 'Y') {
+            changeObjectVisibility("add_amount", "visible");
+        }
+
+        if (toggle == 'N') {
+            changeObjectVisibility("add_amount", "hidden");
+        }
+    }
+
+    function findIndex(name) {
+        for (i = 0; i < OPT.length; i++) {
+            if (OPT[i] == name) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    function addFeatureAction(featureUl) {
+        jQuery('#'+featureUl+' li').click(function(){
+            jQuery(this).siblings("li").removeClass("selected");
+            jQuery(this).addClass("selected"); 
+        });
+    }
+
+    function getList(name, index, src) {
+        currentFeatureIndex = findIndex(name);
+            // set the drop down index for swatch selection
+            document.forms["addform"].elements[name].selectedIndex = (index*1)+1;
+        if (currentFeatureIndex < (OPT.length-1)) {
+            // eval the next list if there are more
+            var selectedValue = document.forms["addform"].elements[name].options[(index*1)+1].value;
+            var selectedText = document.forms["addform"].elements[name].options[(index*1)+1].text;
+            jQuery('.'+selectedText).click();
+            var mapKey = name+'_'+selectedText;
+            var detailImgUrl = '';
+            if(VARMAP[mapKey]) {
+                if(jQuery('#mainImage_'+VARMAP[mapKey]).length) { 
+                    var variantMainImages = jQuery('#mainImage_'+VARMAP[mapKey]).clone();
+                    jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+                    jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
+                    detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
+                    jQuery('#productDetailsImageContainer').html(variantMainImages.html());
+
+                    var variantAltImages = jQuery('#altImage_'+VARMAP[mapKey]).clone();
+                    jQuery(variantAltImages).find('img').each(function(){ jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+                    jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
+
+                    var variantLargeImages = jQuery('#largeImageUrl_'+VARMAP[mapKey]).clone();
+                    jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
+                    jQuery('#seeLargerImage').html(variantLargeImages.html());
+
+                    var variantSeeMainImages = jQuery('#seeMainImage_'+VARMAP[mapKey]).clone();
+                    jQuery('#seeMainImage').html(variantSeeMainImages.html());
+                }
+            }
+            if (index == -1) {
+              <#if featureOrderFirst?exists>
+                var Variable1 = eval("list" + "${featureOrderFirst}" + "()");
+              </#if>
+            } else {
+                var Variable1 = eval("list" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
+                var Variable2 = eval("listLi" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
+                jQuery('#Li'+OPT[(currentFeatureIndex)]+' li').click(function() {
+                  var nextFeatureLength = document.forms["addform"].elements[OPT[(currentFeatureIndex+1)]].length;
+                  if (currentFeatureIndex+1 <= (OPT.length-1) && nextFeatureLength == 2) {
+                    getList(OPT[(currentFeatureIndex+1)],'0',1);
+                  }
+                  var elm = document.getElementById("addToCart");
+                  elm.setAttribute("onClick","javascript:addItem()");
+                  jQuery('#addToCart').addClass("inactiveAddToCart");
+                    //jQuery('#Li'+OPT[(currentFeatureIndex+1)]+' li').removeClass("selected");
+                });
+            }
+            // set the product ID to NULL to trigger the alerts
+            setAddProductId('NULL');
+
+            // set the variant price to NULL
+            setVariantPrice('NULL');
+        } else {
+            // this is the final selection -- locate the selected index of the last selection
+            var indexSelected = document.forms["addform"].elements[name].selectedIndex;
+            // using the selected index locate the sku
+            var sku = document.forms["addform"].elements[name].options[indexSelected].value;
+
+            // set the product ID
+            setAddProductId(sku);
+            setProductStock(sku);
+            // set the variant price
+            //setVariantPrice(sku);
+
+            // check for amount box
+            toggleAmt(checkAmtReq(sku));
+        
+        var varProductId = jQuery('#add_product_id').val();
+        if(jQuery('#mainImage_'+varProductId).length) {
+            var variantMainImages = jQuery('#mainImage_'+varProductId).clone();
+            jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+            jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
+            detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
+            jQuery('#productDetailsImageContainer').html(variantMainImages.html());
+
+            var variantAltImages = jQuery('#altImage_'+varProductId).clone();
+            jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+            jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
+
+            var variantLargeImages = jQuery('#largeImageUrl_'+varProductId).clone();
+            jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
+            jQuery('#seeLargerImage').html(variantLargeImages.html());
+        }
+        }
+        activateZoom(detailImgUrl);
+        activateScroller();
+    }
+
+    function validate(x){
+        var msg=new Array();
+        msg[0]="Please use correct date format [yyyy-mm-dd]";
+
+        var y=x.split("-");
+        if(y.length!=3){ alert(msg[0]);return false; }
+        if((y[2].length>2)||(parseInt(y[2])>31)) { alert(msg[0]); return false; }
+        if(y[2].length==1){ y[2]="0"+y[2]; }
+        if((y[1].length>2)||(parseInt(y[1])>12)){ alert(msg[0]); return false; }
+        if(y[1].length==1){ y[1]="0"+y[1]; }
+        if(y[0].length>4){ alert(msg[0]); return false; }
+        if(y[0].length<4) {
+            if(y[0].length==2) {
+                y[0]="20"+y[0];
+            } else {
+                alert(msg[0]);
+                return false;
+            }
+        }
+        return (y[0]+"-"+y[1]+"-"+y[2]);
+    }
+
+    function additemSubmit(){
+        <#if product.productTypeId?if_exists == "ASSET_USAGE">
+        newdatevalue = validate(document.addform.reservStart.value);
+        if (newdatevalue == false) {
+            document.addform.reservStart.focus();
+        } else {
+            document.addform.reservStart.value = newdatevalue;
+            document.addform.submit();
+        }
+        <#else>
+        document.addform.submit();
+        </#if>
+    }
+
+    function addShoplistSubmit(){
+        <#if product.productTypeId?if_exists == "ASSET_USAGE">
+        if (document.addToShoppingList.reservStartStr.value == "") {
+            document.addToShoppingList.submit();
+        } else {
+            newdatevalue = validate(document.addToShoppingList.reservStartStr.value);
+            if (newdatevalue == false) {
+                document.addToShoppingList.reservStartStr.focus();
+            } else {
+                document.addToShoppingList.reservStartStr.value = newdatevalue;
+                // document.addToShoppingList.reservStart.value = ;
+                document.addToShoppingList.reservStartStr.value.slice(0,9)+" 00:00:00.000000000";
+                document.addToShoppingList.submit();
+            }
+        }
+        <#else>
+        document.addToShoppingList.submit();
+        </#if>
+    }
+
+    <#if product.virtualVariantMethodEnum?if_exists == "VV_FEATURETREE" && featureLists?has_content>
+        function checkRadioButton() {
+            var block1 = document.getElementById("addCart1");
+            var block2 = document.getElementById("addCart2");
+            <#list featureLists as featureList>
+                <#list featureList as feature>
+                    <#if feature_index == 0>
+                        var myList = document.getElementById("FT${feature.productFeatureTypeId}");
+                         if (myList.options[0].selected == true){
+                             block1.style.display = "none";
+                             block2.style.display = "block";
+                             return;
+                         }
+                        <#break>
+                    </#if>
+                </#list>
+            </#list>
+            block1.style.display = "block";
+            block2.style.display = "none";
+        }
+    </#if>
+    
+    function activateZoom(imgUrl) {
+        var image = new Image();
+        image.src = imgUrl+ "?" + new Date().getTime();
+        image.onerror = function () {
+            jQuery('.innerZoom').attr('href', 'javaScript:void(0);');
+            return false;
+        };
+        image.onload = function () {
+            jQuery('.innerZoom').jqzoom(zoomOptions);
+        };
+        
+    }
+    
+    function activateInitialZoom() {
+        jQuery('.innerZoom').each(function() {
+            var elm = this;
+            var image = new Image();
+            image.src = this.href+ "?" + new Date().getTime();
+            image.onerror = function () {
+                jQuery(elm).attr('href', 'javaScript:void(0);');
+                return false;
+            };
+            image.onload = function () {
+                jQuery('.innerZoom').jqzoom(zoomOptions);
+            };
+        });
+    }
+
+    function activateScroller() {
+        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(PDP_ALT_IMG_SCROLLER_ACTIVE)>
+            if(!jQuery('#altImageThumbnails').length) {
+                jQuery('#eCommerceProductAddImage').find('ul').attr('id', 'altImageThumbnails');
+            }
+            jQuery('#altImageThumbnails').addClass('imageScroller');
+            jQuery('#altImageThumbnails').jcarousel({
+            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(PDP_ALT_IMG_SCROLLER_VERTICAL)>
+                vertical: true,
+            </#if>
+                scroll: ${PDP_ALT_IMG_SCROLLER_IMAGES!"2"},
+                itemFallbackDimension: 300
+            });
+        </#if>
+    }
+
+    function showProductVideo(videoDivClass){
+        if (jQuery.browser.msie) jQuery('object > embed').unwrap(); 
+        videoDiv = '.'+ videoDivClass;
+        jQuery('#productDetailsImageContainer').html(jQuery(videoDiv).clone().removeClass(videoDivClass).show());
+    }
+
+	jQuery(function() {
+		jQuery(".pdpTabs").tabs();
+	});
+
+var zoomOptions = {
+    zoomType: 'innerzoom',
+    lens:true,
+    preloadImages: true,
+    preloadText: ''
+};
+
+
+    function makePDPUrl(elm) {
+        var plpFeatureSwatchImageId = jQuery(elm).attr("id");
+        var plpFeatureSwatchImageIdArr = plpFeatureSwatchImageId.split("|");
+        var pdpUrl = jQuery('#pdpUrl_'+plpFeatureSwatchImageIdArr[1]).val();
+        var productFeatureType = plpFeatureSwatchImageIdArr[0];
+        if(pdpUrl.indexOf("?") == -1) {
+            pdpUrl = pdpUrl+'?productFeatureType='+productFeatureType;
+        } else {
+            pdpUrl = pdpUrl+'&productFeatureType='+productFeatureType;
+        }
+        
+        jQuery(elm).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').find('a').attr("href",pdpUrl);
+        jQuery('#detailLink_'+plpFeatureSwatchImageIdArr[1]).attr("href",pdpUrl);
+    }
+    
+
+
+ </script>

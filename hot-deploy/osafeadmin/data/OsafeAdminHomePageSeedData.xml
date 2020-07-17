@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+	<Content contentId="HP_HOTSPOTS" contentTypeId="MENU_CONTAINER" 
+	 	contentName="Home Page Spots" />	
+	<DataResource dataResourceId="HP_HOTSPOTS_01" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_02" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_03" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_04" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_05" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_06" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_07" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_08" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_09" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_10" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_11" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_12" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_13" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_14" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_15" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />
+	<DataResource dataResourceId="HP_HOTSPOTS_16" dataResourceTypeId="ELECTRONIC_TEXT"
+		dataTemplateTypeId="FTL" />	
+	<ElectronicText dataResourceId="HP_HOTSPOTS_01"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_02"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_03"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_04"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_05"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_06"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_07"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_08"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_09"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_10"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_11"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_12"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_13"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_14"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_15"  />
+	<ElectronicText dataResourceId="HP_HOTSPOTS_16"  />
+	
+	<Content contentId="HP_HOTSPOTS_01" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_01" contentName="Home Page Spot 01" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_02" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_02" contentName="Home Page Spot 02" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_03" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_03" contentName="Home Page Spot 03" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_04" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_04" contentName="Home Page Spot 04" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_05" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_05" contentName="Home Page Spot 05" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_06" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_06" contentName="Home Page Spot 06" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_07" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_07" contentName="Home Page Spot 07" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_08" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_08" contentName="Home Page Spot 08" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_09" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_09" contentName="Home Page Spot 09" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_10" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_10" contentName="Home Page Spot 10" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_11" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_11" contentName="Home Page Spot 11" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_12" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_12" contentName="Home Page Spot 12" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_13" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_13" contentName="Home Page Spot 13" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_14" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_14" contentName="Home Page Spot 14" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_15" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_15" contentName="Home Page Spot 15" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+	<Content contentId="HP_HOTSPOTS_16" contentTypeId="DOCUMENT" 
+		dataResourceId="HP_HOTSPOTS_16" contentName="Home Page Spot 16" 
+		statusId="CTNT_IN_PROGRESS" 
+		lastModifiedDate="2011-08-01 13:05:57.0"
+		/>
+		
+	<ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_01" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="1" 
+		mapKey="hotSpot01"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_02" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="2" 
+		mapKey="hotSpot02"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_03" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="3" 
+		mapKey="hotSpot03"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_04" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="4" 
+		mapKey="hotSpot04"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_05" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="5" 
+		mapKey="hotSpot05"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_06" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="6" 
+		mapKey="hotSpot06"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_07" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="7" 
+		mapKey="hotSpot07"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_08" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="8" 
+		mapKey="hotSpot08"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_09" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="9" 
+		mapKey="hotSpot09"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_10" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="10" 
+		mapKey="hotSpot10"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_11" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="11" 
+		mapKey="hotSpot11"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_12" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="12" 
+		mapKey="hotSpot12"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_13" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="13" 
+		mapKey="hotSpot13"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_14" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="14" 
+		mapKey="hotSpot14"
+	 />
+	 <ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_15" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="15" 
+		mapKey="hotSpot15"
+	 />		
+		
+	<ContentAssoc contentId="HP_HOTSPOTS" 
+		contentIdTo="HP_HOTSPOTS_16" 
+		contentAssocTypeId="SUB_CONTENT"
+		fromDate="2011-01-01 00:00:00.0" sequenceNum="16" 
+		mapKey="hotSpot16"
+	 />
+
+</entity-engine-xml>

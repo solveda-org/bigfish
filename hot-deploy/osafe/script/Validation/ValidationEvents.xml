@@ -1,0 +1,1125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="UserLoginValidation" short-description="Basic Account Validation" login-required="false">
+        <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStore" ret-field="productStore">
+            <field field="request" type="javax.servlet.ServletRequest"/>
+        </call-class-method>
+
+        <if-not-empty field="productStore.allowPassword">
+            <if-compare operator="not-equals" value="Y" field="productStore.allowPassword">
+                <set field="parameters.PASSWORD" from-field="productStore.defaultPassword" default-value="ungssblepswd"/>
+                <set field="parameters.CONFIRM_PASSWORD" from-field="productStore.defaultPassword" default-value="ungssblepswd"/>
+                <set field="parameters.PASSWORD_HINT" value="No hint set, account not yet enabled"/>
+            </if-compare>
+        </if-not-empty>
+
+        <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
+        <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
+
+        <if-compare field="productStore.usePrimaryEmailUsername" operator="equals" value="Y">
+            <call-map-processor in-map-name="parameters" out-map-name="emailContext">
+                <simple-map-processor name="newEmail">
+                    <process field="CUSTOMER_EMAIL">
+                        <copy to-field="emailAddress"/>
+                        <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
+                        <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
+                    </process>
+                    <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                </simple-map-processor>
+            </call-map-processor>
+            <check-errors/>
+            <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
+        </if-compare>
+
+        <!-- if username and/or password should be lowercased, do that now -->
+        <if-compare field="username_lowercase" operator="equals" value="true">
+            <call-object-method obj-field="parameters.USERNAME" method-name="toLowerCase" ret-field="parameters.USERNAME"/>
+        </if-compare>
+        <if-compare field="password_lowercase" operator="equals" value="true">
+            <call-object-method obj-field="parameters.PASSWORD" method-name="toLowerCase" ret-field="parameters.PASSWORD"/>
+            <call-object-method obj-field="parameters.CONFIRM_PASSWORD" method-name="toLowerCase" ret-field="parameters.CONFIRM_PASSWORD"/>
+        </if-compare>
+        <!-- ====================================== -->
+
+        <!-- Check Password Strength -->
+        <call-class-method class-name="com.osafe.util.Util" method-name="checkPasswordStrength" ret-field="isValidPass">
+            <field field="request" type="javax.servlet.ServletRequest"/>
+            <field field="parameters.PASSWORD" type="String"/>
+        </call-class-method>
+        <if-compare field="isValidPass" operator="not-equals" value="success">
+             <set field="tempErrorMessage" from-field="isValidPass"/>
+             <string-to-list string="${tempErrorMessage}" message-field="PASSWORD" list="error_list"/>
+        </if-compare>
+
+        <!-- Create Map for UserLogin Record -->
+        <call-map-processor in-map-name="parameters" out-map-name="userLoginContext">
+            <simple-map-processor name="newUserLogin">
+                <process field="USERNAME"><copy to-field="userLoginId"/><not-empty><fail-property resource="OSafeUiLabels" property="UserLoginMissingError"/></not-empty></process>
+                <process field="PASSWORD"><copy to-field="currentPassword"/></process>
+                <process field="CONFIRM_PASSWORD">
+                    <compare-field operator="equals" field="PASSWORD"><fail-property resource="OSafeUiLabels" property="PasswordMatchError"/></compare-field>
+                    <!-- This is checked below in the checkNewPassword method in the bsh block: <not-empty><fail-message message="You must enter your password twice"/></not-empty> -->
+                    <copy to-field="currentPasswordVerify"/>
+                </process>
+                <process field="PASSWORD_HINT"><copy to-field="passwordHint"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+        
+        <if-not-empty field="userLoginContext.userLoginId">
+            <set field="userLoginExistsMap.userLoginId" from-field="userLoginContext.userLoginId"/>
+            <find-by-primary-key entity-name="UserLogin" map="userLoginExistsMap" value-field="existingUserLogin"/>
+            <if-not-empty field="existingUserLogin">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="UserNameInUseError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_CONFIRM" list="error_list"/>
+            </if-not-empty>
+        </if-not-empty>
+
+        <make-value entity-name="UserLogin" value-field="newUserLogin"/>
+        <set from-field="userLoginContext.userLoginId" field="newUserLogin.userLoginId"/>
+        <set from-field="userLoginContext.currentPassword" field="newUserLogin.currentPassword"/>
+        <set from-field="userLoginContext.passwordHint" field="newUserLogin.passwordHint"/>
+
+
+        <!-- Check the password, etc for validity -->
+        <set field="passwordErrorsList" type="List" />
+        <call-bsh><![CDATA[
+            List passwordErrorsList = javolution.util.FastList.newInstance();
+            String password = (String) userLoginContext.get("currentPassword");
+            String confirmPassword = (String) userLoginContext.get("currentPasswordVerify");
+            String passwordHint = (String) userLoginContext.get("passwordHint");
+
+            org.ofbiz.common.login.LoginServices.checkNewPassword(newUserLogin, null, password, confirmPassword, passwordHint, passwordErrorsList, true, locale);
+        ]]></call-bsh>
+        
+        <!-- Get errors from method call and associate to field -->
+        <if-not-empty  field="passwordErrorsList">
+            <log level="info" message="checkNewPassword found errors"/>
+            <iterate list="passwordErrorsList" entry="error">
+                <string-to-list string="${error}" message-field="PASSWORD" list="error_list"/>
+            </iterate>
+        </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="PersonalInfoValidation" short-description="Personal Information Validation" login-required="false">
+
+        <!-- Validate Information for Creating Person -->
+        <call-map-processor in-map-name="parameters" out-map-name="personContext">
+            <simple-map-processor name="newPerson">
+                <process field="USER_FIRST_NAME">
+                    <copy to-field="firstName"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="FirstNameMissingError"/></not-empty>
+                </process>
+                <process field="USER_MIDDLE_NAME"><copy to-field="middleName"/></process>
+                <process field="USER_LAST_NAME">
+                    <copy to-field="lastName"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="LastNameMissingError"/></not-empty>
+                </process>
+                <process field="USER_TITLE"><copy to-field="personalTitle"/></process>
+                <process field="USER_SUFFIX"><copy to-field="suffix"/></process>
+                <process field="USER_BIRTHDATE">
+                    <convert type="Date" to-field="birthDate"><fail-property resource="OSafeUiLabels" property="BirthDateMissingError"/></convert>
+                </process>
+                <process field="USER_GENDER">
+                    <copy to-field="gender"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="GenderMissingError"/></not-empty>
+                </process>
+                <process field="CUSTOMER_EMAIL"><copy to-field="emailAddress"/></process>
+                <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowEmailSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+    </simple-method>
+
+    <simple-method method-name="validateBillingAddress" short-description="validate Customer/Billing Address" login-required="false">
+        <call-map-processor in-map-name="parameters" out-map-name="addressContext">
+            <simple-map-processor name="newPerson">
+                <make-in-string field="fullName">
+                    <in-field field="USER_FIRST_NAME"/><constant> </constant>
+                    <in-field field="USER_MIDDLE_NAME"/><constant> </constant>
+                    <in-field field="USER_LAST_NAME"/>
+                </make-in-string>
+                <process field="roleTypeId"><copy/></process>
+                <process field="fullName"><copy to-field="toName"/></process>
+                <process field="BILLING_ATTN_NAME"><copy to-field="attnName"/></process>
+                <process field="BILLING_ADDRESS1">
+                    <copy to-field="address1"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="AddressLine1MissingError"/></not-empty>
+                </process>
+                <process field="BILLING_ADDRESS2"><copy to-field="address2"/></process>
+                <process field="BILLING_CITY">
+                    <copy to-field="city"/>
+                </process>
+                <process field="BILLING_STATE"><copy to-field="stateProvinceGeoId"/></process>
+                <process field="BILLING_POSTAL_CODE">
+                    <copy to-field="postalCode"/>
+                </process>
+                <process field="BILLING_COUNTRY">
+                    <copy to-field="countryGeoId"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="CountryMissingError"/></not-empty>
+                </process>
+                <process field="BILLING_ADDRESS_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+        <if-empty field="parameters.BILLING_POSTAL_CODE">
+            <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ZipCodeMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+            <if-compare value="CAN" operator="equals" field="parameters.BILLING_COUNTRY">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+        </if-empty>
+
+        <!--Check for countries other than US and Canada that Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province must be entered -->
+        <if>
+            <condition>
+                <or>
+                    <if-compare value="CAN" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                    <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                </or>
+            </condition>
+            <then>
+                <if-empty field="parameters.BILLING_CITY">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_CITY" list="error_list"/>
+                </if-empty>
+                <if-empty field="parameters.BILLING_STATE">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_STATE" list="error_list"/>
+                </if-empty>
+            </then>
+            <else>
+                <set field="fieldCounter" value="0" type="Integer"/>
+                <if-not-empty field="parameters.BILLING_ADDRESS2">
+                    <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                </if-not-empty>
+                <if-empty field="parameters.BILLING_STATE">
+                    <set field="addressContext.stateProvinceGeoId" value="_NA_" type="String"/>
+                    <set field="parameters.BILLING_STATE" value="_NA_" type="String"/>
+                </if-empty>
+                <if-compare field="parameters.BILLING_STATE" operator="equals" value="_NA_">
+                    <if-not-empty field="parameters.BILLING_ADDRESS3">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    </if-not-empty>
+                <else>
+                    <if-not-empty field="parameters.BILLING_STATE">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    </if-not-empty>
+                </else>
+                </if-compare>
+                <if-not-empty field="parameters.BILLING_CITY">
+                    <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                <else>
+                    <set field="addressContext.city" value="_NA_"/>
+                </else>
+                </if-not-empty>
+                <if-not-empty field="parameters.BILLING_POSTAL_CODE">
+                    <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                <else>
+                    <set field="addressContext.postalCode" value="_NA_"/>
+                </else>
+                </if-not-empty>
+                <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
+                </if-compare>
+            </else>
+        </if>
+        
+        <!-- Check for a valid Postal Code For USA only -->
+        <if-not-empty field="parameters.BILLING_POSTAL_CODE">
+            <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY">
+                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                    <field field="parameters.BILLING_POSTAL_CODE"/>
+                </call-class-method>
+            </if-compare>
+            <if-compare field="isZipCode" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidZipCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="BILLING_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+
+        <!-- Check for a address3 -->
+        <if-empty field="parameters.BILLING_STATE">
+            <set field="addressContext.address3" from-field="parameters.BILLING_ADDRESS3"/>
+        </if-empty>
+ 
+        <!-- Check the Home Phone -->
+        <if-compare field="parameters.BILLING_HOME_REQUIRED" operator="equals" value="true">
+            <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                    <!-- Show general error if Home Phone is required -->
+                    <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <make-in-string field="contactNumber">
+                                    <in-field field="BILLING_HOME_CONTACT3"/>
+                                    <in-field field="BILLING_HOME_CONTACT4"/>
+                                </make-in-string>
+                                <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                        <field field="parameters.BILLING_HOME_AREA"/>
+                        <field field="contactHomePhoneMap.contactHomePhoneContact"/>
+                        <field field="parameters.BILLING_HOME_REQUIRED"/>
+                    </call-class-method>
+                    <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                        <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="BILLING_HOME_CONTACT" list="error_list"/>
+                        </if-compare>
+                        <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="BILLING_HOME_CONTACT" list="error_list"/>
+                        </if-compare>
+                    </if-compare>
+                </then>
+                <else>
+                    <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <!--make-in-string field="contactNumber">
+                                    <in-field field="BILLING_HOME_CONTACT_OTHER3"/>
+                                    <in-field field="BILLING_HOME_CONTACT_OTHER4"/>
+                                </make-in-string-->
+                                <process field="BILLING_HOME_CONTACT_OTHER"><copy to-field="contactHomeOtherPhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="BILLING_HOME_CONTACT" list="error_list"/>
+                    </if-empty>
+                </else>
+            </if>
+        </if-compare>
+
+        <!-- Check the Mobile Phone -->
+            <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                    <call-map-processor in-map-name="parameters" out-map-name="contactMobilePhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <make-in-string field="contactNumber">
+                                    <in-field field="BILLING_MOBILE_CONTACT3"/>
+                                    <in-field field="BILLING_MOBILE_CONTACT4"/>
+                                </make-in-string>
+                                <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                        <field field="parameters.BILLING_MOBILE_AREA"/>
+                        <field field="contactMobilePhoneMap.contactMobilePhoneContact"/>
+                        <string value="false"/>
+                    </call-class-method>
+                    <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                        <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="BILLING_MOBILE_CONTACT" list="error_list"/>
+                        </if-compare>
+                    </if-compare>
+                </then>
+                <else>
+                    <if-not-empty field="parameters.BILLING_MOBILE_CONTACT_OTHER">
+                        <set field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.BILLING_MOBILE_CONTACT_OTHER"/>
+                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                            <string value=""/>
+                            <field field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+                            <string value="false"/>
+                        </call-class-method>
+                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="BILLING_MOBILE_CONTACT" list="error_list"/>
+                            </if-compare>
+                        </if-compare>
+                    </if-not-empty>
+                </else>
+            </if>
+
+        <!--  Switched to simple copy on processor since we do all validation above -->
+        <if>
+           <condition>
+              <or>
+                <if-compare value="CAN" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+              </or>
+           </condition>
+                <then>
+                    <if-not-empty field="contactHomePhoneMap.contactHomePhoneContact">
+                        <set field="homePhoneContext.contactNumber" from-field="contactHomePhoneMap.contactHomePhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="homePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="BILLING_HOME_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="BILLING_HOME_AREA">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="BILLING_HOME_EXT"><copy to-field="extension"/></process>
+                                <process field="BILLING_HOME_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                    </if-not-empty>
+                 </then>
+                 <else>
+                     <if-not-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+                        <set field="homePhoneContext.contactNumber" from-field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="homePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="BILLING_HOME_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="BILLING_HOME_AREA_OTHER">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="BILLING_HOME_EXT"><copy to-field="extension"/></process>
+                                <process field="BILLING_HOME_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                    </if-not-empty>
+                 </else>
+                </if>
+
+
+        <!-- Create the Mobile Phone -->
+        <if>
+           <condition>
+              <or>
+                <if-compare value="CAN" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+                <if-compare value="USA" operator="equals" field="parameters.BILLING_COUNTRY"></if-compare>
+              </or>
+           </condition>
+                <then>
+                    <if-not-empty field="contactMobilePhoneMap.contactMobilePhoneContact">
+                        <set field="mobilePhoneContext.contactNumber" from-field="contactMobilePhoneMap.contactMobilePhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="mobilePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="BILLING_MOBILE_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="BILLING_MOBILE_AREA">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="BILLING_MOBILE_EXT"><copy to-field="extension"/></process>
+                                <process field="BILLING_MOBILE_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                    </if-not-empty>
+                </then>
+            <else>
+                <if-not-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
+                        <set field="mobilePhoneContext.contactNumber" from-field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="mobilePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="BILLING_MOBILE_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="BILLING_MOBILE_AREA_OTHER">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="BILLING_MOBILE_EXT"><copy to-field="extension"/></process>
+                                <process field="BILLING_MOBILE_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                    </if-not-empty>
+               </else>
+        </if>
+        <return response-code="success"/>
+    </simple-method>
+
+    <simple-method method-name="validateShippingAddress" short-description="validate Shipping Address" login-required="false">
+        <call-map-processor in-map-name="parameters" out-map-name="shippingAddressContext">
+            <simple-map-processor name="newPerson">
+                <make-in-string field="fullName">
+                    <in-field field="USER_FIRST_NAME"/><constant> </constant>
+                    <in-field field="USER_MIDDLE_NAME"/><constant> </constant>
+                    <in-field field="USER_LAST_NAME"/>
+                </make-in-string>
+                <process field="fullName"><copy to-field="toName"/></process>
+                <process field="roleTypeId"><copy/></process>
+                <process field="SHIPPING_ATTN_NAME">
+                    <copy to-field="attnName"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="AddressNickNameMissingError"/></not-empty>
+                </process>
+                <process field="SHIPPING_ADDRESS1">
+                    <copy to-field="address1"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="AddressLine1MissingError"/></not-empty>
+                </process>
+                <process field="SHIPPING_ADDRESS2"><copy to-field="address2"/></process>
+                <process field="SHIPPING_CITY"><copy to-field="city"/></process>
+                <process field="SHIPPING_STATE"><copy to-field="stateProvinceGeoId"/></process>
+                <process field="SHIPPING_POSTAL_CODE"><copy to-field="postalCode"/></process>
+                <process field="SHIPPING_COUNTRY">
+                    <copy to-field="countryGeoId"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="CountryMissingError"/></not-empty>
+                </process>
+                <process field="SHIPPING_ADDRESS_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+
+        <if-empty field="parameters.SHIPPING_POSTAL_CODE ">
+            <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ZipCodeMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+            <if-compare value="CAN" operator="equals" field="parameters.SHIPPING_COUNTRY">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+        </if-empty>
+
+        <!--Check for countries other than US and Canada that Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province must be entered -->
+        <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                    <if-empty field="parameters.SHIPPING_CITY">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_CITY" list="error_list"/>
+                    </if-empty>
+                    <if-empty field="parameters.SHIPPING_STATE">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_STATE" list="error_list"/>
+                    </if-empty>
+                </then>
+                <else>
+                    <set field="fieldCounter" value="0" type="Integer"/>
+                    <if-not-empty field="parameters.SHIPPING_ADDRESS2">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    </if-not-empty>
+                    <if-compare field="parameters.SHIPPING_STATE" operator="equals" value="_NA_">
+                        <if-not-empty field="parameters.SHIPPING_ADDRESS3">
+                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                        </if-not-empty>
+                    <else>
+                        <if-not-empty field="parameters.SHIPPING_STATE">
+                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                        </if-not-empty>
+                    </else>
+                    </if-compare>
+                    <if-not-empty field="parameters.SHIPPING_CITY">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    <else>
+                        <set field="addressContext.city" value="_NA_"/>
+                    </else>
+                    </if-not-empty>
+                    <if-not-empty field="parameters.SHIPPING_POSTAL_CODE">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    <else>
+                        <set field="addressContext.postalCode" value="_NA_"/>
+                    </else>
+                    </if-not-empty>
+                    <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
+                    </if-compare>
+                </else>
+        </if>
+
+        <!-- Check for a valid Postal Code For USA only -->
+        <if-not-empty field="parameters.SHIPPING_POSTAL_CODE">
+            <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY">
+                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                    <field field="parameters.SHIPPING_POSTAL_CODE"/>
+                </call-class-method>
+            </if-compare>
+            <if-compare field="isZipCode" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidZipCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+
+        <!-- Check for a address3 -->
+        <if-empty field="parameters.SHIPPING_STATE">
+            <set field="addressContext.address3" from-field="parameters.SHIPPING_ADDRESS3"/>
+        </if-empty>
+ 
+        <!-- Check the Home Phone -->
+        <if-compare field="parameters.SHIPPING_HOME_REQUIRED" operator="equals" value="true">
+           <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                <!-- Show general error if Home Phone is required -->
+                <call-map-processor in-map-name="parameters" out-map-name="shipHomePhoneMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <make-in-string field="contactNumber">
+                                <in-field field="SHIPPING_HOME_CONTACT3"/>
+                                <in-field field="SHIPPING_HOME_CONTACT4"/>
+                            </make-in-string>
+                            <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                    <field field="parameters.SHIPPING_HOME_AREA"/>
+                    <field field="shipHomePhoneMap.contactHomePhoneContact"/>
+                    <field field="parameters.SHIPPING_HOME_REQUIRED"/>
+                </call-class-method>
+                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_HOME_CONTACT" list="error_list"/>
+                    </if-compare>
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_HOME_CONTACT" list="error_list"/>
+                    </if-compare>
+                </if-compare>
+                </then>
+                <else>
+                    <call-map-processor in-map-name="parameters" out-map-name="shipHomeOtherPhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <!--make-in-string field="contactNumber">
+                                    <in-field field="SHIPPING_HOME_CONTACT_OTHER3"/>
+                                    <in-field field="SHIPPING_HOME_CONTACT_OTHER4"/>
+                                </make-in-string-->
+                                <process field="SHIPPING_HOME_CONTACT_OTHER"><copy to-field="contactHomeOtherPhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <if-empty field="shipHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_HOME_CONTACT" list="error_list"/>
+                    </if-empty>
+                </else>
+            </if>
+        </if-compare>
+
+        <!-- Check the Mobile Phone -->
+            <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                    <call-map-processor in-map-name="parameters" out-map-name="shipMobilePhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <make-in-string field="contactNumber">
+                                    <in-field field="SHIPPING_MOBILE_CONTACT3"/>
+                                    <in-field field="SHIPPING_MOBILE_CONTACT4"/>
+                                </make-in-string>
+                                <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                        <field field="parameters.SHIPPING_MOBILE_AREA"/>
+                        <field field="shipMobilePhoneMap.contactMobilePhoneContact"/>
+                        <string value="false"/>
+                    </call-class-method>
+                    <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                        <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_MOBILE_CONTACT" list="error_list"/>
+                        </if-compare>
+                    </if-compare>
+                </then>
+                <else>
+                    <if-not-empty field="parameters.SHIPPING_MOBILE_CONTACT_OTHER">
+                        <set field="shipMobileOtherPhoneMap.contactMobileOtherPhoneContact" from-field="parameters.SHIPPING_MOBILE_CONTACT_OTHER"/>
+                        <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                            <string value=""/>
+                            <field field="shipMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+                            <string value="false"/>
+                        </call-class-method>
+                        <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                            <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_MOBILE_CONTACT" list="error_list"/>
+                            </if-compare>
+                        </if-compare>
+                    </if-not-empty>
+                </else>
+            </if>
+
+        <!--  Switched to simple copy on processor since we do all validation above -->
+        <if>
+           <condition>
+              <or>
+                <if-compare value="CAN" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+              </or>
+           </condition>
+                <then>
+                    <if-not-empty field="shipHomePhoneMap.contactHomePhoneContact">
+                        <set field="shipHomePhoneContext.contactNumber" from-field="shipHomePhoneMap.contactHomePhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="shipHomePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="SHIPPING_HOME_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="SHIPPING_HOME_AREA">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="SHIPPING_HOME_EXT"><copy to-field="extension"/></process>
+                                <process field="SHIPPING_HOME_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                    </if-not-empty>
+                 </then>
+                 <else>
+                     <if-not-empty field="shipHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+                        <set field="homePhoneContext.contactNumber" from-field="shipHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="shipHomePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="SHIPPING_HOME_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="SHIPPING_HOME_AREA_OTHER">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="SHIPPING_HOME_EXT"><copy to-field="extension"/></process>
+                                <process field="SHIPPING_HOME_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                        <set field="shipHomePhoneContext.contactNumber" from-field="shipHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+                    </if-not-empty>
+                 </else>
+                </if>
+
+        <!-- Create the Mobile Phone -->
+        <if>
+           <condition>
+              <or>
+                <if-compare value="CAN" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+                <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY"></if-compare>
+              </or>
+           </condition>
+                <then>
+                    <if-not-empty field="shipMobilePhoneMap.contactMobilePhoneContact">
+                        <set field="shipMobilePhoneContext.contactNumber" from-field="shipMobilePhoneMap.contactMobilePhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="shipMobilePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="SHIPPING_MOBILE_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="SHIPPING_MOBILE_AREA">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="SHIPPING_MOBILE_EXT"><copy to-field="extension"/></process>
+                                <process field="SHIPPING_MOBILE_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                        <set field="shipMobilePhoneContext.contactNumber" from-field="shipMobilePhoneMap.contactMobilePhoneContact"/>
+                    </if-not-empty>
+                </then>
+            <else>
+                <if-not-empty field="shipMobileOtherPhoneMap.contactMobileOtherPhoneContact">
+                        <set field="shipMobilePhoneContext.contactNumber" from-field="shipMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+                        <call-map-processor in-map-name="parameters" out-map-name="shipMobilePhoneContext">
+                            <simple-map-processor name="newTelecomNumber">
+                                <process field="roleTypeId"><copy/></process>
+                                <process field="SHIPPING_MOBILE_COUNTRY"><copy to-field="countryCode"/></process>
+                                <process field="SHIPPING_MOBILE_AREA_OTHER">
+                                    <copy to-field="areaCode"/>
+                                </process>
+                                <process field="SHIPPING_MOBILE_EXT"><copy to-field="extension"/></process>
+                                <process field="SHIPPING_MOBILE_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+                            </simple-map-processor>
+                        </call-map-processor>
+                        <set field="shipMobilePhoneContext.contactNumber" from-field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+                    </if-not-empty>
+            </else>
+        </if>
+        <return response-code="success"/>
+    </simple-method>
+
+    <simple-method method-name="validateRequestCatalog" short-description="validate Request catalog" login-required="false">
+        <clear-field field="tempErrorMessage"/>
+        <!-- Check Contact Us form -->
+        <if-empty field="parameters.REQ_CATALOG_FIRST_NAME">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="FirstNameMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_FIRST_NAME" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.REQ_CATALOG_LAST_NAME">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LastNameMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_LAST_NAME" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.REQ_CATALOG_ADDRESS1">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressLine1MissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_ADDRESS1" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.REQ_CATALOG_POSTAL_CODE">
+            <if-compare value="USA" operator="equals" field="parameters.REQ_CATALOG_COUNTRY">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ZipCodeMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+            <if-compare value="CAN" operator="equals" field="parameters.REQ_CATALOG_COUNTRY">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PostalCodeMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+        <else>
+        <!-- Check for a valid Postal Code -->
+            <if-compare value="USA" operator="equals" field="parameters.REQ_CATALOG_COUNTRY">
+                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                    <field field="parameters.REQ_CATALOG_POSTAL_CODE"/>
+                </call-class-method>
+            </if-compare>
+            <if-compare field="isZipCode" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidZipCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.REQ_CATALOG_COUNTRY">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CountryInUsMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_COUNTRY" list="error_list"/>
+        </if-empty>
+        <if>
+            <condition>
+                <or>
+                    <if-compare value="CAN" operator="equals" field="parameters.REQ_CATALOG_COUNTRY"></if-compare>
+                    <if-compare value="USA" operator="equals" field="parameters.REQ_CATALOG_COUNTRY"></if-compare>
+                </or>
+            </condition>
+            <then>
+                <if-empty field="parameters.REQ_CATALOG_CITY">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_CITY" list="error_list"/>
+                </if-empty>
+                <if-empty field="parameters.REQ_CATALOG_STATE">
+                    <if-compare value="USA" operator="equals" field="parameters.REQ_CATALOG_COUNTRY">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_STATE" list="error_list"/>
+                    </if-compare>
+                    <if-compare value="CAN" operator="equals" field="parameters.REQ_CATALOG_COUNTRY">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ProvinceMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_STATE" list="error_list"/>
+                    </if-compare>
+                </if-empty>
+                
+            </then>
+                <else>
+                    <set field="fieldCounter" value="0" type="Integer"/>
+                    <if-not-empty field="parameters.address2">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    </if-not-empty>
+                    <if-compare field="parameters.REQ_CATALOG_STATE" operator="equals" value="_NA_">
+                        <if-not-empty field="parameters.address3">
+                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                        </if-not-empty>
+                    <else>
+                        <if-not-empty field="parameters.REQ_CATALOG_STATE">
+                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                        </if-not-empty>
+                    </else>
+                    </if-compare>
+                    <if-not-empty field="parameters.REQ_CATALOG_CITY">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    <else>
+                        <set field="city" value="_NA_"/>
+                    </else>
+                    </if-not-empty>
+                    <if-not-empty field="parameters.REQ_CATALOG_POSTAL_CODE">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    <else>
+                        <set field="postalCode" value="_NA_"/>
+                    </else>
+                    </if-not-empty>
+                    <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_ADDRESS_ERROR" list="error_list"/>
+                    </if-compare>
+                </else>
+
+        </if>
+        <if-empty field="parameters.REQ_CATALOG_EMAIL_ADDR">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmailAddressMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_EMAIL_ADDR" list="error_list"/>
+        </if-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_EMAIL_ADDR">
+            <call-map-processor in-map-name="parameters" out-map-name="emailContext">
+                <simple-map-processor name="newEmail">
+                    <process field="REQ_CATALOG_EMAIL_ADDR">
+                        <copy to-field="REQ_CATALOG_EMAIL_ADDR"/>
+                        <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailInvalidError"/></validate-method>
+                    </process>
+                </simple-map-processor>
+            </call-map-processor>
+        </if-not-empty>
+        <!-- Check the Home Phone -->
+        <if-compare field="parameters.REQ_CATALOG_HOME_REQUIRED" operator="equals" value="true">
+            <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.REQ_CATALOG_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.REQ_CATALOG_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                    <!-- Show general error if Home Phone is required -->
+                    <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <make-in-string field="contactNumber">
+                                    <in-field field="REQ_CATALOG_HOME_CONTACT3"/>
+                                    <in-field field="REQ_CATALOG_HOME_CONTACT4"/>
+                                </make-in-string>
+                                <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <if>
+                        <condition>
+                            <or>
+                                <and>
+                                    <not><if-empty field="parameters.REQ_CATALOG_HOME_AREA"/></not>
+                                    <if-empty field="contactHomePhoneMap.contactHomePhoneContact"/>
+                                </and>
+                                <and>
+                                    <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"/></not>
+                                    <if-empty field="parameters.REQ_CATALOG_HOME_AREA"/>
+                                </and>
+                            </or>
+                        </condition>
+                        <then>
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_HOME_CONTACT" list="error_list"/>
+                        </then>
+                        <else>
+                            <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                                <field field="parameters.REQ_CATALOG_HOME_AREA"/>
+                                <field field="contactHomePhoneMap.contactHomePhoneContact"/>
+                                <field field="N" type="String"/>
+                            </call-class-method>
+                            <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                                <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                                    <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_HOME_CONTACT" list="error_list"/>
+                                </if-compare>
+                            </if-compare>
+                        </else>
+                    </if>
+                    
+                </then>
+                <else>
+                    <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <process field="REQ_CATALOG_HOME_CONTACT_OTHER"><copy to-field="contactHomeOtherPhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                        <string value=""/>
+                        <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+                        <field field="N" type="String"/>
+                    </call-class-method>
+                    <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                        <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_HOME_CONTACT" list="error_list"/>
+                        </if-compare>
+                    </if-compare>
+                </else>
+            </if>
+        </if-compare>
+
+        <check-errors/>
+    </simple-method>
+    
+    <simple-method method-name="validateAddress" short-description="Validate Address" login-required="false">
+        <set field="fieldCounter" value="0" type="Integer"/>
+        <!-- Check address fields on the Postal Address -->
+         <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY">
+             <if-empty field="parameters.CUSTOMER_STATE">
+                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+                 <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_STATE" list="error_list"/>
+             </if-empty>
+         </if-compare>
+         <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY">
+             <if-empty field="parameters.CUSTOMER_STATE">
+                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="StateMissingError"/>
+                 <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_STATE" list="error_list"/>
+             </if-empty>
+         </if-compare>
+         <call-map-processor in-map-name="parameters" out-map-name="addressContext">
+             <simple-map-processor name="address">
+                <make-in-string field="fullName">
+                     <in-field field="CUSTOMER_FIRST_NAME"/><constant> </constant>
+                     <in-field field="CUSTOMER_LAST_NAME"/>
+                </make-in-string>
+                <process field="CUSTOMER_FIRST_NAME">
+                    <copy to-field="firstName"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="FirstNameMissingError"/></not-empty>
+                </process>
+                <process field="CUSTOMER_LAST_NAME">
+                    <copy to-field="lastName"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="LastNameMissingError"/></not-empty>
+                </process>
+
+                 <process field="fullName"><copy to-field="toName"/></process>
+                 <process field="CUSTOMER_ATTN_NAME">
+                     <copy to-field="attnName"/>
+                     <not-empty><fail-property resource="OSafeUiLabels" property="AddressNickNameMissingError"/></not-empty>
+                 </process>
+                 <process field="CUSTOMER_ADDRESS1">
+                     <copy to-field="address1"/>
+                     <not-empty><fail-property resource="OSafeUiLabels" property="AddressLine1MissingError"/></not-empty>
+                 </process>
+                 <process field="CUSTOMER_ADDRESS2"><copy to-field="address2"/></process>
+                 <process field="CUSTOMER_CITY">
+                     <copy to-field="city"/>
+                 </process>
+                 <process field="CUSTOMER_STATE"><copy to-field="stateProvinceGeoId"/></process>
+                 <process field="CUSTOMER_POSTAL_CODE">
+                     <copy to-field="postalCode"/>
+                 </process>
+                 <process field="CUSTOMER_COUNTRY">
+                     <copy to-field="countryGeoId"/>
+                     <not-empty><fail-property resource="OSafeUiLabels" property="CountryMissingError"/></not-empty>
+                 </process>
+             </simple-map-processor>
+         </call-map-processor>
+
+
+        <!--Check for countries other than US and Canada that Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province must be entered -->
+        <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                    <if-empty field="parameters.CUSTOMER_CITY">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CityMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_CITY" list="error_list"/>
+                    </if-empty>
+                    <if-empty field="parameters.CUSTOMER_POSTAL_CODE">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ZipCodeMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_POSTAL_CODE" list="error_list"/>
+                    </if-empty>
+                </then>
+                <else>
+                    <if-not-empty field="parameters.CUSTOMER_ADDRESS2">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    </if-not-empty>
+                    <if-compare field="parameters.CUSTOMER_STATE" operator="equals" value="_NA_">
+                        <if-not-empty field="parameters.CUSTOMER_ADDRESS3">
+                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                        </if-not-empty>
+                    <else>
+                        <if-not-empty field="parameters.CUSTOMER_STATE">
+                            <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                        </if-not-empty>
+                    </else>
+                    </if-compare>
+                    <if-not-empty field="parameters.CUSTOMER_CITY">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    </if-not-empty>
+                    <if-not-empty field="parameters.CUSTOMER_POSTAL_CODE">
+                        <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
+                    </if-not-empty>
+                    <if-compare field="fieldCounter" operator="less"  value="2" type="Integer">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressIncompleteError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
+                    </if-compare>
+                </else>
+        </if>
+
+        <!-- Check for a valid Postal Code For USA only -->
+        <if-not-empty field="parameters.CUSTOMER_POSTAL_CODE">
+            <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY">
+                <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                    <field field="parameters.CUSTOMER_POSTAL_CODE"/>
+                </call-class-method>
+            </if-compare>
+            <if-compare field="isZipCode" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="InvalidZipCodeError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_POSTAL_CODE" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+
+        <!-- Check the Home Phone -->
+        <if-compare field="parameters.CUSTOMER_HOME_REQUIRED" operator="equals" value="true">
+            <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then>
+                <!-- Show general error if Home Phone is required -->
+                <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <make-in-string field="contactNumber">
+                                <in-field field="CUSTOMER_HOME_CONTACT3"/>
+                                <in-field field="CUSTOMER_HOME_CONTACT4"/>
+                            </make-in-string>
+                            <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                    <field field="parameters.CUSTOMER_HOME_AREA"/>
+                    <field field="contactHomePhoneMap.contactHomePhoneContact"/>
+                    <field field="parameters.CUSTOMER_HOME_REQUIRED"/>
+                </call-class-method>
+                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_HOME_CONTACT" list="error_list"/>
+                    </if-compare>
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_HOME_CONTACT" list="error_list"/>
+                    </if-compare>
+                </if-compare>
+                </then>
+                <else>
+                    <if-empty field="parameters.CUSTOMER_HOME_CONTACT_OTHER">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_HOME_CONTACT" list="error_list"/>
+                    </if-empty>
+                </else>
+             </if>
+        </if-compare>
+
+        <!-- Check the Mobile Phone -->
+        <if>
+            <condition>
+                <or>
+                    <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                    <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                </or>
+            </condition>
+            <then>
+                    <call-map-processor in-map-name="parameters" out-map-name="contactMobilePhoneMap">
+                        <simple-map-processor name="newTelecomNumber">
+                                <make-in-string field="contactNumber">
+                                    <in-field field="CUSTOMER_MOBILE_CONTACT3"/>
+                                    <in-field field="CUSTOMER_MOBILE_CONTACT4"/>
+                                </make-in-string>
+                                <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
+                        </simple-map-processor>
+                    </call-map-processor>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                        <field field="parameters.CUSTOMER_MOBILE_AREA"/>
+                        <field field="contactMobilePhoneMap.contactMobilePhoneContact"/>
+                        <string value="false"/>
+                    </call-class-method>
+                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_MOBILE_CONTACT" list="error_list"/>
+                    </if-compare>
+                </if-compare>
+            </then>
+        </if>
+
+        <!-- now that everything is validated & setup, check to see if there are errors, then call the services -->
+        <check-errors/>
+
+    </simple-method>
+</simple-methods>

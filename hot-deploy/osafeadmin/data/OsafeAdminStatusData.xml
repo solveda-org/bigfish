@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	RMH Aug: 2011: Need a way to allow a spot to go from CTNT_PUBLISHED back to 
+	available to publish...
+
+-->
+
+<entity-engine-xml>
+	<!-- 
+		RMH Aug: 2011 Need a way to allow home page spots to go from CTNT_PUBLISHED
+		back to CTNT_IN_PROGRESS
+	-->
+	<StatusValidChange statusId="CTNT_PUBLISHED" statusIdTo="CTNT_IN_PROGRESS"
+		transitionName="Available to publish again" />
+	<StatusItem statusId="CTNT_DEACTIVATED" statusTypeId="CONTENT_STATUS" 
+		statusCode="DEACTIVATED" sequenceId="99" description="Inactive" />
+	<StatusItem statusId="CTNT_PUBLISHED" statusTypeId="CONTENT_STATUS" 
+		statusCode="PUBLISHED" sequenceId="05" description="Active" />
+	<StatusItem statusId="CTNT_IN_PROGRESS" statusTypeId="CONTENT_STATUS" 
+		statusCode="IN_PROGRESS" sequenceId="03" description="Pending" />
+</entity-engine-xml>

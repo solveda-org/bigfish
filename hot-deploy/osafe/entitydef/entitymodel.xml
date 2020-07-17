@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+    <!-- ========================================================= -->
+    <!-- ======================== Defaults ======================= -->
+    <!-- ========================================================= -->
+    <title>Entity of OSafe Component</title>
+    <description>None</description>
+    <copyright></copyright>
+    <version></version>
+
+
+    <extend-entity entity-name="ProductFeatureCategoryAppl">
+        <field name="sequenceNum" type="numeric"></field>
+    </extend-entity>
+    <extend-entity entity-name="ProductFeatureCatGrpAppl">
+        <field name="sequenceNum" type="numeric"></field>
+        <field name="facetValueMin" type="numeric"></field>
+        <field name="facetValueMax" type="numeric"></field>
+    </extend-entity>
+
+    <extend-entity entity-name="ProductReview">
+        <field name="reviewTitle" type="name"></field>
+        <field name="effectivenessRating" type="fixed-point"></field>
+        <field name="satisfactionRating" type="fixed-point"></field>
+        <field name="qualityRating" type="fixed-point"></field>
+        <field name="reviewLocation" type="name"></field>
+        <field name="reviewNickName" type="name"></field>
+        <field name="reviewGender" type="short-varchar"></field>
+        <field name="reviewAge" type="short-varchar"></field>
+        <field name="responseDateTime"     type="date-time"></field>
+        <field name="reviewResponse" type="very-long"></field>
+    </extend-entity>
+
+    <extend-entity entity-name="CarrierShipmentMethod">
+        <field name="optionalMessage" type="very-long"></field>
+    </extend-entity>
+
+    <extend-entity entity-name="PostalAddress">
+        <field name="address3" type="long-varchar"></field>
+    </extend-entity>
+
+    <entity entity-name="ProdFeatureDataResourceType"
+            package-name="org.ofbiz.product.feature"
+            title="Product Feature Data Resource Type Entity">
+      <field name="prodFeatureDataResourceTypeId" type="id-ne"></field>
+      <field name="hasTable" type="indicator"></field>
+      <field name="description" type="description"></field>
+      <prim-key field="prodFeatureDataResourceTypeId"/>
+    </entity>
+
+    <extend-entity entity-name="ProductFeatureDataResource">
+        <field name="prodFeatureDataResourceTypeId" type="id"></field>
+       <relation type="one" fk-name="PROD_FEAT_TYPRES" rel-entity-name="ProdFeatureDataResourceType">
+        <key-map field-name="prodFeatureDataResourceTypeId"/>
+      </relation>
+    </extend-entity>
+
+    <entity entity-name="XPixelTracking"
+            package-name="org.ofbiz.osafe.admin"
+            title="Merchant Pixel Tracking" >
+      <field name="pixelId" type="id-ne"></field>
+      <field name="pixelScope" type="description"></field>
+      <field name="productStoreId" type="id-ne"></field>
+      <field name="contentId" type="id-ne"></field>
+      <field name="createdByUserLogin" type="id-vlong"></field>
+      <field name="description" type="description"></field>
+      <field name="fromDate" type="date-time"></field>
+      <field name="thruDate" type="date-time"></field>
+      <prim-key field="pixelId"/>
+      <prim-key field="productStoreId"/>
+        <relation type="one" fk-name="PROD_STORE_PXT" rel-entity-name="ProductStore">
+            <key-map field-name="productStoreId"/>
+        </relation>
+       <relation type="one" fk-name="CONTENT_PXT_ULGN" title="CreatedBy" rel-entity-name="UserLogin">
+        <key-map field-name="createdByUserLogin" rel-field-name="userLoginId"/>
+       </relation>
+       <relation type="one" fk-name="CONTENT_PXT_CNT" rel-entity-name="Content">
+        <key-map field-name="contentId"/>
+      </relation>
+    </entity>
+
+
+    <entity entity-name="SagePayTokenPaymentMethod" 
+            package-name="org.ofbiz.accounting.payment">
+      <description>PayPal Payment Method Details</description>
+      <field name="paymentMethodId" type="id-ne"></field>
+      <field name="sagePayToken" type="short-varchar"></field>
+      <field name="contactMechId" type="id-ne"></field>
+      <prim-key field="paymentMethodId"/>
+      <relation type="one" fk-name="SAGEPAYTKN_PMNTMETH" rel-entity-name="PaymentMethod">
+        <key-map field-name="paymentMethodId"/>
+      </relation>
+      <relation type="one" fk-name="SAGEPAYTKN_CMECH" rel-entity-name="ContactMech">
+        <key-map field-name="contactMechId"/>
+      </relation>
+      <relation type="one" fk-name="SAGEPAYTKN_PADDR" rel-entity-name="PostalAddress">
+        <key-map field-name="contactMechId"/>
+      </relation>
+    </entity>
+
+    <entity entity-name="PaymentGatewaySagePayToken"
+            package-name="org.ofbiz.accounting.payment"
+            title="SagePay Token Payment Gateway Configuration">
+      <field name="paymentGatewayConfigId" type="id-ne"></field>
+      <field name="vendor" type="short-varchar"><description>Vendor name</description></field>
+      <field name="productionHost" type="short-varchar"><description>Production Host</description></field>
+      <field name="testingHost" type="short-varchar"><description>Testing Host</description></field>
+      <field name="sagePayMode" type="short-varchar"><description>Mode (PRODUCTION/TEST)</description></field>
+      <field name="protocolVersion" type="very-short"><description>Protocol Version</description></field>
+      <field name="authenticationTransType" type="short-varchar"><description>Authentication type (PAYMENT/AUTHENTICATE/DEFERRED)</description></field>
+      <field name="authenticationUrl" type="long-varchar"><description>Authentication Url</description></field>
+      <field name="authoriseTransType" type="short-varchar"><description>Authorise type (AUTHORISE/RELEASE)</description></field>
+      <field name="authoriseUrl" type="long-varchar"><description>Authorise url</description></field>
+      <field name="releaseTransType" type="short-varchar"><description>Release type (CANCEL/ABORT)</description></field>
+      <field name="releaseUrl" type="long-varchar"><description>Release Url</description></field>
+      <field name="voidTransType" type="short-varchar"><description>Release type (CANCEL/ABORT)</description></field>
+      <field name="voidUrl" type="long-varchar"><description>Void Url</description></field>
+      <field name="refundTransType" type="short-varchar"><description>Release type (CANCEL/ABORT)</description></field>
+      <field name="refundUrl" type="long-varchar"><description>Refund Url</description></field>
+      <field name="registrationTransType" type="short-varchar"><description>Registration type (TOKEN)</description></field>
+      <field name="registrationUrl" type="long-varchar"><description>Registration Url</description></field>
+      <field name="storeToken" type="very-short"><description>Store Token (No:0/Yes:1)</description></field>
+      <prim-key field="paymentGatewayConfigId"/>
+      <relation type="one" fk-name="PGSPT_PGC" rel-entity-name="PaymentGatewayConfig">
+        <key-map field-name="paymentGatewayConfigId"/>
+      </relation>
+    </entity>
+
+
+</entitymodel>

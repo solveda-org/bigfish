@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="updateAddress" short-description="Update Address And Telephone" login-required="false">
+
+
+<!--  No validation is done we just need to transfer the values to the map -->
+         <call-map-processor in-map-name="parameters" out-map-name="shippingAddressContext">
+             <simple-map-processor name="address">
+                <make-in-string field="fullName">
+                     <in-field field="CUSTOMER_FIRST_NAME"/><constant> </constant>
+                     <in-field field="CUSTOMER_LAST_NAME"/>
+                </make-in-string>
+
+                 <process field="fullName"><copy to-field="toName"/></process>
+                 <process field="CUSTOMER_ATTN_NAME">
+                     <copy to-field="attnName"/>
+                 </process>
+                 <process field="CUSTOMER_ADDRESS1">
+                     <copy to-field="address1"/>
+                 </process>
+                 <process field="CUSTOMER_ADDRESS2"><copy to-field="address2"/></process>
+                 <process field="CUSTOMER_CITY">
+                     <copy to-field="city"/>
+                 </process>
+                 <process field="CUSTOMER_STATE"><copy to-field="stateProvinceGeoId"/></process>
+                 <process field="CUSTOMER_POSTAL_CODE">
+                     <copy to-field="postalCode"/>
+                 </process>
+                 <process field="CUSTOMER_COUNTRY">
+                     <copy to-field="countryGeoId"/>
+                 </process>
+             </simple-map-processor>
+         </call-map-processor>
+         
+        <!--Set the Value for City and Postal Code if they are empty as they are required fields by the service -->
+        <if>
+                <condition>
+                    <or>
+                        <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                        <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                    </or>
+                </condition>
+                <then></then>
+                <else>
+                    <if-empty field="parameters.CUSTOMER_CITY">
+                        <set field="shippingAddressContext.city" value="_NA_"/>
+                    </if-empty>
+                    <if-empty field="parameters.CUSTOMER_POSTAL_CODE">
+                        <set field="shippingAddressContext.postalCode" value="_NA_"/>
+                    </if-empty>
+                </else>
+        </if>
+         
+         <!-- Check for a address3 -->
+         <if-empty field="parameters.CUSTOMER_STATE">
+            <set field="shippingAddressContext.address3" from-field="parameters.CUSTOMER_ADDRESS3"/>
+         </if-empty>
+         
+        <set field="shippingAddressContext.contactMechId" from-field="parameters.contactMechId" />
+        <set field="shippingAddressContext.contactMechTypeId" value="POSTAL_ADDRESS" />
+
+        <if-not-empty field="parameters.contactMechId">
+            <call-service service-name="updatePartyPostalAddress" in-map-name="shippingAddressContext">
+                <result-to-request result-name="contactMechId"  />
+                <result-to-field result-name="contactMechId" />
+            </call-service>
+            <else>
+                <call-service service-name="createPartyPostalAddress" in-map-name="shippingAddressContext">
+                    <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
+                    <result-to-request result-name="contactMechId"  />
+                    <result-to-field result-name="contactMechId"  />
+                </call-service>
+                <session-to-field field="userLogin"/>
+                <set from-field="userLogin.partyId" field="addressPurposeContext.partyId"/>
+                <!-- create the shipping location -->
+                <set value="SHIPPING_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
+            </else>
+        </if-not-empty>
+
+
+         <!-- update home phone -->
+         <if>
+           <condition>
+              <or>
+                <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+              </or>
+           </condition>
+                <then>
+			        <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
+			            <simple-map-processor name="newTelecomNumber">
+			                    <make-in-string field="contactNumber">
+			                        <in-field field="CUSTOMER_HOME_CONTACT3"/>
+			                        <in-field field="CUSTOMER_HOME_CONTACT4"/>
+			                    </make-in-string>
+			                    <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+			            </simple-map-processor>
+			        </call-map-processor>
+			        <if-not-empty field="contactHomePhoneMap.contactHomePhoneContact">
+			            <set field="homePhoneContext.contactMechId" from-field="parameters.homePhoneContactMechId"/>
+			            <set field="homePhoneContext.countryCode" from-field="parameters.CUSTOMER_HOME_COUNTRY"/>
+			            <set field="homePhoneContext.areaCode" from-field="parameters.CUSTOMER_HOME_AREA"/>
+			            <set field="homePhoneContext.contactNumber" from-field="contactHomePhoneMap.contactHomePhoneContact"/>
+			            <set field="homePhoneContext.extension" from-field="parameters.CUSTOMER_HOME_EXT"/>
+			            <set field="homePhoneContext.allowSolicitation" from-field="parameters.CUSTOMER_HOME_ALLOW_SOL"/>
+			        </if-not-empty>
+			     </then>
+			     <else>
+			        <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
+			            <simple-map-processor name="newTelecomNumber">
+			                    <process field="CUSTOMER_HOME_CONTACT_OTHER"><copy to-field="contactHomeOtherPhoneContact"/></process>
+			            </simple-map-processor>
+			        </call-map-processor>
+			         <if-not-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+			            <set field="homePhoneContext.contactMechId" from-field="parameters.homePhoneContactMechId"/>
+			            <!-- set field="homePhoneContext.countryCode" from-field="parameters.CUSTOMER_HOME_COUNTRY"/-->
+			            <!-- set field="homePhoneContext.areaCode" from-field="parameters.CUSTOMER_HOME_AREA_OTHER"/-->
+			            <set field="homePhoneContext.contactNumber" from-field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+			            <set field="homePhoneContext.extension" from-field="parameters.CUSTOMER_HOME_EXT"/>
+			            <set field="homePhoneContext.allowSolicitation" from-field="parameters.CUSTOMER_HOME_ALLOW_SOL"/>
+			        </if-not-empty>
+			     </else>
+	    </if>
+	    <if>
+           <condition>
+              <or>
+                <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
+                <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
+              </or>
+           </condition>
+                <then>
+		            <if-not-empty field="parameters.homePhoneContactMechId">
+		                <call-service service-name="updatePartyTelecomNumber" in-map-name="homePhoneContext">
+		                    <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
+		                </call-service>
+		            <else>
+		                <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
+		                    <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
+		                </call-service>
+		                <set from-field="userLogin.partyId" field="homePhonePurposeContext.partyId"/>
+		                <set from-field="homePhoneContext.contactMechId" field="homePhonePurposeContext.contactMechId"/>
+		
+		                <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+		                <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+		                <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+		                <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+		            </else>
+		            </if-not-empty>
+		
+		            <set field="homeLinkContext.contactMechIdFrom" from-field="contactMechId"/>
+		            <set field="homeLinkContext.contactMechIdTo" from-field="homePhoneContext.contactMechId"/>
+		            <find-by-primary-key entity-name="ContactMechLink" map="homeLinkContext" value-field="existingContactMechLink"/>
+		            <if-empty field="existingContactMechLink">
+		                <call-service service-name="createContactMechLink" in-map-name="homeLinkContext"></call-service>
+		            </if-empty>
+		        </then>
+		  </if>
+
+         <!-- Update/Create mobile phone -->
+         <if>
+           <condition>
+              <or>
+                <if-compare value="CAN" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+                <if-compare value="USA" operator="equals" field="parameters.CUSTOMER_COUNTRY"></if-compare>
+              </or>
+           </condition>
+                <then>
+			        <call-map-processor in-map-name="parameters" out-map-name="contactMobilePhoneMap">
+			            <simple-map-processor name="newTelecomNumber">
+			                    <make-in-string field="contactNumber">
+			                        <in-field field="CUSTOMER_MOBILE_CONTACT3"/>
+			                        <in-field field="CUSTOMER_MOBILE_CONTACT4"/>
+			                    </make-in-string>
+			                    <process field="contactNumber"><copy to-field="contactMobilePhoneContact"/></process>
+			            </simple-map-processor>
+			        </call-map-processor>
+			            <set field="mobilePhoneContext.contactMechId" from-field="parameters.mobilePhoneContactMechId"/>
+			            <set field="mobilePhoneContext.countryCode" from-field="parameters.CUSTOMER_MOBILE_COUNTRY"/>
+			            <set field="mobilePhoneContext.areaCode" from-field="parameters.CUSTOMER_MOBILE_AREA"/>
+			            <set field="mobilePhoneContext.contactNumber" from-field="contactMobilePhoneMap.contactMobilePhoneContact"/>
+			            <set field="mobilePhoneContext.extension" from-field="parameters.CUSTOMER_MOBILE_EXT"/>
+			            <set field="mobilePhoneContext.allowSolicitation" from-field="parameters.CUSTOMER_MOBILE_ALLOW_SOL"/>
+			    </then>
+			    <else>
+			        <call-map-processor in-map-name="parameters" out-map-name="contactMobileOtherPhoneMap">
+			            <simple-map-processor name="newTelecomNumber">
+			                    <process field="CUSTOMER_MOBILE_CONTACT_OTHER"><copy to-field="contactMobileOtherPhoneContact"/></process>
+			            </simple-map-processor>
+			        </call-map-processor>
+		            <set field="mobilePhoneContext.contactMechId" from-field="parameters.mobilePhoneContactMechId"/>
+		            <!--set field="mobilePhoneContext.countryCode" from-field="parameters.CUSTOMER_MOBILE_COUNTRY"/>
+		            <set field="mobilePhoneContext.areaCode" from-field="parameters.CUSTOMER_MOBILE_AREA_OTHER"/-->
+		            <set field="mobilePhoneContext.contactNumber" from-field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"/>
+		            <set field="mobilePhoneContext.extension" from-field="parameters.CUSTOMER_MOBILE_EXT"/>
+		            <set field="mobilePhoneContext.allowSolicitation" from-field="parameters.CUSTOMER_MOBILE_ALLOW_SOL"/>
+			    </else>
+		    </if>
+            <if-not-empty field="parameters.mobilePhoneContactMechId">
+                <call-service service-name="updatePartyTelecomNumber" in-map-name="mobilePhoneContext">
+                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
+                </call-service>
+            <else>
+            <if-not-empty field="mobilePhoneContext.contactNumber">
+                <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
+                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
+                </call-service>
+                <set from-field="userLogin.partyId" field="mobilePhonePurposeContext.partyId"/>
+                <set from-field="mobilePhoneContext.contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
+                <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
+            </if-not-empty>
+            </else>
+            </if-not-empty>
+		        <if-not-empty field="mobilePhoneContext.contactMechId">
+		            <set field="mobileLinkContext.contactMechIdFrom" from-field="contactMechId"/>
+		            <set field="mobileLinkContext.contactMechIdTo" from-field="mobilePhoneContext.contactMechId"/>
+		            <find-by-primary-key entity-name="ContactMechLink" map="mobileLinkContext" value-field="existingContactMechLink"/>
+		            <if-empty field="existingContactMechLink">
+		                <call-service service-name="createContactMechLink" in-map-name="mobileLinkContext"></call-service>
+		            </if-empty>
+                </if-not-empty>
+    </simple-method>
+
+     <simple-method method-name="deleteAddress" short-description="delete Address And Telephone" login-required="false">
+     <call-map-processor in-map-name="parameters" out-map-name="shippingAddressContext">
+             <simple-map-processor name="address">
+                <make-in-string field="fullName">
+                     <in-field field="USER_FIRST_NAME"/><constant> </constant>
+                     <in-field field="USER_LAST_NAME"/>
+                </make-in-string>
+
+                 <process field="fullName"><copy to-field="toName"/></process>
+                 <process field="CUSTOMER_ATTN_NAME">
+                     <copy to-field="attnName"/>
+                 </process>
+                 <process field="CUSTOMER_ADDRESS1">
+                     <copy to-field="address1"/>
+                 </process>
+                 <process field="CUSTOMER_ADDRESS2"><copy to-field="address2"/></process>
+                 <process field="CUSTOMER_CITY">
+                     <copy to-field="city"/>
+                 </process>
+                 <process field="CUSTOMER_STATE"><copy to-field="stateProvinceGeoId"/></process>
+                 <process field="CUSTOMER_POSTAL_CODE">
+                     <copy to-field="postalCode"/>
+                 </process>
+                 <process field="CUSTOMER_COUNTRY">
+                     <copy to-field="countryGeoId"/>
+                 </process>
+             </simple-map-processor>
+         </call-map-processor>
+        <set field="shippingAddressContext.contactMechId" from-field="parameters.contactMechId" />
+        <set field="shippingAddressContext.contactMechTypeId" value="POSTAL_ADDRESS" />
+
+        <if-not-empty field="parameters.contactMechId">
+        <log level="info" message="delete address for party which have contact mech id = ${parameters.contactMechId}"></log>
+            <call-service service-name="deletePartyContactMech" in-map-name="shippingAddressContext">
+                <result-to-request result-name="contactMechId"  />
+                <result-to-field result-name="contactMechId" />
+            </call-service>
+         </if-not-empty>
+
+    </simple-method>
+</simple-methods>

@@ -1,0 +1,1955 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>OSafe Services</description>
+    <vendor/>
+    <version>1.0</version>
+    <!-- common hidden fields interface -->
+    <service name="commonFormHiddenFields" engine="interface" location="" invoke="">
+        <description>Interface service for common hidden fields</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="browseRootProductCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="preferredDateFormat" type="String" mode="IN" optional="true"/>
+        <attribute name="preferredDateTimeFormat" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <!-- order lookup services -->
+    <service name="searchOrders" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OrderLookupServices" invoke="findOrders">
+        <description>Uses dynamic view entity to find orders; returns a list of Order (OrderHeader) objects</description>
+        <!-- order header fields -->
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderName" type="String" mode="IN" optional="true"/>
+        <attribute name="orderTypeId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+        <attribute name="orderStatusId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+        <attribute name="productStoreId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+        <attribute name="orderWebSiteId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+        <attribute name="salesChannelEnumId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+        <attribute name="isDownloaded" type="String" mode="IN" optional="true"/> <!-- show orders downloaded Y/N -->
+        <attribute name="createdBy" type="String" mode="IN" optional="true"/>
+        <attribute name="terminalId" type="String" mode="IN" optional="true"/>
+        <attribute name="transactionId" type="String" mode="IN" optional="true"/>
+        <attribute name="externalId" type="String" mode="IN" optional="true"/>
+        <attribute name="internalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="useEntryDate" type="String" mode="IN" optional="true"/> <!-- Y/N use entryDate instead of orderDate -->
+        <attribute name="minDate" type="String" mode="IN" optional="true"/> <!-- converted to Timestamp -->
+        <attribute name="maxDate" type="String" mode="IN" optional="true"/> <!-- converted to Timestamp -->
+        <attribute name="hasBackOrders" type="String" mode="IN" optional="true"/> <!-- Y to only show orders with items on backorder -->
+
+        <!-- order role fields -->
+        <attribute name="userLoginId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="List" mode="IN" optional="true"/> <!-- can pass multiple values as list -->
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+
+        <!-- order item fields -->
+        <attribute name="correspondingPoId" type="String" mode="IN" optional="true"/>
+        <attribute name="subscriptionId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="IN" optional="true"/>
+        <attribute name="budgetId" type="String" mode="IN" optional="true"/>
+        <attribute name="quoteId" type="String" mode="IN" optional="true"/>
+
+        <attribute name="billingAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="finAccountId" type="String" mode="IN" optional="true"/>
+        <attribute name="cardNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="accountNumber" type="String" mode="IN" optional="true"/>
+
+        <!-- shipment/inventory fields -->
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="true"/>
+        <attribute name="softIdentifier" type="String" mode="IN" optional="true"/>
+        <attribute name="serialNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="shipmentId" type="String" mode="IN" optional="true"/>
+
+        <!-- inventory problem fields -->
+        <attribute name="filterInventoryProblems" type="String" mode="IN" optional="true"/>
+        <attribute name="filterPOsWithRejectedItems" type="String" mode="IN" optional="true"/>
+        <attribute name="filterPOsOpenPastTheirETA" type="String" mode="IN" optional="true"/>
+        <attribute name="filterPartiallyReceivedPOs" type="String" mode="IN" optional="true"/>
+
+        <attribute name="isViewed" type="String" mode="IN" optional="true"/> <!-- show orders with viewed Y/N -->
+        <attribute name="shipmentMethod" type="String" mode="IN" optional="true"/>
+        <attribute name="gatewayAvsResult" type="String" mode="IN" optional="true"/>
+        <attribute name="gatewayScoreResult" type="String" mode="IN" optional="true"/>
+
+        <!-- ship to country fields -->
+        <attribute name="countryGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="includeCountry" type="String" mode="IN" optional="true"/>
+        <!-- order contact fields -->
+        <attribute name="orderContactMechId" type="String" mode="IN" optional="true"/>
+
+        <!--  Order adjustments -->
+        <attribute name="productPromoCodeId" mode="IN" type="String" optional="true"/>
+
+        <!-- Order attribute IS DOWNLOADED-->
+        <attribute name="isDownloaded" mode="IN" type="String" optional="true"/>
+        <!-- Order attribute -->
+        <attribute name="attrName" mode="IN" type="String" optional="true"/>
+        <attribute name="attrValue" mode="IN" type="String" optional="true"/>
+        
+        <!-- view and page fields -->
+        <attribute name="viewIndex" type="Integer" mode="INOUT" optional="false"/>
+        <attribute name="viewSize" type="Integer" mode="INOUT" optional="false"/>
+        <attribute name="showAll" type="String" mode="INOUT" optional="true"/>
+
+        <!-- index fields -->
+        <attribute name="highIndex" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="lowIndex" type="Integer" mode="OUT" optional="false"/>
+
+        <!-- inventory problem results -->
+        <attribute name="filterInventoryProblemsList" type="List" mode="OUT" optional="true"/>
+        <attribute name="filterPOsWithRejectedItemsList" type="List" mode="OUT" optional="true"/>
+        <attribute name="filterPOsOpenPastTheirETAList" type="List" mode="OUT" optional="true"/>
+        <attribute name="filterPartiallyReceivedPOsList" type="List" mode="OUT" optional="true"/>
+
+        <!-- actual results -->
+        <attribute name="paramList" type="String" mode="OUT" optional="false"/>
+        <attribute name="orderList" type="List" mode="OUT" optional="false"/>
+        <attribute name="completeOrderList" type="List" mode="OUT" optional="false"/>
+        <attribute name="orderListSize" type="Integer" mode="OUT" optional="false"/>
+
+    </service>
+
+   <service name="createNewContentSpot" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="createNewContentSpot">
+        <description>
+            Create record for following entity:
+            DataResource
+            Content
+            ElectronicText
+            ContentAssoc
+            ContentPurpose
+        </description>
+        <implements service="createTextContent"/>
+        <attribute name="spotListMenuId" type="String" mode="IN" optional="false"/>
+        <override name="description" allow-html="any"/>
+    </service>
+
+    <service name="createContent" engine="simple" auth="true"
+            location="component://content/script/org/ofbiz/content/content/ContentServices.xml" invoke="createContent">
+        <description>Create a Content</description>
+        <permission-service service-name="genericContentPermission" main-action="CREATE"/>
+        <auto-attributes entity-name="Content" include="nonpk" mode="IN" optional="true"/>
+        <!-- TODO: the following fields are deprecated; but will not be removed until all services and callers are updated -->
+        <attribute mode="IN" name="targetOperationList" optional="true" type="List"/>
+        <attribute mode="IN" name="targetOperationString" optional="true" type="String"/>
+        <attribute mode="IN" name="contentPurposeList" optional="true" type="List"/>
+        <attribute mode="IN" name="contentPurposeString" optional="true" type="String"/>
+        <attribute mode="IN" name="skipPermissionCheck" optional="true" type="String"/>
+        <attribute mode="IN" name="displayFailCond" optional="true" type="Boolean"/>
+        <attribute mode="INOUT" name="roleTypeList" optional="true" type="List"/>
+        <!-- end of deprecated fields -->
+        <attribute name="contentPurposeTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="contentAssocTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="contentIdFrom" type="String" mode="IN" optional="true"/>
+        <attribute name="contentIdTo" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="mapKey" type="String" mode="IN" optional="true"/>
+        <attribute name="contentId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="fromDate" type="Timestamp" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Long" mode="IN" optional="true"/>
+        <override name="description" allow-html="any"/>
+        <override name="contentTypeId" default-value="DOCUMENT"/>
+    </service>
+
+    <service name="createNewContentSpotGroup" engine="group" auth="false">
+        <description>
+         create content and render success message
+        </description>
+        <group>
+            <invoke name="createNewContentSpot" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="updateLabelXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="modifyLabelXml">
+        <description>Uses Update Label xml config file</description>
+        <attribute name="key" mode="IN" type="String"/>
+        <attribute name="category" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="deleteUiLabelGroup" engine="group" auth="false">
+        <description>
+         delete ui labels and render success message
+        </description>
+        <group>
+            <invoke name="deleteUiLabel" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="deleteUiLabel" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deleteUiLabel">
+        <description>
+         Delete UiLabel.
+        </description>
+        <attribute name="key" mode="IN" type="String"/>
+    </service>
+
+    <service name="deleteUiLabelXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="deleteUiLabelXml">
+        <description>Delete Ui Label from xml config file</description>
+        <attribute name="key" mode="IN" type="String"/>
+    </service>
+
+    <service name="createUiLabelGroup" engine="group" auth="false">
+        <description>
+         create ui label and render success message
+        </description>
+        <group>
+            <invoke name="createUiLabel" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createUiLabel" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="createUiLabel">
+        <description>
+         create Ui Label.
+        </description>
+        <attribute name="key" mode="INOUT" type="String" optional="true"/>
+        <attribute name="category" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="addUiLabelXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="addUiLabelXml">
+        <description>add Ui Label in xml config file</description>
+        <attribute name="key" mode="IN" type="String"/>
+        <attribute name="category" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="copyLabelXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="copyLabelXml">
+        <description>Uses copy Label xml config file</description>
+    </service>
+
+    <service name="copyDivSequenceXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="copyDivSequenceXml">
+        <description>Uses copy Div Sequence xml config file</description>
+    </service>
+
+    <service name="updateTextContentGroup" engine="group" auth="false">
+        <description>
+         update content and render success message
+        </description>
+        <!-- uses updateContent internally; additonal permission(s) not necessary -->
+        <group>
+            <invoke name="updateTextContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateTextContent" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="updateTextContent">
+        <description>
+         update content 
+        </description>
+        <implements service="updateContent"/>
+        <attribute name="textData" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="description" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+
+    <service name="createCategoryTextContent" engine="simple" auth="true" 
+        location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml" 
+        invoke="createCategoryTextContent">
+        <description>
+            Create record for following entity:
+            DataResource
+            Content
+            ElectronicText
+            ProductCategoryContent
+        </description>
+        
+        <attribute name="prodCatContentTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="productCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="contentId" type="String" mode="OUT" optional="true" />
+    </service>
+    <service name="updateProductCategoryRollupGroup" engine="group" auth="false">
+        <description>
+            Update record for following entity:
+            ProductCategory
+            ProductCategoryRollup
+        </description>
+        <group>
+            <invoke name="updateProductCategoryAndRollup" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateProductCategoryAndRollup" engine="simple" auth="true" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" 
+            invoke="updateProductCategoryAndRollup">
+        <description>
+            Update record for following entity:
+            ProductCategory
+            ProductCategoryRollup
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="updateProductCategory"/>
+        <attribute name="currentPrimaryParentCategoryId" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="String" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="String" mode="IN" optional="true"/>
+        <attribute name="thruDate" type="String" mode="IN" optional="true"/>
+        <attribute name="longDescription" mode="IN" type="String" optional="true"/>
+        <attribute name="currentFromDate" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="formattedFromDate" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="updateProductStoreParmGroup" engine="group" auth="false">
+        <description>
+         update parameter and render success message
+        </description>
+        <group>
+            <invoke name="updateProductStoreParm" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateProductStoreParm" engine="simple" auth="true" default-entity-name="ProductStoreParm"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateProductStoreParm">
+        <description>
+         update parameter.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productStoreId" mode="INOUT" type="String"/>
+        <attribute name="parmKey" mode="INOUT" type="String"/>
+        <attribute name="description" mode="IN" type="String" optional="true" allow-html="any"/>
+        <attribute name="parmValue" mode="IN" type="String" optional="true"/>
+        <attribute name="parmCategory" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="createProductStoreParmGroup" engine="group" auth="false">
+        <description>
+         create parameter and render success message
+        </description>
+        <group>
+            <invoke name="createProductStoreParm" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createProductStoreParm" engine="simple" auth="true" default-entity-name="ProductStoreParm"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="createProductStoreParm">
+        <description>
+         create parameter.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productStoreId" mode="INOUT" type="String"/>
+        <attribute name="parmKey" mode="INOUT" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true" allow-html="any"/>
+        <attribute name="parmValue" mode="IN" type="String" optional="true"/>
+        <attribute name="parmCategory" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="deleteProductStoreParmGroup" engine="group" auth="false">
+        <description>
+         delete parameter and render success message
+        </description>
+        <group>
+            <invoke name="deleteProductStoreParm" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deleteProductStoreParm" engine="simple" auth="true" default-entity-name="ProductStoreParm"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deleteProductStoreParm">
+        <description>
+         delete parameter.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productStoreId" mode="IN" type="String"/>
+        <attribute name="parmKey" mode="IN" type="String" optional="true"/>
+    </service>
+    
+
+    <service name="updateUiLabelGroup" engine="group" auth="false">
+        <description>
+         update ui labels and render success message
+        </description>
+        <group>
+            <invoke name="updateUiLabel" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateUiLabel" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateUiLabel">
+        <description>
+         update parameter.
+        </description>
+        <attribute name="key" mode="INOUT" type="String"/>
+        <attribute name="category" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+     <service name="updateDivSequenceGroup" engine="group" auth="false">
+        <description>
+         update DIV sequence and render succes message.
+        </description>
+        <group>
+            <invoke name="updateDivSequence" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateDivSequence" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateDivSequence">
+        <description>
+         update DIV sequence.
+        </description>
+        <attribute name="keys" type="Map" string-map-prefix="key_" mode="IN" optional="true"/>
+        <attribute name="screens" type="Map" string-map-prefix="screen_" mode="IN" optional="true"/>
+        <attribute name="descriptions" type="Map" string-map-prefix="description_" mode="IN" optional="true"/>
+        <attribute name="values" type="Map" string-map-prefix="value_" mode="IN" optional="true"/>
+        <attribute name="screenType" mode="INOUT" type="String" optional="true"/>
+        <attribute name="showDetail" mode="INOUT" type="String" optional="true"/>
+    </service>
+     <service name="updateDivSequenceXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="modifyDivSequenceXml">
+        <description>Uses Update Label xml config file</description>
+        <attribute name="key" mode="IN" type="String"/>
+        <attribute name="screen" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="copyDivSequenceXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="copyDivSequenceXml">
+        <description>Uses copy Div Sequence xml config file</description>
+    </service>
+
+    <service name="updateProductReviewGroup" engine="group" auth="false">
+        <description>
+         update product review and render success message
+        </description>
+        <group>
+            <invoke name="updateProdReview" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateProductAndPrice" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateProductAndPrice">
+        <description>
+         Update Product data, expire and create ProductPrice.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+        <attribute name="internalName" mode="IN" type="String" optional="true"/>
+        <attribute name="productDetailName" mode="IN" type="String" optional="true" allow-html="any"/>
+        <attribute name="longDescription" mode="IN" type="String" optional="true" allow-html="any"/>
+        <attribute name="introductionDate" mode="IN" type="String" optional="true"/>
+        <attribute name="salesDiscontinuationDate" mode="IN" type="String" optional="true"/>
+        <attribute name="listPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="defaultPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="isVariant" mode="IN" type="String" optional="true"/>
+        <attribute name="inventoryLevel" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    <service name="updateProductContent" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateProductContent">
+        <description>
+         Update Product Contents.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="isVariant" mode="IN" type="String" optional="true"/>
+        <attribute name="productDetailName" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="plpLabel" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="pdpLabel" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="shortSalesPitch" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="longDescription" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="specialInstruction" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="deliveryInfo" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="directions" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="termsAndConds" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="ingredients" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="warnings" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    <service name="createProductGroup" engine="group" auth="false">
+        <description>
+         Create product and product price as well as render success message
+        </description>
+        <group>
+            <invoke name="createNewProduct" result-to-context="true"/>
+            <invoke name="updateProductContent" result-to-context="true"/>
+            <invoke name="updateProductIdentification" result-to-context="true"/>
+            <invoke name="manageBigfishInventory" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createNewProduct" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="createNewProduct">
+        <description>
+         Update Product data, expire and create ProductPrice.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+        <attribute name="internalName" mode="IN" type="String" optional="true"/>
+        <attribute name="productDetailName" mode="IN" type="String" optional="true" allow-html="any"/>
+        <attribute name="longDescription" mode="IN" type="String" optional="true" allow-html="any"/>
+        <attribute name="introductionDate" mode="IN" type="String" optional="true"/>
+        <attribute name="salesDiscontinuationDate" mode="IN" type="String" optional="true"/>
+        <attribute name="listPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="defaultPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="isVariant" mode="IN" type="String" optional="true"/>
+        <attribute name="isVirtual" mode="IN" type="String" optional="true"/>
+        <attribute name="productTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="productCategoryId" mode="IN" type="String" optional="true"/>
+        <attribute name="currencyUomId" mode="IN" type="String" optional="true"/>
+        <attribute name="inventoryLevel" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    
+    <service name="updateProductIdentification" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateProductIdentification">
+        <description>
+         Update Product Contents.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="isVariant" mode="IN" type="String" optional="true"/>
+        <attribute name="idValue" type="Map" string-map-prefix="idValue_" mode="IN" optional="true"/>
+        <attribute name="goodIdentificationTypeId" type="Map" string-map-prefix="goodIdentificationTypeId_" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="manageGoodIdentification" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="manageGoodIdentification">
+        <description>
+         Update Good Idetification.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="goodIdentificationTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="idValue" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="manageBigfishInventory" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="manageBigfishInventory">
+        <description>
+         Create Update, Delete Product Attribute for Bigfish Inventory.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="inventoryLevel" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateProductPriceGroup" engine="group" auth="false">
+        <description>
+         update product and product price as well as render success message
+        </description>
+        <group>
+            <invoke name="updateProductAndPrice" result-to-context="true"/>
+            <invoke name="updateProductContent" result-to-context="true"/>
+            <invoke name="updateProductIdentification" result-to-context="true"/>
+            <invoke name="manageBigfishInventory" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="successMessage" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="successMessage">
+        <description>
+            Generic Service to Render success message
+        </description>
+        <attribute name="errorMessageList" type="List" mode="IN" optional="true" />
+        <attribute name="successMessageList" type="List" mode="IN" optional="true" />
+        <attribute name="osafeSuccessMessageList" type="List" mode="OUT" optional="true" />
+    </service>
+    <service name="updateProdReview" engine="simple" auth="true" default-entity-name="ProductReview"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateProdReview">
+        <description>
+         Updates a product review record
+        </description>
+        <implements service="updateProductReview"/>
+        <override name="productReview" allow-html="any"/>
+    </service>
+    <service name="updateProductContentText" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateProductContentText">
+        <description>
+         Update Product Content Text.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+        <attribute name="productContentTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="text" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    
+    <service name="deleteProductContentAndText" default-entity-name="ProductContent" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="deleteProductContent">
+        <description>
+         Delete ProductContent, Content, ContentRole, ElectronicText ,DataresourceRole and DataResource.
+        </description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
+    
+    <service name="updateFacetGroup" engine="simple" default-entity-name="ProductFeatureCatGrpAppl" auth="true" require-new-transaction="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateFacetGroup">
+        <description>
+         Update Product data, expire and create ProductPrice.
+        </description>
+        <attribute name="productCategoryId" mode="IN" type="String" optional="false"/>
+        <attribute name="productFeatureGroupId" type="Map" string-map-prefix="productFeatureGroupId_" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="Map" string-map-prefix="fromDate_" mode="IN" optional="true"/>
+        <attribute name="thruDate" type="Map" string-map-prefix="thruDate_" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Map" string-map-prefix="sequenceNum_" mode="IN" optional="true"/>
+        <attribute name="facetValueMin" type="Map" string-map-prefix="facetValueMin_" mode="IN" optional="true"/>
+        <attribute name="facetValueMax" type="Map" string-map-prefix="facetValueMax_" mode="IN" optional="true"/>
+        <attribute name="description" type="Map" string-map-prefix="description_" mode="IN" optional="true"/>
+    </service>
+    <service name="updateFacetGroupGroup" engine="group" auth="false">
+        <description>
+         update product and product price as well as render success message
+        </description>
+        <group>
+            <invoke name="updateFacetGroup" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateFacetValue" engine="simple" default-entity-name="ProductFeatureGroupAppl" auth="true" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateFacetValue">
+        <description>
+         Update Product data, expire and create ProductPrice.
+        </description>
+        <attribute name="productFeatureGroupId" mode="IN" type="String" optional="false"/>
+        <attribute name="productFeatureId" type="Map" string-map-prefix="productFeatureId_" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="Map" string-map-prefix="fromDate_" mode="IN" optional="true"/>
+        <attribute name="thruDate" type="Map" string-map-prefix="thruDate_" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Map" string-map-prefix="sequenceNum_" mode="IN" optional="true"/>
+        <attribute name="description" type="Map" string-map-prefix="description_" mode="IN" optional="true"/>
+        <attribute name="productFeatureTypeId" type="Map" string-map-prefix="productFeatureTypeId_" mode="IN" optional="true"/>
+        
+    </service>
+    <service name="updateFacetValueGroup" engine="group" auth="false">
+        <description>
+         update product and product price as well as render success message
+        </description>
+        <group>
+            <invoke name="updateFacetValue" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateFeatureSwatchImageGroup" engine="group" auth="false">
+        <description>
+         update product feature data resource and data resource as well as render success message
+        </description>
+        <group>
+            <invoke name="updateFeatureSwatchImage" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateFeatureSwatchImage" engine="simple" default-entity-name="ProductFeatureDataResource" auth="true" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateFeatureSwatchImage">
+        <description>
+         Update Product Feature Data Resource and Data Resource.
+        </description>
+        <attribute name="productFeatureId" mode="IN" type="String" optional="false"/>
+        <attribute name="productFeatureGroupId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="plpSwatchImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_plpSwatchImage_fileName" type="String" mode="IN" optional="true"/>
+        
+        <attribute name="pdpSwatchImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_pdpSwatchImage_fileName" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateProdStoreEmailSetAndEnumGroup" engine="group" auth="false">
+        <description>
+         update product store email settings and enumeration
+        </description>
+        <group>
+            <invoke name="updateProdStoreEmailSetAndEnum" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="createUpdateProdFeatureDataResource" engine="simple" default-entity-name="ProductFeatureDataResource" auth="true" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="createUpdateProdFeatureDataResource">
+        <description>
+         Update Product data, expire and create ProductPrice.
+        </description>
+        <attribute name="productFeatureId" mode="IN" type="String" optional="false"/>
+        <attribute name="prodFeatureDataResourceTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="dataResourceName" mode="IN" type="String" optional="true"/>
+        <attribute name="objectInfo" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="updateProdStoreEmailSetAndEnum" engine="simple" default-entity-name="ProductStoreEmailSetting" auth="true" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminEmailServices.xml" invoke="updateProdStoreEmailSetAndEnum">
+        <description>
+         Update Product Store Email settings.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="updateEnum" default-entity-name="Enumeration" engine="simple"
+        location="component://common/script/org/ofbiz/common/EnumerationServices.xml" invoke="updateEnumeration" auth="true">
+        <description>Update a Enumeration</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="deleteTextContentGroup" engine="group" auth="false">
+        <description>
+         delete content and render success message
+        </description>
+        <group>
+            <invoke name="deleteTextContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="deleteTextContent" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="deleteTextContent">
+        <description>
+            Delete record for following entity:
+            ContentAssoc
+            ContentRole
+            ContentPurpose
+            Content
+            ElectronicText
+            DataResourceRole
+            DataResource
+        </description>
+        <implements service="removeContent"/>
+    </service>
+    <service name="findParty" engine="java"
+        location="com.osafe.services.PartyServices" invoke="findParty">
+        <description>General Party Find Service, Used in the findparty page in the Party Manager, etc</description>
+        <attribute name="extInfo" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/> <!-- can be null or ANY to include All -->
+        <attribute name="roleTypeIds" type="List" mode="IN" optional="true"/> <!-- a list of role type ids to include specific role types-->
+        <attribute name="VIEW_INDEX" type="String" mode="IN" optional="true"/>
+        <attribute name="VIEW_SIZE" type="String" mode="IN" optional="true"/>
+        <attribute name="lookupFlag" type="String" mode="IN" optional="true"/>
+        <attribute name="showAll" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/> <!-- does a LIKE compare on this, can do partial, case insensitive, etc -->
+        <attribute name="partyTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/> <!-- can be null or ANY to include any -->
+        <attribute name="userLoginId" type="String" mode="IN" optional="true"/> <!-- does a LIKE compare on this, can do partial, case insensitive, etc -->
+        <attribute name="groupName" type="String" mode="IN" optional="true"/>
+        <attribute name="groupNameLocal" type="String" mode="IN" optional="true"/>
+        <attribute name="firstName" type="String" mode="IN" optional="true"/>
+        <attribute name="lastName" type="String" mode="IN" optional="true"/>
+        <attribute name="address1" type="String" mode="IN" optional="true"/>
+        <attribute name="address2" type="String" mode="IN" optional="true"/>
+        <attribute name="city" type="String" mode="IN" optional="true"/>
+        <attribute name="stateProvinceGeoId" type="String" mode="IN" optional="true"/>
+        <attribute name="postalCode" type="String" mode="IN" optional="true"/>
+        <attribute name="infoString" type="String" mode="IN" optional="true"/> <!-- the ContactMech infoString -->
+        <attribute name="countryCode" type="String" mode="IN" optional="true"/>
+        <attribute name="areaCode" type="String" mode="IN" optional="true"/>
+        <attribute name="contactNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="inventoryItemId" type="String" mode="IN" optional="true"/> <!-- does a LIKE compare on this -->
+        <attribute name="serialNumber" type="String" mode="IN" optional="true"/> <!-- does a LIKE compare on this -->
+        <attribute name="softIdentifier" type="String" mode="IN" optional="true"/> <!-- does a LIKE compare on this -->
+        <attribute name="partyRelationshipTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="ownerPartyIds" type="List" mode="IN" optional="true"/><!-- Lead Owners Parties -->
+        <!-- Party attribute IS DOWNLOADED-->
+        <attribute name="isDownloaded" mode="IN" type="String" optional="true"/>
+        <attribute name="attrName" type="String" mode="IN" optional="true"/>
+        <attribute name="attrValue" type="String" mode="IN" optional="true"/>
+
+        <attribute name="roleTypes" type="List" mode="OUT" optional="false"/>
+        <attribute name="partyTypes" type="List" mode="OUT" optional="false"/>
+        <attribute name="currentRole" type="org.ofbiz.entity.GenericValue" mode="OUT" optional="true"/>
+        <attribute name="currentPartyType" type="org.ofbiz.entity.GenericValue" mode="OUT" optional="true"/>
+        <attribute name="currentStateGeo" type="org.ofbiz.entity.GenericValue" mode="OUT" optional="true"/>
+        <attribute name="viewIndex" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="viewSize" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="partyList" type="List" mode="OUT" optional="false"/>
+        <attribute name="completePartyList" type="List" mode="OUT" optional="false"/>
+        <attribute name="partyListSize" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="paramList" type="String" mode="OUT" optional="false"/>
+        <attribute name="highIndex" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="lowIndex" type="Integer" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="clearLabelCacheGroup" engine="group" auth="false">
+        <description>
+         clear label cache and render success message
+        </description>
+        <group>
+            <invoke name="clearLabelCache" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="clearLabelCache" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="clearLabelCache">
+        <description>
+        clear label cache
+        </description>
+        <attribute name="cacheName" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="solrReIndexGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Re-Index solr and render success message
+        </description>
+        <group>
+            <invoke name="solrReIndex" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="solrReIndex" engine="simple" auth="false" transaction-timeout="7200"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="solrReIndex">
+        <description>
+        Re-Index solr
+        </description>
+        <implements service="genProductsIndex"/>
+    </service>
+    
+    <service name="genSeoUrlMapGroup" engine="group" auth="false">
+        <description>
+         generate SEO URL Map File and render success message
+        </description>
+        <group>
+            <invoke name="genSeoUrlMap" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="createUpdateProdPriceRuleGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update product price, create and update price rule and render success message.
+        </description>
+        <group>
+            <invoke name="updateProdPrice" result-to-context="true"/>
+            <invoke name="createUpdateProdPriceRule" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateProdPrice" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminPriceServices.xml"
+            invoke="updateProdPrice">
+        <description>
+         Update Product List and Default Price.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="true"/>
+        <attribute name="listPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="defaultPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="isVariant" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="createUpdateProdPriceRule" engine="java"
+            location="com.osafe.services.OsafeAdminPricingServices" invoke="createUpdateProdPriceRule" auth="true">
+        <description>Create and Update Product Price Rule</description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="PriceTypeRadio" mode="IN" type="String" optional="true"/>
+        <attribute name="fromQuantityInfo" type="Map" string-map-prefix="fromQty_" mode="IN" optional="true"/>
+        <attribute name="toQuantityInfo" type="Map" string-map-prefix="toQty_" mode="IN" optional="true"/>
+        <attribute name="priceInfo" type="Map" string-map-prefix="price_" mode="IN" optional="true"/>
+        <attribute name="descriptionInfo" type="Map" string-map-prefix="description_" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="deleteProdPriceRule" engine="java"
+            location="com.osafe.services.OsafeAdminPricingServices" invoke="deleteProdPriceRule" auth="true">
+        <description>Delete Product Price Condition, Action and Rule</description>
+        <attribute name="productPriceRuleId" mode="IN" type="String" optional="false"/>
+    </service>
+
+    <service name="updatePartyDownload" engine="java" default-entity-name="Person"
+            location="org.ofbiz.party.party.PartyServices" invoke="updatePerson" auth="true">
+        <description>Update Party Download</description>
+        <permission-service service-name="partyGroupPermissionCheck" main-action="UPDATE"/>
+        <auto-attributes mode="IN" include="pk" optional="true"><!-- if no partyId specified will use userLogin.partyId --></auto-attributes>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+        <attribute name="preferredCurrencyUomId" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="externalId" type="String" mode="IN" optional="true"/>
+        <attribute name="isDownloaded" type="String" mode="IN" optional="false"/>
+        <attribute name="datetimeDownloaded" type="Timestamp" mode="IN" optional="false"/>
+        <attribute name="statusId" type="String" mode="IN" optional="true"/>
+        <override name="firstName" optional="false"/>
+        <override name="lastName" optional="false"/>
+    </service>
+    
+    <service name="updatePLPSequence" engine="simple" default-entity-name="ProducCategoryMember" auth="true" require-new-transaction="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updatePLPSequence">
+        <description>
+         Update Product PLP sequence.
+        </description>
+        <attribute name="productId" mode="INOUT" type="String" />
+        <attribute name="productCategoryId" mode="INOUT" type="String"/>
+        <attribute name="fromDate" type="String" mode="INOUT"/>
+        <attribute name="sequenceNum" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateProductMetatagGroup" engine="group" auth="false">
+        <description>
+         update product html metatag content and render success message
+        </description>
+        <group>
+            <invoke name="updateProductMetatagContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateProductMetatagContent" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateProductMetatagContent">
+        <description>
+         Update product html metatag content.
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="metaTitle" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="metaDesc" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="metaKeyword" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+
+    <service name="updateStoreLocationGroup" engine="group" auth="false">
+        <description>
+         Update the store information
+        </description>
+        <group>
+            <invoke name="updateStoreLocation" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateStoreLocation" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminStoreLocationServices.xml"
+            invoke="updateStoreLocation">
+        <description>
+        Update the store information
+        </description>
+        <implements service="updatePartyGroup"/>
+        <implements service="updatePartyPostalAddress"/>
+        <implements service="updatePartyTelecomNumber"/>
+        <implements service="genPartyGeoPoint"/>
+        <attribute name="storeHoursDataResourceId" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="storeNoticeDataResourceId" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="storeHoursTextData" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="storeNoticeTextData" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="addressContactMechId" type="String" mode="IN" optional="false"/>
+        <attribute name="phoneContactMechId" type="String" mode="IN" optional="false"/>
+        <attribute name="contactNumberOther" mode="IN" type="String" optional="true"/>
+        <attribute name="contactNumber3" mode="IN" type="String" optional="true"/>
+        <attribute name="contactNumber4" mode="IN" type="String" optional="true"/>
+        <override name="address1" optional="true"/>
+        <override name="city" optional="true"/>
+        <override name="postalCode" optional="true"/>
+    </service>
+        <service name="createStoreLocationGroup" engine="group" auth="false">
+        <description>
+         Create a new store
+        </description>
+        <group>
+            <invoke name="createStoreLocation" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createStoreLocation" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminStoreLocationServices.xml"
+            invoke="createStoreLocation">
+        <description>
+        Create a new store
+        </description>
+        <implements service="createPartyGroup"/>
+        <implements service="createPostalAddressAndPurposes"/>
+        <implements service="createPartyTelecomNumber"/>
+        <implements service="createTextContent"/>
+        <implements service="genPartyGeoPoint"/>
+        <attribute name="storeHoursTextData" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="storeNoticeTextData" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="contactNumberOther" mode="IN" type="String" optional="true"/>
+        <attribute name="contactNumber3" mode="IN" type="String" optional="true"/>
+        <attribute name="contactNumber4" mode="IN" type="String" optional="true"/>
+        <override name="groupName" optional="true"/>
+        <override name="address1" optional="true"/>
+        <override name="city" optional="true"/>
+        <override name="postalCode" optional="true"/>
+    </service>
+
+    <service name="createNewEnumerationGroup" engine="group" auth="false">
+        <description>
+         create Enumeration and render success message
+        </description>
+        <group>
+            <invoke name="createNewEnum" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+   <service name="createNewEnum" engine="simple" auth="true" default-entity-name="Enumeration" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createNewEnum">
+        <description>Create an Enumeration</description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="updateEnumerationGroup" engine="group" auth="false">
+        <description>
+         update Enumeration and render success message
+        </description>
+        <group>
+            <invoke name="updateEnumer" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateEnumer" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updateEnum">
+        <description>
+         update Enumeration
+        </description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
+    <service name="deleteEnumerationGroup" engine="group" auth="false">
+        <description>delete Enumeration and render success message</description>
+        <group>
+            <invoke name="deleteEnumeration" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="deleteEnumeration" default-entity-name="Enumeration" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deleteEnum">
+        <description>Delete Enumeration </description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
+    
+    <service name="updateMediaContentGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update Media Images
+        </description>
+        <group>
+            <invoke name="updateMediaContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateMediaContent" engine="java"
+            location="com.osafe.services.OsafeAdminMediaContent" invoke="updateMediaContent" auth="true">
+        <description>Update Media Contents</description>
+        <attribute name="mediaType" mode="IN" type="String" optional="false"/>
+        <attribute name="currentMediaName" mode="IN" type="String" optional="false"/>
+        <attribute name="currentMediaType" mode="IN" type="String" optional="true"/>
+        <attribute name="uploadedMediaFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_uploadedMediaFile_fileName" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="addMediaContentGroup" engine="group" auth="false" transaction-timeout="7200" >
+        <description>
+         Create media content and render success mesage.
+        </description>
+        <group>
+            <invoke name="addMediaContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="addMediaContent" engine="java"
+            location="com.osafe.services.OsafeAdminMediaContent" invoke="addMediaContent" auth="true">
+        <description>Create Media Content</description>
+        <attribute name="contentTempPath" mode="IN" type="String" optional="false"/>
+        <attribute name="contentTargetPath" mode="IN" type="String" optional="false"/>
+        <attribute name="mediaFileName" mode="IN" type="String" optional="false"/>
+    </service>
+    
+    <service name="deleteMediaContentGroup" engine="group" auth="false">
+        <description>
+         delete media content and render success message
+        </description>
+        <group>
+            <invoke name="deleteMediaContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deleteMediaContent" engine="java"
+            location="com.osafe.services.OsafeAdminMediaContent" invoke="deleteMediaContent" auth="true">
+        <description>Create Media Content</description>
+        <attribute name="currentMediaType" mode="IN" type="String" optional="false"/>
+        <attribute name="currentMediaName" mode="IN" type="String" optional="false"/>
+    </service>
+    
+    <service name="createOrderAttribute" engine="simple" default-entity-name="OrderAttribute"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createOrderAttribute">
+        <description>Create Order Attribute</description>
+        <auto-attributes mode="IN" include="pk"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+    
+    <service name="updateOrderAttribute" engine="simple" default-entity-name="OrderAttribute"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updateOrderAttribute">
+        <description>Update Order Attribute</description>
+        <auto-attributes mode="IN" include="pk"/>
+        <auto-attributes mode="IN" include="nonpk" optional="true"/>
+    </service>
+    
+    <service name="deleteOrderAttribute" engine="simple" default-entity-name="OrderAttribute"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="deleteOrderAttribute">
+        <description>Delete Order Attribute</description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
+    
+    <service name="updateNoteDataGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update Note Data and render success message
+        </description>
+        <group>
+            <invoke name="updateNoteData" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateNoteData" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminNoteServices.xml" invoke="updateNoteData" auth="true">
+        <description>Update Note Data</description>
+        <attribute name="noteId" mode="IN" type="String" optional="false"/>
+        <attribute name="noteInfo" mode="IN" type="String" optional="true" allow-html="safe"/>
+    </service>
+    
+    <service name="createOrderNoteDataGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Create Order Header Note, Note Data and render success message
+        </description>
+        <group>
+            <invoke name="createOrderNoteData" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createOrderNoteData" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminNoteServices.xml" invoke="createOrderNoteData" auth="true">
+        <description>Create Order Header Note</description>
+        <attribute name="orderId" mode="IN" type="String" optional="false"/>
+        <attribute name="noteInfo" mode="IN" type="String" optional="true" allow-html="safe"/>
+        <attribute name="internalNote" mode="IN" type="String" optional="false"/>
+    </service>
+    
+    <service name="createCustomerNoteDataGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Create Party Note, Note Data and render success message
+        </description>
+        <group>
+            <invoke name="createCustomerNoteData" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createCustomerNoteData" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminNoteServices.xml" invoke="createCustomerNoteData" auth="true">
+        <description>Create Order Header Note</description>
+        <attribute name="partyId" mode="IN" type="String" optional="false"/>
+        <attribute name="noteInfo" mode="IN" type="String" optional="true" allow-html="safe"/>
+        <attribute name="internalNote" mode="IN" type="String" optional="false"/>
+    </service>
+
+    <service name="getStyleFilePath" engine="simple" auth="false" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="getStyleFilePath">
+        <description>
+        get style css file path for specific product store id or visual theme id
+        </description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="visualThemeId" type="String" mode="IN" optional="true"/>
+        <attribute name="styleFilePath" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="updateStyleGroup" engine="group" auth="false" >
+        <description>
+         update style css file group service
+        </description>
+        <group>
+            <invoke name="updateStyle" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateStyle" engine="simple" auth="false" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateStyle">
+        <description>
+        update style css file
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="getStyleFilePath"/>
+        <attribute name="textData" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="visualThemeId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="loadNewStyleGroup" engine="group" auth="false" >
+        <description>
+         upload the css file and save file in current theme directory group service
+        </description>
+        <group>
+            <invoke name="loadNewStyle" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="loadNewStyle" engine="simple" auth="false" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="loadNewStyle">
+        <description>
+        upload the css file and save file in current theme directory
+        </description>
+        <implements service="uploadFileInterface"/>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="visualThemeId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateStyleVisualThemeGroup" engine="group" auth="false" >
+        <description>
+         update visual theme for style file group service
+        </description>
+        <group>
+            <invoke name="updateStyleVisualTheme" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateStyleVisualTheme" engine="simple" auth="false" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateStyleVisualTheme">
+        <description>
+        update visual theme for style file
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="styleFileName" mode="IN" type="String" optional="false"/>
+        <attribute name="visualThemeId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateProductImageAndContentGroup" engine="group" auth="true" transaction-timeout="7200">
+        <description>
+         Update Product Detail Images and Content.
+        </description>
+        <group>
+            <invoke name="updateProductImageAndContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateProductImageAndContent" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateProductImageAndContent" auth="true">
+        <description>Update Detail Image and Content</description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="plpTitleText" mode="IN" type="String" optional="true"/>
+        <attribute name="largeImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_largeImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_largeImage_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="thumbnailImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_thumbnailImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_thumbnailImage_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="detailImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_detailImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_detailImage_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="smallImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_smallImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_smallImage_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="smallAltImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_smallAltImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_smallAltImage_contentType" type="String" mode="IN" optional="true"/>
+        
+        <attribute name="altLargeImage" type="Map" string-map-prefix="altLargeImage_" mode="IN" optional="true"/>
+        <attribute name="altThumbImage" type="Map" string-map-prefix="altThumbImage_" mode="IN" optional="true"/>
+        <attribute name="altDetailImage" type="Map" string-map-prefix="altDetailImage_" mode="IN" optional="true"/>
+        
+        <attribute name="plpSwatchImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_plpSwatchImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_plpSwatchImage_contentType" type="String" mode="IN" optional="true"/>
+        
+        <attribute name="pdpSwatchImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_pdpSwatchImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_pdpSwatchImage_contentType" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="createUpdateProductVideoGroup" engine="group" auth="true" transaction-timeout="7200">
+        <description>
+         Create, Update Product video and Content and render success message.
+        </description>
+        <group>
+            <invoke name="createUpdateProductVideo" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="createUpdateProductVideo" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="createUpdateProductVideo" auth="true">
+        <description>Create, Update Product Video and Content</description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="videoUrl" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_videoUrl_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_videoUrl_contentType" type="String" mode="IN" optional="true"/>
+        
+        <attribute name="video360Url" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_video360Url_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_video360Url_contentType" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="findPromotion" engine="java"
+        location="com.osafe.services.PromotionServices" invoke="findPromotion">
+        <description>General Promotion Find Service, return product promo list with promocode and product store using left outer join</description>
+        <attribute name="VIEW_INDEX" type="String" mode="IN" optional="true"/>
+        <attribute name="VIEW_SIZE" type="String" mode="IN" optional="true"/>
+        <attribute name="showAll" type="String" mode="IN" optional="true"/>
+        <attribute name="searchPartial" type="String" mode="IN" optional="true"/><!-- set to search partial default is N, perform partial search on id column -->
+        <attribute name="searchDistinct" type="String" mode="IN" optional="true"/><!-- set to search Distinct for promo default is Y -->
+        <attribute name="productPromoId" type="String" mode="IN" optional="true"/><!-- can do partial LIKE compare if parameter searchPartial set to be Y, case insensitive, etc -->
+        <attribute name="promoName" type="String" mode="IN" optional="true"/><!-- promotion name  does a LIKE compare on this, can do partial, case insensitive, etc -->
+        <attribute name="promoText" type="String" mode="IN" optional="true"/><!-- promotion description does a LIKE compare on this, can do partial, case insensitive, etc-->
+        <attribute name="productPromoCodeId" type="String" mode="IN" optional="true"/><!-- can do partial LIKE compare if parameter searchPartial set to be Y, case insensitive, etc -->
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/><!-- can do partial LIKE compare if parameter searchPartial set to be Y, case insensitive, etc -->
+        <attribute name="productPromoCodeStatus" type="String" mode="IN" optional="true"/><!-- can be active, inactive or null to include all case insensitive-->
+        <attribute name="productStorePromoApplStatus" type="String" mode="IN" optional="true"/><!-- can be active, inactive or null to include all case insensitive-->
+        <attribute name="viewIndex" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="viewSize" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="productPromoList" type="List" mode="OUT" optional="false"/>
+        <attribute name="completeProductPromoList" type="List" mode="OUT" optional="false"/>
+        <attribute name="productPromoListSize" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="paramList" type="String" mode="OUT" optional="false"/>
+        <attribute name="highIndex" type="Integer" mode="OUT" optional="false"/>
+        <attribute name="lowIndex" type="Integer" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="addProductImageAndContent" default-entity-name="ProductContent" engine="java"
+        location="com.osafe.services.OsafeAdminCatalogServices" invoke="addProductImageAndContent" auth="true">
+        <implements service="uploadFileInterface"/>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute mode="IN" name="contentId" optional="true" type="String"/>
+        <override name="productContentTypeId" optional="false"/>
+        <override name="productId" optional="false"/>
+    </service>
+    
+    <service name="addProductVideoAndContent" default-entity-name="ProductContent" engine="java"
+        location="com.osafe.services.OsafeAdminCatalogServices" invoke="addProductVideoAndContent" auth="true">
+        <implements service="uploadFileInterface"/>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute mode="IN" name="contentId" optional="true" type="String"/>
+        <override name="productContentTypeId" optional="false"/>
+        <override name="productId" optional="false"/>
+    </service>
+
+    <service name="updatePromotionGroup" engine="group" auth="false">
+        <description>
+         Update the Promotion
+        </description>
+        <group>
+            <invoke name="updatePromotion" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updatePromotion" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminPromotionServices.xml"
+            invoke="updatePromotion">
+        <description>
+        Update the Promotion
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="updateProductPromo"/>
+        <implements service="updateProductStorePromoAppl"/>
+        <implements service="updateProductPromoCond"/>
+        <implements service="updateProductPromoAction"/>
+        <attribute name="productPromoCondCategoryDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoCondProductDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoActionCategoryDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoActionProductDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productStorePromoApplFromDate" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoCondCategoryApplEnumIds" type="Map" string-map-prefix="productPromoCondCategoryApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoCondCategoryIds" type="Map" string-map-prefix="productPromoCondCategoryId_" mode="IN" optional="true"/>
+        <attribute name="productPromoCondProductApplEnumIds" type="Map" string-map-prefix="productPromoCondProductApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoCondProductIds" type="Map" string-map-prefix="productPromoCondProductId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionCategoryApplEnumIds" type="Map" string-map-prefix="productPromoActionCategoryApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionCategoryIds" type="Map" string-map-prefix="productPromoActionCategoryId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionProductApplEnumIds" type="Map" string-map-prefix="productPromoActionProductApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionProductIds" type="Map" string-map-prefix="productPromoActionProductId_" mode="IN" optional="true"/>
+        <override name="useLimitPerOrder" type="String" mode="IN" optional="true"/>
+        <override name="useLimitPerCustomer" type="String" mode="IN" optional="true"/>
+        <override name="useLimitPerPromotion" type="String" mode="IN" optional="true"/>
+        <override name="fromDate" type="String" mode="IN" optional="true"/>
+        <override name="thruDate" type="String" mode="IN" optional="true"/>
+        <override name="quantity" type="String" mode="IN" optional="true"/>
+        <override name="amount" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updatePromotionCodeGroup" engine="group" auth="false">
+        <description>
+         Update the Promotion Code
+        </description>
+        <group>
+            <invoke name="updatePromotionCode" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updatePromotionCode" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminPromotionServices.xml"
+            invoke="updatePromotionCode">
+        <description>
+        Update the Promotion code
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productPromoId" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoCodeId" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeUseLimitPerCode" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeUseLimitPerCustomer" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeUserEntered" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeFromDate" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeThruDate" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="createPromotionGroup" engine="group" auth="false">
+        <description>
+         Create the Promotion
+        </description>
+        <group>
+            <invoke name="createPromotion" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createPromotion" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminPromotionServices.xml"
+            invoke="createPromotion">
+        <description>Create the Promotion</description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="createProductPromo"/>
+        <implements service="createProductStorePromoAppl"/>
+        <implements service="createProductPromoRule"/>
+        <implements service="createProductPromoCond"/>
+        <implements service="createProductPromoAction"/>
+        <attribute name="productPromoCondCategoryDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoCondProductDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoActionCategoryDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoActionProductDataRows" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoCondCategoryApplEnumIds" type="Map" string-map-prefix="productPromoCondCategoryApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoCondCategoryIds" type="Map" string-map-prefix="productPromoCondCategoryId_" mode="IN" optional="true"/>
+        <attribute name="productPromoCondProductApplEnumIds" type="Map" string-map-prefix="productPromoCondProductApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoCondProductIds" type="Map" string-map-prefix="productPromoCondProductId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionCategoryApplEnumIds" type="Map" string-map-prefix="productPromoActionCategoryApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionCategoryIds" type="Map" string-map-prefix="productPromoActionCategoryId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionProductApplEnumIds" type="Map" string-map-prefix="productPromoActionProductApplEnumId_" mode="IN" optional="true"/>
+        <attribute name="productPromoActionProductIds" type="Map" string-map-prefix="productPromoActionProductId_" mode="IN" optional="true"/>
+        <override name="productPromoId" type="String" mode="INOUT" optional="true"/>
+        <override name="promoName" type="String" mode="IN" optional="true"/>
+        <override name="productPromoRuleId" type="String" mode="INOUT" optional="true"/>
+        <override name="ruleName" type="String" mode="IN" optional="true"/>
+        <override name="useLimitPerOrder" type="String" mode="IN" optional="true"/>
+        <override name="useLimitPerCustomer" type="String" mode="IN" optional="true"/>
+        <override name="useLimitPerPromotion" type="String" mode="IN" optional="true"/>
+        <override name="fromDate" type="String" mode="IN" optional="true"/>
+        <override name="thruDate" type="String" mode="IN" optional="true"/>
+        <override name="quantity" type="String" mode="IN" optional="true"/>
+        <override name="amount" type="String" mode="IN" optional="true"/>
+        <override name="productPromoCondSeqId" type="String" mode="OUT" optional="true"/>
+        <override name="productPromoActionSeqId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="createPromotionCodeGroup" engine="group" auth="false">
+        <description>
+         Create the Promotion Code
+        </description>
+        <group>
+            <invoke name="createPromotionCode" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createPromotionCode" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminPromotionServices.xml"
+            invoke="createPromotionCode">
+        <description>
+        Create the Promotion code
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productPromoId" type="String" mode="IN" optional="true"/>
+        <attribute name="productPromoCodeId" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeUseLimitPerCode" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeUseLimitPerCustomer" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeUserEntered" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeFromDate" type="String" mode="IN" optional="true"/>
+        <attribute name="promoCodeThruDate" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateCategoryMetatagGroup" engine="group" auth="false">
+        <description>
+         update Category Metatags as well as render success message
+        </description>
+        <group>
+            <invoke name="updateCategoryMetatagContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="createUpdateProdCatContentText" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="createUpdateProdCatContentText">
+        <description>
+         Create and Update Product Category Content and Text.
+        </description>
+        <attribute name="productCategoryId" mode="IN" type="String" optional="true"/>
+        <attribute name="prodCatContentTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="text" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    
+    <service name="deleteProdCatContentAndText" default-entity-name="ProductCategoryContent" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="deleteProdCatContent">
+        <description>
+         Delete ProductCategoryContent, Content, ContentRole, ElectronicText ,DataresourceRole and DataResource.
+        </description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
+    
+    <service name="updateCategoryMetatagContent" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateCategoryMetatagContent">
+        <description>
+         Update category html metatag content.
+        </description>
+        <attribute name="productCategoryId" mode="IN" type="String" optional="false"/>
+        <attribute name="metaTitle" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="metaDesc" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="metaKeyword" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    
+    <service name="updateStaticPageMetatagGroup" engine="group" auth="false">
+        <description>
+         Update Static Page Metatags as well as render success message
+        </description>
+        <group>
+            <invoke name="updateStaticPageContentAttr" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateStaticPageContentAttr" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="updateStaticPageContentAttr">
+        <description>
+         Update static page metatag content.
+        </description>
+        <attribute name="contentId" mode="IN" type="String" optional="false"/>
+        <attribute name="metaTitle" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="metaDesc" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="metaKeyword" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    
+    <service name="createUpdateContentAttribute" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="createUpdateContentAttribute">
+        <description>
+         Create and Update Content Attribute.
+        </description>
+        <attribute name="contentId" mode="IN" type="String" optional="true"/>
+        <attribute name="attrName" mode="IN" type="String" optional="true"/>
+        <attribute name="attrValue" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    <service name="createContentAttr" engine="simple" default-entity-name="ContentAttribute" auth="true"
+            location="component://content/script/org/ofbiz/content/content/ContentServices.xml" invoke="createContentAttribute">
+        <description>Create a ContentAttribute</description>
+        <permission-service service-name="genericContentPermission" main-action="UPDATE"/>
+        <attribute name="contentId" mode="IN" type="String" optional="true"/>
+        <attribute name="attrName" mode="IN" type="String" optional="true"/>
+        <attribute name="attrValue" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    <service name="updateContentAttr" engine="simple" default-entity-name="ContentAttribute" auth="true"
+            location="component://content/script/org/ofbiz/content/content/ContentServices.xml" invoke="updateContentAttribute">
+        <description>Update a ContentAttribute</description>
+        <permission-service service-name="genericContentPermission" main-action="UPDATE"/>
+        <attribute name="contentId" mode="IN" type="String" optional="true"/>
+        <attribute name="attrName" mode="IN" type="String" optional="true"/>
+        <attribute name="attrValue" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    
+    <service name="loadProductFileAndImages" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="loadProductFileAndImages" auth="true" transaction-timeout="720000">
+        <attribute name="productFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_productFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_productFile_contentType" type="String" mode="IN" optional="true"/>
+        
+        <attribute name="localZipFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_localZipFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_localZipFile_contentType" type="String" mode="IN" optional="true"/>
+        
+        <attribute name="imageLocation" type="String" mode="IN" optional="true"/>
+        <attribute name="mediaLibraryZipFile" type="String" mode="IN" optional="true"/>
+        <attribute name="serverZipFile" type="String" mode="IN" optional="true"/>
+        <attribute name="serverDir" type="String" mode="IN" optional="true"/>
+        <attribute name="imageUrl" type="String" mode="INOUT" optional="true"/>
+        
+        <attribute name="uploadedXLSFile" type="String" mode="OUT" optional="true"/>
+        <attribute name="uploadedXLSPath" type="String" mode="OUT" optional="true"/>
+        <attribute name="productLoadImagesDir" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="loadProductDataGroup" engine="group" auth="false" transaction-timeout="720000">
+        <description>
+         Load the product data to database and render success message.
+        </description>
+        <group>
+            <invoke name="loadProductData" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="loadProductData" engine="java"
+        location="com.osafe.services.OsafeAdminServices" invoke="loadProductDataToDB" auth="true" transaction-timeout="720000">
+        <description>Upload the product xls data to database</description>
+        <attribute mode="IN" name="xlsFileName" optional="true" type="String"/>
+        <attribute mode="IN" name="xlsFilePath" optional="true" type="String"/>
+        <attribute mode="IN" name="processingOpt" optional="true" type="String"/>
+        <attribute mode="IN" name="productLoadImagesDir" optional="true" type="String"/>
+        <attribute name="imageUrl" type="String" mode="IN" optional="true"/>
+        <attribute mode="IN" name="errorExists" optional="true" type="String"/>
+    </service>
+    
+    <service name="updateProdCatImageGroup" engine="group" auth="true" transaction-timeout="7200">
+        <description>
+         Update Product Category Images and render success message.
+        </description>
+        <group>
+            <invoke name="updateProductCategoryImage" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateProductCategoryImage" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateProductCategoryImage" auth="true">
+        <description>Update Product Category Image</description>
+        <attribute name="productCategoryId" mode="IN" type="String" optional="false"/>
+        <attribute name="categoryImage" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_categoryImage_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_categoryImage_contentType" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="addProductCategoryImage" default-entity-name="ProductCategory" engine="java"
+        location="com.osafe.services.OsafeAdminCatalogServices" invoke="addProductCategoryImage" auth="true">
+        <implements service="uploadFileInterface"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateOrderStatusGroup" engine="group" auth="false">
+        <description>
+         update order status and render success message
+        </description>
+        <group>
+            <invoke name="updateOrderStatus" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateOrderStatus" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminOrderServices.xml"
+            invoke="updateOrderStatus">
+        <description>
+         update order status 
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="changeOrderStatus"/>
+        <implements service="createOrderNote"/>
+        <implements service="updateOrderItemShipGroup"/>
+        <attribute name="changeStatusAll" mode="IN" type="String" optional="false"/>
+        <attribute name="estimatedShipDate" mode="IN" type="String" optional="true"/>
+        <attribute name="orderItemSeqIds" type="Map" string-map-prefix="orderItemSeqId-" mode="IN" optional="true"/>
+        <override name="note" mode="IN" type="String" optional="true" allow-html="safe"/>
+        <override name="shipGroupSeqId" mode="IN" type="String" optional="true"/>
+        <override name="statusId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="manageRelatedProductsGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update product assoc and render success message.
+        </description>
+        <group>
+            <invoke name="manageRelatedProducts" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="manageRelatedProducts" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="manageRelatedProducts" auth="true">
+        <description>Create and Update Product Assoc</description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="relatedProductId" type="Map" string-map-prefix="relatedProductId_" mode="IN" optional="true"/>
+        <attribute name="relatedProductName" type="Map" string-map-prefix="relatedProductName_" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Map" string-map-prefix="sequenceNum_" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="createTopCategoryGroup" engine="group" auth="false">
+        <description>
+         Create product category and rollup
+        </description>
+        <group>
+            <invoke name="createTopProductCategory" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createTopProductCategory" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="createTopProductCategory">
+        <description>
+         Create product category and rollup.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="fromDate" mode="IN" type="String" optional="true"/>
+        <attribute name="thruDate" mode="IN" type="String" optional="true"/>
+        <attribute name="topNavBar" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceNum" mode="IN" type="String" optional="true"/>
+        <attribute name="longDescription" mode="IN" type="String" optional="true"/>
+        <attribute name="catalogTopCategoryId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="createSubCategoryGroup" engine="group" auth="false">
+        <description>
+         Create product category and rollup
+        </description>
+        <group>
+            <invoke name="createSubProductCategory" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createSubProductCategory" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="createSubProductCategory">
+        <description>
+         Create product category and rollup.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="fromDate" mode="IN" type="String" optional="true"/>
+        <attribute name="thruDate" mode="IN" type="String" optional="true"/>
+        <attribute name="subNavBar" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceNum" mode="IN" type="String" optional="true"/>
+        <attribute name="longDescription" mode="IN" type="String" optional="true"/>
+        <attribute name="topNavBarId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="createProductCategoryAndRollup" default-entity-name="ProductCategory" engine="simple"
+                location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="createProductCategoryAndRollup" auth="true">
+        <description>Create an ProductCategory</description>
+        <implements service="commonFormHiddenFields"/>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+        <attribute name="fromDate" mode="IN" type="String" optional="true"/>
+        <attribute name="thruDate" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceNum" mode="IN" type="String" optional="true"/>
+        <attribute name="longDescription" mode="IN" type="String" optional="true"/>
+        <override name="productCategoryTypeId" optional="false"/>
+    </service>
+    
+    <service name="loadEbayProductFile" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Upload eBay xls file and build ebay Product client template(xls).
+        </description>
+        <group>
+            <invoke name="uploadFile" result-to-context="true"/>
+            <invoke name="importEbayProduct" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="uploadFile" engine="java" location="com.osafe.services.OsafeAdminServices" invoke="uploadFile" auth="true" transaction-timeout="7200">
+        <description>Upload the file to runtime upload temp directory</description>
+        <implements service="uploadFileInterface"/>
+        <attribute name="uploadFileName" mode="OUT" type="String" optional="false"/>
+        <attribute name="uploadFilePath" mode="OUT" type="String" optional="false"/>
+    </service>
+    <service name="deleteProductImageGroup" engine="group" auth="false">
+        <description>
+         Delete Product Images and render success message.
+        </description>
+        <group>
+            <invoke name="deleteProductImageAndContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deleteProductImageAndContent" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="deleteProductImageAndContent">
+        <description>
+         Delete Product Images, Product Content, Content, Content Role, DataResource.
+        </description>
+        <attribute name="productId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="productContentTypeId" mode="IN" type="String" optional="true"/>
+    </service>
+
+    <service name="updatePDPVariantCaptionGroup" engine="group" auth="true">
+        <description>
+         Update Product Variant Caption and render success message.
+        </description>
+        <group>
+            <invoke name="updatePDPVariantCaption" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="updatePDPVariantCaption" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updatePDPVariantCaption">
+        <description>
+         Check For Blank Caption and Update Product Variant Caption.
+        </description>
+        <implements service="updateProductFeatureType"/>
+    </service>
+    
+    <service name="getSysConfigFiles" engine="simple" auth="false" 
+             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+             invoke="getSysConfigFiles">
+         <description>
+          get system config file list
+         </description>
+         <attribute name="sysConfigFileList" mode="OUT" type="java.util.List" optional="true"/>
+     </service>
+     
+    <service name="updateImageLocationPreferencesGroup" engine="group" auth="false">
+        <description>
+         update Image Location Preference and render succes message.
+        </description>
+        <group>
+            <invoke name="updateImageLocationPreferences" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateImageLocationPreferences" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateImageLocationPreferences">
+        <description>
+         update Image Location Preference
+        </description>
+        <attribute name="key" type="Map" string-map-prefix="key_" mode="IN" optional="true"/>
+        <attribute name="imageLocation" type="Map" string-map-prefix="imageLocation_" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="modifyImageLocationPreferencesXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="modifyImageLocationPreferencesXml">
+        <description>Uses Update Label xml config file</description>
+        <attribute name="key" mode="IN" type="String"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+    <service name="copyImageLocationPreferencesXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="copyImageLocationPreferencesXml">
+        <description>Uses copy Image Location Preference xml config file</description>
+    </service>
+    
+    <service name="exportCustomerXML" engine="java" transaction-timeout="7200" auth="true"
+            location="com.osafe.services.ImportServices" invoke="exportCustomerXML">
+        <description>Update Customer Export</description>
+        <attribute name="customerList" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+        
+    </service>
+
+    <service name="createPixelTrackingGroup" engine="group" auth="false">
+        <description>
+         create pixel tracking and render succes message.
+        </description>
+        <group>
+            <invoke name="createPixelTracking" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="createPixelTracking" engine="simple" auth="true" default-entity-name="XPixelTracking" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="createPixelTracking">
+        <description>
+         create pixel tracking
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="createTextContent"/>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updatePixelTrackingGroup" engine="group" auth="false">
+        <description>
+         create pixel tracking and render succes message.
+        </description>
+        <group>
+            <invoke name="updatePixelTracking" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="updatePixelTracking" engine="simple" auth="true" default-entity-name="XPixelTracking" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updatePixelTracking">
+        <description>
+         create pixel tracking
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="updateTextContent"/>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="deletePixelTrackingGroup" engine="group" auth="false">
+        <description>
+         delete Pixel Tracking and render success message
+        </description>
+        <group>
+            <invoke name="deletePixelTracking" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="deletePixelTracking" engine="simple" auth="true" default-entity-name="XPixelTracking" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deletePixelTracking">
+        <description>
+         delete Pixel Tracking
+        </description>
+        <auto-attributes include="pk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updatePaypalConfigGroup" engine="group" auth="false">
+        <description>
+         update content and render success message
+        </description>
+        <group>
+            <invoke name="updatePaymentGatewayConfigPayPal" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateSagePayTokenConfigGroup" engine="group" auth="true">
+        <description>
+         update content and render success message
+        </description>
+        <group>
+            <invoke name="updatePaymentGatewayConfigSagePayToken" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="exportOrderXML" engine="java" transaction-timeout="7200" auth="true"
+            location="com.osafe.services.ImportServices" invoke="exportOrderXML">
+        <description>Export Order XML</description>
+        <attribute name="orderList" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="exportCustRequestContactUsXML" engine="java" transaction-timeout="7200" auth="true"
+            location="com.osafe.services.ImportServices" invoke="exportCustRequestContactUsXML">
+        <description>Export ContactUs XML</description>
+        <attribute name="custRequestIdList" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="exportCustRequestCatalogXML" engine="java" transaction-timeout="7200" auth="true"
+            location="com.osafe.services.ImportServices" invoke="exportCustRequestCatalogXML">
+        <description>Export Request Catalog XML</description>
+        <attribute name="custRequestIdList" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="createXPixelTracking" default-entity-name="XPixelTracking" engine="entity-auto" invoke="create" auth="true">
+        <description>Create a XPixelTracking</description>
+        <auto-attributes include="pk" mode="INOUT" optional="true"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="updateXPixelTracking" default-entity-name="XPixelTracking" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a XPixelTracking</description>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updatePaymentSettingGroup" engine="group" auth="true">
+        <description>
+         update Payment etting and render success message
+        </description>
+        <group>
+            <invoke name="updateProductStorePaymentSetting" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deletePaymentSettingGroup" engine="group" auth="true">
+        <description>
+         delete Payment etting and render success message
+        </description>
+        <group>
+            <invoke name="deleteProductStorePaymentSetting" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+</services>

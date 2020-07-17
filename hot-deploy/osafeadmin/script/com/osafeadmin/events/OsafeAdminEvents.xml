@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="getGeoCode" short-description="get latitude and longitude from address" login-required="true">
+        <set field="address" value=""/>
+        <if-empty field="parameters.address1">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <string-append string="${parameters.address1}, " field="address"/>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.address2">
+            <string-append string="${parameters.address2}, " field="address"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.address3">
+            <string-append string="${parameters.address3}, " field="address"/>
+        </if-not-empty>
+        <if-empty field="parameters.city">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <string-append string="${parameters.city}, " field="address"/>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.stateProvinceGeoId">
+            <entity-one entity-name="Geo" value-field="stateGeo" auto-field-map="false">
+                <field-map field-name="geoId" from-field="parameters.stateProvinceGeoId"/>
+                <select-field field-name="geoName"/>
+            </entity-one>
+            <if-not-empty field="stateGeo.geoName">
+                <string-append string="${stateGeo.geoName}, " field="address"/>
+            </if-not-empty>
+            <set field="parameters.address3" from-field="nullField"/>
+        </if-not-empty>
+        <if>
+            <condition>
+                <or>
+                    <if-compare value="CAN" operator="equals" field="parameters.countryGeoId"></if-compare>
+                    <if-compare value="USA" operator="equals" field="parameters.countryGeoId"></if-compare>
+                </or>
+            </condition>
+            <then>
+                <if-empty field="parameters.stateProvinceGeoId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-empty>
+            </then>
+        </if>
+        <if-not-empty field="parameters.countryGeoId">
+            <entity-one entity-name="Geo" value-field="countryGeo" auto-field-map="false">
+                <field-map field-name="geoId" from-field="parameters.countryGeoId"/>
+                <select-field field-name="geoName"/>
+            </entity-one>
+            <if-not-empty field="countryGeo.geoName">
+                <string-append string="${countryGeo.geoName}" field="address"/>
+            </if-not-empty>
+        </if-not-empty>
+        <check-errors/>
+
+        <log level="info" message="${address}"></log>
+        <call-class-method class-name="com.osafe.geo.OsafeGeo"  method-name="fromAddress" ret-field="osafeGeo">
+            <field field="address"/>
+        </call-class-method>
+        <call-object-method method-name="latitude" obj-field="osafeGeo" ret-field="latitude"/>
+        <call-object-method method-name="longitude" obj-field="osafeGeo" ret-field="longitude"/>
+        <if>
+            <condition>
+                <and>
+                    <if-empty field="latitude"/>
+                    <if-empty field="longitude"/>
+                </and>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GetGeoCodeError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </then>
+            <else>
+                <field-to-request field="latitude"/>
+                <field-to-request field="longitude"/>
+            </else>
+        </if>
+        <check-errors/>
+    </simple-method>
+
+    <simple-method method-name="compareLabelFile" short-description="upload the compare to label file and validate" login-required="true">
+        <set field="tempDir" value="${sys:getProperty('ofbiz.home')}/runtime/tmp/"/>
+        <set field="tempFileName" value="tempComapreToFile"/>
+        <set field="xmlFileExtension" value="XML"/>
+
+        <create-object class-name="org.ofbiz.base.util.HttpRequestFileUpload" field="uploadObject"/>
+        <call-object-method method-name="setOverrideFilename" obj-field="uploadObject">
+            <field field="tempFileName" type="String"/>
+        </call-object-method>
+        <call-object-method method-name="setSavePath" obj-field="uploadObject">
+            <field field="tempDir" type="String"/>
+        </call-object-method>
+        <call-object-method method-name="doUpload" obj-field="uploadObject">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+        </call-object-method>
+        <call-object-method method-name="getFilename" obj-field="uploadObject" ret-field="uploadedFileName"/>
+
+       <if-not-empty field="uploadedFileName">
+           <call-object-method method-name="toUpperCase" obj-field="uploadedFileName" ret-field="uploadedFileNameUpperCase"/>
+           <call-object-method method-name="endsWith" obj-field="uploadedFileNameUpperCase" ret-field="isXmlFile">
+               <field field="xmlFileExtension" type="String"/>
+           </call-object-method>
+           <if-compare field="isXmlFile" operator="equals" value="true">
+               <set field="uploadedFileStr" from-field="tempDir"/>
+               <string-append string="${tempFileName}" field="uploadedFileStr"/>
+               <create-object class-name="java.io.File" field="uploadedFile">
+                   <field field="uploadedFileStr" type="String"/>
+               </create-object>
+               <set field="compareToFileStr" from-field="tempDir"/>
+               <string-append string="${uploadedFileName}" field="compareToFileStr"/>
+               <create-object class-name="java.io.File" field="compareToFile">
+                   <field field="compareToFileStr" type="String"/>
+               </create-object>
+               <call-object-method method-name="delete" obj-field="compareToFile"/>
+               <call-object-method method-name="renameTo" obj-field="uploadedFile">
+                   <field field="compareToFile" type="java.io.File"/>
+               </call-object-method>
+           <else>
+               <add-error><fail-property resource="OSafeAdminUiLabels" property="CompareToFileNotXmlError"/></add-error>
+           </else>
+           </if-compare>
+       <else>
+           <add-error><fail-property resource="OSafeAdminUiLabels" property="CompareToFileExistError"/></add-error>
+       </else>
+       </if-not-empty>
+       <check-errors/>
+       <field-to-session field="uploadedFileName"/>
+    </simple-method>
+
+    <simple-method method-name="updateStyleBox" short-description="upload the css file and put content in style edit box" login-required="true">
+        <set field="tempDir" value="${sys:getProperty('ofbiz.home')}/runtime/tmp/"/>
+        <set field="tempFileName" value="tempStyleFile"/>
+        <set field="cssFileExtension" value="CSS"/>
+
+        <create-object class-name="org.ofbiz.base.util.HttpRequestFileUpload" field="uploadObject"/>
+        <call-object-method method-name="setOverrideFilename" obj-field="uploadObject">
+            <field field="tempFileName" type="String"/>
+        </call-object-method>
+        <call-object-method method-name="setSavePath" obj-field="uploadObject">
+            <field field="tempDir" type="String"/>
+        </call-object-method>
+        <call-object-method method-name="doUpload" obj-field="uploadObject">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+        </call-object-method>
+        <call-object-method method-name="getFilename" obj-field="uploadObject" ret-field="uploadedStyleFileName"/>
+
+       <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
+           <field field="uploadedStyleFileName" type="String"/>
+       </call-class-method>
+       <if-compare field="isNotEmpty" operator="equals" value="true">
+           <call-object-method method-name="toUpperCase" obj-field="uploadedStyleFileName" ret-field="uploadedStyleFileNameUpperCase"/>
+           <call-object-method method-name="endsWith" obj-field="uploadedStyleFileNameUpperCase" ret-field="isCSSFile">
+               <field field="cssFileExtension" type="String"/>
+           </call-object-method>
+           <if-compare field="isCSSFile" operator="equals" value="true">
+               <set field="uploadedFileStr" from-field="tempDir"/>
+               <string-append string="${tempFileName}" field="uploadedFileStr"/>
+               <create-object class-name="java.io.File" field="uploadedFile">
+                   <field field="uploadedFileStr" type="String"/>
+               </create-object>
+               <set field="replaceWithFileStr" from-field="tempDir"/>
+               <string-append string="${uploadedStyleFileName}" field="replaceWithFileStr"/>
+               <create-object class-name="java.io.File" field="replaceWithFile">
+                   <field field="replaceWithFileStr" type="String"/>
+               </create-object>
+               <call-object-method method-name="delete" obj-field="replaceWithFile"/>
+               <call-object-method method-name="renameTo" obj-field="uploadedFile">
+                   <field field="replaceWithFile" type="java.io.File"/>
+               </call-object-method>
+           <else>
+               <add-error><fail-property resource="OSafeAdminUiLabels" property="ReplaceWithFileNotCssError"/></add-error>
+           </else>
+           </if-compare>
+       <else>
+           <add-error><fail-property resource="OSafeAdminUiLabels" property="ReplaceWithFileExistError"/></add-error>
+       </else>
+       </if-compare>
+       <check-errors/>
+       <property-to-field resource="OSafeAdminUiLabels" property="UpdateStyleBoxSuccess" field="updateStyleBoxSuccess"/>
+       <string-to-list string="${updateStyleBoxSuccess}" list="osafeSuccessMessageList"/>
+       <field-to-request field="osafeSuccessMessageList"/>
+       <field-to-session field="uploadedStyleFileName"/>
+    </simple-method>
+
+    <simple-method method-name="checkHomeSpotContent" short-description="Check Home Spot Content" login-required="true">
+        <if-empty field="parameters.contentId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HomePageSpotSelectError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+    </simple-method>
+
+
+    <simple-method method-name="compareParameterFile" short-description="upload the compare to System Parameter file and validate" login-required="true">
+        <set field="tempDir" value="${sys:getProperty('ofbiz.home')}/runtime/tmp/"/>
+        <set field="tempFileName" value="tempComapreToFile"/>
+        <set field="xmlFileExtension" value="XML"/>
+
+        <create-object class-name="org.ofbiz.base.util.HttpRequestFileUpload" field="uploadObject"/>
+        <call-object-method method-name="setOverrideFilename" obj-field="uploadObject">
+            <field field="tempFileName" type="String"/>
+        </call-object-method>
+        <call-object-method method-name="setSavePath" obj-field="uploadObject">
+            <field field="tempDir" type="String"/>
+        </call-object-method>
+        <call-object-method method-name="doUpload" obj-field="uploadObject">
+            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+        </call-object-method>
+        <call-object-method method-name="getFilename" obj-field="uploadObject" ret-field="uploadedParamFileName"/>
+
+       <if-not-empty field="uploadedParamFileName">
+           <call-object-method method-name="toUpperCase" obj-field="uploadedParamFileName" ret-field="uploadedParamFileNameUpperCase"/>
+           <call-object-method method-name="endsWith" obj-field="uploadedParamFileNameUpperCase" ret-field="isXmlFile">
+               <field field="xmlFileExtension" type="String"/>
+           </call-object-method>
+           <if-compare field="isXmlFile" operator="equals" value="true">
+               <set field="uploadedFileStr" from-field="tempDir"/>
+               <string-append string="${tempFileName}" field="uploadedFileStr"/>
+               <create-object class-name="java.io.File" field="uploadedFile">
+                   <field field="uploadedFileStr" type="String"/>
+               </create-object>
+               <set field="compareToFileStr" from-field="tempDir"/>
+               <string-append string="${uploadedParamFileName}" field="compareToFileStr"/>
+               <create-object class-name="java.io.File" field="compareToFile">
+                   <field field="compareToFileStr" type="String"/>
+               </create-object>
+               <call-object-method method-name="delete" obj-field="compareToFile"/>
+               <call-object-method method-name="renameTo" obj-field="uploadedFile">
+                   <field field="compareToFile" type="java.io.File"/>
+               </call-object-method>
+           <else>
+               <add-error><fail-property resource="OSafeAdminUiLabels" property="CompareToFileNotXmlError"/></add-error>
+           </else>
+           </if-compare>
+       <else>
+           <add-error><fail-property resource="OSafeAdminUiLabels" property="CompareToFileExistError"/></add-error>
+       </else>
+       </if-not-empty>
+       <check-errors/>
+       <field-to-session field="uploadedParamFileName"/>
+    </simple-method>
+
+</simple-methods>

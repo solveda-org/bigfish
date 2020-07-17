@@ -1,0 +1,86 @@
+<ProductCategory productCategoryId="10008" 
+	productCategoryTypeId="CATALOG_CATEGORY" 
+	primaryParentCategoryId="RNY_CATEGORY_ROOT" 
+	categoryName="Womens Apparel" description=""/>
+<ProductCategory productCategoryId="10008">
+	<categoryName>
+		<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+            WOMEN&#39S APPAREL
+        ]]>
+	</categoryName>
+</ProductCategory>
+<ProductCategory productCategoryId="10009" 
+	productCategoryTypeId="CATALOG_CATEGORY" 
+	primaryParentCategoryId="RNY_CATEGORY_ROOT" 
+	categoryName="Handbags X Shoes" description=""/>
+<ProductCategory productCategoryId="10009">
+	<categoryName>
+		<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+            HANDBAGS &#38 SHOES
+        ]]>
+	</categoryName>
+</ProductCategory>
+<ProductCategory productCategoryId="10011" 
+	productCategoryTypeId="CATALOG_CATEGORY" 
+	primaryParentCategoryId="RNY_CATEGORY_ROOT" 
+	categoryName="Jewlery Accessories" description=""/>
+<ProductCategory productCategoryId="10011">
+	<categoryName>
+		<![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+            JEWELRY &#38 ACCESSORIES
+        ]]>
+	</categoryName>
+</ProductCategory>
+
+<ProductCategory productCategoryId="10012" 
+    productCategoryTypeId="CATALOG_CATEGORY" 
+    primaryParentCategoryId="RNY_CATEGORY_ROOT" 
+    categoryName="Sample Sale" description=""/>
+
+<ProductCategory productCategoryId="10015" 
+    productCategoryTypeId="CATALOG_CATEGORY" 
+    primaryParentCategoryId="RNY_CATEGORY_ROOT" 
+    categoryName="Whats New" description=""/>
+<ProductCategory productCategoryId="10015">
+	<categoryName>
+		<![CDATA[<?xml version="1.0" encoding="UTF-8"?>WHAT&#39S NEW]]>
+	</categoryName>
+</ProductCategory>
+<ProductCategory productCategoryId="10020" 
+    productCategoryTypeId="CATALOG_CATEGORY" 
+    primaryParentCategoryId="RNY_CATEGORY_ROOT" 
+    categoryName="Top Trends" description=""/>
+
+<ProductCategory productCategoryId="10030" 
+    productCategoryTypeId="CATALOG_CATEGORY" 
+    primaryParentCategoryId="RNY_CATEGORY_ROOT" 
+    categoryName="Our Designers" description=""/>
+
+<ProductCategoryRollup productCategoryId="10008" 
+	parentProductCategoryId="RNY_CATEGORY_ROOT" 
+	fromDate="2011-05-06 12:38:10.0"  
+	sequenceNum="100"/>	
+<ProductCategoryRollup productCategoryId="10009" 
+	parentProductCategoryId="RNY_CATEGORY_ROOT" 
+	fromDate="2011-05-06 12:38:09.0"  
+	sequenceNum="120"/>
+<ProductCategoryRollup productCategoryId="10011" 
+	parentProductCategoryId="RNY_CATEGORY_ROOT" 
+	fromDate="2011-05-06 12:38:08.0"  
+	sequenceNum="160"/>
+<ProductCategoryRollup productCategoryId="10012" 
+	parentProductCategoryId="RNY_CATEGORY_ROOT" 
+	fromDate="2011-05-06 12:38:07.0"  
+	sequenceNum="180"/>
+<ProductCategoryRollup productCategoryId="10015" 
+	parentProductCategoryId="RNY_CATEGORY_ROOT" 
+	fromDate="2011-05-06 12:38:06.0"   
+	sequenceNum="190"/>
+<ProductCategoryRollup productCategoryId="10020" 
+	parentProductCategoryId="RNY_CATEGORY_ROOT" 
+	fromDate="2011-05-06 12:38:05.0"   
+	sequenceNum="200"/>
+<ProductCategoryRollup productCategoryId="10030" 
+	parentProductCategoryId="RNY_CATEGORY_ROOT" 
+	fromDate="2011-05-06 12:38:04.0"  
+	sequenceNum="220"/>

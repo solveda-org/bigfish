@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <GeoType geoTypeId="CITY" hasTable="N" description="City" lastUpdatedStamp="2008-06-09 09:56:23.063" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.063" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="COUNTRY" hasTable="N" description="Country" lastUpdatedStamp="2008-06-09 09:56:23.097" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.097" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="COUNTY" hasTable="N" description="County" lastUpdatedStamp="2008-06-09 09:56:23.097" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.097" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="COUNTY_CITY" hasTable="N" description="County-City" lastUpdatedStamp="2008-06-09 09:56:23.11" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.11" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="GROUP" hasTable="N" description="Group" lastUpdatedStamp="2008-06-09 09:56:23.067" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.067" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="POSTAL_CODE" hasTable="N" description="Postal Code" lastUpdatedStamp="2008-06-09 09:56:23.08" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.08" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="PROVINCE" hasTable="N" description="Province" lastUpdatedStamp="2008-06-09 09:56:23.11" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.11" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="REGION" hasTable="N" description="Region" lastUpdatedStamp="2008-06-09 09:56:23.127" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.127" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="SALES_TERRITORY" parentTypeId="TERRITORY" hasTable="N" description="Sales Territory" lastUpdatedStamp="2008-06-09 09:56:23.143" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.143" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="SERVICE_TERRITORY" parentTypeId="TERRITORY" hasTable="N" description="Service Territory" lastUpdatedStamp="2008-06-09 09:56:23.157" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.157" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="STATE" hasTable="N" description="State" lastUpdatedStamp="2008-06-09 09:56:23.08" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.08" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="TERRITORY" hasTable="N" description="Territory" lastUpdatedStamp="2008-06-09 09:56:23.143" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.143" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoType geoTypeId="UPS_DAS_EXT" description="UPS DAS EXT" lastUpdatedStamp="2011-07-19 14:34:27.5" lastUpdatedTxStamp="2011-07-19 14:34:27.5" createdStamp="2011-07-19 14:34:27.5" createdTxStamp="2011-07-19 14:34:27.5"/>
+    <GeoType geoTypeId="UPS_DAS_EXT_ZONE" description="UPS DAS EXT ZONE" lastUpdatedStamp="2011-07-19 14:35:25.953" lastUpdatedTxStamp="2011-07-19 14:35:25.953" createdStamp="2011-07-19 14:35:25.953" createdTxStamp="2011-07-19 14:35:25.953"/>
+    <GeoType geoTypeId="UPS_DAS_ZONE" description="UPS DAS ZONE" lastUpdatedStamp="2011-07-19 14:32:41.297" lastUpdatedTxStamp="2011-07-19 14:32:41.297" createdStamp="2011-07-19 14:32:41.297" createdTxStamp="2011-07-19 14:32:41.297"/>
+    <GeoType geoTypeId="UPS_GRD_ZONE" description="UPS GRID ZONE" lastUpdatedStamp="2011-07-19 14:36:25.547" lastUpdatedTxStamp="2011-07-19 14:36:25.547" createdStamp="2011-07-19 14:36:25.547" createdTxStamp="2011-07-19 14:36:25.547"/>
+</entity-engine-xml>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">    
+    <simple-method method-name="getAssociatedStateList" short-description="set the state options for selected country" login-required="false">
+        <set field="countryGeoId" from-field="parameters.countryGeoId"/>
+        <property-to-field field="selectOne" resource="OSafeUiLabels" property="SelectOneLabel"/>
+        <clear-field field="geoSelectOne"/>
+        <make-value value-field="geoSelectOne" entity-name="GeoAssocAndGeoTo" />
+        <set field="geoSelectOne.geoName" from-field="selectOne"/>
+        <set field="geoSelectOne.geoCode" value="0"/>
+        
+        <clear-field field="stateList"/>
+        
+        <call-class-method method-name="getAssociatedStateList" class-name="org.ofbiz.common.CommonWorkers" ret-field="geoList">
+            <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+            <field field="countryGeoId" type="String"/>
+            <field field="listOrderBy" type="String"/>
+        </call-class-method>
+        <set field="returnListSize" value="${util:size(geoList)}" type="Integer"/>
+        <if-compare operator="greater" value="0" field="returnListSize">
+            <field-to-list list="stateList" field="geoSelectOne"/>
+        </if-compare>
+	    <list-to-list to-list="stateList" list="geoList"/>
+        <field-to-result field="stateList"/>
+        
+    </simple-method>
+</simple-methods>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <TaxAuthority taxAuthGeoId="USA" taxAuthPartyId="USA_IRS" taxIdFormatPattern="\d{2}\-\d{7}|\d{3}\-\d{2}\-\d{4}" includeTaxInPrice="N" lastUpdatedStamp="2008-09-16 15:33:28.087" lastUpdatedTxStamp="2008-09-16 15:33:28.023" createdStamp="2008-09-16 15:33:28.087" createdTxStamp="2008-09-16 15:33:28.023"/>
+    <TaxAuthority taxAuthGeoId="_NA_" taxAuthPartyId="_NA_" includeTaxInPrice="N" lastUpdatedStamp="2009-03-20 12:39:07.577" lastUpdatedTxStamp="2009-03-20 12:39:07.23" createdStamp="2009-03-20 12:39:07.577" createdTxStamp="2009-03-20 12:39:07.23"/>
+    <TaxAuthority taxAuthGeoId="NY" taxAuthPartyId="NY_DTF" includeTaxInPrice="N" lastUpdatedStamp="2009-03-20 12:39:07.7" lastUpdatedTxStamp="2009-03-20 12:39:07.23" createdStamp="2009-03-20 12:39:07.7" createdTxStamp="2009-03-20 12:39:07.23"/>
+    <TaxAuthority taxAuthGeoId="NY-Albany" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Allegany" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Broome" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Cattaraugus" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Cayuga" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Chautauqua" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Chemung" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Chenango" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Clinton" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Columbia" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Cortland" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Delaware" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Dutchess" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Erie" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Essex" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Franklin" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Fulton" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Genesee" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Greene" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Hamilton" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Herkimer" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Jefferson" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Kings" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Lewis" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Livingston" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Madison" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Monroe" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Montgomery" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Nassau" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-New York" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Niagara" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Oneida" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Onondaga" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Ontario" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Orange" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Orleans" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Oswego" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Otsego" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Putnam" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Queens" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Rensselaer" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Richmond" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Rockland" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Saint Lawrence" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Saratoga" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Schenectady" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Schoharie" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Schuyler" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Seneca" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Steuben" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Suffolk" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Sullivan" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Tioga" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Tompkins" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Ulster" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Warren" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Washington" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Wayne" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Westchester" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Wyoming" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Yates" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+    <TaxAuthority taxAuthGeoId="NY-Yonkers" taxAuthPartyId="NY_DTF" includeTaxInPrice="N"/>
+
+</entity-engine-xml>

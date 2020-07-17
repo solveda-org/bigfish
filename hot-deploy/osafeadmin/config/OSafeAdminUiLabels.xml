@@ -1,0 +1,4617 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+        To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+        Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+    -->
+
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <!-- *** Navigation *************************************** -->
+    <property key="AdminConfigNav">
+        <value xml:lang="en">Configuration</value>
+    </property>
+    <property key="AdminContactUsReasonNav">
+        <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="AdminEmailNav">
+        <value xml:lang="en">Email Templates</value>
+    </property>
+    <property key="AdminEmailConfigNav">
+        <value xml:lang="en">Email Configuration</value>
+    </property>
+    <property key="AdminLabelCaptionNav">
+        <value xml:lang="en">Labels and Captions</value>
+    </property>
+    <property key="AdminNav">
+        <value xml:lang="en">Admin</value>
+    </property>
+    <property key="AdminSystemParamNav">
+        <value xml:lang="en">System Parameters</value>
+    </property>
+    <property key="AdminToolsNav">
+        <value xml:lang="en">Admin Tools</value>
+    </property>
+    <property key="AdminUserNav">
+        <value xml:lang="en">Manage Users</value>
+    </property>
+     <property key="AdminSysConfigNav">
+        <value xml:lang="en">System Configuration Files</value>
+    </property>
+    <property key="AdminPayGatwayNav">
+        <value xml:lang="en">Payment Gateway Settings</value>
+    </property>
+    <property key="AdminPaymentSettingNav">
+        <value xml:lang="en">Payment Settings</value>
+    </property>
+    <property key="AdminPixelTrackingNav">
+        <value xml:lang="en">Pixel Tracking</value>
+    </property>
+    <property key="CatalogAddProductNav">
+        <value xml:lang="en">Add a Product</value>
+    </property>
+    <property key="CatalogNav">
+        <value xml:lang="en">Catalog</value>
+    </property>
+    <property key="CatalogPriceNav">
+        <value xml:lang="en">Pricing</value>
+    </property>
+    <property key="CatalogProductNav">
+        <value xml:lang="en">Manage Product</value>
+    </property>
+    <property key="CatalogViewNav">
+        <value xml:lang="en">Manage Catalog</value>
+    </property>
+    <property key="ConfigurationNav">
+        <value xml:lang="en">Config</value>
+    </property>
+    <property key="ContactUsEventNav">
+        <value xml:lang="en">Contact Us Events</value>
+    </property>
+    <property key="ContentEmailNav">
+        <value xml:lang="en">Email</value>
+    </property>
+    <property key="ContentESpotNav">
+        <value xml:lang="en">eSpots</value>
+    </property>
+    <property key="ContentFooterNav">
+        <value xml:lang="en">Footer</value>
+    </property>
+    <property key="ContentHeaderNav">
+        <value xml:lang="en">Header</value>
+    </property>
+    <property key="ContentNav">
+        <value xml:lang="en">Content</value>
+    </property>
+    <property key="ContentPDPSpotsNav">
+        <value xml:lang="en">PDP Spots</value>
+    </property>
+    <property key="ContentPLPSpotsNav">
+        <value xml:lang="en">PLP Spots</value>
+    </property>
+    <property key="ContentSiteLogoNav">
+        <value xml:lang="en">Site Logo</value>
+    </property>
+    <property key="DynamicPDPAdditionalContentNav">
+        <value xml:lang="en">Dynamic PDP Additional Content</value>
+    </property>
+    <property key="DynamicPLPContentSpotsNav">
+        <value xml:lang="en">Product Category Content</value>
+    </property>
+    <property key="GeneralPDPContentSpotsNav">
+        <value xml:lang="en">General PDP Content Spots</value>
+    </property>
+    <property key="HomePageNav">
+        <value xml:lang="en">Home Page</value>
+    </property>
+    <property key="ImagesNav">
+        <value xml:lang="en">Images</value>
+    </property>
+    <property key="LogoutNav">
+        <value xml:lang="en">Logout</value>
+    </property>
+    <property key="ContentLibraryNav">
+        <value xml:lang="en">Content Library</value>
+    </property>
+    <property key="CustomerMgmntNav">
+        <value xml:lang="en">Customers</value>
+    </property>
+    <property key="CustomerAddNav">
+        <value xml:lang="en">Add a Customer</value>
+    </property>
+    <property key="CustomerViewNav">
+        <value xml:lang="en">View Customers</value>
+    </property>
+    <property key="ManageFacetGroupsNav">
+        <value xml:lang="en">Manage SOLR Facet Groups</value>
+    </property>
+    <property key="ManageFacetValuesNav">
+        <value xml:lang="en">Manage SOLR Facet value</value>
+    </property>
+    <property key="MediaLibraryNav">
+        <value xml:lang="en">Media Library</value>
+    </property>
+    <property key="ManageContactUsReasonNav">
+        <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="ManageDivSequenceNav">
+        <value xml:lang="en">Manage &lt;DIV&gt; sequencing</value>
+    </property>
+    <property key="OrderAddNav">
+        <value xml:lang="en">Add Orders</value>
+    </property>
+    <property key="OrderMgmntNav">
+        <value xml:lang="en">Orders</value>
+    </property>
+    <property key="OrderViewNav">
+        <value xml:lang="en">View Orders</value>
+    </property>
+    <property key="PDPVariantCaptionNav">
+        <value xml:lang="en">PDP Variant Captions</value>
+    </property>
+    <property key="PageContentSpotsNav">
+        <value xml:lang="en">Page Content Spots</value>
+    </property>
+    <property key="ProductLoaderNav">
+        <value xml:lang="en">Product Loader</value>
+    </property>
+    <property key="PromotionConfigureNav">
+        <value xml:lang="en">Configure</value>
+    </property>
+    <property key="PromotionManageNav">
+        <value xml:lang="en">Manage</value>
+    </property>
+    <property key="PromotionNav">
+        <value xml:lang="en">Promotions</value>
+    </property>
+    <property key="PromotionViewNav">
+        <value xml:lang="en">View Promotions</value>
+    </property>
+    <property key="PromotionAddNav">
+        <value xml:lang="en">Add a Promotion</value>
+    </property>
+    <property key="RatingsReviewNav">
+        <value xml:lang="en">Reviews</value>
+    </property>
+    <property key="ReqCatalogEventNav">
+        <value xml:lang="en">Request Catalog Events</value>
+    </property>
+    <property key="ReviewAddNav">
+        <value xml:lang="en">Add a Review</value>
+    </property>
+    <property key="ReviewViewNav">
+        <value xml:lang="en">View Reviews</value>
+    </property>
+    <property key="StoreNav">
+        <value xml:lang="en">Stores</value>
+    </property>
+    <property key="StoreAddNav">
+        <value xml:lang="en">Add a Store</value>
+    </property>
+    <property key="StoreViewNav">
+        <value xml:lang="en">View Stores</value>
+    </property>
+    <property key="SiteInfoNav">
+        <value xml:lang="en">Site Info</value>
+    </property>
+    <property key="StaticPageNav">
+        <value xml:lang="en">Static Pages</value>
+    </property>
+    <!-- *** Navigation Ends *************************************** -->
+
+    <!-- *** Heading Starts*************************************** -->
+    <property key="AddLabelCaptionDetailHeading">
+        <value xml:lang="en">Add Caption</value>
+    </property>
+    <property key="AddTopNavCatalogEntryDetailHeading">
+        <value xml:lang="en">Add Top-Nav Catalog Entry</value>
+    </property>
+    <property key="AddSubNavCatalogEntryDetailHeading">
+        <value xml:lang="en">Add Sub-Nav Catalog Entry</value>
+    </property>
+    <property key="AddSystemParameterHeading">
+        <value xml:lang="en">Add System Parameter</value>
+    </property>
+    <property key="AdminConfigHeading">
+        <value xml:lang="en">Configuration</value>
+    </property>
+    <property key="AdminContactUsReasonHeading">
+        <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="AdminEmailHeading">
+        <value xml:lang="en">Email Templates</value>
+    </property>
+    <property key="AdminEmailConfigHeading">
+        <value xml:lang="en">Email Configuration</value>
+    </property>
+    <property key="AdminLabelCaptionHeading">
+        <value xml:lang="en">Labels and Captions</value>
+    </property>
+    <property key="AdminSystemParamHeading">
+        <value xml:lang="en">System Parameters</value>
+    </property>
+     <property key="AdminSysConfigHeading">
+        <value xml:lang="en">System Configuration Files</value>
+    </property>
+    <property key="AdminToolsHeading">
+        <value xml:lang="en">Admin Tools</value>
+    </property>
+    <property key="AdminUserHeading">
+        <value xml:lang="en">Manage Users</value>
+    </property>
+    <property key="AnalysisTopPromotionsHeading">
+        <value xml:lang="en">Analysis: Top Promotions</value>
+    </property>
+    <property key="AnalysisBestReviewedHeading">
+        <value xml:lang="en">Analysis: Best Reviewed Products</value>
+    </property>
+    <property key="AdminPayGatewayHeading">
+        <value xml:lang="en">Payment Gateway settings</value>
+    </property>
+    <property key="AdminPaymentSettingHeading">
+        <value xml:lang="en">Payment settings</value>
+    </property>
+    <property key="AdminPixelTrackingHeading">
+        <value xml:lang="en">Pixel Tracking</value>
+    </property>
+    <property key="BestReviewedHeading">
+        <value xml:lang="en">Best Reviewed Products</value>
+    </property>
+     <property key="BillingAddressHeading">
+        <value xml:lang="en">Billing Address</value>
+    </property>
+    <property key="CatalogAddProductHeading">
+        <value xml:lang="en">Add a Product</value>
+    </property>
+    <property key="ContactUsReasonDetailHeading">
+        <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="CatalogEntryDetailHeading">
+        <value xml:lang="en">Catalog Entry</value>
+    </property>
+    <property key="CatalogHeading">
+        <value xml:lang="en">Catalog</value>
+    </property>
+    <property key="CatalogPriceHeading">
+        <value xml:lang="en">Pricing</value>
+    </property>
+    <property key="CatalogProductHeading">
+        <value xml:lang="en">Manage Product</value>
+    </property>
+    <property key="CatalogViewHeading">
+        <value xml:lang="en">Manage Catalog</value>
+    </property>
+    <property key="CategoryImageHeading">
+        <value xml:lang="en">Category Image</value>
+    </property>
+    <property key="ClrLblCacheHeading">
+        <value xml:lang="en">Clear Label Cache</value>
+    </property>
+    <property key="ContentLibraryHeading">
+        <value xml:lang="en">Content Library</value>
+    </property>
+    <property key="DefaultSwatchImagesHeading">
+        <value xml:lang="en">Default Swatch Images</value>
+    </property>
+    <property key="MatchingContactUsEventsHeading">
+        <value xml:lang="en">Matching Contact Us Events</value>
+    </property>
+    <property key="ContactUsDetailHeading">
+        <value xml:lang="en">Contact Us</value>
+    </property>
+    <property key="ContentDetailHeading">
+        <value xml:lang="en">Content Details</value>
+    </property>
+    <property key="CustomerInfoHeading">
+        <value xml:lang="en">Customer Information</value>
+    </property>
+    <property key="DashboardOnlineSaleHeading">
+        <value xml:lang="en">Online Sales Dashboard</value>
+    </property>
+    <property key="DashboardStorePickupHeading">
+        <value xml:lang="en">Pickup-in-Store Sales Dashboard</value>
+    </property>
+    <property key="DynamicPDPAdditionalContentHeading">
+        <value xml:lang="en">Dynamic PDP Additional Content</value>
+    </property>
+    <property key="DynamicPLPContentSpotsHeading">
+        <value xml:lang="en">Product Category Content</value>
+    </property>
+    <property key="EmailConfigurationHeading">
+        <value xml:lang="en">Email Configuration</value>
+    </property>
+    <property key="EmailDetailHeading">
+        <value xml:lang="en">Email Detail</value>
+    </property>
+    <property key="EmailSpotHeading">
+        <value xml:lang="en">Email Content Templates</value>
+    </property>
+    <property key="FacetGroupHeading">
+        <value xml:lang="en">Facet Group</value>
+    </property>
+    <property key="FacetGroupsHeading">
+        <value xml:lang="en">Facet Groups</value>
+    </property>
+    <property key="FacetGROUPSHeading">
+        <value xml:lang="en">Facet GROUPS</value>
+    </property>
+    <property key="FacetValuesHeading">
+        <value xml:lang="en">Facet VALUES</value>
+    </property>
+    <property key="GeneralAddressHeading">
+        <value xml:lang="en">General Address</value>
+    </property>
+    <property key="GeneralPDPContentSpotsHeading">
+        <value xml:lang="en">General PDP Content Spots</value>
+    </property>
+    <property key="HomeSpotHeading">
+        <value xml:lang="en">Home Page Spots</value>
+    </property>
+    <property key="HTMLMetatagsDetailHeading">
+        <value xml:lang="en">HTML Meta Tags</value>
+    </property>
+    <property key="ImagesHeading">
+        <value xml:lang="en">Images</value>
+    </property>
+    <property key="ItemHeading">
+        <value xml:lang="en">#Items</value>
+    </property>
+    <property key="LoginHeading">
+        <value xml:lang="en">Login</value>
+    </property>
+    <property key="ManageContentFooterHeading">
+        <value xml:lang="en">Footer Links</value>
+    </property>
+     <property key="ManageContentHeaderHeading">
+        <value xml:lang="en">Top Header Links</value>
+    </property>
+    <property key="ManageEmailSpotHeading">
+        <value xml:lang="en">Email Templates</value>
+    </property>
+    <property key="ManageESpotHeading">
+        <value xml:lang="en">Espot Content Spots</value>
+    </property>
+    <property key="ManageHomeSpotHeading">
+        <value xml:lang="en">Home Page Spots</value>
+    </property>
+    <property key="MatchingMediaHeading">
+        <value xml:lang="en">Matching Media</value>
+    </property>
+    <property key="ManagePLPContentHeading">
+        <value xml:lang="en">PLP Content Spots</value>
+    </property>
+    <property key="ManageSiteLogoHeading">
+        <value xml:lang="en">Site Logo</value>
+    </property>
+    <property key="ManageStaticPageHeading">
+        <value xml:lang="en">Static Pages</value>
+    </property>
+    <property key="ManageUiLabelHeading">
+        <value xml:lang="en">Labels and Captions</value>
+    </property>
+    <property key="ManageUiLabelDetailHeading">
+        <value xml:lang="en">Change Caption</value>
+    </property>
+    <property key="ManageDivSequenceHeading">
+        <value xml:lang="en">Manage &lt;DIV&gt; sequencing</value>
+    </property>
+    <property key="MatchingReqCatalogEventsHeading">
+        <value xml:lang="en">Matching Request Catalog Events</value>
+    </property>
+    <property key="MediaDetailDetailsHeading">
+        <value xml:lang="en">Media Detail</value>
+    </property>
+    <property key="MediaLibraryHeading">
+        <value xml:lang="en">Media Library</value>
+    </property>
+    <property key="NoteHeading">
+        <value xml:lang="en">Note</value>
+    </property>
+    <property key="OperationsHeading">
+        <value xml:lang="en">Operations</value>
+    </property>
+    <property key="PLPSequenceHeading">
+        <value xml:lang="en">Re-sequencing Products: ${prodCategoryName}</value>
+    </property>
+    <property key="PaymentAddressHeading">
+        <value xml:lang="en">Payment Address</value>
+    </property>
+    <property key="ProcessingOptionsHeading">
+        <value xml:lang="en">Processing Options</value>
+    </property>
+    <property key="ProductCategoryHeading">
+        <value xml:lang="en">Product Category</value>
+    </property>
+    <property key="ProductsHeading">
+        <value xml:lang="en">Products</value>
+    </property>
+    <property key="ProductAssociationsHeading">
+        <value xml:lang="en">Product Associations</value>
+    </property>
+    <property key="ProductSwatchImageHeading">
+        <value xml:lang="en">Product Swatch Image</value>
+    </property>
+    <property key="ProductIdentificationHeading">
+        <value xml:lang="en">Product Identifications</value>
+    </property>
+    <property key="FeatureSwatchesHeading">
+        <value xml:lang="en">Feature Swatches</value>
+    </property>
+    <property key="ManufacturerHeading">
+        <value xml:lang="en">Manufacturer</value>
+    </property>
+    <property key="ProductLoaderHeading">
+        <value xml:lang="en">Product Loader</value>
+    </property>
+    <property key="ProductLoaderDetailHeading">
+        <value xml:lang="en">Product Loader</value>
+    </property>
+    <property key="ProductLoaderPreviewDetailHeading">
+        <value xml:lang="en">Product Loader Preview</value>
+    </property>
+    <property key="ProductCatalogFacetGROUPSHeading">
+        <value xml:lang="en">Product Catalog (Facet GROUPS)</value>
+    </property>
+    <property key="ProductHTMLMetatagsDetailHeading">
+        <value xml:lang="en">Product HTML Meta Tags</value>
+    </property>
+    <property key="ProductVideosDetailsHeading">
+        <value xml:lang="en">Product Videos</value>
+    </property>
+    <property key="categoryHTMLMetatagsDetailHeading">
+        <value xml:lang="en">Category HTML Meta Tags</value>
+    </property>
+    <property key="ContactUsEventHeading">
+        <value xml:lang="en">Contact Us Events</value>
+    </property>
+    <property key="CustomerAddHeading">
+        <value xml:lang="en">Add a Customer</value>
+    </property>
+    <property key="CustomerViewHeading">
+        <value xml:lang="en">View Customers</value>
+    </property>
+    <property key="CustomerDetailInfoHeading">
+        <value xml:lang="en">Customer ${partyId} Information</value>
+    </property>
+    <property key="CustomerNoteHeading">
+        <value xml:lang="en">Customer ${partyId} Notes</value>
+    </property>
+    <property key="CustomerHeading">
+        <value xml:lang="en">Matching Customers:</value>
+    </property>
+    <property key="ManageSOLRFacetGroupsHeading">
+        <value xml:lang="en">Manage SOLR Facet Groups</value>
+    </property>
+    <property key="ManageSOLRFacetValueHeading">
+        <value xml:lang="en">Manage SOLR Facet Value</value>
+    </property>
+    <property key="ManageContactUsReasonHeading">
+        <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="OrderAddHeading">
+        <value xml:lang="en">Add Orders</value>
+    </property>
+    <property key="OrderItemsHeading">
+        <value xml:lang="en">Order Items</value>
+    </property>
+    <property key="OrderDetailInfoHeading">
+        <value xml:lang="en">Order ${orderId} Information</value>
+    </property>
+    <property key="OrderStatusBoxHeading">
+        <value xml:lang="en">Status Change</value>
+    </property>
+    <property key="OrderHeading">
+        <value xml:lang="en">Matching Orders:</value>
+    </property>
+    <property key="OrderNoteHeading">
+        <value xml:lang="en">Order ${orderId} Notes</value>
+    </property>
+    <property key="OrdersRequiringWorkHeading">
+        <value xml:lang="en">Orders Requiring Work</value>
+    </property>
+    <property key="OrderViewHeading">
+        <value xml:lang="en">View Orders</value>
+    </property>
+    <property key="OrdHeading">
+        <value xml:lang="en">Ord</value>
+    </property>
+    <property key="PDPVariantCaptionsHeading">
+        <value xml:lang="en">PDP Variant Captions</value>
+    </property>
+    <property key="PTSHeading">
+        <value xml:lang="en">Page Content Spots</value>
+    </property>
+    <property key="PageContentSpotsHeading">
+        <value xml:lang="en">Page Content Spots</value>
+    </property>
+    <property key="PaymentInfoHeading">
+        <value xml:lang="en">Payment Information</value>
+    </property>
+    <property key="PendingRatingsReviewsHeading">
+        <value xml:lang="en">Pending Ratings &amp; Reviews</value>
+    </property>
+    <property key="PDPAddtionalContentHeading">
+        <value xml:lang="en">PDP Addition Content</value>
+    </property>
+    <property key="PDPSpotTableHeading">
+        <value xml:lang="en">PDP Content</value>
+    </property>
+    <property key="PDPVariantCaptionListHeading">
+        <value xml:lang="en">PDP Variant Captions</value>
+    </property>
+    <property key="PDPVariantCaptionDetailHeading">
+        <value xml:lang="en">PDP Variant Caption:</value>
+    </property>
+    <property key="PixelTrackingDetailHeading">
+        <value xml:lang="en">Pixel Tracking Detail</value>
+    </property>
+    <property key="PixelTrackingListHeading">
+        <value xml:lang="en">Pixel Tracking</value>
+    </property>
+    <property key="PLPSpotDetailHeading">
+        <value xml:lang="en">Catalog</value>
+    </property>
+    <property key="DynamicPLPContentHeading">
+        <value xml:lang="en">Product Category content</value>
+    </property>
+     <property key="ScreenSearchContentHeading">
+        <value xml:lang="en">Sequencing for Screen:</value>
+    </property>
+    <property key="PLPSpotTableHeading">
+        <value xml:lang="en">PLP Content</value>
+    </property>
+    <property key="ProductsRelatedToHeading">
+        <value xml:lang="en">Products Related to </value>
+    </property>
+    <property key="ProductAltNoImagesHeading">
+        <value xml:lang="en">Product Alternate# ${altImgNo} Images </value>
+    </property>
+    <property key="ProductDetailsHeading">
+        <value xml:lang="en">Product Details</value>
+    </property>
+    <property key="ProductHeading">
+        <value xml:lang="en">Matching Products</value>
+    </property>
+    <property key="ProductImagesHeading">
+        <value xml:lang="en">Product Images</value>
+    </property>
+    <property key="PromotionManageHeading">
+        <value xml:lang="en">Manage Promotions</value>
+    </property>
+    <property key="ProductPricingHeading">
+        <value xml:lang="en">Product Pricing</value>
+    </property>
+    <property key="ProductReviewDetailHeading">
+        <value xml:lang="en">Review Details</value>
+    </property>
+    <property key="ProductReviewHeading">
+        <value xml:lang="en">Matching Reviews</value>
+    </property>
+    <property key="ProductVariantsHeading">
+        <value xml:lang="en">Product Variants</value>
+    </property>
+    <property key="PromotionConfigureHeading">
+        <value xml:lang="en">Configure Promotions</value>
+    </property>
+    <property key="PromotionManageHeading">
+        <value xml:lang="en">Manage Promotions</value>
+    </property>
+    <property key="PromotionListHeading">
+        <value xml:lang="en">Matching Promotions</value>
+    </property>
+    <property key="PromotionViewHeading">
+        <value xml:lang="en">View Promotions</value>
+    </property>
+    <property key="PromotionAddHeading">
+        <value xml:lang="en">Add a Promotion</value>
+    </property>
+    <property key="PromotionHeading">
+        <value xml:lang="en">PROMOTION DEFINITION</value>
+    </property>
+    <property key="PromotionCodeHeading">
+        <value xml:lang="en">PROMO-CODES</value>
+    </property>
+    <property key="PromotionDefinitionHeading">
+        <value xml:lang="en">Promotion Definition</value>
+    </property>
+    <property key="PromotionCodeDefinitionHeading">
+        <value xml:lang="en">Promo Code Definition</value>
+    </property>
+    <property key="PromotionRuleConditionHeading">
+        <value xml:lang="en">Rules: Conditions</value>
+    </property>
+    <property key="PromotionRuleActionHeading">
+        <value xml:lang="en">Rules: Actions</value>
+    </property>
+    <property key="PromotionCodesHeading">
+        <value xml:lang="en">Promo Codes</value>
+    </property>
+    <property key="paymentSettingDetailHeading">
+        <value xml:lang="en">Payment Settings</value>
+    </property>
+    <property key="RequestCatalogDetailHeading">
+        <value xml:lang="en">Request Catalog</value>
+    </property>
+    <property key="ReqCatalogEventHeading">
+        <value xml:lang="en">Request Catalog Events</value>
+    </property>
+    <property key="RevenueHeading">
+        <value xml:lang="en">Sales ${currencySymbol}</value>
+    </property>
+    <property key="ReviewAddHeading">
+        <value xml:lang="en">Add a Review</value>
+    </property>
+    <property key="ReviewViewHeading">
+        <value xml:lang="en">View Reviews</value>
+    </property>
+    <property key="SiteMapHeading">
+        <value xml:lang="en">sitemap XML generator</value>
+    </property>
+    <property key="SeoUrlMapHeading">
+        <value xml:lang="en">SEO Friendly URL refresh</value>
+    </property>
+    <property key="StoreLocationAddHeading">
+        <value xml:lang="en">Add a Store</value>
+    </property>
+    <property key="StoreLocationViewHeading">
+        <value xml:lang="en">View Stores</value>
+    </property>
+    <property key="StoreLocationManagementHeading">
+        <value xml:lang="en">Matching Stores</value>
+    </property>
+    <property key="StoreLocationDetailHeading">
+        <value xml:lang="en">Store Details</value>
+    </property>
+    <property key="SalesHeading">
+        <value xml:lang="en">Sales</value>
+    </property>
+    <property key="SearchHeading">
+        <value xml:lang="en">Enter Search Criteria:</value>
+    </property>
+    <property key="SystemParameterDetailHeading">
+        <value xml:lang="en">Change System Parameter</value>
+    </property>
+    <property key="SystemParameterHeading">
+        <value xml:lang="en">System Parameters</value>
+    </property>
+     <property key="ManageDivSequenceSearchHeading">
+        <value xml:lang="en">Manage &lt;DIV&gt; Sequencing</value>
+    </property>
+    <property key="ShippingAddressHeading">
+        <value xml:lang="en">Shipping Address</value>
+    </property>
+    <property key="ShippingInfoHeading">
+        <value xml:lang="en">Shipping/Payment Information</value>
+    </property>
+    <property key="SiteInfoHeading">
+        <value xml:lang="en">Site Info</value>
+    </property>
+    <property key="SolrReIndexDetailHeading">
+        <value xml:lang="en">SOLR Indexing</value>
+    </property>
+    <property key="SysConfigHeading">
+        <value xml:lang="en">System Configuration</value>
+    </property>
+    <property key="CompareLabelFileDetailHeading">
+        <value xml:lang="en">Compare Tool</value>
+    </property>
+    <property key="CompareLabelFileResultSearchHeading">
+        <value xml:lang="en">Comparison to</value>
+    </property>
+    <property key="CompareParametersDetailHeading">
+        <value xml:lang="en">Compare Tool: System Parameters</value>
+    </property>
+    <property key="CompareParametersResultSearchHeading">
+        <value xml:lang="en">Comparison to</value>
+    </property>
+    <property key="CompareLabelFileResultHeading">
+        <value xml:lang="en">Results</value>
+    </property>
+    <property key="CompareParametersResultHeading">
+        <value xml:lang="en">Results</value>
+    </property>
+    <property key="ManageEcommerceStyleDetailHeading">
+        <value xml:lang="en">Available CSS Files on "Osafe_theme/css" directory</value>
+    </property>
+    <property key="ManageAdminStyleDetailHeading">
+        <value xml:lang="en">Available CSS Files on "Osafe_admin_theme/css" directory</value>
+    </property>
+    <property key="EditStyleDetailHeading">
+        <value xml:lang="en">Editing active file: ${styleFileName}</value>
+    </property>
+    <property key="StaticPageHeading">
+        <value xml:lang="en">Static Pages</value>
+    </property>
+    <property key="SummaryHeading">
+        <value xml:lang="en">Summary</value>
+    </property>
+    <property key="TopProductsAnalysisHeading">
+        <value xml:lang="en">Analysis: Top Products</value>
+    </property>
+    <property key="TopProductsOnlineSaleAnalysisHeading">
+        <value xml:lang="en">Analysis: Top Online Products</value>
+    </property>
+    <property key="TopProductsStorePickupAnalysisHeading">
+        <value xml:lang="en">Analysis: Top Pickup-in-Store Products</value>
+    </property>
+    <property key="TopProductsHeading">
+        <value xml:lang="en">Top Products</value>
+    </property>
+    <property key="TopPromotionsHeading">
+        <value xml:lang="en">Top Promotions</value>
+    </property>
+    <property key="UnitListPriceHeading">
+        <value xml:lang="en">Price</value>
+    </property>
+    <property key="ProductLoaderListHeading">
+        <value xml:lang="en">Product Load Functions</value>
+    </property>
+    <property key="BigFishSampleFileDetailHeading">
+        <value xml:lang="en">Create BigFish Product Load (Template) XLS File</value>
+    </property>
+    <property key="BigFishProductFileFromDBDetailHeading">
+        <value xml:lang="en">Create BigFish Product Load File</value>
+    </property>
+    <property key="BigFishProductFileFromEbayDetailHeading">
+        <value xml:lang="en">Convert Ebay/Amazon to BigFish format</value>
+    </property>
+    <property key="ImageLocationPreferencesDetailHeading">
+        <value xml:lang="en">Image Location Preferences</value>
+    </property>
+   <!-- *** Heading Ends*************************************** -->
+
+    <!-- *** Caption Starts*************************************** -->
+    <property key="IdCaption">
+        <value xml:lang="en">ID:</value>
+    </property>
+    <property key="AddedByCaption">
+        <value xml:lang="en">Added By:</value>
+    </property>
+    <property key="AdjustmentsCaption">
+        <value xml:lang="en">Adjustments:</value>
+    </property>
+    <property key="AdminModuleCaption">
+        <value xml:lang="en">ADMIN MODULE</value>
+    </property>
+    <property key="AdjTotalDollarCaption">
+        <value xml:lang="en">Total Adj ${currencySymbol}:</value>
+    </property>
+    <property key="AsOfDateCaption">
+        <value xml:lang="en">As Of Date:</value>
+    </property>
+    <property key="AtCaption">
+        <value xml:lang="en">At:</value>
+    </property>
+    <property key="AverageOrderCaption">
+        <value xml:lang="en">Average Order:</value>
+    </property>
+    <property key="BankAccntNrAbbrCaption">
+        <value xml:lang="en">AccntNr:</value>
+    </property>
+    <property key="BankCaption">
+        <value xml:lang="en">Bank:</value>
+    </property>
+    <property key="ByCaption">
+        <value xml:lang="en">By:</value>
+    </property>
+    <property key="BCCCaption">
+        <value xml:lang="en">BCC:</value>
+    </property>
+    <property key="CaptionCaption">
+        <value xml:lang="en">Caption:</value>
+    </property>
+    <property key="CaptionIDCaption">
+        <value xml:lang="en">Caption ID:</value>
+    </property>
+    <property key="CategoryCaption">
+        <value xml:lang="en">Category:</value>
+    </property>
+    <property key="ChangeMediaCaption">
+        <value xml:lang="en">Change Media:</value>
+    </property>
+    <property key="CustomerIdCaption">
+        <value xml:lang="en">Customer Id:</value>
+    </property>
+    <property key="CustomerNoCaption">
+        <value xml:lang="en">Cust#:</value>
+    </property>
+    <property key="CustomerNameCaption">
+        <value xml:lang="en">Customer Name:</value>
+    </property>
+    <property key="FirstNameCaption">
+        <value xml:lang="en">First Name:</value>
+    </property>
+    <property key="LastNameCaption">
+        <value xml:lang="en">Last Name:</value>
+    </property>
+    <property key="CustomerStatusCaption">
+        <value xml:lang="en">Customer Status:</value>
+    </property>
+    <property key="CustomerTypeCaption">
+        <value xml:lang="en">Customer Type:</value>
+    </property>
+    <property key="CustomerRoleCaption">
+        <value xml:lang="en">Customer Role:</value>
+    </property>
+    <property key="CustomerEnabledCaption">
+        <value xml:lang="en">Enabled</value>
+    </property>
+    <property key="CustomerDisabledCaption">
+        <value xml:lang="en">Disabled</value>
+    </property>
+    <property key="CCCaption">
+        <value xml:lang="en">CC:</value>
+    </property>
+    <property key="CustomerCaption">
+        <value xml:lang="en">Customer</value>
+    </property>
+    <property key="EmailSubscriberCaption">
+        <value xml:lang="en">Email Subscriber</value>
+    </property>
+    <property key="UserLoginCaption">
+        <value xml:lang="en">User Login:</value>
+    </property>
+    <property key="DailyAverageCaption">
+        <value xml:lang="en">Daily Average</value>
+    </property>
+    <property key="DateCaption">
+        <value xml:lang="en">Date:</value>
+    </property>
+    <property key="DatesCaption">
+        <value xml:lang="en">Dates:</value>
+    </property>
+    <property key="DaysCaption">
+        <value xml:lang="en">Days:</value>
+    </property>
+    <property key="DefaultSalePriceCaption">
+        <value xml:lang="en">Default Sale Price:</value>
+    </property>
+    <property key="DeliveryInfoCaption">
+        <value xml:lang="en">Delivery Info:</value>
+    </property>
+    <property key="DeliveryOptionCaption">
+        <value xml:lang="en">Delivery Option:</value>
+    </property>
+    <property key="DirectionsCaption">
+        <value xml:lang="en">Directions:</value>
+    </property>
+    <property key="EmailTypeCaption">
+        <value xml:lang="en">Email Type:</value>
+    </property>
+    <property key="FromCaption">
+        <value xml:lang="en">From:</value>
+    </property>
+    <property key="FromDateCaption">
+        <value xml:lang="en">From Date:</value>
+    </property>
+    <property key="PopUpDetailImageCaption">
+        <value xml:lang="en">Popup Detail Image:</value>
+    </property>
+    <property key="FiveToTenDaysCaption">
+        <value xml:lang="en">5-10 Days:</value>
+    </property>
+    <property key="ForCaption">
+        <value xml:lang="en">For:</value>
+    </property>
+    <property key="GuestCaption">
+        <value xml:lang="en">Guest</value>
+    </property>
+    <property key="HeightCaption">
+        <value xml:lang="en">Height:</value>
+    </property>
+    <property key="ContentIdCaption">
+        <value xml:lang="en">Content ID:</value>
+    </property>
+    <property key="ImageCaption">
+        <value xml:lang="en">Image:</value>
+    </property>
+    <property key="ImageDirectoryCaption">
+        <value xml:lang="en">Image Directory:</value>
+    </property>
+    <property key="BFInventoryCaption">
+        <value xml:lang="en">BF Inventory:</value>
+    </property>
+    <property key="IngredientsCaption">
+        <value xml:lang="en">Ingredients:</value>
+    </property>
+    <property key="IntroducedDateCaption">
+        <value xml:lang="en">Introduced Date:</value>
+    </property>
+    <property key="ItemNoCaption">
+        <value xml:lang="en">Item#:</value>
+    </property>
+    <property key="ItemsTotalDollarCaption">
+        <value xml:lang="en">Total Item ${currencySymbol}:</value>
+    </property>
+    <property key="LabelCaption">
+        <value xml:lang="en">Label:</value>
+    </property>
+    <property key="LargeImageCaption">
+        <value xml:lang="en">Large Image:</value>
+    </property>
+    <property key="LastOrderCaption">
+        <value xml:lang="en">Last Order:</value>
+    </property>
+    <property key="ListPriceCaption">
+        <value xml:lang="en">List Price:</value>
+    </property>
+    <property key="LoadMediaCaption">
+        <value xml:lang="en">Load Media:</value>
+    </property>
+    <property key="LongDescCaption">
+        <value xml:lang="en">Long Desc:</value>
+    </property>
+    <property key="MediaNameCaption">
+        <value xml:lang="en">Media Name:</value>
+    </property>
+    <property key="KeyCaption">
+        <value xml:lang="en">Key:</value>
+    </property>
+    <property key="NameCaption">
+        <value xml:lang="en">Name:</value>
+    </property>
+    <property key="NavBarCaption">
+        <value xml:lang="en">Nav Bar:</value>
+    </property>
+    <property key="NewImageCaption">
+        <value xml:lang="en">New Image:</value>
+    </property>
+    <property key="NewLargeImageCaption">
+        <value xml:lang="en">New Large Image:</value>
+    </property>
+    <property key="NewThumbnailImageCaption">
+        <value xml:lang="en">New Thumbnail Image:</value>
+    </property>
+    <property key="NewPopUpDetailImageCaption">
+        <value xml:lang="en">New PopUp Detail Image:</value>
+    </property>
+    <property key="NewSmallImageCaption">
+        <value xml:lang="en">New Small Image:</value>
+    </property>
+    <property key="PLPSwatchImageCaption">
+        <value xml:lang="en">PLP Swatch Image:</value>
+    </property>
+    <property key="NewPLPSwatchImageCaption">
+        <value xml:lang="en">New PLP Swatch Image:</value>
+    </property>
+    <property key="PDPSwatchImageCaption">
+        <value xml:lang="en">PDP Swatch Image:</value>
+    </property>
+    <property key="NewPDPSwatchImageCaption">
+        <value xml:lang="en">New PDP Swatch Image:</value>
+    </property>
+    <property key="PLPImageTitleTextCaption">
+        <value xml:lang="en">PLP Image Title Text:</value>
+    </property>
+    <property key="SmallAltImageCaption">
+        <value xml:lang="en">Small Image ALT:</value>
+    </property>
+    <property key="NewSmallAltImageCaption">
+        <value xml:lang="en">New Small Image ALT:</value>
+    </property>
+    <property key="NoteCaption">
+        <value xml:lang="en">Note:</value>
+    </property>
+    <property key="NoteNoCaption">
+        <value xml:lang="en">Note#:</value>
+    </property>
+    <property key="NumberOrdersCaption">
+        <value xml:lang="en">#Orders:</value>
+    </property>
+    <property key="OneToFiveDaysCaption">
+        <value xml:lang="en">1-5 Days:</value>
+    </property>
+    <property key="OpenCaption">
+        <value xml:lang="en">Open:</value>
+    </property>
+    <property key="OrderDateCaption">
+        <value xml:lang="en">Order Date:</value>
+    </property>
+    <property key="OrderNoCaption">
+        <value xml:lang="en">Order#:</value>
+    </property>
+    <property key="OrderNoSearchCaption">
+        <value xml:lang="en">Order#:</value>
+    </property>
+    <property key="OrderTermsCaption">
+        <value xml:lang="en">Order Terms:</value>
+    </property>
+    <property key="OrderNewStatusCaption">
+        <value xml:lang="en">New Status:</value>
+    </property>
+    <property key="OrderCarrierCaption">
+        <value xml:lang="en">Carrier:</value>
+    </property>
+    <property key="OrderTrackingCaption">
+        <value xml:lang="en">Tracking#:</value>
+    </property>
+    <property key="OrderShipDateCaption">
+        <value xml:lang="en">Ship Date:</value>
+    </property>
+    <property key="PackedCaption">
+        <value xml:lang="en">Packed:</value>
+    </property>
+    <property key="ParameterNameCaption">
+        <value xml:lang="en">Parameter Name:</value>
+    </property>
+    <property key="PaymentInformationCaption">
+        <value xml:lang="en">Payment Information:</value>
+    </property>
+    <property key="PendingReviewCaption">
+        <value xml:lang="en">Pending Review:</value>
+    </property>
+    <property key="PeriodCaption">
+        <value xml:lang="en">Period:</value>
+    </property>
+    <property key="PeriodSummaryCaption">
+        <value xml:lang="en">Summary for Period:</value>
+    </property>
+    <property key="PixelCodeCaption">
+        <value xml:lang="en">Pixel Code:</value>
+    </property>
+    <property key="PixelIdCaption">
+        <value xml:lang="en">Pixel Id:</value>
+    </property>
+    <property key="PixelScopeCaption">
+        <value xml:lang="en">Pixel Scope:</value>
+    </property>
+    <property key="PreviewCaption">
+        <value xml:lang="en">Preview:</value>
+    </property>
+    <property key="PLPSeqNoCaption">
+        <value xml:lang="en">PLP Seq No:</value>
+    </property>
+     <property key="PriorTrendCaption">
+        <value xml:lang="en">${currencySymbol} Prior Trend</value>
+    </property>
+    <property key="ProductIdCaption">
+        <value xml:lang="en">Product Id:</value>
+    </property>
+    <property key="ProductNameCaption">
+        <value xml:lang="en">Product Name:</value>
+    </property>
+    <property key="PDPLabelCaption">
+        <value xml:lang="en">PDP Label:</value>
+    </property>
+    <property key="PLPLabelCaption">
+        <value xml:lang="en">PLP Label:</value>
+    </property>
+    <property key="ProcessingOptionCaption">
+        <value xml:lang="en">Processing Option:</value>
+    </property>
+    <property key="ProductXLSFileCaption">
+        <value xml:lang="en">Product File (XLS):</value>
+    </property>
+    <property key="ReadyCaption">
+        <value xml:lang="en">Ready:</value>
+    </property>
+    <property key="RecentTrendCaption">
+        <value xml:lang="en">${currencySymbol} Recent Trend</value>
+    </property>
+    <property key="ReferenceCaption">
+        <value xml:lang="en">Reference:</value>
+    </property>
+    <property key="RevenueCaption">
+        <value xml:lang="en">${currencySymbol} Revenue:</value>
+    </property>
+    <property key="RoutingCaption">
+        <value xml:lang="en">Routing:</value>
+    </property>
+    <property key="SalesPitchCaption">
+        <value xml:lang="en">Sales Pitch:</value>
+    </property>
+    <property key="SalePriceCaption">
+        <value xml:lang="en">Sale Price:</value>
+    </property>
+    <property key="SearchForCaption">
+        <value xml:lang="en">Search For:</value>
+    </property>
+    <property key="SearchInCaption">
+        <value xml:lang="en">Search In:</value>
+    </property>
+    <property key="ScreenSearchCaption">
+        <value xml:lang="en">Screen:</value>
+    </property>
+    <property key="SequenceCaption">
+        <value xml:lang="en">Sequence:</value>
+    </property>
+    <property key="ShipAfterDateCaption">
+        <value xml:lang="en">Ship After Date:</value>
+    </property>
+    <property key="ShipBeforeDateCaption">
+        <value xml:lang="en">Ship Before Date:</value>
+    </property>
+    <property key="ShipTotalDollarCaption">
+        <value xml:lang="en">Ship Total ${currencySymbol}:</value>
+    </property>
+    <property key="ShipmentInformationCaption">
+        <value xml:lang="en">Shipment Information:</value>
+    </property>
+    <property key="ShippedCaption">
+        <value xml:lang="en">Shipped:</value>
+    </property>
+    <property key="ShortDescCaption">
+        <value xml:lang="en">Short Desc:</value>
+    </property>
+    <property key="SizeCaption">
+        <value xml:lang="en">Size:</value>
+    </property>
+    <property key="SmallImageCaption">
+        <value xml:lang="en">Small Image:</value>
+    </property>
+    <property key="SortByCaption">
+        <value xml:lang="en">Sort By:</value>
+    </property>
+    <property key="SpecialInstrCaption">
+        <value xml:lang="en">Special Instr:</value>
+    </property>
+    <property key="SKUCaption">
+        <value xml:lang="en">SKU:</value>
+    </property>
+    <property key="GoogleIDCaption">
+        <value xml:lang="en">Google ID:</value>
+    </property>
+    <property key="ISBNCaption">
+        <value xml:lang="en">ISBN:</value>
+    </property>
+    <property key="ManufacturerIDCaption">
+        <value xml:lang="en">Manufacturer ID:</value>
+    </property>
+    <property key="TaxTotalDollarCaption">
+        <value xml:lang="en">Tax total ${currencySymbol}:</value>
+    </property>
+    <property key="GeoCodeCaption">
+        <value xml:lang="en">GEO Code:</value>
+    </property>
+    <property key="StoreCaption">
+        <value xml:lang="en">Store:</value>
+    </property>
+    <property key="ProductStoreCaption">
+        <value xml:lang="en">Product Store:</value>
+    </property>
+    <property key="CatalogCaption">
+        <value xml:lang="en">Product Catalog:</value>
+    </property>
+    <property key="StoreAddressCaption">
+        <value xml:lang="en">Store Address:</value>
+    </property>
+    <property key="Address1Caption">
+        <value xml:lang="en">Address 1:</value>
+    </property>
+    <property key="Address2Caption">
+        <value xml:lang="en">Address 2:</value>
+    </property>
+    <property key="CityCaption">
+        <value xml:lang="en">City:</value>
+    </property>
+    <property key="TownOrCityCaption">
+        <value xml:lang="en">City or Town:</value>
+    </property>
+    <property key="StoreLocationCodeCaption">
+        <value xml:lang="en">Store Code:</value>
+    </property>
+    <property key="CountryCaption">
+        <value xml:lang="en">Country:</value>
+    </property>
+    <property key="StoreLocationNameCaption">
+        <value xml:lang="en">Store Name:</value>
+    </property>
+    <property key="PhoneCaption">
+        <value xml:lang="en">Phone:</value>
+    </property>
+    <property key="StoreLocationStatusCaption">
+        <value xml:lang="en">Status:</value>
+    </property>
+    <property key="StateCaption">
+        <value xml:lang="en">State:</value>
+    </property>
+    <property key="StateOrProvinceCaption">
+        <value xml:lang="en">State or Province:</value>
+    </property>
+    <property key="ProvinceCaption">
+        <value xml:lang="en">Province:</value>
+    </property>
+    <property key="StoreWrkHrCaption">
+        <value xml:lang="en">Opening Hours:</value>
+    </property>
+    <property key="StoreNoticeCaption">
+        <value xml:lang="en">Store Notice:</value>
+    </property>
+    <property key="SubNavCaption">
+        <value xml:lang="en">Sub Nav:</value>
+    </property>
+    <property key="TopNavCaption">
+        <value xml:lang="en">Top Nav:</value>
+    </property>
+    <property key="ZipCodeCaption">
+        <value xml:lang="en">Zip:</value>
+    </property>
+    <property key="PostalCodeCaption">
+        <value xml:lang="en">Postal Code:</value>
+    </property>
+    <property key="ZipOrPostalCodeCaption">
+        <value xml:lang="en">Zip or Postal Code:</value>
+    </property>
+    <property key="SubItemCaption">
+        <value xml:lang="en">Sub Item:</value>
+    </property>
+    <property key="SubjectCaption">
+        <value xml:lang="en">Subject:</value>
+    </property>
+    <property key="TaxIdCaption">
+        <value xml:lang="en">Tax ID:</value>
+    </property>
+    <property key="TelephoneAbbrCaption">
+        <value xml:lang="en">Tel:</value>
+    </property>
+    <property key="TenPlusDayCaption">
+        <value xml:lang="en">10+ Days:</value>
+    </property>
+    <property key="TermsAndCondsCaption">
+        <value xml:lang="en">Terms and Cond:</value>
+    </property>
+    <property key="ThumbnailImageCaption">
+        <value xml:lang="en">Thumbnail Image:</value>
+    </property>
+    <property key="TimeCaption">
+        <value xml:lang="en">Time:</value>
+    </property>
+    <property key="ToCaption">
+        <value xml:lang="en">To:</value>
+    </property>
+    <property key="TypeCaption">
+        <value xml:lang="en">Type:</value>
+    </property>
+    <property key="ValueCaption">
+        <value xml:lang="en">Value:</value>
+    </property>
+    <property key="VariantCaption">
+        <value xml:lang="en">Variant:</value>
+    </property>
+    <property key="VirtualCaption">
+        <value xml:lang="en">Virtual:</value>
+    </property>
+    <property key="VirtualProductsCaption">
+        <value xml:lang="en">Virtual Products:</value>
+    </property>
+    <property key="WarningsCaption">
+        <value xml:lang="en">Warnings:</value>
+    </property>
+    <property key="WebsiteCaption">
+        <value xml:lang="en">Website:</value>
+    </property>
+    <property key="WelcomeCaption">
+        <value xml:lang="en">Welcome</value>
+    </property>
+    <property key="WidthCaption">
+        <value xml:lang="en">Width:</value>
+    </property>
+    <property key="NaCaption">
+        <value xml:lang="en">(N/A):</value>
+    </property>
+    <property key="ColonCaption">
+        <value xml:lang="en">:</value>
+    </property>
+    <property key="ReplaceWithCaption">
+        <value xml:lang="en">Replace With:</value>
+    </property>
+    <property key="SaveAsCaption">
+        <value xml:lang="en">Save As:</value>
+    </property>
+    <property key="SaveTextCaption">
+        <value xml:lang="en">Save Text:</value>
+    </property>
+    <property key="ImageLocationCaption">
+        <value xml:lang="en">Image Location:</value>
+    </property>
+    <property key="MediaLibraryZipFileCaption">
+        <value xml:lang="en">Media Library ZIP File:</value>
+    </property>
+    <property key="ServerZipFileCaption">
+        <value xml:lang="en">Server ZIP File:</value>
+    </property>
+    <property key="ServerDirectoryCaption">
+        <value xml:lang="en">Server Directory:</value>
+    </property>
+    <property key="LocalZipFileCaption">
+        <value xml:lang="en">Local ZIP File:</value>
+    </property>
+    <property key="URLCaption">
+        <value xml:lang="en">URL:</value>
+    </property>
+    <property key="VideoURLCaption">
+        <value xml:lang="en">Video URL:</value>
+    </property>
+    <property key="NewVideoCaption">
+        <value xml:lang="en">New Video:</value>
+    </property>
+    <property key="VideoURL360Caption">
+        <value xml:lang="en">360 Video URL:</value>
+    </property>
+    <property key="New360VideoCaption">
+        <value xml:lang="en">New 360 Video:</value>
+    </property>
+    <property key="WebSearchCaption">
+        <value xml:lang="en">Web Search:</value>
+    </property>
+    
+    <!-- Leave so if we want to specific verbage we do not have to change the key -->
+    <property key="ActiveCaption">
+        <value xml:lang="en">Active:</value>
+    </property>
+    <property key="ActiveDateCaption">
+        <value xml:lang="en">Active Date:</value>
+    </property>
+    <property key="ActiveFromCaption">
+        <value xml:lang="en">Active From:</value>
+    </property>
+    <property key="ActiveThruCaption">
+        <value xml:lang="en">Active Thru:</value>
+    </property>
+    <property key="AdjustmentsTotalCaption">
+        <value xml:lang="en">Promotion:</value>
+    </property>
+    <property key="PromotionTotalCaption">
+        <value xml:lang="en">Promotion</value>
+    </property>
+    <property key="ListTotalCaption">
+        <value xml:lang="en">Total ${currencySymbol}:</value>
+    </property>
+    <property key="BillingAddressCaption">
+        <value xml:lang="en">Billing Address:</value>
+    </property>
+    <property key="AddressCaption">
+        <value xml:lang="en">Address:</value>
+    </property>
+    <property key="CreatedDateCaption">
+        <value xml:lang="en">Created Date:</value>
+    </property>
+    <property key="CreditCardCaption">
+        <value xml:lang="en">Credit Card:</value>
+    </property>
+    <property key="CreditCardStatusCaption">
+        <value xml:lang="en">CC Status:</value>
+    </property>
+    <property key="CompareYourDatabaseCaption">
+        <value xml:lang="en">Your Database [A]:</value>
+    </property>
+    <property key="CompareYourLabelFileCaption">
+        <value xml:lang="en">Your Label File [A]:</value>
+    </property>
+    <property key="CompareToLabelFileCaption">
+        <value xml:lang="en">Compare To File [B]:</value>
+    </property>
+    <property key="CompareToParametersFileCaption">
+        <value xml:lang="en">Compare To File [B]:</value>
+    </property>
+    <property key="ShowCaption">
+        <value xml:lang="en">Show:</value>
+    </property>
+    <property key="ExpireDateCaption">
+        <value xml:lang="en">Exp Date:</value>
+    </property>
+    <property key="NumberCaption">
+        <value xml:lang="en">Number:</value>
+    </property>
+    <property key="AmountCaption">
+        <value xml:lang="en">Amount:</value>
+    </property>
+    <property key="DatePostedCaption">
+        <value xml:lang="en">Date Posted:</value>
+    </property>
+    <property key="DescriptionCaption">
+        <value xml:lang="en">Description:</value>
+    </property>
+    <property key="DescCaption">
+        <value xml:lang="en">Desc:</value>
+    </property>
+    <property key="DiscontinuedDateCaption">
+        <value xml:lang="en">Discontinued Date:</value>
+    </property>
+    <property key="DownloadStatusCaption">
+        <value xml:lang="en">Download Status:</value>
+    </property>
+    <property key="EmailAddressCaption">
+        <value xml:lang="en">Email Address:</value>
+    </property>
+    <property key="EmailCaption">
+        <value xml:lang="en">Email:</value>
+    </property>
+    <property key="ExpiredCaption">
+        <value xml:lang="en">Expired:</value>
+    </property>
+    <property key="ExportStatusCaption">
+        <value xml:lang="en">Export Status:</value>
+    </property>
+    <property key="HomePhoneCaption">
+        <value xml:lang="en">Home Phone:</value>
+    </property>
+    <property key="MetaDescBFDefaultCaption">
+        <value xml:lang="en">&lt;META DESC&gt; BF Default:</value>
+    </property>
+    <property key="MetaDescOverrideCaption">
+        <value xml:lang="en">&lt;META DESC&gt; Override:</value>
+    </property>
+    <property key="MetaKeyBFDefaultCaption">
+        <value xml:lang="en">&lt;META KEY&gt; BF Default:</value>
+    </property>
+    <property key="MetaKeyOverrideCaption">
+        <value xml:lang="en">&lt;META KEY&gt; Override:</value>
+    </property>
+    <property key="MobilePhoneCaption">
+        <value xml:lang="en">Mobile Phone:</value>
+    </property>
+    <property key="OptInCaption">
+        <value xml:lang="en">Opt-In:</value>
+    </property>
+    <property key="OrderStatusCaption">
+        <value xml:lang="en">Order Status:</value>
+    </property>
+    <property key="OrderTotalCaption">
+        <value xml:lang="en">Order Total:</value>
+    </property>
+    <property key="PaymentMethodCaption">
+        <value xml:lang="en">Payment Method:</value>
+    </property>
+    <property key="AuthorizedCaption">
+        <value xml:lang="en">Authorized:</value>
+    </property>
+    <property key="AuthorizedRefCaption">
+        <value xml:lang="en">Authorized Ref:</value>
+    </property>
+    <property key="CaptureCaption">
+        <value xml:lang="en">Capture:</value>
+    </property>
+    <property key="CaptureRefCaption">
+        <value xml:lang="en">Capture Ref:</value>
+    </property>
+    <property key="ProductNameCaption">
+        <value xml:lang="en">Product Name:</value>
+    </property>
+    <property key="ProductNoCaption">
+        <value xml:lang="en">Product#:</value>
+    </property>
+    <property key="PromoCodeCaption">
+        <value xml:lang="en">Promo Code:</value>
+    </property>
+    <property key="PromoDescriptionCaption">
+        <value xml:lang="en">Promotion Description:</value>
+    </property>
+     <property key="PromoNameCaption">
+        <value xml:lang="en">Promotion Name:</value>
+    </property>
+     <property key="PromotionIdCaption">
+        <value xml:lang="en">Promotion ID:</value>
+    </property>
+     <property key="PromotionCodeIdCaption">
+        <value xml:lang="en">Promotion Code:</value>
+    </property>
+     <property key="PromotionCodeLimitPerCodeCaption">
+        <value xml:lang="en">Limit Per Code:</value>
+    </property>
+     <property key="PromotionCodeLimitPerCustomerCaption">
+        <value xml:lang="en">Limit Per Customer:</value>
+    </property>
+     <property key="PromotionCodeUserEnterCaption">
+        <value xml:lang="en">User Entered:</value>
+    </property>
+     <property key="PromotionCodeActiveFromCaption">
+        <value xml:lang="en">Active From:</value>
+    </property>
+     <property key="PromotionCodeActiveThruCaption">
+        <value xml:lang="en">Active Thru:</value>
+    </property>
+     <property key="PromotionNameCaption">
+        <value xml:lang="en">Promotion Name:</value>
+    </property>
+     <property key="PromotionDescCaption">
+        <value xml:lang="en">Promotion Desc:</value>
+    </property>
+     <property key="PromotionRequireCodeCaption">
+        <value xml:lang="en">Required Code:</value>
+    </property>
+     <property key="PromotionLimitPerOrderCaption">
+        <value xml:lang="en">Limit Per Order:</value>
+    </property>
+     <property key="PromotionLimitPerCustomerCaption">
+        <value xml:lang="en">Limit Per Customer:</value>
+    </property>
+     <property key="PromotionLimitPerPromotionCaption">
+        <value xml:lang="en">Limit Per Promotion:</value>
+    </property>
+     <property key="PromotionUserEnterCaption">
+        <value xml:lang="en">User Entered:</value>
+    </property>
+     <property key="PromotionShowToCustomerCaption">
+        <value xml:lang="en">Show to Customer:</value>
+    </property>
+     <property key="PromotionActiveFromCaption">
+        <value xml:lang="en">Active From:</value>
+    </property>
+     <property key="PromotionActiveThruCaption">
+        <value xml:lang="en">Active Thru:</value>
+    </property>
+     <property key="PromotionCondCaption">
+        <value xml:lang="en">Condition:</value>
+    </property>
+     <property key="PromotionOperCaption">
+        <value xml:lang="en">Operator:</value>
+    </property>
+     <property key="PromotionCondValueCaption">
+        <value xml:lang="en">Value:</value>
+    </property>
+     <property key="PromotionCondCategoryCaption">
+        <value xml:lang="en">Categories:</value>
+    </property>
+     <property key="PromotionCondProductCaption">
+        <value xml:lang="en">Products:</value>
+    </property>
+     <property key="PromotionActionCaption">
+        <value xml:lang="en">Action:</value>
+    </property>
+     <property key="PromotionQuantityCaption">
+        <value xml:lang="en">Qty:</value>
+    </property>
+     <property key="PromotionQuantityMinCaption">
+        <value xml:lang="en">Min#:</value>
+    </property>
+     <property key="PromotionPriceCaption">
+        <value xml:lang="en">Price:</value>
+    </property>
+     <property key="PromotionDiscCaption">
+        <value xml:lang="en">Disc n:</value>
+    </property>
+     <property key="PromotionDiscPercentCaption">
+        <value xml:lang="en">Disc%:</value>
+    </property>
+     <property key="PromotionShipDiscPercentCaption">
+        <value xml:lang="en">Ship Disc%:</value>
+    </property>
+     <property key="PromotionTaxDiscPercentCaption">
+        <value xml:lang="en">Tax Disc%:</value>
+    </property>
+     <property key="PromotionItemIdCaption">
+        <value xml:lang="en">Item Id:</value>
+    </property>
+     <property key="PromotionActionCategoryCaption">
+        <value xml:lang="en">Categories:</value>
+    </property>
+     <property key="PromotionActionProductCaption">
+        <value xml:lang="en">Products:</value>
+    </property>
+    <property key="ReviewerCaption">
+        <value xml:lang="en">Reviewer:</value>
+    </property>
+    <property key="ReviewIdCaption">
+        <value xml:lang="en">Review#:</value>
+    </property>
+    <property key="ReviewNickNameCaption">
+        <value xml:lang="en">Reviewer:</value>
+    </property>
+    <property key="ReviewTextCaption">
+        <value xml:lang="en">Review Text:</value>
+    </property>
+    <property key="ReviewTitleCaption">
+        <value xml:lang="en">Review Title:</value>
+    </property>
+    <property key="ShipHandleCaption">
+        <value xml:lang="en">Shipping and Handling:</value>
+    </property>
+    <property key="ShipMethodCaption">
+        <value xml:lang="en">Ship Method:</value>
+    </property>
+    <property key="ShippingAddressCaption">
+        <value xml:lang="en">Shipping Address:</value>
+    </property>
+    <property key="ContentCaption">
+        <value xml:lang="en">Content:</value>
+    </property>
+    <property key="SpotNameCaption">
+        <value xml:lang="en">Spot Name:</value>
+    </property>
+    <property key="StarsCaption">
+        <value xml:lang="en">Stars:</value>
+    </property>
+    <property key="StatusCaption">
+        <value xml:lang="en">Status:</value>
+    </property>
+    <property key="SubtotalCaption">
+        <value xml:lang="en">Items Sub Total:</value>
+    </property>
+    <property key="SalesTaxCaption">
+        <value xml:lang="en">Sales Tax:</value>
+    </property>
+    <property key="TaxTotalCaption">
+        <value xml:lang="en">Sales Tax (6.125%):</value>
+    </property>
+    <property key="TextCaption">
+        <value xml:lang="en">Text:</value>
+    </property>
+    <property key="TitleBFDefaultCaption">
+        <value xml:lang="en">&lt;TITLE&gt; BF Default:</value>
+    </property>
+    <property key="TitleOverrideCaption">
+        <value xml:lang="en">&lt;TITLE&gt; Override:</value>
+    </property>
+    <property key="UpdatedDateCaption">
+        <value xml:lang="en">Updated Date:</value>
+    </property>
+    <property key="SeqNumberCaption">
+        <value xml:lang="en">Seq#:</value>
+    </property>
+    <property key="AddressCaption">
+        <value xml:lang="en">Address:</value>
+    </property>
+    <property key="NoItemsCaption">
+        <value xml:lang="en">#Items:</value>
+    </property>
+    <property key="NoOrdersCaption">
+        <value xml:lang="en">#Orders:</value>
+    </property>
+    <property key="EbayXLSFileCaption">
+        <value xml:lang="en">EBay/Amazon (XLS):</value>
+    </property>
+    <property key="VendorCaption">
+        <value xml:lang="en">Vendor</value>
+    </property>
+    <property key="ProductionHostCaption">
+        <value xml:lang="en">Production Host</value>
+    </property>
+    <property key="TestingHostCaption">
+        <value xml:lang="en">Testing Host</value>
+    </property>
+    <property key="SagePayModeCaption">
+        <value xml:lang="en">SagePay Mode</value>
+    </property>
+    <property key="ProtocolVersionCaption">
+        <value xml:lang="en">Protocol Version</value>
+    </property>
+    <property key="AuthenticationTransTypeCaption">
+        <value xml:lang="en">Authentication Trans Type</value>
+    </property>
+    <property key="AuthenticationUrlCaption">
+        <value xml:lang="en">Authentication Url</value>
+    </property>
+    <property key="AuthoriseTransTypeCaption">
+        <value xml:lang="en">Authorise Trans Type</value>
+    </property>
+    <property key="AuthoriseUrlCaption">
+        <value xml:lang="en">Authorise Url</value>
+    </property>
+    <property key="ReleaseTransTypeCaption">
+        <value xml:lang="en">Release Trans Type</value>
+    </property>
+    <property key="ReleaseTransUrlCaption">
+        <value xml:lang="en">Release Trans Url</value>
+    </property>
+    <property key="VoidTransTypeCaption">
+        <value xml:lang="en">Void Trans Type</value>
+    </property>
+    <property key="VoidTransUrlCaption">
+        <value xml:lang="en">Void Trans Url</value>
+    </property>
+    <property key="RefundTransTypeCaption">
+        <value xml:lang="en">Refund Trans Type</value>
+    </property>
+    <property key="RefundTransUrlCaption">
+        <value xml:lang="en">Refund Trans Url</value>
+    </property>
+    <property key="RegistrationTransTypeCaption">
+        <value xml:lang="en">Registration Trans Type</value>
+    </property>
+    <property key="RegistrationTransUrlCaption">
+        <value xml:lang="en">Registration Trans Url</value>
+    </property>
+    <property key="StoreTokenCaption">
+        <value xml:lang="en">Store Token</value>
+    </property>
+    <property key="PaymentCaption">
+        <value xml:lang="en">PAYMENT</value>
+    </property>
+    <property key="DefferedCaption">
+        <value xml:lang="en">DEFFERED</value>
+    </property>
+    <property key="TestCaption">
+        <value xml:lang="en">TEST</value>
+    </property>
+    <property key="ProductionCaption">
+        <value xml:lang="en">PRODUCTION</value>
+    </property>
+    <property key="BusinessEmailCaption">
+        <value xml:lang="en">Business Email</value>
+    </property>
+    <property key="ApiUserNameCaption">
+        <value xml:lang="en">Api User Name</value>
+    </property>
+    <property key="ApiPasswordCaption">
+        <value xml:lang="en">Api Password</value>
+    </property>
+    <property key="ApiSignatureCaption">
+        <value xml:lang="en">Api Signature</value>
+    </property>
+    <property key="ApiEnvironmentCaption">
+        <value xml:lang="en">Api Environment</value>
+    </property>
+    <property key="NotifyUrlCaption">
+        <value xml:lang="en">Notify Url</value>
+    </property>
+    <property key="ReturnUrlCaption">
+        <value xml:lang="en">Return Url</value>
+    </property>
+    <property key="CancelReturnUrlCaption">
+        <value xml:lang="en">Cancel Return Url</value>
+    </property>
+    <property key="ImageUrlCaption">
+        <value xml:lang="en">Image Url</value>
+    </property>
+    <property key="ConfirmTemplateCaption">
+        <value xml:lang="en">Confirm Template</value>
+    </property>
+    <property key="RedirectUrlCaption">
+        <value xml:lang="en">Redirect Url</value>
+    </property>
+    <property key="ConfirmUrlCaption">
+        <value xml:lang="en">Confirm Url</value>
+    </property>
+    <property key="ShippingCallbackUrlCaption">
+        <value xml:lang="en">Shipping Callback Url</value>
+    </property>
+    <property key="RequireConfirmedShippingCaption">
+        <value xml:lang="en">Require Confirmed Shipping</value>
+    </property>
+    <property key="ServiceTypeCaption">
+        <value xml:lang="en">Service Type:</value>
+    </property>
+    <property key="PaymentMethodTypeCaption">
+        <value xml:lang="en">Payment Method Type:</value>
+    </property>
+    <property key="ServiceNameCaption">
+        <value xml:lang="en">Service Name:</value>
+    </property>
+    <property key="CustomMethodCaption">
+        <value xml:lang="en">Custom Method:</value>
+    </property>
+    <property key="PaymentGatwayConfigIdCaption">
+        <value xml:lang="en">Payment Gateway Config ID:</value>
+    </property>
+    <property key="PaymentPropertiesCaption">
+        <value xml:lang="en">Payment Properties:</value>
+    </property>
+    <property key="ApplyToAllCaption">
+        <value xml:lang="en">Apply to All Products:</value>
+    </property>
+    <!-- *** Caption Ends*************************************** -->
+
+    <!-- *** Label Starts *************************************** -->
+    <property key="IdLabel">
+        <value xml:lang="en">ID</value>
+    </property>    
+    <property key="ClrLblCacheLabel">
+        <value xml:lang="en">Clear Label Cache</value>
+    </property>
+    <property key="AdjDollarLabel">
+        <value xml:lang="en">Adj ${currencySymbol}</value>
+    </property>
+    <property key="AmountLabel">
+        <value xml:lang="en">Amount</value>
+    </property>
+    <property key="OrderAmountLabel">
+        <value xml:lang="en">Order Amount</value>
+    </property>
+    <property key="CustomerNoLabel">
+        <value xml:lang="en">Cust#</value>
+    </property>
+    <property key="CustomerTypeLabel">
+        <value xml:lang="en">Customer Type</value>
+    </property>
+    <property key="AddressLabel">
+        <value xml:lang="en">Address</value>
+    </property>
+    <property key="CustomerRoleLabel">
+        <value xml:lang="en">Customer Role</value>
+    </property>
+    <property key="CustomerStatusLabel">
+        <value xml:lang="en">Customer Status</value>
+    </property>
+    <property key="ConfigIDLabel">
+        <value xml:lang="en">Config Id</value>
+    </property>
+    <property key="CharactersLeftLabel">
+        <value xml:lang="en">characters left</value>
+        <description>CharactersLeftLabel</description>
+    </property>
+    <property key="CharactersLimitLabel">
+        <value xml:lang="en">character limit</value>
+        <description>Character limit</description>
+    </property>
+    <property key="DescriptionLabel">
+        <value xml:lang="en">Description</value>
+    </property>
+    <property key="DescLabel">
+        <value xml:lang="en">Desc</value>
+    </property>
+    <property key="ItemDollarLabel">
+        <value xml:lang="en">Item ${currencySymbol}</value>
+    </property>
+    <property key="OrderDollarLabel">
+        <value xml:lang="en">Order ${currencySymbol}</value>
+    </property>
+    <property key="OrderDateLabel">
+        <value xml:lang="en">Order Date</value>
+    </property>
+    <property key="OrderNoLabel">
+        <value xml:lang="en">Order#</value>
+    </property>
+    <property key="plpCategoryDescriptionLabel">
+        <value xml:lang="en">Content Detail for category</value>
+    </property>
+    <property key="ChangeStatusAllOrderItemLabel">
+        <value xml:lang="en">Change ORDER Status, apply to all ITEMS</value>
+    </property>
+    <property key="ChangeStatusSelectedOrderItemLabel">
+        <value xml:lang="en">Apply to selected ITEMS</value>
+    </property>
+    <property key="ShipDollarLabel">
+        <value xml:lang="en">Ship ${currencySymbol}</value>
+    </property>
+    <property key="SiteMapLabel">
+        <value xml:lang="en">Sitemap XML Generator</value>
+    </property>
+    <property key="SeoUrlMapLabel">
+        <value xml:lang="en">SEO Friendly URL</value>
+    </property>
+    <property key="SolrReIndxLabel">
+        <value xml:lang="en">SOLR Indexing</value>
+    </property>
+    <property key="ShipToDeliveryLabel">
+        <value xml:lang="en">Ship To Customer</value>
+    </property>
+    <property key="StorePickupDeliveryLabel">
+        <value xml:lang="en">Pickup In Store</value>
+    </property>
+    <property key="CompareLabelFileLabel">
+        <value xml:lang="en">Label Compare Tool</value>
+    </property>
+    <property key="CompareLabelResultLabel">
+        <value xml:lang="en">Compare Results</value>
+    </property>
+    <property key="CompareParametersLabel">
+        <value xml:lang="en">System Parameters Compare Tool</value>
+    </property>
+    <property key="ManageEcommerceStyleLabel">
+        <value xml:lang="en">eCommerce: Manage CSS File</value>
+    </property>
+    <property key="ManageAdminStyleLabel">
+        <value xml:lang="en">Admin: Manage CSS File</value>
+    </property>
+     <property key="DivTagLabel">
+        <value xml:lang="en">DIV Tag</value>
+    </property> 
+    <property key="EditEcommerceStyleLabel">
+        <value xml:lang="en">eCommerce: Edit CSS File</value>
+    </property>
+    <property key="EditAdminStyleLabel">
+        <value xml:lang="en">Admin: Edit CSS File</value>
+    </property>
+    <property key="TaxDollarLabel">
+        <value xml:lang="en">Tax ${currencySymbol}</value>
+    </property>
+    <property key="ToLabel">
+        <value xml:lang="en">To</value>
+    </property>
+    <property key="UserLoginLabel">
+        <value xml:lang="en">User Login</value>
+    </property>
+    <property key="MegaMenuLabel">
+        <value xml:lang="en">Mega Menu</value>
+    </property>
+    <property key="PageTopLabel">
+        <value xml:lang="en">Page Top</value>
+    </property>
+    <property key="PageEndLabel">
+        <value xml:lang="en">Page End</value>
+    </property>
+    <property key="FacetTopLabel">
+        <value xml:lang="en">Facet Top</value>
+    </property>
+    <property key="FacetEndLabel">
+        <value xml:lang="en">Facet End</value>
+    </property>
+    <property key="LoadBigFishXlsLabel">
+        <value xml:lang="en">Product Loader from BigFish XLS File</value>
+    </property>
+    <property key="CreateBigFishFromDBLabel">
+        <value xml:lang="en">Create BigFish XLS File from Database</value>
+    </property>
+    <property key="CreateBigFishFromEbayLabel">
+        <value xml:lang="en">Convert eBay/Amazon file to BigFish XLS</value>
+    </property>
+    <property key="DownloadBigFishSampleXlsLabel">
+        <value xml:lang="en">Create BigFish Empty Template XLS File</value>
+    </property>
+    <property key="ImageLocationPreferencesLabel">
+        <value xml:lang="en">Image Location Preferences</value>
+    </property>
+    
+    <!-- Leave so if we want to specific verbage we do not have to change the key -->
+    <property key="ActionsLabel">
+        <value xml:lang="en">Actions</value>
+    </property>
+    <property key="ActiveLabel">
+        <value xml:lang="en">Active</value>
+    </property>
+    <property key="InActiveLabel">
+        <value xml:lang="en">InActive</value>
+    </property>
+    <property key="ActiveFromLabel">
+        <value xml:lang="en">Active From</value>
+    </property>
+    <property key="ActiveThruLabel">
+        <value xml:lang="en">Active Thru</value>
+    </property>
+    <property key="Address1Label">
+        <value xml:lang="en">Address1</value>
+    </property>
+    <property key="Address2Label">
+        <value xml:lang="en">Address2</value>
+    </property>
+    <property key="Address3Label">
+        <value xml:lang="en">Address3</value>
+    </property>
+    <property key="AddProductsUsingDefaultQuantitiesLabel">
+        <value xml:lang="en">Add Products in this Category to the Cart using Default Quantities</value>
+    </property>
+    <property key="AdjustAmountLabel">
+        <value xml:lang="en">Adj Amount</value>
+    </property>
+    <property key="AdminEditLabel">
+        <value xml:lang="en">Edit</value>
+    </property>
+    <property key="AdminMoreLabel">
+        <value xml:lang="en">more</value>
+    </property>
+    <property key="AdminMoveLabel">
+        <value xml:lang="en">Move</value>
+    </property>
+    <property key="AllLabel">
+        <value xml:lang="en">All</value>
+    </property>
+    <property key="AllExceptOrderConfirmLabel">
+        <value xml:lang="en">ALL_EXCEPT_ORDER_CONFIRM</value>
+    </property>
+    <property key="OrderConfirmLabel">
+        <value xml:lang="en">ORDER_CONFIRM</value>
+    </property>
+    <property key="ApprovedLabel">
+        <value xml:lang="en">Approved</value>
+    </property>
+    <property key="ApplyToAllLabel">
+        <value xml:lang="en">Apply to All</value>
+    </property>
+    <property key="ByLabel">
+        <value xml:lang="en">By</value>
+    </property>
+    <property key="CancelBackOrderDateLabel">
+        <value xml:lang="en">Cancel Back Order Date</value>
+    </property>
+    <property key="CancelledLabel">
+        <value xml:lang="en">Cancelled</value>
+    </property>
+    <property key="CaptionIDLabel">
+        <value xml:lang="en">Caption ID</value>
+    </property>
+    <property key="CaptionLabel">
+        <value xml:lang="en">Caption</value>
+    </property>
+    <property key="CategoryLabel">
+        <value xml:lang="en">Category</value>
+    </property>
+    <property key="ChangeLabel">
+        <value xml:lang="en">Change</value>
+    </property>
+    <property key="ChooseOneLabel">
+        <value xml:lang="en">Choose One</value>
+    </property>
+    <property key="CityOrTownLabel">
+        <value xml:lang="en">City Or Town</value>
+    </property>
+    <property key="CommentLabel">
+        <value xml:lang="en">Comment</value>
+    </property>
+    <property key="CompletedLabel">
+        <value xml:lang="en">Completed</value>
+    </property>
+    <property key="CompareParameterResultLabel">
+        <value xml:lang="en">Compare Results</value>
+    </property>
+    <property key="ContactPhoneLabel">
+        <value xml:lang="en">Contact Phone</value>
+    </property>
+    <property key="ContactReasonLabel">
+        <value xml:lang="en">Reason For Contact</value>
+    </property>
+    <property key="ContentIDLabel">
+        <value xml:lang="en">Content ID</value>
+    </property>
+    <property key="CountryLabel">
+        <value xml:lang="en">Country</value>
+    </property>
+    <property key="CreatedLabel">
+        <value xml:lang="en">Created</value>
+    </property>
+    <property key="CurrentValueLabel">
+        <value xml:lang="en">Current Value</value>
+    </property>
+    <property key="CurrentStatusLabel">
+        <value xml:lang="en">Current Status</value>
+    </property>
+    <property key="CustomerLabel">
+        <value xml:lang="en">Customer</value>
+    </property>
+    <property key="CustomerNameLabel">
+        <value xml:lang="en">Customer Name</value>
+    </property>
+    <property key="CustomMethodLabel">
+        <value xml:lang="en">Custom Method</value>
+    </property>
+    <property key="FirstNameLabel">
+        <value xml:lang="en">First Name</value>
+    </property>
+    <property key="LastNameLabel">
+        <value xml:lang="en">Last Name</value>
+    </property>
+    <property key="DateContactLabel">
+        <value xml:lang="en">Contact Date</value>
+    </property>
+    <property key="DateRequestLabel">
+        <value xml:lang="en">Request Date</value>
+    </property>
+    <property key="DateDownloadedLabel">
+        <value xml:lang="en">Date Downloaded</value>
+    </property>
+    <property key="DateLabel">
+        <value xml:lang="en">Date</value>
+    </property>
+    <property key="DateOrderedLabel">
+        <value xml:lang="en">Date Ordered</value>
+    </property>
+    <property key="DatePostedLabel">
+        <value xml:lang="en">Date Posted</value>
+    </property>
+    <property key="DiscoDateLabel">
+        <value xml:lang="en">Disco Date</value>
+    </property>
+    <property key="DocumentLabel">
+        <value xml:lang="en">Document</value>
+    </property>
+    <property key="DownloadNewLabel">
+        <value xml:lang="en">New</value>
+    </property>
+    <property key="DownloadStatusLabel">
+        <value xml:lang="en">Download Status</value>
+    </property>
+    <property key="DeliveryLabel">
+        <value xml:lang="en">Delivery</value>
+    </property>
+    <property key="EditLabel">
+        <value xml:lang="en">Edit</value>
+    </property>
+    <property key="EmailLabel">
+        <value xml:lang="en">Email Address</value>
+    </property>
+    <property key="EmailTypeLabel">
+        <value xml:lang="en">Email Type</value>
+    </property>
+    <property key="EmailSubscriberLabel">
+        <value xml:lang="en">Email Subscriber</value>
+    </property>
+    <property key="ExpireDateLabel">
+        <value xml:lang="en">Expire Date</value>
+    </property>
+    <property key="ExpiredLabel">
+        <value xml:lang="en">Expired</value>
+    </property>
+    <property key="ExportedLabel">
+        <value xml:lang="en">Exported</value>
+    </property>
+    <property key="ExportStatusLabel">
+        <value xml:lang="en">Export Status</value>
+    </property>
+    <property key="FacetGroupLabel">
+        <value xml:lang="en">Facet Group</value>
+    </property>
+    <property key="FacetValueLabel">
+        <value xml:lang="en">Facet Value</value>
+    </property>
+    <property key="FacetIDLabel">
+        <value xml:lang="en">Facet ID</value>
+    </property>
+    <property key="FacetsLabel">
+        <value xml:lang="en">Facets</value>
+    </property>
+    <property key="FileNameLabel">
+        <value xml:lang="en">File Name</value>
+    </property>
+    <property key="FiveToTenDaysLabel">
+        <value xml:lang="en">5-10</value>
+    </property>
+    <property key="FlashLabel">
+        <value xml:lang="en">Flash</value>
+    </property>
+    <property key="FromLabel">
+        <value xml:lang="en">From</value>
+    </property>
+    <property key="FromDateLabel">
+        <value xml:lang="en">From Date</value>
+    </property>
+    <property key="FromQtyLabel">
+        <value xml:lang="en">From Qty</value>
+    </property>
+    <property key="GotoPageLabel">
+        <value xml:lang="Go to Page"></value>
+    </property>
+    <property key="HeightLabel">
+        <value xml:lang="en">Height</value>
+    </property>
+    <property key="HeldLabel">
+        <value xml:lang="en">Held</value>
+    </property>
+    <property key="HideLabel">
+        <value xml:lang="en">Hide</value>
+    </property>
+    <property key="HideShowLabel">
+        <value xml:lang="en">Hide / Show</value>
+    </property>
+    <property key="IncludeDiscontinuedLabel">
+        <value xml:lang="en">Include Discontinued</value>
+    </property>
+    <property key="IncludeNotYetIntroLabel">
+        <value xml:lang="en">Include Not Yet Intro</value>
+    </property>
+    <property key="IntroDateLabel">
+        <value xml:lang="en">Intro Date</value>
+    </property>
+    <property key="IsDownloadedLabel">
+        <value xml:lang="en">Is Downloaded</value>
+    </property>
+    <property key="NoItemsLabel">
+        <value xml:lang="en">#Items</value>
+    </property>
+    <property key="ImageLabel">
+        <value xml:lang="en">Image</value>
+    </property>
+    <property key="ItemNoLabel">
+        <value xml:lang="en">Item#</value>
+    </property>
+    <property key="ItemStatusLabel">
+        <value xml:lang="en">Item Status</value>
+    </property>
+    <property key="NewStatusLabel">
+        <value xml:lang="en">New Status</value>
+    </property>
+    <property key="ShipDateLabel">
+        <value xml:lang="en">Ship Date</value>
+    </property>
+    <property key="CarrierLabel">
+        <value xml:lang="en">Carrier</value>
+    </property>
+    <property key="TrackingLabel">
+        <value xml:lang="en">Tracking#</value>
+    </property>
+    <property key="ItemsSubTotalLabel">
+        <value xml:lang="en">Items SubTotal</value>
+    </property>
+    <property key="KeyLabel">
+        <value xml:lang="en">Key</value>
+    </property>
+    <property key="LabelLabel">
+        <value xml:lang="en">Label</value>
+    </property>
+    <property key="ListPriceLabel">
+        <value xml:lang="en">List Price</value>
+    </property>
+    <property key="LongDescLabel">
+        <value xml:lang="en">Long Desc</value>
+    </property>
+    <property key="LatitudeLabel">
+        <value xml:lang="en">Lat</value>
+    </property>
+    <property key="LongitudeLabel">
+        <value xml:lang="en">Long</value>
+    </property>
+    <property key="MaxDisplayLabel">
+        <value xml:lang="en">Max Display</value>
+    </property>
+    <property key="MinDisplayLabel">
+        <value xml:lang="en">Min Display</value>
+    </property>
+    <property key="MoreLinkLabel">
+        <value xml:lang="en">more...</value>
+    </property>
+    <property key="NameLabel">
+        <value xml:lang="en">Name</value>
+    </property>
+    <property key="NavBarLabel">
+        <value xml:lang="en">Nav Bar</value>
+    </property>
+    <property key="NewLabel">
+        <value xml:lang="en">New</value>
+    </property>
+    <property key="NextLabel">
+        <value xml:lang="en">Next</value>
+    </property>
+    <property key="NextPageLabel">
+        <value xml:lang="en">Next Page &gt;&gt;</value>
+    </property>
+    <property key="NoProductsInThisCategoryLabel">
+        <value xml:lang="en">There are no products in this category</value>
+    </property>
+    <property key="NoteLabel">
+        <value xml:lang="en">Note</value>
+    </property>
+    <property key="NotesLabel">
+        <value xml:lang="en">Notes</value>
+    </property>
+    <property key="NoteNoLabel">
+        <value xml:lang="en">Note#</value>
+    </property>
+    <property key="OfLabel">
+        <value xml:lang="en">of</value>
+    </property>
+    <property key="OneToFiveDaysLabel">
+        <value xml:lang="en">1-5</value>
+    </property>
+    <property key="DaysLabel">
+        <value xml:lang="en">Days</value>
+    </property>
+    <property key="NoOrdersLabel">
+        <value xml:lang="en">#Orders</value>
+    </property>
+    <property key="OrderStatusLabel">
+        <value xml:lang="en">Order Status</value>
+    </property>
+    <property key="OrdLabel">
+        <value xml:lang="en">#Ord</value>
+    </property>
+    <property key="OurPriceLabel">
+        <value xml:lang="en">Our Price</value>
+    </property>
+    <property key="PageLabel">
+        <value xml:lang="en">Page</value>
+    </property>
+    <property key="ParameterNameLabel">
+        <value xml:lang="en">Parameter Name</value>
+    </property>
+    <property key="pdpAdditionalLabel">
+        <value xml:lang="en">pdp additional content</value>
+    </property>
+    <property key="PendingLabel">
+        <value xml:lang="en">Pending</value>
+    </property>
+    <property key="PickupInStoreLabel">
+        <value xml:lang="en">PICKUP IN STORE</value>
+    </property>
+    <property key="plpSpotLabel">
+        <value xml:lang="en">plp spot</value>
+    </property>
+    <property key="DaysSincePostingLabel">
+        <value xml:lang="en">Days Since Posting</value>
+    </property>
+    <property key="PreviousLabel">
+        <value xml:lang="en">Previous</value>
+    </property>
+    <property key="PreviousPageLabel">
+        <value xml:lang="en">&lt;&lt; Previous Page</value>
+    </property>
+    <property key="ProcessingLabel">
+        <value xml:lang="en">Processing</value>
+    </property>
+    <property key="ProductNameLabel">
+        <value xml:lang="en">Product Name</value>
+    </property>
+    <property key="ProductIdLabel">
+        <value xml:lang="en">Product Id</value>
+    </property>
+    <property key="ProductLabel">
+        <value xml:lang="en">Product</value>
+    </property>
+    <property key="ProductNameLabel">
+        <value xml:lang="en">Product Name</value>
+    </property>
+    <property key="ProductNoLabel">
+        <value xml:lang="en">Product#</value>
+    </property>
+    <property key="PromotionCodeLabel">
+        <value xml:lang="en">Promo Code</value>
+    </property>
+    <property key="PromoStatusLabel">
+        <value xml:lang="en">Status</value>
+    </property>
+    <property key="PaymentMethodTypeLabel">
+        <value xml:lang="en">Payment Method Type</value>
+    </property>
+    <property key="PaymentGatwayConfigIdLabel">
+        <value xml:lang="en">Payment Gateway Config ID</value>
+    </property>
+    <property key="PaymentPropertiesLabel">
+        <value xml:lang="en">Payment Properties</value>
+    </property>
+    <property key="UserEnteredLabel">
+        <value xml:lang="en">User Entered</value>
+    </property>
+    <property key="LimitPerCodeLabel">
+        <value xml:lang="en">Limit Per Code</value>
+    </property>
+    <property key="LimitPerCustomerLabel">
+        <value xml:lang="en">Limit Per Customer</value>
+    </property>
+    <property key="RequireCodeAutoLabel">
+        <value xml:lang="en">Automatically apply</value>
+    </property>
+    <property key="RequireCodeManualLabel">
+        <value xml:lang="en">Customer has to manually enter</value>
+    </property>
+    <property key="PromotionCodeUserEnterYesLabel">
+        <value xml:lang="en">Yes</value>
+    </property>
+    <property key="PromotionCodeUserEnterNoLabel">
+        <value xml:lang="en">No</value>
+    </property>
+    <property key="QuantityLabel">
+        <value xml:lang="en">Quantity</value>
+    </property>
+    <property key="QtyLabel">
+        <value xml:lang="en">Qty</value>
+    </property>
+    <property key="RELOADInfoLabel">
+        <value xml:lang="en">RE-LOAD: Remove all products and re-load from the input file</value>
+    </property>
+    <property key="RejectedLabel">
+        <value xml:lang="en">Deleted</value>
+    </property>
+    <property key="RequestDateLabel">
+        <value xml:lang="en">Request Date</value>
+    </property>
+    <property key="ReviewerLabel">
+        <value xml:lang="en">Reviewer</value>
+    </property>
+    <property key="ReviewIdLabel">
+        <value xml:lang="en">Review#</value>
+    </property>
+    <property key="ReviewTextLabel">
+        <value xml:lang="en">Review Text</value>
+    </property>
+    <property key="SalesLabel">
+        <value xml:lang="en">Sales</value>
+    </property>
+    <property key="SalePriceLabel">
+        <value xml:lang="en">Sale Price</value>
+    </property>
+    <property key="SearchInCategoryLabel">
+        <value xml:lang="en">Search in Category</value>
+    </property>
+    <property key="SearchInLabel">
+        <value xml:lang="en">Search In</value>
+    </property>
+    <property key="SeqNumberLabel">
+        <value xml:lang="en">Seq#</value>
+    </property>
+    <property key="SequenceNumberLabel">
+        <value xml:lang="en">Sequence#</value>
+    </property>
+    <property key="SequenceLabel">
+        <value xml:lang="en">Sequence</value>
+    </property>
+    <property key="ShowAllLabel">
+        <value xml:lang="en">Show All</value>
+    </property>
+    <property key="ShowAllLinkLabel">
+        <value xml:lang="en">&lt; Show All &gt;</value>
+    </property>
+    <property key="ShowLabel">
+        <value xml:lang="en">Show</value>
+    </property>
+    <property key="ShowPagesLabel">
+        <value xml:lang="en">&lt; Show Pages &gt;</value>
+    </property>
+    <property key="ShowingRowsLabel">
+        <value xml:lang="en">Showing Rows</value>
+    </property>
+    <property key="ShortDescLabel">
+        <value xml:lang="en">Short Desc</value>
+    </property>
+    <property key="SimplePricingLabel">
+        <value xml:lang="en">Simple List / Sales Pricing</value>
+    </property>
+    <property key="SizeLabel">
+        <value xml:lang="en">Size</value>
+    </property>
+    <property key="SpotContentLabel">
+        <value xml:lang="en">Spot Content</value>
+    </property>
+    <property key="SpotNameLabel">
+        <value xml:lang="en">Spot Name</value>
+    </property>
+    <property key="StarsLabel">
+        <value xml:lang="en">Stars</value>
+    </property>
+    <property key="StateOrProvinceLabel">
+        <value xml:lang="en">State Or Province</value>
+    </property>
+    <property key="StatusLabel">
+        <value xml:lang="en">Status</value>
+    </property>
+    <property key="SubjectLabel">
+        <value xml:lang="en">Subject</value>
+    </property>
+    <property key="StoreLocationClosedLabel">
+        <value xml:lang="en">Closed</value>
+    </property>
+    <property key="StoreLocationOpenedLabel">
+        <value xml:lang="en">Open</value>
+    </property>
+    <property key="StoreLocationCodeLabel">
+        <value xml:lang="en">Store Code</value>
+    </property>
+    <property key="StoreLocationNameLabel">
+        <value xml:lang="en">Store Name</value>
+    </property>
+    <property key="StoreLocationStatusLabel">
+        <value xml:lang="en">Status</value>
+    </property>
+    <property key="StoreLocationCityLabel">
+        <value xml:lang="en">City</value>
+    </property>
+    <property key="StoreLocationStateLabel">
+        <value xml:lang="en">State</value>
+    </property>
+    <property key="StoreLocationZipLabel">
+        <value xml:lang="en">Zip</value>
+    </property>
+    <property key="StoreLocationGeoLabel">
+        <value xml:lang="en">GEO?</value>
+    </property>
+    <property key="SubItemLabel">
+        <value xml:lang="en">Sub Item</value>
+    </property>
+    <property key="SubTotalLabel">
+        <value xml:lang="en">Sub Total</value>
+    </property>
+    <property key="ItemTotalLabel">
+        <value xml:lang="en">Item Total</value>
+    </property>
+    <property key="SummaryLabel">
+        <value xml:lang="en">Summary</value>
+    </property>
+    <property key="ServiceTypeLabel">
+        <value xml:lang="en">Service Type</value>
+    </property>
+    <property key="ServiceNameLabel">
+        <value xml:lang="en">Service Name</value>
+    </property>
+    <property key="TenPlusDayLabel">
+        <value xml:lang="en">10+</value>
+    </property>
+    <property key="TextLabel">
+        <value xml:lang="en">Text</value>
+    </property>
+    <property key="ThruDateLabel">
+        <value xml:lang="en">Thru Date</value>
+    </property>
+    <property key="TimeLabel">
+        <value xml:lang="en">Time</value>
+    </property>
+    <property key="ToQtyLabel">
+        <value xml:lang="en">To Qty</value>
+    </property>
+    <property key="TopNavigationLabel">
+        <value xml:lang="en">Top Navigation</value>
+    </property>
+    <property key="TotalDueLabel">
+        <value xml:lang="en">Total Due</value>
+    </property>
+    <property key="TotalOtherOrderAdjustmentsLabel">
+        <value xml:lang="en">Total Other Order Adjustments</value>
+    </property>
+    <property key="TotalSalesTaxLabel">
+        <value xml:lang="en">Total Sales Tax</value>
+    </property>
+    <property key="TotalShippingAndHandlingLabel">
+        <value xml:lang="en">Total Shipping and Handling</value>
+    </property>
+    <property key="TypeLabel">
+        <value xml:lang="en">Type</value>
+    </property>
+    <property key="UPDATEInfoLabel">
+        <value xml:lang="en">UPDATE: Update and insert all changed and new products</value>
+    </property>
+    <property key="UnitListLabel">
+        <value xml:lang="en">Unit / List</value>
+    </property>
+    <property key="UnitPriceLabel">
+        <value xml:lang="en">Unit Price</value>
+    </property>
+    <property key="UsagesLabel">
+        <value xml:lang="en">Usages</value>
+    </property>
+    <property key="ValueLabel">
+        <value xml:lang="en">Value</value>
+    </property>
+    <property key="VariantLabel">
+        <value xml:lang="en">Variant</value>
+    </property>
+    <property key="VirtualLabel">
+        <value xml:lang="en">Virtual</value>
+    </property>
+    <property key="VirtualOnlyLabel">
+        <value xml:lang="en">Virtual Only</value>
+    </property>
+    <property key="VolumePricingLabel">
+        <value xml:lang="en">Volume (Qty Based) Sliding Scale Pricing</value>
+    </property>
+    <property key="WidthLabel">
+        <value xml:lang="en">Width</value>
+    </property>
+    <property key="ZipOrPostCodeLabel">
+        <value xml:lang="en">Zip Or Post Code</value>
+    </property>
+    <property key="RowNoLabel">
+        <value xml:lang="en">Row#</value>
+    </property>
+    <property key="YesLabel">
+        <value xml:lang="en">Yes</value>
+    </property>
+    <property key="NoLabel">
+        <value xml:lang="en">No</value>
+    </property>
+    <property key="CategoryIdLabel">
+        <value xml:lang="en">Category Id</value>
+    </property>
+    <property key="SalesPitchLabel">
+        <value xml:lang="en">Sales Pitch</value>
+    </property>
+    <property key="SpecialInstrLabel">
+        <value xml:lang="en">Special Instr</value>
+    </property>
+    <property key="DeliveryInfoLabel">
+        <value xml:lang="en">Delivery Info</value>
+    </property>
+    <property key="DirectionsLabel">
+        <value xml:lang="en">Directions</value>
+    </property>
+    <property key="TermsAndCondLabel">
+        <value xml:lang="en">Terms and Cond</value>
+    </property>
+    <property key="IngredientsLabel">
+        <value xml:lang="en">Ingredients</value>
+    </property>
+    <property key="WarningsLabel">
+        <value xml:lang="en">Warnings</value>
+    </property>
+    <property key="PLPLabelLabel">
+        <value xml:lang="en">PLP Label</value>
+    </property>
+    <property key="PDPLabelLabel">
+        <value xml:lang="en">PDP Label</value>
+    </property>
+    <property key="SalesPriceLabel">
+        <value xml:lang="en">Sales Price</value>
+    </property>
+    <property key="SelectFeaturesNo1Label">
+        <value xml:lang="en">Selectable Features #1</value>
+    </property>
+    <property key="SelectFeaturesNo2Label">
+        <value xml:lang="en">Selectable Features# 2</value>
+    </property>
+    <property key="SelectFeaturesNo3Label">
+        <value xml:lang="en">Selectable Features# 3</value>
+    </property>
+    <property key="DecriptiveFeaturesNo1Label">
+        <value xml:lang="en">Decriptive Features# 1</value>
+    </property>
+    <property key="DecriptiveFeaturesNo2Label">
+        <value xml:lang="en">Decriptive Features# 2</value>
+    </property>
+    <property key="DecriptiveFeaturesNo3Label">
+        <value xml:lang="en">Decriptive Features# 3</value>
+    </property>
+    <property key="PLPImageLabel">
+        <value xml:lang="en">PLP Image</value>
+    </property>
+    <property key="PDPThumbnailImageLabel">
+        <value xml:lang="en">PDP Thumbnail Image</value>
+    </property>
+    <property key="PDPRegularImageLabel">
+        <value xml:lang="en">PDP Regular Image</value>
+    </property>
+    <property key="PDPLargeImageLabel">
+        <value xml:lang="en">PDP Large Image</value>
+    </property>
+    <property key="PDPAlt1ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-1 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt1RegularImageLabel">
+        <value xml:lang="en">PDP Alt-1 Regular Image</value>
+    </property>
+    <property key="PDPAlt1LargeImageLabel">
+        <value xml:lang="en">PDP Alt-1 Large Image</value>
+    </property>
+    <property key="PDPAlt2ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-2 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt2RegularImageLabel">
+        <value xml:lang="en">PDP Alt-2 Regular Image</value>
+    </property>
+    <property key="PDPAlt2LargeImageLabel">
+        <value xml:lang="en">PDP Alt-2 Large Image</value>
+    </property>
+    <property key="PDPAlt3ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-3 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt3RegularImageLabel">
+        <value xml:lang="en">PDP Alt-3 Regular Image</value>
+    </property>
+    <property key="PDPAlt3LargeImageLabel">
+        <value xml:lang="en">PDP Alt-3 Large Image</value>
+    </property>
+    <property key="PDPAlt4ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-4 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt4RegularImageLabel">
+        <value xml:lang="en">PDP Alt-4 Regular Image</value>
+    </property>
+    <property key="PDPAlt4LargeImageLabel">
+        <value xml:lang="en">PDP Alt-4 Large Image</value>
+    </property>
+    <property key="PDPAlt5ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-5 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt5RegularImageLabel">
+        <value xml:lang="en">PDP Alt-5 Regular Image</value>
+    </property>
+    <property key="PDPAlt5LargeImageLabel">
+        <value xml:lang="en">PDP Alt-5 Large Image</value>
+    </property>
+    <property key="PDPAlt6ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-6 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt6RegularImageLabel">
+        <value xml:lang="en">PDP Alt-6 Regular Image</value>
+    </property>
+    <property key="PDPAlt6LargeImageLabel">
+        <value xml:lang="en">PDP Alt-6 Large Image</value>
+    </property>
+    <property key="PDPAlt7ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-7 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt7RegularImageLabel">
+        <value xml:lang="en">PDP Alt-7 Regular Image</value>
+    </property>
+    <property key="PDPAlt7LargeImageLabel">
+        <value xml:lang="en">PDP Alt-7 Large Image</value>
+    </property>
+    <property key="PDPAlt8ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-8 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt8RegularImageLabel">
+        <value xml:lang="en">PDP Alt-8 Regular Image</value>
+    </property>
+    <property key="PDPAlt8LargeImageLabel">
+        <value xml:lang="en">PDP Alt-8 Large Image</value>
+    </property>
+    <property key="PDPAlt9ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-9 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt9RegularImageLabel">
+        <value xml:lang="en">PDP Alt-9 Regular Image</value>
+    </property>
+    <property key="PDPAlt9LargeImageLabel">
+        <value xml:lang="en">PDP Alt-9 Large Image</value>
+    </property>
+    <property key="PDPAlt10ThumbnailImageLabel">
+        <value xml:lang="en">PDP Alt-10 Thumbnail Image</value>
+    </property>
+    <property key="PDPAlt10RegularImageLabel">
+        <value xml:lang="en">PDP Alt-10 Regular Image</value>
+    </property>
+    <property key="PDPAlt10LargeImageLabel">
+        <value xml:lang="en">PDP Alt-10 Large Image</value>
+    </property>
+    <property key="DepthLabel">
+        <value xml:lang="en">Depth</value>
+    </property>
+    <property key="ReturnableLabel">
+        <value xml:lang="en">Returnable</value>
+    </property>
+    <property key="TaxableLabel">
+        <value xml:lang="en">Taxable</value>
+    </property>
+    <property key="ChargeShippingLabel">
+        <value xml:lang="en">Charge Shipping</value>
+    </property>
+    <property key="ManufacturerLabel">
+        <value xml:lang="en">Manufacturer</value>
+    </property>
+    <property key="FeatureLabel">
+        <value xml:lang="en">Feature</value>
+    </property>
+    <property key="PLPDefaultSwatchLabel">
+        <value xml:lang="en">PLP Default Swatch</value>
+    </property>
+    <property key="PDPDefaultSwatchLabel">
+        <value xml:lang="en">PDP Default Swatch</value>
+    </property>
+    <property key="FacebookUrlLabel">
+        <value xml:lang="en">Facebook Url</value>
+    </property>
+    <property key="TweetUrlLabel">
+        <value xml:lang="en">Tweet Url</value>
+    </property>
+    <property key="PLPSwatchImageLabel">
+        <value xml:lang="en">PLP Swatch Image</value>
+    </property>
+    <property key="PDPSwatchImageLabel">
+        <value xml:lang="en">PDP Swatch Image</value>
+    </property>
+    <property key="SKUNoLabel">
+        <value xml:lang="en">SKU#</value>
+    </property>
+    <property key="GoogleIDLabel">
+        <value xml:lang="en">Google ID</value>
+    </property>
+    <property key="ISBNLabel">
+        <value xml:lang="en">ISBN</value>
+    </property>
+    <property key="ManufacturerIDLabel">
+        <value xml:lang="en">Manufacturer ID</value>
+    </property>
+    <property key="ProductVideoLabel">
+        <value xml:lang="en">Product Video</value>
+    </property>
+    <property key="Product360VideoLabel">
+        <value xml:lang="en">Product 360 Video</value>
+    </property>
+    <property key="ParentCategoryIdLabel">
+        <value xml:lang="en">Parent Category Id</value>
+    </property>
+    <property key="CategoryNameLabel">
+        <value xml:lang="en">Category Name</value>
+    </property>
+    <property key="AdditionalPLPTextLabel">
+        <value xml:lang="en">Additional PLP Text</value>
+    </property>
+    <property key="AdditionalPDPTextLabel">
+        <value xml:lang="en">Additional PDP Text</value>
+    </property>
+    <property key="FromMASTERProductIdLabel">
+        <value xml:lang="en">From MASTER Product Id</value>
+    </property>
+    <property key="ToMASTERProductIdLabel">
+        <value xml:lang="en">To MASTER Product Id</value>
+    </property>
+    <property key="AssociationTypeLabel">
+        <value xml:lang="en">Association Type</value>
+    </property>
+    <property key="ManuIdLabel">
+        <value xml:lang="en">Manu ID</value>
+    </property>
+    <property key="ManuNameLabel">
+        <value xml:lang="en">Manu Name</value>
+    </property>
+    <property key="CityLabel">
+        <value xml:lang="en">City</value>
+    </property>
+    <property key="StateLabel">
+        <value xml:lang="en">State</value>
+    </property>
+    <property key="ZipLabel">
+        <value xml:lang="en">Zip</value>
+    </property>
+    <property key="MasterProductIdLabel">
+        <value xml:lang="en">Master Product ID (Virtual)</value>
+    </property>
+    <property key="ProductIdVaraintLabel">
+        <value xml:lang="en">Product ID (Variant)</value>
+    </property>
+    <property key="SelectFeaturesImageNo1Label">
+        <value xml:lang="en">Select Features# 1 Image</value>
+    </property>
+    <property key="SelectFeaturesImageNo2Label">
+        <value xml:lang="en">Select Features# 2 Image</value>
+    </property>
+    <property key="SelectFeaturesImageNo3Label">
+        <value xml:lang="en">Select Features# 3 Image</value>
+    </property>
+    <property key="PLPAltImageLabel">
+        <value xml:lang="en">PLP Alt Image</value>
+    </property>
+    <property key="ManuImageLabel">
+        <value xml:lang="en">Manu Image</value>
+    </property>
+    <property key="SelectOneLabel">
+        <value xml:lang="en">Select One</value>
+    </property>
+    <property key="XlsImageLabel">
+        <value xml:lang="en">Use as specified in the XLS file</value>
+    </property>
+    <property key="MediaLibraryZipFileLabel">
+        <value xml:lang="en">Media Library ZIP File</value>
+    </property>
+    <property key="MediaLibraryIndividualImagesLabel">
+        <value xml:lang="en">Media Library Individual Images</value>
+    </property>
+    <property key="ServerZipFileLabel">
+        <value xml:lang="en">Server, ZIP File</value>
+    </property>
+    <property key="ServerIndividualImagesLabel">
+        <value xml:lang="en">Server, Individual Images</value>
+    </property>
+    <property key="LocalFileSystemZipFileLabel">
+        <value xml:lang="en">Local File System, ZIP File</value>
+    </property>
+    <property key="URLLabel">
+        <value xml:lang="en">URL</value>
+    </property>
+    <property key="ImageNameLabel">
+        <value xml:lang="en">Image Name</value>
+    </property>
+    <property key="DirectoryLocationLabel">
+        <value xml:lang="en">Directory Location</value>
+    </property>
+    <property key="UserNameLabel">
+        <value xml:lang="en">User Name</value>
+    </property>
+    <property key="PasswordLabel">
+        <value xml:lang="en">Password</value>
+    </property>
+    <property key="ProductHeightLabel">
+        <value xml:lang="en">Product Height</value>
+    </property>
+    <property key="ProductWidthLabel">
+        <value xml:lang="en">Product Width</value>
+    </property>
+    <property key="ProductDepthLabel">
+        <value xml:lang="en">Product Depth</value>
+    </property>
+    <!-- **** Label Ends *************************************** -->
+    
+    <!-- **** Page Title  Starts*************************************** -->
+    <property key="AdminTitle">
+        <value xml:lang="en">admin</value>
+    </property> 
+    <property key="AdminToolTitle">
+        <value xml:lang="en">admin tools</value>
+    </property> 
+    <property key="AnalysisTitle">
+        <value xml:lang="en">analysis</value>
+    </property>
+    <property key="BigFishCommerceTitle">
+        <value xml:lang="en">dashboard</value>
+    </property>
+    <property key="CatalogTitle">
+        <value xml:lang="en">catalog</value>
+    </property>
+    <property key="CategoryImageTitle">
+        <value xml:lang="en">category image</value>
+    </property>
+    <property key="ClrLblCacheDetailTitle">
+        <value xml:lang="en">clear label cache</value>
+    </property>
+    <property key="ContactUsEventDetailTitle">
+        <value xml:lang="en">contact us event detail</value>
+    </property>
+    <property key="ContactUsEventsListTitle">
+        <value xml:lang="en">contact us event list</value>
+    </property>
+    <property key="ContentDetailTitle">
+        <value xml:lang="en">content detail</value>
+    </property>
+    <property key="ContentLibraryDetailTitle">
+        <value xml:lang="en">content library detail</value>
+    </property>
+    <property key="ContentHPDetailTitle">
+        <value xml:lang="en">manage home page spot</value>
+    </property>
+    <property key="ContentLibraryListTitle">
+        <value xml:lang="en">content library list</value>
+    </property>
+    <property key="ContentTitle">
+        <value xml:lang="en">content</value>
+    </property>
+    <property key="CustomerNoteDetailTitle">
+        <value xml:lang="en">customer note detail</value>
+    </property>
+    <property key="DashboardSummaryTitle">
+        <value xml:lang="en">dashboard</value>
+    </property>
+    <property key="eCommerceAdminApplicationTitle">
+        <value xml:lang="en">Big Fish Commerce Administration</value>
+    </property>
+    <property key="eCommerceAdminModuleTitle">
+        <value xml:lang="en">Big Fish Admin Module</value>
+    </property>
+    <property key="EmailConfigDetailTitle">
+        <value xml:lang="en">email configuration detail</value>
+    </property>
+    <property key="EmailConfigListTitle">
+        <value xml:lang="en">email configuration list</value>
+    </property>
+    <property key="EmailSpotDetailTitle">
+        <value xml:lang="en">email templates detail</value>
+    </property>
+    <property key="EmailSpotListTitle">
+        <value xml:lang="en">email templates list</value>
+    </property>
+    <property key="FooterSpotDetailTitle">
+        <value xml:lang="en">manage footer</value>
+    </property>
+    <property key="FeatureSwatchImageTitle">
+        <value xml:lang="en">feature swatch image</value>
+    </property>
+    <property key="GeneralPDPContentListTitle">
+        <value xml:lang="en">general PDP content list</value>
+    </property>
+    <property key="GeneralPDPContentDetailTitle">
+        <value xml:lang="en">general PDP content detail</value>
+    </property>
+    <property key="HeaderSpotDetailTitle">
+        <value xml:lang="en">manage top header</value>
+    </property>
+    <property key="HomeSpotDetailTitle">
+        <value xml:lang="en">home page spots detail</value>
+    </property>
+    <property key="HomeSpotListTitle">
+        <value xml:lang="en">home page spots list</value>
+    </property>
+    <property key="ManageCatalogDetailTitle">
+        <value xml:lang="en">manage catalog detail</value>
+    </property>
+    <property key="ManageCatalogListTitle">
+        <value xml:lang="en">manage catalog list</value>
+    </property>
+    <property key="ManagePLPSequenceTitle">
+        <value xml:lang="en">manage PLP sequence</value>
+    </property>
+    <property key="ManageProductDetailTitle">
+        <value xml:lang="en">manage product detail</value>
+    </property>
+    <property key="ManageProductListTitle">
+        <value xml:lang="en">manage product list</value>
+    </property>
+    <property key="ManageSOLRFacetGroupsTitle">
+        <value xml:lang="en">manage SOLR facet groups</value>
+    </property>
+    <property key="ManageSOLRFacetValuesTitle">
+        <value xml:lang="en">manage SOLR facet values</value>
+    </property>
+    <property key="MediaLibraryDetailDetailTitle">
+        <value xml:lang="en">media library detail</value>
+    </property>
+    <property key="MediaLibraryListTitle">
+        <value xml:lang="en">media library list</value>
+    </property>
+    <property key="ManageDivSequenceTitle">
+        <value xml:lang="en">Manage &lt; DIV &gt; Sequencing</value>
+    </property>
+    <property key="LabelsCaptionsListTitle">
+        <value xml:lang="en">labels and captions list</value>
+    </property>
+    <property key="LabelsCaptionsDetailTitle">
+        <value xml:lang="en">labels and captions detail</value>
+    </property>
+    <property key="CategoryHTMLMetatagsDetailTitle">
+        <value xml:lang="en">category HTML meta tags</value>
+    </property>
+    <property key="CustomerManagementDetailTitle">
+        <value xml:lang="en">customer detail</value>
+    </property>
+    <property key="CustomerManagementTitle">
+        <value xml:lang="en">customer management</value>
+    </property>
+    <property key="HTMLMetatagsDetailTitle">
+        <value xml:lang="en">HTML meta tags</value>
+    </property>
+    <property key="OrderManagementOrderDetailTitle">
+        <value xml:lang="en">order detail</value>
+    </property>
+    <property key="OrderStatusDetailTitle">
+        <value xml:lang="en">order status change</value>
+    </property>
+    <property key="OrderNoteDetailTitle">
+        <value xml:lang="en">order note detail</value>
+    </property>
+    <property key="OrdersTitle">
+        <value xml:lang="en">orders</value>
+    </property>
+    <property key="PaypalConfigDetailTitle">
+        <value xml:lang="en">Configuration PAYPAL</value>
+    </property>
+    <property key="PaymentGateWayListTitle">
+        <value xml:lang="en">payment gateway settings</value>
+    </property>
+    <property key="PaymentSettingTitle">
+        <value xml:lang="en">payment settings</value>
+    </property>
+    <property key="PTSDetailTitle">
+        <value xml:lang="en">page content detail</value>
+    </property>
+    <property key="PTSListTitle">
+        <value xml:lang="en">page content list</value>
+    </property>
+    <property key="PDPAdditionContentDetailTitle">
+        <value xml:lang="en">dynamic PDP additional content detail</value>
+    </property>
+    <property key="PDPAdditionContentListTitle">
+        <value xml:lang="en">dynamic PDP additional content list</value>
+    </property>
+    <property key="PDPVariantCaptionListTitle">
+        <value xml:lang="en">PDP variant captions list</value>
+    </property>
+    <property key="PDPVariantCaptionDetailTitle">
+        <value xml:lang="en">PDP variant captions detail</value>
+    </property>
+    <property key="PixelTrackingListTitle">
+        <value xml:lang="en">pixel tracking list</value>
+    </property>
+    <property key="PixelTrackingDetailTitle">
+        <value xml:lang="en">pixel tracking detail</value>
+    </property>
+    <property key="PLPContentDetailTitle">
+        <value xml:lang="en">Product Category content detail</value>
+    </property>
+    <property key="PLPContentListTitle">
+        <value xml:lang="en">Product Category content list</value>
+    </property>
+    <property key="ProductAlternateImagesTitle">
+        <value xml:lang="en">product alternate images</value>
+    </property>
+    <property key="ProductHTMLMetatagsDetailTitle">
+        <value xml:lang="en">product HTML meta tags</value>
+    </property>
+    <property key="ProductLoaderDetailTitle">
+        <value xml:lang="en">product loader</value>
+    </property>
+    <property key="ProductLoaderPreviewDetailTitle">
+        <value xml:lang="en">product loader preview</value>
+    </property>
+    <property key="ProductPricingTitle">
+        <value xml:lang="en">product pricing</value>
+    </property>
+    <property key="ProductPrimaryImagesTitle">
+        <value xml:lang="en">product primary images</value>
+    </property>
+    <property key="ProductReviewDetailTitle">
+        <value xml:lang="en">review detail</value>
+    </property>
+    <property key="ProductReviewTitle">
+        <value xml:lang="en">reviews</value>
+    </property>
+    <property key="ProductVariantsTitle">
+        <value xml:lang="en">product variants</value>
+    </property>
+    <property key="CategorySelectorTitle">
+        <value xml:lang="en">Category Selector</value>
+    </property>
+    <property key="ProductSelectorTitle">
+        <value xml:lang="en">Product Selector</value>
+    </property>
+    <property key="ProductSwatchImageTitle">
+        <value xml:lang="en">product swatch image</value>
+    </property>
+    <property key="ProductVideosTitle">
+        <value xml:lang="en">product videos</value>
+    </property>
+    <property key="PromotionTitle">
+        <value xml:lang="en">view promotions</value>
+    </property>
+    <property key="PromotionDetailTitle">
+        <value xml:lang="en">manage promotion</value>
+    </property>
+    <property key="PromotionCodeDetailTitle">
+        <value xml:lang="en">promo code detail</value>
+    </property>
+    <property key="PaymentSettingDetailTitle">
+        <value xml:lang="en">payment settings detail</value>
+    </property>
+    <property key="RelatedProductsTitle">
+        <value xml:lang="en">related products</value>
+    </property>
+    <property key="ReqCatEventDetailTitle">
+        <value xml:lang="en">request catalog event detail</value>
+    </property>
+    <property key="ReqCatalogEventsTitle">
+        <value xml:lang="en">request catalog events</value>
+    </property>
+    <property key="SagePayTokenConfigDetailTitle">
+        <value xml:lang="en">Configuration SAGEPAY_TOKEN</value>
+    </property>
+    <property key="SiteMapDetailTitle">
+        <value xml:lang="en">sitemap XML generator</value>
+    </property>
+    <property key="SeoUrlMapDetailTitle">
+        <value xml:lang="en">SEO friendly URL Refresh</value>
+    </property>
+    <property key="SolrReIndexDetailTitle">
+        <value xml:lang="en">SOLR indexing</value>
+    </property>
+    <property key="SysConfigFileTitle">
+        <value xml:lang="en">system configuration files</value>
+    </property>
+    <property key="CompareLabelFileDetailTitle">
+        <value xml:lang="en">compare tool: labels and captions</value>
+    </property>
+    <property key="CompareLabelFileResultTitle">
+        <value xml:lang="en">compare tool: labels and captions</value>
+    </property>
+    <property key="CompareParametersDetailTitle">
+        <value xml:lang="en">compare tool: system parameters</value>
+    </property>
+    <property key="CompareParametersResultTitle">
+        <value xml:lang="en">compare tool: system parameters</value>
+    </property>
+    <property key="ManageEcommerceStyleDetailTitle">
+        <value xml:lang="en">manage CSS file</value>
+    </property>
+    <property key="ManageAdminStyleDetailTitle">
+        <value xml:lang="en">manage CSS file</value>
+    </property>
+    <property key="EditEcommerceStyleDetailTitle">
+        <value xml:lang="en">edit CSS file</value>
+    </property>
+    <property key="EditAdminStyleDetailTitle">
+        <value xml:lang="en">edit CSS file</value>
+    </property>
+    <property key="StaticPageTitle">
+        <value xml:lang="en">Static Page</value>
+    </property>
+    <property key="StoreLocationManagementTitle">
+        <value xml:lang="en">stores</value>
+    </property>
+    <property key="StoreLocationDetailTitle">
+        <value xml:lang="en">store detail </value>
+    </property>
+    <property key="SiteInfoDetailTitle">
+        <value xml:lang="en">site info content detail</value>
+    </property>
+    <property key="SiteInfoTitle">
+        <value xml:lang="en">site info content list</value>
+    </property>
+    <property key="SiteLogoDetailTitle">
+        <value xml:lang="en">site logo content spot</value> 
+    </property>
+    <property key="SiteLogoPageTitle">
+        <value xml:lang="en">manage logo</value>
+    </property>
+    <property key="StaticPageDetailTitle">
+        <value xml:lang="en">static pages detail</value>
+    </property>
+    <property key="StaticPageListTitle">
+        <value xml:lang="en">static pages list</value>
+    </property>
+    <property key="SystemParameterDetailTitle">
+        <value xml:lang="en">system parameter detail</value>
+    </property>
+    <property key="SystemParameterListTitle">
+        <value xml:lang="en">system parameter list</value>
+    </property>
+    <property key="ContactUsReasonPageTitle">
+        <value xml:lang="en">contact us reasons list</value>
+    </property>
+    <property key="ContactUsReasonListHeading">
+        <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="ContactUsReasonDetailTitle">
+        <value xml:lang="en">contact us reasons detail</value>
+    </property>
+    <property key="StoreTitle">
+        <value xml:lang="en">stores</value>
+    </property>
+    <property key="TopProductsDetailTitle">
+        <value xml:lang="en">top products</value>
+    </property>
+    <property key="ViewOrdersTitle">
+        <value xml:lang="en">view orders</value>
+    </property>
+    <property key="ViewCustomersTitle">
+        <value xml:lang="en">view customers</value>
+    </property>
+    <property key="ProductLoaderListTitle">
+        <value xml:lang="en">product loader functions</value>
+    </property>
+    <property key="PaymentGateWayListHeading">
+        <value xml:lang="en">Payment Gateway Settings</value>
+    </property>
+    <property key="PaymentSettingHeading">
+        <value xml:lang="en">Payment Settings</value>
+    </property>
+    <property key="BigFishSampleFileDetailTitle">
+        <value xml:lang="en">create bigfish template XLS file</value>
+    </property>
+    <property key="BigFishProductFileFromDBDetailTitle">
+        <value xml:lang="en">create bigfish product file from database</value>
+    </property>
+    <property key="BigFishProductFileFromEbayDetailTitle">
+        <value xml:lang="en">convert ebay/amazon to bigfish format</value>
+    </property>
+    <property key="ImageLocationPreferencesDetailTitle">
+        <value xml:lang="en">image location preferences</value>
+    </property>
+    <!-- ******* Page Title Ends *************************************** -->
+    
+    <!-- ******* Info Messages Starts*************************************** -->
+    <property key="AddPromoCodeInfo">
+        <value xml:lang="en">Add a new PROMO-CODE for {0}</value>
+    </property>
+    <property key="AdminConfigInfo">
+        <value xml:lang="en">SOLR Options (groups and values);Review Auto Approve;Date and currency options.</value>
+    </property>
+    <property key="AdminContactUsReasonInfo">
+        <value xml:lang="en">Control the reasons that are offered in the Contact Us form</value>
+    </property>
+    <property key="AdminEmailInfo">
+        <value xml:lang="en">Manage Email Templates that are used in all outgoing emails.</value>
+    </property>
+    <property key="AdminEmailConfigInfo">
+        <value xml:lang="en">Manage the “From”, “To” and other attributes of outgoing emails.</value>
+    </property>
+    <property key="AdminLabelCaptionInfo">
+        <value xml:lang="en">Manage eCommerce displayed labels and captions.</value>
+    </property>
+    <property key="AdminParamInfo">
+        <value xml:lang="en">Review Auto Approve; Date and currency options</value>
+    </property>
+    <property key="AdminToolsInfo">
+        <value xml:lang="en">For some changes to take effect, the “cache” may need to be reset or the SOLR index regenerated.</value>
+    </property>
+    <property key="AdminSysConfigInfo">
+        <value xml:lang="en">View system configuration files and other properties.</value>
+    </property>
+    <property key="AdminPayGatewayInfo">
+        <value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways.</value>
+    </property>
+    <property key="AdminPixelTrackingInfo">
+        <value xml:lang="en">Function to maintain 3rd party pixel tracking scripts on various pages throughout the eCommerce implementation.</value>
+    </property>
+    <property key="AdminPaymentSettingInfo">
+        <value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways.</value>
+    </property>
+    <property key="ClrLblCacheInfo">
+        <value xml:lang="en">This function will clear any cache that contains existing labels / captions. So, if the labels / captions have been modified then the cache needs to be refreshed for the new text to take effect.</value>
+    </property>
+    <property key="AdminUserInfo">
+        <value xml:lang="en">Manage Users.</value>
+    </property>
+    <property key="CatalogAddProductInfo">
+        <value xml:lang="en">This function will allow for the quick entry of a Product within the Product Catalog structure.</value>
+    </property>
+    <property key="CatalogPriceInfo">
+        <value xml:lang="en">This function will allow for revisions of pricing for any product within the catalog.</value>
+    </property>
+    <property key="CatalogProductInfo">
+        <value xml:lang="en">This function provides the ability to search, review, edit and remove products from within the catalog.</value>
+    </property>
+    <property key="CatalogViewInfo">
+        <value xml:lang="en">This function provides the ability to view and maintain the product catalog structure.</value>
+    </property>
+    <property key="CategoryImageInfo">
+        <value xml:lang="en">Used as the image displayed within a Category Listing Page</value>
+    </property>
+    <property key="ContentLibraryInfo">
+        <value xml:lang="en">Manage all generic and re-usable content to be included within other content areas.</value>
+    </property>
+    <property key="DetailPOPUPImageInfo">
+        <value xml:lang="en">Used as the popup image when the customer clicks on “View Larger Image” or similar</value>
+    </property>
+    <property key="DownloadNewInfo">
+        <value xml:lang="en">New</value>
+    </property>
+    <property key="DeliveryShipToInfo">
+        <value xml:lang="en">Ship To</value>
+    </property>
+    <property key="DeliveryStorePickupInfo">
+        <value xml:lang="en">Store Pickup</value>
+    </property>
+    <property key="DownloadStatusInfo">
+        <value xml:lang="en">Downloaded</value>
+    </property>
+    <property key="DynamicPDPAdditionalContentInfo">
+        <value xml:lang="en">Manage additional text that is maintained for a sub-category and displayed on each PDP page within that sub-category.</value>
+    </property>
+    <property key="DynamicPLPContentSpotsInfo">
+        <value xml:lang="en">Manage content that appears on each PLP page or as a Mega-Menu. These are associated with Product CATEGORIES.</value>
+    </property>
+    <property key="ExportStatusInfo">
+        <value xml:lang="en">Exported</value>
+    </property>
+    <property key="CustomerEnabledInfo">
+        <value xml:lang="en">Enabled</value>
+    </property>
+    <property key="CustomerDisabledInfo">
+        <value xml:lang="en">Disabled</value>
+    </property>
+    <property key="GeneralPDPContentSpotsInfo">
+        <value xml:lang="en">To manage special text that appears on the PDP for Introduction and Discontinued products.</value>
+    </property>
+    <property key="ImagesInfo">
+        <value xml:lang="en">Manage all the site images that can be referenced in various content throughout the site</value>
+    </property>
+    <property key="LargePDPImageInfo">
+        <value xml:lang="en">Used as the initial primary image display in the PDP</value>
+    </property>
+    <property key="LargeAltPDPImageInfo">
+        <value xml:lang="en">Used as the alternate primary image display in the PDP</value>
+    </property>
+    <property key="ManageSOLRFacetGroupsInfo">
+        <value xml:lang="en">Manage the facet GROUPS at a Product Category level</value>
+    </property>
+    <property key="ManageSOLRFacetValueInfo">
+        <value xml:lang="en">Manage the facet VALUES</value>
+    </property>
+    <property key="ManageDivSequenceInfo">
+        <value xml:lang="en">Manage DIV Sequencing</value>
+    </property>
+    <property key="ManageContactUsReasonInfo">
+        <value xml:lang="en">Control the reasons that are offered in the Contact Us form</value>
+    </property>
+    <property key="PartyNameNotFoundInfo">
+        <value xml:lang="en">Name Not Found</value>
+    </property>
+    <property key="ManageContentFooterInfo">
+        <value xml:lang="en">Manage the Footer content.</value>
+    </property>
+    <property key="ManageContentHeaderInfo">
+        <value xml:lang="en">Manage the Top Header content.</value>
+    </property>
+    <property key="ManageEmailSpotInfo">
+        <value xml:lang="en">Manage Email Templates.</value>
+    </property>
+    <property key="ManageESpotInfo">
+        <value xml:lang="en">Manage specific eSpots for Login, Cart and other pages.</value>
+    </property>
+    <property key="ManageHomePageInfo">
+        <value xml:lang="en">Manage the Home Page content spots.</value>
+    </property>
+    <property key="ManagePDPContentInfo">
+        <value xml:lang="en">Manage additional text that is maintained for a sub-category and displayed on each PDP page within that sub-category.</value>
+    </property>
+    <property key="ManagePLPContentInfo">
+        <value xml:lang="en">Manage spots that appear on each PLP page.</value>
+    </property>
+    <property key="ManageSiteLogoInfo">
+        <value xml:lang="en">Manage your site logo.</value>
+    </property>
+    <property key="ManageStaticPageInfo">
+        <value xml:lang="en">Manage Static Page content.</value>
+    </property>
+    <property key="manageDivSequenceInfo">
+        <value xml:lang="en">This function will maintain the sequencing of &lt;DIV&gt; tags, by screen. All data is held in the file “OSafeUiSequence.xml”.</value>
+    </property>
+    <property key="MediaInfo">
+        <value xml:lang="en">Manage all the site images and other media that can be referenced in various content throughout the site</value>
+    </property>
+    <property key="NAInfo">
+        <value xml:lang="en">N/A</value>
+    </property>
+    <property key="NoInfo">
+        <value xml:lang="en">No</value>
+    </property>
+    <property key="YesInfo">
+        <value xml:lang="en">Yes</value>
+    </property>
+    <property key="NoCategoryDetailInfo">
+        <value xml:lang="en">No Category Detail</value>
+    </property>
+    <property key="NoDataAvailableInfo">
+        <value xml:lang="en">No Data Available</value>
+    </property>
+    <property key="NoUserLoginIdInfo">
+        <value xml:lang="en">No User Login Id</value>
+    </property>
+    <property key="NoMatchingDataInfo">
+        <value xml:lang="en">No Matching Data</value>
+    </property>
+    <property key="NoPaymentMethodInfo">
+        <value xml:lang="en">No Method of Payment</value>
+    </property>
+    <property key="NoPostalAddressInfo">
+        <value xml:lang="en">No Postal Address</value>
+    </property>
+    <property key="NoShippingMethodInfo">
+        <value xml:lang="en">No Method of Shipment</value>
+    </property>
+    <property key="OptionalResizeNoteInfo">
+        <value xml:lang="en">Note: preview image resized from original H=${height}px, W=${originalWidth}px to H=${height}px, W=${width}px</value>
+    </property>
+    <property key="PDPVariantCaptionsInfo">
+        <value xml:lang="en">Maintain the captions in the PDP for the variant selectors (color, size etc.)</value>
+    </property>
+    <property key="EnterCriteriaInfo">
+        <value xml:lang="en">Enter Criteria and click the Search button</value>
+    </property>
+    <property key="ContactUsEventInfo">
+        <value xml:lang="en">This function will allow for browsing and downloading of any Contact Us events that are stored.</value>
+    </property>
+    <property key="CustomerAddInfo">
+        <value xml:lang="en">This function will allow for the quick addition of a Customer.</value>
+    </property>
+    <property key="CustomerViewInfo">
+        <value xml:lang="en">This function provides the ability to search for customers in the database. A list of customers is displayed, with a click-through to the Customer Detail screen</value>
+    </property>
+    <property key="ImageDirectoryNoteInfo">
+        <value xml:lang="en">* Only specify if the images are defined as file-names only in the XLS input; this will define the directory where they are located</value>
+    </property>
+    <property key="OrderAddInfo">
+        <value xml:lang="en">This function will allow for the quick addition of a Sales Order.</value>
+    </property>
+    <property key="OrderViewInfo">
+        <value xml:lang="en">This function provides the ability to search for orders in the database. A list of orders is displayed, with a click-through to the Order Detail screen</value>
+    </property>
+    <property key="PageContentSpotsInfo">
+        <value xml:lang="en">Manage specific content spots for Login, Cart and other pages</value>
+    </property>
+    <property key="PricingRulesApplyInfo">
+        <value xml:lang="en">* Pricing Rules Apply</value>
+    </property>
+    <property key="ProductLoaderInfo">
+        <value xml:lang="en">Import Product Catalog and Item data. Setup selectable and descriptive features.</value>
+    </property>
+    <property key="ProductLoaderDetailInfo">
+        <value xml:lang="en">This function will read an Excel import file that defines Product Information. There are options to re-load (remove existing and load fresh) or append to the Product entities.</value>
+    </property>
+    <property key="PromotionConfigureInfo">
+        <value xml:lang="en">This function allows for the configuration of all promotions.</value>
+    </property>
+    <property key="PromotionManageInfo">
+        <value xml:lang="en">This function allows for the management of all promotions.</value>
+    </property>
+    <property key="PromotionViewInfo">
+        <value xml:lang="en">This function provides the ability to view promotions and gauge the usage for a certain time period. </value>
+    </property>
+    <property key="PromotionAddInfo">
+        <value xml:lang="en">This function allows for the creation of a new Promotion. </value>
+    </property>
+    <property key="ReqCatalogEventInfo">
+        <value xml:lang="en">This function will allow for browsing and downloading of any Request Catalog events that are stored.</value>
+    </property>
+    <property key="ReviewAddInfo">
+        <value xml:lang="en">Add a Review</value>
+    </property>
+    <property key="ReviewViewInfo">
+        <value xml:lang="en">Search, review and edit any consumer reviews. </value>
+    </property>
+    <property key="SiteMapInfo">
+        <value xml:lang="en">This function will generate a sitemap.xml and display the results within this browser. You may then save and deploy the file as appropriate. Sitemap URL’s will include all active Product Catalog data and Static Pages.</value>
+    </property>
+    <property key="SeoUrlMapInfo">
+        <value xml:lang="en">This function will refresh the SEO Friendly URL Mapping File (XML).</value>
+    </property>
+    <property key="SolrReIndxInfo">
+        <value xml:lang="en">This function will re-index SOLR. It should be executed whenever the Product Catalog is updated so that PLP, PDP and Faceted Navigation is refreshed.</value>
+    </property>
+    <property key="StoreLocationAddInfo">
+        <value xml:lang="en">Quick link to add a Store.</value>
+    </property>
+    <property key="SubNavBarInfo">
+        <value xml:lang="en">* Must be blank to define a new Top Category Item</value>
+    </property>
+    <property key="SmallAltImageInfo">
+        <value xml:lang="en">Used in PLP “alternate” image view (typically on hover)</value>
+    </property>
+    <property key="CompareLabelFileInfo">
+        <value xml:lang="en">This tool will compare the Label / Captions file installed on this server (the “A” version) with another instance (the “B” version). Access to the “B” version is required.</value>
+    </property>
+    <property key="CompareParametersInfo">
+        <value xml:lang="en">This tool will compare the SYSTEM_PARAMETERS database entity on this server (the “A” version) with another instance (the “B” version). Access to the “B” database is required.</value>
+    </property>
+    <property key="ManageEcommerceStyleInfo">
+        <value xml:lang="en">ECOMMERCE Implementation: Load new CSS files onto the server; change which CSS file is "active".</value>
+    </property>
+    <property key="ManageAdminStyleInfo">
+        <value xml:lang="en">ADMIN MODULE Implementation: Load new CSS files onto the server; change which CSS file is "active".</value>
+    </property>
+    <property key="EditEcommerceStyleInfo">
+        <value xml:lang="en">ECOMMERCE Implementation: Simple edit and Save-As capability so that the primary CSS file can be modified.</value>
+    </property>
+    <property key="EditAdminStyleInfo">
+        <value xml:lang="en">ADMIN MODULE Implementation: Simple edit and Save-As capability so that the primary CSS file can be modified.</value>
+    </property>
+    <property key="CompareLabelKeysNotInUploadedFileInfo">
+        <value xml:lang="en">Keys that exist on Your-File [A] but do NOT exist on the Compare-To-File [B]</value>
+    </property>
+    <property key="CompareLabelKeysNotInYourLabelFileInfo">
+        <value xml:lang="en">Keys that exist on the Compare-To-File [B] but do NOT exist on Your-File [A]</value>
+    </property>
+    <property key="CompareParamKeysNotInUploadedFileInfo">
+        <value xml:lang="en">Parameters that exist on Your-Database [A] but do NOT exist on the Compare-To-File [B]</value>
+    </property>
+    <property key="CompareParamKeysNotInYourDatabaseInfo">
+        <value xml:lang="en">Parameters that exist on the Compare-To-File [B] but do NOT exist on Your-Database [A]</value>
+    </property>
+    <property key="CompareLabelKeysInBothFileInfo">
+        <value xml:lang="en">Keys that exist on BOTH Files</value>
+    </property>
+    <property key="CompareParamKeysInBothInfo">
+        <value xml:lang="en">Parameters that exist on Both Your Database and Compare File</value>
+    </property>
+    <property key="CompareLabelKeysNotInUploadedFileListInfo">
+        <value xml:lang="en">Key is on the Compare-File [B] but not on Your-File [A]</value>
+    </property>
+    <property key="CompareLabelKeysNotInYourLabelFileListInfo">
+        <value xml:lang="en">Key is on Your-File [A] but not on the Compare-File [B]</value>
+    </property>
+    <property key="CompareParamKeysNotInUploadedFileListInfo">
+        <value xml:lang="en">Key is on Your-Database [A] but not on the Compare-File [B]</value>
+    </property>
+    <property key="CompareParamKeysNotInYourDatabaseListInfo">
+        <value xml:lang="en">Key is on the Compare-File [B] but not on Your-Database [A]</value>
+    </property>
+    <property key="CompareParamKeysInBothListInfo">
+        <value xml:lang="en">Key exists on BOTH Your-Database and the Compare-File</value>
+    </property>
+    <property key="CompareLabelKeysInBothFileListInfo">
+        <value xml:lang="en">Key exists on BOTH files</value>
+    </property>
+    <property key="CompareLabelKeysNotPresentInfo">
+        <value xml:lang="en">Not Present</value>
+    </property>
+    <property key="CompareLabelYourFileInfo">
+        <value xml:lang="en">Your-File</value>
+    </property>
+    <property key="CompareParamKeysNotPresentInfo">
+        <value xml:lang="en">Not Present</value>
+    </property>
+    <property key="CompareParamYourDatabaseInfo">
+        <value xml:lang="en">Your-Database</value>
+    </property>
+    <property key="CompareLabelCompareToFileInfo">
+        <value xml:lang="en">Compare-To-File</value>
+    </property>
+    <property key="CompareParamCompareToFileInfo">
+        <value xml:lang="en">Compare-To-File</value>
+    </property>
+    <property key="StoreLocationViewInfo">
+        <value xml:lang="en">Search, review and edit all your retail stores.</value>
+    </property>
+    <property key="SiteInfoInfo">
+        <value xml:lang="en">Manage your site logo; header and footer links and other content that impacts your eCommerce site. </value>
+    </property>
+    <property key="SmallPLPImageInfo">
+        <value xml:lang="en">Used in PLP, Shopping Cart, Xref, Ratings-and-Reviews, Order Summary and Confirmation.</value>
+    </property>
+    <property key="PLPTitleTextInfo">
+        <value xml:lang="en">“Title Text” on PLP</value>
+    </property>
+    <property key="StoreLocationOpenedInfo">
+        <value xml:lang="en">Open</value>
+    </property>
+    <property key="StoreLocationClosedInfo">
+        <value xml:lang="en">Closed</value>
+    </property>
+    <property key="StoreLocationGeoYesInfo">
+        <value xml:lang="en">Yes</value>
+    </property>
+    <property key="StoreLocationGeoNoInfo">
+        <value xml:lang="en">NO</value>
+    </property>
+    <property key="ThumbAltPDPImageInfo">
+        <value xml:lang="en">Used as the thumbnail for the alternate image image in the PDP</value>
+    </property>
+    <property key="ThumbPDPImageInfo">
+        <value xml:lang="en">Used as the thumbnail for the primary image image in the PDP</value>
+    </property>
+    <property key="LoadBigFishXlsInfo">
+        <value xml:lang="en">Re-load the Category and Products from a BigFish format XLS file</value>
+    </property>
+    <property key="CreateBigFishFromDBInfo">
+        <value xml:lang="en">From the existing database, create a BigFish format “Product Load” XLS file</value>
+    </property>
+    <property key="CreateBigFishFromEbayInfo">
+        <value xml:lang="en">Starting with a standard eBay/Amazon product load formatted file, convert to a BigFish XLS format</value>
+    </property>
+    <property key="DownloadBigFishSampleXlsInfo">
+        <value xml:lang="en">Generate an empty BigFish “Product Load TEMPLATE” XLS file</value>
+    </property>
+    <property key="ImageLocationPreferencesInfo">
+        <value xml:lang="en">This will allow for the modification of the Product Loader Image Mapping file that controls the sub-directory that images should be available.</value>
+    </property>
+    <property key="setToZeroMessage">
+        <value xml:lang="en"> *Set to 0(zero) if not required or hidden</value>
+    </property>
+     <!-- ******* Info Messages Ends*************************************** -->
+   
+    <!-- ******* Success Messages  starts*************************************** -->
+    <property key="ClearLabelCacheSuccess">
+        <value xml:lang="en">The Clear Label Cache successfully completed</value>
+    </property>
+    <property key="DeletedSuccess">
+        <value xml:lang="en">You have Successfully Deleted Your Information</value>
+    </property>
+     <property key="DivSequenceSuccess">
+        <value xml:lang="en">DIV Sequencing Successful</value>
+    </property>
+    <property key="solrReIndexSuccess">
+        <value xml:lang="en">The Solr Re-Index successfully completed</value>
+    </property>
+    <property key="UpdatedSuccess">
+        <value xml:lang="en">You have Successfully Saved Your Information</value>
+    </property>
+    <property key="StoreLocationSavedSuccess">
+        <value xml:lang="en">Your STORE changes [{0}] have been saved</value>
+    </property>
+    <property key="UpdateStyleSuccess">
+        <value xml:lang="en">You have Successfully Saved Your Information</value>
+    </property>
+    <property key="UpdateStyleBoxSuccess">
+        <value xml:lang="en">You have Successfully Replaced Your Information in Edit Box</value>
+    </property>
+    <property key="LoadNewStyleSuccess">
+        <value xml:lang="en">You have Successfully Loaded Your CSS file.</value>
+    </property>
+    <property key="UpdateOrderStatusSuccess">
+        <value xml:lang="en">You have successfully saved the ORDER STATUS change.</value>
+    </property>
+    <property key="UpdateOrderStatusReviewMsgSuccess">
+        <value xml:lang="en">You have successfully saved the ORDER STATUS change. A review email will be sent to {0} in {1} days.</value>
+    </property>
+    <property key="ImageLocationPreferencesSuccess">
+        <value xml:lang="en">Image Location Preferences has been updated</value>
+    </property>
+    ImageLocationPreferencesSuccess
+      <!-- ******* Success Messages  Ends*************************************** -->
+      
+    <!-- ******* Error Messages  Starts*************************************** -->
+    <property key="BlankActiveFromDateError">
+        <value xml:lang="en">The Active From field cannot be blank</value>
+    </property>
+    <property key="BlankCategoryImageError">
+        <value xml:lang="en">Category image file cannot be blank</value>
+    </property>
+    <property key="BlankCategoryNameError">
+        <value xml:lang="en">ERROR Row ${rowNo}: The Category-Name cannot be blank</value>
+    </property>
+    <property key="BlankCategoryError">
+        <value xml:lang="en">The Category field cannot be blank.</value>
+    </property>
+    <property key="BlankDescriptionError">
+        <value xml:lang="en">ERROR Row ${rowNo}: The Description cannot be blank</value>
+    </property>
+    <property key="BlankKeyError">
+        <value xml:lang="en">The Key field cannot be blank.</value>
+    </property>
+    <property key="BlankLongDescError">
+        <value xml:lang="en">ERROR Row ${rowNo}:Long-Desc is blank</value>
+    </property>
+    <property key="BlankStyleTextDataError">
+        <value xml:lang="en">The text data cannot be blank.</value>
+    </property>
+    <property key="BlankFromAddressError">
+        <value xml:lang="en">The From field cannot be blank</value>
+    </property>
+    <property key="BlankFromQtyError">
+        <value xml:lang="en">The From Qty cannot be blank</value>
+    </property>
+    <property key="BlankNoteError">
+        <value xml:lang="en">Note cannot be blank</value>
+    </property>
+    <property key="BlankPriceError">
+        <value xml:lang="en">The Price cannot be blank</value>
+    </property>
+    <property key="BlankSubjectError">
+        <value xml:lang="en">The Subject field cannot be blank</value>
+    </property>
+    <property key="BlankToQtyError">
+        <value xml:lang="en">The To Qty cannot be blank except last row</value>
+    </property>
+    <property key="BlankStoreCodeError">
+        <value xml:lang="en">The Store Code field cannot be blank</value>
+    </property>
+    <property key="BlankStoreNameError">
+        <value xml:lang="en">The Store Name field cannot be blank</value>
+    </property>
+    <property key="BlankAddress1Error">
+        <value xml:lang="en">The Address 1 field cannot be blank</value>
+    </property>
+    <property key="BlankCityError">
+        <value xml:lang="en">The City or Town field cannot be blank</value>
+    </property>
+    <property key="BlankStateError">
+        <value xml:lang="en">The State or Province field cannot be blank</value>
+    </property>
+    <property key="BlankPostalCodeError">
+        <value xml:lang="en">The Zip or Postcode Code field cannot be blank</value>
+    </property>
+    <property key="BlankProductCategoryError">
+        <value xml:lang="en">Please Select a Category.</value>
+    </property>
+    <property key="BlankDetailFieldError">
+        <value xml:lang="en">The Details field cannot be blank</value>
+    </property>
+    <property key="BlankProductNameError">
+        <value xml:lang="en">The Product Name cannot be blank</value>
+    </property>
+    <property key="BlankTopNavBarError">
+        <value xml:lang="en">The Top Nav field cannot be blank</value>
+    </property>
+    <property key="BlankSubNavBarError">
+        <value xml:lang="en">The Sub Nav field cannot be blank</value>
+    </property>
+    <property key="InvalidPostalCodeError">
+        <value xml:lang="en">Please Enter a valid Zip Code.</value>
+    </property>
+    <property key="BlankContactNumberError">
+        <value xml:lang="en">The Phone field cannot be blank</value>
+    </property>
+    <property key="BlankProductFileError">
+        <value xml:lang="en">You must identify a Product File</value>
+    </property>
+    <property key="BlankOrderStatusIdError">
+        <value xml:lang="en">Status cannot be blank.</value>
+    </property>
+    <property key="BlankOrderItemSelectionError">
+        <value xml:lang="en">Please select any item for status change.</value>
+    </property>
+    <property key="ProductFileNotXLSError">
+        <value xml:lang="en">The Product Loader uses MS-Excel format files, please check the file name and try again</value>
+    </property>
+    <property key="CancelledOrderStatusChangeError">
+        <value xml:lang="en">Status cannot be change for cancelled order.</value>
+    </property>
+    <property key="BlankPixelIdError">
+        <value xml:lang="en">Pixel Id cannot be blank</value>
+    </property>
+    <property key="BlankPromotionIdError">
+        <value xml:lang="en">Promotion Id cannot be blank</value>
+    </property>
+    <property key="BlankPromotionCodeIdError">
+        <value xml:lang="en">Promotion Code cannot be blank</value>
+    </property>
+    <property key="BlankPromotionNameError">
+        <value xml:lang="en">Promotion Name cannot be blank</value>
+    </property>
+    <property key="BlankPromotionDescError">
+        <value xml:lang="en">Promotion Desc cannot be blank</value>
+    </property>
+    <property key="BlankPromotionCondValueError">
+        <value xml:lang="en">Condition value cannot be blank</value>
+    </property>
+    <property key="BlankPromotionRuleActionQuantityError">
+        <value xml:lang="en">Field Qty is required, please retry</value>
+    </property>
+    <property key="BlankPromotionRuleActionItemIdError">
+        <value xml:lang="en">Field Item Id is required, please retry</value>
+    </property>
+    <property key="BlankPromotionRuleActionMinQuantityError">
+        <value xml:lang="en">Field Min# is required, please retry</value>
+    </property>
+    <property key="BlankPromotionRuleActionPriceError">
+        <value xml:lang="en">Field Price is required, please retry</value>
+    </property>
+    <property key="BlankPromotionRuleActionDiscountPerError">
+        <value xml:lang="en">Field Disc% is required, please retry</value>
+    </property>
+    <property key="BlankPromotionRuleActionDiscountError">
+        <value xml:lang="en">Field Disc n is required, please retry</value>
+    </property>
+    <property key="BlankPromotionRuleActionShipDiscountPerError">
+        <value xml:lang="en">Field Ship Disc% is required, please retry</value>
+    </property>
+    <property key="BlankPromotionRuleActionTaxDiscountPerError">
+        <value xml:lang="en">Field Tax Disc% is required, please retry</value>
+    </property>
+    <property key="BlankProcessingOptionError">
+        <value xml:lang="en">Either RE-LOAD or UPDATE must be checked before you can proceed</value>
+    </property>
+    <property key="BlankParamKeyError">
+        <value xml:lang="en">The Parameter Name field cannot be blank.</value>
+    </property>
+    <property key="BlankParamCategoryError">
+        <value xml:lang="en">The Category field cannot be blank.</value>
+    </property>
+    <property key="CategoryIdMatchingError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Category ID must match to a new or existing Category ID</value>
+    </property>
+    <property key="CommonPhoneInvalidError">
+        <value xml:lang="en">Please enter a valid Phone Number</value>
+    </property>
+    <property key="CompareToFileExistError">
+        <value xml:lang="en">The Compare-To-File does not exist, please check the file name and try again</value>
+    </property>
+    <property key="CompareToFileNotXmlError">
+        <value xml:lang="en">The Compare-To-File is not a xml file, please check the file name and try again</value>
+    </property>
+    <property key="FacetGroupBlankError">
+        <value xml:lang="en">Facet Group cannot be blank</value>
+    </property>
+    <property key="FacetValueBlankError">
+        <value xml:lang="en">Facet Value cannot be blank</value>
+    </property>
+    <property key="HomePageSpotSelectError">
+        <value xml:lang="en">At least one Home Page Spot must be selected to use the Preview function</value>
+    </property>
+    <property key="KeyExistError">
+        <value xml:lang="en">Key already Exist.</value>
+    </property>
+    <property key="ReplaceWithFileExistError">
+        <value xml:lang="en">The Replace With File does not exist, please check the file name and try again</value>
+    </property>
+    <property key="ReplaceWithFileNotCssError">
+        <value xml:lang="en">The Replace With File is not a css file, please check the file name and try again</value>
+    </property>
+    <property key="UploadedFileExistError">
+        <value xml:lang="en">The uploaded file does not exist, please check the file name and try again</value>
+    </property>
+    <property key="UploadedFileNotCssError">
+        <value xml:lang="en">The uploaded file "{0}" is not a css file name, please check the file name and try again</value>
+    </property>
+    <property key="ClearLabelCacheError">
+        <value xml:lang="en">ERROR: An error occurred while trying to clear the Label Cache</value>
+    </property>
+    <property key="DateFormatInvalidError">
+        <value xml:lang="en">Please enter a valid date</value>
+    </property>
+    <property key="DateRangeInvalidError">
+        <value xml:lang="en">Please enter a valid date range</value>
+    </property>
+    <property key="DescriptionContentError">
+        <value xml:lang="en">The Description cannot be blank.</value>
+    </property>
+    <property key="FollowingErrorsOccurredError">
+        <value xml:lang="en">We're sorry but it appears as if the information you have provided is incomplete.</value>
+    </property>
+    <property key="FileTypeMismatchError">
+        <value xml:lang="en">The existing ${currentFileExt} media file cannot be overlaid with a ${uploadedFileExt} file</value>
+    </property>
+    <property key="GetGeoCodeError">
+        <value xml:lang="en">GEO-Code information is not available. Please check that you have entered a valid address and try again.</value>
+    </property>
+    <property key="NoRowSelectedDeleteError">
+        <value xml:lang="en">A row must be selected in order to Delete a row.</value>
+    </property>
+    <property key="NoRowSelectedInsertError">
+        <value xml:lang="en">A row must be selected in order to Insert a new row.</value>
+    </property>
+    <property key="ParentCategoryIdAssociationError">
+        <value xml:lang="en">ERROR Row ${rowNo}: A Parent-Category-ID must have a corresponding Category-ID</value>
+    </property>
+    <property key="ProductDefaultPriceError">
+        <value xml:lang="en">Please enter a Valid Product Sale Price. It should be a Number.</value>
+    </property>
+    <property key="ProductIdMatchingError">
+        <value xml:lang="en">ERROR Row ${rowNo}: The FROM-MASTER-Product-ID must match to a new or existing Product</value>
+    </property>
+    <property key="ProductIdToMatchingError">
+        <value xml:lang="en">ERROR Row ${rowNo}: The TO-MASTER-Product-ID must match to a new or existing Product</value>
+    </property>
+    <property key="ManufacturerIdMatchingError">
+        <value xml:lang="en">ERROR Row ${rowNo}: The Manufacturer-ID must match to a new or existing Manufacturer</value>
+    </property>
+    <property key="PixelIdNotExistError">
+        <value xml:lang="en">Pixel Tracking Not Exist</value>
+    </property>
+    <property key="ProductLoaderError">
+        <value xml:lang="en">Products can only be loaded if there are zero errors</value>
+    </property>
+    <property key="PromotionIdLengthError">
+        <value xml:lang="en">The Promotion Id cannot be more than 20 characters.</value>
+    </property>
+    <property key="PixelIdExistError">
+        <value xml:lang="en">The Pixel Id must be unique.</value>
+    </property>
+    <property key="PromotionIdExistError">
+        <value xml:lang="en">The Promotion Id must be unique.</value>
+    </property>
+    <property key="PromotionCodeIdExistError">
+        <value xml:lang="en">The Promotion Code must be unique.</value>
+    </property>
+    <property key="PromotionCodeIdLengthError">
+        <value xml:lang="en">The Promotion Code cannot be more than 20 characters.</value>
+    </property>
+    <property key="SequenceNumNotVaildError">
+        <value xml:lang="en">The Sequence '${sequenceNum}' must be between 1 and 1000.</value>
+    </property>
+    <property key="SequenceNumNotVaildNumError">
+        <value xml:lang="en">The Sequence# must be numeric and between 1 and 1000.</value>
+    </property>
+    <property key="InvalidSequenceNumber">
+        <value xml:lang="en">The Seq# must be numeric and between 1 and 1000.</value>
+    </property>
+    <property key="ShowAllError">
+        <value xml:lang="en">“WARNING: List will exceed ${ADM_WARN_LIST_ROWS}. Are you sure you want to continue?”</value>
+    </property>
+    <property key="ProductListPriceError">
+        <value xml:lang="en">Please enter a Valid Product List Price. It should be a Number.</value>
+    </property>
+    <property key="SameNameMediaFileError">
+        <value xml:lang="en">A Media File with the same name currently exists, please retry</value>
+    </property>
+    <property key="SpotContentError">
+        <value xml:lang="en">The Content cannot be blank.</value>
+    </property>
+    <property key="SpotContentIdError">
+        <value xml:lang="en">The Content Id cannot be blank.</value>
+    </property>
+    <property key="SpotContentIdLengthError">
+        <value xml:lang="en">The Content Id cannot be more than 20 characters.</value>
+    </property>
+    <property key="SpotContentIdExistError">
+        <value xml:lang="en">The Content Id must be unique.</value>
+    </property>
+    <property key="SpotNameError">
+        <value xml:lang="en">The Name field cannot be blank.</value>
+    </property>
+    <property key="StoreCodeLengthError">
+        <value xml:lang="en">The Store Code cannot be more than 100 characters.</value>
+    </property>
+    <property key="ValidActiveFromDateError">
+        <value xml:lang="en">Please enter a valid Active From Date.</value>
+    </property>
+    <property key="ValidActiveThruDateError">
+        <value xml:lang="en">Please enter a valid Active Thru Date.</value>
+    </property>
+    <property key="ValidShipDateError">
+        <value xml:lang="en">Please enter a valid Ship Date.</value>
+    </property>
+    <property key="ShipDateBeforeOrderDateError">
+        <value xml:lang="en">Ship Date can not be before Order Date.</value>
+    </property>
+    <property key="BlankCaptionError">
+        <value xml:lang="en">The Caption field cannot be blank.</value>
+    </property>
+    <property key="BlankShipDateError">
+        <value xml:lang="en">A Ship Date is required when changing the status to Completed.</value>
+    </property>
+    <property key="ParamKeyExistError">
+        <value xml:lang="en">Parameter Name already exist.</value>
+    </property>
+    <property key="ValidBCCEmailAddressError">
+        <value xml:lang="en">The BCC field must contain valid email addresses. You can use the “;” separator for multiple email addresses.</value>
+    </property>
+    <property key="ValidCCEmailAddressError">
+        <value xml:lang="en">The CC field must contain valid email addresses. You can use the “;” separator for multiple email addresses</value>
+    </property>
+    <property key="ValidCategorySeqNumError">
+        <value xml:lang="en">Seq# Must be entered, and a valid number between 0 and 9999</value>
+    </property>
+    <property key="ValidInventoryLevelError">
+        <value xml:lang="en">BF Inventory must be numeric and between 0 and 9999</value>
+    </property>
+    <property key="ValidDescriptionContentError">
+        <value xml:lang="en">The Description field cannot be blank.</value>
+    </property>
+    <property key="ValidDescriptionError">
+        <value xml:lang="en">The Description field cannot be blank.</value>
+    </property>
+    <property key="ValidDescriptionParameterError">
+        <value xml:lang="en">The Description field cannot be blank.</value>
+    </property>
+    <property key="ValidFromAddressError">
+        <value xml:lang="en">The FROM field must contain a valid email address.</value>
+    </property>
+    <property key="ValidFromQtyError">
+        <value xml:lang="en">Please enter a Valid From Qty. It should be a number.</value>
+    </property>
+    <property key="ValidProductFileError">
+        <value xml:lang="en">A valid Product File must be uploaded.</value>
+    </property>
+    <property key="ValidMediaFileError">
+        <value xml:lang="en">A valid Media File must be uploaded.</value>
+    </property>
+    <property key="ValidNavbarCategoryError">
+        <value xml:lang="en">Please enter a Valid Category Nav Bar. It should not be blank.</value>
+    </property>
+    <property key="ValidKeyError">
+        <value xml:lang="en">Please enter a Key.</value>
+    </property>
+    <property key="ValidParamKeyError">
+        <value xml:lang="en">Please enter a Parameter Name.</value>
+    </property>
+    <property key="ValidPriceError">
+        <value xml:lang="en">Please enter a Valid Price. It should be a number.</value>
+    </property>
+    <property key="ValidProductDiscontDateError">
+        <value xml:lang="en">Please enter a valid Discontinued Date</value>
+    </property>
+    <property key="ValidProductIntroDateError">
+        <value xml:lang="en">Please enter a valid Introduced Date</value>
+    </property>
+    <property key="ValidProductDefaultPriceError">
+        <value xml:lang="en">Please enter a Valid Product Sale Price. It should not be blank.</value>
+    </property>
+    <property key="ValidProductIdError">
+        <value xml:lang="en">Please enter a Valid Product Id. It should not be blank.</value>
+    </property>
+    <property key="ValidProductListPriceError">
+        <value xml:lang="en">Please enter a Valid Product List Price. It should not be blank.</value>
+    </property>
+    <property key="ValidProductLongDescError">
+        <value xml:lang="en">The Long Desc field cannot be blank</value>
+    </property>
+    <property key="ValidInternalNameError">
+        <value xml:lang="en">The Item# field cannot be blank</value>
+    </property>
+    <property key="ValidProductNameError">
+        <value xml:lang="en">Please enter a Valid Product Name. It should not be blank.</value>
+    </property>
+    <property key="ValidProductReviewTextError">
+        <value xml:lang="en">Please enter a Valid Review Text. It should not be blank.</value>
+    </property>
+    <property key="ValidProductReviewTitaleError">
+        <value xml:lang="en">Please enter a Valid Review Title. It should not be blank.</value>
+    </property>
+    <property key="ValidProductShortDescError">
+        <value xml:lang="en">Please enter a Valid Product Short Description. It should not be blank.</value>
+    </property>
+    <property key="ValidSalesPriceError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price must be a valid number</value>
+    </property>
+    <property key="ValidTopNavBarError">
+        <value xml:lang="en">When adding a new Top Navigation Item it must be unique</value>
+    </property>
+    <property key="PromotionProductRequiredError">
+        <value xml:lang="en">Action Products is required.</value>
+    </property>
+    <property key="PromotionCategoryOrProductRequiredError">
+        <value xml:lang="en">Action Categories or Action Products is required.</value>
+    </property>
+    <property key="ValidPromotionUseLimitPerOrderError">
+        <value xml:lang="en">Please enter a Valid Limit Per Order. It must be a number.</value>
+    </property>
+    <property key="ValidPromotionUseLimitPerCustomerError">
+        <value xml:lang="en">Please enter a Valid Limit Per Customer. It must be a number.</value>
+    </property>
+    <property key="ValidPromotionUseLimitPerPromotionError">
+        <value xml:lang="en">Please enter a Valid Limit Per Promotion. It must be a number.</value>
+    </property>
+    <property key="ValidPromotionCondValueError">
+        <value xml:lang="en">Please enter a Valid Value. It must be numeric.</value>
+    </property>
+    <property key="ValidPromotionRuleActionQuantityError">
+        <value xml:lang="en">Please enter a Valid Qty. It must be numeric and between 1 and 9999.</value>
+    </property>
+    <property key="ValidPromotionRuleActionMinQuantityError">
+        <value xml:lang="en">Please enter a Valid Min#. It must be numeric and between 1 and 9999.</value>
+    </property>
+    <property key="ValidPromotionRuleActionDiscountPerError">
+        <value xml:lang="en">Please enter a Valid Disc%. It must be numeric and between 1 and 100.</value>
+    </property>
+    <property key="ValidPromotionRuleActionDiscountError">
+        <value xml:lang="en">Please enter a Valid Disc n. It must be numeric and between 1 and 9999.</value>
+    </property>
+    <property key="ValidPromotionRuleActionPriceError">
+        <value xml:lang="en">Please enter a Valid Price. It must be numeric and between 1 and 9999.</value>
+    </property>
+    <property key="ValidPromotionRuleActionShipDiscountPerError">
+        <value xml:lang="en">Please enter a Valid Ship Disc%. It must be numeric and between 1 and 100.</value>
+    </property>
+    <property key="ValidPromotionRuleActionTaxDiscountPerError">
+        <value xml:lang="en">Please enter a Valid Tax Disc%. It must be numeric and between 1 and 100.</value>
+    </property>
+    <property key="ValidPromotionCodeUseLimitPerOrderError">
+        <value xml:lang="en">Please enter a Valid Limit Per Order. It must be a number.</value>
+    </property>
+    <property key="ValidPromotionCodeUseLimitPerCustomerError">
+        <value xml:lang="en">Please enter a Valid Limit Per Customer. It must be a number.</value>
+    </property>
+    <property key="ValidPromotionCodeUserEnteredError">
+        <value xml:lang="en">Please enter a Valid User Entered. It must be either Y or N.</value>
+    </property>
+    <property key="ValidSequenceCategoryError">
+        <value xml:lang="en">Please enter a Valid Category Sequence. It should not be blank.</value>
+    </property>
+    <property key="ValidSequenceNumError">
+        <value xml:lang="en">The Sequence# must be numeric and between 1 and 1000.</value>
+    </property>
+    <property key="ValidSpotContentError">
+        <value xml:lang="en">The Content field cannot be blank.</value>
+    </property>
+    <property key="ValidSpotNameError">
+        <value xml:lang="en">The Name field cannot be blank.</value>
+    </property>
+    <property key="ValidStatusError">
+        <value xml:lang="en">The selected status is not valid.</value>
+    </property>
+    <property key="ValidStatusItemError">
+        <value xml:lang="en">The selected status is not valid for product {0}.</value>
+    </property>
+    <property key="DuplicateProductAssocError">
+        <value xml:lang="en">You cannot associate a Product more than once {0}.</value>
+    </property>
+    <property key="ValidTextCategoryError">
+        <value xml:lang="en">Please enter a Valid Category Text. It should not be blank.</value>
+    </property>
+    <property key="ValidToQtyError">
+        <value xml:lang="en">Please enter a Valid To Qty. It should be a number.</value>
+    </property>
+    <property key="ValidToQtyValueError">
+        <value xml:lang="en">The TO QTY must be greater than the FROM QTY for all rows.</value>
+    </property>
+    <property key="ValidValueError">
+        <value xml:lang="en">The Value field cannot be blank.</value>
+    </property>
+    <property key="ValidValueParameterError">
+        <value xml:lang="en">Please enter a Valid Parameter Value. It should not be blank.</value>
+    </property>
+    <property key="ValidCategoryParameterError">
+        <value xml:lang="en">Please enter a Valid Parameter Category. It should not be blank.</value>
+    </property>
+    <property key="VolumePricingGapError">
+        <value xml:lang="en">Your volume pricing structure has quantity gaps. Please review and try again.</value>
+    </property>
+    <property key="AsOfDateError">
+        <value xml:lang="en">Invalid As of Date, defaulting to current date</value>
+    </property>
+    <property key="IdError">
+        <value xml:lang="en">The Id field cannot be blank.</value>
+    </property>
+    <property key="IdLengthError">
+        <value xml:lang="en">The Id field cannot be more than 20 characters.</value>
+    </property>
+    <property key="IdExistError">
+        <value xml:lang="en">The Id field must be unique.</value>
+    </property>
+    <property key="DescriptionError">
+        <value xml:lang="en">The Description field cannot be blank.</value>
+    </property>
+    <property key="SequenceIdError">
+        <value xml:lang="en">The Sequence field cannot be blank.</value>
+    </property>
+    <property key="SequenceIdNotVaildNumError">
+        <value xml:lang="en">The Sequence must be numeric.</value>
+    </property>
+    <property key="SequenceIdNotVaildNumError">
+        <value xml:lang="en">The Sequence must be numeric.</value>
+    </property>
+    <property key="BlankLongDescWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: The Long Desc is blank</value>
+    </property>
+    <property key="UniqueItemNoWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: Item# is not unique</value>
+    </property>
+    <property key="PLPImageNotFoundWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: The PLP image not found</value>
+    </property>
+    <property key="DirectoryPLPImageNotFoundWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: The ${osafeThemeImagePath} PLP image is not found</value>
+    </property>
+    <property key="PDPRegularImageNotFoundWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: The PDP regular image not found</value>
+    </property>
+    <property key="BlankUploadFileError">
+        <value xml:lang="en">File cannot be blank</value>
+    </property>
+    
+ <!-- ******* Error Messages  Ends*************************************** -->
+ 
+ 
+    <!-- **** Button Starts*************************************** -->
+    <property key="AddBtn">
+        <value xml:lang="en">Add</value>
+    </property>
+    <property key="AddNoteBtn">
+        <value xml:lang="en">Add Note</value>
+    </property>
+    <property key="AddPromotionBtn">
+        <value xml:lang="en">Add Promotion</value>
+    </property>
+    <property key="AddTopNavBtn">
+        <value xml:lang="en">Add Top Nav</value>
+    </property>
+    <property key="AddSubNavBtn">
+        <value xml:lang="en">Add Sub Nav</value>
+    </property>
+    <property key="ClrLblCacheBtn">
+        <value xml:lang="en">Clear Cache</value>
+    </property>
+    <property key="SolrReIndxBtn">
+        <value xml:lang="en">Re-Index SOLR</value>
+    </property>
+    <property key="CompareLabelFileBtn">
+        <value xml:lang="en">Compare Labels</value>
+    </property>
+    <property key="CompareParametersBtn">
+        <value xml:lang="en">Compare System Parameters</value>
+    </property>
+    <property key="downloadFileBtn">
+        <value xml:lang="en">Download File</value>
+    </property>
+    <property key="SampleFileBtn">
+        <value xml:lang="en">Create Template</value>
+    </property>
+    <property key="RefreshBtn">
+        <value xml:lang="en">Refresh</value>
+    </property>
+    <property key="execActionBtn">
+        <value xml:lang="en">Run</value>
+    </property>
+    <property key="ApproveBtn">
+        <value xml:lang="en">Approve</value>
+    </property>
+    <property key="BackBtn">
+        <value xml:lang="en">Back</value>
+    </property>
+    <property key="CancelBtn">
+        <value xml:lang="en">Cancel</value>
+    </property>
+    <property key="ChangeBtn">
+        <value xml:lang="en">Change</value>
+    </property>
+    <property key="CreateBtn">
+        <value xml:lang="en">Create</value>
+    </property>
+    <property key="CloseBtn">
+        <value xml:lang="en">Close</value>
+    </property>
+    <property key="CommunicationBtn">
+        <value xml:lang="en">Communication</value>
+    </property>
+    <property key="DateAllBtn">
+        <value xml:lang="en">All</value>
+    </property>
+    <property key="DeleteBtn">
+        <value xml:lang="en">Delete</value>
+    </property>
+    <property key="DescriptionBtn">
+        <value xml:lang="en">Description</value>
+    </property>
+    <property key="DoneBtn">
+        <value xml:lang="en">Done</value>
+    </property>
+    <property key="DownloadPDFBtn">
+        <value xml:lang="en">Download PDF</value>
+    </property>
+    <property key="ExportToFileBtn">
+        <value xml:lang="en">Export To File</value>
+    </property>
+    <property key="ExportToPdfBtn">
+        <value xml:lang="en">Export To PDF</value>
+    </property>
+    <property key="ExportToXMLBtn">
+        <value xml:lang="en">Export To XML</value>
+    </property>
+    <property key="FeatureSwatchesButton">
+        <value xml:lang="en">Feature Swatches</value>
+    </property>
+    <property key="InsertBtn">
+        <value xml:lang="en">Insert</value>
+    </property>
+    <property key="ItemsBtn">
+        <value xml:lang="en">#Items</value>
+    </property>
+    <property key="LoadProductsBtn">
+        <value xml:lang="en">Load Products</value>
+    </property>
+    <property key="LoginBtn">
+        <value xml:lang="en">Login</value>
+    </property>
+    <property key="ManufacturerBtn">
+        <value xml:lang="en">Manufacturer</value>
+    </property>
+    <property key="MonthToDateBtn">
+        <value xml:lang="en">MTD</value>
+    </property>
+    <property key="MoveBtn">
+        <value xml:lang="en">Move</value>
+    </property>
+    <property key="NewStoreLocationBtn">
+        <value xml:lang="en">New Store</value>
+    </property>
+    <property key="NoBtn">
+        <value xml:lang="en">No</value>
+    </property>
+    <property key="OrderBtn">
+        <value xml:lang="en">#Orders</value>
+    </property>
+    <property key="OrdersBtn">
+        <value xml:lang="en">Orders</value>
+    </property>
+    <property key="ProductIdBtn">
+        <value xml:lang="en">Product Id</value>
+    </property>
+    <property key="ProductLoaderBtn">
+        <value xml:lang="en">Product Loader</value>
+    </property>
+    <property key="PendingBtn">
+        <value xml:lang="en">Set To Pending</value>
+    </property>
+    <property key="ProcessingOptionsBtn">
+        <value xml:lang="en">Processing Options</value>
+    </property>
+    <property key="ProductCategoryBtn">
+        <value xml:lang="en">Product Category</value>
+    </property>
+    <property key="ProductAssociationsBtn">
+        <value xml:lang="en">Product Associations</value>
+    </property>
+    <property key="ProductsBtn">
+        <value xml:lang="en">Products</value>
+    </property>
+    <property key="RejectBtn">
+        <value xml:lang="en">Delete</value>
+    </property>
+    <property key="RemoveBtn">
+        <value xml:lang="en">Remove</value>
+    </property>
+    <property key="SalesBtn">
+        <value xml:lang="en">Sales</value>
+    </property>
+    <property key="SaveBtn">
+        <value xml:lang="en">Save</value>
+    </property>
+    <property key="SaveAndRefreshBtn">
+        <value xml:lang="en">Save and Refresh</value>
+    </property>
+    <property key="SaveAndReturnBtn">
+        <value xml:lang="en">Save and Return</value>
+    </property>
+    <property key="LoadCSSBtn">
+        <value xml:lang="en">Load CSS</value>
+    </property>
+    <property key="ReplaceWithBtn">
+        <value xml:lang="en">Replace Text</value>
+    </property>
+    <property key="SaveAsBtn">
+        <value xml:lang="en">Save As</value>
+    </property>
+    <property key="SearchBtn">
+        <value xml:lang="en">Search</value>
+    </property>
+    <property key="SelectBtn">
+        <value xml:lang="en">Select</value>
+    </property>
+    <property key="SiteMapBtn">
+        <value xml:lang="en">Generate XML Sitemap</value>
+    </property>
+    <property key="SeoUrlMapBtn">
+        <value xml:lang="en">SEO Friendly URL Refresh</value>
+    </property>
+    <property key="StoreGetGeoCodeBtn">
+        <value xml:lang="en">GEO Code Now</value>
+    </property>
+    <property key="StoreLocationMakeOpenBtn">
+        <value xml:lang="en">Open Store</value>
+    </property>
+    <property key="StoreLocationMakeCloseBtn">
+        <value xml:lang="en">Close Store</value>
+    </property>
+    <property key="ThisWeekBtn">
+        <value xml:lang="en">WTD</value>
+    </property>
+    <property key="TodayBtn">
+        <value xml:lang="en">Today</value>
+    </property>
+    <property key="YearToDateBtn">
+        <value xml:lang="en">YTD</value>
+    </property>
+    <property key="YesBtn">
+        <value xml:lang="en">Yes</value>
+    </property>
+    <property key="YesterdayBtn">
+        <value xml:lang="en">Yesterday</value>
+    </property>
+    <property key="CommunicationBtn">
+        <value xml:lang="en">Communication</value>
+    </property>
+    <property key="StyleMakeActiveBtn">
+        <value xml:lang="en">Make Active</value>
+    </property>
+    <property key="LogoutBtn">
+        <value xml:lang="en">Logout</value>
+    </property>
+    <property key="HelpBtn">
+        <value xml:lang="en">Help</value>
+    </property>
+    
+    <!-- **** Button Ends*************************************** -->
+    
+    <!-- =====  Labels for CONTENT Specific === -->
+    <!-- ==== Home Spot Listing Labels ====== -->
+    
+    <property key="ActiveDateLabel">
+        <value xml:lang="en">Active Date</value>
+    </property>
+    <property key="ContentNameLabel">
+        <value xml:lang="en">Spot Name</value>
+    </property>
+    <property key="OwnerIdLabel">
+        <value xml:lang="en">Owner ID</value>
+    </property>
+    <property key="CreatedDateLabel">
+        <value xml:lang="en">Created Date</value>
+    </property>
+    <property key="UpdatedDateLabel">
+        <value xml:lang="en">Updated Date</value>
+    </property>
+     <property key="manageDivSequenceLabel">
+        <value xml:lang="en">Manage &lt;DIV&gt; sequencing</value>
+    </property>
+    <!-- === Status Button Labels Starts ===== -->
+    <property key="ActiveLabel">
+        <value xml:lang="en">Active</value>
+    </property>
+    <property key="ContentMakeActive">
+        <value xml:lang="en">Make Active</value>
+    </property>
+    <property key="ContentSetPending">
+        <value xml:lang="en">Set Pending</value>
+    </property>
+    <property key="ContentSetInactive">
+        <value xml:lang="en">Set To Inactive</value>
+    </property>
+    <property key="Inactive">
+        <value xml:lang="en">Inactive</value>
+    </property>
+     <!-- === Status Button Labels  Ends===== -->
+     
+    <!-- === Tooltip Starts ===== -->
+    <property key="AddKeyTooltip">
+        <value xml:lang="en">Add Key ${key} to your Label/Caption file</value>
+    </property>
+    <property key="AddParamKeyTooltip">
+        <value xml:lang="en">Add Key ${key} to your Database file</value>
+    </property>
+    <property key="CategoryImageTooltip">
+        <value xml:lang="en">Show Category Image</value>
+    </property>
+    <property key="DeleteRelatedProductTooltip">
+        <value xml:lang="en">Delete this Related Product</value>
+    </property>
+    <property key="InsertBeforeNewRowTooltip">
+        <value xml:lang="en">Insert a new Related Product row BEFORE this row</value>
+    </property>
+    <property key="InsertAfterNewRowTooltip">
+        <value xml:lang="en">Insert a new Related Product row AFTER this row</value>
+    </property>
+    <property key="DeletePriceRowTooltip">
+        <value xml:lang="en">Delete this Pricing row</value>
+    </property>
+    <property key="InsertBeforeNewPiceRowTooltip">
+        <value xml:lang="en">Insert a new Pricing row BEFORE this row</value>
+    </property>
+    <property key="InsertAfterNewPiceRowTooltip">
+        <value xml:lang="en">Insert a new Pricing row AFTER this row</value>
+    </property>
+    <property key="HtmlMetatagTooltip">
+        <value xml:lang="en">Show Html Meta Tags</value>
+    </property>
+    <property key="ProductCategoryTooltip">
+        <value xml:lang="en">Show Products for this Category</value>
+    </property>
+    <property key="ProductSequenceTooltip">
+        <value xml:lang="en">Show Product Sequences for this Category</value>
+    </property>
+    <property key="ProductImagesTooltip">
+        <value xml:lang="en">Show Product Images</value>
+    </property>
+    <property key="ProductPricingTooltip">
+        <value xml:lang="en">Show Product Pricing</value>
+    </property>
+    <property key="ProductVariantsTooltip">
+        <value xml:lang="en">Show Product Variants</value>
+    </property>
+    <property key="PreviewContentTooltip">
+        <value xml:lang="en">Click to preview the content in a new window</value>
+    </property>
+    <property key="ManagePLPContentSpotTooltip">
+        <value xml:lang="en">Manage PLP Content Spot</value>
+    </property>
+    <property key="ManageRelatedProductsTooltip">
+        <value xml:lang="en">Manage Related Products</value>
+    </property>
+    <property key="ManageSwatchImagesTooltip">
+        <value xml:lang="en">Manage Default Swatch Images</value>
+    </property>
+    <property key="ManageProductVideoTooltip">
+        <value xml:lang="en">Manage Product Videos</value>
+    </property>
+    <!-- === Tooltip Ends ===== -->
+
+    <!-- === confirm Starts ===== -->
+    <property key="commonConfirmDialogText">
+        <value xml:lang="en">Are you sure?</value>
+    </property>
+    <property key="commonConfirmDialogTitle">
+        <value xml:lang="en">Please Confirm</value>
+    </property>
+    <property key="deleteContentConfirmText">
+        <value xml:lang="en">Are you sure you want to DELETE this content?</value>
+    </property>
+    <property key="deleteProductImageConfirmText">
+        <value xml:lang="en">Are you sure you want to delete this image?</value>
+    </property>
+    <property key="deleteProductVideoConfirmText">
+        <value xml:lang="en">Are you sure you want to delete this video?</value>
+    </property>
+    <property key="deleteContactUsReasonConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the reason?</value>
+    </property>
+    <property key="deleteMediaAssetConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the Media Asset?</value>
+    </property>
+    <property key="DeleteRelatedProductConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the Related Product</value>
+    </property>
+    <property key="deleteParameterConfirmText">
+        <value xml:lang="en">Deleting a System parameter may cause serious harm to your eCommerce implementation. Are you sure you want to delete the System Parameter ${parmKey}?</value>
+    </property>
+    <property key="deletePixelTrackingConfirmText">
+        <value xml:lang="en">Are you sure you want to delete pixel ${pixelId}?</value>
+    </property>
+    <property key="deleteUiLabelConfirmText">
+        <value xml:lang="en">Deleting a Label/Caption may cause serious harm to your eCommerce implementation. Are you sure you want to delete the Label/Caption ${key}?</value>
+    </property>
+    <property key="DeletePaymentSettingConfirmText">
+        <value xml:lang="en">Deleting a Payment Setting may cause serious harm to your eCommerce implementation. Are you sure you want to delete the Payment Setting [{0}]?</value>
+    </property>
+    <!-- === confirm Ends ===== -->
+    
+    <!-- Cust Requesst Attribute Starts -->
+    <property key="FIRST_NAME_Caption">
+        <value xml:lang="en">First Name:</value>
+    </property>
+    <property key="LAST_NAME_Caption">
+        <value xml:lang="en">Last Name:</value>
+    </property>
+    <property key="ADDRESS1_Caption">
+        <value xml:lang="en">Address1:</value>
+    </property>
+    <property key="ADDRESS2_Caption">
+        <value xml:lang="en">Address2:</value>
+    </property>
+    <property key="ADDRESS3_Caption">
+        <value xml:lang="en">Address3:</value>
+    </property>
+    <property key="CITY_Caption">
+        <value xml:lang="en">City or Town:</value>
+    </property>
+    <property key="COMMENT_Caption">
+        <value xml:lang="en">Comment:</value>
+    </property>
+    <property key="CONTACT_PHONE_Caption">
+        <value xml:lang="en">Contact Phone:</value>
+    </property>
+    <property key="EMAIL_ADDRESS_Caption">
+        <value xml:lang="en">Email Address:</value>
+    </property>
+    <property key="IS_DOWNLOADED_Caption">
+        <value xml:lang="en">Export Status:</value>
+    </property>
+    <property key="STATE_PROVINCE_Caption">
+        <value xml:lang="en">State or Province:</value>
+    </property>
+    <property key="ZIP_POSTAL_CODE_Caption">
+        <value xml:lang="en">Zip or Postcode:</value>
+    </property>
+    <property key="COUNTRY_Caption">
+        <value xml:lang="en">Country:</value>
+    </property>
+    <property key="REASON_FOR_CONTACT_Caption">
+        <value xml:lang="en">Contact Us Reason:</value>
+    </property>
+    <property key="ORDER_NUMBER_Caption">
+        <value xml:lang="en">Order#:</value>
+    </property>
+    <property key="DATETIME_DOWNLOADED_Caption">
+        <value xml:lang="en">Export Date:</value>
+    </property>
+    <!-- Cust Requesst Attribute Ends-->
+    
+    <!-- Good Identification Types Starts-->
+    <property key="GoodIdentificationType.description.SKU">
+        <value xml:lang="en">SKU:</value>
+    </property>
+    <property key="GoodIdentificationType.description.GOOGLE_ID">
+        <value xml:lang="en">Google ID:</value>
+    </property>
+    <property key="GoodIdentificationType.description.ISBN">
+        <value xml:lang="en">ISBN:</value>
+    </property>
+    <property key="GoodIdentificationType.description.MANUFACTURER_ID_NO">
+        <value xml:lang="en">Manufacturer ID:</value>
+    </property>
+    <!-- Good Identification Types Ends-->
+    <property key="CommonY">
+        <value xml:lang="en">Y</value>
+    </property>
+    <property key="CommonN">
+        <value xml:lang="en">N</value>
+    </property>
+</resource>

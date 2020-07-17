@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<Content contentId="HPS_01" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="HPS_01">
+  <textData>
+    <![CDATA[<img src="/osafe_theme/images/home/alt_home_page_spot_01.gif" alt="Home Spot 1"/>]]>
+  </textData>
+</ElectronicText>
+
+<Content contentId="HPS_02" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="HPS_02">
+  <textData>
+    <![CDATA[<img src="/osafe_theme/images/home/alt_home_page_spot_02.gif" alt="Home Spot 2"/>]]>
+  </textData>
+</ElectronicText>
+
+<Content contentId="HP_CAROUSEL" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="HPS_02">
+  <textData>
+    <![CDATA[
+#--Carousel Settings/Options-->
+
+<#--Width of Carousel Container Container & Image -->
+<#assign CAROUSEL_WIDTH="960"/>
+
+<#--Height of Carousel Container Container & Image -->
+<#assign CAROUSEL_HEIGHT="391"/>
+
+<#--Carousel Images Scroll Automatically "true" or "false" -->
+<#assign CAROUSEL_AUTO="true"/>
+
+<#--Carousel will start over after last slide shows "true" or "false" -->
+<#assign CAROUSEL_CONTINUOUS="true"/>
+
+<#--Carousel image display time in Milliseconds -->
+<#assign CAROUSEL_INTERVAL="4500"/>
+
+<#--Carousel starts when all images are loaded "true" or "false" ("true" is recommended) -->
+<#assign CAROUSEL_LOADING="true"/>
+
+<#-- Navigation on the right and left of carousel.  Arrow images defined in CSS -->
+<#assign CAROUSEL_ARROWS="true"/>
+
+<#-- Button Navigation on the Bottom of Carousel "true" or "false" -->
+<#assign CAROUSEL_BUTTONS="true"/>
+
+<#-- Converts Buttons to Numbers (Note: CAROUSEL_BUTTONS must be "true" to function) -->
+<#assign CAROUSEL_BTN_NUMBERS="false"/>
+
+<#-- Trace x and y coordinates for the mouse "true" or "false" -->
+<#assign CAROUSEL_MOUSE_TRACE="false"/>
+
+<#-- Pause Carousel while hovering over individual image "true" or "false" ("true" is recommended) -->
+<#assign CAROUSEL_PAUSE_ON_HOVER="true"/>
+
+<#-- Stop Carousel on mouse click "true" or "false" -->
+<#assign CAROUSEL_STOP_ON_CLICK="false"/>
+
+<#-- Type of Transition (hslide,vslide,fade) -->
+<#assign CAROUSEL_TRANSITION="fade"/>
+
+<#-- Delay Length Between Transitions in Milliseconds (Default = "0") -->
+<#assign CAROUSEL_TRANSITION_DELAY="0"/>
+
+
+<#-- Speed of Transitions in Milliseconds (Default = "1000") -->
+<#assign CAROUSEL_TRANSITION_SPEED="1000"/>
+
+
+<#--Carousel Images -->
+
+<#assign CAROUSEL_IMAGE_URL_1="/osafe_theme/images/user_content/images/banner1.jpg"/>
+<#assign CAROUSEL_IMAGE_HREF_1="/online/shop/tv/video"/>
+<#assign CAROUSEL_IMAGE_URL_2="/osafe_theme/images/user_content/images/banner2.jpg"/>
+<#assign CAROUSEL_IMAGE_HREF_2="/online/shop/computers-and-tablets/ipads"/>
+<#assign CAROUSEL_IMAGE_URL_3="/osafe_theme/images/user_content/images/banner3.jpg"/>
+<#assign CAROUSEL_IMAGE_HREF_3="/online/shop/mobiles/smart-phones"/>
+<#assign CAROUSEL_IMAGE_URL_4=""/>
+<#assign CAROUSEL_IMAGE_HREF_4=""/>
+<#assign CAROUSEL_IMAGE_URL_5=""/>
+<#assign CAROUSEL_IMAGE_HREF_5=""/>
+
+<#-- Below is Carousel Code // All Adjustments should be made above -->
+
+
+<script type="text/javascript">
+Event.onDOMReady(function()
+{
+    jQuery("#showcase").awShowcase (
+    {
+        content_width:  ${CAROUSEL_WIDTH!""},
+        content_height: ${CAROUSEL_HEIGHT!""},
+        auto: ${CAROUSEL_AUTO!""},
+        continuous: ${CAROUSEL_CONTINUOUS!""},
+        interval: ${CAROUSEL_INTERVAL!""},
+        loading: ${CAROUSEL_LOADING!""},
+        arrows: ${CAROUSEL_ARROWS!""},
+        buttons: ${CAROUSEL_BUTTONS!""},
+        btn_numbers: ${CAROUSEL_BTN_NUMBERS!""},
+        mousetrace: ${CAROUSEL_MOUSE_TRACE!""},
+        pauseonover: ${CAROUSEL_PAUSE_ON_HOVER!""},
+        stoponclick: ${CAROUSEL_STOP_ON_CLICK!""},
+        transition: '${CAROUSEL_TRANSITION!""}',
+        transition_delay: ${CAROUSEL_TRANSITION_DELAY!""},
+        transition_speed: ${CAROUSEL_TRANSITION_SPEED!""},
+        custom_function: null
+    });
+});
+</script>
+
+<div style="width: 960px; margin: auto;">
+ <div id="showcase" class="showcase">
+  <!-- Each child div in #showcase represents a slide -->
+   <#if CAROUSEL_IMAGE_URL_1?has_content>
+    <div class="showcase-slide">
+       <div class="showcase-content"> <a href="${CAROUSEL_IMAGE_HREF_1}"><img src="${CAROUSEL_IMAGE_URL_1}" alt="01" /></a>
+       </div>
+    </div>
+   </#if>
+
+   <#if CAROUSEL_IMAGE_URL_2?has_content>
+     <div class="showcase-slide">
+      <div class="showcase-content"> <a href="${CAROUSEL_IMAGE_HREF_2}"><img src="${CAROUSEL_IMAGE_URL_2}" alt="02" /></a>
+      </div>
+     </div>
+   </#if>
+
+   <#if CAROUSEL_IMAGE_URL_3?has_content>
+     <div class="showcase-slide">
+      <div class="showcase-content"> <a href="${CAROUSEL_IMAGE_HREF_3}"><img src="${CAROUSEL_IMAGE_URL_3}" alt="03" /></a>
+      </div>
+     </div>
+   </#if>
+
+   <#if CAROUSEL_IMAGE_URL_4?has_content>
+     <div class="showcase-slide">
+      <div class="showcase-content"> <a href="${CAROUSEL_IMAGE_HREF_4}"><img src="${CAROUSEL_IMAGE_URL_4}" alt="04" /></a>
+      </div>
+     </div>
+   </#if>
+
+   <#if CAROUSEL_IMAGE_URL_5?has_content>
+     <div class="showcase-slide">
+      <div class="showcase-content"> <a href="${CAROUSEL_IMAGE_HREF_5}"><img src="${CAROUSEL_IMAGE_URL_5}" alt="05" /></a>
+      </div>
+     </div>
+   </#if>
+ </div>
+</div>
+    ]]>
+  </textData>
+</ElectronicText>
+
+
+
+</entity-engine-xml>

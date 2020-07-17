@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="validateDateRange" short-description="Validate Dates in Period Box" login-required="false">
+
+       <set field="periodFrom" value="${groovy: request.getAttribute('periodFrom')}" default-value="${groovy: request.getParameter('periodFrom')}"/>
+       <set field="periodTo" value="${groovy: request.getAttribute('periodTo')}"  default-value="${groovy: request.getParameter('periodTo')}"/>
+       <set field="preferredDateFormat" from-field="parameters.preferredDateFormat" />
+       <if-empty field="preferredDateFormat">
+           <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="preferredDateFormat">
+               <field field="request" type="javax.servlet.ServletRequest"/>
+               <string value="FORMAT_DATE"/>
+           </call-class-method>
+           <call-class-method class-name="com.osafe.util.Util" method-name="isValidDateFormat" ret-field="isValidDateFormat">
+               <field field="preferredDateFormat"/>
+           </call-class-method>
+           <if-compare field="isValidDateFormat" operator="equals" value="false">
+               <set field="preferredDateFormat" value="MM/dd/yy"/>
+           </if-compare>
+       </if-empty>
+       <call-class-method class-name="com.osafe.util.Util"  method-name="checkDateRange" ret-field="checkDateRangeResult">
+            <field field="periodFrom"/>
+            <field field="periodTo"/>
+            <field field="preferredDateFormat"/>
+        </call-class-method>
+        <if-compare field="checkDateRangeResult" operator="not-equals" value="success">
+            <if-compare field="checkDateRangeResult" operator="equals" value="invalidFormat">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DateFormatInvalidError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+            </if-compare>
+            <if-compare field="checkDateRangeResult" operator="equals" value="invalidRange">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DateRangeInvalidError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+            </if-compare>
+        </if-compare>
+
+        <!-- now that everything is validated & setup, check to see if there are errors, then call the services -->
+        <check-errors/>
+
+    </simple-method>
+</simple-methods>

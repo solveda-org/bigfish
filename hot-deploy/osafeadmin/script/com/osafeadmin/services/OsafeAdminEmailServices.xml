@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="updateProdStoreEmailSetAndEnum" short-description="This Service Update ProductStoreEmailSettings and Description in Enumeration">
+        <if-empty field="parameters.fromAddress">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFromAddressError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="emailValid">
+                <field field="parameters.fromAddress"/>
+            </call-class-method>
+            <if-compare field="emailValid" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidFromAddressError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        
+        <if-empty field="parameters.subject">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSubjectError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="SUBJECT" list="error_list"/>
+        </if-empty>
+        
+        <property-to-field field="delim" resource="OSafeAdmin" property="email-address-seperator"/>
+        <set field="del" from-field="delim" default-value=";"/>
+        <if-not-empty field="parameters.ccAddress">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkMultiEmailAddress" ret-field="emailValid">
+                <field field="parameters.ccAddress"/>
+                <field field="del"  type="String"/>
+            </call-class-method>
+            <if-compare field="emailValid" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCCEmailAddressError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="CCADDRESS" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.bccAddress">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkMultiEmailAddress" ret-field="emailValid">
+                <field field="parameters.bccAddress"/>
+                <field field="del"  type="String"/>
+            </call-class-method>
+            <if-compare field="emailValid" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBCCEmailAddressError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="BCCADDRESS" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+        
+        <set-service-fields service-name="updateProductStoreEmailSetting" to-map="updateEmailSetting" map="parameters"/>
+        <call-service service-name="updateProductStoreEmailSetting" in-map-name="updateEmailSetting"/>
+        
+        <set-service-fields service-name="updateEnum" to-map="updateEnumCtx" map="parameters"/>
+        <set field="updateEnumCtx.enumId" from-field="parameters.emailType"/>
+        <call-service service-name="updateEnum" in-map-name="updateEnumCtx" />
+    </simple-method>
+</simple-methods>

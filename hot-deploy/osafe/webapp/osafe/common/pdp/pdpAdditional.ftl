@@ -1,0 +1,7 @@
+<#if (pdpEspotContent?exists && pdpEspotContent?has_content)>
+  <#if ((pdpEspotContent.statusId)?if_exists == "CTNT_PUBLISHED")>
+		 <div id="pdpAdditional">
+		        <@renderContentAsText contentId="${pdpEspotContent.contentId}" ignoreTemplate="true"/>
+		 </div>
+  </#if>
+</#if>

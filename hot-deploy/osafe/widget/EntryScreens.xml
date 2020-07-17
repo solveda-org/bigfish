@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+    <screen name="aboutYouEntryForm">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/aboutYouEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addressShippingEntryForm">
+        <section>
+            <actions>
+                <set field="addressEntryBoxHeading" value="${uiLabelMap.ShippingAddressHeading}"/>
+                <set field="isShipping" value="Y"/>
+                <set field="showAttnName" value="Y"/>
+                <set field="showHomePhone" value="Y"/>
+                <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
+                <set field="homePhoneRequired" value="Y"/>
+                <set field="showMobilePhone" value="Y"/>
+                <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
+                <set field="fieldPurpose" value="SHIPPING" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/addressShippingEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="addressBillingEntryForm">
+        <section>
+            <actions>
+                <set field="addressEntryBoxHeading" value="${uiLabelMap.BillingAddressHeading}" />
+                <set field="showHomePhone" value="Y"/>
+                <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
+                <set field="homePhoneRequired" value="Y"/>
+                <set field="showMobilePhone" value="Y"/>
+                <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
+                <set field="fieldPurpose" value="BILLING" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/addressBillingEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="emailPasswordEntryForm">
+        <section>
+            <actions>
+                <set field="REG_PWD_MIN_CHAR" from-field="REG_PWD_MIN_CHAR" type="Integer" />
+                <set field="REG_PWD_MIN_NUM" from-field="REG_PWD_MIN_NUM" type="Integer" />
+                <set field="REG_PWD_MIN_UPPER" from-field="REG_PWD_MIN_UPPER" type="Integer" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/emailPasswordEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="emailPasswordConfirmEntryForm">
+        <section>
+            <actions>
+                <set field="REG_PWD_MIN_CHAR" from-field="REG_PWD_MIN_CHAR" type="Integer" />
+                <set field="REG_PWD_MIN_NUM" from-field="REG_PWD_MIN_NUM" type="Integer" />
+                <set field="REG_PWD_MIN_UPPER" from-field="REG_PWD_MIN_UPPER" type="Integer" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/emailPasswordConfirmEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="contactUsEntryForm">
+        <section>
+            <actions>
+                <set field="custRequestTypeId" value="RF_CONTACT_US" />
+                <set field="custRequestName" value="Contact Us Request" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/contactUsEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestCatalogEntryForm">
+        <section>
+            <actions>
+                <set field="addressEntryBoxHeading" value="${uiLabelMap.RequestCatalogTitle}"/>
+                <set field="addressInstructionsInfo" value="${uiLabelMap.RequestCatalogInstructionsInfo}"/>
+                <set field="showName" value="Y"/>
+                <set field="showHomePhone" value="Y"/>
+                <set field="showEmailAddr" value="Y"/>
+                <set field="homePhoneCaption" value="${uiLabelMap.ContactPhoneCaption}"/>
+                <set field="fieldPurpose" value="REQ_CATALOG" />
+                <set field="custRequestTypeId" value="RF_CATALOG" />
+                <set field="custRequestName" value="Catalog Request" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/requestCatalogEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="contactMechEntryForm">
+        <section>
+            <actions>
+                <set field="addressEntryBoxHeading" value="${groovy:if(org.ofbiz.base.util.UtilValidate.isNotEmpty(context.contactMech))return (uiLabelMap.UpdateAddressHeading); else return (uiLabelMap.CreateAddressHeading);}"/>
+                <set field="addressInstructionsInfo" value="${uiLabelMap.UpdateAddressInstructionsInfo}"/>
+                <set field="showAttnName" value="Y"/>
+                <set field="showName" value="Y"/>
+                <set field="showHomePhone" value="Y"/>
+                <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
+                <set field="homePhoneRequired" value="Y"/>
+                <set field="showMobilePhone" value="Y"/>
+                <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
+                <set field="fieldPurpose" value="CUSTOMER" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/contactMechEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="forgotPasswordForm">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/forgotPasswordEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="emailSubscriberForm">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/emailSubscriberEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="productReviewSubmitForm">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/productReviewEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Button -->
+    <screen name="formEntryContinueButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/formEntryContinueButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="formEntryContinueBackButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/formEntryContinueBackButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="formEntrySubmitButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/formEntrySubmitButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="formEntryAnyButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/formEntryAnyButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="formProductReviewSubmitButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/productReviewSubmitButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="capturePlusJs">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/js/capturePlusJs.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+</screens>

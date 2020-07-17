@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<ProductStoreShipmentMeth productStoreShipMethId="5001" productStoreId="BigFishStore" shipmentMethodTypeId="STANDARD" partyId="USPS" roleTypeId="CARRIER" allowUspsAddr="Y" requireUspsAddr="N" sequenceNumber="1"/>
+<ProductStoreShipmentMeth productStoreShipMethId="5002" productStoreId="BigFishStore" shipmentMethodTypeId="EXPRESS" partyId="USPS" roleTypeId="CARRIER" allowUspsAddr="Y" requireUspsAddr="N" sequenceNumber="2"/>
+<CarrierShipmentMethod shipmentMethodTypeId="STANDARD" partyId="USPS" roleTypeId="CARRIER" sequenceNumber="1" carrierServiceCode="Standard" optionalMessage=" (delivery in 5-9 business days)"/>
+<CarrierShipmentMethod shipmentMethodTypeId="EXPRESS" partyId="USPS" roleTypeId="CARRIER" sequenceNumber="2" carrierServiceCode="Express" optionalMessage=" (delivery in 1-4 business days)"/>
+<ShipmentCostEstimate shipmentCostEstimateId="5001" productStoreShipMethId="5001" productStoreId="BigFishStore" shipmentMethodTypeId="STANDARD" carrierPartyId="USPS" carrierRoleTypeId="CARRIER" orderFlatPrice="5.95" />
+<ShipmentCostEstimate shipmentCostEstimateId="5002" productStoreShipMethId="5002" productStoreId="BigFishStore" shipmentMethodTypeId="EXPRESS" carrierPartyId="USPS" carrierRoleTypeId="CARRIER" orderFlatPrice="9.95" />
+</entity-engine-xml>

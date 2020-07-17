@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="validateCreditCard" short-description="Validate Credit Card fields" login-required="false">
+        <log level="info" message="${parameters.fieldLevelErrors}"></log>
+        <if-compare field="parameters.fieldLevelErrors" operator="equals" value="Y">
+            <set field="fieldLevelErrors" value="${parameters.fieldLevelErrors}"/>
+            <field-to-request field="fieldLevelErrors" />
+        </if-compare>
+
+        <!-- Check credit card fields -->
+         <call-map-processor in-map-name="parameters" out-map-name="creditCardContext">
+              <simple-map-processor name="createCreditCard">
+                <make-in-string field="expireDate">
+                  <in-field field="expMonth"/>
+                  <constant>/</constant>
+                  <in-field field="expYear"/>
+                </make-in-string>
+                <process field="partyId"><copy/></process>
+                <process field="companyNameOnCard"><copy/></process>
+                <process field="titleOnCard"><copy/></process>
+                <process field="firstNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="FirstNameOnCardMissingError"/></not-empty></process>
+                <process field="middleNameOnCard"><copy/></process>
+                <process field="lastNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="LastNameOnCardMissingError"/></not-empty></process>
+                <process field="suffixOnCard"><copy/></process>
+                <process field="cardType"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardTypeMissingError"/></not-empty></process>
+                <process field="cardNumber"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardNumberMissingError"/></not-empty></process>
+                <process field="contactMechId"><copy/></process>
+                <process field="description"><copy/></process>
+                <process field="expMonth"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationMonthMissingError"/></not-empty></process>
+                <process field="expYear"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationYearMissingError"/></not-empty></process>
+                <process field="expireDate">
+                    <copy/>
+                    <validate-method method="isDateAfterToday"><fail-property resource="OSafeUiLabels" property="ExpirationDateIsBeforeTodayError"/></validate-method></process>
+              </simple-map-processor>
+
+         </call-map-processor>
+
+        <!-- Check that the card type matches -->
+        <call-bsh><![CDATA[
+            List errorMessageList = javolution.util.FastList.newInstance();
+            parameters.put("errorMessageList", errorMessageList );
+            if (!org.ofbiz.base.util.UtilValidate.isCardMatch((String) creditCardContext.get("cardType"), (String) creditCardContext.get("cardNumber"))) {
+                      errorMessageList.add(
+                                          org.ofbiz.base.util.UtilProperties.getMessage("OSafeUiLabels", "CreditCardNumberInvalidError",
+                                              org.ofbiz.base.util.UtilMisc.toMap(
+                                                  "cardNumber", (String) creditCardContext.get("cardNumber"),
+                                                  "cardType", (String) creditCardContext.get("cardType"),
+                                                  "validCardType", org.ofbiz.base.util.UtilValidate.getCardType((String) creditCardContext.get("cardNumber"))
+                                              ),locale));
+              }
+        ]]></call-bsh>
+
+        <set field="errorMessageList" from-field="parameters.errorMessageList" />
+
+        <!-- Get errors from method call and associate to field -->
+        <if-not-empty  field="errorMessageList">
+            <log level="info" message="isCardMatch found errors"/>
+            <iterate list="errorMessageList" entry="error">
+                <string-to-list string="${error}" message-field="cardNumber" list="error_list"/>
+            </iterate>
+        </if-not-empty>
+
+        <!-- now that everything is validated & setup, check to see if there are errors, then call the services -->
+        <check-errors/>
+
+    </simple-method>
+</simple-methods>

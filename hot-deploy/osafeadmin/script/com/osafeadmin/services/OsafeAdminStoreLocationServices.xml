@@ -1,0 +1,427 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createStoreLocation" short-description="create a new store location">
+        <set field="address" value=""/>
+        <if-empty field="parameters.groupNameLocal">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="maxLength" value="100" type="Integer"/>
+                <set field="spaceReplacement" value=" " type="String"/>
+                <set field="makeUpCase" value="false" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="groupNameLocal">
+                    <field field="parameters.groupNameLocal" type="String"/>
+                    <field field="maxLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="groupNameLocal">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StoreCodeLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+                        <set field="parameters.groupNameLocal" from-field="groupNameLocal"/>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.groupName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreNameError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.address1">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <string-append string="${parameters.address1}, " field="address"/>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.address2">
+            <string-append string="${parameters.address2}, " field="address"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.address3">
+            <string-append string="${parameters.address3}, " field="address"/>
+        </if-not-empty>
+        <if-empty field="parameters.city">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <string-append string="${parameters.city}, " field="address"/>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.stateProvinceGeoId">
+            <entity-one entity-name="Geo" value-field="stateGeo" auto-field-map="false">
+                <field-map field-name="geoId" from-field="parameters.stateProvinceGeoId"/>
+                <select-field field-name="geoName"/>
+            </entity-one>
+            <if-not-empty field="stateGeo.geoName">
+                <string-append string="${stateGeo.geoName}, " field="address"/>
+            </if-not-empty>
+            <set field="parameters.address3" from-field="nullField"/>
+        </if-not-empty>
+        <if-empty field="parameters.postalCode">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPostalCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <if-compare value="USA" operator="equals" field="parameters.countryGeoId">
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                        <field field="parameters.postalCode"/>
+                    </call-class-method>
+                </if-compare>
+                <if-compare field="isZipCode" operator="equals"  value="false">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidPostalCodeError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        <if>
+            <condition>
+                <or>
+                    <if-compare value="CAN" operator="equals" field="parameters.countryGeoId"></if-compare>
+                    <if-compare value="USA" operator="equals" field="parameters.countryGeoId"></if-compare>
+                </or>
+            </condition>
+            <then>
+                <if-empty field="parameters.stateProvinceGeoId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-empty>
+                <call-map-processor in-map-name="parameters" out-map-name="contactNumberMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <make-in-string field="contactNumber">
+                                <in-field field="contactNumber3"/>
+                                <in-field field="contactNumber4"/>
+                            </make-in-string>
+                            <process field="contactNumber"><copy to-field="phoneContactNumber"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                    <field field="parameters.areaCode"/>
+                    <field field="contactNumberMap.phoneContactNumber"/>
+                    <string value="true"/>
+                </call-class-method>
+                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    </if-compare>
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    </if-compare>
+                </if-compare>
+            </then>
+            <else>
+                <set field="parameters.areaCode" from-field="nullField"/>
+                <call-map-processor in-map-name="parameters" out-map-name="contactNumberMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <make-in-string field="contactNumber">
+                                <in-field field="contactNumberOther"/>
+                            </make-in-string>
+                            <process field="contactNumber"><copy to-field="phoneContactNumber"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <if-empty field="contactNumberMap.phoneContactNumber">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-empty>
+            </else>
+        </if>
+        <if-not-empty field="parameters.countryGeoId">
+            <entity-one entity-name="Geo" value-field="countryGeo" auto-field-map="false">
+                <field-map field-name="geoId" from-field="parameters.countryGeoId"/>
+                <select-field field-name="geoName"/>
+            </entity-one>
+            <if-not-empty field="countryGeo.geoName">
+                <string-append string="${countryGeo.geoName}" field="address"/>
+            </if-not-empty>
+        </if-not-empty>
+        <check-errors/>
+
+        <call-class-method class-name="com.osafe.geo.OsafeGeo"  method-name="fromAddress" ret-field="osafeGeo">
+            <field field="address"/>
+        </call-class-method>
+        <call-object-method method-name="latitude" obj-field="osafeGeo" ret-field="latitude"/>
+        <call-object-method method-name="longitude" obj-field="osafeGeo" ret-field="longitude"/>
+        <if>
+            <condition>
+                <and>
+                    <if-empty field="latitude"/>
+                    <if-empty field="longitude"/>
+                </and>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GetGeoCodeError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </then>
+            <else>
+                <field-to-request field="latitude"/>
+                <field-to-request field="longitude"/>
+            </else>
+        </if>
+        <check-errors/>
+
+        <set-service-fields service-name="createPartyGroup" map="parameters" to-map="createPartyGroupCtx"/>
+        <call-service service-name="createPartyGroup" in-map-name="createPartyGroupCtx">
+            <result-to-field result-name="partyId" field="parameters.partyId"/>
+        </call-service>
+
+        <set-service-fields service-name="createPostalAddressAndPurposes" map="parameters" to-map="createPostalAddressAndPurposesCtx"/>
+        <set field="createPostalAddressAndPurposesCtx.contactMechPurposeTypeId" value="GENERAL_LOCATION"/>
+        <call-service service-name="createPostalAddressAndPurposes" in-map-name="createPostalAddressAndPurposesCtx"/>
+
+        <set-service-fields service-name="createPartyContactMechPurpose" map="parameters" to-map="createPartyContactMechPurposeCtx"/>
+        <set-service-fields service-name="createPartyTelecomNumber" map="parameters" to-map="createPartyTelecomNumberCtx"/>
+        <set field="createPartyTelecomNumberCtx.contactNumber" from-field="contactNumberMap.phoneContactNumber"/>
+        <call-service service-name="createPartyTelecomNumber" in-map-name="createPartyTelecomNumberCtx">
+            <result-to-field result-name="contactMechId" field="createPartyContactMechPurposeCtx.contactMechId"/>
+        </call-service>
+        <set field="createPartyContactMechPurposeCtx.contactMechPurposeTypeId" value="PRIMARY_PHONE"/>
+        <call-service service-name="createPartyContactMechPurpose" in-map-name="createPartyContactMechPurposeCtx"/>
+
+        <set-service-fields service-name="createPartyRole" map="parameters" to-map="createPartyRoleCtx"/>
+        <set field="createPartyRoleCtx.roleTypeId" value="STORE_LOCATION"/>
+        <call-service service-name="createPartyRole" in-map-name="createPartyRoleCtx"/>
+        <!-- Create Store hours  -->
+        <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyContentCtx"/>
+        <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
+        <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
+        <set field="createTextContentCtx.contentTypeId" value="DOCUMENT"/>
+        <set field="createTextContentCtx.statusId" value="CTNT_PUBLISHED"/>
+        <set field="createTextContentCtx.textData" from-field="parameters.storeHoursTextData"/>
+        <call-service service-name="createTextContent" in-map-name="createTextContentCtx">
+            <result-to-field result-name="contentId" field="createPartyContentCtx.contentId"/>
+        </call-service>
+        <set field="createPartyContentCtx.partyContentTypeId" value="STORE_HOURS"/>
+        <call-service service-name="createPartyContent" in-map-name="createPartyContentCtx"/>
+        <!-- End of Create Store hours -->
+        <!-- Create Store notice  -->
+        <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyNoticeContentCtx"/>
+        <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextNoticeContentCtx"/>
+        <set field="createTextNoticeContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createTextNoticeContentCtx.dataTemplateTypeId" value="FTL"/>
+        <set field="createTextNoticeContentCtx.contentTypeId" value="DOCUMENT"/>
+        <set field="createTextNoticeContentCtx.statusId" value="CTNT_PUBLISHED"/>
+        <set field="createTextNoticeContentCtx.textData" from-field="parameters.storeNoticeTextData"/>
+        <call-service service-name="createTextContent" in-map-name="createTextNoticeContentCtx">
+            <result-to-field result-name="contentId" field="createPartyNoticeContentCtx.contentId"/>
+        </call-service>
+        <set field="createPartyNoticeContentCtx.partyContentTypeId" value="STORE_NOTICE"/>
+        <call-service service-name="createPartyContent" in-map-name="createPartyNoticeContentCtx"/>
+        <!-- End of Create Store notice -->
+        <set-service-fields service-name="genPartyGeoPoint" map="parameters" to-map="genPartyGeoPointCtx"/>
+        <call-service service-name="genPartyGeoPoint" in-map-name="genPartyGeoPointCtx"/>
+
+        <set field="argListNames[]" from-field="parameters.groupNameLocal"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="StoreLocationSavedSuccess" field="StoreLocationSavedSuccess" arg-list-name="argListNames"/>
+        <string-to-list string="${StoreLocationSavedSuccess}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="updateStoreLocation" short-description="Update a store location information">
+        <set field="address" value=""/>
+        <if-empty field="parameters.groupName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreNameError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.address1">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <string-append string="${parameters.address1}, " field="address"/>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.address2">
+            <string-append string="${parameters.address2}, " field="address"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.address3">
+            <string-append string="${parameters.address3}, " field="address"/>
+        </if-not-empty>
+        <if-empty field="parameters.city">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <string-append string="${parameters.city}, " field="address"/>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.stateProvinceGeoId">
+            <entity-one entity-name="Geo" value-field="stateGeo" auto-field-map="false">
+                <field-map field-name="geoId" from-field="parameters.stateProvinceGeoId"/>
+                <select-field field-name="geoName"/>
+            </entity-one>
+            <if-not-empty field="stateGeo.geoName">
+                <string-append string="${stateGeo.geoName}, " field="address"/>
+            </if-not-empty>
+            <set field="parameters.address3" from-field="nullField"/>
+        </if-not-empty>
+        <if-empty field="parameters.postalCode">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPostalCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <if-compare value="USA" operator="equals" field="parameters.countryGeoId">
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="isZipCode" ret-field="isZipCode">
+                        <field field="parameters.postalCode"/>
+                    </call-class-method>
+                </if-compare>
+                <if-compare field="isZipCode" operator="equals"  value="false">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidPostalCodeError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        <if>
+            <condition>
+                <or>
+                    <if-compare value="CAN" operator="equals" field="parameters.countryGeoId"></if-compare>
+                    <if-compare value="USA" operator="equals" field="parameters.countryGeoId"></if-compare>
+                </or>
+            </condition>
+            <then>
+                <if-empty field="parameters.stateProvinceGeoId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-empty>
+                <call-map-processor in-map-name="parameters" out-map-name="contactNumberMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <make-in-string field="contactNumber">
+                                <in-field field="contactNumber3"/>
+                                <in-field field="contactNumber4"/>
+                            </make-in-string>
+                            <process field="contactNumber"><copy to-field="phoneContactNumber"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                    <field field="parameters.areaCode"/>
+                    <field field="contactNumberMap.phoneContactNumber"/>
+                    <string value="true"/>
+                </call-class-method>
+                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    </if-compare>
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    </if-compare>
+                </if-compare>
+            </then>
+            <else>
+                <set field="parameters.areaCode" from-field="nullField"/>
+                <call-map-processor in-map-name="parameters" out-map-name="contactNumberMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <make-in-string field="contactNumber">
+                                <in-field field="contactNumberOther"/>
+                            </make-in-string>
+                            <process field="contactNumber"><copy to-field="phoneContactNumber"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <if-empty field="contactNumberMap.phoneContactNumber">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankContactNumberError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-empty>
+            </else>
+        </if>
+        <if-not-empty field="parameters.countryGeoId">
+            <entity-one entity-name="Geo" value-field="countryGeo" auto-field-map="false">
+                <field-map field-name="geoId" from-field="parameters.countryGeoId"/>
+                <select-field field-name="geoName"/>
+            </entity-one>
+            <if-not-empty field="countryGeo.geoName">
+                <string-append string="${countryGeo.geoName}" field="address"/>
+            </if-not-empty>
+        </if-not-empty>
+        <check-errors/>
+
+        <call-class-method class-name="com.osafe.geo.OsafeGeo"  method-name="fromAddress" ret-field="osafeGeo">
+            <field field="address"/>
+        </call-class-method>
+        <call-object-method method-name="latitude" obj-field="osafeGeo" ret-field="latitude"/>
+        <call-object-method method-name="longitude" obj-field="osafeGeo" ret-field="longitude"/>
+        <if>
+            <condition>
+                <and>
+                    <if-empty field="latitude"/>
+                    <if-empty field="longitude"/>
+                </and>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GetGeoCodeError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </then>
+            <else>
+                <field-to-request field="latitude"/>
+                <field-to-request field="longitude"/>
+            </else>
+        </if>
+        <check-errors/>
+        <!-- Update Store Hours -->
+        <if-not-empty field="parameters.storeHoursDataResourceId">
+            <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextCtx"/>
+            <set field="updateElectronicTextCtx.dataResourceId" from-field="parameters.storeHoursDataResourceId"/>
+            <set field="updateElectronicTextCtx.textData" from-field="parameters.storeHoursTextData" set-if-null="true"/>
+            <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextCtx"/>
+        <else>
+            <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyContentCtx"/>
+            <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
+            <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+            <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
+            <set field="createTextContentCtx.contentTypeId" value="DOCUMENT"/>
+            <set field="createTextContentCtx.statusId" value="CTNT_PUBLISHED"/>
+            <set field="createTextContentCtx.textData" from-field="parameters.storeHoursTextData"/>
+            <call-service service-name="createTextContent" in-map-name="createTextContentCtx">
+                <result-to-field result-name="contentId" field="createPartyContentCtx.contentId"/>
+            </call-service>
+            <set field="createPartyContentCtx.partyContentTypeId" value="STORE_HOURS"/>
+            <call-service service-name="createPartyContent" in-map-name="createPartyContentCtx"/>
+        </else>
+        </if-not-empty>
+        <!-- End of Update Store Hours -->
+        
+        <!-- Update Store Notice -->
+        <if-not-empty field="parameters.storeNoticeDataResourceId">
+            <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextNoticeCtx"/>
+            <set field="updateElectronicTextNoticeCtx.dataResourceId" from-field="parameters.storeNoticeDataResourceId"/>
+            <set field="updateElectronicTextNoticeCtx.textData" from-field="parameters.storeNoticeTextData" set-if-null="true"/>
+            <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextNoticeCtx"/>
+        <else>
+            <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyNoticeContentCtx"/>
+            <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextNoticeContentCtx"/>
+            <set field="createTextNoticeContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+            <set field="createTextNoticeContentCtx.dataTemplateTypeId" value="FTL"/>
+            <set field="createTextNoticeContentCtx.contentTypeId" value="DOCUMENT"/>
+            <set field="createTextNoticeContentCtx.statusId" value="CTNT_PUBLISHED"/>
+            <set field="createTextNoticeContentCtx.textData" from-field="parameters.storeNoticeTextData"/>
+            <call-service service-name="createTextContent" in-map-name="createTextNoticeContentCtx">
+                <result-to-field result-name="contentId" field="createPartyNoticeContentCtx.contentId"/>
+            </call-service>
+            <set field="createPartyNoticeContentCtx.partyContentTypeId" value="STORE_NOTICE"/>
+            <call-service service-name="createPartyContent" in-map-name="createPartyNoticeContentCtx"/>
+        </else>
+        </if-not-empty>
+        <!-- End of Update Store Notice -->
+
+        <set-service-fields service-name="updatePartyGroup" map="parameters" to-map="updatePartyGroupCtx"/>
+        <call-service service-name="updatePartyGroup" in-map-name="updatePartyGroupCtx"/>
+
+        <set-service-fields service-name="updatePartyPostalAddress" map="parameters" to-map="updatePartyPostalAddressCtx"/>
+        <set field="updatePartyPostalAddressCtx.contactMechId" from-field="parameters.addressContactMechId"/>
+        <call-service service-name="updatePartyPostalAddress" in-map-name="updatePartyPostalAddressCtx"/>
+
+        <set-service-fields service-name="updatePartyTelecomNumber" map="parameters" to-map="updatePartyTelecomNumberCtx"/>
+        <set field="updatePartyTelecomNumberCtx.contactNumber" from-field="contactNumberMap.phoneContactNumber"/>
+        <set field="updatePartyTelecomNumberCtx.contactMechId" from-field="parameters.phoneContactMechId"/>
+        <call-service service-name="updatePartyTelecomNumber" in-map-name="updatePartyTelecomNumberCtx"/>
+
+        <set-service-fields service-name="genPartyGeoPoint" map="parameters" to-map="genPartyGeoPointCtx"/>
+        <call-service service-name="genPartyGeoPoint" in-map-name="genPartyGeoPointCtx"/>
+
+        <set field="argListNames[]" from-field="parameters.groupNameLocal"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="StoreLocationSavedSuccess" field="StoreLocationSavedSuccess" arg-list-name="argListNames"/>
+        <string-to-list string="${StoreLocationSavedSuccess}" list="successMessageList"/>
+        <field-to-result field="parameters.dataResourceId" result-name="dataResourceId"/>
+    </simple-method>
+
+</simple-methods>

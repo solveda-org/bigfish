@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="generateSuccessMessage" short-description="Create DataResource, ElectronicText, Content and ProductCategoryContent record.">
+        <set from-field="requestAttributes.errorMessageList" field="errorMessages"/>
+          <property-to-field resource="OSafeAdminUiLabels" property="UpdatedSuccess" field="tempSuccessMessage"/>
+          <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
+          <field-to-request field="success_list" request-name="successMessageList" />
+          <field-to-result field="success_list" result-name="successMessageList"/>
+    </simple-method>
+    
+</simple-methods>

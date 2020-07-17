@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!-- Admin Default Visual Theme -->
+    <VisualTheme visualThemeId="OSAFE_ADMIN_DEFAULT" visualThemeSetId="BACKOFFICE" description="OSafe Admin Standard Layout"/>
+    <VisualThemeResource visualThemeId="OSAFE_ADMIN_DEFAULT" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/osafe_admin_theme/css/admin/admin.css" sequenceId="01"/>
+	<VisualThemeResource visualThemeId="OSAFE_ADMIN_DEFAULT" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="/osafe_admin_theme/images/classic/icon/bigfishfavicon.gif" sequenceId="01"/>
+</entity-engine-xml>

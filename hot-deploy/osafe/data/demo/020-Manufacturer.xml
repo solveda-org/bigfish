@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+<Party partyId="DONATELLI" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" />
+<PartyRole partyId="DONATELLI" roleTypeId="MANUFACTURER" />
+<PartyGroup partyId="DONATELLI" groupName="by Donatelli" />
+<ContactMech contactMechId="10233" contactMechTypeId="POSTAL_ADDRESS" />
+<PartyContactMech partyId="DONATELLI" contactMechId="10233" fromDate="2012-03-23 12:17:24" />
+<PartyContactMechPurpose partyId="DONATELLI" contactMechId="10233" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2012-03-23 12:17:24" />
+<PostalAddress contactMechId="10233" toName="by Donatelli" address1="1 Lisa Street" city="Lisaville" stateProvinceGeoId="NY" postalCode="11111" />
+<DataResource dataResourceId="41237" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="shortDescription" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41237" textData="Donatelli is an Italian fashion designer and current Vice-President of the Versace Group, as well as chief designer. " />
+<Content contentId="45209" contentTypeId="DOCUMENT" dataResourceId="41237" statusId="CTNT_PUBLISHED" contentName="shortDescription" />
+<PartyContent partyId="DONATELLI" contentId="45209" partyContentTypeId="DESCRIPTION" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41238" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="longDescription" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41238" textData="Donatelli is an Italian fashion designer and current Vice-President of the Versace Group, as well as chief designer. She owns 20 percent of the entire stock market assets of Versace. Her brother, Santo Versace, owns 30 percent. Donatella's daughter Allegra Versace inherited 50% of the company stock after the death of Gianni Versace, Donatella's brother and Versace's founder." />
+<Content contentId="45210" contentTypeId="DOCUMENT" dataResourceId="41238" statusId="CTNT_PUBLISHED" contentName="longDescription" />
+<PartyContent partyId="DONATELLI" contentId="45210" partyContentTypeId="LONG_DESCRIPTION" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41239" dataResourceTypeId="SHORT_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="DESIGNER lisa.jpg" mimeTypeId="text/html" objectInfo="/osafe_theme/images/manufacturer/DESIGNER_lisa.jpg" isPublic="Y" />
+<Content contentId="45211" contentTypeId="DOCUMENT" dataResourceId="41239" statusId="CTNT_PUBLISHED" contentName="manufacturerImage" />
+<PartyContent partyId="DONATELLI" contentId="45211" partyContentTypeId="PROFILE_IMAGE_URL" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41240" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="manufacturerName" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41240" textData="by Donatelli" />
+<Content contentId="45212" contentTypeId="DOCUMENT" dataResourceId="41240" statusId="CTNT_PUBLISHED" contentName="manufacturerName" />
+<PartyContent partyId="DONATELLI" contentId="45212" partyContentTypeId="PROFILE_NAME" fromDate="2012-03-23 12:17:24" />
+<Party partyId="STELLA" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" />
+<PartyRole partyId="STELLA" roleTypeId="MANUFACTURER" />
+<PartyGroup partyId="STELLA" groupName="Stella Designs" />
+<ContactMech contactMechId="10234" contactMechTypeId="POSTAL_ADDRESS" />
+<PartyContactMech partyId="STELLA" contactMechId="10234" fromDate="2012-03-23 12:17:24" />
+<PartyContactMechPurpose partyId="STELLA" contactMechId="10234" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2012-03-23 12:17:24" />
+<PostalAddress contactMechId="10234" toName="Stella Designs" address1="1 Sapna Street" city="Sapnaville" stateProvinceGeoId="NY" postalCode="22222" />
+<DataResource dataResourceId="41241" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="shortDescription" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41241" textData="Stella is an English fashion designer. She is the daughter of former Beatles member Sir Paul McCartney and the late photographer and animal rights activist, Linda McCartney." />
+<Content contentId="45213" contentTypeId="DOCUMENT" dataResourceId="41241" statusId="CTNT_PUBLISHED" contentName="shortDescription" />
+<PartyContent partyId="STELLA" contentId="45213" partyContentTypeId="DESCRIPTION" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41242" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="longDescription" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41242" textData="Stella McCartney was born in Lambeth, London on 13 September 1971, the second child of former Beatle bassist Sir Paul McCartney and Linda Eastman. She is named after her maternal great-grandmothers: both of Linda McCartney's grandmothers were named Stella. As a young girl, McCartney travelled the globe with her parents and their pop group Wings, along with her siblings: older half-sister Heather (who was legally adopted by Paul McCartney), older sister Mary, and younger brother James. According to her father, the name of Wings was inspired by Stella's difficult birth. As his daughter was being born by emergency caesarean section, Paul sat outside the operating room and prayed that she be born 'on the wings of an angel.'[1] Wings toured from shortly after her birth in 1971 until 1980." />
+<Content contentId="45214" contentTypeId="DOCUMENT" dataResourceId="41242" statusId="CTNT_PUBLISHED" contentName="longDescription" />
+<PartyContent partyId="STELLA" contentId="45214" partyContentTypeId="LONG_DESCRIPTION" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41243" dataResourceTypeId="SHORT_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="DESIGNER sapna.jpg" mimeTypeId="text/html" objectInfo="/osafe_theme/images/manufacturer/DESIGNER_sapna.jpg" isPublic="Y" />
+<Content contentId="45215" contentTypeId="DOCUMENT" dataResourceId="41243" statusId="CTNT_PUBLISHED" contentName="manufacturerImage" />
+<PartyContent partyId="STELLA" contentId="45215" partyContentTypeId="PROFILE_IMAGE_URL" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41244" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="manufacturerName" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41244" textData="Stella Designs" />
+<Content contentId="45216" contentTypeId="DOCUMENT" dataResourceId="41244" statusId="CTNT_PUBLISHED" contentName="manufacturerName" />
+<PartyContent partyId="STELLA" contentId="45216" partyContentTypeId="PROFILE_NAME" fromDate="2012-03-23 12:17:24" />
+<Party partyId="VERA" partyTypeId="PARTY_GROUP" statusId="PARTY_ENABLED" />
+<PartyRole partyId="VERA" roleTypeId="MANUFACTURER" />
+<PartyGroup partyId="VERA" groupName="Vera Wang" />
+<ContactMech contactMechId="10235" contactMechTypeId="POSTAL_ADDRESS" />
+<PartyContactMech partyId="VERA" contactMechId="10235" fromDate="2012-03-23 12:17:24" />
+<PartyContactMechPurpose partyId="VERA" contactMechId="10235" contactMechPurposeTypeId="GENERAL_LOCATION" fromDate="2012-03-23 12:17:24" />
+<PostalAddress contactMechId="10235" toName="Vera Wang" address1="1 Valeriya Street" city="Valeriyaville" stateProvinceGeoId="NY" postalCode="33333" />
+<DataResource dataResourceId="41245" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="shortDescription" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41245" textData="Vera Wang is a Chinese American fashion designer based in New York City and former figure skater. She is known for her wide clientele of couture bridesmaid gowns and wedding gown collections." />
+<Content contentId="45217" contentTypeId="DOCUMENT" dataResourceId="41245" statusId="CTNT_PUBLISHED" contentName="shortDescription" />
+<PartyContent partyId="VERA" contentId="45217" partyContentTypeId="DESCRIPTION" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41246" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="longDescription" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41246" textData="Vera Wang was born and raised in New York City and is of Chinese descent. Her parents were born in Shanghai, China, and came to the United States in the mid-1940s. Her mother worked as a translator for the United Nations, while her father owned a medicine company. She has one younger brother, Kenneth. After graduating from The Chapin School in 1967, she attended the University of Paris and earned a degree in art history from Sarah Lawrence College." />
+<Content contentId="45218" contentTypeId="DOCUMENT" dataResourceId="41246" statusId="CTNT_PUBLISHED" contentName="longDescription" />
+<PartyContent partyId="VERA" contentId="45218" partyContentTypeId="LONG_DESCRIPTION" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41247" dataResourceTypeId="SHORT_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="DESIGNER vM.jpg" mimeTypeId="text/html" objectInfo="/osafe_theme/images/manufacturer/DESIGNER_vM.jpg" isPublic="Y" />
+<Content contentId="45219" contentTypeId="DOCUMENT" dataResourceId="41247" statusId="CTNT_PUBLISHED" contentName="manufacturerImage" />
+<PartyContent partyId="VERA" contentId="45219" partyContentTypeId="PROFILE_IMAGE_URL" fromDate="2012-03-23 12:17:24" />
+<DataResource dataResourceId="41248" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" statusId="CTNT_PUBLISHED" dataResourceName="manufacturerName" mimeTypeId="application/octet-stream" objectInfo="" isPublic="Y" />
+<ElectronicText dataResourceId="41248" textData="Vera Wang" />
+<Content contentId="45220" contentTypeId="DOCUMENT" dataResourceId="41248" statusId="CTNT_PUBLISHED" contentName="manufacturerName" />
+<PartyContent partyId="VERA" contentId="45220" partyContentTypeId="PROFILE_NAME" fromDate="2012-03-23 12:17:24" />
+</entity-engine-xml>

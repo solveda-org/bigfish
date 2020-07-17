@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+<!-- Header Content -->
+<ElectronicText dataResourceId="SI_HEADER_CONTENT">
+   <textData>
+      <![CDATA[
+<ul>
+    <li><a href="<@ofbizUrl>main</@ofbizUrl>">Home</a></li>
+    <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_CONTACT_US</@ofbizUrl>">Contact Us</a></li>
+    <li><a href="<@ofbizUrl>requestCatalog</@ofbizUrl>">Request Catalog</a></li>
+    <li><a href="<@ofbizUrl>MyAccount</@ofbizUrl>">My Account</a></li>
+    <#if userLogin?has_content && userLogin.userLoginId != "anonymous">
+        <li><a href="<@ofbizUrl>logout</@ofbizUrl>">Logout</a></li>
+    <#else/>
+        <li><a href="<@ofbizUrl>checkLogin</@ofbizUrl>">Sign In</a></li>
+    </#if>
+</ul>]]>
+  </textData>
+</ElectronicText>
+<Content contentId="SI_HEADER_CONTENT" statusId="CTNT_PUBLISHED"/>
+
+<!-- Footer Content -->
+<ElectronicText dataResourceId="SI_FOOTER_CONTENT">
+<textData>
+  <![CDATA[
+  
+<div class="footerColumn">
+    <span class="footerCaption">About Us</span>
+    <ul id="footerLinks">
+        <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_ABOUT_US</@ofbizUrl>">Company</a></li>
+        <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_ABOUT_US</@ofbizUrl>">Background</a></li>
+        <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_CONTACT_US</@ofbizUrl>">Address</a></li>
+        <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_CONTACT_US</@ofbizUrl>">Contact Us</a></li>
+    </ul>
+</div>
+<div class="footerColumn">
+    <span class="footerCaption">Our Products</span>
+    <ul id="footerLinks">
+        <li><a href="<@ofbizUrl>eCommerceCategoryList?productCategoryId=10032</@ofbizUrl>">Category 1</a></li>
+        <li><a href="<@ofbizUrl>eCommerceCategoryList?productCategoryId=10029</@ofbizUrl>">Category 2</a></li>
+        <li><a href="<@ofbizUrl>eCommerceProductList?productCategoryId=10013</@ofbizUrl>">Category 3</a></li>
+        <li><a href="<@ofbizUrl>eCommerceCategoryList?productCategoryId=10067</@ofbizUrl>">Category 4</a></li>
+    </ul>
+</div>
+<div class="footerColumn">
+    <span class="footerCaption">Delivery</span>
+    <ul id="footerLinks">
+        <li><a href="<@ofbizUrl>eCommerceOrderHistory</@ofbizUrl>">Order Status</a></li>
+        <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_RETURN_POLICY</@ofbizUrl>">Return Policy</a></li>
+        <li><a href="http://www.ups.com/tracking/tracking.html" target="_blank">UPS</a></li>
+        <li><a href="http://fedex.com/Tracking" target="_blank">Fedex</a></li>
+    </ul>
+</div>
+
+<div class="footerColumn">
+    <span class="footerCaption">Your Account</span>
+    <ul id="footerLinks">
+        <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_PRIVACY_POLICY</@ofbizUrl>">Privacy Policy</a></li>
+        <li><a href="<@ofbizUrl>eCommerceContent?contentId=SP_TERMS_CONDITIONS</@ofbizUrl>">Terms and Conditions</a></li>
+        <li><a href="<@ofbizUrl>MyAccount</@ofbizUrl>">Your Account</a></li>
+    </ul>
+</div>
+        
+<div id="footerSocialMediaLink">
+<table id="socialMediaGrid" width="200" align="center">
+        <tbody>
+            <tr>
+                <td style="text-align: center;">
+                    <img border="0" usemap="#social.jpg" src="/osafe_theme/images/user_content/image/social_media_block.jpg">
+                    <map name="social.jpg">
+                        <area target="_blank" shape="RECT" href="http://www.facebook.com/mobileprotection#!/pages/Big-Fish-Products/107239952667861" coords="5,5,166,35" alt="Facebook">
+                        <area target="_blank" shape="RECT" href="" coords="171,5,370,34" alt="Twitter">
+                        <area target="_blank" shape="RECT" href="" coords="381,5,543,40" alt="YouTube">
+                        <area target="_blank" shape="RECT" href="" coords="543,0,713,39" alt="Wikipedia">
+                    </map>
+                </td>
+            </tr>
+        </tbody>
+</table>
+</div>
+
+<div id="eCommerceFooterLinks">
+<@renderContentAsText contentId="SI_HEADER_CONTENT" ignoreTemplate="true"/>
+</div>]]>
+  </textData>
+</ElectronicText>
+<Content contentId="SI_FOOTER_CONTENT" statusId="CTNT_PUBLISHED"/>
+
+<!-- Site Logo -->
+<ElectronicText dataResourceId="SI_LOGO">
+ <textData>
+      <![CDATA[<a class="logo" href="<@ofbizUrl>main</@ofbizUrl>"><img alt="Home" src="/osafe_theme/images/user_content/image/logo_main.png"></a>]]>
+ </textData>
+</ElectronicText>
+<Content contentId="SI_LOGO" statusId="CTNT_PUBLISHED"/>
+
+<!-- Mailing List -->
+<ElectronicText dataResourceId="SI_MAILING_LIST">
+  <textData>
+      <![CDATA[<a href="<@ofbizUrl>eCommerceMailingList</@ofbizUrl>"><img id="joinMailingListImage" class="joinMailingListImage" alt="Join Mailing List" src="/osafe_theme/images/user_content/image/joinMailingList.gif"></a>]]>
+  </textData>
+</ElectronicText>
+<Content contentId="SI_MAILING_LIST" statusId="CTNT_PUBLISHED"/>
+
+<!-- Shopping Cart -->
+<ElectronicText dataResourceId="SI_SHOPPING_CART">
+  <textData><![CDATA[<a href="<@ofbizUrl>eCommerceShowcart</@ofbizUrl>">
+       <span id="shoppingCartCaption">${uiLabelMap.ShoppingCartCaption}</span>
+        <div id="siteCartStats">
+            <div class="highlightGroup">
+                <img id="viewCartSmallImage" alt="View Cart" src="/osafe_theme/images/user_content/image/viewCart_small.gif">
+                <span id="siteShoppingCartSize">${shoppingCartSize} Items</span> <span class="price"><@ofbizCurrency amount=shoppingCart.getGrandTotal() isoCode=CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency()/></span>
+            </div>
+        </div>
+        <#--<input type="button" id="viewCartButtonImage" name="viewCartButtonImage" value=""  />-->
+        <input type="button" id="viewCartButton" class="standardBtn action" name="viewCartButton" value="${uiLabelMap.ViewCartBtn}"  />
+</a>]]>
+  </textData>
+</ElectronicText>
+<Content contentId="SI_SHOPPING_CART" statusId="CTNT_PUBLISHED"/>
+
+<!-- Search -->
+<ElectronicText dataResourceId="SI_SEARCH">
+  <textData><![CDATA[<form method="get" id="frmSearchForm" name="frmSearchForm" action="siteSearch">
+     <fieldset title="Search this site..." class="formstyle">
+            <span>${uiLabelMap.SearchCaption}</span>
+            <input type="text" name="searchText" class="input placeholder" id="searchText" value="" maxlength="60" >
+            <input type="submit" id="searchBtn" class="standardBtn action" name="searchBtn" value="${uiLabelMap.HeaderSearchBtn}" />
+        </fieldset>
+    </form>]]>
+</textData>
+</ElectronicText>
+<Content contentId="SI_SEARCH" statusId="CTNT_PUBLISHED"/>
+
+
+<!-- HOME PAGE SPOTS -->
+<!-- HOME PAGE SPOTS - HPS_01 -->
+<ElectronicText dataResourceId="HPS_01">
+  <textData>
+    <![CDATA[<img src="/osafe_theme/images/user_content/image/home spot 1-1.gif" alt="Big Fish"/>]]>
+  </textData>
+</ElectronicText>
+<!-- HOME PAGE SPOTS - HPS_01 -->
+<ElectronicText dataResourceId="HPS_02">
+  <textData><![CDATA[<img id="homeSpotImg2" src="/osafe_theme/images/user_content/image/Home Spot 1-2.gif" alt="Big Fish"/>]]>
+</textData>
+</ElectronicText>
+<!-- PAGE TOP SPOTS -->
+<!-- Order Summary -->
+<ElectronicText dataResourceId="PTS_ORDER_SUMMARY">
+  <textData><![CDATA[
+  <div class="instructions">
+            <div id="acceptMsg">
+                <p>Please select your method of payment.  We accept all major credit cards.</p>
+            </div>
+            <div id="ccImageBlock">
+                <a href="#" onclick="selectPaymentMethod('AmericanExpress');return false;"><img alt="American Express" src="/osafe_theme/images/user_content/image/americanExpress.gif" class="paymentMethodImg" ></a>
+                <a href="#" onclick="selectPaymentMethod('Visa');return false;"><img alt="Visa" src="/osafe_theme/images/user_content/image/visa.gif" class="paymentMethodImg"></a>
+                <a href="#" onclick="selectPaymentMethod('Discover');return false;"><img alt="Discover" src="/osafe_theme/images/user_content/image/discover.gif" class="paymentMethodImg"></a>
+                <a href="#" onclick="selectPaymentMethod('MasterCard');return false;"><img alt="Mastercard" src="/osafe_theme/images/user_content/image/mastercard.gif" class="paymentMethodImg"></a>
+                <a href="#" onclick="selectPaymentMethod('PayPal');return false;"><img alt="PayPal" src="/osafe_theme/images/user_content/image/paypal.gif" class="paymentMethodImg"></a>
+            </div>
+        </div>]]>
+  </textData>
+</ElectronicText>
+<Content contentId="PTS_ORDER_SUMMARY" statusId="CTNT_PUBLISHED"/>
+
+<!-- Shipping Method -->
+<ElectronicText dataResourceId="PTS_SHIPPING_METHOD">
+  <textData>
+  <![CDATA[<div class="instructions">
+   <p><b>US Post Office</b>
+    <ul>
+      <li>Note: an additional charge of $2.50 will apply for deliveries to a PO Box</li>
+    </ul>
+   </p>
+  </div>]]>
+ </textData>
+</ElectronicText>
+<Content contentId="PTS_SHIPPING_METHOD" statusId="CTNT_PUBLISHED"/>
+
+<!-- Store Locator -->
+<ElectronicText dataResourceId="PTS_STORE_LOCATOR">
+ <textData>
+   <![CDATA[
+<h1>Store Locator Content</h1>
+   ]]>
+ </textData>
+</ElectronicText>
+
+<!-- Static Pages -->
+<!-- About Us -->
+<ElectronicText dataResourceId="SP_ABOUT_US">
+  <textData>
+    <![CDATA[
+
+<h1>About Us</h1>
+  <p>BigFish is a world class solution that leverages the power of the Open for Business (OFBiz) open source project. OFBiz has been downloaded hundreds of thousands of times and is the foundation for thousands of eCommerce and ERP solutions.</p>
+  <p>BigFish extends OFBiz. Extends, enhances and simplifies. From our years of experience in delivering eCommerce solutions, we've learned what needs to be part of a solid stable foundation and what features need to be open and flexible. We have delivered solutions for companies of all sizes: from Fortune 1000 companies to smaller start ups.</p>
+  <p>Our approach is to offer solutions that work. Solutions that generate revenue. Solutions that grow revenue. We understand that time to market is key - the faster we can deliver an eCommerce solution, the faster you can make money and grow your business. </p>
+  <p>Once the platform is implemented, we typically continue to work with our clients beyond launch. We offer assistance in any number of areas: feature enhancements, styling changes, expanded product line, quicker deliveries, promotional and coupon offerings. And anything else that will grow revenue.</p>
+]]>
+ </textData>
+</ElectronicText>
+<Content contentId="SP_ABOUT_US" statusId="CTNT_PUBLISHED"/>
+
+<!-- Privacy Policy-->
+<ElectronicText dataResourceId="SP_PRIVACY_POLICY">
+        <textData>
+            <![CDATA[
+<#assign clientName = "Big Fish">
+
+<h1>Privacy Policy</h1>
+<div>
+<h2>${clientName} Statement of Privacy</h2>
+<p>${clientName} is committed to protecting your privacy. This Statement of Privacy applies to ${clientName} Web site and governs data collection and usage at all ${clientName} sites and services; it does not apply to other online or offline sites, products or services. Please read the ${clientName} Statement of Privacy.</p>
+<p>${clientName} is a general audience web site, intended for users of all ages. Personal information of all users is collected, used and disclosed as described in this Statement of Privacy.</p>
+<p>${clientName} is a general audience web site, intended for users of all ages. Personal information of all users is collected, used and disclosed as described in this Statement of Privacy.</p>
+
+<h2>Collection of your Personal Information</h2>
+<p>As an E-commerce Web site, ${clientName} collects personal information, such as your e-mail address, name, home or work address or telephone number. Information collected by ${clientName} is used solely for the purpose of billing and shipping your online purchases. ${clientName} does not collect any information about your computer hardware and software.</p>
+<p>${clientName} encourages you to review the privacy statements of Web sites you choose to link to from ${clientName} so that you can understand how those Web sites collect, use and share your information. We are not responsible for the privacy statements or other content on Web sites outside of the ${clientName} Web site.</p>
+
+<h2>Use of your Personal Information</h2>
+
+<p>${clientName} and its operational service partners collect and use your personal information to process product orders and deliver the products requested. It is possible that ${clientName} may also use personal information to inform you of other products or services available from DWS and its affiliates. ${clientName} may also contact you via surveys to conduct research about your opinion of current services or of potential new services that may be offered.</p>
+<p>${clientName} does not sell, rent or lease its customer lists to third parties. ${clientName} may, from time to time, contact you on behalf of external business partners about a particular offering that may be of interest to you. In those cases, your personal information (e-mail, name, address, telephone number) is not transferred to the third party.</p>
+<p>We occasionally hire other companies to provide limited services on our behalf, such as handling the processing and delivery of mailings, providing customer support, processing transactions, or performing statistical analysis of our services. We will only provide those companies the personal information they need to deliver the service. They are required to maintain the confidentiality of your information and are prohibited from using that information for any other purpose.</p>
+<p>${clientName} does not use or disclose sensitive personal information, such as race, religion, or political affiliations, without your explicit consent.
+<p>${clientName} may access and/or disclose your personal information if required to do so by law or in the good faith belief that such action is necessary to: (a) conform to the edicts of the law or comply with legal process served on ${clientName} or the site; (b) protect and defend the rights or property of ${clientName}, including its Web site; or (c) act under exigent circumstances to protect the personal safety of users of ${clientName} or the public.</p>
+<p>Personal information collected on this site may be stored and processed in the United States or any other country in which ${clientName} or its affiliates, subsidiaries or agents maintain facilities, and by using this site, you consent to any such transfer of information outside of your country. ${clientName} abides by the safe harbor framework as set forth by the U.S. Department of Commerce regarding the collection, use, and retention of data from the European Union.</p>
+
+<h2>Control your Personal Information</h2>
+<p>${clientName} offers its customers choices for the collection, use and sharing of personal information. You may go notify us of your preferences by emailing privacy@best-meetings.com. Please be sure to provide complete account information so we can identify you in our records.</p>
+<p>You may also stop the delivery of future promotional e-mail from ${clientName} by responding directly to any email you receive with a request to remove you from the mailing list</p>
+
+<h2>Security of your Personal Information</h2>
+<p>${clientName} is committed to protecting the security of your personal information. We use a variety of security technologies and procedures to help protect your personal information from unauthorized access, use, or disclosure. For example, we store the personal information you provide on computer systems with limited access, that are located in controlled facilities. When we transmit highly confidential information (such as a credit card number) over the Internet, we protect it through 128 bit encription through thawte.</p>
+
+<h2>Changes to this Statement</h2>
+<p>${clientName} will occasionally update this Statement of Privacy to reflect company and customer feedback. If there are material changes to this Statement or in how ${clientName} will use your personal information, ${clientName} will prominently post such changes prior to implementing the change. ${clientName} encourages you to periodically review this Statement to be informed of how ${clientName} is protecting your information.</p>
+</div>]]>
+ </textData>
+</ElectronicText>
+<Content contentId="SP_PRIVACY_POLICY" statusId="CTNT_PUBLISHED"/>
+
+<!-- Terms and Conditions -->
+<ElectronicText dataResourceId="SP_TERMS_CONDITIONS">
+ <textData>
+   <![CDATA[<#assign clientName = "Big Fish eCommerce">
+<#assign clientNameDotCom = "bigfish.salmonllc.com">
+<#assign clientDescription = "Bigfish eCommerce">
+<h1>Terms and Conditions</h1>
+
+<div>
+
+    <h2>Terms and Conditions</h2>
+
+    <p>Welcome to the ${clientNameDotCom} (the "Site"). The Site is owned and operated by ${clientName}. This page contains the ${clientNameDotCom} Internet Site Terms and Conditions of Use (these "Terms & Conditions"). The Site is made available only to those who agree to these Terms & Conditions. As such, these Terms & Conditions govern and control your access to and use of the Site and by accessing and using the Site you are agreeing to be bound by these Terms & Conditions. If you do not agree to be bound by these Terms & Conditions, you are not authorized to use the Site. ${clientName} may change these Terms & Conditions from time to time, without notice to you, by posting such changes on the Site. By using the Site following any such changes, you agree to be bound by these Terms & Conditions as they may have been changed.</p>
+
+    <h2>The Site and ${clientName}'s Business</h2>
+
+    <p>${clientName} is the operator of an online ${clientDescription} store for consumers ("Customers").</p>
+
+    <h2>Compliance with Laws</h2>
+
+    <p>Use of the Site is subject to compliance with all applicable international, federal, state and local laws and regulations.</p>
+
+    <h2>Collection of Certain Information</h2>
+
+    <p>The Site may include functions (such as "contact us", forms for employment applications and registration information or "feedback" pages) provided for the purpose of submitting information to ${clientName}. Submitted information may include personally identifiable information such as names and e-mail addresses. ${clientName} handling and use of all submitted information will be pursuant to the ${clientName} Privacy Policy published separately on the Site.</p>
+
+    <h2>Your Account and Password</h2>
+
+    <p>If you are required to establish or use an account on the Site (whether or not as a Customer) and have been provided with a user name and password for such purpose, you are responsible for maintaining the strict confidentiality of that information. You are also responsible for any activity conducted under your account. You agree to: (a) immediately notify ${clientName} of any unauthorized use of your password or account or any other breach of the Site's security; and (b) ensure that you log-off and exit from your account at the end of each session. It is your sole responsibility to control the dissemination and use of your password, and control access to and use of your account. It is also your sole responsibility to notify ${clientName} if you desire to cancel your account on the Site. ${clientName} will not be responsible or liable for any loss or damage arising from your failure to comply with this provision.</p>
+
+    <h2>Rights to Site Content</h2>
+
+    <p>As between ${clientName} and Site visitors, ${clientName} is the sole and exclusive owner of all intellectual property rights, proprietary rights and moral rights in and to the Site content including, without limitation, all text, graphics and photographs located within the Site.</p>
+
+    <h2>Prohibited Conduct</h2>
+
+    <p>The Site may not be used in any manner that is unlawful or harmful to the rights of ${clientName}, any Customer or any third party. In no event shall you use the Site in a manner that exceeds the specific authorization granted by ${clientName} under these Terms & Conditions or by other express written agreement. The prohibition on unauthorized uses includes (but is not limited to) an express prohibition any attempt to: (a) retrieve, alter, or destroy data on, from or through the Site; (b) probe, scan or test the vulnerability of a system or network on, from or through the Site; or (c) breach or defeat system or network security measures on, from or through the Site such as authentication, authorization, confidentiality, intrusion detection, or monitoring; (d) interfere with or disrupt the Site or the business, operations or services of ${clientName}; (e) interfere with or disrupt any computer, host, network, or telecommunications device maintained by ${clientName} or any third party; (f) interfere with or disrupt the legitimate use of the Site by any person; (g) transmit, distribute, disseminate, publish or store any information that is in violation of any applicable law or regulation or is defamatory, abusive, obscene, indecent, or harassing, or that threatens or encourages injury to persons or property or infringement of the lawful rights of ${clientName} or any other party; (h) violate the privacy rights of ${clientName} or any other party under applicable law or regulation; (i) use any technology that is or reasonably should be known to contain software viruses, trojan horses, or any computer code, files, or programs designed to disrupt, destroy, invade, gain unauthorized access to, corrupt, observe, or modify without authorization, any data, software, computing or network devices, or telecommunications equipment of ${clientName} or any Customer or any other third party; (j) use the facilities of the Site to send, relay, forward, bounce, reply, or otherwise route commercial or non-commercial unsolicited electronic messages (commonly referred to as "spam") or commercial electronic messages even if previously solicited by the intended recipient; and (k) copy (whether directly or by use of any "scraping" or related technology) any of the contents of the Site.</p>
+
+    <h2>Links</h2>
+
+    <p>The Site may include links to other Internet sites over which ${clientName} has no control. These links are provided solely as a convenience to users of the Site. You acknowledge and agree that ${clientName} is not responsible for the availability of the sites intended to be located at such links, and that ${clientName} does not endorse (and is not responsible or liable for) any such linked sites including their content, advertising, products, or other materials. You further acknowledge and agree that, under no circumstances, will ${clientName} be held responsible or liable, directly or indirectly, for any loss or damage that is caused or alleged to have been caused to you in connection with your use of, or reliance on, any content, advertisements, products or other resources available on any other Internet site (regardless of whether the Site is directly or indirectly linked to such content, advertisements, products or other resources). You should direct any concerns with respect to any other Internet site to that Internet site's administrator or webmaster.</p>
+
+    <h2>Transactions</h2>
+
+    <p>For all credit card transactions conducted on ${clientName}, customers credit card statement will reflect charges from "[CLIENT CREDIT CARD NAME]".</p>
+
+    <h2>DISCLAIMER OF WARRANTIES</h2>
+
+    <p>THE SITE AND ALL INFORMATION CONTAINED ON IT IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE OR NON-INFRINGEMENT. ${clientName} MAKES NO WARRANTIES WITH RESPECT TO THE ACCURACY OR COMPLETENESS OF INFORMATION CONTAINED ON THE SITE, OR THAT THE SITE WILL BE ERROR-FREE OR AVAILABLE FOR UNINTERRUPTED USE. NO ADVICE, RESULTS OR INFORMATION, WHETHER ORAL OR WRITTEN, OBTAINED BY YOU FROM ${clientName} THROUGH THE SITE SHALL CREATE ANY WARRANTY. IF YOU ARE DISSATISFIED WITH THE SITE, YOUR SOLE REMEDY IS TO DISCONTINUE USING THE SITE. YOU SHOULD NOT RELY ON THE SITE TO MAINTAIN ANY SUBMISSIONS YOU MAY MAKE; YOU SHOULD RETAIN ALL SUCH DATA AND INFORMATION IN YOUR OWN RECORDS FOR USE IN THE EVENT THAT THE SITE FAILS OR IS UNAVAILABLE, OR THE DATA OR INFORMATION IS LOST.</p>
+    <h2>Indemnification & Limitation of Liability</h2>
+
+    <p>You agree to defend, indemnify and hold ${clientName} and each of its subsidiary, affiliated and related entities, and each of their respective directors, officers, members, shareholders, employees and suppliers (collectively the "${clientName} Parties"), harmless from any and all claims, liabilities, costs and expenses, including reasonable legal fees, arising in any way from your use or misuse of the Site or your breach or violation of the law or of these Terms & Conditions. You agree that the ${clientName} Parties shall not have any liability to you under any theory of liability or indemnity in connection with your use of the Site. You hereby release and forever waive any and all claims you may have against the ${clientName} Parties for losses or damages you sustain in connection with your use of the Site.</p>
+
+    <p>IN NO EVENT SHALL THE ${clientName} PARTIES BE LIABLE FOR ANY DAMAGES, WHETHER DIRECT, INDIRECT, INCIDENTAL, PUNITIVE, EXEMPLARY, SPECIAL OR CONSEQUENTIAL (INCLUDING, WITHOUT LIMITATION, FOR LOST PROFITS, BUSINESS INTERRUPTION, LOSS OF INFORMATION, PROGRAMS OR DATA), RESULTING FROM ACCESS TO, USE OF, OR INABILITY TO USE THE SITE, OR DUE TO ANY BREACH OF SECURITY ASSOCIATED WITH THE TRANSMISSION OF INFORMATION VIA THE INTERNET, EVEN IF THE ${clientName} PARTIES WERE ADVISED OF THE POSSIBILITY OF SUCH DAMAGES AND WHETHER ARISING UNDER THEORY OF CONTRACT, TORT (INCLUDING NEGLIGENCE), STRICT LIABILITY OR OTHERWISE.</p>
+
+    <h2>Applicable Laws</h2>
+
+    <p>These Terms & Conditions shall be governed by and construed in accordance with the laws of the State of New York without regard to principles of conflicts of laws. All proceedings relating to the Site or these Terms & Conditions shall be brought in the state or federal courts located in the State of New York and you hereby irrevocably consent to the personal and exclusive jurisdiction of such courts. ${clientName} controls and operates this Site from its offices in New York in the United States of America. ${clientName} does not represent that materials on the Site are appropriate or available for use in other locations. Persons who choose to access this Site from other locations do so on their own initiative, and are responsible for compliance with local laws, if and to the extent applicable.</p>
+
+    <h2>General</h2>
+
+    <p>You agree that regardless of any statute or law to the contrary, any claim or cause of action by you arising out of or related to use of the Site or the Terms & Conditions must be filed by you within one (1) year after such claim or cause of action arose or be forever barred. Should any provision of these Terms & Conditions be held to be void, invalid, unenforceable or illegal by a court of competent jurisdiction, the remaining provisions hereof shall remain in full force and effect. The waiver of any breach or default of these Terms & Conditions will not constitute a waiver of any subsequent breach or default, and will not act to amend or negate the rights of the waiving party. These Terms & Conditions constitute the complete agreement of the parties with respect to the subject matter hereof, and supersede all prior agreements and understandings in relation thereto.</p>
+
+
+</div>]]>
+  </textData>
+</ElectronicText>
+<Content contentId="SP_TERMS_CONDITIONS" statusId="CTNT_PUBLISHED"/>
+
+<!-- Return Policy -->
+<ElectronicText dataResourceId="SP_RETURN_POLICY">
+ <textData>
+   <![CDATA[<#assign clientName = "Big Fish eCommerce">
+
+<h1>Return Policy</h1>
+<div>
+<h2>Wigs, DVDs, Garments, and all other catalog items</h2>
+<p>Items may be returned to Big Fish for exchange, refund or charge credit within 10 days of purchase. You are responsible for return postage. Returned items must be in new condition, never worn and with all original packaging and labels.</p>
+
+<h2>eCommerce Products</h2>
+<p>Items may be returned to Big Fish for exchange, refund or charge credit within 30 days of purchase.</p>
+
+<h2>Mailing Instructions</h2>
+<p>You are responsible for return postage.  Send returns via US Postal Service or UPS. Be sure to include your receipt and a note explaining your request for refund or exchange.  If your order was charged, your refund will be in the form of a charge credit.</p>
+
+<p>
+Big Fish eCommerce Products<br>
+Returns Dept.<br>
+104 Allen Blvd. Ste H<br>
+Farmingdale NY 11735
+</div>
+ ]]>
+  </textData>
+</ElectronicText>
+<Content contentId="SP_RETURN_POLICY" statusId="CTNT_PUBLISHED"/>
+
+<!-- Contact Us -->
+<ElectronicText dataResourceId="SP_CONTACT_US">
+  <textData>
+  <![CDATA[
+
+           
+<h1>Contact Us</h1>
+
+<style type="text/css">
+
+#main_text{
+    position: relative;
+    margin: 10px 80px 50px 95px;;
+
+}
+
+#contact_box{
+    width: 500px;
+    margin: 50px auto 30px auto;
+}
+.contact_row{
+    height: 80px;
+}
+.contact_icon{
+    float: left;
+    position: relative;
+    top: 10px;
+}
+.contact_text{
+    position: relative;
+    top: 20px;
+    float: right;
+    width: 400px;
+}
+.contact_text p{
+    margin: 0;
+}
+.contact_label{
+    float: left;
+}
+.contact_info {
+    float: right;
+    width: 200px;
+
+}
+</style>
+
+<div id="main_text">
+  <p> Can we help? We're just a toll free phone call away. Please feel free to contact us by phone, email, or post! </p>
+</div>
+<div id="contact_box">
+    <div class="contact_row">
+
+        <img class="contact_icon" src="/osafe_theme/images/user_content/image/image002.jpg" alt="phone icon" />
+
+    <div class="contact_text">
+      <p class="contact_label">Toll Free<br />
+        Local</p>
+      <p class="contact_info">(800) 324-7136<br />
+        (516) 378-6900</p>
+    </div>
+
+    </div>
+    <div class="contact_row">
+        <img class="contact_icon" src="/osafe_theme/images/user_content/image/image003.jpg" style="position: relative; right: 15px;" alt="fax icon" />
+
+    <div class="contact_text">
+      <p class="contact_label">Local</p>
+      <p class="contact_info">(516) 378-0168</p>
+    </div>
+    </div>
+
+    <div class="contact_row">
+        <img class="contact_icon" src="/osafe_theme/images/user_content/image/image004.jpg" alt="mail icon" />
+
+    <div class="contact_text">
+      <p class="contact_label">Post Address</p>
+      <p class="contact_info">Big Fish eCommerce<br />
+        104 Allen Blvd, Suite H<br />
+        Farmingdale, NY 11735</p>
+
+    </div>
+    </div>
+    <div class="contact_row">
+        <img class="contact_icon" src="/osafe_theme/images/user_content/image/image005.jpg" alt="email icon" />
+
+    <div class="contact_text">
+      <p class="contact_label">Questions & Comments</p>
+      <p class="contact_info"><a href="<@ofbizUrl>contactUs</@ofbizUrl>">Click here to contact us</a></p>
+    </div>
+
+    </div>
+</div>]]>
+ </textData>
+</ElectronicText>
+<Content contentId="SP_CONTACT_US" statusId="CTNT_PUBLISHED"/>
+
+
+</entity-engine-xml>

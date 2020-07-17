@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+        To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+        Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+    -->
+
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <!-- *** ECOMMERCE CONTENT *************************************** -->
+    <property key="SITE_INFO_HEADER_CONTENT">
+        <value xml:lang="en">SI_HEADER_CONTENT</value>
+    </property>
+    <property key="SITE_INFO_FOOTER_CONTENT">
+        <value xml:lang="en">SI_FOOTER_CONTENT</value>
+    </property>
+    <property key="SITE_INFO_SITE_LOGO">
+        <value xml:lang="en">SI_LOGO</value>
+    </property>
+
+    <!-- *** ECOMMERCE HOME PAGE SPOT MENU *************************************** -->
+    <property key="HOME_PAGE_SPOT_01">
+        <value xml:lang="en">HPS_01</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_02">
+        <value xml:lang="en">HPS_02</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_03">
+        <value xml:lang="en">HPS_03</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_04">
+        <value xml:lang="en">HPS_04</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_05">
+        <value xml:lang="en">HPS_05</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_06">
+        <value xml:lang="en">HPS_06</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_07">
+        <value xml:lang="en">HPS_07</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_08">
+        <value xml:lang="en">HPS_08</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_09">
+        <value xml:lang="en">HPS_09</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_10">
+        <value xml:lang="en">HPS_10</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_11">
+        <value xml:lang="en">HPS_11</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_12">
+        <value xml:lang="en">HPS_12</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_13">
+        <value xml:lang="en">HPS_13</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_14">
+        <value xml:lang="en">HPS_14</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_15">
+        <value xml:lang="en">HPS_15</value>
+    </property>
+    <property key="HOME_PAGE_SPOT_16">
+        <value xml:lang="en">HPS_16</value>
+    </property>
+
+    <!-- *** ECOMMERCE ESPOTS *************************************** -->
+    <property key="PAGE_TOP_SPOT_ADDRESS_BOOK_VIEW">
+        <value xml:lang="en">PTS_ADDR_BOOK_VIEW</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_ADDRESS_BOOK_EDIT">
+        <value xml:lang="en">PTS_ADDR_BOOK_EDIT</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_MY_ACCOUNT">
+        <value xml:lang="en">PTS_MY_ACCOUNT</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_ORDER_CONFIRM">
+        <value xml:lang="en">PTS_ORDER_CONFIRM</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_ORDER_STATUS">
+        <value xml:lang="en">PTS_ORDER_STATUS</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_ORDER_SUMMARY">
+        <value xml:lang="en">PTS_ORDER_SUMMARY</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_SHIPPING_ADDRESS">
+        <value xml:lang="en">PTS_SHIPPING_ADDRESS</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_SHIPPING_METHOD">
+        <value xml:lang="en">PTS_SHIPPING_METHOD</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_SHOPPING_CART">
+        <value xml:lang="en">PTS_SHOPPING_CART</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_CONTACT_US">
+        <value xml:lang="en">PTS_CONTACT_US</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_STORE_LOCATOR">
+        <value xml:lang="en">PTS_STORE_LOCATOR</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_LOGIN">
+        <value xml:lang="en">PTS_LOGIN</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_MAILING_LIST">
+        <value xml:lang="en">PTS_MAILING_LIST</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_ONE_STEP_CHKOUT">
+        <value xml:lang="en">PTS_ONE_STEP_CHKOUT</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_FORGOT_PASSWORD">
+        <value xml:lang="en">PTS_FORGOT_PASSWORD</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_REGISTRATION">
+        <value xml:lang="en">PTS_REGISTRATION</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_CHANGE_PROFILE">
+        <value xml:lang="en">PTS_CHANGE_PROFILE</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_PERSONAL_INFO">
+        <value xml:lang="en">PTS_PERSONAL_INFO</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_CONFIRM">
+        <value xml:lang="en">PTS_CONFIRM</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_SEARCH_NO_RESULT">
+        <value xml:lang="en">PTS_SEARCH_NO_RESULT</value>
+    </property>
+
+    <property key="PAGE_END_SPOT_ADDRESS_BOOK_VIEW">
+        <value xml:lang="en">PES_ADDR_BOOK_VIEW</value>
+    </property>
+    <property key="PAGE_END_SPOT_ADDRESS_BOOK_EDIT">
+        <value xml:lang="en">PES_ADDR_BOOK_EDIT</value>
+    </property>
+    <property key="PAGE_END_SPOT_MY_ACCOUNT">
+        <value xml:lang="en">PES_MY_ACCOUNT</value>
+    </property>
+    <property key="PAGE_END_SPOT_ORDER_CONFIRM">
+        <value xml:lang="en">PES_ORDER_CONFIRM</value>
+    </property>
+    <property key="PAGE_END_SPOT_ORDER_STATUS">
+        <value xml:lang="en">PES_ORDER_STATUS</value>
+    </property>
+    <property key="PAGE_END_SPOT_ORDER_SUMMARY">
+        <value xml:lang="en">PES_ORDER_SUMMARY</value>
+    </property>
+    <property key="PAGE_END_SPOT_SHIPPING_ADDRESS">
+        <value xml:lang="en">PES_SHIPPING_ADDRESS</value>
+    </property>
+    <property key="PAGE_END_SPOT_SHIPPING_METHOD">
+        <value xml:lang="en">PES_SHIPPING_METHOD</value>
+    </property>
+    <property key="PAGE_END_SPOT_SHOPPING_CART">
+        <value xml:lang="en">PES_SHOPPING_CART</value>
+    </property>
+    <property key="PAGE_END_SPOT_CONTACT_US">
+        <value xml:lang="en">PES_CONTACT_US</value>
+    </property>
+    <property key="PAGE_END_SPOT_STORE_LOCATOR">
+        <value xml:lang="en">PES_STORE_LOCATOR</value>
+    </property>
+    <property key="PAGE_END_SPOT_LOGIN">
+        <value xml:lang="en">PES_LOGIN</value>
+    </property>
+    <property key="PAGE_END_SPOT_MAILING_LIST">
+        <value xml:lang="en">PES_MAILING_LIST</value>
+    </property>
+    <property key="PAGE_END_SPOT_ONE_STEP_CHKOUT">
+        <value xml:lang="en">PES_ONE_STEP_CHKOUT</value>
+    </property>
+    <property key="PAGE_END_SPOT_FORGOT_PASSWORD">
+        <value xml:lang="en">PES_FORGOT_PASSWORD</value>
+    </property>
+    <property key="PAGE_END_SPOT_REGISTRATION">
+        <value xml:lang="en">PES_REGISTRATION</value>
+    </property>
+    <property key="PAGE_END_SPOT_CHANGE_PROFILE">
+        <value xml:lang="en">PES_CHANGE_PROFILE</value>
+    </property>
+    <property key="PAGE_END_SPOT_PERSONAL_INFO">
+        <value xml:lang="en">PES_PERSONAL_INFO</value>
+    </property>
+    <property key="PAGE_END_SPOT_CONFIRM">
+        <value xml:lang="en">PES_CONFIRM</value>
+    </property>
+    <property key="PAGE_END_SPOT_SEARCH_NO_RESULT">
+        <value xml:lang="en">PES_SEARCH_NO_RESULT</value>
+    </property>
+
+    <!-- *** ECOMMERCE PDP SPOT MENU HOT SPOTS *************************************** -->
+    <property key="PDP_SPOT_INTRODUCED">
+        <value xml:lang="en">PS_INTRODUCED</value>
+    </property>
+    <property key="PDP_SPOT_DISCONTINUED">
+        <value xml:lang="en">PS_DISCONTINUED</value>
+    </property>
+
+    <!-- *** ECOMMERCE EMAIL MENU HOT SPOTS *************************************** -->
+    <property key="EMAIL_COMMON_STYLES">
+        <value xml:lang="en">E_COMMON_STYLES</value>
+    </property>
+    <property key="EMAIL_COMMON_HEADER">
+        <value xml:lang="en">E_COMMON_HEADER</value>
+    </property>
+    <property key="EMAIL_COMMON_FOOTER">
+        <value xml:lang="en">E_COMMON_FOOTER</value>
+    </property>
+    <property key="EMAIL_NEW_CUSTOMER">
+        <value xml:lang="en">E_NEW_CUSTOMER</value>
+    </property>
+    <property key="EMAIL_CHANGE_CUSTOMER">
+        <value xml:lang="en">E_CHANGE_CUSTOMER</value>
+    </property>
+    <property key="EMAIL_FORGOT_PASSWORD">
+        <value xml:lang="en">E_FORGOT_PASSWORD</value>
+    </property>
+    <property key="EMAIL_ABANDON_CART">
+        <value xml:lang="en">E_ABANDON_CART</value>
+    </property>
+    <property key="EMAIL_SHIP_REVIEW">
+        <value xml:lang="en">E_SHIP_REVIEW</value>
+    </property>
+    <property key="EMAIL_CONTACT_US">
+        <value xml:lang="en">E_CONTACT_US</value>
+    </property>
+    <property key="EMAIL_REQUEST_CATALOG">
+        <value xml:lang="en">E_REQUEST_CATALOG</value>
+    </property>
+    <property key="EMAIL_ORDER_CONFIRM">
+        <value xml:lang="en">E_ORDER_CONFIRM</value>
+    </property>
+    <property key="EMAIL_ORDER_CHANGE">
+        <value xml:lang="en">E_ORDER_CHANGE</value>
+    </property>
+
+    <property key="STATIC_PAGE_ABOUT_US">
+        <value xml:lang="en">SP_ABOUT_US</value>
+    </property>
+    <property key="STATIC_PAGE_PRIVACY_POLICY">
+        <value xml:lang="en">SP_PRIVACY_POLICY</value>
+    </property>
+    <property key="STATIC_PAGE_TERMS_CONDITIONS">
+        <value xml:lang="en">SP_TERMS_CONDITIONS</value>
+    </property>
+    <property key="STATIC_PAGE_SITE_MAP">
+        <value xml:lang="en">SP_SITE_MAP</value>
+    </property>
+    <property key="STATIC_PAGE_ERROR_PAGE">
+        <value xml:lang="en">SP_ERROR_PAGE</value>
+    </property>
+
+    <property key="SITE_INFO_SITE_SEARCH">
+        <value xml:lang="en">SI_SEARCH</value>
+    </property>
+    <property key="SITE_INFO_SHOPPING_CART">
+        <value xml:lang="en">SI_SHOPPING_CART</value>
+    </property>
+    <property key="SITE_INFO_MAILING_LIST">
+        <value xml:lang="en">SI_MAILING_LIST</value>
+    </property>
+    <property key="HOME_PAGE_HOTSPOTS">
+        <value xml:lang="en">HOME_PAGE_SPOT_MENU</value>
+    </property>
+
+    <property key="SOCIAL_MEDIA_LINKS">
+        <value xml:lang="en">SOCIAL_MEDIA_LINKS</value>
+    </property>
+
+</resource>

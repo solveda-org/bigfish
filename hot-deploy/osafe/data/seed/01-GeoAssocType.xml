@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <GeoAssocType geoAssocTypeId="COUNTY_SEAT" description="Administrative Main City of a County" lastUpdatedStamp="2008-06-09 09:56:23.173" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.173" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoAssocType geoAssocTypeId="GROUP_MEMBER" description="Geo Group Member" lastUpdatedStamp="2008-06-09 09:56:23.157" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.157" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoAssocType geoAssocTypeId="REGIONS" description="For a region of a larger Geo, i.e. states, counties, provinces..." lastUpdatedStamp="2008-06-09 09:56:23.173" lastUpdatedTxStamp="2008-06-09 09:56:22.767" createdStamp="2008-06-09 09:56:23.173" createdTxStamp="2008-06-09 09:56:22.767"/>
+    <GeoAssocType geoAssocTypeId="UPS_DAS_EXT" description="UPS DAS EXT" lastUpdatedStamp="2011-07-19 15:35:45.07" lastUpdatedTxStamp="2011-07-19 15:35:45.053" createdStamp="2011-07-19 15:35:45.07" createdTxStamp="2011-07-19 15:35:45.053"/>
+    <GeoAssocType geoAssocTypeId="UPS_DAS_EXT_ZONE" description="UPS DAS EXT ZONE" lastUpdatedStamp="2011-07-19 15:36:01.57" lastUpdatedTxStamp="2011-07-19 15:36:01.57" createdStamp="2011-07-19 15:36:01.57" createdTxStamp="2011-07-19 15:36:01.57"/>
+    <GeoAssocType geoAssocTypeId="UPS_DAS_ZONE" description="UPS DAS ZONE" lastUpdatedStamp="2011-07-19 15:35:30.757" lastUpdatedTxStamp="2011-07-19 15:35:30.757" createdStamp="2011-07-19 15:35:30.757" createdTxStamp="2011-07-19 15:35:30.757"/>
+    <GeoAssocType geoAssocTypeId="UPS_GRD_ZONE" description="UPS GRID ZONE" lastUpdatedStamp="2011-07-19 15:36:18.773" lastUpdatedTxStamp="2011-07-19 15:36:18.773" createdStamp="2011-07-19 15:36:18.773" createdTxStamp="2011-07-19 15:36:18.773"/>
+</entity-engine-xml>

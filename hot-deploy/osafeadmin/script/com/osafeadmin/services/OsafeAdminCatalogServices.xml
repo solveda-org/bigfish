@@ -1,0 +1,1631 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="updateProductCategoryAndRollup" short-description="Update ProductCategory and ProductCategoryRollup">
+        <if-empty field="parameters.primaryParentCategoryId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidNavbarCategoryError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PRIMARYPARENTCATEGORYID" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.categoryName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidTextCategoryError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="CATEGORYNAME" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.fromDate">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankActiveFromDateError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="FROMDATE" list="error_list"/>
+        </if-empty>
+        
+        <if-not-empty field="parameters.fromDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.fromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="FROMDATE" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.fromDate">
+                        <field field="parameters.fromDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.thruDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.thruDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.thruDate">
+                        <field field="parameters.thruDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-empty field="parameters.sequenceNum">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${parameters.sequenceNum}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="1" field="parameters.sequenceNum" type="Long"/>
+                                <if-compare operator="less-equals" value="9999" field="parameters.sequenceNum" type="Long"/>
+                            </and>
+                        </condition>
+                        <then>
+                        </then>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
+                        </else>
+                    </if>
+                </else>
+                </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+        <if-not-empty field="parameters.formattedFromDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.formattedFromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <else>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.formattedFromDate">
+                        <field field="parameters.formattedFromDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <set-service-fields service-name="updateProductCategory" map="parameters" to-map="updateProductCategoryCtx"/>
+        <call-service service-name="updateProductCategory" in-map-name="updateProductCategoryCtx"/>
+        
+        <entity-one entity-name="ProductCategoryRollup" value-field="productCategoryRollup">
+            <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+            <field-map field-name="parentProductCategoryId" from-field="parameters.primaryParentCategoryId"/>
+            <field-map field-name="fromDate" from-field="parameters.fromDate"/>
+        </entity-one>
+        <now-timestamp field="nowStamp"/>
+        <if-empty field="productCategoryRollup">
+            <set-service-fields service-name="updateProductCategoryToCategory" map="parameters" to-map="currentRollupCtx"/>
+            <set field="currentRollupCtx.thruDate" from-field="nowStamp"/>
+            <set field="currentRollupCtx.fromDate" from-field="parameters.currentFromDate" type="Timestamp"/>
+            <set field="currentRollupCtx.parentProductCategoryId" from-field="parameters.currentPrimaryParentCategoryId"/>
+            <call-service service-name="updateProductCategoryToCategory" in-map-name="currentRollupCtx"/>
+            
+            <set-service-fields service-name="addProductCategoryToCategory" map="parameters" to-map="createRollupCtx"/>
+            <set field="createRollupCtx.parentProductCategoryId" from-field="parameters.primaryParentCategoryId"/>
+            <set field="createRollupCtx.thruDate" from-field="parameters.thruDate" type="Timestamp" set-if-empty="true"/>
+            <call-service service-name="addProductCategoryToCategory" in-map-name="createRollupCtx"/>
+        <else>
+            <if>
+           <condition>
+              <or>
+                <if-compare-field operator="not-equals" field="parameters.fromDate" to-field="parameters.formattedDate"></if-compare-field>
+                <if-compare-field operator="not-equals" field="parameters.primaryParentCategoryId" to-field="parameters.currentPrimaryParentCategoryId"></if-compare-field>
+              </or>
+           </condition>
+                <then>
+                    <set-service-fields service-name="updateProductCategoryToCategory" map="parameters" to-map="prevExistedRollupCtx"/>
+                    <set field="prevExistedRollupCtx.thruDate" from-field="nowStamp"/>
+                    <set field="prevExistedRollupCtx.fromDate" from-field="parameters.currentFromDate" type="Timestamp"/>
+                    <set field="prevExistedRollupCtx.parentProductCategoryId" from-field="parameters.currentPrimaryParentCategoryId"/>
+                    <call-service service-name="updateProductCategoryToCategory" in-map-name="prevExistedRollupCtx"/>
+                </then>
+            </if>
+            
+            <set-service-fields service-name="updateProductCategoryToCategory" map="parameters" to-map="updateCurrentRollupCtx"/>
+            <set field="updateCurrentRollupCtx.thruDate" from-field="parameters.thruDate" type="Timestamp" set-if-empty="true"/>
+            <set field="updateCurrentRollupCtx.parentProductCategoryId" from-field="parameters.primaryParentCategoryId"/>
+            <call-service service-name="updateProductCategoryToCategory" in-map-name="updateCurrentRollupCtx"/>
+        </else>
+        </if-empty>
+    </simple-method>
+    
+    <simple-method method-name="updateProductAndPrice" short-description="update Product record and also update ProductPrice">
+        <if-empty field="parameters.productId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTID" list="error_list"/>
+        </if-empty>
+        
+        <!-- if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductShortDescError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+        </if-empty>  -->
+        <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+        <if-empty field="parameters.productDetailName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductNameError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTDETAILNAME" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.longDescription">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDetailFieldError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="LONGDESCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.listPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductListPriceError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">
+                    <field field="parameters.listPrice"/>
+                </call-class-method>
+                <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductListPriceError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.defaultPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDefaultPriceError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">
+                    <field field="parameters.defaultPrice"/>
+                </call-class-method>
+                <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductDefaultPriceError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        </if-compare>
+        <if-not-empty field="parameters.introductionDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.introductionDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIntroDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.introductionDate">
+                        <field field="parameters.introductionDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.salesDiscontinuationDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.salesDiscontinuationDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDiscontDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.salesDiscontinuationDate">
+                        <field field="parameters.salesDiscontinuationDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.inventoryLevel"> 
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="inventoryLevelVaild">
+               <string value="${parameters.inventoryLevel}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="inventoryLevelVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+            <else>
+                <if>
+                    <condition>
+                    <and>
+                        <if-compare operator="greater-equals" value="0" field="parameters.inventoryLevel" type="Long"/>
+                        <if-compare operator="less-equals" value="9999" field="parameters.inventoryLevel" type="Long"/>
+                    </and>
+                    </condition>
+                <then>
+                </then>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+                </else>
+                </if>
+            </else>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+        
+        <set-service-fields service-name="updateProduct" map="parameters" to-map="updateProductCtx"/>
+        <call-service service-name="updateProduct" in-map-name="updateProductCtx"/>
+        
+        <if-not-empty field="parameters.defaultPrice">
+            <entity-and entity-name="ProductPrice" list="prodDefaultPriceList">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
+            </entity-and>
+            <filter-list-by-date list="prodDefaultPriceList" to-list="productDefaultPriceList"/>
+            <if-not-empty field="productDefaultPriceList">
+                <first-from-list entry="productDefaultPrice" list="productDefaultPriceList"/>
+                <set-service-fields service-name="updateProductPrice" to-map="productDefaultPriceCtx" map="productDefaultPrice"/>
+                <set field="productDefaultPriceCtx.price" from-field="parameters.defaultPrice" type="BigDecimal"/>
+                <call-service service-name="updateProductPrice" in-map-name="productDefaultPriceCtx"/>
+            </if-not-empty>
+        </if-not-empty>
+        <if-not-empty field="parameters.listPrice">
+            <entity-and entity-name="ProductPrice" list="prodListPriceList">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
+            </entity-and>
+            <filter-list-by-date list="prodListPriceList" to-list="productListPriceList"/>
+            <if-not-empty field="productListPriceList">
+                <first-from-list entry="productListPrice" list="productListPriceList"/>
+                <set-service-fields service-name="updateProductPrice" to-map="productListPriceCtx" map="productListPrice"/>
+                <set field="productListPriceCtx.price" from-field="parameters.listPrice" type="BigDecimal"/>
+                <call-service service-name="updateProductPrice" in-map-name="productListPriceCtx"/>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="updateProdReview" short-description="Updates a product review record">
+        <if-empty field="parameters.reviewTitle">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductReviewTitaleError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="REVIEWTITLE" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.productReview">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductReviewTextError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTREVIEW" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="updateProductReview" map="parameters" to-map="updateProductReviewCtx"/>
+        <call-service service-name="updateProductReview" in-map-name="updateProductReviewCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="updateProductIdentification" short-description="Update Good Identification">
+        <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+            <set field="idValueMap" from-field="parameters.idValue"/>
+            <iterate-map key="goodIdentificationTypeIdKey" value="goodIdentificationTypeIdValue" map="parameters.goodIdentificationTypeId">
+                <set field="idValue" from-field="idValueMap.${goodIdentificationTypeIdKey}"/>
+                <set field="manageGoodIdentificationCtx.productId" from-field="parameters.productId"/>
+                <set field="manageGoodIdentificationCtx.idValue" from-field="idValue"/>
+                <set field="manageGoodIdentificationCtx.goodIdentificationTypeId" from-field="goodIdentificationTypeIdValue"/>
+                <call-service service-name="manageGoodIdentification" in-map-name="manageGoodIdentificationCtx"/>
+                <clear-field field="manageGoodIdentificationCtx"/>
+            </iterate-map>
+        </if-compare>
+    </simple-method>
+    
+    <simple-method method-name="manageBigfishInventory" short-description="Create Update, Delete Product Attribute for Bigfish Inventory">
+        <set field="attrName" value="BIGFISH_INVENTORY"/>
+        <entity-one entity-name="ProductAttribute" value-field="productAttribute">
+            <field-map field-name="productId" from-field="parameters.productId"/>
+            <field-map field-name="attrName" from-field="attrName"/>
+        </entity-one>
+        <if-not-empty field="productAttribute">
+            <if-not-empty field="parameters.inventoryLevel">
+                <set field="updateProductAttributeCtx.productId" from-field="parameters.productId"/>
+                <set field="updateProductAttributeCtx.attrName" from-field="attrName"/>
+                <set field="updateProductAttributeCtx.attrValue" from-field="parameters.inventoryLevel"/>
+                <call-service service-name="updateProductAttribute" in-map-name="updateProductAttributeCtx"/>
+            <else>
+                <set field="deleteProductAttributeCtx.productId" from-field="parameters.productId"/>
+                <set field="deleteProductAttributeCtx.attrName" from-field="attrName"/>
+                <call-service service-name="deleteProductAttribute" in-map-name="deleteProductAttributeCtx"/>
+            </else>
+            </if-not-empty>
+        <else>
+            <set field="createProductAttributeCtx.productId" from-field="parameters.productId"/>
+            <set field="createProductAttributeCtx.attrName" from-field="attrName"/>
+            <set field="createProductAttributeCtx.attrValue" from-field="parameters.inventoryLevel"/>
+            <call-service service-name="createProductAttribute" in-map-name="createProductAttributeCtx"/>
+        </else>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="updateProductContent" short-description="Update Product Contents">
+        <set field="updateProductText.productId" from-field="parameters.productId"/>
+        <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+        <!-- For PRODUCT_NAME Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductNameText"/>
+            <set field="updateProductNameText.text" from-field="parameters.productDetailName"/>
+            <set field="updateProductNameText.productContentTypeId" value="PRODUCT_NAME"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductNameText"/>
+            
+        <!-- For PLP_LABEL Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductPLPText"/>
+            <set field="updateProductPLPText.text" from-field="parameters.plpLabel"/>
+            <set field="updateProductPLPText.productContentTypeId" value="PLP_LABEL"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductPLPText"/>
+            
+        <!-- For PDP_LABEL Product Content --> 
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductPDPText"/>
+            <set field="updateProductPDPText.text" from-field="parameters.pdpLabel"/>
+            <set field="updateProductPDPText.productContentTypeId" value="PDP_LABEL"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductPDPText"/>
+            
+        <!-- For SHORT_SALES_PITCH Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductSalesText"/>
+            <set field="updateProductSalesText.text" from-field="parameters.shortSalesPitch"/>
+            <set field="updateProductSalesText.productContentTypeId" value="SHORT_SALES_PITCH"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductSalesText"/>
+            
+        <!-- For LONG_DESCRIPTION Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductLongText"/>
+            <set field="updateProductLongText.text" from-field="parameters.longDescription"/>
+            <set field="updateProductLongText.productContentTypeId" value="LONG_DESCRIPTION"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductLongText"/>
+            
+        <!-- For SPECIALINSTRUCTIONS Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductInstText"/>
+            <set field="updateProductInstText.text" from-field="parameters.specialInstruction"/>
+            <set field="updateProductInstText.productContentTypeId" value="SPECIALINSTRUCTIONS"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductInstText"/>
+            
+        <!-- For DELIVERY_INFO Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductDelivText"/>
+            <set field="updateProductDelivText.text" from-field="parameters.deliveryInfo"/>
+            <set field="updateProductDelivText.productContentTypeId" value="DELIVERY_INFO"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductDelivText"/>
+            
+        <!-- For DIRECTIONS Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductDirectText"/>
+            <set field="updateProductDirectText.text" from-field="parameters.directions"/>
+            <set field="updateProductDirectText.productContentTypeId" value="DIRECTIONS"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductDirectText"/>
+            
+        <!-- For TERMS_AND_CONDS Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductTermsText"/>
+            <set field="updateProductTermsText.text" from-field="parameters.termsAndConds"/>
+            <set field="updateProductTermsText.productContentTypeId" value="TERMS_AND_CONDS"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductTermsText"/>
+            
+        <!-- For INGREDIENTS Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductIngredText"/>
+            <set field="updateProductIngredText.text" from-field="parameters.ingredients"/>
+            <set field="updateProductIngredText.productContentTypeId" value="INGREDIENTS"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductIngredText"/>
+            
+        <!-- For WARNINGS Product Content -->
+            <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductWarnText"/>
+            <set field="updateProductWarnText.text" from-field="parameters.warnings"/>
+            <set field="updateProductWarnText.productContentTypeId" value="WARNINGS"/>
+            <call-service service-name="updateProductContentText" in-map-name="updateProductWarnText"/>
+        <!-- Clear the Product Content Rendered Cache -->
+            <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="clearCache">
+                <string value="product.content.rendered"/>
+            </call-class-method>
+        </if-compare>
+    </simple-method>
+    
+    <simple-method method-name="updateProductContentText" short-description="Update Product Content Text">
+        <entity-and entity-name="ProductContent" list="productContentList">
+            <field-map field-name="productId" from-field="parameters.productId"/>
+            <field-map field-name="productContentTypeId" from-field="parameters.productContentTypeId"/>
+        </entity-and>
+        <filter-list-by-date list="productContentList" to-list="productContents"/>
+        <if-not-empty field="productContents">
+            <first-from-list list="productContents" entry="productContent"/>
+            <entity-one entity-name="Content" value-field="content">
+                <field-map field-name="contentId" from-field="productContent.contentId"/>
+            </entity-one>
+        </if-not-empty>
+        <if-not-empty field="content">
+            <get-related-one value-field="content" relation-name="DataResource" to-value-field="textDr"/>
+            <if-not-empty field="textDr">
+                <get-related-one value-field="textDr" relation-name="ElectronicText" to-value-field="text"/>
+                <if-not-empty field="text">
+                    <set-service-fields service-name="updateSimpleTextContent" map="text" to-map="updateSimpleText"/>
+                    <set field="updateSimpleText.text" from-field="parameters.text"/>
+                    <set field="updateSimpleText.textDataResourceId" from-field="text.dataResourceId"/>
+                    <if-not-empty field="parameters.text">
+                        <!-- Update product content electronic text -->
+                        <call-service service-name="updateSimpleTextContent" in-map-name="updateSimpleText"/>
+                    <else>
+                        <!-- Remove Product content if content is exists and the text is left blank -->
+                        <set-service-fields service-name="deleteProductContentAndText" map="productContent" to-map="deleteProductContentCtx"/>
+                        <call-service service-name="deleteProductContentAndText" in-map-name="deleteProductContentCtx"/>
+                    </else>
+                    </if-not-empty>
+                </if-not-empty>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="parameters.text">
+                <!-- Create Product Content if it is not exist -->
+                <set-service-fields service-name="createSimpleTextContent" map="parameters" to-map="createSimpleTextMap"/>
+                <set field="createSimpleTextMap.text" from-field="parameters.text"/>
+                <call-service service-name="createSimpleTextContent" in-map-name="createSimpleTextMap">
+                    <result-to-field result-name="contentId" field="createProductContentMap.contentId"/>
+                </call-service>
+                <set-service-fields service-name="createProductContent" map="parameters" to-map="createProductContentMap"/>
+                <set field="createProductContentMap.productContentTypeId" from-field="parameters.productContentTypeId"/>
+                <set field="createProductContentMap.productId" from-field="parameters.productId"/>
+                <call-service service-name="createProductContent" in-map-name="createProductContentMap"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="manageGoodIdentification" short-description="Create Update and Delete GoodIdentification">
+        <entity-one entity-name="GoodIdentification" value-field="goodIdentification">
+            <field-map field-name="productId" from-field="parameters.productId"/>
+            <field-map field-name="goodIdentificationTypeId" from-field="parameters.goodIdentificationTypeId"/>
+        </entity-one>
+        <if-not-empty field="goodIdentification">
+            <if-not-empty field="parameters.idValue">
+                <call-service service-name="updateGoodIdentification" in-map-name="parameters"/>
+            <else>
+                <set field="deleteGoodIdentificationMap.productId" from-field="parameters.productId"/>
+                <set field="deleteGoodIdentificationMap.goodIdentificationTypeId" from-field="parameters.goodIdentificationTypeId"/>
+                <call-service service-name="deleteGoodIdentification" in-map-name="deleteGoodIdentificationMap"/>
+            </else>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="parameters.idValue">
+                <call-service service-name="createGoodIdentification" in-map-name="parameters"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="deleteProductContent" short-description="Delete Product Content And Text">
+        <!-- Remove Product content if content is exists and the text is left blank -->
+        <set-service-fields service-name="removeProductContent" map="parameters" to-map="removeProductContentMap"/>
+        <call-service service-name="removeProductContent" in-map-name="removeProductContentMap"/>
+        
+        <entity-one entity-name="Content" value-field="content"/>
+        <if-not-empty field="content">
+            <entity-and entity-name="ContentRole" list="contentRoleList">
+                <field-map field-name="contentId" from-field="parameters.contentId"/>
+            </entity-and>
+            <iterate entry="contentRole" list="contentRoleList">
+                <set-service-fields service-name="removeContentRole" map="contentRole" to-map="contentRoleCtx"/>
+                <call-service service-name="removeContentRole" in-map-name="contentRoleCtx"/>
+            </iterate>
+            <get-related-one value-field="content" relation-name="DataResource" to-value-field="dataResource"/>
+            <set-service-fields service-name="removeContent" map="content" to-map="removeContentCtx"/>
+            <call-service service-name="removeContent" in-map-name="removeContentCtx"/>
+            <if-not-empty field="dataResource">
+                <get-related-one value-field="dataResource" relation-name="ElectronicText" to-value-field="electronicText"/>
+                <if-not-empty field="electronicText">
+                    <set-service-fields service-name="removeElectronicText" map="electronicText" to-map="removeElectronicTextCtx"/>
+                    <call-service service-name="removeElectronicText" in-map-name="removeElectronicTextCtx"/>
+                    <entity-and entity-name="DataResourceRole" list="dataResourceRoleList">
+                       <field-map field-name="dataResourceId" from-field="dataResource.dataResourceId"/>
+                    </entity-and>
+                    <iterate entry="dataResourceRole" list="dataResourceRoleList">
+                        <set-service-fields service-name="removeDataResourceRole" map="dataResourceRole" to-map="dataResourceRoleCtx"/>
+                        <call-service service-name="removeDataResourceRole" in-map-name="dataResourceRoleCtx"/>
+                    </iterate>
+                    <set-service-fields service-name="removeDataResource" map="dataResource" to-map="removeDataResourceCtx"/>
+                    <call-service service-name="removeDataResource" in-map-name="removeDataResourceCtx"/>
+                </if-not-empty>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="updateFacetGroup" short-description="Updates a facet groups" use-transaction="false">
+        <iterate-map key="descriptionKey" value="descriptionValue" map="parameters.description">
+            <if-empty field="descriptionValue">
+                <set field="descriptionBlank" value="true"/>
+            </if-empty>
+        </iterate-map>
+        <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+            <if-not-empty field="sequenceNumValue">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${sequenceNumValue}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <set field="invalidSeqNum" value="true"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
+                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
+                            </and>
+                        </condition>
+                        <then>
+                        </then>
+                        <else>
+                            <set field="invalidSeqNumRange" value="true"/>
+                        </else>
+                    </if>
+                </else>
+                </if-compare>
+            </if-not-empty>
+        </iterate-map>
+        <if-compare field="descriptionBlank" value="true" operator="equals">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetGroupBlankError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+        </if-compare>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumNotVaildNumError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SEQUENCENUM" list="error_list"/>
+            </then>
+        </if>
+        <check-errors/>
+        
+        <set field="productCategoryId" from-field="parameters.productCategoryId"/>
+        <iterate-map key="productFeatureGroupIdKey" value="productFeatureGroupIdValue" map="parameters.productFeatureGroupId">
+            <set field="productFeatureGroupId" from-field="productFeatureGroupIdValue"/>
+            <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+                <if-compare-field field="productFeatureGroupIdKey" to-field="sequenceNumKey" operator="equals">
+                    <set field="sequenceNum" from-field="sequenceNumValue" type="Long"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="fromDateKey" value="fromDateValue" map="parameters.fromDate">
+                <if-compare-field field="productFeatureGroupIdKey" to-field="fromDateKey" operator="equals">
+                    <set field="fromDate" from-field="fromDateValue"/>
+                </if-compare-field>
+            </iterate-map> 
+            <iterate-map key="thruDateKey" value="thruDateValue" map="parameters.thruDate">
+                <if-compare-field field="productFeatureGroupIdKey" to-field="thruDateKey" operator="equals">
+                    <set field="thruDate" from-field="thruDateValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="descriptionKey" value="descriptionValue" map="parameters.description">
+                <if-compare-field field="productFeatureGroupIdKey" to-field="descriptionKey" operator="equals">
+                    <set field="description" from-field="descriptionValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="facetValueMinKey" value="facetValueMinValue" map="parameters.facetValueMin">
+                <if-compare-field field="productFeatureGroupIdKey" to-field="facetValueMinKey" operator="equals">
+                    <set field="facetValueMin" from-field="facetValueMinValue" type="Long"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="facetValueMaxKey" value="facetValueMaxValue" map="parameters.facetValueMax">
+                <if-compare-field field="productFeatureGroupIdKey" to-field="facetValueMaxKey" operator="equals">
+                    <set field="facetValueMax" from-field="facetValueMaxValue" type="Long"/>
+                </if-compare-field>
+            </iterate-map>
+            
+            <set-service-fields service-name="updateProductFeatureCatGrpAppl" to-map="updateProductFeatureCatGrpApplCtx"/>
+            <set field="updateProductFeatureCatGrpApplCtx.productCategoryId" from-field="parameters.productCategoryId"/>
+            <set field="updateProductFeatureCatGrpApplCtx.sequenceNum" from-field="sequenceNum" type="Long"/>
+            <set field="updateProductFeatureCatGrpApplCtx.productFeatureGroupId" from-field="productFeatureGroupId"/>
+            <set field="updateProductFeatureCatGrpApplCtx.facetValueMin" from-field="facetValueMin" type="Long"/>
+            <set field="updateProductFeatureCatGrpApplCtx.facetValueMax" from-field="facetValueMax" type="Long"/>
+            
+            <set field="updateProductFeatureCatGrpApplCtx.thruDate" from-field="thruDate" type="Timestamp" default-value=""/>
+            
+            <if-compare field="fromDate" operator="not-equals" from-field="nullField">
+                <set field="updateProductFeatureCatGrpApplCtx.fromDate" from-field="fromDate" type="Timestamp"/>
+            </if-compare>
+            
+            <call-service service-name="updateProductFeatureCatGrpAppl" in-map-name="updateProductFeatureCatGrpApplCtx"/>
+        
+            <set-service-fields service-name="updateProductFeatureGroup" map="parameters" to-map="updateProductFeatureGroupCtx"/>
+            <set field="updateProductFeatureGroupCtx.productFeatureGroupId" from-field="productFeatureGroupId"/>
+            <set field="updateProductFeatureGroupCtx.description" from-field="description"/>
+            <call-service service-name="updateProductFeatureGroup" in-map-name="updateProductFeatureGroupCtx"/>
+            
+        </iterate-map>
+    </simple-method>
+    
+    <simple-method method-name="updatePLPSequence" short-description="Updates PLP Sequence" use-transaction="false">
+        <set field="nowFromDate" from-field="parameters.fromDate" type="Timestamp"/>
+        <if-empty field="parameters.sequenceNum">
+            <set field="parameters.sequenceNum" value="10" type="String" />
+        </if-empty>
+        <if-not-empty field="parameters.sequenceNum">
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                <string value="${parameters.sequenceNum}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                 <set field="parameters.sequenceNum" value="10" type="String" />
+            </if-compare>
+        </if-not-empty>
+        <set-service-fields service-name="updateProductToCategory" to-map="updateProductToCategoryCtx" map="parameters"/>
+        <call-service service-name="updateProductToCategory" in-map-name="updateProductToCategoryCtx"/>
+        <field-to-result field="parameters.productId" result-name="productId"/>
+        <field-to-result field="parameters.productCategoryId" result-name="productCategoryId"/>
+        <field-to-result field="parameters.fromDate" result-name="fromDate"/>
+    </simple-method>
+    
+    <simple-method method-name="updateProductMetatagContent" short-description="Update Product Contents">
+        <set field="updateProductText.productId" from-field="parameters.productId"/>
+        <!-- For HTML_PAGE_TITLE Product Content -->
+        <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductMetaTitleCtx"/>
+        <set field="updateProductMetaTitleCtx.text" from-field="parameters.metaTitle"/>
+        <set field="updateProductMetaTitleCtx.productContentTypeId" value="HTML_PAGE_TITLE"/>
+        <call-service service-name="updateProductContentText" in-map-name="updateProductMetaTitleCtx"/>
+            
+        <!-- For HTML_PAGE_META_DESC Product Content -->
+        <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductMetaDescCtx"/>
+        <set field="updateProductMetaDescCtx.text" from-field="parameters.metaDesc"/>
+        <set field="updateProductMetaDescCtx.productContentTypeId" value="HTML_PAGE_META_DESC"/>
+        <call-service service-name="updateProductContentText" in-map-name="updateProductMetaDescCtx"/>
+            
+        <!-- For HTML_PAGE_META_KEY Product Content --> 
+        <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductMetaKeyCtx"/>
+        <set field="updateProductMetaKeyCtx.text" from-field="parameters.metaKeyword"/>
+        <set field="updateProductMetaKeyCtx.productContentTypeId" value="HTML_PAGE_META_KEY"/>
+        <call-service service-name="updateProductContentText" in-map-name="updateProductMetaKeyCtx"/>
+            
+        <!-- Clear the Product Content Rendered Cache -->
+        <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="clearCache">
+            <string value="product.content.rendered"/>
+        </call-class-method>
+    </simple-method>
+    
+    <simple-method method-name="updateProductImageAndContent" short-description="Method to update images and content for product">
+        <set-service-fields service-name="addProductImageAndContent" map="parameters" to-map="addProductImageAndContentMap"/>
+        <if-not-empty field="parameters.largeImage">
+            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductImageAndContentMap.uploadedFile" from-field="parameters.largeImage"/>
+            <set field="addProductImageAndContentMap.productContentTypeId" value="LARGE_IMAGE_URL"/>
+            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="parameters._largeImage_fileName"/>
+            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="parameters._largeImage_contentType"/>
+            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+            <clear-field field="addProductImageAndContentMap"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.thumbnailImage">
+            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductImageAndContentMap.uploadedFile" from-field="parameters.thumbnailImage"/>
+            <set field="addProductImageAndContentMap.productContentTypeId" value="THUMBNAIL_IMAGE_URL"/>
+            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="parameters._thumbnailImage_fileName"/>
+            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="parameters._thumbnailImage_contentType"/>
+            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+            <clear-field field="addProductImageAndContentMap"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.detailImage">
+            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductImageAndContentMap.uploadedFile" from-field="parameters.detailImage"/>
+            <set field="addProductImageAndContentMap.productContentTypeId" value="DETAIL_IMAGE_URL"/>
+            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="parameters._detailImage_fileName"/>
+            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="parameters._detailImage_contentType"/>
+            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+            <clear-field field="addProductImageAndContentMap"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.smallImage">
+            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductImageAndContentMap.uploadedFile" from-field="parameters.smallImage"/>
+            <set field="addProductImageAndContentMap.productContentTypeId" value="SMALL_IMAGE_URL"/>
+            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="parameters._smallImage_fileName"/>
+            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="parameters._smallImage_contentType"/>
+            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+            <clear-field field="addProductImageAndContentMap"/>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.smallAltImage">
+            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductImageAndContentMap.uploadedFile" from-field="parameters.smallAltImage"/>
+            <set field="addProductImageAndContentMap.productContentTypeId" value="SMALL_IMAGE_ALT_URL"/> 	
+            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="parameters._smallAltImage_fileName"/>
+            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="parameters._smallAltImage_contentType"/>
+            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+            <clear-field field="addProductImageAndContentMap"/>
+        </if-not-empty>
+        
+        <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updatePLPTitleCtx"/>
+        <set field="updatePLPTitleCtx.text" from-field="parameters.plpTitleText"/>
+        <set field="updatePLPTitleCtx.productContentTypeId" value="SMALL_IMAGE_ALT"/>
+        <call-service service-name="updateProductContentText" in-map-name="updatePLPTitleCtx"/>
+
+        <set field="largeImageMap" from-field="parameters.altLargeImage"/>
+        <set field="thumbImageMap" from-field="parameters.altThumbImage"/>
+        <set field="detailImageMap" from-field="parameters.altDetailImage"/>
+        <iterate-map key="largeImageKey" value="largeImageValue" map="parameters.altLargeImage">
+            <if-not-empty field="largeImageMap._${largeImageKey}_fileName">
+	            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+	            <set field="addProductImageAndContentMap.uploadedFile" from-field="largeImageMap.${largeImageKey}" type="java.nio.ByteBuffer"/>
+	            <set field="addProductImageAndContentMap.productContentTypeId" value="XTRA_IMG_${largeImageKey}_LARGE"/>
+	            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="largeImageMap._${largeImageKey}_fileName"/>
+	            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="largeImageMap._${largeImageKey}_contentType"/>
+	            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+	            <clear-field field="addProductImageAndContentMap"/>
+	        </if-not-empty>
+	        
+            <if-not-empty field="thumbImageMap._${largeImageKey}_fileName">
+	            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+	            <set field="addProductImageAndContentMap.uploadedFile" from-field="thumbImageMap.${largeImageKey}" type="java.nio.ByteBuffer"/>
+	            <set field="addProductImageAndContentMap.productContentTypeId" value="ADDITIONAL_IMAGE_${largeImageKey}"/>
+	            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="thumbImageMap._${largeImageKey}_fileName"/>
+	            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="thumbImageMap._${largeImageKey}_contentType"/>
+	            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+	            <clear-field field="addProductImageAndContentMap"/>
+	        </if-not-empty>
+	        
+            <if-not-empty field="detailImageMap._${largeImageKey}_fileName">
+	            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+	            <set field="addProductImageAndContentMap.uploadedFile" from-field="detailImageMap.${largeImageKey}" type="java.nio.ByteBuffer"/>
+	            <set field="addProductImageAndContentMap.productContentTypeId" value="XTRA_IMG_${largeImageKey}_DETAIL"/>
+	            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="detailImageMap._${largeImageKey}_fileName"/>
+	            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="detailImageMap._${largeImageKey}_contentType"/>
+	            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+	            <clear-field field="addProductImageAndContentMap"/>
+	        </if-not-empty>
+        </iterate-map>
+        
+        <if-not-empty field="parameters.plpSwatchImage">
+            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductImageAndContentMap.uploadedFile" from-field="parameters.plpSwatchImage"/>
+            <set field="addProductImageAndContentMap.productContentTypeId" value="PLP_SWATCH_IMAGE_URL"/>
+            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="parameters._plpSwatchImage_fileName"/>
+            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="parameters._plpSwatchImage_contentType"/>
+            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+            <clear-field field="addProductImageAndContentMap"/>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.pdpSwatchImage">
+            <set field="addProductImageAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductImageAndContentMap.uploadedFile" from-field="parameters.pdpSwatchImage"/>
+            <set field="addProductImageAndContentMap.productContentTypeId" value="PDP_SWATCH_IMAGE_URL"/>
+            <set field="addProductImageAndContentMap._uploadedFile_fileName" from-field="parameters._pdpSwatchImage_fileName"/>
+            <set field="addProductImageAndContentMap._uploadedFile_contentType" from-field="parameters._pdpSwatchImage_contentType"/>
+            <call-service service-name="addProductImageAndContent" in-map-name="addProductImageAndContentMap"/>
+            <clear-field field="addProductImageAndContentMap"/>
+        </if-not-empty>
+        
+        <!-- Clear the Product Content Rendered Cache -->
+        <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="clearCache">
+            <string value="product.content.rendered"/>
+        </call-class-method>
+    </simple-method>
+    
+    <simple-method method-name="createUpdateProductVideo" short-description="Method to create, update video content for product">
+        <set-service-fields service-name="addProductVideoAndContent" map="parameters" to-map="addProductVideoAndContentMap"/>
+        <if-not-empty field="parameters.videoUrl">
+            <set field="addProductVideoAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductVideoAndContentMap.uploadedFile" from-field="parameters.videoUrl"/>
+            <set field="addProductVideoAndContentMap.productContentTypeId" value="PDP_VIDEO_URL"/>
+            <set field="addProductVideoAndContentMap._uploadedFile_fileName" from-field="parameters._videoUrl_fileName"/>
+            <set field="addProductVideoAndContentMap._uploadedFile_contentType" from-field="parameters._videoUrl_contentType"/>
+            <call-service service-name="addProductVideoAndContent" in-map-name="addProductVideoAndContentMap"/>
+            <clear-field field="addProductVideoAndContentMap"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.video360Url">
+            <set field="addProductVideoAndContentMap.productId" from-field="parameters.productId"/>
+            <set field="addProductVideoAndContentMap.uploadedFile" from-field="parameters.video360Url"/>
+            <set field="addProductVideoAndContentMap.productContentTypeId" value="PDP_VIDEO_360_URL"/>
+            <set field="addProductVideoAndContentMap._uploadedFile_fileName" from-field="parameters._video360Url_fileName"/>
+            <set field="addProductVideoAndContentMap._uploadedFile_contentType" from-field="parameters._video360Url_contentType"/>
+            <call-service service-name="addProductVideoAndContent" in-map-name="addProductVideoAndContentMap"/>
+            <clear-field field="addProductVideoAndContentMap"/>
+        </if-not-empty>
+        <!-- Clear the Product Content Rendered Cache -->
+        <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="clearCache">
+            <string value="product.content.rendered"/>
+        </call-class-method>
+    </simple-method>
+    
+    <simple-method method-name="createUpdateProdCatContentText" short-description="Create and Update Product Category Content Text">
+        <entity-and entity-name="ProductCategoryContent" list="prodCatContentList">
+            <field-map field-name="productCategoryId" from-field="parameters.productCategoryId"/>
+            <field-map field-name="prodCatContentTypeId" from-field="parameters.prodCatContentTypeId"/>
+        </entity-and>
+        <filter-list-by-date list="prodCatContentList" to-list="prodCatContents"/>
+        <if-not-empty field="prodCatContents">
+            <first-from-list list="prodCatContents" entry="prodCatContent"/>
+            <get-related-one value-field="prodCatContent" relation-name="Content" to-value-field="content"/>
+        </if-not-empty>
+        <if-not-empty field="content">
+            <get-related-one value-field="content" relation-name="DataResource" to-value-field="textDr"/>
+            <if-not-empty field="textDr">
+                <get-related-one value-field="textDr" relation-name="ElectronicText" to-value-field="text"/>
+                <if-not-empty field="text">
+                    <set-service-fields service-name="updateSimpleTextContent" map="text" to-map="updateSimpleText"/>
+                    <set field="updateSimpleText.text" from-field="parameters.text"/>
+                    <set field="updateSimpleText.textDataResourceId" from-field="text.dataResourceId"/>
+                    <if-not-empty field="parameters.text">
+                        <!-- Update product category content electronic text -->
+                        <call-service service-name="updateSimpleTextContent" in-map-name="updateSimpleText"/>
+                    <else>
+                        <!-- Remove Product category content if content is exists and the text is left blank -->
+                        <set-service-fields service-name="deleteProdCatContentAndText" map="prodCatContent" to-map="deleteProdCatContentCtx"/>
+                        <call-service service-name="deleteProdCatContentAndText" in-map-name="deleteProdCatContentCtx"/>
+                    </else>
+                    </if-not-empty>
+                </if-not-empty>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="parameters.text">
+                <!-- Create Product Content if it is not exist -->
+                <set-service-fields service-name="createSimpleTextContent" map="parameters" to-map="createSimpleTextMap"/>
+                <set field="createSimpleTextMap.text" from-field="parameters.text"/>
+                <call-service service-name="createSimpleTextContent" in-map-name="createSimpleTextMap">
+                    <result-to-field result-name="contentId" field="createProdCatContentMap.contentId"/>
+                </call-service>
+                <set-service-fields service-name="createCategoryContent" map="parameters" to-map="createProdCatContentMap"/>
+                <set field="createProdCatContentMap.prodCatContentTypeId" from-field="parameters.prodCatContentTypeId"/>
+                <set field="createProdCatContentMap.productCategoryId" from-field="parameters.productCategoryId"/>
+                <call-service service-name="createCategoryContent" in-map-name="createProdCatContentMap"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="deleteProdCatContent" short-description="Delete Product Content And Text">
+        <!-- Remove Product content if content is exists and the text is left blank -->
+        <set-service-fields service-name="removeCategoryContent" map="parameters" to-map="removeCategoryContentMap"/>
+        <call-service service-name="removeCategoryContent" in-map-name="removeCategoryContentMap"/>
+        
+        <entity-one entity-name="Content" value-field="content"/>
+        <if-not-empty field="content">
+            <entity-and entity-name="ContentRole" list="contentRoleList">
+                <field-map field-name="contentId" from-field="parameters.contentId"/>
+            </entity-and>
+            <iterate entry="contentRole" list="contentRoleList">
+                <set-service-fields service-name="removeContentRole" map="contentRole" to-map="contentRoleCtx"/>
+                <call-service service-name="removeContentRole" in-map-name="contentRoleCtx"/>
+            </iterate>
+            <get-related-one value-field="content" relation-name="DataResource" to-value-field="dataResource"/>
+            <set-service-fields service-name="removeContent" map="content" to-map="removeContentCtx"/>
+            <call-service service-name="removeContent" in-map-name="removeContentCtx"/>
+            <if-not-empty field="dataResource">
+                <get-related-one value-field="dataResource" relation-name="ElectronicText" to-value-field="electronicText"/>
+                <if-not-empty field="electronicText">
+                    <set-service-fields service-name="removeElectronicText" map="electronicText" to-map="removeElectronicTextCtx"/>
+                    <call-service service-name="removeElectronicText" in-map-name="removeElectronicTextCtx"/>
+                    <entity-and entity-name="DataResourceRole" list="dataResourceRoleList">
+                       <field-map field-name="dataResourceId" from-field="dataResource.dataResourceId"/>
+                    </entity-and>
+                    <iterate entry="dataResourceRole" list="dataResourceRoleList">
+                        <set-service-fields service-name="removeDataResourceRole" map="dataResourceRole" to-map="dataResourceRoleCtx"/>
+                        <call-service service-name="removeDataResourceRole" in-map-name="dataResourceRoleCtx"/>
+                    </iterate>
+                    <set-service-fields service-name="removeDataResource" map="dataResource" to-map="removeDataResourceCtx"/>
+                    <call-service service-name="removeDataResource" in-map-name="removeDataResourceCtx"/>
+                </if-not-empty>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="updateCategoryMetatagContent" short-description="Update Product Category Contents">
+        <!-- For HTML_PAGE_TITLE Product Category Content -->
+        <set-service-fields service-name="createUpdateProdCatContentText" map="parameters" to-map="createUpdateProdCatMetaTitleCtx"/>
+        <set field="createUpdateProdCatMetaTitleCtx.text" from-field="parameters.metaTitle"/>
+        <set field="createUpdateProdCatMetaTitleCtx.prodCatContentTypeId" value="HTML_PAGE_TITLE"/>
+        <call-service service-name="createUpdateProdCatContentText" in-map-name="createUpdateProdCatMetaTitleCtx"/>
+            
+        <!-- For HTML_PAGE_META_DESC Product Category Content -->
+        <set-service-fields service-name="createUpdateProdCatContentText" map="parameters" to-map="createUpdateProdCatMetaDescCtx"/>
+        <set field="createUpdateProdCatMetaDescCtx.text" from-field="parameters.metaDesc"/>
+        <set field="createUpdateProdCatMetaDescCtx.prodCatContentTypeId" value="HTML_PAGE_META_DESC"/>
+        <call-service service-name="createUpdateProdCatContentText" in-map-name="createUpdateProdCatMetaDescCtx"/>
+            
+        <!-- For HTML_PAGE_META_KEY Product Category Content --> 
+        <set-service-fields service-name="createUpdateProdCatContentText" map="parameters" to-map="createUpdateProdCatMetaKeyCtx"/>
+        <set field="createUpdateProdCatMetaKeyCtx.text" from-field="parameters.metaKeyword"/>
+        <set field="createUpdateProdCatMetaKeyCtx.prodCatContentTypeId" value="HTML_PAGE_META_KEY"/>
+        <call-service service-name="createUpdateProdCatContentText" in-map-name="createUpdateProdCatMetaKeyCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="updateProductCategoryImage" short-description="Method to update images for category">
+        <if-empty field="parameters._categoryImage_fileName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCategoryImageError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="categoryImage" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="addProductCategoryImage" map="parameters" to-map="addProductCategoryImageMap"/>
+        <if-not-empty field="parameters.categoryImage">
+            <set field="addProductCategoryImageMap.productCategoryId" from-field="parameters.productCategoryId"/>
+            <set field="addProductCategoryImageMap.uploadedFile" from-field="parameters.categoryImage"/>
+            <set field="addProductCategoryImageMap._uploadedFile_fileName" from-field="parameters._categoryImage_fileName"/>
+            <set field="addProductCategoryImageMap._uploadedFile_contentType" from-field="parameters._categoryImage_contentType"/>
+            <call-service service-name="addProductCategoryImage" in-map-name="addProductCategoryImageMap"/>
+            <clear-field field="addProductCategoryImageMap"/>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="manageRelatedProducts" short-description="Method to update and create product assoc">
+        <iterate-map key="productIdKey" value="productIdValue" map="parameters.relatedProductId">
+            <field-to-list field="productIdValue" list="newProductIdList"/>
+            <iterate-map key="relatedProductNameKey" value="relatedProductNameValue" map="parameters.relatedProductName">
+                <if-compare-field field="productIdKey" to-field="relatedProductNameKey" operator="equals">
+                    <set field="pruductNameMap.${productIdValue}" from-field="relatedProductNameValue"/>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+        <if-not-empty field="newProductIdList">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="findDuplicates" ret-field="dupProductIdList">
+                <field field="newProductIdList" type="List"/>
+            </call-class-method>
+        </if-not-empty>s
+        <if-not-empty field="dupProductIdList">
+            <iterate entry="dupProductId" list="dupProductIdList">
+                <clear-field field="argListNames"/>
+                <set field="argListNames[]" from-field="pruductNameMap.${dupProductId}"/>
+                <property-to-field resource="OSafeAdminUiLabels" property="DuplicateProductAssocError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </iterate>
+        </if-not-empty>
+        <check-errors/>
+        <iterate-map key="productIdKey" value="productIdValue" map="parameters.relatedProductId">
+            <field-to-list field="productIdValue" list="newProductIdList"/>
+            <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+                <if-compare-field field="productIdKey" to-field="sequenceNumKey" operator="equals">
+                    <set field="pruductSeqMap.${productIdValue}" from-field="sequenceNumValue"/>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+        
+        <entity-and entity-name="ProductAssoc" list="productAssocList" filter-by-date="true">
+            <field-map field-name="productIdTo" from-field="parameters.productId"/>
+            <field-map field-name="productAssocTypeId" value="PRODUCT_COMPLEMENT"/>
+        </entity-and>
+        
+        <call-bsh><![CDATA[
+            List existingProductIds = org.ofbiz.entity.util.EntityUtil.getFieldListFromEntityList(productAssocList, "productId", true);
+            parameters.put("existingProductIds",existingProductIds);
+        ]]></call-bsh>
+        
+        <set field="existingProductIds" from-field="parameters.existingProductIds"/>
+        <if-not-empty field="newProductIdList">
+            <call-bsh><![CDATA[
+                List allProductIds = javolution.util.FastList.newInstance();
+                allProductIds.addAll(existingProductIds);
+                
+                for(String newProductId : newProductIdList)
+                {
+                    if(!allProductIds.contains(newProductId)) {
+                        allProductIds.add(newProductId);
+                    }
+                }
+                parameters.put("allProductIds",allProductIds);
+            ]]></call-bsh>
+        <else>
+            <call-bsh><![CDATA[
+                List allProductIds = javolution.util.FastList.newInstance();
+                allProductIds.addAll(existingProductIds);
+                
+                parameters.put("allProductIds",allProductIds);
+            ]]></call-bsh>
+        </else>
+        </if-not-empty>
+        <now-timestamp field="nowStamp"/>    
+        <set field="allProductIds" from-field="parameters.allProductIds"/>
+        <iterate entry="allProductId" list="allProductIds">
+            <set field="sequenceNumValue" from-field="pruductSeqMap.${allProductId}"/>
+            <if-empty field="sequenceNumValue">
+                <set field="sequNumValue" value="10" type="String" />
+            <else>
+                <set field="sequNumValue" from-field="sequenceNumValue"/>
+            </else>
+            </if-empty>
+            <if-not-empty field="sequNumValue">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${sequNumValue}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <set field="sequNumValue" value="10" type="String" />
+                </if-compare>
+            </if-not-empty>
+            
+            <entity-and entity-name="ProductAssoc" list="productAssocListToUpdate" filter-by-date="true">
+                <field-map field-name="productIdTo" from-field="parameters.productId"/>
+                <field-map field-name="productId" from-field="allProductId"/>
+                <field-map field-name="productAssocTypeId" value="PRODUCT_COMPLEMENT"/>
+            </entity-and>
+                    
+            <if>
+                <condition>
+                    <and>
+                        <if-compare-field field="existingProductIds" to-field="allProductId" operator="contains"/>
+                        <if-compare-field field="newProductIdList" to-field="allProductId" operator="contains"/>
+                    </and>
+                </condition>
+                <then>
+                    <first-from-list entry="productAssocToUpdate" list="productAssocListToUpdate"/>
+                    <set-service-fields service-name="updateProductAssoc" map="productAssocToUpdate" to-map="updateProductAssocCtx"/>
+                    <set field="updateProductAssocCtx.sequenceNum" from-field="sequNumValue" type="Long"/>
+                    <call-service service-name="updateProductAssoc" in-map-name="updateProductAssocCtx"/>
+                </then>
+            </if>
+            <if>
+                <condition>
+                    <and>
+                        <if-compare-field field="existingProductIds" to-field="allProductId" operator="contains"/>
+                        <not><if-compare-field field="newProductIdList" to-field="allProductId" operator="contains"/></not>
+                    </and>
+                </condition>
+                <then>
+                    <!-- Perform EXPIRE -->
+                    <first-from-list entry="productAssocToExpire" list="productAssocListToUpdate"/>
+                    <set-service-fields service-name="updateProductAssoc" map="productAssocToExpire" to-map="updateProductAssocCtx"/>
+                    <set field="updateProductAssocCtx.thruDate" from-field="nowStamp"/>
+                    <call-service service-name="updateProductAssoc" in-map-name="updateProductAssocCtx"/>
+                </then>
+            </if>
+            <if>
+                <condition>
+                    <and>
+                        <not><if-compare-field field="existingProductIds" to-field="allProductId" operator="contains"/></not>
+                        <if-compare-field field="newProductIdList" to-field="allProductId" operator="contains"/>
+                    </and>
+                </condition>
+                <then>
+                    <!-- Perform CREATE -->
+                    <set field="createProductAssocCtx.fromDate" from-field="nowStamp"/>
+                    <set field="createProductAssocCtx.productId" from-field="allProductId"/>
+                    <set field="createProductAssocCtx.productIdTo" from-field="parameters.productId"/>
+                    <set field="createProductAssocCtx.productAssocTypeId" value="PRODUCT_COMPLEMENT"/>
+                    <set field="createProductAssocCtx.sequenceNum" from-field="sequNumValue" type="Long"/>
+                    <call-service service-name="createProductAssoc" in-map-name="createProductAssocCtx"/>
+                </then>
+            </if>
+        </iterate>
+    </simple-method>
+    
+    <simple-method method-name="createNewProduct" short-description="Method to Create Product">
+        <if-empty field="parameters.productCategoryId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductCategoryError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.productDetailName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductNameError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PRODUCTNAME" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.internalName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInternalNameError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="INTERNALNAME" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.longDescription">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDetailFieldError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="LONGDESCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.listPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductListPriceError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">
+                    <field field="parameters.listPrice"/>
+                </call-class-method>
+                <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductListPriceError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="LISTPRICE" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.defaultPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDefaultPriceError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="checkFloatResult">
+                    <field field="parameters.defaultPrice"/>
+                </call-class-method>
+                <if-compare field="checkFloatResult" operator="equals" value="false" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ProductDefaultPriceError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DEFAULTPRICE" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.introductionDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.introductionDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIntroDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.introductionDate">
+                        <field field="parameters.introductionDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.salesDiscontinuationDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.salesDiscontinuationDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDiscontDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.salesDiscontinuationDate">
+                        <field field="parameters.salesDiscontinuationDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.inventoryLevel"> 
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="inventoryLevelVaild">
+               <string value="${parameters.inventoryLevel}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="inventoryLevelVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+            <else>
+                <if>
+                    <condition>
+                    <and>
+                        <if-compare operator="greater-equals" value="0" field="parameters.inventoryLevel" type="Long"/>
+                        <if-compare operator="less-equals" value="9999" field="parameters.inventoryLevel" type="Long"/>
+                    </and>
+                    </condition>
+                <then>
+                </then>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+                </else>
+                </if>
+            </else>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+        
+        <!-- create Product -->
+        <set-service-fields service-name="createProduct" map="parameters" to-map="createProductCtx"/>
+        <call-service service-name="createProduct" in-map-name="createProductCtx">
+            <result-to-field result-name="productId" field="parameters.productId"/>
+        </call-service>
+        
+        <!-- create ProductPrice -->
+        <now-timestamp field="nowStamp"/>
+        <if-not-empty field="parameters.listPrice">
+            <set-service-fields service-name="createProductPrice" map="parameters" to-map="createProductPriceCtx"/>
+            <set field="createProductPriceCtx.fromDate" from-field="nowStamp"/>
+            <set field="createProductPriceCtx.productPricePurposeId" value="PURCHASE"/>
+            <set field="createProductPriceCtx.productStoreGroupId" value="_NA_"/>
+            <set field="createProductPriceCtx.productPriceTypeId" value="LIST_PRICE"/>
+            <set field="createProductPriceCtx.price" from-field="parameters.listPrice" type="BigDecimal"/>
+            <call-service service-name="createProductPrice" in-map-name="createProductPriceCtx"/>
+            <clear-field field="createProductPriceCtx"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.defaultPrice">
+            <set-service-fields service-name="createProductPrice" map="parameters" to-map="createProductPriceCtx"/>
+            <set field="createProductPriceCtx.fromDate" from-field="nowStamp"/>
+            <set field="createProductPriceCtx.productPricePurposeId" value="PURCHASE"/>
+            <set field="createProductPriceCtx.productStoreGroupId" value="_NA_"/>
+            <set field="createProductPriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+            <set field="createProductPriceCtx.price" from-field="parameters.defaultPrice" type="BigDecimal"/>
+            <call-service service-name="createProductPrice" in-map-name="createProductPriceCtx"/>
+            <clear-field field="createProductPriceCtx"/>
+        </if-not-empty>
+        
+        <!-- create ProductCategoryMember -->
+        <if-not-empty field="parameters.productCategoryId">
+            <set field="callCreateProductCategoryMemberMap.productId" from-field="parameters.productId"/>
+            <set field="callCreateProductCategoryMemberMap.productCategoryId" from-field="parameters.productCategoryId"/>
+            <call-service service-name="addProductToCategory" in-map-name="callCreateProductCategoryMemberMap"/>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="createTopProductCategory" short-description="Method to create top category and rollup">
+        <if-empty field="parameters.topNavBar">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTopNavBarError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+        <else>
+            <entity-and entity-name="ProductCategory" list="productCategoryList">
+                <field-map field-name="categoryName" from-field="parameters.topNavBar"/>
+            </entity-and>
+            <if-not-empty field="productCategoryList">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidTopNavBarError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+            </if-not-empty>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.fromDate">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankActiveFromDateError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+        <else>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.fromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        <if-not-empty field="parameters.thruDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.thruDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-empty field="parameters.sequenceNum">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                <string value="${parameters.sequenceNum}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
+            <else>
+                <if>
+                    <condition>
+                        <and>
+                            <if-compare operator="greater-equals" value="1" field="parameters.sequenceNum" type="Long"/>
+                            <if-compare operator="less-equals" value="9999" field="parameters.sequenceNum" type="Long"/>
+                        </and>
+                    </condition>
+                    <then>
+                    </then>
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
+                    </else>
+                </if>
+            </else>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+        
+        <set-service-fields service-name="createProductCategoryAndRollup" map="parameters" to-map="createProductCategoryCtx"/>
+        <set field="createProductCategoryCtx.productCategoryTypeId" value="CATALOG_CATEGORY"/>
+        <set field="createProductCategoryCtx.primaryParentCategoryId" from-field="parameters.catalogTopCategoryId"/>
+        <set field="createProductCategoryCtx.categoryName" from-field="parameters.topNavBar"/>
+        <call-service service-name="createProductCategoryAndRollup" in-map-name="createProductCategoryCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="createSubProductCategory" short-description="Method to create sub category and rollup">
+        <if-empty field="parameters.topNavBarId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTopNavBarError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.subNavBar">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSubNavBarError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.fromDate">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankActiveFromDateError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+        <else>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.fromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        <if-not-empty field="parameters.thruDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.thruDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-empty field="parameters.sequenceNum">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                <string value="${parameters.sequenceNum}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+            <else>
+                <if>
+                    <condition>
+                        <and>
+                            <if-compare operator="greater-equals" value="1" field="parameters.sequenceNum" type="Long"/>
+                            <if-compare operator="less-equals" value="9999" field="parameters.sequenceNum" type="Long"/>
+                        </and>
+                    </condition>
+                    <then>
+                    </then>
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidCategorySeqNumError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                    </else>
+                </if>
+            </else>
+        </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+        
+        <set-service-fields service-name="createProductCategoryAndRollup" map="parameters" to-map="createProductCategoryCtx"/>
+        <set field="createProductCategoryCtx.productCategoryTypeId" value="CATALOG_CATEGORY"/>
+        <set field="createProductCategoryCtx.primaryParentCategoryId" from-field="parameters.topNavBarId"/>
+        <set field="createProductCategoryCtx.categoryName" from-field="parameters.subNavBar"/>
+        <call-service service-name="createProductCategoryAndRollup" in-map-name="createProductCategoryCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="createProductCategoryAndRollup" short-description="Create an ProductCategory">
+        <check-permission permission="CATALOG" action="_CREATE">
+            <alt-permission permission="CATALOG_ROLE" action="_CREATE"/>
+            <fail-message message="Security Error: to run createProductCategory you must have the CATALOG_CREATE or CATALOG_ADMIN permission, or the limited CATALOG_ROLE_CREATE permission"/>
+        </check-permission>
+        <check-errors/>
+
+        <now-timestamp field="nowTimestamp"/>
+        <make-value value-field="newEntity" entity-name="ProductCategory"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+
+        <if-empty field="parameters.productCategoryId">
+            <sequenced-id sequence-name="ProductCategory" field="newEntity.productCategoryId"/>
+        <else>
+            <set field="newEntity.productCategoryId" from-field="parameters.productCategoryId"/>
+            <check-id field="newEntity.productCategoryId"/>
+            <check-errors/>
+        </else>
+        </if-empty>
+        <field-to-result field="newEntity.productCategoryId" result-name="productCategoryId"/>
+
+        <create-value value-field="newEntity"/>
+
+        <!-- if setting the primaryParentCategoryId, create a rollup entity too -->
+        <if-not-empty field="parameters.fromDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.fromDate">
+                <field field="parameters.fromDate"/>
+            </call-class-method>
+        </if-not-empty>
+        <if-not-empty field="parameters.thruDate">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.thruDate">
+                <field field="parameters.thruDate"/>
+            </call-class-method>
+        </if-not-empty>
+        <if-not-empty field="newEntity.primaryParentCategoryId">
+            <make-value entity-name="ProductCategoryRollup" value-field="newRollup"/>
+            <set field="newRollup.productCategoryId" from-field="newEntity.productCategoryId"/>
+            <set field="newRollup.parentProductCategoryId" from-field="newEntity.primaryParentCategoryId"/>
+            <set field="newRollup.sequenceNum" from-field="parameters.sequenceNum" type="Long"/>
+            <set field="newRollup.fromDate" from-field="parameters.fromDate"/>
+            <set field="newRollup.thruDate" from-field="parameters.thruDate"/>
+            <create-value value-field="newRollup"/>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="deleteProductImageAndContent" short-description="Method to Delete Product Image And Content">
+        <if-not-empty field="parameters.productContentTypeId">
+            <entity-and entity-name="ProductContent" list="productContentList" filter-by-date="true">
+                <field-map field-name="productId" from-field="parameters.productId"/>
+                <field-map field-name="productContentTypeId" from-field="parameters.productContentTypeId"/>
+            </entity-and>
+        </if-not-empty>
+        <if-not-empty field="productContentList">
+            <first-from-list entry="productContent" list="productContentList"/>
+        </if-not-empty>
+        <if-not-empty field="productContent">
+            <set-service-fields service-name="removeProductContent" map="productContent" to-map="removeProductContentCtx"/>
+            <set field="removeProductContentCtx.productId" from-field="productContent.productId"/>
+            <set field="removeProductContentCtx.productContentTypeId" from-field="productContent.productContentTypeId"/>
+            <set field="removeProductContentCtx.contentId" from-field="productContent.contentId"/>
+            <set field="removeProductContentCtx.fromDate" from-field="productContent.fromDate"/>
+            <call-service service-name="removeProductContent" in-map-name="removeProductContentCtx">
+            </call-service>
+            <entity-one entity-name="Content" value-field="content">
+                <field-map field-name="contentId" from-field="productContent.contentId"/>
+            </entity-one>
+            <if-not-empty field="content">
+                <entity-and entity-name="ContentRole" list="contentRoleList">
+                    <field-map field-name="contentId" from-field="content.contentId"/>
+                </entity-and>
+                <iterate entry="contentRole" list="contentRoleList">
+                    <set-service-fields service-name="removeContentRole" map="contentRole" to-map="contentRoleCtx"/>
+                    <call-service service-name="removeContentRole" in-map-name="contentRoleCtx"/>
+                </iterate>
+                <get-related-one value-field="content" relation-name="DataResource" to-value-field="dataResource"/>
+                <set-service-fields service-name="removeContent" map="content" to-map="removeContentCtx"/>
+                <call-service service-name="removeContent" in-map-name="removeContentCtx"/>
+                <if-not-empty field="dataResource">
+                    <entity-and entity-name="DataResourceRole" list="dataResourceRoleList">
+                        <field-map field-name="dataResourceId" from-field="dataResource.dataResourceId"/>
+                    </entity-and>
+                    <iterate entry="dataResourceRole" list="dataResourceRoleList">
+                        <set-service-fields service-name="removeDataResourceRole" map="dataResourceRole" to-map="dataResourceRoleCtx"/>
+                        <call-service service-name="removeDataResourceRole" in-map-name="dataResourceRoleCtx"/>
+                    </iterate>
+                    <set-service-fields service-name="removeDataResource" map="dataResource" to-map="removeDataResourceCtx"/>
+                    <call-service service-name="removeDataResource" in-map-name="removeDataResourceCtx"/>
+                </if-not-empty>
+            </if-not-empty>
+            <field-to-result field="parameters.productId" result-name="productId"/>
+            <!-- Clear the Product Content Rendered Cache -->
+            <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="clearCache">
+                <string value="product.content.rendered"/>
+            </call-class-method>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="updateFacetValue" short-description="Updates a facet groups">
+        <iterate-map key="descriptionKey" value="descriptionValue" map="parameters.description">
+            <if-empty field="descriptionValue">
+                <set field="descriptionBlank" value="true"/>
+            </if-empty>
+        </iterate-map>
+        <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+            <if-not-empty field="sequenceNumValue">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${sequenceNumValue}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <set field="invalidSeqNum" value="true"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
+                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
+                            </and>
+                        </condition>
+                        <then>
+                        </then>
+                        <else>
+                            <set field="invalidSeqNumRange" value="true"/>
+                        </else>
+                    </if>
+                </else>
+                </if-compare>
+            </if-not-empty>
+        </iterate-map>
+        <if-compare field="descriptionBlank" value="true" operator="equals">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetValueBlankError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+        </if-compare>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumNotVaildNumError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SEQUENCENUM" list="error_list"/>
+            </then>
+        </if>
+        <check-errors/>
+        <set field="productFeatureGroupId" from-field="parameters.productFeatureGroupId"/>
+        <iterate-map key="productFeatureIdKey" value="productFeatureIdValue" map="parameters.productFeatureId">
+            <set field="productFeatureId" from-field="productFeatureIdValue"/>
+            <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+                <if-compare-field field="productFeatureIdKey" to-field="sequenceNumKey" operator="equals">
+                    <set field="sequenceNum" from-field="sequenceNumValue" type="Long"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="fromDateKey" value="fromDateValue" map="parameters.fromDate">
+                <if-compare-field field="productFeatureIdKey" to-field="fromDateKey" operator="equals">
+                    <set field="fromDate" from-field="fromDateValue"/>
+                </if-compare-field>
+            </iterate-map> 
+            <iterate-map key="thruDateKey" value="thruDateValue" map="parameters.thruDate">
+                <if-compare-field field="productFeatureIdKey" to-field="thruDateKey" operator="equals">
+                    <set field="thruDate" from-field="thruDateValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="productFeatureTypeIdKey" value="productFeatureTypeIdValue" map="parameters.productFeatureTypeId">
+                <if-compare-field field="productFeatureIdKey" to-field="productFeatureTypeIdKey" operator="equals">
+                    <set field="productFeatureTypeId" from-field="productFeatureTypeIdValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="descriptionKey" value="descriptionValue" map="parameters.description">
+                <if-compare-field field="productFeatureIdKey" to-field="descriptionKey" operator="equals">
+                    <set field="description" from-field="descriptionValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <set-service-fields service-name="updateProductFeatureGroupAppl" to-map="updateProductFeatureGroupApplCtx"/>
+            <set field="updateProductFeatureGroupApplCtx.productFeatureGroupId" from-field="productFeatureGroupId"/>
+            <set field="updateProductFeatureGroupApplCtx.productFeatureId" from-field="productFeatureId"/>
+            <set field="updateProductFeatureGroupApplCtx.sequenceNum" from-field="sequenceNum"/>
+            <if-compare field="thruDate" operator="not-equals" value="null">
+                <set field="updateProductFeatureGroupApplCtx.thruDate" from-field="thruDate" type="Timestamp"/>
+            </if-compare>
+            <if-compare field="fromDate" operator="not-equals" value="null">
+                <set field="updateProductFeatureGroupApplCtx.fromDate" from-field="fromDate" type="Timestamp"/>
+            </if-compare>
+            <call-service service-name="updateProductFeatureGroupAppl" in-map-name="updateProductFeatureGroupApplCtx"/>   
+            
+            <set-service-fields service-name="updateProductFeature" map="parameters" to-map="updateProductFeatureCtx"/>
+            <set field="updateProductFeatureCtx.productFeatureId" from-field="productFeatureId"/>
+            <set field="updateProductFeatureCtx.productFeatureTypeId" from-field="productFeatureTypeId"/>
+            <set field="updateProductFeatureCtx.description" from-field="description"/>
+            <call-service service-name="updateProductFeature" in-map-name="updateProductFeatureCtx"/>
+        </iterate-map>
+    </simple-method>
+    
+    <simple-method method-name="updateFeatureSwatchImage" short-description="Method to update PLP and PDP swatch images for feature">
+        <call-class-method class-name="org.ofbiz.base.util.UtilProperties" method-name="getPropertyValue" ret-field="osafeThemeServerPath">
+            <string value="osafe.properties"/>
+            <string value="osafe.theme.server"/>
+        </call-class-method>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="buildProductImagePathExt" ret-field="featureSwatchImagePath">
+            <string value="FEATURE_SWATCH_IMAGE_URL"/>
+        </call-class-method>
+        <set field="featureSwatchTargetPath" value="${osafeThemeServerPath}${featureSwatchImagePath}"/>
+        <create-object class-name="java.io.File" field="featureSwatchTargetPathFile">
+            <field field="featureSwatchTargetPath" type="String"/>
+        </create-object>
+        <call-object-method method-name="exists" obj-field="featureSwatchTargetPathFile" ret-field="isFeatureSwatchTargetPathFile"/>
+        <if-compare field="isFeatureSwatchTargetPathFile" operator="equals" value="FALSE" type="Boolean">
+            <call-object-method method-name="mkdirs" obj-field="featureSwatchTargetPathFile"/>
+        </if-compare>
+        <set-service-fields service-name="createUpdateProdFeatureDataResource" map="parameters" to-map="createUpdateProdFeatureDataResourceCtx"/>
+        <if-not-empty field="parameters._plpSwatchImage_fileName">
+            <set field="uploadFileCtx.uploadedFile" from-field="parameters.plpSwatchImage"/>
+            <set field="uploadFileCtx._uploadedFile_fileName" from-field="parameters._plpSwatchImage_fileName"/>
+            <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+                <result-to-field result-name="uploadFileName" field="parameters.plpSwatchImageName"/>
+                <result-to-field result-name="uploadFilePath" field="parameters.plpSwatchImagePath"/>
+            </call-service>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="moveContent">
+                <field field="parameters.plpSwatchImagePath"/>
+                <field field="featureSwatchTargetPath"/>
+                <field field="parameters.plpSwatchImageName"/>
+            </call-class-method>
+            <clear-field field="uploadFileCtx"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.productFeatureId" from-field="parameters.productFeatureId"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.dataResourceName" value="${parameters.plpSwatchImageName}"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.objectInfo" value="${featureSwatchImagePath}${parameters.plpSwatchImageName}"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.prodFeatureDataResourceTypeId" value="PLP_SWATCH_IMAGE_URL"/>
+            <call-service service-name="createUpdateProdFeatureDataResource" in-map-name="createUpdateProdFeatureDataResourceCtx"/>
+            <clear-field field="createUpdateProdFeatureDataResourceCtx"/>
+        </if-not-empty>
+        <if-not-empty field="parameters._pdpSwatchImage_fileName">
+            <set field="uploadFileCtx.uploadedFile" from-field="parameters.pdpSwatchImage"/>
+            <set field="uploadFileCtx._uploadedFile_fileName" from-field="parameters._pdpSwatchImage_fileName"/>
+            <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+                <result-to-field result-name="uploadFileName" field="parameters.pdpSwatchImageName"/>
+                <result-to-field result-name="uploadFilePath" field="parameters.pdpSwatchImagePath"/>
+            </call-service>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="moveContent">
+                <field field="parameters.pdpSwatchImagePath"/>
+                <field field="featureSwatchTargetPath"/>
+                <field field="parameters.pdpSwatchImageName"/>
+            </call-class-method>
+            <clear-field field="uploadFileCtx"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.productFeatureId" from-field="parameters.productFeatureId"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.dataResourceName" value="${parameters.pdpSwatchImageName}"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.objectInfo" value="${featureSwatchImagePath}${parameters.pdpSwatchImageName}"/>
+            <set field="createUpdateProdFeatureDataResourceCtx.prodFeatureDataResourceTypeId" value="PDP_SWATCH_IMAGE_URL"/>
+            <call-service service-name="createUpdateProdFeatureDataResource" in-map-name="createUpdateProdFeatureDataResourceCtx"/>
+            <clear-field field="createUpdateProdFeatureDataResourceCtx"/>
+        </if-not-empty>
+        <field-to-result field="parameters.productFeatureGroupId" result-name="productFeatureGroupId"/>
+    </simple-method>
+    
+    <simple-method method-name="createUpdateProdFeatureDataResource" short-description="Method to create and update product feature dataresource">
+        <entity-and entity-name="ProductFeatureDataResource" list="productFeatureDataResourceList">
+            <field-map field-name="productFeatureId" from-field="parameters.productFeatureId"/>
+            <field-map field-name="prodFeatureDataResourceTypeId" from-field="parameters.prodFeatureDataResourceTypeId"/>
+        </entity-and>
+        <if-not-empty field="productFeatureDataResourceList">
+            <first-from-list list="productFeatureDataResourceList" entry="productFeatureDataResource"/>
+            <get-related-one relation-name="DataResource" to-value-field="dataResource" value-field="productFeatureDataResource"/>
+            <if-not-empty field="dataResource">
+                <set-service-fields service-name="updateDataResource" map="dataResource" to-map="updateDataResourceCtx"/>
+                <set field="updateDataResourceCtx.objectInfo" from-field="parameters.objectInfo"/>
+                <set field="updateDataResourceCtx.dataResourceName" from-field="parameters.dataResourceName"/>
+                <call-service service-name="updateDataResource" in-map-name="updateDataResourceCtx"/>
+            </if-not-empty>
+        <else>
+            <set-service-fields service-name="createDataResource" map="parameters" to-map="createDataResourceCtx"/>
+            <set field="createDataResourceCtx.dataResourceTypeId" value="SHORT_TEXT"/>
+            <set field="createDataResourceCtx.mimeTypeId" value="text/html"/>
+            <call-service service-name="createDataResource" in-map-name="createDataResourceCtx">
+                <result-to-field result-name="dataResourceId" field="parameters.dataResourceId"/>
+            </call-service>
+            <make-value value-field="newEntity" entity-name="ProductFeatureDataResource"/>
+            <set-pk-fields map="parameters" value-field="newEntity"/>
+            <set-nonpk-fields map="parameters" value-field="newEntity"/>
+            <create-value value-field="newEntity"/>
+        </else>
+        </if-not-empty>
+    </simple-method>
+</simple-methods>

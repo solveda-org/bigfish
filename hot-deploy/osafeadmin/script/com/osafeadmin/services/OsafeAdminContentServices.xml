@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createCategoryTextContent" short-description="Create DataResource, ElectronicText, Content and ProductCategoryContent record.">
+    
+        <set field="createDataResourceCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createDataResourceCtx.dataTemplateTypeId" value="FTL"/>
+        <call-service service-name="createDataResource" in-map-name="createDataResourceCtx">
+            <result-to-field result-name="dataResourceId"/>
+        </call-service>
+        <set field="createContentCtx.dataResourceId" from-field="dataResourceId"/>
+        <call-service service-name="createElectronicText" in-map-name="createContentCtx"/>
+        <set field="createContentCtx.statusId" value="CTNT_PUBLISHED"/>
+        <entity-one entity-name="ProductCategory" value-field="productCategory"/>
+        <entity-one entity-name="ProductCategoryContentType" value-field="productCategoryContentType">
+            <field-map field-name="prodCatContentTypeId" from-field="parameters.prodCatContentTypeId"/>
+        </entity-one>
+        <if-compare field="parameters.prodCatContentTypeId" operator="equals" value="PLP_ESPOT_CONTENT">
+            <property-to-field field="plpSpotLabel" resource="OSafeAdminUiLabels" property="plpSpotLabel"/>
+            <set field="contentName" value="${productCategory.categoryName} ${plpSpotLabel}"/>
+        </if-compare>
+        <if-compare field="parameters.prodCatContentTypeId" operator="equals" value="PDP_ADDITIONAL">
+         <property-to-field field="pdpAdditionalLabel" resource="OSafeAdminUiLabels" property="pdpAdditionalLabel"/>
+            <set field="contentName" value="${productCategory.categoryName} ${pdpAdditionalLabel}"/>
+        </if-compare>
+        <if-compare field="parameters.prodCatContentTypeId" operator="not-equals" value="PDP_ADDITIONAL">
+           <property-to-field field="plpCategoryDescriptionLabel" resource="OSafeAdminUiLabels" property="plpCategoryDescriptionLabel"/>
+           <set field="contentDescription" value="${productCategoryContentType.description}: ${productCategory.categoryName}"/>
+        </if-compare>
+        <set field="createContentCtx.contentName" from-field="contentName" default-value="${productCategory.productCategoryId} ${productCategoryContentType.description}"/>
+        <set field="createContentCtx.description" from-field="contentDescription" default-value=""/>
+        <call-service service-name="createContent" in-map-name="createContentCtx">
+            <result-to-field result-name="contentId"/>
+            <result-to-result result-name="contentId"/>
+        </call-service>
+        <set field="createProdCatContentCtx.contentId" from-field="contentId"/>
+        <set field="createProdCatContentCtx.prodCatContentTypeId" from-field="parameters.prodCatContentTypeId"/>
+        <set field="createProdCatContentCtx.productCategoryId" from-field="parameters.productCategoryId"/>
+        <call-service service-name="createCategoryContent" in-map-name="createProdCatContentCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="updateTextContent" short-description="Update Text Content">
+        <entity-one entity-name="Content" value-field="content"/>
+        <if-not-empty field="content">
+            <set field="parameters.dataResourceId" from-field="content.dataResourceId"/>
+            <entity-one entity-name="ElectronicText" value-field="electronicText" />
+             <if-empty field="content.contentName">
+                <if-empty field="parameters.contentName">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotNameError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="contentName" list="error_list"/>
+                </if-empty>
+             <else>
+                <if-empty field="parameters.contentName">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotNameError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="contentName" list="error_list"/>
+                </if-empty>
+             </else>
+            </if-empty>
+            <if-empty field="content.description">
+                <if-empty field="parameters.description">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionContentError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DEASCRIPTION" list="error_list"/>
+                </if-empty>
+            <else>
+                <if-empty field="parameters.description">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionContentError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DEASCRIPTION" list="error_list"/>
+                </if-empty>
+            </else>
+            </if-empty>
+            <if-empty field="electronicText.textData">
+                <if-empty field="parameters.textData">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="TEXTDATA" list="error_list"/>
+                </if-empty>
+            <else>
+                <if-empty field="parameters.textData">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotContentError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="TEXTDATA" list="error_list"/>
+                </if-empty>
+            </else>
+            </if-empty>
+            <check-errors/>
+            <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextCtx"/>
+            <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextCtx"/>
+            <set-service-fields service-name="updateDataResource" map="parameters" to-map="updateDataResourceCtx"/>
+            <call-service service-name="updateDataResource" in-map-name="updateDataResourceCtx"/>
+            <now-timestamp field="lastModifiedDate"/>
+            <if-compare field="parameters.statusId" operator="not-equals" value="CTNT_PUBLISHED">
+                <set field="parameters.lastModifiedDate" from-field="lastModifiedDate"/>
+            <else>
+                <if-empty field="content.lastModifiedDate">
+                    <set field="parameters.lastModifiedDate" from-field="lastModifiedDate"/>
+                </if-empty>
+            </else>
+            </if-compare>
+            <set-nonpk-fields value-field="content" map="parameters"/>
+            <store-value value-field="content"/>
+        </if-not-empty>
+        <field-to-result field="parameters.contentId" result-name="contentId"/>
+    </simple-method>
+
+    <simple-method method-name="createNewContentSpot" short-description="create a new content">
+        <if-empty field="parameters.contentId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
+            <else>
+                <set field="contentIdLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value="_" type="String"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="contentId">
+                    <field field="parameters.contentId" type="String"/>
+                    <field field="contentIdLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="contentId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
+                    <else>
+                        <set field="parameters.contentId" from-field="contentId"/>
+                        <entity-one entity-name="Content" value-field="existingContent"/>
+                        <if-not-empty field="existingContent">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.contentName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotNameError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="contentName" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionContentError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="DEASCRIPTION" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.textData">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="TEXTDATA" list="error_list"/>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
+        <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
+        <set field="createTextContentCtx.contentTypeId" value="DOCUMENT"/>
+        <set field="createTextContentCtx.mapKey" value="link"/>
+        <set field="createTextContentCtx.contentAssocTypeId"  value="SUB_CONTENT"/>
+        <set field="createTextContentCtx.contentIdFrom" from-field="parameters.spotListMenuId"/>
+        <set field="createTextContentCtx.contentIdTo" from-field="parameters.contentId"/>
+        <set field="createTextContentCtx.contentPurposeTypeId"  value="SECTION"/>
+        <call-service service-name="createTextContent" in-map-name="createTextContentCtx"/>
+        <field-to-result field="parameters.contentId" result-name="contentId"/>
+    </simple-method>
+
+    <simple-method method-name="deleteTextContent" short-description="delete content">
+        <entity-one entity-name="Content" value-field="content"/>
+        <if-not-empty field="content">
+            <set field="removeContentAssocCtx.contentIdTo" from-field="content.contentId"/>
+            <remove-by-and entity-name="ContentAssoc" map="removeContentAssocCtx"/>
+            <set field="removeContentCtx.contentId" from-field="content.contentId"/>
+            <remove-by-and entity-name="ContentRole" map="removeContentCtx"/>
+            <remove-by-and entity-name="ContentPurpose" map="removeContentCtx"/>
+            <call-service service-name="removeContent" in-map-name="removeContentCtx"/>
+            <set field="removeDataResourceCtx.dataResourceId" from-field="content.dataResourceId"/>
+            <remove-by-and entity-name="DataResourceRole" map="removeDataResourceCtx"/>
+            <call-service service-name="removeElectronicText" in-map-name="removeDataResourceCtx"/>
+            <call-service service-name="removeDataResource" in-map-name="removeDataResourceCtx"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+            <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="successMessage" short-description="Display success message when no error messages are found.">
+         <set field="errorMessageListSize" value="${groovy:if(parameters.errorMessageList != null)return(parameters.errorMessageList.size());}"  type="Integer" default-value="0"/>
+         <if-compare field="errorMessageListSize" operator="equals" value="0">
+            <if-empty field="parameters.successMessageList">
+                <property-to-field resource="OSafeAdminUiLabels" property="UpdatedSuccess" field="defaultSuccessMessage"/>
+                <string-to-list string="${defaultSuccessMessage}" list="parameters.successMessageList"/>
+            </if-empty>
+             <field-to-result field="parameters.successMessageList" result-name="osafeSuccessMessageList"/>
+         </if-compare>
+    </simple-method>
+    
+    <simple-method method-name="updateStaticPageContentAttr" short-description="Update Static Page Contents">
+        <!-- For HTML_PAGE_TITLE Content Attribute-->
+        <set-service-fields service-name="createUpdateContentAttribute" map="parameters" to-map="createUpdateContAttrMetaTitleCtx"/>
+        <set field="createUpdateContAttrMetaTitleCtx.attrValue" from-field="parameters.metaTitle"/>
+        <set field="createUpdateContAttrMetaTitleCtx.attrName" value="HTML_PAGE_TITLE"/>
+        <call-service service-name="createUpdateContentAttribute" in-map-name="createUpdateContAttrMetaTitleCtx"/>
+            
+        <!-- For HTML_PAGE_META_DESC Content Attribute -->
+        <set-service-fields service-name="createUpdateContentAttribute" map="parameters" to-map="createUpdateContAttrMetaDescCtx"/>
+        <set field="createUpdateContAttrMetaDescCtx.attrValue" from-field="parameters.metaDesc"/>
+        <set field="createUpdateContAttrMetaDescCtx.attrName" value="HTML_PAGE_META_DESC"/>
+        <call-service service-name="createUpdateContentAttribute" in-map-name="createUpdateContAttrMetaDescCtx"/>
+            
+        <!-- For HTML_PAGE_META_KEY Content Attribute --> 
+        <set-service-fields service-name="createUpdateContentAttribute" map="parameters" to-map="createUpdateContAttrMetaKeyCtx"/>
+        <set field="createUpdateContAttrMetaKeyCtx.attrValue" from-field="parameters.metaKeyword"/>
+        <set field="createUpdateContAttrMetaKeyCtx.attrName" value="HTML_PAGE_META_KEY"/>
+        <call-service service-name="createUpdateContentAttribute" in-map-name="createUpdateContAttrMetaKeyCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="createUpdateContentAttribute" short-description="Create And Update Content Attribute">
+        <entity-one entity-name="ContentAttribute" value-field="contentAttr">
+            <field-map field-name="contentId" from-field="parameters.contentId"/>
+            <field-map field-name="attrName" from-field="parameters.attrName"/>
+        </entity-one>
+        <if-not-empty field="contentAttr">
+            <if-not-empty field="parameters.attrValue">
+                <set-service-fields service-name="updateContentAttr" map="parameters" to-map="updateContentAttributeCtx"/>
+                <call-service service-name="updateContentAttr" in-map-name="updateContentAttributeCtx"/>
+            <else>
+                <set-service-fields service-name="removeContentAttribute" map="parameters" to-map="removeContentAttributeCtx"/>
+                <call-service service-name="removeContentAttribute" in-map-name="removeContentAttributeCtx"/>
+            </else>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="parameters.attrValue">
+                <set-service-fields service-name="createContentAttr" map="parameters" to-map="createContentAttributeCtx"/>
+                <call-service service-name="createContentAttr" in-map-name="createContentAttributeCtx"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+    </simple-method>
+</simple-methods>

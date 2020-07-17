@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="eCommerceGuestCheckout">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+                <set field="pageTitle" value="${uiLabelMap.GuestCheckoutTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="formAction" value="eCommerceSubmitOrder" />
+                <set field="formName" value="guestCheckout" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="isCheckoutPage" value="true" />
+                <set field="updateShippingOptionRequest" value="updateShippingOption" />
+                <set field="setShippingOptionRequest" value="setShippingOption" />
+                <set field="addPromoCodeRequest" value="validateCheckoutCartPromoCode"/>
+                <set field="removePromoCodeRequest" value="removeCheckoutCartPromoCode"/>
+                <set field="removeStorePickupRequest" value="removeStorePickup" />
+                <set field="dialogPurpose" value="storePickup_"/>
+                <set field="popupContentScreen" value="component://osafe/widget/EcommerceScreens.xml#eCommerceStorePickupPopup"/>
+                <set field="shoppingCartSize" value="${groovy:session.getAttribute(&quot;shoppingCart&quot;).items().size()}"/>
+                <set field="loadPca" value="Y" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                <if-compare operator="greater" value="0" field="shoppingCartSize"/>
+                            </condition>
+                            <actions>
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceGuestCheckout.groovy" />
+                            </actions>
+                            <widgets>
+                                <include-screen name="PTS_ONE_STEP_CHECKOUT" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                <platform-specific>
+                                    <html>
+                                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                            <html-template-decorator-section name="entryFormJS">
+                                                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" /></html></platform-specific>
+                                            </html-template-decorator-section>
+                                            <html-template-decorator-section name="entryForm">
+                                                <include-screen name="aboutYouEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                <include-screen name="addressBillingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                <include-screen name="addressShippingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                <include-screen name="eCommerceCheckoutShippingOptions"/>
+                                                <include-screen name="eCommerceEnterPromoCode" location="component://osafe/widget/EcommerceScreens.xml"/>
+                                                <container id="checkoutOrderDetailAndPromoCodeSec">
+                                                    <include-screen name="checkoutOrderDetailAndPromoCode"/>
+                                                </container>
+                                                <include-screen name="createAccountEntryForm"/>
+                                                <include-screen name="checkoutOrderPaymentMethods"/>
+                                            </html-template-decorator-section>
+                                            <html-template-decorator-section name="entryFormButtons">
+                                                <include-screen name="formEntryContinueButton" location="component://osafe/widget/EntryScreens.xml" />
+                                            </html-template-decorator-section>
+                                            <html-template-decorator-section name="capturePlusJs">
+                                                <include-screen name="capturePlusJs" location="component://osafe/widget/EntryScreens.xml" />
+                                            </html-template-decorator-section>
+                                        </html-template-decorator>
+                                    </html>
+                                </platform-specific>
+                                <include-screen name="storePickupDialog" location="component://osafe/widget/DialogScreens.xml"/>
+                                <!-- <container id="commonPopup">
+                                    <include-screen name="ecommerceCommonPopup" location="component://osafe/widget/CommonScreens.xml"/>
+                                </container> -->
+                            </widgets>
+                            <fail-widgets>
+                                <container style="displayBox">
+                                    <label style="instructions" text="${uiLabelMap.YourShoppingCartIsEmptyInfo}"/>
+                                </container>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="eCommerceCheckoutShippingOptions">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="dialogPurpose" value="storePickup_"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutShippingOptions.groovy" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/eCommerceCheckoutShippingOptions.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="checkoutOrderDetailAndPromoCode">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <set field="useAvailability" value="Y" />
+            </actions>
+            <widgets>
+                <include-screen name="orderItems" location="component://osafe/widget/EcommerceScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="checkoutOrderPaymentMethods">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/eCommerceCheckoutOrderPaymentMethods.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="createAccountEntryForm">
+        <section>
+            <actions>
+                <set field="REG_PWD_MIN_CHAR" from-field="REG_PWD_MIN_CHAR" type="Integer" />
+                <set field="REG_PWD_MIN_NUM" from-field="REG_PWD_MIN_NUM" type="Integer" />
+                <set field="REG_PWD_MIN_UPPER" from-field="REG_PWD_MIN_UPPER" type="Integer" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/createAccountEntry.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

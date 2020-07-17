@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="anonRequestCatalogSubmit" short-description="submit request catalog" login-required="false">
+        <call-simple-method method-name="validateRequestCatalog" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+
+        <if-not-empty field="parameters.REQ_CATALOG_FIRST_NAME">
+            <set field="parameters.firstName" from-field="parameters.REQ_CATALOG_FIRST_NAME"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_LAST_NAME">
+            <set field="parameters.lastName" from-field="parameters.REQ_CATALOG_LAST_NAME"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_ADDRESS1">
+            <set field="parameters.address1" from-field="parameters.REQ_CATALOG_ADDRESS1"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_ADDRESS2">
+            <set field="parameters.address2" from-field="parameters.REQ_CATALOG_ADDRESS2"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_CITY">
+            <set field="parameters.city" from-field="parameters.REQ_CATALOG_CITY"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_STATE">
+            <set field="parameters.stateCode" from-field="parameters.REQ_CATALOG_STATE"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_POSTAL_CODE">
+            <set field="parameters.postalCode" from-field="parameters.REQ_CATALOG_POSTAL_CODE"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_COUNTRY">
+            <set field="parameters.countryCode" from-field="parameters.REQ_CATALOG_COUNTRY"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_HOME_AREA">
+            <set field="parameters.contactPhoneArea" from-field="parameters.REQ_CATALOG_HOME_AREA"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_HOME_CONTACT3">
+            <set field="parameters.contactPhoneContact3" from-field="parameters.REQ_CATALOG_HOME_CONTACT3"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_HOME_AREA">
+            <set field="parameters.contactPhoneContact4" from-field="parameters.REQ_CATALOG_HOME_CONTACT4"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_HOME_CONTACT_OTHER">
+            <set field="parameters.phoneNumber" from-field="parameters.REQ_CATALOG_HOME_CONTACT_OTHER"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.REQ_CATALOG_EMAIL_ADDR">
+            <set field="parameters.emailAddress" from-field="parameters.REQ_CATALOG_EMAIL_ADDR"/>
+        </if-not-empty>
+
+        <set-service-fields service-name="sendContactUsEmailToCompany" to-map="sendContactUsEmailToCompanyCtx" map="parameters"/>
+        <call-service service-name="sendContactUsEmailToCompany" in-map-name="sendContactUsEmailToCompanyCtx" />
+    </simple-method>
+</simple-methods>

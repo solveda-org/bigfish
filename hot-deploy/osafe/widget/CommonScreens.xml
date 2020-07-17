@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+
+    <screen name="main-decorator">
+        <section>
+            <actions>
+                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.jcarousel.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/validation.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/fieldlookup.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.min.js" global="true"/>
+                <set field="layoutSettings.companyName" from-field="uiLabelMap.eCommerceCompanyName" global="true"/>
+                <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.eCommerceCompanySubtitle" global="true"/>
+                <set field="layoutSettings.styleSheets[+0]" value="/osafe_theme/css/jquery.jqzoom.css" global="true"/>
+
+                <set field="activeApp" value="osafe" global="true"/>
+                <set field="applicationMenuName" value="MainAppBar" global="true"/>
+                <set field="applicationMenuLocation" value="" global="true"/>
+                <set field="applicationTitle" value="${uiLabelMap.eCommerceApplication}" global="true"/>
+            </actions>
+            <widgets>
+                <include-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PageMessages">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafe/webapp/osafe/common/eCommerceErrorMessages.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="screen-macro-decorator">
+        <section>
+            <widgets>
+               <include-screen name="CommonMacros"/>
+               <decorator-section-include name="screenBody"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CommonMacros">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
+                    </html>
+                </platform-specific>
+               <decorator-section-include name="screenBody"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ecommerce-basic-decorator">
+        <section>
+            <actions>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+
+                <!-- The default (main) java scripts -->
+                <!-- NOTE: this should be included on each screen that uses it to avoid including it in all screens: -->
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.jcarousel.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/validation.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.domReady.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/fieldlookup.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
+                <set field="layoutSettings.styleSheets[+0]" value="/osafe_theme/css/jquery.jqzoom.css" global="true"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
+                <!-- Get the store VisualTheme -->
+                <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
+                <service service-name="getVisualThemeResources">
+                    <field-map field-name="visualThemeId"/>
+                    <field-map field-name="themeResources" from-field="layoutSettings"/>
+                </service>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/setMainPanelStyle.groovy"/>
+                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy"/>
+            </actions>
+            <widgets>
+                <!--
+                    html head
+                    must be an ftl so it is the first thing rendered
+                -->
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/eCommerceHtmlOpen.ftl"/>
+                    </html>
+                </platform-specific>
+                <container id="eCommeceOuterBasicWrap">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonJquery.ftl"/>
+                        </html>
+                    </platform-specific>
+                    <container id="eCommerceInnerBasicWrapper">
+                        <container id="eCommerceContent" style="${contentPanelStyle}">
+                            <!-- header -->
+                            <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
+                            <include-screen name="eCommerceHeaderLinks" location="${parameters.eCommerceScreensLocation}"/>
+                            <include-screen name="eCommerceHeader" location="${parameters.eCommerceScreensLocation}"/>
+
+                            <include-screen name="eCommerceNavBar" location="${parameters.eCommerceScreensLocation}"/>
+
+                            <container id="eCommercePageBody">
+                                <section>
+                                    <condition>
+                                        <not>
+                                            <if-empty field="eCommerceLeftPanel"/>
+                                        </not>
+                                    </condition>
+                                    <widgets>
+                                        <container id="eCommerceLeftPanel" style="${leftPanelStyle}">
+                                            <include-screen name="${eCommerceLeftPanel}" location="${parameters.eCommerceScreensLocation}"/>
+                                        </container>
+                                    </widgets>
+                                </section>
+                                <container id="eCommerceMainPanel" style="${mainPanelStyle}">
+                                    <decorator-section-include name="title"/>
+                                    <section>
+                                        <condition>
+                                                <if-compare field="screenMessages" operator="not-equals" value="Y"/>
+                                        </condition>
+                                        <widgets>
+                                           <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
+                                        </widgets>
+                                    </section>
+                                    <decorator-section-include name="body"/>
+                                </container>
+                                <section>
+                                    <condition>
+                                        <not>
+                                            <if-empty field="eCommerceRightPanel"/>
+                                        </not>
+                                    </condition>
+                                    <widgets>
+                                        <container id="eCommerceRightPanel" style="${rightPanelStyle}">
+                                            <include-screen name="${eCommerceRightPanel}" location="${parameters.eCommerceScreensLocation}"/>
+                                        </container>
+                                    </widgets>
+                                </section>
+                            </container>
+                            <!-- render footer -->
+                            <include-screen name="eCommerceFooter" location="${parameters.eCommerceScreensLocation}"/>
+                        </container>
+                    </container>
+                    <container id="eCommerceBuiltBy">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://osafe/webapp/osafe/common/eCommerceBuiltBy.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </container>
+                </container>
+                <include-screen name="googleAnalytics"/>
+                <include-screen name="pixelTracking"/>
+                <!-- closing tags for body and html -->
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/eCommerceHtmlClose.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ecommerce-basic-bevel-decorator">
+        <section>
+            <actions>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+
+                <!-- The default (main) java scripts -->
+                <!-- NOTE: this should be included on each screen that uses it to avoid including it in all screens: -->
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.jcarousel.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/validation.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.domReady.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/fieldlookup.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
+                <set field="layoutSettings.styleSheets[+0]" value="/osafe_theme/css/jquery.jqzoom.css" global="true"/>
+
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
+                <!-- Get the store VisualTheme -->
+                <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
+                <service service-name="getVisualThemeResources">
+                    <field-map field-name="visualThemeId"/>
+                    <field-map field-name="themeResources" from-field="layoutSettings"/>
+                </service>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/setMainPanelStyle.groovy"/>
+                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy"/>
+            </actions>
+            <widgets>
+                <!--
+                    html head
+                    must be an ftl so it is the first thing rendered
+                -->
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/eCommerceHtmlOpen.ftl"/>
+                    </html>
+                </platform-specific>
+                <container id="eCommerceOuterBasicBevelWrap">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonJquery.ftl"/>
+                        </html>
+                    </platform-specific>
+                    <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
+                    <container id="eCommerceHeaderLinksBevelWrapper">
+                        <include-screen name="eCommerceHeaderLinks" location="${parameters.eCommerceScreensLocation}"/>
+                    </container>
+                    <container id="eCommerceInnerBasicBevelWrapper">
+                        <container id="eCommerceContent" style="${contentPanelStyle}">
+                            <!-- header -->
+                            <include-screen name="eCommerceHeader" location="${parameters.eCommerceScreensLocation}"/>
+                            <include-screen name="eCommerceNavBar" location="${parameters.eCommerceScreensLocation}"/>
+                            <container id="eCommercePageBody">
+                                <section>
+                                    <condition>
+                                        <not>
+                                            <if-empty field="eCommerceLeftPanel"/>
+                                        </not>
+                                    </condition>
+                                    <widgets>
+                                        <container id="eCommerceLeftPanel" style="${leftPanelStyle}">
+                                            <include-screen name="${eCommerceLeftPanel}" location="${parameters.eCommerceScreensLocation}"/>
+                                        </container>
+                                    </widgets>
+                                </section>
+                                <container id="eCommerceMainPanel" style="${mainPanelStyle}">
+                                    <decorator-section-include name="title"/>
+                                    <section>
+                                        <condition>
+                                                <if-compare field="screenMessages" operator="not-equals" value="Y"/>
+                                        </condition>
+                                        <widgets>
+                                           <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
+                                        </widgets>
+                                    </section>
+                                    <decorator-section-include name="body"/>
+                                </container>
+                                <section>
+                                    <condition>
+                                        <not>
+                                            <if-empty field="eCommerceRightPanel"/>
+                                        </not>
+                                    </condition>
+                                    <widgets>
+                                        <container id="eCommerceRightPanel" style="${rightPanelStyle}">
+                                            <include-screen name="${eCommerceRightPanel}" location="${parameters.eCommerceScreensLocation}"/>
+                                        </container>
+                                    </widgets>
+                                </section>
+                            </container>
+                        </container>
+                    </container>
+                    <!-- render footer -->
+                    <include-screen name="eCommerceFooter" location="${parameters.eCommerceScreensLocation}"/>
+                    <container id="eCommerceBuiltByBevelWrapper">
+                        <container id="eCommerceBuiltBy">
+                            <platform-specific>
+                                <html>
+                                    <html-template location="component://osafe/webapp/osafe/common/eCommerceBuiltBy.ftl"/>
+                                </html>
+                            </platform-specific>
+                        </container>
+                    </container>
+                </container>
+                <include-screen name="googleAnalytics"/>
+                <include-screen name="pixelTracking"/>
+                <!-- closing tags for body and html -->
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/eCommerceHtmlClose.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- AJAX screens -->
+    <screen name="ajaxSuccessResponse">
+        <section>
+            <widgets>
+                <platform-specific><html>
+                    <html-template location="component://osafe/webapp/osafe/common/ajax/productReviewSuccess.ftl"/>
+                </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ajaxFailResponse">
+        <section>
+            <widgets>
+                <platform-specific><html>
+                    <html-template location="component://osafe/webapp/osafe/common/ajax/productReviewFail.ftl"/>
+                </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="googleAnalytics">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/googleAnalytics.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html>
+                    <html-template location="component://osafe/webapp/osafe/includes/googleAnalytics.ftl"/>
+                </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pixelTracking">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/pixelTracking.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html>
+                    <html-template location="component://osafe/webapp/osafe/includes/pixelTracking.ftl"/>
+                </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="commonGeoLocationChart">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/commonGeoLocationChart.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ecommerceCommonButtons">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/ecommerceCommonButtons.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ecommerceCommonPopup">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/eCommerceCommonPopup.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

@@ -1,0 +1,712 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+    <screen name="eCommerceRenderContent">
+        <section>
+            <actions>
+                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
+                <set field="mainContentId" from-field="id"/>
+                <set field="containerId" from-field="contentContainerId"/>
+                <set field="containerStyle" from-field="contentContainerStyle"/>
+                <entity-one entity-name="Content" value-field="content">
+                    <field-map field-name="contentId" from-field="mainContentId"/>
+                </entity-one>
+            </actions>
+            <widgets>
+                <section>
+                    <condition>
+                       <and>
+                        <not><if-empty field="content"/></not>
+                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                       </and>
+                    </condition>
+                    <widgets>
+                        <container id="${containerId}" style="${containerStyle}">
+                            <content content-id="${content.contentId}"/>
+                        </container>
+                    </widgets>
+                    <fail-widgets>
+                        <container id="${containerId}">
+                        </container>
+                    </fail-widgets>
+                </section>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="eCommerceContent">
+        <section>
+            <actions>
+                <set field="mainContentId" value="${parameters.contentId}" default-value="${contentId}"/>
+                <set field="containerId" value="${containerId}" default-value="${mainContentId}"/>
+                <set field="containerStyle" value="${containerStyle}" default-value="staticContent"/>
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                <and>
+                                    <not><if-empty field="content"/></not>
+                                    <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                                </and>
+                            </condition>
+                            <widgets>
+                                <container id="${containerId}" style="${containerStyle}">
+                                     <content content-id="${mainContentId}"/>
+                                </container>
+                            </widgets>
+                            <fail-widgets>
+                                <container id="eCommerceContentNotFound">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceContentNotFound.ftl"/>
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- EPSOTS -->
+    <screen name="PTS_SHOPPING_CART">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_SHOPPING_CART}"/>
+                <set field="contentContainerId" value="ptsShoppingCart"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_SHIPPING_ADDRESS">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_SHIPPING_ADDRESS}"/>
+                <set field="contentContainerId" value="ptsShippingAddress"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_SHIPPING_METHOD">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_SHIPPING_METHOD}"/>
+                <set field="contentContainerId" value="ptsShippingMethod"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_ORDER_SUMMARY">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_ORDER_SUMMARY}"/>
+                <set field="contentContainerId" value="ptsOrderSummary"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_ORDER_CONFIRM">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_ORDER_CONFIRM}"/>
+                <set field="contentContainerId" value="ptsOrderConfirm"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_LOGIN">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_LOGIN}"/>
+                <set field="contentContainerId" value="ptsLogin"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_FORGOT_PASSWORD">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_FORGOT_PASSWORD}"/>
+                <set field="contentContainerId" value="ptsForgotPassword"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_REGISTRATION">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_REGISTRATION}"/>
+                <set field="contentContainerId" value="ptsRegistration"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_MY_ACCOUNT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_MY_ACCOUNT}"/>
+                <set field="contentContainerId" value="ptsMyAccount"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_CHANGE_PROFILE">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_CHANGE_PROFILE}"/>
+                <set field="contentContainerId" value="ptsChangeProfile"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_PERSONAL_INFO">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_PERSONAL_INFO}"/>
+                <set field="contentContainerId" value="ptsPersonalInfo"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_ADDRESS_BOOK_VIEW">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_ADDRESS_BOOK_VIEW}"/>
+                <set field="contentContainerId" value="ptsAddressBook"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_ADDRESS_BOOK_EDIT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_ADDRESS_BOOK_EDIT}"/>
+                <set field="contentContainerId" value="ptsAddressBook"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_ORDER_STATUS">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_ORDER_STATUS}"/>
+                <set field="contentContainerId" value="ptsOrderStatus"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_CONFIRM">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_CONFIRM}"/>
+                <set field="contentContainerId" value="ptsConfirmInfo"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="emailSubscriberEspot">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.EMAIL_SUBSCRIBER_ESPOT}"/>
+                <set field="contentContainerId" value="emailSubscriberEspot"/>
+                <set field="contentContainerStyle" value="eSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_ORDER_DETAIL">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_ORDER_DETAIL}"/>
+                <set field="contentContainerId" value="orderDetailEspot"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PS_INTRODUCED">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PDP_SPOT_INTRODUCED}"/>
+                <set field="contentContainerId" value="pdpIntroduced"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PS_DISCONTINUED">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PDP_SPOT_DISCONTINUED}"/>
+                <set field="contentContainerId" value="pdpDiscontinued"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SI_LOGO">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.SITE_INFO_SITE_LOGO}"/>
+                <set field="contentContainerId" value="siteLogo"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SI_SHOPPING_CART">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.SITE_INFO_SHOPPING_CART}"/>
+                <set field="contentContainerId" value="siteShoppingCart"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SI_SEARCH">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.SITE_INFO_SITE_SEARCH}"/>
+                <set field="contentContainerId" value="siteSearch"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SI_MAILING_LIST">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.SITE_INFO_MAILING_LIST}"/>
+                <set field="contentContainerId" value="siteMailingList"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_MAILING_LIST">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_MAILING_LIST}"/>
+                <set field="contentContainerId" value="ptsMailingList"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_CONTACT_US">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_CONTACT_US}"/>
+                <set field="contentContainerId" value="ptsContactUs"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_STORE_LOCATOR">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_STORE_LOCATOR}"/>
+                <set field="contentContainerId" value="ptsStoreLocator"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="PTS_SEARCH_NO_RESULT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_SEARCH_NO_RESULT}"/>
+                <set field="contentContainerId" value="ptsSearchNoResult"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="PTS_ONE_STEP_CHECKOUT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_ONE_STEP_CHKOUT}"/>
+                <set field="contentContainerId" value="ptsOneStepCheckout"/>
+                <set field="contentContainerStyle" value="espot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PES_MAILING_LIST">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_MAILING_LIST}"/>
+                <set field="contentContainerId" value="pesMailingList"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_CONTACT_US">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_CONTACT_US}"/>
+                <set field="contentContainerId" value="pesContactUs"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_STORE_LOCATOR">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_STORE_LOCATOR}"/>
+                <set field="contentContainerId" value="pesStoreLocator"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_SEARCH_NO_RESULT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_SEARCH_NO_RESULT}"/>
+                <set field="contentContainerId" value="pesSearchNoResult"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_ONE_STEP_CHECKOUT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_ONE_STEP_CHKOUT}"/>
+                <set field="contentContainerId" value="pesOneStepCheckout"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_SHOPPING_CART">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_SHOPPING_CART}"/>
+                <set field="contentContainerId" value="pesShoppingCart"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_SHIPPING_ADDRESS">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_SHIPPING_ADDRESS}"/>
+                <set field="contentContainerId" value="pesShippingAddress"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_SHIPPING_METHOD">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_SHIPPING_METHOD}"/>
+                <set field="contentContainerId" value="pesShippingMethod"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_ORDER_SUMMARY">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_ORDER_SUMMARY}"/>
+                <set field="contentContainerId" value="pesOrderSummary"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_ORDER_CONFIRM">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_ORDER_CONFIRM}"/>
+                <set field="contentContainerId" value="pesOrderConfirm"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_LOGIN">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_LOGIN}"/>
+                <set field="contentContainerId" value="ptsLogin"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_FORGOT_PASSWORD">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_FORGOT_PASSWORD}"/>
+                <set field="contentContainerId" value="pesForgotPassword"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_REGISTRATION">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_REGISTRATION}"/>
+                <set field="contentContainerId" value="pesRegistration"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_MY_ACCOUNT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_MY_ACCOUNT}"/>
+                <set field="contentContainerId" value="pesMyAccount"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_CHANGE_PROFILE">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_CHANGE_PROFILE}"/>
+                <set field="contentContainerId" value="pesChangeProfile"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+   <screen name="PES_PERSONAL_INFO">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_PERSONAL_INFO}"/>
+                <set field="contentContainerId" value="pesPersonalInfo"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_ADDRESS_BOOK_VIEW">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_ADDRESS_BOOK_VIEW}"/>
+                <set field="contentContainerId" value="pesAddressBook"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_ADDRESS_BOOK_EDIT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_ADDRESS_BOOK_EDIT}"/>
+                <set field="contentContainerId" value="pesAddressBook"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_ORDER_STATUS">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_ORDER_STATUS}"/>
+                <set field="contentContainerId" value="pesOrderStatus"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_CONFIRM">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_CONFIRM}"/>
+                <set field="contentContainerId" value="pesConfirmInfo"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_ORDER_DETAIL">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_ORDER_DETAIL}"/>
+                <set field="contentContainerId" value="pesOrderDetail"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

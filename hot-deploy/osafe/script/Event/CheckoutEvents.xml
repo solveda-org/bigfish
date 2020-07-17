@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createGuestCheckoutOrder" short-description="guest Checkout" login-required="false">
+
+        <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+        <call-object-method method-name="items" obj-field="shoppingCart" ret-field="shoppingCartItems"/>
+        <call-object-method method-name="size" obj-field="shoppingCartItems" ret-field="shoppingCartSize"/>
+        <if-compare operator="less-equals" value="0" field="shoppingCartSize">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="YourShoppingCartIsEmptyInfo"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <check-errors/>
+        </if-compare>
+        <!-- Validate UserLogin detail -->
+        <if-not-empty field="parameters.PASSWORD">
+            <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+            <map-to-map map="userLoginContext" to-map="paramContext"/>
+        </if-not-empty>
+
+        <!-- validate Personal Information -->
+        <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <map-to-map map="personContext" to-map="paramContext"/>
+
+        <!-- Validate Billing Postal Address, Home Phoone and Mobile Phone information -->
+        <call-simple-method method-name="validateBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <map-to-map map="addressContext" to-map="paramContext"/>
+
+        <!-- Set Billing Home Phone Context -->
+        <map-to-map map="homePhoneContext" to-map="paramContext.billingHomePhoneCtx"/>
+        <set field="paramContext.billingHomePhoneCtx.contactMechId" from-field="parameters.BILLINGHomePhoneContactMechId"/>
+
+        <!-- Set Billing Mobile Phone Context -->
+        <map-to-map map="mobilePhoneContext" to-map="paramContext.billingMobilePhoneCtx"/>
+        <set field="paramContext.billingMobilePhoneCtx.contactMechId" from-field="parameters.BILLINGMobilePhoneContactMechId"/>
+
+        <set field="paramContext.roleTypeId" value="CUSTOMER"/>
+        <set field="paramContext.partyId" from-field="parameters.partyId"/>
+
+        <if-empty field="parameters.isSameAsBilling">
+            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+            <map-to-map map="shippingAddressContext" to-map="paramContext.shippingAddressCtx"/>
+
+            <map-to-map map="shipHomePhoneContext" to-map="paramContext.shippingHomePhoneCtx"/>
+            <set field="paramContext.shippingHomePhoneCtx.contactMechId" from-field="parameters.SHIPPINGHomePhoneContactMechId"/>
+
+            <map-to-map map="shipMobilePhoneContext" to-map="paramContext.shippingMobilePhoneCtx"/>
+            <set field="paramContext.shippingMobilePhoneCtx.contactMechId" from-field="parameters.SHIPPINGMobilePhoneContactMechId"/>
+        <else>
+            <set field="paramContext.isSameAsBilling" from-field="parameters.isSameAsBilling"/>
+        </else>
+        </if-empty>
+
+        <set field="paramContext.paymentMethodTypeId" from-field="parameters.paymentMethodTypeId"/>
+        <if-compare field="parameters.paymentMethodTypeId" operator="equals" value="CREDIT_CARD">
+            <set field="parameters.firstNameOnCard" from-field="paramContext.firstName"/>
+<!--             <set field="parameters.middleNameOnCard" from-field="paramContext.middleName"/> -->
+            <set field="parameters.lastNameOnCard" from-field="paramContext.lastName"/>
+            <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/Payment.xml"/>
+            <map-to-map map="creditCardContext" to-map="paramContext"/>
+        </if-compare>
+        <check-errors/>
+        
+        <set field="paramContext.billingAddressContactMechId" from-field="parameters.BILLINGAddressContactMechId"/>
+        <set field="paramContext.shippingAddressCtx.contactMechId" from-field="parameters.SHIPPINGAddressContactMechId"/>
+
+        <set-service-fields service-name="createCustomer" to-map="createCustomerContext" map="paramContext"/>
+        <call-service service-name="createCustomer" in-map-name="createCustomerContext">
+            <result-to-field result-name="partyId"/>
+            <result-to-field result-name="billingAddressContactMechId"/>
+            <result-to-field result-name="billingHomePhoneContactMechId"/>
+            <result-to-field result-name="billingMobilePhoneContactMechId"/>
+            <result-to-field result-name="shippingAddressContactMechId"/>
+            <result-to-field result-name="shippingHomePhoneContactMechId"/>
+            <result-to-field result-name="emailContactMechId"/>
+            <result-to-field result-name="paymentMethodId"/>
+            <result-to-field result-name="newUserLogin"/>
+        </call-service>
+
+        <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+        <if-compare operator="not-equals" value="null" field="shoppingCart">
+	        <set field="guestCheckoutAttr" value="TRUE"/>
+            <call-object-method obj-field="shoppingCart" method-name="setAttribute">
+                <string value="GUEST_CHECKOUT"/>
+                <field field="guestCheckoutAttr" type="Object"/>
+            </call-object-method>
+
+            <call-object-method obj-field="shoppingCart" method-name="setOrderPartyId">
+                <field field="partyId"/>
+            </call-object-method>
+
+            <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
+                <field field="shippingAddressContactMechId"/>
+            </call-object-method>
+
+            <call-object-method obj-field="shoppingCart" method-name="addContactMech">
+                <string value="PHONE_BILLING"/>
+                <field field="billingHomePhoneContactMechId"/>
+            </call-object-method>
+
+            <if-not-empty field="shippingHomePhoneContactMechId">
+                <call-object-method obj-field="shoppingCart" method-name="addContactMech">
+                    <string value="PHONE_SHIPPING"/>
+                    <field field="shippingHomePhoneContactMechId"/>
+                </call-object-method>
+            </if-not-empty>
+
+            <call-object-method obj-field="shoppingCart" method-name="addContactMech">
+                <string value="ORDER_EMAIL"/>
+                <field field="emailContactMechId"/>
+            </call-object-method>
+        </if-compare>
+
+        <if-not-empty field="newUserLogin">
+            <call-object-method obj-field="shoppingCart" method-name="removeAdditionalPartyRole">
+                <field field="partyId"/>
+                <string value="GUEST_CUSTOMER"/>
+            </call-object-method>
+            <entity-one entity-name="UserLogin" value-field="userLogin" auto-field-map="false">
+                <field-map field-name="userLoginId" from-field="newUserLogin.userLoginId"/>
+            </entity-one>
+            <call-bsh>
+                <![CDATA[
+                    org.ofbiz.webapp.control.LoginWorker.doBasicLogin(userLogin, request);
+                    org.ofbiz.webapp.control.LoginWorker.autoLoginSet(request, response);
+                ]]>
+            </call-bsh>
+        <else>
+            <call-object-method obj-field="shoppingCart" method-name="addAdditionalPartyRole">
+                <field field="partyId"/>
+                <string value="GUEST_CUSTOMER"/>
+            </call-object-method>
+                <entity-one entity-name="UserLogin" value-field="userLogin">
+                    <field-map field-name="userLoginId" value="anonymous"/>
+                </entity-one>
+                <set field="userLogin.partyId" from-field="partyId"/>
+                <set-current-user-login value-field="userLogin"/>
+                <call-object-method obj-field="shoppingCart" method-name="setUserLogin">
+                    <field field="userLogin" type="org.ofbiz.entity.GenericValue"/>
+                    <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+                </call-object-method>
+          </else>
+        </if-not-empty>
+
+        <!-- Set Payment Method-->
+        <if-compare field="parameters.paymentMethodTypeId" operator="equals" value="CREDIT_CARD">
+            <if-not-empty field="paymentMethodId">
+                <set field="cardSecurityCode" from-field="parameters.billToCardSecurityCode" set-if-null="true" set-if-empty="true"/>
+                <create-object class-name="org.ofbiz.order.shoppingcart.CheckOutHelper" field="checkOutHelper">
+                    <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+                    <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+                    <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+                </create-object>
+                <set field="callResult" value="${groovy:checkOutHelper.finalizeOrderEntryPayment(paymentMethodId, null, false, false)}"/>
+                <set field="cartPaymentInfo" value="${groovy: org.ofbiz.order.shoppingcart.ShoppingCart.CartPaymentInfo cpi = shoppingCart.getPaymentInfo(paymentMethodId, null, null, null, true); cpi.securityCode = cardSecurityCode; return cpi;}"/>
+                <return response-code="success"/>
+            </if-not-empty>
+        <else>
+            <if-compare field="parameters.paymentMethodTypeId" operator="equals" value="EXT_PAYPAL">
+                <return response-code="paypal"/>
+            </if-compare>
+            <if-compare field="parameters.paymentMethodTypeId" operator="equals" value="_NA_">
+                <return response-code="store"/>
+            </if-compare>
+        </else>
+        </if-compare>
+
+    </simple-method>
+
+    <simple-method method-name="setStorePickup" short-description="Set Store For Pickup Order" login-required="false">
+        <if-not-empty field="parameters.storeId">
+            <session-to-field field="shoppingCart"/>
+            <if-not-empty field="shoppingCart">
+                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                    <string value="STORE_LOCATION"/>
+                    <field field="parameters.storeId" type="String"/>
+                </call-object-method>
+                <set field="parameters.shipMethod" value="NO_SHIPPING@_NA_"/>
+                <call-simple-method method-name="setShippingOption" xml-resource="component://ecommerce/script/org/ofbiz/ecommerce/customer/CustomerEvents.xml"/>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="removeStorePickup" short-description="Remove Store For Pickup Order" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <if-not-empty field="shoppingCart">
+            <call-object-method method-name="removeOrderAttribute" obj-field="shoppingCart">
+                <string value="STORE_LOCATION"/>
+            </call-object-method>
+        <else>
+            <return response-code="error"/>
+        </else>
+        </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="processCartAttribute" short-description="process Cart Attribute" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <if-not-empty field="shoppingCart">
+            <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="storeId">
+                <string value="STORE_LOCATION"/>
+            </call-object-method>
+            <if-not-empty field="storeId">
+                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                    <string value="DELIVERY_OPTION"/>
+                    <string value="STORE_PICKUP"/>
+                </call-object-method>
+            <else>
+                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                    <string value="DELIVERY_OPTION"/>
+                    <string value="SHIP_TO"/>
+                </call-object-method>
+            </else>
+            </if-not-empty>
+
+            <call-object-method obj-field="shoppingCart" method-name="getAttribute" ret-field="guestCheckoutAttr">
+                <string value="GUEST_CHECKOUT"/>
+            </call-object-method>
+            <if-not-empty field="guestCheckoutAttr">
+                <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+                    <string value="IS_DOWNLOADED"/>
+                    <string value="N"/>
+                </call-object-method>
+            </if-not-empty>
+        </if-not-empty>
+    </simple-method>
+
+</simple-methods>

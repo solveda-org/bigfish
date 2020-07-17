@@ -1,0 +1,1385 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createPromotion" short-description="Create a promotion">
+        <if-empty field="parameters.productPromoId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="maxLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value=" " type="String"/>
+                <set field="makeUpCase" value="false" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="productPromoId">
+                    <field field="parameters.productPromoId" type="String"/>
+                    <field field="maxLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="productPromoId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionIdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+                        <entity-one entity-name="ProductPromo" value-field="existingProductPromo">
+                            <field-map field-name="productPromoId" from-field="productPromoId"/>
+                        </entity-one>
+                        <if-not-empty field="existingProductPromo">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <else>
+                                <set field="parameters.productPromoId" from-field="productPromoId"/>
+                            </else>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.promoName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionNameError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="parameters.ruleName" from-field="parameters.promoName"/>
+            </else>
+        </if-empty>
+        <if-empty field="parameters.promoText">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionDescError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <if-not-empty field="parameters.useLimitPerOrder">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.useLimitPerOrder"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.useLimitPerCustomer">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.useLimitPerCustomer"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerCustomerError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.useLimitPerPromotion">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.useLimitPerPromotion"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerPromotionError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+
+        <if-not-empty field="parameters.fromDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.fromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.fromDate">
+                        <field field="parameters.fromDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.thruDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.thruDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.thruDate">
+                        <field field="parameters.thruDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-empty field="parameters.condValue">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionCondValueError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+                    <field field="parameters.condValue"/>
+                </call-class-method>
+                <if-compare field="isFloat" operator="equals" value="false">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCondValueError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+
+        <if>
+            <condition>
+                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_GWP"/>
+            </condition>
+            <then>
+                <if-empty field="parameters.quantity">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionQuantityError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                   <else>
+                       <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                           <field field="parameters.quantity"/>
+                       </call-class-method>
+                       <if-compare field="isNumber" operator="equals" value="false">
+                           <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
+                           <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                           <else>
+                               <if>
+                                   <condition>
+                                       <and>
+                                           <if-compare operator="greater-equals" value="1" field="parameters.quantity" type="Integer"/>
+                                           <if-compare operator="less-equals" value="9999" field="parameters.quantity" type="Integer"/>
+                                       </and>
+                                   </condition>
+                                   <then>
+                                       <set field="parameters.amount" from-field="nullField"/>
+                                   </then>
+                                   <else>
+                                       <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
+                                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                   </else>
+                               </if>
+                           </else>
+                       </if-compare>
+                   </else>
+                </if-empty>
+                <if-empty field="parameters.productId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionItemIdError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-empty>
+                <if>
+                    <condition>
+                        <if-empty field="parameters.productPromoActionProductIds"/>
+                    </condition>
+                    <then>
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionProductRequiredError"/>
+<!--                        <string-to-list string="${tempErrorMessage}" list="error_list"/>-->
+                    </then>
+                </if>
+            </then>
+            <else-if>
+                <condition>
+                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_SPPRC"/>
+                </condition>
+                <then>
+                    <if-empty field="parameters.amount">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
+                                <field field="parameters.amount"/>
+                            </call-class-method>
+                            <if-compare field="isFloat" operator="equals" value="false">
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if>
+                                        <condition>
+                                            <and>
+                                                <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                <if-compare operator="less-equals" value="9999" field="parameters.amount" type="BigDecimal"/>
+                                            </and>
+                                        </condition>
+                                        <then>
+                                            <set field="parameters.quantity" from-field="nullField"/>
+                                            <set field="parameters.productId" from-field="nullField"/>
+                                        </then>
+                                        <else>
+                                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-empty field="parameters.productPromoActionProductIds"/>
+                                <if-empty field="parameters.productPromoActionCategoryIds"/>
+                            </and>
+                        </condition>
+                        <then>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        </then>
+                    </if>
+                </then>
+            </else-if>
+            <else-if>
+                <condition>
+                    <or>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE"/>
+                    </or>
+                </condition>
+                <then>
+                    <if-empty field="parameters.quantity">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionMinQuantityError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                                <field field="parameters.quantity"/>
+                            </call-class-method>
+                            <if-compare field="isNumber" operator="equals" value="false">
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if>
+                                        <condition>
+                                            <and>
+                                                <if-compare operator="greater-equals" value="1" field="parameters.quantity" type="Integer"/>
+                                                <if-compare operator="less-equals" value="9999" field="parameters.quantity" type="Integer"/>
+                                            </and>
+                                        </condition>
+                                        <then>
+                                            <set field="parameters.productId" from-field="nullField"/>
+                                        </then>
+                                        <else>
+                                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
+                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                    <if-empty field="parameters.amount">
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionDiscountPerError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionDiscountError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
+                        </if-compare>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
+                                <field field="parameters.amount"/>
+                            </call-class-method>
+                            <if-compare field="isFloat" operator="equals" value="false">
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                </if-compare>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then></then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="9999" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then></then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="9999" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then></then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-empty field="parameters.productPromoActionProductIds"/>
+                                <if-empty field="parameters.productPromoActionCategoryIds"/>
+                            </and>
+                        </condition>
+                        <then>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        </then>
+                    </if>
+                </then>
+            </else-if>
+            <else-if>
+                <condition>
+                    <or>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT"/>
+                    </or>
+                </condition>
+                <then>
+                    <if-empty field="parameters.amount">
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionDiscountPerError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionShipDiscountPerError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionTaxDiscountPerError"/>
+                        </if-compare>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
+                                <field field="parameters.amount"/>
+                            </call-class-method>
+                            <if-compare field="isFloat" operator="equals" value="false">
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionShipDiscountPerError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
+                                </if-compare>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="9999" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                                <set field="parameters.productId" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionShipDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                </then>
+            </else-if>
+        </if>
+        <check-errors/>
+
+        <set-service-fields service-name="createProductPromo" map="parameters" to-map="createProductPromoCtx"/>
+<!--        <call-service service-name="createProductPromo" in-map-name="createProductPromoCtx"/>-->
+
+        <make-value value-field="newEntity" entity-name="ProductPromo"/>
+        <set-nonpk-fields map="createProductPromoCtx" value-field="newEntity"/>
+        <if-empty field="parameters.productPromoId">
+            <sequenced-id sequence-name="ProductPromo" field="newEntity.productPromoId"/>
+            <set field="parameters.productPromoId" from-field="newEntity.productPromoId"/>
+            <else>
+                <set field="newEntity.productPromoId" from-field="parameters.productPromoId"/>
+            </else>
+        </if-empty>
+        <if-empty field="newEntity.userEntered">
+            <set value="Y" set-if-empty="true" field="newEntity.userEntered"/>
+        </if-empty>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="newEntity.createdDate"/>
+        <set from-field="nowTimestamp" field="newEntity.lastModifiedDate"/>
+        <set from-field="userLogin.userLoginId" field="newEntity.lastModifiedByUserLogin"/>
+        <set from-field="userLogin.userLoginId" field="newEntity.createdByUserLogin"/>
+        <create-value value-field="newEntity"/>
+
+        <set-service-fields service-name="createProductStorePromoAppl" map="parameters" to-map="createProductStorePromoApplCtx"/>
+        <call-service service-name="createProductStorePromoAppl" in-map-name="createProductStorePromoApplCtx"/>
+
+        <set-service-fields service-name="createProductPromoRule" map="parameters" to-map="createProductPromoRuleCtx"/>
+        <call-service service-name="createProductPromoRule" in-map-name="createProductPromoRuleCtx">
+            <result-to-field result-name="productPromoRuleId" field="parameters.productPromoRuleId"/>
+        </call-service>
+
+        <set-service-fields service-name="createProductPromoCond" map="parameters" to-map="createProductPromoCondCtx"/>
+        <call-service service-name="createProductPromoCond" in-map-name="createProductPromoCondCtx">
+            <result-to-field result-name="productPromoCondSeqId" field="parameters.productPromoCondSeqId"/>
+        </call-service>
+        <iterate-map key="categoryKey" value="categoryValue" map="parameters.productPromoCondCategoryIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoCondCategoryApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="categoryKey">
+                   <set field="createProductPromoCategoryCtx.andGroupId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productCategoryId" from-field="categoryValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoActionSeqId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
+                       <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
+                       <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoCategoryCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoCategoryCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoCategoryCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoCategoryCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoCategory">
+                       <call-service service-name="createProductPromoCategory" in-map-name="createProductPromoCategoryCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+        <iterate-map key="ProductKey" value="ProductValue" map="parameters.productPromoCondProductIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoCondProductApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="ProductKey">
+                   <set field="createProductPromoProductCtx.productId" from-field="ProductValue"/>
+                   <set field="createProductPromoProductCtx.productPromoActionSeqId" value="_NA_"/>
+                   <set field="createProductPromoProductCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoProductCtx.productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
+                   <set field="createProductPromoProductCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoProductCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoProduct" value-field="existingProductPromoProduct">
+                       <field-map field-name="productId" from-field="createProductPromoProductCtx.productId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoProductCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoProductCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoProductCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoProductCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoProduct">
+                       <call-service service-name="createProductPromoProduct" in-map-name="createProductPromoProductCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+
+        <set-service-fields service-name="createProductPromoAction" map="parameters" to-map="createProductPromoActionCtx"/>
+        <call-service service-name="createProductPromoAction" in-map-name="createProductPromoActionCtx">
+            <result-to-field result-name="productPromoActionSeqId" field="parameters.productPromoActionSeqId"/>
+        </call-service>
+        <iterate-map key="categoryKey" value="categoryValue" map="parameters.productPromoActionCategoryIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoActionCategoryApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="categoryKey">
+                   <set field="createProductPromoCategoryCtx.andGroupId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productCategoryId" from-field="categoryValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoActionSeqId" from-field="parameters.productPromoActionSeqId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoCondSeqId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
+                       <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
+                       <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoCategoryCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoCategoryCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoCategoryCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoCategoryCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoCategory">
+                       <call-service service-name="createProductPromoCategory" in-map-name="createProductPromoCategoryCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+        <iterate-map key="ProductKey" value="ProductValue" map="parameters.productPromoActionProductIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoActionProductApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="ProductKey">
+                   <set field="createProductPromoProductCtx.productId" from-field="ProductValue"/>
+                   <set field="createProductPromoProductCtx.productPromoActionSeqId" from-field="parameters.productPromoActionSeqId"/>
+                   <set field="createProductPromoProductCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoProductCtx.productPromoCondSeqId" value="_NA_"/>
+                   <set field="createProductPromoProductCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoProductCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoProduct" value-field="existingProductPromoProduct">
+                       <field-map field-name="productId" from-field="createProductPromoProductCtx.productId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoProductCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoProductCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoProductCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoProductCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoProduct">
+                       <call-service service-name="createProductPromoProduct" in-map-name="createProductPromoProductCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+    </simple-method>
+
+    <simple-method method-name="updatePromotion" short-description="Update a promotion">
+        <if-empty field="parameters.promoName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionNameError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.promoText">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionDescError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <if-not-empty field="parameters.useLimitPerOrder">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.useLimitPerOrder"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.useLimitPerCustomer">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.useLimitPerCustomer"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerCustomerError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.useLimitPerPromotion">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.useLimitPerPromotion"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerPromotionError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+
+        <if-not-empty field="parameters.fromDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.fromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.fromDate">
+                        <field field="parameters.fromDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.thruDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.thruDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.thruDate">
+                        <field field="parameters.thruDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-empty field="parameters.condValue">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionCondValueError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+                    <field field="parameters.condValue"/>
+                </call-class-method>
+                <if-compare field="isFloat" operator="equals" value="false">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCondValueError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+
+        <if>
+            <condition>
+                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_GWP"/>
+            </condition>
+            <then>
+                <if-empty field="parameters.quantity">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionQuantityError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                   <else>
+                       <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                           <field field="parameters.quantity"/>
+                       </call-class-method>
+                       <if-compare field="isNumber" operator="equals" value="false">
+                           <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
+                           <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                           <else>
+                               <if>
+                                   <condition>
+                                       <and>
+                                           <if-compare operator="greater-equals" value="1" field="parameters.quantity" type="Integer"/>
+                                           <if-compare operator="less-equals" value="9999" field="parameters.quantity" type="Integer"/>
+                                       </and>
+                                   </condition>
+                                   <then>
+                                       <set field="parameters.amount" from-field="nullField"/>
+                                   </then>
+                                   <else>
+                                       <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionQuantityError"/>
+                                       <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                   </else>
+                               </if>
+                           </else>
+                       </if-compare>
+                   </else>
+                </if-empty>
+                <if-empty field="parameters.productId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionItemIdError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </if-empty>
+                <if>
+                    <condition>
+                        <if-empty field="parameters.productPromoActionProductIds"/>
+                    </condition>
+                    <then>
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionProductRequiredError"/>
+<!--                        <string-to-list string="${tempErrorMessage}" list="error_list"/>-->
+                    </then>
+                </if>
+            </then>
+            <else-if>
+                <condition>
+                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_SPPRC"/>
+                </condition>
+                <then>
+                    <if-empty field="parameters.amount">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
+                                <field field="parameters.amount"/>
+                            </call-class-method>
+                            <if-compare field="isFloat" operator="equals" value="false">
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if>
+                                        <condition>
+                                            <and>
+                                                <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                <if-compare operator="less-equals" value="9999" field="parameters.amount" type="BigDecimal"/>
+                                            </and>
+                                        </condition>
+                                        <then>
+                                            <set field="parameters.quantity" from-field="nullField"/>
+                                            <set field="parameters.productId" from-field="nullField"/>
+                                        </then>
+                                        <else>
+                                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-empty field="parameters.productPromoActionProductIds"/>
+                                <if-empty field="parameters.productPromoActionCategoryIds"/>
+                            </and>
+                        </condition>
+                        <then>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        </then>
+                    </if>
+                </then>
+            </else-if>
+            <else-if>
+                <condition>
+                    <or>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE"/>
+                    </or>
+                </condition>
+                <then>
+                    <if-empty field="parameters.quantity">
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionMinQuantityError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                                <field field="parameters.quantity"/>
+                            </call-class-method>
+                            <if-compare field="isNumber" operator="equals" value="false">
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if>
+                                        <condition>
+                                            <and>
+                                                <if-compare operator="greater-equals" value="1" field="parameters.quantity" type="Integer"/>
+                                                <if-compare operator="less-equals" value="9999" field="parameters.quantity" type="Integer"/>
+                                            </and>
+                                        </condition>
+                                        <then></then>
+                                        <else>
+                                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionMinQuantityError"/>
+                                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                    <if-empty field="parameters.amount">
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionDiscountPerError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionDiscountError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
+                        </if-compare>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
+                                <field field="parameters.amount"/>
+                            </call-class-method>
+                            <if-compare field="isFloat" operator="equals" value="false">
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                </if-compare>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_DISC">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.productId" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_AMDISC">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="9999" field="parameters.amount"  type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then></then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_PROD_PRICE">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="9999" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then></then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-empty field="parameters.productPromoActionProductIds"/>
+                                <if-empty field="parameters.productPromoActionCategoryIds"/>
+                            </and>
+                        </condition>
+                        <then>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCategoryOrProductRequiredError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        </then>
+                    </if>
+                </then>
+            </else-if>
+            <else-if>
+                <condition>
+                    <or>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE"/>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT"/>
+                    </or>
+                </condition>
+                <then>
+                    <if-empty field="parameters.amount">
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionDiscountPerError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionPriceError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionShipDiscountPerError"/>
+                        </if-compare>
+                        <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionRuleActionTaxDiscountPerError"/>
+                        </if-compare>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                        <else>
+                            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="isFloat">
+                                <field field="parameters.amount"/>
+                            </call-class-method>
+                            <if-compare field="isFloat" operator="equals" value="false">
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionShipDiscountPerError"/>
+                                </if-compare>
+                                <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
+                                </if-compare>
+                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                <else>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_PERCENT">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                                <set field="parameters.productId" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_ORDER_AMOUNT">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="9999" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionPriceError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_SHIP_CHARGE">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionShipDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                    <if-compare field="parameters.productPromoActionEnumId" operator="equals" value="PROMO_TAX_PERCENT">
+                                        <if>
+                                            <condition>
+                                                <and>
+                                                    <if-compare operator="greater-equals" value="1" field="parameters.amount" type="BigDecimal"/>
+                                                    <if-compare operator="less-equals" value="100" field="parameters.amount" type="BigDecimal"/>
+                                                </and>
+                                            </condition>
+                                            <then>
+                                                <set field="parameters.quantity" from-field="nullField"/>
+                                            </then>
+                                            <else>
+                                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionRuleActionTaxDiscountPerError"/>
+                                                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                            </else>
+                                        </if>
+                                    </if-compare>
+                                </else>
+                            </if-compare>
+                        </else>
+                    </if-empty>
+                </then>
+            </else-if>
+        </if>
+        <check-errors/>
+
+        <set-service-fields service-name="updateProductPromo" map="parameters" to-map="updateProductPromoCtx"/>
+        <call-service service-name="updateProductPromo" in-map-name="updateProductPromoCtx"/>
+
+        <entity-one entity-name="ProductStorePromoAppl" value-field="oldProductStorePromoAppl">
+            <field-map field-name="productStoreId" from-field="parameters.productStoreId"/>
+            <field-map field-name="productPromoId" from-field="parameters.productPromoId"/>
+            <field-map field-name="fromDate" from-field="parameters.productStorePromoApplFromDate"/>
+        </entity-one>
+        <set-service-fields service-name="deleteProductStorePromoAppl" map="oldProductStorePromoAppl" to-map="deleteProductStorePromoApplCtx"/>
+        <call-service service-name="deleteProductStorePromoAppl" in-map-name="deleteProductStorePromoApplCtx"/>
+        <set-service-fields service-name="createProductStorePromoAppl" map="parameters" to-map="createProductStorePromoApplCtx"/>
+        <call-service service-name="createProductStorePromoAppl" in-map-name="createProductStorePromoApplCtx"/>
+
+        <set-service-fields service-name="updateProductPromoCond" map="parameters" to-map="updateProductPromoCondCtx"/>
+        <call-service service-name="updateProductPromoCond" in-map-name="updateProductPromoCondCtx"/>
+
+        <entity-and entity-name="ProductPromoCategory" list="productPromoCondCategoryList">
+            <field-map field-name="productPromoId" from-field="parameters.productPromoId"/>
+            <field-map field-name="productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+            <field-map field-name="productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
+        </entity-and>
+        <iterate entry="productPromoCondCategory" list="productPromoCondCategoryList">
+            <set-service-fields service-name="deleteProductPromoCategory" map="productPromoCondCategory" to-map="deleteProductPromoCategoryCtx"/>
+            <call-service service-name="deleteProductPromoCategory" in-map-name="deleteProductPromoCategoryCtx"/>
+        </iterate>
+        <iterate-map key="categoryKey" value="categoryValue" map="parameters.productPromoCondCategoryIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoCondCategoryApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="categoryKey">
+                   <set field="createProductPromoCategoryCtx.andGroupId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productCategoryId" from-field="categoryValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoActionSeqId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
+                       <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
+                       <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoCategoryCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoCategoryCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoCategoryCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoCategoryCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoCategory">
+                       <call-service service-name="createProductPromoCategory" in-map-name="createProductPromoCategoryCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+
+        <entity-and entity-name="ProductPromoProduct" list="productPromoCondProductList">
+            <field-map field-name="productPromoId" from-field="parameters.productPromoId"/>
+            <field-map field-name="productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+            <field-map field-name="productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
+        </entity-and>
+        <iterate entry="productPromoCondProduct" list="productPromoCondProductList">
+            <set-service-fields service-name="deleteProductPromoProduct" map="productPromoCondProduct" to-map="deleteProductPromoProductCtx"/>
+            <call-service service-name="deleteProductPromoProduct" in-map-name="deleteProductPromoProductCtx"/>
+        </iterate>
+        <iterate-map key="ProductKey" value="ProductValue" map="parameters.productPromoCondProductIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoCondProductApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="ProductKey">
+                   <set field="createProductPromoProductCtx.productId" from-field="ProductValue"/>
+                   <set field="createProductPromoProductCtx.productPromoActionSeqId" value="_NA_"/>
+                   <set field="createProductPromoProductCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoProductCtx.productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
+                   <set field="createProductPromoProductCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoProductCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoProduct" value-field="existingProductPromoProduct">
+                       <field-map field-name="productId" from-field="createProductPromoProductCtx.productId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoProductCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoProductCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoProductCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoProductCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoProduct">
+                       <call-service service-name="createProductPromoProduct" in-map-name="createProductPromoProductCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+
+        <set-service-fields service-name="updateProductPromoAction" map="parameters" to-map="updateProductPromoActionCtx"/>
+        <set field="updateProductPromoActionCtx.orderAdjustmentTypeId" value="PROMOTION_ADJUSTMENT"/>
+        <call-service service-name="updateProductPromoAction" in-map-name="updateProductPromoActionCtx"/>
+
+        <entity-and entity-name="ProductPromoCategory" list="productPromoActionCategoryList">
+            <field-map field-name="productPromoId" from-field="parameters.productPromoId"/>
+            <field-map field-name="productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+            <field-map field-name="productPromoActionSeqId" from-field="parameters.productPromoActionSeqId"/>
+        </entity-and>
+        <iterate entry="productPromoActionCategory" list="productPromoActionCategoryList">
+            <set-service-fields service-name="deleteProductPromoCategory" map="productPromoActionCategory" to-map="deleteProductPromoCategoryCtx"/>
+            <call-service service-name="deleteProductPromoCategory" in-map-name="deleteProductPromoCategoryCtx"/>
+        </iterate>
+        <iterate-map key="categoryKey" value="categoryValue" map="parameters.productPromoActionCategoryIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoActionCategoryApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="categoryKey">
+                   <set field="createProductPromoCategoryCtx.andGroupId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productCategoryId" from-field="categoryValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoActionSeqId" from-field="parameters.productPromoActionSeqId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoCategoryCtx.productPromoCondSeqId" value="_NA_"/>
+                   <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
+                       <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
+                       <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoCategoryCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoCategoryCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoCategoryCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoCategoryCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoCategory">
+                       <call-service service-name="createProductPromoCategory" in-map-name="createProductPromoCategoryCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+
+        <entity-and entity-name="ProductPromoProduct" list="productPromoActionProductList">
+            <field-map field-name="productPromoId" from-field="parameters.productPromoId"/>
+            <field-map field-name="productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+            <field-map field-name="productPromoActionSeqId" from-field="parameters.productPromoActionSeqId"/>
+        </entity-and>
+        <iterate entry="productPromoActionProduct" list="productPromoActionProductList">
+            <set-service-fields service-name="deleteProductPromoProduct" map="productPromoActionProduct" to-map="deleteProductPromoProductCtx"/>
+            <call-service service-name="deleteProductPromoProduct" in-map-name="deleteProductPromoProductCtx"/>
+        </iterate>
+        <iterate-map key="ProductKey" value="ProductValue" map="parameters.productPromoActionProductIds">
+            <iterate-map key="EnumKey" value="EnumValue" map="parameters.productPromoActionProductApplEnumIds">
+                <if-compare-field field="EnumKey" operator="equals" to-field="ProductKey">
+                   <set field="createProductPromoProductCtx.productId" from-field="ProductValue"/>
+                   <set field="createProductPromoProductCtx.productPromoActionSeqId" from-field="parameters.productPromoActionSeqId"/>
+                   <set field="createProductPromoProductCtx.productPromoApplEnumId" from-field="EnumValue"/>
+                   <set field="createProductPromoProductCtx.productPromoCondSeqId" value="_NA_"/>
+                   <set field="createProductPromoProductCtx.productPromoId" from-field="parameters.productPromoId"/>
+                   <set field="createProductPromoProductCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <entity-one entity-name="ProductPromoProduct" value-field="existingProductPromoProduct">
+                       <field-map field-name="productId" from-field="createProductPromoProductCtx.productId"/>
+                       <field-map field-name="productPromoActionSeqId" from-field="createProductPromoProductCtx.productPromoActionSeqId"/>
+                       <field-map field-name="productPromoCondSeqId" from-field="createProductPromoProductCtx.productPromoCondSeqId"/>
+                       <field-map field-name="productPromoId" from-field="createProductPromoProductCtx.productPromoId"/>
+                       <field-map field-name="productPromoRuleId" from-field="createProductPromoProductCtx.productPromoRuleId"/>
+                   </entity-one>
+                   <if-empty field="existingProductPromoProduct">
+                       <call-service service-name="createProductPromoProduct" in-map-name="createProductPromoProductCtx"/>
+                   </if-empty>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
+    </simple-method>
+
+    <simple-method method-name="createPromotionCode" short-description="Update a promotion Code">
+        <if-empty field="parameters.productPromoCodeId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionCodeIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="maxLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value=" " type="String"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="productPromoCodeId">
+                    <field field="parameters.productPromoCodeId" type="String"/>
+                    <field field="maxLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="productPromoCodeId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCodeIdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+                        <entity-one entity-name="ProductPromoCode" value-field="existingProductPromoCode">
+                            <field-map field-name="productPromoCodeId" from-field="productPromoCodeId"/>
+                        </entity-one>
+                        <if-not-empty field="existingProductPromoCode">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCodeIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <else>
+                                <set field="parameters.productPromoCodeId" from-field="productPromoCodeId"/>
+                            </else>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+        <if-not-empty field="parameters.promoCodeUseLimitPerCode">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.promoCodeUseLimitPerCode"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerOrderError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeUseLimitPerCustomer">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.promoCodeUseLimitPerCustomer"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerCustomerError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeUserEntered">
+           <call-object-method method-name="toUpperCase" obj-field="parameters.promoCodeUserEntered" ret-field="promoCodeUserEntered"/>
+            <if>
+                <condition>
+                    <or>
+                        <if-compare value="Y" operator="equals" field="promoCodeUserEntered"/>
+                        <if-compare value="N" operator="equals" field="promoCodeUserEntered"/>
+                    </or>
+                </condition>
+                <then>
+                    <set field="parameters.promoCodeUserEntered" from-field="promoCodeUserEntered"/>
+                </then>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUserEnteredError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </else>
+            </if>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeFromDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.promoCodeFromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeFromDate">
+                        <field field="parameters.promoCodeFromDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeThruDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.promoCodeThruDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeThruDate">
+                        <field field="parameters.promoCodeThruDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+
+        <set field="createProductPromoCode.productPromoId" from-field="parameters.productPromoId"/>
+        <set field="createProductPromoCode.productPromoCodeId" from-field="parameters.productPromoCodeId"/>
+        <set field="createProductPromoCode.useLimitPerCode" from-field="parameters.promoCodeUseLimitPerCode"/>
+        <set field="createProductPromoCode.useLimitPerCustomer" from-field="parameters.promoCodeUseLimitPerCustomer"/>
+        <set field="createProductPromoCode.userEntered" from-field="parameters.promoCodeUserEntered"/>
+        <set field="createProductPromoCode.fromDate" from-field="parameters.promoCodeFromDate"/>
+        <set field="createProductPromoCode.thruDate" from-field="parameters.promoCodeThruDate"/>
+        <set-service-fields service-name="createProductPromoCode" map="createProductPromoCode" to-map="createProductPromoCodeCtx"/>
+        <call-service service-name="createProductPromoCode" in-map-name="createProductPromoCodeCtx"/>
+    </simple-method>
+
+    <simple-method method-name="updatePromotionCode" short-description="Update a promotion Code">
+        <if-not-empty field="parameters.promoCodeUseLimitPerCode">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.promoCodeUseLimitPerCode"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerOrderError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeUseLimitPerCustomer">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.promoCodeUseLimitPerCustomer"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUseLimitPerCustomerError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeUserEntered">
+           <call-object-method method-name="toUpperCase" obj-field="parameters.promoCodeUserEntered" ret-field="promoCodeUserEntered"/>
+            <if>
+                <condition>
+                    <or>
+                        <if-compare value="Y" operator="equals" field="promoCodeUserEntered"/>
+                        <if-compare value="N" operator="equals" field="promoCodeUserEntered"/>
+                    </or>
+                </condition>
+                <then>
+                    <set field="parameters.promoCodeUserEntered" from-field="promoCodeUserEntered"/>
+                </then>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionCodeUserEnteredError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                </else>
+            </if>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeFromDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.promoCodeFromDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeFromDate">
+                    
+                        <field field="parameters.promoCodeFromDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <if-not-empty field="parameters.promoCodeThruDate">
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
+                <field field="parameters.promoCodeThruDate"/>
+                <field field="parameters.preferredDateFormat"/>
+            </call-class-method>
+            <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="periodFrom" list="error_list"/>
+                <else>
+                    <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeThruDate">
+                        <field field="parameters.promoCodeThruDate"/>
+                        <field field="parameters.preferredDateFormat"/>
+                    </call-class-method>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+
+        <set field="updateProductPromoCode.productPromoId" from-field="parameters.productPromoId"/>
+        <set field="updateProductPromoCode.productPromoCodeId" from-field="parameters.productPromoCodeId"/>
+        <set field="updateProductPromoCode.useLimitPerCode" from-field="parameters.promoCodeUseLimitPerCode" set-if-null="true"/>
+        <set field="updateProductPromoCode.useLimitPerCustomer" from-field="parameters.promoCodeUseLimitPerCustomer" set-if-null="true"/>
+        <set field="updateProductPromoCode.userEntered" from-field="parameters.promoCodeUserEntered"/>
+        <set field="updateProductPromoCode.fromDate" from-field="parameters.promoCodeFromDate" set-if-null="true"/>
+        <set field="updateProductPromoCode.thruDate" from-field="parameters.promoCodeThruDate" set-if-null="true"/>
+        <set-service-fields service-name="updateProductPromoCode" map="updateProductPromoCode" to-map="updateProductPromoCodeCtx"/>
+        <call-service service-name="updateProductPromoCode" in-map-name="updateProductPromoCodeCtx"/>
+    </simple-method>
+</simple-methods>
