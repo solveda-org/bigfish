@@ -54,7 +54,7 @@ public class OsafeProductLoaderHelper {
                 	    {
                 		    colContent="";
                 	    }
-                        mRows.put(headerCols.get(colCount),StringUtil.replaceString(colContent,"\"","'"));
+                        mRows.put(headerCols.get(colCount),colContent);
                     }
                     dataRows.add(mRows);
                 }

@@ -18,7 +18,7 @@
                   <#assign hasNext = partyRow_has_next/>
                   <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
                   	<#assign userLoginId = "">
-                    <td class="idCol <#if !partyRow_has_next>lastRow</#if> firstCol" ><a href="<@ofbizUrl>customerDetail?partyId=${partyRow.partyId}</@ofbizUrl>">${partyRow.partyId}</a></td>
+                    <td class="idCol <#if !partyRow_has_next>lastRow</#if> firstCol" ><a href="<@ofbizUrl>${detailAction!}?partyId=${partyRow.partyId}</@ofbizUrl>">${partyRow.partyId}</a></td>
                    <#assign person = delegator.findByPrimaryKey("Person", {"partyId", partyRow.partyId})/>
                    <#assign party = delegator.findByPrimaryKey("Party", {"partyId", partyRow.partyId})/>
                     <#assign downloadStatus = "">
@@ -84,6 +84,7 @@
                             <#else>
                                 <#if (roleTypeIds?has_content && roleTypeIds.contains(partyRole.roleTypeId))>
                                     <#assign partyRoleType = roleTypesDescMap.get(partyRole.roleTypeId)! />
+                                    <#break>
                                 <#elseif !roleTypeIds?has_content>
                                     <#if partyRoleTypeIds?has_content && partyRoleTypeIds.contains("CUSTOMER")>
                                         <#assign partyRoleType = roleTypesDescMap.get("CUSTOMER")! />
@@ -119,7 +120,7 @@
                             <div class="actionIconBox" style="display:none">
                                 <div class="actionIcon">
                                     <ul>
-                                       <li><a href="<@ofbizUrl>customerDetail?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="editIcon"></span>${uiLabelMap.EditCustomerTooltip}</a></li>
+                                       <li><a href="<@ofbizUrl>${detailAction!}?partyId=${partyRow.partyId}</@ofbizUrl>"><span class="editIcon"></span>${uiLabelMap.EditCustomerTooltip}</a></li>
                                        <#assign partyOrders = party.getRelated("OrderRole",  {"roleTypeId" : "PLACING_CUSTOMER"}, [])?if_exists/>
                                        <li>
                                            <#if (partyOrders?has_content)>

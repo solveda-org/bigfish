@@ -12,6 +12,7 @@ import org.ofbiz.order.shoppingcart.ShoppingCart;
 userLogin = session.getAttribute("userLogin");
 context.userLogin = userLogin;
 savedPaymentMethodValueMaps = FastList.newInstance();
+savedPaymentMethodEftValueMaps = FastList.newInstance();
 partyId = null;
 partyProfileDefault = null;
 productStoreId = "";
@@ -29,7 +30,10 @@ ShoppingCart shoppingCart = session.getAttribute("shoppingCart");
 currencyUom = Util.getProductStoreParm(request,"CURRENCY_UOM_DEFAULT");
 if(UtilValidate.isEmpty(currencyUom))
 {
-	currencyUom = shoppingCart.getCurrency();
+	if(UtilValidate.isNotEmpty(shoppingCart))
+	{
+		currencyUom = shoppingCart.getCurrency();
+	}
 }
 context.currencyUom = currencyUom;
 if(UtilValidate.isNotEmpty(userLogin))
@@ -46,16 +50,17 @@ if(Util.isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS"))
     {
         paymentMethods = delegator.findByAndCache("PaymentMethod", UtilMisc.toMap("partyId", partyId), UtilMisc.toList("lastUpdatedStamp"));
         paymentMethodValueMaps = FastList.newInstance();
+        paymentMethodEftValueMaps = FastList.newInstance();
         if(UtilValidate.isNotEmpty(paymentMethods))
         {
             paymentMethods = EntityUtil.filterByDate(paymentMethods, true);
             for (GenericValue paymentMethod : paymentMethods) 
             {
-                valueMap = FastMap.newInstance();
-                paymentMethodValueMaps.add(valueMap);
-                valueMap.put("paymentMethod", paymentMethod);
                 if ("CREDIT_CARD".equals(paymentMethod.getString("paymentMethodTypeId"))) 
                 {
+                    valueMap = FastMap.newInstance();
+                    paymentMethodValueMaps.add(valueMap);
+                    valueMap.put("paymentMethod", paymentMethod);
                     GenericValue creditCard = paymentMethod.getRelatedOneCache("CreditCard");
                     if (UtilValidate.isNotEmpty(creditCard))
                     {
@@ -63,10 +68,23 @@ if(Util.isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS"))
                         
                     }
                 }
+                else if ("EFT_ACCOUNT".equals(paymentMethod.getString("paymentMethodTypeId")))
+                {
+                    eftValueMap = FastMap.newInstance();
+                    paymentMethodEftValueMaps.add(eftValueMap);
+                    eftValueMap.put("paymentMethod", paymentMethod);
+                    GenericValue eftAccount = paymentMethod.getRelatedOneCache("EftAccount");
+                    if (UtilValidate.isNotEmpty(eftAccount))
+                    {
+                        eftValueMap.put("eftAccount", eftAccount);
+                    }
+                }
             }
             savedPaymentMethodValueMaps= paymentMethodValueMaps;
+            savedPaymentMethodEftValueMaps = paymentMethodEftValueMaps; 
         }
     }
     context.savedPaymentMethodValueMaps = savedPaymentMethodValueMaps;
+    context.savedPaymentMethodEftValueMaps = savedPaymentMethodEftValueMaps;
 }
 context.partyProfileDefault = partyProfileDefault;

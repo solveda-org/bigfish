@@ -72,6 +72,10 @@
       <#assign attrNameComment = custReqAttribute.attrName+caption!""/>
       <#assign comment = custReqAttribute.attrValue!""/>
     </#if>
+    <#if custReqAttribute.attrName == 'SKU_OR_PART'>
+      <#assign attrNamePartNumber = custReqAttribute.attrName+caption!""/>
+      <#assign partNumber = custReqAttribute.attrValue!""/>
+    </#if>
   </#list>
   </#if>
   <div class="infoRow row">
@@ -237,20 +241,7 @@
     </div>
   </div>
  </#if>
-       
-  <#if orderNo?exists && orderNo?has_content>
-    <div class="infoRow row">
-      <div class="infoEntry long">
-        <div class="infoCaption">
-          <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameOrderNo, locale)/>${labelName!}
-          </label>
-        </div>
-        <div class="infoValue">${orderNo!}</div>
-      </div>
-    </div>
-  </#if>
-       
+
   <#if phone?exists && phone?has_content>
     <div class="infoRow row">
       <div class="infoEntry long">
@@ -265,7 +256,33 @@
       </div>
     </div>
   </#if>
-       
+
+  <#if partNumber?exists && partNumber?has_content>
+    <div class="infoRow row">
+      <div class="infoEntry long">
+        <div class="infoCaption">
+          <label>
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNamePartNumber, locale)/>${labelName!}
+          </label>
+        </div>
+        <div class="infoValue">${partNumber!}</div>
+      </div>
+    </div>
+  </#if>
+
+  <#if orderNo?exists && orderNo?has_content>
+    <div class="infoRow row">
+      <div class="infoEntry long">
+        <div class="infoCaption">
+          <label>
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameOrderNo, locale)/>${labelName!}
+          </label>
+        </div>
+        <div class="infoValue">${orderNo!}</div>
+      </div>
+    </div>
+  </#if>
+
   <#if comment?exists && comment?has_content>
     <div class="infoRow row">
       <div class="infoEntry long">

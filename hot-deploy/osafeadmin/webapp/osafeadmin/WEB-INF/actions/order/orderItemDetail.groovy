@@ -138,7 +138,7 @@ if (UtilValidate.isNotEmpty(orderId))
 						promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
 						if(UtilValidate.isNotEmpty(promoCodesEntered))
 						{
-							for (GenericValue promoCodeEntered : promoCodesEntered)
+							for (String promoCodeEntered : promoCodesEntered)
 							{
 								if(UtilValidate.isNotEmpty(promoCodeEntered))
 								{

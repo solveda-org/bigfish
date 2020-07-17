@@ -28,4 +28,23 @@
 <!-- Pay Pal Custom Method -->
 <CustomMethod customMethodId="PAYPAL_CAPTURE_FAIL" customMethodTypeId="PAYPAL_CAPTURE" customMethodName="alwaysFailCCProcessor" description="PayPal Test capture fail"/>
 
+<!-- EFT Account Payment Custom Method -->
+<CustomMethod customMethodId="EFT_AUTH_ALWAYSAPPRO" customMethodTypeId="EFT_AUTH" customMethodName="alwaysApproveEFTProcessor" description="EFT always authorize"/>
+<CustomMethod customMethodId="EFT_RELEASE_TEST" customMethodTypeId="EFT_RELEASE" customMethodName="testEFTRelease" description="EFT test release"/>
+<CustomMethod customMethodId="EFT_CAPTURE" customMethodTypeId="EFT_CAPTURE" customMethodName="testCCCapture" description="EFT payment capture"/>
+<CustomMethod customMethodId="EFT_REFUND" customMethodTypeId="EFT_REFUND" customMethodName="testCCRefund" description="EFT payment refund"/>
+<CustomMethod customMethodId="EFT_CAPTURE_FAIL" customMethodTypeId="EFT_CAPTURE" customMethodName="alwaysFailCCProcessor" description="EFT Test capture fail"/>
+
+<!-- FIN Account Payment Custom Method -->
+<CustomMethod customMethodId="FIN_AUTH_ALWAYSAPPRO" customMethodTypeId="FIN_AUTH" customMethodName="alwaysApproveFaProcessor" description="FIN account always authorize"/>
+<CustomMethod customMethodId="FIN_AUTH_FAIL" customMethodTypeId="FIN_AUTH" customMethodName="alwaysDeclineFaProcessor" description="FIN account authorize fail"/>
+<CustomMethod customMethodId="FIN_CAPTURE_TEST" customMethodTypeId="FIN_CAPTURE" customMethodName="testFaCapture" description="FIN account capture"/>
+<CustomMethod customMethodId="FIN_RELEASE_TEST" customMethodTypeId="FIN_RELEASE" customMethodName="testFaRelease" description="FIN account test release"/>
+<CustomMethod customMethodId="FIN_REFUND_TEST" customMethodTypeId="FIN_REFUND" customMethodName="testFaRefund" description="FIN account refund"/>
+
+<CustomMethod customMethodId="FIN_AUTH_OFBIZ" customMethodTypeId="FIN_AUTH" customMethodName="ofbFaAuthorize" description="FIN account authorize"/>
+<CustomMethod customMethodId="FIN_CAPTURE_OFBIZ" customMethodTypeId="FIN_CAPTURE" customMethodName="ofbFaCapture" description="FIN account capture"/>
+<CustomMethod customMethodId="FIN_REFUND_OFBIZ" customMethodTypeId="FIN_REFUND" customMethodName="ofbFaRefund" description="FIN account refund"/>
+<CustomMethod customMethodId="FIN_RELEASE_OFBIZ" customMethodTypeId="FIN_RELEASE" customMethodName="ofbFaRelease" description="FIN account release"/>
+
 </entity-engine-xml>

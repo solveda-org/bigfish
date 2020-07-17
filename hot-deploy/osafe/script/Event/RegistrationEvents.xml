@@ -140,31 +140,34 @@
         <call-service service-name="createPartyRole" in-map-name="partyRoleContext" include-user-login="true"/>
 
         <!-- billing address -->
-        <call-service service-name="createPartyPostalAddress" in-map-name="billingAddressContext">
-            <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
-        </call-service>
+        <if-not-empty field="parameters.BILLING_USE_SCREEN">
+	        <call-service service-name="createPartyPostalAddress" in-map-name="billingAddressContext">
+	            <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
+	        </call-service>
+	        
+	        <set from-field="tempMap.partyId" field="addressPurposeContext.partyId"/>
+	        
+	        <set value="BILLING_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
+	        <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
+	        
+	        <!-- also consider this address the general correspondence address -->
+	        <set value="GENERAL_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
+	        <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
+
+	    </if-not-empty>
 
         <!-- shipping address -->
-        <call-service service-name="createPartyPostalAddress" in-map-name="shippingAddressContext">
-            <result-to-field result-name="contactMechId" field="shippingAddressPurposeContext.contactMechId"/>
-        </call-service>
+       	<if-not-empty field="parameters.SHIPPING_USE_SCREEN">
+	        <call-service service-name="createPartyPostalAddress" in-map-name="shippingAddressContext">
+	            <result-to-field result-name="contactMechId" field="shippingAddressPurposeContext.contactMechId"/>
+	        </call-service>
+	         <set field="shippingAddressPurposeContext.partyId" from-field="tempMap.partyId"/>
+	         <!-- create the shipping location -->
+	         <set field="shippingAddressPurposeContext.contactMechPurposeTypeId" value="SHIPPING_LOCATION"/>
+	         <call-service service-name="createPartyContactMechPurpose" in-map-name="shippingAddressPurposeContext"/>
+        </if-not-empty>
 
-         <set field="shippingAddressPurposeContext.partyId" from-field="tempMap.partyId"/>
-         <!-- create the shipping location -->
-         <set field="shippingAddressPurposeContext.contactMechPurposeTypeId" value="SHIPPING_LOCATION"/>
-         <call-service service-name="createPartyContactMechPurpose" in-map-name="shippingAddressPurposeContext"/>
 
-        <set from-field="tempMap.partyId" field="addressPurposeContext.partyId"/>
-        
-        <!-- also consider this address the general correspondence address -->
-        <set value="GENERAL_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
-        <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
-        <!-- also consider this address the shipping correspondence address -->
-       <!-- <set value="SHIPPING_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
-        <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/> -->
-        <!-- Create Billing address -->
-        <set value="BILLING_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
-        <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
         <!-- home phone -->
         <if>
            <condition>
@@ -495,6 +498,9 @@
             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmailAddressMissingError"/>
             <string-to-list string="${tempErrorMessage}" message-field="SUBSCRIBER_EMAIL" list="error_list"></string-to-list>
         <else>
+       		 <call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="removeSpaces" ret-field="parameters.SUBSCRIBER_EMAIL">
+       				<field field="parameters.SUBSCRIBER_EMAIL" type="String"/>
+       		 </call-class-method>
              <if-validate-method field="parameters.SUBSCRIBER_EMAIL" method="isEmail">
                  <entity-condition entity-name="PartyContactWithPurpose" list="partyContactPurposeList">
                      <condition-list combine="and">

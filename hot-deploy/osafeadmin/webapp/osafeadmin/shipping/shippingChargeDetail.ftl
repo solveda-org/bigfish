@@ -266,7 +266,7 @@
         <label>${uiLabelMap.SeqNumCaption}</label>
       </div>
       <div class="infoValue">
-        	<input name="sequenceNum" type="text" id="sequenceNum" maxlength="10" value="${parameters.sequenceNum!sequenceNum!"1"}"/>
+        	<input name="sequenceNum" type="text" id="sequenceNum" maxlength="9" value="${parameters.sequenceNum!sequenceNum!"1"}"/>
       </div>
     </div>
   </div>

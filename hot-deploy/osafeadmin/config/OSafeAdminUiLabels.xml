@@ -76,6 +76,9 @@
     <property key="ContactUsEventNav">
         <value xml:lang="en">Contact Us Events</value>
     </property>
+    <property key="RequestQuoteEventNav">
+        <value xml:lang="en">Request Quote Events</value>
+    </property>
     <property key="ContentEmailNav">
         <value xml:lang="en">Email</value>
     </property>
@@ -129,6 +132,9 @@
     </property>
     <property key="CustomerViewNav">
         <value xml:lang="en">View Customers</value>
+    </property>
+    <property key="OrganizationViewNav">
+        <value xml:lang="en">View Organization</value>
     </property>
     <property key="FeedsNav">
         <value xml:lang="en">Feeds</value>
@@ -268,8 +274,17 @@
     <property key="DivSequenceDetailTitle">
         <value xml:lang="en">DIV Sequence</value>
     </property>
+    <property key="ProductAttachmentsTitle">
+        <value xml:lang="en">Product Attachments</value>
+    </property>
     <property key="ProductContentListTitle">
         <value xml:lang="en">Product Content List</value>
+    </property>
+    <property key="ReviewCustomAttribute01ListTitle">
+        <value xml:lang="en">Review Custom Attribute 01</value>
+    </property>
+    <property key="ReviewCustomAttribute01DetailTitle">
+        <value xml:lang="en">Review Custom Attribute 01 Detail</value>
     </property>
     <property key="ProductContentDetailTitle">
         <value xml:lang="en">Product Content Detail</value>
@@ -310,8 +325,14 @@
     <property key="ContactUsEventDetailTitle">
         <value xml:lang="en">Contact Us Event Detail</value>
     </property>
+    <property key="RequestQuoteEventDetailTitle">
+        <value xml:lang="en">request quote event detail</value>
+    </property>
     <property key="ContactUsEventsListTitle">
         <value xml:lang="en">Contact Us Event List</value>
+    </property>
+    <property key="RequestQuoteEventsListTitle">
+        <value xml:lang="en">Request Quote Event List</value>
     </property>
     <property key="ContentDetailTitle">
         <value xml:lang="en">Content Detail</value>
@@ -320,7 +341,7 @@
         <value xml:lang="en">Content Library Detail</value>
     </property>
     <property key="CompareDivSequenceFileResultTitle">
-        <value xml:lang="en">Compare tool: DIV-Sequence </value>
+        <value xml:lang="en">Compare Tool: DIV-Sequence </value>
     </property>
     <property key="ContentHPDetailTitle">
         <value xml:lang="en">Manage Home Page Spot</value>
@@ -337,8 +358,14 @@
     <property key="CustomerNoteDetailTitle">
         <value xml:lang="en">Customer Note Detail</value>
     </property>
+    <property key="ViewOrganizationTitle">
+        <value xml:lang="en">View Organizations</value>
+    </property>
     <property key="DashboardSummaryTitle">
         <value xml:lang="en">Dashboard</value>
+    </property>
+	<property key="AdminModuleTitle">
+        <value xml:lang="en">Admin Module</value>
     </property>
     <property key="EBSConfigDetailTitle">
         <value xml:lang="en">Configuration EBS</value>
@@ -419,10 +446,10 @@
         <value xml:lang="en">Manage &lt; DIV &gt; Sequencing</value>
     </property>
     <property key="ManageBigfishParameterTitle">
-        <value xml:lang="en">manage bigfish parameters</value>
+        <value xml:lang="en">Manage Bigfish Parameters</value>
     </property>
     <property key="BigfishParameterDetailTitle">
-        <value xml:lang="en">parameter detail</value>
+        <value xml:lang="en">Parameter Detail</value>
     </property>
     <property key="LabelsCaptionsListTitle">
         <value xml:lang="en">Labels And Captions List</value>
@@ -431,25 +458,37 @@
         <value xml:lang="en">Labels And Captions Detail</value>
     </property>
     <property key="CategoryHTMLMetatagsDetailTitle">
-        <value xml:lang="en">category HTML Meta Tags</value>
+        <value xml:lang="en">Category SEO Meta Tags</value>
     </property>
     <property key="CustomerManagementDetailTitle">
-        <value xml:lang="en">customer Detail</value>
+        <value xml:lang="en">Customer Detail</value>
     </property>
+    <property key="OrganizationManagementDetailTitle">
+        <value xml:lang="en">Organization Detail</value>
+    </property> 
     <property key="CustomerWebsiteActivityDetailTitle">
-        <value xml:lang="en">customer Website Activity</value>
+        <value xml:lang="en">Customer Website Activity</value>
     </property>
     <property key="CustomerManagementTitle">
-        <value xml:lang="en">customer Management</value>
+        <value xml:lang="en">Customer Management</value>
     </property>
     <property key="DescriptiveFeaturePickerTitle">
         <value xml:lang="en">Descriptive Feature Picker</value>
+    </property>
+    <property key="ProductFeaturePickerTitle">
+        <value xml:lang="en">Product Feature Picker</value>
+    </property>
+    <property key="PartyClassificationGroupPickerTitle">
+        <value xml:lang="en">Party Classification Picker</value>
     </property>
     <property key="HTMLMetatagsDetailTitle">
         <value xml:lang="en">HTML Meta Tags</value>
     </property>
     <property key="OrderManagementOrderDetailTitle">
-        <value xml:lang="en">order Detail</value>
+        <value xml:lang="en">Order Detail</value>
+    </property>
+    <property key="OrderNotesDetailTitle">
+        <value xml:lang="en">Order Notes</value>
     </property>
     <property key="OrderStatusDetailTitle">
         <value xml:lang="en">Order Status Change</value>
@@ -503,7 +542,7 @@
         <value xml:lang="en">Product Alternate Images</value>
     </property>
     <property key="ProductHTMLMetatagsDetailTitle">
-        <value xml:lang="en">Product HTML Meta Tags</value>
+        <value xml:lang="en">Product SEO Meta Tags</value>
     </property>
     <property key="ProductLoaderDetailTitle">
         <value xml:lang="en">Product Loader</value>
@@ -556,6 +595,12 @@
     <property key="PromotionTitle">
         <value xml:lang="en">View Promotions</value>
     </property>
+    <property key="PriceRuleTitle">
+        <value xml:lang="en">View Price Rule</value>
+    </property>
+    <property key="PriceRuleDetailTitle">
+        <value xml:lang="en">Manage Price Rule</value>
+    </property>
     <property key="PromotionDetailTitle">
         <value xml:lang="en">Manage Promotion</value>
     </property>
@@ -569,7 +614,7 @@
         <value xml:lang="en">Related Products</value>
     </property>
     <property key="ProductCategoryMembershipTitle">
-        <value xml:lang="en">category / Product Membership</value>
+        <value xml:lang="en">Category / Product Membership</value>
     </property>
     <property key="ReqCatEventDetailTitle">
         <value xml:lang="en">Request Catalog Event Detail</value>
@@ -713,7 +758,7 @@
         <value xml:lang="en">Create Bigfish Product File From Database</value>
     </property>
     <property key="BigFishProductFileFromEbayDetailTitle">
-        <value xml:lang="en">Convert ebay/amazon To Bigfish Format</value>
+        <value xml:lang="en">Convert eBay/Amazon To Bigfish Format</value>
     </property>
     <property key="ImageLocationPreferencesDetailTitle">
         <value xml:lang="en">Image Location Preferences</value>
@@ -773,7 +818,7 @@
         <value xml:lang="en">Payment Settings</value>
     </property>
     <property key="ManageEmailListTitle">
-        <value xml:lang="en">Manage Email and Text Messages</value>
+        <value xml:lang="en">Manage Email And Text Messages</value>
     </property>
     <property key="LookupDataTitle">
         <value xml:lang="en">Lookup Data</value>
@@ -886,26 +931,41 @@
     <property key="CustomerAddressDetailTitle">
         <value xml:lang="en">Customer Address</value>
     </property>
+    <property key="OrganizationAddressDetailTitle">
+        <value xml:lang="en">Organization Address</value>
+    </property>
     <property key="OrderShippingDetailTitle">
-        <value xml:lang="en">order shipping details</value>
+        <value xml:lang="en">Order Shipping Details</value>
     </property> 
     <property key="ViewManufacturerTitle">
-        <value xml:lang="en">view manufacturers</value>
+        <value xml:lang="en">View Manufacturers</value>
     </property>
     <property key="ManufacturerManagementDetailTitle">
-        <value xml:lang="en">manufacturer detail</value>
+        <value xml:lang="en">Manufacturer Detail</value>
     </property>
     <property key="OrderAddPaymentDetailTitle">
-        <value xml:lang="en">apply a payment</value>
+        <value xml:lang="en">Apply A Payment</value>
     </property>
     <property key="PersonTitleDetailTitle">
-        <value xml:lang="en">title detail</value>
+        <value xml:lang="en">Title Detail</value>
+    </property>
+    <property key="RecurrenceFreqTypeTitle">
+        <value xml:lang="en">Recurrence Frequency</value>
+    </property>
+    <property key="RecurrenceFreqTypeDetailTitle">
+        <value xml:lang="en">Recurrence Frequency Detail</value>
     </property>
     <!-- ******* Page Title Ends *************************************** -->
     
     <!-- *** Heading Starts*************************************** -->
     <property key="ContactUsReasonListHeading">
         <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="ReviewCustomAttribute01ListHeading">
+        <value xml:lang="en">Review Custom Attribute 01</value>
+    </property>
+    <property key="ReviewCustomAttribute01DetailHeading">
+        <value xml:lang="en">Review Custom Attribute 01</value>
     </property>
     <property key="ProductContentListHeading">
         <value xml:lang="en">Content List for Product</value>
@@ -1123,11 +1183,17 @@
     <property key="MatchingContactUsEventsHeading">
         <value xml:lang="en">Matching Contact Us Events</value>
     </property>
+    <property key="MatchingRequestQuoteEventsHeading">
+        <value xml:lang="en">Matching Request Quote Events:</value>
+    </property>
     <property key="ContactUsDetailHeading">
         <value xml:lang="en">Contact Us</value>
     </property>
     <property key="ContentDetailHeading">
         <value xml:lang="en">Content Details</value>
+    </property>
+    <property key="RequestQuoteDetailHeading">
+        <value xml:lang="en">Request Quote</value>
     </property>
     <property key="CustomerInfoHeading">
         <value xml:lang="en">Customer Information</value>
@@ -1304,7 +1370,7 @@
         <value xml:lang="en">Product Catalog (Facet GROUPS)</value>
     </property>
     <property key="ProductHTMLMetatagsDetailHeading">
-        <value xml:lang="en">Product HTML Meta Tags</value>
+        <value xml:lang="en">Product SEO Meta Tags</value>
     </property>
     <property key="ProductVideosDetailsHeading">
         <value xml:lang="en">Product Videos</value>
@@ -1314,6 +1380,21 @@
     </property>
     <property key="PaymentTypeLabel">
         <value xml:lang="en">Payment Type</value>
+    </property>
+    <property key="ProductAttachment1Label">
+        <value xml:lang="en">Product Attachment #1</value>
+    </property>
+    <property key="ProductAttachment2Label">
+        <value xml:lang="en">Product Attachment #2</value>
+    </property>
+    <property key="ProductAttachment3Label">
+        <value xml:lang="en">Product Attachment #3</value>
+    </property>
+    <property key="ReviewCustomIdLabel">
+        <value xml:lang="en">Review Custom ID</value>
+    </property>
+    <property key="ReviewCustomDescLabel">
+        <value xml:lang="en">Description</value>
     </property>
     <property key="EmbeddedLabel">
         <value xml:lang="en">Embedded</value>
@@ -1346,10 +1427,13 @@
         <value xml:lang="en">Rating &amp; Review Summary</value>
     </property>
     <property key="categoryHTMLMetatagsDetailHeading">
-        <value xml:lang="en">Category HTML Meta Tags</value>
+        <value xml:lang="en">Category SEO Meta Tags</value>
     </property>
     <property key="ContactUsEventHeading">
         <value xml:lang="en">Contact Us Events</value>
+    </property>
+    <property key="RequestQuoteEventHeading">
+        <value xml:lang="en">Request Quote Events</value>
     </property>
     <property key="CustomerAddHeading">
         <value xml:lang="en">Add a Customer</value>
@@ -1357,8 +1441,20 @@
     <property key="CustomerViewHeading">
         <value xml:lang="en">View Customers</value>
     </property>
+    <property key="OrganizationViewHeading">
+        <value xml:lang="en">View Organization</value>
+    </property>
     <property key="CustomerDetailInfoWithNameHeading">
         <value xml:lang="en">Customer ${partyId} ${firstName} ${lastName}</value>
+    </property>
+    <property key="OrganizationDetailInfoWithNameHeading">
+        <value xml:lang="en">Organization ${partyId} ${groupName}</value>
+    </property>
+    <property key="OrganizationDetailInfoHeading">
+        <value xml:lang="en">Organization Information</value>
+    </property>
+    <property key="OrganizationInfoHeading">
+        <value xml:lang="en">Organization ${partyId} Information</value>
     </property>
     <property key="CustomerDetailInfoHeading">
         <value xml:lang="en">Customer ${partyId} Information</value>
@@ -1381,6 +1477,9 @@
     <property key="CustomerHeading">
         <value xml:lang="en">Matching Customers:</value>
     </property>
+    <property key="MatchingOrganizationHeading">
+        <value xml:lang="en">Matching Organizations:</value>
+    </property>
     <property key="ManageSOLRFacetGroupsHeading">
         <value xml:lang="en">Manage SOLR Facet Groups</value>
     </property>
@@ -1401,6 +1500,9 @@
     </property>
     <property key="ManageGiftMessageHeading">
         <value xml:lang="en">Gift Messages</value>
+    </property>
+    <property key="ManageReviewCustomAttribute01Heading">
+        <value xml:lang="en">Review Custom Attribute</value>
     </property>
     <property key="OrderAddHeading">
         <value xml:lang="en">Add Orders</value>
@@ -1483,6 +1585,9 @@
     <property key="ProductAltNoImagesHeading">
         <value xml:lang="en">Product Alternate# ${altImgNo} Images </value>
     </property>
+    <property key="ProductAttachmentHeading">
+        <value xml:lang="en">Product Attachment #${attachNo}</value>
+    </property>
     <property key="ProductDetailsHeading">
         <value xml:lang="en">Product Details</value>
     </property>
@@ -1546,11 +1651,23 @@
     <property key="PromotionAddHeading">
         <value xml:lang="en">Add a Promotion</value>
     </property>
+    <property key="PriceRuleListHeading">
+        <value xml:lang="en">Matching Price Rules</value>
+    </property>
     <property key="PromotionHeading">
         <value xml:lang="en">PROMOTION DEFINITION</value>
     </property>
     <property key="PromotionCodeHeading">
         <value xml:lang="en">PROMO-CODES</value>
+    </property>
+    <property key="PriceRuleDefinitionHeading">
+        <value xml:lang="en">Price Rule Definition</value>
+    </property>
+    <property key="PriceRuleConditionHeading">
+        <value xml:lang="en">Rules: Conditions</value>
+    </property>
+    <property key="PriceRuleActionHeading">
+        <value xml:lang="en">Rules: Actions</value>
     </property>
     <property key="PromotionDefinitionHeading">
         <value xml:lang="en">Promotion Definition</value>
@@ -1575,6 +1692,9 @@
     </property>
     <property key="ReqCatalogEventHeading">
         <value xml:lang="en">Request Catalog Events</value>
+    </property>
+    <property key="GoogleProductFeedDetailHeading">
+        <value xml:lang="en">Google Product</value>
     </property>
     <property key="RevenueHeading">
         <value xml:lang="en">Sales ${currencySymbol}</value>
@@ -2038,6 +2158,9 @@
     <property key="CustomerAddressDetailHeading">
         <value xml:lang="en">Address</value>
     </property>
+    <property key="OrganizationAddressDetailHeading">
+        <value xml:lang="en">Address</value>
+    </property>
     <property key="EntitySyncDetailHeading">
         <value xml:lang="en">Entity Sync</value>
     </property>
@@ -2074,12 +2197,36 @@
     <property key="LoyaltyPointsOptionHeading">
         <value xml:lang="en">Loyalty Points</value>
     </property>
+    <property key="PersonTitleHeading">
+        <value xml:lang="en">Title</value>
+    </property>
+    <property key="RecurrenceFreqTypeListHeading">
+        <value xml:lang="en">Recurrence Frequency</value>
+    </property>
+    <property key="RecurrenceFreqTypeDetailHeading">
+        <value xml:lang="en">Recurrence Frequency</value>
+    </property>
+    <property key="ManageRecurrenceFreqTypeHeading">
+        <value xml:lang="en">Recurrence Frequency</value>
+    </property>
+    <property key="OrganizationEmployeeUsersHeading">
+        <value xml:lang="en">Users</value>
+    </property>
+    <property key="DashboardAlertsHeading">
+        <value xml:lang="en">Alerts</value>
+    </property>
     
    <!-- *** Heading Ends*************************************** -->
 
     <!-- *** Caption Starts*************************************** -->
     <property key="IdCaption">
         <value xml:lang="en">ID:</value>
+    </property>
+    <property key="FilePathOrUrlCaption">
+        <value xml:lang="en">File Path or URL:</value>
+    </property>
+    <property key="NewFileCaption">
+        <value xml:lang="en">New File:</value>
     </property>
     <property key="MandatoryCaption">
         <value xml:lang="en">Mandatory:</value>
@@ -2162,11 +2309,26 @@
     <property key="LoginEmailCaption">
         <value xml:lang="en">Login Email:</value>
     </property>
+    <property key="OrganizationCaption">
+        <value xml:lang="en">Organization:</value>
+    </property>
     <property key="EmailAddressConfirmCaption">
         <value xml:lang="en">Confirm Email:</value>
     </property>
     <property key="PasswordCaption">
         <value xml:lang="en">Password:</value>
+    </property>
+    <property key="ProductFeatureCaption">
+        <value xml:lang="en">Product Feature#:</value>
+    </property>
+    <property key="ProductFeatureTypeCaption">
+        <value xml:lang="en">Type#:</value>
+    </property>
+    <property key="PartyClassificationCaption">
+        <value xml:lang="en">Party Classification#:</value>
+    </property>
+    <property key="PartyClassificationTypeCaption">
+        <value xml:lang="en">Type#:</value>
     </property>
     <property key="RepeatPasswordCaption">
         <value xml:lang="en">Confirm Password:</value>
@@ -2216,8 +2378,14 @@
     <property key="CustomerNoCaption">
         <value xml:lang="en">Customer#:</value>
     </property>
+    <property key="OrgNoCaption">
+        <value xml:lang="en">Org#:</value>
+    </property>
     <property key="CustomerNameCaption">
         <value xml:lang="en">Customer Name:</value>
+    </property>
+    <property key="OrganizationNameCaption">
+        <value xml:lang="en">Organization Name:</value>
     </property>
     <property key="ContactUsReasonIdCaption">
         <value xml:lang="en">Credit Card ID:</value>
@@ -2632,6 +2800,9 @@
     </property>
     <property key="ProductNameCaption">
         <value xml:lang="en">Product Name:</value>
+    </property>
+    <property key="ProductTypeCaption">
+        <value xml:lang="en">Type:</value>
     </property>
     <property key="PDPLabelCaption">
         <value xml:lang="en">PDP Label:</value>
@@ -3151,6 +3322,9 @@
     <property key="MetaKeyOverrideCaption">
         <value xml:lang="en">&lt;META KEY&gt; Override:</value>
     </property>
+    <property key="CanonicalOverrideUrlCaption">
+        <value xml:lang="en">Canonical Override URL:</value>
+    </property>
     <property key="MobilePhoneCaption">
         <value xml:lang="en">Mobile Phone:</value>
     </property>
@@ -3196,6 +3370,27 @@
      <property key="PromoNameCaption">
         <value xml:lang="en">Promotion Name:</value>
     </property>
+     <property key="PriceRuleIdCaption">
+        <value xml:lang="en">Price Rule ID:</value>
+    </property>
+     <property key="PriceRuleNameCaption">
+        <value xml:lang="en">Price Rule Name:</value>
+    </property>
+     <property key="PriceRuleDescCaption">
+        <value xml:lang="en">Description:</value>
+    </property>
+     <property key="PriceRuleActiveFromCaption">
+        <value xml:lang="en">Active From:</value>
+    </property>
+     <property key="PriceRuleActiveThruCaption">
+        <value xml:lang="en">Active Thru:</value>
+    </property>
+     <property key="PriceRuleActionCaption">
+        <value xml:lang="en">Action:</value>
+    </property>
+     <property key="PriceRuleValueCaption">
+        <value xml:lang="en">Value:</value>
+    </property>
      <property key="PromotionIdCaption">
         <value xml:lang="en">Promotion ID:</value>
     </property>
@@ -3216,6 +3411,9 @@
     </property>
      <property key="PromotionCodeActiveThruCaption">
         <value xml:lang="en">Active Thru:</value>
+    </property>
+     <property key="PriceRuleCaption">
+        <value xml:lang="en">Price Rule:</value>
     </property>
      <property key="PromotionNameCaption">
         <value xml:lang="en">Promotion Name:</value>
@@ -3318,6 +3516,9 @@
     </property>
     <property key="AgeCaption">
         <value xml:lang="en">Age:</value>
+    </property>
+    <property key="Custom01Caption">
+        <value xml:lang="en">Custom 01:</value>
     </property>
     <property key="ReviewTextCaption">
         <value xml:lang="en">Review Text:</value>
@@ -4369,6 +4570,21 @@
     <property key="AmountPaidCaption">
         <value xml:lang="en">Amount Paid:</value>
     </property>
+    <property key="FriendlyUrlDefaultCaption">
+        <value xml:lang="en">Friendly URL Default:</value>
+    </property>
+    <property key="FriendlyUrlOverrideCaption">
+        <value xml:lang="en">Friendly URL Override:</value>
+    </property>
+    <property key="RecurrenceFreqTypeIdCaption">
+        <value xml:lang="en">Recurrence Freq ID:</value>
+    </property>
+    <property key="RecurrenceFreqTypeDescCaption">
+        <value xml:lang="en">Recurrence Freq Desc:</value>
+    </property>
+    <property key="RecurrenceFreqTypeIntervalCaption">
+        <value xml:lang="en">Interval:</value>
+    </property>
 
     <!-- *** Caption Ends*************************************** -->
 
@@ -4475,6 +4691,9 @@
     <property key="CustNoLabel">
         <value xml:lang="en">Cust#</value>
     </property>
+    <property key="OrgNoLabel">
+        <value xml:lang="en">Org#</value>
+    </property>
     <property key="CustomerNoLabel">
         <value xml:lang="en">Customer#</value>
     </property>
@@ -4486,6 +4705,9 @@
     </property>
     <property key="AddressLabel">
         <value xml:lang="en">Address</value>
+    </property>
+    <property key="BillingAddressLabel">
+        <value xml:lang="en">Billing Address</value>
     </property>
     <property key="CustomerRoleLabel">
         <value xml:lang="en">Customer Role</value>
@@ -4684,6 +4906,18 @@
     <property key="ProductDeleteToolLabel">
         <value xml:lang="en">Product Delete Tool</value>
     </property>
+    <property key="ProductFeatureLabel">
+        <value xml:lang="en">Product Feature#</value>
+    </property>
+    <property key="ProductFeatureTypeLabel">
+        <value xml:lang="en">Type#</value>
+    </property>
+    <property key="PartyClassificationLabel">
+        <value xml:lang="en">Party Classification#</value>
+    </property>
+    <property key="PartyClassificationTypeLabel">
+        <value xml:lang="en">Type#</value>
+    </property>
     <property key="SimpleTestLabel">
         <value xml:lang="en">Simple Test</value>
     </property>
@@ -4834,6 +5068,9 @@
     <property key="RequestCatalogExportLabel">
         <value xml:lang="en">Request Catalog</value>
     </property>
+    <property key="GoogleProductFeedExportLabel">
+        <value xml:lang="en">Google Product Feed</value>
+    </property>
     <property key="IncludeItemNotExportedLabel">
         <value xml:lang="en">Only Include Items that are NOT exported already?</value>
     </property>
@@ -4909,6 +5146,12 @@
     </property>
     <property key="ActiveThruLabel">
         <value xml:lang="en">Active Thru</value>
+    </property>
+    <property key="InputLabel">
+        <value xml:lang="en">Input</value>
+    </property>
+    <property key="OperatorLabel">
+        <value xml:lang="en">Operator</value>
     </property>
     <property key="ActiveToLabel">
         <value xml:lang="en">Active To</value>
@@ -5014,6 +5257,9 @@
     </property>
     <property key="CommentLabel">
         <value xml:lang="en">Comment</value>
+    </property>
+    <property key="PartNumberLabel">
+        <value xml:lang="en">SKUs or Part#</value>
     </property>
     <property key="CompletedLabel">
         <value xml:lang="en">Completed</value>
@@ -5638,6 +5884,12 @@
     </property>
     <property key="ExportToPdfTooltip">
         <value xml:lang="en">Export Customer to PDF</value>
+    </property>
+    <property key="ProductAttachmentsTooltip">
+        <value xml:lang="en">Product Attachments</value>
+    </property>
+    <property key="DeleteOrganizationCustomerTooltip">
+        <value xml:lang="en">Remove Customer from Organization</value>
     </property>
     <property key="EmailTestTooltip">
         <value xml:lang="en">Test Email</value>
@@ -6542,6 +6794,12 @@
     <property key="SummarySalesTaxShortCaption">
         <value xml:lang="en">Sales Tax:</value>
     </property>
+    <property key="ReviewCustomAttributeIdCaption">
+        <value xml:lang="en">Review Custom ID:</value>
+    </property>
+    <property key="ReviewCustomAttributeDescCaption">
+        <value xml:lang="en">Review Desc:</value>
+    </property>
     <property key="AdjustmentTypeLabel">
         <value xml:lang="en">Adjustment Type</value>
     </property>
@@ -6589,6 +6847,15 @@
     </property>
     <property key="PersonalCheckLabel">
         <value xml:lang="en">Personal Check</value>
+    </property>
+    <property key="RecurrenceFreqTypeIdLabel">
+        <value xml:lang="en">Recurrence Freq ID</value>
+    </property>
+    <property key="RecurrenceFreqTypeDescLabel">
+        <value xml:lang="en">Recurrence Freq Desc</value>
+    </property>
+    <property key="RecurrenceFreqTypeIntervalLabel">
+        <value xml:lang="en">Interval</value>
     </property>
     
     <!-- **** Label Ends *************************************** -->
@@ -6902,6 +7169,9 @@
     <property key="ManageGiftMessageInfo">
         <value xml:lang="en">Ability to maintain a set of pre-canned Gift Messages to be used within the Show Cart function.</value>
     </property>
+    <property key="ManageReviewCustomAttribute01Info">
+        <value xml:lang="en">Ability to maintain the custom review attribute.</value>
+    </property>
     <property key="ManagePersonTitleInfo">
         <value xml:lang="en">Ability to maintain which Titles are offered during the Registration process. Example: Mr, Mrs etc.</value>
     </property>
@@ -6986,11 +7256,17 @@
     <property key="ContactUsEventInfo">
         <value xml:lang="en">This function will allow for browsing and downloading of any Contact Us events that are stored.</value>
     </property>
+    <property key="RequestQuoteEventInfo">
+        <value xml:lang="en">This function will allow for browsing and downloading of any Request Quote events that are stored.</value>
+    </property>
     <property key="CustomerAddInfo">
         <value xml:lang="en">This function will allow for the quick addition of a Customer.</value>
     </property>
     <property key="CustomerViewInfo">
         <value xml:lang="en">This function provides the ability to search for customers in the database. A list of customers is displayed, with a click-through to the Customer Detail screen</value>
+    </property>
+    <property key="OrganizationViewInfo">
+        <value xml:lang="en">This function provides the ability to search for Organizations. Organizations are entities that have associated users.</value>
     </property>
     <property key="ImageDirectoryNoteInfo">
         <value xml:lang="en">* Only specify if the images are defined as file-names only in the XLS input; this will define the directory where they are located</value>
@@ -7253,6 +7529,9 @@
     <property key="RequestCatalogExportInfo">
         <value xml:lang="en">Export all Request Catalog communication events</value>
     </property>
+    <property key="GoogleProductFeedExportInfo">
+        <value xml:lang="en">Export Google Product Feed File</value>
+    </property>
     <property key="SolrConfigInfo">
         <value xml:lang="en">Options to configure both Facet GROUPS and VALUES</value>
     </property>
@@ -7358,6 +7637,27 @@
     <property key="AdjustmentIncludeInShippingInfo">
         <value xml:lang="en">Include in Shipping? ${includeInShipping}</value>
     </property>
+    <property key="ManageRecurrenceFreqTypeInfo">
+        <value xml:lang="en">Ability to maintain a set of pre-canned Recurrence Frequencies to be used within the Show Cart function</value>
+    </property>
+    <property key="JobSandBoxAlertInfo">
+        <value xml:lang="en">The database entity JOB_SANDBOX has in excess of ${entityRowCount} rows. This normally indicates a large number of scheduled jobs. Each scheduled job, when completed, will generate a FINISHED job entry. Eventually the table of scheduled jobs gets large and requires routine maintenance. To perform routine maintenance use the following function:</value>
+    </property>
+    <property key="JobSandBoxAlertActionPathInfo">
+        <value xml:lang="en">Admin -> Tools -> System Health Check -></value>
+    </property>
+    <property key="JobSandBoxAlertActionInfo">
+        <value xml:lang="en">Click on the “Scheduled Jobs Analysis” and use the helper functions to clean up.</value>
+    </property>
+    <property key="AlertInfo">
+        <value xml:lang="en">To modify the threshold for any alert use the following function:</value>
+    </property>
+    <property key="AlertActionPathInfo">
+        <value xml:lang="en">Admin -> Tools -></value>
+    </property>
+    <property key="AlertActionInfo">
+        <value xml:lang="en">Select the parameters_alerts.xml file and click Search. From the list the alert thresholds can be modified.</value>
+    </property>
      <!-- ******* Info Messages Ends*************************************** -->
    
     <!-- ******* Success Messages  starts*************************************** -->
@@ -7415,6 +7715,9 @@
     <property key="UpdateOrderStatusReviewMsgSuccess">
         <value xml:lang="en">You have successfully saved the ORDER STATUS change. A review email may be sent to {0} in {1} days.</value>
     </property>
+    <property key="PriceRuleSavedSuccess">
+        <value xml:lang="en">Your Price Rule changes ({0}) have been saved</value>
+    </property>
     <property key="ManageProductCategoryMembershipMsgSuccess">
         <value xml:lang="en">Your Product-Category Membership changes for Product: {0} have been saved</value>
     </property>
@@ -7440,6 +7743,9 @@
         <value xml:lang="en">Your changes to [{0}] have been saved.</value>
     </property>
     <property key="ReviewAgesSavedSuccess">
+        <value xml:lang="en">Your changes to [{0}] have been saved.</value>
+    </property>
+    <property key="ReviewCustomAttributeSavedSuccess">
         <value xml:lang="en">Your changes to [{0}] have been saved.</value>
     </property>
     <property key="GiftMessageSavedSuccess">
@@ -7505,6 +7811,9 @@
     <property key="UpdateBigfishParameterDetailSuccess">
         <value xml:lang="en">Your changes to {0} have been saved. You will need to reset cache in Admin/Tools for your changes to take effect.</value>
     </property>
+    <property key="RecurrenceFreqTypeSavedSuccess">
+        <value xml:lang="en">Your changes to [{0}] have been saved.</value>
+    </property>
       <!-- ******* Success Messages  Ends*************************************** -->
       
     <!-- ******* Error Messages  Starts*************************************** -->
@@ -7553,6 +7862,12 @@
     <property key="BlankCustomerIdError">
         <value xml:lang="en">The Customer field cannot be blank.</value>
     </property>
+    <property key="BlankOrganizationIdError">
+        <value xml:lang="en">The Org# field cannot be blank.</value>
+    </property>
+    <property key="OrganizationIdNumericError">
+        <value xml:lang="en">The Org# field cannot start from numeric.</value>
+    </property>
     <property key="MessageMethodError">
         <value xml:lang="en">This implementation is not setup to send text messages. Please review parameter TEXT_MESSAGE_METHOD.</value>
     </property>
@@ -7590,7 +7905,7 @@
         <value xml:lang="en">The Key field cannot be blank.</value>
     </property>
     <property key="BlankLongDescError">
-        <value xml:lang="en">ERROR Row ${rowNo}:Long Description is required for [${productType}] products</value>
+        <value xml:lang="en">ERROR Row ${rowNo}:Long Description is required for [${productType}] product ID [${productId}]</value>
     </property>
     <property key="BlankStyleTextDataError">
         <value xml:lang="en">The text data cannot be blank.</value>
@@ -7846,6 +8161,27 @@
     </property>
     <property key="BlankPixelCodeError">
         <value xml:lang="en">Page Tagging Code cannot be blank</value>
+    </property>
+    <property key="BlankProductPriceRuleIdError">
+        <value xml:lang="en">Price Rule Id cannot be blank</value>
+    </property>
+    <property key="BlankPriceRuleNameError">
+        <value xml:lang="en">Price Rule Name cannot be blank</value>
+    </property>
+    <property key="BlankPriceRuleDescriptionError">
+        <value xml:lang="en">Description cannot be blank</value>
+    </property>
+    <property key="BlankPriceRuleActionValueError">
+        <value xml:lang="en">Action value cannot be blank</value>
+    </property>
+    <property key="ValidPriceRuleActionValueError">
+        <value xml:lang="en">Action value must be a valid number</value>
+    </property>
+    <property key="BlankPriceRuleConditionValueError">
+        <value xml:lang="en">Condition value cannot be blank</value>
+    </property>
+    <property key="BlankPriceRuleConditionError">
+        <value xml:lang="en">At least 1 Condition is required to save a price rule</value>
     </property>
     <property key="BlankPromotionIdError">
         <value xml:lang="en">Promotion Id cannot be blank</value>
@@ -8165,14 +8501,23 @@
     <property key="ImagePathNotExistError">
         <value xml:lang="en">The Image-Path {0} for the {1} image does not already exist</value>
     </property>
+    <property key="AttachmentPathNotExistError">
+        <value xml:lang="en">The File-Path {0} for the {1} does not already exist</value>
+    </property>
     <property key="ContentFileNotExistError">
         <value xml:lang="en">File [{0}] does not exist on the server. Please check and retry.</value>
     </property>
     <property key="ImagePathBlankError">
         <value xml:lang="en">The Image-Path for the {0} image cannot be blank</value>
     </property>
+    <property key="AttachmentPathBlankError">
+        <value xml:lang="en">The File-Path for the {0} cannot be blank</value>
+    </property>
     <property key="ImagePathURLError">
         <value xml:lang="en">The Image-Path {0} must reference a directory on the server</value>
+    </property>
+    <property key="AttachmentPathURLError">
+        <value xml:lang="en">The File-Path {0} must reference a directory on the server</value>
     </property>
     <property key="ValidURLRefError">
         <value xml:lang="en">The URL must be a valid URL reference</value>
@@ -8475,13 +8820,13 @@
         <value xml:lang="en">Please enter a Valid Product Short Description. It should not be blank.</value>
     </property>
     <property key="ValidSalesPriceError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price [${salesPrice}] must be a valid number</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price [${salesPrice}] must be a valid number product ID [${productId}]</value>
     </property>
     <property key="EmptySalesPriceError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price is required for [${productType}] products</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price is required for [${productType}] product ID [${productId}]</value>
     </property>
     <property key="ValidListPriceError">
-        <value xml:lang="en">ERROR Row ${rowNo}: List-Price [${listPrice}], when provided, must be a valid number</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: List-Price [${listPrice}], when provided, must be a valid number product ID [${productId}]</value>
     </property>
     <property key="ValidBFTotalInventoryRowError">
         <value xml:lang="en">ERROR Row ${rowNo}: BF Total Inventory must be a whole number and between -9999 and 99999</value>
@@ -8684,6 +9029,9 @@
     <property key="UniqueProductNameAdminError">
         <value xml:lang="en">For SEO-Friendly purposes the Product Name must be unique. There is already a product with a name of [{0}]</value>
     </property>
+    <property key="UniqueProductSeoUrlError">
+        <value xml:lang="en">For SEO-Friendly purposes the Friendly Url Override must be unique. There is already a product with a name of [{0}]</value>
+    </property>
     <property key="UniqueProductNameError">
         <value xml:lang="en">ERROR Row ${rowNo}: Product ID [${productId}] must have an unique Product Name</value>
     </property>
@@ -8756,6 +9104,21 @@
     </property>
     <property key="ReviewAgesSequenceIdError">
         <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999</value>
+    </property>
+    <property key="ReviewCustomAttributeIdError">
+        <value xml:lang="en">The Review Custom ID field cannot be blank</value>
+    </property>
+    <property key="ReviewCustomAttributeIdLengthError">
+        <value xml:lang="en">The Review Custom ID field cannot be more than 20 characters.</value>
+    </property>
+    <property key="ReviewCustomAttributeDescriptionError">
+        <value xml:lang="en">The Review DESC field cannot be blank</value>
+    </property>
+    <property key="ReviewCustomAttributeSequenceIdError">
+        <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999</value>
+    </property>
+    <property key="ReviewCustomAttributeIdExistError">
+        <value xml:lang="en">The Review Custom ID field must be unique</value>
     </property>
     <property key="GiftMessageIdError">
         <value xml:lang="en">The Gift Message ID field cannot be blank</value>
@@ -8856,6 +9219,9 @@
     <property key="ValidIdError">
         <value xml:lang="en">Your entry ${errorKey} is not valid. BigFish ID attributes must contain alpha, number digits, hyphens or underscores. Spaces and other special characters are not allowed.</value>
     </property>
+    <property key="ValidPromoCodeError">
+        <value xml:lang="en">The Promotion Code must contain alpha, numbers or underscore. Other special characters are not allowed..</value>
+    </property>
     <property key="ValidSeoNameError">
         <value xml:lang="en">The SEO Friendly name must contain alpha, numbers or underscore. Other special characters are not allowed.</value>
     </property>
@@ -8872,7 +9238,7 @@
         <value xml:lang="en">Invalid Run Date and Time format.</value>
     </property>
     <property key="StartTimePassedError">
-        <value xml:lang="en">Run Date must be entered and for a Pending job it must be in the future</value>
+        <value xml:lang="en">Run Date / Time must be entered and for a Pending job it must be in the future</value>
     </property>
     <property key="InvalidEndDateError">
         <value xml:lang="en">Invalid End Date and Time format. [ex. 07/08/2012 02:00]</value>
@@ -8902,7 +9268,7 @@
         <value xml:lang="en">Your Facet GROUP has been saved (changes may not take affect until SOLR is re-indexed)</value>
     </property>
     <property key="BlankStartDateError">
-        <value xml:lang="en">Run Date must be entered and for a Pending job it must be in the future</value>
+        <value xml:lang="en">Run Date / Time must be entered and for a Pending job it must be in the future</value>
     </property>
     <property key="TestEmailSendFailError">
         <value xml:lang="en">An error occurred attempting to send an email. Error is [{0}]. Check the client.properties file. Specific email properties are listed in the 'General Properties' section. It is possible that these are not configured correctly. For more information check the Help function "How To Set Up BigFish Emails".</value>
@@ -8954,6 +9320,12 @@
     </property>
     <property key="NewCustomerIdExistError">
         <value xml:lang="en">Customer ID must be unique, there is already a Customer with an ID of ${errorKey}</value>
+    </property>
+    <property key="NewOrganizationIdExistError">
+        <value xml:lang="en">Org# must be unique, there is already a Customer/Organization with an ID of ${errorKey}</value>
+    </property>
+    <property key="BlankOrganizationNameError">
+        <value xml:lang="en">Organization Name cannot be blank</value>
     </property>
     <property key="BlankPasswordHintError">
         <value xml:lang="en">The Password Hint cannot be blank</value>
@@ -9160,7 +9532,7 @@
         <value xml:lang="en">ERROR Row ${rowNo}: Product Name is limited to 100 characters</value>
     </property>
     <property key="ProductNameInvalidRowError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Product Name is invalid, name fields are limited to alphanumeric and some special characters (! @  # $ % ? , - _ : ; . /)</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Product Name is invalid, name fields are limited to alphanumeric and some special characters (! @  # $ % ? , - _ : ; . / ")</value>
     </property>
     <property key="InvalidFeatureError">
         <value xml:lang="en">ERROR Row ${rowNo}: Feature Group [${featureData}] is not valid. BigFish ID attributes must contain alpha, number digits, hyphens or underscores. Spaces and other special characters are not allowed.</value>
@@ -9327,6 +9699,24 @@
     <property key="AddPaymentCCProcessingError">
         <value xml:lang="en">Please check your credit card details, we were unable to process your payment.</value>
     </property>
+    <property key="RecurrenceFreqTypeIdError">
+        <value xml:lang="en">The Recurrence Freq ID field cannot be blank</value>
+    </property>
+    <property key="RecurrenceFreqTypeIdLengthError">
+        <value xml:lang="en">The Recurrence Freq ID field cannot be more than 20 characters</value>
+    </property>
+    <property key="RecurrenceFreqTypeIdExistError">
+        <value xml:lang="en">The Recurrence Freq ID field must be unique</value>
+    </property>
+    <property key="RecurrenceFreqTypeDescriptionError">
+        <value xml:lang="en">The Recurrence Freq DESC field cannot be blank</value>
+    </property>
+    <property key="RecurrenceFreqTypeSequenceIdError">
+        <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999</value>
+    </property>
+    <property key="RecurrenceFreqTypeCodeError">
+        <value xml:lang="en">The Interval must be entered and numeric</value>
+    </property>
     
  <!-- ******* Error Messages  Ends*************************************** -->
  
@@ -9340,6 +9730,9 @@
     </property>
     <property key="AddPromotionBtn">
         <value xml:lang="en">Add Promotion</value>
+    </property>
+    <property key="AddPriceRuleBtn">
+        <value xml:lang="en">Add Price Rule</value>
     </property>
     <property key="AddTopNavBtn">
         <value xml:lang="en">Add Top Nav</value>
@@ -9773,6 +10166,15 @@
     <property key="InsertCategoryAfterNewRowTooltip">
         <value xml:lang="en">Insert a new Member row AFTER this row</value>
     </property>
+    <property key="DeletePriceRuleRowTooltip">
+        <value xml:lang="en">Delete this Price Rule Condition</value>
+    </property>
+    <property key="InsertBeforeNewPiceRuleRowTooltip">
+        <value xml:lang="en">Insert a new Price Rule Condition BEFORE this row</value>
+    </property>
+    <property key="InsertAfterNewPiceRuleRowTooltip">
+        <value xml:lang="en">Insert a new Price Rule Condition AFTER this row</value>
+    </property>
     <property key="DeletePriceRowTooltip">
         <value xml:lang="en">Delete this Pricing row</value>
     </property>
@@ -9792,7 +10194,7 @@
         <value xml:lang="en">Insert a new Facet Value AFTER this row</value>
     </property>
     <property key="HtmlMetatagTooltip">
-        <value xml:lang="en">Html Meta Tags</value>
+        <value xml:lang="en">SEO Meta Tags</value>
     </property>
     <property key="CategoryContentTooltip">
         <value xml:lang="en">Content Spot</value>
@@ -9882,6 +10284,9 @@
     <property key="deleteProductImageConfirmText">
         <value xml:lang="en">Are you sure you want to delete this image?</value>
     </property>
+    <property key="deleteProductAttachmentConfirmText">
+        <value xml:lang="en">Are you sure you want to delete this attachment?</value>
+    </property>
     <property key="deleteProductVideoConfirmText">
         <value xml:lang="en">Are you sure you want to delete this video?</value>
     </property>
@@ -9895,7 +10300,10 @@
         <value xml:lang="en">Are you sure you want to delete the Title [{0}]?</value>
     </property>
     <property key="deleteReviewAgesConfirmText">
-        <value xml:lang="en">Are you sure you want to delete the Title [{0}]?</value>
+        <value xml:lang="en">Are you sure you want to delete the Review Ages [{0}]?</value>
+    </property>
+    <property key="deleteReviewCustomAttribute01ConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the Review Custom Attribute [{0}]?</value>
     </property>
     <property key="deleteGiftMessageConfirmText">
         <value xml:lang="en">Are you sure you want to delete the Gift Message [{0}]?</value>
@@ -9917,6 +10325,9 @@
     </property>
     <property key="DeleteCategoryMemberConfirmText">
         <value xml:lang="en">Are you sure you want to remove Product {0} from</value>
+    </property>
+    <property key="DeleteOrganizationCustomerConfirmText">
+        <value xml:lang="en">Are you sure you want to remove Customer</value>
     </property>
     <property key="deleteParameterConfirmText">
         <value xml:lang="en">Deleting a System parameter may cause serious harm to your eCommerce implementation. Are you sure you want to delete the System Parameter ${parmKey}?</value>
@@ -9960,6 +10371,9 @@
     <property key="DeletePartyImageConfirmText">
         <value xml:lang="en">Are you sure you want to delete this image?</value>
     </property>
+    <property key="deleteRecurrenceFreqTypeConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the Recurrence Frequency [{0}]?</value>
+    </property>
     <!-- === confirm Ends ===== -->
     
     <!-- Cust Requesst Attribute Starts -->
@@ -9992,6 +10406,9 @@
     </property>
     <property key="IS_DOWNLOADED_Caption">
         <value xml:lang="en">Export Status:</value>
+    </property>
+    <property key="SKU_OR_PART_Caption">
+        <value xml:lang="en">SKUs or Part#:</value>
     </property>
     <property key="StarsCaption">
         <value xml:lang="en">Stars:</value>
@@ -10128,6 +10545,9 @@
     </property>
     <property key="ValueListHelpInfo">
         <value xml:lang="en">Enter a comma separated list of allowable values</value>
+    </property>
+    <property key="PriceRuleConditionHelpInfo">
+        <value xml:lang="en">If multiple conditions are entered they are tested logically as "AND" statements. Therefore, all conditions must be TRUE for the price rule to execute.</value>
     </property>
     <property key="PromotionUseLimitPerOrderHelpInfo">
         <value xml:lang="en">Limit Per Order: The total number of times a specific Promo can be applied to an Order. Remember that some promos are applied at the cart Product level. If a Promo is allowed to be applied to multiple Product line items then this should be set accordingly. Otherwise, and in most cases, this should be set to 1.</value>

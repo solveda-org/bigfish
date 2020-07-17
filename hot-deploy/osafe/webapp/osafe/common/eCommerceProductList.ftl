@@ -3,7 +3,15 @@
   <input type="hidden" name="plp_qty" id="plp_qty" value=""/>
   <input type="hidden" name="plp_add_product_id" id="plp_add_product_id" value=""/>
   <input type="hidden" name="plp_add_category_id" id="plp_add_category_id" value=""/> 
-  <input type="hidden" name="productListFormSearchText" id="productListFormSearchText" value="${productListFormSearchText!""}"/> 
+  <input type="hidden" name="productListFormSearchText" id="productListFormSearchText" value="${productListFormSearchText!""}"/>
+  
+  <#if searchTermsMap?has_content>
+      <#list searchTermsMap.entrySet() as entry>
+          <#if entry.value?has_content>
+	          <input type="hidden" name="${entry.key}" id="${entry.key}" value="${entry.value!""}"/>
+	      </#if>
+      </#list>
+  </#if> 
   <#-- flag to display success message -->
   <input type="hidden" name="showSuccess" id="showSuccess" value="Y"/> 
 </form>

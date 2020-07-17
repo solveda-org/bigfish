@@ -75,6 +75,7 @@ import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.common.login.LoginServices;
 import org.ofbiz.datafile.DataFile;
@@ -104,12 +105,16 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import com.osafe.constants.Constants;
 import com.osafe.feeds.FeedsUtil;
 import com.osafe.feeds.osafefeeds.*;
 import com.osafe.util.OsafeAdminUtil;
 import com.osafe.util.OsafeProductLoaderHelper;
+
+import org.apache.commons.lang.StringEscapeUtils;
 
 
 public class ImportServices {
@@ -1186,6 +1191,9 @@ public class ImportServices {
 	    headerCols.put("pdpQtyMax","PDP Max Quantity");
 	    headerCols.put("pdpQtyDefault","PDP Default Quantity");
 	    headerCols.put("pdpInStoreOnly","PDP In Store Only (Y/N)");
+	    headerCols.put("productAttachment1","Product Attachment #1");
+	    headerCols.put("productAttachment2","Product Attachment #2");
+	    headerCols.put("productAttachment3","Product Attachment #3");
    	    return headerCols;
     }
 
@@ -1827,6 +1835,9 @@ public class ImportServices {
    	    headerCols.add("pdpQtyMax");
    	    headerCols.add("pdpQtyDefault");
    	    headerCols.add("pdpInStoreOnly");
+   	    headerCols.add("productAttachment1");
+   	    headerCols.add("productAttachment2");
+   	    headerCols.add("productAttachment3");
    	    return headerCols;
     }
 
@@ -2514,6 +2525,14 @@ public class ImportServices {
 							     if(UtilValidate.isNotEmpty(mRow.get(productCategoryIds[j].trim()+"_sequenceNum"))) 
 							     {
 							         sequenceNum =  (String) mRow.get(productCategoryIds[j].trim()+"_sequenceNum");
+							     }
+							     if(UtilValidate.isNotEmpty(sequenceNum))
+							     {
+							    	 sequenceNum = sequenceNum.trim();
+							    	 if(!UtilValidate.isInteger(sequenceNum))
+							    	 {
+							    		 sequenceNum = "0";
+							    	 }
 							     }
 							     if(UtilValidate.isEmpty(mRow.get(productCategoryIds[j].trim()+"_fromDate"))) 
 							     {
@@ -3299,6 +3318,10 @@ public class ImportServices {
  			 addProductContentRow(rowString, mRow, bwOutFile, productId,"text","PDP_LABEL", "pdpLabel", loadImagesDirPath, imageUrl,"pdpLabelThruDate");
  			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_VIDEO_URL", "pdpVideoUrl", loadImagesDirPath, imageUrl,"pdpVideoUrlThruDate");
  			 addProductContentRow(rowString, mRow, bwOutFile, productId,"image","PDP_VIDEO_360_URL", "pdpVideo360Url", loadImagesDirPath, imageUrl,"pdpVideo360UrlThruDate");
+ 			 
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ATTACH_URL_01", "productAttachment1", loadImagesDirPath, imageUrl,"productAttachment1ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ATTACH_URL_02", "productAttachment2", loadImagesDirPath, imageUrl,"productAttachment2ThruDate");
+ 			 addProductContentRow(rowString, mRow, bwOutFile, productId, "image","ATTACH_URL_03", "productAttachment3", loadImagesDirPath, imageUrl,"productAttachment3ThruDate");
     		
     	}
     	 catch (Exception e)
@@ -4149,6 +4172,19 @@ public class ImportServices {
 		            					GenericValue productFeatureGroupAppl = EntityUtil.getFirst(productFeatureGroupApplList);
 		            					productFeatureGroupApplFromDate = _sdf.format(new Date(productFeatureGroupAppl.getTimestamp("fromDate").getTime()));
 		            				}
+		            				String sequenceNum = String.valueOf((iSeq +1) *10);
+		            				if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum")))
+		            				{
+		            					sequenceNum = (String) mRow.get(featureType.trim()+"_sequenceNum");
+		            					if(UtilValidate.isNotEmpty(sequenceNum))
+									    {
+									        sequenceNum = sequenceNum.trim();
+									    	if(!UtilValidate.isInteger(sequenceNum))
+									    	{
+									    	    sequenceNum = "0";
+									    	}
+									    }
+		            				}
 		            				
 		            				Map entityFieldMap = FastMap.newInstance();
 		                            rowString.setLength(0);
@@ -4156,14 +4192,7 @@ public class ImportServices {
 		                            rowString.append("productFeatureGroupId" + "=\"" + featureTypeId + "\" ");
 		                            rowString.append("productFeatureId" + "=\"" + featureId + "\" ");
 		    	                    rowString.append("fromDate" + "=\"" + productFeatureGroupApplFromDate + "\" ");
-		    	                    if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum"))) 
-	                	            {
-	                	            	rowString.append("sequenceNum" + "=\"" + (String) mRow.get(featureType.trim()+"_sequenceNum") + "\" ");
-	                	            } 
-	                	            else 
-	                	            {
-		                	            rowString.append("sequenceNum" + "=\"" + ((iSeq +1) *10) + "\" ");
-	                	            }
+		    	                    rowString.append("sequenceNum" + "=\"" + sequenceNum + "\" ");
 		                            rowString.append("/>");
 		                            
 		                            if(UtilValidate.isEmpty((String) mRow.get(featureType.trim()+"_sequenceNum"))) 
@@ -4298,6 +4327,21 @@ public class ImportServices {
 					      			 java.util.Date formattedFromDate=OsafeAdminUtil.validDate(featureFromDate);
 					      			 featureFromDate =_sdf.format(formattedFromDate);
 		    		            }
+		       		            
+		       		            String sequenceNum = String.valueOf((iSeq +1) *10);
+	            				if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum")))
+	            				{
+	            					sequenceNum = (String) mRow.get(featureType.trim()+"_sequenceNum");
+	            					if(UtilValidate.isNotEmpty(sequenceNum))
+								    {
+								        sequenceNum = sequenceNum.trim();
+								    	if(!UtilValidate.isInteger(sequenceNum))
+								    	{
+								    	    sequenceNum = "0";
+								    	}
+								    }
+	            				}
+		       		            
 		       		            Map entityFieldMap = FastMap.newInstance();	
 		                		rowString.setLength(0);
 		       	                rowString.append("<" + "ProductFeatureAppl" + " ");
@@ -4312,14 +4356,7 @@ public class ImportServices {
 					      			featureThruDate =_sdf.format(formattedFromDate);
 	                	        	rowString.append("thruDate" + "=\"" + featureThruDate + "\" ");
 	                	        }
-                	            if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum"))) 
-                	            {
-                	            	rowString.append("sequenceNum" + "=\"" + (String) mRow.get(featureType.trim()+"_sequenceNum") + "\" ");
-                	            } 
-                	            else 
-                	            {
-	                	            rowString.append("sequenceNum" + "=\"" + ((iSeq +1) *10) + "\" ");
-                	            }
+                	            rowString.append("sequenceNum" + "=\"" + sequenceNum + "\" ");
 		                        rowString.append("/>");
 		                        
 		                        entityFieldMap.put("productId", masterProductId);
@@ -4368,14 +4405,7 @@ public class ImportServices {
 						      		    featureThruDate =_sdf.format(formattedFromDate);
 	                	            	rowString.append("thruDate" + "=\"" + featureThruDate + "\" ");
 	                	            }
-	                	            if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum"))) 
-	                	            {
-	                	            	rowString.append("sequenceNum" + "=\"" + (String) mRow.get(featureType.trim()+"_sequenceNum") + "\" ");
-	                	            } 
-	                	            else 
-	                	            {
-		                	            rowString.append("sequenceNum" + "=\"" + ((iSeq +1) *10) + "\" ");
-	                	            }
+	                	            rowString.append("sequenceNum" + "=\"" + sequenceNum + "\" ");
 		                            rowString.append("/>");
 		                            
 		                            entityFieldMap.put("productId", variantProductId);
@@ -4506,6 +4536,21 @@ public class ImportServices {
 	                			    {
 		    		                	featureFromDate = (String) mRow.get(featureType.trim()+"_fromDate");
 		    		                }
+	                			    
+	                			    String sequenceNum = String.valueOf((iSeq +1) *10);
+		            				if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum")))
+		            				{
+		            					sequenceNum = (String) mRow.get(featureType.trim()+"_sequenceNum");
+		            					if(UtilValidate.isNotEmpty(sequenceNum))
+									    {
+									        sequenceNum = sequenceNum.trim();
+									    	if(!UtilValidate.isInteger(sequenceNum))
+									    	{
+									    	    sequenceNum = "0";
+									    	}
+									    }
+		            				}
+	                			    
 	                			    Map entityFieldMap = FastMap.newInstance();
 	                			    rowString.setLength(0);
 	                	            rowString.append("<" + "ProductFeatureAppl" + " ");
@@ -4520,14 +4565,7 @@ public class ImportServices {
 						      		    featureThruDate =_sdf.format(formattedFromDate);
 	                	            	rowString.append("thruDate" + "=\"" + featureThruDate + "\" ");
 	                	            }
-	                	            if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum"))) 
-	                	            {
-	                	            	rowString.append("sequenceNum" + "=\"" + (String) mRow.get(featureType.trim()+"_sequenceNum") + "\" ");
-	                	            } 
-	                	            else 
-	                	            {
-		                	            rowString.append("sequenceNum" + "=\"" + ((iSeq +1) *10) + "\" ");
-	                	            }
+	                	            rowString.append("sequenceNum" + "=\"" + sequenceNum + "\" ");
 	                	            rowString.append("/>");
 	                	            
 	                	            if(UtilValidate.isEmpty((String) mRow.get(featureType.trim()+"_sequenceNum")))
@@ -4573,14 +4611,7 @@ public class ImportServices {
 						      		    featureThruDate =_sdf.format(formattedFromDate);
 	                	            	rowString.append("thruDate" + "=\"" + featureThruDate + "\" ");
 	                	            }
-	                	            if(UtilValidate.isNotEmpty((String) mRow.get(featureType.trim()+"_sequenceNum"))) 
-	                	            {
-	                	            	rowString.append("sequenceNum" + "=\"" + (String) mRow.get(featureType.trim()+"_sequenceNum") + "\" ");
-	                	            } 
-	                	            else 
-	                	            {
-		                	            rowString.append("sequenceNum" + "=\"" + ((iSeq +1) *10) + "\" ");
-	                	            }
+	                	            rowString.append("sequenceNum" + "=\"" + sequenceNum + "\" ");
 	                	            rowString.append("/>");
 	                	            if(UtilValidate.isEmpty((String) mRow.get(featureType.trim()+"_sequenceNum")))
 	                	            {
@@ -4754,6 +4785,15 @@ public class ImportServices {
                 	Map mRow = (Map)dataRows.get(i);
                 	String productCategoryId=(String)mRow.get("productCategoryId");
                 	String sequenceNum=(String)mRow.get("sequenceNum");
+    				if(UtilValidate.isNotEmpty(sequenceNum))
+				    {
+				        sequenceNum = sequenceNum.trim();
+				    	if(!UtilValidate.isInteger(sequenceNum))
+				    	{
+				    	    sequenceNum = "0";
+				    	}
+				    }
+    				
                 	String fromDate=(String)mRow.get("fromDate");
                 	String thruDate=(String)mRow.get("thruDate");
                 	String minDisplay=(String)mRow.get("minDisplay");
@@ -4899,6 +4939,15 @@ public class ImportServices {
 	            		 description = description.trim();
 	            	 }
 	            	 String sequenceNum=(String)mRow.get("sequenceNum");
+     				
+ 					if(UtilValidate.isNotEmpty(sequenceNum))
+				    {
+				        sequenceNum = sequenceNum.trim();
+				    	if(!UtilValidate.isInteger(sequenceNum))
+				    	{
+				    	    sequenceNum = "0";
+				    	}
+				    }
 	            	 
 	            	 if (!mFeatureValueExists.containsKey(productFeatureGroupId + "~" + description))
         			 {
@@ -5025,9 +5074,9 @@ public class ImportServices {
 	                if(UtilValidate.isEmpty(mRow.get("fromDate"))) 
 	             	{
 	                    List<GenericValue> productAssocs = _delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId",mRow.get("productId"),"productIdTo",mRow.get("productIdTo"),"productAssocTypeId",productAssocTypeId),UtilMisc.toList("-fromDate"));
+                    	productAssocs = EntityUtil.filterByDate(productAssocs);
 	                    if(UtilValidate.isNotEmpty(productAssocs)) 
 	                    {
-	                    	productAssocs = EntityUtil.filterByDate(productAssocs);
 	                    	if(UtilValidate.isNotEmpty(productAssocs)) 
 	                        {
 	                            GenericValue productAssoc = EntityUtil.getFirst(productAssocs);
@@ -5037,9 +5086,21 @@ public class ImportServices {
 	                } 
 	             	else 
 	                {
-	             	    String fromDate=(String)mRow.get("fromDate");
-	                    java.util.Date formattedFromDate=OsafeAdminUtil.validDate(fromDate);
-	                    productAssocFromDate =_sdf.format(formattedFromDate);
+
+	                    List<GenericValue> productAssocs = _delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId",mRow.get("productId"),"productIdTo",mRow.get("productIdTo"),"productAssocTypeId",productAssocTypeId),UtilMisc.toList("-fromDate"));
+                    	productAssocs = EntityUtil.filterByDate(productAssocs);
+	                    if(UtilValidate.isNotEmpty(productAssocs)) 
+	                    {
+	                            GenericValue productAssoc = EntityUtil.getFirst(productAssocs);
+	                        	productAssocFromDate = _sdf.format(new Date(productAssoc.getTimestamp("fromDate").getTime()));
+	                    }
+	                    else
+	                    {
+		             	    String fromDate=(String)mRow.get("fromDate");
+		                    java.util.Date formattedFromDate=OsafeAdminUtil.validDate(fromDate);
+		                    productAssocFromDate =_sdf.format(formattedFromDate);
+	                    }
+	                    
 	                }
 	                rowString.append("fromDate" + "=\"" + productAssocFromDate + "\" ");
 	                    
@@ -5082,7 +5143,7 @@ public class ImportServices {
         }
     }
     
-    static Map featureTypeIdMap = FastMap.newInstance();
+    static Map<String, String> featureTypeIdMap = FastMap.newInstance();
     private static Map buildFeatureMap(Map featureTypeMap,String parseFeatureType) 
     {
     	if (UtilValidate.isNotEmpty(parseFeatureType))
@@ -5097,32 +5158,62 @@ public class ImportServices {
                 for (int f=0;f < featureTokens.length;f++)
                 {
                 	String featureId = ""; 
+                	String description = featureTokens[f].trim();
                 	try 
                 	{
                 		String featureTypeKey = StringUtil.removeSpaces(featureType).toUpperCase()+"~"+featureTokens[f].trim();
-                		if(featureTypeIdMap.containsKey(featureTypeKey))
+                		
+                		//first check if feature Id was already added to the existing map
+						for (Map.Entry<String, String> entry : featureTypeIdMap.entrySet())
+						{
+						    if (StringEscapeUtils.unescapeHtml(entry.getKey().toUpperCase()).equals(StringEscapeUtils.unescapeHtml(featureTypeKey.toUpperCase())))
+    						{
+						    	featureId = (String) entry.getValue();
+						    	featureTypeKey = entry.getKey();
+						    	String [] featureTypeKeyArr = featureTypeKey.split("~");
+						    	if(UtilValidate.isNotEmpty(featureTypeKeyArr[1]))
+						    	{
+						    		description = featureTypeKeyArr[1];
+						    	}
+    						}
+						}
+						
+						//if it was not added, then check the DB.  If it does not exist in the DB, then create a new one.
+            			if(UtilValidate.isEmpty(featureId))
                 		{
-                			featureId = (String) featureTypeIdMap.get(featureTypeKey); 
-                		}
-                		else
-                		{
-                			List productFeatureList = _delegator.findByAnd("ProductFeature", UtilMisc.toMap("productFeatureTypeId", StringUtil.removeSpaces(featureType).toUpperCase(), "productFeatureCategoryId", StringUtil.removeSpaces(featureType).toUpperCase(), "description", featureTokens[f].trim()));
+                			List<GenericValue> productFeatureList = _delegator.findByAnd("ProductFeature", UtilMisc.toMap("productFeatureTypeId", StringUtil.removeSpaces(featureType).toUpperCase(), "productFeatureCategoryId", StringUtil.removeSpaces(featureType).toUpperCase()));
                 			if(UtilValidate.isNotEmpty(productFeatureList))
                 			{
-                				GenericValue productFeature = EntityUtil.getFirst(productFeatureList);
-        						featureId = productFeature.getString("productFeatureId");
+                				for (GenericValue productFeatureValue : productFeatureList)
+                				{
+                					if(UtilValidate.isNotEmpty(productFeatureValue.getString("description")))
+                        			{
+                						if (StringEscapeUtils.unescapeHtml(productFeatureValue.getString("description").toUpperCase()).equals(StringEscapeUtils.unescapeHtml(featureTokens[f].trim().toUpperCase())))
+                						{
+                							//keep the feature Id and description that is already saved in the DB.
+                							featureId = productFeatureValue.getString("productFeatureId");
+                							featureTypeKey = StringUtil.removeSpaces(featureType).toUpperCase()+"~"+productFeatureValue.getString("description");
+                							description = productFeatureValue.getString("description");
+                							break;
+                						}
+                        			}
+                				}
                 			}
-                			else
-                			{
+                			
+                			if(UtilValidate.isEmpty(featureId))
+                    		{
+                				//if the we do not have this feature in the map or in the DB, then create a new one
                 				featureId = _delegator.getNextSeqId("ProductFeature");
                 			}
                 		}
                 		featureTypeIdMap.put(featureTypeKey, featureId);
-					} catch (GenericEntityException e) {
+					} 
+                	catch (GenericEntityException e) 
+                	{
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-                	mFeatureMap.put(""+featureId,""+featureTokens[f].trim());
+                	mFeatureMap.put(""+featureId,""+description);
                 }
         		featureTypeMap.put(featureType, mFeatureMap);
         	}
@@ -7185,8 +7276,205 @@ public class ImportServices {
         return result;
 
     }
-    
-    
+
+    public static Map<String, Object> exportGoogleProductXml(DispatchContext ctx, Map<String, ?> context) 
+    {
+        LocalDispatcher dispatcher = ctx.getDispatcher();
+        Delegator delegator = ctx.getDelegator();
+        _delegator =  ctx.getDelegator();
+        _locale = (Locale) context.get("locale");
+        String productStoreId = (String)context.get("productStoreId");
+        String browseRootProductCategoryId = (String) context.get("browseRootProductCategoryId");
+
+        //Define the variables
+        List<String> messages = FastList.newInstance();
+        Map result = ServiceUtil.returnSuccess();
+        List<String> exportMessageList = FastList.newInstance();
+        List<String> exportedIdList = FastList.newInstance();
+
+        // Get the common variables values
+        Map<Object, Object> imageLocationMap = new HashMap<Object, Object>();
+        for(Map<Object, Object> imageLocationPref : imageLocationPrefList) 
+        {
+            imageLocationMap.put(imageLocationPref.get("key"), imageLocationPref.get("value"));
+        }
+        String defaultImageDirectory = (String)imageLocationMap.get("DEFAULT_IMAGE_DIRECTORY");
+
+        //Create the temp file to write XML
+        String downloadTempDir = FeedsUtil.getFeedDirectory("googleProductFeed");
+        String googleProductFeedFileName = "GoogleProductFeed";
+        googleProductFeedFileName = googleProductFeedFileName + "_" + (OsafeAdminUtil.convertDateTimeFormat(UtilDateTime.nowTimestamp(), "yyyy-MM-dd-HHmm"));
+        googleProductFeedFileName = UtilValidate.stripWhitespace(googleProductFeedFileName) + ".xml";
+        if (!new File(downloadTempDir).exists()) 
+        {
+            new File(downloadTempDir).mkdirs();
+        }
+        File file = new File(downloadTempDir + googleProductFeedFileName);
+
+        //Create The Root element object
+        Document googleXmlDocument = UtilXml.makeEmptyXmlDocument(getGoogleFeedParam("GOOGLE_FEED_RSS_TAG"));
+        Element googleRssElem = googleXmlDocument.getDocumentElement();
+        googleRssElem.setAttributeNS("http://www.w3.org/2000/xmlns/", getGoogleFeedParam("GOOGLE_FEED_NAME_SPACE_URL_ATTR_TAG"), getGoogleFeedParam("GOOGLE_FEED_NAME_SPACE_URL"));
+        googleRssElem.setAttribute(getGoogleFeedParam("GOOGLE_FEED_VERSION_ATTR_TAG"), getGoogleFeedParam("GOOGLE_FEED_VERSION"));
+
+        Element channelElem = UtilXml.addChildElement(googleRssElem, "channel", googleXmlDocument);
+        UtilXml.addChildElementValue(channelElem, getGoogleFeedParam("GOOGLE_FEED_TITLE_TAG"), getGoogleFeedParam("STORE_TITLE"), googleXmlDocument);
+        UtilXml.addChildElementValue(channelElem, getGoogleFeedParam("GOOGLE_FEED_LINK_TAG"), getGoogleFeedParam("WEBSITE_URL"), googleXmlDocument);
+        UtilXml.addChildElementValue(channelElem, getGoogleFeedParam("GOOGLE_FEED_DESC_TAG"), getGoogleFeedParam("STORE_DESCRIPTION"), googleXmlDocument);
+
+        // Build the product data rows by passing the false in method then return map would not have the variant
+        int row = 0;
+        List<Map<String, Object>> dataRows = buildProductDataRows(context, false);
+        for (Map<String, Object> dataRow : dataRows) 
+        {
+            // check that product is sellable
+            if (UtilValidate.isNotEmpty(dataRow.get(Constants.PRODUCT_IS_SELLABLE_DATA_KEY)) && Boolean.valueOf(getString(dataRow.get(Constants.PRODUCT_IS_SELLABLE_DATA_KEY))))
+            {
+                row = row+1;
+                String productId = getString(dataRow.get(Constants.PRODUCT_ID_DATA_KEY));
+                if(UtilValidate.isEmpty(productId)) 
+                {
+                    productId = getString(dataRow.get(Constants.PRODUCT_MASTER_ID_DATA_KEY));
+                } 
+                exportMessageList.add("IN PROGRESS: [Processing row #"+(row)+" Product ID: "+productId+"]");
+
+                String largeImage = getString(dataRow.get(Constants.PRODUCT_LARGE_IMG_DATA_KEY));
+                if (UtilValidate.isNotEmpty(largeImage))
+                {
+                    if (!UtilValidate.isUrl(largeImage)) 
+                    {
+                        if(UtilValidate.isNotEmpty(defaultImageDirectory)) 
+                        {
+                            largeImage = defaultImageDirectory + largeImage;
+                        } 
+                    }
+                }
+
+                String googleProductCategory = "";
+                String productCategoryId = "";
+                String googleProductType = "";
+                if (UtilValidate.isNotEmpty(dataRow.get(Constants.PRODUCT_CAT_COUNT_DATA_KEY)))
+                {
+                    int cnt = (Integer) dataRow.get(Constants.PRODUCT_CAT_COUNT_DATA_KEY);
+                    for (int i = 1; i <= cnt; i++)
+                    {
+                        String tempProductCategoryId = getString(dataRow.get(FlexibleStringExpander.expandString(Constants.PRODUCT_CAT_ID_DATA_KEY, UtilMisc.toMap("count", i))));
+                        String singleGoogleProductTypeRow = "";
+
+                        if (UtilValidate.isEmpty(productCategoryId))
+                        {
+                            productCategoryId = tempProductCategoryId;
+                        }
+                        try
+                        {
+                            // we will loop until we reach to root category
+                            boolean done = false;
+                            while (!done)
+                            {
+                                String parentProductCategoryId = "";
+                                String categoryName = "";
+                                List<GenericValue> topLevelCategoryList =  _delegator.findByAnd("ProductCategoryRollupAndChild", UtilMisc.toMap("productCategoryId", tempProductCategoryId),UtilMisc.toList("sequenceNum"));
+                                topLevelCategoryList = EntityUtil.filterByDate(topLevelCategoryList);
+                                if (UtilValidate.isNotEmpty(topLevelCategoryList))
+                                {
+                                    GenericValue topLevelCategory = EntityUtil.getFirst(topLevelCategoryList);
+                                    parentProductCategoryId = topLevelCategory.getString("parentProductCategoryId");
+                                    categoryName = topLevelCategory.getString("categoryName");
+                                }
+                                else
+                                {
+                                    parentProductCategoryId = browseRootProductCategoryId;
+                                }
+
+                                if (UtilValidate.isEmpty(singleGoogleProductTypeRow))
+                                {
+                                    singleGoogleProductTypeRow = categoryName;
+                                }
+                                else
+                                {
+                                    singleGoogleProductTypeRow = categoryName.concat(" > ").concat(singleGoogleProductTypeRow);
+                                }
+                                tempProductCategoryId = parentProductCategoryId;
+
+                                if (parentProductCategoryId.equals(browseRootProductCategoryId))
+                                {
+                                    done = true;
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+                        if (UtilValidate.isEmpty(googleProductCategory))
+                        {
+                            googleProductCategory = singleGoogleProductTypeRow;
+                        }
+
+                        if (UtilValidate.isEmpty(googleProductType))
+                        {
+                            googleProductType = singleGoogleProductTypeRow;
+                        }
+                        else
+                        {
+                            googleProductType = googleProductType.concat(", ").concat(singleGoogleProductTypeRow);
+                        }
+                    }
+                }
+
+                Element itemElem = UtilXml.addChildElement(channelElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_TAG"), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_TITLE_TAG"), getString(dataRow.get(Constants.PRODUCT_NAME_DATA_KEY)), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_LINK_TAG"), getGoogleFeedParam("WEBSITE_URL").concat("/").concat(OsafeAdminUtil.findProductDetailSeoUrl(productId, productCategoryId)), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_DESC_TAG"), getString(dataRow.get(Constants.PRODUCT_LONG_DESC_DATA_KEY)), googleXmlDocument);
+
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_ID_TAG"), productId, googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_PRICE_TAG"), getString(dataRow.get(Constants.PRODUCT_DEFAULT_PRICE_DATA_KEY)), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_IMG_LINK_TAG"), getGoogleFeedParam("WEBSITE_URL").concat(largeImage), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_CAT_TAG"), googleProductCategory, googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_TYPE_TAG"), googleProductType, googleXmlDocument);
+
+                Element shippingElem = UtilXml.addChildElement(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_SHIP_TAG"), googleXmlDocument);
+                UtilXml.addChildElementValue(shippingElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_SHIP_PRICE_TAG"), getGoogleFeedParam("DEFAULT_SHIPPING_COST"), googleXmlDocument);
+
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_TIN_TAG"), getString(dataRow.get(Constants.PRODUCT_ISBN_DATA_KEY)), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_MPN_TAG"), getString(dataRow.get(Constants.PRODUCT_MANUFACTURER_ID_NO_DATA_KEY)), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_REVIEW_CNT_TAG"), getString(dataRow.get(Constants.PRODUCT_REVIEW_SIZE_DATA_KEY)), googleXmlDocument);
+                UtilXml.addChildElementValue(itemElem, getGoogleFeedParam("GOOGLE_FEED_ITEM_REVIEW_AVG_TAG"), getString(dataRow.get(Constants.PRODUCT_AVERAGE_RATING_DATA_KEY)), googleXmlDocument);
+
+                exportMessageList.add("ROW COMPLETE: [Processed row #"+(row)+" Product ID: "+productId+"]");
+                exportedIdList.add(productId);
+            }
+        }
+
+        // Write the XML object in file
+        try
+        {
+            UtilXml.writeXmlDocument(file.getPath(), googleXmlDocument);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        result.put("feedsDirectoryPath", downloadTempDir);
+        result.put("feedsFileName", googleProductFeedFileName);
+        result.put("feedsExportedIdList", exportedIdList);
+        result.put("exportMessageList", exportMessageList);
+        return result;
+    }
+
+    private static String getGoogleFeedParam(String paramKey) 
+    {
+        ResourceBundle parameters = UtilProperties.getResourceBundle("parameters_googleFeed.xml", Locale.getDefault());
+        String paramValue = "";
+        try 
+        {
+            paramValue = parameters.getString(paramKey);
+        } 
+        catch (Exception exc) {}
+        return paramValue;
+    }
+
     public static Map<String, Object> importProductXML(DispatchContext ctx, Map<String, ?> context) {
         LocalDispatcher dispatcher = ctx.getDispatcher();
         _delegator = ctx.getDelegator();
@@ -7926,6 +8214,27 @@ public class ImportServices {
                 else
                 {
                 	mRows.put("totDescriptiveFeatures",new Integer(0).toString());
+                }
+                
+                ProductAttachmentsType productAttachments = product.getProductAttachments();
+                if(UtilValidate.isNotEmpty(productAttachments))
+                {
+                	List productAttchs = productAttachments.getProductAttach();
+                    if(UtilValidate.isNotEmpty(productAttchs)) 
+                    { 
+                    	int totProductAttachs = 0;
+                    	
+                    	for(int i = 0; i < productAttchs.size(); i++) 
+                    	{
+                    		ProductAttachType productAttach = (ProductAttachType)productAttchs.get(i);
+                    		if(UtilValidate.isNotEmpty(productAttach)) 
+                    		{
+                    			mRows.put("productAttachment"+(i+1),productAttach.getUrl());
+                    			mRows.put("productAttachment"+(i+1)+"ThruDate",productAttach.getThruDate());
+                    			totProductAttachs = totProductAttachs + 1;
+                    		}
+                    	}
+                    }
                 }
                 
                 ProductImageType productImage = product.getProductImage();
@@ -8767,11 +9076,11 @@ public class ImportServices {
 	                     }
 	                     if(mRow.get("state") != null) 
 	                     {
-	                    	 rowString.append("stateProvinceGeoId" + "=\"" +  mRow.get("state") + "\" ");
+	                    	 rowString.append("stateProvinceGeoId" + "=\"" +  getGeoId((String)mRow.get("state")) + "\" ");
 	                     }
 	                     if(mRow.get("country") != null) 
 	                     {
-	                    	 rowString.append("countryGeoId" + "=\"" +  mRow.get("country") + "\" ");
+	                    	 rowString.append("countryGeoId" + "=\"" +  getGeoId((String)mRow.get("country")) + "\" ");
 	                     }
 	                     if(mRow.get("zip") != null) 
 	                     {
@@ -8813,7 +9122,28 @@ public class ImportServices {
 	                     rowString.setLength(0);
 	                     rowString.append("<" + "TelecomNumber" + " ");
 	                     rowString.append("contactMechId" + "=\"" + contactMechId + "\" ");
-	                     rowString.append("contactNumber" + "=\"" +  (String)mRow.get("phone") + "\" ");
+	                     String storePhone= (String)mRow.get("phone");
+	                     String storePhoneArea= "";
+	                     String storePhoneNumber= "";
+	                     if (UtilValidate.isNotEmpty(storePhone))
+	                     {
+	                    	 if (storePhone.length() == 10)
+	                    	 {
+	                    		 storePhoneArea = storePhone.substring(0,3);
+	                    		 storePhoneNumber = storePhone.substring(3);
+	                    	 }
+	                    	 else
+	                    	 {
+	                    		 storePhoneNumber = storePhone; 
+	                    	 }
+	                     }
+	                     else
+	                     {
+                    		 storePhoneNumber = storePhone; 
+	                    	 
+	                     }
+	                     rowString.append("areaCode" + "=\"" +  storePhoneArea + "\" ");
+	                     rowString.append("contactNumber" + "=\"" +  storePhoneNumber + "\" ");
 	                     rowString.append("/>");
 	                     bwOutFile.write(rowString.toString());
 	                     bwOutFile.newLine();
@@ -8822,7 +9152,7 @@ public class ImportServices {
 	                     addPartyStoreContentRow(rowString, mRow, bwOutFile, partyId, "text", "STORE_NOTICE", "storeNotice");
 	                     addPartyStoreContentRow(rowString, mRow, bwOutFile, partyId, "text", "STORE_CONTENT_SPOT", "storeContentSpot");
 	 	            	
-	                     if(mRow.get("geoCodeLat") != "" || mRow.get("geoCodeLong") != "") 
+	                     if(UtilValidate.isNotEmpty(mRow.get("geoCodeLat")) || UtilValidate.isNotEmpty(mRow.get("geoCodeLong"))) 
 	                     {
 	                         String geoPointId = _delegator.getNextSeqId("GeoPoint");
 	                         rowString.setLength(0);
@@ -10324,6 +10654,14 @@ public class ImportServices {
             descriptiveFeatureList.add(delFeature);
             productType.setProductDescriptiveFeature(descriptiveFeature);
             
+            ProductAttachmentsType productAttachments = factory.createProductAttachmentsType();
+            List<ProductAttachType> productAttachList = productAttachments.getProductAttach();
+            ProductAttachType productAttach = factory.createProductAttachType();
+            productAttach.setUrl("");
+            productAttach.setThruDate("");
+            productAttachList.add(productAttach);
+            productType.setProductAttachments(productAttachments);
+            
             ProductImageType productImage = factory.createProductImageType();
             
             PlpSwatchType plpSwatch = factory.createPlpSwatchType();
@@ -11704,8 +12042,8 @@ public class ImportServices {
                     {
                         if(UtilValidate.isEmpty(longDescription))
                         {    
-                        	productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL"), locale));
-                        	serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL"), locale));
+                        	productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL","productId",masterProductId), locale));
+                        	serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL","productId",masterProductId), locale));
                         	
                         }
                     }
@@ -11717,8 +12055,8 @@ public class ImportServices {
                     {
                         if(UtilValidate.isEmpty(longDescription))
                         {    
-                        	productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD"), locale));
-                        	serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD"), locale));
+                        	productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD","productId",masterProductId), locale));
+                        	serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD","productId",masterProductId), locale));
                         	
                         }
                     }
@@ -11938,8 +12276,8 @@ public class ImportServices {
                     {
                         if(UtilValidate.isEmpty(defaultPrice))
                         {    
-                             productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL"), locale));
-                             serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL"), locale));
+                             productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL","productId", masterProductId), locale));
+                             serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "VIRTUAL","productId", masterProductId), locale));
                              
                         }
                     }
@@ -11951,8 +12289,8 @@ public class ImportServices {
                     {
                         if(UtilValidate.isEmpty(defaultPrice))
                         {    
-                             productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD"), locale));
-                             serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD"), locale));
+                             productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD","productId", masterProductId), locale));
+                             serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "EmptySalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "productType", "FINISHED-GOOD","productId", masterProductId), locale));
                              
                         }
                     }
@@ -11964,8 +12302,8 @@ public class ImportServices {
                     boolean checkFloatResult = OsafeAdminUtil.isFloat(listPrice);
                     if(!checkFloatResult)
                     {
-                        productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidListPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "listPrice", listPrice), locale));
-                        serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "ValidListPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "listPrice", listPrice), locale));
+                        productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidListPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "listPrice", listPrice,"productId", masterProductId), locale));
+                        serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "ValidListPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "listPrice", listPrice,"productId", masterProductId), locale));
                         
                     }
                 }
@@ -11976,8 +12314,8 @@ public class ImportServices {
                     boolean checkFloatResult = OsafeAdminUtil.isFloat(defaultPrice);
                     if(!checkFloatResult)
                     {
-                        productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidSalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "salesPrice", defaultPrice), locale));
-                        serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "ValidSalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "salesPrice", defaultPrice), locale));
+                        productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidSalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "salesPrice", defaultPrice,"productId", masterProductId), locale));
+                        serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "ValidSalesPriceError", UtilMisc.toMap("rowNo", rowNo.toString(), "salesPrice", defaultPrice,"productId", masterProductId), locale));
                         
                     }
                 }
@@ -12100,7 +12438,7 @@ public class ImportServices {
             			serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "ProductNameLengthExceedRowError", UtilMisc.toMap("rowNo", rowNo.toString()), locale));
             			
             		}
-            		if(!OsafeAdminUtil.isValidName(productName))
+            		if(!OsafeAdminUtil.isValidName(productName, "-_!@#$%:?,;.&/\""))
                     {
             			productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ProductNameInvalidRowError", UtilMisc.toMap("rowNo", rowNo.toString()), locale));
             			serviceLogProductMessageList.add(errorLogText + UtilProperties.getMessage("OSafeAdminUiLabels", "ProductNameInvalidRowError", UtilMisc.toMap("rowNo", rowNo.toString()), locale));
@@ -15024,6 +15362,36 @@ public class ImportServices {
 		return geoName;
     }
     
+    private static String getGeoId(String geoValue)
+    {
+    	if (UtilValidate.isEmpty(geoValue))
+    	{
+    		return null;
+    	}
+    	String geoId="";
+    	try
+    	{
+    		GenericValue geo = _delegator.findByPrimaryKey("Geo", UtilMisc.toMap("geoId", geoValue));
+    		if(UtilValidate.isNotEmpty(geo))
+    	    {
+    			geoId = geo.getString("geoId");
+    	    }
+    		else
+    		{
+				List lGeo = _delegator.findByAnd("Geo", UtilMisc.toMap("geoName", geoValue));
+	    		if(UtilValidate.isNotEmpty(lGeo))
+	    	    {
+	    			geoId = EntityUtil.getFirst(lGeo).getString("geoId");
+	    	    }
+    			
+    		}
+    	}
+    	catch (Exception e)
+    	{
+			e.printStackTrace();
+	    }
+		return geoId;
+    }
     public static Map<String, Object> changeShipGroupOrderItemStatus(DispatchContext ctx, Map<String, ?> context) 
     {
     	LocalDispatcher dispatcher = ctx.getDispatcher();
@@ -16121,6 +16489,15 @@ public class ImportServices {
                     dataRow.put(FlexibleStringExpander.expandString(Constants.PRODUCT_XTRA_DETAIL_IMG_THRU_DATA_KEY, UtilMisc.toMap("count", cnt)), "");
         	    }
             }
+            for (cnt = 1; cnt <= 3; cnt++)
+            {
+            	if(UtilValidate.isNotEmpty(mRow.get("productAttachment"+cnt)))
+            	{
+            		dataRow.put(FlexibleStringExpander.expandString(Constants.PRODUCT_ATTACH_URL_DATA_KEY, UtilMisc.toMap("count", cnt)), mRow.get("productAttachment"+cnt));
+                    dataRow.put(FlexibleStringExpander.expandString(Constants.PRODUCT_ATTACH_URL_THRU_DATA_KEY, UtilMisc.toMap("count", cnt)), "");
+            	}
+            }
+            
         }
         catch (Exception e) 
         {
@@ -16135,6 +16512,17 @@ public class ImportServices {
      * @return a List of Map.
      */
     public static List<Map<String, Object>> buildProductDataRows(Map<String, ?> context) 
+    {
+        return buildProductDataRows(context, true);
+    }
+
+    /**
+     * process the DB and build the product data rows
+     * @param context service context 
+     * @param includeVariant whether return list will contain the variant data rows or not
+     * @return a List of Map.
+     */
+    public static List<Map<String, Object>> buildProductDataRows(Map<String, ?> context, boolean includeVariant) 
     {
         String productStoreId = (String) context.get("productStoreId");
         String browseRootProductCategoryId = (String) context.get("browseRootProductCategoryId");
@@ -16199,18 +16587,21 @@ public class ImportServices {
                             {
                                 dataRows.add(dataRow);
                             }
-                            List<GenericValue> productAssocitations = _delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", product.getString("productId"), "productAssocTypeId", "PRODUCT_VARIANT"),UtilMisc.toList("sequenceNum"));
-                            if (UtilValidate.isNotEmpty(productAssocitations))
+                            if (includeVariant)
                             {
-                                for (GenericValue productAssoc : productAssocitations) 
-                                {
-                                    GenericValue variantProduct = productAssoc.getRelatedOne("AssocProduct");
-                                    dataRow = buildProductDataRow(product.getString("productId"), variantProduct, productFeatureTypesMap);
-                                    if (UtilValidate.isNotEmpty(dataRow))
-                                    {
-                                        dataRows.add(dataRow);
-                                    }
-                                }
+	                            List<GenericValue> productAssocitations = _delegator.findByAnd("ProductAssoc", UtilMisc.toMap("productId", product.getString("productId"), "productAssocTypeId", "PRODUCT_VARIANT"),UtilMisc.toList("sequenceNum"));
+	                            if (UtilValidate.isNotEmpty(productAssocitations))
+	                            {
+	                                for (GenericValue productAssoc : productAssocitations) 
+	                                {
+	                                    GenericValue variantProduct = productAssoc.getRelatedOne("AssocProduct");
+	                                    dataRow = buildProductDataRow(product.getString("productId"), variantProduct, productFeatureTypesMap);
+	                                    if (UtilValidate.isNotEmpty(dataRow))
+	                                    {
+	                                        dataRows.add(dataRow);
+	                                    }
+	                                }
+	                            }
                             }
                         }
                     }
@@ -16231,6 +16622,7 @@ public class ImportServices {
         try
         {
             dataRow.put(Constants.PRODUCT_MASTER_ID_DATA_KEY, masterProductId);
+            dataRow.put(Constants.PRODUCT_IS_SELLABLE_DATA_KEY, ProductWorker.isSellable(productGV));
             if(productGV.getString("isVirtual").equals("Y") || productGV.getString("isVariant").equals("Y")) 
             {
                 dataRow.put(Constants.PRODUCT_ID_DATA_KEY, productGV.getString("productId"));
@@ -16363,6 +16755,20 @@ public class ImportServices {
             dataRow.put(Constants.PRODUCT_GOOGLE_ID_DATA_KEY, mGoodIdentifications.get("GOOGLE_ID"));
             dataRow.put(Constants.PRODUCT_ISBN_DATA_KEY, mGoodIdentifications.get("ISBN"));
             dataRow.put(Constants.PRODUCT_MANUFACTURER_ID_NO_DATA_KEY, mGoodIdentifications.get("MANUFACTURER_ID_NO"));
+
+            List<GenericValue> productCalculatedInfos = productGV.getRelated("ProductCalculatedInfo");
+            if (UtilValidate.isNotEmpty(productCalculatedInfos))
+            {
+                GenericValue productCalculatedInfo = EntityUtil.getFirst(productCalculatedInfos);
+                dataRow.put(Constants.PRODUCT_AVERAGE_RATING_DATA_KEY, productCalculatedInfo.getBigDecimal("averageCustomerRating"));
+            }
+
+            List<GenericValue> reviews = productGV.getRelated("ProductReview");
+            if (UtilValidate.isNotEmpty(reviews))
+            {
+                reviews = EntityUtil.filterByAnd(reviews, UtilMisc.toMap("statusId", "PRR_APPROVED"));
+                dataRow.put(Constants.PRODUCT_REVIEW_SIZE_DATA_KEY, reviews.size());
+            }
 
             List<GenericValue> productAttributes = productGV.getRelated("ProductAttribute");
             Map productAttrMap = FastMap.newInstance();
@@ -16539,6 +16945,25 @@ public class ImportServices {
                 }
                 dataRow.put(FlexibleStringExpander.expandString(Constants.PRODUCT_XTRA_DETAIL_IMG_DATA_KEY, UtilMisc.toMap("count", cnt)), imageURL);
                 dataRow.put(FlexibleStringExpander.expandString(Constants.PRODUCT_XTRA_DETAIL_IMG_THRU_DATA_KEY, UtilMisc.toMap("count", cnt)), getProductContentThruDateTs(productGV.getString("productId"), "XTRA_IMG_" + cnt +"_DETAIL", productContent));
+                
+                
+            }
+            
+            for (cnt = 1; cnt <= 3; cnt++)
+            {
+                imageURL = getProductContent(productGV.getString("productId"), "ATTACH_URL_0" + cnt, productContent);
+                if (UtilValidate.isNotEmpty(imageURL))
+                {
+                    if (!UtilValidate.isUrl(imageURL))
+                    {
+                        String imagePath = getOsafeImagePath("ATTACH_URL_0" + cnt);
+                        List<String> pathElements = StringUtil.split(imageURL, "/");
+                        imageURL = imagePath + pathElements.get(pathElements.size() - 1);
+                    }
+                }
+                dataRow.put(FlexibleStringExpander.expandString(Constants.PRODUCT_ATTACH_URL_DATA_KEY, UtilMisc.toMap("count", cnt)), imageURL);
+                dataRow.put(FlexibleStringExpander.expandString(Constants.PRODUCT_ATTACH_URL_THRU_DATA_KEY, UtilMisc.toMap("count", cnt)), getProductContentThruDateTs(productGV.getString("productId"), "ATTACH_URL_0" + cnt, productContent));
+                
             }
         }
         catch (Exception e) 
@@ -17206,6 +17631,10 @@ public class ImportServices {
             createWorkBookRow(excelSheet, dataRow.get(Constants.PRODUCT_QTY_MAX_DATA_KEY), iColIdx++, iRowIdx);
             createWorkBookRow(excelSheet, dataRow.get(Constants.PRODUCT_QTY_DEFAULT_DATA_KEY), iColIdx++, iRowIdx);
             createWorkBookRow(excelSheet, dataRow.get(Constants.PRODUCT_IN_STORE_ONLY_DATA_KEY), iColIdx++, iRowIdx);
+            for (int i = 1; i <= 3; i++)
+            {
+                createWorkBookRow(excelSheet, dataRow.get(FlexibleStringExpander.expandString(Constants.PRODUCT_ATTACH_URL_DATA_KEY, UtilMisc.toMap("count", i))), iColIdx++, iRowIdx);
+            }
             iRowIdx++;
         }
     }
@@ -17319,6 +17748,18 @@ public class ImportServices {
             }
             productType.setProductDescriptiveFeature(productDescriptiveFeatureType);
 
+            ProductAttachmentsType productAttachments = factory.createProductAttachmentsType();
+            List productAttachs = productAttachments.getProductAttach();
+            for (int i = 1; i <= 3; i++)
+            {
+            	ProductAttachType productAttach = factory.createProductAttachType();
+            	productAttach.setUrl(getString(dataRow.get(FlexibleStringExpander.expandString(Constants.PRODUCT_ATTACH_URL_DATA_KEY, UtilMisc.toMap("count", i)))));
+            	productAttach.setThruDate(formatDate(dataRow.get(FlexibleStringExpander.expandString(Constants.PRODUCT_ATTACH_URL_THRU_DATA_KEY, UtilMisc.toMap("count", i)))));
+            	productAttachs.add(productAttach);
+            }
+            
+            productType.setProductAttachments(productAttachments);
+            
             ProductImageType productImage = factory.createProductImageType();
       
             PlpSwatchType plpSwatch = factory.createPlpSwatchType();

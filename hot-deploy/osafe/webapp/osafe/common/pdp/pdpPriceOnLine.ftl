@@ -5,6 +5,10 @@
 	    <label>${uiLabelMap.OnlinePriceCaption}</label>
 	    <span><@ofbizCurrency amount=pdpPriceMap.price isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed rounding=globalContext.currencyRounding /></span>
 	  </div>
+	  <div class="pdpPriceOnline" id="js_pdpPriceOnline_Virtual" style="display:none">
+	    <label>${uiLabelMap.OnlinePriceCaption}</label>
+	    <span><@ofbizCurrency amount=pdpPriceMap.price isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed rounding=globalContext.currencyRounding /></span>
+	  </div>
 	</#if>
 	
 	<#if productVariantMapKeys?exists && productVariantMapKeys?has_content>

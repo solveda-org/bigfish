@@ -60,13 +60,15 @@
 	                      </#if>
 	                      <#if plpFeatureOrderSize == 1>
 	                        <#assign variantProductInventoryLevel = plpProductVariantInventoryMap.get(productFeatureSelectVariantId)!/>
-	                        <#assign inventoryLevel = variantProductInventoryLevel.get("inventoryLevel")/>
-	                        <#assign inventoryInStockFrom = variantProductInventoryLevel.get("inventoryLevelInStockFrom")/>
-	                        <#assign inventoryOutOfStockTo = variantProductInventoryLevel.get("inventoryLevelOutOfStockTo")/>
-	                        <#if (inventoryLevel?number <= inventoryOutOfStockTo?number)>
+							<#if variantProductInventoryLevel?has_content>
+	                            <#assign inventoryLevel = variantProductInventoryLevel.get("inventoryLevel")/>
+	                            <#assign inventoryInStockFrom = variantProductInventoryLevel.get("inventoryLevelInStockFrom")/>
+	                            <#assign inventoryOutOfStockTo = variantProductInventoryLevel.get("inventoryLevelOutOfStockTo")/>
+						    </#if>
+	                        <#if inventoryLevel?has_content && inventoryOutOfStockTo?has_content && (inventoryLevel?number <= inventoryOutOfStockTo?number)>
 	                          <#assign stockClass = "outOfStock"/>
 	                        <#else>
-	                          <#if (inventoryLevel?number >= inventoryInStockFrom?number)>
+	                          <#if inventoryLevel?has_content && inventoryInStockFrom?has_content && (inventoryLevel?number >= inventoryInStockFrom?number)>
 	                            <#assign stockClass = "inStock"/>
 	                          <#else>
 	                            <#assign stockClass = "lowStock"/>
@@ -90,7 +92,7 @@
 	                        </#if>
 	                      </#if>
 	                      <li class="${featureClass!} <#if selectedClass == "true">selected</#if><#if stockClass?exists> ${stockClass}</#if>">
-	                        <a href="javascript:void(0);" class="plpFeatureSwatchLink" onclick="javascript:getListPlp('FT${productFeatureTypeId}','${selectedIdx}', 1,'${uiSequenceScreen}_${plpProduct.productId}');">
+	                        <a href="javascript:void(0);" class="plpFeatureSwatchLink" onclick="javascript:getListPlp('FT${productFeatureTypeId}_${uiSequenceScreen}_${plpProduct.productId}','${selectedIdx}', 1,'${uiSequenceScreen}_${plpProduct.productId}');">
 	                          <img src="<@ofbizContentUrl>${productFeatureSwatchURL!""}</@ofbizContentUrl>" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="FT${productFeatureTypeId}_${uiSequenceScreen}_${plpProduct.productId}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
 	                        </a>
 	                      </li>

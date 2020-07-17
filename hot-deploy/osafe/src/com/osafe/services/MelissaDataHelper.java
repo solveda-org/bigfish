@@ -196,25 +196,45 @@ public class MelissaDataHelper {
 
     private mdAddr setMelissaFileRequest(mdAddr ao, AddressDocument queryAddressdata)
     {
-	    String a2 = queryAddressdata.getAddress2();
-	    if (UtilValidate.isNotEmpty(queryAddressdata.getAddress3()))
-	    {
-	    	a2 = a2+" "+queryAddressdata.getAddress3();
-	    }
         if (UtilValidate.isNotEmpty(queryAddressdata.getAddress1()))
+        {
         	ao.SetAddress(queryAddressdata.getAddress1());
-        if (UtilValidate.isNotEmpty(a2))
-        	ao.SetAddress2(a2);
+        }
+        if (UtilValidate.isNotEmpty(queryAddressdata.getAddress2()))
+        {
+        	ao.SetAddress2(queryAddressdata.getAddress2());
+        }
+        if (UtilValidate.isNotEmpty(queryAddressdata.getAddress3()))
+        {
+            if (UtilValidate.isNotEmpty(queryAddressdata.getAddress2()))
+            {
+            	ao.SetAddress2(queryAddressdata.getAddress2() + " " + queryAddressdata.getAddress3());
+            }
+            else
+            {
+            	ao.SetAddress2(queryAddressdata.getAddress3());
+            }
+        }
         if (UtilValidate.isNotEmpty(queryAddressdata.getCity()))
+        {
         	ao.SetCity(queryAddressdata.getCity());
+        }
         if (UtilValidate.isNotEmpty(queryAddressdata.getStateProvinceGeoId()))
+        {
         	ao.SetState(queryAddressdata.getStateProvinceGeoId());
+        }
         if (UtilValidate.isNotEmpty(queryAddressdata.getPostalCode()))
+        {
         	ao.SetZip(queryAddressdata.getPostalCode());
+        }
         if (UtilValidate.isNotEmpty(queryAddressdata.getPostalCodeExt()))
+        {
         	ao.SetPlus4(queryAddressdata.getPostalCodeExt());
+        }
         if (UtilValidate.isNotEmpty(queryAddressdata.getCountryGeoId()))
+        {
         	ao.SetCountryCode(queryAddressdata.getCountryGeoId());
+        }
         return ao;
     }
 
@@ -244,10 +264,21 @@ public class MelissaDataHelper {
     private String createMelissaRestRequest(AddressDocument queryAddressdata)
     {
     	    String a2 = queryAddressdata.getAddress2();
-    	    if (UtilValidate.isNotEmpty(queryAddressdata.getAddress3()))
-    	    {
-    	    	a2 = a2+" "+queryAddressdata.getAddress3();
-    	    }
+            if (UtilValidate.isNotEmpty(queryAddressdata.getAddress2()))
+            {
+            	a2 = queryAddressdata.getAddress2();
+            }
+            if (UtilValidate.isNotEmpty(queryAddressdata.getAddress3()))
+            {
+                if (UtilValidate.isNotEmpty(queryAddressdata.getAddress2()))
+                {
+                	a2 = queryAddressdata.getAddress2() + " " + queryAddressdata.getAddress3();
+                }
+                else
+                {
+                	a2 = queryAddressdata.getAddress3();
+                }
+            }
             //Build the rest request here    
             String restRequestString = getWebUrl() +"?" + 
                 "t=" + makeEncoded("DQWS XML Sample Code implementation using Multiple record inputs.") + "&" +
@@ -323,7 +354,15 @@ public class MelissaDataHelper {
 				responseAddresse.setAddress1(nodeList.item(0).getNodeValue());
 				//get address2
 				nodeList =  eElement.getElementsByTagName("Address2").item(0).getChildNodes();
-				responseAddresse.setAddress2(nodeList.item(0).getNodeValue());
+				String address2 = nodeList.item(0).getNodeValue();
+				if (UtilValidate.isEmpty(address2) || "NULL".equalsIgnoreCase(address2)) 
+				{
+					responseAddresse.setAddress2("");
+                                }
+                                else
+                                {
+					responseAddresse.setAddress2(address2);
+                                }
 				//get City
 				nodeList =  eElement.getElementsByTagName("City").item(0).getChildNodes();
 				responseAddresse.setCity(nodeList.item(0).getChildNodes().item(0).getNodeValue());

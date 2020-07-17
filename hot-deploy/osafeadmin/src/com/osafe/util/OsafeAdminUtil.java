@@ -48,11 +48,15 @@ import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.common.CommonWorkers;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.DelegatorFactory;
+import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.model.ModelEntity;
+import org.ofbiz.entity.model.ModelReader;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.ServiceUtil;
@@ -315,8 +319,27 @@ public class OsafeAdminUtil {
          return false;
      }
     
-    public static boolean isProductStoreParmTrue(ServletRequest request,String parmName) {
+    public static boolean isProductStoreParmTrue(ServletRequest request,String parmName) 
+    {
          return isProductStoreParmTrue(getProductStoreParm(request,parmName));
+    }
+    
+    public static boolean isProductStoreParmFalse(String parmValue) 
+    {
+        if (UtilValidate.isEmpty(parmValue)) 
+        {
+             return false;
+        }
+        if ("FALSE".equals(parmValue.trim().toUpperCase()))
+        {
+             return true;
+        }
+        return false;
+     }
+    
+    public static boolean isProductStoreParmFalse(ServletRequest request,String parmName) 
+    {
+         return isProductStoreParmFalse(getProductStoreParm(request,parmName));
      }
     
 
@@ -729,14 +752,23 @@ public class OsafeAdminUtil {
         {
             return false;
         }
+        return isValidName(desc, "-_!@#$%:?,;.&/\"");
+    }
+    
+    public static boolean isValidName(String desc, String allowableCharStr) 
+    {
+        if (UtilValidate.isEmpty(desc)) 
+        {
+            return false;
+        }
         char[] chars = desc.toCharArray();
         for (char c: chars) 
         {
-            if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_') && (c!='!') && (c!='@') && (c!='#') && (c!='$') && (c!='%') && (c!=':') && (c!='?') && (c!=',') && (c!=';') && (c!='.') && (c!='&') && (c!='/') && (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.LATIN_1_SUPPLEMENT)) 
+            if ((!Character.isLetterOrDigit(c)) && (Character.UnicodeBlock.of(c) != Character.UnicodeBlock.LATIN_1_SUPPLEMENT) && !(c == ' ')) 
             {
-                if(!(c == ' '))
+                if(allowableCharStr.indexOf(c) < 0)
                 {
-                    return false;
+                	return false;
                 }
             }
         }
@@ -1613,6 +1645,96 @@ public class OsafeAdminUtil {
     	{
     		return "odd";
     	}
+    }
+
+    /**
+     * find product SEO url according to the configurations.
+     * 
+     * @return String a product url
+     */
+    public static String findProductDetailSeoUrl(String productId, String productCategoryId)
+    {
+        StringBuilder newURL = new StringBuilder();
+        newURL.append("eCommerceProductDetail");
+        newURL.append("?");
+        newURL.append("productId");
+        newURL.append("=");
+        newURL.append(productId);
+        newURL.append("&");
+        newURL.append("productCategoryId");
+        newURL.append("=");
+        newURL.append(productCategoryId);
+        return findFriendlyUrl(newURL.toString());
+    }
+
+    public static String findFriendlyUrl(String URL)
+    {
+        StringBuilder urlBuilder = new StringBuilder();
+        String solrURLParam=null;
+        String origURL=URL;
+        try
+        {
+            urlBuilder.setLength(0);
+            //Check URL for SOLR
+            int solrIdx = origURL.indexOf("&filterGroup");
+            if (solrIdx > -1)
+            {
+                solrURLParam = origURL.substring(solrIdx+1);
+                origURL = origURL.substring(0,solrIdx);
+            }
+            
+            ResourceBundleMapWrapper OSAFE_FRIENDLY_URL = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeSeoUrlMap", Locale.getDefault());            
+            String friendlyKey=StringUtil.replaceString(origURL,"&","~");
+            friendlyKey=StringUtil.replaceString(friendlyKey,"=","^^");
+            if (OSAFE_FRIENDLY_URL.containsKey(friendlyKey))
+            {
+                String friendlyUrl =(String)OSAFE_FRIENDLY_URL.get(friendlyKey);
+                urlBuilder.append(friendlyUrl);
+                if (solrIdx > -1)
+                {
+                    urlBuilder.append("?" + solrURLParam);
+                    
+                }
+            }
+            else
+            {
+                urlBuilder.append(URL);
+            }
+
+        }
+        catch (Exception e)
+        {
+             //Debug.log(e, "Friendly URL not found for: " + URL, module);
+        }
+        return urlBuilder.toString();
+    }
+    
+    public static boolean entityExists(Delegator delegator, String searchEntityName)
+    {
+    	if(UtilValidate.isEmpty(delegator) || UtilValidate.isEmpty(searchEntityName))
+    	{
+    		return false;
+    	}
+    	String delegatorName = delegator.getDelegatorName();
+    	try
+    	{
+	    	ModelReader modelReader = ModelReader.getModelReader(delegatorName);
+	    	if(UtilValidate.isNotEmpty(modelReader))
+	    	{
+	    		ModelEntity modelEntity = modelReader.getModelEntityNoCheck(searchEntityName);
+	    		if(UtilValidate.isEmpty(modelEntity))
+	        	{
+	    			return false;
+	        	}
+	    	}
+    	}
+    	catch(GenericEntityException e)
+    	{
+    		String errorMessage = "Exception during searching model for entity: " + e.getMessage();
+            Debug.logError(e, errorMessage, module);
+            return false;
+    	}
+    	return true;
     }
     
 }

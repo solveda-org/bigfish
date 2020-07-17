@@ -128,7 +128,7 @@
         <attribute name="messages" type="List" mode="OUT" optional="true"/>
     </service>
     
-    <service name="importClientStoreXMLTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="importStoreXML" auth="false" use-transaction="false">
+    <service name="importClientStoreXMLTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="importStoreXML" auth="false" use-transaction="true" transaction-timeout="7200">
         <description>Import XML Elements, generate xml files in given directory using importDefinitionNames</description>
         <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
         <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>

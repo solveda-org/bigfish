@@ -9,13 +9,12 @@ import javolution.util.FastMap;
 import javolution.util.FastList;
 import org.ofbiz.product.store.ProductStoreWorker;
 
-
 custRequestList=session.getAttribute("custRequestList");
 
 List custRequestIdList = new ArrayList();
 if (UtilValidate.isNotEmpty(custRequestList)) 
 {
-    for(GenericValue custRequestInfo : custRequestList)
+    for(Map custRequestInfo : custRequestList)
     {
         custRequest = custRequestInfo.CustRequest;
         custRequestIdList.add(custRequest.custRequestId);

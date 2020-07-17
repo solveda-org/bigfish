@@ -76,6 +76,7 @@
                    <li><a href="<@ofbizUrl>finishedProductDetail?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="detailIcon"></span>${uiLabelMap.ShowFinishedDetailTooltip}</a></li>
                   </#if>
                   <li><a href="<@ofbizUrl>productImages?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="imageIcon"></span>${uiLabelMap.ProductImagesTooltip}</a></li>
+                  <li><a href="<@ofbizUrl>productAttachments?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="attachIcon"></span>${uiLabelMap.ProductAttachmentsTooltip}</a></li>
                   <li><a href="<@ofbizUrl>productPrice?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="priceIcon"></span>${uiLabelMap.ProductPricingTooltip}</a></li>
                   <li><a href="<@ofbizUrl>productMetatag?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
                   <#if (product.isVariant?if_exists == 'N')>

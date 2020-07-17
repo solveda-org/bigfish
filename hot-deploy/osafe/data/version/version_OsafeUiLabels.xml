@@ -23,6 +23,26 @@
         <category>PDP</category>
         <description>YouSaveCaption</description>
     </property>
+    <property key="ProductAttachmentCaption">
+        <value xml:lang="en">Product Attachment:</value>
+        <category>PDP</category>
+        <description>ProductAttachmentCaption</description>
+    </property>
+    <property key="ProductAttachment01Link">
+        <value xml:lang="en">Product Attachment 1</value>
+        <category>PDP</category>
+        <description>ProductAttachment01Link</description>
+    </property>
+    <property key="ProductAttachment02Link">
+        <value xml:lang="en">Product Attachment 2</value>
+        <category>PDP</category>
+        <description>ProductAttachment02Link</description>
+    </property>
+    <property key="ProductAttachment03Link">
+        <value xml:lang="en">Product Attachment 3</value>
+        <category>PDP</category>
+        <description>ProductAttachment03Link</description>
+    </property>
     <property key="SeeMainImageLabel">
         <value xml:lang="en">See Main Image</value>
         <category>PDP</category>
@@ -38,10 +58,20 @@
         <category>CHECK_OUT</category>
         <description>SelectSavedCardCaption</description>
     </property>
+    <property key="SelectSavedEftAccountCaption">
+        <value xml:lang="en">Select One:</value>
+        <category>CHECK_OUT</category>
+        <description>SelectSavedEftAccountCaption</description>
+    </property>
     <property key="UseSavedCardLabel">
         <value xml:lang="en">Choose from a previously saved card:</value>
         <category>CHECK_OUT</category>
         <description>UseSavedCardLabel</description>
+    </property>
+    <property key="UseSavedEftAccountLabel">
+        <value xml:lang="en">Choose from a previously saved bank account:</value>
+        <category>CHECK_OUT</category>
+        <description>UseSavedEftAccountLabel</description>
     </property>
    <property key="PaymentOptionsHeading">
         <value xml:lang="en">Pay Now or Pay in the Store?</value>
@@ -88,10 +118,20 @@
         <category>CHECK_OUT</category>
         <description>PayWithAnotherCardLabel</description>
     </property>
+    <property key="PayWithAnotherEftAccountLabel">
+        <value xml:lang="en">New Electronic Bank Account payment, my details are below:</value>
+        <category>CHECK_OUT</category>
+        <description>PayWithAnotherEftAccountLabel</description>
+    </property>
     <property key="CreditCardlabel">
         <value xml:lang="en">Credit Card</value>
         <category>CHECK_OUT</category>
         <description>CreditCardlabel</description>
+    </property>
+    <property key="EftAccountLabel">
+        <value xml:lang="en">Electronic Funds Transfer (EFT)</value>
+        <category>CHECK_OUT</category>
+        <description>EftAccountLabel</description>
     </property>
     <property key="CardExpirationLabel">
         <value xml:lang="en">Exp:</value>
@@ -192,6 +232,11 @@
         <value xml:lang="en">Order Number:</value>
         <category>CONTACT_US</category>
         <description>OrderNumberCaption</description>
+    </property>
+    <property key="PartNumberCaption">
+        <value xml:lang="en">SKUs or Part#:</value>
+        <category>CONTACT_US</category>
+        <description>PartNumberCaption</description>
     </property>
     <property key="CommentCaption">
         <value xml:lang="en">Comment:</value>
@@ -494,6 +539,51 @@
         <category>MULTI_USE</category>
         <description>CardNumberCaption used in both the Checkout and Order-Status functions</description>
     </property>
+    <property key="AccountNameCaption">
+        <value xml:lang="en">Account Name:</value>
+        <category>MULTI_USE</category>
+        <description>AccountNameCaption</description>
+    </property>
+    <property key="NameOnAccountCaption">
+        <value xml:lang="en">Name on Account:</value>
+        <category>MY_ACCOUNT</category>
+        <description>NameOnAccountCaption</description>
+    </property>
+    <property key="AccountNumberCaption">
+        <value xml:lang="en">Account Number:</value>
+        <category>MY_ACCOUNT</category>
+        <description>AccountNumberCaption</description>
+    </property>
+    <property key="AccountTypeCaption">
+        <value xml:lang="en">Account Type:</value>
+        <category>MY_ACCOUNT</category>
+        <description>AccountTypeCaption</description>
+    </property>
+    <property key="AccountTypeCheckingLabel">
+        <value xml:lang="en">Checking</value>
+        <category>MY_ACCOUNT</category>
+        <description>AccountTypeCaption</description>
+    </property>
+    <property key="AccountTypeSavingLabel">
+        <value xml:lang="en">Saving</value>
+        <category>MY_ACCOUNT</category>
+        <description>AccountTypeSavingLabel</description>
+    </property>
+    <property key="BankNameCaption">
+        <value xml:lang="en">Bank Name:</value>
+        <category>MULTI_USE</category>
+        <description>BankNameCaption</description>
+    </property>
+    <property key="BankAcctNoCaption">
+        <value xml:lang="en">Bank Acct#:</value>
+        <category>MULTI_USE</category>
+        <description>BankAcctNoCaption</description>
+    </property>
+    <property key="RoutingNumberCaption">
+        <value xml:lang="en">Routing Number:</value>
+        <category>MULTI_USE</category>
+        <description>RoutingNumberCaption</description>
+    </property>
     <property key="RemainingPaymentCaption">
         <value xml:lang="en">BALANCE DUE:</value>
         <category>MULTI_USE</category>
@@ -728,6 +818,11 @@
         <value xml:lang="en">Age:</value>
         <category>RATING_REVIEW</category>
         <description>AgeCaption</description>
+    </property>
+    <property key="ReviewCustom01Caption">
+        <value xml:lang="en">Review Custom 01:</value>
+        <category>RATING_REVIEW</category>
+        <description>ReviewCustom01Caption</description>
     </property>
     <property key="SortByCaption">
         <value xml:lang="en">Sort By:</value>
@@ -1086,6 +1181,11 @@
         <category>PLP</category>
         <description>Recently Introduced</description>
     </property>
+    <property key="ClosestDiscoDateLabel">
+        <value xml:lang="en">Closest Discontinued Date</value>
+        <category>PLP</category>
+        <description>Closest salesDiscoDate</description>
+    </property>
     <property key="SeeItemDetailsLabel">
         <value xml:lang="en">See Item Details</value>
         <category>PLP</category>
@@ -1125,6 +1225,11 @@
         <value xml:lang="en">Internal Name</value>
         <category>MULTI_USE</category>
         <description>PDPInternalNameLabel</description>
+    </property>
+    <property key="PDPManufacturerNameLabel">
+        <value xml:lang="en">Manufacturer Name</value>
+        <category>MULTI_USE</category>
+        <description>PDPManufacturerNameLabel</description>
     </property>
     <property key="PDPLabelNameLabel">
         <value xml:lang="en">Product Label</value>
@@ -1346,6 +1451,21 @@
         <value xml:lang="en">If you have a Gift Card, please enter the code here:</value>
         <category>CHECK_OUT</category>
         <description>EnterGiftCardLabel</description>
+    </property>
+    <property key="UseStoreCreditLabel">
+        <value xml:lang="en">Use Store Credit:</value>
+        <category>CHECK_OUT</category>
+        <description>UseStoreCreditLabel</description>
+    </property>
+    <property key="AmountRedeemedLabel">
+        <value xml:lang="en">Amount Redeemed:</value>
+        <category>CHECK_OUT</category>
+        <description>AmountRedeemedLabel</description>
+    </property>
+    <property key="StoreCreditInfo">
+        <value xml:lang="en">You have a ${amount} Store Credit available</value>
+        <category>CHECK_OUT</category>
+        <description>StoreCreditInfo</description>
     </property>
     <property key="RemoveOfferLabel">
         <value xml:lang="en">Remove Offer</value>
@@ -1673,15 +1793,25 @@
         <category>PLP</category>
         <description>ItemsTitle</description>
     </property>
-    <property key="MyPaymentInfoTitle">
-        <value xml:lang="en">My Payment Information</value>
+    <property key="MyCreditCardPaymentInfoTitle">
+        <value xml:lang="en">My Credit Card Payment Information</value>
         <category>MY_ACCOUNT</category>
-        <description>My Payment Information</description>
+        <description>My Credit Card Payment Information</description>
+    </property>
+    <property key="MyEFTPaymentInfoTitle">
+        <value xml:lang="en">My EFT Payment Information</value>
+        <category>MY_ACCOUNT</category>
+        <description>My EFT Payment Information</description>
     </property>
     <property key="ChangeCreditCardInfoTitle">
         <value xml:lang="en">Credit Card</value>
         <category>MY_ACCOUNT</category>
         <description>Credit Card</description>
+    </property>
+    <property key="ChangeEftAccountInfoTitle">
+        <value xml:lang="en">EFT</value>
+        <category>MY_ACCOUNT</category>
+        <description>EFT</description>
     </property>
     <property key="ChangePasswordTitle">
         <value xml:lang="en">Change Password</value>
@@ -1808,6 +1938,11 @@
         <category>PAGE_HEADING_H1</category>
         <description>ContactUsTitle</description>
     </property>
+    <property key="RequestQuoteTitle">
+        <value xml:lang="en">Request a Quote</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>RequestQuoteTitle</description>
+    </property>
     <property key="MailingListTitle">
         <value xml:lang="en">Join Mailing List</value>
         <category>PAGE_HEADING_H1</category>
@@ -1918,6 +2053,17 @@
         <category>PAGE_HEADING_H1</category>
         <description>Choose Shipping Options Title</description>
     </property>
+    <property key="RecurringOrdersTitle">
+        <value xml:lang="en">Recurring Orders List</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>RecurringOrdersTitle</description>
+    </property>
+    <property key="RecurringOrderEditTitle">
+        <value xml:lang="en">Recurring Order</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>RecurringOrdersTitle</description>
+    </property>
+    
     <property key="JobNameLabel">
         <value xml:lang="en">Job Name: </value>
         <category>SCHEDULED_JOB</category>
@@ -2014,15 +2160,30 @@
         <category>PAGE_SUB_HEADING</category>
         <description>ToHeading</description>
     </property>
-    <property key="PaymentMethodsHeading">
-        <value xml:lang="en">Payment Methods</value>
+    <property key="CreditCardPaymentMethodsHeading">
+        <value xml:lang="en">Credit Card Payment Methods</value>
         <category>MY_ACCOUNT</category>
-        <description>Payment Methods</description>
+        <description>Credit Card Payment Methods</description>
+    </property>
+    <property key="EFTPaymentMethodsHeading">
+        <value xml:lang="en">Electronic Funds Transfer (EFT) Payment Methods</value>
+        <category>MY_ACCOUNT</category>
+        <description>Electronic Funds Transfer (EFT) Payment Methods</description>
     </property>
     <property key="CreditCardInfoHeading">
         <value xml:lang="en">Change Credit Card</value>
         <category>MY_ACCOUNT</category>
         <description>Change Credit Card</description>
+    </property>
+    <property key="EftAccountInfoHeading">
+        <value xml:lang="en">Change EFT</value>
+        <category>MY_ACCOUNT</category>
+        <description>Change EFT</description>
+    </property>
+    <property key="AddEftInfoHeading">
+        <value xml:lang="en">Add EFT</value>
+        <category>MY_ACCOUNT</category>
+        <description>Add EFT</description>
     </property>
     <property key="ChangePasswordHeading">
         <value xml:lang="en">Change Password</value>
@@ -2274,6 +2435,11 @@
         <category>PAGE_SUB_HEADING</category>
         <description>CreditCardHeading</description>
     </property>
+    <property key="EftAccountHeading">
+        <value xml:lang="en">Electronic Funds Transfer (EFT)</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>EftAccountHeading</description>
+    </property>
     <property key="EmailSubscriberHeading">
         <value xml:lang="en">Please enter the following:</value>
         <category>PAGE_SUB_HEADING</category>
@@ -2303,6 +2469,11 @@
         <value xml:lang="en">Gift Cards</value>
         <category>PAGE_SUB_HEADING</category>
         <description>GiftCardHeading</description>
+    </property>
+    <property key="StoreCreditHeading">
+        <value xml:lang="en">Store Credit Redemption</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>StoreCreditHeading</description>
     </property>
     <property key="PDPLongDescriptionHeading">
         <value xml:lang="en">Details</value>
@@ -2349,24 +2520,44 @@
         <category>PAGE_SUB_HEADING</category>
         <description>ContactUsHeading</description>
     </property>
+    <property key="CustomerRecurringOrdersHeading">
+        <value xml:lang="en">Recurring Orders</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>CustomerRecurringOrdersHeading</description>
+    </property>
     <!-- ******* Info Messages *************************************** -->
     <property key="ReviewLoginInfo">
         <value xml:lang="en">Login to write a review</value>
         <category>MESSAGE_INFO</category>
         <description>ReviewLoginInfo</description>
     </property>
-    <property key="PaymentMethodsInfo">
-        <value xml:lang="en">Need to add or remove a Payment Method? Click the link below:</value>
+    <property key="CreditCardPaymentMethodsInfo">
+        <value xml:lang="en">Need to add or remove a Credit Card Payment Method? Click the link below:</value>
         <category>MESSAGE_INFO</category>
-        <description>Payment method info</description>
+        <description>Credit Card Payment method info</description>
     </property>
-    <property key="ClickViewPaymentMethodInfo">
-        <value xml:lang="en">Click here to edit your payment methods</value>
+    <property key="EFTPaymentMethodsInfo">
+        <value xml:lang="en">Need to add or remove a EFT Payment Method? Click the link below:</value>
         <category>MESSAGE_INFO</category>
-        <description>Click Payment method info</description>
+        <description>EFT Payment method info</description>
+    </property>
+    <property key="ClickViewCreditCardPaymentMethodInfo">
+        <value xml:lang="en">Click here to edit your credit card payment methods</value>
+        <category>MESSAGE_INFO</category>
+        <description>Click Credit Card Payment method info</description>
+    </property>
+    <property key="ClickViewEFTPaymentMethodInfo">
+        <value xml:lang="en">Click here to edit your EFT payment methods</value>
+        <category>MESSAGE_INFO</category>
+        <description>Click EFT Payment method info</description>
     </property>
     <property key="DeletePmtMethodText">
         <value xml:lang="en">Are you sure you want to delete Credit Card </value>
+        <category>MESSAGE_INFO</category>
+        <description>Delete Confirm Message</description>
+    </property>
+    <property key="DeleteEFTPmtMethodText">
+        <value xml:lang="en">Are you sure you want to delete EFT</value>
         <category>MESSAGE_INFO</category>
         <description>Delete Confirm Message</description>
     </property>
@@ -2374,6 +2565,11 @@
         <value xml:lang="en">No saved payment method.</value>
         <category>MESSAGE_INFO</category>
         <description>NoSavedPaymentMethodFound</description>
+    </property>
+    <property key="NoSavedPaymentMethodEftFound">
+        <value xml:lang="en">No saved eft payment method.</value>
+        <category>MESSAGE_INFO</category>
+        <description>NoSavedPaymentMethodEftFound</description>
     </property>
     <property key="BillingAddressHeadingInfo">
         <value xml:lang="en">Where is your credit card statement sent?</value>
@@ -2526,6 +2722,16 @@
         <category>MESSAGE_INFO</category>
         <description>ContactUsEnterMessageInfo</description>
     </property>
+    <property key="RequestQuoteInstructionsInfo">
+        <value xml:lang="en">Request a Quote if you are ordering large quantities or have any special requirements.</value>
+        <category>MESSAGE_INFO</category>
+        <description>RequestQuoteInstructionsInfo</description>
+    </property>
+    <property key="RequestQuoteEnterMessageInfo">
+        <value xml:lang="en">Provide as much information as possible and we will get back to you with quote.</value>
+        <category>MESSAGE_INFO</category>
+        <description>RequestQuoteEnterMessageInfo</description>
+    </property>
     <property key="StoreLocatorInstructionsInfo">
         <value xml:lang="en">Find a store nearby. Enter the address, city, state or zip from where you want to search for a store.</value>
         <category>MESSAGE_INFO</category>
@@ -2603,6 +2809,16 @@
     </property>
     <property key="OutOfStockInfo">
         <value xml:lang="en">We're sorry but this item is currently out of stock.</value>
+        <category>MESSAGE_INFO</category>
+        <description>OutOfStockInfo</description>
+    </property>
+    <property key="OutOfStockProductInfo">
+        <value xml:lang="en">We're sorry but ${productName} is currently out of stock.</value>
+        <category>MESSAGE_INFO</category>
+        <description>OutOfStockInfo</description>
+    </property>
+    <property key="OutOfStockOrderedProductInfo">
+        <value xml:lang="en">We're sorry but ${productName} has ${productAvailable} available.</value>
         <category>MESSAGE_INFO</category>
         <description>OutOfStockInfo</description>
     </property>
@@ -2845,6 +3061,16 @@
         <category>MY_ACCOUNT</category>
         <description>GenderFemale</description>
     </property>
+    <property key="CustomerRecurringOrdersInfo">
+        <value xml:lang="en">Use this function to manage any items that are part of your recurring orders. Click the link below:</value>
+        <category>MY_ACCOUNT</category>
+        <description>CustomerRecurringOrdersInfo</description>
+    </property>
+    <property key="ClickViewRecurringOrdersInfo">
+        <value xml:lang="en">Click here to manage Recurring Orders</value>
+        <category>MY_ACCOUNT</category>
+        <description>ClickViewRecurringOrdersInfo</description>
+    </property>
     <!-- ******* Success Messages *************************************** -->
     <property key="UserLoginUpdatedSuccess">
         <value xml:lang="en">Login Information updated</value>
@@ -2897,8 +3123,33 @@
         <category>MESSAGE_ERROR</category>
         <description>Missing Loyalty Point Id error message</description>
     </property>
+    <property key="NameOnAccountMissingError">
+        <value xml:lang="en">Name on Account is a required field</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Name on Account is a required field</description>
+    </property>
+    <property key="BankNameMissingError">
+        <value xml:lang="en">Bank Name is a required field</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Bank Name is a required field</description>
+    </property>
+    <property key="AccountTypeMissingError">
+        <value xml:lang="en">Account Type is a required field</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Account Type is a required field</description>
+    </property>
+    <property key="RoutingNumberInvalidError">
+        <value xml:lang="en">Routing Number is a required field and must be 9 digits</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Routing Number is a required field and must be 9 digits</description>
+    </property>
+    <property key="AccountNumberInvalidError">
+        <value xml:lang="en">Account Number is a required field and must be numeric</value>
+        <category>MESSAGE_ERROR</category>
+        <description>Account Number is a required field and must be numeric</description>
+    </property>
     <property key="ContactReasonMissingError">
-        <value xml:lang="en">o  Please select a Reason for Contact. This allows us to better serve you.</value>
+        <value xml:lang="en">Please select a Reason for Contact. This allows us to better serve you.</value>
         <category>MESSAGE_ERROR</category>
         <description>ContactReasonMissingError</description>
     </property>
@@ -3041,6 +3292,11 @@
         <value xml:lang="en">Please enter a valid Email Address in the box provided and then click CONTINUE</value>
         <category>MESSAGE_ERROR</category>
         <description>LoginEmailAddressMissingError</description>
+    </property>
+    <property key="RequestQuoteEmailAddressMissingError">
+        <value xml:lang="en">Please enter your Email Address. This allows us to respond quickly and ensure that we can contact you to better serve you.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>RequestQuoteEmailAddressMissingError</description>
     </property>
     <property key="EmailAddressNotFormattedCorrectlyError">
         <value xml:lang="en">Please enter a valid Email Address</value>
@@ -3262,6 +3518,11 @@
         <category>MESSAGE_ERROR</category>
         <description>Order Number Misssing error message</description>
     </property>
+    <property key="PartNumberMissingError">
+        <value xml:lang="en">Please enter SKUs or Manufacturer Part Numbers.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PartNumberMissingError</description>
+    </property>
     <property key="MobilePhoneMissingError">
         <value xml:lang="en">Please enter your Mobile Phone</value>
         <category>MESSAGE_ERROR</category>
@@ -3316,6 +3577,26 @@
         <value xml:lang="en">A Gift Card can only be used once, please enter a different number</value>
         <category>MESSAGE_ERROR</category>
         <description>DuplicateGiftCardNumberError</description>
+    </property>
+    <property key="StoreCreditAmountMissingError">
+        <value xml:lang="en">Please enter amount to redeemed</value>
+        <category>MESSAGE_ERROR</category>
+        <description>StoreCreditAmountMissingError</description>
+    </property>
+    <property key="StoreCreditAmountNumberInvalidError">
+        <value xml:lang="en">The Amount Redeemed must be a dollar amount and greater than zero</value>
+        <category>MESSAGE_ERROR</category>
+        <description>StoreCreditAmountNumberInvalidError</description>
+    </property>
+    <property key="StoreCreditAmountExceedAvailableError">
+        <value xml:lang="en">The Amount Redeemed cannot be more than the Store Credit available</value>
+        <category>MESSAGE_ERROR</category>
+        <description>StoreCreditAmountExceedAvailableError</description>
+    </property>
+    <property key="StoreCreditAmountExceedDueError">
+        <value xml:lang="en">The Amount redeemed is more than the outstanding balance</value>
+        <category>MESSAGE_ERROR</category>
+        <description>StoreCreditAmountExceedDueError</description>
     </property>
     <property key="OfferCodeMissingError">
         <value xml:lang="en">Please enter your Offer Code.</value>
@@ -3386,6 +3667,11 @@
         <value xml:lang="en">Please select one of saved card</value>
         <category>MESSAGE_ERROR</category>
         <description>SavedCardMissingError</description>
+    </property>
+    <property key="SavedEftAccountMissingError">
+        <value xml:lang="en">Please select one of saved EFT account</value>
+        <category>MESSAGE_ERROR</category>
+        <description>SavedEftAccountMissingError</description>
     </property>
     <property key="ExpirationYearMissingError">
         <value xml:lang="en">Please enter your Expiration Year</value>
@@ -3483,6 +3769,11 @@
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>ReviewAgeMissingError</description>
     </property>
+    <property key="ReviewCustomMissingError">
+        <value xml:lang="en">You must enter a review custom.</value>
+        <category>MESSAGE_REVIEW_ERROR</category>
+        <description>ReviewCustomMissingError</description>
+    </property>
     <property key="ReviewLocationMissingError">
         <value xml:lang="en">You must enter a review location.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
@@ -3502,6 +3793,11 @@
         <value xml:lang="en">You have exceeded the maximum length allowed for a review. The maximum is XXX characters.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>ReviewTextLongError</description>
+    </property>
+    <property key="ReOredrBlankQtyError">
+        <value xml:lang="en">Please enter re-order quantity</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ReOredrBlankQtyError</description>
     </property>
     <property key="PDPMinQtyError">
         <value xml:lang="en">The Quantity for Product _PRODUCT_NAME_ is less than the minimum allowed. The minimum allowed is _PDP_QTY_MIN_. Please retry.</value>
@@ -3600,6 +3896,11 @@
         <category>BUTTON_TEXT</category>
         <description>ApplyOfferBtn</description>
     </property>
+    <property key="AddRowBtn">
+        <value xml:lang="en">Add Row</value>
+        <category>BUTTON_TEXT</category>
+        <description>AddRowBtn</description>
+    </property>
     <property key="ApplyGiftCardBtn">
         <value xml:lang="en">Apply Gift Card</value>
         <category>BUTTON_TEXT</category>
@@ -3619,6 +3920,11 @@
         <value xml:lang="en">Add New Card</value>
         <category>BUTTON_TEXT</category>
         <description>AddNewCardBtn</description>
+    </property>
+    <property key="AddNewEftBtn">
+        <value xml:lang="en">Add New EFT</value>
+        <category>BUTTON_TEXT</category>
+        <description>AddNewEftBtn</description>
     </property>
     <property key="UpdatePersonalAddBtn">
         <value xml:lang="en">Update</value>
@@ -3801,6 +4107,21 @@
         <value xml:lang="en">Your catalog request will be processed immediately. Thank you for your interest in XXX Products, we appreciate your business!</value>
         <category>CONFIRM</category>
         <description>Confirm Catalog Request Text</description>
+    </property>
+    <property key="ConfirmH1RequestQuote">
+        <value xml:lang="en">Request Quote</value>
+        <category>CONFIRM</category>
+        <description>Confirm Request Quote Page Title</description>
+    </property>
+    <property key="ConfirmH2RequestQuote">
+        <value xml:lang="en">Confirmation and Thank You</value>
+        <category>CONFIRM</category>
+        <description>Confirm Request Quote Sub Title</description>
+    </property>
+    <property key="ConfirmTextRequestQuote">
+        <value xml:lang="en">Your request quote will be processed immediately. Thank you for your interest, we appreciate your business!</value>
+        <category>CONFIRM</category>
+        <description>Confirm Request Quote Text</description>
     </property>
     <property key="ConfirmH1MailingList">
         <value xml:lang="en">Mailing List</value>
@@ -4110,6 +4431,16 @@
         <category>CART</category>
         <description>CartItemPriceRecurrenceCaption</description>
     </property>
+    <property key="CartItemRecurrenceFlagCaption">
+        <value xml:lang="en">Item Recurrence Flag:</value>
+        <category>CART</category>
+        <description>CartItemRecurrenceFlagCaption</description>
+    </property>
+    <property key="CartItemRecurrenceFreqCaption">
+        <value xml:lang="en">Item Recurrence Freq:</value>
+        <category>CART</category>
+        <description>CartItemRecurrenceFreqCaption</description>
+    </property>
     <property key="ExportToPDFLabel">
         <value xml:lang="en">Printable PDF</value>
         <category>CHECK_OUT</category>
@@ -4170,6 +4501,12 @@
         <value xml:lang="en">Check to Re-Order:</value>
         <category>RE_ORDER_ITEM</category>
         <description>ReOrderCheckBoxCaption</description>
+    </property>
+    <!-- === Recurring Order Items ===== -->
+    <property key="OrderNoRecurringOrderFoundInfo">
+        <value xml:lang="en">There are no Recurring Orders on file</value>
+        <category>RECURRING_ORDER</category>
+        <description>OrderNoOrderFoundInfo</description>
     </property>
     <property key="CartCheckBoxCaption">
         <value xml:lang="en">Check to Add:</value>
@@ -4491,6 +4828,152 @@
         <value xml:lang="en">Hide</value>
         <category>MULTI_USE</category>
         <description>Hide Navigation Widget</description>
+    </property>
+    <property key="AddNewAddressBtn">
+        <value xml:lang="en">Add Address</value>
+        <category>MULTI_USE</category>
+        <description>Hide Navigation Widget</description>
+    </property>
+    <property key="AddCCBtn">
+        <value xml:lang="en">Add Credit Card</value>
+        <category>MULTI_USE</category>
+        <description>Hide Navigation Widget</description>
+    </property>
+    <property key="AddEFTBtn">
+        <value xml:lang="en">Add Check</value>
+        <category>MULTI_USE</category>
+        <description>Hide Navigation Widget</description>
+    </property>
+     <property key="CartItemShipAddressCaption">
+        <value xml:lang="en">Shipping Address:</value>
+        <category>MULTI_USE</category>
+        <description>CartItemShipAddressCaption</description>
+    </property>
+    <property key="CartItemPaymentMethodCaption">
+        <value xml:lang="en">Payment Method:</value>
+        <category>MULTI_USE</category>
+        <description>CartItemPaymentMethodCaption</description>
+    </property>
+    <property key="CancelledCaption">
+        <value xml:lang="en">Cancelled</value>
+        <category>MULTI_USE</category>
+        <description>CancelledCaption</description>
+    </property>
+    <property key="ActiveCaption">
+        <value xml:lang="en">Active</value>
+        <category>MULTI_USE</category>
+        <description>ActiveCaption</description>
+    </property>
+    
+    <property key="BlankRecurrenceQuantityError">
+        <value xml:lang="en">The Quantity entered for Product ${PRODUCT_NAME} can not be blank</value>
+        <category>MULTI_USE</category>
+        <description>BlankRecurrenceQuantityError</description>
+    </property>
+    <property key="ValidRecurrenceQuantityError">
+        <value xml:lang="en">The Quantity entered for Product ${PRODUCT_NAME} must be a whole number, decimals are not allowed, please retry</value>
+        <category>MULTI_USE</category>
+        <description>ValidRecurrenceQuantityError</description>
+    </property>
+    <property key="ValidRecurrenceQuantityLowError">
+        <value xml:lang="en">The Quantity for Product ${PRODUCT_NAME} is less than the minimum allowed. The minimum allowed is ${PDP_QTY_MIN}. Please retry</value>
+        <category>MULTI_USE</category>
+        <description>ValidRecurrenceQuantityLowError</description>
+    </property>
+    <property key="ValidRecurrenceQuantityHighError">
+        <value xml:lang="en">The Quantity for Product ${PRODUCT_NAME} is greater than the maximum allowed. The maximum allowed is ${PDP_QTY_MAX}. Please retry</value>
+        <category>MULTI_USE</category>
+        <description>ValidRecurrenceQuantityHighError</description>
+    </property>
+    <property key="ValidShipDateError">
+        <value xml:lang="en">Please enter a valid Ship Date</value>
+        <category>MULTI_USE</category>
+        <description>ValidShipDateError</description>
+    </property>
+    <property key="ShipDateInFutureError">
+        <value xml:lang="en">The Ship Date must be in the future</value>
+        <category>MULTI_USE</category>
+        <description>ShipDateInFutureError</description>
+    </property>
+    <property key="BlankShipDateError">
+        <value xml:lang="en">The Ship Date can not be blank</value>
+        <category>MULTI_USE</category>
+        <description>BlankShipDateError</description>
+    </property>
+    <property key="BlankShippingContactMechError">
+        <value xml:lang="en">Please select a Shipping Address</value>
+        <category>MULTI_USE</category>
+        <description>BlankShippingContactMechError</description>
+    </property>
+    <property key="BlankPaymentMethodIdError">
+        <value xml:lang="en">Please select a Payment Method</value>
+        <category>MULTI_USE</category>
+        <description>BlankPaymentMethodIdError</description>
+    </property>
+    <property key="OrderNoRecurringOrderFoundInfo">
+        <value xml:lang="en">There are no Recurring Orders on file</value>
+        <category>RECURRING_ORDER</category>
+        <description>OrderNoRecurringOrderFoundInfo</description>
+    </property>
+    <property key="ChoosePaymentOptionLabel">
+        <value xml:lang="en">Select Payment Option</value>
+        <category>CHECK_OUT</category>
+        <description>ChoosePaymentOptionLabel</description>
+    </property>
+    <property key="PaymentOptionCreditCardLabel">
+        <value xml:lang="en">Credit Card</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption CreditCard Label</description>
+    </property>
+    <property key="PaymentOptionSavedCreditCardLabel">
+        <value xml:lang="en">Saved Credit Card</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption Saved CreditCard Label</description>
+    </property>
+    <property key="PaymentOptionEftAccountLabel">
+        <value xml:lang="en">Eft Account</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption EftAccount Label</description>
+    </property>
+    <property key="PaymentOptionSavedEftAccountLabel">
+        <value xml:lang="en">Saved Eft Account</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption Saved EftAccount Label</description>
+    </property>
+    <property key="PaymentOptionPayPalLabel">
+        <value xml:lang="en">PayPal</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption PayPal Label</description>
+    </property>
+    <property key="PaymentOptionEbsLabel">
+        <value xml:lang="en">EBS</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption EBS Label</description>
+    </property>
+    <property key="PaymentOptionPayNetzLabel">
+        <value xml:lang="en">Pay Netz</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption PayNetz Label</description>
+    </property>
+    <property key="PaymentOptionCODLabel">
+        <value xml:lang="en">COD</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentOption COD Label</description>
+    </property>
+    <property key="ProcessPaymentOptionError">
+        <value xml:lang="en">Please select a method of payment</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ProcessPaymentMethodError</description>
+    </property>
+    <property key="CommonAll">
+        <value xml:lang="en">All</value>
+        <category>MULTI_USE</category>
+        <description>CommonAll</description>
+    </property>
+    <property key="SecurityAccessError">
+        <value xml:lang="en">We are sorry but you do not have permission to view this information!</value>
+        <category>MESSAGE_ERROR</category>
+        <description>SecurityAccessError</description>
     </property>
     
 </resource>

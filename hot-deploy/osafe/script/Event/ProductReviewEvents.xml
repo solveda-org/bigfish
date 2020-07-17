@@ -21,6 +21,7 @@
                 <process field="REVIEW_AGE"><copy to-field="reviewAge"/></process>
                 <process field="REVIEW_LOCATION"><copy to-field="reviewLocation"/></process>
                 <process field="REVIEW_PRIVATE_NOTE"><copy to-field="reviewPrivateNote"/></process>
+                <process field="REVIEW_CUSTOM_01"><copy to-field="reviewCustom01"/></process>
              </simple-map-processor>
 
          </call-map-processor>
@@ -55,6 +56,13 @@
              <string-to-list string="${tempErrorMessage}" message-field="REVIEW_AGE" list="error_list"/>
          </if-empty>
         </if-compare>
+        <if-compare field="parameters.REVIEW_CUSTOM_01_MANDATORY" operator="equals" value="Y">
+         <if-empty field="parameters.REVIEW_CUSTOM_01">
+             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ReviewCustomMissingError"/>
+             <string-to-list string="${tempErrorMessage}" message-field="REVIEW_CUSTOM_01" list="error_list"/>
+         </if-empty>
+        </if-compare>
+        
         <if-compare field="parameters.REVIEW_LOCATION_MANDATORY" operator="equals" value="Y">
          <if-empty field="parameters.REVIEW_LOCATION">
              <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ReviewLocationMissingError"/>

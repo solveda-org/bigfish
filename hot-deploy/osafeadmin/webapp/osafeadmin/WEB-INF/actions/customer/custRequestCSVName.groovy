@@ -28,9 +28,13 @@ if (custRequestTypeId.equals("RF_CONTACT_US"))
 {
 	custRequestName = "ContactUs_";
 }
-else
+else if (custRequestTypeId.equals("RF_CATALOG"))
 {
 	custRequestName = "Request-Catalog_";
+}
+else if (custRequestTypeId.equals("RF_REQUEST_QUOTE"))
+{
+	custRequestName = "Request-Quote_";
 }
 if (UtilValidate.isNotEmpty(custRequestName)) 
 {

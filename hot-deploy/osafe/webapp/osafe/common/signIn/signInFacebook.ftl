@@ -12,13 +12,13 @@
 			       		 <input type="submit" id="js_fbLoginButton" name="fbLoginButton" value="Facebook Login" />
 			       		 -->
 			       		
-			       		<div class="fb-login-button" data-size="large" data-show-faces="false" data-auto-logout-link="false" onlogin="fbSetFields()" scope="basic_info,email"></div>
+			       		<div class="fb-login-button" data-size="large" data-show-faces="false" data-auto-logout-link="false" onlogin="fbSetFields()" scope="public_profile,email"></div>
 			       		
 			       </div>
 			  </li>
 	</ul>
 	<#-- Set hidden fields when facebook successfully logs in -->
-    <form method="post" action="" id="fbLoginForm" name="fbLoginForm" onsubmit="submitForm(this)" class="entryForm">
+    <form method="post" action="" id="fbLoginForm" name="fbLoginForm" onsubmit="submitForm(this)">
           <input type="hidden" id="js_fbBirthday" name="fbBirthday" value=""/>
           <input type="hidden" id="js_fbEmail" name="fbEmail" value=""/>
           <input type="hidden" id="js_fbFirstName" name="fbFirst_name" value=""/>

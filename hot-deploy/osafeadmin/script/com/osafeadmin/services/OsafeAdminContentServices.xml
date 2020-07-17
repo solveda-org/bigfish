@@ -149,7 +149,7 @@
             </if-compare>
             <set-nonpk-fields value-field="content" map="parameters"/>
             <if-not-empty field="parameters.locale">
-                <set field="content.localeString" from-field="parameters.locale" type="PlainString"/>
+                <set field="content.localeString" from-field="parameters.locale" type="String"/>
             </if-not-empty>
             <store-value value-field="content"/>
         </if-not-empty>
@@ -245,7 +245,7 @@
 	        <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
 	        <set field="createTextContentCtx.contentTypeId" from-field="parameters.contentTypeId"/>
 	        <if-not-empty field="parameters.locale">
-	            <set field="createTextContentCtx.localeString" from-field="parameters.locale" type="PlainString"/>
+	            <set field="createTextContentCtx.localeString" from-field="parameters.locale" type="String"/>
 	        </if-not-empty>
 	        <set field="createTextContentCtx.mapKey" value="link"/>
 	        <set field="createTextContentCtx.contentPurposeTypeId"  value="SECTION"/>
@@ -263,7 +263,7 @@
 	        <set field="createContentFromDataResourceCtx.dataResourceId" from-field="parameters.generatedDataResourceId"/>
 	        <set field="createContentFromDataResourceCtx.contentTypeId" from-field="parameters.contentTypeId"/>
 	        <if-not-empty field="parameters.locale">
-	            <set field="createContentFromDataResourceCtx.localeString" from-field="parameters.locale" type="PlainString"/>
+	            <set field="createContentFromDataResourceCtx.localeString" from-field="parameters.locale" type="String"/>
 	        </if-not-empty>
 	        <set field="createContentFromDataResourceCtx.contentPurposeTypeId" value="SECTION"/>
 	        <call-service service-name="createContentFromDataResource" in-map-name="createContentFromDataResourceCtx"/>
@@ -276,24 +276,22 @@
         <field-to-result field="parameters.contentId" result-name="contentId"/>
     </simple-method>
 
-    <simple-method method-name="deleteTextContent" short-description="delete content">
+    <simple-method method-name="deleteTextContent" short-description="delete content">        
         <entity-one entity-name="Content" value-field="content"/>
         <if-not-empty field="content">
-            <set field="removeXContentXrefCtx.contentId" from-field="content.contentId"/>
-            <set field="removeXContentXrefCtx.productStoreId" from-field="parameters.productStoreId"/>
-            <remove-by-and entity-name="XContentXref" map="removeXContentXrefCtx"/>
-            <set field="removeContentCtx.contentId" from-field="content.contentId"/>
-            <remove-by-and entity-name="ContentAttribute" map="removeContentCtx"/>
-            <remove-by-and entity-name="ContentRole" map="removeContentCtx"/>
-            <remove-by-and entity-name="ContentPurpose" map="removeContentCtx"/>
-            <call-service service-name="removeContent" in-map-name="removeContentCtx"/>
-            <set field="removeDataResourceCtx.dataResourceId" from-field="content.dataResourceId"/>
-            <remove-by-and entity-name="DataResourceRole" map="removeDataResourceCtx"/>
-            <call-service service-name="removeElectronicText" in-map-name="removeDataResourceCtx"/>
-            <call-service service-name="removeDataResource" in-map-name="removeDataResourceCtx"/>
-            <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
-            <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+	        <set field="removeXContentXrefCtx.contentId" from-field="content.contentId"/>
+	        <set field="removeXContentXrefCtx.productStoreId" from-field="parameters.productStoreId"/>
+	        <remove-by-and entity-name="XContentXref" map="removeXContentXrefCtx"/>
+	        <set field="removeContentCtx.contentId" from-field="content.contentId"/>
+	        <remove-by-and entity-name="ContentAttribute" map="removeContentCtx"/>
+	        <remove-by-and entity-name="ContentPurpose" map="removeContentCtx"/>
+	        <set-service-fields service-name="removeContentAndRelated" map="parameters" to-map="removeContentAndRelatedMap"/>
+	        <call-service service-name="removeContentAndRelated" in-map-name="removeContentAndRelatedMap"/>
+	        
+	        <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+	        <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
         </if-not-empty>
+        
     </simple-method>
 
     <simple-method method-name="successMessage" short-description="Display success message when no error messages are found.">
@@ -508,7 +506,7 @@
             </if-compare>
             <set-nonpk-fields value-field="content" map="parameters"/>
             <if-not-empty field="parameters.locale">
-                <set field="content.localeString" from-field="parameters.locale" type="PlainString"/>
+                <set field="content.localeString" from-field="parameters.locale" type="String"/>
             </if-not-empty>
             <store-value value-field="content"/>
         </if-not-empty>
@@ -549,5 +547,35 @@
             <result-to-result result-name="productId"/>
         </call-service>
     </simple-method>
+    
+    <!-- This service is not defined in ofbiz 10 so we will override -->
+    <simple-method method-name="removeContentAndRelated" short-description="Remove a Content Record, related resource(s) and assocs.">
+        <entity-one entity-name="Content" value-field="content"/> 
+        <remove-related value-field="content" relation-name="ContentRole"/>
+        <!-- Need to check if ContentKeyword entity exists before attempting to delete related -->
+        <call-class-method method-name="entityExists" class-name="com.osafe.util.OsafeAdminUtil" ret-field="entityExists">
+            <field field="delegator" type="org.ofbiz.entity.Delegator"/>
+            <string value="ContentKeyword"/>
+        </call-class-method>
+        <if-compare operator="equals" value="true" field="entityExists" type="Boolean">
+        	<remove-related value-field="content" relation-name="ContentKeyword"/>
+        </if-compare>
+        <remove-related value-field="content" relation-name="FromContentAssoc"/>
+        <remove-related value-field="content" relation-name="ToContentAssoc"/>
+        <remove-value value-field="content"/>
+        <get-related-one value-field="content" relation-name="DataResource" to-value-field="dataResource"/>
+        <if-not-empty field="dataResource">
+            <get-related-one value-field="dataResource" relation-name="ImageDataResource" to-value-field="imageDataResource"/>
+            <if-not-empty field="imageDataResource">
+                <remove-value value-field="imageDataResource"/>
+            </if-not-empty>
+            <get-related-one value-field="dataResource" relation-name="ElectronicText" to-value-field="electronicText"/>
+            <if-not-empty field="electronicText">
+                <remove-value value-field="electronicText"/>
+            </if-not-empty>
+            <remove-related value-field="dataResource" relation-name="DataResourceRole"/>
+            <remove-value value-field="dataResource"/>
+        </if-not-empty>
+    </simple-method>    
 
 </simple-methods>

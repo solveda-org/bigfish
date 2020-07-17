@@ -149,7 +149,7 @@
     });
  }
   function lineBreakCount(str){
-        /* counts \n */
+        //counts n
         try {
             return((str.match(/[^\n]*\n[^\n]*/gi).length));
         } catch(e) {

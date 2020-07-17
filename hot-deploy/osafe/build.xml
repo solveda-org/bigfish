@@ -2,6 +2,7 @@
 
 <project name="OFBiz - OSafe Component" default="osafe-deployment" basedir=".">
     <import file="../../common.xml"/>
+	<import file="build_custom.xml" optional="true"/>
 
     <!-- ================================================================== -->
     <!-- Initialization of all property settings                            -->
@@ -123,10 +124,26 @@
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_clickatell.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_clickatell.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_pinnacle.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_pinnacle.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_email_styles.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+    	<mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_alerts.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_alerts.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_clientDeployment.properties" toFilePath="${osafe.deployemt.home}/client-deployment.properties" keyValues="key" fileType="PROPERTIES" preserveExtra="false"/>
 
-        <customizeMergeFile fromFilePath="${osafe.home}/data/version/version_ofbiz-component.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template" readerNames="ofbizversion12"/>
+        <antcall target="osafe-deployment" inheritall="true"/>
+    </target>
+	
+	<target name="run-bigfish-merge-preserve" description="merge the XML/PROPERTIE file base on passed key values but preserve extra values">
+        <property name="osafe.deployemt.home" value="../../osafe_deployment"></property>
+        <property name="osafe.home" value="../../hot-deploy/osafe"></property>
+
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiLabels.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiLabels.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeUiSequence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiSequence.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_recurrence.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_recurrence.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_clickatell.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_clickatell.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_pinnacle.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_pinnacle.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_email_styles.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+    	<mergeFile fromFilePath="${osafe.home}/data/version/version_parameters_alerts.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_alerts.xml" keyValues="key" fileType="XML" preserveExtra="true"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
+        <mergeFile fromFilePath="${osafe.home}/data/version/version_clientDeployment.properties" toFilePath="${osafe.deployemt.home}/client-deployment.properties" keyValues="key" fileType="PROPERTIES" preserveExtra="false"/>
 
         <antcall target="osafe-deployment" inheritall="true"/>
     </target>
@@ -185,12 +202,12 @@
         <createToFile file="${osafe.home}/data/version/version_parameters_pinnacle.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_pinnacle.xml"/>
         <!-- Create Parameters email if not exist -->
         <createToFile file="${osafe.home}/data/version/version_parameters_email_styles.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_email_styles.xml"/>
+    	<!-- Create Parameters Alerts if not exist -->
+    	<createToFile file="${osafe.home}/data/version/version_parameters_alerts.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_alerts.xml"/>
         <!-- Create osafe properties if not exist -->
         <createToFile file="${osafe.home}/data/version/version_OsafeProperties.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template"/>
         <!-- Create client Deployment properties if not exist -->
         <createToFile file="${osafe.home}/data/version/version_clientDeployment.properties" tofile="${osafe.deployemt.home}/client-deployment.properties"/>
-        <!-- Create osafe ofbiz component xml if not exist -->
-        <createToFile file="${osafe.home}/data/version/version_ofbiz-component.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template"/>
 
         <!-- Load client specific property values -->
         <property file="${osafe.deployemt.home}/client-deployment.properties"></property>
@@ -408,6 +425,7 @@
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml" todir="../../hot-deploy/osafe/webapp/osafe/WEB-INF" overwrite="true" failonerror="false"/>
 
         <!-- Osafe ofbiz-component.xml -->
+        <copy file="../../hot-deploy/osafe/data/version/version_ofbiz-component.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template" overwrite="true" failonerror="false"></copy>
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml">
             <filterset >
                 <filter token="localDispatcherName" value=""/>

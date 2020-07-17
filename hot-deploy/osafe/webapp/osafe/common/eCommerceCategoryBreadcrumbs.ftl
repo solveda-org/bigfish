@@ -21,7 +21,12 @@ under the License.
 <#assign curCategoryId = requestAttributes.curCategoryId?if_exists>
 <#assign curTopMostCategoryId = requestAttributes.curTopMostCategoryId?if_exists>
 <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
-<#assign facetMultiSelect = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"FACET_MULTI_SELECT")/>
+<#assign FACET_VALUE_STYLE = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_STYLE")!"DEFAULT"/>
+<#if !FACET_VALUE_STYLE?has_content>
+	<#assign FACET_VALUE_STYLE = "DEFAULT"/>
+<#else>
+	<#assign FACET_VALUE_STYLE = FACET_VALUE_STYLE?string?upper_case/>
+</#if>
 
 <#-- looping macro -->
 <#macro topCategoryList category>
@@ -178,7 +183,7 @@ under the License.
     <#if pdpProductName?has_content>
         <@renderProductCrumb pdpProductName=pdpProductName/>
     </#if>
-    <#if facetGroups?has_content && !facetMultiSelect>
+    <#if facetGroups?has_content && FACET_VALUE_STYLE != "CHECKBOX">
         <#assign facetIdx =0/>
         <#assign facetSize =facetGroups.size()/>
         <#list facetGroups as facet>

@@ -4,7 +4,7 @@
 	  <div class="${request.getAttribute("attributeClass")!}<#if className?exists && className?has_content> ${className}</#if>">
 	    <div class="displayBox">
 	      <h3>${uiLabelMap.GuestCheckoutHeading?if_exists}</h3>
-	      <form method="post" action="<@ofbizUrl>validateAnonCustomerEmail${previousParams!""}</@ofbizUrl>" id="guestCustomerForm" name="guestCustomerForm" onsubmit="submitForm(this)" class="entryForm">
+	      <form method="post" action="<@ofbizUrl>validateAnonCustomerEmail${previousParams!""}</@ofbizUrl>" id="guestCustomerForm" name="guestCustomerForm" onsubmit="submitForm(this)">
 	          <p class="instructions">${uiLabelMap.GuestCheckoutInfo!""}</p>
 	          <ul class="displayActionList ${request.getAttribute("attributeClass")!}">
 			      <li>

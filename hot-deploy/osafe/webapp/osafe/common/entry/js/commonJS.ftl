@@ -1,5 +1,15 @@
 <script type="text/javascript">
-
+	
+	function submitCommonForm(form, mode, value) 
+    {
+        if (mode == "DN") {
+            <#-- done action -->
+            form.action="<@ofbizUrl>${doneAction!""}</@ofbizUrl>";
+            form.submit();
+        }
+    }
+    
+    
     var displayDialogId;
     var myDialog;
     var titleText;
@@ -53,6 +63,16 @@
         popupWindow = window.open(
             url,'popUpWindow','height=350,width=500,left=400,top=200,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
     }
+    function newPopupWindow(url, name) 
+    {
+        popupWindow = window.open(
+            url,name,'height=500,width=700,left=400,top=200,resizable=yes,scrollbars=yes,toolbar=yes,menubar=no,location=no,directories=no,status=yes')
+            
+            jQuery(popupWindow.document).ready(function() {
+		        popupWindow.document.title = name;
+		    });
+    }
+			
     function setDeleteId(deleteId,hiddenInputId)
     {
     	if (jQuery('#'+hiddenInputId).length) 
@@ -320,8 +340,8 @@
             function(e) {
                <#assign shoppingCart = Static["org.ofbiz.order.shoppingcart.ShoppingCartEvents"].getCartObject(request)! />  
                     <#if shoppingCart?has_content >
-                        <#assign cartCount = shoppingCart.getTotalQuantity()!"0" />
-                        <#assign cartSubTotal = shoppingCart.getSubTotal()!"0" />
+                        <#assign cartCount = shoppingCart.getTotalQuantity()!0 />
+                        <#assign cartSubTotal = shoppingCart.getSubTotal()!0 />
                     </#if>
                     <#if (cartCount?if_exists > 0) >
                         e.preventDefault();
@@ -403,41 +423,45 @@
             var keyCode = e.keyCode;
             if(keyCode != 40 && keyCode != 38)
             {
-              var searchText = jQuery(this).attr('value');
+            	var searchText = jQuery(this).attr('value');
             
-              jQuery("#searchText").autocomplete({
-                appendTo:"#searchAutoComplete",
-                source: function(request, response) {
-                jQuery.ajax({
-                    url: "<@ofbizUrl secure="${request.isSecure()?string}">findAutoSuggestions?searchText="+searchText+"</@ofbizUrl>",
-                    dataType: "json",
-                    type: "POST",
-                    success: function(data) {
-                    if(data.autoSuggestionList != null)
-                    {
-                        response(jQuery.map(data.autoSuggestionList, function(item) 
-                        {
-                            return {
-                                value: item
-                            }
-                        }))
-                    }
-                    else
-                    {
-                        response(function() {
-                            return {
-                                value: ""
-                            }
-                        })
-                    }
-                }
-                
-            });
-          },
-          minLength: 1
-          });
-        }
-    });
+              	jQuery("#searchText").autocomplete({
+                	appendTo:"#searchAutoComplete",
+                	source: function(request, response) 
+                	{
+	                	jQuery.ajax({
+	                    	url: "<@ofbizUrl secure="${request.isSecure()?string}">findAutoSuggestions?searchText="+searchText+"</@ofbizUrl>",
+	                    	dataType: "json",
+	                    	type: "POST",
+	                    	success: function(data) 
+	                    	{
+	                    		if(data.autoSuggestionList != null)
+	                    		{
+	                        		response(jQuery.map(data.autoSuggestionList, function(item) 
+	                        		{
+	                            		return {label: __highlight(item, searchText),
+	                    				value: item};
+	                        		}))
+	                    		}
+	                    		else
+	                    		{
+	                        		response(function() 
+	                        		{
+	                            		return {
+	                                		value: ""
+	                            		}
+	                        		})
+	                    		}
+	                		}
+	                
+	            		});
+          			},
+          			minLength: 1
+          		});
+        	}
+    	});
+    
+    
         
     jQuery('.checkDelivery').click(function(e)
     {
@@ -459,7 +483,19 @@
             jQuery(displayDialogId).dialog('close');
     });
     
-    });
+    <#-- Set column numbers on table -->
+    setTableColumnNumber();
+    
+}); 
+<#-- END DOCUMENT ON READY  -->
+
+
+
+function __highlight(s, t) 
+{
+  var matcher = new RegExp("("+jQuery.ui.autocomplete.escapeRegex(t)+")", "ig" );
+  return s.replace(matcher, "<span class=\"searchHighlight\">$1</span>");
+}
     
     function displayLightDialogBox(dialogPurpose) 
     {
@@ -548,11 +584,13 @@
 				}
 				else
 				{
+				    alert("${uiLabelMap.ReOredrBlankQtyError}");
 					addItemsToCart = "false";
 				}
     		}
     		count = count + 1;
-    	}); 
+    	});
+ 
         if (!itemSelected)
         {
             alert("${uiLabelMap.NoItemSelectedError}");
@@ -585,11 +623,14 @@
 	    document.reOrderItemSearchForm.submit();
     }
     
-    function showTooltip(text, elm)
+    function showTooltip(text, elm, elmType)
     {
         var tooltipBox = jQuery('.js_tooltip')[0];
-	    var obj2 = jQuery('.js_tooltipText')[0];
-	    obj2.innerHTML = text;
+        if(text != "")
+        {
+		    var obj2 = jQuery('.js_tooltipText')[0];
+		    obj2.innerHTML = text;
+	    }
 	    tooltipBox.style.display = 'block';
 	    <#assign decorator = "${parameters.eCommerceDecoratorName!}"/>
 	    <#-- get the ScrollTop and ScrollLeft to add in top and left postion of tooltip. -->
@@ -610,9 +651,20 @@
 	    var WW = jQuery(window).width();
 	    var WH = jQuery(window).height();
 	    
-	    //subtracting the sl and st from element left and top position because element left and top includes the scroll pixels. 
-	    var EX = jQuery(elm).children().offset().left - sl;
-	    var EY = jQuery(elm).children().offset().top - st;
+	    var EX = "";
+		var EY = "";
+	    if(elmType == "icon")
+	    {
+		    //subtracting the sl and st from element left and top position because element left and top includes the scroll pixels. 
+		    EX = jQuery(elm).children().offset().left - sl;
+		    EY = jQuery(elm).children().offset().top - st;
+	    }
+	    else if(elmType == "input")
+	    {
+	    	//subtracting the sl and st from element left and top position because element left and top includes the scroll pixels. 
+		    EX = jQuery(elm).offset().left - sl;
+		    EY = jQuery(elm).offset().top - st;
+	    }
 	    
 	    var TTW = jQuery(tooltipBox).width();
 	    var TTH = jQuery(tooltipBox).height();
@@ -620,6 +672,19 @@
 	    var TP = 0;
 	    var EH = jQuery(elm).children().height();
 		var EW = jQuery(elm).children().width();
+		
+		var EH = "";
+		var EW = "";
+	    if(elmType == "icon")
+	    {
+		    EH = jQuery(elm).children().height();
+			EW = jQuery(elm).children().width();
+	    }
+	    else if(elmType == "input")
+	    {
+	    	EH = jQuery(elm).height();
+			EW = jQuery(elm).width();
+	    }
 	    
 	    var TOP = eval(EY > TTH);
 	    var BOTTOM = eval(!(TOP));
@@ -958,6 +1023,100 @@
         {
             form.submit();
         }
-    }   
-   
+    }
+    
+    function addRow(elm, index)
+    {
+        var addRowElm = elm;
+        var lastDivElm = jQuery('#searchItemDiv');
+        var rowDiv = new Element('DIV');
+        rowDiv.setAttribute("class", "entry");
+        var innerText =  "<label>${uiLabelMap.FindItemCaption}<\/label><div class=\"entryField\"><input type=\"text\" name=\"searchItem"+index+"\"\/><\/div>";
+        jQuery(rowDiv).html(innerText);
+        jQuery(rowDiv).insertAfter('#searchItemDiv');
+        jQuery(lastDivElm).removeAttr("id");
+        jQuery(rowDiv).attr("id","searchItemDiv");
+        updateIndexPos(addRowElm, index);
+    }
+    
+    function updateIndexPos(addRowElm, index)
+    {
+        index = index + 1;
+        addRowElm.setAttribute("onClick", "javascript:addRow(this,"+index+");");
+    }
+    
+    //nextRowNumberInputId: the next row number will be stored in a hidden field with this ID
+    //rowClass: all rows will have a common class
+    //placeholderDivId: added Div will go before this DivId
+    //getRowAction: this is the controller action to retrieve the screen that is added as the next row
+	function addNewRow(nextRowNumberInputId, rowClass, placeholderDivId, getRowAction)
+	{
+		//set the next row number as a hidden input on the screen
+		var rowNum = Number(0);
+		if (jQuery('.'+rowClass).length) 
+	    {
+	    	rowNum = Number(jQuery("#"+nextRowNumberInputId).val());
+	    }
+	    
+		jQuery("#"+nextRowNumberInputId).val(Number(rowNum + 1));
+		
+		jQuery.get('<@ofbizUrl>'+ getRowAction +'?addRowIndex='+rowNum+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+	        jQuery(data).insertBefore("#" + placeholderDivId);
+	    });
+	}
+		
+	function deleteExistingRow(addRemoveIndex,rowClass,nextRowNumberInputId)
+	{
+		jQuery('.'+addRemoveIndex).remove();
+		if (jQuery('.'+rowClass).length) 
+	    {
+	    	//do nothing
+	    }
+	    else
+	    {
+	    	//set the hidden input rowNumber to 0
+	    	jQuery("#"+nextRowNumberInputId).val("0");
+	    }
+	}
+	
+	function elmIsEmpty(elm)
+	{
+      return !jQuery.trim(elm.html())
+    }
+    
+    function setTableColumnNumber()
+    {
+    
+    	jQuery('table.dataTable').each(function () 
+    	{
+    		var count = 1;
+    		var theadTrTh = jQuery(this).find('thead').find('tr').find('th');
+    		jQuery(theadTrTh).each(function () 
+    		{
+    			jQuery(this).addClass("column" + count);
+    			count++;
+    		});
+    		
+    		var tbodyTr = jQuery(this).find('tbody').find('tr');
+    		jQuery(tbodyTr).each(function () 
+    		{
+    			count = 1;
+    			jQuery(this).find('td').each(function () 
+    			{
+    				jQuery(this).addClass("column" + count);
+    				count++;
+    			});
+    		});
+    		
+    		count = 1;
+    		var tfootTrTd = jQuery(this).find('tfoot').find('tr').find('td');
+    		jQuery(tfootTrTd).each(function () 
+    		{
+    			jQuery(this).addClass("column" + count);
+    			count ++;
+    		});
+    		
+    	});
+    }
+    
 </script>

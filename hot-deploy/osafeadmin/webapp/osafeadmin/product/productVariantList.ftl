@@ -51,9 +51,9 @@
 	    	<#assign listPrice = productVariantListPrice.price!"" />
 	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantListPrice", globalContext.currencySymbol+""+listPrice, "productListPrice", globalContext.currencySymbol+""+productListPrice.price!"")>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VariantOverridePriceInfo",pricesMap, locale )+"</p>">
-	    <#else>
+	    <#elseif productListPrice?has_content>
 	    	<#assign listPrice = productListPrice.price!"" />
-	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("productListPrice", globalContext.currencySymbol+""+productListPrice.price!"")>
+	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("productListPrice", globalContext.currencySymbol+""+listPrice!"")>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VirtualListPriceInfo",pricesMap, locale )+"</p>">
 	  	</#if>
         <td class="dollarCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
@@ -64,11 +64,11 @@
         <#assign productVariantSalePrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, variantProdDetail.productId, "DEFAULT_PRICE")!>
         <#if productVariantSalePrice?has_content>
 	    	<#assign defaultPrice = productVariantSalePrice.price!"" />
-	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantSalePrice", globalContext.currencySymbol+""+defaultPrice, "virtualSalePrice", globalContext.currencySymbol+""+productDefaultPrice.price!)>
+	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("variantSalePrice", globalContext.currencySymbol+""+defaultPrice, "virtualSalePrice", globalContext.currencySymbol+""+defaultPrice!)>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VariantOverrideDefaultPriceInfo",pricesMap, locale )+"</p>">
-	    <#else>
+	    <#elseif productDefaultPrice?has_content>
 	    	<#assign defaultPrice = productDefaultPrice.price!"" />
-	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("virtualSalePrice", globalContext.currencySymbol+""+productDefaultPrice.price)>
+	    	<#assign pricesMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("virtualSalePrice", globalContext.currencySymbol+""+defaultPrice)>
 	    	<#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","VirtualDefaultPriceInfo",pricesMap, locale )+"</p>">
 	  	</#if>
         <td class="dollarCol <#if !variantProduct_has_next?if_exists>lastRow</#if>">
@@ -80,7 +80,9 @@
             <#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+uiLabelMap.StoreOnlyProductInfo>
         </#if>
         <td class="actionCol">
-        	<p onMouseover="showTooltip(event,'${variantProductPriceInfo}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></p>
+        	<#if variantProductPriceInfo?has_content>
+        		<p onMouseover="showTooltip(event,'${variantProductPriceInfo}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></p>
+        	</#if>
         </td> 
         <#assign bfTotalInventoryProductAttribute = delegator.findOne("ProductAttribute", {"productId" : variantProduct.productIdTo, "attrName" : "BF_INVENTORY_TOT"}, false)?if_exists/> 
         <#if bfTotalInventoryProductAttribute?exists>

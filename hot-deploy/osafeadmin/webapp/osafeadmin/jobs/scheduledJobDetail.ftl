@@ -130,8 +130,7 @@
 	      <div class="infoValue">
 	      		<#if mode == "add">
 		      		<select name="SERVICE_NAME" id="SERVICE_NAME">
-		        	<!--<input name="SERVICE_NAME" type="text" id="SERVICE_NAME" value="${serviceName!parameters.SERVICE_NAME!""}"/>-->
-		        	<#include "component://osafeadmin/webapp/osafeadmin/jobs/scheduledJobServiceNames.ftl"/>
+		        		${screens.render("component://osafeadmin/widget/CommonScreens.xml#scheduledJobServiceNames")}
 		        	</select>
 		        <#else>
 		        	${serviceName!""}
@@ -179,49 +178,6 @@
 	      </div>  
 	    </div>
 	  </div>
-	  
-	  <#if statusId == "PENDING">
-	  <div class="infoRow">
-	    <div class="infoEntry">
-	    	  <div class="infoCaption">
-		        	<label>${uiLabelMap.RunTimeCaption}</label>
-		      </div>
-		      <div class="infoValue">
-		        <div class="entryInput"> 
-		        	<#if statusId == "PENDING">
-	                  <!-- service hour -->
-	                  <select id="SERVICE_HOUR" name="SERVICE_HOUR" >
-	                  <#assign runHour = requestParameters.SERVICE_HOUR!runHour!"">
-	                  <#if runHour?has_content && (runHour?length gt 0)>
-	                      <option value="${runHour?if_exists}">${runHour?if_exists}</option>
-	                  </#if>
-	                  <option value="">${uiLabelMap.CommonHH}</option>
-	                  ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ddHours")}
-	                  </select>
-	
-	                  <!-- service minute -->
-	                  <select id="SERVICE_MINUTE" name="SERVICE_MINUTE" >
-	                  <#assign runMinute = requestParameters.SERVICE_MINUTE!runMinute!"">
-	                  <#if runMinute?has_content && (runMinute?length gt -1)>
-	                      <option value="${runMinute?if_exists}">${runMinute?if_exists}</option>
-	                  </#if>
-	                  <option value="">${uiLabelMap.CommonMM}</option>
-	                  ${screens.render("component://osafeadmin/widget/CommonScreens.xml#ddMinuts")}
-	                  </select>
-	
-	                  <!-- service AMPM -->
-	        		  <#assign selectedAMPM = parameters.SERVICE_AMPM!runTimeAMPM!""/>
-					  <select name="SERVICE_AMPM" id="SERVICE_AMPM" >
-                        <option value="">${uiLabelMap.CommonAMPM}</option>
-						<option value='1'<#if selectedAMPM == "1">selected=selected</#if>>${uiLabelMap.CommonAM}</option>
-						<option value='2'<#if selectedAMPM == "2">selected=selected</#if>>${uiLabelMap.CommonPM}</option>
-				      </select>
-				    </#if>
-		        </div>
-		      </div>
-		 </div>
-	  </div>
-	  </#if> 
 	  
 	  <#if mode!="add">	
 	  <div class="infoRow">

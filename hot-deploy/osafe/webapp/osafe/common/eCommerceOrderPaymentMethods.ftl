@@ -1,6 +1,8 @@
+<#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#assign shoppingCart = sessionAttributes.shoppingCart?if_exists>
 <#if userLogin?has_content>
     <#assign partyId = userLogin.partyId!"">
+    <#assign partyProfileDefault = delegator.findOne("PartyProfileDefault", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId, "productStoreId", productStore.productStoreId), true)?if_exists/>
 </#if>
 
 <#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content && !Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC")>
@@ -8,357 +10,348 @@
 <#else>
   <#assign ccAvailable = "true" />
 </#if>
+<#assign donePage = "donePage">
+<#if !creditCard?exists>
+	<#--
+	    Sending to validation routine, we want to only show field level messages when adding a "Credit Card"
+	    but want to allow teh screen in general to show general messages if you try to continue without choosing
+	    a payment method
+	-->
+<#else>
+	<input type="hidden" name="paymentMethodId" value="${paymentMethodId}" />
+</#if>
+
+<#-- Added to deal with payment being declined -->
+<input type="hidden" id="BACK_PAGE" name="BACK_PAGE" value="checkoutoptions" />
+
+<#-- Added so on successful redirect to "Order Complete" page we know to show the "Thank You" message  -->
+<#-- <input type="hidden" id="showThankYouStatus" name="showThankYouStatus" value="Y" /> -->
+        
+<#if !creditCard?has_content>
+    <#assign creditCard = requestParameters>
+</#if>
+	
+<#if !paymentMethod?has_content>
+    <#assign paymentMethod = requestParameters>
+</#if>
+<#assign checkOutStoreCC = Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_STORE_CC")!""/>
+<#assign checkOutStoreCCReq = Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_STORE_CC_REQ")!""/>
+<#assign checkoutPaymentStyle = Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_PAYMENT_STYLE")!"LIST"/>
+
+
+<input type="hidden" name="companyNameOnCard" id="companyNameOnCard" value="" />
+<input type="hidden" name="titleOnCard" id="titleOnCard" value="" />
+<input type="hidden" name="firstNameOnCard" id="firstNameOnCard" value="${billingPersonFirstName!}" />
+<input type="hidden" name="middleNameOnCard" id="middleNameOnCard" value="" />
+<input type="hidden" name="lastNameOnCard" id="lastNameOnCard" value="${billingPersonLastName!}" />
+<input type="hidden" name="suffixOnCard" id="suffixOnCard" value="" />
+<input type="hidden" name="cardSecurityCode" id="cardSecurityCode" value="" />
+<input type="hidden" name="description" id="cardSecurityCode" value="" />
+<input type="hidden" name="contactMechId" id="contactMechId" value="${billingContactMechId!""}" />
+<input type="hidden" name="paymentMethodTypeId" id="js_paymentMethodTypeId" value="CREDIT_CARD" />
+<input type="hidden" name="storeCCRequired" id="storeCCRequired" value="${checkOutStoreCC!"true"}" />
+<input type="hidden" name="storeCCValidate" id="storeCCValidate" value="${checkOutStoreCCReq!"false"}" />
+
+<#-- LOGIC TO DISPLAY OPTIONS FOR PAY NOW /PAY IN STORE -->
+<#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content>
+	<#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC_REQ") && Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC")>
+   		<#assign showPaymentOption = "true"/>
+	<#else>
+   		<#assign showPaymentOption = "false" />
+	</#if>
+<#else>
+	<#assign showPaymentOption = "false"/>
+</#if>
+
+<#if parameters.paymentOption?exists && parameters.paymentOption?has_content>
+     <#assign selectedPaymentOption = parameters.paymentOption!""/>
+<#else>
+	 <#assign selectedPaymentOption = "PAYOPT_EMPTY">
+</#if>     
+
+
 
 <div class="${request.getAttribute("attributeClass")!}">
-	<#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
-	    <#-- Enter Credit Card Box -->
-	    <div class="displayBox">
-	      <h3>${uiLabelMap.PaymentInformationHeading}</h3>
-
-	      <#assign donePage = "donePage">
-	      <#if !creditCard?exists>
-	       <div>
-	            <#--
-	                Sending to validation routine, we want to only show field level messages when adding a "Credit Card"
-	                but want to allow teh screen in general to show general messages if you try to continue without choosing
-	                a payment method
-	            -->
-	      <#else>
-	       <div>
-	        <input type="hidden" name="paymentMethodId" value="${paymentMethodId}" />
-	      </#if>
-
-              <div id="js_remainingPayment" class="container remainingPayment">
-                <h4>${uiLabelMap.RemainingPaymentHeading}</h4>
-                  <label>${uiLabelMap.RemainingPaymentCaption}</label>
-                  <#assign remainingPayment = shoppingCart.getGrandTotal().subtract(shoppingCart.getPaymentTotal())! />
-                  <span><@ofbizCurrency amount=remainingPayment! isoCode=currencyUom  rounding=globalContext.currencyRounding/></span>
-                  <input type="hidden" name="remainingPayment" id="js_remainingPaymentValue" value="${remainingPayment}" />
-              </div>
-	
-	        <#-- Added to deal with payment being declined -->
-	        <input type="hidden" id="BACK_PAGE" name="BACK_PAGE" value="checkoutoptions" />
-	
-	        <#-- Added so on successful redirect to "Order Complete" page we know to show the "Thank You" message  -->
-	        <#-- <input type="hidden" id="showThankYouStatus" name="showThankYouStatus" value="Y" /> -->
-	        
-    	        <#if !creditCard?has_content>
-    	            <#assign creditCard = requestParameters>
-    	        </#if>
-    	
-    	        <#if !paymentMethod?has_content>
-    	            <#assign paymentMethod = requestParameters>
-    	        </#if>
-                  <#assign checkOutStoreCC= Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_STORE_CC")!""/>
-                  <#assign checkOutStoreCCReq= Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_STORE_CC_REQ")!""/>
-    
-    	          <input type="hidden" name="companyNameOnCard" id="companyNameOnCard" value="" />
-    	          <input type="hidden" name="titleOnCard" id="titleOnCard" value="" />
-    	          <input type="hidden" name="firstNameOnCard" id="firstNameOnCard" value="${billingPersonFirstName!}" />
-    	          <input type="hidden" name="middleNameOnCard" id="middleNameOnCard" value="" />
-    	          <input type="hidden" name="lastNameOnCard" id="lastNameOnCard" value="${billingPersonLastName!}" />
-    	          <input type="hidden" name="suffixOnCard" id="suffixOnCard" value="" />
-    	
-    	          <input type="hidden" name="cardSecurityCode" id="cardSecurityCode" value="" />
-    	          <input type="hidden" name="description" id="cardSecurityCode" value="" />
-    	          <input type="hidden" name="contactMechId" id="contactMechId" value="${billingContactMechId!""}" />
-                  <input type="hidden" name="paymentMethodTypeId" id="js_paymentMethodTypeId" value="CREDIT_CARD" />
-                  <input type="hidden" name="storeCCRequired" id="storeCCRequired" value="${checkOutStoreCC!"true"}" />
-                  <input type="hidden" name="storeCCValidate" id="storeCCValidate" value="${checkOutStoreCCReq!"false"}" />
-    
-                  <#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content>
-                    <#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC_REQ") && Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC")>
-                       <#assign showPaymentOption = "true"/>
-                    <#else>
-                       <#assign showPaymentOption = "false" />
-                    </#if>
-                  <#else>
-                    <#assign showPaymentOption = "false"/>
-                  </#if>
-                    <div class="entry payInStore js_paymentOptions" <#if showPaymentOption == "false" || (remainingPayment <= 0)>style="display:none"</#if>>
-                      <h4>${uiLabelMap.PaymentOptionsHeading}</h4>
-                      <label class="radioOptionLabel"><input type="radio" id="js_payInStoreN" name="payInStore" value="N" <#if (!(parameters.payInStore?exists && parameters.payInStore?string == "Y"))>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.PayNowLabel}</span></label>
-                      <label class="radioOptionLabel"><input type="radio" id="js_payInStoreY" name="payInStore" value="Y" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "Y"))>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.PayInStoreLabel}</span></label>
-                    </div>
-                  <div id="js_checkoutPaymentOptions" <#if ccAvailable == "false" || (remainingPayment <= 0)>style="display:none"</#if>>
-    	              <!-- EBS section Starts-->
-    	              <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EBS")>
-    	                  <div class="container ebs">
-    		                <h4>${uiLabelMap.EBSHeading}</h4>
-   	                        <div class="entry">
-	    		                <label>${uiLabelMap.EBSCaption}</label>
-	    		                <a href="javascript:submitCheckoutForm(document.${formName!}, 'EB', 'EXT_EBS');">
-	    		                    <span class="ebsCheckoutImage"><span>${uiLabelMap.EBSHeading}</span></span>
-	    		                </a>
-	    		            </div>
-    		              </div>
-    		          </#if>
-
-                      <!-- ATOM PAYNETZ section Starts-->
-                      <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYNETZ")>
-                          <div class="container payNetz">
-                            <h4>${uiLabelMap.PayNetzHeading}</h4>
-   	                        <div class="entry">
-	                            <label>${uiLabelMap.PayNetzCaption}</label>
-	                            <a href="javascript:submitCheckoutForm(document.${formName!}, 'PNZ', 'EXT_PAYNETZ');">
-	    		                    <span class="payNetzCheckoutImage"><span>${uiLabelMap.PayNetzHeading}</span></span>
-	                            </a>
+	<div class="displayBox">
+		<h3>${uiLabelMap.PaymentInformationHeading}</h3>
+		<div>
+			<!-- REMAINING PAYMENT SECTION (Will display the balance due) -->
+			<div id="js_remainingPayment" class="container remainingPayment">
+				<h4>${uiLabelMap.RemainingPaymentHeading}</h4>
+				<label>${uiLabelMap.RemainingPaymentCaption}</label>
+				<#assign remainingPayment = shoppingCart.getGrandTotal().subtract(shoppingCart.getPaymentTotal())! />
+				<span><@ofbizCurrency amount=remainingPayment! isoCode=currencyUom  rounding=globalContext.currencyRounding/></span>
+				<input type="hidden" name="remainingPayment" id="js_remainingPaymentValue" value="${remainingPayment}" />
+			</div>
+			
+			<div class="entry payInStore js_paymentOptions" <#if showPaymentOption == "false" || (remainingPayment <= 0)>style="display:none"</#if>>
+			  <h4>${uiLabelMap.PaymentOptionsHeading}</h4>
+			  <label class="radioOptionLabel"><input type="radio" id="js_payInStoreN" name="payInStore" value="N" <#if (!(parameters.payInStore?exists && parameters.payInStore?string == "Y"))>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.PayNowLabel}</span></label>
+			  <label class="radioOptionLabel"><input type="radio" id="js_payInStoreY" name="payInStore" value="Y" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "Y"))>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.PayInStoreLabel}</span></label>
+			</div>
+			
+			<!-- DISPLAY PAYMENT OPTIONS -->
+			<div id="js_checkoutPaymentOptions" <#if ccAvailable == "false" || (remainingPayment <= 0)>style="display:none"</#if>>
+		 
+        	 <#if "DROPDOWN" == checkoutPaymentStyle.toUpperCase()>
+        	   <div class="container paymentOptionsDD">
+					<div class="entryForm paymentEntry paymentOptions">
+						<div class="entry">
+							<label>${uiLabelMap.ChoosePaymentOptionLabel}</label>
+	                       	<div class="entryField">
+	                         	<select id="js_paymentOptionsDD" name="paymentOption">
+	                                <option value="PAYOPT_EMPTY" <#if selectedPaymentOption == "PAYOPT_EMPTY"> selected</#if>>${uiLabelMap.SelectOneLabel}</option>
+	            			  		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_CC")>
+	                            		<option value="PAYOPT_CC_NEW" <#if selectedPaymentOption == "PAYOPT_CC_NEW"> selected</#if>>${uiLabelMap.PaymentOptionCreditCardLabel}</option>
+	                            	</#if>
+									<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+										<#-- IF WE ARE SAVING CC INFO -->
+										<#if savedPaymentMethodValueMaps?has_content>
+				   							<#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
+				 								<#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
+				 								<#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
+				 									<#assign hasSavedCard= "Y"/>
+				 									<#break>
+				 								</#if>
+				   							</#list>
+										</#if>
+				    		       		<#if hasSavedCard?has_content>
+	                            		    <option value="PAYOPT_CC_EXIST" <#if selectedPaymentOption == "PAYOPT_CC_EXIST"> selected</#if>>${uiLabelMap.PaymentOptionSavedCreditCardLabel}</option>
+				    		       		</#if>
+				    		       </#if>
+	          			      	   <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EFT")>
+	                            		<option value="PAYOPT_EFT_NEW" <#if selectedPaymentOption == "PAYOPT_EFT_NEW"> selected</#if>>${uiLabelMap.PaymentOptionEftAccountLabel}</option>
+	                               </#if>
+					               <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+										<#-- IF WE ARE SAVING EFT INFO -->
+							            <#if savedPaymentMethodEftValueMaps?has_content>
+							               	<#list savedPaymentMethodEftValueMaps as savedPaymentMethodEftValueMap>
+							                 	<#assign savedPaymentMethod =savedPaymentMethodEftValueMap.paymentMethod/>
+							                 	<#if "EFT_ACCOUNT" == savedPaymentMethod.paymentMethodTypeId>
+							                     	<#assign hasSavedEftAccount = "Y"/>
+							                     	<#break>
+							                 	</#if>
+							               	</#list>
+							          	</#if>
+					             		<#if hasSavedEftAccount?has_content>
+	                            		    <option value="PAYOPT_EFT_EXIST" <#if selectedPaymentOption == "PAYOPT_EFT_EXIST"> selected</#if>>${uiLabelMap.PaymentOptionSavedEftAccountLabel}</option>
+	                            		</#if>
+	                               </#if>
+						           <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYPAL")>
+	                            		<option value="PAYOPT_PAYPAL" <#if selectedPaymentOption == "PAYOPT_PAYPAL"> selected</#if>>${uiLabelMap.PaymentOptionPayPalLabel}</option>
+	                               </#if>
+						           <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EBS")>
+	                            		<option value="PAYOPT_EBS" <#if selectedPaymentOption == "PAYOPT_EBS"> selected</#if>>${uiLabelMap.PaymentOptionEbsLabel}</option>
+	                               </#if>
+						           <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYNETZ")>
+	                            		<option value="PAYOPT_PAYNETZ" <#if selectedPaymentOption == "PAYOPT_PAYNETZ"> selected</#if>>${uiLabelMap.PaymentOptionPayNetzLabel}</option>
+	                               </#if>
+	                               <#if (Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD"))>					           
+	                            		<option value="PAYOPT_COD" <#if selectedPaymentOption == "PAYOPT_COD"> selected</#if>>${uiLabelMap.PaymentOptionCODLabel}</option>
+	                               </#if>
+								</select>
 	                        </div>
-                          </div>
-                      </#if>
-    	
-    	              <!-- PAYPAL-->
-    	              <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYPAL")>
-    		             <div class="container paypal">
-       		                <h4>${uiLabelMap.PayPalHeading}</h4>
-   	                        <div class="entry">
-	    		               <label>${uiLabelMap.PayPalCaption}</label>
-	    		               <a href="javascript:submitCheckoutForm(document.${formName!}, 'PA', 'EXT_PAYPAL');">
-	    		                    <span class="payPalCheckoutImage"><span>${uiLabelMap.PayPalHeading}</span></span>
-	    		               </a>
-	    		            </div>
-    		             </div>
-    		          </#if>
-    		            
-    		          <!-- CREDIT CARD-->
-    		          <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_CC")>
-    		              <div class="container creditCard js_creditCardEntry">
-    		              <h4>${uiLabelMap.CreditCardHeading}</h4>
-    		              <#if userLogin?has_content>
-    		                    <#assign partyId = userLogin.partyId!"">
-    		                    <#assign partyProfileDefault = delegator.findOne("PartyProfileDefault", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId, "productStoreId", productStore.productStoreId), true)?if_exists/>
-    		              </#if>
-    		
-    		              <#if (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_CC_EXIST")>
-    		                  <#assign selectedPaymentOption = "PAYOPT_CC_EXIST">
-    		              <#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_CC_NEW")>
-    		                  <#assign selectedPaymentOption = "PAYOPT_CC_NEW">
-    		              <#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_COD")>
-    		                  <#assign selectedPaymentOption = "PAYOPT_COD">
-    		              <#elseif Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
-    		                  <#if savedPaymentMethodValueMaps?has_content>
-    		                     <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
-    		                       <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
-    		                       <#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
-    		                           <#assign hasSavedCard= "Y"/>
-    		                           <#break>
-    		                       </#if>
-    		                     </#list>
-    		                  </#if>
-    		                  <#if hasSavedCard?has_content>
-    		                      <#assign selectedPaymentOption = "PAYOPT_CC_EXIST">
-    		                  <#else>
-    		                      <#assign selectedPaymentOption = "PAYOPT_CC_NEW">
-    		                  </#if>
-    		              <#else>
-    		                  <#assign selectedPaymentOption = "PAYOPT_CC_NEW">
-    		              </#if>
-    		
-    		              <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
-    		                <#if savedPaymentMethodValueMaps?has_content>
-    		                   <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
-    		                     <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
-    		                     <#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
-    		                         <#assign hasSavedCard= "Y"/>
-    		                         <#break>
-    		                     </#if>
-    		                   </#list>
-    		                </#if>
-    		                
-    		                <#if hasSavedCard?has_content>
-    		                        <div class="entry">
-    		                          <label class="radioOptionLabel"><input type="radio" id="js_useSavedCard" name="paymentOption" value="PAYOPT_CC_EXIST" <#if (selectedPaymentOption?exists && selectedPaymentOption?string == "PAYOPT_CC_EXIST")>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.UseSavedCardLabel}</span></label>
-    		                        </div>
-    		                        <div class="entry savedCreditCard">
-    		                         <label for="savedCard">${uiLabelMap.SelectSavedCardCaption}</label>
-              	                       <div class="entryField">
-	    		                         <select id="js_savedCard" name="savedCard" class="savedCard">
-	    		                           <option value="">${uiLabelMap.CommonSelectOne}</option>
-	    		                             <#assign alreadyShownSavedCreditCardList = Static["javolution.util.FastList"].newInstance()/>
-	    		                             <#assign selectedSavedCard = parameters.savedCard!""/>
-	    		                             <#if savedPaymentMethodValueMaps?has_content>
-	    		                                <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
-	    		                                   <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod?if_exists/>
-	    		                                   <#assign savedCreditCard = savedPaymentMethodValueMap.creditCard?if_exists/>
-	    		                                   <#if ("CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId) && (savedCreditCard?has_content)>
-	    		                                     <#assign cardExpireDate=savedCreditCard.expireDate?if_exists/>
-	    		                                     <#assign cardNumber=savedCreditCard.cardNumber?if_exists/>
-	    		                                     <#if (cardExpireDate?has_content) && (Static["org.ofbiz.base.util.UtilValidate"].isDateAfterToday(cardExpireDate)) && (cardNumber?has_content) && (!alreadyShownSavedCreditCardList.contains(cardNumber+cardExpireDate))>
-	    		                                      <#if partyProfileDefault?exists >
-	    		                                      	<#assign partyProfileDefaultPayMeth = partyProfileDefault.defaultPayMeth!"" />
-	    		                                      </#if>
-	    		                                      <option value="${savedPaymentMethod.paymentMethodId}" <#if (selectedSavedCard == savedPaymentMethod.paymentMethodId) || (partyProfileDefaultPayMeth?exists && partyProfileDefaultPayMeth?has_content && (partyProfileDefaultPayMeth == savedCreditCard.paymentMethodId)) >selected=selected</#if>>
-	    		                                            ${savedCreditCard.cardType}
-	    		                                        <#assign cardNumberDisplay = "">
-	    		                                        <#if cardNumber?has_content>
-	    		                                           <#assign size = cardNumber?length - 4>
-	    		                                           <#if (size > 0)>
-	    		                                             <#list 0 .. size-1 as charno>
-	    		                                               <#assign cardNumberDisplay = cardNumberDisplay + "*">
-	    		                                             </#list>
-	    		                                             <#assign cardNumberDisplay = cardNumberDisplay + cardNumber[size .. size + 3]>
-	    		                                           <#else>
-	    		                                             <#assign cardNumberDisplay = cardNumber>
-	    		                                           </#if>
-	    		                                        </#if>
-	    		                                        ${cardNumberDisplay?if_exists}
-	    		                                        ${uiLabelMap.CardExpirationLabel}${savedCreditCard.expireDate}
-	    		                                      </option>
-	    		                                      <#assign changed = alreadyShownSavedCreditCardList.add(cardNumber+cardExpireDate)/>
-	    		                                     </#if>
-	    		                                   </#if>
-	    		                                 </#list>
-	    		                              </#if>
-	    		                         </select>
-	    		                         <@fieldErrors fieldName="savedCard"/>
-	    		                       </div>
-    		                        </div>
-    		                        
-    		                        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_CC_VERIFICATION_REQ")>
-    		                           <div class="entry verificationNo">
-    		                              <label for="savedVerificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
-		            	                   <div class="entryField">
-	    		                               <input type="text" class="cardNumber" maxlength="30" id="js_savedVerificationNo"  name="savedVerificationNo" value="${requestParameters.savedVerificationNo!""}"/>
-	    		                              <@fieldErrors fieldName="savedVerificationNo"/>
-	    		                           </div>
-    		                           </div>
-    		                           <div class="entry content">
-        						           <label for="content">&nbsp;</label>
-                                           <span>${screens.render("component://osafe/widget/EcommerceContentScreens.xml#CHECKOUT_CC_VERIFY")}</span>
-                                       </div>
-    		                        </#if>
-    		                        <div class="entry">
-    		                            <label class="radioOptionLabel"><input type="radio" id="js_useOtherCard" name="paymentOption" value="PAYOPT_CC_NEW" <#if (selectedPaymentOption?exists && selectedPaymentOption?string == "PAYOPT_CC_NEW")>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.PayWithAnotherCardLabel}</span></label>
-    		                        </div>
-    		                    <#else>
-    		                        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD")>
-    		                            <div class="entry">
-    		                                <label class="radioOptionLabel"><input type="radio" id="useSavedCard" name="paymentOption" value="paymentOption" <#if (selectedPaymentOption?exists && selectedPaymentOption?string == "PAYOPT_CC_NEW")>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.CreditCardlabel}</span></label>
-    		                            </div>
-    		                        <#else>
-    		                            <input type="hidden" name="paymentOption" value="paymentOption"/>
-    		                        </#if>
-    		                        <input type="hidden" name="useSavedCard" value="N"/>
-    		                    </#if>
-    		                <#else>
-    		                    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD")>
-    		                        <div class="entry">
-    		                            <label class="radioOptionLabel"><input type="radio" id="useSavedCard" name="paymentOption" value="PAYOPT_CC_NEW" <#if (selectedPaymentOption?exists && selectedPaymentOption?string == "PAYOPT_CC_NEW")>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.CreditCardlabel}</span></label>
-    		                        </div>
-    		                    <#else>
-    		                        <input type="hidden" name="paymentOption" value="paymentOption"/>
-    		                    </#if>
-    		                    <input type="hidden" name="useSavedCard" value="N"/>
-    		                </#if>
-    		
-    			            <div class="entry cardType">
-    			              <label for="cardType"><@required/>${uiLabelMap.CardTypeCaption}</label>
-            	                   <div class="entryField">
-		    			              <select id="js_cardType" name="cardType" class="cardType">
-		    		                    <#if creditCard?has_content && creditCard.cardType?has_content>
-		    		                       <#assign cardType = creditCard.cardType>
-		    		                    <#else>
-		    		                       <#assign cardType = requestParameters.cardType?if_exists>
-		    		                    </#if>
-		    		                  
-		    		                    <#if cardType?has_content>
-		    		                       <#assign cardTypeEnums = delegator.findByAndCache("Enumeration", {"enumCode" : cardType, "enumTypeId" : "CREDIT_CARD_TYPE"})?if_exists/>
-		    		                       <#if cardTypeEnums?has_content>
-		    		                          <#assign cardTypeEnum = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(cardTypeEnums) />
-		    		                          <option value="${cardTypeEnum.enumCode!}">${cardTypeEnum.description!}</option>
-		    		                       </#if>
-		    		                    </#if>
-		    			                <option value="">${uiLabelMap.CommonSelectOne}</option>
-		    			                ${screens.render("component://osafe/widget/CommonScreens.xml#ccTypes")}
-		    			              </select>
-		    			              <@fieldErrors fieldName="cardType"/>
-		    			           </div>
-    			            </div>
-    			            
-    			            <div class="entry cardNumber">
-    			              <label for="cardNumber"><@required/>${uiLabelMap.CardNumberCaption}</label>
-            	                 <div class="entryField">
-		    			              <input type="text" class="cardNumber" maxlength="30" id="js_cardNumber"  name="cardNumber" value="${creditCard.cardNumber!requestParameters.cardNumber!""}"/>
-		    			              <@fieldErrors fieldName="cardNumber"/>
-		    			         </div>
-    			            </div>
-    			              
-    			            <#assign expMonth = "">
-    			            <#assign expYear = "">
-    			            <#if creditCard?exists && creditCard.expireDate?exists>
-    			               <#assign expDate = creditCard.expireDate>
-    			               <#if (expDate?exists && expDate.indexOf("/") > 0)>
-    			                  <#assign expMonth = expDate.substring(0,expDate.indexOf("/"))>
-    			                  <#assign expYear = expDate.substring(expDate.indexOf("/")+1)>
-    			               </#if>
-    			            </#if>
-    			            
-    			            <div class="entry expMonth">
-    			              <label for="expMonth"><@required/>${uiLabelMap.ExpirationMonthCaption}</label>
-            	                   <div class="entryField">
-		    			              <select id="js_expMonth" name="expMonth" class="expMonth">
-		    			                <#if creditCard?has_content && expMonth?has_content>
-		    			                  <#assign ccExprMonth = expMonth>
-		    			                <#else>
-		    			                  <#assign ccExprMonth = requestParameters.expMonth?if_exists>
-		    			                </#if>
-		    			                <#if ccExprMonth?has_content>
-		    			                  <option value="${ccExprMonth?if_exists}">${ccExprMonth?if_exists}</option>
-		    			                </#if>
-		    			                <option value="">${uiLabelMap.CommonSelectOne}</option>
-		    			                ${screens.render("component://osafe/widget/CommonScreens.xml#ccMonths")}
-		    			              </select>
-		    			              <@fieldErrors fieldName="expMonth"/>
-		    			          </div>
-    			            </div>
-    			            
-    			            <div class="entry expYear">
-    			              <label for="expYear"><@required/>${uiLabelMap.ExpirationYearCaption}</label>
-            	                   <div class="entryField">
-		    			              <select id="js_expYear" name="expYear" class="expYear">
-		    			                <#if creditCard?has_content && expYear?has_content>
-		    			                  <#assign ccExprYear = expYear>
-		    			                <#else>
-		    			                  <#assign ccExprYear = requestParameters.expYear?if_exists>
-		    			                </#if>
-		    			                <#if ccExprYear?has_content>
-		    			                  <option value="${ccExprYear?if_exists}">${ccExprYear?if_exists}</option>
-		    			                </#if>
-		    			                <option value="">${uiLabelMap.CommonSelectOne}</option>
-		    			                ${screens.render("component://osafe/widget/CommonScreens.xml#ccYears")}
-		    			              </select>
-		    			              <@fieldErrors fieldName="expYear"/>
-		    			          </div>
-    			            </div>
-    		                
-    		                <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_CC_VERIFICATION_REQ")>
-    		                    <div class="entry">
-    		                      <label for="verificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
-            	                   <div class="entryField">
-	    		                       <input type="text" class="cardNumber" maxlength="30" id="js_verificationNo"  name="verificationNo" value="${requestParameters.verificationNo!""}"/>
-	    		                      <@fieldErrors fieldName="verificationNo"/>
-	    		                   </div>
-    		                    </div>
-    		                    <div class="entry content">
-        						  <label for="content">&nbsp;</label>
-                                  <span>${screens.render("component://osafe/widget/EcommerceContentScreens.xml#CHECKOUT_CC_VERIFY")}</span>
-                                </div>
-    		                </#if>
-    		              </div>
-    		          <#elseif Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD")>
-    		              <#assign selectedPaymentOption = "PAYOPT_COD">
-    	              </#if>
-    	              
-    		          <!-- cod-->
-	                  <div class="container paymentOption js_codOptions" <#if (shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content) || !(Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD"))>style="display:none"</#if>>
-   	                   <h4>${uiLabelMap.CODHeading}</h4>
-		                   <div class="entry">
-			                    <label class="radioOptionLabel"><input type="radio" id="codPayment" name="paymentOption" value="PAYOPT_COD" <#if (selectedPaymentOption?exists && selectedPaymentOption?string == "PAYOPT_COD")>checked="checked"</#if>/><span class="radioOptionText">${uiLabelMap.CODLabel}</span></label>
-			               </div>
-	                  </div>
-                  </div> <!-- End of checkoutPaymentOptions DIV -->
-	        
-        </div>
-	<a name="paymentMethod"></a>
-    </div>
+						</div>
+				    </div>
+
+                        <!--CC -->
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardEntry")}
+					    ${setRequestAttribute("attributeStyle", "display:none;")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_CC_NEW")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardNew")}
+
+                        <!--EXISTING CC -->
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardExistEntry")}
+					    ${setRequestAttribute("attributeStyle", "display:none;")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_CC_EXIST")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardExist")}
+
+                        <!--EFT -->
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftEntry")}
+					    ${setRequestAttribute("attributeStyle", "display:none;")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_EFT_NEW")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftNew")}
+                        <!--EXISTING EFT -->
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftExistEntry")}
+					    ${setRequestAttribute("attributeStyle", "display:none;")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_EFT_EXIST")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftExist")}
+                        <!--PAYPAL -->
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry paypalEntry")}
+					    ${setRequestAttribute("attributeStyle", "display:none;")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_PAYPAL")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionPayPal")}
+                        <!--PAYNETZ -->
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry payNetzEntry")}
+					    ${setRequestAttribute("attributeStyle", "display:none;")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_PAYNETZ")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionPayNetz")}
+                        <!--EBS -->
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry ebsEntry")}
+					    ${setRequestAttribute("attributeStyle", "display:none;")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_EBS")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEbs")}
+					    	  
+        	 <#else>
+					<#-- DETERMINE THE SELECTED PAYMENT METHOD RADIO BUTTON ON LOAD OF THE SCREEN -->
+					<#if (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_CC_EXIST")>
+						<#assign selectedPaymentOption = "PAYOPT_CC_EXIST">
+					<#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_CC_NEW")>
+						<#assign selectedPaymentOption = "PAYOPT_CC_NEW">
+					<#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_EFT_EXIST")>
+						<#assign selectedPaymentOption = "PAYOPT_EFT_EXIST">
+					<#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_EFT_NEW")>
+						<#assign selectedPaymentOption = "PAYOPT_EFT_NEW">
+					<#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_COD")>
+						<#assign selectedPaymentOption = "PAYOPT_COD">
+					<#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_EBS")>
+						<#assign selectedPaymentOption = "PAYOPT_EBS">
+					<#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_PAYPAL") || (parameters.token?exists && parameters.token?has_content)>
+						<#assign selectedPaymentOption = "PAYOPT_PAYPAL">
+					<#elseif (parameters.paymentOption?exists && parameters.paymentOption?string == "PAYOPT_PAYNETZ")>
+						<#assign selectedPaymentOption = "PAYOPT_PAYNETZ">
+					<#elseif Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_CC")>
+						<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && savedPaymentMethodValueMaps?has_content && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+							<#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
+								<#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
+								<#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
+									<#assign hasSavedCard= "Y"/>
+									<#break>
+								</#if>
+							</#list>
+						</#if>
+						<#if hasSavedCard?has_content>
+							<#assign selectedPaymentOption = "PAYOPT_CC_EXIST">
+						<#else>
+							<#assign selectedPaymentOption = "PAYOPT_CC_NEW">
+						</#if>
+					<#elseif Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EFT")>
+						<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && savedPaymentMethodEftValueMaps?has_content && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+							<#list savedPaymentMethodEftValueMaps as savedPaymentMethodEftValueMap>
+								<#assign savedPaymentMethod =savedPaymentMethodEftValueMap.paymentMethod/>
+								<#if "EFT_ACCOUNT" == savedPaymentMethod.paymentMethodTypeId>
+									<#assign hasSavedEftAccount = "Y"/>
+									<#break>
+								</#if>
+							</#list>
+						</#if>
+						<#if hasSavedEftAccount?has_content>
+							<#assign selectedPaymentOption = "PAYOPT_EFT_EXIST">
+						<#else>
+							<#assign selectedPaymentOption = "PAYOPT_EFT_NEW">
+						</#if>
+					<#else>
+						<#assign selectedPaymentOption = "PAYOPT_EMPTY">
+					</#if>
+						<#-- EBS OPTION -->
+					<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EBS")>
+						<div class="container ebs">
+							<h4>${uiLabelMap.EBSHeading}</h4>
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry ebsEntry")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_EBS")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEbs")}
+						</div>
+					</#if>
+			
+					<#-- ATOM PAYNETZ OPTION -->
+					<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYNETZ")>
+						<div class="container payNetz">
+							<h4>${uiLabelMap.PayNetzHeading}</h4>
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry payNetzEntry")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_PAYNETZ")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionPayNetz")}
+						</div>
+					</#if>
+			    	
+					<#-- PAYPAL -->
+					<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYPAL")>
+						<div class="container paypal">
+							<h4>${uiLabelMap.PayPalHeading}</h4>
+						    ${setRequestAttribute("attributeClass", "entryForm paymentEntry paypalEntry")}
+						    ${setRequestAttribute("attributeId", "PAYOPT_PAYPAL")}
+						    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionPayPal")}
+						</div>
+					</#if>
+	
+			  		<#-- CREDIT CARD -->
+			  		<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_CC")>
+						<#-- CHECK WE ARE SAVING CC INFO -->
+						<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+							<#if savedPaymentMethodValueMaps?has_content>
+	   							<#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
+	 								<#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
+	 								<#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
+	 									<#assign hasSavedCard= "Y"/>
+	 									<#break>
+	 								</#if>
+	   							</#list>
+							</#if>
+						</#if>
+						<div class="container creditCard js_creditCardEntry">
+							<h4>${uiLabelMap.CreditCardHeading}</h4>
+								<#-- IF WE ARE SAVING CC INFO -->
+		    		       		<#if hasSavedCard?has_content>
+			                        <!--EXISTING CC -->
+								    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardExistEntry")}
+								    ${setRequestAttribute("attributeId", "PAYOPT_CC_EXIST")}
+								    ${setRequestAttribute("includeRadioOption", "Y")}
+								    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardExist")}
+				                </#if>
+		                        <!--CC -->
+							    ${setRequestAttribute("attributeClass", "entryForm paymentEntry creditCardEntry")}
+							    ${setRequestAttribute("attributeId", "PAYOPT_CC_NEW")}
+							    ${setRequestAttribute("includeRadioOption", "Y")}
+							    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCreditCardNew")}
+						</div>
+					</#if>
+					<#-- END CREDIT CARD -->
+
+			     	<#-- EFT -->
+			      	<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EFT")>
+			            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+				            <#if savedPaymentMethodEftValueMaps?has_content>
+				               	<#list savedPaymentMethodEftValueMaps as savedPaymentMethodEftValueMap>
+				                 	<#assign savedPaymentMethod =savedPaymentMethodEftValueMap.paymentMethod/>
+				                 	<#if "EFT_ACCOUNT" == savedPaymentMethod.paymentMethodTypeId>
+				                     	<#assign hasSavedEftAccount = "Y"/>
+				                     	<#break>
+				                 	</#if>
+				               	</#list>
+				          	</#if>
+				         </#if>
+
+			      		<div class="container eftAccount js_eftAccountEntry">
+				      		<h4>${uiLabelMap.EftAccountHeading}</h4>
+				             	<#if hasSavedEftAccount?has_content>
+			                        <!--EXISTING EFT -->
+								    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftExistEntry")}
+								    ${setRequestAttribute("includeRadioOption", "Y")}
+								    ${setRequestAttribute("attributeId", "PAYOPT_EFT_EXIST")}
+								    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftExist")}
+
+				        		</#if>
+		                        <!--EFT -->
+							    ${setRequestAttribute("attributeClass", "entryForm paymentEntry eftEntry")}
+							    ${setRequestAttribute("includeRadioOption", "Y")}
+							    ${setRequestAttribute("attributeId", "PAYOPT_EFT_NEW")}
+							    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionEftNew")}
+			      		</div>
+			  		</#if>
+			  		<#-- END EFT -->
+			
+			      	<#-- COD-->
+			      	<div class="container paymentOption js_codOptions" <#if (shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content) || !(Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD"))>style="display:none"</#if>>
+			       		<h4>${uiLabelMap.CODHeading}</h4>
+					    ${setRequestAttribute("attributeClass", "entryForm paymentEntry codEntry")}
+					    ${setRequestAttribute("includeRadioOption", "Y")}
+					    ${setRequestAttribute("attributeId", "PAYOPT_COD")}
+					    ${screens.render("component://osafe/widget/EntryScreens.xml#paymentOptionCod")}
+			      	</div>
+			      	<#-- END COD-->
+        	 </#if>
+		 	</div> <!-- End of checkoutPaymentOptions DIV -->
+			        
+		</div>
+		<a name="paymentMethod"></a>
+	</div>
  </div>

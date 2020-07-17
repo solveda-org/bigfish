@@ -283,11 +283,15 @@
                         <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_AREA" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_HOME_CONTACT3" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_HOME_CONTACT4" list="error_list"/>
                             </if-compare>
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_AREA" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_HOME_CONTACT3" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_HOME_CONTACT4" list="error_list"/>
                             </if-compare>
                         </if-compare>
                     </then>
@@ -309,13 +313,13 @@
                         <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
                             </if-compare>
                         </if-compare>
                         <if-compare field="parameters.PHONE_HOME_MANDATORY" operator="equals" value="Y">
                             <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="HomePhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_HOME_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
                             </if-empty>
                         </if-compare>
                         
@@ -348,11 +352,15 @@
                         <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
 	                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-	                            <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_AREA" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT3" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT4" list="error_list"/>
 	                        </if-compare>
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_AREA" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT3" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_MOBILE_CONTACT4" list="error_list"/>
                             </if-compare>
                         </if-compare>
                     </then>
@@ -366,13 +374,13 @@
                         <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
                             </if-compare>
                         </if-compare>
                         <if-compare field="parameters.PHONE_MOBILE_MANDATORY" operator="equals" value="Y">
                             <if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MobilePhoneMissingError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_MOBILE_CONTACT_OTHER" list="error_list"/>
                             </if-empty>
                         </if-compare>
                     </else>
@@ -405,11 +413,17 @@
                         <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
 	                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="WorkPhoneMissingError"/>
-	                            <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_AREA" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_WORK_CONTACT3" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_WORK_CONTACT4" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_WORK_EXT" list="error_list"/>
 	                        </if-compare>
                             <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT" list="error_list"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_AREA" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_WORK_CONTACT3" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_WORK_CONTACT4" list="error_list"/>
+                                <string-to-list string="" message-field="PHONE_WORK_EXT" list="error_list"/>
                             </if-compare>
                         </if-compare>
                     </then>
@@ -426,13 +440,15 @@
                             <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
                                 <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
                                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
-                                    <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT" list="error_list"/>
+                                    <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT_OTHER" list="error_list"/>
+                                    <string-to-list string="" message-field="PHONE_WORK_EXT_OTHER" list="error_list"/>
                                 </if-compare>
                             </if-compare>
                             <if-compare field="parameters.PHONE_WORK_MANDATORY" operator="equals" value="Y">
 	                            <if-empty field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact">
 	                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="WorkPhoneMissingError"/>
-	                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT" list="error_list"/>
+	                                <string-to-list string="${tempErrorMessage}" message-field="PHONE_WORK_CONTACT_OTHER" list="error_list"/>
+                                    <string-to-list string="" message-field="PHONE_WORK_EXT_OTHER" list="error_list"/>
 	                            </if-empty>
                             </if-compare>
                         </if-not-empty>
@@ -651,10 +667,14 @@
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
 	                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MissingDobDateError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDD" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortDayUs" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortMonthUs" list="error_list"/>
 	            </if-compare>
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDD" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortDayUs" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortMonthUs" list="error_list"/>
                 </if-compare>
             <else>
                 <if-not-empty field="parameters.dobShortMonthUs">
@@ -678,10 +698,16 @@
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
 	                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MissingDobDateError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDDYYYY" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongDayUs" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongMonthUs" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongYearUs" list="error_list"/>
 	            </if-compare>
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDDYYYY" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongDayUs" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongMonthUs" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongYearUs" list="error_list"/>
                 </if-compare>
             <else>
                 <if-not-empty field="parameters.dobLongMonthUs">
@@ -707,10 +733,14 @@
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
 	                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MissingDobDateError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMM" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortDayUk" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortMonthUk" list="error_list"/>
 	            </if-compare>
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMM" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortDayUk" list="error_list"/>
+                    <string-to-list string="" message-field="dobShortMonthUk" list="error_list"/>
                 </if-compare>
             <else>
                 <if-not-empty field="parameters.dobShortMonthUk">
@@ -734,10 +764,16 @@
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="missing">
 	                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="MissingDobDateError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMMYYYY" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongDayUk" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongMonthUk" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongYearUk" list="error_list"/>
 	            </if-compare>
                 <if-compare field="checkDateOfBirthResult" operator="equals" value="invalid">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMMYYYY" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongDayUk" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongMonthUk" list="error_list"/>
+                    <string-to-list string="" message-field="dobLongYearUk" list="error_list"/>
                 </if-compare>
             <else>
                 <if-not-empty field="parameters.dobLongMonthUk">
@@ -1205,10 +1241,14 @@
                 <if-empty field="responseCode">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
+	    	        <set field="BILLING_SHOW_SKIP_VERIFICATION" value="Y"/>
+                    <field-to-request field="BILLING_SHOW_SKIP_VERIFICATION"/>
                 <else>
 	                <if-compare operator="less-equals" value="0" field="responseCode">
 	                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
 	                    <string-to-list string="${tempErrorMessage}" message-field="BILLING_ADDRESS_ERROR" list="error_list"/>
+		    	        <set field="BILLING_SHOW_SKIP_VERIFICATION" value="Y"/>
+	                    <field-to-request field="BILLING_SHOW_SKIP_VERIFICATION"/>
 	                </if-compare>
                 </else>
                 </if-empty>
@@ -1385,10 +1425,14 @@
                 <if-empty field="responseCode">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
+	    	        <set field="SHIPPING_SHOW_SKIP_VERIFICATION" value="Y"/>
+                    <field-to-request field="SHIPPING_SHOW_SKIP_VERIFICATION"/>
                 <else>
                     <if-compare operator="less-equals" value="0" field="responseCode">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ADDRESS_ERROR" list="error_list"/>
+		    	        <set field="SHIPPING_SHOW_SKIP_VERIFICATION" value="Y"/>
+	                    <field-to-request field="SHIPPING_SHOW_SKIP_VERIFICATION"/>
                     </if-compare>
                 </else>
                 </if-empty>
@@ -2022,10 +2066,14 @@
                 <if-empty field="responseCode">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
+		    	    <set field="CUSTOMER_SHOW_SKIP_VERIFICATION" value="Y"/>
+	                <field-to-request field="CUSTOMER_SHOW_SKIP_VERIFICATION"/>
                 <else>
                     <if-compare operator="less-equals" value="0" field="responseCode">
                         <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressVerificationError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ADDRESS_ERROR" list="error_list"/>
+		    	        <set field="CUSTOMER_SHOW_SKIP_VERIFICATION" value="Y"/>
+	                    <field-to-request field="CUSTOMER_SHOW_SKIP_VERIFICATION"/>
                     </if-compare>
                 </else>
                 </if-empty>
@@ -2034,6 +2082,13 @@
         <!-- now that everything is validated & setup, check to see if there are errors, then call the services -->
         <check-errors/>
 
+    </simple-method>
+    
+    <simple-method method-name="checkUserSessionAndValidateAddress" short-description="Check User Session and Validate Address" login-required="false">
+    	<call-simple-method method-name="checkUserSession" xml-resource="component://osafe/script/Event/CheckoutEvents.xml"/>
+    	<if-not-empty field="userLogin">
+    		<call-simple-method method-name="validateAddress"/>
+    	</if-not-empty>
     </simple-method>
 
     <simple-method method-name="validateCreditCard" short-description="Validate Credit Card fields" login-required="false">
@@ -2571,5 +2626,214 @@
          </if-not-empty>
         
         
+    </simple-method>
+    
+    
+    <simple-method method-name="validateEftAccount" short-description="Validate Eft Account Fields" login-required="false">
+        <log level="info" message="${parameters.fieldLevelErrors}"></log>
+        <if-compare field="parameters.fieldLevelErrors" operator="equals" value="Y">
+            <set field="fieldLevelErrors" value="${parameters.fieldLevelErrors}"/>
+            <field-to-request field="fieldLevelErrors" />
+        </if-compare>
+
+        <if-compare field="parameters.paymentOption" operator="equals" value="PAYOPT_EFT_EXIST" type="String">
+
+            <if-empty field="parameters.savedEftAccount">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="SavedEftAccountMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="savedEftAccount" list="error_list"/>
+            <else>
+                <entity-one value-field="savedEftAccountGv" entity-name="EftAccount">
+                    <field-map field-name="paymentMethodId" from-field="parameters.savedEftAccount"/>
+                </entity-one>
+                <set field="eftAccountContext.nameOnAccount" from-field="savedEftAccountGv.nameOnAccount"/>
+                <set field="eftAccountContext.bankName" from-field="savedEftAccountGv.bankName"/>
+                <set field="eftAccountContext.routingNumber" from-field="savedEftAccountGv.routingNumber"/>
+                <set field="eftAccountContext.accountNumber" from-field="savedEftAccountGv.accountNumber"/>
+                <set field="eftAccountContext.accountType" from-field="savedEftAccountGv.accountType"/>
+            </else>
+            </if-empty>
+        <else>
+            <if-empty field="parameters.nameOnAccount">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="NameOnAccountMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="nameOnAccount" list="error_list"/>
+            </if-empty>
+            
+            <if-empty field="parameters.bankName">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="BankNameMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="bankName" list="error_list"/>
+            </if-empty>
+            
+            <if-not-empty field="parameters.routingNumber">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="routingNumberVaild">
+                    <string value="${parameters.routingNumber}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="true" field="routingNumberVaild" type="Boolean">
+                    <call-object-method method-name="length" obj-field="parameters.routingNumber" ret-field="routingNumberLength"/>
+    	            <if-compare operator="not-equals" value="9" field="routingNumberLength" type="Integer">
+    		        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="RoutingNumberInvalidError"/>
+    	           		<string-to-list string="${tempErrorMessage}" message-field="routingNumber" list="error_list"/>
+    	            </if-compare>
+    	        <else>
+    	            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="RoutingNumberInvalidError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="routingNumber" list="error_list"/>
+    	        </else>
+                </if-compare>
+            <else>
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="RoutingNumberInvalidError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="routingNumber" list="error_list"/>
+            </else>
+            </if-not-empty>
+            
+            <if-empty field="parameters.accountType">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AccountTypeMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="accountType" list="error_list"/>
+            </if-empty>
+            
+            <if-not-empty field="parameters.accountNumber">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="accountNumberVaild">
+                    <string value="${parameters.accountNumber}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="accountNumberVaild" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AccountNumberInvalidError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="accountNumber" list="error_list"/>
+                </if-compare>
+            <else>
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AccountNumberInvalidError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="accountNumber" list="error_list"/>
+            </else>
+            </if-not-empty>
+
+            <set field="eftAccountContext.nameOnAccount" from-field="parameters.nameOnAccount"/>
+            <set field="eftAccountContext.bankName" from-field="parameters.bankName"/>
+            <set field="eftAccountContext.routingNumber" from-field="parameters.routingNumber"/>
+            <set field="eftAccountContext.accountNumber" from-field="parameters.accountNumber"/>
+            <set field="eftAccountContext.accountType" from-field="parameters.accountType"/>
+        </else>
+        </if-compare>
+    </simple-method>
+
+    <simple-method method-name="validateRequestQuote" short-description="validate Request Quote" login-required="false">
+        <!-- Check Contact Us form -->
+        <call-map-processor in-map-name="parameters" out-map-name="custRequestContext">
+            <simple-map-processor name="custRequest">
+                <process field="emailAddress"><copy/></process>
+                <process field="firstName"><copy/></process>
+                <process field="lastName"><copy/></process>
+                <process field="content"><copy/></process>
+                <process field="contactPhoneArea"><copy/></process>
+                <process field="contactPhoneContact3"><copy/></process>
+                <process field="contactPhoneContact4"><copy/></process>
+                <process field="contactPhoneNumber"><copy to-field="phoneNumber"/></process>
+                <process field="partNumber"><copy/></process>
+            </simple-map-processor>
+        </call-map-processor>
+        <if-compare field="parameters.firstName_MANDATORY" operator="equals" value="Y">
+         <if-empty field="parameters.firstName">
+             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="FirstNameMissingError"/>
+             <string-to-list string="${tempErrorMessage}" message-field="firstName" list="error_list"/>
+         </if-empty>
+        </if-compare>
+        <if-compare field="parameters.lastName_MANDATORY" operator="equals" value="Y">
+         <if-empty field="parameters.lastName">
+             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LastNameMissingError"/>
+             <string-to-list string="${tempErrorMessage}" message-field="lastName" list="error_list"/>
+         </if-empty>
+        </if-compare>
+        <if-compare field="parameters.emailAddress_MANDATORY" operator="equals" value="Y">
+         <if-empty field="parameters.emailAddress">
+             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="RequestQuoteEmailAddressMissingError"/>
+             <string-to-list string="${tempErrorMessage}" message-field="emailAddress" list="error_list"/>
+         </if-empty>
+        </if-compare>
+        <if-not-empty field="parameters.emailAddress">
+            <call-map-processor in-map-name="parameters" out-map-name="emailContext">
+                <simple-map-processor name="newEmail">
+                    <process field="emailAddress">
+                        <copy to-field="emailAddress"/>
+                        <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailInvalidError"/></validate-method>
+                    </process>
+                </simple-map-processor>
+            </call-map-processor>
+        </if-not-empty>
+        <if-compare field="parameters.content_MANDATORY" operator="equals" value="Y">
+         <if-empty field="parameters.content">
+             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommentMissingError"/>
+             <string-to-list string="${tempErrorMessage}" message-field="content" list="error_list"/>
+         </if-empty>
+        </if-compare>
+        <if-compare field="parameters.partNumber_MANDATORY" operator="equals" value="Y">
+         <if-empty field="parameters.partNumber">
+             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="PartNumberMissingError"/>
+             <string-to-list string="${tempErrorMessage}" message-field="partNumber" list="error_list"/>
+         </if-empty>
+        </if-compare>
+        <if>
+            <condition>
+                <or>
+                    <if-compare value="CAN" operator="equals" field="parameters.CONTACT_US_COUNTRY"></if-compare>
+                    <if-compare value="USA" operator="equals" field="parameters.CONTACT_US_COUNTRY"></if-compare>
+                </or>
+            </condition>
+            <then>
+                <!-- Show general error if Home Phone is required -->
+                <call-map-processor in-map-name="parameters" out-map-name="contactHomePhoneMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <make-in-string field="contactNumber">
+                                <in-field field="contactPhoneContact3"/>
+                                <in-field field="contactPhoneContact4"/>
+                            </make-in-string>
+                            <process field="contactNumber"><copy to-field="contactHomePhoneContact"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                    <field field="parameters.contactPhoneArea"/>
+                    <field field="contactHomePhoneMap.contactHomePhoneContact"/>
+                    <field field="parameters.contactPhoneNumber_MANDATORY"/>
+                </call-class-method>
+                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="missing">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+                        <string-to-list string="" message-field="contactPhoneArea" list="error_list"/>
+                        <string-to-list string="" message-field="contactPhoneContact3" list="error_list"/>
+                        <string-to-list string="" message-field="contactPhoneContact4" list="error_list"/>
+                    </if-compare>
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+                        <string-to-list string="" message-field="contactPhoneArea" list="error_list"/>
+                        <string-to-list string="" message-field="contactPhoneContact3" list="error_list"/>
+                        <string-to-list string="" message-field="contactPhoneContact4" list="error_list"/>
+                    </if-compare>
+                </if-compare>
+            </then>
+            <else>
+                <call-map-processor in-map-name="parameters" out-map-name="contactHomeOtherPhoneMap">
+                    <simple-map-processor name="newTelecomNumber">
+                            <process field="contactPhoneNumber"><copy to-field="contactHomeOtherPhoneContact"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <call-class-method class-name="com.osafe.util.Util"  method-name="checkTelecomNumber" ret-field="checkTelecomNumberResult">
+                    <string value=""/>
+                    <field field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"/>
+                    <string value="false"/>
+                </call-class-method>
+                <if-compare field="checkTelecomNumberResult" operator="not-equals" value="success">
+                    <if-compare field="checkTelecomNumberResult" operator="equals" value="invalid">
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+                        <string-to-list string="" message-field="contactPhoneNumber" list="error_list"/>
+                    </if-compare>
+                </if-compare>
+               <if-compare field="parameters.contactPhoneNumber_MANDATORY" operator="equals" value="Y">
+                   <if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact">
+                       <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CommonPhoneInvalidError"/>
+                       <string-to-list string="${tempErrorMessage}" message-field="contactPhoneContact" list="error_list"/>
+                       <string-to-list string="" message-field="contactPhoneNumber" list="error_list"/>
+                   </if-empty>
+              </if-compare>
+            </else>
+        </if>
+        <check-errors/>
     </simple-method>
 </simple-methods>

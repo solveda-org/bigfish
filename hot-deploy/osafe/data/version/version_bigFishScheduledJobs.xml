@@ -748,4 +748,55 @@
 <RecurrenceInfo recurrenceInfoId="PURGE_OLD_JOBS" recurrenceRuleId="PURGE_OLD_JOBS" startDateTime="2011-01-01 00:00:00.0"/>
 <JobSandbox jobId="PURGE_OLD_JOBS" jobName="Purge Old Jobs" serviceName="purgeOldJobs" runtimeDataId="PURGE_OLD_JOBS" recurrenceInfoId="PURGE_OLD_JOBS" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" runTime="2000-01-01 00:00:00.000"/>
 
+<RuntimeData runtimeDataId="GOOGLE_PRODUCT_FEED">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="browseRootProductCategoryId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productCategoryRootId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin isSystem="Y" enabled="N" userLoginId="system"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="GOOGLE_PRODUCT_FEED" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="GOOGLE_PRODUCT_FEED" recurrenceRuleId="GOOGLE_PRODUCT_FEED" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="GOOGLE_PRODUCT_FEED" jobName="googleProductFeed" serviceName="googleProductFeed" runtimeDataId="GOOGLE_PRODUCT_FEED" recurrenceInfoId="GOOGLE_PRODUCT_FEED" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" />
+
 </entity-engine-xml>

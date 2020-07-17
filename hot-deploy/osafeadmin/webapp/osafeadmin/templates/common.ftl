@@ -60,7 +60,9 @@
             <div id="bodyContainer">
                 <div id="header">
                     ${sections.render('siteLogo')}
-                    ${sections.render('dailySalesCounter')}
+                    <#if !Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmFalse(request,"ADM_SHOW_DAILY_COUNTER")>  
+                    	${sections.render('dailySalesCounter')}
+                    </#if>
                     ${sections.render('siteInfo')}
                     ${sections.render('navigationBar')}
                 </div>
@@ -68,7 +70,9 @@
                 	${sections.render('navigationBarBreadcrumb')}
                     ${sections.render('pageHeading')}
                     <#if showLastOrder?has_content && showLastOrder =="Y">
-                        ${sections.render('lastOrder')}
+                    	<#if !Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmFalse(request,"ADM_SHOW_DASHBOARD")> 
+                        	${sections.render('lastOrder')}
+                        </#if>
                     </#if>
                     <#if hideMainPageMessages?has_content && hideMainPageMessages =="Y">
                     <#else>

@@ -33,6 +33,10 @@
 	   <#if megaMenuContent.statusId?has_content>
 		   <#if (megaMenuContent.statusId == "CTNT_PUBLISHED")>
 		        <#assign megaMenuContentId = megaMenuContent.contentId/>
+		   <#elseif previewContentId?has_content>
+               <#if (previewContentId == megaMenuContent.contentId)>
+                    <#assign megaMenuContentId = megaMenuContent.contentId/>
+               </#if>
 		   </#if>
 	   </#if>
 	  </#if>
@@ -57,7 +61,7 @@
     </#if>
   <#local macroLevelUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${macroLevelUrl}?productCategoryId=${category.productCategoryId}')>
   
-    <li class="${levelClass} ${itemIndexClass}">
+    <li class="${levelClass} ${itemIndexClass} ${category.productCategoryId!}">
         <a class="${levelClass}" href="${macroLevelUrl}">
           <#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if>
         </a>
@@ -94,24 +98,36 @@
     Current nav bar is genrated as a single level menu
     http://htmldog.com/articles/suckerfish/dropdowns/
     -->
-<#if topLevelList?has_content>
+    
+<#assign superMegaMenuContentXrefs = delegator.findByAndCache("XContentXref", Static["org.ofbiz.base.util.UtilMisc"].toMap("productStoreId" , productStoreId, "bfContentId", "SI_SUPER_MEGA_MENU")) />
+<#if superMegaMenuContentXrefs?has_content>
+	<#assign superMegaMenuContentXref = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(superMegaMenuContentXrefs) />
+	<#assign superMegaMenuContents= delegator.findByAndCache("Content", Static["org.ofbiz.base.util.UtilMisc"].toMap("contentId" , superMegaMenuContentXref.contentId)) />
+	<#if superMegaMenuContents?has_content>
+		<#assign superMegaMenuContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(superMegaMenuContents) />
+		<#assign superMegaMenuContentStatusId = superMegaMenuContent.statusId!/>
+		<#if previewContentId?has_content>
+			<#if (previewContentId == superMegaMenuContent.contentId)>
+				<#assign superMegaMenuContentStatusId = "CTNT_PUBLISHED"/>
+			</#if>
+		</#if>
+	</#if>
+</#if>
+
+<#if superMegaMenuContentStatusId?exists && superMegaMenuContentStatusId?has_content && superMegaMenuContentStatusId=="CTNT_PUBLISHED">
   <div id="eCommerceNavBarWidget">
     <a href="javascript:void(0);" class="showNavWidget"><span>${uiLabelMap.ShowNavWidgetLabel}</span></a>
 	<a href="javascript:void(0);" class="hideNavWidget" style="display:none"><span>${uiLabelMap.HideNavWidgetLabel}</span></a>
   </div>
-  <#assign superMegaMenuContentXrefs = delegator.findByAndCache("XContentXref", Static["org.ofbiz.base.util.UtilMisc"].toMap("productStoreId" , productStoreId, "bfContentId", "SI_SUPER_MEGA_MENU")) />
-  <#if superMegaMenuContentXrefs?has_content>
-    <#assign superMegaMenuContentXref = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(superMegaMenuContentXrefs) />
-    <#assign superMegaMenuContents= delegator.findByAndCache("Content", Static["org.ofbiz.base.util.UtilMisc"].toMap("contentId" , superMegaMenuContentXref.contentId)) />
-    <#if superMegaMenuContents?has_content>
-      <#assign superMegaMenuContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(superMegaMenuContents) />
-     <#assign superMegaMenuContentStatusId = superMegaMenuContent.statusId!/>
-    </#if>
-  </#if>
   <ul id="eCommerceNavBarMenu">
-  	<#if superMegaMenuContentStatusId?exists && superMegaMenuContentStatusId?has_content && superMegaMenuContentStatusId=="CTNT_PUBLISHED">
-  		${screens.render("component://osafe/widget/EcommerceContentScreens.xml#SI_SUPER_MEGA_MENU")}
-  	<#else>
+  	${screens.render("component://osafe/widget/EcommerceContentScreens.xml#SI_SUPER_MEGA_MENU")}
+  </ul>
+<#elseif topLevelList?has_content>
+	<div id="eCommerceNavBarWidget">
+	    <a href="javascript:void(0);" class="showNavWidget"><span>${uiLabelMap.ShowNavWidgetLabel}</span></a>
+		<a href="javascript:void(0);" class="hideNavWidget" style="display:none"><span>${uiLabelMap.HideNavWidgetLabel}</span></a>
+	</div>
+	<ul id="eCommerceNavBarMenu">
   		<#assign parentIdx=1/>
 	    <#assign listSize=topLevelList.size()/>
 	    <#list topLevelList as category>
@@ -124,9 +140,8 @@
 	            <@navBar parentCategory="" category=category levelUrl="eCommerceCategoryList" levelValue="1" listIndex=parentIdx listSize=listSize/>
 	            <#assign parentIdx= parentIdx + 1/>
 	        </#if>
-	    </#list>
-  	</#if>
-    
-  </ul>
+	    </#list>  
+	</ul>
 </#if>
+
 </div>

@@ -12,6 +12,14 @@
           <span><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed rounding=globalContext.currencyRounding /></span>
         </#if>
       </div>
+      
+      <div class="pdpPriceSavingMoney" id="js_pdpPriceSavingMoney_Virtual" style="display:none">
+        <#if youSaveMoney gt showSavingMoneyAbove?number>
+          <label>${uiLabelMap.YouSaveCaption}</label>
+          <span><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed rounding=globalContext.currencyRounding /></span>
+        </#if>
+      </div>
+      
     </li>
   </#if>
 </#if>

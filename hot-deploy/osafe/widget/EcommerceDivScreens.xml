@@ -830,6 +830,48 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="pdpAttach01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpAttach02">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach02.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpAttach03">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach03.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : (PDP) TABS Sequencer Type : PDPTabs -->
 	<!-- ********************************************************************** -->
@@ -1610,6 +1652,48 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/pdp/pdpPreviousProductScroll.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpTabsAttach01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpTabsAttach02">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach02.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpTabsAttach03">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach03.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -2453,6 +2537,48 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="quicklookAttach01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="quicklookAttach02">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach02.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="quicklookAttach03">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpAttach03.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : PDP Review List Sequencer Type : PDPReviewList -->
@@ -2829,6 +2955,20 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="pdpReviewListItemsReviewerCustom01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/review/reviewListReviewerCustom01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 	<screen name="pdpReviewListItemsReviewResponse">
 		<section>
 			<actions>
@@ -3012,6 +3152,20 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/pdp/review/reviewListReviewerGender.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpTabsReviewListItemsReviewerCustom01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/review/reviewListReviewerCustom01.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -3205,6 +3359,20 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="quicklookReviewListItemsReviewerCustom01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/review/reviewListReviewerCustom01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 	<screen name="quicklookReviewListItemsReviewResponse">
 		<section>
 			<actions>
@@ -3214,6 +3382,488 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/pdp/review/reviewListRateReviewResponse.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	
+	<!-- ********************************************************************** -->
+	<!-- Sequence Screen : Product Listing Page (PLP) Sequencer Type : List: 
+		PLPFlyout -->
+	<!-- ********************************************************************** -->
+	<screen name="plpFlyoutDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="PLPFlyout" />
+				<set field="uiBoxListItemGridName" value="productItem" />
+				<set field="uiBoxListItemTabName" value="" />
+				<set field="uiDisplayListName" value="productItemList" />
+				<set field="jqueryIdPrefix" value="PLP_" />
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutProductName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpProductName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutDetailLink">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpDetailLink.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutPriceList">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpPriceList.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutPriceOnline">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpPriceOnline.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutPriceSavingPercent">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpPriceSavingPercent.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutPriceSavingMoney">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpPriceSavingMoney.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutPriceRecurrence">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpPriceRecurrence.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutSwatchImage">
+		<section>
+			<actions>
+				<set field="thumbImageHeight"
+					value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_H')}" />
+				<set field="thumbImageWidth"
+					value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_W')}" />
+				<set field="plpSwatchImageHeight"
+					value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_H')}" />
+				<set field="plpSwatchImageWidth"
+					value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_SWATCH_W')}" />
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpSwatchImage.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutInternalName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpInternalName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutLabelName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpLabelName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutReviewStars">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpReviewStars.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="plpFlyoutReviewRead">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpReviewRead.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutReviewWrite">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpReviewWrite.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutThumbImage">
+		<section>
+			<actions>
+				<set field="thumbImageHeight"
+					value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_H')}" />
+				<set field="thumbImageWidth"
+					value="${groovy:com.osafe.util.Util.getProductStoreParm(request,'IMG_SIZE_PLP_W')}" />
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpThumbImage.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutManufacturerDescription">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpManufacturerDescription.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutManufacturerHeading">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpManufacturerHeading.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutManufacturerImage">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpManufacturerImage.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutManufacturerName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpManufacturerName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutSeeItemDetails">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpSeeItemDetails.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutDistinguishingFeature">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpDistinguishingFeature.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutDeliveryInfo">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpDeliveryInfo.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutDirections">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpDirections.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutIngredients">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpIngredients.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutLongDescription">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpLongDescription.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutSalesPitch">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpSalesPitch.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutSpecialInstructions">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpSpecialInstructions.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutTermsAndConditions">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpTermsConditions.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutWarnings">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpWarnings.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="plpFlyoutSelectableFeature">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpSelectableFeature.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+	<screen name="plpFlyoutQty">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpQty.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutAddToCart">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpAddToCart.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="plpFlyoutAddToWishlist">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/plp/plpAddToWishlist.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -5727,6 +6377,34 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="showCartOrderItemsItemRecurrenceFlag">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFlag.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="showCartOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreqOptions.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 	<screen name="showCartOrderItemsItemTotal">
 		<section>
 			<actions>
@@ -6379,6 +7057,16 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="orderSummaryStoreCredit">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceStoreCreditPayment"
+                    location="component://osafe/widget/EcommerceCheckoutScreens.xml" />
+            </widgets>
+        </section>
+    </screen>
 	<!--returning have a blank create account -->
 	<screen name="orderSummaryCreateAccount">
 		<section>
@@ -6557,6 +7245,20 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/cart/cartItemItemAvailability.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="orderSummaryOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreq.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -6836,6 +7538,14 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="anonorderSummaryStoreCredit">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="anonorderSummaryCreateAccount">
 		<section>
 			<actions>
@@ -7014,6 +7724,21 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/cart/cartItemItemAvailability.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	
+	<screen name="anonorderSummaryOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreq.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -7263,6 +7988,14 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="paypalorderSummaryStoreCredit">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="paypalorderSummaryLoyaltyPoints">
 		<section>
 			<actions>
@@ -7711,6 +8444,14 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="anonPaypalorderSummaryStoreCredit">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="anonPaypalorderSummaryLoyaltyPoints">
 		<section>
 			<actions>
@@ -8375,6 +9116,20 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="orderConfirmOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreq.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : Show Cart Order Items Confirm Sequencer Type : OrderConfirmOrderItemsSummary -->
@@ -8687,6 +9442,18 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="onePageCheckoutStoreCredit">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="js_onePageCheckoutStoreCredit">
+                    <include-screen name="ecommerceStoreCreditPayment"
+                        location="component://osafe/widget/EcommerceCheckoutScreens.xml" />
+                </container>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="onePageCheckoutPaymentOptions">
 		<section>
 			<actions>
@@ -8710,6 +9477,7 @@
 	<screen name="onePageCheckoutPreviousButton">
 		<section>
 			<actions>
+				<set field="prevButtonUrl" value="eCommerceShowcartCheckSession" />
 			</actions>
 			<widgets>
 				<platform-specific>
@@ -8915,6 +9683,14 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="anononePageCheckoutStoreCredit">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="anononePageCheckoutPaymentOptions">
 		<section>
 			<actions>
@@ -8938,6 +9714,7 @@
 	<screen name="anononePageCheckoutPreviousButton">
 		<section>
 			<actions>
+				<set field="prevButtonUrl" value="eCommerceShowcartCheckSession" />
 			</actions>
 			<widgets>
 				<platform-specific>
@@ -8976,6 +9753,7 @@
                 <set field="uiBoxListItemGridName" value=""/>
                 <set field="uiBoxListItemTabName" value=""/>
                 <set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="personalInfo" />
 			</actions>
 			<widgets>
 				<include-screen name="ecommerceDivSequence" />
@@ -9355,6 +10133,7 @@
                 <set field="uiBoxListItemGridName" value=""/>
                 <set field="uiBoxListItemTabName" value=""/>
                 <set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="addressInfo" />
             </actions>
             <widgets>
                 <include-screen name="ecommerceDivSequence" />
@@ -9758,6 +10537,7 @@
                 <set field="uiBoxListItemGridName" value=""/>
                 <set field="uiBoxListItemTabName" value=""/>
                 <set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="addressInfo" />
             </actions>
             <widgets>
                 <include-screen name="ecommerceDivSequence" />
@@ -10177,6 +10957,7 @@
                 <set field="uiBoxListItemGridName" value=""/>
                 <set field="uiBoxListItemTabName" value=""/>
                 <set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="personalInfo" />
 			</actions>
 			<widgets>
 				<include-screen name="ecommerceDivSequence" />
@@ -10410,6 +11191,7 @@
                 <set field="uiBoxListItemGridName" value=""/>
                 <set field="uiBoxListItemTabName" value=""/>
                 <set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="addressInfo" />
             </actions>
             <widgets>
                 <include-screen name="ecommerceDivSequence" />
@@ -10593,6 +11375,7 @@
 				<set field="uiBoxListItemGridName" value="" />
 				<set field="uiBoxListItemTabName" value="" />
 				<set field="uiDisplayListName" value="" />
+				<set field="uiEntryFormName" value="writeReview" />
 			</actions>
 			<widgets>
 				<include-screen name="ecommerceDivSequence" />
@@ -11078,6 +11861,21 @@
 		</section>
 	</screen>
 
+    <screen name="writeReviewDetailReviewerCustom01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewDetail/writeReviewReviewerCustom01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
 	<screen name="writeReviewDetailReviewerPrivateNote">
 		<section>
 			<actions>
@@ -11365,6 +12163,20 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/cart/cartItemItemAvailability.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="lightBoxOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreq.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -12537,6 +13349,7 @@
 				<set field="uiBoxListItemGridName" value="" />
 				<set field="uiBoxListItemTabName" value="" />
 				<set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="contactUs" />
 			</actions>
 			<widgets>
 				<include-screen name="ecommerceDivSequence" />
@@ -12665,6 +13478,7 @@
 				<set field="uiBoxListItemGridName" value="" />
 				<set field="uiBoxListItemTabName" value="" />
 				<set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="requestCatalog" />
 			</actions>
 			<widgets>
 				<include-screen name="ecommerceDivSequence" />
@@ -12901,6 +13715,9 @@
 	<screen name="paymentMethodSummaryContinueButton">
 		<section>
 			<actions>
+			    <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+			    <set field="createPaymentMethodAction" value="eCommerceCreateCreditCardInfo"/>
+			    <set field="createPaymentMethodBtn" value="${uiLabelMap.AddNewCardBtn}"/>
 			</actions>
 			<widgets>
 				<platform-specific>
@@ -13023,6 +13840,199 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/paymentmethod/paymentMethodItemsSetAsDefaultButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+    <!-- ********************************************************************** -->
+	<!-- Sequence Screen : Payment Method Summary Page Sequencer Type : PaymentMethodSummary -->
+	<!-- ********************************************************************** -->
+	<screen name="paymentMethodEFTSummaryDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="PaymentMethodEFTSummary" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="" />
+				<set field="uiDisplayListName" value="" />
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTSummaryItems">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTList.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTSummaryPreviousButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/templates/commonBackAction.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTSummaryContinueButton">
+		<section>
+			<actions>
+			    <set field="createPaymentMethodAction" value="eCommerceCreateFftAccountInfo"/>
+			    <set field="createPaymentMethodBtn" value="${uiLabelMap.AddNewEftBtn}"/>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/addPaymentMethodButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+
+    <!-- ********************************************************************** -->
+	<!-- Sequence Screen : Payment Method EFT Items Page Sequencer Type : PaymentMethodItems -->
+	<!-- ********************************************************************** -->
+	<screen name="paymentMethodEFTItemsDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="PaymentMethodEFTItems" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="paymentMethodEFTItem" />
+				<set field="uiDisplayListName" value="paymentMethodEFTItemList" />
+				<script
+					location="component://osafe/webapp/osafe/WEB-INF/actions/paymentmethod/paymentMethodItem.groovy" />
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsAccountName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsAccountName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsBankName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsBankName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsAccountNumber">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsAccountNumber.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsAccountType">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsAccountType.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsRoutingNumber">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsRoutingNumber.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsEditButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsEditButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsDeleteButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsDeleteButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="paymentMethodEFTItemsSetAsDefaultButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/paymentmethod/eft/paymentMethodEFTItemsSetAsDefaultButton.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -13447,6 +14457,7 @@
 				<set field="uiBoxListItemGridName" value="" />
 				<set field="uiBoxListItemTabName" value="" />
 				<set field="uiDisplayListName" value="" />
+				<set field="uiEntryFormName" value="customerLogin" />
 			</actions>
 			<widgets>
 				<include-screen name="ecommerceDivSequence" />
@@ -13758,6 +14769,20 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="giftMessageOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreq.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 
 
     <!-- ********************************************************************** -->
@@ -13974,6 +14999,20 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/cart/cartItemItemAvailability.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreq.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -14270,6 +15309,20 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="orderDetailShippingGroupOrderItemsItemOfferPrice">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemOfferPrice.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : Show Cart Order Items Summary Sequencer Type : ShowCartOrderItemsSummary -->
@@ -14452,6 +15505,7 @@
 				<set field="uiBoxListItemGridName" value="" />
 				<set field="uiBoxListItemTabName" value="" />
 				<set field="uiDisplayListName" value="" />
+				<set field="uiEntryFormName" value="emailAFriend" />
 			</actions>
 			<widgets>
 				<include-screen name="ecommerceDivSequence" />
@@ -14660,6 +15714,722 @@
 			</widgets>
 		</section>
 	</screen>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- ********************************************************************** -->
+	<!-- Sequence Screen : Recurring Order Page Sequencer Type : RecurringOrder -->
+	<!-- ********************************************************************** -->
+	<screen name="recurringOrderDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="RecurringOrder" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="" />
+				<set field="uiDisplayListName" value="" />
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItems">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/recurringOrderItems.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderPreviousButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/templates/commonBackAction.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+	<!-- ********************************************************************** -->
+	<!-- Sequence Screen : Order History Items Sequencer Type : RecurringOrderItems -->
+	<!-- ********************************************************************** -->
+	<screen name="recurringOrderItemsDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="RecurringOrderItems" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="order" />
+				<set field="uiDisplayListName" value="orderList" />
+				<script
+					location="component://osafe/webapp/osafe/WEB-INF/actions/cart/recurringOrderItems.groovy" />
+				<!-- <set field="formName" value="cartform" /> <set field="doneAction" 
+					value="checkout" /> -->
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemImage">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemImage.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemDescription">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemDescription.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemQty">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemQuantity.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemShipDate">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/order/orderItem/orderItemShipDate.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceFreq.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemPrice">
+		<section>
+			<actions>
+				<set field="priceLabel" value="${uiLabelMap.UnitPriceCaption}"/>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemPrice.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemTotal">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemPriceTotal.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemStatus">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceStatus.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderItemsItemEditButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemRecurrenceEditButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	
+	
+	<!-- ********************************************************************** -->
+	<!-- Sequence Screen : Order History Items Sequencer Type : RecurringOrderDetail -->
+	<!-- ********************************************************************** -->
+	<screen name="recurringOrderDetailDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="RecurringOrderDetail" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="" />
+				<set field="uiDisplayListName" value="" />
+				<set field="uiEntryFormName" value="recurringOrder" />
+				<!-- <set field="formName" value="cartform" /> <set field="doneAction" 
+					value="checkout" /> -->
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailImage">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderImage.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailDescription">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderDescription.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailQty">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderQuantityInput.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailShipDate">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderShipDateInput.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailRecurrenceFreq">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderRecurrenceFreqOptions.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailPrice">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderUnitPrice.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailTotal">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderPriceTotal.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailShipAddress">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderShipAddressOptions.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailShipAddressAction">
+		<section>
+			<actions>
+				<set field="commonButtonUrl" value="eCommerceUpdateAddressBook?DONE_PAGE=eCommerceRecurrenceOrderDetail&amp;shoppingListId=${parameters.shoppingListId}"/>
+				<set field="commonButtonClass" value="standardBtn"/>
+				<set field="commonButtonLabel" value="${uiLabelMap.AddNewAddressBtn}"/>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/templates/commonActionButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailPaymentMethod">
+		<section>
+			<actions>
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePaymentMethods.groovy" />
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/entry/recurringOrder/recurringOrderPaymentMethodOptions.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailNewCCAction">
+		<section>
+			<actions>
+				<set field="commonButtonUrl" value="eCommerceCreateCreditCardInfo?DONE_PAGE=eCommerceRecurrenceOrderDetail&amp;shoppingListId=${parameters.shoppingListId}"/>
+				<set field="commonButtonClass" value="standardBtn"/>
+				<set field="commonButtonLabel" value="${uiLabelMap.AddCCBtn}"/>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/templates/commonActionButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailNewEFTAction">
+		<section>
+			<actions>
+				<set field="commonButtonUrl" value="eCommerceCreateFftAccountInfo?DONE_PAGE=eCommerceRecurrenceOrderDetail&amp;shoppingListId=${parameters.shoppingListId}"/>
+				<set field="commonButtonClass" value="standardBtn"/>
+				<set field="commonButtonLabel" value="${uiLabelMap.AddEFTBtn}"/>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/templates/commonActionButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailPreviousButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/templates/commonBackAction.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="recurringOrderDetailContinueButton">
+		<section>
+			<actions>
+				<set field="commonButtonUrl" value=""/>
+				<set field="commonButtonClass" value="standardBtn positive"/>
+				<set field="commonButtonLabel" value="${uiLabelMap.SaveBtn}"/>
+				<set field="showHiddenFields" value="Y"/>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/templates/commonActionButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+    <!-- ********************************************************************** -->
+    <!-- Sequence Screen : Request Quote Form Sequencer Type : RequestQuote -->
+    <!-- ********************************************************************** -->
+    <screen name="requestQuoteDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="RequestQuote" />
+                <set field="uiBoxListItemGridName" value="" />
+                <set field="uiBoxListItemTabName" value="" />
+                <set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="requestQuote" />
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence" />
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestQuoteFirstName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/entry/requestQuote/requestQuoteFirstName.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestQuoteLastName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/entry/requestQuote/requestQuoteLastName.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestQuoteEmailAddress">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/entry/requestQuote/requestQuoteEmailAddress.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestQuotePhoneContact">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/entry/requestQuote/requestQuotePhone.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestQuotePartNums">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/entry/requestQuote/requestQuotePartNums.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestQuoteComment">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/entry/requestQuote/requestQuoteComment.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="requestQuoteSubmitButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/entry/formEntrySubmitButton.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+	<!-- ********************************************************************** -->
+	<!-- Sequence Screen : MyAccount Menu : myAccountMenu -->
+	<!-- ********************************************************************** -->
+	<screen name="myAccountMenuDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="MyAccountMenu" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="" />
+				<set field="uiDisplayListName" value="" />
+                <set field="uiEntryFormName" value="" />
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+    <screen name="myAccountMenuPersonalInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/myAccount/menuItemPersonalInfo.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="myAccountMenuLoginInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/myAccount/menuItemLoginInfo.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="myAccountMenuAddressInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/myAccount/menuItemAddressInfo.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="myAccountMenuPaymentMethodCCInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/myAccount/menuItemPaymentMethodCCInfo.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="myAccountMenuPaymentMethodEftInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/myAccount/menuItemPaymentMethodEftInfo.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="myAccountMenuOrderStatusInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/myAccount/menuItemOrderStatusInfo.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="myAccountMenuRecurringOrderInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/myAccount/menuItemRecurringOrderInfo.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 
 
 </screens>

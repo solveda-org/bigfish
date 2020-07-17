@@ -22,7 +22,7 @@
                        <input type="hidden" name="attrName_${customPartyAttribute_index}" value="${parameters.get("attrName_${customPartyAttribute_index}")!customPartyAttribute.AttrName!}"></input>
                      </td>
                      <td class="seqCol <#if !hasNext>lastRow</#if>">
-                       <input type="text" name="sequenceNum_${customPartyAttribute_index}" class="small" id="sequenceNum" value="${parameters.get("sequenceNum_${customPartyAttribute_index}")!customPartyAttribute.SequenceNum!}" maxlength="10"></input>
+                       <input type="text" name="sequenceNum_${customPartyAttribute_index}" class="small" id="sequenceNum" value="${parameters.get("sequenceNum_${customPartyAttribute_index}")!customPartyAttribute.SequenceNum!}" maxlength="9"></input>
                      </td>
                      <td class="seqCol <#if !hasNext>lastRow</#if>">
                        <input type="hidden" name="caption_${customPartyAttribute_index}" value="${parameters.get("caption_${customPartyAttribute_index}")!customPartyAttribute.Caption!}"></input>

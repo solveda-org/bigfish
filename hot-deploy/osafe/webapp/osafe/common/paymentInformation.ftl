@@ -172,6 +172,22 @@
 		                     </div>
 		                 </li>
 	                 </ul>
+                <#elseif "FIN_ACCOUNT" == paymentMethod.paymentMethodTypeId>
+                      <ul class="displayDetail finAccountInfo">
+                         <li>
+                             <div>
+                                 <h4>${uiLabelMap.StoreCreditHeading}</h4>
+                             </div>
+                         </li>
+                         <li>
+                             <div>
+                                <label>${uiLabelMap.AmountCaption}</label>
+                                <span>
+                                    <@ofbizCurrency amount=orderPaymentPreference.maxAmount isoCode=currencyUom rounding=globalContext.currencyRounding/>
+                                </span>
+                             </div>
+                         </li>
+                     </ul>
 	            <#else>
 			          <ul class="displayDetail payInfo">
 		                 <li>

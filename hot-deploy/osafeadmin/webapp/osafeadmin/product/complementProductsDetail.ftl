@@ -139,7 +139,7 @@ function setRowNo(rowNo, assocType) {
              <a href="javascript:void(0);" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
            </td>
            <td class="seqCol">
-             <input type="text" class="infoValue small textAlignCenter" name="compSequenceNum_${rowNo}" id="compSequenceNum" value="${relatedProduct.sequenceNum!}" maxlength="10"/>
+             <input type="text" class="infoValue small textAlignCenter" name="compSequenceNum_${rowNo}" id="compSequenceNum" value="${relatedProduct.sequenceNum!}" maxlength="9"/>
            </td>
            <#assign productName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productContentWrapper.get("PRODUCT_NAME")!""}')/>
            <td class="actionCol">
@@ -190,7 +190,7 @@ function setRowNo(rowNo, assocType) {
            </td>
            <td class="seqCol">
              <#assign sequenceNum = request.getParameter("compSequenceNum_${x}")!/>
-             <input type="text" class="infoValue small textAlignCenter" name="compSequenceNum_${x}" id="compSequenceNum" value="${sequenceNum!}" maxlength="10"/>
+             <input type="text" class="infoValue small textAlignCenter" name="compSequenceNum_${x}" id="compSequenceNum" value="${sequenceNum!}" maxlength="9"/>
            </td>
            <#assign productName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productContentWrapper.get("PRODUCT_NAME")!""}')/>
            <td class="actionCol">

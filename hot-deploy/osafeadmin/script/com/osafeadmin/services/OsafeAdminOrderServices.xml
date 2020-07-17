@@ -522,7 +522,7 @@
         <now-timestamp field="nowTimestamp"/>
         <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="updatedDate">
             <field field="nowTimestamp" type="Timestamp"/>
-            <field field="parameters.entryDateTimeFormat" type="String"/>
+            <field field="parameters.preferredDateFormat" type="String"/>
         </call-class-method>
         <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="updatedTime">
             <field field="nowTimestamp" type="Timestamp"/>
@@ -1172,48 +1172,67 @@
 	              <set field="totalOrderRefundAmount" from-field="parameters.totalRefundAmount" type="BigDecimal"/>
 
 	              <if-not-empty field="negatedOrderAdjustmentAmount">
-	                    <calculate field="totalOrderRefundAmount">
+	                    <calculate field="amountLeftToRefund">
 		                        <calcop operator="add" field="totalOrderRefundAmount"/>
 		                        <calcop operator="get" field="negatedOrderAdjustmentAmount"/>
 		                </calculate>
+                  <else>
+                        <set field="amountLeftToRefund" from-field="totalOrderRefundAmount" type="BigDecimal"/>
+                  </else>
 		          </if-not-empty>
 
                 <entity-and list="orderPaymentPreferenceList" entity-name="OrderPaymentPreference">
                     <field-map field-name="orderId" from-field="parameters.orderId"/>
                     <field-map field-name="statusId" value="PAYMENT_SETTLED"/>
-                    <!-- We may not be needed this check for CREDIT_CARD in future, the paymentMethodTypeId can be any of GIFT_CARD, PAYPAL etc.. -->
-                    <field-map field-name="paymentMethodTypeId" value="CREDIT_CARD"/>
+                    <!-- We may not be needed this check for CREDIT_CARD in future, the paymentMethodTypeId can be any of GIFT_CARD, PAYPAL etc..
+                    <field-map field-name="paymentMethodTypeId" value="CREDIT_CARD"/> -->
                 </entity-and>
                             
                 <iterate entry="orderPaymentPreference" list="orderPaymentPreferenceList">
-                  <!--  
-	                <set-service-fields service-name="createOrderPaymentPreference" to-map="createOrderPaymentPreferenceCtx" map="createOrderPaymentPreference"/>
-	                <set field="createOrderPaymentPreferenceCtx.orderId" from-field="orderPaymentPreference.orderId"/>
-	                <set field="createOrderPaymentPreferenceCtx.paymentMethodTypeId" from-field="orderPaymentPreference.paymentMethodTypeId"/>
-	                <set field="createOrderPaymentPreferenceCtx.paymentMethodId" from-field="orderPaymentPreference.paymentMethodId"/>
-	                <set field="createOrderPaymentPreferenceCtx.statusId" from-field="orderPaymentPreference.statusId"/>
-	                <set field="createOrderPaymentPreferenceCtx.maxAmount" from-field="totalOrderRefundAmount" type="BigDecimal"/>
-	                <call-service service-name="createOrderPaymentPreference" in-map-name="createOrderPaymentPreferenceCtx">
-	                    <result-to-field result-name="orderPaymentPreferenceId" field="parameters.orderPaymentPreferenceId"/>
-	                </call-service>
-	                <entity-one value-field="orderPaymentPreferenceGV" entity-name="OrderPaymentPreference">
-	                    <field-map field-name="orderPaymentPreferenceId" from-field="parameters.orderPaymentPreferenceId"/>
-	                </entity-one>
-                  -->
-                    <set field="refundOrderPaymentCtx.orderPaymentPreference" from-field="orderPaymentPreference"/>
-                    <set field="refundOrderPaymentCtx.refundAmount" from-field="totalOrderRefundAmount" type="BigDecimal"/>
-                    <call-service service-name="refundPayment" in-map-name="refundOrderPaymentCtx">
-                        <result-to-field result-name="paymentId" field="paymentId"/>
-                        <result-to-field result-name="refundAmount" field="refundAmount"/>
-                    </call-service>
-                    <!-- Ofbiz PaymentGatewayServices.processRefundResult (Line 2492) updates the PAYMENT_SETTLED order payment preference to
-                         PAYMENT_REFUNDED.  Even if the entir payment was not refunded.  Thererfore any subsequent monetary refunds will not go through.
-                         Updting any orginally PAYMENT_SETTLED order payment preferences back. 
-                    -->
-                   <if-not-empty field="paymentId">
-                       <set field="orderPaymentPreference.statusId" value="PAYMENT_SETTLED"/>
-                       <store-value value-field="orderPaymentPreference"/>
-                   </if-not-empty>
+                    <if-compare operator="greater" value="0" field="amountLeftToRefund" type="BigDecimal">
+
+                        <set field="amountToRefund" from-field="orderPaymentPreference.maxAmount" type="BigDecimal"/>
+
+                        <if-compare-field operator="greater" field="amountToRefund" to-field="amountLeftToRefund" type="BigDecimal">
+                            <set field="amountToRefund" from-field="amountLeftToRefund"/>
+                        </if-compare-field>
+
+                        <calculate field="amountLeftToRefund">
+                            <calcop operator="subtract">
+                                <calcop operator="get" field="amountLeftToRefund"/>
+                                <calcop operator="get" field="amountToRefund"/>
+                            </calcop>
+                        </calculate>
+
+                        <!--  
+    	                <set-service-fields service-name="createOrderPaymentPreference" to-map="createOrderPaymentPreferenceCtx" map="createOrderPaymentPreference"/>
+    	                <set field="createOrderPaymentPreferenceCtx.orderId" from-field="orderPaymentPreference.orderId"/>
+    	                <set field="createOrderPaymentPreferenceCtx.paymentMethodTypeId" from-field="orderPaymentPreference.paymentMethodTypeId"/>
+    	                <set field="createOrderPaymentPreferenceCtx.paymentMethodId" from-field="orderPaymentPreference.paymentMethodId"/>
+    	                <set field="createOrderPaymentPreferenceCtx.statusId" from-field="orderPaymentPreference.statusId"/>
+    	                <set field="createOrderPaymentPreferenceCtx.maxAmount" from-field="totalOrderRefundAmount" type="BigDecimal"/>
+    	                <call-service service-name="createOrderPaymentPreference" in-map-name="createOrderPaymentPreferenceCtx">
+    	                    <result-to-field result-name="orderPaymentPreferenceId" field="parameters.orderPaymentPreferenceId"/>
+    	                </call-service>
+    	                <entity-one value-field="orderPaymentPreferenceGV" entity-name="OrderPaymentPreference">
+    	                    <field-map field-name="orderPaymentPreferenceId" from-field="parameters.orderPaymentPreferenceId"/>
+    	                </entity-one>
+                        -->
+                        <set field="refundOrderPaymentCtx.orderPaymentPreference" from-field="orderPaymentPreference"/>
+                        <set field="refundOrderPaymentCtx.refundAmount" from-field="amountToRefund" type="BigDecimal"/>
+                        <call-service service-name="refundPayment" in-map-name="refundOrderPaymentCtx">
+                            <result-to-field result-name="paymentId" field="paymentId"/>
+                            <result-to-field result-name="refundAmount" field="refundAmount"/>
+                        </call-service>
+                        <!-- Ofbiz PaymentGatewayServices.processRefundResult (Line 2492) updates the PAYMENT_SETTLED order payment preference to
+                             PAYMENT_REFUNDED.  Even if the entir payment was not refunded.  Thererfore any subsequent monetary refunds will not go through.
+                             Updting any orginally PAYMENT_SETTLED order payment preferences back. 
+                        -->
+                        <if-not-empty field="paymentId">
+                            <set field="orderPaymentPreference.statusId" value="PAYMENT_SETTLED"/>
+                            <store-value value-field="orderPaymentPreference"/>
+                        </if-not-empty>
+                    </if-compare>
                 </iterate>
 	          
 	          <set field="refundedAmountTotal" value="${groovy:org.ofbiz.base.util.UtilFormatOut.formatCurrency(totalOrderRefundAmount, orderHeader.currencyUom, parameters.locale)}"/>

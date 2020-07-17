@@ -92,12 +92,12 @@
             </td>
             <td class="actionCol">
               <a href="javascript:setNewRowNo('${x}');javascript:removeRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeletePriceRowTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
-              <a href="javascript:setNewRowNo('${x}');javascript:addNewRow('${detailEntryTable}');" ><span class="insertBeforeIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>
-              <a href="javascript:setNewRowNo('${x+1}');javascript:addNewRow('${detailEntryTable}');" ><span class="insertAfterIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>           </td>
+              <a href="javascript:setNewRowNo('${x}');javascript:addNewRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
+              <a href="javascript:setNewRowNo('${x+1}');javascript:addNewRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>           </td>
           </tr>
         </#list>
       </#if>
-      <tr id="addIconRow extraTr" <#if (productPriceCondList?exists && productPriceCondList?has_content) || (minRow?exists && minRow &gt; 0)> style="display:none"</#if>>
+      <tr id="addIconRow" class="extraTr" <#if (productPriceCondList?exists && productPriceCondList?has_content) || (minRow?exists && minRow &gt; 0)> style="display:none"</#if>>
       <td colspan="5">&nbsp;</td>
       <td class="actionCol">
         <span class="noAction"></span>
@@ -123,7 +123,8 @@
         </td>
         <td class="actionCol">
           <a href="javascript:setNewRowNo('');javascript:removeRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeletePriceRowTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
-          <a href="javascript:setNewRowNo('');javascript:addNewRow('${detailEntryTable}');" ><span class="insertBeforeIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>
-          <a href="javascript:setNewRowNo('');javascript:addNewRow('${detailEntryTable}');" ><span class="insertAfterIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>        </td>
+          <a href="javascript:setNewRowNo('');javascript:addNewRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
+          <a href="javascript:setNewRowNo('');javascript:addNewRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
+        </td>
       </tr>
   </table>

@@ -434,4 +434,102 @@
         <attribute name="orderLoyaltyAmount" type="BigDecimal" mode="IN" optional="true"/>
     </service>
 
+    <service name="balanceInquireStoreCredit" engine="java"
+            location="com.osafe.services.StoreCreditServices" invoke="balanceInquire" auth="false">
+        <description>Inquire current store credit balance</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="false"/>
+        <attribute name="balance" type="BigDecimal" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="setStoreCreditPayment" engine="java"
+            location="com.osafe.services.StoreCreditServices" invoke="setStoreCreditPayment" auth="false">
+        <description>Set Store Credit Payment</description>
+        <attribute name="cart" mode="IN" type="org.ofbiz.order.shoppingcart.ShoppingCart" optional="false"/>
+        <attribute name="storeCreditAmount" type="BigDecimal" mode="IN" optional="false"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+    </service>
+
+    <service name="getStoreCreditPaymentTotal" engine="java"
+            location="com.osafe.services.StoreCreditServices" invoke="getStoreCreditPaymentTotal" auth="false">
+        <description>Remove Store Credit Payment</description>
+        <attribute name="cart" mode="IN" type="org.ofbiz.order.shoppingcart.ShoppingCart" optional="false"/>
+        <attribute name="total" type="BigDecimal" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="removeStoreCreditPayment" engine="java"
+            location="com.osafe.services.StoreCreditServices" invoke="removeStoreCreditPayment" auth="false">
+        <description>Remove Store Credit Payment</description>
+        <attribute name="cart" mode="IN" type="org.ofbiz.order.shoppingcart.ShoppingCart" optional="false"/>
+    </service>
+
+    <!-- Test FIN_ACCOUNT Implementations -->
+    <service name="alwaysApproveFaProcessor" engine="java"
+             location="org.ofbiz.accounting.payment.PaymentGatewayServices" invoke="alwaysApproveProcessor">
+        <description>Financial Account Processing</description>
+        <implements service="paymentProcessInterface"/>
+        <attribute name="finAccountCode" type="String" mode="IN" optional="true"/>
+        <attribute name="finAccountPin" type="String" mode="IN" optional="true"/>
+        <attribute name="finAccountId" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="alwaysDeclineFaProcessor" engine="java"
+            location="org.ofbiz.accounting.payment.PaymentGatewayServices" invoke="alwaysDeclineProcessor">
+        <description>Financial Account Processing</description>
+        <implements service="paymentProcessInterface"/>
+        <attribute name="finAccountCode" type="String" mode="IN" optional="true"/>
+        <attribute name="finAccountPin" type="String" mode="IN" optional="true"/>
+        <attribute name="finAccountId" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="testFaCapture" engine="java"
+            location="org.ofbiz.accounting.payment.PaymentGatewayServices" invoke="testCapture">
+        <description>EFT Account Processing</description>
+        <implements service="ccCaptureInterface"/>
+    </service>
+    <service name="testFaRelease" engine="java"
+            location="org.ofbiz.accounting.payment.PaymentGatewayServices" invoke="testRelease">
+        <description>Financial Account Test Release</description>
+        <implements service="paymentReleaseInterface"/>
+    </service>
+    <service name="testFaRefund" engine="java"
+            location="org.ofbiz.accounting.payment.PaymentGatewayServices" invoke="testRefund">
+        <description>Financial Account Test Release</description>
+        <implements service="paymentRefundInterface"/>
+        <attribute name="finAccountId" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="genProductsIndexAdd" engine="java" location="com.osafe.services.SolrServices" invoke="genProductsIndexAdd" auth="false" transaction-timeout="7200">
+        <description>Add a document to the End of Document List and Re-index the SOLR</description>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="productId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="documentListCount" type="Integer" mode="OUT" optional="false"/>
+    </service>
+    <service name="genProductsIndexUpdate" engine="java" location="com.osafe.services.SolrServices" invoke="genProductsIndexUpdate" auth="false" transaction-timeout="7200">
+        <description>Update a existing document in the Document List and Re-index the SOLR</description>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="productId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="documentListCount" type="Integer" mode="OUT" optional="false"/>
+    </service>
+
+    <service name="fdggCCAuth" engine="java" location="com.osafe.services.firstData.FdggPaymentServices" invoke="ccAuth">
+        <description>First Data Global Gateway CC Authorization</description>
+        <implements service="ccAuthInterface"/>
+    </service>
+    <service name="fdggCCAuthCapture" engine="java" location="com.osafe.services.firstData.FDGGPaymentServices" invoke="ccAuthCapture">
+        <description>First Data Global Gateway CC Authorize and Capture service</description>
+        <implements service="ccAuthInterface"/>
+    </service>
+    <service name="fdggCCCapture" engine="java" location="com.osafe.services.firstData.FDGGPaymentServices" invoke="ccCapture">
+        <description>First Data Global Gateway CC Payment Capture Service</description>
+        <implements service="ccCaptureInterface"/>
+    </service>
+    <service name="fdggCCRelease" engine="java" location="com.osafe.services.firstData.FDGGPaymentServices" invoke="ccRelease">
+        <description>First Data Global Gateway CC Payment Release Service - NOT IMPLEMENTED YET</description>
+        <implements service="paymentReleaseInterface"/>
+    </service>
+    <service name="fdggCCRefund" engine="java" location="com.osafe.services.firstData.FDGGPaymentServices" invoke="ccRefund">
+        <description>First Data Global Gateway CC Payment Refund Service</description>
+        <implements service="paymentRefundInterface"/>
+    </service>
+
 </services>

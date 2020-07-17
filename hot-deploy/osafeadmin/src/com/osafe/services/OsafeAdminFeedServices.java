@@ -3008,4 +3008,146 @@ public class OsafeAdminFeedServices
     	}
     	return jobName;
     }
+
+    public static Map<String, Object> googleProductFeed(DispatchContext dctx, Map<String, ? extends Object> context) {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String productStoreId = (String)context.get("productStoreId");
+        String browseRootProductCategoryId = (String)context.get("browseRootProductCategoryId");
+        
+        String feedsOutGoogleProductDir = (String)context.get("feedsOutGoogleProductDir");
+        String feedsOutGoogleProductPrefix = (String)context.get("feedsOutGoogleProductPrefix");
+
+        // Check passed params
+        if (UtilValidate.isEmpty(feedsOutGoogleProductDir)) 
+        {
+        	feedsOutGoogleProductDir = OsafeAdminUtil.getProductStoreParm(delegator, productStoreId, "FEEDS_OUT_GOOGLE_PRODUCT_URL_DIR");
+        }
+        if (UtilValidate.isEmpty(feedsOutGoogleProductPrefix)) 
+        {
+        	feedsOutGoogleProductPrefix = OsafeAdminUtil.getProductStoreParm(delegator, productStoreId, "FEEDS_OUT_GOOGLE_PRODUCT_PREFIX");
+        }
+
+        String jobName = getJobName(dispatcher, "googleProductFeed");
+        
+        String serviceName = "googleProductFeed";
+
+    	StringBuilder jobInfoStr = new StringBuilder();
+		jobInfoStr.append(UtilDateTime.nowTimestamp().toString());
+		jobInfoStr.append("   Job Name: "+jobName);
+		jobInfoStr.append("   ServiceName: "+serviceName);
+		jobInfoStr.append("   SCHEDULED");
+		jobInfoStr.append("   STARTED");
+        
+        if (UtilValidate.isNotEmpty(feedsOutGoogleProductDir)) 
+        {
+        		Map<String, Object> exportGoogleProductXmlCtx = UtilMisc.toMap("browseRootProductCategoryId", browseRootProductCategoryId,
+                        "productStoreId", productStoreId,
+                        "userLogin", userLogin);
+        		Map exportResults;
+				try 
+				{
+					exportResults = dispatcher.runSync("exportGoogleProductXml", exportGoogleProductXmlCtx);
+					String feedsDirectoryPath = (String)exportResults.get("feedsDirectoryPath");
+	        		String feedsFileName = (String)exportResults.get("feedsFileName");
+	        		List<String> feedsExportedIdList =  (List) exportResults.get("feedsExportedIdList");
+	        		
+	        		List<String> exportMessageList = UtilGenerics.checkList(exportResults.get("exportMessageList"), String.class);
+	        		
+	        		File exportedFileSrc = new File(feedsDirectoryPath, feedsFileName);
+	        		String exportedFileName = "_"+UtilDateTime.nowDateString("yyyyMMdd")+"_"+UtilDateTime.nowDateString("HHmmss")+".xml";
+	                if(UtilValidate.isNotEmpty(feedsOutGoogleProductPrefix)) 
+	                {
+	                	exportedFileName = feedsOutGoogleProductPrefix + exportedFileName; 
+	                }
+	        		try 
+	        		{
+	        	        FileUtils.copyFile(exportedFileSrc, new File(feedsOutGoogleProductDir, exportedFileName));
+	        	        
+	        	        File fOutFile =null;
+                        BufferedWriter bwOutFile = null;
+                        try
+                        {
+                        	fOutFile = new File(feedsOutGoogleProductDir, exportedFileName.replace(".xml", ".log"));
+                            if (fOutFile.createNewFile()) 
+                            {
+                            	bwOutFile = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(fOutFile), "UTF-8"));
+                            }
+                        }
+                        catch(Exception e)
+                        {
+                        	Debug.log("can not create a file "+e);
+                        }
+                        
+                        writeFeedLogMessage(bwOutFile, jobInfoStr.toString());
+                        
+	        	        if(UtilValidate.isNotEmpty(exportMessageList))
+	        	        {
+	        	        	for(String exportMessage : exportMessageList)
+                			{
+                				writeFeedLogMessage(bwOutFile, exportMessage);
+                			}
+	        	        }
+	        	        writeOutFeedSummary(bwOutFile, Integer.toString(feedsExportedIdList.size()), Integer.toString(feedsExportedIdList.size()), "GOOGLE ITEM");
+	        	        
+	        	        StringBuilder jobEndInfoStr = new StringBuilder();
+	        	        jobEndInfoStr.append(UtilDateTime.nowTimestamp().toString());
+        				if(UtilValidate.isNotEmpty(jobName))
+        				{
+        					jobEndInfoStr.append("   Job Name: "+jobName);
+        				}
+        				else
+        				{
+        					jobEndInfoStr.append("   Job Name: "+serviceName);
+        				}
+        				jobEndInfoStr.append("   ServiceName: "+serviceName);
+        				jobEndInfoStr.append("   SCHEDULED");
+        				jobEndInfoStr.append("   FINISHED - Job Status is SUCCESS");
+        				
+        				writeFeedLogMessage(bwOutFile, jobEndInfoStr.toString());
+        				
+	        	        try
+                        {
+                            bwOutFile.flush();
+                        }
+                        catch (Exception e) 
+                        {
+                        	Debug.log("Can not flush the file "+e);
+              	        }
+                        finally 
+                        {
+                            try 
+                            {
+                                if (bwOutFile != null) 
+                                {
+                           	        bwOutFile.close();
+                                }
+                            }  
+                            catch (IOException ioe) {
+                                Debug.logError(ioe, module);
+                            }
+                        }
+	        	        
+	        	        exportedFileSrc.delete();
+	        	      
+	        	    } 
+	        		catch (IOException e) 
+	        		{
+	        		    Debug.log("Can not copy file " + exportedFileSrc.getName() + " to Directory " +feedsOutGoogleProductDir);
+				    }
+				} 
+				catch (Exception e1) 
+				{
+					e1.printStackTrace();
+				}
+        } 
+        else 
+        {
+        	Debug.log("No path specified, doing nothing.");
+        }
+        
+        return ServiceUtil.returnSuccess();
+    }
 }

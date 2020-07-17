@@ -400,6 +400,7 @@
       <xsd:element type="ProductImageType" name="ProductImage" minOccurs="0"/>
       <xsd:element type="GoodIdentificationType" name="ProductGoodIdentification" minOccurs="0"/>
       <xsd:element type="ProductInventoryType" name="ProductInventory" minOccurs="0"/>
+      <xsd:element type="ProductAttachmentsType" name="ProductAttachments" minOccurs="0"/>
       <xsd:element type="ProductAttributeType" name="ProductAttribute" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
@@ -482,8 +483,21 @@
     </xsd:all>
   </xsd:complexType>
   
+  <xsd:complexType name="ProductAttachmentsType">
+    <xsd:sequence>
+      <xsd:element type="ProductAttachType" name="ProductAttach" minOccurs="0" maxOccurs="3"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
   <xsd:element type="xsd:string" name="Url" default=""/>
   <xsd:element type="xsd:string" name="ThruDate" default=""/>
+  
+  <xsd:complexType name="ProductAttachType">
+    <xsd:all>
+      <xsd:element ref="Url"  minOccurs="1"/>
+      <xsd:element ref="ThruDate" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
   
   <xsd:complexType name="PlpSwatchType">
     <xsd:all>
@@ -799,5 +813,5 @@
       <xsd:element name="ProductRatingScore" type="xsd:string" default="" minOccurs="1"/>
     </xsd:all>
   </xsd:complexType>
-  
+
 </xsd:schema>

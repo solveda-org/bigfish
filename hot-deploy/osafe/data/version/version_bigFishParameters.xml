@@ -4,15 +4,17 @@
 <!-- Product Store Parm count (190) -->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MIN" description="Number of facet values to show; see less/More" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MAX" description="Max Number of facet values to show" parmCategory="SOLR"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_MULTI_SELECT" description="Indicates if multiple Facet VALUES can be selected from within one Facet GROUP" parmCategory="SOLR"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_STYLE" description="Indicates if multiple Facet VALUES are displayed as links (NORMAL), checkboxes with multi-select (CHECKBOX), or a drop-down list (DROPDOWN). Can be selected from within one Facet GROUP" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_CAT_ON_PLP" description="Display categories as a facet group on the PLP page TRUE or FALSE" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_SHOW_ITEM_CNT" description="Determines whether the facets show the number of items in parenthesis" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_PRICE_ROUND" description="Control the number of decimal places to be displayed in the listed prices" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_GROUP_VARIANT_MATCH" description="If the customer clicks a value in this Facet Group then the system will attempt to find a matching Variant" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_PDP_MATCH" description="This is the FACET GROUP that will used to control the Sticky link from the PLP Variant to the PDP Variant" parmCategory="SOLR"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_MONEY_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PRODUCT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_PCT_THRESHOLD" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PRODUCT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_INC_GOOD_ID" description="A comma separated list of which Good Identification Type IDs to include in the Admin Product detail screen." parmCategory="PRODUCT"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_FACET_GROUP_VARIANT_SWATCH_IMG" description="This is the FACET GROUP that may have variant 'swatches' images on the PLP. For example, if this parameter is set to COLOR then the PDP will offer the 'color swatches'as a selector." parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_QTY_DEFAULT" description="The default Qty to be displayed on the PDP. Typically this will be left blank. Useful for certain applications or if the Qty is hidden via DIV sequencing." parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_QTY_MIN" description="The minimum allowed quantity that can be ordered on the PDP" parmCategory="PDP"/>
@@ -23,17 +25,21 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_VERTICAL" description="TRUE or FALSE. A value of TRUE will display a Vertical scroller. A value of FALSE will display a Horizontal scroller." parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_IMAGES" description="The number of images that should be scrolled up or down when the arrow is clicked." parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_FACET_GROUP_VARIANT_MATCH" description="This is the FACET GROUP that will be used for matching in the PDP. Examples: customer clicks on the Blue Swatch, system needs to match on Color-Group facet to show matching you-may-also-like products." parmCategory="PDP"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_NUM_ITEMS_PER_PAGE" description="The number of items that should appear per page in the PLP." parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_DEFAULT_SORT" description="Controls the default sequence used on all PLP pages. Valid values are: HIGHEST_RATING, BEST_SELLING, MOST_VIEWED, MOST_POPULAR, NAME_ASCENDING, NAME_DESCENDING, HIGHEST_PRICE, LOWEST_PRICE, RECENT_INTRO" parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_SWATCH_IMG" description="This is the FACET GROUP that may have variant 'swatch' images on the PLP. For example, if this parameter is set to COLOR, and COLOR=Red is clicked on the Facets, then the PDP processing will look for images from the variant product Color=Red." parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_AVAILABLE_SORT" description="A comma separated list of available Sort options on the PLP. Valid values can contain one, more or all of the following: HIGHEST_RATING, BEST_SELLING, MOST_VIEWED, MOST_POPULAR, NAME_ASCENDING, NAME_DESCENDING, HIGHEST_PRICE, LOWEST_PRICE, RECENT_INTRO" parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_MATCH" description="This is the FACET GROUP that will be used for matching in the PLP. Example: customer clicks on Color=Blue facet, system needs to match on Color-Group facet to show similar products." parmCategory="PLP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FLYOUT_ACTIVE" description="Defines whether a retailer site has PLP Flyout functionality" parmCategory="PLP"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AUTO_APPROVE" description="This defines whether Ratings and Reviews will be automatically approved. Setting this value to FALSE requires your approval of each Review posted. Approval is done in the Admin Module." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_SEND_EMAIL" description="This defines whether BigFish sends out the email notification 'n' days after the Order has Shipped (EMAIL_REVIEW_SHP_DYS). Some clients may have an external service to perform this function - so even if Reviews are active this parameter may be False." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MIN_CHAR" description="The minimum number of characters allowed for a review. Zero indicates that a review may be left blank." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MAX_CHAR" description="The maximum number of characters allowed for a review. Zero indicates that a review may have unlimited characters." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AS_GUEST" description="TRUE indicates that the customer does NOT have to be logged in as a registered user. FALSE will force a login or registration" parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_METHOD" description="Determines if reviews are active and which service is implemented. NONE indicates no reviews. BIGFISH indicates standard BF Reviews. REEVOO indicates the Reevoo service." parmCategory="REVIEW"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_SHOW_ON_PLP" description="Display Reevoo mark on the PLP page TRUE or FALSE" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_JS_URL" description="Request Url for instantiate the REEVOO mark processing" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_BADGE_URL" description="Request Url for showing REEVOO mark badge" parmCategory="REEVOO"/>
@@ -42,8 +48,10 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_PASSWORD" description="Used for authentication purposes when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_API_URL" description="Used to identify the Reevoo service when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_CSV_URL" description="Used to identify the file destination when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GA_SITE_VERIFICATION" description="Google analytics site verification" parmCategory="GOOGLE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GA_ACCOUNT_NO" description="Google analytics account number" parmCategory="GOOGLE"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_ABANDON_HRS" description="The time in hours to wait before sending the Abandoned Cart email. Set to 0 to disable the Abandoned Cart email." parmCategory="EMAIL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_ABANDON_NUM" description="The number of times to send the Abandoned Cart email, reset if the customer purchases. Set to 0 to disable the Abandoned Cart email." parmCategory="EMAIL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_CLNT_NAME" description="Client name, referenced in email-templates" parmCategory="EMAIL"/>
@@ -57,9 +65,11 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_TBL_HEAD_COLOR" description="HTML Table color, referenced in email-templates" parmCategory="EMAIL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_TBL_FONT_SIZE" description="HTML Table font size, referenced in email-templates" parmCategory="EMAIL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_REVIEW_SHP_DYS" description="Send email for product review after day ? shipped." parmCategory="EMAIL"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_MULTI" description="Does this client support multiple coutries. Value of TRUE or FALSE" parmCategory="COUNTRY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DEFAULT" description="The client's default country" parmCategory="COUNTRY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DROPDOWN" description="If the client supports Multi-countries, this is the list of countries supported. A value of ALL indicates all countries." parmCategory="COUNTRY"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_H" description="Height of PLP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_W" description="Width of PLP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_REG_H" description="Height of PDP Image" parmCategory="IMAGE"/>
@@ -94,10 +104,12 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_W" description="Width of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_WISHLIST_H" description="Height of Wishlist Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_WISHLIST_W" description="Width of Wishlist Image" parmCategory="IMAGE"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_H" description="Height of PDP Product Video" parmCategory="VIDEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_W" description="Width of PDP Product Video" parmCategory="VIDEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_360_H" description="Height of PDP Video 360" parmCategory="VIDEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_360_W" description="Width of PDP Video 360" parmCategory="VIDEO"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_ADDRESS" description="This defines how Addresses are formatted within both the eCommerce and Admin modules. State options are STATE_SHORT, STATE_LONG. Zip options are ZIP_SHORT, ZIP_LONG. Country options are COUNTRY_SHORT, COUNTRY_LONG." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_DATE" description="This defines how dates are displayed within both the eCommerce and Admin modules. CASE SENSITIVE. dd=Day, MM=Month yy=Year hh=Hour mm=Minute ss=Second." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_DATE_TIME" description="This defines how dates with time are displayed within both the eCommerce and Admin modules. CASE SENSITIVE. dd=Day, MM=Month yy=Year hh=Hour mm=Minute ss=Second." parmCategory="FORMAT"/>
@@ -106,6 +118,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CURRENCY_UOM_ROUNDING" description="This defines the rounding increment for currency amounts. 0 if no rounding is done (show full amounts). Default is 2." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="LENGTH_UOM_DEFAULT" description="Default setting for the LENGTH unit of measure (UOM). Valid values as per the UOM_TYPE entity of type LENGTH_MEASURE. Typical setting is cm or in." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="WEIGHT_UOM_DEFAULT" description="Default setting for the WEIGHT unit of measure (UOM). Valid values as per the UOM_TYPE entity of type WEIGHT_MEASURE. Typical setting is lb or kg." parmCategory="FORMAT"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REG_PWD_MIN_CHAR" description="Password Strength, specifies the minimum number of total characters." parmCategory="USER_PROFILE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REG_PWD_MIN_NUM" description="Password Strength, specifies the minimum number of numeric digits." parmCategory="USER_PROFILE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REG_PWD_MIN_UPPER" description="Password Strength, specifies the minimum of uppercase characters." parmCategory="USER_PROFILE"/>
@@ -121,11 +134,13 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_JS_API_URL" description="Request Url for Showing Google Map Input as Geo Point(Lat,Long)" parmCategory="GMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_JS_API_KEY" description="Request Url Key for Showing Google Map Input as Geo Point(Lat,Long)" parmCategory="GMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_NOT_FOUND_ADDRESS" description="An address that is used when no stores are found using the customers request. This should be a value that ensures results." parmCategory="GMAP"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SITEMAP_CLP_URL" description="Sitemap starting URL for Category List Pages" parmCategory="SITEMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SITEMAP_PLP_URL" description="Sitemap starting URL for Product List Pages" parmCategory="SITEMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SITEMAP_PDP_URL" description="Sitemap starting URL for Product Detail Pages" parmCategory="SITEMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SITEMAP_STATIC_URL" description="Sitemap starting URL for Static Pages" parmCategory="SITEMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SITEMAP_VARIANT_FEATURES" description="Defines a list of features that may be used to extend the SITEMAP and SEO-Friendly-URL functions to include variant products. For example: www.client.com/big-product-blue. Leave blank to include to primary (Virtual) products only." parmCategory="SITEMAP"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_AS_GUEST" description="Defines whether a customer can checkout as a Guest, without having to register." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_EMAIL_ALERT" description="The number of additional emails that can be entered on the Order Confirmation page. Should be a number from 0 to 10." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_SINGLE_PAGE" description="Defines whether the Single-Page checkout page is offered by default" parmCategory="CHECKOUT"/>
@@ -149,15 +164,20 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_COD" description="Determines if COD (Cash on Delivery) is an option for checkout. This is used extensively in the Indian marketplace." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_GOOGLE" description="Determines if Google Checkout is an acceptable for of payment during the Check Out process." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_CC" description="Determines if Credit Cards are an acceptable form of payment during the Check Out process." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_EFT" description="Determines if Electronic Funds Transfer (EFT) is an acceptable form of payment during the Check Out process." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_GIFT_MESSAGE" description="TRUE or FALSE flag value to indicate if Gift Messages are to be offered in the My Cart page. This acts as the default, can be overridden at the Product level." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_LOYALTY_METHOD" description="A value indicating if Loyalty Card redemptions are available during checkout and which service is to be used. Valid values are NONE and TEST (test that returns 10 points)." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_LOYALTY_CONVERSION" description="A value indicating the conversion of Loyalty Points to money. POINTS divided by CONVERSION equals MONETARY-VALUE. 100 points with a conversion of 10 would equal 10 monetary units." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_SHOW_SALES_TAX_MULTI" description="TRUE will show multiple sales tax, if configured, on checkout pages." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_CREDIT" description="A value indicating if Store Credit are available during checkout and which service is to be used. Valid values are TRUE and TEST (test that returns 10 unit store credit)." parmCategory="CHECKOUT"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_ACTIVE" description="Display quick view on the PLP page for each product." parmCategory="QUICKLOOK"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_DELAY_MS" description="The time, in milliseconds, that the site will wait before displaying the Quick Look icon" parmCategory="QUICKLOOK"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_IMG_ZOOM_ACTIVE_FLAG" description="TRUE or FALSE. Indicates if the Quicklook implementation is using the inline image zoom feature." parmCategory="QUICKLOOK"/> 
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="LIGHTBOX_ACTIVE" description="Defines whether the retailer site supports the View-Cart drop-down light box functionality" parmCategory="LIGHTBOX"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="LIGHTBOX_DELAY_MS" description="The time, in milliseconds, that the site will wait before displaying the Light Box" parmCategory="LIGHTBOX"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_META_DESC_LEN" description="Length of Meta  DESCRIPTION tag. Will truncate to include a full word." parmCategory="SEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_META_KEY_LEN" description="Length of Meta  KEY tag. Will truncate to include a full word." parmCategory="SEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_TITLE" description="Value for the TITLE tag for the Home Page" parmCategory="SEO"/>
@@ -166,18 +186,23 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_H1" description="Value for the H1 tag for the Home Page" parmCategory="SEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE" description="General name of the Store to be used in all TITLE tags except the Home Page. This will supplement other information that is used to derive the TITLE tag." parmCategory="SEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE_POSITION" description="Parameter to define whether the SEO_GENERAL_TITLE is used as PREFIX or SUFFIX when building TITLE tags" parmCategory="SEO"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADDRESS_VERIFICATION_METHOD" parmValue="NONE" description="Method of verying the addres (in addition to standard validation).Valid values are NONE, PCA, MELISSA_DATA" parmCategory="ADDRESS"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_JS_URL" description="Request url for find address" parmCategory="PCA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_CSS_URL" description="Request url for link PCA CSS" parmCategory="PCA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_KEY" description="Request Url Key for intracting with PCA product" parmCategory="PCA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_APP_NO" description="Request url application number." parmCategory="PCA"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_LICENSE" description="A current license string is required to use the functionality of locally installed Melissa address tool. Use 'DEMO' string as license in demo mode." parmCategory="MELISSA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_FILE_PATH_US" description="Indicates the Directory location where the Melissa US db is configured for checking the US address." parmCategory="MELISSA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_FILE_PATH_CAN" description="Indicates the Directory location where the Melissa Canada db is configured for checking the Canadian address." parmCategory="MELISSA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_VERIFICATION_MODE" description="Melissa provides the two types of services for address verification. First install the Melissa address tool locally and second send HTTP request for verification. Possible values are HTTP or FILEPATH." parmCategory="MELISSA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_HTTP_URL" description="HTTP url for address verification. Default value is https://addresscheck.melissadata.net/v2/REST/Service.svc/doAddressCheck" parmCategory="MELISSA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="MELISSA_REGISTRATION_ID" description="Registered customer Id for web data verification " parmCategory="MELISSA"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SHOW_BUILT_BY" description="Simple TRUE or FALSE value that will determine if the Built by Salmon LLC link will be displayed" parmCategory="GENERAL"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_PRODUCT_URL_DIR" description="Client to Bigfish Incoming Product File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_ORDER_STATUS_URL_DIR" description="Client to Bigfish Incoming Order Status File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_RATING_URL_DIR" description="Client to Bigfish Incoming Rating File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
@@ -188,31 +213,48 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_ORDER_URL_DIR" description="Bigfish to Client Outgoing Order File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CONTACT_US_URL_DIR" description="Bigfish to Client Outgoing Contact-Us File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_REQUEST_CATALOG_URL_DIR" description="Bigfish to Client Outgoing Request-Catalog File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_GOOGLE_PRODUCT_URL_DIR" description="Bigfish to Client Outgoing Google Product File, indicates the default URL or Directory location to place newly created files." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CUSTOMER_PREFIX" description="Bigfish to Client Outgoing Customer File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_ORDER_PREFIX" description="Bigfish to Client Outgoing Order File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CONTACT_US_PREFIX" description="Bigfish to Client Outgoing Contact-Us File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_REQUEST_CATALOG_PREFIX" description="Bigfish to Client Outgoing Request-Catalog File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_MASK_ACCOUNT_INFO" description="Apply Mask (e.g. *1234) to Account information (Credit Card, Bank Account, Routing Numbers) on all outgoing FEEDS. TRUE or FALSE.  Default is TRUE." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_GOOGLE_PRODUCT_PREFIX" description="Bigfish to Client Outgoing Google-Product File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_DEF_LIST_ROWS" description="Default view size" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_WARN_LIST_ROWS" description="Default max view size" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_TOOLTIP_MAX_CHAR" description="The maximum number of characters to display in a Tooltip within the Admin Module" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_HELP_URL" description="The URL location of the help files" parmCategory="ADM"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_SHOW_DASHBOARD" description="Parameter that determines if the sales and related information is to be displayed on the Home Page of the Admin Module. Set to FALSE if there is a performance overhead." parmCategory="ADM"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_SHOW_DAILY_COUNTER" description="Parameter that determines if the daily sales counter, displayed on the top right of the Admin Module, is displayed. Set to FALSE if there is a performance overhead." parmCategory="ADM"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_SHOW_ALERTS" description="Parameter that determines if the Alerts, displayed on the Home Page of the Admin Module, are displayed. Set to FALSE if there is a performance overhead." parmCategory="ADM"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_DEFAULT_TEXT" description="Default text for site search entry text box" parmCategory="SEARCH"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_NO_ENTRY_ERROR" description="Site search no entry error message" parmCategory="SEARCH"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_FACET_GROUP_INCLUDE" description="The comma separated list of Facet Groups that should be included after a Site Search." parmCategory="SEARCH"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_METHOD" description="The method used for tracking inventory: NONE: Inventory is not relevant to this implementation OFBIZ: use standard OFBiz inventory. Facility, reservations, ATP, QOH BIGFISH: simple inventory value" parmCategory="INVENTORY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_OUT_OF_STOCK_TO" description="If the current inventory is less than or equal to this value then the Product is considered to be Out-of-Stock." parmCategory="INVENTORY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_IN_STOCK_FROM" description="If the current inventory is greater than or equal to this value then the Product is considered to be In-Stock." parmCategory="INVENTORY"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CUSTOMER_ROLE_INC_SEARCH" description="A comma separated list of Customer Roles that should be used on the Customer List screen. Can include any ROLE_TYPE_ID from the ROLE_TYPE entity" parmCategory="CUSTOMER"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ORDER_STATUS_INC_DASHBOARD" description="A comma separated list of Order Status IDs that should be included in the Dashboard sales numbers. Can include ORDER_CREATED, ORDER_SENT, ORDER_PROCESSING, ORDER_APPROVED, ORDER_HOLD, ORDER_COMPLETED, ORDER_REJECTED, ORDER_CANCELLED" parmCategory="ORDER"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ORDER_STATUS_INC_SEARCH" description="A comma separated list of Order Status IDs that should be used on the Order List screen. ORDER_CREATED, ORDER_SENT, ORDER_PROCESSING, ORDER_APPROVED, ORDER_HOLD, ORDER_COMPLETED, ORDER_REJECTED, ORDER_CANCELLED" parmCategory="ORDER"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ORDER_STATUS_INC_EXPORT" description="A comma separated list of Order Status IDs that should be included in the Order Export process. Can include ORDER_CREATED, ORDER_SENT, ORDER_PROCESSING, ORDER_APPROVED, ORDER_HOLD, ORDER_COMPLETED, ORDER_REJECTED, ORDER_CANCELLED" parmCategory="ORDER"/>
+
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_METHOD" description="Indicates if Text Messaging (SMS) is an option and which service to use for delivery. Valid values are NONE, CLICKATELL, PINNACLE" parmCategory="TEXT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADD_TO_CART_REDIRECT" description="Defines the next page after adding an item to the cart. CART (default) will redirect to the Show Cart page. CHECKOUT will redirect to the checkout flow." parmCategory="GENERAL"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_METHOD" description="Indicates if Text Messaging (SMS) is an option and which service to use for delivery. Valid values are NONE, CLICKATELL, PINNACLE" parmCategory="TEXT"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_FROM_MAX_CHAR" description="The maximum number of characters that can be entered in the FROM field within the Gift Message feature. Default is 50." parmCategory="GIFT_MSG"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_TO_MAX_CHAR" description="The maximum number of characters that can be entered in the TO field within the Gift Message feature. Default is 50." parmCategory="GIFT_MSG"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_TEXT_MAX_CHAR" description="The maximum number of characters that can be entered in the TEXT field within the Gift Message feature. Default is 255." parmCategory="GIFT_MSG"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_PAYMENT_STYLE" description="LIST refers to listing all the available payment options one after the other. DROPDOWN condenses each option into a dropdown, selection of an option exposes the details." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ADDRESS_STYLE" description="Controls the UI for the selection of an address. RADIOBUTTON will display as radio button controls. DROPDOWN will display as drop-down controls." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_FORCE_CASE" description="Indicates if Facet VALUES are forced into a specific case, useful to remove duplicates. Either force to upper-case (UPPER), lower-case (LOWER) or do not force (NONE)." parmCategory="SOLR"/>
+
+
 </entity-engine-xml>

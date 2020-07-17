@@ -2,21 +2,24 @@ package com.osafe.services;
 
 import java.io.Serializable;
 
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilValidate;
+
 public class AddressDocument implements Serializable {
 
-    private String toName;
-    private String attnName;
-    private String address1;
-    private String address2;
-    private String address3;
-    private String city;
-    private String stateProvinceGeoId;
-    private String postalCode;
-    private String postalCodeExt;
-    private String countryGeoId;
-    private String countyGeoId;
-    private Double latitude;
-    private Double longitude;
+    private String toName=null;
+    private String attnName=null;
+    private String address1=null;
+    private String address2=null;
+    private String address3=null;
+    private String city=null;
+    private String stateProvinceGeoId=null;
+    private String postalCode=null;
+    private String postalCodeExt=null;
+    private String countryGeoId=null;
+    private String countyGeoId=null;
+    private Double latitude=null;
+    private Double longitude=null;
 
     public AddressDocument() {
         super();

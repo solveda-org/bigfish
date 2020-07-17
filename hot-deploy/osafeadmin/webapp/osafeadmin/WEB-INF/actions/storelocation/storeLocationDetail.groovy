@@ -6,10 +6,10 @@ import javolution.util.FastMap;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.common.CommonWorkers;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.party.contact.ContactMechWorker;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.content.content.ContentWorker;
 import org.ofbiz.party.party.PartyHelper;
+import org.ofbiz.party.contact.*;
 
 userLogin = session.getAttribute("userLogin");
 partyId = StringUtils.trimToEmpty(parameters.storePartyId);
@@ -29,25 +29,32 @@ if (UtilValidate.isNotEmpty(partyGroup))
     storeName = partyGroup.groupName;
 }
 context.storeName = storeName;
-partyContactMechValueMaps = ContactMechWorker.getPartyContactMechValueMaps(delegator, partyId, false);
-if (UtilValidate.isNotEmpty(partyContactMechValueMaps))
+partyGeneralContactMechValueMap = FastMap.newInstance();
+partyPrimaryPhoneContactMechValueMap = FastMap.newInstance();
+partyPrimaryEmailContactMechValueMap = FastMap.newInstance();
+
+contactMechs = ContactHelper.getContactMech(party, "GENERAL_LOCATION", "POSTAL_ADDRESS", false);
+if (UtilValidate.isNotEmpty(contactMechs))
 {
-    partyContactMechValueMaps.each { partyContactMechValueMap ->
-        contactMechPurposes = partyContactMechValueMap.partyContactMechPurposes;
-        contactMechPurposes.each { contactMechPurpose ->
-            if (contactMechPurpose.contactMechPurposeTypeId.equals("GENERAL_LOCATION")) 
-            {
-                context.partyGeneralContactMechValueMap = partyContactMechValueMap;
-            } else if (contactMechPurpose.contactMechPurposeTypeId.equals("PRIMARY_PHONE"))
-            {
-                context.partyPrimaryPhoneContactMechValueMap = partyContactMechValueMap;
-            } else if (contactMechPurpose.contactMechPurposeTypeId.equals("PRIMARY_EMAIL"))
-            {
-                context.partyPrimaryEmailContactMechValueMap = partyContactMechValueMap;
-            }
-        }
-    }
+	     contactMech = EntityUtil.getFirst(contactMechs);
+	     partyGeneralContactMechValueMap.put("contactMech",contactMech);
+	     postalAddress = contactMech.getRelatedOne("PostalAddress"); 
+	     partyGeneralContactMechValueMap.put("postalAddress",postalAddress);
+	 
 }
+
+contactMechs = ContactHelper.getContactMech(party, "PRIMARY_PHONE", "TELECOM_NUMBER", false);
+if (UtilValidate.isNotEmpty(contactMechs))
+{
+	     contactMech = EntityUtil.getFirst(contactMechs);
+	     partyPrimaryPhoneContactMechValueMap.put("contactMech",contactMech);
+	     telecomNumber = contactMech.getRelatedOne("TelecomNumber"); 
+	     partyPrimaryPhoneContactMechValueMap.put("telecomNumber",telecomNumber);
+}
+context.partyGeneralContactMechValueMap = partyGeneralContactMechValueMap;
+context.partyPrimaryPhoneContactMechValueMap = partyPrimaryPhoneContactMechValueMap;
+context.partyPrimaryEmailContactMechValueMap = partyPrimaryEmailContactMechValueMap;
+
 
 partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "STORE_HOURS"]));
 if (UtilValidate.isNotEmpty(partyContent)) 

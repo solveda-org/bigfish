@@ -971,7 +971,313 @@
         <string-to-list string="${reviewAgesSavedSuccess}" list="successMessageList"/>
     </simple-method>
     
+    
     <simple-method method-name="deleteReviewAges" short-description="Delete Review Ages">
+        <make-value entity-name="Enumeration" value-field="lookupKeyValue"/>
+        <set-pk-fields map="parameters" value-field="lookupKeyValue"/>
+        <find-by-primary-key entity-name="Enumeration" map="lookupKeyValue" value-field="lookedUpValue"/>
+        <remove-value value-field="lookedUpValue"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+        <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="createRecurrenceFreqType" short-description="Create Frequency Type Type">
+        <if-empty field="parameters.enumId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+        <else>
+            <set field="IdLength" value="20" type="Integer"/>
+            <set field="spaceReplacement" value=" " type="String"/>
+            <set field="makeUpCase" value="true" type="Boolean"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="enumId">
+                <field field="parameters.enumId" type="String"/>
+                <field field="IdLength" type="Integer"/>
+                <field field="spaceReplacement" type="String"/>
+                <field field="makeUpCase" type="boolean"/>
+            </call-class-method>
+            <if-empty field="enumId">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeIdLengthError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+            <else>
+                <entity-one entity-name="Enumeration" value-field="existingEnum"/>
+                <if-not-empty field="existingEnum">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeIdExistError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+                    <else>
+                        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+                            <field field="parameters.enumId"/>
+                        </call-class-method>
+                        <if-compare field="isValidId" operator="equals" value="false">
+                            <set field="errorKey" from-field="parameters.enumId"/>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+                        </if-compare>
+                        <set field="parameters.enumId" from-field="enumId"/> 
+                    </else>
+                </if-not-empty>
+            </else>
+            </if-empty>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+        </if-empty>
+        
+        <if-empty field="parameters.enumCode">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeCodeError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="enumCode" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="intervalVaild">
+                    <string value="${parameters.enumCode}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="intervalVaild" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeCodeError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="enumCode" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        
+        <if-empty field="parameters.sequenceId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSequenceIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                <string value="${parameters.sequenceId}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSequenceIdError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="0" field="parameters.sequenceId" type="Long"/>
+                                <if-compare operator="less-equals" value="9999" field="parameters.sequenceId" type="Long"/>
+                            </and>
+                        </condition>
+                        <then></then>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSequenceIdError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                        </else>
+                    </if>
+                </else>
+            </if-compare>
+        </else>
+        </if-empty>
+        
+        <check-errors/>
+        
+        <make-value entity-name="Enumeration" value-field="newEntity"/>
+        <set field="newEntity.enumId" from-field="parameters.enumId"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
+        <field-to-result field="parameters.enumId" result-name="enumId"/>
+        <set field="argListNames[]" from-field="parameters.enumId"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSavedSuccess" field="recurrenceFreqTypeSavedSuccess" arg-list-name="argListNames"/>
+        <string-to-list string="${recurrenceFreqTypeSavedSuccess}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="updateRecurrenceFreqType" short-description="update Frequency Type Type">
+        <if-empty field="parameters.enumId">
+           <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeIdError"/>
+           <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+        </if-empty>
+        
+        <if-empty field="parameters.enumCode">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeCodeError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="enumCode" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="intervalVaild">
+                    <string value="${parameters.enumCode}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="intervalVaild" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeCodeError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="enumCode" list="error_list"/>
+                </if-compare>
+            </else>
+        </if-empty>
+        
+        <if-empty field="parameters.sequenceId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSequenceIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${parameters.sequenceId}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSequenceIdError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                    <else>
+                        <if>
+                            <condition>
+                                <and>
+                                    <if-compare operator="greater-equals" value="0" field="parameters.sequenceId" type="Long"/>
+                                    <if-compare operator="less-equals" value="9999" field="parameters.sequenceId" type="Long"/>
+                                </and>
+                            </condition>
+                            <then></then>
+                            <else>
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSequenceIdError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                            </else>
+                        </if>
+                    </else>
+                </if-compare>
+            </else>
+        </if-empty>
+        
+        <check-errors/>
+        
+        <set-service-fields service-name="updateEnumeration" map="parameters" to-map="updateEnumerationCtx"/>
+        <call-service service-name="updateEnumeration" in-map-name="updateEnumerationCtx"/>
+        <set field="argListNames[]" from-field="parameters.enumId"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="RecurrenceFreqTypeSavedSuccess" field="recurrenceFreqTypeSavedSuccess" arg-list-name="argListNames"/>
+        <string-to-list string="${recurrenceFreqTypeSavedSuccess}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="deleteRecurrenceFreqType" short-description="Delete Frequency Type Type">
+        <make-value entity-name="Enumeration" value-field="lookupKeyValue"/>
+        <set-pk-fields map="parameters" value-field="lookupKeyValue"/>
+        <find-by-primary-key entity-name="Enumeration" map="lookupKeyValue" value-field="lookedUpValue"/>
+        <remove-value value-field="lookedUpValue"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+        <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="updateReviewCustomAttribute01" short-description="update Review Custom Attribute 01">
+        <if-empty field="parameters.enumId">
+           <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeIdError"/>
+           <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.sequenceId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSequenceIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+            <else>
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${parameters.sequenceId}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSequenceIdError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                    <else>
+                        <if>
+                            <condition>
+                                <and>
+                                    <if-compare operator="greater-equals" value="0" field="parameters.sequenceId" type="Long"/>
+                                    <if-compare operator="less-equals" value="9999" field="parameters.sequenceId" type="Long"/>
+                                </and>
+                            </condition>
+                            <then></then>
+                            <else>
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSequenceIdError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                            </else>
+                        </if>
+                    </else>
+                </if-compare>
+            </else>
+        </if-empty>
+        <check-errors/>
+        <set-service-fields service-name="updateEnumeration" map="parameters" to-map="updateEnumerationCtx"/>
+        <call-service service-name="updateEnumeration" in-map-name="updateEnumerationCtx"/>
+        <set field="argListNames[]" from-field="parameters.enumId"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSavedSuccess" field="reviewCustomAttributeSavedSuccess" arg-list-name="argListNames"/>
+        <string-to-list string="${reviewCustomAttributeSavedSuccess}" list="successMessageList"/>
+    </simple-method>
+
+
+    <simple-method method-name="createReviewCustomAttribute01" short-description="Create Review Ages">
+        <if-empty field="parameters.enumId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+        <else>
+            <set field="IdLength" value="20" type="Integer"/>
+            <set field="spaceReplacement" value=" " type="String"/>
+            <set field="makeUpCase" value="true" type="Boolean"/>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="enumId">
+                <field field="parameters.enumId" type="String"/>
+                <field field="IdLength" type="Integer"/>
+                <field field="spaceReplacement" type="String"/>
+                <field field="makeUpCase" type="boolean"/>
+            </call-class-method>
+            <if-empty field="enumId">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeIdLengthError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+            <else>
+                <entity-one entity-name="Enumeration" value-field="existingEnum"/>
+                <if-not-empty field="existingEnum">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeIdExistError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+                    <else>
+                        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+                            <field field="parameters.enumId"/>
+                        </call-class-method>
+                        <if-compare field="isValidId" operator="equals" value="false">
+                            <set field="errorKey" from-field="parameters.enumId"/>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="enumId" list="error_list"/>
+                        </if-compare>
+                        <set field="parameters.enumId" from-field="enumId"/> 
+                    </else>
+                </if-not-empty>
+            </else>
+            </if-empty>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.sequenceId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSequenceIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                <string value="${parameters.sequenceId}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSequenceIdError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="0" field="parameters.sequenceId" type="Long"/>
+                                <if-compare operator="less-equals" value="9999" field="parameters.sequenceId" type="Long"/>
+                            </and>
+                        </condition>
+                        <then></then>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSequenceIdError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="sequenceId" list="error_list"/>
+                        </else>
+                    </if>
+                </else>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+        <make-value entity-name="Enumeration" value-field="newEntity"/>
+        <set field="newEntity.enumId" from-field="parameters.enumId"/>
+        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+        <create-value value-field="newEntity"/>
+        <field-to-result field="parameters.enumId" result-name="enumId"/>
+        <set field="argListNames[]" from-field="parameters.enumId"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="ReviewCustomAttributeSavedSuccess" field="reviewCustomAttributeSavedSuccess" arg-list-name="argListNames"/>
+        <string-to-list string="reviewCustomAttributeSavedSuccess" list="successMessageList"/>
+    </simple-method>
+
+    <simple-method method-name="deleteReviewCustomAttribute01" short-description="Delete Review Custom Attribute">
         <make-value entity-name="Enumeration" value-field="lookupKeyValue"/>
         <set-pk-fields map="parameters" value-field="lookupKeyValue"/>
         <find-by-primary-key entity-name="Enumeration" map="lookupKeyValue" value-field="lookedUpValue"/>
@@ -2219,6 +2525,7 @@
         <set-pk-fields map="parameters" value-field="newEntity"/>
         <set-nonpk-fields map="parameters" value-field="newEntity"/>
         <set field="newEntity.contentId" from-field="parameters.contentId"/>
+        <set field="newEntity.pixelSequenceNum" from-field="parameters.pixelSequenceNum" type="Long"/>
         <create-value value-field="newEntity"/>
 
         <field-to-result field="newEntity.pixelId" result-name="pixelId"/>
@@ -2548,7 +2855,7 @@
             <set field="updateCustomPartyAttributeItemXmlCtx.valueList" from-field="customPartyAttributeMap.ValueList"/>
             <set field="updateCustomPartyAttributeItemXmlCtx.mandatory" from-field="customPartyAttributeMap.Mandatory"/>
             <set field="updateCustomPartyAttributeItemXmlCtx.reqMessage" from-field="customPartyAttributeMap.ReqMessage"/>
-            <set field="updateCustomPartyAttributeItemXmlCtx.sequenceNum" from-field="seqNum"/>
+            <set field="updateCustomPartyAttributeItemXmlCtx.sequenceNum" from-field="seqNum" type="Long"/>
             <call-service service-name="updateCustomPartyAttributeItemXml" in-map-name="updateCustomPartyAttributeItemXmlCtx"/>
 	    </iterate>
         

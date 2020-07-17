@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.MessageString;
 import org.ofbiz.base.util.ObjectType;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
@@ -37,6 +39,9 @@ import org.ofbiz.security.Security;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+
+import com.osafe.services.InventoryServices;
+import com.osafe.util.Util;
 
 public class WishListEvents {
 
@@ -245,7 +250,7 @@ public class WishListEvents {
         Locale locale = UtilHttp.getLocale(request);
 
         // Get the parameters as a MAP, remove the productId and quantity params.
-        Map paramMap = UtilHttp.getCombinedMap(request);
+        Map<String, Object> paramMap = UtilHttp.getCombinedMap(request);
         
         if (paramMap.containsKey("plp_add_product_id")) 
         {
@@ -373,7 +378,23 @@ public class WishListEvents {
             return "error";
         }
         
-        if (paramMap.containsKey("productListFormSearchText")) {
+        boolean multiSearchExists = false;
+        for(Entry<String, Object> entry : paramMap.entrySet()) 
+        {
+    		String parameterName = entry.getKey();
+    		if (parameterName.toUpperCase().startsWith("SEARCHITEM"))
+        	{
+    			String searchItem = Util.stripHTML((String)paramMap.get(parameterName));
+    			if(UtilValidate.isNotEmpty(searchItem))
+    			{
+    				multiSearchExists = true;
+    				request.setAttribute(parameterName, searchItem);
+    			}
+        	}
+        }
+        
+        if (paramMap.containsKey("productListFormSearchText")) 
+        {
         	searchText = (String) paramMap.remove("productListFormSearchText");
         }
         String last_page_productId = null;
@@ -387,7 +408,10 @@ public class WishListEvents {
         	manufacturer_party_id = (String) paramMap.remove("manufacturer_party_id");
         }
         request.setAttribute("product_id", last_page_productId);
-        request.setAttribute("productCategoryId", categoryId);
+        if(UtilValidate.isEmpty(searchText) && !multiSearchExists)
+        {
+        	request.setAttribute("productCategoryId", categoryId);
+        }
         request.setAttribute("manufacturerPartyId", manufacturer_party_id);
         request.setAttribute("searchText", searchText);
         
@@ -596,7 +620,6 @@ public class WishListEvents {
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         String shoppingListId = getWishListId(request, false);
-        String productId = "";
         BigDecimal quantity = BigDecimal.ZERO;
         ShoppingCart shoppingCart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         ShoppingCartHelper cartHelper = new ShoppingCartHelper(delegator, dispatcher, shoppingCart); 
@@ -605,7 +628,15 @@ public class WishListEvents {
         Set parameterNames = paramMap.keySet();
         Iterator parameterNameIter = parameterNames.iterator();
         Map serviceResult = null;
-
+        MessageString tmpMessage = null;
+        List<MessageString> errMsgList = new ArrayList<MessageString>();
+    	BigDecimal inventoryInStockFrom = new BigDecimal("-1");
+    	BigDecimal inventoryOutOfStockTo = new BigDecimal("-1");
+    	BigDecimal inventoryLevel = BigDecimal.ZERO;
+    	BigDecimal inventoryWarehouseLevel = BigDecimal.ZERO;
+        String productId = "";
+        GenericValue product = null;
+        String productName = null;
         while (parameterNameIter.hasNext())
         {
             String parameterName = (String) parameterNameIter.next();
@@ -629,10 +660,20 @@ public class WishListEvents {
                     productId = shoppingListItem.getString("productId");
                     try
                     {
-                        Map ctx = UtilMisc.toMap("userLogin", userLogin, "shoppingListId", shoppingListId, "shoppingListItemSeqId", shoppingListItemSeqId);
-                        serviceResult = dispatcher.runSync("removeShoppingListItem", ctx);
+                        product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+                    	productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher);
+                    	if(UtilValidate.isEmpty(productName))
+                    	{
+                    		GenericValue virtualProduct = ProductWorker.getParentProduct(productId, delegator);
+                    		if(UtilValidate.isNotEmpty(virtualProduct))
+                        	{
+                    			productName = ProductContentWrapper.getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher);
+                        	}
+                    	}
+                    	
+
                     }
-                    catch (GenericServiceException e)
+                    catch (Exception e)
                     {
                         Debug.logError(e, "Problems deleting ShoppingList item entity", module);
                     }
@@ -649,10 +690,38 @@ public class WishListEvents {
                     }
             		if(quantity.compareTo(BigDecimal.ZERO) > 0)
                     {
-                    	// add item and quantity to cart using the addToCart method
-            			Map<String, Object> context = FastMap.newInstance(); 
-                    	cartHelper.addToCart(null, null, null, productId, categoryId, null, null, null, null, quantity, null, null, null, null, null, null, null, null, null, context, null);
-	                	com.osafe.events.ShoppingCartEvents.setProductFeaturesOnCart(shoppingCart,productId);
+            			
+            			
+                    	//Check Inventory before adding
+            			Map<String,Object> inventoryLevelMap = InventoryServices.getProductInventoryLevel(productId, request);
+                        if (UtilValidate.isNotEmpty(inventoryLevelMap))
+                        {
+                        	inventoryInStockFrom = (BigDecimal) inventoryLevelMap.get("inventoryLevelInStockFrom");
+                        	inventoryOutOfStockTo = (BigDecimal) inventoryLevelMap.get("inventoryLevelOutOfStockTo");
+                        	inventoryLevel = (BigDecimal) inventoryLevelMap.get("inventoryLevel");
+                        	inventoryWarehouseLevel = (BigDecimal) inventoryLevelMap.get("inventoryWarehouseLevel");
+             			    if ((inventoryLevel.doubleValue() < inventoryOutOfStockTo.doubleValue()) || (inventoryLevel.doubleValue() == inventoryOutOfStockTo.doubleValue()))
+            			    {
+                            	Map<String, String> messageMap = UtilMisc.toMap("productName", productName);
+                            	tmpMessage = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "OutOfStockProductInfo",messageMap, locale),"",true);
+                            	errMsgList.add(tmpMessage);
+                            	request.setAttribute("_ERROR_MESSAGE_LIST_", errMsgList);
+            			    }
+             			    else
+             			    {
+                    			
+                    			// add item and quantity to cart using the addToCart method
+                    			Map<String, Object> context = FastMap.newInstance(); 
+                            	cartHelper.addToCart(null, null, null, productId, categoryId, null, null, null, null, quantity, null, null, null, null, null, null, null, null, null, context, null);
+        	                	com.osafe.events.ShoppingCartEvents.setProductFeaturesOnCart(shoppingCart,productId);
+
+                                Map ctx = UtilMisc.toMap("userLogin", userLogin, "shoppingListId", shoppingListId, "shoppingListItemSeqId", shoppingListItemSeqId);
+                                serviceResult = dispatcher.runSync("removeShoppingListItem", ctx);
+
+             			    }
+                        	
+                        }
+            			
                     }
                 }
                 catch(Exception e)
@@ -661,7 +730,7 @@ public class WishListEvents {
                 }
             }
         }
-        if (ServiceUtil.isError(serviceResult))
+        if (ServiceUtil.isError(serviceResult)|| errMsgList.size() > 0)
         {
             return "error";
         }
@@ -669,24 +738,6 @@ public class WishListEvents {
         {
         	if (UtilValidate.isNotEmpty(productId))
         	{
-                GenericValue product = null;
-                try
-                {
-                    product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
-                }
-                catch (GenericEntityException e)
-                {
-                    Debug.logWarning(e.getMessage(), module);
-                }
-            	String productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher);
-            	if(UtilValidate.isEmpty(productName))
-            	{
-            		GenericValue virtualProduct = ProductWorker.getParentProduct(productId, delegator);
-            		if(UtilValidate.isNotEmpty(virtualProduct))
-                	{
-            			productName = ProductContentWrapper.getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher);
-                	}
-            	}
             	//Get values for success message variables
             	Map<String, String> messageMap = UtilMisc.toMap("productName", productName);
                 //Set the success message
@@ -715,7 +766,17 @@ public class WishListEvents {
         BigDecimal quantity = BigDecimal.ZERO;
         ShoppingCart shoppingCart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         ShoppingCartHelper cartHelper = new ShoppingCartHelper(delegator, dispatcher, shoppingCart); 
+        MessageString tmpMessage = null;
+        List<MessageString> errMsgList = new ArrayList<MessageString>();
+    	BigDecimal inventoryInStockFrom = new BigDecimal("-1");
+    	BigDecimal inventoryOutOfStockTo = new BigDecimal("-1");
+    	BigDecimal inventoryLevel = BigDecimal.ZERO;
+    	BigDecimal inventoryWarehouseLevel = BigDecimal.ZERO;
+        String productId = "";
+        GenericValue product = null;
+        String productName = null;
 
+        
         while (parameterNameIter.hasNext())
         {
             String parameterName = (String) parameterNameIter.next();
@@ -737,12 +798,22 @@ public class WishListEvents {
                     }
                     String categoryId = (String) paramMap.get("add_category_id_"+shoppingListItemSeqId);
                     request.setAttribute("add_multi_product_quantity_"+shoppingListItemSeqId, quantityStr);
+                    
+                    productId = shoppingListItem.getString("productId");
                     try
                     {
-                        Map ctx = UtilMisc.toMap("userLogin", userLogin, "shoppingListId", shoppingListId, "shoppingListItemSeqId", shoppingListItemSeqId);
-                        serviceResult = dispatcher.runSync("removeShoppingListItem", ctx);
+                        product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+                    	productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher);
+                    	if(UtilValidate.isEmpty(productName))
+                    	{
+                    		GenericValue virtualProduct = ProductWorker.getParentProduct(productId, delegator);
+                    		if(UtilValidate.isNotEmpty(virtualProduct))
+                        	{
+                    			productName = ProductContentWrapper.getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher);
+                        	}
+                    	}
                     }
-                    catch (GenericServiceException e)
+                    catch (Exception e)
                     {
                         Debug.logError(e, "Problems deleting ShoppingList item entity", module);
                     }
@@ -759,10 +830,34 @@ public class WishListEvents {
                     }
             		if(quantity.compareTo(BigDecimal.ZERO) > 0)
                     {
-                    	// add item and quantity to cart using the addToCart method
-            			Map<String, Object> context = FastMap.newInstance(); 
-                    	cartHelper.addToCart(null, null, null, shoppingListItem.getString("productId"), null, null, null, null, null, quantity, null, null, null, null, null, null, null, null, null, context, null);
-	                	com.osafe.events.ShoppingCartEvents.setProductFeaturesOnCart(shoppingCart,shoppingListItem.getString("productId"));
+                    	//Check Inventory before adding
+            			Map<String,Object> inventoryLevelMap = InventoryServices.getProductInventoryLevel(productId, request);
+                        if (UtilValidate.isNotEmpty(inventoryLevelMap))
+                        {
+                        	inventoryInStockFrom = (BigDecimal) inventoryLevelMap.get("inventoryLevelInStockFrom");
+                        	inventoryOutOfStockTo = (BigDecimal) inventoryLevelMap.get("inventoryLevelOutOfStockTo");
+                        	inventoryLevel = (BigDecimal) inventoryLevelMap.get("inventoryLevel");
+                        	inventoryWarehouseLevel = (BigDecimal) inventoryLevelMap.get("inventoryWarehouseLevel");
+             			    if ((inventoryLevel.doubleValue() < inventoryOutOfStockTo.doubleValue()) || (inventoryLevel.doubleValue() == inventoryOutOfStockTo.doubleValue()))
+            			    {
+                            	Map<String, String> messageMap = UtilMisc.toMap("productName", productName);
+                            	tmpMessage = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "OutOfStockProductInfo",messageMap, locale),"",true);
+                            	errMsgList.add(tmpMessage);
+                            	request.setAttribute("_ERROR_MESSAGE_LIST_", errMsgList);
+            			    }
+             			    else
+             			    {
+                            	// add item and quantity to cart using the addToCart method
+                    			Map<String, Object> context = FastMap.newInstance(); 
+                            	cartHelper.addToCart(null, null, null, shoppingListItem.getString("productId"), categoryId, null, null, null, null, quantity, null, null, null, null, null, null, null, null, null, context, null);
+        	                	com.osafe.events.ShoppingCartEvents.setProductFeaturesOnCart(shoppingCart,shoppingListItem.getString("productId"));
+
+                                Map ctx = UtilMisc.toMap("userLogin", userLogin, "shoppingListId", shoppingListId, "shoppingListItemSeqId", shoppingListItemSeqId);
+                                serviceResult = dispatcher.runSync("removeShoppingListItem", ctx);
+        	                	
+             			    }
+                        	
+                        }
                     }
                 }
                 catch(Exception e)
@@ -771,7 +866,7 @@ public class WishListEvents {
                 }
             }
         }
-        if (ServiceUtil.isError(serviceResult))
+        if (ServiceUtil.isError(serviceResult) || errMsgList.size() > 0)
         {
             return "error";
         }

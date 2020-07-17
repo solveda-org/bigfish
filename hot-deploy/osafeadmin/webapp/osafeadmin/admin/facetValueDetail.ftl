@@ -103,7 +103,7 @@
                   </span>
                 </td>
                 <td class="seqCol">
-                   <input type="text" class="small" name="sequenceNum_${x}" id="sequenceNum" value="${sequenceNumParm!}" maxlength="10"/>
+                   <input type="text" class="small" name="sequenceNum_${x}" id="sequenceNum" value="${sequenceNumParm!}" maxlength="9"/>
                 </td>
                 <td class="actionCol">
                   <#if parameters.productFeatureGroupId?exists && parameters.productFeatureGroupId?has_content>

@@ -225,9 +225,26 @@ if(UtilValidate.isNotEmpty(productFeatureTypesList))
 }
 
 //product features : STANDARD FEATURES 
-productFeatureAndAppls = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum"));
-productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
-productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
+//Issue 38934, 38916 - Check for duplicate feature descriptions
+productFeatureAndAppls = FastList.newInstance();
+Map standardFeatureExistsMap = FastMap.newInstance();
+standardFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum"));
+standardFeatures = EntityUtil.filterByDate(standardFeatures,true);
+standardFeatures = EntityUtil.orderBy(standardFeatures,UtilMisc.toList('sequenceNum'));
+
+for (GenericValue standardFeature : standardFeatures)
+{
+    String featureDescription = standardFeature.description;
+    if (UtilValidate.isNotEmpty(featureDescription)) 
+    {
+    	featureDescription = featureDescription.toUpperCase();
+        if (!standardFeatureExistsMap.containsKey(featureDescription))
+        {
+        	productFeatureAndAppls.add(standardFeature);
+        	standardFeatureExistsMap.put(featureDescription,featureDescription);
+        }
+    }
+}
 
 productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 

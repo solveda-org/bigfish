@@ -2,11 +2,13 @@
 <menus>
 	<menu sequenceNumber="0">
 	    <menu-item action="_VIEW" className="topLevel firstItem" entity="SPER_PARTY_MGMT" href="customerNavigation" name="CustomerMgmntNav" navigationCategory="CUSTOMER" sequenceNumber="0" text="CustomerMgmntNav">
-	        <sub-menu-item className="subLevel navfirstitem" description="CustomerViewInfo" heading="CustomerViewHeading" href="customerManagement" name="CustomerViewNav" sequenceNumber="0" text="CustomerViewNav"/>
-	        <sub-menu-item className="subLevel" description="CustomerAddInfo" heading="CustomerAddHeading" href="addCustomer" name="CustomerAddNav" sequenceNumber="1" text="CustomerAddNav"/>
-	        <sub-menu-item className="subLevel" description="ReqCatalogEventInfo" heading="ReqCatalogEventHeading" href="custRequestCatalogList" name="ReqCatalogEventNav" sequenceNumber="2" text="ReqCatalogEventNav"/>
-	        <sub-menu-item className="subLevel" description="ContactUsEventInfo" heading="ContactUsEventHeading" href="custRequestContactUsList" name="ContactUsEventNav" sequenceNumber="3" text="ContactUsEventNav"/>
-	        <sub-menu-item className="subLevel" description="AbandonedCartAnalysisInfo" heading="AbandonedCartAnalysisHeading" href="abandonedCartAnalysis" name="AbandonedCartAnalysisNav" sequenceNumber="4" text="AbandonedCartAnalysisNav"/>
+	        <sub-menu-item className="subLevel navfirstitem" description="OrganizationViewInfo" heading="OrganizationViewHeading" href="organizationManagement" name="OrganizationViewNav" sequenceNumber="0" text="OrganizationViewNav"/>
+	        <sub-menu-item className="subLevel" description="CustomerViewInfo" heading="CustomerViewHeading" href="customerManagement" name="CustomerViewNav" sequenceNumber="1" text="CustomerViewNav"/>
+	        <sub-menu-item className="subLevel" description="CustomerAddInfo" heading="CustomerAddHeading" href="addCustomer" name="CustomerAddNav" sequenceNumber="2" text="CustomerAddNav"/>
+	        <sub-menu-item className="subLevel" description="ReqCatalogEventInfo" heading="ReqCatalogEventHeading" href="custRequestCatalogList" name="ReqCatalogEventNav" sequenceNumber="3" text="ReqCatalogEventNav"/>
+	        <sub-menu-item className="subLevel" description="ContactUsEventInfo" heading="ContactUsEventHeading" href="custRequestContactUsList" name="ContactUsEventNav" sequenceNumber="4" text="ContactUsEventNav"/>
+            <sub-menu-item className="subLevel" description="RequestQuoteEventInfo" heading="RequestQuoteEventHeading" href="custRequestQuoteList" name="RequestQuoteEventNav" sequenceNumber="5" text="RequestQuoteEventNav"/>
+	        <sub-menu-item className="subLevel" description="AbandonedCartAnalysisInfo" heading="AbandonedCartAnalysisHeading" href="abandonedCartAnalysis" name="AbandonedCartAnalysisNav" sequenceNumber="6" text="AbandonedCartAnalysisNav"/>
 	    </menu-item>
 	    <menu-item action="_VIEW" className="topLevel" entity="SPER_ORDER_MGMT" href="orderNavigation" name="OrderMgmntNav" navigationCategory="ORDER" sequenceNumber="1" text="OrderMgmntNav">
 	        <sub-menu-item className="subLevel navfirstitem" description="OrderViewInfo" heading="OrderViewHeading" href="orderManagement" name="OrderViewNav" sequenceNumber="0" text="OrderViewNav"/>
@@ -17,7 +19,7 @@
 	        <sub-menu-item className="subLevel navfirstitem" description="CatalogViewInfo" heading="CatalogViewHeading" href="catalogManagement" name="CatalogViewNav" sequenceNumber="0" text="CatalogViewNav"/>
 	        <sub-menu-item className="subLevel" description="CatalogProductInfo" heading="CatalogProductHeading" href="productManagement" name="CatalogProductNav" sequenceNumber="1" text="CatalogProductNav"/>
 	        <sub-menu-item className="subLevel" description="CatalogAddProductInfo" heading="CatalogAddProductHeading" href="addProduct" name="CatalogAddProductNav" sequenceNumber="2" text="CatalogAddProductNav"/>
-	        <sub-menu-item className="subLevel" description="CatalogPriceInfo" heading="CatalogPriceHeading" href="underConstruction" name="CatalogPriceNav" sequenceNumber="3" text="CatalogPriceNav"/>
+	        <sub-menu-item className="subLevel" description="CatalogPriceInfo" heading="CatalogPriceHeading" href="priceRuleManagement" name="CatalogPriceNav" sequenceNumber="3" text="CatalogPriceNav"/>
 	        <sub-menu-item className="subLevel" description="CatalogManufacturerInfo" heading="CatalogManufacturerHeading" href="manufacturerManagement" name="ManufacturerMgmntNav" sequenceNumber="4" text="ManufacturerMgmntNav"/>
 	    </menu-item>
 	    <menu-item action="_VIEW" className="topLevel" entity="SPER_PROMO" href="promotionNavigation" name="PromotionNav" navigationCategory="PROMOTION" sequenceNumber="3" text="PromotionNav">

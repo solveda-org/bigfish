@@ -2743,6 +2743,10 @@ td div.infoEntry input[type="text"] {
     height:16px;
     display: inline-block;
 }
+.header .helperIcon {
+    float: right;
+    margin: -16px 0 0 0;
+}
 .helperIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/helperIcon.gif);
     background-repeat: no-repeat;
@@ -2966,6 +2970,14 @@ td div.infoEntry input[type="text"] {
 }
 .warningIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/warningIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.attachIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/attachIcon.png);
     background-repeat:no-repeat;
     width: 16px;
     height:16px;

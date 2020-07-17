@@ -454,6 +454,30 @@
         <group>0</group>
         <description>Scroll to previous Product</description>
     </property>
+    <property key="pdpAttach01">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
+    <property key="pdpAttach02">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
+    <property key="pdpAttach03">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
 
 <!-- *************************************** -->
 <!-- PDPTabs-->
@@ -897,6 +921,30 @@
         <style>action</style>
         <mandatory>NA</mandatory>
         <description>Scroll to previous Product</description>
+    </property>
+    <property key="pdpTabsAttach01">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
+    <property key="pdpTabsAttach02">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
+    <property key="pdpTabsAttach03">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
     </property>
 <!-- *************************************** -->
 <!-- Quicklook -->
@@ -1357,6 +1405,30 @@
         <group>0</group>
         <description>Scroll to previous Product</description>
     </property>
+    <property key="quicklookAttach01">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
+    <property key="quicklookAttach02">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
+    <property key="quicklookAttach03">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Attachment Link</description>
+    </property>
 <!-- *************************************** -->
 <!-- PLP -->
 <!-- *************************************** -->
@@ -1611,6 +1683,265 @@
     <property key="plpAddToWishlist">
         <value xml:lang="en">0</value>
         <screen>PLP</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Add To Wishlist. The actual action button that adds the Product to the Wish List.</description>
+    </property>
+<!-- *************************************** -->
+<!-- PLPFlyout -->
+<!-- *************************************** -->
+    <property key="plpFlyoutThumbImage">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>image</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Main Image</description>
+    </property>
+    <property key="plpFlyoutProductName">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Name</description>
+    </property>
+    <property key="plpFlyoutPriceOnline">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration.</description>
+    </property>
+    <property key="plpFlyoutDetailLink">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Info Link (possibly replaced by plpSeeItemDetails)</description>
+    </property>
+    <property key="plpFlyoutPriceList">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
+    </property>
+    <property key="plpFlyoutPriceSavingPercent">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>percent</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="plpFlyoutPriceSavingMoney">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="plpFlyoutPriceRecurrence">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence price. The price the customer will pay for this item if placed as a recurring order.</description>
+    </property>
+    <property key="plpFlyoutSwatchImage">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>image</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Swatch Image</description>
+    </property>
+    <property key="plpFlyoutInternalName">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Internal Name</description>
+    </property>
+    <property key="plpFlyoutLabelName">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Label</description>
+    </property>
+    <property key="plpFlyoutReviewStars">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>image</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>RENAME from plpProdReview. Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="plpFlyoutReviewRead">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Offers the Read-Reviews link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="plpFlyoutReviewWrite">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>action</style>
+        <group>0</group>
+        <mandatory>NA</mandatory>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="plpFlyoutManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="plpFlyoutManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="plpFlyoutManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>image</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="plpFlyoutManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Manufacturer Name</description>
+    </property>
+    <property key="plpFlyoutSeeItemDetails">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>See Item Details (maybe the same as plpDetailLink – in which case use this Key and remove plpDetailLink)</description>
+    </property>
+    <property key="plpFlyoutLongDescription">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Long Description. The primary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutDistinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutSalesPitch">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Sales Pitch. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutSpecialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutDeliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutDirections">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutIngredients">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutWarnings">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutTermsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    <property key="plpFlyoutQty">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>entry</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The Qty field that the customer uses for purchasing.</description>
+    </property>
+    <property key="plpFlyoutSelectableFeature">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Selectable Features. This element contains all the features that define the specific Variant for purchase. Typical examples are Color and Size.</description>
+    </property>
+    <property key="plpFlyoutAddToCart">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Add To Cart. The actual action button that adds the Product to the cart.</description>
+    </property>
+    <property key="plpFlyoutAddToWishlist">
+        <value xml:lang="en">0</value>
+        <screen>PLPFlyout</screen>
         <style>action</style>
         <mandatory>NA</mandatory>
         <group>0</group>
@@ -2567,6 +2898,14 @@
         <group>0</group>
         <description>Recurrence price. The price the customer will pay for this item if placed as a recurring order.</description>
     </property>
+    <property key="showCartOrderItemsItemRecurrenceFlag">
+        <value xml:lang="en">0</value>
+        <screen>ShowCartOrderItems</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency. Checkbox.</description>
+    </property>
     <property key="showCartOrderItemsItemRemoveButton">
         <value xml:lang="en">90</value>
         <screen>ShowCartOrderItems</screen>
@@ -2590,6 +2929,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>The link to "Add Gift message" page</description>
+    </property>
+    <property key="showCartOrderItemsItemRecurrenceFreq">
+        <value xml:lang="en">0</value>
+        <screen>ShowCartOrderItems</screen>
+        <style>entry</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency. Drop Down of Shipping frequency for the item on Recurrence.</description>
     </property>
 
 <!-- *************************************** -->
@@ -2856,6 +3203,14 @@
         <group>0</group>
         <description>Gift Card redemption entry element. This is where the customer enters a Gift Card number and views redemption details.</description>
     </property>
+    <property key="orderSummaryStoreCredit">
+        <value xml:lang="en">0</value>
+        <screen>OrderSummary</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Store Credit redemption entry element. This is where the customer enters a Store Credit to be applied against the balance due.</description>
+    </property>
     <property key="orderSummaryPaymentOptions">
         <value xml:lang="en">80</value>
         <screen>OrderSummary</screen>
@@ -2963,6 +3318,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>The items stock level (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+    <property key="orderSummaryOrderItemsItemRecurrenceFreq">
+        <value xml:lang="en">0</value>
+        <screen>OrderSummaryOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency. Shipping frequency for the item on Recurrence.</description>
     </property>
 
 <!-- *************************************** -->
@@ -3216,6 +3579,14 @@
         <group>0</group>
         <description>The items stock level (In Stock, Out of Stock , Low Stock)</description>
     </property>
+    <property key="orderConfirmOrderItemsItemRecurrenceFreq">
+        <value xml:lang="en">0</value>
+        <screen>OrderConfirmOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency. Shipping frequency for the item on Recurrence.</description>
+    </property>
 
 <!-- *************************************** -->
 <!-- OrderConfirmOrderItemsSummary -->
@@ -3415,6 +3786,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>Gift Card redemption entry element. This is where the customer enters a Gift Card number and views redemption details.</description>
+    </property>
+    <property key="onePageCheckoutStoreCredit">
+        <value xml:lang="en">0</value>
+        <screen>OnePageCheckout</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Store Credit redemption entry element. This is where the customer enters a Store Credit to be applied against the balance due.</description>
     </property>
     <property key="onePageCheckoutCreateAccount">
         <value xml:lang="en">0</value>
@@ -4575,6 +4954,14 @@
         <group>0</group>
         <description>Gender of reviewer</description>
     </property>
+    <property key="writeReviewDetailReviewerCustom01">
+        <value xml:lang="en"></value>
+        <screen>WriteReviewDetail</screen>
+        <style>entry</style>
+        <mandatory>NO</mandatory>
+        <group>0</group>
+        <description>Custom response</description>
+    </property>
     <property key="writeReviewDetailReviewerPrivateNote">
         <value xml:lang="en">0</value>
         <screen>WriteReviewDetail</screen>
@@ -4864,6 +5251,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>The items stock level (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+    <property key="lightBoxOrderItemsItemRecurrenceFreq">
+        <value xml:lang="en">0</value>
+        <screen>LightBoxOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency. Shipping frequency for the item on Recurrence.</description>
     </property>
 <!-- *************************************** -->
 <!-- LightBoxOrderItemsSummary -->
@@ -5355,6 +5750,14 @@
         <group>0</group>
         <description>Gender of reviewer</description>
     </property>
+    <property key="pdpReviewListItemsReviewerCustom01">
+        <value xml:lang="en">0</value>
+        <screen>PDPReviewListItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Custom drop down prompt</description>
+    </property>
     <property key="pdpReviewListItemsReviewResponse">
         <value xml:lang="en">0</value>
         <screen>PDPReviewListItems</screen>
@@ -5483,6 +5886,14 @@
         <group>0</group>
         <description>Gender of reviewer</description>
     </property>
+    <property key="pdpTabsReviewListItemsReviewerCustom01">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabsReviewListItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Custom drop down prompt</description>
+    </property>
     <property key="pdpTabsReviewListItemsReviewResponse">
         <value xml:lang="en">0</value>
         <screen>PDPTabsReviewListItems</screen>
@@ -5610,6 +6021,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>Gender of reviewer</description>
+    </property>
+    <property key="quicklookReviewListItemsReviewerCustom01">
+        <value xml:lang="en">0</value>
+        <screen>QuicklookReviewListItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Custom drop down prompt</description>
     </property>
     <property key="quicklookReviewListItemsReviewResponse">
         <value xml:lang="en">0</value>
@@ -6110,6 +6529,103 @@
     </property>
 
 <!-- *************************************** -->
+<!-- PaymentMethodEFTSummary -->
+<!-- *************************************** -->
+    <property key="paymentMethodEFTSummaryItems">
+        <value xml:lang="en">10</value>
+        <screen>PaymentMethodEFTSummary</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>List of items, see PaymentMethodEFTItems</description>
+    </property>
+    <property key="paymentMethodEFTSummaryPreviousButton">
+        <value xml:lang="en">20</value>
+        <screen>PaymentMethodEFTSummary</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="paymentMethodEFTSummaryContinueButton">
+        <value xml:lang="en">30</value>
+        <screen>PaymentMethodEFTSummary</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The Add new EFT Account button</description>
+    </property>
+
+
+<!-- *************************************** -->
+<!-- PaymentMethodEFTItems -->
+<!-- *************************************** -->
+    <property key="paymentMethodEFTItemsAccountName">
+        <value xml:lang="en">10</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Account Name</description>
+    </property>
+    <property key="paymentMethodEFTItemsBankName">
+        <value xml:lang="en">20</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Bank Name</description>
+    </property>
+    <property key="paymentMethodEFTItemsAccountNumber">
+        <value xml:lang="en">30</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Account Number</description>
+    </property>
+    <property key="paymentMethodEFTItemsAccountType">
+        <value xml:lang="en">40</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Account Type</description>
+    </property>
+    <property key="paymentMethodEFTItemsRoutingNumber">
+        <value xml:lang="en">50</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Routing Number</description>
+    </property>
+    <property key="paymentMethodEFTItemsEditButton">
+        <value xml:lang="en">60</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Edit Button</description>
+    </property>
+    <property key="paymentMethodEFTItemsDeleteButton">
+        <value xml:lang="en">70</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Delete Buttton</description>
+    </property>
+    <property key="paymentMethodEFTItemsSetAsDefaultButton">
+        <value xml:lang="en">80</value>
+        <screen>PaymentMethodEFTItems</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Set As Default button</description>
+    </property>
+
+<!-- *************************************** -->
 <!-- StoreLocator -->
 <!-- *************************************** -->
     <property key="storeLocatorSearch">
@@ -6485,7 +7001,14 @@
         <group>0</group>
         <description>The total (quantity * price) of the item.</description>
     </property>
-    
+    <property key="giftMessageOrderItemsItemRecurrenceFreq">
+        <value xml:lang="en">0</value>
+        <screen>GiftMessageOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency. Shipping frequency for the item on Recurrence.</description>
+    </property>
 
 <!-- *************************************** -->
 <!-- GiftMessageConfirm -->
@@ -6598,6 +7121,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>The total (quantity * price) of the item.</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemRecurrenceFreq">
+        <value xml:lang="en">0</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency. Shipping frequency for the item on Recurrence.</description>
     </property>
         
     
@@ -6755,6 +7286,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>The total (quantity * price) of the item.</description>
+    </property>
+    <property key="orderDetailShippingGroupOrderItemsItemOfferPrice">
+        <value xml:lang="en">0</value>
+        <screen>OrderDetailShippingGroupOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The Item Offer Price</description>
     </property>
 
 
@@ -6941,5 +7480,355 @@
         <group>0</group>
         <description>Email Comment</description>
     </property>
+    
+    
+    <!-- *************************************** -->
+<!-- RecurringOrder -->
+<!-- *************************************** -->
+    <property key="recurringOrderItems">
+        <value xml:lang="en">10</value>
+        <screen>RecurringOrder</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>List of Recurring Orders</description>
+    </property>
+    <property key="recurringOrderPreviousButton">
+        <value xml:lang="en">20</value>
+        <screen>RecurringOrder</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- RecurringOrderItems -->
+<!-- *************************************** -->
+    <property key="recurringOrderItemsItemImage">
+        <value xml:lang="en">10</value>
+        <screen>RecurringOrderItems</screen>
+        <style>image</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item image</description>
+    </property>
+    <property key="recurringOrderItemsItemName">
+        <value xml:lang="en">20</value>
+        <screen>RecurringOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item Name</description>
+    </property>
+    <property key="recurringOrderItemsItemDescription">
+        <value xml:lang="en">30</value>
+        <screen>RecurringOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item Description (Selected Features)</description>
+    </property>
+    <property key="recurringOrderItemsItemQty">
+        <value xml:lang="en">40</value>
+        <screen>RecurringOrderItems</screen>
+        <style>number</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item Qty</description>
+    </property>
+    <property key="recurringOrderItemsItemShipDate">
+        <value xml:lang="en">50</value>
+        <screen>RecurringOrderItems</screen>
+        <style>entry</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item ship date</description>
+    </property>
+    <property key="recurringOrderItemsItemRecurrenceFreq">
+        <value xml:lang="en">60</value>
+        <screen>RecurringOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The unit price of the item</description>
+    </property>
+    <property key="recurringOrderItemsItemPrice">
+        <value xml:lang="en">70</value>
+        <screen>RecurringOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence price. The price the customer will pay for this item if placed as a recurring order.</description>
+    </property>
+    <property key="recurringOrderItemsItemTotal">
+        <value xml:lang="en">0</value>
+        <screen>RecurringOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+    <property key="recurringOrderItemsItemStatus">
+        <value xml:lang="en">80</value>
+        <screen>RecurringOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Status</description>
+    </property>
+    <property key="recurringOrderItemsItemEditButton">
+        <value xml:lang="en">90</value>
+        <screen>RecurringOrderItems</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Edit button</description>
+    </property>
+    
+    
+    <!-- *************************************** -->
+<!-- RecurringOrderDetail -->
+<!-- *************************************** -->
+    <property key="recurringOrderDetailImage">
+        <value xml:lang="en">10</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>image</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Image</description>
+    </property>
+    <property key="recurringOrderDetailName">
+        <value xml:lang="en">20</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Product Name</description>
+    </property>
+    <property key="recurringOrderDetailDescription">
+        <value xml:lang="en">30</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Description</description>
+    </property>
+    <property key="recurringOrderDetailQty">
+        <value xml:lang="en">40</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>entry</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Qty</description>
+    </property>
+    <property key="recurringOrderDetailShipDate">
+        <value xml:lang="en">50</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>entry</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Ship Date</description>
+    </property>
+    <property key="recurringOrderDetailRecurrenceFreq">
+        <value xml:lang="en">60</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>entry</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence Frequency</description>
+    </property>
+    <property key="recurringOrderDetailPrice">
+        <value xml:lang="en">70</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence price.</description>
+    </property>
+    <property key="recurringOrderDetailTotal">
+        <value xml:lang="en">0</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+    <property key="recurringOrderDetailShipAddress">
+        <value xml:lang="en">80</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Shipping Address</description>
+    </property>
+    <property key="recurringOrderDetailShipAddressAction">
+        <value xml:lang="en">90</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Add new address</description>
+    </property>
+    <property key="recurringOrderDetailPaymentMethod">
+        <value xml:lang="en">100</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Payment Method</description>
+    </property>
+    <property key="recurringOrderDetailNewCCAction">
+        <value xml:lang="en">110</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Add new credit card</description>
+    </property>
+    <property key="recurringOrderDetailNewEFTAction">
+        <value xml:lang="en">120</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Add new EFT</description>
+    </property>
+    <property key="recurringOrderDetailPreviousButton">
+        <value xml:lang="en">130</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="recurringOrderDetailContinueButton">
+        <value xml:lang="en">140</value>
+        <screen>RecurringOrderDetail</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The RE-ORDER button</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- RequestQuote -->
+<!-- *************************************** -->
+    <property key="requestQuoteFirstName">
+        <value xml:lang="en">10</value>
+        <screen>RequestQuote</screen>
+        <style>entry</style>
+        <mandatory>SYS_YES</mandatory>
+        <group>0</group>
+        <description>Customer First Name</description>
+    </property>
+    <property key="requestQuoteLastName">
+        <value xml:lang="en">20</value>
+        <screen>RequestQuote</screen>
+        <style>entry</style>
+        <mandatory>SYS_YES</mandatory>
+        <group>0</group>
+        <description>Customer Last Name</description>
+    </property>
+    <property key="requestQuoteEmailAddress">
+        <value xml:lang="en">30</value>
+        <screen>RequestQuote</screen>
+        <style>entry</style>
+        <mandatory>SYS_YES</mandatory>
+        <group>0</group>
+        <description>Customer Email Address</description>
+    </property>
+    <property key="requestQuotePhoneContact">
+        <value xml:lang="en">40</value>
+        <screen>RequestQuote</screen>
+        <style>entry</style>
+        <mandatory>NO</mandatory>
+        <group>0</group>
+        <description>Customer Contact Phone Number</description>
+    </property>
+    <property key="requestQuotePartNums">
+        <value xml:lang="en">50</value>
+        <screen>RequestQuote</screen>
+        <style>entry</style>
+        <mandatory>YES</mandatory>
+        <group>0</group>
+        <description>SKU or Part Numbers</description>
+    </property>
+    <property key="requestQuoteComment">
+        <value xml:lang="en">70</value>
+        <screen>RequestQuote</screen>
+        <style>entry</style>
+        <mandatory>NO</mandatory>
+        <group>0</group>
+        <description>The Contact Reason</description>
+    </property>
+    <property key="requestQuoteSubmitButton">
+        <value xml:lang="en">80</value>
+        <screen>RequestQuote</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Submit button</description>
+    </property>
+<!-- *************************************** -->
+<!-- MyAccountMenu -->
+<!-- *************************************** -->
+    <property key="myAccountMenuPersonalInfo">
+        <value xml:lang="en">10</value>
+        <screen>MyAccountMenu</screen>
+        <style>displayBox</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Link to Edit Personal Information</description>
+    </property>
+    <property key="myAccountMenuLoginInfo">
+        <value xml:lang="en">20</value>
+        <screen>MyAccountMenu</screen>
+        <style>displayBox</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Link to Edit Login Information</description>
+    </property>
+    <property key="myAccountMenuAddressInfo">
+        <value xml:lang="en">30</value>
+        <screen>MyAccountMenu</screen>
+        <style>displayBox</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Link to Edit Address Book Information</description>
+    </property>
+    <property key="myAccountMenuPaymentMethodCCInfo">
+        <value xml:lang="en">40</value>
+        <screen>MyAccountMenu</screen>
+        <style>displayBox</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Link to Edit CC Payment Method Information</description>
+    </property>
+    <property key="myAccountMenuPaymentMethodEftInfo">
+        <value xml:lang="en">0</value>
+        <screen>MyAccountMenu</screen>
+        <style>displayBox</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Link to Edit EFT Payment Method Information</description>
+    </property>
+    <property key="myAccountMenuOrderStatusInfo">
+        <value xml:lang="en">50</value>
+        <screen>MyAccountMenu</screen>
+        <style>displayBox</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Link to View Order History Information</description>
+    </property>
+    <property key="myAccountMenuRecurringOrderInfo">
+        <value xml:lang="en">0</value>
+        <screen>MyAccountMenu</screen>
+        <style>displayBox</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Link to View Recurring Order History Information</description>
+    </property>
+    
     
 </resource>

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+        To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+        Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+    -->
+
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <property key="abandonCartEmail">
+        <name xml:lang="en">Abandon Cart Email</name>
+        <sequenceNum>10</sequenceNum>
+    </property>
+    <property key="bigFishContactUsFeed">
+        <name xml:lang="en">Contact Us Feed</name>
+        <sequenceNum>20</sequenceNum>
+    </property>
+    <property key="bigFishCustomerFeed">
+        <name xml:lang="en">Customer Feed</name>
+        <sequenceNum>30</sequenceNum>
+    </property>
+    <property key="bigFishOrderFeed">
+        <name xml:lang="en">Order Feed</name>
+        <sequenceNum>40</sequenceNum>
+    </property>
+    <property key="bigFishOrderFeed">
+        <name xml:lang="en">Order Feed</name>
+        <sequenceNum>50</sequenceNum>
+    </property>
+    <property key="bigFishRequestCatalogFeed">
+        <name xml:lang="en">Request Catalog Feed</name>
+        <sequenceNum>60</sequenceNum>
+    </property>
+    <property key="clientProductRatingUpdate">
+        <name xml:lang="en">Client Product Rating Update</name>
+        <sequenceNum>70</sequenceNum>
+    </property>
+    <property key="clientProductUpdate">
+        <name xml:lang="en">Client Product Update</name>
+        <sequenceNum>80</sequenceNum>
+    </property>
+    <property key="clientProductUpdateIndexSeoFriendlyUrl">
+        <name xml:lang="en">Client Product Update Index Seo Friendly Url</name>
+        <sequenceNum>90</sequenceNum>
+    </property>
+    <property key="clientOrderStatusUpdate">
+        <name xml:lang="en">Client Order Status Update</name>
+        <sequenceNum>100</sequenceNum>
+    </property>
+    <property key="clientStoreUpdate">
+        <name xml:lang="en">Client Store Update</name>
+        <sequenceNum>110</sequenceNum>
+    </property>
+    <property key="genProductsIndex">
+        <name xml:lang="en">Generate Products Index</name>
+        <sequenceNum>120</sequenceNum>
+    </property>
+    <property key="genSeoFriendlyUrl">
+        <name xml:lang="en">Generate Seo Friendly Url</name>
+        <sequenceNum>130</sequenceNum>
+    </property>
+    <property key="googleProductFeed">
+        <name xml:lang="en">Google Product Feed</name>
+        <sequenceNum>140</sequenceNum>
+    </property>
+    <property key="reevooGetProductRatingScore">
+        <name xml:lang="en">Reevoo Get Product Rating Score</name>
+        <sequenceNum>150</sequenceNum>
+    </property>
+    <property key="reevooProductRatingUpdate">
+        <name xml:lang="en">Reevoo Product Rating Update</name>
+        <sequenceNum>160</sequenceNum>
+    </property>
+    <property key="shipReviewEmail">
+        <name xml:lang="en">Ship Review Email</name>
+        <sequenceNum>170</sequenceNum>
+    </property>
+    <property key="purgeOldJobs">
+        <name xml:lang="en">Purge Old Jobs</name>
+        <sequenceNum>180</sequenceNum>
+    </property>
+</resource>

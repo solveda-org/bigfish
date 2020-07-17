@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
     <!-- ========================================================= -->
@@ -32,6 +32,7 @@
         <field name="responseDateTime"     type="date-time"></field>
         <field name="reviewResponse" type="very-long"></field>
         <field name="reviewPrivateNote" type="very-long"></field>
+        <field name="reviewCustom01" type="very-long"></field>
     </extend-entity>
 
     <extend-entity entity-name="CarrierShipmentMethod">
@@ -194,6 +195,25 @@
         </relation>
     </entity>
 	
+    <entity entity-name="PaymentGatewayFdgg"
+            package-name="org.ofbiz.accounting.payment"
+            title="First Data Global Gateway Payment Gateway Configuration">
+      <field name="paymentGatewayConfigId" type="id-ne"></field>
+      <field name="userId" type="value"><description>User Name</description></field>
+      <field name="userPassword" type="value" encrypt="true"><description>User Password </description></field>
+      <field name="serverUrl" type="value"><description>Transaction Server URL</description></field>
+      <field name="certificateAlias" type="value"><description>Certificate Alias</description></field>
+      <field name="apiVersion" type="short-varchar"><description>Target API version</description></field>
+      <field name="soapEnvelopeXmlns" type="value"><description>Name Space for Soap Envelope</description></field>
+      <field name="versionXmlns" type="value"><description>Name Space API version</description></field>
+      <field name="fdggwsapiXmlns" type="value"><description>Name Space for FDGG WS API</description></field>
+      <prim-key field="paymentGatewayConfigId"/>
+      <relation type="one" fk-name="PGFD_PGC" rel-entity-name="PaymentGatewayConfig">
+        <key-map field-name="paymentGatewayConfigId"/>
+      </relation>
+    </entity>
+
+
     <extend-entity entity-name="ProductStoreShipmentMeth">
         <field name="allowPoBoxAddr" type="indicator"></field>
     </extend-entity>

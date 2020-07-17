@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?><!--
+    To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+    Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+--><resource xmlns:xsi="http://www.w3.org/01/XMLSchema-instance">
+
+    <property key="WEBSITE_URL">
+        <value xml:lang="en">http://www.yoursite.com</value>
+        <description>A parameter that defines the website URL of the application.</description>
+    </property>
+    <property key="DEFAULT_SHIPPING_COST">
+        <value xml:lang="en">0</value>
+        <description>The default Shipping cost that will be used on the shopping Cart.</description>
+    </property>
+    <property key="STORE_TITLE">
+        <value xml:lang="en">store title</value>
+        <description>Value for the store TITLE for the google feed.</description>
+    </property>
+    <property key="STORE_DESCRIPTION">
+        <value xml:lang="en">store description</value>
+        <description>Value for the store DESCRIPTION for the google feed.</description>
+    </property>
+    <property key="GOOGLE_FEED_VERSION">
+        <value xml:lang="en">2.0</value>
+        <description>version of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_NAME_SPACE_URL">
+        <value xml:lang="en">http://base.google.com/ns/1.0</value>
+        <description>name space url of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_RSS_TAG">
+        <value xml:lang="en">rss</value>
+        <description>root rss tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_NAME_SPACE_URL_ATTR_TAG">
+        <value xml:lang="en">xmlns:g</value>
+        <description>name space url tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_VERSION_ATTR_TAG">
+        <value xml:lang="en">version</value>
+        <description>version tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_CHANNEL_TAG">
+        <value xml:lang="en">channel</value>
+        <description>channel tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_TITLE_TAG">
+        <value xml:lang="en">title</value>
+        <description>title tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_LINK_TAG">
+        <value xml:lang="en">link</value>
+        <description>link tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_DESC_TAG">
+        <value xml:lang="en">description</value>
+        <description>description tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_TAG">
+        <value xml:lang="en">item</value>
+        <description>item tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_TITLE_TAG">
+        <value xml:lang="en">title</value>
+        <description>itemtitle tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_LINK_TAG">
+        <value xml:lang="en">link</value>
+        <description>itemlink tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_DESC_TAG">
+        <value xml:lang="en">description</value>
+        <description>itemdescription tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_ID_TAG">
+        <value xml:lang="en">g:id</value>
+        <description>item id tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_PRICE_TAG">
+        <value xml:lang="en">g:price</value>
+        <description>item price tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_IMG_LINK_TAG">
+        <value xml:lang="en">g:image_link</value>
+        <description>item image link tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_CAT_TAG">
+        <value xml:lang="en">g:google_product_category</value>
+        <description>item product category tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_TYPE_TAG">
+        <value xml:lang="en">g:product_type</value>
+        <description>item product type tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_SHIP_TAG">
+        <value xml:lang="en">g:shipping</value>
+        <description>item shipping tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_SHIP_PRICE_TAG">
+        <value xml:lang="en">g:price</value>
+        <description>item shipping price tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_TIN_TAG">
+        <value xml:lang="en">g:tin</value>
+        <description>item tin tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_MPN_TAG">
+        <value xml:lang="en">g:mpn</value>
+        <description>item mpn tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_REVIEW_CNT_TAG">
+        <value xml:lang="en">g:product_review_count</value>
+        <description>item review count tag of google feed xml.</description>
+    </property>
+    <property key="GOOGLE_FEED_ITEM_REVIEW_AVG_TAG">
+        <value xml:lang="en">g:product_review_average</value>
+        <description>item review average tag of google feed xml.</description>
+    </property>
+</resource>

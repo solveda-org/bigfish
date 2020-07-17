@@ -4,6 +4,7 @@
 <input type="hidden" name="detailScreen" value="${parameters.detailScreen?default(detailScreen!"")}" />
 <input type="hidden" name="emailType" value="${parameters.emailType?default(emailType!"")}" />
 <h3>${uiLabelMap.EmailSubscriberHeading}</h3>
+   <div class="entryForm subscriber emailSubscriber">
     <div class="entry emailAddress">
       <label for= "SUBSCRIBER_EMAIL"><@required/>${uiLabelMap.EmailAddressCaption}</label>
       <div class="entryField">
@@ -42,4 +43,5 @@
         <label class="radioOptionLabel"><input type="radio" id="PARTY_EMAIL_HTML" name="PARTY_EMAIL_PREFERENCE" value="HTML" ${partyEmailPreferenceHtml!""}/><span class="radioOptionText">${uiLabelMap.RegistrationEmailPreferenceHtmlLabel}</span></label>
         <label class="radioOptionLabel"><input type="radio" id="PARTY_EMAIL_TEXT" name="PARTY_EMAIL_PREFERENCE" value="TEXT" ${partyEmailPreferenceText!""}/><span class="radioOptionText">${uiLabelMap.RegistrationEmailPreferenceTextLabel}</span></label>
       </div>
+   </div>
 </div>

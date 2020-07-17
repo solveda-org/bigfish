@@ -111,9 +111,6 @@ public class OsafeAdminScheduledJobServices {
         String serviceName = (String) params.remove("SERVICE_NAME");
         String poolName = (String) params.remove("POOL_NAME");
         String serviceDate = (String) params.remove("SERVICE_DATE");
-        String serviceHour = (String) params.remove("SERVICE_HOUR");
-        String serviceMinute = (String) params.remove("SERVICE_MINUTE");
-        String serviceAMPMString= (String) params.remove("SERVICE_AMPM");
         String serviceEndTime = (String) params.remove("SERVICE_END_TIME");
         String serviceFreq = (String) params.remove("SERVICE_FREQUENCY");
         String serviceIntr = (String) params.remove("SERVICE_INTERVAL");
@@ -254,59 +251,34 @@ public class OsafeAdminScheduledJobServices {
         
         
         //check if input date is before today
-        String serviceDateEOD = getValidJobDate(serviceDate, "11", "59", "2", prefDateFormat);
+        String serviceDateEOD = getValidJobDate(serviceDate, prefDateFormat);
         if (UtilValidate.isNotEmpty(serviceDateEOD)) 
         {
             if (!checkPassedJobDate(serviceDateEOD)) 
             {
                 //error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
-            	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale),"SERVICE_HOUR",true);
+            	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale),"SERVICE_DATE",true);
             	error_list.add(tmp);
             }
             else
             {
-            	if((OsafeAdminUtil.isNumber(serviceHour)) && (OsafeAdminUtil.isNumber(serviceHour)) && (OsafeAdminUtil.isNumber(serviceHour)))
-            	{
-            		//SERVICE_TIME manipulation (serviceDate + serviceTime + serviceAMPM --> serviceDatetime)
-                    serviceDateTime = getValidJobDate(serviceDate, serviceHour, serviceMinute, serviceAMPMString, prefDateFormat);
-                    if (UtilValidate.isNotEmpty(serviceDateTime)) 
+        		//SERVICE_TIME manipulation (serviceDate + serviceTime + serviceAMPM --> serviceDatetime)
+                serviceDateTime = getValidJobDate(serviceDate, prefDateFormat);
+                if (UtilValidate.isNotEmpty(serviceDateTime)) 
+                {
+                    if (!checkPassedJobDate(serviceDateTime)) 
                     {
-                        if (!checkPassedJobDate(serviceDateTime)) 
-                        {
-                            //error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
-                            tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale),"SERVICE_HOUR",true);
-                        	error_list.add(tmp);
-                        }
+                        //error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
+                        tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale),"SERVICE_DATE",true);
+                    	error_list.add(tmp);
                     }
-            	}
-            	
+                }
             }
         }
         else
         {
         	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "BlankStartDateError", locale));
         	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "BlankStartDateError", locale),"SERVICE_DATE",true);
-        	error_list.add(tmp);
-        }
-
-        if(!OsafeAdminUtil.isNumber(serviceHour))
-        {
-        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "HHNotSelectedError", locale));
-        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "HHNotSelectedError", locale),"SERVICE_HOUR",true);
-        	error_list.add(tmp);
-        }
-        
-        if(!OsafeAdminUtil.isNumber(serviceMinute))
-        {
-        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MMNotSelectedError", locale));
-        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MMNotSelectedError", locale),"SERVICE_MINUTE",true);
-        	error_list.add(tmp);
-        }
-        
-        if(!OsafeAdminUtil.isNumber(serviceAMPMString))
-        {
-        	//error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "AMPMNotSelectedError", locale));
-        	tmp = new MessageString(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "AMPMNotSelectedError", locale),"SERVICE_AMPM",true);
         	error_list.add(tmp);
         }
         
@@ -552,6 +524,19 @@ public class OsafeAdminScheduledJobServices {
     }
 
 
+    public static String getValidJobDate(String serviceDate, String prefDateFormat)
+    {
+    	 //check start datetime
+        String serviceDateTime = "";
+        Timestamp serviceDateTs = OsafeAdminUtil.toTimestamp(serviceDate, prefDateFormat);
+        if (UtilValidate.isNotEmpty(serviceDateTs))
+        {
+            serviceDateTime = serviceDateTs.toString();
+        }
+        return serviceDateTime;
+    }
+
+
     public static String getValidJobDate(String serviceDate, String serviceHour, String serviceMinute, String serviceAMPMString, String prefDateFormat)
     {
     	 //check start datetime
@@ -571,7 +556,7 @@ public class OsafeAdminScheduledJobServices {
 		        }
 	        	int minute = Integer.parseInt(serviceMinute);
 	        	int addTimeInMilliSec = (hour*60*60*1000)+(minute*60*1000);
-	        	serviceDateTs = new Timestamp(serviceDateTs.getTime() + addTimeInMilliSec);
+	        	//serviceDateTs = new Timestamp(serviceDateTs.getTime() + addTimeInMilliSec);
 		        serviceDateTime = serviceDateTs.toString();
 	        }
         }

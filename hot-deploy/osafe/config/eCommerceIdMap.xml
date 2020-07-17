@@ -111,6 +111,9 @@
     <property key="PAGE_TOP_SPOT_CONTACT_US">
         <value xml:lang="en">PTS_CONTACT_US</value>
     </property>
+    <property key="PAGE_TOP_SPOT_REQUEST_QUOTE">
+        <value xml:lang="en">PTS_REQUEST_QUOTE</value>
+    </property>
     <property key="PAGE_TOP_SPOT_STORE_LOCATOR">
         <value xml:lang="en">PTS_STORE_LOCATOR</value>
     </property>
@@ -187,6 +190,9 @@
     <property key="PAGE_END_SPOT_CONTACT_US">
         <value xml:lang="en">PES_CONTACT_US</value>
     </property>
+    <property key="PAGE_END_SPOT_REQUEST_QUOTE">
+        <value xml:lang="en">PES_REQUEST_QUOTE</value>
+    </property>
     <property key="PAGE_END_SPOT_STORE_LOCATOR">
         <value xml:lang="en">PES_STORE_LOCATOR</value>
     </property>
@@ -238,6 +244,9 @@
     <property key="CHECKOUT_CC_VERIFY">
         <value xml:lang="en">CHECKOUT_CC_VERIFY</value>
     </property>
+    <property key="CHECKOUT_EFT_GUIDE">
+        <value xml:lang="en">CHECKOUT_EFT_GUIDE</value>
+    </property>
     <property key="PAGE_TOP_SPOT_STORE_PICKUP">
         <value xml:lang="en">PTS_STORE_PICKUP</value>
     </property>
@@ -264,6 +273,12 @@
     </property>
     <property key="PAGE_END_SPOT_EMAIL_A_FRIEND">
         <value xml:lang="en">PES_EMAIL_A_FRIEND</value>
+    </property>
+    <property key="RECURRING_ORDER_LIST_ESPOT">
+        <value xml:lang="en">RECUR_LIST_ESPOT</value>
+    </property>
+    <property key="RECURRING_ORDER_DETAIL_ESPOT">
+        <value xml:lang="en">RECUR_DETAIL_ESPOT</value>
     </property>
 
     <!-- *** ECOMMERCE PDP SPOT MENU HOT SPOTS *************************************** -->
@@ -307,6 +322,9 @@
     </property>
     <property key="EMAIL_CONTACT_US">
         <value xml:lang="en">E_CONTACT_US</value>
+    </property>
+    <property key="EMAIL_REQUEST_QUOTE">
+        <value xml:lang="en">E_REQUEST_QUOTE</value>
     </property>
     <property key="EMAIL_REQUEST_CATALOG">
         <value xml:lang="en">E_REQUEST_CATALOG</value>

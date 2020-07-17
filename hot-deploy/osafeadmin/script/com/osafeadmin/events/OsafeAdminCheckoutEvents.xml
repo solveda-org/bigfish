@@ -1510,5 +1510,27 @@
         </if-compare>
 	    
     </simple-method>
-
+    <simple-method method-name="checkCartInventory" short-description="Check cart items are in stock before processing order" login-required="false">
+        <session-to-field field="shoppingCart"/>
+        <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="storeId">
+             <string value="STORE_LOCATION"/>
+        </call-object-method>
+        <if-empty field="storeId">
+           <call-object-method obj-field="shoppingCart" method-name="items" ret-field="shoppingCartItems"/>
+            <if-not-empty field="shoppingCartItems">
+                <iterate entry="shoppingCartItem" list="shoppingCartItems">
+                    <call-class-method class-name="com.osafe.services.InventoryServices" method-name="checkProductInventoryLevel" ret-field="checkInventoyMap" >
+                        <field field="shoppingCartItem.productId"/>
+                        <field field="shoppingCartItem.quantity" type="BigDecimal"/>
+                        <field field="request" type="javax.servlet.ServletRequest"/>
+                        <field field="servletRequest" type="javax.servlet.http.HttpServletRequest"/>
+                    </call-class-method>
+                    <if-compare operator="equals" value="N" field="checkInventoyMap.inStock">
+                            <string-to-list string="${checkInventoyMap.stockMessage}" message-field="inventoryCheck" list="error_list"/>
+                    </if-compare>
+                </iterate>
+            </if-not-empty>
+        </if-empty>
+        <check-errors/>
+    </simple-method>
 </simple-methods>

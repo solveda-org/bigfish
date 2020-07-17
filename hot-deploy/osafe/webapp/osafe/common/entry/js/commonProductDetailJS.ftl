@@ -1,12 +1,17 @@
 <script language="JavaScript" type="text/javascript">
-  <#if currentProduct?exists>
+ <#if currentProduct?exists>
   <#assign PDP_QTY_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"PDP_QTY_DEFAULT")!/>
   <#if !PDP_QTY_DEFAULT?has_content || !(Static["com.osafe.util.Util"].isNumber(PDP_QTY_DEFAULT))>
   	<#assign PDP_QTY_DEFAULT = "1"/>
   </#if>
-  
-  function sortReviews(screen) 
+
+  jQuery(function() 
   {
+		jQuery(".js_pdpTabs").tabs();
+  });
+  
+    function sortReviews(screen) 
+    {
   	  var sortOption = jQuery('#js_'+screen+'reviewSort').val();
   	  jQuery('#js_'+screen+'SortReviewBy').val(sortOption);
       var reviewParams = jQuery('.js_'+screen+'ReviewList').find('input.reviewParam').serialize();
@@ -15,77 +20,8 @@
           var sortedList = jQuery(data).find('#js_'+screen+'reviewList');
           jQuery('#js_'+screen+'reviewList').replaceWith(sortedList);
       });
-  }
-
-  jQuery(document).ready(function()
-  {
-    jQuery('.js_pdpFeatureSwatchImage').click(function() 
-    {
-        if (jQuery('.js_seeItemDetail').length) 
-        {
-            jQuery('#js_plpQuicklook_Container .js_seeItemDetail').attr('href', jQuery('#quicklook_Url_'+this.title).val());
-        }
-    }); 
-  
-    jQuery('.js_pdpUrl.js_review').click(function() 
-    {
-        var tabAnchor = jQuery('#js_productReviews').parents('.ui-tabs-panel').attr('id');
-        jQuery.find('a[href="#'+tabAnchor+'"]').each(function(elm)
-        {
-            jQuery(elm).click();
-        });
-    });
-
-    jQuery('#js_reviewSort').change(function() 
-    {
-        var tabAnchor = jQuery('#js_productReviews').parents('.ui-tabs-panel').attr('id');
-        jQuery.find('a[href="#'+tabAnchor+'"]').each(function(elm)
-        {
-            jQuery(elm).click();
-        });
-     });
-     
-    jQuery('.js_plpFeatureSwatchImage').click(function() 
-    {
-        var swatchVariant = jQuery(this).next('.js_swatchVariant').clone();
-        
-        var swatchVariantOnlinePrice = jQuery(this).nextAll('.js_swatchVariantOnlinePrice:first').clone().show();
-        swatchVariantOnlinePrice.removeClass('js_swatchVariantOnlinePrice').addClass('js_plpPriceOnline');
-        jQuery(this).parents('.productItem').find('.js_plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
-
-        var swatchVariantListPrice = jQuery(this).nextAll('.js_swatchVariantListPrice:first').clone().show();
-        swatchVariantListPrice.removeClass('js_swatchVariantListPrice').addClass('js_plpPriceList');
-        jQuery(this).parents('.productItem').find('.js_plpPriceList').replaceWith(swatchVariantListPrice);
-        
-        var swatchVariantSaveMoney = jQuery(this).nextAll('.js_swatchVariantSaveMoney:first').clone().show();
-        swatchVariantSaveMoney.removeClass('js_swatchVariantSaveMoney').addClass('js_plpPriceSavingMoney');
-        jQuery(this).parents('.productItem').find('.js_plpPriceSavingMoney').replaceWith(swatchVariantSaveMoney);
-        
-        var swatchVariantSavingPercent = jQuery(this).nextAll('.js_swatchVariantSavingPercent:first').clone().show();
-        swatchVariantSavingPercent.removeClass('js_swatchVariantSavingPercent').addClass('js_plpPriceSavingPercent');
-        jQuery(this).parents('.productItem').find('.js_plpPriceSavingPercent').replaceWith(swatchVariantSavingPercent);
-        
-        jQuery(this).parents('.productItem').find('.js_eCommerceThumbNailHolder').find('.js_swatchProduct').replaceWith(swatchVariant);
-        
-        jQuery('.js_eCommerceThumbNailHolder').find('.js_swatchVariant').show().attr("class", "js_swatchProduct");
-        jQuery(this).siblings('.js_plpFeatureSwatchImage').removeClass('selected');
-        jQuery(this).addClass('selected');
-        makeProductUrl(this);
-    });
-    
-    activateInitialZoom();
-
-    var selectedSwatch = '${StringUtil.wrapString(parameters.productFeatureType)!""}';
-    if(selectedSwatch != '') 
-    {
-        var featureArray = selectedSwatch.split(":");
-        //jQuery('.pdpRecentlyViewed .'+featureArray[1]).click();
-        //jQuery('.pdpComplement .'+featureArray[1]).click();
     }
-    <#if isPdpInStoreOnly?exists>
-        checkProductInStore('${isPdpInStoreOnly}');
-    </#if>
-  });
+
     var detailImageUrl = null;
     function setAddProductId(name) 
     {
@@ -535,6 +471,9 @@
             		var variantPdpSpecificContent01 = jQuery('#js_pdpSpecificContent01_'+VARMAP[mapKey]).html();
             		var variantPdpSpecificContent02 = jQuery('#js_pdpSpecificContent02_'+VARMAP[mapKey]).html();
             		var variantPdpSpecificContent03 = jQuery('#js_pdpSpecificContent03_'+VARMAP[mapKey]).html();
+            		var variantPdpAttach01 = jQuery('#js_pdpAttach01_'+VARMAP[mapKey]).html();
+            		var variantPdpAttach02 = jQuery('#js_pdpAttach02_'+VARMAP[mapKey]).html();
+            		var variantPdpAttach03 = jQuery('#js_pdpAttach03_'+VARMAP[mapKey]).html();
             	
             		jQuery(variantLargeImages).find('.js_mainImageLink').attr('id', 'js_mainImageLink');
             		jQuery('#js_seeLargerImage').html(variantLargeImages.html());
@@ -550,6 +489,9 @@
             		jQuery('#js_pdpSpecificContent01').html(variantPdpSpecificContent01);
             		jQuery('#js_pdpSpecificContent02').html(variantPdpSpecificContent02);
             		jQuery('#js_pdpSpecificContent03').html(variantPdpSpecificContent03);
+            		jQuery('#js_pdpAttach01').html(variantPdpAttach01);
+            		jQuery('#js_pdpAttach02').html(variantPdpAttach02);
+            		jQuery('#js_pdpAttach03').html(variantPdpAttach03);
 					
 					if(jQuery('#js_quantity').length)
 					{
@@ -615,6 +557,14 @@
               var variantPdpTermsConditions = jQuery('#js_pdpTermsConditions_Virtual').html();
               var variantPdpWarnings = jQuery('#js_pdpWarnings_Virtual').html();
               var variantPdpInternalName = jQuery('#js_pdpInternalName_Virtual').html();
+              var variantPdpAttach01 = jQuery('#js_pdpAttach01_Virtual').html();
+              var variantPdpAttach02 = jQuery('#js_pdpAttach02_Virtual').html();
+              var variantPdpAttach03 = jQuery('#js_pdpAttach03_Virtual').html();
+              var variantPdpPriceList = jQuery('#js_pdpPriceList_Virtual').html();
+        	  var variantPdpPriceOnline = jQuery('#js_pdpPriceOnline_Virtual').html();
+        	  var variantPdpPriceSavingMoney = jQuery('#js_pdpPriceSavingMoney_Virtual').html();
+        	  var variantPdpPriceSavingPercent = jQuery('#js_pdpPriceSavingPercent_Virtual').html();
+        	  var variantPdpVolumePricing = jQuery('#js_pdpVolumePricing_Virtual').html();
             	
               jQuery(variantLargeImages).find('.js_mainImageLink').attr('id', 'js_mainImageLink');
               jQuery('#js_seeLargerImage').html(variantLargeImages.html());
@@ -628,6 +578,14 @@
               jQuery('#js_pdpTermsConditions').html(variantPdpTermsConditions);
               jQuery('#js_pdpWarnings').html(variantPdpWarnings);
               jQuery('#js_pdpInternalName').html(variantPdpInternalName); 
+              jQuery('#js_pdpAttach01').html(variantPdpAttach01);
+              jQuery('#js_pdpAttach02').html(variantPdpAttach02);
+              jQuery('#js_pdpAttach03').html(variantPdpAttach03);
+              jQuery('#js_pdpPriceList').html(variantPdpPriceList);
+              jQuery('#js_pdpPriceOnline').html(variantPdpPriceOnline);
+              jQuery('#js_pdpPriceSavingMoney').html(variantPdpPriceSavingMoney);
+              jQuery('#js_pdpPriceSavingPercent').html(variantPdpPriceSavingPercent);
+			  jQuery('#js_pdpVolumePricing').html(variantPdpVolumePricing);
             } 
             else 
             {
@@ -717,11 +675,8 @@
         	var variantProductVideoLink = jQuery('#js_productVideoLink_'+varProductId).html();
         	var variantProductVideo360 = jQuery('#js_productVideo360_'+varProductId).html();
         	var variantProductVideo360Link = jQuery('#js_productVideo360Link_'+varProductId).html();
-        	var variantPdpPriceSavingMoney = jQuery('#js_pdpPriceSavingMoney_'+varProductId).html();
-        	var variantPdpPriceSavingPercent = jQuery('#js_pdpPriceSavingPercent_'+varProductId).html();
-        	var variantPdpVolumePricing = jQuery('#js_pdpVolumePricing_'+varProductId).html();
-        	var variantPdpPriceList = jQuery('#js_pdpPriceList_'+varProductId).html();
-        	var variantPdpPriceOnline = jQuery('#js_pdpPriceOnline_'+varProductId).html();
+        	
+        	
 	            
             if(noSelection=="true" || varProductId == "")
             {
@@ -739,6 +694,14 @@
             	var variantPdpSpecificContent01 = jQuery('#js_pdpSpecificContent01_Virtual').html();
             	var variantPdpSpecificContent02 = jQuery('#js_pdpSpecificContent02_Virtual').html();
             	var variantPdpSpecificContent03 = jQuery('#js_pdpSpecificContent03_Virtual').html();
+            	var variantPdpAttach01 = jQuery('#js_pdpAttach01_Virtual').html();
+                var variantPdpAttach02 = jQuery('#js_pdpAttach02_Virtual').html();
+                var variantPdpAttach03 = jQuery('#js_pdpAttach03_Virtual').html();
+                var variantPdpPriceList = jQuery('#js_pdpPriceList_Virtual').html();
+        	    var variantPdpPriceOnline = jQuery('#js_pdpPriceOnline_Virtual').html();
+        	    var variantPdpPriceSavingMoney = jQuery('#js_pdpPriceSavingMoney_Virtual').html();
+        	    var variantPdpPriceSavingPercent = jQuery('#js_pdpPriceSavingPercent_Virtual').html();
+        	    var variantPdpVolumePricing = jQuery('#js_pdpVolumePricing_Virtual').html();
             }
             else
             {
@@ -756,6 +719,14 @@
             	var variantPdpSpecificContent01 = jQuery('#js_pdpSpecificContent01_'+varProductId).html();
             	var variantPdpSpecificContent02 = jQuery('#js_pdpSpecificContent02_'+varProductId).html();
             	var variantPdpSpecificContent03 = jQuery('#js_pdpSpecificContent03_'+varProductId).html();
+            	var variantPdpAttach01 = jQuery('#js_pdpAttach01_'+varProductId).html();
+                var variantPdpAttach02 = jQuery('#js_pdpAttach02_'+varProductId).html();
+                var variantPdpAttach03 = jQuery('#js_pdpAttach03_'+varProductId).html();
+                var variantPdpPriceList = jQuery('#js_pdpPriceList_'+varProductId).html();
+        	    var variantPdpPriceOnline = jQuery('#js_pdpPriceOnline_'+varProductId).html();
+        	    var variantPdpPriceSavingMoney = jQuery('#js_pdpPriceSavingMoney_'+varProductId).html();
+        	    var variantPdpPriceSavingPercent = jQuery('#js_pdpPriceSavingPercent_'+varProductId).html();
+        	    var variantPdpVolumePricing = jQuery('#js_pdpVolumePricing_'+varProductId).html();
             }
             
             //jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
@@ -784,6 +755,9 @@
     		jQuery('#js_pdpSpecificContent01').html(variantPdpSpecificContent01);
     		jQuery('#js_pdpSpecificContent02').html(variantPdpSpecificContent01);
     		jQuery('#js_pdpSpecificContent03').html(variantPdpSpecificContent01);
+    		jQuery('#js_pdpAttach01').html(variantPdpAttach01);
+    		jQuery('#js_pdpAttach02').html(variantPdpAttach02);
+    		jQuery('#js_pdpAttach03').html(variantPdpAttach03);
     		
     		if(jQuery('#js_quantity').length)
     		{
@@ -873,11 +847,6 @@
         jQuery('#js_productDetailsImageContainer').html(jQuery(videoDiv).clone().removeClass(videoDivClass).show());
     }
 
-	jQuery(function() 
-	{
-		jQuery(".js_pdpTabs").tabs();
-	});
-
     var zoomOptions = {
         zoomType: 'innerzoom',
         lens:true,
@@ -897,6 +866,94 @@
         jQuery(elm).parents('.productItem').find('a.js_pdpUrl').attr("href",pdpUrl);
         jQuery(elm).parents('.productItem').find('a.js_pdpUrl.js_review').attr("href",pdpUrl+"#productReviews");
     }
+  
+
+  jQuery(document).ready(function()
+  {
+    jQuery('.js_pdpFeatureSwatchImage').click(function() 
+    {
+        if (jQuery('.js_seeItemDetail').length) 
+        {
+            jQuery('#js_plpQuicklook_Container .js_seeItemDetail').attr('href', jQuery('#quicklook_Url_'+this.title).val());
+        }
+    }); 
+  
+    var pdpTab = '${StringUtil.wrapString(parameters.tab)!""}';
+    if(pdpTab != '') 
+    {
+        var tabAnchor = jQuery('#js_' + pdpTab).parents('.ui-tabs-panel').attr('id');
+	    if(tabAnchor != '') 
+	    {
+	        jQuery.find('a[href="#'+tabAnchor+'"]').each(function(elm)
+	        {
+	            jQuery(elm).click();
+	        });
+           var tabAnchorParent = jQuery('#' + tabAnchor).parents('.js_pdpTabs');
+	       jQuery('html,body').animate({scrollTop: tabAnchorParent.offset().top},'slow'); 
+	    }      
+        
+    }
+
+    jQuery('.js_pdpUrl.js_review').click(function() 
+    {
+        var tabAnchor = jQuery('#js_productReviews').parents('.ui-tabs-panel').attr('id');
+        jQuery.find('a[href="#'+tabAnchor+'"]').each(function(elm)
+        {
+            jQuery(elm).click();
+        });
+    });
+
+    jQuery('#js_reviewSort').change(function() 
+    {
+        var tabAnchor = jQuery('#js_productReviews').parents('.ui-tabs-panel').attr('id');
+        jQuery.find('a[href="#'+tabAnchor+'"]').each(function(elm)
+        {
+            jQuery(elm).click();
+        });
+     });
+     
+    jQuery('.js_plpFeatureSwatchImage').click(function() 
+    {
+        var swatchVariant = jQuery(this).next('.js_swatchVariant').clone();
+        
+        var swatchVariantOnlinePrice = jQuery(this).nextAll('.js_swatchVariantOnlinePrice:first').clone().show();
+        swatchVariantOnlinePrice.removeClass('js_swatchVariantOnlinePrice').addClass('js_plpPriceOnline');
+        jQuery(this).parents('.productItem').find('.js_plpPriceOnline').replaceWith(swatchVariantOnlinePrice);
+
+        var swatchVariantListPrice = jQuery(this).nextAll('.js_swatchVariantListPrice:first').clone().show();
+        swatchVariantListPrice.removeClass('js_swatchVariantListPrice').addClass('js_plpPriceList');
+        jQuery(this).parents('.productItem').find('.js_plpPriceList').replaceWith(swatchVariantListPrice);
+        
+        var swatchVariantSaveMoney = jQuery(this).nextAll('.js_swatchVariantSaveMoney:first').clone().show();
+        swatchVariantSaveMoney.removeClass('js_swatchVariantSaveMoney').addClass('js_plpPriceSavingMoney');
+        jQuery(this).parents('.productItem').find('.js_plpPriceSavingMoney').replaceWith(swatchVariantSaveMoney);
+        
+        var swatchVariantSavingPercent = jQuery(this).nextAll('.js_swatchVariantSavingPercent:first').clone().show();
+        swatchVariantSavingPercent.removeClass('js_swatchVariantSavingPercent').addClass('js_plpPriceSavingPercent');
+        jQuery(this).parents('.productItem').find('.js_plpPriceSavingPercent').replaceWith(swatchVariantSavingPercent);
+        
+        jQuery(this).parents('.productItem').find('.js_eCommerceThumbNailHolder').find('.js_swatchProduct').replaceWith(swatchVariant);
+        
+        jQuery('.js_eCommerceThumbNailHolder').find('.js_swatchVariant').show().attr("class", "js_swatchProduct");
+        jQuery(this).siblings('.js_plpFeatureSwatchImage').removeClass('selected');
+        jQuery(this).addClass('selected');
+        makeProductUrl(this);
+    });
+    
+    activateInitialZoom();
+
+    var selectedSwatch = '${StringUtil.wrapString(parameters.productFeatureType)!""}';
+    if(selectedSwatch != '') 
+    {
+        var featureArray = selectedSwatch.split(":");
+        //jQuery('.pdpRecentlyViewed .'+featureArray[1]).click();
+        //jQuery('.pdpComplement .'+featureArray[1]).click();
+    }
+    <#if isPdpInStoreOnly?exists>
+        checkProductInStore('${isPdpInStoreOnly}');
+    </#if>
+  });
+
 </#if>
 
  </script>

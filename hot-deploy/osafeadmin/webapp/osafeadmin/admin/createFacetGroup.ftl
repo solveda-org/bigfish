@@ -97,7 +97,7 @@
         <#if readOnly?has_content && readOnly == "true">
             <input type = "text" name="grpSequenceNum" readonly="readonly" value="${parameters.grpSequenceNum!grpSequenceNum!""}"/>
         <#else>
-            <input type = "text" name="grpSequenceNum" value="${parameters.grpSequenceNum!grpSequenceNum!""}" maxlength="10"/>
+            <input type = "text" name="grpSequenceNum" value="${parameters.grpSequenceNum!grpSequenceNum!""}" maxlength="9"/>
         </#if>
       </div>
     </div>

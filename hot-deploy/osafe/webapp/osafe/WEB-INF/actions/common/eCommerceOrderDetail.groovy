@@ -27,6 +27,7 @@ chosenShippingMethodDescription="";
 shippingInstructions = "";
 deliveryOption = "";
 currencyUom = Util.getProductStoreParm(request,"CURRENCY_UOM_DEFAULT");
+offerPriceVisible = "";
 
 
 party = context.party;
@@ -277,6 +278,19 @@ if (UtilValidate.isNotEmpty(orderId))
 			context.returnLink = "Y";
 		}
 		
+		if(UtilValidate.isNotEmpty(orderItems))
+		{
+			for (GenericValue orderItem : orderItems)
+			{
+				cartItemAdjustment = orderReadHelper.getOrderItemAdjustmentsTotal(orderItem);
+				if(cartItemAdjustment < 0)
+				{
+					offerPriceVisible= "Y";
+					break;
+				}
+			}
+		}
+		
 		//get Delivery Option
 		deliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], true);
 		if (UtilValidate.isNotEmpty(deliveryOptionAttr))
@@ -393,7 +407,7 @@ if (UtilValidate.isNotEmpty(orderId))
 						promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
 						if(UtilValidate.isNotEmpty(promoCodesEntered))
 						{
-							for (GenericValue promoCodeEntered : promoCodesEntered)
+							for (String promoCodeEntered : promoCodesEntered)
 							{
 								if(UtilValidate.isNotEmpty(promoCodeEntered))
 								{
@@ -434,6 +448,7 @@ if (UtilValidate.isNotEmpty(orderId))
 	
 		context.orderId = orderId;
 		context.isStorePickUp = isStorePickUp;
+		context.offerPriceVisible = offerPriceVisible;
 		context.orderHeader = orderHeader;
 		context.localOrderReadHelper = orderReadHelper;
 		context.orderItems = orderItems;

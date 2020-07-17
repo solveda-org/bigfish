@@ -8,6 +8,9 @@
   <#if !showImageLink?has_content>
       <#assign showImageLink = "true"/>
   </#if>
+  <#if !showAttachLink?has_content>
+      <#assign showAttachLink = "true"/>
+  </#if>
   <#if !showProductFeatureLink?has_content>
       <#assign showProductFeatureLink = "true"/>
   </#if>
@@ -53,6 +56,10 @@
   
   <#if showImageLink == 'true'>
     <a href="<@ofbizUrl>productImages?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'${uiLabelMap.ProductImagesTooltip}','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
+  </#if>
+  
+  <#if showAttachLink == 'true'>
+    <a href="<@ofbizUrl>productAttachments?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductAttachmentsTooltip}');" onMouseout="hideTooltip()"><span class="attachIcon"></span></a>
   </#if>
   
   <#if showProductFeatureLink == 'true'>
@@ -205,7 +212,7 @@
   </#if>
   
   <#if showProductContentLink == 'true'>
-    <a href="<@ofbizUrl>${productContentSpotListAction}?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductContentSpotTooltip}');" onMouseout="hideTooltip()"><span class="contentSpotIcon"></span></a>
+    <a href="<@ofbizUrl>productContentSpotList?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductContentSpotTooltip}');" onMouseout="hideTooltip()"><span class="contentSpotIcon"></span></a>
   </#if>
 </div>
 </#if>

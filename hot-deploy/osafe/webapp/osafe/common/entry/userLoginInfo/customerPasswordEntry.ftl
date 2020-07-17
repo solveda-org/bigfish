@@ -3,6 +3,7 @@
 <div id="emailPasswordEntry" class="displayBox">
     <h3>${uiLabelMap.ChangePasswordHeading}</h3>
     <p class="instructions">${StringUtil.wrapString(uiLabelMap.ChangeLoginInstructionsInfo)}</p>
+   <div class="entryForm customerLogin editLoginInfo">
     <div class="entry userLogin editLoginInfo">
       <label for= "CUSTOMER_EMAIL">${uiLabelMap.CurrentEmailAddressCaption}</label>
       <div class="entryField">
@@ -58,4 +59,5 @@
 	        <@fieldErrors fieldName="CONFIRM_PASSWORD"/>
         </div>
       </div>
+   </div>
 </div>

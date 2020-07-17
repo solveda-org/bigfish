@@ -1260,16 +1260,25 @@
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCodeIdLengthError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
                     <else>
-                        <entity-one entity-name="ProductPromoCode" value-field="existingProductPromoCode">
-                            <field-map field-name="productPromoCodeId" from-field="productPromoCodeId"/>
-                        </entity-one>
-                        <if-not-empty field="existingProductPromoCode">
-                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCodeIdExistError"/>
-                            <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
-                            <else>
-                                <set field="parameters.productPromoCodeId" from-field="productPromoCodeId"/>
-                            </else>
-                        </if-not-empty>
+                        <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+                            <field field="productPromoCodeId"/>
+                        </call-class-method>
+                        <if-compare field="isValidId" operator="equals" value="true">
+                            <entity-one entity-name="ProductPromoCode" value-field="existingProductPromoCode">
+                                <field-map field-name="productPromoCodeId" from-field="productPromoCodeId"/>
+                            </entity-one>
+                            <if-not-empty field="existingProductPromoCode">
+                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PromotionCodeIdExistError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="productPromoCodeId" list="error_list"/>
+                                <else>
+                                    <set field="parameters.productPromoCodeId" from-field="productPromoCodeId"/>
+                                </else>
+                            </if-not-empty>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromoCodeError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="partyId" list="error_list"/>
+                        </else>
+                        </if-compare>
                     </else>
                 </if-empty>
             </else>

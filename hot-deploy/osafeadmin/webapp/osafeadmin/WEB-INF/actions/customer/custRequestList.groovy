@@ -29,6 +29,7 @@ String entryDateFormat = entryDateTimeFormat;
 List infoMsgList = FastList.newInstance();
 Boolean isValidDate = true;
 String isDownloaded = "";
+party=null;
 if(UtilValidate.isEmpty(parameters.downloadnew) & UtilValidate.isNotEmpty(parameters.downloadloaded)) 
 {
     isDownloaded = "Y";
@@ -62,10 +63,11 @@ lCustRequest=FastList.newInstance();
 dateExpr= FastList.newInstance();
 
 dateCond = null;
-mainCond = null;
+mainCond = EntityCondition.makeCondition("custRequestTypeId", EntityOperator.EQUALS, custRequestType);
 if(UtilValidate.isNotEmpty(partyId)) 
 {
-    mainCond = EntityCondition.makeCondition("fromPartyId", EntityOperator.EQUALS, partyId);
+    party = delegator.findByPrimaryKey("Party", [partyId : partyId]);
+    mainCond = EntityCondition.makeCondition([mainCond, EntityCondition.makeCondition("fromPartyId", EntityOperator.EQUALS, partyId)], EntityOperator.AND);
 }
 if(UtilValidate.isNotEmpty(contactUsDateFrom))
 {
@@ -120,7 +122,6 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N" && UtilValidate.
 	{
 	    mainCond = EntityCondition.makeCondition([mainCond, EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId)], EntityOperator.AND);
 	}
-    mainCond = EntityCondition.makeCondition([mainCond, EntityCondition.makeCondition("custRequestTypeId", EntityOperator.EQUALS, custRequestType)], EntityOperator.AND);
     lCustRequest = delegator.findList("CustRequest",mainCond, null, null, null, false);
     if (UtilValidate.isNotEmpty(lCustRequest))
     {
@@ -175,6 +176,11 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N" && UtilValidate.
     }
 }
 pagingListSize=contactUsSearchList.size();
+if (UtilValidate.isNotEmpty(party) && pagingListSize > 0)
+ {
+        context.party=party;
+ }
+
 context.pagingListSize=pagingListSize;
 context.pagingList = contactUsSearchList;
 session.setAttribute("custRequestList", contactUsSearchList);

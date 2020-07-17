@@ -24,4 +24,15 @@
       </div>
     </div>
   </div>
+  <div class="entryRow">
+   <div class="entry medium">
+      <#assign intiCb = "${initializedCB!}"/>
+      <label>${uiLabelMap.ProductTypeCaption}</label>
+      <div class="entryInput checkbox short">
+         <input class="checkBoxEntry" type="checkbox" id="srchFinishedGoodOnly" name="srchFinishedGoodOnly" value="Y" <#if parameters.srchFinishedGoodOnly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.FinishedGoodLabel}
+         <input class="checkBoxEntry" type="checkbox" id="srchVirtualOnly" name="srchVirtualOnly" value="Y" <#if parameters.srchVirtualOnly?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if>/>${uiLabelMap.VirtualLabel}
+         <input class="checkBoxEntry" type="checkbox" id="srchVariantOnly" name="srchVariantOnly" value="Y" <#if parameters.srchVariantOnly?has_content>checked</#if>/>${uiLabelMap.VariantLabel}
+      </div>
+   </div>
+  </div>
   <!-- end searchBox -->

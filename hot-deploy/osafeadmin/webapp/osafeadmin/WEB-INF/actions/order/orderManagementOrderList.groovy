@@ -40,6 +40,7 @@ statusId = StringUtils.trimToEmpty(parameters.statusId);
 productPromoCodeId = StringUtils.trimToEmpty(parameters.productPromoCodeId);
 productStoreall = StringUtils.trimToEmpty(parameters.productStoreall);
 productId = StringUtils.trimToEmpty(parameters.productId);
+party=null;
 
 List infoMsgList = FastList.newInstance();
 Boolean isValidDate = true;
@@ -213,6 +214,7 @@ if (UtilValidate.isNotEmpty(infoMsgList))
 }
 if(UtilValidate.isNotEmpty(partyId))
 {
+    party = delegator.findByPrimaryKey("Party", [partyId : partyId]);
     svcCtx.put("partyId", partyId);
 }
 
@@ -285,10 +287,22 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N" && isValidDate)
      session.setAttribute("orderPDFMap", svcCtx);
 
      context.pagingList = svcRes.get("completeOrderList");
-     context.pagingListSize = svcRes.get("orderListSize");
+     pagingListSize = svcRes.get("orderListSize");
+     context.pagingListSize = pagingListSize;
+     if (UtilValidate.isNotEmpty(party) && pagingListSize > 0)
+     {
+        context.party=party;
+     }
+
+
 }
 else
 {
      context.pagingList = orderList;
-     context.pagingListSize = orderList.size();
+     pagingListSize = orderList.size();
+     context.pagingListSize = pagingListSize;
+     if (UtilValidate.isNotEmpty(party) && pagingListSize > 0)
+     {
+        context.party=party;
+     }
 }

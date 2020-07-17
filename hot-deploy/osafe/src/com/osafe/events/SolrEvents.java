@@ -1,18 +1,19 @@
 package com.osafe.events;
 
 import java.io.UnsupportedEncodingException;
-import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,12 +33,14 @@ import org.apache.solr.client.solrj.impl.CommonsHttpSolrServer;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.client.solrj.response.TermsResponse.Term;
+import org.apache.solr.common.SolrDocument;
 import org.apache.solr.common.SolrDocumentList;
 import org.apache.solr.common.params.FacetParams;
 import org.apache.solr.common.params.ModifiableSolrParams;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
@@ -54,6 +57,7 @@ import org.ofbiz.product.store.ProductStoreWorker;
 
 import com.osafe.services.SolrIndexDocument;
 import com.osafe.solr.CommandContext;
+import com.osafe.solr.GenericRefinement;
 import com.osafe.solr.RefinementsHelperSolr;
 import com.osafe.solr.SolrConstants;
 import com.osafe.util.Util;
@@ -64,13 +68,17 @@ public class SolrEvents
     public static final String module = SolrEvents.class.getName();
     private static final ResourceBundle OSAFE_UI_LABELS = UtilProperties.getResourceBundle("OSafeUiLabels.xml", Locale.getDefault());
     private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
-
+    private static final SimpleDateFormat _sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'");
+    
     public static String solrSearch(HttpServletRequest request, HttpServletResponse response) 
     {
         try 
         {
+        	String nowDate = _sdf.format(UtilDateTime.nowDate());
+        	
             Delegator delegator = (Delegator) request.getAttribute("delegator");
             String productCategoryId = request.getParameter("productCategoryId");
+            String productSearchCategoryId = request.getParameter("productSearchCategoryId");
             if (UtilValidate.isEmpty(productCategoryId))
             {
                 productCategoryId = (String)request.getAttribute("productCategoryId");
@@ -91,11 +99,7 @@ public class SolrEvents
             //replace special characters with their solr encoded value
             if(UtilValidate.isNotEmpty(searchText))
             {
-            	searchText = URLEncoder.encode(searchText, SolrConstants.DEFAULT_ENCODING);
-                searchText = searchText.replace("\\", "%5C");
-                searchText = searchText.replace("\"", "%22");
-                searchText = searchText.replace(":", "%3A");
-                searchText = searchText.replace("&", "%26");
+            	searchText = replaceSpecialChar(searchText);
             }
 
             //append "" to search text to perform exact search
@@ -247,6 +251,14 @@ public class SolrEvents
                     facetGroups.add(0, SolrConstants.TYPE_PRODUCT_CATEGORY);
                     facetGroupDescriptions.put(SolrConstants.TYPE_PRODUCT_CATEGORY, facetSearchCategoryLabel);
                 }
+                
+                if (UtilValidate.isNotEmpty(productSearchCategoryId)) 
+                {
+                    queryFacet +=" AND " + "productCategoryId:" + productSearchCategoryId;
+                    cc.setProductCategoryId(productSearchCategoryId);
+                	
+                }
+                
 
             } 
             else if (UtilValidate.isNotEmpty(productCategoryId)) 
@@ -271,7 +283,14 @@ public class SolrEvents
                     cc.setFilterGroupsIds(facetGroupIds);
                 }
             }
-            boolean facetMultiSelectTrue  = Util.isProductStoreParmTrue(request, "FACET_MULTI_SELECT");
+            
+            String facetValueStyle = Util.getProductStoreParm(request, "FACET_VALUE_STYLE");
+            boolean facetMultiSelectTrue = false;
+            if (UtilValidate.isNotEmpty(facetValueStyle) && (facetValueStyle.equalsIgnoreCase("CHECKBOX") || facetValueStyle.equalsIgnoreCase("DROPDOWN")))
+            {
+            	facetMultiSelectTrue = true;
+            }
+            
             // Get filter groups that are being passed and exclude them from the
             // list of facets we are want to show
             Float priceLow = null;
@@ -286,7 +305,7 @@ public class SolrEvents
                 for (int i = 0; i < filterGroupArr.length; i++) 
                 {
                     String filterGroupValue = filterGroupArr[i];
-                    if (filterGroupValue.toLowerCase().contains("price") || filterGroupValue.toLowerCase().contains("customer_rating")) 
+                    if (filterGroupValue.toLowerCase().contains("customer_rating")) 
                     {
                         filterGroupValue = StringUtil.replaceString(filterGroupValue,"+", " ");
                     }
@@ -310,10 +329,13 @@ public class SolrEvents
                     }
                     
                     String encodedValue = null;
-                    splitTemp[1] = splitTemp[1].replace("/", "%2F");
+                    
+                    splitTemp[1] = replaceSpecialChar(splitTemp[1]);
+                    /*splitTemp[1] = splitTemp[1].replace("/", "%2F");
                     splitTemp[1] = splitTemp[1].replace("\"", "%22");
                     splitTemp[1] = splitTemp[1].replace(":", "%3A");
-                    splitTemp[1] = splitTemp[1].replace("&", "%26");
+                    splitTemp[1] = splitTemp[1].replace("&", "%26");*/
+                    
 
                     try 
                     {
@@ -325,51 +347,12 @@ public class SolrEvents
                     }
                     filterGroupValue = splitTemp[0] + ":" + encodedValue;
                     cc.addFilterGroup(filterGroupValue);
-                    // Price
+                    
                     if (filterGroupValue.toLowerCase().contains("price")) 
                     {
-                        filterPriceQuery = filterGroupValue.replaceAll("PRICE", SolrConstants.TYPE_PRICE);
-                        
-                        //calculation for price range retrieve on price facet selection click
-                        String[] priceRangeArr =  URLDecoder.decode(encodedValue, SolrConstants.DEFAULT_ENCODING).split(" ");
-                        try 
-                        {
-                            if(facetMultiSelectTrue)
-                            {
-                                //if there are multiple price groups then the lower price would be the minimum price and high price would be the maximum price.
-                                //For Ex:- price:[100 150] and price: [90 120], then The LowPrice is 90 and HighPrice is 150.
-                                if(UtilValidate.isEmpty(priceLow) || (UtilValidate.isNotEmpty(priceLow) && Float.parseFloat(priceRangeArr[0].substring(1)) < priceLow))
-                                {
-                                    priceLow = Float.parseFloat(priceRangeArr[0].substring(1));
-                                }
-                                if(UtilValidate.isEmpty(priceHigh) || (UtilValidate.isNotEmpty(priceHigh) && Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1)) > priceHigh))
-                                {
-                                    priceHigh = Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1));
-                                }
-                            }
-                            else
-                            {
-                                //if there are multiple price groups then the lower price would be the maximum price and high price would be the minimum price.
-                                //For Ex:- price:[100 150] and price: [90 120], then The LowPrice is 100 and HighPrice is 120.
-                                if(UtilValidate.isEmpty(priceLow) || (UtilValidate.isNotEmpty(priceLow) && Float.parseFloat(priceRangeArr[0].substring(1)) > priceLow))
-                                {
-                                    priceLow = Float.parseFloat(priceRangeArr[0].substring(1));
-                                }
-                                if(UtilValidate.isEmpty(priceHigh) || (UtilValidate.isNotEmpty(priceHigh) && Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1)) < priceHigh))
-                                {
-                                    priceHigh = Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1));
-                                }
-                            }
-                        } 
-                        catch (NumberFormatException nexc) 
-                        {
-                            priceLow = null;
-                            priceHigh = null;
-                        }
                         // skip
                         continue;
                     }
-
                     // Customer Rating
                     if (filterGroupValue.toLowerCase().contains("customer_rating")) 
                     {
@@ -377,7 +360,7 @@ public class SolrEvents
                         // skip
                         continue;
                     }
-                    if(filterGroupValue.toLowerCase().contains("customer_rating") || filterGroupValue.toLowerCase().contains("price"))
+                    if(filterGroupValue.toLowerCase().contains("customer_rating"))
                     {
                         queryFacet += " AND " + filterGroupValue;
                     }
@@ -408,7 +391,7 @@ public class SolrEvents
                     queryFacetGroup += " AND " + entry.getKey()+": ("+entry.getValue()+")";
                 }
             }
-            queryFacet += " AND rowType:product";
+            queryFacet += " AND rowType:product AND -(-introductionDate:[* TO "+nowDate+"] AND introductionDate:[* TO *]) AND -(-salesDiscontinuationDate:["+nowDate+" TO *] AND salesDiscontinuationDate:[* TO *])";
 
             String queryFacetWithoutGroup = "";
             if(facetMultiSelectTrue)
@@ -416,20 +399,6 @@ public class SolrEvents
                 queryFacetWithoutGroup = queryFacet; 
             }
             queryFacet+=queryFacetGroup;
-
-            // Add filter query (Price)
-            if (UtilValidate.isNotEmpty(priceLow) && UtilValidate.isNotEmpty(priceHigh)) 
-            {
-                try 
-                {
-                    filterPriceQuery = "price:[" + (priceLow) + " " + priceHigh + "]" ;
-                } 
-                catch (Exception e) 
-                {
-                    Debug.logError(e, module);
-                }
-                queryFacet += " AND " + filterPriceQuery;
-            }
 
             // Add filter query (Customer Rating)
             if (UtilValidate.isNotEmpty(filterCustomerRatingQuery)) 
@@ -445,6 +414,7 @@ public class SolrEvents
                 queryFacet += " AND " + filterCustomerRatingQuery;
             }
 
+            List facetCatList = null;
             try 
             {
                 String productParentCategoryId="";
@@ -488,7 +458,7 @@ public class SolrEvents
                     facetCatGroups.add(0, SolrConstants.TYPE_PRODUCT_CATEGORY);
                     facetCatGroupDescriptions.put(SolrConstants.TYPE_PRODUCT_CATEGORY, facetProductCategoryLabel);
                 }
-                queryCatFacet += "rowType:product";
+                queryCatFacet += "rowType:product AND -(-introductionDate:[* TO "+nowDate+"] AND introductionDate:[* TO *]) AND -(-salesDiscontinuationDate:["+nowDate+" TO *] AND salesDiscontinuationDate:[* TO *])";
 
                 SolrQuery solrCatQueryFacet = new SolrQuery(queryCatFacet);
                 solrCatQueryFacet.setFacet(true);
@@ -511,7 +481,7 @@ public class SolrEvents
                 QueryResponse responseCatFacet = solr.query(solrCatQueryFacet);
                 List<FacetField> resultsFacet = responseCatFacet.getFacetFields();
                 RefinementsHelperSolr rh = new RefinementsHelperSolr(ccCat, delegator);
-                List facetCatList = (List) rh.processRefinements(resultsFacet);
+                facetCatList = (List) rh.processRefinements(resultsFacet);
                 request.setAttribute("facetCatList", facetCatList);
             }
             catch (Exception e) 
@@ -526,183 +496,13 @@ public class SolrEvents
             solrQueryFacet.setFacetMinCount(1);    
 
             String priceQueryFacet = queryFacet;
+            
             if(facetMultiSelectTrue)
             {
+            	//TO DO
                 priceLow = null;
                 priceHigh = null;
                 priceQueryFacet = queryFacetWithoutGroup; 
-            }
-
-            // Pricing Facets
-            if (UtilValidate.isEmpty(priceLow)) 
-            {
-                String queryPriceRangeLow = priceQueryFacet;
-                queryPriceRangeLow += " AND _val_:" + "\"" + "max(price, 99999)" + "\"";
-                SolrQuery solrQueryPriceRangeLow = new SolrQuery(queryPriceRangeLow);
-                solrQueryPriceRangeLow.addSortField("price", ORDER.asc);
-                solrQueryPriceRangeLow.setRows(Integer.valueOf(1));
-                QueryResponse responsePriceRangeLow = solr.query(solrQueryPriceRangeLow);
-                List<SolrIndexDocument> resultsPriceRangeLow = responsePriceRangeLow.getBeans(SolrIndexDocument.class);
-                if (UtilValidate.isNotEmpty(resultsPriceRangeLow)) 
-                {
-                    SolrIndexDocument solrIndexDocumentLow = resultsPriceRangeLow.get(0);
-                    priceLow = solrIndexDocumentLow.getPrice();
-                }
-            }
-
-            if (UtilValidate.isEmpty(priceHigh)) 
-            {
-                String queryPriceRangeHigh = priceQueryFacet;
-                queryPriceRangeHigh += " AND _val_:" + "\"" + "max(price,0)" + "\"";
-                SolrQuery solrQueryPriceRangeHigh = new SolrQuery(queryPriceRangeHigh);
-                solrQueryPriceRangeHigh.addSortField("price", ORDER.desc);
-                solrQueryPriceRangeHigh.setRows(Integer.valueOf(1));
-                QueryResponse responsePriceRangeHigh = solr.query(solrQueryPriceRangeHigh);
-                List<SolrIndexDocument> resultsPriceRangeHigh = responsePriceRangeHigh.getBeans(SolrIndexDocument.class);
-                if (UtilValidate.isNotEmpty(resultsPriceRangeHigh)) 
-                {
-                    SolrIndexDocument solrIndexDocumentHigh = resultsPriceRangeHigh.get(0);
-                    priceHigh = solrIndexDocumentHigh.getPrice();
-                }    
-            }
-
-            if (UtilValidate.isNotEmpty(priceLow) && UtilValidate.isNotEmpty(priceHigh)) 
-            {
-                float priceHighVal = priceHigh.floatValue();
-                float priceLowVal = priceLow.floatValue();
-
-                float priceRange = priceHighVal - priceLowVal;
-                float step = priceRange / 5;
-
-                float priceFacetRound=.01f;
-                String sPriceFacetRound =Util.getProductStoreParm(request, "FACET_PRICE_ROUND");
-                if (!UtilValidate.isEmpty(sPriceFacetRound))
-                {
-                    int iPriceFacetRound=2;
-                    try 
-                    {
-                        iPriceFacetRound = Integer.parseInt(sPriceFacetRound);
-                    }
-                    catch (Exception e)
-                    {
-                        iPriceFacetRound=2; 
-                    }
-                    if (iPriceFacetRound == 0)
-                    {
-                        priceFacetRound=1.0f;
-                    }
-                }
-
-                if (step > 10000)
-                {
-                    step = ((float)Math.ceil((step/1000))*1000);
-                }
-                else if (step > 1000)
-                {
-                    step = ((float)Math.ceil((step/100))*100);
-                }
-                else if (step > 100)
-                {
-                    step = ((float)Math.ceil((step/10))*10);
-                }
-                else
-                {
-                    step = ((float)Math.ceil((step/1))*1);
-                }
-
-                //incremental factor calculation as defined in BF Facet Price Calculator.xls
-                //CEIL HIGH PRICE
-                if (priceHighVal > 1000)
-                {
-                    priceHighVal= ((float)Math.ceil((priceHighVal/100))*100);
-                }
-                else if (priceHighVal > 100)
-                {
-                    priceHighVal= ((float)Math.ceil((priceHighVal/10))*10);
-                }
-                else
-                {
-                    priceHighVal= ((float)Math.ceil((priceHighVal/1))*1);
-                }
-
-                //FLOOR LOW PRICE
-                if (priceLowVal > 1000)
-                {
-                    priceLowVal= ((float)Math.floor((priceLowVal/100))*100);
-                }
-                else if (priceLowVal > 100)
-                {
-                    priceLowVal= ((float)Math.floor((priceLowVal/10))*10);
-                }
-                else
-                {
-                    priceLowVal= ((float)Math.floor((priceLowVal/1))*1);
-                }
-
-                float rangeLowVal = priceLowVal;
-                float rangeHighVal = priceLowVal + step;
-
-                int rangeCount = 0;
-                while (priceRange > 0) 
-                {
-                    String priceRangeQuery = priceQueryFacet;
-                    priceRangeQuery += " AND price:[" + (rangeLowVal) + " " + rangeHighVal + "]";
-                    SolrQuery solrPriceRangeQuery = new SolrQuery(priceRangeQuery);
-                    QueryResponse responsePriceRangeQuery = solr.query(solrPriceRangeQuery);
-                    List<SolrIndexDocument> resultsPriceRange = responsePriceRangeQuery.getBeans(SolrIndexDocument.class);
-                    if (UtilValidate.isNotEmpty(resultsPriceRange))
-                    {
-                        float tempPriceRange =  priceRange - step;
-                        float tempRangeLowVal = rangeHighVal + priceFacetRound;
-                        float tempRangeHighVal = rangeHighVal + step;
-                        while (tempPriceRange > 0) 
-                        {
-                            priceRangeQuery = priceQueryFacet;
-                            priceRangeQuery += " AND price:[" + (tempRangeLowVal) + " " + tempRangeHighVal + "]";
-                            solrPriceRangeQuery = new SolrQuery(priceRangeQuery);
-                            responsePriceRangeQuery = solr.query(solrPriceRangeQuery);
-                            resultsPriceRange = responsePriceRangeQuery.getBeans(SolrIndexDocument.class);
-                            if (UtilValidate.isNotEmpty(resultsPriceRange))
-                            {
-                                break;
-                            }
-                            else
-                            {
-                                tempPriceRange = tempPriceRange - step;
-                                tempRangeHighVal = tempRangeHighVal + step;
-                            }
-                        }
-                        priceRange = tempPriceRange + step;
-                        rangeHighVal = tempRangeHighVal - step;
-
-                        priceRange = priceRange - step;
-
-                        if(priceRange <= 0)
-                        {
-                            solrQueryFacet.addFacetQuery("price:[" + (rangeLowVal) + " " + priceHighVal + "]");
-                        }
-                        else
-                        {
-                            if(rangeCount == 0)
-                            {
-                                solrQueryFacet.addFacetQuery("price:[" + (priceLowVal) + " " + rangeHighVal + "]");
-                            }
-                            else
-                            {
-                                solrQueryFacet.addFacetQuery("price:[" + (rangeLowVal) + " " + rangeHighVal + "]");
-                            }
-                        }
-                        rangeLowVal = rangeHighVal + priceFacetRound;
-
-                        rangeHighVal = rangeHighVal + step;
-                    }
-                    else
-                    {
-                        priceRange = priceRange - step;
-                        rangeHighVal = rangeHighVal + step;
-                    }
-                    rangeCount++;
-                }
             }
 
             // Customer Rating Facets
@@ -833,7 +633,7 @@ public class SolrEvents
                 QueryResponse responseCatFacet = solr.query(solrQueryFacet);
                 List<FacetField> resultsCatFacet = responseCatFacet.getFacetFields();
                 RefinementsHelperSolr rhCatFacet = new RefinementsHelperSolr(cc, delegator);
-                List facetCatList = (List) rhCatFacet.processRefinements(resultsCatFacet);
+                facetCatList = (List) rhCatFacet.processRefinements(resultsCatFacet);
                 request.setAttribute("facetCatList", facetCatList);
                 solrQueryFacet.removeFacetField(SolrConstants.TYPE_PRODUCT_CATEGORY);
                 facetGroups.remove(SolrConstants.TYPE_PRODUCT_CATEGORY);
@@ -852,7 +652,8 @@ public class SolrEvents
                     solrQueryFacet.addFacetField(groupName);
                 }
             }
-            
+
+            List<SolrIndexDocument> resultsCompleteMultiSelect = FastList.newInstance();
             if(facetMultiSelectTrue)
             {
                 solrQueryFacet.setParam("q", queryFacetWithoutGroup);
@@ -868,14 +669,17 @@ public class SolrEvents
 
                 QueryResponse responseFacetCompleteFacetGroup = solr.query(solrQueryFacet);
 
-                List<SolrIndexDocument> resultsCompleteFacetGroup = responseFacetCompleteFacetGroup.getBeans(SolrIndexDocument.class);
+                resultsCompleteMultiSelect = responseFacetCompleteFacetGroup.getBeans(SolrIndexDocument.class);
+                
+                Map multiResultsFacetQueriesPrice = (Map) rhFacetGroup.getResultFacetQueryPrice(request, resultsCompleteMultiSelect, null);
                 
                 List multiFacetGroup = (List) rhFacetGroup.processRefinements(resultsFacetGroup, responseFacetCompleteFacetGroup.getResults());
-                List multiFacetPriceRange = (List) rhFacetGroup.processPriceRangeRefinements(responseFacetGroup.getFacetQuery(), resultsCompleteFacetGroup);
-                List multiFacetCustomerRating = (List) rhFacetGroup.processCustomerRatingRefinements(responseFacetGroup.getFacetQuery(), resultsCompleteFacetGroup);
+                List multiFacetPriceRange = (List) rhFacetGroup.processPriceRangeRefinements(multiResultsFacetQueriesPrice, resultsCompleteMultiSelect);
+                List multiFacetCustomerRating = (List) rhFacetGroup.processCustomerRatingRefinements(responseFacetGroup.getFacetQuery(), resultsCompleteMultiSelect);
                 request.setAttribute("multiFacetGroup", multiFacetGroup);
                 request.setAttribute("multiFacetCustomerRating", multiFacetCustomerRating);
                 request.setAttribute("multiFacetPriceRange", multiFacetPriceRange);
+                request.setAttribute("multiFacetListAll", buildAllFacetList(delegator, productCategoryId, facetCatList, multiFacetPriceRange, multiFacetCustomerRating, multiFacetGroup));
             }
             solrQueryFacet.setParam("q", queryFacet);
 
@@ -906,16 +710,23 @@ public class SolrEvents
             Map<String, Integer> resultsFacetQueries = responseFacet.getFacetQuery();
 
             List facetList = null;
-
-            facetList = (List) rh.processRefinements(resultsFacet, responseFacetComplete.getResults());
-
-            List facetListPriceRange = (List) rh.processPriceRangeRefinements(resultsFacetQueries, resultsComplete);
+            Map resultsFacetQueriesPrice = (Map) rh.getResultFacetQueryPrice(request, resultsComplete, resultsCompleteMultiSelect);
+            List facetListPriceRange = (List) rh.processPriceRangeRefinements(resultsFacetQueriesPrice, resultsComplete);
+            
+            
             List facetListCustomerRating = (List) rh.processCustomerRatingRefinements(resultsFacetQueries, resultsComplete);
+            
+            List newresultCompleteUnique = removeDuplicateEntry(resultsComplete);
+            List<SolrIndexDocument> newresultComplete = rh.filterResultsOnPriceRange(request, newresultCompleteUnique);
+            
+            List<SolrDocument> solrDocumentFiltered = getSolrDocumentFromIndexDoc(responseFacetComplete.getResults(), newresultComplete);
+            
+            facetList = (List) rh.processRefinements(resultsFacet, solrDocumentFiltered);
 
-            List newresultComplete = removeDuplicateEntry(resultsComplete);
-
-
-            List newresult = removeDuplicateEntry(results);
+            List newresultUnique = removeDuplicateEntry(results);
+            
+            List newresult = rh.filterResultsOnPriceRange(request, newresultUnique);
+            
             int startIndex = Integer.valueOf(NumberUtils.toInt(start, 0));
 
             if (newresultComplete.size() > (startIndex+pageSize)) 
@@ -927,6 +738,7 @@ public class SolrEvents
                 newresult = newresultComplete.subList(startIndex, newresultComplete.size());
             }
 
+            
             //used in resultsNavigation.ftl
             request.setAttribute("sortOptions", sortOptions);
             request.setAttribute("numFound", newresultComplete.size());
@@ -934,6 +746,7 @@ public class SolrEvents
             request.setAttribute("size", pageSize);
             request.setAttribute("pageSize", pageSize);
             request.setAttribute("solrPageSize", solrPageSize);
+            request.setAttribute("facetListAll", buildAllFacetList(delegator, productCategoryId, facetCatList, facetListPriceRange, facetListCustomerRating, facetList));
             request.setAttribute("facetList", facetList);
             request.setAttribute("facetListPriceRange", facetListPriceRange);
             request.setAttribute("facetListCustomerRating", facetListCustomerRating);
@@ -1000,7 +813,35 @@ public class SolrEvents
         }
         return newresult;
     }
-
+    
+    public static List<SolrDocument> getSolrDocumentFromIndexDoc(List<SolrDocument> results, List<SolrIndexDocument> resultsIndex) 
+    {
+        Iterator itr = results.iterator();
+        List newresult = FastList.newInstance();
+        try 
+        {
+            while(itr.hasNext()) 
+            {
+                SolrDocument solrDocument = (SolrDocument)itr.next();
+                Iterator itrIndex = resultsIndex.iterator();
+                while(itrIndex.hasNext()) 
+                {
+                	SolrIndexDocument solrIndexDocument = (SolrIndexDocument)itrIndex.next();
+                	if ((solrIndexDocument.getProductId()).toString().equals(solrDocument.getFieldValue("productId"))) 
+                    {
+                		newresult.add(solrDocument);
+                        //results.remove(itr.next());
+                    }
+                }
+            }
+        }
+        catch (Exception e) 
+        {
+            Debug.log(e.getMessage());
+        }
+        return newresult;
+    }
+    
     public static String solrSpellCheck(HttpServletRequest request, HttpServletResponse response) 
     {
         String solrServer = OSAFE_PROPS.getString("solrSearchServer");
@@ -1074,7 +915,8 @@ public class SolrEvents
                 params.set("terms.fl", "autocomplete_text");
                 params.set("omitHeader", "true");
                 params.set("terms.sort", "index");
-                params.set("terms.prefix", searchText);
+                params.set("terms.regex", searchText+".*");
+                params.set("terms.regex.flag", "case_insensitive");
                 QueryResponse responseSpell = solr.query(params);
 
                 List<Term> termsListParent = responseSpell.getTermsResponse().getTerms("autocomplete_text");
@@ -1448,6 +1290,8 @@ public class SolrEvents
     {
         try 
         {
+        	
+        	String nowDate = _sdf.format(UtilDateTime.nowDate());
             Delegator delegator = (Delegator) request.getAttribute("delegator");
 
             
@@ -1462,7 +1306,7 @@ public class SolrEvents
 
             Map<String, String> mProductStoreParms = FastMap.newInstance();
             
-            Map<String, Object> params = UtilHttp.getParameterMap(request);
+            Map<String, Object> params = UtilHttp.getCombinedMap(request);
             
             Map<String, String> searchTermsMap = new TreeMap<String, String>();
             
@@ -1563,29 +1407,25 @@ public class SolrEvents
                     }
                 }
             }
-           
-            
+            List<String> processedSearchItems = FastList.newInstance();
             for(Entry<String, Object> entry : params.entrySet()) 
             {
                 String parameterName = entry.getKey();
             	if (parameterName.toUpperCase().startsWith("SEARCHITEM"))
             	{
             		// Get text to use for a site search query
-                    String searchItem = Util.stripHTML(request.getParameter(parameterName));
+                    String searchItem = request.getParameter(parameterName);
                     if (UtilValidate.isEmpty(searchItem))
                     {
                     	searchItem = Util.stripHTML((String)request.getAttribute(parameterName));
                     }
                     String searchItemCompleteResultText = "";
-                    if (UtilValidate.isNotEmpty(searchItem))
+                    if (UtilValidate.isNotEmpty(searchItem)&& !processedSearchItems.contains(searchItem.toUpperCase()))
                     {
-                    	searchItem = URLEncoder.encode(searchItem, SolrConstants.DEFAULT_ENCODING);
-                    	//replace special characters with their solr encoded value
+                    	
+						searchItem = searchItem.toLowerCase();
                         
-                    	searchItem = searchItem.replace("\\", "%5C");
-                    	searchItem = searchItem.replace("\"", "%22");
-                    	searchItem = searchItem.replace(":", "%3A");
-                    	searchItem = searchItem.replace("&", "%26");
+						searchItem = replaceSpecialChar(searchItem);
                         
                     	searchItemCompleteResultText = searchItem;
                     	
@@ -1595,7 +1435,7 @@ public class SolrEvents
                         
                         searchItemCompleteResultText = searchItemUsingAnd;
                         
-                        QueryResponse responseFacet = getQueryResponse(searchItemUsingAnd, solr);
+                        QueryResponse responseFacet = getQueryResponse(searchItemUsingAnd, solr, nowDate);
                         
                         List<FacetField> resultsFacet = responseFacet.getFacetFields();
 
@@ -1603,36 +1443,28 @@ public class SolrEvents
                         
                         SolrDocumentList sdl = responseFacet.getResults();
                         
-                        //PERFORM OR SEARCH
-                        if (sdl.getNumFound() < 1) 
-                        {
-                        	responseFacet = getQueryResponse(searchItem, solr);
-                        	
-                        	resultsFacet = responseFacet.getFacetFields();
-
-                            results = responseFacet.getBeans(SolrIndexDocument.class);
-                            
-                            sdl = responseFacet.getResults();
-                        }
-                        
                         //PERFORM SPELL CHECK
                         boolean spellCheck = false;
+                        String searchItemSpellCheck = searchItem;
                         if (sdl.getNumFound() < 1) 
                         {
-                        	String searchItemSpellCheck = searchItem;
                         	ModifiableSolrParams solrParams = new ModifiableSolrParams();
                         	solrParams.set("qt", "/spell");
                         	solrParams.set("q", searchItem);
                             QueryResponse responseSpellCheck = solr.query(solrParams);
-                            if(!responseSpellCheck.getSpellCheckResponse().isCorrectlySpelled()) 
+                            if(responseSpellCheck.getSpellCheckResponse()!= null)
                             {
-                            	searchItemSpellCheck = responseSpellCheck.getSpellCheckResponse().getCollatedResult();
+                            	if(!responseSpellCheck.getSpellCheckResponse().isCorrectlySpelled()) 
+                                {
+                                	searchItemSpellCheck = responseSpellCheck.getSpellCheckResponse().getCollatedResult();
+                                }
                             }
                             
-                            if(UtilValidate.isNotEmpty(searchItemSpellCheck))
+                            if(UtilValidate.isNotEmpty(searchItemSpellCheck) && !processedSearchItems.contains(searchItemSpellCheck.toUpperCase()))
                             {
+                            	
                             	spellCheck = true;
-	                            responseFacet = getQueryResponse(searchItemSpellCheck, solr);
+	                            responseFacet = getQueryResponse(searchItemSpellCheck, solr, nowDate);
 	                        	
 	                        	resultsFacet = responseFacet.getFacetFields();
 	
@@ -1649,7 +1481,7 @@ public class SolrEvents
                         queryFacet = "searchText: (" + searchItemCompleteResultText +")";
                         
                         
-                        queryFacet += " AND rowType:product";
+                        queryFacet += " AND rowType:product AND -(-introductionDate:[* TO "+nowDate+"] AND introductionDate:[* TO *]) AND -(-salesDiscontinuationDate:["+nowDate+" TO *] AND salesDiscontinuationDate:[* TO *])";
                         
                         SolrQuery solrQueryFacet = new SolrQuery(queryFacet);
                         
@@ -1686,14 +1518,19 @@ public class SolrEvents
                         List newresultComplete = removeDuplicateEntry(resultsComplete);
 
                         resultShoppingListSearch.addAll(newresultComplete);
-                        if(spellCheck)
+                        if(!processedSearchItems.contains(searchItemSpellCheck.toUpperCase()))
                         {
-                        	searchTermsMap.put(parameterName, URLDecoder.decode(searchItemCompleteResultText, SolrConstants.DEFAULT_ENCODING));
+                        	if(spellCheck)
+                            {
+                            	searchTermsMap.put(parameterName, URLDecoder.decode(searchItemSpellCheck, SolrConstants.DEFAULT_ENCODING));
+                            }
+                            else
+                            {
+                            	searchTermsMap.put(parameterName, URLDecoder.decode(searchItem, SolrConstants.DEFAULT_ENCODING));
+                            }
+                        	processedSearchItems.add(searchItemSpellCheck.toUpperCase());
                         }
-                        else
-                        {
-                        	searchTermsMap.put(parameterName, URLDecoder.decode(searchItem, SolrConstants.DEFAULT_ENCODING));
-                        }
+                        
                     }
             	}
             }
@@ -1749,13 +1586,13 @@ public class SolrEvents
     }
     
     
-    public static QueryResponse getQueryResponse(String searchText, CommonsHttpSolrServer solr)
+    public static QueryResponse getQueryResponse(String searchText, CommonsHttpSolrServer solr, String nowDate)
     {
     	String queryFacet = null;
         
         queryFacet = "searchText: (" + searchText +")";
         
-        queryFacet += " AND rowType:product";
+        queryFacet += " AND rowType:product AND -(-introductionDate:[* "+nowDate+"] AND introductionDate:[* TO *]) AND -(-salesDiscontinuationDate:["+nowDate+" TO *] AND salesDiscontinuationDate:[* TO *])";
         
         SolrQuery solrQueryFacet = new SolrQuery(queryFacet);
         
@@ -1770,5 +1607,130 @@ public class SolrEvents
 		}
         
         return responseFacet;
+    }
+
+    /**
+     * Build the final facet list base on ProductFeatureCatGrpAppl entity
+     * @param delegator String xml file path
+     * @param productCategoryId String product category id
+     * @param facetCatList List of category facet
+     * @param facetListPriceRange List of price facet
+     * @param facetListCustomerRating List of customer rating facet
+     * @param facetList List of all other facet
+     * @return a new collection of facet.
+     */
+    public static Collection<GenericRefinement> buildAllFacetList(Delegator delegator, String productCategoryId, List<GenericRefinement> facetCatList, List<GenericRefinement> facetListPriceRange, List<GenericRefinement> facetListCustomerRating, List<GenericRefinement> facetList)
+    {
+        Collection<GenericRefinement> returnFacetList = new ArrayList<GenericRefinement>();
+        if (UtilValidate.isNotEmpty(productCategoryId))
+        {
+            List<GenericValue> productFeatureCatGrpApplList = null;
+            try 
+            {
+                List orderBy = UtilMisc.toList("sequenceNum");
+                productFeatureCatGrpApplList = delegator.findByAndCache("ProductFeatureCatGrpAppl", UtilMisc.toMap("productCategoryId", productCategoryId), orderBy);
+                List<GenericValue> filteredProductFeatureCatGrpApplList = EntityUtil.filterByCondition(productFeatureCatGrpApplList, EntityCondition.makeCondition("productFeatureGroupId", EntityOperator.IN, UtilMisc.toList("FACET_GROUP_CATEGORY", "FACET_GROUP_PRICE", "FACET_GROUP_RATINGS")));
+                if(UtilValidate.isEmpty(filteredProductFeatureCatGrpApplList))
+                {
+                    // Now Rearrange the seq for other
+                    if(UtilValidate.isNotEmpty(productFeatureCatGrpApplList))
+                    {
+                        Long count = 4L;
+                        for (GenericValue productFeatureCatGrpAppl : productFeatureCatGrpApplList)
+                        {
+                            productFeatureCatGrpAppl.put("sequenceNum", 10L * count);
+                            count++;
+                        }
+                    }
+
+                    GenericValue categoryFacetGv = delegator.makeValue("ProductFeatureCatGrpAppl");
+                    categoryFacetGv.put("productCategoryId", productCategoryId);
+                    categoryFacetGv.put("productFeatureGroupId", "FACET_GROUP_CATEGORY");
+                    categoryFacetGv.put("sequenceNum", 10L);
+                    productFeatureCatGrpApplList.add(categoryFacetGv);
+
+                    GenericValue priceFacetGv = delegator.makeValue("ProductFeatureCatGrpAppl");
+                    priceFacetGv.put("productCategoryId", productCategoryId);
+                    priceFacetGv.put("productFeatureGroupId", "FACET_GROUP_PRICE");
+                    priceFacetGv.put("sequenceNum", 20L);
+                    productFeatureCatGrpApplList.add(priceFacetGv);
+
+                    GenericValue ratingFacetGv = delegator.makeValue("ProductFeatureCatGrpAppl");
+                    ratingFacetGv.put("productCategoryId", productCategoryId);
+                    ratingFacetGv.put("productFeatureGroupId", "FACET_GROUP_RATINGS");
+                    ratingFacetGv.put("sequenceNum", 30L);
+                    productFeatureCatGrpApplList.add(ratingFacetGv);
+
+                    productFeatureCatGrpApplList = EntityUtil.orderBy(productFeatureCatGrpApplList, orderBy);
+                }
+                productFeatureCatGrpApplList = EntityUtil.filterByDate(productFeatureCatGrpApplList);
+
+            	if(UtilValidate.isNotEmpty(productFeatureCatGrpApplList))
+                {
+                    for (GenericValue productFeatureCatGrpAppl : productFeatureCatGrpApplList)
+                    {
+                        if ("FACET_GROUP_CATEGORY".equals(productFeatureCatGrpAppl.get("productFeatureGroupId")))
+                        {
+                            returnFacetList.addAll(facetCatList);
+                        }
+                        else if("FACET_GROUP_PRICE".equals(productFeatureCatGrpAppl.get("productFeatureGroupId")))
+                        {
+                            returnFacetList.addAll(facetListPriceRange);
+                        }
+                        else if("FACET_GROUP_RATINGS".equals(productFeatureCatGrpAppl.get("productFeatureGroupId")))
+                        {
+                            returnFacetList.addAll(facetListCustomerRating);
+                        }
+                        else
+                        {
+                        	for (GenericRefinement facet : facetList)
+                        	{
+                        		if (facet.getType().equals(productFeatureCatGrpAppl.get("productFeatureGroupId")))
+                        		{
+                        			returnFacetList.add(facet);
+                        			break;
+                        		}
+                        	}
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.logError(e.getMessage(), module);
+                returnFacetList = new ArrayList<GenericRefinement>();
+                returnFacetList.addAll(facetCatList);
+                returnFacetList.addAll(facetListPriceRange);
+                returnFacetList.addAll(facetListCustomerRating);
+                returnFacetList.addAll(facetList);
+            }
+        }
+        else
+        {
+            returnFacetList.addAll(facetCatList);
+            returnFacetList.addAll(facetListPriceRange);
+            returnFacetList.addAll(facetListCustomerRating);
+            returnFacetList.addAll(facetList);
+        }
+        return returnFacetList;
+    }
+    
+    private static String replaceSpecialChar(String str)
+    {
+    	if(UtilValidate.isNotEmpty(str))
+    	{
+    		str = str.replace("/", "%2F");
+    		str = str.replace("\\", "%5C");
+        	str = str.replace("\"", "%22");
+        	str = str.replace(":", "%3A");
+        	str = str.replace("&", "%26");
+        	str = str.replace("!", "%21");
+        	str = str.replace("^", "%5E");
+    	}
+    	else
+    	{
+    		return "";
+    	}
+    	return str;
     }
 }

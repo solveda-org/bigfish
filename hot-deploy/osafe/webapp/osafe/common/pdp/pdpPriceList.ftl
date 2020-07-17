@@ -6,6 +6,11 @@
 	    <label>${uiLabelMap.ListPriceCaption}</label>
 	    <span><@ofbizCurrency amount=pdpPriceMap.listPrice isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed! rounding=globalContext.currencyRounding/></span>
     </div>
+    
+    <div class="pdpPriceList" id="js_pdpPriceList_Virtual" style="display:none">
+	    <label>${uiLabelMap.ListPriceCaption}</label>
+	    <span><@ofbizCurrency amount=pdpPriceMap.listPrice isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed! rounding=globalContext.currencyRounding/></span>
+    </div>
   </li>
 
   <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>

@@ -144,7 +144,7 @@
     <div class="infoEntry">
         <div class="infoCaption"><label>${uiLabelMap.SeqNumCaption}</label></div>
         <div class="infoValue">
-            <input type="text" name="sequenceNum" value="${parameters.sequenceNum!sequenceNum?if_exists}" maxlength="10"/>
+            <input type="text" name="sequenceNum" value="${parameters.sequenceNum!sequenceNum?if_exists}" maxlength="9"/>
         </div>
         <div class="infoIcon">
             <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.CategorySequenceNumInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>

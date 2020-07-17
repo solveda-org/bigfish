@@ -15,6 +15,7 @@ import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
@@ -46,6 +47,7 @@ import org.ofbiz.service.ServiceUtil;
 import org.w3c.tidy.Tidy;
 
 import com.ibm.icu.text.NumberFormat;
+import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.Currency;
 import com.osafe.geo.OsafeGeo;
 
@@ -418,6 +420,47 @@ public class Util {
             return null;
         }
     }
+    
+    public static Timestamp getDaysForwardTimestamp(Timestamp timestampText, int daysForward) 
+    {
+        Timestamp retStamp = null;
+        
+        try 
+        {
+            Calendar tempCal = UtilDateTime.toCalendar(timestampText); 
+            tempCal.add(Calendar.DATE, daysForward);
+            retStamp = new Timestamp(tempCal.getTimeInMillis());
+            retStamp.setNanos(0);
+        }
+        catch (Exception e)
+        {
+            Debug.logError(e, e.getMessage(), module);
+        }
+        return retStamp;
+    }
+
+    public static Timestamp getMonthsForwardTimestamp(Timestamp timestampText, Integer monthsForward) 
+    {
+        return getMonthsForwardTimestamp(timestampText, monthsForward.intValue());
+    }
+    
+    public static Timestamp getMonthsForwardTimestamp(Timestamp timestampText, int monthsForward) 
+    {
+        Timestamp retStamp = null;
+        
+        try 
+        {
+            Calendar tempCal = UtilDateTime.toCalendar(timestampText); 
+            tempCal.add(Calendar.MONTH, monthsForward);
+            retStamp = new Timestamp(tempCal.getTimeInMillis());
+            retStamp.setNanos(0);
+        }
+        catch (Exception e)
+        {
+            Debug.logError(e, e.getMessage(), module);
+        }
+        return retStamp;
+    }
 
     public static Map<String, Object> getCountryGeoInfo(Delegator delegator, String geoId)
     {
@@ -625,6 +668,25 @@ public class Util {
     {
          return isProductStoreParmTrue(getProductStoreParm(request,parmName));
      }
+    
+    public static boolean isProductStoreParmFalse(String parmValue)
+    {
+         if (UtilValidate.isEmpty(parmValue)) 
+         {
+             return false;
+         }
+         if ("FALSE".equals(parmValue.trim().toUpperCase()))
+         {
+             return true;
+         }
+         return false;
+     }
+    
+    public static boolean isProductStoreParmFalse(ServletRequest request,String parmName)
+    {
+         return isProductStoreParmFalse(getProductStoreParm(request,parmName));
+     }
+    
     /**
      * Return a string formatted as format 
      * if format is wrong or null return dateString for the default locale
@@ -928,6 +990,15 @@ public class Util {
         return StringUtil.removeRegex(str, "[^a-zA-Z0-9]");
     }
     
+    public static String removeNonNumeric(String str)
+    {
+        if (UtilValidate.isEmpty(str))
+        {
+        	return str;
+       	}
+        return StringUtil.removeRegex(str, "[^0-9]");
+    }
+    
     /** String with in the given limit
      * @param String that need to refactor
      * @param String length
@@ -994,6 +1065,70 @@ public class Util {
         text = text.replaceAll("(\r\n|\r|\n|\n\r)", " ");
         text = (text.replace("\"","\\\"")).replace("\'", "\\'");
         return StringUtil.wrapString(text).toString();
+    }
+    
+    public static String getMaskedAccountField(String sValue)
+    {
+        String sReturn = sValue;
+         try {
+            if (sReturn != null)
+            {
+                    int iSize = sValue.length() -4;
+                    if (iSize > 0)
+                    {
+                        StringBuffer sbReturn = new StringBuffer();
+                        for (int i=0; i < iSize;i++)
+                        {
+                            sbReturn.append("*");
+                        }
+                        sbReturn.append(sValue.substring(iSize));
+                        sReturn=sbReturn.toString();
+                    }
+            }
+
+         }
+           catch (Exception e) {
+               
+           }
+       
+        return sReturn;
+        
+    }
+    
+    public static long stringToTimestamp(String formatDate)
+    {
+        SimpleDateFormat dyFormat;
+        if(formatDate != null && formatDate.indexOf(":") != -1)
+        {
+            dyFormat = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
+        }
+        else
+        {
+            dyFormat = new SimpleDateFormat("MM/dd/yy");
+        }
+        
+        try 
+        {
+            return dyFormat.parse(formatDate).getTime();
+        } 
+        catch (ParseException e) 
+        {
+
+        }
+
+        return 0;
+    }
+    
+    public static String timeStampToTimeString(Timestamp tStamp)
+    {
+        return timeStampToDateString(tStamp, "HH:mm:ss");
+    }
+    
+    public static String timeStampToDateString(Timestamp tStamp,String sFormat)
+    {
+        SimpleDateFormat dyFormat = new SimpleDateFormat(sFormat);
+
+        return dyFormat.format(tStamp);
     }
     
 }

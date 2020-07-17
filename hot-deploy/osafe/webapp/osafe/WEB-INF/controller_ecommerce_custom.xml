@@ -1,3 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
+
+	<request-map uri="addOuting">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="addOuting"/>
+    </request-map>
+	
+	<request-map uri="createOuting">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/EZGolfEvents.xml" invoke="createOuting"/>
+        <response name="success" type="view" value="main"/>
+        <response name="error" type="view" value="addOuting"/>
+    </request-map>
+	
+	<!-- =============VIEW-MAP =============== -->
+    <view-map name="addOuting" type="screen" page="component://osafe/widget/EZGolfScreens.xml#addOuting"/>
+
+
 </site-conf>

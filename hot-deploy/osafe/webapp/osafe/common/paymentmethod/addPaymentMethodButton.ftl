@@ -1,3 +1,3 @@
 <div class="${request.getAttribute("attributeClass")!}">
-    <a href="<@ofbizUrl>eCommerceCreateCreditCardInfo</@ofbizUrl>" class="standardBtn action"><span>${uiLabelMap.AddNewCardBtn}</span></a>
+    <a href="<@ofbizUrl>${createPaymentMethodAction!""}</@ofbizUrl>" class="standardBtn action"><span>${createPaymentMethodBtn!}</span></a>
 </div>

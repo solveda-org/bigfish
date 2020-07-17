@@ -10,9 +10,11 @@ import javolution.util.FastList;
 import org.apache.commons.lang.StringUtils;
 import com.osafe.util.Util;
 import java.util.Map;
+import java.net.URLDecoder;
+import com.osafe.solr.SolrConstants;
 
-String searchText = com.osafe.util.Util.stripHTML(parameters.searchText);
-String searchTextSpellCheck = com.osafe.util.Util.stripHTML(parameters.searchTextSpellCheck);
+String searchText = URLDecoder.decode(com.osafe.util.Util.stripHTML(parameters.searchText), SolrConstants.DEFAULT_ENCODING);
+String searchTextSpellCheck = URLDecoder.decode(com.osafe.util.Util.stripHTML(parameters.searchTextSpellCheck), SolrConstants.DEFAULT_ENCODING);
 if (UtilValidate.isNotEmpty(searchText))
 {
 	SearchResultsPageTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsNotFoundTitle", UtilMisc.toMap("searchText", searchText), locale)

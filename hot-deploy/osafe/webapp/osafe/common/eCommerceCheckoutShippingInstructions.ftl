@@ -4,6 +4,7 @@
     <#assign shippingInstructions = shoppingCart.getShippingInstructions()?if_exists>
 </#if>
 <div class="${request.getAttribute("attributeClass")!}">
+    <div class="entryForm shippingInstructions">
     <div class="entry">
       <label>${uiLabelMap.ShippingInstructionsLabel}</label>
         <div class="entryField">
@@ -13,4 +14,5 @@
 		      <@fieldErrors fieldName="shipping_instructions"/>
 		</div>
     </div>
+   </div>
 </div>

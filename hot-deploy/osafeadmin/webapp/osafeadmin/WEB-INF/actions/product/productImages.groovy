@@ -47,4 +47,11 @@ if (UtilValidate.isNotEmpty(parameters.productId))
     	maxAltImages.add(imgNo.toString());
     }
     context.maxAltImages = maxAltImages;
+    
+    maxAattachs = FastList.newInstance();
+    for(attachNo = 1; attachNo <= 3; attachNo++)
+    {
+    	maxAattachs.add(attachNo.toString());
+    }
+    context.maxAattachs = maxAattachs;
 }

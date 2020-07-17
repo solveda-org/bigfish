@@ -78,7 +78,7 @@ under the License.
  
           <#if osafeSuccessMessageList?has_content>
                 <#list osafeSuccessMessageList as eventMsg>
-                    <p class="eventMessage">${eventMsg}</p>
+                    <p class="eventMessage">${StringUtil.wrapString(eventMsg)}</p>
                 </#list>
           </#if> 
       </div>
@@ -87,7 +87,7 @@ under the License.
 <#if responseMessage?has_content>
   <div class="content-messages eCommerceSuccessMessage">
      <span class="checkMarkIcon eventImage"></span>
-        <p class="eventMessage">${responseMessage}</p>
+        <p class="eventMessage">${StringUtil.wrapString(responseMessage)}</p>
   </div>
 </#if>
 
@@ -96,11 +96,11 @@ under the License.
   <div class="content-messages eCommerceWarningMessage">
      <span class="checkMarkIcon warningImage"></span>
     <#if warningMessage?has_content>
-      <p class="warningMessage">${warningMessage}</p>
+      <p class="warningMessage">${StringUtil.wrapString(warningMessage)}</p>
     </#if>
     <#if warningMessageList?has_content>
       <#list warningMessageList as warningMsg>
-        <p class="warningMessage">${warningMsg}</p>
+        <p class="warningMessage">${StringUtil.wrapString(warningMsg)}</p>
       </#list>
     </#if>
   </div>
@@ -111,11 +111,11 @@ under the License.
   <div class="content-messages eCommerceInfoMessage">
      <span class="infoMessageIcon infoIcon"></span>
     <#if infoMessage?has_content>
-      <p class="infoMessage">${infoMessage}</p>
+      <p class="infoMessage">${StringUtil.wrapString(infoMessage)}</p>
     </#if>
     <#if infoMessageList?has_content>
       <#list infoMessageList as infoMsg>
-        <p class="infoMessage">${infoMsg}</p>
+        <p class="infoMessage">${StringUtil.wrapString(infoMsg)}</p>
       </#list>
     </#if>
   </div>

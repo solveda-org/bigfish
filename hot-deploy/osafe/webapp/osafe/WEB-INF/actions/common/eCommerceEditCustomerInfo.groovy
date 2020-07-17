@@ -17,7 +17,7 @@ if (UtilValidate.isNotEmpty(userLogin))
     party = userLogin.getRelatedOneCache("Party");
     person = party.getRelatedOneCache("Person");
     context.person=person;
-    partyId=person.partyId
+    partyId=party.partyId;
     context.partyId = partyId;
     partyAttributes = party.getRelatedCache("PartyAttribute");
     if (UtilValidate.isNotEmpty(partyAttributes))

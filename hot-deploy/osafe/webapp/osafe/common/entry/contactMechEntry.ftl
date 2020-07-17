@@ -12,6 +12,9 @@
 <input type="hidden" name="contactMechPurposeTypeId" value="${requestParameters.contactMechPurposeTypeId!"SHIPPING_LOCATION"}"/>
 <input type="hidden" name="DONE_PAGE" value="${requestParameters.DONE_PAGE!}"/>
 <input type="hidden" name="checkoutpage" value="${requestParameters.checkoutpage!}"/>
+<#if requestParameters.shoppingListId?exists && requestParameters.shoppingListId?has_content>
+	<input type="hidden" name="shoppingListId" value="${requestParameters.shoppingListId!}"/>
+</#if>
 <div id="js_${fieldPurpose?if_exists}_ADDRESS_ENTRY" class="displayBox">
     <#include "component://osafe/webapp/osafe/common/entry/commonAddressEntry.ftl"/>
 </div>

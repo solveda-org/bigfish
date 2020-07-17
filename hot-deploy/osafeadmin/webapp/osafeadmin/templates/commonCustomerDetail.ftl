@@ -81,6 +81,18 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
         </div>
     </div>
 </#if>
+<#if organizationEmployeeInfoBoxHeading?exists && organizationEmployeeInfoBoxHeading?has_content>
+    <div class="displayListBox customerAttributesInfo">
+        <div class="header">
+            <h2>
+                ${organizationEmployeeInfoBoxHeading}
+            </h2>
+        </div>
+        <div class="boxBody">
+            ${sections.render('organizationEmployeeInfoBoxBody')?if_exists}
+        </div>
+    </div>
+</#if>
 <div class="displayBox footerInfo">
     <div>
           ${sections.render('footerBoxBody')}
@@ -89,5 +101,7 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
       ${sections.render('commonDetailLinkButton')!}
     </div>
 </div>
+${sections.render('commonConfirm')!}
 ${sections.render('capturePlusJs')?if_exists}
+${sections.render('commonLookup')?if_exists}
 </form>

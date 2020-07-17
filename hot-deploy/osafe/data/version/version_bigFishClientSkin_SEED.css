@@ -2290,8 +2290,8 @@ table#rateObj2Filled {
     color: #666666;
 }
 
-.tooltipBottomArrow {
-    background: url("/osafe_theme/images/user_content/images/tooltipBottomArrow.png") no-repeat scroll 5px 0 transparent;
+.tooltipBottomLeftArrow {
+    background: url("/osafe_theme/images/user_content/images/tooltipBottomLeftArrow.png") no-repeat scroll 5px 0 transparent;
     background-repeat: no-repeat;
     clear: both;
     height: 13px;
@@ -2300,8 +2300,8 @@ table#rateObj2Filled {
     width: auto;
 }
 
-.tooltipTopArrow {
-    background: url("/osafe_theme/images/user_content/images/tooltipTopArrow.png") no-repeat scroll 5px 0 transparent;
+.tooltipTopLeftArrow {
+    background: url("/osafe_theme/images/user_content/images/tooltipTopLeftArrow.png") no-repeat scroll 5px 0 transparent;
     background-repeat: no-repeat;
     clear: both;
     height: 13px;
@@ -3743,6 +3743,16 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-datepicker-rtl .ui-datepicker-group { float:right; }
 .ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
 .ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width:0; border-left-width:1px; }
+
+button.ui-datepicker-trigger {
+    border: medium none;
+    cursor: pointer;
+    height: 15px;
+    margin: 0 0 0 5px;
+    position: relative;
+    top: 3px;
+    width: 16px;
+}
 
 /* IE6 IFRAME FIX (taken from datepicker 1.5.3 */
 .ui-datepicker-cover {

@@ -311,6 +311,7 @@ if(UtilValidate.isNotEmpty(shoppingCart))
 	//Adjustments are pulled in the FTL
 	try
 	{
+		ShippingEvents.getShipEstimate(request, response);
 		shippingAddress = shoppingCart.getShippingAddress();
 		if (chosenShippingMethod.equals("NO_SHIPPING@_NA_") || (UtilValidate.isNotEmpty(shippingAddress) && (UtilValidate.isNotEmpty(shippingAddress.get("countryGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("stateProvinceGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("postalCodeGeoId")))))
 		{
@@ -358,7 +359,7 @@ if(UtilValidate.isNotEmpty(shoppingCart))
 					promoCodesEntered = shoppingCart.getProductPromoCodesEntered();
 					if(UtilValidate.isNotEmpty(promoCodesEntered))
 					{
-						for (GenericValue promoCodeEntered : promoCodesEntered)
+						for (String promoCodeEntered : promoCodesEntered)
 						{
 							if(UtilValidate.isNotEmpty(promoCodeEntered))
 							{

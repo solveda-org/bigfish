@@ -51,6 +51,9 @@ public class ProductDocument implements Serializable {
 
     private String productFacilityIds;
     private String introductionDate;
+    private String salesDiscontinuationDate;
+    private String manufacturerName;
+    private String manufacturerIdNo;
 
     public ProductDocument() {
         super();
@@ -329,4 +332,28 @@ public class ProductDocument implements Serializable {
     public void setIntroductionDate(String introductionDate) {
         this.introductionDate = introductionDate;
     }
+    
+    public String getSalesDiscontinuationDate() {
+        return salesDiscontinuationDate;
+    }
+
+    public void setSalesDiscontinuationDate(String salesDiscontinuationDate) {
+        this.salesDiscontinuationDate = salesDiscontinuationDate;
+    }
+
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
+	}
+
+	public String getManufacturerName() {
+		return manufacturerName;
+	}
+
+	public void setManufacturerIdNo(String manufacturerIdNo) {
+		this.manufacturerIdNo = manufacturerIdNo;
+	}
+
+	public String getManufacturerIdNo() {
+		return manufacturerIdNo;
+	}
 }

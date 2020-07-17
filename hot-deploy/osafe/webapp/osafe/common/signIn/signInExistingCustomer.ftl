@@ -1,7 +1,7 @@
 <div class="${request.getAttribute("attributeClass")!}<#if className?exists && className?has_content> ${className}</#if>">
   <div class="displayBox">
     <h3>${uiLabelMap.ReturningCustomerLoginHeading?if_exists}</h3>
-    <form method="post" action="<@ofbizUrl>validateLogin${previousParams!""}</@ofbizUrl>" id="loginform"  name="loginform" class="entryForm">
+    <form method="post" action="<@ofbizUrl>validateLogin${previousParams!""}</@ofbizUrl>" id="loginform"  name="loginform">
             <p class="instructions">${uiLabelMap.ReturningCustomerLoginInfo!""}</p>
           <ul class="displayActionList ${request.getAttribute("attributeClass")!}">
 		      <li>

@@ -627,6 +627,7 @@ public class EBSPaymentServices
            result.put("authResult", Boolean.valueOf(false));
            result.put("processAmount", BigDecimal.ZERO);
            result.put("authMessage", UtilXml.elementAttribute(outputElement, "error", null));
+           result.put("authRefNum", errorCode);
         }
        else
        {
@@ -660,7 +661,8 @@ public class EBSPaymentServices
       {
           result.put("releaseResult", Boolean.valueOf(true)); //because EBS integrated as auto capture; set false if auto capture is not integrated
           result.put("releaseAmount", BigDecimal.ZERO);
-           result.put("releaseMessage", UtilXml.elementAttribute(outputElement, "error", null));
+          result.put("releaseMessage", UtilXml.elementAttribute(outputElement, "error", null));
+          result.put("releaseRefNum", errorCode);
       }
       else
       {
@@ -696,6 +698,7 @@ public class EBSPaymentServices
           result.put("captureResult", Boolean.valueOf(false));
           result.put("captureAmount", BigDecimal.ZERO);
           result.put("captureMessage", UtilXml.elementAttribute(outputElement, "error", null));
+          result.put("captureRefNum", errorCode);
       }
       else
       {
@@ -729,7 +732,8 @@ public class EBSPaymentServices
       {
           result.put("refundResult", Boolean.valueOf(false));
           result.put("refundAmount", BigDecimal.ZERO);
-           result.put("refundMessage", UtilXml.elementAttribute(outputElement, "error", null));
+          result.put("refundMessage", UtilXml.elementAttribute(outputElement, "error", null));
+          result.put("refundRefNum",errorCode);
       }
       else
       {

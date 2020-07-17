@@ -19,6 +19,14 @@
         <call-simple-method method-name="sendCustRequestEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
     </simple-method>
 
+    <simple-method method-name="submitRequestQuote" short-description="submit Request Quote" login-required="false" use-transaction="false">
+        <call-simple-method method-name="validateRequestQuote" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <check-errors/>
+        
+        <call-simple-method method-name="submitCustRequest"/>
+        <call-simple-method method-name="sendCustRequestEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
+    </simple-method>
+
     <simple-method method-name="submitCustRequest" short-description="create Customer Request Attribute and send mail" login-required="false">
         <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
             <field-map field-name="userLoginId" value="system"/>
@@ -135,6 +143,11 @@
            <if-not-empty field="custRequestContext.orderIdNumber">
                 <set field="custRequestAttr.attrName" value="ORDER_NUMBER"/>
                 <set field="custRequestAttr.attrValue" from-field="custRequestContext.orderIdNumber"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.partNumber">
+                <set field="custRequestAttr.attrName" value="SKU_OR_PART"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.partNumber"/>
                 <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
             </if-not-empty>
            <if-not-empty field="custRequestContext.contactPhoneArea">

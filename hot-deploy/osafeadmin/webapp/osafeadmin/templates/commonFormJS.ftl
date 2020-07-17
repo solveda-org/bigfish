@@ -2,11 +2,16 @@
     jQuery(document).ready(function () 
     {
         //Prevents the Page to Hit the Enter Key
-        jQuery(window).keydown(function(event){
-		    if(event.keyCode == 13) {
-		      event.preventDefault();
-		      return false;
-		    }
+        jQuery(window).keydown(function(event)
+        {
+            if(event.target.type != 'textarea')
+            {
+                if(event.keyCode == 13) 
+                {
+		            event.preventDefault();
+		            return false;
+		        }
+            }
 		});
         
         if(jQuery('#ckeditor').length)
@@ -303,6 +308,11 @@
         if(jQuery('#shipByDate').length && (jQuery('#shipByDate') != "" || jQuery('#shipByDate') != null))
         {
             validateInput('#shipByDate', '+DATE', '${uiLabelMap.OrderShipDateWarning}')
+        }
+
+        if (jQuery('.priceRuleInputParamEnumId').length) 
+        {
+            showLookupIconPageLoad();
         }
     });
 
@@ -1462,6 +1472,7 @@
     function addHtmlContent(indexPos, table) {
         var newRow = jQuery('#newRow tr').clone();
         jQuery(newRow).find('input').removeAttr('disabled');
+        jQuery(newRow).find('select').removeAttr('disabled');
         jQuery(jQuery(table).find('tr')[parseInt(indexPos)-1]).after(newRow);
         setIndexPos(table);
     }
@@ -1480,9 +1491,18 @@
                 attrId = inputs[j].getAttribute("id");
                 inputs[j].setAttribute("name",attrId+"_"+i)
             }
+            var selects = rows[i].getElementsByTagName('select');
+            for (k = 0; k < selects.length; k++) {
+                attrId = selects[k].getAttribute("id");
+                selects[k].setAttribute("name",attrId+"_"+i)
+            }
             var anchors = rows[i].getElementsByTagName('a');
-            if(anchors.length == 3)  {  
-                    var deleteAnchor = anchors[0];
+            if(anchors.length >= 3)  {  
+                    var index = 0
+                    if(anchors.length > 3) {
+                        index = 1
+                    }
+                    var deleteAnchor = anchors[index++];
                     if (jQuery(deleteAnchor).hasClass('normalAnchor'))
                     {
                     } else
@@ -1492,12 +1512,12 @@
                         deleteAnchor.setAttribute("href", "javascript:setNewRowNo('"+i+"');"+deleteTagSecondMethod);
                     }
                     
-                    var insertBeforeAnchor = anchors[1];
+                    var insertBeforeAnchor = anchors[index++];
                     var insertBeforeTagSecondMethodIndex = insertBeforeAnchor.getAttribute("href").indexOf(";");
                     var insertBeforeTagSecondMethod = insertBeforeAnchor.getAttribute("href").substring(insertBeforeTagSecondMethodIndex+1,insertBeforeAnchor.getAttribute("href").length);
                     insertBeforeAnchor.setAttribute("href", "javascript:setNewRowNo('"+i+"');"+insertBeforeTagSecondMethod);
                     
-                    var insertAfterAnchor = anchors[2];
+                    var insertAfterAnchor = anchors[index++];
                     var insertAfterTagSecondMethodIndex = insertAfterAnchor.getAttribute("href").indexOf(";");
                     var insertAfterTagSecondMethod = insertAfterAnchor.getAttribute("href").substring(insertAfterTagSecondMethodIndex+1,insertAfterAnchor.getAttribute("href").length);
                     insertAfterAnchor.setAttribute("href", "javascript:setNewRowNo('"+(i+1)+"');"+insertAfterTagSecondMethod);
@@ -2069,6 +2089,12 @@ function deleteCategoryMemberRow(categoryName, parentCategoryName)
     displayDialogBox();
 }
 
+function deleteOrganizationCustomerRow(partyId, customerName)
+{
+    jQuery('#confirmDeleteTxt').html('${confirmDialogText!""} '+customerName+'?');
+    displayDialogBox();
+}
+
 function removeCategoryMemberRow(tableId){
     var table=document.getElementById(tableId);
     var inputRow = table.getElementsByTagName('tr');
@@ -2077,6 +2103,16 @@ function removeCategoryMemberRow(tableId){
     hideDialog('#dialog', '#displayDialog');
     setTableIndexPos(table);
 }
+
+function removeOrganizationCustomerRow(tableId){
+    var table=document.getElementById(tableId);
+    var inputRow = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    table.deleteRow(indexPos);
+    hideDialog('#dialog', '#displayDialog');
+    setTableIndexPos(table);
+}
+
 function addCategoryMemberRow(tableId) 
 {
     var table = document.getElementById(tableId);
@@ -2088,6 +2124,22 @@ function addCategoryMemberRow(tableId)
     productCategoryName = jQuery('#productCategoryName').val(); 
     
     jQuery.get('<@ofbizUrl>addCategoryMemberRow?productCategoryId='+productCategoryId+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+        jQuery(row).replaceWith(data);
+        setTableIndexPos(table);
+    });
+}
+
+function addOrganizationCustomerRow(tableId) 
+{
+    var table = document.getElementById(tableId);
+    var rows = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    var row = table.insertRow(indexPos);
+    
+    organizationCustomerPartyId =  jQuery('#organizationCustomerPartyId').val();
+    organizationCustomerPartyTypeId = jQuery('#organizationCustomerPartyTypeId').val(); 
+    
+    jQuery.get('<@ofbizUrl>addOrganizationCustomerRow?organizationCustomerPartyId='+organizationCustomerPartyId+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
         jQuery(row).replaceWith(data);
         setTableIndexPos(table);
     });
@@ -2160,29 +2212,45 @@ function addPermissionRow(tableId)
 function setTableIndexPos(table)
 {
     var rows = table.getElementsByTagName('tr');
-    for (i = 1; i < rows.length; i++) {
+    for (i = 1; i < rows.length; i++) 
+    {
         var columns = rows[i].getElementsByTagName('td');
-        for (j = 0; j < columns.length; j++) {
-            if(j ==  (columns.length-1)) {
+        for (j = 0; j < columns.length; j++) 
+        {
+            if(j == (columns.length-1)) 
+            {
                 var anchors = columns[j].getElementsByTagName('a');
-                if(anchors.length == 3) {
+                if(anchors.length > 1) 
+                {
                     var deleteAnchor = anchors[0];
                     var deleteTagSecondMethodIndex = deleteAnchor.getAttribute("href").indexOf(";");
                     var deleteTagSecondMethod = deleteAnchor.getAttribute("href").substring(deleteTagSecondMethodIndex+1,deleteAnchor.getAttribute("href").length);
                     deleteAnchor.setAttribute("href", "javascript:setRowNo('"+i+"');"+deleteTagSecondMethod);
                     
-                    var insertBeforeAnchor = anchors[1];
-                    var insertBeforeTagSecondMethodIndex = insertBeforeAnchor.getAttribute("href").indexOf(";");
-                    var insertBeforeTagSecondMethod = insertBeforeAnchor.getAttribute("href").substring(insertBeforeTagSecondMethodIndex+1,insertBeforeAnchor.getAttribute("href").length);
-                    insertBeforeAnchor.setAttribute("href", "javascript:setRowNo('"+i+"');"+insertBeforeTagSecondMethod);
-                    
-                    var insertAfterAnchor = anchors[2];
-                    var insertAfterTagSecondMethodIndex = insertAfterAnchor.getAttribute("href").indexOf(";");
-                    var insertAfterTagSecondMethod = insertAfterAnchor.getAttribute("href").substring(insertAfterTagSecondMethodIndex+1,insertAfterAnchor.getAttribute("href").length);
-                    insertAfterAnchor.setAttribute("href", "javascript:setRowNo('"+(i+1)+"');"+insertAfterTagSecondMethod);
+                    if(jQuery(anchors[1]).length)
+                    {
+                        var insertBeforeAnchor = anchors[1];
+	                    var insertBeforeTagSecondMethodIndex = insertBeforeAnchor.getAttribute("href").indexOf(";");
+	                    if(insertBeforeTagSecondMethodIndex != -1)
+	                    {
+	                        var insertBeforeTagSecondMethod = insertBeforeAnchor.getAttribute("href").substring(insertBeforeTagSecondMethodIndex+1,insertBeforeAnchor.getAttribute("href").length);
+	                    	insertBeforeAnchor.setAttribute("href", "javascript:setRowNo('"+i+"');"+insertBeforeTagSecondMethod);
+	                    }
+                    }
+                    if(jQuery(anchors[2]).length)
+                    {
+                        var insertAfterAnchor = anchors[2];
+	                    var insertAfterTagSecondMethodIndex = insertAfterAnchor.getAttribute("href").indexOf(";");
+	                    if(insertAfterTagSecondMethodIndex != -1)
+	                    {
+	                        var insertAfterTagSecondMethod = insertAfterAnchor.getAttribute("href").substring(insertAfterTagSecondMethodIndex+1,insertAfterAnchor.getAttribute("href").length);
+	                    	insertAfterAnchor.setAttribute("href", "javascript:setRowNo('"+(i+1)+"');"+insertAfterTagSecondMethod);
+	                    }
+                    }
                 }
                     
-                if(anchors.length == 1) {
+                if(anchors.length == 1) 
+                {
                     var insertBeforeAnchor = anchors[0];
                     var insertBeforeTagSecondMethodIndex = insertBeforeAnchor.getAttribute("href").indexOf(";");
                     var insertBeforeTagSecondMethod = insertBeforeAnchor.getAttribute("href").substring(insertBeforeTagSecondMethodIndex+1,insertBeforeAnchor.getAttribute("href").length);
@@ -2201,7 +2269,22 @@ function setTableIndexPos(table)
     } else {
        jQuery('#addIconRow').show();
     }
-    $('totalRows').value = rows.length-2;
+    if(jQuery('#addIconRow').length)
+    {
+        $('totalRows').value = rows.length-2;
+    }
+    else
+    {
+        $('totalRows').value = rows.length-1;
+    }
+    //Set Rowno on Add Button
+    if(jQuery('.addCustomerRow').length)
+    {
+        var addBtnAnchor = jQuery('.addCustomerRow').find('a');
+	    var insertBeforeTagSecondMethodIndex = jQuery(addBtnAnchor).attr("href").indexOf(";");
+	    var insertBeforeTagSecondMethod = jQuery(addBtnAnchor).attr("href").substring(insertBeforeTagSecondMethodIndex+1,jQuery(addBtnAnchor).attr("href").length);
+	    jQuery(addBtnAnchor).attr("href", "javascript:setRowNo('"+rows.length+"');"+insertBeforeTagSecondMethod)
+    }
 }
 function setRowNo(rowNo) {
     jQuery('#rowNo').val(rowNo);
@@ -2641,5 +2724,84 @@ function setRowNo(rowNo) {
             jQuery(element).parent().append("<div class='inputWarning'>"+warningMessage+"</div>");
         }
     }
+
+    function showLookupIconPageLoad()
+    {
+        jQuery('.priceRuleInputParamEnumId').each(function(){
+            showLookupIcon(this);
+        });
+    }
+
+    function showLookupIcon(elm)
+    {
+        var value = jQuery(elm).val();
+        var hypenIndex = jQuery(elm).attr('name').indexOf("_");
+        var rowNo = jQuery(elm).attr('name').substring(hypenIndex+1);
+
+        if (isNotEmpty(rowNo)) 
+        {
+            var condValueElement = jQuery(elm).parent().parent().find('#condValue');
+            var appendTdElement = condValueElement.parent();
     
+            var previewIconAnchor = document.createElement("A");
+            var previewIconSpan = new Element('SPAN');
+            previewIconSpan.setAttribute("class", "previewIcon");
+            previewIconAnchor.appendChild(previewIconSpan)
+
+            // First remove the lookup icon if exist on page.
+            if(appendTdElement.find('a').length)
+            {
+                appendTdElement.find('a').remove();
+            }
+    
+            if (value == "PRIP_PRODUCT_ID") 
+            {
+                // add product look up
+                previewIconAnchor.setAttribute("href", "javascript:openLookup(document.${detailFormName!}.condValue_"+rowNo+", document.${detailFormName!}.productName, 'lookupProduct','500','700','center','true')");
+                appendTdElement.append(previewIconAnchor);
+            }
+            else if (value == "PRIP_PROD_CAT_ID") 
+            {
+                // add category look up
+                previewIconAnchor.setAttribute("href", "javascript:openLookup(document.${detailFormName!}.condValue_"+rowNo+", document.${detailFormName!}.categoryName, 'lookupCategory','500','700','center','true')");
+                appendTdElement.append(previewIconAnchor);
+            }
+            else if (value == "PRIP_PARTY_ID") 
+            {
+                // add customer look up
+                previewIconAnchor.setAttribute("href", "javascript:openLookup(document.${detailFormName!}.condValue_"+rowNo+", document.${detailFormName!}.customerName, 'lookupCustomer','500','700','center','true')");
+                appendTdElement.append(previewIconAnchor);
+            }
+            else if (value == "PRIP_PROD_FEAT_ID") 
+            {
+                // add product feature look up
+                previewIconAnchor.setAttribute("href", "javascript:openLookup(document.${detailFormName!}.condValue_"+rowNo+", document.${detailFormName!}.featureDescription, 'lookupProductFeature','500','700','center','true')");
+                appendTdElement.append(previewIconAnchor);
+            }
+            else if (value == "PRIP_PARTY_CLASS") 
+            {
+                // add Party Classification Group look up
+                previewIconAnchor.setAttribute("href", "javascript:openLookup(document.${detailFormName!}.condValue_"+rowNo+", document.${detailFormName!}.partyClassificationGroupDescription, 'lookupPartyClassificationGroup','500','700','center','true')");
+                appendTdElement.append(previewIconAnchor);
+            }
+        }
+    }
+
+    function isNotEmpty(value) 
+    {
+        return !isEmpty(value);
+    }
+
+    function isEmpty(value) 
+    {
+        valueWithoutSpace = value.replace(/^\s+|\s+$/g, "");
+        if (valueWithoutSpace == null || valueWithoutSpace == "") 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 </script>

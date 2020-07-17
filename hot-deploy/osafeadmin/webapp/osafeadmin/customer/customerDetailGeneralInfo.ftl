@@ -207,5 +207,30 @@
             </div>
         </div>
     </div>
+    
+    <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.OrganizationCaption}</label>
+            </div>
+            <div class="infoValue">
+                <#assign groupName = ""/>
+                <#if parameters.organizationPartyId?has_content || partyOrganization?has_content>
+                    <#assign organizationId = parameters.organizationPartyId!partyOrganization.partyIdFrom!""/>
+                </#if>
+                
+                <#if organizationList?has_content>
+                    <select name="organizationPartyId">
+                    	<option value="" <#if !organizationId?has_content>selected=selected</#if>>${uiLabelMap.NALabel}</option>
+                        <#list organizationList as organization>
+                            <#assign partyGroup = delegator.findByPrimaryKey("PartyGroup", {"partyId", organization.partyId})/>
+                            <option value="${organization.partyId}" <#if organizationId?has_content && organizationId == organization.partyId>selected=selected</#if>>${partyGroup.groupName!}</option>
+                        </#list>
+                    </select>
+                </#if>
+                <input type="hidden" name="existingOrganizationId" value="${parameters.existingOrganizationId!organizationId!}"/>
+            </div>
+        </div>
+    </div>
 
 <!-- end customerDetailGeneralInfo.ftl -->

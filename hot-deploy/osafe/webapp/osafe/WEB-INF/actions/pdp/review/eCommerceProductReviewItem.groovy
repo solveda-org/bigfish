@@ -44,7 +44,7 @@ if(UtilValidate.isNotEmpty(productReview))
 	if(UtilValidate.isNotEmpty(quality))
 	{
 		qualityRate = quality.setScale(decimals,rounding);
-		qualityRatePercentage = ((overallRate / 5) * 100);
+		qualityRatePercentage = ((qualityRate / 5) * 100);
 	}
 	//effectiveness rating
 	effectivenessRate = 0;
@@ -53,7 +53,7 @@ if(UtilValidate.isNotEmpty(productReview))
 	if(UtilValidate.isNotEmpty(effectiveness))
 	{
 		effectivenessRate = effectiveness.setScale(decimals,rounding);
-		effectivenessRatePercentage = ((overallRate / 5) * 100);
+		effectivenessRatePercentage = ((effectivenessRate / 5) * 100);
 	}
 	//satisfaction rating
 	satisfactionRate = 0;
@@ -62,7 +62,7 @@ if(UtilValidate.isNotEmpty(productReview))
 	if(UtilValidate.isNotEmpty(satisfaction))
 	{
 		satisfactionRate = satisfaction.setScale(decimals,rounding);
-		satisfactionRatePercentage = ((overallRate / 5) * 100);
+		satisfactionRatePercentage = ((satisfactionRate / 5) * 100);
 	}
 	//posted date
 	postedDate = Util.convertDateTimeFormat(productReview.postedDateTime, FORMAT_DATE_TIME);
@@ -91,6 +91,9 @@ if(UtilValidate.isNotEmpty(productReview))
 	
 	//review response
 	reviewResponseText = productReview.reviewResponse;
+	
+	//review custom 01
+	reviewCustom01 = productReview.reviewCustom01;
 }
 
 context.FORMAT_DATE_TIME = FORMAT_DATE_TIME;
@@ -118,6 +121,7 @@ if(UtilValidate.isNotEmpty(reviewerText))
 context.reviewerLocation = reviewerLocation;
 context.reviewerAge = reviewerAge;
 context.reviewerGender = reviewerGender;
+context.reviewCustom01 = reviewCustom01;
 context.reviewResponseText = reviewResponseText;
 context.reviewResponse = "";
 if(UtilValidate.isNotEmpty(reviewResponseText))

@@ -15,10 +15,14 @@
     <#assign feedsOutDir = FEEDS_OUT_REQUEST_CATALOG_URL_DIR!"" />
     <#assign feedsOutPrefix = FEEDS_OUT_REQUEST_CATALOG_PREFIX!"" />
   </#if>
+  <#if feedsOutDirParm?exists && feedsOutDirParm == 'googleProductFeed'>
+    <#assign feedsOutDir = FEEDS_OUT_GOOGLE_PRODUCT_URL_DIR!"" />
+    <#assign feedsOutPrefix = FEEDS_OUT_GOOGLE_PRODUCT_PREFIX!"" />
+  </#if>
   <#if feedsOutDir?has_content>
     <#assign currentDateString = Static["org.ofbiz.base.util.UtilDateTime"].nowDateString("yyyyMMdd") />
     <#assign currentTimeString = Static["org.ofbiz.base.util.UtilDateTime"].nowDateString("HHmmss") />
-    <#assign exportFileServerPath = feedsOutDir + feedsOutPrefix + "_"+currentDateString+"_"+currentTimeString+".xml" />
+    <#assign exportFileServerPath = feedsOutDir + "/"+ feedsOutPrefix + "_"+currentDateString+"_"+currentTimeString+".xml" />
   </#if>
   <input type="hidden" name="exportId" value="${parameters.exportId!exportId!""}" />
   <input type="hidden" name="exportIdList" value="${parameters.exportIdList!exportIdList!""}" />

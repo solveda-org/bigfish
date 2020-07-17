@@ -92,15 +92,15 @@ function toggleBillingAccount(box) {
                        ${setRequestAttribute("PostalAddress",shippingAddress)}
                        ${screens.render("component://osafe/widget/CommonScreens.xml#displayPostalAddress")}
                        <div class="container button">
-                           <a href="javascript:submitForm(document.checkoutInfoForm, 'EA', ${shippingAddress.contactMechId});" class="standardBtn update">${uiLabelMap.UpdateAddressBtn}</a>
+                           <a href="javascript:submitForm(document.checkoutInfoForm, 'EA', ${shippingAddress.contactMechId});" class="standardBtn update"><span>${uiLabelMap.UpdateAddressBtn}</span></a>
                            <#if showDelete?has_content && showDelete=="Y">
                                <#if firstBillingContactMechId?if_exists != shippingContactMech.contactMechId>
-                                <a href="javascript:submitForm(document.checkoutInfoForm, 'DE', ${shippingAddress.contactMechId});" class="standardBtn delete">${uiLabelMap.DeleteBtn}</a>
+                                <a href="javascript:submitForm(document.checkoutInfoForm, 'DE', ${shippingAddress.contactMechId});" class="standardBtn delete"><span>${uiLabelMap.DeleteBtn}</span></a>
                                </#if>
                            </#if>
                            <#if !(partyProfileDefault?has_content && partyProfileDefault.defaultShipAddr?has_content && partyProfileDefault.defaultShipAddr == shippingContactMech.contactMechId)>
                                <#if firstBillingContactMechId?if_exists != shippingContactMech.contactMechId>
-                                   <a class="standardBtn action" href="javascript:submitForm(document.checkoutInfoForm, 'SDA', ${shippingAddress.contactMechId});">${uiLabelMap.SetAsDefaultLabel}</a>
+                                   <a class="standardBtn action" href="javascript:submitForm(document.checkoutInfoForm, 'SDA', ${shippingAddress.contactMechId});"><span>${uiLabelMap.SetAsDefaultLabel}</span></a>
                                </#if>
                            </#if>
                        </div>
@@ -111,9 +111,9 @@ function toggleBillingAccount(box) {
         </#if>
         <div class="container button">
             <#if backAction?exists && backAction?has_content>
-              <a class="standardBtn negative" href="<@ofbizUrl>${backAction!}</@ofbizUrl>">${uiLabelMap.CommonBack}</a>
+              <a class="standardBtn negative" href="<@ofbizUrl>${backAction!}</@ofbizUrl>"><span>${uiLabelMap.CommonBack}</span></a>
             </#if>
-            <a href="javascript:submitForm(document.checkoutInfoForm, 'NA', '');" class="standardBtn action">${uiLabelMap.AddAddressBtn}</a>
+            <a href="javascript:submitForm(document.checkoutInfoForm, 'NA', '');" class="standardBtn action"><span>${uiLabelMap.AddAddressBtn}</span></a>
         </div>
    </div>
 </div>

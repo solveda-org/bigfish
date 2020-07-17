@@ -204,6 +204,9 @@
     <property key="RECENT_INTRO">
         <value xml:lang="en">introductionDate-desc|RecentlyIntroducedLabel</value>
     </property>
+    <property key="CLOSEST_DISCO">
+        <value xml:lang="en">salesDiscontinuationDate-asc|ClosestDiscoDateLabel</value>
+    </property>
 <!-- *************************************** -->
 <!-- Version File Paths -->
 <!-- *************************************** -->

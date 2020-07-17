@@ -1,7 +1,7 @@
 <div class="${request.getAttribute("attributeClass")!}<#if className?exists && className?has_content> ${className}</#if>">
   <div class="displayBox">
     <h3>${uiLabelMap.NotRegisteredHeading?if_exists}</h3>
-    <form method="post" action="<@ofbizUrl>validateNewCustomerEmail${previousParams!""}</@ofbizUrl>" id="newCustomerForm" name="newCustomerForm" onsubmit="submitForm(this)" class="entryForm">
+    <form method="post" action="<@ofbizUrl>validateNewCustomerEmail${previousParams!""}</@ofbizUrl>" id="newCustomerForm" name="newCustomerForm" onsubmit="submitForm(this)">
           <p class="instructions">${uiLabelMap.NotRegisteredInfo!""}</p>
           <ul class="displayActionList">
 		      <li>

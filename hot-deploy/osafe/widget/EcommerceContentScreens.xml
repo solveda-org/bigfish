@@ -16,7 +16,10 @@
                     <condition>
                        <and>
                         <not><if-empty field="content"/></not>
-                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                        <or>
+                            <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                            <if-compare-field operator="equals" field="contentId" to-field="previewContentId"/>
+                        </or>
                        </and>
                     </condition>
                     <widgets>
@@ -48,7 +51,10 @@
                             <condition>
                                 <and>
                                     <not><if-empty field="content"/></not>
-                                    <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                                    <or>
+                                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                                        <if-compare-field operator="equals" field="contentId" to-field="previewContentId"/>
+                                    </or>
                                 </and>
                             </condition>
                             <widgets>
@@ -77,6 +83,7 @@
                 <set field="containerId" value="${containerId}" default-value="${contentId}"/>
                 <set field="containerStyle" value="${containerStyle}" default-value="staticContent"/>
                 <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
+                <set field="pageClassIdentifier" from-field="contentId" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContentAndAttribute.groovy" />
             </actions>
@@ -87,7 +94,10 @@
                             <condition>
                                 <and>
                                     <not><if-empty field="content"/></not>
-                                    <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                                    <or>
+                                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                                        <if-compare-field operator="equals" field="contentId" to-field="previewContentId"/>
+                                    </or>
                                 </and>
                             </condition>
                             <widgets>
@@ -552,6 +562,18 @@
             </widgets>
         </section>
     </screen>
+    <screen name="CHECKOUT_EFT_GUIDE">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.CHECKOUT_EFT_GUIDE}"/>
+                <set field="contentContainerId" value="checkoutEftGuide"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
     <screen name="SI_LINKS">
         <section>
             <actions>
@@ -709,6 +731,19 @@
             </widgets>
         </section>
     </screen>
+    <screen name="PTS_REQUEST_QUOTE">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_REQUEST_QUOTE}"/>
+                <set field="contentContainerId" value="ptsRequestQuote"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
     <screen name="PTS_STORE_LOCATOR">
         <section>
             <actions>
@@ -784,6 +819,19 @@
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="id" value="${idMap.PAGE_END_SPOT_CONTACT_US}"/>
                 <set field="contentContainerId" value="pesContactUs"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_REQUEST_QUOTE">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_REQUEST_QUOTE}"/>
+                <set field="contentContainerId" value="pesRequestQuote"/>
                 <set field="contentContainerStyle" value="pesSpot"/>
             </actions>
             <widgets>
@@ -1151,6 +1199,33 @@
                 <set field="id" value="${idMap.PAGE_END_SPOT_EMAIL_A_FRIEND}"/>
                 <set field="contentContainerId" value="pesEmailAFriend"/>
                 <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="RECUR_LIST_ESPOT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.RECURRING_ORDER_LIST_ESPOT}"/>
+                <set field="contentContainerId" value="recurringOrderListEspot"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="RECUR_DETAIL_ESPOT">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.RECURRING_ORDER_DETAIL_ESPOT}"/>
+                <set field="contentContainerId" value="recurringOrderDetailEspot"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
             </actions>
             <widgets>
                 <include-screen name="eCommerceRenderContent"/>

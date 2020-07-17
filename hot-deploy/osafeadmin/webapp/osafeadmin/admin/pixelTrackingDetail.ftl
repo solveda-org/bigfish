@@ -87,7 +87,7 @@
             <div class="infoEntry">
                 <div class="infoCaption"><label>${uiLabelMap.SeqNumberCaption}</label></div>
                     <div class="infoValue">
-                        <input type="text" name="pixelSequenceNum" value="${parameters.pixelSequenceNum!pixelSequenceNum!""}" class="small" maxlength="10"/>
+                        <input type="text" name="pixelSequenceNum" value="${parameters.pixelSequenceNum!pixelSequenceNum!""}" class="small" maxlength="9"/>
                     </div>
             </div>
         </div>

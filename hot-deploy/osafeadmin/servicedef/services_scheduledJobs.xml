@@ -65,4 +65,12 @@
         <attribute name="feedsOutRequestCatalogDir" mode="IN" type="String" optional="true" />
         <attribute name="feedsOutRequestCatalogPrefix" mode="IN" type="String" optional="true" />
     </service>
+    <service name="googleProductFeed" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="googleProductFeed" auth="false" transaction-timeout="7200">
+        <description>Export google Product Feed</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsOutGoogleProductDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsOutGoogleProductPrefix" mode="IN" type="String" optional="true" />
+    </service>
 </services>

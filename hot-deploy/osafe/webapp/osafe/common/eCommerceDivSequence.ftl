@@ -18,6 +18,9 @@
         <#if (entry.key !=0)>
           <div class="${uiSequenceScreen!} group group${entry.key!}">
         </#if>
+        <#if uiEntryFormName?exists && uiEntryFormName?has_content>
+         <div class="entryForm ${uiEntryFormName!} ${uiSequenceScreen!}">
+        </#if>
         <#if uiDisplayListName?exists && uiDisplayListName?has_content>
          <ul class="displayList ${uiDisplayListName!} ${uiSequenceScreen!}">
         </#if>
@@ -55,6 +58,9 @@
 	        </#list>
         <#if uiDisplayListName?exists && uiDisplayListName?has_content>
          </ul>
+        </#if>
+        <#if uiEntryFormName?exists && uiEntryFormName?has_content>
+         </div>
         </#if>
         <#if (entry.key !=0)>
           </div>

@@ -60,7 +60,7 @@ under the License.
         <#if errorMessageList?has_content>
             <ul>
 	          <#list errorMessageList as errorMsg>
-	            <li class="errorMessage">${errorMsg}</li>
+	            <li class="errorMessage">${StringUtil.wrapString(errorMsg)}</li>
 	          </#list>
 	        </ul>
         </#if>
@@ -73,7 +73,7 @@ under the License.
             <p class="errorMessage">${uiLabelMap.CommonFollowingErrorsOccurred}</p>
             <ul>
 	          <#list errorMessageList as errorMsg>
-	            <li class="errorMessage">${errorMsg}</li>
+	            <li class="errorMessage">${StringUtil.wrapString(errorMsg)}</li>
 	          </#list>
 	        </ul>
             <@fieldErrors fieldName="GENERAL_FIELD_MESSAGE_ERROR"/>
@@ -88,7 +88,7 @@ under the License.
          <div class="eventImage"></div>
         <#if osafeSuccessMessageList?has_content>
           <#list osafeSuccessMessageList as eventMsg>
-            <p class="eventMessage">${eventMsg}</p>
+            <p class="eventMessage">${StringUtil.wrapString(eventMsg)}</p>
           </#list>
         </#if>
       </div>
@@ -100,11 +100,11 @@ under the License.
   <div class="content-messages eCommerceWarningMessage">
     <div class="warningImage"></div>
     <#if warningMessage?has_content>
-      <p class="warningMessage">${warningMessage}</p>
+      <p class="warningMessage">${StringUtil.wrapString(warningMessage)}</p>
     </#if>
     <#if warningMessageList?has_content>
       <#list warningMessageList as warningMsg>
-        <p class="warningMessage">${warningMsg}</p>
+        <p class="warningMessage">${StringUtil.wrapString(warningMsg)}</p>
       </#list>
     </#if>
   </div>
@@ -115,11 +115,11 @@ under the License.
   <div class="content-messages eCommerceWarningMessage">
     <div class="infoImage"></div>
     <#if infoMessage?has_content>
-      <p class="warningMessage">${infoMessage}</p>
+      <p class="warningMessage">${StringUtil.wrapString(infoMessage)}</p>
     </#if>
     <#if infoMessageList?has_content>
       <#list infoMessageList as infoMsg>
-        <p class="warningMessage">${infoMsg}</p>
+        <p class="warningMessage">${StringUtil.wrapString(infoMsg)}</p>
       </#list>
     </#if>
   </div>

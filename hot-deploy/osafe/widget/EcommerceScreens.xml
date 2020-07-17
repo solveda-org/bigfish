@@ -24,6 +24,7 @@
     <screen name="eCommerceHomePage">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceHomePage" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="title" value="${uiLabelMap.EcommerceApplication}" />
                 <set field="mainPanelStyle" value="homePage" />
@@ -33,8 +34,7 @@
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceHomePage.groovy" />
             </actions>
             <widgets>
-                <decorator-screen name="${parameters.eCommerceDecoratorName}"
-                    location="${parameters.eCommerceDecoratorLocation}">
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
                     <decorator-section name="body">
                         <section>
                             <widgets>
@@ -49,6 +49,7 @@
     <screen name="eCommerceCategoryList">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceCategoryList" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="eCommerceLeftPanel" value="eCommerceRefineByCategory" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCategoryList.groovy" />
@@ -82,14 +83,15 @@
     <screen name="eCommerceProductList">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceProductList" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="eCommerceLeftPanel" value="eCommerceRefineByCategoryFacet" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductList.groovy" />
                 <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
                 <set field="dialogActionRequest" value="eCommercePlpQuickLook" global="true"/>
                 <set field="dialogBoxStyle" value="plpQuicklook" global="true"/>
-                <set field="addToCartPlpAction" value="addPlpItemToCart"/>
-                <set field="addToWishListPlpAction" value="addPlpItemToWishlist"/>
+                <set field="addToCartPlpAction" value="${plpAddToCartAction}" default-value="addPlpItemToCart"/>
+                <set field="addToWishListPlpAction" value="${plpAddToWishListAction}" default-value="addPlpItemToWishlist"/>
                 <set field="addMultiItemsToCartAction" value="addMultiItemsToCart"/>
                 <set field="addMultiItemsToWishlistAction" value="addMultiItemsToWishlist"/>
                 <set field="formName" value="productListForm"/>
@@ -130,6 +132,7 @@
     <screen name="eCommerceSearchResultNotFound">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="searchShoppingListNotFound" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="Sorry!" />
                 <set field="title" from-field="${parameters.searchText} - ${uiLabelMap.SearchResults}" />
@@ -162,6 +165,7 @@
     <screen name="eCommerceProductDetail">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceProductDetail" />
                 <property-map resource="OsafeProperties" map-name="OSafeConfig" global="true" />
                 <set field="activeZoomParam" value="PDP_IMG_ZOOM_ACTIVE_FLAG" />
                 <set field="showHeadingTertiaryInformation" value="Y" />
@@ -218,6 +222,7 @@
     <screen name="eCommerceManufacturerDetail">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceManufacturerDetail" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceManufacturerDetail.groovy" />
                 <set field="formName" value="productListForm"/>
@@ -308,6 +313,7 @@
     <screen name="eCommerceProductReviewSubmitLogged">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceProductReviewSubmitLogged" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.WriteReviewTitle}" />
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/productReview/js/productReviewUI.js" global="true" />
@@ -350,6 +356,7 @@
 	<screen name="eCommerceProductReviewSubmit">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceProductReviewSubmit" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.WriteReviewTitle}" />
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/productReview/js/productReviewUI.js" global="true" />
@@ -421,6 +428,7 @@
     <screen name="eCommerceLogin">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceLogin" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.LoginTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -456,6 +464,7 @@
     <screen name="eCommerceForgotPassword">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceForgotPassword" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ForgotPasswordTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -495,6 +504,7 @@
     <screen name="eCommerceEMailSubscriber">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceEMailSubscriber" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.EmailSubscriberTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -553,6 +563,7 @@
     <screen name="eCommerceNewCustomer">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceNewCustomer" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.NewCustomerTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -603,6 +614,7 @@
     <screen name="eCommerceRequirePasswordChange">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceLoginChangePassword" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ChangePasswordTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -632,6 +644,7 @@
     <screen name="eCommerceMyAccount">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="myAccount" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.MyAccountTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -666,12 +679,14 @@
     <screen name="eCommerceShoppingListSearch">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="shoppingListSearch" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ShoppingListSearchTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <!-- For Page Tagging to be generated -->
                 <set field="createAccountPageTagging" value="Y" />
                 <set field="formAction" value="searchShoppingList" />
+                <set field="initialRow" value="5" type="Integer" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -700,14 +715,15 @@
     <screen name="eCommerceProductListShoppingSearch">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="searchShoppingList" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="eCommerceLeftPanel" value="eCommerceShoppingListSearchFacet" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductList.groovy" />
                 <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
                 <set field="dialogActionRequest" value="eCommercePlpQuickLook" global="true"/>
                 <set field="dialogBoxStyle" value="plpQuicklook" global="true"/>
-                <set field="addToCartPlpAction" value="addPlpItemToCart"/>
-                <set field="addToWishListPlpAction" value="addPlpItemToWishlist"/>
+                <set field="addToCartPlpAction" value="${plpAddToCartAction}" default-value="addPlpItemToCart"/>
+                <set field="addToWishListPlpAction" value="${plpAddToWishListAction}" default-value="addPlpItemToWishlist"/>
                 <set field="addMultiItemsToCartAction" value="addMultiItemsToCart"/>
                 <set field="addMultiItemsToWishlistAction" value="addMultiItemsToWishlist"/>
                 <set field="formName" value="productListForm"/>
@@ -767,6 +783,7 @@
     <screen name="eCommerceEditCustomerInfo">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceEditCustomerInfo" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ChangePersonalInfoTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -819,6 +836,7 @@
     <screen name="eCommerceEditLoginInfo">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceEditLoginInfo" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.UpdateLoginInfoTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -851,6 +869,7 @@
     <screen name="eCommerceEditCustomerLogin">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceEditCustomerLogin" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ChangeLoginNameTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -902,6 +921,7 @@
     <screen name="eCommerceEditCustomerPassword">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceEditCustomerPassword" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ChangePasswordTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -953,9 +973,10 @@
     <screen name="eCommercePaymentMethodInfo">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommercePaymentMethodInfo" />
                 <set field="selectedStep" value="confirmation" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.MyPaymentInfoTitle}" />
+                <set field="pageTitle" value="${uiLabelMap.MyCreditCardPaymentInfoTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="formButton" value="${uiLabelMap.AddNewCardBtn}" />
                 <set field="backAction" value="MyAccount"/>
@@ -975,7 +996,7 @@
                                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePaymentMethods.groovy" />
                             </actions>
                             <widgets>
-                                <container id="eCommercePaymentMethodsContainer">
+                                <container id="eCommercePaymentMethodsContainer" style="creditCardPaymentMethods">
                                     <include-screen name="PTS_PMT_METHOD_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                     <include-screen name="paymentMethodSummaryDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
                                     <include-screen name="PES_PMT_METHOD_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
@@ -991,6 +1012,7 @@
     <screen name="eCommerceEditCreditCardInfo">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceEditCreditCardInfo" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ChangeCreditCardInfoTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1000,6 +1022,8 @@
                 <set field="backAction" value="eCommercePaymentMethodInfo" />
                 <set field="formContinueButton" value="${uiLabelMap.SaveBtn}" />
                 <set field="formName" value="creditCardInfoform" />
+                <set field="partySecurityCheck" value="Y" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/paymentmethod/paymentMethodPartySecurity.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1008,6 +1032,9 @@
                     </decorator-section>
                     <decorator-section name="body">
                         <section>
+                            <condition>
+                                    <if-compare operator="equals" field="partySecurityCheck" value="Y"/>
+                            </condition>
                             <actions>
                             </actions>
                             <widgets>
@@ -1036,6 +1063,11 @@
                                     <include-screen name="PES_PMT_METHOD_EDIT" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                 </container>
                             </widgets>
+                            <fail-widgets>
+                                <container>
+                                    <label style="h2">${uiLabelMap.SecurityAccessError}</label>
+                                </container>
+                            </fail-widgets>
                         </section>
                     </decorator-section>
                 </decorator-screen>
@@ -1045,6 +1077,7 @@
     <screen name="eCommerceCreateCreditCardInfo">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceCreateCreditCardInfo" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ChangeCreditCardInfoTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1095,9 +1128,173 @@
             </widgets>
         </section>
     </screen>
+    
+    
+    <screen name="eCommerceEftPaymentMethodInfo">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="eCommerceEftPaymentMethodInfo" />
+                <set field="selectedStep" value="confirmation" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.MyEFTPaymentInfoTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="formButton" value="${uiLabelMap.AddNewEFTBtn}" />
+                <set field="backAction" value="MyAccount"/>
+                <set field="confirmDialogForm" value="paymentMethodForm"/>
+                <set field="confirmDialogAction" value="deleteEFTPaymentMethod"/>
+                <set field="confirmDialogText" value="${uiLabelMap.DeleteEFTPmtMethodText}"/>
+                <set field="dialogPurpose" value="confirm_" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <actions>
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePaymentMethods.groovy" />
+                            </actions>
+                            <widgets>
+                                <container id="eCommercePaymentMethodsContainer" style="eftPaymentMethods">
+                                    <include-screen name="PTS_PMT_METHOD_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <include-screen name="paymentMethodEFTSummaryDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
+                                    <include-screen name="PES_PMT_METHOD_VIEW" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                </container>
+                                <include-screen name="commonConfirmDialog" location="component://osafe/widget/DialogScreens.xml"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceEditEftAccountInfo">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="eCommerceEditEftAccountInfo" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ChangeEftAccountInfoTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="formAction" value="updateEftAccountInfo" />
+                <set field="donePage" value="eCommerceEftPaymentMethodInfo" />
+                <set field="backAction" value="eCommerceEftPaymentMethodInfo" />
+                <set field="formContinueButton" value="${uiLabelMap.SaveBtn}" />
+                <set field="formName" value="eftAccountInfoform" />
+                <set field="partySecurityCheck" value="Y" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/paymentmethod/paymentMethodPartySecurity.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                    <if-compare operator="equals" field="partySecurityCheck" value="Y"/>
+                            </condition>
+                            <actions>
+                            </actions>
+                            <widgets>
+                                <container id="eCommerceEditCustomerInfoContainer">
+                                    <include-screen name="PTS_PMT_METHOD_EDIT" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <platform-specific>
+                                        <html>
+                                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                                <html-template-decorator-section name="entryFormJS">
+                                                    <platform-specific>
+                                                        <html>
+                                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                        </html>
+                                                    </platform-specific>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="entryForm">
+                                                    <include-screen name="eftAccountInfoForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="entryFormButtons">
+                                                    <include-screen name="formEntryContinueBackButton" location="component://osafe/widget/EntryScreens.xml" />
+                                                </html-template-decorator-section>
+
+                                            </html-template-decorator>
+                                        </html>
+                                    </platform-specific>
+                                    <include-screen name="PES_PMT_METHOD_EDIT" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                </container>
+                            </widgets>
+                            <fail-widgets>
+                                <container>
+                                    <label style="h2">${uiLabelMap.SecurityAccessError}</label>
+                                </container>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceCreateFftAccountInfo">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="eCommerceCreateFftAccountInfo" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ChangeEftAccountInfoTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="formAction" value="createEftAccountInfo" />
+                <set field="donePage" value="eCommerceEftPaymentMethodInfo" />
+                <set field="backAction" value="eCommerceEftPaymentMethodInfo" />
+                <set field="formContinueButton" value="${uiLabelMap.SaveBtn}" />
+                <set field="formName" value="eftAccountInfoform" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <actions>
+                                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCountry.groovy" />
+                            </actions>
+                            <widgets>
+                                <container id="eCommerceEditCustomerInfoContainer">
+                                    <include-screen name="PTS_PMT_METHOD_EDIT" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <platform-specific>
+                                        <html>
+                                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                                <html-template-decorator-section name="entryFormJS">
+                                                    <platform-specific>
+                                                        <html>
+                                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                        </html>
+                                                    </platform-specific>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="entryForm">
+                                                    <include-screen name="eftAccountInfoForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="entryFormButtons">
+                                                    <include-screen name="formEntryContinueBackButton" location="component://osafe/widget/EntryScreens.xml" />
+                                                </html-template-decorator-section>
+                                            </html-template-decorator>
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="eCommerceEditAddressBook">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceEditAddressBook" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.CustomerAddressBookHeading}" />
                 <set field="title" from-field="pageTitle" />
@@ -1148,6 +1345,7 @@
     <screen name="eCommerceUpdateAddressBook">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceUpdateAddressBook" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/EditContactMech.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceAddressPurpose.groovy" />
@@ -1184,6 +1382,7 @@
     <screen name="eCommerceOrderHistory">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceOrderHistory" />
                 <set field="selectedStep" value="confirmation" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderHistoryTitle}" />
@@ -1217,6 +1416,7 @@
     <screen name="eCommerceOrderDetail">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceOrderDetail" />
                 <set field="selectedStep" value="confirmation" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderDetailTitle}" />
@@ -1248,6 +1448,7 @@
     <screen name="eCommerceReOrderItems">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceReOrderItems" />
                 <set field="selectedStep" value="confirmation" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.PreviouslyPurchasedProductsTitle}" />
@@ -1275,6 +1476,95 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="eCommerceRecurringOrder">
+        <section>
+            <actions>
+            	<!-- <set field="selectedStep" value="confirmation" /> -->
+                <set field="pageClassIdentifier" value="eCommerceRecurringOrder" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.RecurringOrdersTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <!-- <set field="showStatusDetails" value="Y" /> -->
+                <set field="backAction" value="MyAccount"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceRecurringOrder.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceRecurringOrderContainer">
+                                	<include-screen name="RECUR_LIST_ESPOT" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                	<include-screen name="recurringOrderDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml"/>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceRecurrenceOrderDetail">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="eCommerceRecurrenceOrderDetail" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.RecurringOrderEditTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="fieldLevelErrors" value="${groovy:if(request.getAttribute('setFieldLevelErrors') == 'N')return '' else return 'Y';}" />
+                <set field="formName" value="eCommerceRecurrenceOrderDetailForm" />
+                <set field="doneAction" value="updateRecurringOrder"/>
+                <set field="backAction" value="eCommerceRecurringOrder"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/recurringOrderItems.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <condition>
+                                <and>
+                                    <not><if-empty field="shoppingList"/></not>
+                                </and>
+                            </condition>
+                            <widgets>
+                                <include-screen name="RECUR_DETAIL_ESPOT" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                <platform-specific>
+                                    <html>
+                                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                            <html-template-decorator-section name="entryFormJS">
+                                                <platform-specific>
+                                                    <html>
+                                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                    </html>
+                                                </platform-specific>
+                                            </html-template-decorator-section>
+                                            <html-template-decorator-section name="entryForm">
+                                                <include-screen name="recurringOrderEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                            </html-template-decorator-section>
+                                        </html-template-decorator>
+                                    </html>
+                                </platform-specific>
+                            </widgets>
+                            <fail-widgets>
+                                <container>
+                                    <label style="h2">${uiLabelMap.SecurityAccessError}</label>
+                                </container>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="editContactMech">
         <section>
             <actions>
@@ -1593,6 +1883,7 @@
     <screen name="eCommerceContactUs">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="contactUs" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ContactUsTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1654,6 +1945,7 @@
     <screen name="eCommerceConfirm">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceConfirm" />
                 <set field="pageTitle" from-field="confirmH1MapValue" />
                 <set field="title" from-field="pageTitle" />
                 <set field="pageMessaging" value="N" />
@@ -1697,6 +1989,7 @@
     <screen name="ecommerceRequestCatalog">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="requestCatalog" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceRequestCatalogInfo.groovy" />
                 <set field="pageTitle" value="${uiLabelMap.RequestCatalogTitle}" />
@@ -1761,6 +2054,7 @@
     <screen name="eCommerceStoreLocator">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="storeLocator" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.StoreLocatorTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1833,6 +2127,7 @@
     <screen name="eCommerceStoreDetail">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceStoreDetail" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.StoreDetailTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1905,6 +2200,7 @@
     <screen name="bigfishInfo">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="bigfishInfo" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.BigFishInfoTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1936,6 +2232,7 @@
     <screen name="emailAFriend">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="emailAFriend" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceEmailAFriend.groovy" />
                 <set field="pageTitle" value="${uiLabelMap.EmailAFriendTitle}" />
@@ -1979,4 +2276,108 @@
         </section>
     </screen>
     
+    <!-- Confirm dialog box when deleting row
+    <screen name="confirmSecurityGroupDelete">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="commonConfirmDialogTitle" from-field="confirmDialogTitle" default-value="${uiLabelMap.commonConfirmDialogTitle}"/>
+                <set field="commonConfirmDialogText" from-field="confirmDialogText" default-value="${uiLabelMap.commonConfirmDialogText}"/>
+                <set field="commonConfirmDialogYesBtn" from-field="confirmDialogYesBtnText" default-value="${uiLabelMap.YesBtn}"/>
+                <set field="commonConfirmDialogNoBtn" from-field="confirmDialogNoBtnText" default-value="${uiLabelMap.NoBtn}"/>
+            </actions>
+            <widgets>
+                <container id="confirmSecurityGroupDelete" style="commonConfirm">
+                    <platform-specific>
+                        <html>
+                            <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDialog.ftl">
+                                <html-template-decorator-section name="dialogBox">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafeadmin/webapp/osafeadmin/user/confirmSecurityGroupDelete.ftl"/>
+                                        </html>
+                                     </platform-specific>
+                                </html-template-decorator-section>
+                            </html-template-decorator>
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    -->
+    <!-- In order to add/delete rows in a list, We need to define the actual content of the row
+    <screen name="addSecurityGroupRow">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/user/securityGroupDetail.groovy"/>
+                <set field="detailFormName" value="userSecurityGroupForm"/>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html><html-template location="component://osafeadmin/webapp/osafeadmin/user/userSecurityGroupRow.ftl"/></html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+     -->
+
+    <screen name="ecommerceRequestQuote">
+        <section>
+            <actions>
+                <set field="pageClassIdentifier" value="requestQuote" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.RequestQuoteTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <set field="fieldLevelErrors" value="${groovy:if(request.getAttribute('setFieldLevelErrors') == 'N')return '' else return 'Y';}" />
+                <set field="formAction" value="submitRequestQuote" />
+                <set field="formName" value="entryForm" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <include-screen name="PTS_REQUEST_QUOTE" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                <platform-specific>
+                                    <html>
+                                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                            <html-template-decorator-section name="entryFormJS">
+                                                <platform-specific>
+                                                    <html>
+                                                        <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" />
+                                                    </html>
+                                                </platform-specific>
+                                            </html-template-decorator-section>
+                                            <html-template-decorator-section name="entryForm">
+                                                <include-screen name="requestQuoteEntryForm" location="component://osafe/widget/EntryScreens.xml" />
+                                            </html-template-decorator-section>
+                                        </html-template-decorator>
+                                    </html>
+                                </platform-specific>
+                                <include-screen name="PES_REQUEST_QUOTE" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="eCommerceConfirmRequestQuote">
+        <section>
+            <actions>
+                <set field="confirmH1MapName" value="ConfirmH1RequestQuote" />
+                <set field="confirmH2MapName" value="ConfirmH2RequestQuote" />
+                <set field="confirmTextMapName" value="ConfirmTextRequestQuote" />
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceConfirm" />
+            </widgets>
+        </section>
+    </screen>
 </screens>

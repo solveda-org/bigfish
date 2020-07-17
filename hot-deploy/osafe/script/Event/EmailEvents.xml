@@ -74,8 +74,14 @@
         <set field="bodyParameters.countryCode" from-field="parameters.countryCode"/>
         <set field="bodyParameters.contactReason" from-field="parameters.contactReason"/>
         <set field="bodyParameters.contactPhoneArea" from-field="parameters.contactPhoneArea"/>
-        <set field="bodyParameters.contactPhoneContact" from-field="parameters.contactPhoneContact"/>
+        <if-empty field="parameters.contactPhoneContact">
+          <set field="bodyParameters.contactPhoneContact" value="${parameters.contactPhoneContact3}${parameters.contactPhoneContact4}"/>
+        <else>
+          <set field="bodyParameters.contactPhoneContact" from-field="parameters.contactPhoneContact"/>
+        </else>
+        </if-empty>
         <set field="bodyParameters.orderIdNumber" from-field="parameters.orderIdNumber"/>
+        <set field="bodyParameters.partNumber" from-field="parameters.partNumber"/>
         <set field="bodyParameters.catalogName" from-field="parameters.catalogName"/>
         <set field="bodyParameters.message" from-field="parameters.content"/>
         <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">

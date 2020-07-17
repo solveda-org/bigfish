@@ -1,8 +1,12 @@
 package com.osafe.services;
 
 import java.io.BufferedWriter;
+import java.io.FileReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
@@ -12,6 +16,8 @@ import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -45,17 +51,20 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.transaction.GenericTransactionException;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.party.content.PartyContentWrapper;
 import org.ofbiz.product.category.CategoryContentWrapper;
 import org.ofbiz.product.category.CategoryWorker;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.supercsv.cellprocessor.ConvertNullTo;
 import org.supercsv.cellprocessor.ift.CellProcessor;
 import org.supercsv.io.CsvBeanWriter;
 import org.supercsv.prefs.CsvPreference;
+//import au.com.bytecode.opencsv.CSVReader;
 
 import com.osafe.solr.SolrConstants;
 import com.osafe.util.SerializationUtils;
@@ -77,39 +86,11 @@ public class SolrServices {
         Delegator delegator = dctx.getDelegator();
         LocalDispatcher dispatcher = dctx.getDispatcher();
 
-        // call the updateSolrSchemaXml service for update the schema.xml
-//        Map updateSolrSchemaXmlParams = UtilMisc.toMap("userLogin", context.get("userLogin"));
-//        try {
-//            Map updateSolrSchema = dispatcher.runSync("updateSolrSchemaXml", updateSolrSchemaXmlParams);
-//           
-//        } catch (Exception exc) {
-//            Debug.logError(exc, module);
-//        }
-
         List<ProductDocument> documentList = FastList.newInstance();
-        List<String> headerColumns = FastList.newInstance();
-        headerColumns.addAll(UtilMisc.toList("id", "rowType", "productId", "name"));
-        headerColumns.addAll(UtilMisc.toList("internalName", "description"));
-        headerColumns.addAll(UtilMisc.toList("categoryDescription","categoryPdpDescription"));
-        headerColumns.addAll(UtilMisc.toList("productCategoryId", "topMostProductCategoryId", "categoryLevel", "categoryName", "categoryImageUrl"));
-        headerColumns.addAll(UtilMisc.toList("productImageSmallUrl", "productImageSmallAlt","productImageSmallAltUrl","productImageMediumUrl", "productImageLargeUrl"));
-        headerColumns.addAll(UtilMisc.toList("productFeatureGroupId", "productFeatureGroupDescription","productCategoryFacetGroups"));
-        headerColumns.addAll(UtilMisc.toList("listPrice","price", "customerRating","sequenceNum"));
-        headerColumns.addAll(UtilMisc.toList("totalTimesViewed","totalQuantityOrdered"));
-        headerColumns.addAll(UtilMisc.toList("productFacilityIds"));
-        headerColumns.addAll(UtilMisc.toList("introductionDate"));
+        
+        List<String> headerColumns = getHeaderColumns();
 
-        List<CellProcessor> cellProcessors = FastList.newInstance();
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(null), new ConvertNullTo("product"), new ConvertNullTo(""), new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
-		cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""),new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""),new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""),new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
+        List<CellProcessor> cellProcessors = getCellProcesser();
         
         List<String> prodFeatureColNames = FastList.newInstance();
         ProductContentWrapper productContentWrapper = null;
@@ -226,9 +207,33 @@ public class SolrServices {
                                     productDocument.setRowType(SolrConstants.ROW_TYPE_PRODUCT);
                                     productDocument.setName(productContentWrapper.get("PRODUCT_NAME").toString());
                                     productDocument.setInternalName(product.getString("internalName"));
+                                    
+                                    GenericValue goodIdentification = delegator.findByPrimaryKey("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "MANUFACTURER_ID_NO"));
+                                    if(UtilValidate.isNotEmpty(goodIdentification))
+                                    {
+                                    	productDocument.setManufacturerIdNo(goodIdentification.getString("idValue"));
+                                    }
+                                    
+                                    String manufacturerPartyId = product.getString("manufacturerPartyId");
+                                    if(UtilValidate.isNotEmpty(manufacturerPartyId))
+                                    {
+                                    	GenericValue manufacturerParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", manufacturerPartyId));
+                                    	if(UtilValidate.isNotEmpty(manufacturerParty))
+                                    	{
+                                    		PartyContentWrapper partyContentWrapper = new PartyContentWrapper(dispatcher, manufacturerParty, locale, "text/html");
+                                    		productDocument.setManufacturerName(partyContentWrapper.get("PROFILE_NAME").toString());
+                                    	}
+                                    }
+                                    
+                                    
+                                    
                                     if(UtilValidate.isNotEmpty(product.getTimestamp("introductionDate")))
                                     {
                                     	productDocument.setIntroductionDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("introductionDate").getTime())));
+                                    }
+                                    if(UtilValidate.isNotEmpty(product.getTimestamp("salesDiscontinuationDate")))
+                                    {
+                                    	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("salesDiscontinuationDate").getTime())));
                                     }
                                     productDocument.setSequenceNum(productCategoryMember.getString("sequenceNum"));
                                     productDocument.setCategoryName(workingCategory.getString("categoryName"));
@@ -309,7 +314,25 @@ public class SolrServices {
                                                 	//productFeatureGroupAppls = EntityUtil.filterByDate(productFeatureGroupAppls);
                                                 	if(productFeatureGroupAppls.size() > 0) 
                                                 	{
-                                                        description = feature.getString("description");
+                                                		//Issue 38916
+                            		                    description = feature.getString("description");
+                            		                	if (UtilValidate.isNotEmpty(description))
+                            		                	{
+                            	                            String forceCase = Util.getProductStoreParm(delegator, productStoreId, "FACET_VALUE_FORCE_CASE");
+                                		                	if (UtilValidate.isNotEmpty(forceCase))
+                                		                	{
+                                	                            if ("UPPER".equals(forceCase.trim().toUpperCase()))
+                                	                            {
+                                	    		                    description = description.toUpperCase();
+                                	                            }
+                                	                            else if ("LOWER".equals(forceCase.trim().toUpperCase()))
+                                	                            {
+                                	    		                    description = description.toLowerCase();
+                                	                            	
+                                	                            }
+                                		                		
+                                		                	}
+                            		                	}
                                                 	}
                                                     //Commented out block
                                                     //issue #25879
@@ -487,6 +510,7 @@ public class SolrServices {
                                             {
                                                 if (UtilValidate.isEmpty(facetValueMin)) 
                                                 {
+                                                	
                                                     String xProductStorePramFaceValueMin = Util.getProductStoreParm(delegator, productStoreId, "FACET_VALUE_MIN");
                                                     if (UtilValidate.isNotEmpty(xProductStorePramFaceValueMin)) 
                                                     {
@@ -559,7 +583,7 @@ public class SolrServices {
                 Debug.log("solrProductIndexFile=" + filename, module);
 
                 PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename), "UTF-8")));
-                CsvBeanWriter cbw = new CsvBeanWriter(writer, CsvPreference.EXCEL_PREFERENCE);
+				CsvBeanWriter cbw = new CsvBeanWriter(writer, CsvPreference.EXCEL_PREFERENCE);
 
                 CellProcessor[] cp = (CellProcessor[]) cellProcessors.toArray(new CellProcessor[cellProcessors.size()]);
                 for (ProductDocument doc : documentList) 
@@ -606,6 +630,40 @@ public class SolrServices {
 
         return result;
     }
+
+	private static List<CellProcessor> getCellProcesser() {
+		List<CellProcessor> cellProcessors = FastList.newInstance();
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(null), new ConvertNullTo("product"), new ConvertNullTo(""), new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
+		cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""),new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""),new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""),new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
+		return cellProcessors;
+	}
+
+	private static List<String> getHeaderColumns() {
+		List<String> headerColumns = FastList.newInstance();
+        headerColumns.addAll(UtilMisc.toList("id", "rowType", "productId", "name"));
+        headerColumns.addAll(UtilMisc.toList("internalName", "description"));
+        headerColumns.addAll(UtilMisc.toList("categoryDescription","categoryPdpDescription"));
+        headerColumns.addAll(UtilMisc.toList("productCategoryId", "topMostProductCategoryId", "categoryLevel", "categoryName", "categoryImageUrl"));
+        headerColumns.addAll(UtilMisc.toList("productImageSmallUrl", "productImageSmallAlt","productImageSmallAltUrl","productImageMediumUrl", "productImageLargeUrl"));
+        headerColumns.addAll(UtilMisc.toList("productFeatureGroupId", "productFeatureGroupDescription","productCategoryFacetGroups"));
+        headerColumns.addAll(UtilMisc.toList("listPrice","price", "customerRating","sequenceNum"));
+        headerColumns.addAll(UtilMisc.toList("totalTimesViewed","totalQuantityOrdered"));
+        headerColumns.addAll(UtilMisc.toList("productFacilityIds"));
+        headerColumns.addAll(UtilMisc.toList("introductionDate"));
+        headerColumns.addAll(UtilMisc.toList("salesDiscontinuationDate"));
+        headerColumns.addAll(UtilMisc.toList("manufacturerName", "manufacturerIdNo"));
+		return headerColumns;
+	}
 
     private static List<Map<String, Object>> getRelatedCategories(Delegator delegator, String parentId, List<String> categoryTrail, boolean limitView, boolean excludeEmpty, boolean recursive) 
     {
@@ -938,6 +996,740 @@ public class SolrServices {
     		
     	}
     	return resp;
+    }
+    
+    public static Map genProductsIndexAdd(DispatchContext dctx, Map context) throws GenericTransactionException
+    {
+
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+        String productStoreId = (String) context.get("productStoreId");
+        String productId = (String) context.get("productId");
+        String browseRootProductCategoryId = (String) context.get("browseRootProductCategoryId");
+        Delegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        List<ProductDocument> documentList = FastList.newInstance();
+        
+        List<String> headerColumns = getHeaderColumns();
+
+        List<String> headerNames = getHeaderColumns();
+        
+        List<CellProcessor> cellProcessors = getCellProcesser();
+
+        List<String> prodFeatureColNames = FastList.newInstance();
+        
+        ProductContentWrapper productContentWrapper = null;
+        try 
+        {
+            // Find Product Store - to find store's currency setting
+            GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), false);
+
+            List<GenericValue> productFeatureGroupApplsList = delegator.findList("ProductFeatureGroupAppl", null, UtilMisc.toSet("productFeatureGroupId", "productFeatureId", "fromDate", "thruDate", "sequenceNum"), null, null, false);
+            
+            productFeatureGroupApplsList = EntityUtil.filterByDate(productFeatureGroupApplsList);
+            
+            // Get all unexpired Product Categories (Top Level Catalog Category)
+            GenericValue workingCategory = null;
+            List<Map<String, Object>> allUnexpiredCategories = getRelatedCategories(delegator, browseRootProductCategoryId, null, true, true, true);
+            updateHeaderAndProcesser(dispatcher, headerColumns, headerNames,
+					cellProcessors, prodFeatureColNames,
+					allUnexpiredCategories);
+            
+            ProductDocument productDocument = null;
+            
+            Map<String, Object> results = null;
+            String productCategoryId = null;
+            StringUtil.StringWrapper imageUrl = null;
+            String categoryDescription = null;
+            Double totalQuantityOrdered = 0.00;
+            BigDecimal averageProductRating = BigDecimal.ZERO;
+            Long totalTimesViewed = 0L;
+            GenericValue product = null;
+            if(UtilValidate.isNotEmpty(productId))
+            {
+            	product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+            }
+            
+            String productDocumentId = null;
+
+            // All Sub Categries
+            String productCategoryIdPath = null;
+            int categoryLevel = 0;
+            List<String> categoryTrail = null;
+            if(UtilValidate.isNotEmpty(product)) 
+            {
+                List<GenericValue> productCategoryMembers = product.getRelated("ProductCategoryMember");
+                productCategoryMembers = EntityUtil.orderBy(productCategoryMembers,UtilMisc.toList("sequenceNum"));
+
+                // Remove any expired
+                productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
+                    
+                for (GenericValue productCategoryMember : productCategoryMembers) 
+                {
+                    productCategoryId = (String) productCategoryMember.getString("productCategoryId");
+                    workingCategory = productCategoryMember.getRelatedOne("ProductCategory");
+                    String isVariant = product.getString("isVariant");
+	                if (UtilValidate.isEmpty(isVariant)) 
+	                {
+	                    isVariant = "N";
+	                }
+                    // All Non-Variant Products
+                    if ("N".equals(isVariant)) 
+                    {
+                        //if (ProductWorker.isSellable(product)) 
+                        //{
+                            productDocument = getProductDocumentFromProduct(
+											locale, delegator, dispatcher,
+											productStore,
+											productFeatureGroupApplsList,
+											workingCategory,
+											categoryDescription, product,
+											productCategoryMember);
+                                    
+                            documentList.add(productDocument);
+                        //}
+                    }
+                }
+            }
+
+            if (UtilValidate.isNotEmpty(documentList)) 
+            {
+                // Generate CSV File
+                String[] columnNames = (String[]) headerColumns.toArray(new String[headerColumns.size()]);
+                String filename = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("solrProductIndexFile"), context);
+
+                PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename, true), "UTF-8")));
+				CsvBeanWriter cbw = new CsvBeanWriter(writer, CsvPreference.EXCEL_PREFERENCE);
+
+                CellProcessor[] cp = (CellProcessor[]) cellProcessors.toArray(new CellProcessor[cellProcessors.size()]);
+                
+                for (ProductDocument doc : documentList) 
+                {
+                    cbw.write(doc, columnNames, cp);
+                }
+                cbw.close();
+                writer.flush();
+
+                String solrServer = OSAFE_PROPS.getString("solrIndexServer");
+
+                Debug.log("solrServer=" + solrServer, module);
+
+                // Delete previous index using Http Client
+                String deleteAllUrl = solrServer + "/update?stream.body=<delete><query>*:*</query></delete>&commit=true";
+                HttpClient hc = new HttpClient(deleteAllUrl);
+                String deleteResponse = hc.get();
+                Debug.log(deleteResponse, module);
+
+                // Import CSV file using Http Client
+                int index = prodFeatureColNames.size();
+                for (String prodFeatureType : prodFeatureColNames) 
+                {
+                    columnNames[columnNames.length - index] = prodFeatureType;
+                    index--;
+                }
+                String importUrl = solrServer + "/update/csv?stream.file=" + filename + "&stream.contentType=text/plain;charset=utf-8&header=false&commit=true&fieldnames=" + StringUtils.join(columnNames, ",");
+                Debug.log(importUrl, module);
+                hc = new HttpClient(importUrl);
+                String importResponse = hc.get();
+                Debug.log(importResponse, module);
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.logError(e, e.getMessage(), module);
+        }
+
+        if (documentList == null) 
+        {
+            documentList = FastList.newInstance();
+        }
+        result.put("documentListCount", documentList.size());
+
+        return result;
+    
+    }
+
+	private static ProductDocument getProductDocumentFromProduct(Locale locale,
+			Delegator delegator, LocalDispatcher dispatcher,
+			GenericValue productStore,
+			List<GenericValue> productFeatureGroupApplsList,
+			GenericValue workingCategory, String categoryDescription,
+			GenericValue product, GenericValue productCategoryMember)
+			throws GenericEntityException, GenericServiceException {
+		String productId;
+        String productStoreId = productStore.getString("productStoreId");
+		ProductContentWrapper productContentWrapper;
+		ProductDocument productDocument;
+		Map<String, Object> results;
+		StringUtil.StringWrapper imageUrl;
+		Double totalQuantityOrdered;
+		BigDecimal averageProductRating;
+		Long totalTimesViewed;
+		String productDocumentId;
+		productContentWrapper = new ProductContentWrapper(dispatcher, product, locale, "text/html");
+		productDocument = new ProductDocument();
+		productId = product.getString("productId");
+		productDocumentId = SolrConstants.ROW_TYPE_PRODUCT + "_" + productId;
+		productDocument.setId(productDocumentId);
+		productDocument.setProductId(productId);
+		productDocument.setRowType(SolrConstants.ROW_TYPE_PRODUCT);
+		productDocument.setName(productContentWrapper.get("PRODUCT_NAME").toString());
+		productDocument.setInternalName(product.getString("internalName"));
+		
+		GenericValue goodIdentification = delegator.findByPrimaryKey("GoodIdentification", UtilMisc.toMap("productId", productId, "goodIdentificationTypeId", "MANUFACTURER_ID_NO"));
+		if(UtilValidate.isNotEmpty(goodIdentification))
+		{
+			productDocument.setManufacturerIdNo(goodIdentification.getString("idValue"));
+		}
+		
+		String manufacturerPartyId = product.getString("manufacturerPartyId");
+		if(UtilValidate.isNotEmpty(manufacturerPartyId))
+		{
+			GenericValue manufacturerParty = delegator.findByPrimaryKey("Party", UtilMisc.toMap("partyId", manufacturerPartyId));
+			if(UtilValidate.isNotEmpty(manufacturerParty))
+			{
+				PartyContentWrapper partyContentWrapper = new PartyContentWrapper(dispatcher, manufacturerParty, locale, "text/html");
+				productDocument.setManufacturerName(partyContentWrapper.get("PROFILE_NAME").toString());
+			}
+		}
+		
+		
+		
+		if(UtilValidate.isNotEmpty(product.getTimestamp("introductionDate")))
+		{
+			productDocument.setIntroductionDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("introductionDate").getTime())));
+		}
+		if(UtilValidate.isNotEmpty(product.getTimestamp("salesDiscontinuationDate")))
+        {
+        	productDocument.setSalesDiscontinuationDate(new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sss'Z'").format(new java.util.Date(product.getTimestamp("salesDiscontinuationDate").getTime())));
+        }
+		productDocument.setSequenceNum(productCategoryMember.getString("sequenceNum"));
+		productDocument.setCategoryName(workingCategory.getString("categoryName"));
+		
+		if (UtilValidate.isNotEmpty(categoryDescription) && !"null".equalsIgnoreCase(categoryDescription.toString())) 
+		{
+			productDocument.setCategoryDescription(categoryDescription.toString());
+		}
+		// LONG_DESCRIPTION
+		String longDescription = ProductContentWrapper.getProductContentAsText(product, "LONG_DESCRIPTION", locale, dispatcher);
+		if (UtilValidate.isNotEmpty(longDescription)) 
+		{
+		    productDocument.setDescription(longDescription);
+		}
+
+		// SMALL_IMAGE_URL
+		imageUrl = productContentWrapper.get("SMALL_IMAGE_URL");
+		if (UtilValidate.isNotEmpty(imageUrl) && !"null".equalsIgnoreCase(imageUrl.toString())) 
+		{
+		    productDocument.setProductImageSmallUrl(imageUrl.toString());
+		}
+
+		// SMALL_IMAGE_ALT
+		imageUrl = productContentWrapper.get("SMALL_IMAGE_ALT");
+		if (UtilValidate.isNotEmpty(imageUrl) && !"null".equalsIgnoreCase(imageUrl.toString())) 
+		{
+		    productDocument.setProductImageSmallAlt(imageUrl.toString());
+		}
+
+		// SMALL_IMAGE_ALT_URL
+		imageUrl = productContentWrapper.get("SMALL_IMAGE_ALT_URL");
+		if (UtilValidate.isNotEmpty(imageUrl) && !"null".equalsIgnoreCase(imageUrl.toString())) 
+		{
+			if (UtilValidate.isNotEmpty(imageUrl.toString()))
+			{
+		        productDocument.setProductImageSmallAltUrl(imageUrl.toString());
+			}
+		}
+		// MEDIUM_IMAGE_URL
+		imageUrl = productContentWrapper.get("MEDIUM_IMAGE_URL");
+		if (UtilValidate.isNotEmpty(imageUrl) && !"null".equalsIgnoreCase(imageUrl.toString())) 
+		{
+		    productDocument.setProductImageMediumUrl(imageUrl.toString());
+		}
+
+		// LARGE_IMAGE_URL
+		imageUrl = productContentWrapper.get("LARGE_IMAGE_URL");
+		if (UtilValidate.isNotEmpty(imageUrl) && !"null".equalsIgnoreCase(imageUrl.toString())) 
+		{
+		    productDocument.setProductImageLargeUrl(imageUrl.toString());
+		}
+
+		results = dispatcher.runSync("getProductFeaturesByType", UtilMisc.toMap("productId", productId));
+		List<String> productFeatureTypes = (List<String>) results.get("productFeatureTypes");
+
+		// for each new feature type add a column heading
+		// ex. COLOR SIZE
+
+		Map<String, GenericValue> productFeaturesByType = (Map<String, GenericValue>) results.get("productFeaturesByType");
+		for (String productFeatureType : productFeatureTypes) 
+		{
+
+		    List<GenericValue> productFeatures = (List<GenericValue>) productFeaturesByType.get(productFeatureType);
+
+		    try 
+		    {
+		    	
+		        Map<String, String> featureValuesMap = FastMap.newInstance();
+		        List<String> featureValues = FastList.newInstance();
+		        try 
+		        {
+		            for (GenericValue feature : productFeatures) 
+		            {
+		            	String description ="";
+		            	String productFeatureApplTypeId = feature.getString("productFeatureApplTypeId");
+		            	List<GenericValue> productFeatureGroupAppls = EntityUtil.filterByAnd(productFeatureGroupApplsList, UtilMisc.toMap("productFeatureId",feature.getString("productFeatureId")));
+		            	if(productFeatureGroupAppls.size() > 0) 
+		            	{
+                    		//Issue 38916
+		                    description = feature.getString("description");
+		                	if (UtilValidate.isNotEmpty(description))
+		                	{
+	                            String forceCase = Util.getProductStoreParm(delegator, productStoreId, "FACET_VALUE_FORCE_CASE");
+    		                	if (UtilValidate.isNotEmpty(forceCase))
+    		                	{
+    	                            if ("UPPER".equals(forceCase.trim().toUpperCase()))
+    	                            {
+    	    		                    description = description.toUpperCase();
+    	                            }
+    	                            else if ("LOWER".equals(forceCase.trim().toUpperCase()))
+    	                            {
+    	    		                    description = description.toLowerCase();
+    	                            	
+    	                            }
+    		                		
+    		                	}
+		                	}
+		            	}
+		                if ("SELECTABLE_FEATURE".equals(productFeatureApplTypeId)) 
+		                {
+		                    if (description.contains("/")) 
+		                    {
+		                        String[] descriptionParts = StringUtils.split(description, "/");
+		                        for (String descPart : descriptionParts) 
+		                        {
+		                            descPart = StringUtils.trim(descPart);
+		                            featureValuesMap.put(descPart, descPart);
+		                        }
+		                        continue;
+		                    }
+		                }
+		                try 
+		                {
+		                	if (UtilValidate.isNotEmpty(description))
+		                	{
+		                        featureValuesMap.put(description, description);
+		                		
+		                	}
+		                }
+		                catch (Exception eee) 
+		                {
+		                	Debug.logError(eee, "h" + eee.getMessage()+ description, module);
+		                }
+		            }
+		        }
+		        catch (Exception eee) 
+		        {
+		        	Debug.logError(eee, eee.getMessage(), module);
+		        }
+		        Set<Entry<String, String>> featureValuesEntrySet = featureValuesMap.entrySet();
+		        Iterator<Entry<String, String>> featureValuesIterator = featureValuesEntrySet.iterator();
+		        while (featureValuesIterator.hasNext()) 
+		        {
+		            Map.Entry<String, String> featureValueEntry = (Map.Entry<String, String>) featureValuesIterator.next();
+		            featureValues.add((String) featureValueEntry.getKey());
+		        }
+
+		        // Need to replace spaces in decription with underscore symbol "_"
+		        for (int i = 0; i < featureValues.size(); i++) 
+		        {
+		            String val = featureValues.get(i);
+		            val = URLEncoder.encode(StringUtils.replace(val, " ", "_"), SolrConstants.DEFAULT_ENCODING);
+		            featureValues.set(i, val);
+		        }
+
+		        productDocument.addProductFeature(productFeatureType, featureValues);
+
+		    }
+		     catch (Exception ee)
+		     {
+		    	 Debug.logError(ee, ee.getMessage(),module);
+		     }
+		    // ex. Red Small
+		}
+
+		// Product Prices
+		String currencyUomId = productStore.getString("defaultCurrencyUomId");
+		results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "currencyUomId", currencyUomId));
+		productDocument.setListPrice((BigDecimal) results.get("listPrice"));
+		productDocument.setPrice((BigDecimal) results.get("price"));
+
+		// Product RECURRENCE Prices
+		results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "currencyUomId", currencyUomId,"productPricePurposeId","RECURRING_CHARGE"));
+		productDocument.setRecurrencePrice((BigDecimal) results.get("price"));
+
+		GenericValue ProductCalculatedInfo = delegator.findOne("ProductCalculatedInfo", UtilMisc.toMap("productId", productId), false);
+		// Product Ratings
+		if(UtilValidate.isNotEmpty(ProductCalculatedInfo) && UtilValidate.isNotEmpty(ProductCalculatedInfo.getBigDecimal("averageCustomerRating")))
+		{
+		    averageProductRating = ProductCalculatedInfo.getBigDecimal("averageCustomerRating");
+		} 
+		else 
+		{
+		    averageProductRating = BigDecimal.ZERO;
+		}
+		productDocument.setCustomerRating(averageProductRating);
+
+		// Product Quantity Ordered
+        if(UtilValidate.isNotEmpty(ProductCalculatedInfo) && ProductCalculatedInfo.getDouble("totalQuantityOrdered")!= null)
+        {
+		    totalQuantityOrdered = ProductCalculatedInfo.getDouble("totalQuantityOrdered");
+        }
+        else
+        {
+		    totalQuantityOrdered = 0.00;
+        }
+        productDocument.setTotalQuantityOrdered(totalQuantityOrdered);
+        
+        // Product View Count
+        if(UtilValidate.isNotEmpty(ProductCalculatedInfo) && ProductCalculatedInfo.getLong("totalTimesViewed")!= null)
+        {
+		    totalTimesViewed = ProductCalculatedInfo.getLong("totalTimesViewed");
+        }
+        else
+        {
+		    totalTimesViewed = 0L;
+        }
+        productDocument.setTotalTimesViewed(totalTimesViewed);
+
+        // Product Facilities
+        List<GenericValue>  productFacilityList = delegator.findList("ProductFacility", EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId), UtilMisc.toSet("facilityId"), null, null, false);
+        List productFacilityIdList = FastList.newInstance();
+        for (GenericValue productFacility : productFacilityList)
+        {
+		    productFacilityIdList.add(productFacility.getString("facilityId"));
+        }
+        String productFacilityIds = StringUtils.join(productFacilityIdList, " ");
+        productDocument.setProductFacilityIds(productFacilityIds);
+
+		
+        List<GenericValue> rollups = null;
+
+        rollups = delegator.findByAnd("ProductCategoryRollup", UtilMisc.toMap("productCategoryId", productCategoryMember.getString("productCategoryId")), UtilMisc.toList("sequenceNum"));
+        rollups = EntityUtil.filterByDate(rollups);
+                           
+		GenericValue gvTopMostCategory = null;
+		for(GenericValue rollUp : rollups)
+		{
+			gvTopMostCategory = rollUp.getRelatedOne("ParentProductCategory");
+			break;
+		}
+		
+		if (UtilValidate.isNotEmpty(gvTopMostCategory)) 
+		{
+		    String topMostProductCategoryId = gvTopMostCategory.getString("productCategoryId");
+		    productDocumentId = SolrConstants.ROW_TYPE_PRODUCT + "_" + productId + "_" + topMostProductCategoryId + "_" + productCategoryMember.getString("productCategoryId");
+		    productDocument.setId(productDocumentId);
+		    productDocument.setProductCategoryId(productCategoryMember.getString("productCategoryId"));
+		    productDocument.setTopMostProductCategoryId(topMostProductCategoryId);
+		}
+		return productDocument;
+	}
+    
+    
+    public static Map genProductsIndexUpdate(DispatchContext dctx, Map context) throws GenericTransactionException
+    {
+        Map<String, Object> result = ServiceUtil.returnSuccess();
+        Locale locale = (Locale) context.get("locale");
+        String productStoreId = (String) context.get("productStoreId");
+        String productId = (String) context.get("productId");
+        String browseRootProductCategoryId = (String) context.get("browseRootProductCategoryId");
+        Delegator delegator = dctx.getDelegator();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        List<ProductDocument> documentList = FastList.newInstance();
+        List<ProductDocument> documentListExisting = FastList.newInstance();
+        
+        List<String> headerColumns = getHeaderColumns();
+        
+        List<String> headerNames = getHeaderColumns();
+
+        List<CellProcessor> cellProcessors = getCellProcesser();
+        
+        List<String> prodFeatureColNames = FastList.newInstance();
+        
+        ProductContentWrapper productContentWrapper = null;
+        try 
+        {
+
+            // Find Product Store - to find store's currency setting
+            GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), false);
+
+            List<GenericValue> productFeatureGroupApplsList = delegator.findList("ProductFeatureGroupAppl", null, UtilMisc.toSet("productFeatureGroupId", "productFeatureId", "fromDate", "thruDate", "sequenceNum"), null, null, false); 
+            productFeatureGroupApplsList = EntityUtil.filterByDate(productFeatureGroupApplsList);
+            
+            // Get all unexpired Product Categories (Top Level Catalog Category)
+            GenericValue workingCategory = null;
+            List<Map<String, Object>> allUnexpiredCategories = getRelatedCategories(delegator, browseRootProductCategoryId, null, true, true, true);
+            updateHeaderAndProcesser(dispatcher, headerColumns, headerNames,
+					cellProcessors, prodFeatureColNames,
+					allUnexpiredCategories);
+            
+            ProductDocument productDocument = null;
+            
+            Map<String, Object> results = null;
+            String productCategoryId = null;
+            StringUtil.StringWrapper imageUrl = null;
+            String categoryDescription = null;
+            Double totalQuantityOrdered = 0.00;
+            BigDecimal averageProductRating = BigDecimal.ZERO;
+            Long totalTimesViewed = 0L;
+            GenericValue product = null;
+            if(UtilValidate.isNotEmpty(productId))
+            {
+            	product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+            }
+            
+            String productDocumentId = null;
+
+            // All Sub Categries
+            String productCategoryIdPath = null;
+            int categoryLevel = 0;
+            List<String> categoryTrail = null;
+            if(UtilValidate.isNotEmpty(product)) 
+            {
+                List<GenericValue> productCategoryMembers = product.getRelated("ProductCategoryMember");
+                productCategoryMembers = EntityUtil.orderBy(productCategoryMembers,UtilMisc.toList("sequenceNum"));
+
+                // Remove any expired
+                productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
+                    
+                for (GenericValue productCategoryMember : productCategoryMembers) 
+                {
+                    productCategoryId = (String) productCategoryMember.getString("productCategoryId");
+                    workingCategory = productCategoryMember.getRelatedOne("ProductCategory");
+                    String isVariant = product.getString("isVariant");
+                    if (UtilValidate.isEmpty(isVariant)) 
+                    {
+                        isVariant = "N";
+                    }
+                    // All Non-Variant Products
+                    if ("N".equals(isVariant)) 
+                    {
+                        //if (ProductWorker.isSellable(product)) 
+                        //{
+                            productDocument = getProductDocumentFromProduct(
+							        locale, delegator, dispatcher,
+								    productStore,
+									productFeatureGroupApplsList,
+									workingCategory,
+									categoryDescription, product,
+									productCategoryMember);
+                                    
+                            documentList.add(productDocument);
+                        //}
+                     }
+                 }
+             }
+
+             if (UtilValidate.isNotEmpty(documentList)) 
+             {
+                 // Generate CSV File
+                 String[] columnNames = (String[]) headerColumns.toArray(new String[headerColumns.size()]);
+                 String[] headerColumnNames = (String[]) headerNames.toArray(new String[headerNames.size()]);
+                 String filename = FlexibleStringExpander.expandString(OSAFE_PROPS.getString("solrProductIndexFile"), context);
+
+                 Debug.log("solrProductIndexFile=" + filename, module);
+
+                 CellProcessor[] cp = (CellProcessor[]) cellProcessors.toArray(new CellProcessor[cellProcessors.size()]);
+                
+                 /*String[] row = null;
+                 
+                 InputStreamReader inFile = new InputStreamReader(new FileInputStream(filename));
+                 
+                 CSVReader csvReader = new CSVReader(inFile);
+                 
+                 ProductDocument productDocumentRead = null;
+                 //List content = csvReader.readAll();
+                 while((row = csvReader.readNext()) != null)
+                 {
+                     productDocumentRead = getProductDocumentFromCsv(row, headerColumnNames);
+                     if(productDocumentRead.getRowType().equals(SolrConstants.ROW_TYPE_PRODUCT))
+                	 {
+                	     for (ProductDocument doc : documentList) 
+                         {
+            				 if(productDocumentRead.getProductId().equals(doc.getProductId()))
+                             {
+                            	 documentListExisting.add(doc);
+                             }
+                             else
+                             {
+                            	 documentListExisting.add(productDocumentRead);
+                             }
+                         }
+                	 }
+                	 else
+                	 {
+                	     documentListExisting.add(productDocumentRead);
+                	 }
+                     System.out.println("++++++++++++"+row[0]);
+                 }
+                 csvReader.close();
+                 inFile.close();*/
+                
+                 PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filename, true), "UTF-8")));
+				 CsvBeanWriter cbw = new CsvBeanWriter(writer, CsvPreference.EXCEL_PREFERENCE);
+                
+                 for (ProductDocument doc : documentList) 
+                 {
+                     cbw.write(doc, columnNames, cp);
+                 }
+                 cbw.close();
+                 writer.flush();
+
+                 String solrServer = OSAFE_PROPS.getString("solrIndexServer");
+
+                 // Delete previous index using Http Client
+                 String deleteAllUrl = solrServer + "/update?stream.body=<delete><query>*:*</query></delete>&commit=true";
+                 HttpClient hc = new HttpClient(deleteAllUrl);
+                 String deleteResponse = hc.get();
+                 Debug.log(deleteResponse, module);
+
+                 // Import CSV file using Http Client
+                 int index = prodFeatureColNames.size();
+                 for (String prodFeatureType : prodFeatureColNames) 
+                 {
+                     columnNames[columnNames.length - index] = prodFeatureType;
+                     index--;
+                 }
+                 String importUrl = solrServer + "/update/csv?stream.file=" + filename + "&stream.contentType=text/plain;charset=utf-8&header=false&commit=true&fieldnames=" + StringUtils.join(columnNames, ",");
+                 Debug.log(importUrl, module);
+                 hc = new HttpClient(importUrl);
+                 String importResponse = hc.get();
+                 Debug.log(importResponse, module);
+             }
+         } 
+         catch (Exception e) 
+         {
+             Debug.logError(e, e.getMessage(), module);
+         }
+
+         if (documentList == null) 
+         {
+             documentList = FastList.newInstance();
+         }
+         result.put("documentListCount", documentList.size());
+
+         return result;
+    }
+
+	private static void updateHeaderAndProcesser(LocalDispatcher dispatcher,
+			List<String> headerColumns, List<String> headerNames,
+			List<CellProcessor> cellProcessors,
+			List<String> prodFeatureColNames,
+			List<Map<String, Object>> allUnexpiredCategories)
+			throws GenericEntityException, GenericServiceException {
+		GenericValue workingCategory;
+		for (Map<String, Object> workingCategoryMap : allUnexpiredCategories) 
+		{
+		    workingCategory = (GenericValue) workingCategoryMap.get("ProductCategory");
+		    List<GenericValue> productCatMemberList = workingCategory.getRelated("ProductCategoryMember");
+		    if(UtilValidate.isNotEmpty(productCatMemberList))
+		    {
+		    	for(GenericValue productCatMember : productCatMemberList)
+		    	{
+		    		GenericValue product = productCatMember.getRelatedOne("Product");
+		    		String isVariant = product.getString("isVariant");
+		    		if (UtilValidate.isEmpty(isVariant)) 
+		            {
+		                isVariant = "N";
+		            }
+		            if ("N".equals(isVariant)) 
+		            {
+		                //if (ProductWorker.isSellable(product)) 
+		                //{
+		                	Map results = dispatcher.runSync("getProductFeaturesByType", UtilMisc.toMap("productId", product.getString("productId")));
+		                    List<String> productFeatureTypes = (List<String>) results.get("productFeatureTypes");
+
+		                    Map<String, GenericValue> productFeaturesByType = (Map<String, GenericValue>) results.get("productFeaturesByType");
+		                    for (String productFeatureType : productFeatureTypes) 
+		                    {
+		                        try 
+		                        {
+		                            if (!prodFeatureColNames.contains(productFeatureType)) 
+		                            {
+		                                headerColumns.add("productFeature");
+		                                headerNames.add(productFeatureType);
+		                                cellProcessors.add(new ProductFeatureCellProcessor(productFeatureType));
+		                                prodFeatureColNames.add(productFeatureType);
+		                            }
+		                        }
+		                         catch (Exception ee)
+		                         {
+		                        	 Debug.logError(ee, ee.getMessage(),module);
+		                         }
+		                    }
+		                //}
+		            }
+		    	}
+		    }
+		}
+	}
+    
+    /*private static ProductDocument getProductDocumentFromCsv(String[] row, String[] headerColumnNames)
+    {
+    	ProductDocument doc = new ProductDocument();
+    	if(row.length == headerColumnNames.length)
+    	{
+    		doc.setId(getString(row[0]));
+    		doc.setRowType(getString(row[1]));
+    		doc.setProductId(getString(row[2]));
+    		doc.setName(getString(row[3]));
+    		doc.setInternalName(getString(row[4]));
+    		doc.setDescription(getString(row[5]));
+    		doc.setCategoryDescription(getString(row[6]));
+    		doc.setCategoryPdpDescription(getString(row[7]));
+    		doc.setProductCategoryId(getString(row[8]));
+    		doc.setTopMostProductCategoryId(getString(row[9]));
+    		doc.setCategoryLevel(getString(row[10]));
+    		doc.setCategoryName(getString(row[11]));
+    		doc.setCategoryImageUrl(getString(row[12]));
+    		doc.setProductImageSmallUrl(getString(row[13]));
+    		doc.setProductImageSmallAlt(getString(row[14]));
+    		doc.setProductImageSmallAltUrl(getString(row[15]));
+    		doc.setProductImageMediumUrl(getString(row[16]));
+    		doc.setProductImageLargeUrl(getString(row[17]));
+    		doc.setProductFeatureGroupId(getString(row[18]));
+    		doc.setProductFeatureGroupDescription(getString(row[19]));
+    		doc.setProductCategoryFacetGroups(getString(row[20]));
+    		doc.setListPrice(getString(row[21]));
+    		doc.setPrice(getString(row[22]));
+    		doc.setCustomerRating(getString(row[23]));
+    		doc.setSequenceNum(getString(row[24]));
+    		doc.setTotalTimesViewed(getString(row[25]));
+    		doc.setTotalQuantityOrdered(getString(row[26]));
+    		doc.setProductFacilityIds(getString(row[27]));
+    		doc.setIntroductionDate(getString(row[28]));
+    		doc.setSalesDiscontinuationDate(getString(row[29]));
+    		doc.setManufacturerName(getString(row[30]));
+    		doc.setManufacturerIdNo(getString(row[31]));
+    		
+    		for(int i = 32; i < headerColumnNames.length; i++)
+    		{
+    			doc.addProductFeature(headerColumnNames[i], new ArrayList<String>(Arrays.asList(getString(row[i]).split(" "))));
+    		}
+    	}
+    	return doc;
+    }*/
+    
+    public static String getString(Object tsObj) 
+    {
+        if (UtilValidate.isNotEmpty(tsObj))
+        {
+            return tsObj.toString();
+        }
+        else
+        {
+            return "";
+        }
     }
     
 }

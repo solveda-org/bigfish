@@ -170,12 +170,18 @@ public class LoginEvents {
             		regPwdMinChar = "6"; //default value
             	}
                 passwordToSend = RandomStringUtils.randomAlphanumeric(Integer.parseInt(regPwdMinChar));
+                if ("true".equalsIgnoreCase(UtilProperties.getPropertyValue("security.properties", "password.lowercase"))) 
+                {
+                	passwordToSend=passwordToSend.toLowerCase();
+                }
                 supposedUserLogin.set("currentPassword", HashCrypt.getDigestHash(passwordToSend, LoginServices.getHashType()));
                 supposedUserLogin.set("passwordHint", "Auto-Generated Password");
                 if ("true".equals(UtilProperties.getPropertyValue("security.properties", "password.email_password.require_password_change"))){
                     supposedUserLogin.set("requirePasswordChange", "Y");
                 }
-            } else {
+            } 
+            else 
+            {
                 passwordToSend = supposedUserLogin.getString("currentPassword");
             }
         } catch (GenericEntityException e) {

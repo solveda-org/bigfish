@@ -447,7 +447,23 @@ under the License.
             </widgets>
         </section>
     </screen>
-    
-    
+
+    <screen name="requestQuoteEmailNotification">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="title" value="${uiLabelMap.RequestQuoteTitleTitle}"/>
+                <set field="contentEmailBodyId" value="${idMap.EMAIL_REQUEST_QUOTE}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="email-body-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
 
 </screens>

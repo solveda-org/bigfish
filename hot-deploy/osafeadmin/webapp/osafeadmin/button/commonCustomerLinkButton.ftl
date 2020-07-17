@@ -1,4 +1,4 @@
-<#if party?has_content>
+<#if party?has_content && party.partyTypeId == "PERSON">
     <div class="linkButton">
       <#if !showCustomerEditLink?has_content>
           <#assign showCustomerEditLink = "true"/>
@@ -67,6 +67,8 @@
           </#if>
           <#if userLoginId?has_content>
               <a href="<@ofbizUrl>customerActivityDetail?partyId=${parameters.partyId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.CustomerWebsiteActivityTooltip}');" onMouseout="hideTooltip()"><span class="customerActivityIcon"></span></a>
+          <#else>
+               <span class="customerActivityIcon" onMouseover="showTooltip(event,'${uiLabelMap.CustomerWebsiteActivityTooltip} [0]');" onMouseout="hideTooltip()"></span>
           </#if>
       </#if>
       <#if showExportToPdfLink == 'true'>

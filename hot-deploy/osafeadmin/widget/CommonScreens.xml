@@ -860,4 +860,37 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="reviewAges">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="REVIEW_AGE"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/reviewAges.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="reviewCustom01">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="REVIEW_CUSTOM_01"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/common/reviewCustom01.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="scheduledJobServiceNames">
+        <section>
+            <actions>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/jobs/scheduledJobServiceNames.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/jobs/scheduledJobServiceNames.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
 </screens>

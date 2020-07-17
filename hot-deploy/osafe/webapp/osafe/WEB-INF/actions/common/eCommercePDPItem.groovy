@@ -22,6 +22,7 @@ import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;
 import org.ofbiz.base.util.UtilProperties;
 import com.osafe.util.OsafeAdminUtil;
+import org.ofbiz.product.catalog.CatalogWorker;
 
 productId = request.getAttribute("plpItemId");
 cart = session.getAttribute("shoppingCart");
@@ -351,7 +352,7 @@ String buildVariantMapJS(Map firstVariantIdMap, Map variantStandardFeatureMap)
         {
             for(GenericValue productVariantStandardFeatureAppl : productVariantStandardFeatures)
             {
-                def mapKey = "FT"+productVariantStandardFeatureAppl.productFeatureTypeId+"_"+productVariantStandardFeatureAppl.description;
+                def mapKey = "FT"+productVariantStandardFeatureAppl.productFeatureTypeId+"_"+uiSequenceScreen+"_"+productId+"_"+productVariantStandardFeatureAppl.description;
                 if(!featureExist.contains(mapKey))
                 {
                     buf.append("VARMAP['" + mapKey + "'] = \"" + productVariantStandardFeatureAppl.productId + "\";");
@@ -553,7 +554,23 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
 
 
 
-
+currentCatalogId = CatalogWorker.getCurrentCatalogId(request);
+webSiteId = CatalogWorker.getWebSiteId(request);
+productStore = ProductStoreWorker.getProductStore(request);
+productStoreId = productStore.get("productStoreId");
+priceContext = [:];
+if (cart.isSalesOrder()) 
+{
+    // sales order: run the "calculateProductPrice" service
+    priceContext = [prodCatalogId : currentCatalogId,
+                currencyUomId : cart.getCurrency(), autoUserLogin : autoUserLogin];
+    priceContext.webSiteId = webSiteId;
+    priceContext.productStoreId = productStoreId;
+    priceContext.checkIncludeVat = "Y";
+    priceContext.agreementId = cart.getAgreementId();
+    priceContext.productPricePurposeId = "PURCHASE";
+    priceContext.partyId = cart.getPartyId();  // IMPORTANT: must put this in, or price will be calculated for the CSR instead of the customer
+}
 
 
 if(UtilValidate.isNotEmpty(productId)) 
@@ -685,9 +702,15 @@ if(UtilValidate.isNotEmpty(productId))
         
     }
     
+    priceContext.put("product", product);
+    plpVirtualPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+    
+    price = plpVirtualPriceMap.price;
+    listPrice = plpVirtualPriceMap.listPrice;
+
     //Not useing the calculateProductPrice service on purpose.
     //Instead just pulling the pricing directly from DB for plp type item displays (Complement, Accessory and  Recently Viewed)
-    virtualProductPrices = delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", productId, "currencyUomId", cart.getCurrency(), "productStoreGroupId", "_NA_","productPricePurposeId","PURCHASE"), UtilMisc.toList("-fromDate"));
+    /*virtualProductPrices = delegator.findByAndCache("ProductPrice", UtilMisc.toMap("productId", productId, "currencyUomId", cart.getCurrency(), "productStoreGroupId", "_NA_","productPricePurposeId","PURCHASE"), UtilMisc.toList("-fromDate"));
     virtualProductPrices = EntityUtil.filterByDate(virtualProductPrices, true);
     if (UtilValidate.isNotEmpty(virtualProductPrices))
     {
@@ -695,17 +718,17 @@ if(UtilValidate.isNotEmpty(productId))
         {
           if (virtualProductPrice.productPriceTypeId == "DEFAULT_PRICE")
           {
-        	    price = virtualProductPrice.price;
+        	    price = plpVirtualPriceMap.price;
                 continue;
           }
           if (virtualProductPrice.productPriceTypeId == "LIST_PRICE")
           {
-        	    listPrice = virtualProductPrice.price;
+        	    listPrice = plpVirtualPriceMap.listPrice;
                 continue;
           }
         }
     	
-    }
+    }*/
 
     //CHECK if the virtual product has RECURRING price.
     //Instead just pulling the pricing directly from DB for plp type item displays (Complement, Accessory and  Recently Viewed)
@@ -798,8 +821,25 @@ if(UtilValidate.isNotEmpty(productId))
     
     // GET PRODUCT FEATURE AND APPLS: DISTINGUISHING FEATURES
     // Using findByAndCache Call since the ProductService(Service getProductVariantTree call) will make the same findByAndCache Call.
-    productDistinguishingFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "DISTINGUISHING_FEAT"), UtilMisc.toList("sequenceNum"));
-    productDistinguishingFeatures = EntityUtil.filterByDate(productDistinguishingFeatures, true);
+	//Issue 38934, 38916 - Check for duplicate feature descriptions
+    productDistinguishingFeatures = FastList.newInstance();
+    Map distinguishingFeatureExistsMap = FastMap.newInstance();
+    distinguishingFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "DISTINGUISHING_FEAT"), UtilMisc.toList("sequenceNum"));
+    distinguishingFeatures = EntityUtil.filterByDate(distinguishingFeatures, true);
+    
+    for (GenericValue distinguishingFeature : distinguishingFeatures)
+    {
+        String featureDescription = distinguishingFeature.description;
+        if (UtilValidate.isNotEmpty(featureDescription)) 
+        {
+        	featureDescription = featureDescription.toUpperCase();
+            if (!distinguishingFeatureExistsMap.containsKey(featureDescription))
+            {
+            	productDistinguishingFeatures.add(distinguishingFeature);
+            	distinguishingFeatureExistsMap.put(featureDescription,featureDescription);
+            }
+        }
+    }
 
     // GET PRODUCT FEATURE AND APPLS : DISTINGUISHING FEATURES BY FEATURE TYPE
     productFeatureTypes = FastList.newInstance();
@@ -849,7 +889,7 @@ if(UtilValidate.isNotEmpty(productId))
     if(UtilValidate.isNotEmpty((product).isVirtual) && ((product).isVirtual).toUpperCase()== "Y")
     {
    	
-    	Map productVariantPriceMap = FastMap.newInstance();
+    	Map plpProductVariantPriceMap = FastMap.newInstance();
     	Map descpFeatureGroupDescMap = FastMap.newInstance();
         variantFirstFeatureIdExist = [];
         facetGroupVariantMatch = request.getAttribute("FACET_GROUP_VARIANT_MATCH");
@@ -877,45 +917,62 @@ if(UtilValidate.isNotEmpty(productId))
                 variantProductFeatureAndAppls = EntityUtil.filterByDate(variantProductFeatureAndAppls,true);
   	            variantProductFeatureAndAppls = EntityUtil.orderBy(variantProductFeatureAndAppls,UtilMisc.toList("sequenceNum"));
   	            
-                variantProductPrices = assocVariantProduct.getRelatedCache("ProductPrice");
-                variantProductPrices = EntityUtil.filterByDate(variantProductPrices,true);
-
+  	            priceContext.put("product", assocVariantProduct);
+	            
+	            plpPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+  	            
+                /*variantProductPrices = assocVariantProduct.getRelatedCache("ProductPrice");
+                variantProductPrices = EntityUtil.filterByDate(variantProductPrices,true);*/
+	            
                 //BULLD PRODUCT CONTENT WRAPPER FOR EACH VARIANT TO PUT INTO CONTEXT
                 varProductContentWrapper = new ProductContentWrapper(assocVariantProduct, request);
                 productVariantContentWrapperMap.put(assocVariantProduct.productId, varProductContentWrapper);
 
-                for(GenericValue variantProductPrice : variantProductPrices)
+                varBasePrice = plpPriceMap.price;
+                plpProductVariantPriceMap.put(assocVariantProduct.productId, UtilMisc.toMap("basePrice", varBasePrice));
+                
+                varListPrice = plpPriceMap.listPrice;
+                varPriceMap = plpProductVariantPriceMap.get(assocVariantProduct.productId);
+                if (UtilValidate.isNotEmpty(varPriceMap)) 
+                {
+                    varPriceMap.put("listPrice", varListPrice)
+                } 
+                else 
+                {
+                	plpProductVariantPriceMap.put(assocVariantProduct.productId, UtilMisc.toMap("listPrice", varListPrice));
+                }
+                
+                /*for(GenericValue variantProductPrice : variantProductPrices)
 	            {
 	              if (variantProductPrice.productPriceTypeId == "DEFAULT_PRICE")
 	              {
 	                	varBasePrice = variantProductPrice.price;
-	                    varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
+	                    varPriceMap = plpProductVariantPriceMap.get(variantProductPrice.productId);
 	                    if (UtilValidate.isNotEmpty(varPriceMap)) 
 	                    {
 	                        varPriceMap.put("basePrice", varBasePrice)
 	                    } 
 	                    else 
 	                    {
-	                    	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("basePrice", varBasePrice))
+	                    	plpProductVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("basePrice", varBasePrice))
 	                    }
 	                    continue;
 	              }
 	              if (variantProductPrice.productPriceTypeId == "LIST_PRICE")
 	              {
 		            	varListPrice = variantProductPrice.price;
-		                varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
+		                varPriceMap = plpProductVariantPriceMap.get(variantProductPrice.productId);
 		                if (UtilValidate.isNotEmpty(varPriceMap)) 
 		                {
 		                    varPriceMap.put("listPrice", varListPrice)
 		                } 
 		                else 
 		                {
-		                	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("listPrice", varListPrice))
+		                	plpProductVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("listPrice", varListPrice))
 		                }
 		                continue;
 	              }
-	            }
-
+	            }*/
                 for (GenericValue variantProductFeatureAndAppl: variantProductFeatureAndAppls)
                 {
 		            if (UtilValidate.isNotEmpty(PLP_FACET_GROUP_VARIANT_MATCH)) 
@@ -936,7 +993,7 @@ if(UtilValidate.isNotEmpty(productId))
 			             }
 			             productVariantFeatureMap = UtilMisc.toMap("productVariantId", productIdTo,"productVariant", assocVariantProduct, "productFeatureId", variantProductFeatureAndAppl.productFeatureId,"productFeatureDesc", productFeatureDesc,"productFeatureTypeId", variantProductFeatureAndAppl.productFeatureTypeId);
 			
-			             variantPriceMap = productVariantPriceMap.get(productIdTo);
+			             variantPriceMap = plpProductVariantPriceMap.get(productIdTo);
 			             
 			             if (UtilValidate.isNotEmpty(variantPriceMap))
 			             {
@@ -1158,7 +1215,8 @@ if(UtilValidate.isNotEmpty(productId))
 	               }
 	            }
 	        }
-	  }
+	    }
+	    context.plpProductVariantPriceMap = plpProductVariantPriceMap;
     }
 	
 	//check if it is a finished good
@@ -1187,8 +1245,24 @@ if(UtilValidate.isNotEmpty(productId))
         {
             // GET PRODUCT FEATURE AND APPLS: SELECTABLE FEATURES
             // Using findByAndCache Call since the ProductService(Service getProductVariantTree call) will make the same findByAndCache Call.
-            productSelectableFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", product.productId, "productFeatureApplTypeId", "SELECTABLE_FEATURE"), UtilMisc.toList("sequenceNum"));
-            productSelectableFeatures = EntityUtil.filterByDate(productSelectableFeatures, true);
+        	//Issue 38934, 38916 - Check for duplicate feature descriptions
+            productSelectableFeatures = FastList.newInstance();
+            Map selectableFeatureExistsMap = FastMap.newInstance();
+            selectableFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", product.productId, "productFeatureApplTypeId", "SELECTABLE_FEATURE"), UtilMisc.toList("sequenceNum"));
+            selectableFeatures = EntityUtil.filterByDate(selectableFeatures, true);
+            for (GenericValue selectableFeature : selectableFeatures)
+            {
+                String featureDescription = selectableFeature.description;
+                if (UtilValidate.isNotEmpty(featureDescription)) 
+                {
+                	featureDescription = featureDescription.toUpperCase();
+	                if (!selectableFeatureExistsMap.containsKey(featureDescription))
+	                {
+		            	productSelectableFeatures.add(selectableFeature);
+		            	selectableFeatureExistsMap.put(featureDescription,featureDescription);
+	                }
+                }
+            }
         
             //BUILD PRODUCT FEATURE SET (SELECTABLE FEATURES BY FEATURE TYPE)
             plpFeatureSet = new LinkedHashSet();
@@ -1404,8 +1478,6 @@ if(UtilValidate.isNotEmpty(productId))
     }
     context.plpFeatureOrder = plpFeatureOrder;
     //************************************ END CREATING PLP VARIANT VIRTUAL JS**********************************//
-	
-	
 	
 	
 	

@@ -368,31 +368,11 @@ public class OsafeManageXml
         }
         return resp;
     }
-    /**
-     * read xml document and make List of Maps of element.
-     * @param XmlFilePath String xml file path
-     * @return a new List of  Maps.
-     */
-    public static List<Map<Object, Object>> getListMapsFromXmlFile(String XmlFilePath)
-    {
-        return getListMapsFromXmlFile(XmlFilePath, null);
-        
-    }
-    
-    public static List<Map<Object, Object>> getListMapsFromXmlFile(String XmlFilePath, String activChildName)
+
+    private static List<Map<Object, Object>> getListMaps(Document xmlDocument,String activChildName)
     {
         List<Map<Object, Object>> listMaps = FastList.newInstance();
-        InputStream ins = null;
-        URL xmlFileUrl = null;
-        Document xmlDocument = null;
         try {
-            if (UtilValidate.isNotEmpty(XmlFilePath))
-            {
-                xmlFileUrl = UtilURL.fromFilename(XmlFilePath);
-                if (xmlFileUrl  != null) ins = xmlFileUrl.openStream();
-                if (ins != null)
-                {
-                    xmlDocument = UtilXml.readXmlDocument(ins, xmlFileUrl.toString());
                     List<? extends Node> nodeList = FastList.newInstance();
                     if (UtilValidate.isNotEmpty(activChildName))
                     {
@@ -437,6 +417,42 @@ public class OsafeManageXml
                             listMaps.add(fields);
                         }
                     }
+        }
+        catch (Exception exc)
+        {
+            Debug.logError(exc, "Error building Node List Map", module);
+        }
+        return listMaps;
+    }    
+    /**
+     * read xml document and make List of Maps of element.
+     * @param XmlFilePath String xml file path
+     * @return a new List of  Maps.
+     */
+    public static List<Map<Object, Object>> getListMapsFromXmlFile(String XmlFilePath)
+    {
+        return getListMapsFromXmlFile(XmlFilePath, null);
+        
+    }
+    
+    public static List<Map<Object, Object>> getListMapsFromXmlFile(String XmlFilePath, String activChildName)
+    {
+        List<Map<Object, Object>> listMaps = FastList.newInstance();
+        InputStream ins = null;
+        URL xmlFileUrl = null;
+        Document xmlDocument = null;
+        try {
+            if (UtilValidate.isNotEmpty(XmlFilePath))
+            {
+                xmlFileUrl = UtilURL.fromFilename(XmlFilePath);
+                if (xmlFileUrl  != null)
+                {
+                	ins = xmlFileUrl.openStream();
+                }
+                if (ins != null)
+                {
+                    xmlDocument = UtilXml.readXmlDocument(ins, xmlFileUrl.toString());
+                    listMaps = getListMaps(xmlDocument,activChildName);
                 }
             }
         }
@@ -454,6 +470,27 @@ public class OsafeManageXml
             {
                 Debug.logError(exc, "Error reading xml file", module);
             }
+        }
+        return listMaps;
+    }
+    public static List<Map<Object, Object>> getListMapsFromXmlSource(String Xml)
+    {
+    	return getListMapsFromXmlSource(Xml,null);
+    }
+    public static List<Map<Object, Object>> getListMapsFromXmlSource(String Xml, String activChildName)
+    {
+        List<Map<Object, Object>> listMaps = FastList.newInstance();
+        Document xmlDocument = null;
+        try {
+            if (UtilValidate.isNotEmpty(Xml))
+            {
+                    xmlDocument = UtilXml.readXmlDocument(Xml);
+                    listMaps = getListMaps(xmlDocument,activChildName);
+            }
+        }
+        catch (Exception exc)
+        {
+            Debug.logError(exc, "Error reading xml source", module);
         }
         return listMaps;
     }

@@ -1,11 +1,13 @@
 package com.osafe.solr;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -14,10 +16,16 @@ import java.util.ResourceBundle;
 import com.osafe.util.Util;
 import javax.servlet.http.HttpServletRequest;
 import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.apache.commons.collections.primitives.adapters.CollectionByteCollection;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
+import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.response.FacetField;
+import org.apache.solr.client.solrj.response.QueryResponse;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -26,8 +34,16 @@ import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
+import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
+import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.service.LocalDispatcher;
+
+import com.osafe.events.SolrEvents;
 import com.osafe.services.SolrIndexDocument;
 import org.apache.solr.common.SolrDocument;
 
@@ -35,7 +51,7 @@ public class RefinementsHelperSolr {
 
     private static final String module = RefinementsHelperSolr.class.getName();
     private CommandContext commandContext;
-    private Delegator delegator = null;
+    private static Delegator delegator = null;
     private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
 
     public RefinementsHelperSolr(CommandContext commandContext, Delegator delegator) 
@@ -383,7 +399,354 @@ public class RefinementsHelperSolr {
         }
         return refinementCollection;
     }
+    
+    
+    public Map<String, Integer> getResultFacetQueryPrice(HttpServletRequest request, List<SolrIndexDocument> results, List<SolrIndexDocument> multiSelectResults) 
+    {
+    	List resultsDoc = updateSolrDocumentPrice(results, request);
+    	String facetValueStyle = Util.getProductStoreParm(request, "FACET_VALUE_STYLE");
+        boolean facetMultiSelectTrue = false;
+        if (UtilValidate.isNotEmpty(facetValueStyle) && (facetValueStyle.equalsIgnoreCase("CHECKBOX") || facetValueStyle.equalsIgnoreCase("DROPDOWN")))
+        {
+        	facetMultiSelectTrue = true;
+        }
+    	Map LowHighPriceMap = FastMap.newInstance();
+    	// multiSelectResults is used to show the all price facets
+    	if (UtilValidate.isNotEmpty(multiSelectResults)) 
+        {
+        	List multiSelectResultsDoc = updateSolrDocumentPrice(multiSelectResults, request);
+            LowHighPriceMap = getLowHighPriceMap(request, multiSelectResultsDoc);
+        }
+    	else
+    	{
+        	LowHighPriceMap = getLowHighPriceMap(request, resultsDoc);
+    	}
+    	Float priceLow = (Float) LowHighPriceMap.get("priceLow");
+        Float priceHigh = (Float) LowHighPriceMap.get("priceHigh");
+        List<Map<String, Integer>> resultsFacetQueriesMapList = FastList.newInstance();
+        Map<String, Integer> resultsFacetQueriesMap = new HashMap();
+        
+        if (UtilValidate.isNotEmpty(priceLow) && UtilValidate.isNotEmpty(priceHigh)) 
+        {
+            float priceHighVal = priceHigh.floatValue();
+            float priceLowVal = priceLow.floatValue();
 
+            float priceRange = priceHighVal - priceLowVal;
+            float step = priceRange / 5;
+
+            float priceFacetRound=.01f;
+            String sPriceFacetRound =Util.getProductStoreParm(request, "FACET_PRICE_ROUND");
+            if (!UtilValidate.isEmpty(sPriceFacetRound))
+            {
+                int iPriceFacetRound=2;
+                try 
+                {
+                    iPriceFacetRound = Integer.parseInt(sPriceFacetRound);
+                }
+                catch (Exception e)
+                {
+                    iPriceFacetRound=2; 
+                }
+                if (iPriceFacetRound == 0)
+                {
+                    priceFacetRound=1.0f;
+                }
+            }
+
+            if (step > 10000)
+            {
+                step = ((float)Math.ceil((step/1000))*1000);
+            }
+            else if (step > 1000)
+            {
+                step = ((float)Math.ceil((step/100))*100);
+            }
+            else if (step > 100)
+            {
+                step = ((float)Math.ceil((step/10))*10);
+            }
+            else
+            {
+                step = ((float)Math.ceil((step/1))*1);
+            }
+
+            //incremental factor calculation as defined in BF Facet Price Calculator.xls
+            //CEIL HIGH PRICE
+            if (priceHighVal > 1000)
+            {
+                priceHighVal= ((float)Math.ceil((priceHighVal/100))*100);
+            }
+            else if (priceHighVal > 100)
+            {
+                priceHighVal= ((float)Math.ceil((priceHighVal/10))*10);
+            }
+            else
+            {
+                priceHighVal= ((float)Math.ceil((priceHighVal/1))*1);
+            }
+
+            //FLOOR LOW PRICE
+            if (priceLowVal > 1000)
+            {
+                priceLowVal= ((float)Math.floor((priceLowVal/100))*100);
+            }
+            else if (priceLowVal > 100)
+            {
+                priceLowVal= ((float)Math.floor((priceLowVal/10))*10);
+            }
+            else
+            {
+                priceLowVal= ((float)Math.floor((priceLowVal/1))*1);
+            }
+
+            float rangeLowVal = priceLowVal;
+            float rangeHighVal = priceLowVal + step;
+
+            int rangeCount = 0;
+            while (priceRange > 0) 
+            {
+            	String priceRangeMap =  "price:[" + (rangeLowVal) + " " + rangeHighVal + "]";
+                int productCount = getProductCountsInRange(resultsDoc, rangeLowVal, rangeHighVal).get(priceRangeMap);
+                // if facetMultiSelectTrue is true then show the count even product count is zero
+                if (productCount > 0 || facetMultiSelectTrue)
+                {
+                    float tempPriceRange =  priceRange - step;
+                    float tempRangeLowVal = rangeHighVal + priceFacetRound;
+                    float tempRangeHighVal = rangeHighVal + step;
+                    // if facetMultiSelectTrue is true then do not club the facets even product count is zero
+                    while (tempPriceRange > 0 && !facetMultiSelectTrue) 
+                    {
+                    	String priceRangeQueryTemp = "price:[" + (tempRangeLowVal) + " " + tempRangeHighVal + "]";
+                    	int productCounttemp = getProductCountsInRange(resultsDoc, tempRangeLowVal, tempRangeHighVal).get(priceRangeQueryTemp);
+                        if (productCounttemp > 0)
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            tempPriceRange = tempPriceRange - step;
+                            tempRangeHighVal = tempRangeHighVal + step;
+                        }
+                    }
+                    priceRange = tempPriceRange + step;
+                    rangeHighVal = tempRangeHighVal - step;
+
+                    priceRange = priceRange - step;
+
+                    if(priceRange <= 0)
+                    {
+                    	resultsFacetQueriesMapList.add(getProductCountsInRange(resultsDoc, rangeLowVal, priceHighVal));
+                    }
+                    else
+                    {
+                        if(rangeCount == 0)
+                        {
+                        	resultsFacetQueriesMapList.add(getProductCountsInRange(resultsDoc, priceLowVal, rangeHighVal));
+                        }
+                        else
+                        {
+                        	resultsFacetQueriesMapList.add(getProductCountsInRange(resultsDoc, rangeLowVal, rangeHighVal));
+                        }
+                    }
+                    rangeLowVal = rangeHighVal + priceFacetRound;
+
+                    rangeHighVal = rangeHighVal + step;
+                }
+                else
+                {
+                    priceRange = priceRange - step;
+                    rangeHighVal = rangeHighVal + step;
+                }
+                rangeCount++;
+            }
+            
+            for(Map<String, Integer> resultsFacetQueries : resultsFacetQueriesMapList)
+            {
+            	for (Map.Entry<String, Integer> entry : resultsFacetQueries.entrySet())
+            	{
+            		resultsFacetQueriesMap.put(entry.getKey(), entry.getValue());
+            	}
+            }
+        }
+        return resultsFacetQueriesMap;
+    }
+
+    
+    public Map getLowHighPriceMap(HttpServletRequest request, List<SolrIndexDocument> resultsDoc)
+    {
+    	String facetValueStyle = Util.getProductStoreParm(request, "FACET_VALUE_STYLE");
+        boolean facetMultiSelectTrue = false;
+        if (UtilValidate.isNotEmpty(facetValueStyle) && (facetValueStyle.equalsIgnoreCase("CHECKBOX") || facetValueStyle.equalsIgnoreCase("DROPDOWN")))
+        {
+        	facetMultiSelectTrue = true;
+        }
+    	Float priceLow = null;
+        Float priceHigh = null;
+        String multiFacetInitialType = null;
+        Map<String, Object> lowHighPriceMap = new HashMap();
+        
+        //GET THE LOWPRICE AND HIGHPRICE FROM REQUEST PARAMETERS
+        String filterGroup = request.getParameter("filterGroup");
+        if (UtilValidate.isEmpty(filterGroup))
+        {
+            filterGroup = (String)request.getAttribute("filterGroup");
+        }
+        if (UtilValidate.isNotEmpty(filterGroup)) 
+        {
+            String[] filterGroupArr = StringUtils.split(filterGroup, "|");
+
+            for (int i = 0; i < filterGroupArr.length; i++) 
+            {
+                String filterGroupValue = filterGroupArr[i];
+                if (filterGroupValue.toLowerCase().contains("price")) 
+                {
+                    filterGroupValue = StringUtil.replaceString(filterGroupValue,"+", " ");
+                }
+
+                String[] splitTemp = filterGroupValue.split(":");
+
+                if(UtilValidate.isEmpty(multiFacetInitialType))
+                {
+                    multiFacetInitialType = splitTemp[0];
+                }
+
+                String encodedValue = null;
+                splitTemp[1] = splitTemp[1].replace("/", "%2F");
+                splitTemp[1] = splitTemp[1].replace("\"", "%22");
+                splitTemp[1] = splitTemp[1].replace(":", "%3A");
+                splitTemp[1] = splitTemp[1].replace("&", "%26");
+
+                try 
+                {
+                    encodedValue = URLEncoder.encode(splitTemp[1], SolrConstants.DEFAULT_ENCODING);
+                } 
+                catch (UnsupportedEncodingException e) 
+                {
+                    encodedValue = splitTemp[1];
+                }
+                
+                filterGroupValue = splitTemp[0] + ":" + encodedValue;
+
+                // Price
+                if (filterGroupValue.toLowerCase().contains("price")) 
+                {
+                    
+                    //calculation for price range retrieve on price facet selection click
+                    String[] priceRangeArr = null;
+					try {
+						priceRangeArr = URLDecoder.decode(encodedValue, SolrConstants.DEFAULT_ENCODING).split(" ");
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+                    try 
+                    {
+                        if(facetMultiSelectTrue)
+                        {
+                            //if there are multiple price groups then the lower price would be the minimum price and high price would be the maximum price.
+                            //For Ex:- price:[100 150] and price: [90 120], then The LowPrice is 90 and HighPrice is 150.
+                            if(UtilValidate.isEmpty(priceLow) || (UtilValidate.isNotEmpty(priceLow) && Float.parseFloat(priceRangeArr[0].substring(1)) < priceLow))
+                            {
+                                priceLow = Float.parseFloat(priceRangeArr[0].substring(1));
+                            }
+                            if(UtilValidate.isEmpty(priceHigh) || (UtilValidate.isNotEmpty(priceHigh) && Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1)) > priceHigh))
+                            {
+                                priceHigh = Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1));
+                            }
+                        }
+                        else
+                        {
+                            //if there are multiple price groups then the lower price would be the maximum price and high price would be the minimum price.
+                            //For Ex:- price:[100 150] and price: [90 120], then The LowPrice is 100 and HighPrice is 120.
+                            if(UtilValidate.isEmpty(priceLow) || (UtilValidate.isNotEmpty(priceLow) && Float.parseFloat(priceRangeArr[0].substring(1)) > priceLow))
+                            {
+                                priceLow = Float.parseFloat(priceRangeArr[0].substring(1));
+                            }
+                            if(UtilValidate.isEmpty(priceHigh) || (UtilValidate.isNotEmpty(priceHigh) && Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1)) < priceHigh))
+                            {
+                                priceHigh = Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1));
+                            }
+                        }
+                    } 
+                    catch (NumberFormatException nexc) 
+                    {
+                        priceLow = null;
+                        priceHigh = null;
+                    }
+                    // skip
+                    continue;
+                }
+            }
+        }
+    	
+        //GET THE LOWPRICE AND HIGHPRICE FROM RESULTS IF THE REQUEST PARAMETERS DOESN'T HAVE ANY
+        if (UtilValidate.isEmpty(priceLow)) 
+        {
+        	Iterator itr = resultsDoc.iterator();
+            List newresult = FastList.newInstance();
+            try 
+            {
+            	BigDecimal lowPrice = null;
+                while(itr.hasNext()) 
+                {
+                    SolrIndexDocument solrIndexDocument = (SolrIndexDocument)itr.next();
+                    if(UtilValidate.isEmpty(lowPrice))
+                    {
+                    	lowPrice = new BigDecimal(solrIndexDocument.getPrice());
+                    }
+                    BigDecimal price = new BigDecimal(solrIndexDocument.getPrice());
+                    if(price.compareTo(lowPrice) < 0)
+                    {
+                    	lowPrice = price;
+                    }
+                }
+                priceLow = lowPrice.floatValue();
+                
+            }
+            catch(Exception e)
+            {
+            	
+            }
+        }
+    	
+        
+        if (UtilValidate.isEmpty(priceHigh)) 
+        {
+        	Iterator itr = resultsDoc.iterator();
+            List newresult = FastList.newInstance();
+            try 
+            {
+            	BigDecimal highPrice = null;
+                while(itr.hasNext()) 
+                {
+                    SolrIndexDocument solrIndexDocument = (SolrIndexDocument)itr.next();
+                    if(UtilValidate.isEmpty(highPrice))
+                    {
+                    	highPrice = new BigDecimal(solrIndexDocument.getPrice());
+                    }
+                    BigDecimal price = new BigDecimal(solrIndexDocument.getPrice());
+                    if(price.compareTo(highPrice) > 0)
+                    {
+                    	highPrice = price;
+                    }
+                }
+                priceHigh = highPrice.floatValue();
+                
+            }
+            catch(Exception e)
+            {
+            	
+            }
+        }
+        if(UtilValidate.isNotEmpty(priceLow) && UtilValidate.isNotEmpty(priceHigh))
+        {
+        	lowHighPriceMap.put("priceLow", priceLow);
+            lowHighPriceMap.put("priceHigh", priceHigh);
+        }
+        return lowHighPriceMap;
+        
+    }
+    
     public Collection processCustomerRatingRefinements(Map facetResults, List<SolrIndexDocument> results) 
     {
         // Create a new collection for the generic Refinements in the generic wrapper
@@ -558,6 +921,8 @@ public class RefinementsHelperSolr {
             {
             	if(UtilValidate.isNotEmpty(results)) 
             	{
+            		String facetFieldName = value.getFacetField().getName();
+            		count = countFacetExistenceInResult(results, value);
             		List<SolrDocument> duplicateProducts = getDuplicateProductsSolrDoc(results);
             		if(UtilValidate.isNotEmpty(duplicateProducts)) 
             		{
@@ -565,7 +930,6 @@ public class RefinementsHelperSolr {
                         while (duplicateProductItr.hasNext()) 
                         {
                         	SolrDocument solrDocument = (SolrDocument)duplicateProductItr.next();
-                        	String facetFieldName = value.getFacetField().getName();
                         	List<String> facetValueList = (List)solrDocument.getFieldValue(facetFieldName);
                             if(UtilValidate.isNotEmpty(facetValueList) && facetValueList.contains(value.getName()))
                             {
@@ -577,19 +941,21 @@ public class RefinementsHelperSolr {
             }
             
             GenericRefinementValue genericRefinementValue = null;
-            // Create a generic refinement value
-            try 
+            if(count > 0)
             {
-                genericRefinementValue = convertRefinementValueToGeneric(URLDecoder.decode(value.getName(), SolrConstants.DEFAULT_ENCODING), count.longValue(), genericRefinement);
-            } 
-            catch (UnsupportedEncodingException e) 
-            {
-                // Oops UTF-8?????
-                genericRefinementValue = convertRefinementValueToGeneric(value.getName(), count.longValue(), genericRefinement);
+	            // Create a generic refinement value
+	            try 
+	            {
+	                genericRefinementValue = convertRefinementValueToGeneric(URLDecoder.decode(value.getName(), SolrConstants.DEFAULT_ENCODING), count.longValue(), genericRefinement);
+	            } 
+	            catch (UnsupportedEncodingException e) 
+	            {
+	                // Oops UTF-8?????
+	                genericRefinementValue = convertRefinementValueToGeneric(value.getName(), count.longValue(), genericRefinement);
+	            }
+     	        // Add the refinementValue to the collection
+	            refinementValues.add(genericRefinementValue);
             }
-
-            // Add the refinementValue to the collection
-            refinementValues.add(genericRefinementValue);
         }
 
         return refinementValues;
@@ -984,4 +1350,211 @@ public class RefinementsHelperSolr {
         return dupresult;
     }
     
+    public static int countFacetExistenceInResult(List<SolrDocument> results, FacetField.Count value) 
+    {
+        Iterator itr = results.iterator();
+        List subresult = FastList.newInstance();
+        List dupresult = FastList.newInstance();
+        int count = 0;
+        try 
+        {
+            while(itr.hasNext()) 
+            {
+            	SolrDocument solrDocument = (SolrDocument)itr.next();
+            	List<String> facetValueList = (List)solrDocument.getFieldValue(value.getFacetField().getName());
+            	if(UtilValidate.isNotEmpty(facetValueList) && facetValueList.size() > 0)
+            	{
+            		String facetValueStr = facetValueList.get(0);
+                	String[] facetValList = facetValueStr.split(" ");
+                	String valueName = value.getName().trim();
+                    if(UtilValidate.isNotEmpty(facetValList))
+                    {
+                    	for(int i = 0; i < facetValList.length; i++)
+                    	{
+                    		String facetVal = facetValList[i].trim();
+                    		if(valueName.equals(facetVal))
+                    		{
+                    			count = count + 1;
+                    		}
+                    	}
+                    }
+            	}
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.log(e.getMessage());
+        }
+        return count;
+    }
+    
+    public static Map<String, Integer> getProductCountsInRange(List<SolrIndexDocument> results, Float lowPrice, Float  highPrice) 
+    {
+        Iterator itr = results.iterator();
+        Map<String, Integer> productCountMap = new HashMap();
+        int count = 0;
+        try 
+        {
+            while(itr.hasNext()) 
+            {
+            	SolrIndexDocument solrDocument = (SolrIndexDocument)itr.next();
+            	if(checkProductInPriceRange(solrDocument, lowPrice, highPrice))
+            	{
+            		count++;
+            	}
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.log(e.getMessage());
+        }
+        productCountMap.put(SolrConstants.TYPE_PRICE+":["+ lowPrice + " " + highPrice +"]", count);
+        return productCountMap;
+    }
+    
+    
+    public static boolean checkProductInPriceRange(SolrIndexDocument solrIndexDocument, Float lowPrice, Float highPrice)
+    {
+        try 
+        {
+            Float documentPrice = solrIndexDocument.getPrice();
+            if(documentPrice.compareTo(lowPrice) >= 0 && documentPrice.compareTo(highPrice) <= 0)
+            {
+            	return true;
+            }
+        }
+        catch (Exception e) 
+        {
+            Debug.log(e.getMessage());
+        }
+        return false;
+    }
+    
+    public List<SolrIndexDocument> getProductDocInPriceRange(List<SolrIndexDocument> results, Float lowPrice, Float highPrice)
+    {
+    	
+    	Iterator itr = results.iterator();
+        Map<String, Integer> productCountMap = new HashMap();
+        List newresult = FastList.newInstance();
+        int count = 0;
+        try 
+        {
+            while(itr.hasNext()) 
+            {
+            	SolrIndexDocument solrDocument = (SolrIndexDocument)itr.next();
+            	if(checkProductInPriceRange(solrDocument, lowPrice, highPrice))
+            	{
+            		newresult.add(solrDocument);
+            	}
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.log(e.getMessage());
+        }
+        return newresult;
+    }
+    
+    public List<SolrIndexDocument> filterResultsOnPriceRange(HttpServletRequest request, List<SolrIndexDocument> results)
+    {
+    	List resultsDoc = updateSolrDocumentPrice(results, request);
+        Map LowHighPriceMap = getLowHighPriceMap(request, resultsDoc);
+        Float priceLow = (Float) LowHighPriceMap.get("priceLow");
+        Float priceHigh = (Float) LowHighPriceMap.get("priceHigh");
+    	return getProductDocInPriceRange(resultsDoc, priceLow, priceHigh);
+    }
+    
+    public static List<SolrIndexDocument> updateSolrDocumentPrice(List<SolrIndexDocument> results, HttpServletRequest request) 
+    {
+    	GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
+    	if(UtilValidate.isEmpty(userLogin))
+    	{
+    		return results;
+    	}
+
+		String partyId = (String)userLogin.getString("partyId");
+		List<GenericValue> productPriceRules = FastList.newInstance();
+		if(UtilValidate.isNotEmpty(partyId))
+		{
+			List<GenericValue> partyIdConds = FastList.newInstance();
+			try 
+			{
+				partyIdConds = delegator.findByAndCache("ProductPriceCond", UtilMisc.toMap("inputParamEnumId", "PRIP_PARTY_ID", "condValue", partyId));
+			} 
+			catch (GenericEntityException e1) 
+			{
+				e1.printStackTrace();
+			}
+			if(UtilValidate.isNotEmpty(partyIdConds))
+			{
+				List<String> priceRuleIds = EntityUtil.getFieldListFromEntityList(partyIdConds, "productPriceRuleId", true);
+				try 
+				{
+					productPriceRules = delegator.findList("ProductPriceRule", EntityCondition.makeCondition("productPriceRuleId", EntityOperator.IN, priceRuleIds), null, null, null, true);
+				} 
+				catch (GenericEntityException e) 
+				{
+					e.printStackTrace();
+				}
+				productPriceRules = EntityUtil.filterByDate(productPriceRules);
+			}
+		}
+			
+		if(UtilValidate.isNotEmpty(productPriceRules))
+		{
+    		ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
+        	String currentCatalogId = CatalogWorker.getCurrentCatalogId(request);
+        	String webSiteId = CatalogWorker.getWebSiteId(request);
+        	GenericValue productStore = ProductStoreWorker.getProductStore(request);
+        	String productStoreId = (String) productStore.get("productStoreId");
+        	
+        	Delegator delegator = (Delegator) request.getAttribute("delegator");
+        	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        	
+            Iterator itr = results.iterator();
+            List newresult = FastList.newInstance();
+            try 
+            {
+                while(itr.hasNext()) 
+                {
+                    SolrIndexDocument solrIndexDocument = (SolrIndexDocument)itr.next();
+                    String productId = solrIndexDocument.getProductId();
+                    GenericValue product = delegator.findByPrimaryKeyCache("Product", UtilMisc.toMap("productId", productId));
+                    if (cart.isSalesOrder()) 
+                    {
+                    	Map priceContext = FastMap.newInstance();
+                        // sales order: run the "calculateProductPrice" service
+                    	priceContext.put("product", product);
+                    	priceContext.put("prodCatalogId", currentCatalogId);
+                    	priceContext.put("currencyUomId", cart.getCurrency());
+						if(UtilValidate.isNotEmpty(userLogin))
+    	                {
+		                    priceContext.put("autoUserLogin", userLogin);
+		                }
+                    	
+                    	priceContext.put("webSiteId", webSiteId);
+                    	priceContext.put("productStoreId", productStoreId);
+                    	priceContext.put("checkIncludeVat", "Y");
+                    	priceContext.put("agreementId", cart.getAgreementId());
+                    	priceContext.put("productPricePurposeId", "PURCHASE");
+                    	if(UtilValidate.isNotEmpty(partyId))
+                    	{
+                    		priceContext.put("partyId", partyId);
+                    	}
+                        Map pdpPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+                        solrIndexDocument.setListPrice(((BigDecimal)pdpPriceMap.get("listPrice")).floatValue());
+                        solrIndexDocument.setPrice(((BigDecimal)pdpPriceMap.get("price")).floatValue());
+                    }
+                    newresult.add(solrIndexDocument);
+                }
+            }
+            catch (Exception e) 
+            {
+                Debug.log(e.getMessage());
+				return results;
+            }
+            return newresult;
+		}
+        return results;
+    }
 }

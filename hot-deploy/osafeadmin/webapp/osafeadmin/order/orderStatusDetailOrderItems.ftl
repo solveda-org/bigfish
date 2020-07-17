@@ -204,7 +204,7 @@
 			                    <#assign productName = Static['org.ofbiz.product.product.ProductContentWrapper'].getProductContentAsText(virtualProduct, 'PRODUCT_NAME', request)?if_exists>
 			                </#if>
 			            </#if>
-			            <#assign orderItemPrice = (orderItem.unitPrice)*(orderItem.quantity)/>
+			            <#assign orderItemPrice = (orderItem.unitPrice)*(orderItemShipGroupAssoc.quantity)/>
 			            <#assign shippedQuantity = 0?number>
 			            <#assign orderItemShipments = orderItem.getRelated("OrderShipment")/>
 			            

@@ -56,5 +56,23 @@
          </div>
        </div>
     </div>
+    
+    <#assign  selectedReviewCustom01 = parameters.reviewCustom01!review.reviewCustom01!""/>
+    <div class="infoRow">
+       <div class="infoEntry long">
+         <div class="infoCaption">
+          <label>${uiLabelMap.Custom01Caption}</label>
+         </div>
+         <div class="infoValue">
+             <select name="reviewCustom01" id="reviewCustom01">
+                  <#if selectedReviewCustom01?has_content>
+                    <option value="${selectedReviewCustom01!}">${selectedReviewCustom01!}</option>
+                  </#if>
+                  <option value="">${uiLabelMap.SelectOneLabel}</option>
+                 ${screens.render("component://osafeadmin/widget/CommonScreens.xml#reviewCustom01")}
+             </select> 
+         </div>
+       </div>
+    </div>
 
 </#if>

@@ -286,14 +286,20 @@ public class CheckOutEvents {
                 		String shoppingListId=sci.getShoppingListId();
                         Map shoppingListItemCtx = UtilMisc.toMap("userLogin", userLogin);
                         shoppingListItemCtx.put("shoppingListId", shoppingListId);
-                        shoppingListItemCtx.put("productId", sci.getProductId());
+                        String productId = sci.getProductId();
+                        String shoppingListItemSuffix = PARAMETERS_RECURRENCE.getString("SHOPPING_LIST_ITEM_SUFFIX");
+                        if (UtilValidate.isNotEmpty(shoppingListItemSuffix))
+                        {
+                        	productId = productId.concat(shoppingListItemSuffix);
+                        }
+                        shoppingListItemCtx.put("productId", productId);
                         shoppingListItemCtx.put("quantity", sci.getQuantity());
                         Map shoppingListItemResp = null;
                         try 
                         {
                             shoppingListItemResp = dispatcher.runSync("createShoppingListItem", shoppingListItemCtx);
                             GenericValue shoppingListItem = delegator.findByPrimaryKey("ShoppingListItem", UtilMisc.toMap("shoppingListId", shoppingListId,"shoppingListItemSeqId", (String) shoppingListItemResp.get("shoppingListItemSeqId")));
-                            shoppingListItem.set("modifiedPrice", sci.getDisplayPrice());
+                            shoppingListItem.set("modifiedPrice", sci.getRecurringDisplayPrice());
                             shoppingListItem.store();
                         } 
                         catch (GenericServiceException e) 
@@ -313,7 +319,16 @@ public class CheckOutEvents {
                         shoppingListCtx.put("startDateTime", UtilDateTime.nowTimestamp());
                         shoppingListCtx.put("lastOrderedDate", UtilDateTime.nowTimestamp());
                         shoppingListCtx.put("frequency", new Integer(4));
-                        shoppingListCtx.put("intervalNumber", new Integer(PARAMETERS_RECURRENCE.getString("FREQUENCY")));
+                        String sIntervalNumber = sci.getOrderItemAttribute("RECURRENCE_FREQ");
+                        if (UtilValidate.isEmpty(sIntervalNumber))
+                        {
+                        	sIntervalNumber= PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT");
+                        }
+                        if (UtilValidate.isEmpty(sIntervalNumber))
+                        {
+                        	sIntervalNumber= "90";
+                        }
+                        shoppingListCtx.put("intervalNumber", new Integer(sIntervalNumber));
                         shoppingListCtx.put("shoppingListId", shoppingListId);
                         shoppingListCtx.put("userLogin", userLogin);
                         

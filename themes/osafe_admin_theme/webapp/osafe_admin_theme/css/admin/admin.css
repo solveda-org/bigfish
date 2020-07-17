@@ -1138,7 +1138,7 @@ categoryDetail:after {
 }
 
 .entryRow .entry.long{
-    width: 830px;
+    width: 860px;
 }
 
 .entryRow .entry.daterange {
@@ -1714,7 +1714,7 @@ float: left;
 
 }
 .periodBox .entryButtons input {
-    margin: -3px 0 0 -125px;
+    margin: -3px;
 }
 
 .periodBox .entryButtons {
@@ -2652,6 +2652,10 @@ td div.infoEntry input[type="text"] {
     height:16px;
     display: inline-block;
 }
+.header .helperIcon {
+    float: right;
+    margin: -16px 0 0 0;
+}
 .helperIcon {
     background-image: url(/osafe_admin_theme/images/classic/icon/helperIcon.gif);
     background-repeat: no-repeat;
@@ -2887,6 +2891,13 @@ td div.infoEntry input[type="text"] {
 }
 .warningIcon {
     background-image: url(/osafe_admin_theme/images/classic/icon/warningIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+.attachIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/attachIcon.png);
     background-repeat:no-repeat;
     width: 16px;
     height:16px;
@@ -3179,7 +3190,25 @@ a.standardBtn.adminCartIcon:hover {
     width: 16px;
 }
 
+.informationDetailIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/informationDetailIcon.gif);
+    background-repeat:no-repeat;
+    width: 44px;
+    height:39px;
+    margin-left: 10px;
+    margin-right: 15px;
+    display: inline-block;
+}
 
+.cautionIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/cautionIcon.gif);
+    background-repeat:no-repeat;
+    width: 44px;
+    height:39px;
+    margin-left: 10px;
+    margin-right: 15px;
+    display: inline-block;
+}
 
 
 /****************************************************************
@@ -3226,7 +3255,13 @@ a.standardBtn.adminCartIcon:hover {
 .linkButton{
     display: inline-block;
     float: right;
+    margin: 0 5px 0 0;
 }
+
+.displayListBox .linkButton {
+    margin: 7px 5px 0 0;
+}
+
 
 .mediaImage {
     width: 120px;

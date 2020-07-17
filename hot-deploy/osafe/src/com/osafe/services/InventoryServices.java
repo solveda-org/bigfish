@@ -3,20 +3,27 @@ package com.osafe.services;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import javolution.util.FastMap;
 
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.MessageString;
+import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.product.product.ProductContentWrapper;
+import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
@@ -104,6 +111,7 @@ public class InventoryServices {
     	ineventoryLevelMap.put("inventoryWarehouseLevel", inventoryWarehouseLevel);
     	ineventoryLevelMap.put("inventoryLevelInStockFrom", inventoryInStockFrom);
     	ineventoryLevelMap.put("inventoryLevelOutOfStockTo", inventoryOutOfStockTo);
+    	ineventoryLevelMap.put("inventoryMethod", inventoryMethod);
     	return ineventoryLevelMap;
     }
     
@@ -221,4 +229,77 @@ public class InventoryServices {
             }
     	}
     }
+    
+    public static Map<String, Object> checkProductInventoryLevel(String productId, BigDecimal orderedQty, ServletRequest request, HttpServletRequest servletRequest) {
+    	Delegator delegator = (Delegator)request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        Locale locale = UtilHttp.getLocale(servletRequest);
+    	Map<String, Object> checkInventoryLevelMap = new HashMap<String, Object>();
+    	checkInventoryLevelMap.put("stockMessage","");
+    	checkInventoryLevelMap.put("inStock","Y");
+
+    	
+		try {
+			Map<String,Object> inventoryLevelMap = InventoryServices.getProductInventoryLevel(productId, request);
+            if (UtilValidate.isNotEmpty(inventoryLevelMap))
+            {
+            	String inventoryMethod =(String) inventoryLevelMap.get("inventoryMethod"); 
+            	if(UtilValidate.isNotEmpty(inventoryMethod) && inventoryMethod.equalsIgnoreCase("BIGFISH"))
+            	{
+                	BigDecimal inventoryInStockFrom = (BigDecimal) inventoryLevelMap.get("inventoryLevelInStockFrom");
+                	BigDecimal inventoryOutOfStockTo = (BigDecimal) inventoryLevelMap.get("inventoryLevelOutOfStockTo");
+                	BigDecimal inventoryLevel = (BigDecimal) inventoryLevelMap.get("inventoryLevel");
+                	BigDecimal inventoryWarehouseLevel = (BigDecimal) inventoryLevelMap.get("inventoryWarehouseLevel");
+     			    if ((inventoryLevel.doubleValue() < inventoryOutOfStockTo.doubleValue()) || (inventoryLevel.doubleValue() == inventoryOutOfStockTo.doubleValue()) || (orderedQty.doubleValue() > inventoryLevel.doubleValue()))
+    			    {
+                        GenericValue product = delegator.findByPrimaryKey("Product", UtilMisc.toMap("productId", productId));
+                    	String productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher);
+                    	if(UtilValidate.isEmpty(productName))
+                    	{
+                    		GenericValue virtualProduct = ProductWorker.getParentProduct(productId, delegator);
+                    		if(UtilValidate.isNotEmpty(virtualProduct))
+                        	{
+                    			productName = ProductContentWrapper.getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher);
+                        	}
+                    	}
+                    	MessageString tmpMessage=null;
+     	 			    if ((orderedQty.doubleValue() > inventoryLevel.doubleValue()))
+     	 			    {
+     	                	String productAvailable= null;
+     	                	if (inventoryLevel.intValue() != 1)
+     	                	{
+     	                		productAvailable = inventoryLevel.intValue() + " items";
+     	                	}
+     	                	else
+     	                	{
+     	                		productAvailable = inventoryLevel.intValue() + " item";
+     	                		
+     	                	}
+     	                	Map<String, String> messageMap = UtilMisc.toMap("productName", productName,"productAvailable",productAvailable );
+     	                	tmpMessage = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "OutOfStockOrderedProductInfo",messageMap, locale),"",true);
+	
+     	 			    }
+     	 			    else
+     	 			    {
+                        	Map<String, String> messageMap = UtilMisc.toMap("productName", productName);
+                        	tmpMessage = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "OutOfStockProductInfo",messageMap, locale),"",true);
+	
+     	 			    }
+                    	
+                    	checkInventoryLevelMap.put("stockMessage",tmpMessage);
+                    	checkInventoryLevelMap.put("inStock","N");
+    			    }
+     			    checkInventoryLevelMap.putAll(inventoryLevelMap);            		
+            	}
+
+            }
+			
+		} catch (GenericEntityException ge) {
+		    Debug.logError(ge, ge.getMessage(), module);
+		}
+    	return checkInventoryLevelMap;
+    }
+    
+    
+    
 }

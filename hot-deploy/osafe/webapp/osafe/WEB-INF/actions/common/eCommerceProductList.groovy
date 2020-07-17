@@ -41,11 +41,23 @@ if(UtilValidate.isNotEmpty(productCategoryId))
 String searchText = com.osafe.util.Util.stripHTML(parameters.searchText);
 String searchTextSpellCheck = com.osafe.util.Util.stripHTML(parameters.searchTextSpellCheck);
 context.pageSubTitle = "";
-
+String plpAddToCartAction = "addPlpItemToCart";
+String plpAddToWishListAction = "addPlpItemToWishlist";
 if (UtilValidate.isNotEmpty(searchText))
 {
 	context.productListFormSearchText = searchText;
+	plpAddToCartAction = "addPlpItemToCartSearch";
+	plpAddToWishListAction = "addPlpItemToWishlistSearch";
 }
+if(request.getAttribute("searchTermsMap"))
+{
+	plpAddToCartAction = "addPlpItemToCartMultiSearch";
+	plpAddToWishListAction = "addPlpItemToWishlistMultiSearch";
+	context.searchTermsMap = request.getAttribute("searchTermsMap");
+}
+
+context.plpAddToCartAction = plpAddToCartAction;
+context.plpAddToWishListAction = plpAddToWishListAction;
 if (UtilValidate.isNotEmpty(gvProductCategory)) 
 {
     CategoryContentWrapper currentProductCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
@@ -83,6 +95,12 @@ if (UtilValidate.isNotEmpty(gvProductCategory))
     if(UtilValidate.isNotEmpty(metaDescription)) 
     {
         context.metaDescription = metaDescription;
+    }
+    
+    String canonicalUrl = currentProductCategoryContentWrapper.get("CANONICAL_URL");
+    if(UtilValidate.isNotEmpty(canonicalUrl)) 
+    {
+        context.canonicalUrl = canonicalUrl;
     }
  
  } 
@@ -130,9 +148,29 @@ if (UtilValidate.isNotEmpty(previousParams))
 
     previousParamsMap = UtilHttp.getParameterMap(request,UtilMisc.toSet("start", "rows", "sortResults" , "sortBtn"),false);
     previousParamsList = UtilMisc.toList(previousParamsMap.keySet());
-} else 
+} 
+else 
 {
-    previousParams = "";
+	//Set the Previous Params for Shopping List Search
+	previousParamsSiteSearch = new StringBuffer();
+	if(UtilValidate.isNotEmpty(request.getAttribute("searchTermsMap")))
+	{ 
+		Map searchTermsMap = (Map)request.getAttribute("searchTermsMap");
+		previousParamsSiteSearch.append("?");
+		for (Map.Entry<String, String> entry : searchTermsMap.entrySet()) 
+		{
+			previousParamsSiteSearch.append(entry.getKey()+"="+entry.getValue());
+			previousParamsSiteSearch.append("&");
+		}
+		previousParams = previousParamsSiteSearch.toString();
+		previousParamsMap = searchTermsMap;
+		previousParamsList = UtilMisc.toList(previousParamsMap.keySet());
+	}
+	else
+	{
+		previousParams = "";
+	}
+    
 }
 context.previousParams = previousParams;
 context.previousParamsList = previousParamsList;
@@ -320,18 +358,3 @@ if (UtilValidate.isNotEmpty(productScrollerUrlList))
 {
 	session.setAttribute("productScrollerUrlList",productScrollerUrlList);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

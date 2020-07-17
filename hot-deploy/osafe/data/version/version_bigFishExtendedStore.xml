@@ -165,6 +165,7 @@
 <DataResource dataResourceId="PTS_SHIP_METH@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_CONTACT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_RQST_QUOTE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_ST_LOC@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_MAILING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_LOGIN@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
@@ -190,6 +191,7 @@
 <DataResource dataResourceId="PES_SHIP_METH@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PES_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PES_CONTACT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PES_RQST_QUOTE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PES_ST_LOC@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PES_MAILING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PES_LOGIN@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
@@ -212,6 +214,7 @@
 <DataResource dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
 
 <DataResource dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="CHECKOUT_CC_VRFY@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="CHECKOUT_EFT@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="CHECKOUT_EFT@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="MULTI_ADDR@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="MULTI_SHIPPING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_SHIPPING@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PS_OUT_OF_STOCK@extendedStore.suffix@" localeString="en_US"/>
@@ -228,6 +231,7 @@
 <ElectronicText dataResourceId="PTS_SHIP_METH@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_CART@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_CONTACT_US@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PTS_RQST_QUOTE@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_ST_LOC@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_MAILING@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_LOGIN@extendedStore.suffix@"/>
@@ -253,6 +257,7 @@
 <ElectronicText dataResourceId="PES_SHIP_METH@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PES_CART@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PES_CONTACT_US@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PES_RQST_QUOTE@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PES_ST_LOC@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PES_MAILING@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PES_LOGIN@extendedStore.suffix@"/>
@@ -275,6 +280,7 @@
 <ElectronicText dataResourceId="PDP_CONTENT_05@extendedStore.suffix@"/>
 
 <ElectronicText dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="CHECKOUT_EFT@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="MULTI_ADDR@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="MULTI_SHIPPING@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@"/>
@@ -290,6 +296,7 @@
 <Content contentId="PTS_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHIP_METH@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CART@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONTACT_US@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_RQST_QUOTE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_RQST_QUOTE@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the REQUEST-QUOTE page" contentName="Request Quote" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ST_LOC@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_MAILING@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_LOGIN@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
@@ -316,6 +323,7 @@
 <Content contentId="PES_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHIP_METH@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PES_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CART@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PES_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONTACT_US@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PES_RQST_QUOTE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_RQST_QUOTE@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the REQUEST-QUOTE page" contentName="Request Quote" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PES_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ST_LOC@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PES_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MAILING@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PES_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_LOGIN@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
@@ -338,6 +346,7 @@
 <Content contentId="PDP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05@extendedStore.suffix@" localeString="en_US"/>
 
 <Content contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout CC VRFY Content" contentName="Checkout CC VRFY Content" dataResourceId="CHECKOUT_CC_VRFY@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="CHECKOUT_EFT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Special check-out page content to show where EFT account can be found" contentName="EFT account Helper" dataResourceId="CHECKOUT_EFT@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="MULTI_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout Multi Address Content" contentName="Checkout Multi Address Content" dataResourceId="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="MULTI_SHIPPING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout Multi Shipping Option Content" contentName="Checkout Multi Shipping Option Content" dataResourceId="MULTI_SHIPPING@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Out of Stock Content. Specific Page Content that may be included informing the customer that the Product is not available for purchase." contentName="out of stock" dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@" localeString="en_US"/>
@@ -357,6 +366,7 @@
 <ContentRole contentId="PTS_SHIP_METH@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_CART@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_CONTACT_US@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_RQST_QUOTE@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ST_LOC@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_MAILING@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_LOGIN@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -380,6 +390,7 @@
 <ContentRole contentId="PES_SHIP_METH@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_CART@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_CONTACT_US@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_RQST_QUOTE@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ST_LOC@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_MAILING@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_LOGIN@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -400,6 +411,7 @@
 <ContentRole contentId="PDP_CONTENT_05@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 
 <ContentRole contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="CHECKOUT_EFT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="MULTI_ADDR@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="MULTI_SHIPPINGT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -473,6 +485,7 @@
 <DataResource dataResourceId="E_ABANDON_CART@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="E_CONTACT_US@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="E_REQ_CATALOG@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="E_REQ_QUOTE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="E_ORD_CONFIRM@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="E_ORD_CHNGE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="E_SHIP_REVIEW@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
@@ -490,6 +503,7 @@
 <ElectronicText dataResourceId="E_ABANDON_CART@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="E_CONTACT_US@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="E_REQ_CATALOG@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="E_REQ_QUOTE@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="E_ORD_CONFIRM@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="E_ORD_DETAIL@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="E_ORD_CHNGE@extendedStore.suffix@"/>
@@ -508,6 +522,7 @@
 <Content contentId="E_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Abandoned Cart email. Other PARAMETERS control the timing of this email." contentName="Abandon Cart Email" dataResourceId="E_ABANDON_CART@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="E_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Contact-Us email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form." contentName="Contact Us Email" dataResourceId="E_CONTACT_US@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="E_REQ_CATALOG@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form. " contentName="Request Catalog Email" dataResourceId="E_REQ_CATALOG@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="E_REQ_QUOTE@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client." contentName="Request Quote Email" dataResourceId="E_REQ_QUOTE@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="E_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Confirm Email" dataResourceId="E_ORD_CONFIRM@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="E_ORD_CHNGE@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Change email (when the Status on the Order gets modified from one state to another)." contentName="Order Notice Email" dataResourceId="E_ORD_CHNGE@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="E_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW@extendedStore.suffix@" localeString="en_US"/>
@@ -525,6 +540,7 @@
 <ContentPurpose contentId="E_ABANDON_CART@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_CONTACT_US@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_REQ_CATALOG@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_REQ_QUOTE@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_ORD_CONFIRM@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_ORD_CHNGE@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_SHIP_REVIEW@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
@@ -542,6 +558,7 @@
 <Content contentId="E_ABANDON_CART@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
 <Content contentId="E_CONTACT_US@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
 <Content contentId="E_REQ_CATALOG@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
+<Content contentId="E_REQ_QUOTE@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
 <Content contentId="E_ORD_CONFIRM@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
 <Content contentId="E_ORD_CHNGE@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
 <Content contentId="E_SHIP_REVIEW@extendedStore.suffix@" statusId="CTNT_PUBLISHED" localeString="en_US"/>
@@ -634,6 +651,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHIPPING_METHOD" contentId="PTS_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHOPPING_CART" contentId="PTS_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_CONTACT_US" contentId="PTS_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_RQST_QUOTE" contentId="PTS_RQST_QUOTE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_STORE_LOCATOR" contentId="PTS_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_MAILING_LIST" contentId="PTS_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_LOGIN" contentId="PTS_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -660,6 +678,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHIPPING_METHOD" contentId="PES_SHIP_METH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SHOPPING_CART" contentId="PES_CART@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_CONTACT_US" contentId="PES_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_RQST_QUOTE" contentId="PES_RQST_QUOTE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_STORE_LOCATOR" contentId="PES_ST_LOC@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_MAILING_LIST" contentId="PES_MAILING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_LOGIN" contentId="PES_LOGIN@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -682,10 +701,13 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_05" contentId="PDP_CONTENT_05@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="CHECKOUT_CC_VERIFY" contentId="CHECKOUT_CC_VRFY@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="CHECKOUT_EFT_GUIDE" contentId="CHECKOUT_EFT@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_ADDR_ESPOT" contentId="MULTI_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_SHIPPING_ESPOT" contentId="MULTI_SHIPPING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_OUT_OF_STOCK" contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_IN_STORE_ONLY" contentId="PS_IN_STORE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="RECUR_LIST_ESPOT" contentId="RECUR_LIST@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="RECUR_DETAIL_ESPOT" contentId="RECUR_DETAIL@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <!-- PDP SPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_INTRODUCED" contentId="PS_INTRODUCED@extendedStore.suffix@" contentTypeId="BF_PDP_SPOT"/>
@@ -713,6 +735,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ABANDON_CART" contentId="E_ABANDON_CART@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_CONTACT_US" contentId="E_CONTACT_US@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_REQUEST_CATALOG" contentId="E_REQ_CATALOG@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_REQUEST_QUOTE" contentId="E_REQ_QUOTE@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_CONFIRM" contentId="E_ORD_CONFIRM@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_CHANGE" contentId="E_ORD_CHNGE@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SHIP_REVIEW" contentId="E_SHIP_REVIEW@extendedStore.suffix@" contentTypeId="BF_EMAIL_TEMPLATE"/>

@@ -76,6 +76,14 @@ feedsExport.put("toolDesc", uiLabelMap.RequestCatalogExportInfo);
 feedsExport.put("toolDetail", "requestCatalogExport");
 feedExportList.add(feedsExport);
 
+//Google Product Feed Export
+feedsExport = FastMap.newInstance();
+feedsExport.put("toolSeq","1");
+feedsExport.put("toolType", uiLabelMap.GoogleProductFeedExportLabel);
+feedsExport.put("toolDesc", uiLabelMap.GoogleProductFeedExportInfo);
+feedsExport.put("toolDetail", "googleProductFeedExport");
+feedExportList.add(feedsExport);
+
 
 //BLUEDART FEEDS IMPORT LIST
 List bluedartFeedsImportList = FastList.newInstance();

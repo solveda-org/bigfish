@@ -1,6 +1,6 @@
 ${sections.render('entryFormJS')?if_exists}
 ${sections.render('checkoutJS')?if_exists}
-<form method="post" class="entryForm" action="<@ofbizUrl>${formAction!""}${previousParams?if_exists}</@ofbizUrl>" id="${formName!""}" name="${formName!""}">
+<form method="post" action="<@ofbizUrl>${formAction!""}${previousParams?if_exists}</@ofbizUrl>" id="${formName!""}" name="${formName!""}">
     <input type="hidden" id="checkoutpage" name="checkoutpage" value="${checkoutPage!}"/>
     <#if userLogin?has_content>
         <#assign partyId = userLogin.partyId!"">

@@ -31,6 +31,7 @@ import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.condition.EntityCondition;
 import com.osafe.util.OsafeAdminUtil;
+import com.osafe.webapp.ftl.OfbizSeoUrlTransform;
 
 
 osafeProperties = UtilProperties.getResourceBundleMap("OsafeProperties.xml", locale);
@@ -51,6 +52,7 @@ webSiteId = CatalogWorker.getWebSiteId(request);
 autoUserLogin = request.getSession().getAttribute("autoUserLogin");
 currencyUomId = Util.getProductStoreParm(request, "CURRENCY_UOM_DEFAULT");
 addToCartRedirect = Util.getProductStoreParm(request,"ADD_TO_CART_REDIRECT");
+productCategoryMemberList = FastList.newInstance();
 pdpSelectMultiVariant = "";
 isPdpInStoreOnly = "N";
 
@@ -811,7 +813,40 @@ if (UtilValidate.isNotEmpty(productId))
                 context.metaKeywords = productAttrMap.get("SEO_DESCRIPTION");
             }
         }
-
+        canonicalUrl = "";
+        productContentId = productContentIdMap.get("CANONICAL_URL");
+        if(UtilValidate.isNotEmpty(productContentId)) 
+        {
+            canonicalUrl = productContentWrapper.get("CANONICAL_URL");
+        } 
+        else
+        {
+        	String primaryProductCategoryId = gvProduct.getString("primaryProductCategoryId");
+        	if(UtilValidate.isNotEmpty(primaryProductCategoryId))
+        	{
+        		canonicalUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+primaryProductCategoryId, false);
+        	}
+        	else
+        	{
+        		if(UtilValidate.isEmpty(productCategoryMemberList))
+                {
+        			productCategoryMemberList = gvProduct.getRelatedCache("ProductCategoryMember");
+                    productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
+                    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
+                }
+        		if(UtilValidate.isNotEmpty(productCategoryMemberList))
+                {
+        			productCategoryMemberSeo = EntityUtil.getFirst(productCategoryMemberList);
+                    productCategoryIdSeo = productCategoryMemberSeo.productCategoryId;
+                    canonicalUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+productCategoryIdSeo, false);
+                }
+        	}
+        }
+        if(UtilValidate.isNotEmpty(canonicalUrl))
+		{
+        	context.canonicalUrl = canonicalUrl;	
+		}
+        
         
         //SET PRODUCT CONTENT IMAGE URLS
         productContentId = productContentIdMap.get("ADDTOCART_IMAGE");
@@ -1091,8 +1126,25 @@ if (UtilValidate.isNotEmpty(productId))
 			//sorted list of groups
 			productFeatureCatGrpAppls = delegator.findByAndCache("ProductFeatureCatGrpAppl", UtilMisc.toMap("productCategoryId", productCategoryId), UtilMisc.toList("sequenceNum"));
 			// Using findByAndCache Call since the ProductService(Service getProductVariantTree call) will make the same findByAndCache Call.
-			productDistinguishingFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", gvProduct.productId, "productFeatureApplTypeId", "DISTINGUISHING_FEAT"), UtilMisc.toList("sequenceNum"));
-			productDistinguishingFeatures = EntityUtil.filterByDate(productDistinguishingFeatures, true);
+			//Issue 38934, 38916 - Check for duplicate feature descriptions
+		    productDistinguishingFeatures = FastList.newInstance();
+		    Map distinguishingFeatureExistsMap = FastMap.newInstance();
+		    distinguishingFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", gvProduct.productId, "productFeatureApplTypeId", "DISTINGUISHING_FEAT"), UtilMisc.toList("sequenceNum"));
+		    distinguishingFeatures = EntityUtil.filterByDate(distinguishingFeatures, true);
+		    
+		    for (GenericValue distinguishingFeature : distinguishingFeatures)
+		    {
+		        String featureDescription = distinguishingFeature.description;
+		        if (UtilValidate.isNotEmpty(featureDescription)) 
+		        {
+		        	featureDescription = featureDescription.toUpperCase();
+		            if (!distinguishingFeatureExistsMap.containsKey(featureDescription))
+		            {
+		            	productDistinguishingFeatures.add(distinguishingFeature);
+		            	distinguishingFeatureExistsMap.put(featureDescription,featureDescription);
+		            }
+		        }
+		    }
 			
 			productFeatureTypes = FastList.newInstance();
 			productFeaturesByType = new LinkedHashMap();
@@ -1258,8 +1310,24 @@ if (UtilValidate.isNotEmpty(productId))
             {
                 // GET PRODUCT FEATURE AND APPLS: SELECTABLE FEATURES
                 // Using findByAndCache Call since the ProductService(Service getProductVariantTree call) will make the same findByAndCache Call.
-                productSelectableFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", gvProduct.productId, "productFeatureApplTypeId", "SELECTABLE_FEATURE"), UtilMisc.toList("sequenceNum"));
-                productSelectableFeatures = EntityUtil.filterByDate(productSelectableFeatures, true);
+            	//Issue 38934, 38916 - Check for duplicate feature descriptions
+                productSelectableFeatures = FastList.newInstance();
+                Map selectableFeatureExistsMap = FastMap.newInstance();
+                selectableFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", gvProduct.productId, "productFeatureApplTypeId", "SELECTABLE_FEATURE"), UtilMisc.toList("sequenceNum"));
+                selectableFeatures = EntityUtil.filterByDate(selectableFeatures, true);
+                for (GenericValue selectableFeature : selectableFeatures)
+                {
+                    String featureDescription = selectableFeature.description;
+                    if (UtilValidate.isNotEmpty(featureDescription)) 
+                    {
+                    	featureDescription = featureDescription.toUpperCase();
+    	                if (!selectableFeatureExistsMap.containsKey(featureDescription))
+    	                {
+    		            	productSelectableFeatures.add(selectableFeature);
+    		            	selectableFeatureExistsMap.put(featureDescription,featureDescription);
+    	                }
+                    }
+                }
             
                 //BUILD PRODUCT FEATURE SET (SELECTABLE FEATURES BY FEATURE TYPE)
                 featureSet = new LinkedHashSet();

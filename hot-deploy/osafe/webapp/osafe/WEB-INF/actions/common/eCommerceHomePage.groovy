@@ -8,6 +8,7 @@ metaTitle = Util.getProductStoreParm(request,"SEO_HOME_PAGE_TITLE");
 metaH1 = Util.getProductStoreParm(request,"SEO_HOME_PAGE_H1");
 metaKeywords =Util.getProductStoreParm(request,"SEO_HOME_META_KEY");
 metaDescription = Util.getProductStoreParm(request,"SEO_HOME_META_DESC");
+canonicalUrl = Util.getProductStoreParm(request,"HTTP_HOST");
 if(UtilValidate.isNotEmpty(metaTitle)) 
 {
     context.metaTitle = metaTitle;
@@ -23,4 +24,8 @@ if(UtilValidate.isNotEmpty(metaKeywords))
 if(UtilValidate.isNotEmpty(metaDescription)) 
 {
     context.metaDescription = metaDescription;
+}
+if(UtilValidate.isNotEmpty(canonicalUrl)) 
+{
+    context.canonicalUrl = canonicalUrl;
 }

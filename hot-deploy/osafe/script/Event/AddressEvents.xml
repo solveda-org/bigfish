@@ -99,6 +99,16 @@
                 <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
             </else>
         </if-not-empty>
+        
+        <if-not-empty field="parameters.DONE_PAGE">
+        	<if-compare operator="equals" value="eCommerceRecurrenceOrderDetail" field="parameters.DONE_PAGE">
+        		<if-not-empty field="parameters.shoppingListId">
+        			<set field="shoppingListId" from-field="parameters.shoppingListId"/>
+        			<field-to-request field="shoppingListId"/>
+        		</if-not-empty>
+        		<return response-code="eCommerceRecurrenceOrderDetail"/>
+        	</if-compare>
+        </if-not-empty>
      </simple-method>
 
      <simple-method method-name="deleteAddress" short-description="delete Address And Telephone" login-required="false">

@@ -30,6 +30,7 @@
     <Enumeration enumId="PRDS_EMAIL_TEST" enumTypeId="PRDS_EMAIL" description="Test Email" enumCode="EMAIL_TEST"  sequenceId="29"/>
     <Enumeration enumId="PRDS_MAILING_LIST" enumTypeId="PRDS_EMAIL" description="Mailing List Subscription" enumCode="MAILING_LIST"  sequenceId="30"/>
     <Enumeration enumId="PRDS_SCHED_JOB_ALERT" enumTypeId="PRDS_EMAIL" description="Scheduled Job Notification" enumCode="SCHED_JOB"  sequenceId="31"/>
+    <Enumeration enumId="PRDS_REQUEST_QUOTE" enumTypeId="PARTY_EMAIL" description="Request Quote Notification" enumCode="REQQUOTE_EMAIL" sequenceId="32"/>
 
     <!-- CONTACT US REASON -->
     <Enumeration enumId="CR_ORDER_INQUIRY" enumTypeId="CONTACT_US_REASON" description="Order Inquiry" enumCode="CR_ORDER_INQUIRY" sequenceId="01"/>
@@ -53,6 +54,13 @@
     <Enumeration enumId="RA_41_TO_50" enumTypeId="REVIEW_AGE" description="41 - 50" enumCode="RA_41_TO_50" sequenceId="05"/>
     <Enumeration enumId="RA_51_TO_60" enumTypeId="REVIEW_AGE" description="51 - 60" enumCode="RA_51_TO_60" sequenceId="06"/>
     <Enumeration enumId="RA_61_AND_OLDER" enumTypeId="REVIEW_AGE" description="61 and older" enumCode="RA_61_AND_OLDER" sequenceId="07"/>
+    
+    <!-- REVIEW CUSTOM 01 -->
+    <Enumeration enumId="RC01_01" enumTypeId="REVIEW_CUSTOM_01" description="Digestive Health" enumCode="RC01_01" sequenceId="01"/>
+    <Enumeration enumId="RC01_02" enumTypeId="REVIEW_CUSTOM_01" description="Heart Health" enumCode="RC01_02" sequenceId="02"/>
+    <Enumeration enumId="RC01_03" enumTypeId="REVIEW_CUSTOM_01" description="Weight Loss" enumCode="RC01_03" sequenceId="03"/>
+    <Enumeration enumId="RC01_04" enumTypeId="REVIEW_CUSTOM_01" description="General Health" enumCode="RC01_04" sequenceId="04"/>
+    <Enumeration enumId="RC01_05" enumTypeId="REVIEW_CUSTOM_01" description="Skin Health" enumCode="RC01_05" sequenceId="05"/>
 
     <!-- GIFT_MESSAGE -->
     <Enumeration enumId="GM_MOTHERS_DAY" enumTypeId="GIFT_MESSAGE" description="Happy Mother’s Day." enumCode="GM_MOTHERS_DAY" sequenceId="01"/>
@@ -71,6 +79,12 @@
     <Enumeration enumId="GM_PERFECT" enumTypeId="GIFT_MESSAGE" description="Perfect for someone soooo pretty." enumCode="GM_PERFECT" sequenceId="14"/>
     <Enumeration enumId="GM_POINTS" enumTypeId="GIFT_MESSAGE" description="How many points can I score with this great gift?" enumCode="GM_POINTS" sequenceId="15"/>
     <Enumeration enumId="GM_BEST_MOM" enumTypeId="GIFT_MESSAGE" description="To the best Mom in the world!" enumCode="GM_BEST_MOM" sequenceId="16"/>
+    
+    <!-- RECURRENCE FREQUENCY -->
+    <Enumeration enumId="FREQ_30" enumTypeId="RECURRENCE_FREQUENCY" description="1 Month" enumCode="30" sequenceId="01"/>
+    <Enumeration enumId="FREQ_60" enumTypeId="RECURRENCE_FREQUENCY" description="2 Months" enumCode="60" sequenceId="02"/>
+    <Enumeration enumId="FREQ_90" enumTypeId="RECURRENCE_FREQUENCY" description="3 Months" enumCode="90" sequenceId="03"/>
+    <Enumeration enumId="FREQ_120" enumTypeId="RECURRENCE_FREQUENCY" description="4 Months" enumCode="120" sequenceId="04"/>
 
     <!-- CONTENT STATUS DESCRIPTIONS -->
     <StatusItem statusId="CTNT_INITIAL_DRAFT" description="Initial Draft"/>

@@ -30,7 +30,7 @@
             </td>
             <td class="seqCol">
                <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureAndAppl_index}")!productFeatureAndAppl.sequenceNum!''/>
-               <input type="text" class="small" name="sequenceNum_${productFeatureAndAppl_index}" value="${rowSeq!}" maxlength="10"/>
+               <input type="text" class="small" name="sequenceNum_${productFeatureAndAppl_index}" value="${rowSeq!}" maxlength="9"/>
             </td>
             <#if rowClass == "2">
                 <#assign rowClass = "1">

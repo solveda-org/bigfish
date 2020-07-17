@@ -664,4 +664,59 @@
             </if-not-empty>
         </if-compare>
     </simple-method>
+
+    <simple-method method-name="exportGoogleProductFeedXml" short-description="Method to Export Google Product Feed Xml.">
+    
+        <if-not-empty field="parameters.exportFileServerPath">
+            <create-object class-name="java.io.File" field="exportedFileDest">
+                <field field="parameters.exportFileServerPath" type="String"/>
+            </create-object>
+            <call-object-method obj-field="exportedFileDest" method-name="getName" ret-field="exportedFileName"/>
+            <call-object-method method-name="toUpperCase" obj-field="exportedFileName" ret-field="exportedFileNameUpperCase"/>
+            <call-object-method method-name="endsWith" obj-field="exportedFileNameUpperCase" ret-field="isXMLFile">
+                <string value=".XML"/>
+            </call-object-method>
+            <if-compare operator="equals" value="false" field="isXMLFile">
+                <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
+                <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
+            </if-compare>
+        <else>
+            <property-to-field resource="OSafeAdminUiLabels" property="ExportedFileNotXmlError" field="tempErrorMessage"/>
+            <string-to-list string="${tempErrorMessage}" message-field="exportFileServerPath" list="error_list"/>
+        </else>
+        </if-not-empty>
+        <check-errors/>
+
+        <!-- Export Product in Google Xml Feeds -->
+        <set-service-fields service-name="exportGoogleProductXml" to-map="exportGoogleProductXmlCtx" map="parameters"/>
+        <call-service service-name="exportGoogleProductXml" in-map-name="exportGoogleProductXmlCtx">
+            <result-to-field result-name="feedsDirectoryPath" field="feedsDirectoryPath"/>
+            <result-to-field result-name="feedsFileName" field="feedsFileName"/>
+            <result-to-field result-name="feedsExportedIdList" field="feedsExportedIdList"/>
+        </call-service>
+        <create-object class-name="java.io.File" field="exportedFileSrc">
+            <string value="${feedsDirectoryPath}${feedsFileName}"/>
+        </create-object>
+
+        <!-- Copy Exported Files to the Given Server Path and Set the Out Parameters to Download the File -->
+        <if-not-empty field="exportedFileDest">
+            <call-object-method obj-field="exportedFileSrc" method-name="exists" ret-field="isExist"/>
+            <if-compare field="isExist" operator="equals" value="true">
+                <call-class-method method-name="copyFile" class-name="org.apache.commons.io.FileUtils">
+                    <field field="exportedFileSrc" type="java.io.File"/>
+                    <field field="exportedFileDest" type="java.io.File"/>
+                </call-class-method>
+                <if-not-empty field="exportedFileName">
+                    <set field="downloadedFileName" from-field="exportedFileName"/>
+                <else>
+                    <set field="downloadedFileName" from-field="feedsFileName"/>
+                </else>
+                </if-not-empty>
+                <field-to-result field="feedsDirectoryPath" result-name="exportedFilePath"/>
+                <field-to-result field="feedsFileName" result-name="exportedFileName"/>
+                <field-to-result field="downloadedFileName" result-name="downloadedFileName"/>
+            </if-compare>
+        </if-not-empty>
+
+    </simple-method>
 </simple-methods>

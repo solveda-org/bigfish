@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 <Content contentId="E_HEAD_TAG" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ABANDON_CART" statusId="CTNT_PUBLISHED"/>
@@ -10,6 +10,7 @@
 <Content contentId="E_FORGOT_PASSWORD" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_CONTACT_US" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_REQUEST_CATALOG" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_REQUEST_QUOTE" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_CONFIRM" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_CHANGE" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_DETAIL" statusId="CTNT_PUBLISHED"/>
@@ -654,6 +655,115 @@
   </textData>
 </ElectronicText>
 
+<!-- REQUET QUOTE EMAIL -->
+<ElectronicText dataResourceId="E_REQUEST_QUOTE">
+  <textData>
+     <![CDATA[
+     
+<!-- HEAD TAG -->
+<@renderContentAsText contentId="E_HEAD_TAG" ignoreTemplate="true"/>
+
+<body style="${E_BODY_STYLE!""}">
+
+    <!--start Table Container -->
+    <table cellpadding="0" cellspacing="0" width="100%" style="${DEFAULT_TABLE_CONTAINER!""}">
+
+        <tbody >
+            <tr>
+
+                <td>
+
+                    <!--start Table Body -->
+                    <table align="center" cellpadding="0" cellspacing="0" style="${DEFAULT_TABLE_INNER_CONTAINER!""}">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <!-- COMMON HEADER -->
+                                    <@renderContentAsText contentId="E_COMMON_HEADER" ignoreTemplate="true"/>
+                                </td>
+
+                            </tr>
+
+                            <tr>
+
+                                <td style="${E_MAIN_CONTENT!""}">
+
+                                <!-- **************************** -->
+                                <!-- Specific Content for this Email START -->
+                                <!-- **************************** -->
+
+                                    <p>
+                                        Request a Quote if you are ordering large quantities or have any special requirements.
+                                    </p>
+
+                                    <p>
+                                        <span style="${E_LABEL!""}">${uiLabelMap.FirstNameCaption}</span>
+                                             ${parameters.firstName!}
+                                    </p>
+
+                                    <p>
+                                         <span style="${E_LABEL!""}">${uiLabelMap.LastNameCaption}</span>
+                                             ${parameters.lastName!}
+                                    </p>
+
+                                    <p>
+                                         <span style="${E_LABEL!""}">${uiLabelMap.EmailAddressCaption}</span>
+                                             ${parameters.email!}
+                                    </p>
+                                     <#if parameters.contactPhoneArea?has_content>
+                                         <p>
+                                         <span style="${E_LABEL!""}">${uiLabelMap.ContactPhoneCaption}</span>
+                                          <#assign areaCode = parameters.contactPhoneArea!"">
+                                          <#assign contactPhoneContact = parameters.contactPhoneContact!"">
+                                          <#assign fullPhone = areaCode + contactPhoneContact>
+                                          <#if fullPhone?has_content && fullPhone?length == 10>
+                                              <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(3)>
+                                              <#assign fullPhone = areaCode + "-" + contactPhoneContact>
+                                            </#if>
+                                             ${fullPhone!""}
+                                         </p>
+                                      </#if>
+
+                                     <#if parameters.partNumber?has_content>
+                                         <p>
+                                             <span style="${E_LABEL!""}">${uiLabelMap.PartNumberCaption}</span>
+                                             ${parameters.partNumber!}
+                                         </p>
+                                      </#if>
+
+                                    <p>
+                                         <span style="${E_LABEL!""}">${uiLabelMap.CommentCaption}</span>
+                                             ${parameters.message!}
+                                    </p>
+
+                                <!-- **************************** -->
+                                <!-- Specific Content for this Email END -->
+                                <!-- **************************** -->
+
+                                    <!-- COMMON FOOTER -->
+                                    <@renderContentAsText contentId="E_COMMON_FOOTER" ignoreTemplate="true"/>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                    <!--end Table Body -->
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</body>
+
+         ]]>
+    </textData>
+</ElectronicText>
+
 <!-- ORDER CONFIRM EMAIL -->
 <ElectronicText dataResourceId="E_ORDER_CONFIRM">
   <textData>
@@ -765,13 +875,32 @@
                                         Dear ${FIRST_NAME!""} ${LAST_NAME!""},
                                     </p>
 
-                                    <p>
-                                        <#assign statusItem = ORDER.getRelatedOne("StatusItem")!/>
+                                    <#assign statusId = ""/>
+                                    <#assign statusDescription = ""/>
+                                    <#assign pickupInStore = "N"/>
+                                    <#if ORDER?has_content>
+	                                    <!-- STATUS -->
+	                                    <#assign statusItem = ORDER.getRelatedOneCache("StatusItem")!""/>
+	                                    <#if statusItem?has_content>
+	                                      <#assign statusId = statusItem.statusId/>
+	                                      <#assign statusDescription = statusItem.get("description",locale)!statusItem.statusId />
+	                                    </#if>
+	                                    <!-- PICKUP IN STORE -->
+                                        <#assign orderAttrPickupStore = ORDER.getRelatedByAnd("OrderAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName", "STORE_LOCATION"))!""/>
+									    <#if orderAttrPickupStore?has_content>
+									       <#assign pickupInStore="Y"/>
+									    </#if>
+
+                                     <p>
+                                       <#if pickupInStore == "Y" && statusId == "ORDER_COMPLETED">
+                                         Your Order is ready for Pickup!
+                                       <#else>
                                         ${uiLabelMap.OrderStatusChangeMessage} ${statusItem.get("description",locale)?default(statusItem.statusId?default("N/A"))}        
-                                    </p>
+                                       </#if>
+                                     </p>
 
-                                    <@renderContentAsText contentId="E_ORDER_DETAIL" ignoreTemplate="true"/>
-
+                                     <@renderContentAsText contentId="E_ORDER_DETAIL" ignoreTemplate="true"/>
+                                    </#if>
                                 <!-- **************************** -->
                                 <!-- Specific Content for this Email END -->
                                 <!-- **************************** -->
@@ -828,21 +957,21 @@
     </#if>
     
 	 <#-- ORDER DETAIL TABLE -->
-	 <table class="displayBox orderDetail">
+	 <table style="${ORDER_COMPONENT!}">
+	  <tr>
+	     <td colspan="2"><h3 style="${H3!}">${uiLabelMap.OrderInformationHeading}</h3></td>
+	  </tr>
 	 <tr>
-	  <td class="H3">${uiLabelMap.OrderInformationHeading}</td>
+	  <td style="${E_LABEL!""}">${uiLabelMap.OrderNumberCaption}</td>
+	  <td>${ORDER.orderId!}</td>
 	 </tr>
 	 <tr>
-	  <td class="label">${uiLabelMap.OrderNumberCaption}</td>
-	  <td class="span">${ORDER.orderId!}</td>
+	  <td style="${E_LABEL!""}">${uiLabelMap.NameCaption}</td>
+	  <td>${(displayPartyNameResult.fullName)?default("[Name Not Found]")}</td>
 	 </tr>
 	 <tr>
-	  <td class="label">${uiLabelMap.NameCaption}</td>
-	  <td class="span">${(displayPartyNameResult.fullName)?default("[Name Not Found]")}</td>
-	 </tr>
-	 <tr>
-	  <td class="label">${uiLabelMap.OrderDateCaption}</td>
-	  <td class="span">${ORDER.orderDate?string("yyyy-MM-dd")}</td>
+	  <td style="${E_LABEL!""}">${uiLabelMap.OrderDateCaption}</td>
+	  <td>${ORDER.orderDate?string("yyyy-MM-dd")}</td>
 	 </tr>
 	</table>
   
@@ -868,20 +997,18 @@
         <td colspan="2"><h3 style="${H3!}">${uiLabelMap.PaymentInformationHeading}</h3></td>
     </tr>
 
-    <#-- Process ALL possible payments -->
-    <#assign orderPaymentPref=ORDER_HELPER.getPaymentPreferences()/>
+    <!-- Process ALL possible payments -->
+    <#assign orderPaymentPref= ORDER_HELPER.getPaymentPreferences()/>
     <#list orderPaymentPref as orderPaymentPreference>
 
-        <#-- Assignments that apply to all payment types -->
-
+        <!-- Assignments that apply to all payment types -->
         <#assign paymentNumber = "">
         <#assign creditCard = "">
-       <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
-       <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>
-       <#assign paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")?if_exists>
+        <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
+        <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>
+        <#assign paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")?if_exists>
 
-        <#-- Assignments for CREDIT CARD payment -->
-
+        <!-- Assignments for CREDIT CARD payment -->
         <#if "CREDIT_CARD" == orderPaymentPreference.paymentMethodTypeId>
             <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>
             <#if creditCard?has_content>
@@ -892,8 +1019,7 @@
             </#if>
         </#if>
 
-        <#-- Assignments for GIFTCARD payment -->
-
+        <!-- Assignments for GIFTCARD payment -->
         <#if "GIFT_CARD" == orderPaymentPreference.paymentMethodTypeId>
             <#assign giftCard = paymentMethod.getRelatedOne("GiftCard")?if_exists>
             <#if giftCard?has_content>
@@ -901,11 +1027,12 @@
             </#if>
         </#if>
 
-        <#-- Output retrieved values -->
-
+        <!-- Output retrieved values -->
         <tr>
-            <td style="${E_LABEL!""}">Payment Method:</td>
-            <#if payInStore == "Y">
+            <td style="${LABEL!""}">Payment Method:</td>
+            <#if payInStore == "Y" && paymentNumber?has_content>
+                <td>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</td>
+            <#elseif payInStore == "Y" && paymentMethodType.paymentMethodTypeId == "EXT_COD">
                 <td>${uiLabelMap.PayInStoreLabel}</td>
             <#else>
                 <td>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</td>
@@ -914,20 +1041,19 @@
 
         <#if paymentNumber?has_content>
             <tr>
-                <td style="${E_LABEL!""}">Card Number:</td>
+                <td style="${LABEL!""}">Card Number:</td>
                 <td>${paymentNumber}</td>
             </tr> 
         </#if>
 
         <tr>
-            <td style="${E_LABEL!""}">Amount:</td>
-            <td><@ofbizCurrency amount=orderPaymentPreference.maxAmount isoCode=ORDER_CURRENCY rounding=CURRENCY_UOM_ROUNDING/></td>
+            <td style="${LABEL!""}">Amount:</td>
+            <td><@ofbizCurrency amount=orderPaymentPreference.maxAmount isoCode=ORDER_HELPER.getCurrency() rounding=globalContext.currencyRounding/></td>
         </tr>
 
     </#list>
    </table>
 </#if>
-  
   ]]>
   </textData>
  </ElectronicText>
@@ -935,19 +1061,18 @@
 <!-- E_ORDER_SHIPMENTS -->
 <ElectronicText dataResourceId="E_ORDER_SHIPMENTS">
   <textData><![CDATA[
-    <#if ORDER_ITEM_SHIP_GROUP?has_content>
+<#if ORDER_ITEM_SHIP_GROUP?has_content>
         <table style="${ORDER_COMPONENT!}">                                                                                      
         <#assign groupIdx = 0>                                                                                                                                                                                                                                                                                
             <#list ORDER_ITEM_SHIP_GROUP as shipGroup>
-	            <tr>
-	                <td colspan="2"><h3 style="${H3!}">${uiLabelMap.ShippingInformationHeading}</h3></td>
-	            </tr>
                 <#assign storeGroup = "">
+                <#assign pickupInStore = "N">
 				<#assign orderAttrPickupStore = ORDER.getRelatedByAnd("OrderAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName", "STORE_LOCATION"))/>
 				<#if orderAttrPickupStore?has_content>
 				    <#assign orderAttribute= Static["org.ofbiz.entity.util.EntityUtil"].getFirst(orderAttrPickupStore)/>
 				    <#assign storeId=orderAttribute.attrValue!/>
 				    <#assign storeParty= delegator.findOne("Party", {"partyId", storeId}, false)!""/>
+                    <#assign pickupInStore = "Y">
 				    <#if storeParty?has_content>
 				        <#assign storePartyContactPurpose= storeParty.getRelated("PartyContactMechPurpose")/>
 				        <#assign storePartyContactPurpose= Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(storePartyContactPurpose,true)/>
@@ -965,7 +1090,13 @@
 				            <#assign storeGroup= delegator.findOne("PartyGroup", {"partyId", storeId}, false)!""/>
 				       </#if>
 				    </#if>
+		            <tr>
+		                <td colspan="2"><h3 style="${H3!}">Store Information</h3></td>
+		            </tr>
 				<#else>
+		            <tr>
+		                <td colspan="2"><h3 style="${H3!}">${uiLabelMap.ShippingInformationHeading}</h3></td>
+		            </tr>
                     <#assign shippingAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
 				</#if>
                 <#assign groupNumber = shipGroup.shipGroupSeqId?if_exists>
@@ -1032,10 +1163,12 @@
                 <#assign shipmentMethodType = shipGroup.getRelatedOne("ShipmentMethodType")?if_exists>
                 <#assign carrierPartyId = shipGroup.carrierPartyId?if_exists>
 
-                <tr>
-                    <td style="${E_LABEL!""}">${uiLabelMap.ShippingMethodCaption}</td>
-                    <td>${carrierPartyId!""} <#if shipmentMethodType?exists>${shipmentMethodType.description!""}</#if></td>
-                </tr>
+                <#if pickupInStore == "N">
+	                <tr>
+	                    <td style="${E_LABEL!""}">${uiLabelMap.ShippingMethodCaption}</td>
+	                    <td>${carrierPartyId!""} <#if shipmentMethodType?exists>${shipmentMethodType.description!""}</#if></td>
+	                </tr>
+                </#if>
                 <#if shipGroup.trackingNumber?has_content>
                       <#assign trackingURLPartyContents = delegator.findByAnd("PartyContent", {"partyId": shipGroup.carrierPartyId, "partyContentTypeId": "TRACKING_URL"})/>
                       <#if trackingURLPartyContents?has_content>
@@ -1061,7 +1194,11 @@
                 </#if>
                 <#if shipGroup.estimatedShipDate?has_content>
                     <tr>
+                       <#if pickupInStore == "Y">
+                        <td style="${E_LABEL!""}">Pick Up Date:</td>
+                       <#else>
                         <td style="${E_LABEL!""}">${uiLabelMap.ShipDateCaption}</td>
+                       </#if>
                         <td>${shipGroup.estimatedShipDate?string(FORMAT_DATE)}</td>
                     </tr>
                 </#if>
@@ -1080,7 +1217,7 @@
                                    <td style="${PRICE!""}${E_LABEL!""}">${uiLabelMap.PriceLabel}</td>
                                    <td style="${PRICE!""}${E_LABEL!""}">${uiLabelMap.TotalLabel}</td>
                               </tr>
-                              <#list orderItemShipGroupAssoc as shipGroupAssoc>                                                                                                                                                                                                                                                                                                  <#assign alreadyProcessedOrderItemAttributes = Static["javolution.util.FastList"].newInstance()/>                                                                                                                         
+                              <#list orderItemShipGroupAssoc as shipGroupAssoc>                                                                                                                                                                                                                                                                                                  
                                   <#assign orderItem =shipGroupAssoc.getRelatedOne("OrderItem")!""/>
                                   <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
                                   <#assign urlProductId = product.productId>
@@ -1127,9 +1264,23 @@
                                       <td style="${PRICE!""}"><@ofbizCurrency amount=orderItem.unitPrice isoCode=ORDER_HELPER.getCurrency()/></td>
                                       <#assign itemTotal = (orderItem.unitPrice?number) * (shipGroupAssoc.quantity?number)>
                                       <td style="${PRICE!""}"><@ofbizCurrency amount=itemTotal isoCode=ORDER_HELPER.getCurrency()/></td>                                                                                                                                                                                                                                                                                                                                                                             
-                                  </tr>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <#-- GIFT MESSAGE INFO -->
-	                                  <#assign shipGroupAssocQty = shipGroupAssoc.quantity!/>
+                                  </tr>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+                                  <#-- GIFT MESSAGE INFO -->
+	                                  <#assign shipGroupAssocQty = shipGroupAssoc.quantity!1/>
 								      <#assign shipGroupSeqId = shipGroupAssoc.shipGroupSeqId!/>
+								      <#-- filter the OrderItem attributes which are in the same shipgroup -->
+						              <#assign orderItemAttributes = orderItem.getRelatedCache("OrderItemAttribute")!""/>
+								      <#assign alreadyProcessedOrderItemAttributes = Static["javolution.util.FastList"].newInstance()/>
+								      <#assign orderItemAttributesChanged = Static["javolution.util.FastList"].newInstance()/>
+								      <#list orderItemAttributes as orderItemAttribute>
+								          <#assign attrName = orderItemAttribute.attrName!""/>
+								          <#if (attrName.startsWith("GIFT_MSG_FROM_") || attrName.startsWith("GIFT_MSG_TO_") || attrName.startsWith("GIFT_MSG_TEXT_"))>
+								              <#assign iShipIdItem = attrName.lastIndexOf("_")/>
+								              <#if (iShipIdItem > -1 && attrName.substring(iShipIdItem+1).equals(shipGroupSeqId))>
+								                  <#assign changedItemAttr = orderItemAttributesChanged.add(orderItemAttribute)>
+								              </#if>
+					  	  	        	  </#if>  
+								      </#list>
 								      
 								      <#list 1 .. shipGroupAssocQty as count>
 								          <#assign orderItemAttributes = orderItem.getRelated("OrderItemAttribute")!""/>
@@ -1141,7 +1292,8 @@
 							              <#assign giftMessageText = ""/>
 							              <#assign seqId = ""/>
 							             
-								          <#list orderItemAttributes as orderItemAttribute>
+							              <#-- Get the SeqId like '01, 02...' so that we get correct AttrName value for TO_01 FROM_01 and TEXT_01 attributes -->
+								          <#list orderItemAttributesChanged as orderItemAttribute>
 								              <#assign attrName = orderItemAttribute.attrName!""/>
 								              <#if !seqId?has_content>
 									             <#if attrName.startsWith("GIFT_MSG_FROM_")>
@@ -1172,6 +1324,7 @@
 									         </#if>
 									      </#list>
 									      
+								      <#-- Here put the sequenceId in the  alreadyProcessedOrderItemAttributes list so we wouldn't be get the sequId again -->
 								          <#assign changed = alreadyProcessedOrderItemAttributes.add(seqId)/>
 		
 								          <#list orderItemAttributes as orderItemAttribute>
@@ -1189,12 +1342,12 @@
 								          <tr style="${TABULAR_DATA!""}">
 								            <td colspan="100%">
 								              <#if to?has_content || giftMessageText?has_content || from?has_content>
-							                  	${uiLabelMap.GiftMessageLabel}<#if shipGroupAssocQty &gt; 1> ${count!}</#if>: ${to!}  ${giftMessageText!}  ${from!}
+							                  	${uiLabelMap.GiftMessageLabel}<#if (shipGroupAssocQty > 1)> ${count!}</#if>: <#if to?has_content>${uiLabelMap.ToCaption} ${to!}</#if> ${giftMessageText!}  <#if from?has_content>${uiLabelMap.FromCaption} ${from!}</#if>
 							                  </#if>
 							                </td>
 							              </tr>
 								      </#list>
-	                                  <#-- END GIFT MESSAGE-->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+	                                  <#-- END -->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                               </#list>    
                           </table>
                       </td>

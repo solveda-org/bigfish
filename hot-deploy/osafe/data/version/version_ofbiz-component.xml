@@ -16,7 +16,7 @@
     <!-- entity resources: model(s), eca(s), group, and data definitions -->
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
     <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entityImportModel.xml"/>
-    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_customer.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_custom.xml"/>
     <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
     <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
 
@@ -29,20 +29,7 @@
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentEmailData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentSeedData.xml"/>
-
-    <!--  Shipment Custom Methods -->
-    <entity-resource type="data" reader-name="customshipmentmethods" loader="main" location="data/seed/eCommerceShipmentCustomMethods.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceShipmentCustomMethods.xml"/>
-
-    <!-- Payment Custom Methods -->
-    <entity-resource type="data" reader-name="custompaymentmethods" loader="main" location="data/seed/eCommercePaymentCustomMethods.xml"/>
-
-    <!-- Gift Card Payment Setting -->
-    <entity-resource type="data" reader-name="gifcardpaymentsettings" loader="main" location="data/seed/ecommerceGiftCardPaymentSettings.xml"/>
-
-    <!-- Tender Card Custom Methods -->
-    <entity-resource type="data" reader-name="tendercardpaymentsettings" loader="main" location="data/seed/ecommerceTenderCardPaymentSettings.xml"/>
-
     <!-- Geo Files -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/01-GeoAssocType.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/02-GeoType.xml"/>
@@ -65,30 +52,13 @@
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/330-Geo_Assco_UPS_DAS_EXT_ZONE.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/340-Geo_Assoc_UPS_GRD_ZONE.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/400-Tax_Party.xml"/>
-
-    <!-- Shipping Methods -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/ecommerceSeedShippingMethods.xml"/>
 
-    <!-- BigFish Parameters -->
-    <entity-resource type="data" reader-name="parameters" loader="main" location="data/bigFishParameters.xml"/>
-    <entity-resource type="data" reader-name="version" loader="main" location="data/bigFishParameters.xml"/>
-
-    <!-- BigFish Content Menu -->
-    <entity-resource type="data" reader-name="contentmenu" loader="main" location="data/seed/bigFishContentMenu.xml"/>
-    <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishContentMenu.xml"/>
-
-    <!-- BigFish Content Types -->
-    <entity-resource type="data" reader-name="bigfishtypes" loader="main" location="data/seed/bigFishTypes.xml"/> 
-    <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishTypes.xml"/> 
-
-    <!-- BigFish Extended Store Content -->
-    <entity-resource type="data" reader-name="extendedstore" loader="main" location="data/bigFishExtendedStore.xml"/>
-
-    <!-- BigFish Schedulers -->
-    <entity-resource type="data" reader-name="schedulers" loader="main" location="data/eCommerceBigfishScheduledJobs.xml"/>
 
     <!-- Demo Data -->
     <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceShippingOptions.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/XProductStoreParm.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/BigfishContent.xml"/>
 
     <!-- Product Data -->
     <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/000-ProductCategory.xml"/>
@@ -105,15 +75,30 @@
     <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/070-ProductAssoc.xml"/>
     <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/075-ProductAttribute.xml"/>
 
-    <!-- Content Demo Data 
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_HP_SPOT.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_PTS_SPOT.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SI_INFO.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SP_PAGE.xml"/>
-    -->
+    <!-- Custom Method Readers -->
+    <!-- Shipment -->
+    <entity-resource type="data" reader-name="customshipmentmethods" loader="main" location="data/seed/eCommerceShipmentCustomMethods.xml"/>
+    <!-- Payment -->
+    <entity-resource type="data" reader-name="custompaymentmethods" loader="main" location="data/seed/eCommercePaymentCustomMethods.xml"/>
+    <!-- Gift Card -->
+    <entity-resource type="data" reader-name="gifcardpaymentsettings" loader="main" location="data/seed/ecommerceGiftCardPaymentSettings.xml"/>
+    <!-- Tender Card  -->
+    <entity-resource type="data" reader-name="tendercardpaymentsettings" loader="main" location="data/seed/ecommerceTenderCardPaymentSettings.xml"/>
+    <!-- BigFish Parameters -->
+    <entity-resource type="data" reader-name="parameters" loader="main" location="data/bigFishParameters.xml"/>
+    <!-- BigFish Content Menu -->
+    <entity-resource type="data" reader-name="contentmenu" loader="main" location="data/seed/bigFishContentMenu.xml"/>
+    <!-- BigFish Content Types -->
+    <entity-resource type="data" reader-name="bigfishtypes" loader="main" location="data/seed/bigFishTypes.xml"/> 
+    <!-- Version -->
+    <entity-resource type="data" reader-name="version" loader="main" location="data/bigFishParameters.xml"/>
+    <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishTypes.xml"/> 
+    <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishContentMenu.xml"/>
 
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/XProductStoreParm.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/BigfishContent.xml"/>
+    <!-- BigFish Extended Store Content -->
+    <entity-resource type="data" reader-name="extendedstore" loader="main" location="data/bigFishExtendedStore.xml"/>
+    <!-- BigFish Schedulers -->
+    <entity-resource type="data" reader-name="schedulers" loader="main" location="data/eCommerceBigfishScheduledJobs.xml"/>
 
     <!-- Ofbiz version 12 migration Data -->
     <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/PaymentGatewayConfData.xml"/>
@@ -139,9 +124,7 @@
     <service-resource type="model" loader="main" location="servicedef/services_scheduledJobs.xml"/>
     <service-resource type="model" loader="main" location="servicedef/services_custom.xml"/>
     <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
-    <!--
-    <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
-    -->
+    <service-resource type="eca" loader="main" location="servicedef/secas_custom.xml"/>
 
     <!-- web applications; will be mounted when using the embedded container -->
     <webapp name="osafe"

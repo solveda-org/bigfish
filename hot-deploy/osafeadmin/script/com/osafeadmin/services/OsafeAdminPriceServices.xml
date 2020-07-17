@@ -55,116 +55,110 @@
 	    <check-errors/>
         
         <if-not-empty field="parameters.defaultPrice">
-            <entity-and entity-name="ProductPrice" list="productDefaultPriceList" filter-by-date="true">
-                <field-map field-name="productId" from-field="parameters.productId"/>
-                <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
-                <order-by field-name="-fromDate"/>
-            </entity-and>
-            <if-not-empty field="productDefaultPriceList">
-                <first-from-list entry="productDefaultPrice" list="productDefaultPriceList"/>
-                <set-service-fields service-name="updateProductPrice" to-map="productDefaultPriceCtx" map="productDefaultPrice"/>
-                <set field="productDefaultPriceCtx.price" from-field="parameters.defaultPrice" type="BigDecimal"/>
-                <call-service service-name="updateProductPrice" in-map-name="productDefaultPriceCtx"/>
-            </if-not-empty>
+            <set field="createUpdateProdPriceCtx.productId" from-field="parameters.productId"/>
+            <set field="createUpdateProdPriceCtx.newPrice" from-field="parameters.defaultPrice" type="BigDecimal"/>
+            <set field="createUpdateProdPriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+            <set field="createUpdateProdPriceCtx.isVariant" from-field="parameters.isVariant"/>
+            <set field="createUpdateProdPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+            <set field="createUpdateProdPriceCtx.productPricePurposeId" value="PURCHASE"/>
+            <set field="createUpdateProdPriceCtx.productStoreGroupId" value="_NA_"/>
+            <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
         </if-not-empty>
         <if-not-empty field="parameters.listPrice">
-            <entity-and entity-name="ProductPrice" list="productListPriceList" filter-by-date="true">
-                <field-map field-name="productId" from-field="parameters.productId"/>
-                <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
-                <order-by field-name="-fromDate"/>
-            </entity-and>
-            <if-not-empty field="productListPriceList">
-                <first-from-list entry="productListPrice" list="productListPriceList"/>
-                <set-service-fields service-name="updateProductPrice" to-map="productListPriceCtx" map="productListPrice"/>
-                <set field="productListPriceCtx.price" from-field="parameters.listPrice" type="BigDecimal"/>
-                <call-service service-name="updateProductPrice" in-map-name="productListPriceCtx"/>
-            </if-not-empty>
+            <set field="createUpdateProdPriceCtx.productId" from-field="parameters.productId"/>
+            <set field="createUpdateProdPriceCtx.newPrice" from-field="parameters.listPrice" type="BigDecimal"/>
+            <set field="createUpdateProdPriceCtx.productPriceTypeId" value="LIST_PRICE"/>
+            <set field="createUpdateProdPriceCtx.isVariant" from-field="parameters.isVariant"/>
+            <set field="createUpdateProdPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+            <set field="createUpdateProdPriceCtx.productPricePurposeId" value="PURCHASE"/>
+            <set field="createUpdateProdPriceCtx.productStoreGroupId" value="_NA_"/>
+            <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
         </if-not-empty>
         
         <if-compare field="parameters.isVariant" operator="equals" value="Y">
-        <entity-and list="productVariantListPriceList" entity-name="ProductPrice" filter-by-date="true">
-            <field-map field-name="productId" from-field="parameters.productId"/>
-            <field-map field-name="productPriceTypeId" value="LIST_PRICE"/>
-            <field-map field-name="productPricePurposeId" value="PURCHASE"/>
-            <field-map field-name="currencyUomId" from-field="parameters.currencyUomId"/>
-            <field-map field-name="productStoreGroupId" value="_NA_"/>
-            <order-by field-name="-fromDate"/>
-        </entity-and>
-        <if-not-empty field="productVariantListPriceList">
-            <first-from-list entry="productVariantListPrice" list="productVariantListPriceList"/>
-        </if-not-empty>
-        
-        <if-not-empty field="productVariantListPrice">
-            <if-not-empty field="parameters.variantListPrice">
-                <set-service-fields service-name="updateProductPrice" to-map="productVariantListPriceCtx" map="productVariantListPrice"/>
-                <set field="productVariantListPriceCtx.price" from-field="parameters.variantListPrice" type="BigDecimal"/>
-                <call-service service-name="updateProductPrice" in-map-name="productVariantListPriceCtx"/>
-            <else>
-                <set field="deleteProductVariantListPriceCtx.productId" from-field="productVariantListPrice.productId"/>
-                <set field="deleteProductVariantListPriceCtx.productPriceTypeId" value="LIST_PRICE"/>
-                <set field="deleteProductVariantListPriceCtx.productPricePurposeId" value="PURCHASE"/>
-                <set field="deleteProductVariantListPriceCtx.currencyUomId" from-field="productVariantListPrice.currencyUomId"/>
-                <set field="deleteProductVariantListPriceCtx.productStoreGroupId" value="_NA_"/>
-                <set field="deleteProductVariantListPriceCtx.fromDate" from-field="productVariantListPrice.fromDate" type="Timestamp"/>
-                <call-service service-name="deleteProductPrice" in-map-name="deleteProductVariantListPriceCtx"/>
-            </else>
-            </if-not-empty>
-        <else>
-            <if-not-empty field="parameters.variantListPrice">
-                <now-timestamp field="fromDate"/>
-                <set field="createProductVariantListPriceCtx.price" from-field="parameters.variantListPrice" type="BigDecimal"/>
-                <set field="createProductVariantListPriceCtx.productId" from-field="parameters.productId"/>
-                <set field="createProductVariantListPriceCtx.productPriceTypeId" value="LIST_PRICE"/>
-                <set field="createProductVariantListPriceCtx.productPricePurposeId" value="PURCHASE"/>
-                <set field="createProductVariantListPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
-                <set field="createProductVariantListPriceCtx.productStoreGroupId" value="_NA_"/>
-                <set field="createProductVariantListPriceCtx.fromDate" from-field="fromDate" type="Timestamp"/>
-                <call-service service-name="createProductPrice" in-map-name="createProductVariantListPriceCtx"/>
-            </if-not-empty>
-        </else>
-        </if-not-empty>
-        
-        <entity-and list="productVariantSalePriceList" entity-name="ProductPrice" filter-by-date="true">
-            <field-map field-name="productId" from-field="parameters.productId"/>
-            <field-map field-name="productPriceTypeId" value="DEFAULT_PRICE"/>
-            <field-map field-name="productPricePurposeId" value="PURCHASE"/>
-            <field-map field-name="currencyUomId" from-field="parameters.currencyUomId"/>
-            <field-map field-name="productStoreGroupId" value="_NA_"/>
-            <order-by field-name="-fromDate"/>
-        </entity-and>
-        <if-not-empty field="productVariantSalePriceList">
-            <first-from-list entry="productVariantSalePrice" list="productVariantSalePriceList"/>
-        </if-not-empty>
-        
-        <if-not-empty field="productVariantSalePrice">
-            <if-not-empty field="parameters.variantSalePrice">
-                <set-service-fields service-name="updateProductPrice" to-map="productVariantSalePriceCtx" map="productVariantSalePrice"/>
-                <set field="productVariantSalePriceCtx.price" from-field="parameters.variantSalePrice" type="BigDecimal"/>
-                <call-service service-name="updateProductPrice" in-map-name="productVariantSalePriceCtx"/>
-            <else>
-                <set field="deleteProductVariantSalePriceCtx.productId" from-field="productVariantSalePrice.productId"/>
-                <set field="deleteProductVariantSalePriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
-                <set field="deleteProductVariantSalePriceCtx.productPricePurposeId" value="PURCHASE"/>
-                <set field="deleteProductVariantSalePriceCtx.currencyUomId" from-field="productVariantSalePrice.currencyUomId"/>
-                <set field="deleteProductVariantSalePriceCtx.productStoreGroupId" value="_NA_"/>
-                <set field="deleteProductVariantSalePriceCtx.fromDate" from-field="productVariantSalePrice.fromDate" type="Timestamp"/>
-                <call-service service-name="deleteProductPrice" in-map-name="deleteProductVariantSalePriceCtx"/>
-            </else>
-            </if-not-empty>
-        <else>
-            <if-not-empty field="parameters.variantSalePrice">
-                <now-timestamp field="fromDate"/>
-                <set field="createProductVariantSalePriceCtx.price" from-field="parameters.variantSalePrice" type="BigDecimal"/>
-                <set field="createProductVariantSalePriceCtx.productId" from-field="parameters.productId"/>
-                <set field="createProductVariantSalePriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
-                <set field="createProductVariantSalePriceCtx.productPricePurposeId" value="PURCHASE"/>
-                <set field="createProductVariantSalePriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
-                <set field="createProductVariantSalePriceCtx.productStoreGroupId" value="_NA_"/>
-                <set field="createProductVariantSalePriceCtx.fromDate" from-field="fromDate" type="Timestamp"/>
-                <call-service service-name="createProductPrice" in-map-name="createProductVariantSalePriceCtx"/>
-            </if-not-empty>
-        </else>
-        </if-not-empty>
+        	<set field="createUpdateProdPriceCtx.productId" from-field="parameters.productId"/>
+            <set field="createUpdateProdPriceCtx.newPrice" from-field="parameters.variantListPrice" type="BigDecimal"/>
+            <set field="createUpdateProdPriceCtx.productPriceTypeId" value="LIST_PRICE"/>
+            <set field="createUpdateProdPriceCtx.isVariant" from-field="parameters.isVariant"/>
+            <set field="createUpdateProdPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+            <set field="createUpdateProdPriceCtx.productPricePurposeId" value="PURCHASE"/>
+            <set field="createUpdateProdPriceCtx.productStoreGroupId" value="_NA_"/>
+            <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
+            
+            <set field="createUpdateProdPriceCtx.productId" from-field="parameters.productId"/>
+            <set field="createUpdateProdPriceCtx.newPrice" from-field="parameters.variantSalePrice" type="BigDecimal"/>
+            <set field="createUpdateProdPriceCtx.productPriceTypeId" value="DEFAULT_PRICE"/>
+            <set field="createUpdateProdPriceCtx.isVariant" from-field="parameters.isVariant"/>
+            <set field="createUpdateProdPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+            <set field="createUpdateProdPriceCtx.productPricePurposeId" value="PURCHASE"/>
+            <set field="createUpdateProdPriceCtx.productStoreGroupId" value="_NA_"/>
+            <call-service service-name="createUpdateProdPrice" in-map-name="createUpdateProdPriceCtx"/>
         </if-compare>
+        
     </simple-method>
+
+    
+    <simple-method method-name="createUpdateProdPrice" short-description="This Service Update Product Price">
+        <if>
+        	<condition>
+        		<and>
+        			<not><if-empty field="parameters.productId"></if-empty></not>
+        			<not><if-empty field="parameters.productPriceTypeId"></if-empty></not>
+        			<not><if-empty field="parameters.isVariant"></if-empty></not>
+        			<not><if-empty field="parameters.currencyUomId"></if-empty></not>
+        			<not><if-empty field="parameters.productPricePurposeId"></if-empty></not>
+        			<not><if-empty field="parameters.productStoreGroupId"></if-empty></not>
+        		</and>
+        	</condition>
+        	<then>
+        		<entity-and entity-name="ProductPrice" list="productPriceList" filter-by-date="true">
+	                <field-map field-name="productId" from-field="parameters.productId"/>
+	                <field-map field-name="productPriceTypeId" from-field="parameters.productPriceTypeId"/>
+	                <field-map field-name="productPricePurposeId" from-field="parameters.productPricePurposeId"/>
+		            <field-map field-name="currencyUomId" from-field="parameters.currencyUomId"/>
+		            <field-map field-name="productStoreGroupId" from-field="parameters.productStoreGroupId"/>
+	                <order-by field-name="-fromDate"/>
+	            </entity-and>
+	            
+	            <if-not-empty field="productPriceList">
+	            	<first-from-list entry="productPrice" list="productPriceList"/>
+	            </if-not-empty>
+	            
+            	<if-not-empty field="parameters.newPrice">
+		            <if-not-empty field="productPrice">
+		                <set-service-fields service-name="updateProductPrice" to-map="productPriceCtx" map="productPrice"/>
+		                <set field="productPriceCtx.price" from-field="parameters.newPrice" type="BigDecimal"/>
+		                <call-service service-name="updateProductPrice" in-map-name="productPriceCtx"/>
+		                <else>
+		                	<!-- create one if one does not exist -->
+		                	<now-timestamp field="fromDate"/>
+			                <set field="createProductPriceCtx.price" from-field="parameters.newPrice" type="BigDecimal"/>
+			                <set field="createProductPriceCtx.productId" from-field="parameters.productId"/>
+			                <set field="createProductPriceCtx.productPriceTypeId" from-field="parameters.productPriceTypeId"/>
+			                <set field="createProductPriceCtx.productPricePurposeId" from-field="parameters.productPricePurposeId"/>
+			                <set field="createProductPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+			                <set field="createProductPriceCtx.productStoreGroupId" from-field="parameters.productStoreGroupId"/>
+			                <set field="createProductPriceCtx.fromDate" from-field="fromDate" type="Timestamp"/>
+			                <call-service service-name="createProductPrice" in-map-name="createProductPriceCtx"/>
+	                	</else>
+		            </if-not-empty>
+		            <else>
+		            	<if-not-empty field="productPrice">
+		            		<!-- If this ProductPrice is for a variant -->
+			            	<if-compare field="parameters.isVariant" operator="equals" value="Y">
+			            		<set field="deleteProductVariantListPriceCtx.productId" from-field="parameters.productId"/>
+				                <set field="deleteProductVariantListPriceCtx.productPriceTypeId" from-field="parameters.productPriceTypeId"/>
+				                <set field="deleteProductVariantListPriceCtx.productPricePurposeId" from-field="parameters.productPricePurposeId"/>
+				                <set field="deleteProductVariantListPriceCtx.currencyUomId" from-field="parameters.currencyUomId"/>
+				                <set field="deleteProductVariantListPriceCtx.productStoreGroupId" from-field="parameters.productStoreGroupId"/>
+				                <set field="deleteProductVariantListPriceCtx.fromDate" from-field="productPrice.fromDate" type="Timestamp"/>
+				                <call-service service-name="deleteProductPrice" in-map-name="deleteProductVariantListPriceCtx"/>
+			            	</if-compare>
+		            	</if-not-empty>
+		            </else>
+	            </if-not-empty>
+        	</then>
+        </if>
+    </simple-method>
+    
 </simple-methods>

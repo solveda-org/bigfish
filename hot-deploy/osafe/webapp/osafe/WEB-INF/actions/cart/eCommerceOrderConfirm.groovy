@@ -46,6 +46,11 @@ else
 }
 
 orderId = parameters.orderId;
+if (UtilValidate.isEmpty(orderId))
+{
+	orderId = session.getAttribute("orderId");
+
+}
 orderHeader = null;
 orderHeaderAdjustments = null;
 orderSubTotal = 0;
@@ -259,7 +264,7 @@ if (UtilValidate.isNotEmpty(orderId))
 					   promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
 					   if(UtilValidate.isNotEmpty(promoCodesEntered))
 					   {
-						   for (GenericValue promoCodeEntered : promoCodesEntered)
+						   for (String promoCodeEntered : promoCodesEntered)
 						   {
 							   if(UtilValidate.isNotEmpty(promoCodeEntered))
 							   {

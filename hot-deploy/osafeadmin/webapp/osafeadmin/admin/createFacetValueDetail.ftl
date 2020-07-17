@@ -36,7 +36,7 @@
             </td>
             <td class="seqCol">
                <#assign sequenceNumParm = parameters.get("sequenceNum_${rowNo}")! />
-               <input type="text" class="small" name="sequenceNum_${rowNo}" id="sequenceNum" value="${sequenceNumParm!}" maxlength="10"/>
+               <input type="text" class="small" name="sequenceNum_${rowNo}" id="sequenceNum" value="${sequenceNumParm!}" maxlength="9"/>
             </td>
             <td class="actionCol">
                 <a href="javascript:setNewRowNo('${rowNo}');javascript:removeRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteFeatureRowTooltip}');" onMouseout="hideTooltip()"></a>

@@ -16,11 +16,12 @@ import com.osafe.util.Util;
 import org.ofbiz.common.geo.GeoWorker;
 import javolution.util.FastMap;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
+import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 
-cart = session.getAttribute("shoppingCart");
+cart = ShoppingCartEvents.getCartObject(request);
 productStore = ProductStoreWorker.getProductStore(request);
 party = null;
 context.shoppingCart = cart;
@@ -165,7 +166,7 @@ if (UtilValidate.isNotEmpty(cart))
 	    context.carrierShipmentMethodList = carrierShipmentMethodList;
 	}
 
-	if (cart.getShipmentMethodTypeId() && cart.getCarrierPartyId()) 
+	if (UtilValidate.isNotEmpty(cart.getShipmentMethodTypeId()) && UtilValidate.isNotEmpty(cart.getCarrierPartyId())) 
 	{
 	    context.chosenShippingMethod = cart.getShipmentMethodTypeId() + '@' + cart.getCarrierPartyId();
 	}

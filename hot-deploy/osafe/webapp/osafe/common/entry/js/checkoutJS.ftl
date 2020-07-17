@@ -1,5 +1,181 @@
 <script type="text/javascript">
 <#assign allowCOD = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_COD")/>
+
+   jQuery(document).ready(function () 
+   {
+   		<#-- validate the shopping cart -->
+   		validateCart();
+   		
+        <#-- update shipping options base on shipping postal code -->
+        if (jQuery('#js_SHIPPING_POSTAL_CODE').length) 
+        {
+          updateShippingOption('Y');
+          jQuery('#js_SHIPPING_POSTAL_CODE').change(function () 
+          {
+            updateShippingOption('N');
+          });
+          jQuery('#js_SHIPPING_STATE').change(function () 
+          {
+            updateShippingOption('N');
+          });
+          jQuery('#js_SHIPPING_ADDRESS1').change(function () 
+          {
+            updateShippingOption('N');
+          });
+          jQuery('#js_SHIPPING_ADDRESS2').change(function () 
+          {
+            updateShippingOption('N');
+          });
+          jQuery('#js_SHIPPING_ADDRESS3').change(function () 
+          {
+            updateShippingOption('N');
+          });
+          jQuery('#js_SHIPPING_COUNTRY').change(function () 
+          {
+            updateShippingOption('N');
+          });
+        }
+
+        <#-- make first shipping option as selected -->
+        if (jQuery('input.js_shipping_method:checked').val() == undefined) 
+        {
+          jQuery('input.js_shipping_method:first').attr("checked", true);
+        }
+
+        <#-- activate pick up store event listener -->
+        pickupStoreEventListener();
+
+       <#-- display payment options based on if a user selects pay now or pay in store -->
+    	if (jQuery('#js_payInStoreY').is(':checked')) 
+    	{	
+		    jQuery('#js_checkoutPaymentOptions').hide();     
+		}
+    	jQuery('#js_payInStoreN').click(function()
+    	{
+		    jQuery('#js_checkoutPaymentOptions').show();
+		});
+		
+		jQuery('#js_payInStoreY').click(function()
+		{
+		    jQuery('#js_checkoutPaymentOptions').hide();
+		});
+
+        <#-- PAYMENT OPTIONS (RADIO BUTTON AUTO SELECTION)-->
+    	<#-- select saved card option -->
+    	jQuery('#js_savedCard').change(function () 
+		{
+			jQuery('#js_useSavedCard').prop('checked',true);
+		});
+		jQuery('#js_savedVerificationNo').change(function () 
+		{
+			jQuery('#js_useSavedCard').prop('checked',true);
+		});
+		
+		<#-- select other card option -->
+    	jQuery('#js_cardType').change(function () 
+		{
+			jQuery('#js_useOtherCard').prop('checked',true);
+		});
+		jQuery('#js_cardNumber').change(function () 
+		{
+			jQuery('#js_useOtherCard').prop('checked',true);
+		});
+		jQuery('#js_expMonth').change(function () 
+		{
+			jQuery('#js_useOtherCard').prop('checked',true);
+		});
+		jQuery('#js_expYear').change(function () 
+		{
+			jQuery('#js_useOtherCard').prop('checked',true);
+		});
+		jQuery('#js_verificationNo').change(function () 
+		{
+			jQuery('#js_useOtherCard').prop('checked',true);
+		});
+
+        <#-- select saved EFT option -->
+        jQuery('#js_savedEftAccount').change(function () 
+        {
+            jQuery('#js_useSavedEftAccount').prop('checked',true);
+        });
+        
+        <#-- select other EFT option -->
+        jQuery('#js_nameOnAccount').change(function () 
+        {
+            jQuery('#js_useOtherEftAccount').prop('checked',true);
+        });
+        jQuery('#js_bankName').change(function () 
+        {
+            jQuery('#js_useOtherEftAccount').prop('checked',true);
+        });
+        jQuery('#js_routingNumber').change(function () 
+        {
+            jQuery('#js_useOtherEftAccount').prop('checked',true);
+        });
+        jQuery('#js_accountNumber').change(function () 
+        {
+            jQuery('#js_useOtherEftAccount').prop('checked',true);
+        });
+        jQuery('#js_accountType').change(function () 
+        {
+            jQuery('#js_useOtherEftAccount').prop('checked',true);
+        });
+
+        <#-- show payment Option div based on dropdown option selected -->
+        var selectedValue = jQuery('#js_paymentOptionsDD').val();
+        jQuery('#' + selectedValue ).show();
+
+		jQuery('#js_paymentOptionsDD').change(function(){
+			   jQuery(this).find("option").each(function(){
+			      jQuery('#' + this.value).hide();
+			    });
+			    jQuery('#' + this.value).show();
+			
+		});
+
+        <#-- SHOWCART event listener -->
+      <#if updateCartRecurrenceFlagRequest?exists && updateCartRecurrenceFlagRequest?has_content>
+		jQuery('.js_recurrenceFlag').click(function()
+		{
+		   var recurrenceFlagId = jQuery(this).attr('id');
+           if(recurrenceFlagId != "")
+           {
+	           recurrenceFlagArr = recurrenceFlagId.split("_");
+	           cartLineIdx = recurrenceFlagArr[1];
+        	   modifyCartItemRecurrenceFlag(cartLineIdx);
+           }
+		});
+       </#if>
+       
+       <#if updateRecurrenceFreqRequest?exists && updateRecurrenceFreqRequest?has_content>
+          <#-- on change of recurrence frequency selection -->
+          jQuery('.js_recurrenceFreq').change(function () 
+          {
+          	var recurrenceFreqId = jQuery(this).attr('id');
+          	if(recurrenceFreqId != "")
+          	{
+          		recurrenceFreqIdArr = recurrenceFreqId.split("_");
+    	    	cartLineIdx = recurrenceFreqIdArr[1];
+    	    	recurrenceFreqValue = jQuery('#'+recurrenceFreqId).val();
+          		var reqParam = '?cartLineIndex='+cartLineIdx+'&recurrenceFreq='+recurrenceFreqValue;
+          		
+          		modifyCartItemRecurrenceFreq(cartLineIdx,recurrenceFreqValue);
+          	}
+          });
+	    </#if>  
+
+        <#-- Store Credit selection -->
+        jQuery('#js_useStoreCredit').click(function()
+        {
+            checkStoreCreditRequestFromCheckBox();
+        });
+        jQuery('#js_storeCreditAmount').change(function () 
+        {
+            checkStoreCreditRequestFromAmount();
+        });
+
+    });
+
     function submitCheckoutForm(form, mode, value) 
     {
         if (mode == "DN") {
@@ -417,72 +593,27 @@
 	    cform.action="<@ofbizUrl>${updateLoyaltyPointsRequest!}</@ofbizUrl>";
 	    cform.submit();
     }
+    function modifyCartItemRecurrenceFlag(itemIndex)
+    {
+        if (itemIndex != null)
+        {
+          var cform = document.${formName!};
+          cform.action="<@ofbizUrl>${updateCartRecurrenceFlagRequest!}?cartLineIndex="+itemIndex+"</@ofbizUrl>";
+          cform.submit();
+        }
+    }
+    function modifyCartItemRecurrenceFreq(itemIndex,value)
+    {
+        if (itemIndex != "" && value != "")
+        {
+          var cform = document.${formName!};
+          cform.action="<@ofbizUrl>${updateRecurrenceFreqRequest!}?cartLineIndex="+itemIndex+"&recurrenceFreq="+value+"</@ofbizUrl>";
+          cform.submit();
+        }
+    }
 </#if>
     
-   jQuery(document).ready(function () 
-   {
-   		<#-- validate the shopping cart -->
-   		validateCart();
-   		
-        <#-- update shipping options base on shipping postal code -->
-        if (jQuery('#js_SHIPPING_POSTAL_CODE').length) 
-        {
-          updateShippingOption('Y');
-          jQuery('#js_SHIPPING_POSTAL_CODE').change(function () 
-          {
-            updateShippingOption('N');
-          });
-          jQuery('#js_SHIPPING_STATE').change(function () 
-          {
-            updateShippingOption('N');
-          });
-          jQuery('#js_SHIPPING_ADDRESS1').change(function () 
-          {
-            updateShippingOption('N');
-          });
-          jQuery('#js_SHIPPING_ADDRESS2').change(function () 
-          {
-            updateShippingOption('N');
-          });
-          jQuery('#js_SHIPPING_ADDRESS3').change(function () 
-          {
-            updateShippingOption('N');
-          });
-          jQuery('#js_SHIPPING_COUNTRY').change(function () 
-          {
-            updateShippingOption('N');
-          });
-        }
 
-        <#-- make first shipping option as selected -->
-        if (jQuery('input.js_shipping_method:checked').val() == undefined) 
-        {
-          jQuery('input.js_shipping_method:first').attr("checked", true);
-        }
-
-        <#-- activate pick up store event listener -->
-        pickupStoreEventListener();
-    });
-    
-    <#-- display payment options based on if a user selects pay now or pay in store -->
-    jQuery(document).ready(function () 
-    {
-    	if (jQuery('#js_payInStoreY').is(':checked')) 
-    	{	
-		    jQuery('#js_checkoutPaymentOptions').hide();     
-		}
-    	jQuery('#js_payInStoreN').click(function()
-    	{
-		    jQuery('#js_checkoutPaymentOptions').show();
-		});
-		
-		jQuery('#js_payInStoreY').click(function()
-		{
-		    jQuery('#js_checkoutPaymentOptions').hide();
-		});
-    });
-    
-    
     function pickupStoreEventListener() 
     {
         <#-- If shipping method is select, remove related error message if one is displayed -->
@@ -750,41 +881,6 @@
 	     }
     }
     
-    <#-- PAYMENT OPTIONS (RADIO BUTTON AUTO SELECTION)-->
-    jQuery(document).ready(function () 
-    {
-    	<#-- select saved card option -->
-    	jQuery('#js_savedCard').change(function () 
-		{
-			jQuery('#js_useSavedCard').prop('checked',true);
-		});
-		jQuery('#js_savedVerificationNo').change(function () 
-		{
-			jQuery('#js_useSavedCard').prop('checked',true);
-		});
-		
-		<#-- select other card option -->
-    	jQuery('#js_cardType').change(function () 
-		{
-			jQuery('#js_useOtherCard').prop('checked',true);
-		});
-		jQuery('#js_cardNumber').change(function () 
-		{
-			jQuery('#js_useOtherCard').prop('checked',true);
-		});
-		jQuery('#js_expMonth').change(function () 
-		{
-			jQuery('#js_useOtherCard').prop('checked',true);
-		});
-		jQuery('#js_expYear').change(function () 
-		{
-			jQuery('#js_useOtherCard').prop('checked',true);
-		});
-		jQuery('#js_verificationNo').change(function () 
-		{
-			jQuery('#js_useOtherCard').prop('checked',true);
-		});
-    });
     
     function getQtyInWishlist(productId) 
     {
@@ -818,4 +914,55 @@
         return cartItemProductId;
     }
 
+    function checkStoreCreditRequestFromCheckBox() 
+    {
+        if (jQuery('#js_useStoreCredit').is(':checked') && isNotEmpty(jQuery('#js_storeCreditAmount').val())) 
+        {   
+            addStoreCredit();
+        }
+        else if (isNotEmpty(jQuery('#js_storeCreditAmount').val()))
+        {
+            removeStoreCredit();
+        }
+    }
+
+    function checkStoreCreditRequestFromAmount() 
+    {
+        if (jQuery('#js_useStoreCredit').is(':checked') && isNotEmpty(jQuery('#js_storeCreditAmount').val())) 
+        {   
+            addStoreCredit();
+        }
+    }
+
+    function addStoreCredit() 
+    {
+        var cform = document.${formName!};
+        cform.action="<@ofbizUrl>${addStoreCreditRequest!}</@ofbizUrl>";
+        cform.submit();
+    }
+
+    function removeStoreCredit()
+    {
+          var cform = document.${formName!};
+          cform.action="<@ofbizUrl>${removeStoreCreditRequest!}</@ofbizUrl>";
+          cform.submit();
+    }
+
+    function isNotEmpty(value) 
+    {
+        return !isEmpty(value);
+    }
+
+    function isEmpty(value) 
+    {
+        valueWithoutSpace = value.replace(/^\s+|\s+$/g, "");
+        if (valueWithoutSpace == null || valueWithoutSpace == "") 
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 </script>

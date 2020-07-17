@@ -1,6 +1,9 @@
 package com.osafe.services;
 
+import java.util.Date;
+
 import org.apache.solr.client.solrj.beans.Field;
+import org.apache.solr.common.SolrDocument;
 
 public class SolrIndexDocument {
 
@@ -54,6 +57,14 @@ public class SolrIndexDocument {
     private Float recurrencePrice;
     @Field
     private Float customerRating;
+    @Field
+    private String manufacturerName;
+    @Field
+    private String manufacturerIdNo;
+    @Field
+    private Date salesDiscontinuationDate;
+    @Field
+    private Date introductionDate;
 
     public SolrIndexDocument() {
         super();
@@ -256,5 +267,36 @@ public class SolrIndexDocument {
 
     public void setCustomerRating(Float customerRating) {
         this.customerRating = customerRating;
+    }
+
+	public void setManufacturerName(String manufacturerName) {
+		this.manufacturerName = manufacturerName;
+	}
+
+	public String getManufacturerName() {
+		return manufacturerName;
+	}
+
+	public void setManufacturerIdNo(String manufacturerIdNo) {
+		this.manufacturerIdNo = manufacturerIdNo;
+	}
+
+	public String getManufacturerIdNo() {
+		return manufacturerIdNo;
+	}
+	
+	public Date getSalesDiscontinuationDate() {
+        return salesDiscontinuationDate;
+    }
+
+    public void setSalesDiscontinuationDate(Date salesDiscontinuationDate) {
+        this.salesDiscontinuationDate = salesDiscontinuationDate;
+    }
+    public Date getIntroductionDate() {
+        return introductionDate;
+    }
+
+    public void setIntroductionDate(Date introductionDate) {
+        this.introductionDate = introductionDate;
     }
 }

@@ -11,6 +11,14 @@
         <span>${youSavePercent?string("#0%")}</span>
       </#if>
     </div>
+    
+    <div class="pdpPriceSavingPercent" id="js_pdpPriceSavingPercent_Virtual" style="display:none">
+      <#if youSavePercent gt showSavingPercentAbove?number>
+        <label>${uiLabelMap.YouSaveCaption}</label>
+        <span>${youSavePercent?string("#0%")}</span>
+      </#if>
+    </div>
+    
   </li>
 </#if>
 

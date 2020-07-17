@@ -22,6 +22,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/bigfishFieldLookup.js" global="true"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
@@ -42,7 +43,7 @@
                     </html>
                 </platform-specific>
                 <container id="scrollerPageTop"></container>
-                <container id="eCommeceOuterBasicWrap">
+                <container id="eCommeceOuterBasicWrap" style="${pageClassIdentifier}">
                     <container id="eCommerceInnerBasicWrapper">
                         <container id="eCommerceContent" style="${contentPanelStyle}">
                             <!-- header -->
@@ -130,6 +131,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/bigfishFieldLookup.js" global="true"/>
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->
@@ -151,7 +153,7 @@
                     </html>
                 </platform-specific>
                 <container id="scrollerPageTop"></container>
-                <container id="eCommerceOuterBasicBevelWrap">
+                <container id="eCommerceOuterBasicBevelWrap" style="${pageClassIdentifier}">
                     <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
                     <include-screen name="pincodeCheckDialog" location="component://osafe/widget/DialogScreens.xml"/>
                     <container id="eCommerceInnerBasicBevelWrapper">
@@ -442,6 +444,17 @@
             </widgets>
         </section>
     </screen>
+    <screen name="reviewCustom01">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="REVIEW_CUSTOM_01"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/reviewCustom01.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="giftMessageTypes">
         <section>
             <actions>
@@ -450,6 +463,17 @@
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/giftMessageTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="recurrenceFreqTypes">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="RECURRENCE_FREQUENCY"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/recurrenceFreqTypes.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

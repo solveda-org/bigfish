@@ -128,20 +128,26 @@ if(UtilValidate.isEmpty(productName) && UtilValidate.isNotEmpty(virtualProduct))
 price = cartLine.getBasePrice();
 displayPrice = cartLine.getDisplayPrice();
 
+recurrencePrice = cartLine.getRecurringDisplayPrice();
+
+//Change Product Price Purpose and check for Recurring Pricing
+priceContext = [product : cartLine.getProduct(), prodCatalogId : currentCatalogId,
+                currencyUomId : shoppingCart.getCurrency(), autoUserLogin : autoUserLogin];
+priceContext.webSiteId = webSiteId;
+priceContext.productStoreId = productStoreId;
+priceContext.checkIncludeVat = "Y";
+priceContext.agreementId = shoppingCart.getAgreementId();
+priceContext.productPricePurposeId = "RECURRING_CHARGE";
+priceContext.partyId = shoppingCart.getPartyId();  
+recurrencePriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+context.recurrencePriceMap = recurrencePriceMap;
+
 //If the item was added to the Shopping Cart as a Recurrence Item
 //The Base and Display Price in the cart is changed to match the Recurrence Price.
 //To display the Recurrence Savings the system is calling calculate product price here to get back the original Default price.
-recurrencePrice = cartLine.getRecurringDisplayPrice();
 if (UtilValidate.isNotEmpty(cartLine.getShoppingListId()) && "SLT_AUTO_REODR".equals(cartLine.getShoppingListId()))
 {
-        priceContext = [product : cartLine.getProduct(), prodCatalogId : currentCatalogId,
-                    currencyUomId : shoppingCart.getCurrency(), autoUserLogin : autoUserLogin];
-        priceContext.webSiteId = webSiteId;
-        priceContext.productStoreId = productStoreId;
-        priceContext.checkIncludeVat = "Y";
-        priceContext.agreementId = shoppingCart.getAgreementId();
         priceContext.productPricePurposeId = "PURCHASE";
-        priceContext.partyId = shoppingCart.getPartyId();  
         productPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
 		productPrice = productPriceMap.price;
 		recurrenceSavePercent = (productPrice - recurrencePrice) / productPrice;
@@ -268,6 +274,11 @@ if(showGiftMessageLink)
 		}
 	}
 }
+recurrenceFreq="";
+if(UtilValidate.isNotEmpty(cartAttrMap))
+{
+	recurrenceFreq = (String)cartAttrMap.get("RECURRENCE_FREQ");
+}
 pdpQtyMinAttributeValue = "";
 pdpQtyMaxAttributeValue = "";
 if(UtilValidate.isNotEmpty(productAttributes))
@@ -326,9 +337,26 @@ if(UtilValidate.isNotEmpty(cartShipInfo))
 
 
 //product features : STANDARD FEATURES 
-productFeatureAndAppls = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum"));
-productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
-productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
+//Issue 38934, 38916 - Check for duplicate feature descriptions
+productFeatureAndAppls = FastList.newInstance();
+Map standardFeatureExistsMap = FastMap.newInstance();
+standardFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum"));
+standardFeatures = EntityUtil.filterByDate(standardFeatures,true);
+standardFeatures = EntityUtil.orderBy(standardFeatures,UtilMisc.toList('sequenceNum'));
+
+for (GenericValue standardFeature : standardFeatures)
+{
+    String featureDescription = standardFeature.description;
+    if (UtilValidate.isNotEmpty(featureDescription)) 
+    {
+    	featureDescription = featureDescription.toUpperCase();
+        if (!standardFeatureExistsMap.containsKey(featureDescription))
+        {
+        	productFeatureAndAppls.add(standardFeature);
+        	standardFeatureExistsMap.put(featureDescription,featureDescription);
+        }
+    }
+}
 
 productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 
@@ -388,6 +416,7 @@ context.offerPrice = offerPrice;
 context.recurrencePrice = recurrencePrice;
 context.recurrenceItem = recurrenceItem;
 context.recurrenceSavePercent = recurrenceSavePercent;
+context.recurrenceFreq = recurrenceFreq;
 context.currencyUom = currencyUom;
 context.quantity = quantity;
 context.itemSubTotal = cartLine.getDisplayItemSubTotal();

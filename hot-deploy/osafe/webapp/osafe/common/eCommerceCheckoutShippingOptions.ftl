@@ -8,6 +8,7 @@
 	    <div id="shippingOptionDisplay" class="displayBox">
 	      <h3>${uiLabelMap.ShippingMethodsHeading}</h3>
 	      <div class="js_shippingMethodsContainer">
+		   <div class="entryForm shippingMethods">
 	        <#-- Display All available Shipping Method Options -->
 	        <#if carrierShipmentMethodList?exists && carrierShipmentMethodList?has_content>
 	          <#list carrierShipmentMethodList as carrierMethod>
@@ -86,6 +87,7 @@
 			    </div>
 			  </div>
 			</#if>
+		   </div>
 	      </div>
 	    </div>
 	  </div>

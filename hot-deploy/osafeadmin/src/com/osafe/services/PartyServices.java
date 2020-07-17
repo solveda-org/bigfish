@@ -225,6 +225,7 @@ public class PartyServices {
             String lastName = (String) context.get("lastName");
             String groupName = (String) context.get("groupName");
             String groupNameLocal = (String) context.get("groupNameLocal");
+            String groupNameStartWithFlag = (String) context.get("groupNameStartWithFlag");
             String productStoreId = (String) context.get("productStoreId");
             String personName = (String) context.get("personName");
             String attrName = (String) context.get("attrName");
@@ -294,9 +295,17 @@ public class PartyServices {
                     fieldsToSelect.add("groupNameLocal");
                 }
                 // filter on groupName
-                if (UtilValidate.isNotEmpty(groupName)) {
-                    paramList = paramList + "&groupName=" + groupName;
-                    andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("groupName"), EntityOperator.LIKE, EntityFunction.UPPER("%"+groupName+"%")));
+                if (UtilValidate.isNotEmpty(groupName)) 
+                { 
+                	paramList = paramList + "&groupName=" + groupName;
+                	if (UtilValidate.isNotEmpty(groupNameStartWithFlag) && groupNameStartWithFlag.equalsIgnoreCase("Y")) 
+                	{
+                		andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("groupName"), EntityOperator.LIKE, EntityFunction.UPPER(""+groupName+"%")));
+                	}
+                	else
+                	{
+                		andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("groupName"), EntityOperator.LIKE, EntityFunction.UPPER("%"+groupName+"%")));
+                	}
                 }
 
                 // filter on groupNameLocal

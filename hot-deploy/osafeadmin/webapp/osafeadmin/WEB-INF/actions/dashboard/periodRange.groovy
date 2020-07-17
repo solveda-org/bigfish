@@ -53,7 +53,7 @@ if(UtilValidate.isEmpty(periodTo))
     periodTo = periodToSess;
     if(UtilValidate.isEmpty(periodTo))
     {
-        periodToTs = UtilDateTime.getDayEnd(nowTs);
+        periodToTs = nowTs;
         periodTo = UtilDateTime.timeStampToString(periodToTs, entryDateTimeFormat, timeZone, locale);
     }
 }

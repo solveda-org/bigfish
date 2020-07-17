@@ -49,6 +49,11 @@ public class SeoUrlHelper
 
     public static String makeSeoFriendlyUrl(HttpServletRequest request, String URL)
     {
+    	return makeSeoFriendlyUrl(request, URL, true);
+    }
+
+    public static String makeSeoFriendlyUrl(HttpServletRequest request, String URL, boolean includeJSessionId)
+    {
         StringBuilder urlBuilder = new StringBuilder();
         String solrURLParam=null;
         String origURL=URL;
@@ -86,10 +91,10 @@ public class SeoUrlHelper
         {
              //Debug.log(e, "Friendly URL not found for: " + URL, module);
         }
-        return makeLink(request,urlBuilder.toString());
+        return makeLink(request,urlBuilder.toString(), includeJSessionId);
     }
 
-    private static String makeLink(HttpServletRequest request,String url)
+    private static String makeLink(HttpServletRequest request,String url, boolean includeJSessionId)
     {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         String webSiteId = WebSiteWorker.getWebSiteId(request);
@@ -162,17 +167,22 @@ public class SeoUrlHelper
             newURL.append("/");
         }
         newURL.append(url);
-        String sessionId = ";jsessionid=" + request.getSession().getId();
-        // this should be inserted just after the "?" for the parameters, if there is one, or at the end of the string
-        int questionIndex = newURL.indexOf("?");
-        if (questionIndex == -1)
+        
+        if(includeJSessionId)
         {
-            newURL.append(sessionId);
-        } 
-        else
-        {
-            newURL.insert(questionIndex, sessionId);
+        	String sessionId = ";jsessionid=" + request.getSession().getId();
+            // this should be inserted just after the "?" for the parameters, if there is one, or at the end of the string
+            int questionIndex = newURL.indexOf("?");
+            if (questionIndex == -1)
+            {
+                newURL.append(sessionId);
+            } 
+            else
+            {
+                newURL.insert(questionIndex, sessionId);
+            } 
         }
+        
         return newURL.toString();
     }
 
@@ -220,7 +230,7 @@ public class SeoUrlHelper
         StringBuilder urlBuilder = new StringBuilder();
         urlBuilder.setLength(0); 
         urlBuilder.append(url);
-        return makeLink(request, urlBuilder.toString());
+        return makeLink(request, urlBuilder.toString(), true);
     }
 
 }

@@ -1,6 +1,7 @@
 package common;
 
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.webapp.control.*;
 
 /*
  if NOTHING is being included set mainPanelStyle=mainPanel
@@ -34,4 +35,12 @@ else if (UtilValidate.isNotEmpty(eCommerceLeftPanel))
 else if (UtilValidate.isNotEmpty(eCommerceRightPanel))
 {
     context.mainPanelStyle="rightPanel";
+}
+
+//Placed on the highest level container in decorators.
+//PageClassIdentifier are defined at the screen defintion level for each page 
+
+if (UtilValidate.isNotEmpty(context.pageClassIdentifier))
+{
+	context.pageClassIdentifier = context.pageClassIdentifier + "PageIdentifier";
 }

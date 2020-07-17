@@ -7,6 +7,7 @@
     <screen name="eCommerceShowWishList">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceShowWishList" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -73,6 +74,7 @@
     <screen name="eCommerceShowcart">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceShowcart" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="cart" />
                 <set field="screenMessages" value="Y" />
@@ -90,10 +92,13 @@
                 <set field="updateCartAction" value="modifycart"/>
                 <set field="addPromoCodeRequest" value="validateShowCartPromoCode"/>
                 <set field="removePromoCodeRequest" value="removeShowCartPromoCode"/>
+                <set field="updateCartRecurrenceFlagRequest" value="modifyShowCartRecurrence"/>
                 
                 <set field="addLoyaltyPointsRequest" value="validateShowCartLoyaltyPoints"/>
                 <set field="removeLoyaltyPointsRequest" value="removeShowCartLoyaltyPoints"/>
                 <set field="updateLoyaltyPointsRequest" value="validateShowCartUpdateLoyaltyPoints"/>
+                
+                <set field="updateRecurrenceFreqRequest" value="updateShowCartRecurrenceFreq"/>
                 
                 <set field="prevButtonUrl" value="main" />
                 <set field="prevButtonDescription" value="${uiLabelMap.ContinueShoppingBtn}"/>
@@ -152,6 +157,7 @@
     <screen name="anonSinglePageCheckout">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonSinglePageCheckout" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.SinglePageCheckoutTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -180,7 +186,6 @@
                 <set field="shoppingCartSize" value="${groovy:org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request).size();}"/>
                 <set field="useAvailability" value="Y" />
                 <set field="loadPca" value="Y" />
-                <set field="prevButtonUrl" value="eCommerceShowcart" />
                 <set field="nextButtonVisible" value="N" />
                 <set field="submitOrderButtonVisible" value="Y" />
                 <set field="submitOrderAction" value="anonSinglePageSubmitOrder"/>
@@ -193,7 +198,6 @@
                 <set field="dialogPurpose" value="storePickup_"/>
                 <set field="storePickupAction" value="setStorePickup"/>
                 
-                <set field="useBrowserBackAction" value="Y" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -257,6 +261,7 @@
     <screen name="anonSinglePagePayPalOrderSummary">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonSinglePagePayPalOrderSummary" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
@@ -328,6 +333,7 @@
     <screen name="singlePageCheckout">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="singlePageCheckout" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.SinglePageCheckoutTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -355,10 +361,12 @@
                 <set field="addGiftCardNumberRequest" value="singlePageAddGiftCardNumber"/>
                 <set field="removeGiftCardNumberRequest" value="singlePageRemoveGiftCardNumber"/>
                 <set field="refreshGiftCardRequest" value="singlePageRefreshGiftCard"/>
+                <!-- Store Credit Payment -->
+                <set field="addStoreCreditRequest" value="singlePageAddStoreCredit"/>
+                <set field="removeStoreCreditRequest" value="singlePageRemoveStoreCredit"/>
                 <set field="shoppingCartSize" value="${groovy:org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request).size();}"/>
                 <set field="useAvailability" value="Y" />
                 <set field="loadPca" value="Y" />
-                <set field="prevButtonUrl" value="eCommerceShowcart" />
                 <set field="nextButtonVisible" value="N" />
                 <set field="submitOrderButtonVisible" value="Y" />
                 <set field="submitOrderAction" value="singlePageSubmitOrder"/>
@@ -371,7 +379,6 @@
                 <set field="dialogPurpose" value="storePickup_"/>
                 <set field="storePickupAction" value="setStorePickup"/>
                 
-                <set field="useBrowserBackAction" value="Y" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -436,6 +443,7 @@
     <screen name="singlePagePayPalOrderSummary">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="singlePagePayPalOrderSummary" />
                 <set field="screenMessages" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderSummaryTitle}" />
@@ -505,6 +513,7 @@
     <screen name="singlePageNewCheckoutAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="singlePageNewCheckoutAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
                 <set field="formName" value="checkoutInfoForm" />
@@ -562,6 +571,7 @@
     <screen name="singlePageNewCheckoutMultiAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="singlePageNewCheckoutMultiAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
                 <set field="formName" value="checkoutInfoForm" />
@@ -633,6 +643,7 @@
     <screen name="multiPageCustomerAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPageCustomerAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -645,7 +656,7 @@
                 <set field="checkoutPage" value="shippingaddress" />
                 <set field="showAddressSelection" value="Y" />
 
-                <set field="prevButtonUrl" value="eCommerceShowcart" />
+                <set field="prevButtonUrl" value="eCommerceShowcartCheckSession" />
                 <set field="doneAction" value="multiPageUpdateCustomerAddress"/>
                 <set field="multiAddressAction" value="multiPageCustomerAddressValidation"/>
                 <set field="addAddressAction" value="multiPageNewCheckoutAddress"/>
@@ -707,6 +718,7 @@
     <screen name="multiPageNewCheckoutAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPageNewCheckoutAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
@@ -767,6 +779,7 @@
     <screen name="multiPageNewCheckoutMultiAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPageNewCheckoutMultiAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
@@ -827,6 +840,7 @@
     <screen name="anonMultiPageNewCheckoutMultiAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonMultiPageNewCheckoutMultiAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="pageTitle" value="${groovy:if(parameters.contactMechPurposeTypeId.equals('BILLING_LOCATION'))return (uiLabelMap.BillingAddressTitle); else return (uiLabelMap.ShippingAddressTitle);}"/>
@@ -887,6 +901,7 @@
     <screen name="multiPageShippingOptions">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPageShippingOptions" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shippingMethod" />
                 <set field="screenMessages" value="Y" />
@@ -958,6 +973,7 @@
     <screen name="multiPageOrderSummary">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPageOrderSummary" />
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
@@ -971,6 +987,9 @@
                 <!-- Gift Card Payment -->
                 <set field="addGiftCardNumberRequest" value="multiPageAddGiftCardNumber"/>
                 <set field="removeGiftCardNumberRequest" value="multiPageRemoveGiftCardNumber"/>
+                <!-- Store Credit Payment -->
+                <set field="addStoreCreditRequest" value="multiPageAddStoreCredit"/>
+                <set field="removeStoreCreditRequest" value="multiPageRemoveStoreCredit"/>
                 
                 <set field="addLoyaltyPointsRequest" value="validateLoyaltyPoints"/>
                 <set field="removeLoyaltyPointsRequest" value="removeLoyaltyPoints"/>
@@ -994,7 +1013,7 @@
                 <set field="submitOrderAction" value="multiPageSubmitOrder"/>
                 <set field="backAction" value="${groovy:if(shippingApplies == true)return 'multiPageShippingOptions' else return '';}"/>
                 <set field="prevButtonUrl" value="${groovy:if(shippingApplies == true)return '' else return 'multiPageCustomerAddress';}"/>
-                <set field="payPalAction" value="setPayPalCheckout"/>
+                <set field="payPalAction" value="multiPageSetPayPalCheckout"/>
                 <set field="ebsAction" value="multiPageEBSCheckout"/>
                 <set field="payNetzAction" value="multiPagePayNetzCheckout"/>
 
@@ -1051,6 +1070,7 @@
     <screen name="multiPagePayPalOrderSummary">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPagePayPalOrderSummary" />
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -1073,6 +1093,11 @@
                 <set field="submitOrderButtonVisible" value="Y" />
                 <set field="prevButtonVisible" value="N" />
                 <set field="submitOrderAction" value="multiPagePayPalSubmitOrder"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="multiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="multiPageShippingOptions"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1119,6 +1144,7 @@
     <screen name="eCommerceOrderComplete">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceOrderComplete" />
                 <set field="selectedStep" value="confirmation" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -1196,6 +1222,7 @@
     <screen name="anonMultiPageCustomerAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonMultiPageCustomerAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="screenMessages" value="Y" />
@@ -1269,6 +1296,7 @@
     <screen name="anonMultiPageShippingOptions">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonMultiPageShippingOptions" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shippingMethod" />
                 <set field="screenMessages" value="Y" />
@@ -1337,6 +1365,7 @@
     <screen name="anonMultiPageOrderSummary">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonMultiPageOrderSummary" />
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
@@ -1431,6 +1460,7 @@
     <screen name="anonMultiPagePayPalOrderSummary">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonMultiPagePayPalOrderSummary" />
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -1454,6 +1484,11 @@
                 <set field="submitOrderButtonVisible" value="Y" />
                 <set field="prevButtonVisible" value="N" />
                 <set field="submitOrderAction" value="anonMultiPagePayPalSubmitOrder"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="anonMultiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="anonMultiPageShippingOptions"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1640,6 +1675,7 @@
         <section>
             <actions>
 				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/shipMultiOptionsShipGroup.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/ecommerceCheckoutStoreDetail.groovy" />
             </actions>
             <widgets>
                 <platform-specific>
@@ -1679,6 +1715,7 @@
         <section>
             <actions>
 				<script location="component://osafe/webapp/osafe/WEB-INF/actions/order/orderShipGroupItem.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/ecommerceCheckoutStoreDetail.groovy" />
             </actions>
             <widgets>
                 <platform-specific>
@@ -2006,6 +2043,7 @@
     <screen name="multiPageShippingOptionList">
         <section>
             <actions>
+            	<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
             	<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/ecommerceCheckoutStoreDetail.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutShippingOptions.groovy" />
             </actions>
@@ -2091,6 +2129,22 @@
         </section>
     </screen>
 
+    <screen name="ecommerceStoreCreditPayment">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/ecommerceStoreCreditPayment.groovy" />
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template location="component://osafe/webapp/osafe/common/ecommerceStoreCreditPayment.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="shippingInstructions">
         <section>
             <actions>
@@ -2124,6 +2178,7 @@
     <screen name="eCommerceGiftMessage">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceGiftMessage" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -2181,6 +2236,7 @@
     <screen name="eCommerceOrderConfirmGiftMessage">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="eCommerceOrderConfirmGiftMessage" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -2283,6 +2339,7 @@
     <screen name="multiPageMultiAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPageMultiAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="showCartFootprint" value="Y" />
@@ -2345,6 +2402,7 @@
     <screen name="anonMultiPageMultiAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonMultiPageMultiAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="showCartFootprint" value="Y" />
@@ -2407,6 +2465,7 @@
     <screen name="singlePageMultiAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="singlePageMultiAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -2461,6 +2520,7 @@
     <screen name="anonSinglePageMultiAddress">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonSinglePageMultiAddress" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -2542,6 +2602,7 @@
     <screen name="multiPageMultiShippingOptions">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="multiPageMultiShippingOptions" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shippingMethod"/>
                 <set field="checkoutPage" value="shippingoptions" />
@@ -2604,6 +2665,7 @@
     <screen name="anonMultiPageMultiShippingOptions">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonMultiPageMultiShippingOptions" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shippingMethod"/>
                 <set field="checkoutPage" value="shippingoptions" />
@@ -2667,6 +2729,7 @@
     <screen name="singlePageMultiShippingOptions">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="singlePageMultiShippingOptions" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
@@ -2718,6 +2781,7 @@
     <screen name="anonSinglePageMultiShippingOptions">
         <section>
             <actions>
+                <set field="pageClassIdentifier" value="anonSinglePageMultiShippingOptions" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />

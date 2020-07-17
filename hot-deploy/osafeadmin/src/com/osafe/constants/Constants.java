@@ -18,7 +18,7 @@ public class Constants {
                                                            "ShipmentPackageRouteSeg", "ShipmentRouteSegment", "ShipmentPackage",
                                                            "ShipmentStatus", "ShipmentItem", "Shipment", "ReturnHeader",
                                                            "OrderContent", "OrderHeaderNote", "OrderNotification", "OrderItemChange",
-                                                           "OrderItemShipGroupAssoc","OrderItemAttribute","OrderItem","OrderItemShipGroup",
+                                                           "OrderItemShipGroupAssoc","OrderItemAttribute","OrderItemRole","OrderItem","OrderItemShipGroup",
                                                            "OrderAdjustmentTypeAttr","OrderAdjustmentAttribute","OrderAdjustment","OrderContactMech","OrderAttribute",
                                                            "Payment", "PaymentGatewayRespMsg", "PaymentGatewayResponse", "CommunicationEventOrder",
                                                            "OrderPaymentPreference","OrderRole","OrderStatus","OrderProductPromoCode","ProductPromoUse","OrderHeader",
@@ -49,6 +49,7 @@ public class Constants {
     public static final String CATEGORY_THRU_DATE_DATA_KEY = "catThruDate";
 
     public static final String PRODUCT_MASTER_ID_DATA_KEY = "masterProductId";
+    public static final String PRODUCT_IS_SELLABLE_DATA_KEY = "isSellable";
     public static final String PRODUCT_ID_DATA_KEY = "productId";
     public static final String PRODUCT_CAT_ID_DATA_KEY = "category_${count}_Id";
     public static final String PRODUCT_CAT_SEQ_NUM_DATA_KEY = "category_${count}_sequenceNum";
@@ -101,6 +102,8 @@ public class Constants {
     public static final String PRODUCT_GOOGLE_ID_DATA_KEY = "goodIdentificationGoogleId";
     public static final String PRODUCT_ISBN_DATA_KEY = "goodIdentificationIsbnId";
     public static final String PRODUCT_MANUFACTURER_ID_NO_DATA_KEY = "goodIdentificationManufacturerId";
+    public static final String PRODUCT_AVERAGE_RATING_DATA_KEY = "productAverageRating";
+    public static final String PRODUCT_REVIEW_SIZE_DATA_KEY = "productReviewSize";
     public static final String PRODUCT_BF_INVENTORY_TOT_DATA_KEY = "bfInventoryTot";
     public static final String PRODUCT_BF_INVENTORY_WHS_DATA_KEY = "bfInventoryWhs";
     public static final String PRODUCT_MULTI_VARIANT_DATA_KEY = "multiVariant";
@@ -133,6 +136,8 @@ public class Constants {
     public static final String PRODUCT_XTRA_LARGE_IMG_THRU_DATA_KEY = "xtraLargeImageThruDate_${count}";
     public static final String PRODUCT_XTRA_DETAIL_IMG_DATA_KEY = "xtraDetailImage_${count}";
     public static final String PRODUCT_XTRA_DETAIL_IMG_THRU_DATA_KEY = "xtraDetailImageThruDate_${count}";
+    public static final String PRODUCT_ATTACH_URL_DATA_KEY = "productAttachment_${count}";
+    public static final String PRODUCT_ATTACH_URL_THRU_DATA_KEY = "productAttachmentThruDate_${count}";
 
     public static final String PRODUCT_ASSOC_ID_DATA_KEY = "assocProductId";
     public static final String PRODUCT_ASSOC_ID_TO_DATA_KEY = "assocProductIdTo";

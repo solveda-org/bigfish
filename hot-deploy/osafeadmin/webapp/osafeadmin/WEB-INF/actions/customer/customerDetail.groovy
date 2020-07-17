@@ -18,7 +18,14 @@ shoppingCart = ShoppingCartEvents.getCartObject(request);
 context.shoppingCart = shoppingCart;
 
 partyId = StringUtils.trimToEmpty(parameters.partyId);
-context.partyId=partyId;
+if(UtilValidate.isNotEmpty(partyId))
+{
+	context.partyId=partyId;
+}
+
+List<String> roleTypeIds = FastList.newInstance();
+roleTypeIds.add("INTERNAL_ORGANIZATIO");
+
 if (UtilValidate.isNotEmpty(partyId))
 {
 	party = delegator.findByPrimaryKey("Party", [partyId : partyId]);
@@ -28,6 +35,9 @@ if (UtilValidate.isNotEmpty(partyId))
 
         person = party.getRelatedOne("Person");
         context.person=person;
+        
+        partyGroup = party.getRelatedOne("PartyGroup");
+        context.partyGroup = partyGroup;
 
 		partyRoles = party.getRelated("ProductStoreRole");
         context.partyRoles=partyRoles;
@@ -181,7 +191,42 @@ if (UtilValidate.isNotEmpty(partyId))
 			context.userFbUser = partyAttr.attrValue;
 		}
 		
+		
+		partyRelationships = party.getRelated("ToPartyRelationship", );
+		partyRelationships = EntityUtil.filterByCondition(partyRelationships, EntityCondition.makeCondition("roleTypeIdFrom", EntityOperator.IN, roleTypeIds));
+		partyRelationship = EntityUtil.getFirst(partyRelationships);
+	    if (UtilValidate.isNotEmpty(partyRelationship))
+	    {
+	    	context.partyOrganization = partyRelationship;
+	    }
+	    
 	}
 	
 }
+
+Map<String, Object> svcCtx = FastMap.newInstance();
+userLogin = session.getAttribute("userLogin");
+svcCtx.put("userLogin", userLogin);
+
+svcCtx.put("lookupFlag", "Y");
+svcCtx.put("showAll", "N");
+svcCtx.put("partyTypeId", "ANY");
+svcCtx.put("statusId", "ANY");
+svcCtx.put("extInfo", "N");
+svcCtx.put("partyTypeId", "PARTY_GROUP");
+
+svcCtx.put("productStoreId", context.productStoreId);
+if(UtilValidate.isNotEmpty(roleTypeIds))
+{
+	svcCtx.put("roleTypeIds", roleTypeIds);
+	context.roleTypeIds = roleTypeIds;
+}
+
+Map<String, Object> svcRes;
+
+List<GenericValue> partyList = FastList.newInstance();
+
+svcRes = dispatcher.runSync("findParty", svcCtx);
+
+context.organizationList = svcRes.get("completePartyList");
 

@@ -25,6 +25,10 @@ if (paymentMethodTypeId && paymentServiceTypeEnumId)
 		{
 		    customMethodTypeId = "GIFT_AUTH";
 		}
+		else if (paymentMethodTypeId == "FIN_ACCOUNT")
+		{
+		    customMethodTypeId = "FIN_AUTH";
+		}
 		else if (paymentMethodTypeId == "EFT_ACCOUNT")
 		{
 		    customMethodTypeId = "EFT_AUTH";
@@ -60,6 +64,10 @@ if (paymentMethodTypeId && paymentServiceTypeEnumId)
 		{
 		    customMethodTypeId = "EBS_CAPTURE";
 		}
+		else if (paymentMethodTypeId == "EFT_ACCOUNT")
+		{
+		    customMethodTypeId = "EFT_CAPTURE";
+		}
 	} 
 	else if (paymentServiceTypeEnumId == "PRDS_PAY_REAUTH" )
 	{
@@ -71,6 +79,10 @@ if (paymentMethodTypeId && paymentServiceTypeEnumId)
 		{
 		    customMethodTypeId = "GIFT_AUTH";
 		}
+		else if (paymentMethodTypeId == "FIN_ACCOUNT")
+		{
+		    customMethodTypeId = "FIN_AUTH";
+		}
 		else if (paymentMethodTypeId == "EXT_PAYPAL")
 		{
 		    customMethodTypeId = "PAYPAL_AUTH";
@@ -78,6 +90,10 @@ if (paymentMethodTypeId && paymentServiceTypeEnumId)
 		else if (paymentMethodTypeId == "EXT_EBS")
 		{
 		    customMethodTypeId = "EBS_AUTH";
+		}
+		else if (paymentMethodTypeId == "EFT_ACCOUNT")
+		{
+		    customMethodTypeId = "EFT_AUTH";
 		}
 	} 
 	else if (paymentServiceTypeEnumId == "PRDS_PAY_REFUND" )
@@ -101,6 +117,10 @@ if (paymentMethodTypeId && paymentServiceTypeEnumId)
 		else if (paymentMethodTypeId == "EXT_EBS")
 		{
 		    customMethodTypeId = "EBS_REFUND";
+		}
+		else if (paymentMethodTypeId == "EFT_ACCOUNT")
+		{
+		    customMethodTypeId = "EFT_REFUND";
 		}
 	}
 	else if (paymentServiceTypeEnumId == "PRDS_PAY_RELEASE" )

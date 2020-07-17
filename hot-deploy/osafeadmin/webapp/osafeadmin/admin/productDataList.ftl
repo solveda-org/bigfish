@@ -176,6 +176,9 @@
     <th class="descCol">${uiLabelMap.PdpQtyMaxLabel}</th>
     <th class="descCol">${uiLabelMap.PdpQtyDefaultLabel}</th>
     <th class="descCol">${uiLabelMap.PdpInStoreOnlyLabel}</th>
+    <th class="descCol">${uiLabelMap.ProductAttachment1Label}</th>
+    <th class="descCol">${uiLabelMap.ProductAttachment2Label}</th>
+    <th class="descCol">${uiLabelMap.ProductAttachment3Label}</th>
   </tr>
   <#if productDataList?exists && productDataList?has_content>
     <#assign rowClass = "1">
@@ -267,6 +270,9 @@
         <td class="nameCol">${product.pdpQtyMax!""}</td>
         <td class="nameCol">${product.pdpQtyDefault!""}</td>
         <td class="nameCol">${product.pdpInStoreOnly!""}</td>
+        <td class="nameCol">${product.productAttachment1!""}</td>
+        <td class="nameCol">${product.productAttachment2!""}</td>
+        <td class="nameCol">${product.productAttachment3!""}</td>
       </tr>
       <#-- toggle the row color -->
       <#if rowClass == "2">

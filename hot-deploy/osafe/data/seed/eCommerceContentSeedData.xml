@@ -132,7 +132,7 @@
  }
  </script>
  
- <form id="frmSearchForm" onsubmit="return submitSearchForm(document.frmSearchForm);" action="<@ofbizUrl>siteSearch</@ofbizUrl>" name="frmSearchForm" method="get">
+ <form id="frmSearchForm" onsubmit="return submitSearchForm(document.frmSearchForm);" action="/siteSearch" name="frmSearchForm" method="get">
          <fieldset class="formstyle" title="Search this site...">
              <div id="searchContainer" class="targetMobile">
                  <div id="searchButton">

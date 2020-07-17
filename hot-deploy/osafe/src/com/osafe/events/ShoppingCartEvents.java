@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.Map.Entry;  
 import javax.servlet.http.HttpServletRequest;
@@ -105,7 +106,7 @@ public class ShoppingCartEvents {
     		for(GenericValue paymentMethod : paymentMethods) 
             {
                 CartPaymentInfo paymentInfo = sc.getPaymentInfo(paymentMethod.getString("paymentMethodId"));
-                if (!paymentInfo.paymentMethodTypeId.equalsIgnoreCase("GIFT_CARD"))
+                if (!paymentInfo.paymentMethodTypeId.equalsIgnoreCase("GIFT_CARD") && !paymentInfo.paymentMethodTypeId.equalsIgnoreCase("FIN_ACCOUNT"))
                 {
                     paymentInfo.amount = null;
                 }
@@ -114,7 +115,9 @@ public class ShoppingCartEvents {
         if(UtilValidate.isEmpty(sc.items())) 
         {
         	removeLoyaltyPoints(request, response);
-            return org.ofbiz.order.shoppingcart.ShoppingCartEvents.clearCart(request, response);
+            java.sql.Timestamp lastLoad = sc.getLastListRestore();
+            org.ofbiz.order.shoppingcart.ShoppingCartEvents.clearCart(request, response);
+            sc.setLastListRestore(lastLoad);
         }
         return "success";
     }
@@ -411,7 +414,6 @@ public class ShoppingCartEvents {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
       
-        Debug.logError("Start",module);
         if (shoppingCart.items().size() > 0)
     	{
     		
@@ -846,6 +848,7 @@ public class ShoppingCartEvents {
         ShoppingCart shoppingCart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         ShoppingCartHelper cartHelper = new ShoppingCartHelper(delegator, dispatcher, shoppingCart); 
         Locale locale = UtilHttp.getLocale(request);
+        String searchText = null;
         
         //validate quantity value
         BigDecimal quantity = BigDecimal.ZERO;
@@ -873,9 +876,38 @@ public class ShoppingCartEvents {
             {
             	manufacturer_party_id = (String) params.remove("manufacturer_party_id");
             }
-        	request.setAttribute("productCategoryId", categoryId);
+            boolean multiSearchExists = false;
+            for(Entry<String, Object> entry : params.entrySet()) 
+            {
+        		String parameterName = entry.getKey();
+        		if (parameterName.toUpperCase().startsWith("SEARCHITEM"))
+            	{
+        			String searchItem = Util.stripHTML(request.getParameter(parameterName));
+        			if(UtilValidate.isNotEmpty(searchItem))
+        			{
+        				multiSearchExists = true;
+        				request.setAttribute(parameterName, searchItem);
+        			}
+            	}
+            }
+            
+            if (params.containsKey("productListFormSearchText")) 
+            {
+            	searchText = (String) params.remove("productListFormSearchText");
+            }
+            
+            
+            request.setAttribute("searchText", searchText);
+            if(UtilValidate.isEmpty(searchText) && !multiSearchExists)
+            {
+            	request.setAttribute("productCategoryId", categoryId);
+            }
         	request.setAttribute("product_id", last_page_productId);
         	request.setAttribute("manufacturerPartyId", manufacturer_party_id);
+        	
+        	
+        	
+        	
         	/*
         	 * add item and quantity to cart using the addToCart method
         	 */
@@ -926,7 +958,7 @@ public class ShoppingCartEvents {
         ShoppingCart shoppingCart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         ShoppingCartHelper cartHelper = new ShoppingCartHelper(delegator, dispatcher, shoppingCart); 
         Locale locale = UtilHttp.getLocale(request);
-        
+        ResourceBundle PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
         //validate quantity value
         BigDecimal quantity = BigDecimal.ZERO;
         if (UtilValidate.isNotEmpty(quantityStr)) 
@@ -958,10 +990,20 @@ public class ShoppingCartEvents {
             	{
             		if (sci.getRecurringDisplayPrice().compareTo(BigDecimal.ZERO) > 0)
             		{
-                		sci.setBasePrice(sci.getRecurringDisplayPrice());
-                		sci.setDisplayPrice(sci.getRecurringDisplayPrice());
+            			if (sci.getRecurringDisplayPrice().compareTo(sci.getDisplayPrice()) == -1)
+            			{
+                    		sci.setBasePrice(sci.getRecurringDisplayPrice());
+                    		sci.setDisplayPrice(sci.getRecurringDisplayPrice());
+            			}
+            			else
+            			{
+                    		sci.setRecurringBasePrice(sci.getBasePrice());
+                    		sci.setRecurringDisplayPrice(sci.getDisplayPrice());
+            				
+            			}
                 		sci.setIsModifiedPrice(true);
                 		sci.setShoppingList("SLT_AUTO_REODR", "00001");
+                		sci.setOrderItemAttribute("RECURRENCE_FREQ", PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT"));
             		}
             		break;
             	}
@@ -1400,117 +1442,139 @@ public class ShoppingCartEvents {
         session.removeAttribute("orderAdjustmentList");
         return "success";
     }
-    public static String validateModifyCart(HttpServletRequest request, HttpServletResponse response) 
+    public static String modifyCartRecurrence(HttpServletRequest request, HttpServletResponse response) 
     {
     	HttpSession session = request.getSession();
     	Delegator delegator = (Delegator) request.getAttribute("delegator");
     	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-    	ShoppingCart cart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
+    	ShoppingCart shoppingCart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         Locale locale = UtilHttp.getLocale(request);
         Map paramMap = UtilHttp.getParameterMap(request);
-        Set parameterNames = paramMap.keySet();
-        List<MessageString> error_list = new ArrayList<MessageString>();
-        MessageString tmp = null;
-        
-        String pdpQtyMin = Util.getProductStoreParm(request, "PDP_QTY_MIN");
-        if(UtilValidate.isEmpty(pdpQtyMin) || !(Util.isNumber(pdpQtyMin)))
-        {
-        	pdpQtyMin = "1";
-        }
-        String pdpQtyMax = Util.getProductStoreParm(request, "PDP_QTY_MAX");  
-        if(UtilValidate.isEmpty(pdpQtyMax) || !(Util.isNumber(pdpQtyMax)))
-        {
-        	pdpQtyMax = "99";
-        }
-        
-        Iterator parameterNameIter = parameterNames.iterator();
-        while (parameterNameIter.hasNext()) 
-        {
-            String parameterName = (String) parameterNameIter.next();
-            int underscorePos = parameterName.lastIndexOf('_');
-            if (underscorePos >= 0) 
-            {
-            	try 
-            	{
-                    String indexStr = parameterName.substring(underscorePos + 1);
-                    int index = Integer.parseInt(indexStr);
-                    String quantStr = (String) paramMap.get(parameterName);
-                    String itemDescription = "";
-                    if (quantStr != null) quantStr = quantStr.trim();
-                    if (parameterName.toUpperCase().startsWith("UPDATE")) 
-                    {
-                    	ShoppingCartItem item = cart.findCartItem(index);
-                		GenericValue gvProduct = item.getProduct();
-                    	String productName = ProductContentWrapper.getProductContentAsText(gvProduct, "PRODUCT_NAME", locale, dispatcher);
-                    	if(UtilValidate.isEmpty(productName))
-                    	{
-                    		GenericValue virtualProduct = ProductWorker.getParentProduct(gvProduct.getString("productId"), delegator);
-                    		if(UtilValidate.isNotEmpty(virtualProduct))
-                        	{
-                    			productName = ProductContentWrapper.getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher);
-                        	}
-                    	}
-                    	Map arguments = FastMap.newInstance();
-                    	arguments.put("productName", productName);
-                    	if(Util.isNumber(quantStr))
-                    	{
-                    		BigDecimal quantity = new BigDecimal(quantStr);
-                    		String pdpQtyMinValue = pdpQtyMin;
-                    		String pdpQtyMaxValue = pdpQtyMax;
-                    		GenericValue pdpQtyMinAttribute = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",gvProduct.getString("productId"),"attrName","PDP_QTY_MIN"), true);
-                    		GenericValue pdpQtyMaxAttribute = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",gvProduct.getString("productId"),"attrName","PDP_QTY_MAX"), true);
-                    		if(UtilValidate.isNotEmpty(pdpQtyMinAttribute) && UtilValidate.isNotEmpty(pdpQtyMinAttribute) && UtilValidate.isNotEmpty(pdpQtyMinAttribute.getString("attrName"))&& UtilValidate.isNotEmpty(pdpQtyMaxAttribute.getString("attrName")))
-                    		{
-                    			pdpQtyMinValue = pdpQtyMinAttribute.getString("attrValue");
-                        		pdpQtyMaxValue = pdpQtyMaxAttribute.getString("attrValue");
-                    		}
-                    		BigDecimal pdpQtyMinBD = new BigDecimal(pdpQtyMinValue);
-                    		BigDecimal pdpQtyMaxBD = new BigDecimal(pdpQtyMaxValue);
-                    		
-                    		arguments.put("pdpQtyMin", pdpQtyMinValue);
-                    		arguments.put("pdpQtyMax", pdpQtyMaxValue);
-                    		
-                    		if(quantity.compareTo(pdpQtyMinBD) < 0)
-                    		{
-                    			//min error
-                    			//invalid whole number error
-                        		tmp = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "PDPMinQtyError", arguments, locale),parameterName,true);
-                            	error_list.add(tmp);
-                    		}
-                    		else if(quantity.compareTo(pdpQtyMaxBD) > 0)
-                    		{
-                    			//max error
-                    			//invalid whole number error
-                        		tmp = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "PDPMaxQtyError", arguments, locale),parameterName,true);
-                            	error_list.add(tmp);
-                    		}
-                    	}
-                    	else
-                    	{
-                    		//invalid whole number error
-                    		tmp = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "PDPQtyDecimalNumberError", arguments, locale),parameterName,true);
-                        	error_list.add(tmp);
-                    	}
-                    }
-            	}
-            	catch (NumberFormatException nfe) 
-            	{
-            		Debug.logWarning(nfe, "Error validating quantity. Invalid number.");
-            	} 
-            	catch (Exception e) 
-            	{
-            		Debug.logWarning(e, "Error validating quantity");
-            	}
-            	
-            }
-        }
-        
-        if(error_list.size() > 0)
-        {
-        	request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
-        	return "error";
-        }
+        String cartItemIndex = (String) paramMap.get("cartLineIndex");
+        GenericValue autoUserLogin = (GenericValue)session.getAttribute("autoUserLogin");
+        Map priceMap = FastMap.newInstance();
+        ResourceBundle PARAMETERS_RECURRENCE = UtilProperties.getResourceBundle("parameters_recurrence.xml", Locale.getDefault());
+        try 
+        	{
+        	  if (shoppingCart.items().size() == 0)
+        	  {
+        		  return "success";
+        	  }
+              int index = Integer.parseInt(cartItemIndex);
+              ShoppingCartItem cartItem = shoppingCart.findCartItem(index);
+              
+              Map priceContext = UtilMisc.toMap("product",cartItem.getProduct(),"prodCatalogId", cartItem.getProdCatalogId(),"currencyUomId",shoppingCart.getCurrency(),"autoUserLogin",autoUserLogin);
+              priceContext.put("webSiteId",shoppingCart.getWebSiteId());
+              priceContext.put("productStoreId",shoppingCart.getProductStoreId());
+              priceContext.put("checkIncludeVat","Y");
+              priceContext.put("agreementId",shoppingCart.getAgreementId());
+              priceContext.put("partyId",shoppingCart.getPartyId());  
+              
+              if (UtilValidate.isNotEmpty(cartItem.getShoppingListId()) && "SLT_AUTO_REODR".equals(cartItem.getShoppingListId()))
+              {
+                  priceContext.put("productPricePurposeId","PURCHASE");
+                  priceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+                  cartItem.setBasePrice((BigDecimal)priceMap.get("basePrice"));
+                  cartItem.setDisplayPrice((BigDecimal)priceMap.get("price"));
+                  cartItem.setIsModifiedPrice(false);
+                  cartItem.setShoppingList(null, null);
+            	  cartItem.removeOrderItemAttribute("RECURRENCE_FREQ");
+            	  
+              }
+              else
+              {
+                  priceContext.put("productPricePurposeId","RECURRING_CHARGE");
+                  priceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+                  cartItem.setBasePrice((BigDecimal)priceMap.get("price"));
+                  cartItem.setDisplayPrice((BigDecimal)priceMap.get("price"));
+                  cartItem.setIsModifiedPrice(true);
+                  cartItem.setShoppingList("SLT_AUTO_REODR", "00001");
+                  String sIntervalNumber = PARAMETERS_RECURRENCE.getString("RECURRENCE_FREQ_DEFAULT");
+                  if (UtilValidate.isEmpty(sIntervalNumber))
+                  {
+                  	 sIntervalNumber= "90";
+                  }
 
+            	  cartItem.setOrderItemAttribute("RECURRENCE_FREQ",sIntervalNumber);
+              }
+
+        	}
+        	catch (Exception e) 
+        	{
+        		Debug.logWarning(e, "Error validating quantity");
+        	}
         return "success";
     }
+    
+    public static String updateRecurrenceFrequency(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	Map<String, Object> context = FastMap.newInstance(); 
+    	Map<String, Object> params = UtilHttp.getParameterMap(request);
+        String sCartLineIndexStr = (String) params.get("cartLineIndex");
+        String sRecurrenceFreq = (String) params.get("recurrenceFreq");
+        ShoppingCart shoppingCart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
+        int iCartLineIndex = -1;
+        if (UtilValidate.isNotEmpty(sCartLineIndexStr)) 
+        {
+            try 
+            {
+            	iCartLineIndex = Integer.parseInt(sCartLineIndexStr);
+            } 
+            catch (NumberFormatException nfe) 
+            {
+            	String errMsg = "Error when parsing cart line index :" + nfe.toString();
+	            Debug.logError(nfe, errMsg, module);
+                return "error";
+            }
+        }
+        if(UtilValidate.isNotEmpty(shoppingCart) && iCartLineIndex>-1 && UtilValidate.isNotEmpty(sRecurrenceFreq))
+        {
+        	ShoppingCartItem cartItem = shoppingCart.findCartItem(iCartLineIndex);
+        	if(UtilValidate.isNotEmpty(cartItem)) 
+            {
+        		cartItem.setOrderItemAttribute("RECURRENCE_FREQ", sRecurrenceFreq);
+            }
+        }
+        return "success";
+    }
+    
+    /** Update the cart's UserLogin object if it isn't already set. */
+    public static String keepCartUpdatedByVisitor(HttpServletRequest request, HttpServletResponse response) {
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+        HttpSession session = request.getSession();
+        ShoppingCart cart = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
+        GenericValue visitor = (GenericValue) session.getAttribute("visitor");
+
+        if (UtilValidate.isEmpty(cart.getAutoSaveListId()))
+        {
+            if (UtilValidate.isNotEmpty(visitor)) 
+            {
+                    String sVisitorId =visitor.getString("visitorId");
+                    Debug.log("keepCartUpdatedByVisitor: " + sVisitorId,module);
+
+                    try 
+                    {
+                        
+                        Map findMap = UtilMisc.toMap("visitorId", sVisitorId, "productStoreId", cart.getProductStoreId(), "shoppingListTypeId", "SLT_SPEC_PURP", "listName", org.ofbiz.order.shoppinglist.ShoppingListEvents.PERSISTANT_LIST_NAME);
+                        List existingLists = delegator.findByAndCache("ShoppingList", findMap);
+                        GenericValue list = null;
+                        if (existingLists != null && !existingLists.isEmpty()) 
+                        {
+                            list = EntityUtil.getFirst(existingLists);
+                            cart.setAutoSaveListId(list.getString("shoppingListId"));
+                        }
+                        
+                    }
+                      catch (Exception e)
+                      {
+                          Debug.logError(e, module);
+                      }
+            }
+            
+        }
+        
+        return "success";
+    }
+    
 }

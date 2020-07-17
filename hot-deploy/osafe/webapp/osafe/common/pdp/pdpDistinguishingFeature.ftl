@@ -25,7 +25,7 @@
 	              <#if productFacetTooltip?has_content>
                     <#assign facetTooltipTxt = Static["com.osafe.util.Util"].formatToolTipText("${productFacetTooltip}", "${productFacetTooltip?length}")/>
                     <#if facetTooltipTxt?has_content >
-                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this);" onMouseout="hideTooltip()" class="toolTipLink">
+                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this, 'icon');" onMouseout="hideTooltip()" class="toolTipLink">
                         <span class="tooltipIcon"></span>
                       </a>
                     </#if>
@@ -74,7 +74,7 @@
 	              <#if productFacetTooltip?has_content>
                     <#assign facetTooltipTxt = Static["com.osafe.util.Util"].formatToolTipText("${productFacetTooltip}", "${productFacetTooltip?length}")/>
                     <#if facetTooltipTxt?has_content >
-                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this);" onMouseout="hideTooltip()" class="toolTipLink">
+                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this, 'icon');" onMouseout="hideTooltip()" class="toolTipLink">
                         <span class="tooltipIcon"></span>
                       </a>
                     </#if>
@@ -134,7 +134,7 @@
 	              <#if productFacetTooltip?has_content>
                     <#assign facetTooltipTxt = Static["com.osafe.util.Util"].formatToolTipText("${productFacetTooltip}", "${productFacetTooltip?length}")/>
                     <#if facetTooltipTxt?has_content >
-                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this);" onMouseout="hideTooltip()" class="toolTipLink">
+                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this, 'icon');" onMouseout="hideTooltip()" class="toolTipLink">
                         <span class="tooltipIcon"></span>
                       </a>
                     </#if>

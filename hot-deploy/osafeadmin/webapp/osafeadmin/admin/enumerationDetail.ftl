@@ -25,6 +25,17 @@
                </div>
          </div>
        </div>
+       
+       <#if enumCodeCaption?exists && enumCodeCaption?has_content && enumTypeId == "RECURRENCE_FREQUENCY">
+            <div class="infoRow">
+                <div class="infoEntry">
+                    <div class="infoCaption"><label>${enumCodeCaption!}</label></div>
+                    <div class="infoValue">
+                      <input name="enumCode" type="text" id="enumCode" value="${parameters.enumCode!enumCode!""}" class="medium"/>
+                    </div>
+                </div>
+            </div>
+        </#if>
 
         <div class="infoRow">
             <div class="infoEntry">
@@ -35,10 +46,10 @@
             </div>
         </div>
 
-        <#if enumTypeId?has_content && enumTypeId == "CREDIT_CARD_TYPE">
+        <#if enumCodeCaption?exists && enumCodeCaption?has_content && enumTypeId == "CREDIT_CARD_TYPE">
             <div class="infoRow">
                 <div class="infoEntry">
-                    <div class="infoCaption"><label>${uiLabelMap.CeditCardTypeCaption}</label></div>
+                    <div class="infoCaption"><label>${enumCodeCaption!}</label></div>
                     <div class="infoValue">
                      <select name="enumCode" class="small">
                          <#assign cardType = parameters.enumCode!enumCode!"">

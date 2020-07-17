@@ -13,7 +13,7 @@
           <a href="<@ofbizUrl>${StringUtil.wrapString(addAction)}</@ofbizUrl>" class="buttontext standardBtn action">${addActionBtn!"${uiLabelMap.AddBtn}"}</a>
         </#if>
         <#if addAction2?exists && addAction2?has_content>
-          <a href="<@ofbizUrl>${addAction2}</@ofbizUrl>" class="buttontext standardBtn action">${addActionBtn2!"${uiLabelMap.AddBtn}"}</a>
+          <a href="<@ofbizUrl>${addAction2}<#if detailParamKey2?has_content>?${detailParamKey2!}=${detailId2!}</#if></@ofbizUrl>" class="buttontext standardBtn action">${addActionBtn2!"${uiLabelMap.AddBtn}"}</a>
         </#if>
         <#if addAction3?exists && addAction3?has_content>
           <a href="<@ofbizUrl>${addAction3}</@ofbizUrl>" class="buttontext standardBtn action">${addActionBtn3!"${uiLabelMap.AddBtn}"}</a>

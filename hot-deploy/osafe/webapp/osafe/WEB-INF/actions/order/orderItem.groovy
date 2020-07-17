@@ -2,6 +2,7 @@ package common;
 
 import org.ofbiz.base.util.UtilValidate;
 import javolution.util.FastMap;
+import javolution.util.FastList;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductContentWrapper;
@@ -194,9 +195,26 @@ if (UtilValidate.isNotEmpty(rowOrderItem))
 	}
 
 	//product features
-	productFeatureAndAppls = product.getRelatedCache("ProductFeatureAndAppl", UtilMisc.toMap("productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum"));
-	productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
-	productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
+	//Issue 38934, 38916 - Check for duplicate feature descriptions
+	productFeatureAndAppls = FastList.newInstance();
+	Map standardFeatureExistsMap = FastMap.newInstance();
+	standardFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "STANDARD_FEATURE"), UtilMisc.toList("sequenceNum"));
+	standardFeatures = EntityUtil.filterByDate(standardFeatures,true);
+	standardFeatures = EntityUtil.orderBy(standardFeatures,UtilMisc.toList('sequenceNum'));
+
+	for (GenericValue standardFeature : standardFeatures)
+	{
+	    String featureDescription = standardFeature.description;
+	    if (UtilValidate.isNotEmpty(featureDescription)) 
+	    {
+	    	featureDescription = featureDescription.toUpperCase();
+	        if (!standardFeatureExistsMap.containsKey(featureDescription))
+	        {
+	        	productFeatureAndAppls.add(standardFeature);
+	        	standardFeatureExistsMap.put(featureDescription,featureDescription);
+	        }
+	    }
+	}
 
 	productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 	
@@ -340,6 +358,7 @@ if (UtilValidate.isNotEmpty(rowOrderItem))
 	context.orderDate = rowOrderItem.orderDate;
 	context.priceMap = priceMap;
 	context.price = price;
+	context.offerPrice = offerPrice;
 	context.displayPrice = price;
 	context.productId = productId;
 	context.productCategoryId = productCategoryId;

@@ -22,6 +22,7 @@ import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;
 import org.ofbiz.base.util.UtilProperties;
 import com.osafe.util.OsafeAdminUtil;
+import org.ofbiz.product.catalog.CatalogWorker;
 
 
 plpItem = request.getAttribute("plpItem");
@@ -354,7 +355,7 @@ String buildVariantMapJS(Map firstVariantIdMap, Map variantStandardFeatureMap)
         {
             for(GenericValue productVariantStandardFeatureAppl : productVariantStandardFeatures)
             {
-                def mapKey = "FT"+productVariantStandardFeatureAppl.productFeatureTypeId+"_"+productVariantStandardFeatureAppl.description;
+                def mapKey = "FT"+productVariantStandardFeatureAppl.productFeatureTypeId+"_"+uiSequenceScreen+"_"+productId+"_"+productVariantStandardFeatureAppl.description;
                 if(!featureExist.contains(mapKey))
                 {
                     buf.append("VARMAP['" + mapKey + "'] = \"" + productVariantStandardFeatureAppl.productId + "\";");
@@ -557,6 +558,25 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
 
 autoUserLogin = request.getSession().getAttribute("autoUserLogin");
 cart = session.getAttribute("shoppingCart");
+
+currentCatalogId = CatalogWorker.getCurrentCatalogId(request);
+webSiteId = CatalogWorker.getWebSiteId(request);
+productStore = ProductStoreWorker.getProductStore(request);
+productStoreId = productStore.get("productStoreId");
+priceContext = [:];
+if (cart.isSalesOrder()) 
+{
+    // sales order: run the "calculateProductPrice" service
+    priceContext = [prodCatalogId : currentCatalogId,
+                currencyUomId : cart.getCurrency(), autoUserLogin : autoUserLogin];
+    priceContext.webSiteId = webSiteId;
+    priceContext.productStoreId = productStoreId;
+    priceContext.checkIncludeVat = "Y";
+    priceContext.agreementId = cart.getAgreementId();
+    priceContext.productPricePurposeId = "PURCHASE";
+    priceContext.partyId = cart.getPartyId();  // IMPORTANT: must put this in, or price will be calculated for the CSR instead of the customer
+}
+
 
 if(UtilValidate.isNotEmpty(productId)) 
 {
@@ -781,8 +801,25 @@ if(UtilValidate.isNotEmpty(productId))
 		//sorted list of groups
 		productFeatureCatGrpAppls = delegator.findByAndCache("ProductFeatureCatGrpAppl", UtilMisc.toMap("productCategoryId", categoryId), UtilMisc.toList("sequenceNum"));
 		// Using findByAndCache Call since the ProductService(Service getProductVariantTree call) will make the same findByAndCache Call.
-		productDistinguishingFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "DISTINGUISHING_FEAT"), UtilMisc.toList("sequenceNum"));
-		productDistinguishingFeatures = EntityUtil.filterByDate(productDistinguishingFeatures, true);
+		//Issue 38934, 38916 - Check for duplicate feature descriptions
+	    productDistinguishingFeatures = FastList.newInstance();
+	    Map distinguishingFeatureExistsMap = FastMap.newInstance();
+	    distinguishingFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", productId, "productFeatureApplTypeId", "DISTINGUISHING_FEAT"), UtilMisc.toList("sequenceNum"));
+	    distinguishingFeatures = EntityUtil.filterByDate(distinguishingFeatures, true);
+	    
+	    for (GenericValue distinguishingFeature : distinguishingFeatures)
+	    {
+	        String featureDescription = distinguishingFeature.description;
+	        if (UtilValidate.isNotEmpty(featureDescription)) 
+	        {
+	        	featureDescription = featureDescription.toUpperCase();
+	            if (!distinguishingFeatureExistsMap.containsKey(featureDescription))
+	            {
+	            	productDistinguishingFeatures.add(distinguishingFeature);
+	            	distinguishingFeatureExistsMap.put(featureDescription,featureDescription);
+	            }
+	        }
+	    }
 		
 		productFeatureTypes = FastList.newInstance();
 		productFeaturesByType = new LinkedHashMap();
@@ -867,7 +904,7 @@ if(UtilValidate.isNotEmpty(productId))
     
     if(UtilValidate.isNotEmpty((product).isVirtual) && ((product).isVirtual).toUpperCase()== "Y")
     {
-    	Map productVariantPriceMap = FastMap.newInstance();
+    	Map plpProductVariantPriceMap = FastMap.newInstance();
     	Map descpFeatureGroupDescMap = FastMap.newInstance();
         variantFirstFeatureIdExist = [];
         facetGroupVariantMatch = request.getAttribute("FACET_GROUP_VARIANT_MATCH");
@@ -875,6 +912,10 @@ if(UtilValidate.isNotEmpty(productId))
         plpFacetGroupVariantSwatch = request.getAttribute("PLP_FACET_GROUP_VARIANT_SWATCH");
     	plpFacetGroupVariantMatch = Util.getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_MATCH");
 
+        if(UtilValidate.isNotEmpty(plpFacetGroupVariantSwatch))
+        {
+            context.PLP_FACET_GROUP_VARIANT_SWATCH = plpFacetGroupVariantSwatch;
+        }
     	
     	productAssoc = product.getRelatedCache("MainProductAssoc");
         productAssoc = EntityUtil.filterByDate(productAssoc,true);
@@ -895,45 +936,65 @@ if(UtilValidate.isNotEmpty(productId))
                 variantProductFeatureAndAppls = EntityUtil.filterByDate(variantProductFeatureAndAppls,true);
   	            variantProductFeatureAndAppls = EntityUtil.orderBy(variantProductFeatureAndAppls,UtilMisc.toList("sequenceNum"));
   	            
-                variantProductPrices = assocVariantProduct.getRelatedCache("ProductPrice");
-                variantProductPrices = EntityUtil.filterByDate(variantProductPrices,true);
+  	            priceContext.put("product", assocVariantProduct);
+  	            
+  	            plpPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+  	            
+                /*variantProductPrices = assocVariantProduct.getRelatedCache("ProductPrice");
+                variantProductPrices = EntityUtil.filterByDate(variantProductPrices,true);*/
 
                 //BULLD PRODUCT CONTENT WRAPPER FOR EACH VARIANT TO PUT INTO CONTEXT
                 varProductContentWrapper = new ProductContentWrapper(assocVariantProduct, request);
                 productVariantContentWrapperMap.put(assocVariantProduct.productId, varProductContentWrapper);
                 
-	            for(GenericValue variantProductPrice : variantProductPrices)
+                varBasePrice = plpPriceMap.price;
+                plpProductVariantPriceMap.put(assocVariantProduct.productId, UtilMisc.toMap("basePrice", varBasePrice));
+                
+                varListPrice = plpPriceMap.listPrice;
+                varPriceMap = plpProductVariantPriceMap.get(assocVariantProduct.productId);
+                if (UtilValidate.isNotEmpty(varPriceMap)) 
+                {
+                    varPriceMap.put("listPrice", varListPrice)
+                } 
+                else 
+                {
+                	plpProductVariantPriceMap.put(assocVariantProduct.productId, UtilMisc.toMap("listPrice", varListPrice));
+                }
+                
+                
+	            /*for(GenericValue variantProductPrice : variantProductPrices)
 	            {
 	              if (variantProductPrice.productPriceTypeId == "DEFAULT_PRICE")
 	              {
 	                	varBasePrice = variantProductPrice.price;
-	                    varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
+	                    varPriceMap = plpProductVariantPriceMap.get(variantProductPrice.productId);
 	                    if (UtilValidate.isNotEmpty(varPriceMap)) 
 	                    {
 	                        varPriceMap.put("basePrice", varBasePrice)
 	                    } 
 	                    else 
 	                    {
-	                    	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("basePrice", varBasePrice))
+	                    	plpProductVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("basePrice", varBasePrice))
 	                    }
 	                    continue;
 	              }
 	              if (variantProductPrice.productPriceTypeId == "LIST_PRICE")
 	              {
 		            	varListPrice = variantProductPrice.price;
-		                varPriceMap = productVariantPriceMap.get(variantProductPrice.productId);
+		                varPriceMap = plpProductVariantPriceMap.get(variantProductPrice.productId);
 		                if (UtilValidate.isNotEmpty(varPriceMap)) 
 		                {
 		                    varPriceMap.put("listPrice", varListPrice)
 		                } 
 		                else 
 		                {
-		                	productVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("listPrice", varListPrice))
+		                	plpProductVariantPriceMap.put(variantProductPrice.productId, UtilMisc.toMap("listPrice", varListPrice))
 		                }
 		                continue;
 	              }
-	            }
-
+	            }*/
+                
+            
                 for (GenericValue variantProductFeatureAndAppl: variantProductFeatureAndAppls)
                 {
 		            if (UtilValidate.isNotEmpty(plpFacetGroupVariantMatch)) 
@@ -954,7 +1015,7 @@ if(UtilValidate.isNotEmpty(productId))
 			             }
 			             productVariantFeatureMap = UtilMisc.toMap("productVariantId", productIdTo,"productVariant", assocVariantProduct, "productFeatureId", variantProductFeatureAndAppl.productFeatureId,"productFeatureDesc", productFeatureDesc,"productFeatureTypeId", variantProductFeatureAndAppl.productFeatureTypeId);
 			
-			             variantPriceMap = productVariantPriceMap.get(productIdTo);
+			             variantPriceMap = plpProductVariantPriceMap.get(productIdTo);
 			             
 			             if (UtilValidate.isNotEmpty(variantPriceMap))
 			             {
@@ -1183,7 +1244,8 @@ if(UtilValidate.isNotEmpty(productId))
 	               }
 	            }
 	        }
-	  }
+	    }
+	    context.plpProductVariantPriceMap = plpProductVariantPriceMap;
     }
 	
     
@@ -1206,8 +1268,24 @@ if(UtilValidate.isNotEmpty(productId))
         {
             // GET PRODUCT FEATURE AND APPLS: SELECTABLE FEATURES
             // Using findByAndCache Call since the ProductService(Service getProductVariantTree call) will make the same findByAndCache Call.
-            productSelectableFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", product.productId, "productFeatureApplTypeId", "SELECTABLE_FEATURE"), UtilMisc.toList("sequenceNum"));
-            productSelectableFeatures = EntityUtil.filterByDate(productSelectableFeatures, true);
+        	//Issue 38934, 38916 - Check for duplicate feature descriptions
+            productSelectableFeatures = FastList.newInstance();
+            Map selectableFeatureExistsMap = FastMap.newInstance();
+            selectableFeatures = delegator.findByAndCache("ProductFeatureAndAppl", UtilMisc.toMap("productId", product.productId, "productFeatureApplTypeId", "SELECTABLE_FEATURE"), UtilMisc.toList("sequenceNum"));
+            selectableFeatures = EntityUtil.filterByDate(selectableFeatures, true);
+            for (GenericValue selectableFeature : selectableFeatures)
+            {
+                String featureDescription = selectableFeature.description;
+                if (UtilValidate.isNotEmpty(featureDescription)) 
+                {
+                	featureDescription = featureDescription.toUpperCase();
+	                if (!selectableFeatureExistsMap.containsKey(featureDescription))
+	                {
+		            	productSelectableFeatures.add(selectableFeature);
+		            	selectableFeatureExistsMap.put(featureDescription,featureDescription);
+	                }
+                }
+            }
         
             //BUILD PRODUCT FEATURE SET (SELECTABLE FEATURES BY FEATURE TYPE)
             plpFeatureSet = new LinkedHashSet();

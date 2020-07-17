@@ -59,6 +59,10 @@
     <#if GA_SITE_VERIFICATION?has_content>
        <meta name="google-site-verification" content="${GA_SITE_VERIFICATION!}"/>
     </#if>
+    
+    <#if canonicalUrl?has_content>
+        <link rel="canonical" href="${StringUtil.wrapString(canonicalUrl)}"/>
+    </#if>
   <#-- BF CUSTOM HEADER TAG CONTENT (SI_HEAD_TAG)- typically used for adding the mobile css-->
     ${screens.render("component://osafe/widget/EcommerceContentScreens.xml#SI_HEAD_TAG")}    
 

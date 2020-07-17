@@ -28,6 +28,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
+import javolution.util.FastList;
+
 import org.apache.commons.io.FileUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.StringUtil;
@@ -108,9 +110,10 @@ public class SiteMapServices {
         try 
         {
             List<String> rootUrlList = StringUtil.split(PRODUCT_LIST_URL, "/");
+            List<String> usedUrlList = FastList.newInstance();
             if (rootUrlList.size() > 1) {
                 String rootUrl = rootUrlList.get(0)+"//"+rootUrlList.get(1);
-                createSiteMapNode(rootUrl);
+                createSiteMapNode(rootUrl, usedUrlList);
             }
            
             // Get all unexpired Product Categories (Top Level Catalog Category)
@@ -138,13 +141,13 @@ public class SiteMapServices {
                             url = makeCatalogUrl(null,null,productCategoryId,null, null,null);
                         	
                         }
-                        createSiteMapNode(url);
+                        createSiteMapNode(url, usedUrlList);
                     	
                     }
                     else
                     {
                         url = makeCatalogUrl(null,null,productCategoryId,null, null,null);
-                        createSiteMapNode(url);
+                        createSiteMapNode(url, usedUrlList);
                     	
                     }
                     
@@ -171,7 +174,7 @@ public class SiteMapServices {
                                 if (ProductWorker.isSellable(product)) 
                                 {
                                     url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,null);
-                                    createSiteMapNode(url);
+                                    createSiteMapNode(url, usedUrlList);
                                     if (UtilValidate.isNotEmpty(SITEMAP_VARIANT_FEATURES))
                                     {
                                        List<GenericValue> lProductFeatureAndAppl = delegator.findByAndCache("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
@@ -182,7 +185,7 @@ public class SiteMapServices {
                                             {
                                                 String featureDescription = productFeatureAndAppl.getString("description"); 
                                                 url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,SITEMAP_VARIANT_FEATURES.toUpperCase() + ":" + featureDescription);
-                                                createSiteMapNode(url);
+                                                createSiteMapNode(url, usedUrlList);
                                             }
                                         }
                                     }
@@ -205,7 +208,7 @@ public class SiteMapServices {
                     if (UtilValidate.isNotEmpty(content) && "CTNT_PUBLISHED".equals(content.getString("statusId")))
                     {
                         url = makeCatalogUrl(null, null, null, null, xContentXref.getString("bfContentId"),null);
-                        createSiteMapNode(url);
+                        createSiteMapNode(url, usedUrlList);
                     }
                 }
             }
@@ -404,8 +407,8 @@ public class SiteMapServices {
           
        return result;
     }
-    
-    private static void createSiteMapNode (String URL)
+
+    private static void createSiteMapNode (String URL, List<String> usedUrlList)
     {
         StringBuilder urlBuilder = new StringBuilder();
     	
@@ -429,13 +432,16 @@ public class SiteMapServices {
         	{
                 urlBuilder.append(URL);
         	}
-        	
-            Element newElement = document.createElement("url");
-            Element newChildElement = document.createElement("loc");
-            newChildElement.appendChild(document.createTextNode(urlBuilder.toString()));
-            newElement.appendChild(newChildElement);
-            rootElement.appendChild(newElement);
-    		
+
+            if(!usedUrlList.contains(urlBuilder.toString()))
+            {
+                usedUrlList.add(urlBuilder.toString());
+	            Element newElement = document.createElement("url");
+	            Element newChildElement = document.createElement("loc");
+	            newChildElement.appendChild(document.createTextNode(urlBuilder.toString()));
+	            newElement.appendChild(newChildElement);
+	            rootElement.appendChild(newElement);
+            }
     		
     	} catch (Exception e) {
     		
@@ -462,17 +468,38 @@ public class SiteMapServices {
             
         	if (productContentWrapper != null)
         	{
-        		productName=productContentWrapper.get("PRODUCT_NAME").toString();
+        		if (UtilValidate.isNotEmpty(productContentWrapper.get("SEO_PAGE_URL")))
+        		{
+        			productName = productContentWrapper.get("SEO_PAGE_URL").toString();
+        		}
+        		if (UtilValidate.isEmpty(productName) && UtilValidate.isNotEmpty(productContentWrapper.get("PRODUCT_NAME")))
+        		{
+        			productName = productContentWrapper.get("PRODUCT_NAME").toString();
+        		}
         	}
 
         	if (parentCategoryContentWrapper !=null)
         	{
-        		parentCategoryName=parentCategoryContentWrapper.get("CATEGORY_NAME").toString();
+        		if (UtilValidate.isNotEmpty(parentCategoryContentWrapper.get("SEO_PAGE_URL")))
+        		{
+        			parentCategoryName = parentCategoryContentWrapper.get("SEO_PAGE_URL").toString();
+        		}
+        		if (UtilValidate.isEmpty(parentCategoryName) && UtilValidate.isNotEmpty(parentCategoryContentWrapper.get("CATEGORY_NAME")))
+        		{
+        			parentCategoryName = parentCategoryContentWrapper.get("CATEGORY_NAME").toString();
+        		}
         	}
 
         	if (categoryContentWrapper !=null)
         	{
-        		categoryName=categoryContentWrapper.get("CATEGORY_NAME").toString();
+        		if (UtilValidate.isNotEmpty(categoryContentWrapper.get("SEO_PAGE_URL")))
+        		{
+        			categoryName = categoryContentWrapper.get("SEO_PAGE_URL").toString();
+        		}
+        		if (UtilValidate.isEmpty(categoryName) && UtilValidate.isNotEmpty(categoryContentWrapper.get("CATEGORY_NAME")))
+        		{
+        			categoryName = categoryContentWrapper.get("CATEGORY_NAME").toString();
+        		}
         	}
         	
         	if (UtilValidate.isNotEmpty(parentCategoryName))
@@ -497,21 +524,7 @@ public class SiteMapServices {
         	{
         		friendlyKeyValue.append(contentSeoFriendlyName);
         	}
-        	friendlyValue=friendlyKeyValue.toString();
-        	friendlyValue=StringUtil.replaceString(friendlyValue,"&apos;","");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,"'","");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,"&quot;","");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,"\"","");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,"&amp;","And");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,"&","And");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,",","");
-        	//Do not replace '-' if this was a static page friendly name (contentAttribute type=SEO_FRIENDLY_URL) 
-        	if (UtilValidate.isEmpty(contentSeoFriendlyName))
-        	{
-        	     friendlyValue=StringUtil.replaceString(friendlyValue,"-","");
-        	}
-        	friendlyValue=StringUtil.replaceString(friendlyValue,".","");
-        	friendlyValue=StringUtil.replaceString(friendlyValue," ","-");
+        	friendlyValue=makeCharsFriendly(friendlyKeyValue.toString(), contentSeoFriendlyName);
         	
         	Element newElement = document.createElement("property");
             newElement.setAttribute("key", friendlyKey);
@@ -526,6 +539,33 @@ public class SiteMapServices {
             Debug.logError(e, module);
     		
     	}
+    }
+
+    public static String makeCharsFriendly(String valuetoFriendly, String contentSeoFriendlyName) 
+    {
+    	if(UtilValidate.isNotEmpty(valuetoFriendly))
+    	{
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"&apos;","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"'","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"&quot;","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"\"","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"&amp;","And");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"&","And");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,",","");
+	    	//Do not replace '-' if this was a static page friendly name (contentAttribute type=SEO_FRIENDLY_URL) 
+	    	if (UtilValidate.isEmpty(contentSeoFriendlyName))
+	    	{
+	    		valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"-","");
+	    	}
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,".","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly," ","-");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"%","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"#","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,";","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"?","");
+	    	valuetoFriendly=StringUtil.replaceString(valuetoFriendly,"\\","");
+    	}
+    	return valuetoFriendly;
     }
 
     private static File createDocument(String xmlFilePath,String sFileName) 
