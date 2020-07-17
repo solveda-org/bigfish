@@ -13,7 +13,7 @@
         </#if>
       </div>
       <div class="infoText">
-        <label>${uiLabelMap.CategoryImageInfo}</label>
+        <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.CategoryImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
       </div>
     </div>
   </div>

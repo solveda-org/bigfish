@@ -39,7 +39,7 @@
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="title" value="${uiLabelMap.eCommerceApplication}" />
+                <set field="title" value="${uiLabelMap.EcommerceApplication}" />
                 <set field="mainPanelStyle" value="homePage" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceHomePage.groovy" />
             </actions>
@@ -200,7 +200,7 @@
                         </section>
                     </decorator-section>
                 </decorator-screen>
-                <include-screen name="viewLargeImageDialog" location="component://osafe/widget/DialogScreens.xml" />
+<!--                 <include-screen name="viewLargeImageDialog" location="component://osafe/widget/DialogScreens.xml" /> -->
             </widgets>
         </section>
     </screen>
@@ -308,7 +308,46 @@
         </section>
     </screen>
   
-    <screen name="eCommerceProductReviewSubmit">
+    <screen name="eCommerceProductReviewSubmitLogged">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.WriteReviewTitle}" />
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/productReview/js/productReviewUI.js" global="true" />
+
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductReviewSubmit.groovy" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="formAction" value="eCommerceCreateProductReviewLogged" />
+                <set field="formName" value="productReviewForm" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceProductReviewSubmit">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                                <html-template-decorator-section name="entryForm">
+                                                    <include-screen name="productReviewSubmitForm" location="component://osafe/widget/EntryScreens.xml" />
+                                                </html-template-decorator-section>
+                                            </html-template-decorator>
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+	
+	<screen name="eCommerceProductReviewSubmit">
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
@@ -362,18 +401,6 @@
             </widgets>
         </section>
     </screen>
-    <screen name="ratingsGuideLines">
-        <section>
-            <widgets>
-                <platform-specific>
-                    <html>
-                        <html-template location="component://osafe/webapp/osafe/common/ratingsGuideLines.ftl" />
-                    </html>
-                </platform-specific>
-            </widgets>
-        </section>
-    </screen>
-
 
     <screen name="categoryBreadcrumbs">
         <section>
@@ -484,6 +511,7 @@
                         <section>
                             <widgets>
                                 <include-screen name="PTS_MAILING_LIST" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                <container style="emailSubscriber">
                                 <platform-specific>
                                     <html>
                                         <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
@@ -496,6 +524,7 @@
                                         </html-template-decorator>
                                     </html>
                                 </platform-specific>
+                                </container>
                                 <include-screen name="PES_MAILING_LIST" location="component://osafe/widget/EcommerceContentScreens.xml" />
                             </widgets>
                         </section>
@@ -757,7 +786,7 @@
                 <set field="showDelete" value="Y" />
                 <set field="confirmDialogForm" value="checkoutInfoForm"/>
                 <set field="confirmDialogAction" value="deleteAddressBook"/>
-                <set field="confirmDialogText" value="${uiLabelMap.deleteAddressConfirmText}"/>
+                <set field="confirmDialogText" value="${uiLabelMap.DeleteAddressConfirmText}"/>
                 <set field="dialogPurpose" value="confirm_" global="true"/>
                 <set field="backAction" value="MyAccount"/>
             </actions>
@@ -1413,6 +1442,8 @@
                 <set field="pageTitle" value="${uiLabelMap.StoreLocatorTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="dataSourceId" value="GEOPT_GOOGLE" />
+                <set field="mapWidthParam" value="GMAP_MAP_IMG_W" />
+                <set field="mapHeightParam" value="GMAP_MAP_IMG_H" />
                 <set field="displayInitialStores" value="N" />
                 <set field="searchStoreFormAction" value="searchStoreLocator" />
                 <set field="searchStoreFormName" value="searchStoreLocator" />

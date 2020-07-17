@@ -15,9 +15,22 @@ jQuery(document).ready(function () {
         var swatchVariant = jQuery(this).next('.swatchVariant').clone();
         jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
         jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
-        jQuery(this).siblings('.plpFeatureSwatchImage').attr("class", "plpFeatureSwatchImage");
-        jQuery(this).attr("class","plpFeatureSwatchImage selected");
+        jQuery(this).siblings('.plpFeatureSwatchImage').removeClass("selected");
+        jQuery(this).addClass("selected");
         makePDPUrl(this);
+        <#if PLP_FACET_GROUP_VARIANT_MATCH?has_content>
+          var descFeatureGroup = jQuery(this).prev("input.featureGroup").val();
+          if(descFeatureGroup != '') {
+            jQuery.each( jQuery('.'+descFeatureGroup), function(idx, elm){
+              changeSwatchImg(elm);
+            });
+          }
+          
+          var title = jQuery(this).attr("title");
+          jQuery.each( jQuery('.'+title), function(idx, elm){
+            changeSwatchImg(elm);
+          });
+        </#if>
     });
 
     jQuery('.seeMoreLink').click(function() {
@@ -29,6 +42,15 @@ jQuery(document).ready(function () {
         jQuery(this).hide().parents('li').siblings('li.hideThem').hide();
         jQuery(this).siblings('.seeMoreLink').show();
     });
+    
+    function changeSwatchImg(elm) {
+        var swatchVariant = jQuery(elm).next('.swatchVariant').clone();
+        jQuery(elm).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
+        jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
+        jQuery(elm).siblings('.plpFeatureSwatchImage').removeClass("selected");
+        jQuery(elm).addClass("selected");
+        makePDPUrl(elm);
+    }
     
     function makePDPUrl(elm) {
         var plpFeatureSwatchImageId = jQuery(elm).attr("id");

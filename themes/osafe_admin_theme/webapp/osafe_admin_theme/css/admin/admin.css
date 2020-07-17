@@ -316,6 +316,7 @@ input[type="button"].standardBtn.secondary:hover,
 a.standardBtn.secondary:hover {
     color: #000000;
 }
+
 a.standardBtn.help {
     background: #0C0C0C;
     background-image: url("/osafe_admin_theme/images/classic/icon/helpFunction.png");
@@ -596,7 +597,7 @@ border-bottom: none;
 #navigationMenu li.sfHover ul {
     left:            0;
     top:            23px; /* match top ul list item height */
-   *top: 22px; 
+    top: 22px\9; /* For IE 8 and Below */
     z-index:        99;
     border-top: 1px solid #000;
 }
@@ -780,6 +781,11 @@ ul#navigationMenu li li li.sfHover ul {
     margin: 0 0 0 10px;
 }
 
+.displayBox .header h2 .headingHelperText {
+    font-weight: normal;
+    font-size: 10px;
+}
+
 .displayBox .subHeader {
     background: #ecb564;
     border-bottom: 1px solid #000000;
@@ -808,6 +814,15 @@ ul#navigationMenu li li li.sfHover ul {
     clear: left;
     font-size: 1.3em;
 }
+
+.displayBox .boxBody:after, .displaySearchBox .boxBody:after, .displayListBox .boxBody:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
 .displayBox .boxText {
     font-size: 1.3em;
 }
@@ -1117,15 +1132,15 @@ div.infoValue div.dataRow div.dataColumn {
 }
 div.infoValue div.dataRow div.operDataColumn {
 	float: left;
-/*    width: 130px;  */
+    width: 130px;  
 }
 div.infoValue div.dataRow div.nameDataColumn {
 	float: left;
-/*   width: 300px;  */
+    width: 300px;  
 }
 div.infoValue div.dataRow div.actionDataColumn {
 	float: left;
-/*    width: 200px;  */
+    width: 200px;
 }
 div.infoRow span.textCounter{
     color: #333333;
@@ -1194,7 +1209,7 @@ div.infoValue div.geoCode {
     width: 320px;
 }
 .infoValue.small{
-/*    width: 160px;  */
+    width: 160px;  
 }
 .infoRow div.infoDetail {
     padding: 5px 50px 0 0;
@@ -2344,6 +2359,27 @@ td div.infoEntry input[type="text"] {
     height:16px;
     display: inline-block;
 }
+.helperIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/helperIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    margin-top:2px;
+    margin-left:2px;
+    display: inline-block;
+}
+
+.helperIcon:hover {
+    cursor: pointer;
+
+}
+.featureIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/productFeature.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
 .variantIcon {
     background-image: url(/osafe_admin_theme/images/classic/icon/productvariant.gif);
     background-repeat:no-repeat;
@@ -2359,6 +2395,13 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+.helpIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/helpIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
 .noImage {
     background-image: url(/osafe_admin_theme/images/classic/noimage/noImageLoded.gif);
     background-repeat:no-repeat;
@@ -2503,6 +2546,19 @@ td div.infoEntry input[type="text"] {
     height:16px;
     display: inline-block;
 }
+.warningIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/warningIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.warningHelper { /* for pixel tracking page */
+    float: right;
+    margin: 0 5px 0 0;
+}
+
 /****************************************************************
 * Detail Entry Table
 ****************************************************************/
@@ -2610,7 +2666,8 @@ input[type="button"].standardBtn.productLoaderTab {
 }
 
 .boxBody .helperText {
-    clear: both;
+    float: right;
+    margin: 0 10px 0 0;
 }
 
 .boxBody .helperText span {
@@ -3004,7 +3061,7 @@ ul.pagingLinksBody li.selectorNoResultText {
 .ui-state-hover a, .ui-state-hover a:hover { color: #c77405; text-decoration: none; }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active { border: 1px solid #fbd850; background: #ffffff url(/osafe_admin_theme/images/classic/icon/ui-bg_glass_65_ffffff_1x400.png) 50% 50% repeat-x; font-weight: bold; color: #eb8f00; }
 .ui-state-active a, .ui-state-active a:link, .ui-state-active a:visited { color: #eb8f00; text-decoration: none; }
-.ui-widget :active { outline: none; }
+
 
 /* Interaction Cues
 ----------------------------------*/
@@ -3517,8 +3574,8 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 }
 
 button.ui-datepicker-trigger {
-     background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg") 50% no-repeat;
-    border: 0 none;
+background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg") 0 0 no-repeat; 
+    border: none;
     cursor: pointer;
     height: 15px;
     margin: 0 0 0 5px;
@@ -3533,6 +3590,7 @@ button.ui-datepicker-trigger img {
 }
 
 button.ui-datepicker-trigger:active {
+background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg") 1px 1px no-repeat\9;  /* For IE 8 and lower */
 
 }
 
@@ -3603,5 +3661,25 @@ button.ui-datepicker-trigger:active {
     left: -4px; /*must have*/
     width: 200px; /*must have*/
     height: 200px; /*must have*/
+}
+
+/* align times on scheduled jobs detail page */
+
+.scheduledJobTimeEntry {
+	margin: 0 0 0 20px; 
+}
+
+.scheduledJobTimeEntry div label {
+       width: auto;
+       margin: 0 0 0 25px;
+}
+
+.scheduledJobTime {
+	margin: 0 0 0 20px; 
+}
+
+.scheduledJobTime div label {
+       width: auto;
+       margin: 0 0 0 161px;
 }
 

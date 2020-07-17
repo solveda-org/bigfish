@@ -437,7 +437,7 @@ public class RefinementsHelperSolr {
             url += "productCategoryId" + "=" + ccProductCategoryId;
         }
 
-        if (isProductCategory) {
+        if (isProductCategory && UtilValidate.isEmpty(ccSearchText)) {
             if (!isOnCategoryList) {
                 url += "&";
             }

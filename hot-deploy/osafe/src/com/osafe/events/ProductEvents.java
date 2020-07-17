@@ -109,7 +109,7 @@ public class ProductEvents {
             inputMap.put("productRating", new BigDecimal(Double.parseDouble(productRating)));
             if(productReview != null)
                 inputMap.put("productReview", productReview);
-            if(userLogin != null)
+            if(UtilValidate.isNotEmpty(userLogin))
             {
                 inputMap.put("userLoginId", userLogin.getString("userLoginId"));
                 inputMap.put("postedAnonymous", "N");

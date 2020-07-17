@@ -22,11 +22,9 @@
 	                but want to allow teh screen in general to show general messages if you try to continue without choosing
 	                a payment method
 	            -->
-	            <input type="hidden" name="fieldLevelErrors" value="Y" />
 	        <#else>
 	           <div>
 	            <input type="hidden" name="paymentMethodId" value="${paymentMethodId}" />
-	            <input type="hidden" name="fieldLevelErrors" value="Y" />
 	        </#if>
 	
 	        <#-- Added to deal with payment being declined -->
@@ -176,7 +174,11 @@
                           <#assign cardType = requestParameters.cardType?if_exists>
                         </#if>
                         <#if cardType?has_content>
-                          <option value="${cardType?if_exists}">${cardType?if_exists}</option>
+                          <#assign cardTypeEnums = delegator.findByAnd("Enumeration", {"enumCode" : cardType, "enumTypeId" : "CREDIT_CARD_TYPE"})?if_exists/>
+                          <#if cardTypeEnums?has_content>
+                            <#assign cardTypeEnum = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(cardTypeEnums) />
+                            <option value="${cardTypeEnum.enumCode!}">${cardTypeEnum.description!}</option>
+                          </#if>
                         </#if>
 	                    <option value="">${uiLabelMap.CommonSelectOne}</option>
 	                    ${screens.render("component://osafe/widget/CommonScreens.xml#ccTypes")}

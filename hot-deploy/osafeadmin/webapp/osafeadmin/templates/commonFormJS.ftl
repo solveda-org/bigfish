@@ -21,6 +21,12 @@
                 clearField();
             });
         }
+        if (jQuery('#inputParamEnumId').length){
+            getDisplayFormat('#inputParamEnumId');
+            jQuery('#inputParamEnumId').change(function(){
+                getDisplayFormat('#inputParamEnumId');
+            });
+        }
         getOrderItemCheckDisplay('changeStatusAll');
         jQuery('input:radio[name=changeStatusAll]').click(function(event) {
             getOrderItemCheckDisplay('changeStatusAll');
@@ -127,7 +133,7 @@
         var allCheckbox = document.forms[formName].elements[checkBoxName + "all"];
         for(i = 0;i < document.forms[formName].elements.length;i++) {
             var elem = document.forms[formName].elements[i];
-            if (elem.name.indexOf(checkBoxName) == 0 && elem.name.indexOf("_") < 0 && elem.type == "checkbox") {
+            if (elem.id.indexOf(checkBoxName) == 0 && elem.id.indexOf("_") < 0 && elem.type == "checkbox" && allCheckbox.type == "checkbox") {
                 elem.checked = allCheckbox.checked;
             }
         }
@@ -574,6 +580,8 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').show();
+            jQuery('.promoActionCategory').hide();
+            jQuery('.promoActionProduct').hide();
         } else if (enumId == "PROMO_PROD_DISC") {
             jQuery('.QTYDIV').show();
             jQuery('.QTY').hide();
@@ -586,6 +594,8 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').show();
+            jQuery('.promoActionProduct').show();
         } else if (enumId == "PROMO_PROD_AMDISC") {
             jQuery('.QTYDIV').show();
             jQuery('.QTY').hide();
@@ -598,6 +608,8 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').show();
+            jQuery('.promoActionProduct').show();
         } else if (enumId == "PROMO_PROD_PRICE") {
             jQuery('.QTYDIV').show();
             jQuery('.QTY').hide();
@@ -610,6 +622,8 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').show();
+            jQuery('.promoActionProduct').show();
         } else if (enumId == "PROMO_ORDER_PERCENT") {
             jQuery('.QTYDIV').hide();
             jQuery('.QTY').hide();
@@ -622,6 +636,8 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').hide();
+            jQuery('.promoActionProduct').hide();
         } else if (enumId == "PROMO_ORDER_AMOUNT") {
             jQuery('.QTYDIV').hide();
             jQuery('.QTY').hide();
@@ -634,6 +650,8 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').hide();
+            jQuery('.promoActionProduct').hide();
         } else if (enumId == "PROMO_PROD_SPPRC") {
             jQuery('.QTYDIV').hide();
             jQuery('.QTY').hide();
@@ -646,6 +664,8 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').show();
+            jQuery('.promoActionProduct').show();
         } else if (enumId == "PROMO_SHIP_CHARGE") {
             jQuery('.QTYDIV').hide();
             jQuery('.QTY').hide();
@@ -658,6 +678,8 @@
             jQuery('.SHIPDISCPER').show();
             jQuery('.TAXDISCPER').hide();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').hide();
+            jQuery('.promoActionProduct').hide();
         } else if (enumId == "PROMO_TAX_PERCENT") {
             jQuery('.QTYDIV').hide();
             jQuery('.QTY').hide();
@@ -670,6 +692,23 @@
             jQuery('.SHIPDISCPER').hide();
             jQuery('.TAXDISCPER').show();
             jQuery('.ITEMDIV').hide();
+            jQuery('.promoActionCategory').hide();
+            jQuery('.promoActionProduct').hide();
+        } else if (enumId == "PPIP_ORDER_TOTAL") {
+            jQuery('.promoConditionCategory').hide();
+            jQuery('.promoConditionProduct').hide();
+        } else if (enumId == "PPIP_PRODUCT_TOTAL") {
+            jQuery('.promoConditionCategory').show();
+            jQuery('.promoConditionProduct').show();
+        } else if (enumId == "PPIP_PRODUCT_AMOUNT") {
+            jQuery('.promoConditionCategory').show();
+            jQuery('.promoConditionProduct').show();
+        } else if (enumId == "PPIP_PRODUCT_QUANT") {
+            jQuery('.promoConditionCategory').show();
+            jQuery('.promoConditionProduct').show();
+        } else if (enumId == "PPIP_ORDER_SHIPTOTAL") {
+            jQuery('.promoConditionCategory').hide();
+            jQuery('.promoConditionProduct').hide();
         }
     }
     function changeColor(inputId) {
@@ -713,4 +752,162 @@
             jQuery('.PRR_DELETED').show();
         }
     }
+  
+//begin JQuery for scheduledJobRule 
+//handle the display of the helper text for the Unit of the frequency interval 
+//when page is displayed, this will run		
+jQuery(document).ready(function(){
+		var servFreq = jQuery('#SERVICE_FREQUENCY').val();
+		if(servFreq=="")
+		{
+			servFreq = jQuery('#SERVICE_FREQUENCYspan').text();
+		}
+		var servInter = jQuery('#SERVICE_INTERVAL').val();
+		if(servInter=="")
+		{
+			servInter = jQuery('#SERVICE_INTERVALspan').text();
+		}
+		var intervalUnit = "";
+		if(servFreq != "")
+		{
+			if(servFreq == "0")
+			{//not set	
+					jQuery("#SERVICE_INTERVAL").prop('disabled', true);	
+					jQuery("#SERVICE_INTERVAL").val('');
+					jQuery("#SERVICE_COUNT").prop('disabled', true);	
+					jQuery("#SERVICE_COUNT").val('');
+			}	
+			if(servInter != "")
+			{
+				if(servFreq == "0")
+				{//not set					
+				}
+				if(servFreq == "4")
+				{
+					intervalUnit= "${uiLabelMap.Days}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Day}";
+					}
+				}
+				if(servFreq == "5")
+				{
+					intervalUnit= "${uiLabelMap.Weeks}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Week}";
+					}
+				}
+				if(servFreq == "6")
+				{
+					intervalUnit= "${uiLabelMap.Months}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Month}";
+					}
+				}
+				if(servFreq == "7")
+				{
+					intervalUnit= "${uiLabelMap.Years}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Year}";
+					}
+				}
+				if(servFreq == "3")
+				{
+					intervalUnit= "${uiLabelMap.Hours}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Hour}";
+					}
+				}
+				if(servFreq == "2")
+				{
+					intervalUnit= "${uiLabelMap.Minutes}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Minute}";
+					}
+				}
+			}
+		jQuery("#intervalUnit").text(intervalUnit);
+		}	
+	//when values are changed, run this:
+	jQuery('.intervalUnitSet').change(function() {
+		var servFreq = jQuery('#SERVICE_FREQUENCY').val();
+		var servInter = jQuery('#SERVICE_INTERVAL').val();
+		var intervalUnit = "";
+		if(servFreq != "")
+		{
+			if(servFreq == "0")
+			{//not set
+					jQuery("#SERVICE_INTERVAL").prop('disabled', true);	
+					jQuery("#SERVICE_INTERVAL").val('');
+					jQuery("#SERVICE_COUNT").prop('disabled', true);	
+					jQuery("#SERVICE_COUNT").val('');
+			}	
+			if(servFreq != "0")
+			{//not set
+					jQuery("#SERVICE_INTERVAL").prop('disabled', false);	
+					jQuery("#SERVICE_COUNT").prop('disabled', false);
+			}	
+			if(servInter != "")
+			{
+				if(servFreq == "0")
+				{//not set					
+				}
+				if(servFreq == "4")
+				{
+					intervalUnit= "${uiLabelMap.Days}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Day}";
+					}
+				}
+				if(servFreq == "5")
+				{
+					intervalUnit= "${uiLabelMap.Weeks}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Week}";
+					}
+				}
+				if(servFreq == "6")
+				{
+					intervalUnit= "${uiLabelMap.Months}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Month}";
+					}
+				}
+				if(servFreq == "7")
+				{
+					intervalUnit= "${uiLabelMap.Years}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Year}";
+					}
+				}
+				if(servFreq == "3")
+				{
+					intervalUnit= "${uiLabelMap.Hours}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Hour}";
+					}
+				}
+				if(servFreq == "2")
+				{
+					intervalUnit= "${uiLabelMap.Minutes}";
+					if(servInter == "1")
+					{
+						intervalUnit= "${uiLabelMap.Minute}";
+					}
+				}
+			}
+		jQuery("#intervalUnit").text(intervalUnit);
+		}	
+	});
+});//end of JQuery for scheduledJobsRule
 </script>

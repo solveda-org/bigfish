@@ -23,7 +23,7 @@
                 </#if>
               </div>
               <div class="infoText">
-                  <label>${uiLabelMap.LargePDPImageInfo}</label>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.LargePDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>
@@ -52,7 +52,7 @@
                 </#if>
               </div>
               <div class="infoText">
-                  <label>${uiLabelMap.ThumbPDPImageInfo}</label>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ThumbPDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>
@@ -82,7 +82,7 @@
                 </#if>
               </div>
               <div class="infoText">
-                  <label>${uiLabelMap.DetailPOPUPImageInfo}</label>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.DetailPOPUPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>
@@ -111,7 +111,7 @@
                 </#if>
               </div>
               <div class="infoText">
-                  <label>${uiLabelMap.SmallPLPImageInfo}</label>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SmallPLPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>
@@ -136,7 +136,7 @@
                 <input type="text" name="plpTitleText" id="plpTitleText" class="medium" value="${parameters.plpTitleText!plpTitleText!""}" />
               </div>
               <div class="infoText">
-                  <label>${uiLabelMap.PLPTitleTextInfo}</label>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PLPTitleTextInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>
@@ -155,7 +155,7 @@
                 </#if>
               </div>
               <div class="infoText">
-                  <label>${uiLabelMap.SmallAltImageInfo}</label>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SmallAltImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>

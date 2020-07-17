@@ -22,12 +22,56 @@ if (UtilValidate.isEmpty(partyId))
   userLogin = context.userLogin
   if (UtilValidate.isNotEmpty(userLogin))
   {
+    globalContext.put("USER_LOGIN",userLogin);
+    globalContext.put("USER_LOGIN_ID",userLogin.userLoginId);
     partyId = userLogin.partyId;
   }
 }
+productStoreId = parameters.productStoreId;
+if (UtilValidate.isNotEmpty(productStoreId))
+{
+  globalContext.put("PRODUCT_STORE_ID",productStoreId);
+
+}
+
+emailType = parameters.emailType;
+if (UtilValidate.isNotEmpty(emailType))
+{
+  globalContext.put("EMAIL_TYPE",emailType);
+
+}
+
+emailMessage = parameters.message;
+if (UtilValidate.isNotEmpty(emailMessage))
+{
+  globalContext.put("EMAIL_MESSAGE",emailMessage);
+
+}
+
+subscriberEmail = parameters.SUBSCRIBER_EMAIL;
+if (UtilValidate.isNotEmpty(subscriberEmail))
+{
+  globalContext.put("SUBSCRIBER_EMAIL",subscriberEmail);
+
+}
+
+subscriberFirstName = parameters.SUBSCRIBER_FIRST_NAME;
+if (UtilValidate.isNotEmpty(subscriberFirstName))
+{
+  globalContext.put("SUBSCRIBER_FIRST_NAME",subscriberFirstName);
+
+}
+
+subscriberLastName = parameters.SUBSCRIBER_LAST_NAME;
+if (UtilValidate.isNotEmpty(subscriberLastName))
+{
+  globalContext.put("SUBSCRIBER_LAST_NAME",subscriberLastName);
+
+}
+
 
 orderId=context.orderId;
-context.put("EMAIL_TITLE",context.title);
+globalContext.put("EMAIL_TITLE",context.title);
 
 if (UtilValidate.isNotEmpty(partyId)) 
 {
@@ -37,20 +81,20 @@ if (UtilValidate.isNotEmpty(partyId))
         person=gvParty.getRelatedOne("Person");
         if (UtilValidate.isNotEmpty(person)) 
         {
-          context.put("PARTY_ID",partyId);
-          context.put("FIRST_NAME",person.firstName);
-          context.put("LAST_NAME",person.lastName);
-          context.put("MIDDLE_NAME",person.middleName);
-          context.put("GENDER",person.gender);
-          context.put("SUFFIX",person.suffix);
-          context.put("PERSONAL_TITLE",person.personalTitle);
-          context.put("NICKNAME",person.nickname);
+          globalContext.put("PARTY_ID",partyId);
+          globalContext.put("FIRST_NAME",person.firstName);
+          globalContext.put("LAST_NAME",person.lastName);
+          globalContext.put("MIDDLE_NAME",person.middleName);
+          globalContext.put("GENDER",person.gender);
+          globalContext.put("SUFFIX",person.suffix);
+          globalContext.put("PERSONAL_TITLE",person.personalTitle);
+          globalContext.put("NICKNAME",person.nickname);
         }
         userLogins=gvParty.getRelated("UserLogin");
         userLogin = EntityUtil.getFirst(userLogins);
         if (UtilValidate.isNotEmpty(userLogin)) 
         {
-          context.put("LOGIN_EMAIL",userLogin.userLoginId);
+          globalContext.put("LOGIN_EMAIL",userLogin.userLoginId);
         }
     }
 }
@@ -111,22 +155,22 @@ if (UtilValidate.isNotEmpty(orderId))
        osisFindOptions.setDistinct(true);
        orderShipmentInfoSummaryList = delegator.findList("OrderShipmentInfoSummary", osisCond, osisFields, osisOrder, osisFindOptions, false);
 
-       context.put("ORDER_HELPER",orderReadHelper);
-       context.put("ORDER",orderHeader);
-       context.put("ORDER_ID",orderId);
-       context.put("ORDER_SUB_TOTAL",orderSubTotal);
-       context.put("ORDER_SHIP_TOTAL",orderShippingTotal);
-       context.put("ORDER_TAX_TOTAL",orderTaxTotal);
-       context.put("ORDER_TOTAL",orderGrandTotal);
-       context.put("ORDER_ITEMS",orderItems);
-       context.put("ORDER_ADJUSTMENTS",headerAdjustmentsToShow);
-       context.put("ORDER_SHIP_ADDRESS",shippingAddress);
-       context.put("ORDER_BILL_ADDRESS",billingAddress);
-       context.put("ORDER_PAYMENTS",paymentMethods);
-       context.put("ORDER_PAY_PREFERENCES",orderPaymentPreferences);
-       context.put("ORDER_PAYMENT_TYPE",paymentMethodType);
-       context.put("ORDER_SHIPPING_INFO",orderShipmentInfoSummaryList);
-       context.put("ORDER_ITEM_SHIP_GROUP",orderItemShipGroups);
+       globalContext.put("ORDER_HELPER",orderReadHelper);
+       globalContext.put("ORDER",orderHeader);
+       globalContext.put("ORDER_ID",orderId);
+       globalContext.put("ORDER_SUB_TOTAL",orderSubTotal);
+       globalContext.put("ORDER_SHIP_TOTAL",orderShippingTotal);
+       globalContext.put("ORDER_TAX_TOTAL",orderTaxTotal);
+       globalContext.put("ORDER_TOTAL",orderGrandTotal);
+       globalContext.put("ORDER_ITEMS",orderItems);
+       globalContext.put("ORDER_ADJUSTMENTS",headerAdjustmentsToShow);
+       globalContext.put("ORDER_SHIP_ADDRESS",shippingAddress);
+       globalContext.put("ORDER_BILL_ADDRESS",billingAddress);
+       globalContext.put("ORDER_PAYMENTS",paymentMethods);
+       globalContext.put("ORDER_PAY_PREFERENCES",orderPaymentPreferences);
+       globalContext.put("ORDER_PAYMENT_TYPE",paymentMethodType);
+       globalContext.put("ORDER_SHIPPING_INFO",orderShipmentInfoSummaryList);
+       globalContext.put("ORDER_ITEM_SHIP_GROUP",orderItemShipGroups);
     }
 
 }
@@ -134,5 +178,5 @@ shoppingListId = context.shoppingListId;
 if (UtilValidate.isNotEmpty(shoppingListId)) 
 {
 	shoppingCartInfoList = delegator.findByAnd("ShoppingListItem", [shoppingListId : shoppingListId]);
-	context.put("CART_ITEMS",shoppingCartInfoList);
+	globalContext.put("CART_ITEMS",shoppingCartInfoList);
 }

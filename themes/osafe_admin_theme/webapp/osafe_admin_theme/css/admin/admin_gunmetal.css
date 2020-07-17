@@ -661,7 +661,7 @@ border-top-right-radius: 8px;
     background: #000;
     left:            0;
     top:            24px; /* match top ul list item height */
-   *top: 23px; 
+   top: 23px\9; /*IE8 and below */ 
     z-index:        99;
 
 }
@@ -841,7 +841,7 @@ border-top-right-radius: 8px;
 
 .displayBox .header, .displaySearchBox .header , .displayListBox .header {
     background: #637b93;
-    border-bottom: 1px solid #000000
+    border-bottom: 1px solid #000000;
     padding: 3px 0;
 
 }
@@ -854,8 +854,13 @@ border-top-right-radius: 8px;
 }
 .displaySearchBox .header h2 , .displayListBox .header h2  , .displayBox .header h2 {
     margin: 0 0 0 10px;
-
 }
+
+.displayBox .header h2 .headingHelperText {
+    font-weight: normal;
+    font-size: 10px;
+}
+
 .displaySearchBox  div.searchButton {
    padding: 0 0 0 7px;
 
@@ -891,6 +896,15 @@ border-top-right-radius: 8px;
     background: #f5f5f5;
     font-size: 1.3em;
 }
+
+.displayBox .boxBody:after, .displaySearchBox .boxBody:after, .displayListBox .boxBody:after {
+    content: " ";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
 .displayBox .boxText {
     font-size: 1.3em;
 }
@@ -1198,15 +1212,15 @@ div.infoValue div.dataRow div.dataColumn {
 }
 div.infoValue div.dataRow div.operDataColumn {
 	float: left;
-/*    width: 130px;  */
+    width: 130px;  
 }
 div.infoValue div.dataRow div.nameDataColumn {
 	float: left;
-/*   width: 300px;  */
+   width: 300px;  
 }
 div.infoValue div.dataRow div.actionDataColumn {
 	float: left;
-/*    width: 200px;  */
+    width: 200px;  
 }
 div.infoRow span.textCounter{
     color: #333333;
@@ -1273,7 +1287,7 @@ div.infoValue div.geoCode {
     width: 320px;
 }
 .infoValue.small{
-/*    width: 160px;  */
+    width: 160px;  
 }
 .infoRow div.infoDetail {
     padding: 5px 50px 0 0;
@@ -1396,7 +1410,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     color: #262626;
     text-decoration: underline;
 }
-.displayListBox .boxBody td.idCol a:hover, .boxBody th.idCol a:hover, .infoValue a:hover, td.totalCaption a:hover, .nameCol a:hover, .usageCol a:hover, td.actionCol a:hover {
+.displayListBox .boxBody td.idCol a:hover, .boxBody th.idCol a:hover, td.totalCaption a:hover, .nameCol a:hover, .usageCol a:hover, td.actionCol a:hover {
     background: none repeat scroll 0 0 #445566;
     color: #FFFFFF;
     text-decoration: none;
@@ -2432,6 +2446,15 @@ td div.infoEntry input[type="text"] {
     height:16px;
     display: inline-block;
 }
+.helperIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/helperIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    margin-top:2px;
+    margin-left:2px;
+    display: inline-block;
+}
 .variantIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/productvariant.gif);
     background-repeat:no-repeat;
@@ -2447,6 +2470,25 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+.helpIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/helpIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.helperIcon:hover {
+    cursor: pointer;
+}
+
+.featureIcon {
+    background-image: url(/osafe_admin_theme/images/classic/icon/productFeature.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
 .noImage {
     background-image: url(/osafe_admin_theme/images/gunmetal/noimage/noImageLoded.gif);
     background-repeat:no-repeat;
@@ -2591,6 +2633,19 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 
 }
+.warningIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/warningIcon.png);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.warningHelper { /* for pixel tracking page */
+    float: right;
+    margin: 0 5px 0 0;
+}
+
 /****************************************************************
 * Detail Entry Table
 ****************************************************************/
@@ -2696,7 +2751,8 @@ input[type="button"].standardBtn.productLoaderTab {
 }
 
 .boxBody .helperText {
-    clear: both;
+    float: right;
+    margin: 0 10px 0 0;
 }
 
 .boxBody .helperText span {
@@ -3530,6 +3586,7 @@ button.ui-datepicker-trigger img {
 }
 
 button.ui-datepicker-trigger:active {
+background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg") 1px 1px no-repeat\9;  /* For IE 8 and lower */
 
 }
 
@@ -3602,3 +3659,22 @@ button.ui-datepicker-trigger:active {
     height: 200px; /*must have*/
 }
 
+/* align times on scheduled jobs detail page */
+
+.scheduledJobTimeEntry {
+	margin: 0 0 0 20px; 
+}
+
+.scheduledJobTimeEntry div label {
+       width: auto;
+       margin: 0 0 0 25px;
+}
+
+.scheduledJobTime {
+	margin: 0 0 0 20px; 
+}
+
+.scheduledJobTime div label {
+       width: auto;
+       margin: 0 0 0 161px;
+}

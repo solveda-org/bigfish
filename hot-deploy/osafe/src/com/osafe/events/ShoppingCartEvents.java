@@ -51,7 +51,9 @@ public class ShoppingCartEvents {
                 paymentInfo.amount = null;
             }
         }
-
+        if(UtilValidate.isEmpty(sc.items())) {
+            return org.ofbiz.order.shoppingcart.ShoppingCartEvents.clearCart(request, response);
+        }
         return "success";
     }
 

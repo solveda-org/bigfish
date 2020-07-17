@@ -3,6 +3,8 @@
 <#assign partyDBEmailPref=partyEmailPreference!""/>
 <input type="hidden" name="partyId" value="${partyId!""}"/>
 <div id="emailPasswordEntry" class="displayBox">
+<h3>${uiLabelMap.ChangeLoginHeading}</h3>
+<p class="instructions">${StringUtil.wrapString(uiLabelMap.ChangeLoginInstructionsInfo)}</p>
   <fieldset class="col">
     <div class="entry">
       <label for= "CUSTOMER_EMAIL"><@required/>${uiLabelMap.EmailAddressCaption}</label>

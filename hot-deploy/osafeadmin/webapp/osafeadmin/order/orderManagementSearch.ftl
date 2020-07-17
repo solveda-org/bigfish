@@ -39,12 +39,13 @@
 	          <div class="entryInput checkbox">
 	                    <input type="checkbox" class="checkBoxEntry" name="viewall" id="viewall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','view')" <#if parameters.viewall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
 	                    <input type="checkbox" class="checkBoxEntry" name="viewcreated" id="viewcreated"  <#if parameters.viewcreated?has_content || viewcreated?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CreatedLabel}
-	                    <input type="checkbox" class="checkBoxEntry" name="viewprocessing" name="viewprocessing" value="Y" <#if parameters.viewprocessing?has_content || viewprocessing?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ProcessingLabel}
+	                    <input type="checkbox" class="checkBoxEntry" name="viewsent" id="viewsent" value="Y" <#if parameters.viewsent?has_content || viewsent?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.SentLabel}
+	                    <input type="checkbox" class="checkBoxEntry" name="viewcancelled" id="viewcancelled" value="Y" <#if parameters.viewcancelled?has_content || viewcancelled?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CancelledLabel}
 	                    <input type="checkbox" class="checkBoxEntry" name="viewapproved" id="viewapproved" value="Y" <#if parameters.viewapproved?has_content || viewapproved?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ApprovedLabel}
 	                    <input type="checkbox" class="checkBoxEntry" name="viewhold" id="viewhold" value="Y" <#if parameters.viewhold?has_content || viewhold?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.HeldLabel}
-	                    <input type="checkbox" class="checkBoxEntry" name="viewcompleted" id="viewcompleted" value="Y" <#if parameters.viewcompleted?has_content || viewcompleted?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CompletedLabel}
 	                    <input type="checkbox" class="checkBoxEntry" name="viewrejected" id="viewrejected" value="Y" <#if parameters.viewrejected?has_content || viewrejected?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.RejectedLabel}
-	                    <input type="checkbox" class="checkBoxEntry" name="viewcancelled" id="viewcancelled" value="Y" <#if parameters.viewcancelled?has_content || viewcancelled?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CancelledLabel}
+	                    <input type="checkbox" class="checkBoxEntry" name="viewcompleted" id="viewcompleted" value="Y" <#if parameters.viewcompleted?has_content || viewcompleted?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CompletedLabel}
+	                    
 	          </div>
 	     </div>
      </div>

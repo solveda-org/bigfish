@@ -483,6 +483,30 @@
             </widgets>
         </section>
     </screen>
+    <screen name="SP_REVIEW_GUIDELINES">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.STATIC_PAGE_REVIEW_GUIDELINES}"/>
+                <set field="contentContainerId" value="reviewGuideLines"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SP_REVIEW_TERMS_COND">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.STATIC_PAGE_REVIEW_TERMS_CONDITIONS}"/>
+                <set field="contentContainerId" value="reviewTermsConditions"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
     <screen name="PTS_MAILING_LIST">
         <section>
             <actions>

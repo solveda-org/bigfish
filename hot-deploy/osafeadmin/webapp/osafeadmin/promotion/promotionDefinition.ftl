@@ -114,28 +114,31 @@
       <div class="infoValue small">
         <#if isPromotionDetail>
           <input type="text" class="textEntry" name="useLimitPerOrder" maxlength="20" value='${parameters.useLimitPerOrder!useLimitPerOrder!""}'/>
+          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerOrderHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
         <#else>
           ${useLimitPerOrder!""}
         </#if>
       </div>
 
       <div>
-        <label>${uiLabelMap.PromotionLimitPerCustomerCaption}</label>
+        <label class="extraSmallLabel">${uiLabelMap.PromotionLimitPerCustomerCaption}</label>
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
           <input type="text"  class="textEntry" name="useLimitPerCustomer" maxlength="20" value='${parameters.useLimitPerCustomer!useLimitPerCustomer!""}'/>
+          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerCustomerHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
         <#else>
           ${useLimitPerCustomer!""}
         </#if>
       </div>
 
       <div>
-        <label>${uiLabelMap.PromotionLimitPerPromotionCaption}</label>
+        <label class="extraSmallLabel">${uiLabelMap.PromotionLimitPerPromotionCaption}</label>
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
           <input type="text"  class="textEntry" name="useLimitPerPromotion" maxlength="20" value='${parameters.useLimitPerPromotion!useLimitPerPromotion!""}'/>
+          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromotionUseLimitPerPromotionHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
         <#else>
           ${useLimitPerCustomer!""}
         </#if>
@@ -157,7 +160,7 @@
       </div>
 
       <div>
-        <label>${uiLabelMap.PromotionShowToCustomerCaption}</label>
+        <label class="extraSmallLabel">${uiLabelMap.PromotionShowToCustomerCaption}</label>
       </div>
       <div class="infoValue small">
         <#if isPromotionDetail>
@@ -185,7 +188,7 @@
       </div>
 
       <div>
-        <label>${uiLabelMap.PromotionActiveThruCaption}</label>
+        <label class="extraSmallLabel">${uiLabelMap.PromotionActiveThruCaption}</label>
       </div>
       <div class="infoValue small">
         <div class="entryInput from">

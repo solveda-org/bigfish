@@ -41,7 +41,7 @@ if (partyContactMechValueMaps) {
     }
 }
 
-partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "STORE_HOURS"]))
+partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "STORE_HOURS"]));
 if (UtilValidate.isNotEmpty(partyContent)) {
     content = partyContent.getRelatedOne("Content");
     if (UtilValidate.isNotEmpty(content))
@@ -60,7 +60,7 @@ if (UtilValidate.isNotEmpty(partyContent)) {
     }
 }
 
-partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "STORE_NOTICE"]))
+partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "STORE_NOTICE"]));
 if (UtilValidate.isNotEmpty(partyContent)) {
     content = partyContent.getRelatedOne("Content");
     if (UtilValidate.isNotEmpty(content))

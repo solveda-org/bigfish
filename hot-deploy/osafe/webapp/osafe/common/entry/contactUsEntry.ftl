@@ -23,11 +23,7 @@
     <div class="entry">
       <label><@required/>${uiLabelMap.ReasonForContactCaption}</label>
       <select name="contactReason" id="contactReason">
-       <#if contactReasons?has_content>
-        <#list contactReasons as reason>
-            <option value="${reason.description}">${reason.description}</option>
-        </#list>
-       </#if>
+          ${screens.render("component://osafe/widget/CommonScreens.xml#contactReasonType")}
       </select>
       <@fieldErrors fieldName="contactReason"/>
     </div>
@@ -46,6 +42,11 @@
       <input type="text"  maxlength="100" name="emailAddress" id="emailAddress" value="${parameters.emailAddress!emailLogin!""}"/>
       <@fieldErrors fieldName="emailAddress"/>
     </div>
+    <#assign countryDefault=COUNTRY_DEFAULT!""/>
+    <#if countryDefault?has_content>
+     <#assign countryDefault = countryDefault.toUpperCase()/> 
+    </#if>
+    <#if countryDefault?has_content && (countryDefault =="USA" || countryDefault="CAN")>
     <div class="entry">
       <label for="contactPhoneContact">${uiLabelMap.ContactPhoneCaption}</label>
       <input type="text" class="phone3" name="contactPhoneArea" size="5" value="${parameters.contactPhoneArea!""}" /></td>
@@ -53,6 +54,12 @@
       <input type="text" class="phone3" id="contactPhoneContact3" name="contactPhoneContact3" value="${parameters.contactPhoneContact3!""}" maxlength="3" /></td>
       <input type="text" class="phone4" id="contactPhoneContact4" name="contactPhoneContact4" value="${parameters.contactPhoneContact4!""}" maxlength="255"/></td>
     </div>
+    <#else>
+    <div class="entry">
+      <label for="contactPhoneContact">${uiLabelMap.ContactPhoneCaption}</label>
+      <input type="text" class="phone" name="contactPhoneNumber" maxlength="100" value="${parameters.contactPhoneNumber!""}" /></td>
+    </div>
+    </#if>
     <div class="entry">
       <label for="orderIdNumber">${uiLabelMap.OrderNumberCaption}</label>
       <input type="text"  maxlength="20" name="orderIdNumber" id="orderIdNumber" value="${parameters.orderIdNumber!""}"/>

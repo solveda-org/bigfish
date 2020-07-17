@@ -10,7 +10,10 @@
 	  <div id="plpQuicklook_${productId!""}" class="plpQuicklook" style="display:none">
 	    <input type="hidden" class="param" name="productId" id="productId" value="${productId!}"/>
 	    <input type="hidden" class="param" name="productCategoryId" value="${categoryId!}"/>
-	    <input type="hidden" class="param" name="productFeatureType" id="${productId!}_productFeatureType" value=""/>
+	    <#if productFeatureType?has_content && featureValueSelected?has_content>
+            <#assign featureValue = productFeatureType+':'+featureValueSelected/>
+        </#if>
+	    <input type="hidden" class="param" name="productFeatureType" id="${productId!}_productFeatureType" value="${featureValue!""}"/>
 	    <a href="javaScript:void(0);" onClick="displayActionDialogBox('${dialogPurpose!}',this);"><img alt="${productName!""}" src="/osafe_theme/images/user_content/images/quickLook.png"></a>
 	  </div>
 	</#if>

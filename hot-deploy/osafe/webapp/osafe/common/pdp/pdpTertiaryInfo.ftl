@@ -1,5 +1,5 @@
 <#if tertiaryInformation?has_content>
-<div class="plpTertiaryInfo">
+<div class="pdpTertiaryInfo">
         <p class="tertiaryInformation">${tertiaryInformation}</p>
 </div>
 </#if>

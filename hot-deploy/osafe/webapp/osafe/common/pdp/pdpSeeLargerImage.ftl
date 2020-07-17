@@ -17,3 +17,5 @@
     </#if>  
   </#list>
 </#if>
+
+${screens.render("component://osafe/widget/DialogScreens.xml#viewLargeImageDialog")}

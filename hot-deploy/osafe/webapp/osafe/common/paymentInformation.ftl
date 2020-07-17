@@ -60,8 +60,10 @@
                    </#if>
            </#if>
         </#list>
+      </div>
 <!-- section rendered when user selects STORE-PICKUP -->
   <#elseif paymentMethodType?has_content>
+   <div class="checkoutOrderPaymentInformation">
       <div class="displayBox">
           <#if  isStorePickUp?has_content && isStorePickUp == "true">
           <h3>${uiLabelMap.PaymentInformationHeading}</h3>

@@ -190,8 +190,32 @@
                 <set field="createUpdateGenderCtx.attrValue" from-field="parameters.USER_GENDER"/>
                 <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateGenderCtx"/>
             </if-compare-field>
-            
+
+            <!-- Create/Update USER Title -->
+            <if-compare-field field="parameters.USER_TITLE" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateTitleCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateTitleCtx.attrName" value="TITLE"/>
+                <set field="createUpdateTitleCtx.attrValue" from-field="parameters.USER_TITLE"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateTitleCtx"/>
+            </if-compare-field>
+
             <!-- Create/Update USER DOB (DDMM) -->
+            <if-compare-field field="DOB_DDMM" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateDOBShortCtx.attrName" value="DOB_DDMM"/>
+                <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_DDMM"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
+            </if-compare-field>
+
+            <!-- Create/Update USER DOB (DDMMYYYY) -->
+            <if-compare-field field="DOB_DDMMYYYY" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateDOBLongCtx.attrName" value="DOB_DDMMYYYY"/>
+                <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_DDMMYYYY"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
+            </if-compare-field>
+
+            <!-- Create/Update USER DOB (MMDD) -->
             <if-compare-field field="DOB_MMDD" operator="not-equals" to-field="nullValue">
                 <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
                 <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
@@ -199,8 +223,7 @@
                 <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
             </if-compare-field>
 
-            
-            <!-- Create/Update USER DOB (DDMMYYYY) -->
+            <!-- Create/Update USER DOB (MMDDYYYY) -->
             <if-compare-field field="DOB_MMDDYYYY" operator="not-equals" to-field="nullValue">
                 <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
                 <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>

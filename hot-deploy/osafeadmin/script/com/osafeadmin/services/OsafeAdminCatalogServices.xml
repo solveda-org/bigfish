@@ -1662,12 +1662,13 @@
                 <set field="updateProductFeatureGroupApplCtx.fromDate" from-field="fromDate" type="Timestamp"/>
             </if-compare>
             <call-service service-name="updateProductFeatureGroupAppl" in-map-name="updateProductFeatureGroupApplCtx"/>   
-            
-            <set-service-fields service-name="updateProductFeatureAppl" to-map="updateProductFeatureApplCtx"/>
-            <set field="updateProductFeatureApplCtx.productFeatureId" from-field="productFeatureId"/>
-            <set field="updateProductFeatureApplCtx.sequenceNum" from-field="sequenceNum"/>
-            <call-service service-name="updateProductFeatureAppl" in-map-name="updateProductFeatureApplCtx"/>
-                            
+
+            <if-compare field="parameters.updateProductFeatureAppls" operator="equals" value="Y" type="String">
+                <set field="updateProductFeatureApplsCtx.productFeatureId" from-field="productFeatureId"/>
+                <set field="updateProductFeatureApplsCtx.sequenceNum" from-field="sequenceNum"/>
+                <call-service service-name="updateProductFeatureAppls" in-map-name="updateProductFeatureApplsCtx"/>
+            </if-compare>
+
             <set-service-fields service-name="updateProductFeature" map="parameters" to-map="updateProductFeatureCtx"/>
             <set field="updateProductFeatureCtx.productFeatureId" from-field="productFeatureId"/>
             <set field="updateProductFeatureCtx.productFeatureTypeId" from-field="productFeatureTypeId"/>
@@ -1765,5 +1766,82 @@
             <create-value value-field="newEntity"/>
         </else>
         </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="updateProductFeatures" short-description="Update product feature">
+        <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+            <if-not-empty field="sequenceNumValue">
+                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
+                    <string value="${sequenceNumValue}"></string>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
+                    <set field="invalidSeqNum" value="true"/>
+                <else>
+                    <if>
+                        <condition>
+                            <and>
+                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
+                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
+                            </and>
+                        </condition>
+                        <then>
+                        </then>
+                        <else>
+                            <set field="invalidSeqNumRange" value="true"/>
+                        </else>
+                    </if>
+                </else>
+                </if-compare>
+                <else>
+                    <set field="invalidSeqNum" value="true"/>
+                </else>
+            </if-not-empty>
+        </iterate-map>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FeatureSequenceNumNotVaildNumError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SEQUENCENUM" list="error_list"/>
+            </then>
+        </if>
+        <check-errors/>
+        <set field="productFeatureTypeId" from-field="parameters.productFeatureTypeId"/>
+        <set field="productId" from-field="parameters.productId"/>
+        <iterate-map key="productFeatureIdKey" value="productFeatureIdValue" map="parameters.productFeatureId">
+            <set field="productFeatureId" from-field="productFeatureIdValue"/>
+            <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
+                <if-compare-field field="productFeatureIdKey" to-field="sequenceNumKey" operator="equals">
+                    <set field="sequenceNum" from-field="sequenceNumValue" type="Long"/>
+                </if-compare-field>
+            </iterate-map>
+            <iterate-map key="fromDateKey" value="fromDateValue" map="parameters.fromDate">
+                <if-compare-field field="productFeatureIdKey" to-field="fromDateKey" operator="equals">
+                    <set field="fromDate" from-field="fromDateValue"/>
+                </if-compare-field>
+            </iterate-map> 
+            <iterate-map key="thruDateKey" value="thruDateValue" map="parameters.thruDate">
+                <if-compare-field field="productFeatureIdKey" to-field="thruDateKey" operator="equals">
+                    <set field="thruDate" from-field="thruDateValue"/>
+                </if-compare-field>
+            </iterate-map>
+            <set field="updateProductFeatureApplCtx.productId" from-field="productId"/>
+            <set field="updateProductFeatureApplCtx.productFeatureId" from-field="productFeatureId"/>
+            <set field="updateProductFeatureApplCtx.sequenceNum" from-field="sequenceNum"/>
+            <if-compare field="thruDate" operator="not-equals" value="null">
+                <set field="updateProductFeatureApplCtx.thruDate" from-field="thruDate" type="Timestamp"/>
+            </if-compare>
+            <if-compare field="fromDate" operator="not-equals" value="null">
+                <set field="updateProductFeatureApplCtx.fromDate" from-field="fromDate" type="Timestamp"/>
+            </if-compare>
+            <call-service service-name="updateProductFeatureAppl" in-map-name="updateProductFeatureApplCtx"/>
+        </iterate-map>
+        <property-to-field resource="OSafeAdminUiLabels" property="ProductFeatureSavedSuccess" field="facetValueSavedSuccess"/>
+        <string-to-list string="${facetValueSavedSuccess}" list="successMessageList"/>
+        <field-to-result field="parameters.productId" result-name="productId"/>
     </simple-method>
 </simple-methods>

@@ -17,49 +17,28 @@ import org.ofbiz.entity.util.*;
 import org.ofbiz.entity.model.DynamicViewEntity;
 import org.ofbiz.entity.model.ModelKeyMap;
 import org.ofbiz.entity.util.EntityFindOptions;
-
+import com.osafe.util.OsafeAdminUtil;
 
 productStoreId=globalContext.productStoreId;
 jobId=parameters.jobId;
-
-//partysOps = new EntityFindOptions();
-//partysOps.setDistinct(true);
-//Set<String> party = new TreeSet<String>();
-//party.add("partyId");
-
-//conditions = FastList.newInstance();
-//conditions.add(EntityCondition.makeCondition("roleTypeId", EntityOperator.EQUALS, "CARRIER"));
-//mainCond = EntityCondition.makeCondition(conditions, EntityOperator.AND);
-
-//partys = delegator.findList("PartyRole", mainCond, party, null, partysOps, false);
-
-//if (UtilValidate.isNotEmpty(partys))
-//{
-//    context.partys = partys;
-//}
-
-//Shipping Method
-
-//shipmentMethodTypeOps = new EntityFindOptions();
-//shipmentMethodTypeOps.setDistinct(true);
-//Set<String> shipm = new TreeSet<String>();
-//shipm.add("shipmentMethodTypeId");
-//shipmentMethodTypes = delegator.findList("ShipmentMethodType", null, shipm, null, shipmentMethodTypeOps, false);
-
-//if (UtilValidate.isNotEmpty(shipmentMethodTypes))
-//{
-//    context.shipmentMethodTypes =shipmentMethodTypes;
-//}
 
 //get entity for schedJob
 jobId = StringUtils.trimToEmpty(parameters.jobId);
 context.jobId = jobId;
 if (UtilValidate.isNotEmpty(jobId))
 {
-    schedJob = delegator.findByAnd("JobSandbox", [jobId : jobId]);
-    schedJob = EntityUtil.getFirst(schedJob);
+    schedJob = delegator.findByPrimaryKey("JobSandbox", [jobId : jobId]);
     context.schedJob = schedJob;
 	
+	//break up the timestamp into a date for display(date, time, AMPM)
+	runDateTime = schedJob.runTime.toString();
+	
+	runDate = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, preferredDateFormat);
+	runTime = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, "h:mm");
+	runTimeAMPM = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, "a");
+	context.runDate = runDate;
+	context.runTime = runTime;
+	context.runTimeAMPM = runTimeAMPM;
 	
 	//get recurrence info
 	if (UtilValidate.isNotEmpty(schedJob.recurrenceInfoId))

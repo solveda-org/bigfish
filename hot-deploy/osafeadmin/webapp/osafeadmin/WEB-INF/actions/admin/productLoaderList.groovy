@@ -10,16 +10,16 @@ productLoadersList = FastList.newInstance();
 //Load bIg fish xls file
 productLoader = FastMap.newInstance();
 productLoader.put("toolSeq","1");
-productLoader.put("toolType", uiLabelMap.LoadBigFishXlsLabel);
-productLoader.put("toolDesc", uiLabelMap.LoadBigFishXlsInfo);
+productLoader.put("toolType", uiLabelMap.LoadBigFishFormatLabel);
+productLoader.put("toolDesc", uiLabelMap.LoadBigFishFormatInfo);
 productLoader.put("toolDetail", "bigFishXlsLoader");
 productLoadersList.add(productLoader);
 
 //Download Big Fish Sample xls file
 productLoader = FastMap.newInstance();
 productLoader.put("toolSeq","2");
-productLoader.put("toolType", uiLabelMap.DownloadBigFishSampleXlsLabel);
-productLoader.put("toolDesc", uiLabelMap.DownloadBigFishSampleXlsInfo);
+productLoader.put("toolType", uiLabelMap.DownloadBigFishSampleFileLabel);
+productLoader.put("toolDesc", uiLabelMap.DownloadBigFishSampleFileInfo);
 productLoader.put("toolDetail", "bigFishXlsSampleDetail");
 productLoadersList.add(productLoader);
 

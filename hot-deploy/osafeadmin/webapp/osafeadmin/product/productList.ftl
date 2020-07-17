@@ -57,6 +57,16 @@
            <a href="<@ofbizUrl>productImages?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'${uiLabelMap.ProductImagesTooltip}','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
            <a href="<@ofbizUrl>productPrice?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductPricingTooltip}');" onMouseout="hideTooltip()"><span class="priceIcon"></span></a>
            <a href="<@ofbizUrl>productMetatag?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
+           <#if (product.isVariant?if_exists == 'N')>
+             <#assign features = product.getRelated("ProductFeatureAppl")/>
+             <#if features?exists && features?has_content>
+               <a href="<@ofbizUrl>productFeatures?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductFeaturesTooltip}');" onMouseout="hideTooltip()"><span class="featureIcon"></span></a>
+             <#else>
+               <span class="noAction"></span>
+             </#if>
+           <#else>
+               <span class="noAction"></span>
+           </#if>
            <#if (product.isVirtual?if_exists == 'Y') && (product.isVariant?if_exists == 'N')>
              <#assign variants = delegator.findByAnd("ProductAssoc", {"productId" : product.productId, "productAssocTypeId" : "PRODUCT_VARIANT"})/>
              <#if variants?exists && variants?has_content>

@@ -3,10 +3,13 @@
 <!-- start contentList.ftl -->
             <tr class="heading">
                 <th class="idCol firstCol">${uiLabelMap.ContentIDLabel}</th>
+                <#if contentTypeId?exists && libraryContentTypeId?exists && contentTypeId == libraryContentTypeId>
+                  <th class="actionCol"></th>
+                </#if>
             	<th class="nameCol">${uiLabelMap.NameLabel}</th>
                 <th class="statusCol">${uiLabelMap.StatusLabel}</th>
                 <th class="descCol">${uiLabelMap.DescriptionLabel}</th>
-                <#if contentTypeId?exists && contentTypeId == 'BF_STATIC_PAGE'>
+                <#if contentTypeId?exists && staticPageContentTypeId?exists && contentTypeId == staticPageContentTypeId>
                   <th class="actionCol"></th>
                 </#if>
                 <th class="dateCol">${uiLabelMap.ActiveDateLabel}</th>
@@ -37,6 +40,11 @@
                     <td class="idCol firstCol" >
                         <a href="<@ofbizUrl>${detailPage}?contentId=${thisContent.contentId}</@ofbizUrl>">${thisContent.contentId!"N/A"}</a>
                      </td>
+                     <#if contentTypeId?exists && libraryContentTypeId?exists && contentTypeId == libraryContentTypeId>
+                     <td class="actionCol <#if !hasNext>lastRow</#if> lastCol">
+                         <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SyntaxHelperInfo}${thisContent.contentId}${uiLabelMap.EndTag}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                     </td>
+                     </#if>
             		<#-- ==== Content Name ===== -->
                     <td class="nameCol <#if !hasNext>lastRow</#if>" >
 						${thisContent.contentName!"N/A"}
@@ -57,7 +65,7 @@
                        ${thisContent.description?if_exists}
                      </td>
                      
-                    <#if contentTypeId?exists && contentTypeId == 'BF_STATIC_PAGE'>
+                    <#if contentTypeId?exists && staticPageContentTypeId?exists && contentTypeId == staticPageContentTypeId>
                     <#assign eText = ""/>
                     <#if thisContent?exists>
                       <#assign dataResource = thisContent.getRelatedOne("DataResource")>
@@ -87,7 +95,7 @@
                         ${(thisContent.createdDate?string(preferredDateFormat))!""}
                     </td>
                     <td class="actionColSmall <#if !hasNext>lastRow</#if> lastCol">
-                      <#if contentTypeId?exists && contentTypeId == 'BF_STATIC_PAGE'>
+                      <#if contentTypeId?exists && staticPageContentTypeId?exists && contentTypeId == staticPageContentTypeId>
                         <a href="<@ofbizUrl>staticPageMetatag?contentId=${thisContent.contentId!}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
                       </#if>
                       <#if previewAction?exists && previewAction?has_content>

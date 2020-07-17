@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javolution.util.FastMap;
+
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FileUtils;
 import org.jdom.JDOMException;
@@ -70,9 +72,17 @@ public class OsafeAdminServices {
             }
             Boolean autoLoad = true;
             Map<String, Object> importClientProductTemplateCtx = null;
-            importClientProductTemplateCtx = UtilMisc.toMap("xlsDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
+            
             try {
-                Map result = dispatcher.runSync("importClientProductTemplate", importClientProductTemplateCtx);
+            	Map result  = FastMap.newInstance();
+            	if(xlsDataFile.endsWith(".xls")) {
+            		importClientProductTemplateCtx = UtilMisc.toMap("xlsDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
+                    result = dispatcher.runSync("importClientProductTemplate", importClientProductTemplateCtx);
+            	}
+            	if(xlsDataFile.endsWith(".xml")) {
+            		importClientProductTemplateCtx = UtilMisc.toMap("xmlDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
+                    result = dispatcher.runSync("importClientProductXMLTemplate", importClientProductTemplateCtx);
+            	}
                 List<String> serviceMsg = (List)result.get("messages");
                 if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) {
                 	try {
@@ -108,6 +118,10 @@ public class OsafeAdminServices {
                 String filenameToUse = xlsFileName;
                 
                 File file = new File(uploadTempDir + filenameToUse);
+                
+                if(file.exists()) {
+                	file.delete();
+                }
                 
                 try {
                     RandomAccessFile out = new RandomAccessFile(file, "rw");

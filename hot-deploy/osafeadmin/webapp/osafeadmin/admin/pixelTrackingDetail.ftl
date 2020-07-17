@@ -109,10 +109,10 @@
                             ${(Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(lastModifiedDate, preferredDateTimeFormat).toLowerCase())!"N/A"}
                         </#if>
                     </#if>
-                   
                 </div>
             </div>
         </div>
+    
 <#else>
     ${uiLabelMap.NoDataAvailableInfo}
 </#if>

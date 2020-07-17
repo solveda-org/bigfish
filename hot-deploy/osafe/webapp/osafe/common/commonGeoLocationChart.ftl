@@ -1,3 +1,4 @@
+<#if parameters.showMap?has_content && parameters.showMap == "Y">
 <script type="text/javascript">
     jQuery(document).ready(function () {
         loadMap();
@@ -163,4 +164,5 @@
     </#if>
 <#else>
   <h2>${uiLabelMap.NoGeoLocationAvailableInfo}</h2>
+</#if>
 </#if>

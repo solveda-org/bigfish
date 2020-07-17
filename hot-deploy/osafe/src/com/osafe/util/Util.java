@@ -704,6 +704,11 @@ public class Util {
           }
         return dValue;
     }
+    
+    /** Returns true if single String subString is contained within string s. */
+    public static boolean isSubString(String subString, String s) {
+        return (s.indexOf(subString) != -1); 
+    }
 
     
 }

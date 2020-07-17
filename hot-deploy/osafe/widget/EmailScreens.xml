@@ -25,10 +25,32 @@ under the License.
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+
+                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
+                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
+                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/email/getGlobalEmailVariables.groovy"/>
             </actions>
             <widgets>
-                    <decorator-section-include name="body"/>
+               <platform-specific>
+               <html>
+                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
+                       <html-template-decorator-section name="emailBodyHeader">
+                              <include-screen name="emailBodyHeaderContent"/>
+                       </html-template-decorator-section>
+                       <html-template-decorator-section name="emailBodyStyles">
+                              <include-screen name="emailBodyStylesContent"/>
+                       </html-template-decorator-section>
+                       <html-template-decorator-section name="emailBody">
+                                <decorator-section-include name="emailBody"/>
+                       </html-template-decorator-section>
+                       <html-template-decorator-section name="emailBodyFooter">
+                              <include-screen name="emailBodyFooterContent"/>
+                       </html-template-decorator-section>
+                   </html-template-decorator>
+               </html>
+              </platform-specific>
             </widgets>
         </section>
     </screen>
@@ -94,25 +116,20 @@ under the License.
                     <set field="clientLogoPath" value="${OSafeConfig['client-logo-path']}" />
                     <set field="emailFontFamily" value="${OSafeConfig['email-font-family']}" />
                     <set field="contentId" from-field="contentId" />
-                    <script location="component://osafe/webapp/osafe/WEB-INF/actions/email/getGlobalEmailVariables.groovy"/>
                     <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
                 </actions>
             <widgets>
-                <decorator-screen name="email-decorator">
-                    <decorator-section name="body">
-                        <section>
-                            <condition>
-                               <and>
-                                <not><if-empty field="content"/></not>
-                                <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
-                               </and>
-                            </condition>
-                            <widgets>
-                                <content content-id="${content.contentId}"/>
-                            </widgets>
-                        </section>
-                    </decorator-section>
-                </decorator-screen>
+                <section>
+                    <condition>
+                       <and>
+                        <not><if-empty field="content"/></not>
+                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                       </and>
+                    </condition>
+                    <widgets>
+                        <content content-id="${content.contentId}"/>
+                    </widgets>
+                </section>
             </widgets>
         </section>
     </screen>
@@ -121,152 +138,89 @@ under the License.
     <screen name="createPartyNotification">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
                 <set field="title" value="${uiLabelMap.PartyNotificationMailCreateTitle}"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_NEW_CUSTOMER}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
+
     <screen name="changePersonalInfoNotification">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
                 <set field="title" value="${uiLabelMap.PartyNotificationMailChangeTitle}"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_CHANGE_CUSTOMER}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
-
     </screen>
+
     <screen name="contactUsEmailNotification">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
                 <set field="title" value="${uiLabelMap.ContactUsTitle}"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_CONTACT_US}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
+    
+    <screen name="mailingListEmailNotification">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="title" value="${uiLabelMap.MailingListTitle}"/>
+                <set field="contentEmailBodyId" value="${idMap.EMAIL_MAILING_LIST}"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="abandonCartEmail">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
                 <set field="title" value="${uiLabelMap.AbandonCartEmailTitle}"/>
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ABANDON_CART}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -274,41 +228,17 @@ under the License.
     <screen name="shipReviewEmail">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
-                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
-
                 <set field="title" value="${uiLabelMap.ShipReviewEmailTitle}"/>
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_SHIP_REVIEW}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-                
-                <set field="emailBodyBodyStyleAttribute" value="style=&quot;margin-left:10px&quot;;"/>
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -316,78 +246,36 @@ under the License.
     <screen name="requestCatalogEmailNotification">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="title" value="${uiLabelMap.RequestCatalogTitle}"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_REQUEST_CATALOG}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
-
         </section>
     </screen>
+
     <screen name="forgotPasswordEmail">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
                 <set field="title" value="${uiLabelMap.ForgotPasswordEmailTitle}"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_FORGOT_PASSWORD}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
-
         </section>
     </screen>
 
@@ -396,47 +284,17 @@ under the License.
     <screen name="orderConfirmEmail">
         <section>
             <actions>
-
-                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
-
-                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
                 <set field="title" value="${uiLabelMap.PageTitleOrderConfirmationNotice}"/>
-
-                <set field="emailBodyBodyStyleAttribute" value="style=&quot;margin-left:10px&quot;;"/>
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_CONFIRM}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -444,49 +302,18 @@ under the License.
     <screen name="OrderCompleteNotice">
         <section>
             <actions>
-
-                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
-
-                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="allowAnonymousView" value="Y"/>  <!-- this field will instruction OrderStatus.groovy to allow an anonymous order to be viewed by anybody, so the email confirmation screen will work -->
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
+                <set field="allowAnonymousView" value="Y"/>  <!-- this field will instruction OrderStatus.groovy to allow an anonymous order to be viewed by anybody, so the email confirmation screen will work -->
                 <set field="title" value="${uiLabelMap.PageTitleOrderCompleteNotice}"/>
-
-                <set field="emailBodyBodyStyleAttribute" value="style=&quot;margin-left:10px&quot;;"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_CHANGE}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -513,55 +340,26 @@ under the License.
             </widgets>
         </section>
     </screen>
+
     <screen name="OrderChangeNotice">
         <section>
             <actions>
-
-                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
-
-                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
-                <set field="allowAnonymousView" value="Y"/>  <!-- this field will instruction OrderStatus.groovy to allow an anonymous order to be viewed by anybody, so the email confirmation screen will work -->
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-
+                <set field="allowAnonymousView" value="Y"/>  <!-- this field will instruction OrderStatus.groovy to allow an anonymous order to be viewed by anybody, so the email confirmation screen will work -->
                 <set field="title" value="${uiLabelMap.PageTitleOrderChangeNotice}"/>
-
-                <set field="emailBodyBodyStyleAttribute" value="style=&quot;margin-left:10px&quot;;"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_ORDER_CHANGE}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
         </section>
     </screen>
+
     <screen name="ShipmentCompleteNotice">
         <section>
             <actions>
@@ -586,43 +384,23 @@ under the License.
 
         </section>
     </screen>
-    
+
     <screen name="emailTest">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="title" value="${uiLabelMap.EmailTestTitle}"/>
-
-                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
-                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
                 <set field="contentEmailBodyId" value="${idMap.EMAIL_TEST_EMAIL}"/>
-                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
-
             </actions>
             <widgets>
-               <platform-specific>
-               <html>
-                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
-                       <html-template-decorator-section name="emailBodyHeader">
-                              <include-screen name="emailBodyHeaderContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyStyles">
-                              <include-screen name="emailBodyStylesContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBody">
-                                <include-screen name="emailBodyContent"/>
-                       </html-template-decorator-section>
-                       <html-template-decorator-section name="emailBodyFooter">
-                              <include-screen name="emailBodyFooterContent"/>
-                       </html-template-decorator-section>
-                   </html-template-decorator>
-               </html>
-              </platform-specific>
+                <decorator-screen name="email-decorator">
+                    <decorator-section name="emailBody">
+                        <include-screen name="emailBodyContent"/>
+                    </decorator-section>
+                </decorator-screen>
             </widgets>
-
         </section>
     </screen>
+
 </screens>

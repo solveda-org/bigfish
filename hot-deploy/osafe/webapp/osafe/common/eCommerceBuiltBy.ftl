@@ -1,1 +1,3 @@
-<p>Built by <a href="http://www.salmonllc.com" target="_blank">Salmon LLC:BFVersion-1.04</a></p>
+<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(SHOW_BUILT_BY)>
+    <p>${uiLabelMap.BuiltByLabel} <a href="http://www.salmonllc.com" target="_blank">${uiLabelMap.SalmonLLCLabel}</a></p>
+</#if>

@@ -53,31 +53,51 @@
         	<set from-field="nowTimestamp" field="parameters.SERVICE_TIME"/>
             <else>
 	            <!-- check if this is a valid date -->
-	            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkValidJobDate" ret-field="isValidServTime">
+	            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="getValidJobDate" ret-field="ValidServTime">
+	                <field field="parameters.SERVICE_DATE"/>
 	                <field field="parameters.SERVICE_TIME"/>
+	                <field field="parameters.SERVICE_AMPM"/>
+	                <field field="parameters.FORMAT_DATE"/>
 	            </call-class-method>
-	            <if-compare field="isValidServTime" operator="equals" value="false">
+	            <if-empty field="ValidServTime">
 	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidStartDateError"/>
 	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
 	                <else>
-	                <!-- check if datetime passed already -->
-	                <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedServTime">
-	                	<field field="parameters.SERVICE_TIME"/>
-	            	</call-class-method>
-	            	<if-compare field="PassedServTime" operator="equals" value="false">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StartTimePassedError"/>
-	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-	            	</if-compare>
+		                <set from-field="ValidServTime" field="parameters.SERVICE_TIME"/> 
+		                <!-- check if datetime passed already -->
+		                <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedServTime">
+		                	<field field="parameters.SERVICE_TIME"/>
+		            	</call-class-method>
+		            	<if-compare field="PassedServTime" operator="equals" value="false">
+			                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StartTimePassedError"/>
+			                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            	</if-compare>
 	                </else>
-	            </if-compare>
+	            </if-empty>
             </else>
         </if-empty>
         
-        <if-empty field="parameters.SERVICE_FREQUENCY">
-        	<!-- if NONE is selected, then make it DAILY -->
-            <set field="daily" value="DAILY" type="String"/>
-        	<set from-field="daily" field="parameters.SERVICE_FREQUENCY"/>            
-        </if-empty>
+        <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="0">
+        	<set field="parameters.SERVICE_FREQUENCY" value="DAILY" type="String"/>
+        </if-compare>
+        <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="2">
+        	<set field="parameters.SERVICE_FREQUENCY" value="MINUTELY" type="String"/>
+        </if-compare>
+        <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="3">
+        	<set field="parameters.SERVICE_FREQUENCY" value="HOURLY" type="String"/>
+        </if-compare>
+        <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="4">
+        	<set field="parameters.SERVICE_FREQUENCY" value="DAILY" type="String"/>
+        </if-compare>
+        <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="5">
+        	<set field="parameters.SERVICE_FREQUENCY" value="WEEKLY" type="String"/>
+        </if-compare>
+        <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="6">
+        	<set field="parameters.SERVICE_FREQUENCY" value="MONTHLY" type="String"/>
+        </if-compare>
+        <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="7">
+        	<set field="parameters.SERVICE_FREQUENCY" value="YEARLY" type="String"/>
+        </if-compare>
         
         <if-not-empty field="parameters.SERVICE_INTERVAL">
             <!-- check if this is a valid interval -->

@@ -16,7 +16,13 @@
         <#if orderHeader.orderTypeId == "SALES_ORDER" && shipGroup.shipmentMethodTypeId?has_content>
             <#if shipGroup.carrierPartyId?has_content || shipmentMethodType?has_content>
                 <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED">
-                    <p><#if shipGroup.carrierPartyId != "_NA_">${shipGroup.carrierPartyId?if_exists} &nbsp;</#if>${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}</p>
+                    <p>
+                       <#if shipGroup.carrierPartyId?has_content>
+                        <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
+                        <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)!}&nbsp;</#if>
+                       </#if>
+                      ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
+                   </p>
                 </#if>
             </#if>
         </#if>
@@ -87,9 +93,8 @@
               <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "CREDIT_CARD") && (orderPaymentPreference.getString("paymentMethodId")?has_content))>
                     <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
                     <p>${creditCard.get("cardType")?if_exists}</p>
-              <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD"))>
-                  <#assign PaymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")>
-                  <p>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</p>
+              <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y") >
+                  <p>${uiLabelMap.PayInStoreInfo}</p>
               <#else>
                   <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>
                   <#if paymentMethod?has_content>

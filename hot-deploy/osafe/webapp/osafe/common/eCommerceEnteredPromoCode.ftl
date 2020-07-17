@@ -48,9 +48,9 @@
         </div>
      <div class="ecommercePromocodeStatus">
          <#if (productPromoUseInfo.quantityLeftInActions?string == null) || (productPromoUseInfo.quantityLeftInActions?double > 0)>
-             ${uiLabelMap.promoCodeAddedOnlyInfo}
+             ${uiLabelMap.PromoCodeAddedOnlyInfo}
          <#else>
-             ${uiLabelMap.promoCodeAppliedInfo}
+             ${uiLabelMap.PromoCodeAppliedInfo}
          </#if>
      </div>
      <div class="ecommercePromocodeAction">

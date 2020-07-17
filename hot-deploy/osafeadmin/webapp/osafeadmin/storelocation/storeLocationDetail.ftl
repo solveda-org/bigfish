@@ -62,7 +62,7 @@
     <#if storeNoticeContentId?has_content>
       <#assign storeNoticeTextData = Static["org.ofbiz.content.content.ContentWorker"].renderContentAsText(dispatcher, delegator, storeNoticeContentId, Static["javolution.util.FastMap"].newInstance(), locale, "", true)/>
       <#if storeNoticeTextData?has_content && storeNoticeTextData.equals("null")>
-        <#assign storeHoursTextData = ""/>
+        <#assign storeNoticeTextData = ""/>
       </#if>
     </#if>
 

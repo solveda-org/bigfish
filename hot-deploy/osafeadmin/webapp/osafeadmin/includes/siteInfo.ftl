@@ -19,7 +19,7 @@
       <p>${uiLabelMap.CatalogCaption} <span class="name">[${globalContext.prodCatalogName?if_exists}]</span></p>
     </div>
    <div id="helperImages">
-		   <a class="standardBtn help" href="<@ofbizUrl>../../osafe_admin_theme/help/${helperFileName!"indexHelp.htm"}</@ofbizUrl>" target="new" onclick="window.open (this.href, 'child', 'height=400,width=600,scrollbars'); return false">${uiLabelMap.HelpBtn}</a>
+		   <a class="standardBtn help" href="${ADM_HELP_URL!}${helperFileName!"index.htm"}" target="_blank" >${uiLabelMap.HelpBtn}</a>
 		   <a class="standardBtn logout" href="<@ofbizUrl>logout</@ofbizUrl>">${uiLabelMap.LogoutBtn}</a>
     </div>
 </div>

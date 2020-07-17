@@ -105,4 +105,10 @@ adminTool.put("toolDetail", "emailTestDetail");
 adminToolsList.add(adminTool);
 
 
+//bigfish xml export
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.BFXmlExportLabel);
+adminTool.put("toolDesc", uiLabelMap.BFXmlExportInfo);
+adminTool.put("toolDetail", "exportBigfishContentDetail");
+adminToolsList.add(adminTool);
 context.resultList = UtilMisc.sortMaps(adminToolsList, UtilMisc.toList("toolType"));

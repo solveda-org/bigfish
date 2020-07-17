@@ -52,21 +52,17 @@
                 <#assign totalTaxAmount = totalTaxAmount + taxAmount />
                 <#assign grandTotal = orh.getOrderGrandTotal(orh.getValidOrderItems(), orderAdjustments)>
 
+				<#if orderSearchEmail?exists && orderSearchEmail?has_content>
+					<#assign orderEmail=orderSearchEmail/>
+				<#else>
+	                <#assign orderEmailContactMechs = orh.getOrderContactMechs("ORDER_EMAIL")!""/>
+	                <#if orderEmailContactMechs?has_content>
+	                  <#assign orderEmail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(orderEmailContactMechs)/>
+	                  <#assign orderEmailContactMech = orderEmail.getRelatedOne("ContactMech")/>
+				      <#assign orderEmail=orderEmailContactMech.infoString!""/>
+				    </#if>
+				</#if>
 
-                <#assign orderEmailContactMechs = orh.getOrderContactMechs("ORDER_EMAIL")!""/>
-                <#if orderEmailContactMechs?has_content>
-                  <#list orderEmailContactMechs as orderContactMech>
-                   <#assign contactMech = orderContactMech.getRelatedOne("ContactMech")/>
-                   <#assign contactMechPurps = contactMech.getRelated("PartyContactMechPurpose")/>
-                   <#if contactMechPurps?has_content>
-                     <#list contactMechPurps as partyContactPurpose>
-                       <#if partyContactPurpose.contactMechPurposeTypeId =="PRIMARY_EMAIL">
-                         <#assign orderEmail=contactMech.infoString/>
-                       </#if>
-                     </#list>
-                   </#if>
-                  </#list>
-                </#if>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
                     <td class="idCol <#if !orderHeader_has_next>lastRow</#if> firstCol" >
                         <a href="<@ofbizUrl>orderDetail?orderId=${orderHeader.orderId}</@ofbizUrl>">${orderHeader.orderId}</a>

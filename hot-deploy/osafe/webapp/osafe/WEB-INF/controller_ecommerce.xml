@@ -21,11 +21,14 @@
     <preprocessor>
         <!-- This event allows affilate/distributor entry on any page -->
         <event name="checkExternalLoginKey" type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+        <!-- LS 08/22/2012 - Commenting Out, not using Ofbiz OOTB affiliate,distributor code 
         <event name="setAssociationId" type="java" path="org.ofbiz.ecommerce.misc.ThirdPartyEvents" invoke="setAssociationId"/>
+        -->
         <event name="checkTrackingCodeUrlParam" type="java" path="org.ofbiz.marketing.tracking.TrackingCodeEvents" invoke="checkTrackingCodeUrlParam"/>
         <event name="checkPartnerTrackingCodeUrlParam" type="java" path="org.ofbiz.marketing.tracking.TrackingCodeEvents" invoke="checkPartnerTrackingCodeUrlParam"/>
         <event name="keepCartUpdated" type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="keepCartUpdated"/>
-        <event name="restoreAutoSaveList" type="java" path="org.ofbiz.order.shoppinglist.ShoppingListEvents" invoke="restoreAutoSaveList"/>
+        <event name="restoreAutoSaveList" type="java" path="com.osafe.events.ShoppingListEvents" invoke="restoreAutoSaveList"/>
+        <event name="checkoutConfirmCookies" type="java" path="com.osafe.events.TrackCookieEvents" invoke="checkoutConfirmCookies"/>
     </preprocessor>
 
     <!-- Events to run on every request after all other processing (chains exempt) -->
@@ -39,9 +42,9 @@
         <event name="updateAssociatedDistributor" type="java" path="org.ofbiz.ecommerce.misc.ThirdPartyEvents" invoke="updateAssociatedDistributor"/>
         <event name="keepCartUpdated" type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="keepCartUpdated"/>
         <!-- after login, get everything from the auto-save list -->
-        <event name="restoreAutoSaveList" type="java" path="org.ofbiz.order.shoppinglist.ShoppingListEvents" invoke="restoreAutoSaveList"/>
+        <event name="restoreAutoSaveList" type="java" path="com.osafe.events.ShoppingListEvents" invoke="restoreAutoSaveList"/>
         <!-- after login and restoring from the auto-save list, save everything to the auto-save list to handle anything that may have already been in the cart before login -->
-        <event name="saveCartToAutoSaveList" type="java" path="org.ofbiz.order.shoppinglist.ShoppingListEvents" invoke="saveCartToAutoSaveList"/>
+        <event name="saveCartToAutoSaveList" type="java" path="com.osafe.events.ShoppingListEvents" invoke="saveCartToAutoSaveList"/>
     </after-login>
 
     <!-- default request; call into CMS -->
@@ -112,18 +115,28 @@
         <response name="success" type="view" value="main"/>
         <response name="error" type="view" value="eCommerceNewCustomer"/>
     </request-map>
+    <request-map uri="forgotPassword">
+        <security https="true" auth="false"/>
+        <response name="success" type="view" value="eCommerceForgotPassword"/>
+    </request-map>
     <request-map uri="validateForgotPassword">
         <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Validation/Login.xml" invoke="validateForgotPassword"/>
-        <response name="success" type="request" value="forgotPassword"/>
+        <response name="success" type="request" value="emailForgotPassword"/>
         <response name="error" type="view" value="eCommerceForgotPassword"/>
     </request-map>
-    <request-map uri="forgotPassword">
+
+    <request-map uri="emailForgotPassword">
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.securityext.login.LoginEvents" invoke="forgotPassword"/>
-        <response name="success" type="view" value="eCommerceForgotPassword"/>
-        <response name="passwordEmailed" type="view" value="eCommerceLogin"/>
+        <response name="success" type="request" value="forgotPasswordEmailed"/>
         <response name="error" type="view" value="eCommerceForgotPassword"/>
+    </request-map>
+
+    <request-map uri="forgotPasswordEmailed">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Validation/Login.xml" invoke="forgotPasswordEmailedSuccess"/>
+        <response name="success" type="view" value="eCommerceLogin"/>
     </request-map>
 
     <request-map uri="eCommerceMailingList">
@@ -294,8 +307,12 @@
     </request-map>
 
     <request-map uri="eCommerceProductReviewSubmit">
-        <security https="false" auth="true"/>
+        <security https="false" auth="false"/>
         <response name="success" type="view" value="eCommerceProductReviewSubmit"/>
+    </request-map>
+	<request-map uri="eCommerceProductReviewSubmitLogged">
+        <security https="false" auth="true"/>
+        <response name="success" type="view" value="eCommerceProductReviewSubmitLogged"/>
     </request-map>
 
     <request-map uri="ratingsTermsAndConditions">
@@ -304,13 +321,22 @@
     </request-map>
 
     <request-map uri="eCommerceCreateProductReview">
-        <security https="false" auth="true"/>
+        <security https="false" auth="false"/>
         <event type="simple" path="component://osafe/script/Event/ProductReviewEvents.xml" invoke="createProductReview"/>
         <response name="success" type="request-redirect" value="eCommerceProductDetail">
             <redirect-parameter name="productId"/>
             <redirect-parameter name="productCategoryId"/>
         </response>
         <response name="error" type="view" value="eCommerceProductReviewSubmit"/>
+    </request-map>
+	<request-map uri="eCommerceCreateProductReviewLogged">
+        <security https="false" auth="true"/>
+        <event type="simple" path="component://osafe/script/Event/ProductReviewEvents.xml" invoke="createProductReview"/>
+        <response name="success" type="request-redirect" value="eCommerceProductDetail">
+            <redirect-parameter name="productId"/>
+            <redirect-parameter name="productCategoryId"/>
+        </response>
+        <response name="error" type="view" value="eCommerceProductReviewSubmitLogged"/>
     </request-map>
 
     <request-map uri="createProductReviewAjax">
@@ -566,7 +592,21 @@
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="processPayment"/>
         <response name="success" type="request" value="anonSinglePageProcessBigfishInventory"/>
-        <response name="fail" type="request" value="anonSinglePageCheckout"/>
+        <response name="fail" type="request" value="anonSinglePageProcesspaymentFail"/>
+        <response name="error" type="view" value="anonSinglePageProcesspaymentError"/>
+    </request-map>
+
+    <request-map uri="anonSinglePageProcesspaymentFail">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentFail"/>
+        <response name="success" type="request" value="anonSinglePageCheckout"/>
+        <response name="error" type="request" value="anonSinglePageCheckout"/>
+    </request-map>
+
+    <request-map uri="anonSinglePageProcesspaymentError">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentError"/>
+        <response name="success" type="view" value="anonSinglePageCheckout"/>
         <response name="error" type="view" value="anonSinglePageCheckout"/>
     </request-map>
 
@@ -723,7 +763,7 @@
     <request-map uri="singlePageCalcTax">
         <security direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="calcTax"/>
-        <response name="success" type="request" value="anonSinglePageCheckPaymentMethods"/>
+        <response name="success" type="request" value="singlePageCheckPaymentMethods"/>
         <response name="error" type="request" value="singlePageCheckout"/>
     </request-map>
 
@@ -760,7 +800,21 @@
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="processPayment"/>
         <response name="success" type="request" value="singlePageProcessBigfishInventory"/>
-        <response name="fail" type="request" value="singlePageCheckout"/>
+        <response name="fail" type="request" value="singlePageProcesspaymentFail"/>
+        <response name="error" type="view" value="singlePageProcesspaymentError"/>
+    </request-map>
+
+    <request-map uri="singlePageProcesspaymentFail">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentFail"/>
+        <response name="success" type="request" value="singlePageCheckout"/>
+        <response name="error" type="request" value="singlePageCheckout"/>
+    </request-map>
+
+    <request-map uri="singlePageProcesspaymentError">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentError"/>
+        <response name="success" type="view" value="singlePageCheckout"/>
         <response name="error" type="view" value="singlePageCheckout"/>
     </request-map>
 
@@ -937,7 +991,21 @@
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="processPayment"/>
         <response name="success" type="request" value="anonMultiPageProcessBigfishInventory"/>
-        <response name="fail" type="request" value="anonMultiPageOrderSummary"/>
+        <response name="fail" type="request" value="anonMultiPageProcesspaymentFail"/>
+        <response name="error" type="view" value="anonMultiPageProcesspaymentError"/>
+    </request-map>
+
+    <request-map uri="anonMultiPageProcesspaymentFail">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentFail"/>
+        <response name="success" type="request" value="anonMultiPageOrderSummary"/>
+        <response name="error" type="request" value="anonMultiPageOrderSummary"/>
+    </request-map>
+
+    <request-map uri="anonMultiPageProcesspaymentError">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentError"/>
+        <response name="success" type="view" value="anonMultiPageOrderSummary"/>
         <response name="error" type="view" value="anonMultiPageOrderSummary"/>
     </request-map>
 
@@ -1129,10 +1197,24 @@
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="processPayment"/>
         <response name="success" type="request" value="multiPageProcessBigfishInventory"/>
-        <response name="fail" type="request" value="multiPageCheckouterror"/>
+        <response name="fail" type="request" value="multiPageProcesspaymentFail"/>
+        <response name="error" type="request" value="multiPageProcesspaymentError"/>
+    </request-map>
+
+    <request-map uri="multiPageProcesspaymentFail">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentFail"/>
+        <response name="success" type="request" value="multiPageOrderSummary"/>
+        <response name="error" type="request" value="multiPageOrderSummary"/>
+    </request-map>
+
+    <request-map uri="multiPageProcesspaymentError">
+        <security https="true" auth="false"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processpaymentError"/>
+        <response name="success" type="view" value="multiPageOrderSummary"/>
         <response name="error" type="view" value="multiPageOrderSummary"/>
     </request-map>
-    
+ 
     <request-map uri="multiPageProcessBigfishInventory">
         <security direct-request="false"/>
         <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="processBigfishInventory"/>
@@ -1440,6 +1522,7 @@
     <view-map name="eCommerceContent" type="screen" page="component://osafe/widget/EcommerceContentScreens.xml#eCommerceContent"/>
     <view-map name="eCommerceStaticContent" type="screen" page="component://osafe/widget/EcommerceContentScreens.xml#eCommerceStaticContent"/>
     <view-map name="eCommerceProductReviewSubmit" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceProductReviewSubmit"/>
+	<view-map name="eCommerceProductReviewSubmitLogged" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceProductReviewSubmitLogged"/>
     <view-map name="eCommerceSubmitRatingsThankyou" type="screen" page="component://osafe/widget/EcommerceScreens.xml#submitRatingsThankyou"/>
     <view-map name="ratingsTermsAndConditions" type="screen" page="component://osafe/widget/EcommerceScreens.xml#ratingsTermsAndConditions"/>
     <view-map name="ratingsGuideLines" type="screen" page="component://osafe/widget/EcommerceScreens.xml#ratingsGuideLines"/>

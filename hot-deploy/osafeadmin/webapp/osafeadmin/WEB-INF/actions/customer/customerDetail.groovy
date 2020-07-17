@@ -143,6 +143,12 @@ if (partyContactMechValueMaps) {
     }
 }
 
+//TITLE
+if(UtilValidate.isNotEmpty(partyId))
+{
+	title = delegator.findByPrimaryKey("PartyAttribute",UtilMisc.toMap("partyId", partyId,"attrName","TITLE"));
+	context.title = title;
+}
 //GENDER
 if(UtilValidate.isNotEmpty(partyId))
 {
@@ -162,5 +168,17 @@ if(UtilValidate.isNotEmpty(partyId))
 	context.dob_MMDDYYYY = dob_MMDDYYYY;
 }
 
+//DOB_DDMM
+if(UtilValidate.isNotEmpty(partyId))
+{
+	dob_DDMM = delegator.findByPrimaryKey("PartyAttribute",UtilMisc.toMap("partyId", partyId,"attrName","DOB_DDMM"));
+	context.dob_DDMM = dob_DDMM;
+}
+//DOB_DDMMYYYY
+if(UtilValidate.isNotEmpty(partyId))
+{
+	dob_DDMMYYYY = delegator.findByPrimaryKey("PartyAttribute",UtilMisc.toMap("partyId", partyId,"attrName","DOB_DDMMYYYY"));
+	context.dob_DDMMYYYY = dob_DDMMYYYY;
+}
 
 

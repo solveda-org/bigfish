@@ -57,7 +57,8 @@
             <#assign nextPrevUrl = nextPrevUrl + "&sortResults=" + parameters.sortResults!"" >
             <#assign pageIndex = (start/pageSize) + 1>
             <#assign totalPages = numFound / pageSize>
-            <#assign totalPages = totalPages?floor>
+            <#assign pageIndex = pageIndex?int>
+            <#assign totalPages = totalPages?int>
             <#if (numFound % pageSize gt 0) >
                 <#assign totalPages = totalPages +1 >
             </#if>

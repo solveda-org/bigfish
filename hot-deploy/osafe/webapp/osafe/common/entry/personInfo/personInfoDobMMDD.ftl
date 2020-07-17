@@ -15,16 +15,16 @@
 <div class = "personalInfoDateOfBirthMMDD">
  <div class="entry">
       <label for="DOB_MMDD"><@required/>${uiLabelMap.DOB_Caption}</label>
-      <select id="dobShortMonth" name="dobShortMonth" class="dobMonth">
-      <#assign dobMonth = requestParameters.dobShortMonth!dobMonth!"">
+      <select id="dobShortMonthUs" name="dobShortMonthUs" class="dobMonth">
+      <#assign dobMonth = requestParameters.dobShortMonthUs!dobMonth!"">
       <#if dobMonth?has_content && (dobMonth?length gt 1)>
           <option value="${dobMonth?if_exists}">${dobMonth?if_exists}</option>
       </#if>
         <option value="">${uiLabelMap.DOB_Month}</option>
         ${screens.render("component://osafe/widget/CommonScreens.xml#ddMonths")}
       </select>
-      <select id="dobShortDay" name="dobShortDay" class="dobDay">
-      <#assign dobDay = requestParameters.dobShortDay!dobDay!"">
+      <select id="dobShortDayUs" name="dobShortDayUs" class="dobDay">
+      <#assign dobDay = requestParameters.dobShortDayUs!dobDay!"">
       <#if dobDay?has_content && (dobDay?length gt 1)>
           <option value="${dobDay?if_exists}">${dobDay?if_exists}</option>
       </#if>

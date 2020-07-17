@@ -274,6 +274,8 @@
 <!-- STATIC PAGES-->
 <DataResource dataResourceId="SP_ABOUT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SP_PRIVACY_POLICY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="SP_REVIEW_TERMS_COND" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="SP_REVIEW_GUIDELINES" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SP_TERMS_CONDITIONS" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SP_SITE_MAP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SP_ERROR_PAGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
@@ -281,14 +283,18 @@
 <DataResource dataResourceId="SP_CONTACT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="SP_ABOUT_US"/>
 <ElectronicText dataResourceId="SP_PRIVACY_POLICY"/>
-<ElectronicText dataResourceId="SP_TERMS_CONDITIONS"/>
+<ElectronicText dataResourceId="SP_REVIEW_GUIDELINES"/>
 <ElectronicText dataResourceId="SP_SITE_MAP"/>
 <ElectronicText dataResourceId="SP_ERROR_PAGE"/>
 <ElectronicText dataResourceId="SP_RETURN_POLICY"/>
 <ElectronicText dataResourceId="SP_CONTACT_US"/>
+<ElectronicText dataResourceId="SP_TERMS_CONDITIONS"/>
+<ElectronicText dataResourceId="SP_REVIEW_TERMS_COND"/>
 <Content contentId="SP_ABOUT_US" contentTypeId="BF_STATIC_PAGE"  description="About Us (Seeded SAMPLE)" contentName="About Us" dataResourceId="SP_ABOUT_US"/>
 <Content contentId="SP_PRIVACY_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Privacy Policy (Seeded SAMPLE)" contentName="Privacy Policy" dataResourceId="SP_PRIVACY_POLICY"/>
 <Content contentId="SP_TERMS_CONDITIONS" contentTypeId="BF_STATIC_PAGE"  description="Terms and Conditions (Seeded SAMPLE)" contentName="Terms and Conditions" dataResourceId="SP_TERMS_CONDITIONS"/>
+<Content contentId="SP_REVIEW_TERMS_COND" contentTypeId="BF_STATIC_PAGE"  description="Review Terms and Conditions (Seeded SAMPLE)" contentName="Review Terms and Conditions" dataResourceId="SP_REVIEW_TERMS_COND"/>
+<Content contentId="SP_REVIEW_GUIDELINES" contentTypeId="BF_STATIC_PAGE"  description="Review Guidlines (Seeded SAMPLE)" contentName="Review Gudlines" dataResourceId="SP_REVIEW_GUIDELINES"/>
 <Content contentId="SP_SITE_MAP" contentTypeId="BF_STATIC_PAGE"  description="Site Map (Seeded SAMPLE)" contentName="Site Map" dataResourceId="SP_SITE_MAP"/>
 <Content contentId="SP_ERROR_PAGE" contentTypeId="BF_STATIC_PAGE"  description="System error page used for Page-Not-Found conditions. You should not edit the ID." contentName="Error Page" dataResourceId="SP_ERROR_PAGE"/>
 <Content contentId="SP_RETURN_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Return Policy (Seeded SAMPLE)" contentName="Return Policy" dataResourceId="SP_RETURN_POLICY"/>
@@ -296,6 +302,8 @@
 <ContentPurpose contentId="SP_ABOUT_US" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_PRIVACY_POLICY" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_TERMS_CONDITIONS" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_REVIEW_TERMS_COND" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_REVIEW_GUIDELINES" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_SITE_MAP" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_ERROR_PAGE" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_RETURN_POLICY" contentPurposeTypeId="SECTION"/>
@@ -321,6 +329,7 @@
 <DataResource dataResourceId="E_SHIP_REVIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_ORDER_DETAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_TEST_EMAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="E_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="E_COMMON_STYLES"/>
 <ElectronicText dataResourceId="E_COMMON_HEADER"/>
 <ElectronicText dataResourceId="E_COMMON_FOOTER"/>
@@ -336,6 +345,7 @@
 <ElectronicText dataResourceId="E_SHIP_REVIEW"/>
 <ElectronicText dataResourceId="E_ORDER_DETAIL"/>
 <ElectronicText dataResourceId="E_TEST_EMAIL"/>
+<ElectronicText dataResourceId="E_MAILING_LIST"/>
 <Content contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
 <Content contentId="E_COMMON_HEADER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included in the beginning of all BigFish generated emails. Use this to define standard heading information such as your logo and company information." contentName="Common Client Header" dataResourceId="E_COMMON_HEADER"/>
 <Content contentId="E_COMMON_FOOTER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included at the end of all BigFish generated emails. Use this to define standard closing information such as Yours-Sincerely and your company contact information. " contentName="Common Client Footer " dataResourceId="E_COMMON_FOOTER"/>
@@ -350,6 +360,7 @@
 <Content contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW"/>
 <Content contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
 <Content contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be used to send out a test email." contentName="Test Email" dataResourceId="E_TEST_EMAIL"/>
+<Content contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Mailing-List email. This email sent to both the customer and the client." contentName="Mailing List Email" dataResourceId="E_MAILING_LIST"/>
 <ContentPurpose contentId="E_COMMON_HEADER" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_STYLES" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_FOOTER" contentPurposeTypeId="SECTION"/>
@@ -364,6 +375,7 @@
 <ContentPurpose contentId="E_SHIP_REVIEW" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_ORDER_DETAIL" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_TEST_EMAIL" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_MAILING_LIST" contentPurposeTypeId="SECTION"/>
 <Content contentId="E_COMMON_HEADER" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_COMMON_STYLES" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_COMMON_FOOTER" statusId="CTNT_PUBLISHED"/>
@@ -378,6 +390,7 @@
 <Content contentId="E_SHIP_REVIEW" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_DETAIL" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_TEST_EMAIL" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_MAILING_LIST" statusId="CTNT_PUBLISHED"/>
 
 <!-- ********************************* -->
 

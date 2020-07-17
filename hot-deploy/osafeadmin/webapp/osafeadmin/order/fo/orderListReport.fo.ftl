@@ -83,7 +83,7 @@ under the License.
      <#assign faxNumbers = delegator.findByAnd("PartyContactMechPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",payToPartyId,"contactMechPurposeTypeId","FAX_NUMBER"))/>
      <#if faxNumbers?has_content>  
         <#assign faxNumbers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(faxNumbers, nowTimestamp, null, null, true)/>
-        <#assign companyFax = delegator.findOne("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",faxNumbers[0].contactMechId), false)/>;
+        <#assign companyFax = delegator.findOne("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",faxNumbers[0].contactMechId), false)/>
      </#if>
      <#-- Company Email -->
      <#assign emails = delegator.findByAnd("PartyContactMechPurpose",Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",payToPartyId,"contactMechPurposeTypeId","PRIMARY_EMAIL"))/>
@@ -432,15 +432,24 @@ under the License.
                             <fo:block font-size="8pt" start-indent="10pt">${uiLabelMap.PickupInStoreLabel}</fo:block>
                           <#else>
                          
-                            <#assign shipmentMethodType = shipGroup.getRelatedOne("ShipmentMethodType")?if_exists>
-                            <#assign shipGroupAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
-                            <#if orderHeader.orderTypeId == "SALES_ORDER" && shipGroup.shipmentMethodTypeId?has_content>
-                              <#if shipGroup.carrierPartyId?has_content || shipmentMethodType?has_content>
-                                <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED">
-                                  <fo:block font-size="8pt" start-indent="10pt"><#if shipGroup.carrierPartyId != "_NA_">${shipGroup.carrierPartyId?if_exists} </#if>${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}</fo:block>
-                                </#if>
-                              </#if>
-                            </#if>
+		                            <#assign shipmentMethodType = shipGroup.getRelatedOne("ShipmentMethodType")?if_exists>
+		                            <#assign shipGroupAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
+		                            
+		                            <#if orderHeader.orderTypeId == "SALES_ORDER" && shipGroup.shipmentMethodTypeId?has_content>
+		                              <#if shipGroup.carrierPartyId?has_content || shipmentMethodType?has_content>
+		                                <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED">
+		                                
+		                                  <fo:block font-size="8pt" start-indent="10pt">
+		                                    <#if shipGroup.carrierPartyId?has_content>
+		                                      <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
+		                                        <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)}</#if>
+		                                    </#if>
+		                                    ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
+		                                  </fo:block>
+		                                  
+		                                </#if>
+		                              </#if>
+		                            </#if>
                           
                           </#if>
                         <#else>
@@ -519,9 +528,8 @@ under the License.
                                 <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "CREDIT_CARD") && (orderPaymentPreference.getString("paymentMethodId")?has_content))>
                                     <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
                                     <fo:block start-indent="10pt">${creditCard.get("cardType")?if_exists}</fo:block>
-                                <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD"))>
-                                    <#assign PaymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")>
-                                    <fo:block start-indent="10pt">${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</fo:block>
+                                <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y")>
+                                    <fo:block start-indent="10pt">${uiLabelMap.PayInStoreInfo}</fo:block>
                                 <#else>
                                     <#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")>
                                     <fo:block start-indent="10pt">${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</fo:block>

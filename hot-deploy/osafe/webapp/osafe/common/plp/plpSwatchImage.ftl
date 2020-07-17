@@ -1,7 +1,7 @@
-<#if productFeatureAndAppl?has_content && productFeatureAndAppl.size() gt 1>
+<#if productSelectableFeatureAndAppl?has_content && productSelectableFeatureAndAppl.size() gt 1>
 <div class="plpSwatchImage">
   <div class="swatch">
-    <#list productFeatureAndAppl as productFeatureAppls>
+    <#list productSelectableFeatureAndAppl as productFeatureAppls>
       <#assign plpSwatchImageHeight= IMG_SIZE_PLP_SWATCH_H!""/>
       <#assign plpSwatchImageWidth= IMG_SIZE_PLP_SWATCH_W!""/>
       <#assign productFeatureId=productFeatureAppls.productFeatureId/>
@@ -23,17 +23,29 @@
         </#if>
       </#list>
       <#if productFeatureVariantId?has_content>
+        
+        <#if PLP_FACET_GROUP_VARIANT_MATCH?has_content>
+          <#assign descriptiveProductFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" ,productFeatureVariantId, 'productFeatureTypeId', PLP_FACET_GROUP_VARIANT_MATCH, 'productFeatureApplTypeId','DISTINGUISHING_FEAT')) />
+		  <#assign descriptiveProductFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(descriptiveProductFeatureAndAppls?if_exists)/>
+		  <#if descriptiveProductFeatureAndAppls?has_content>
+		    <#assign descriptiveProductFeatureAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(descriptiveProductFeatureAndAppls?if_exists)/>
+		    <#assign descriptiveFeatureGroupDesc = descriptiveProductFeatureAndAppl.description! />
+		  </#if>
+        </#if>
+        
         <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, StringUtil.wrapString(pdpUrl) + "&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
         <input type = "hidden" id="${productId}${productFeatureTypeId!}:${productFeatureDescription!}" value="${variantProductUrl!}"/>
+        <input type = "hidden" class="featureGroup" value="${descriptiveFeatureGroupDesc!}"/>
+        
         <#assign productVariantContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(productFeatureVariantProduct, request)!""/>
         <#assign productVariantSmallURL = productVariantContentWrapper.get("SMALL_IMAGE_URL")!"">
         <#assign productVariantSmallAltURL = productVariantContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
         <#assign productVariantPlpSwatchURL = productVariantContentWrapper.get("PLP_SWATCH_IMAGE_URL")!"">
         <#if (productVariantPlpSwatchURL?string?has_content)>
-          <img src="<@ofbizContentUrl>${productVariantPlpSwatchURL}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
+          <img src="<@ofbizContentUrl>${productVariantPlpSwatchURL}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
         <#else>
           <#if productFeatureUrl?has_content>
-            <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
+            <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
           </#if>
         </#if>
         <div class="swatchVariant" style="display:none">

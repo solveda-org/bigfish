@@ -30,7 +30,33 @@ if (UtilValidate.isNotEmpty(searchString))
             }
         }
     }
-    screenSearchList = UtilMisc.sortMaps(screenSearchList, UtilMisc.toList("value"));
+
+    if (UtilValidate.isNotEmpty(context.PDPTabsScreenType) && searchString.equals(context.PDPTabsScreenType)) {
+        // make group search list sorted by value
+        screenGroupSearchList = FastList.newInstance();
+        processedGroupList = FastList.newInstance();
+        for(Map screenListMap : screenSearchList) {
+            if (!processedGroupList.contains(screenListMap.group)) {
+                searchGroupMapList =  OsafeManageXml.getSearchListFromListMaps(screenSearchList, UtilMisc.toMap("group", "Y"), screenListMap.group, true, false);
+                screenGroupSearchList.addAll( UtilMisc.sortMaps(searchGroupMapList, UtilMisc.toList("value")));
+                processedGroupList.add(screenListMap.group);
+            }
+        }
+        // sort group search list sorted by group
+        screenSearchList = screenGroupSearchList;
+        for(Map screenListMap : screenSearchList) {
+            if (UtilValidate.isInteger(screenListMap.group)) {
+                if (UtilValidate.isNotEmpty(screenListMap.group)) {
+                    screenListMap.group = Integer.parseInt(screenListMap.group);
+                } else {
+                    screenListMap.group = 0;
+                }
+            }
+        }
+        screenSearchList = UtilMisc.sortMaps(screenSearchList, UtilMisc.toList("group"));
+    } else {
+        screenSearchList = UtilMisc.sortMaps(screenSearchList, UtilMisc.toList("value"));
+    }
     context.resultScreenList = screenSearchList;
     pagingListSize=screenSearchList.size();
     context.pagingListSize=pagingListSize;

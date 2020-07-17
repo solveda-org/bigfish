@@ -23,6 +23,8 @@ ${sections.render('commonFormDialog')?if_exists}
           ${sections.render('commonDetailLinkButton')!}
       </form>
       ${sections.render('commonDetailHelperText')!}
+      ${sections.render('commonDetailWarningIcon')!}
+      ${sections.render('commonDetailHelperIcon')!}
     </div>
 </div>
 ${sections.render('commonConfirm')!}

@@ -55,7 +55,7 @@
     <#if custReqAttribute.attrName == 'CONTACT_PHONE'>
       <#assign attrNamePhone = custReqAttribute.attrName+caption!""/>
       <#assign phone = custReqAttribute.attrValue!""/>
-      <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(null, phone?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
+      <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone("", phone?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
     </#if>
     <#if custReqAttribute.attrName == 'ORDER_NUMBER'>
       <#assign attrNameOrderNo = custReqAttribute.attrName+caption!""/>

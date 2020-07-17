@@ -160,6 +160,7 @@
         <set field="createTextContentCtx.contentTypeId" from-field="parameters.contentTypeId"/>
         <set field="createTextContentCtx.mapKey" value="link"/>
         <set field="createTextContentCtx.contentPurposeTypeId"  value="SECTION"/>
+        <set field="createTextContentCtx.mimeTypeId"  value="text/html"/>
         <call-service service-name="createTextContent" in-map-name="createTextContentCtx"/>
 
         <set-service-fields service-name="createXContentXref" map="parameters" to-map="createXContentXrefCtx"/>

@@ -58,6 +58,28 @@
                     <string value="N"/>
                 </call-object-method>
             </if-not-empty>
+	        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="checkoutConfirmCookies">
+	            <field field="request" type="javax.servlet.ServletRequest"/>
+	            <string value="CHECKOUT_CONFIRM_GET_COOKIE"/>
+	        </call-class-method>
+            <if-not-empty field="checkoutConfirmCookies">
+              <call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="checkoutConfirmCookieNames">
+	            <field field="checkoutConfirmCookies" type="String"/>
+	            <string value=","/>
+   	          </call-class-method>
+              <iterate list="checkoutConfirmCookieNames" entry="confirmCookieName">
+		            <call-object-method obj-field="session" method-name="getAttribute" ret-field="checkoutConfirmOrderAttr">
+        	            <field field="confirmCookieName" type="String"/>
+		            </call-object-method>
+                    <if-not-empty field="checkoutConfirmOrderAttr">
+				         <call-object-method method-name="setOrderAttribute" obj-field="shoppingCart">
+          	                <field field="confirmCookieName" type="String"/>
+         	                <field field="checkoutConfirmOrderAttr" type="String"/>
+			              </call-object-method>
+                    </if-not-empty>
+              </iterate>
+            </if-not-empty>	        
+            
         </if-not-empty>
     </simple-method>
 
@@ -379,10 +401,10 @@
         </if-not-empty>
         <check-errors/>
 
-        <set field="userLoginContext.partyId" from-field="userLogin.partyId"/>
-        <call-simple-method method-name="createUserLogin"/>
         <call-simple-method method-name="createUpdatePerson"/>
         <call-simple-method method-name="createUpdateCustomerInfo"/>
+        <set field="userLoginContext.partyId" from-field="userLogin.partyId"/>
+        <call-simple-method method-name="createUserLogin"/>
         <if-compare operator="equals" value="CREDIT_CARD" field="parameters.paymentMethodTypeId">
             <set field="creditCardContext.partyId" from-field="userLogin.partyId"/>
             <call-simple-method method-name="createCreditCardPayment"/>
@@ -557,7 +579,6 @@
     </simple-method>
 
     <simple-method method-name="createUpdatePerson" short-description="Create or Update person" login-required="false">
-
         <if-empty field="parameters.partyId">
             <!-- call the create person service -->
             <set-service-fields service-name="createPerson" to-map="createPersonCtx" map="personContext"/>
@@ -814,13 +835,13 @@
 
         <!-- create login -->
         <if-not-empty field="userLoginContext.currentPassword">
+            <set field="userLoginContext.partyId" from-field="userLogin.partyId"/>
             <set-service-fields service-name="createUserLogin" to-map="createUserLoginCtx" map="userLoginContext"/>
             <call-service service-name="createUserLogin" in-map-name="createUserLoginCtx"/>
             <entity-one entity-name="UserLogin" value-field="createdUserLogin">
                 <field-map field-name="userLoginId" from-field="userLoginContext.userLoginId"/>
             </entity-one>
             <field-to-request field="createdUserLogin" request-name="createdUserLogin"/>
-
             <!-- send registration mail -->
             <call-simple-method method-name="sendRegistrationEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
             <call-bsh>
@@ -875,5 +896,21 @@
         <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
             <field field="shippingAddressPurposeContext.contactMechId"/>
         </call-object-method>
+    </simple-method>
+
+    <simple-method method-name="processpaymentFail" short-description="process payment fail" login-required="false">
+        <set field="isPaymentProcessError" value="Y"/>
+        <field-to-request field="isPaymentProcessError" />
+        <request-to-field field="errorMessage" request-name="_ERROR_MESSAGE_"/>
+        <property-to-field field="errorMessage" resource="OSafeUiLabels" property="ProcessPaymentError"/>
+        <field-to-request field="errorMessage" request-name="_ERROR_MESSAGE_"/>
+    </simple-method>
+
+    <simple-method method-name="processpaymentError" short-description="process payment error" login-required="false">
+        <set field="isPaymentProcessError" value="Y"/>
+        <field-to-request field="isPaymentProcessError" />
+        <request-to-field field="errorMessage" request-name="_ERROR_MESSAGE_"/>
+        <property-to-field field="errorMessage" resource="OSafeUiLabels" property="ProcessPaymentError"/>
+        <field-to-request field="errorMessage" request-name="_ERROR_MESSAGE_"/>
     </simple-method>
 </simple-methods>

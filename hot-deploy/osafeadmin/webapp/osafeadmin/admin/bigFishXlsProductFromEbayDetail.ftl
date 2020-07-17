@@ -1,7 +1,7 @@
   <input type="hidden" name="detailScreen" value="${parameters.detailScreen?default(detailScreen!"")}" />
   <div class="infoRow">
       <div class="infoDetail">
-          <p>${uiLabelMap.CreateBigFishFromEbayInfo}</p>
+          <p>${uiLabelMap.CreateBigFishLoadFromEbayInfo}</p>
       </div>
   </div>
   <div class="infoRow">

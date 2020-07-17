@@ -1,7 +1,17 @@
 //********************************************************************************************
 //SQL UPDATES
 //********************************************************************************************
-
+08/03/2012 Issue #26302
+		DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='IMG_SIZE_PDP_XREF_H';
+		DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='IMG_SIZE_PDP_XREF_W';
+08/23/2012 Issue #26560
+		--@PRODUCT_STORE_ID@ replace this variable with product store id
+		INSERT INTO PRODUCT_STORE_EMAIL_SETTING (product_store_id, email_type, body_screen_location, from_address, cc_address, subject)
+		VALUES ("@PRODUCT_STORE_ID@", "PRDS_MAILING_LIST", "component://osafe/widget/EmailScreens.xml#mailingListEmailNotification", "customerservice@bigfish.com", "bigfish@salmonllc.com", "${EMAIL_CLNT_NAME}:You have been added to our Mailing List!");
+08/23/2012 Issue #26356
+		--@PRODUCT_STORE_ID@ replace this variable with product store id
+		INSERT INTO PRODUCT_STORE_EMAIL_SETTING (product_store_id, email_type, body_screen_location, from_address, cc_address, subject)
+		VALUES ("@PRODUCT_STORE_ID@", "PRDS_EMAIL_TEST", "component://osafe/widget/EmailScreens.xml#emailTest", "customerservice@bigfish.com", "bigfish@salmonllc.com", "${EMAIL_CLNT_NAME}: Test Email");
 //********************************************************************************************
 //BIGFISH PARAMETERS UPDATES
 //FILE: bigFishParameters.xml
@@ -20,8 +30,63 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_EBS" description="Determines if EBS is an acceptable form of payment during the Check Out process. " parmCategory="CHECKOUT"/>
 08/01/2012 issue#26358
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_SUPPRESS_TAX_IF_ZERO" description="This will suppress the Sales-Tax line during the checkout if the tax is zero. Used for UK clients where the VAT is included in the purchase price." parmCategory="CHECKOUT"/>
+08/03/2012 issue#26411
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
+08/03/2012 issue#26422
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SHOW_BUILT_BY" description="Simple TRUE or FALSE value that will determine if the Built by Salmon LLC link will be displayed" parmCategory="GENERAL"/>	
+08/07/2012 issue#26376
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_PICKUP_MAP_IMG_W" description="Width of store locator map when used in select a store" parmCategory="GMAP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_PICKUP_MAP_IMG_H" description="Height of store locator map when used in select a store" parmCategory="GMAP"/>
+08/08/2012 issue#26477
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_FACET_GROUP_INCLUDE" description="The comma separated list of Facet Groups that should be included after a Site Search." parmCategory="SEARCH"/>
+08/09/2012 issue#26529
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IGNORE_REJECTED_ORDERS" description="Value of TRUE means that any Order with a status of Rejected will NOT be extracted. A value of FALSE will include Rejected Orders" parmCategory="FEEDS"/>
+08/13/2012 issue#25696
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_MATCH" description="This is the FACET GROUP that will be used for matching in the PLP. Example: customer clicks on Color=Blue facet, system needs to match on Color-Group facet to show similar products." parmCategory="PLP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_FACET_GROUP_VARIANT_MATCH" description="This is the FACET GROUP that will be used for matching in the PDP. Examples: customer clicks on the Blue Swatch, system needs to match on Color-Group facet to show matching you-may-also-like products." parmCategory="PDP"/>
+08/13/2012 issue#26560
+<Enumeration enumId="PRDS_MAILING_LIST" enumTypeId="PRDS_EMAIL" description="Mailing List Email" enumCode="MAILING_LIST"  sequenceId="30"/>
+<DataResource dataResourceId="E_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<ElectronicText dataResourceId="E_MAILING_LIST"/>
+<Content contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"  description="The Contact Us Notification is an email that gets sent to the client and customer after the customer completes a Subscribe to Mailing List form request in the eCommerce implementation. It is sent immediately (not part of a scheduled service)." contentName="Email Mailing List" dataResourceId="E_MAILING_LIST"/>
+<ContentPurpose contentId="E_MAILING_LIST" contentPurposeTypeId="SECTION"/>
+<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_MAILING_LIST" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#mailingListEmailNotification" xslfoAttachScreenLocation=""  />
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_MAILING_LIST" contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"/>
+08/14/2012 issue#26546
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_USERNAME" description="Used for authentication purposes when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_PASSWORD" description="Used for authentication purposes when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_API_URL" description="Used to identify the Reevoo service when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_CSV_URL" description="Used to identify the file destination when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+08/15/2012 issue#26573
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MIN_CHAR" description="The minimum number of characters allowed for a review. Zero indicates that a review may be left blank." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MAX_CHAR" description="The maximum number of characters allowed for a review. Zero indicates that a review may have unlimited characters." parmCategory="REVIEW"/>
+08/15/2012 issue#26600
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_HELP_URL" description="The URL location of the help files" parmCategory="ADM"/>
+08/15/2012 issue#26590
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_GROUP_VARIANT_MATCH" description="If the customer clicks a value in this Facet Group then the system will attempt to find a matching Variant" parmCategory="SOLR"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_PDP_MATCH" description="This is the FACET GROUP that will used to control the Sticky link from the PLP Variant to the PDP Variant" parmCategory="SOLR"/>
+08/17/2012 issue#26626
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_NUM_ITEMS_PER_PAGE" description="The number of items that should appear per page in the PLP." parmCategory="PLP"/>
+08/17/2012 issue#26573
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MIN_CHAR" description="The minimum number of characters allowed for a review. Zero indicates that a review may be left blank." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MAX_CHAR" description="The maximum number of characters allowed for a review. Zero indicates that a review may have unlimited characters." parmCategory="REVIEW"/>
+08/24/2012 issue#26691
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AS_GUEST" description="TRUE indicates that the customer does NOT have to be logged in as a registered user. FALSE will force a login or registration" parmCategory="REVIEW"/>
+08/27/2012 issue#25884
+<PartyContentType partyContentTypeId="STORE_CONTENT_SPOT" description="Store Content Spot" hasTable="N" parentTypeId=""/>
+08/27/2012 issue#26697
+<DataResource dataResourceId="SP_REVIEW_TERMS_COND" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="SP_REVIEW_GUIDELINES" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<ElectronicText dataResourceId="SP_REVIEW_TERMS_COND"/>
+<ElectronicText dataResourceId="SP_REVIEW_GUIDELINES"/>
+<Content contentId="SP_REVIEW_TERMS_COND" contentTypeId="BF_STATIC_PAGE"  description="Review Terms and Conditions (Seeded SAMPLE)" contentName="Review Terms and Conditions" dataResourceId="SP_REVIEW_TERMS_COND"/>
+<Content contentId="SP_REVIEW_GUIDELINES" contentTypeId="BF_STATIC_PAGE"  description="Review Guidlines (Seeded SAMPLE)" contentName="Review Gudlines" dataResourceId="SP_REVIEW_GUIDELINES"/>
+<ContentPurpose contentId="SP_REVIEW_TERMS_COND" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_REVIEW_GUIDELINES" contentPurposeTypeId="SECTION"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_REVIEW_TERMS_COND" contentId="SP_REVIEW_TERMS_COND" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_REVIEW_GUIDELINES" contentId="SP_REVIEW_GUIDELINES" contentTypeId="BF_STATIC_PAGE"/>
 
-	
 //Remove
     07/30/12 issue#26302
     <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_XREF_H" description="Height of PDP Related Image" parmCategory="IMAGE"/>
@@ -49,7 +114,251 @@
         <category>CHECKOUT</category>
         <description>Pay in Store</description>
     </property>
+  Issue# 26405  08/02/29012 -Renamed BILLING,SHIPPING to Billing,Shipping
+    <property key="BillingAddressHeadingInfo">
+        <value xml:lang="en">Where is your credit card statement sent?</value>
+        <category>MESSAGE_INFO</category>
+        <description>BillingAddressHeadingInfo</description>
+    </property>
+    <property key="ShippingAddressHeadingInfo">
+        <value xml:lang="en">Where would you like your items shipped?</value>
+        <category>MESSAGE_INFO</category>
+        <description>ShippingAddressHeadingInfo</description>
+    </property>
+  Issue# 26375  08/06/29012
+     <property key="TitleCaption">
+        <value xml:lang="en">Title:</value>
+        <category>MY_ACCOUNT</category>
+        <description>TitleCaption</description>
+    </property>
+    <property key="TitleMissingError">
+        <value xml:lang="en">Please select your Title</value>
+        <category>MESSAGE_ERROR</category>
+        <description>TitleMissingError</description>
+    </property>
+    
+  Issue# 26375  08/06/29012
+    <property key="BuiltByLabel">
+        <value xml:lang="en">Built by</value>
+        <category>MULTI_USE</category>
+        <description>BuiltByLabel</description>
+    </property>
+    <property key="SalmonLLCLabel">
+        <value xml:lang="en">Salmon LLC</value>
+        <category>MULTI_USE</category>
+        <description>SalmonLLCLabel</description>
+    </property>
+    Issue# 26411  08/08/2012
+    <property key="CardTypeMissingError">
+        <value xml:lang="en">A Credit Card type must be selected from the drop-down</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CardTypeMissingError</description>
+    </property>
+    <property key="VerificationNumberMissingError">
+        <value xml:lang="en">A valid Verification Code must be entered. Please try again.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>VerificationNumberMissingError</description>
+    </property>
+    <property key="ExpirationDateIsBeforeTodayError">
+        <value xml:lang="en">A valid Expiration Date must be selected. Please try again.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ExpirationDateIsBeforeTodayError</description>
+    </property>
+    <property key="CreditCardNumberInvalidError">
+        <value xml:lang="en">A valid Credit Card number must be entered. Please try again.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CreditCardNumberInvalidError</description>
+    </property>
+    <property key="CreditCardNumberInvalidSuggestError">
+        <value xml:lang="en">{0} is not a valid {1} credit card number. (It appears to be a {2} credit card number)</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CreditCardNumberInvalidError</description>
+    </property>
+    Issue# 26504 08/09/2012
+    <property key="GenderMale">
+        <value xml:lang="en">Male</value>
+        <category>MY_ACCOUNT</category>
+        <description>GenderMale</description>
+    </property>
+    <property key="GenderFemale">
+        <value xml:lang="en">Female</value>
+        <category>MY_ACCOUNT</category>
+        <description>GenderFemale</description>
+    </property>
+    Issue# 26411  08/10/2012
+    <property key="ProcessPaymentError">
+        <value xml:lang="en">We cannot process your payment information. Please check your information and retry.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ProcessPaymentError</description>
+    </property>
+    08/14/2012
+    <property key="ForgotPasswordEmailedSuccess">
+        <value xml:lang="en">A new password has been sent to your contact email address. Please use the new password to sign in and for your security you will be prompted to reset your password.</value>
+        <category>MESSAGE_SUCCESS</category>
+        <description>ForgotPasswordEmailedSuccess</description>
+    </property>
+    08/15/2012 issue#26573
+    <property key="ReviewTextShortError">
+        <value xml:lang="en">Please enter a review with at least [${parameters.REVIEW_MIN_CHAR}] characters</value>
+        <category>MESSAGE_REVIEW_ERROR</category>
+        <description>ReviewTextShortError</description>
+    </property>
+    <property key="ReviewTextLongError">
+        <value xml:lang="en">You have exceeded the maximum length allowed for a review. The maximum is [${parameters.REVIEW_MAX_CHAR}] characters, you have entered [${reviewTextLength}] characters.</value>
+        <category>MESSAGE_REVIEW_ERROR</category>
+        <description>ReviewTextLongError</description>
+    </property>
+   08/16/2012 issue#26622
+    <property key="PromoCodeAddedOnlyInfo">
+        <value xml:lang="en">Added but does not apply</value>
+        <category>CHECKOUT</category>
+        <description>promo code added</description>
+    </property>
+    <property key="PromoCodeAppliedInfo">
+        <value xml:lang="en">Applied, see Summary Below</value>
+        <category>CHECKOUT</category>
+        <description>promo code applied</description>
+    </property>
+    <property key="CommonConfirmDialogText">
+        <value xml:lang="en">Are you sure?</value>
+        <category>CONFIRM_DIALOG</category>
+        <description>Confirm Dialog Box Message</description>
+    </property>
+    <property key="CommonConfirmDialogTitle">
+        <value xml:lang="en">Please Confirm</value>
+        <category>CONFIRM_DIALOG</category>
+        <description>Confirm Dialog Box Title</description>
+    </property>
+    <property key="DeleteAddressConfirmText">
+        <value xml:lang="en">Are you sure you want to DELETE this Address?</value>
+        <category>CHECK_OUT</category>
+        <description>Confirm Dialog Box Message</description>
+    </property>
+    <property key="SearchDialogText">
+        <value xml:lang="en">Please enter one or more terms to search for</value>
+        <category>SEARCH_DIALOG</category>
+        <description>Search Dialog Box Message</description>
+    </property>
+    <property key="SearchDialogTitle">
+        <value xml:lang="en">Please Confirm</value>
+        <category>SEARCH_DIALOG</category>
+        <description>Search Dialog Box Title</description>
+    </property>
+    <property key="EcommerceApplication">
+        <value xml:lang="en">Big Fish Commerce</value>
+    </property>
+    <property key="EcommerceViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>eCommerceViewPermissionError</description>
+    </property>
+    
+    08/28/2012 issue# 26699
+    <property key="ReviewTermCondTitle">
+        <value xml:lang="en">Customer Ratings and Reviews - Terms &amp; Conditions</value>
+        <category>PDP</category>
+        <description>Review Terms and conditions Dialog title</description>
+    </property>
+    <property key="ReviewGuideLinesTitle">
+        <value xml:lang="en">Review Guidelines</value>
+        <category>PDP</category>
+        <description>Review Guildelines Dialog title</description>
+    </property>
 //Remove
+
+  Issue# 26405  08/02/29012 -Renamed BILLING,SHIPPING to Billing,Shipping
+    <property key="BILLINGAddressHeadingInfo">
+        <value xml:lang="en">Where is your credit card statement sent?</value>
+        <category>MESSAGE_INFO</category>
+        <description>BILLINGAddressHeadingInfo</description>
+    </property>
+    <property key="SHIPPINGAddressHeadingInfo">
+        <value xml:lang="en">Where would you like your items shipped?</value>
+        <category>MESSAGE_INFO</category>
+        <description>SHIPPINGAddressHeadingInfo</description>
+    </property>
+    <property key="BILLINGPhoneInfo">
+        <value xml:lang="en">We may contact you by phone for delivery updates</value>
+        <category>MESSAGE_INFO</category>
+        <description>BILLINGPhoneLabelInfo</description>
+    </property>
+    <property key="SHIPPINGPhoneInfo">
+        <value xml:lang="en">We may contact you by phone for delivery updates</value>
+        <category>MESSAGE_INFO</category>
+        <description>SHIPPINGPhoneLabelInfo</description>
+    </property>
+    Issue# 26411  08/08/2012
+    <property key="CardTypeMissingError">
+        <value xml:lang="en">Please enter your Card Type</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CardTypeMissingError</description>
+    </property>
+    <property key="VerificationNumberMissingError">
+        <value xml:lang="en">Please enter your Verification Number</value>
+        <category>MESSAGE_ERROR</category>
+        <description>VerificationNumberMissingError</description>
+    </property>
+    <property key="ExpirationDateIsBeforeTodayError">
+        <value xml:lang="en">The expiration date is before today</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ExpirationDateIsBeforeTodayError</description>
+    </property>
+    <property key="CreditCardNumberInvalidError">
+        <value xml:lang="en">${cardNumber} is not a valid ${cardType} credit card number. (It appears to be a ${validCardType}) credit card number)</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CreditCardNumberInvalidError</description>
+    </property>
+    08/15/2012 issue#26573
+    <property key="ReviewTextMissingError">
+        <value xml:lang="en">You must enter review text.</value>
+        <category>MESSAGE_REVIEW_ERROR</category>
+        <description>ReviewTextMissingError</description>
+    </property>
+   08/16/2012 issue#26622
+    <property key="promoCodeAddedOnlyInfo">
+        <value xml:lang="en">Added but does not apply</value>
+        <category>CHECKOUT</category>
+        <description>promo code added</description>
+    </property>
+    <property key="promoCodeAppliedInfo">
+        <value xml:lang="en">Applied, see Summary Below</value>
+        <category>CHECKOUT</category>
+        <description>promo code applied</description>
+    </property>
+    <property key="commonConfirmDialogText">
+        <value xml:lang="en">Are you sure?</value>
+        <category>CONFIRM_DIALOG</category>
+        <description>Confirm Dialog Box Message</description>
+    </property>
+    <property key="commonConfirmDialogTitle">
+        <value xml:lang="en">Please Confirm</value>
+        <category>CONFIRM_DIALOG</category>
+        <description>Confirm Dialog Box Title</description>
+    </property>
+    <property key="deleteAddressConfirmText">
+        <value xml:lang="en">Are you sure you want to DELETE this Address?</value>
+        <category>CHECK_OUT</category>
+        <description>Confirm Dialog Box Message</description>
+    </property>
+    <property key="searchDialogText">
+        <value xml:lang="en">Please enter one or more terms to search for</value>
+        <category>SEARCH_DIALOG</category>
+        <description>Search Dialog Box Message</description>
+    </property>
+    <property key="searchDialogTitle">
+        <value xml:lang="en">Please Confirm</value>
+        <category>SEARCH_DIALOG</category>
+        <description>Search Dialog Box Title</description>
+    </property>
+    <property key="eCommerceApplication">
+        <value xml:lang="en">Big Fish Commerce</value>
+    </property>
+    <property key="eCommerceViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>eCommerceViewPermissionError</description>
+    </property>
+
 //********************************************************************************************
 //DIV SEQUENCE UPDATES
 //FILE: OSafeUiSequence.xml
@@ -112,6 +421,252 @@
         <div>addressInfoZipPostcode</div>
         <description>Zip or Postcode</description>
     </property>
+  Issue# 26375  08/06/29012
+    <property key="title">
+        <value xml:lang="en">0</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoTitle</div>
+        <description>title</description>
+    </property>
+  Issue# 26374  08/06/29012
+    <property key="dateOfBirthDDMMYYYY">
+        <value xml:lang="en">0</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoDateOfBirthDDMMYYYY</div>
+        <description>Date of Birth in DDMMYYYY format</description>
+    </property>
+    <property key="dateOfBirthDDMM">
+        <value xml:lang="en">0</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoDateOfBirthDDMM</div>
+        <description>Date of Birth in DDMM format</description>
+    </property>
+  Issue# 26699 08/23/2012
+    <!-- *************************************** -->
+    <!-- Write-Review -->
+    <!-- *************************************** -->
+    <property key="productContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewProduct</div>
+        <description>Review Product Information.</description>
+    </property>
+    <property key="ratingContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewRating</div>
+        <description>Review Product Ratings.</description>
+    </property>
+    <property key="detailContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewDetail</div>
+        <description>Review Text.</description>
+    </property>
+    <property key="aboutYouContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewAboutYou</div>
+        <description>Review User Information.</description>
+    </property>
+    <property key="linkContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewLink</div>
+        <description>Help Links. </description>
+    </property>
+    <property key="buttonContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewButton</div>
+        <description>Submit and Cancel Button.</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Product -->
+    <!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewProductName</div>
+        <description>Product Name</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewTertiaryInfo</div>
+        <description>Product Tertiary Information.</description>
+    </property>
+    <property key="thumbImage">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Rating -->
+    <!-- *************************************** -->
+    <property key="rateOverallStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateOverallStars</div>
+        <description>The overall rating star selection</description>
+    </property>
+    <property key="rateQualityStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateQualityStars</div>
+        <description>The quality rating star selection</description>
+    </property>
+    <property key="rateEffectivenessStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateEffectivenessStars</div>
+        <description>The effectiveness rating star selection</description>
+    </property>
+    <property key="rateSatisfactionStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateSatisfactionStars</div>
+        <description>The satisfaction rating star selection</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Detail -->
+    <!-- *************************************** -->
+    <property key="reviewerNickname">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerNickname</div>
+        <description>The Nickname of the reviewer</description>
+    </property>
+    <property key="reviewerTitle">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerTitle</div>
+        <description>The Title for the review</description>
+    </property>
+    <property key="reviewerText">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerText</div>
+        <description>The Text of the review</description>
+    </property>
+    <property key="reviewerTip">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerTip</div>
+        <description>Tips for writing a review, from Label file</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-AboutYou -->
+    <!-- *************************************** -->
+    <property key="reviewerLocation">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerLocation</div>
+        <description>Location of reviewer</description>
+    </property>
+    <property key="reviewerAge">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerAge</div>
+        <description>Age of reviewer</description>
+    </property>
+    <property key="reviewerGender">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerGender</div>
+        <description>Gender of reviewer</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Link -->
+    <!-- *************************************** -->
+    <property key="reviewTermsCondLink">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewLink</screen>
+        <div>writeReviewReviewTermsCondLink</div>
+        <description>The Terms and Conditions helper link .</description>
+    </property>
+    <property key="reviewGuidelinesLink">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewLink</screen>
+        <div>writeReviewReviewGuidelinesLink</div>
+        <description>The Guidelines helper link.</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Button -->
+    <!-- *************************************** -->
+    <property key="submitButton">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewButton</screen>
+        <div>writeReviewSubmitButton</div>
+        <description>The Submit button.</description>
+    </property>
+    <property key="cancelButton">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewButton</screen>
+        <div>writeReviewCancelButton</div>
+        <description>The Cancel button.</description>
+    </property>
 //Remove
 
 
@@ -121,7 +676,125 @@
 //********************************************************************************************
 
 //Add
+  08/17/2012 issue# 26627
+    ###########################################################
+    # Java Memory : Startofbiz.bat and Startofbiz.sh
+    #
+    # Ofbiz File : Ofbiz/startofbiz.bat, Ofbiz/startofbiz.sh
+    ###########################################################
+    Xms = 128M
+    Xmx = 512M
+    MaxPermSize =128m
+    
+  08/17/2012 issue# 26628 (CHANGED HEADERS)
+    ####################################################################
+    # Database Properties : EntityEngine.xml
+    #
+    # Ofbiz File : framework/entity/config/entityengine.xml
+    ####################################################################
+    
+    #######################################################################################################################
+    # Windows Service Properties : Install_Osafe_Service.bat, Uninstall_Osafe_Service.bat, Startofbiz.bat and Startofbiz.sh
+    #
+    # Ofbiz File : Ofbiz/JavaService/install_Osafe_Service.bat,Ofbiz/JavaService/uninstall_Osafe_Service.bat
+    #              Ofbiz/startofbiz.bat and Ofbiz/startofbiz.sh
+    #######################################################################################################################
+    
+    ##########################################################
+    # General Properties : General.properties
+    #
+    # Ofbiz File : framework/common/config/general.properties
+    ##########################################################
 
+    ###############################################################
+    # General Properties for Multi country : General.properties
+    #
+    # Ofbiz File : framework/common/config/general.properties
+    ###############################################################
+    
+    ##########################################################################
+    # Start Properties for Multi Locale : Start.properties
+    #
+    # Ofbiz File : framework\start\src\org\ofbiz\base\start\start.properties
+    ##########################################################################
+    
+    ###########################################################
+    # Port Numbers : Ofbiz-containers.xml
+    #
+    # Ofbiz File : framework/base/config/ofbiz-containers.xml
+    ###########################################################
+    
+    ######################################################
+    # URL Properties : Url.properties
+    #
+    # Ofbiz File : framework/webapp/config/url.properties
+    ######################################################
+    
+    #########################################################################
+    # Store Settings: Web.xml
+    #
+    # Ofbiz File : hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml
+    #########################################################################
+    
+    ##################################################
+    # OSafe Settings : Web.xml
+    #
+    # Ofbiz File : hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml
+    ##################################################
+
+    #########################################################################
+    # OSafe Admin Settings
+    #
+    # Ofbiz File : hot-deploy/osafeadmin/webapp/osafeadmin/WEB-INF/web.xml
+    #########################################################################
+    
+    ##########################################################
+    # OSafe-Theme Settings : OsafeThemeData.xml
+    #
+    # Ofbiz File : theme/osafe_theme/data/osafeThemeData.xml
+    ###########################################################
+    
+    #############################################################
+    # OSafe Images Settings : Osafe.properties
+    #
+    # Ofbiz File : hot-deploy/osafe/config/osafe.properties
+    #############################################################
+    
+    ############################################################
+    # Security Properties : Security.properties
+    #
+    # Ofbiz File : framework/security/config/security.properties
+    #############################################################
+    
+    #########################################################
+    # widget Settings : Widget.properties
+    #
+    # Ofbiz File : framework/widget/config/widget.properties 
+    #########################################################
+    
+    ##############################################################
+    # SEO Friendly Url : Osafe.properties and Web.xml
+    #
+    # Ofbiz File : hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml
+    ##############################################################
+    
+    ################################################################
+    # ProdSearch Properties for Indexing : Prodsearch.properties
+    #
+    # Ofbiz File : applications\product\config\prodsearch.properties
+    #################################################################
+    
+    #########################################################
+    # Good Indentification Types : Osafe.properties
+    #
+    # Ofbiz File : hot-deploy/osafe/config/osafe.properties
+    #########################################################
+    
+    ###########################################################
+    # Java Memory : Startofbiz.bat and Startofbiz.sh
+    #
+    # Ofbiz File : Ofbiz/startofbiz.bat, Ofbiz/startofbiz.sh
+    ###########################################################
 
 //Remove
 
@@ -132,17 +805,9 @@
 
 //Add
 
-7.31.2012:
-
-.pdpVideo #productVideoLink a, .pdpVideo #productVideoLink a:hover, 
-.pdpVideo #productVideoLink a span, .pdpVideo360 #productVideo360Link a, .pdpVideo360 #productVideo360Link a:hover, 
-.pdpVideo360 #productVideo360Link a span, .displayBox h3, 
-
 //Remove
 
-7.31.2012:
 
-.displayBoxHeader, .displayBoxHeaderCaption
 
 //********************************************************************************************
 //ECOMMERCE CSS UPDATES
@@ -151,7 +816,41 @@
 
 //Add
 
+
+7.31.2012:
+
+.pdpVideo #productVideoLink a, .pdpVideo #productVideoLink a:hover, 
+.pdpVideo #productVideoLink a span, .pdpVideo360 #productVideo360Link a, .pdpVideo360 #productVideo360Link a:hover, 
+.pdpVideo360 #productVideo360Link a span, .displayBox h3,
+
+8.10.2012:
+
+#anonSinglePageCheckout .checkoutOrderPayments .paymentOptions, #singlePageCheckout .checkoutOrderPayments .paymentOptions { }#anonSinglePageCheckout .checkoutOrderPayments .paymentOptions h3, #singlePageCheckout .checkoutOrderPayments .paymentOptions h3 { }#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow {     float: left;    width: 100%;}#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry {     float: left;    width: 100%;}#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel { }#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span {     float: left;    font-size: 1.6em;    margin: 9px 0 0 10px;}#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup p, #singlePageCheckout #deliveryOptionBox #customerStorePickup p {     display: inline-block;    margin: 10px 0;}#anonSinglePageCheckout #deliveryOptionBox .deliveryOption, /* 'Deliver My Items' Button */#singlePageCheckout #deliveryOptionBox .deliveryOption { }#anonSinglePageCheckout #deliveryOptionBox .deliveryOption span, #singlePageCheckout #deliveryOptionBox .deliveryOption span {     font-size: 1.6em;}.personalInfoTitleSeq {	}.personalInfoDateOfBirthDDMMYYYYSeq {	}.personalInfoDateOfBirthDDMMSeq {	}.personalInfoDateOfBirthDDMMYYYY {}.personalInfoDateOfBirthDDMM {}.personalInfoTitle {}
+ 
+8.17.2012:
+
+	7.2 Dialog Boxes/* === 7.2 Dialog  Boxes  === */#storePickup_displayDialog #eCommerceStoreLocatorContainer {    width: 600px; /* need to prevent select store popup resizing on map load */}.pdpSocialMediaSeq {}.pdpTabsSocialMediaSeq {	}.quicklookSocialMediaSeq {}.personalInfoTitleSeq {	}.personalInfoTitle {	}.personalInfoDateOfBirthDDMMYYYYSeq {	}.personalInfoDateOfBirthDDMMSeq {	}.personalInfoDateOfBirthDDMMYYYY {	}.personalInfoDateOfBirthDDMM {	}#eCommerceLoginContainer #ptsLogin {}#eCommerceLoginContainer #ptsLogin p {}#eCommerceLoginContainer #pesLogin  {}#eCommerceLoginContainer #pesLogin p {}
+
+#anonSinglePageCheckout .checkoutOrderPayments .paymentOptions, #singlePageCheckout .checkoutOrderPayments .paymentOptions {     margin: 10px 0;}#anonSinglePageCheckout .checkoutOrderPayments .paymentOptions h3, #singlePageCheckout .checkoutOrderPayments .paymentOptions h3 {     font-size: 14px;}#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction,#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction {}#anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a,#singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a {}#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup, /* Appears when customer selects 'Store Pickup' */#singlePageCheckout #deliveryOptionBox #customerStorePickup { }#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow { }#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry { }#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel { }#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span, #singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span { }#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup p, #singlePageCheckout #deliveryOptionBox #customerStorePickup p { }#anonSinglePageCheckout #deliveryOptionBox .deliveryOption, /* 'Deliver My Items' Button */#singlePageCheckout #deliveryOptionBox .deliveryOption { }#anonSinglePageCheckout #deliveryOptionBox .deliveryOption span, #singlePageCheckout #deliveryOptionBox .deliveryOption span {     font-size: 1.6em;}#anonSinglePageCheckout .shippingOptionsStorePickup a span, #singlePageCheckout .shippingOptionsStorePickup a span { }
+
+8.22.2012:
+
+#eCommerceEditCustomerInfoContainer {}#eCommerceEditCustomerInfoContainer #ptsLoginInfo {}#eCommerceEditCustomerInfoContainer #ptsLoginInfo p {}#eCommerceEditCustomerInfoContainer #pesLoginInfo {}#eCommerceEditCustomerInfoContainer #pesLoginInfo p {}/* ---- Order Status Information ---- */#eCommerceOrderHistoryContainer {}#eCommerceOrderHistoryContainer #ptsOrderStatus {}#eCommerceOrderHistoryContainer #ptsOrderStatus p {}#eCommerceOrderHistoryContainer #pesOrderStatus {}#eCommerceOrderHistoryContainer #pesOrderStatus p {}table#orderSalesHistory {}table#orderSalesHistory thead tr {}table#orderSalesHistory thead tr th {}table#orderSalesHistory tbody tr {}table#orderSalesHistory tbody tr th {}table#orderSalesHistory thead tr {}table#orderSalesHistory thead tr th {}table#orderSalesHistory tbody tr {}table#orderSalesHistory tbody tr th {}/* === 12.5 Site Map === */…..#eCommerceMyAccountContainer {}#eCommerceMyAccountContainer .displayBox {    margin: 25px 0;}#eCommerceMyAccountContainer .displayBox h3 {}
+
+#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeDesc {    color: #FF0000;    font-size: 14px;	}#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeStatus {}#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction {}#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a {}#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a {    margin: 0;}#multiPageOrderSummary #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a:hover {….entry span {}#multiPageOrderSummary h3 { }#multiPageOrderSummary .entry h3 { /* For Paypal and Credit Card H3s */}
+
 //Remove
+
+7.31.2012:
+
+.displayBoxHeader, .displayBoxHeaderCaption
+
+8.22.2012:
+
+.withGuestCheckoutOption h3, .requestCatalog, .requestCatalog .entry ul li, .textCounter, .headerCaption,
+
+
+ 
 
 //********************************************************************************************
 //OSAFE PROPERTIES UPDATE
@@ -161,3 +860,56 @@
 //Add
 
 //Remove
+  Issue# 26626  08/17/29012
+  solr-page-size=20
+
+//********************************************************************************************
+//EECAS XML TEMPLATE UPDATE
+//FILE: eecas.xml.template
+//********************************************************************************************
+
+//comment out all services
+  Issue# 26713  08/24/2012 
+    <!-- Product Keyword Indexing ECAs
+    <eca entity="Product" operation="create-store" event="return">
+        <condition field-name="autoCreateKeywords" operator="not-equals" value="N"/>
+        <action service="indexProductKeywords" mode="sync" value-attr="productInstance"/>
+    </eca>
+    <eca entity="ProductAttribute" operation="create-store" event="return">
+        <action service="indexProductKeywords" mode="sync"/>
+    </eca>
+    <eca entity="ProductFeatureAppl" operation="create-store" event="return">
+        <action service="indexProductKeywords" mode="sync"/>
+    </eca>
+    <eca entity="ProductContent" operation="create-store" event="return">
+        <action service="indexProductKeywords" mode="sync"/>
+    </eca> -->
+
+    <!-- inventory related ECAs 
+    <eca entity="InventoryItem" operation="create-store" event="return">
+        <condition field-name="productId" operator="is-not-empty"/>
+        <condition field-name="availableToPromiseTotal" operator="is-not-empty"/>
+        <condition field-name="availableToPromiseTotal" operator="less-equals" value="0" type="BigDecimal"/>
+        <action service="checkProductInventoryDiscontinuation" mode="async"/>
+    </eca> -->
+    <!-- update the totals for serialized inventory items
+    <eca entity="InventoryItem" operation="create-store" event="return">
+        <action service="updateSerializedInventoryTotals" mode="sync"/>
+    </eca> -->
+    <!-- Just in case an InventoryItem is ever created with ATP/QOH values, catch and handle that
+    <eca entity="InventoryItem" operation="create" event="return">
+        <action service="createInventoryItemCheckSetAtpQoh" mode="sync"/>
+    </eca> -->
+    <!-- Create the initial status record
+    <eca entity="InventoryItem" operation="create" event="return">
+        <condition field-name="statusId" operator="is-not-empty"/>
+        <action service="createInventoryItemStatus" mode="sync"/>
+    </eca> -->
+    <!-- The InventoryItemDetail entity should never be updated/stored or deleted/removed, but we'll catch those too anyway...
+    <eca entity="InventoryItemDetail" operation="create-store-remove" event="return">
+        <action service="updateInventoryItemFromDetail" mode="sync"/>
+    </eca>
+    <eca entity="InventoryItemDetail" operation="create-store-remove" event="return">
+        <condition field-name="availableToPromiseDiff" operator="not-equals" value="0" type="BigDecimal"/>
+        <action service="setLastInventoryCount" mode="sync"/>
+    </eca> -->

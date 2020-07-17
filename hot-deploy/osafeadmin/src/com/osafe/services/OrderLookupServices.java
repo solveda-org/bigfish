@@ -628,24 +628,30 @@ public class OrderLookupServices {
                 conditions.add(EntityCondition.makeCondition(orExpr, EntityOperator.OR));
             }
         }
-
+           
         // Get all orders according to specific ship to country with "Only Include" or "Do not Include".
-        String orderContactMechId = (String) context.get("orderContactMechId");
+        List<String> orderContactMechIds = (List) context.get("orderContactMechIds");
         String countryGeoId = (String) context.get("countryGeoId");
         String includeCountry = (String) context.get("includeCountry");
+        
+        List orCon = FastList.newInstance();
 
-        if (orderContactMechId != null || (UtilValidate.isNotEmpty(countryGeoId) && UtilValidate.isNotEmpty(includeCountry))) {
+        if (orderContactMechIds != null || (UtilValidate.isNotEmpty(countryGeoId) && UtilValidate.isNotEmpty(includeCountry))) {
             dve.addMemberEntity("OCM", "OrderContactMech");
             dve.addAlias("OCM", "contactMechId");
             dve.addAlias("OCM", "contactMechPurposeTypeId");
             dve.addViewLink("OH", "OCM", Boolean.FALSE, ModelKeyMap.makeKeyMapList("orderId"));
         }
-        if (UtilValidate.isNotEmpty(orderContactMechId)) {
+        if (orderContactMechIds != null) {
             paramList.add("orderContactMechId=" + countryGeoId);
-            conditions.add(makeExpr("contactMechId", orderContactMechId));
+            for(String orderContactMechId : orderContactMechIds){
+            	if(UtilValidate.isNotEmpty(orderContactMechId)){
+            		orCon.add(EntityCondition.makeCondition("contactMechId", EntityOperator.EQUALS, orderContactMechId));
+            	}
+            }
+            conditions.add(EntityCondition.makeCondition(orCon, EntityOperator.OR));
         }
-
-
+         
         if (UtilValidate.isNotEmpty(countryGeoId) && UtilValidate.isNotEmpty(includeCountry)) {
             paramList.add("countryGeoId=" + countryGeoId);
             paramList.add("includeCountry=" + includeCountry);

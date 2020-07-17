@@ -204,6 +204,13 @@
 
         </if-not-empty>
         <check-errors/>
-
     </simple-method>
+    <simple-method method-name="forgotPasswordEmailedSuccess" short-description="Forgot Password Emailed" login-required="false">
+        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="ForgotPasswordEmailedSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
+        <field-to-request field="success_list" request-name="osafeSuccessMessageList"/>
+        <return response-code="success"/>
+    </simple-method>
+    
+    
 </simple-methods>

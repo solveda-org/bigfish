@@ -50,7 +50,7 @@ userLogin = session.getAttribute("userLogin");
 session = context.session;
 svcCtx = session.getAttribute("customerPDFMap");
 if (UtilValidate.isEmpty(svcCtx)) {
-    Map<String, Object> svcCtx = FastMap.newInstance();
+    svcCtx = FastMap.newInstance();
 }
 
 if (UtilValidate.isNotEmpty(partyId)) {

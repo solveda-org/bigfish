@@ -35,7 +35,7 @@
                        ${review.reviewTitle!}
                     </td>
                     <td class="actionReviewCol <#if !hasNext>lastRow</#if>">
-                        <#assign tooltipData = review.productReview/>
+                        <#assign tooltipData = review.productReview!""/>
                         <#assign tooltipData = Static["com.osafe.util.OsafeAdminUtil"].formatToolTipText(tooltipData, ADM_TOOLTIP_MAX_CHAR!)/>
                         <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="descIcon"></span></a>
                     </td>

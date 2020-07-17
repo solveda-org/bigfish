@@ -505,10 +505,14 @@ public class SiteMapServices {
         	}
         	friendlyValue=friendlyKeyValue.toString();
         	friendlyValue=StringUtil.replaceString(friendlyValue,"&apos;","");
+        	friendlyValue=StringUtil.replaceString(friendlyValue,"'","");
         	friendlyValue=StringUtil.replaceString(friendlyValue,"&quot;","");
+        	friendlyValue=StringUtil.replaceString(friendlyValue,"\"","");
         	friendlyValue=StringUtil.replaceString(friendlyValue,"&amp;","And");
         	friendlyValue=StringUtil.replaceString(friendlyValue,"&","And");
-        	friendlyValue=StringUtil.replaceString(friendlyValue,","," ");
+        	friendlyValue=StringUtil.replaceString(friendlyValue,",","");
+        	friendlyValue=StringUtil.replaceString(friendlyValue,"-","");
+        	friendlyValue=StringUtil.replaceString(friendlyValue,".","");
         	friendlyValue=StringUtil.replaceString(friendlyValue," ","-");
         	
         	Element newElement = document.createElement("property");

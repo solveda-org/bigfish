@@ -16,24 +16,24 @@
 <div class = "personalInfoDateOfBirthMMDDYYYY">
  <div class="entry">
       <label for="DOB_MMDDYYYY"><@required/>${uiLabelMap.DOB_Caption}</label>
-      <select id="dobLongMonth" name="dobLongMonth" class="dobMonth">
-      <#assign dobMonth = requestParameters.dobLongMonth!dobMonth!"">
+      <select id="dobLongMonthUs" name="dobLongMonthUs" class="dobMonth">
+      <#assign dobMonth = requestParameters.dobLongMonthUs!dobMonth!"">
       <#if dobMonth?has_content && (dobMonth?length gt 1)>
           <option value="${dobMonth?if_exists}">${dobMonth?if_exists}</option>
       </#if>
         <option value="">${uiLabelMap.DOB_Month}</option>
         ${screens.render("component://osafe/widget/CommonScreens.xml#ddMonths")}
       </select>
-      <select id="dobLongDay" name="dobLongDay" class="dobDay">
-      <#assign dobDay = requestParameters.dobLongDay!dobDay!"">
+      <select id="dobLongDayUs" name="dobLongDayUs" class="dobDay">
+      <#assign dobDay = requestParameters.dobLongDayUs!dobDay!"">
       <#if dobDay?has_content && (dobDay?length gt 1)>
           <option value="${dobDay?if_exists}">${dobDay?if_exists}</option>
       </#if>
         <option value="">${uiLabelMap.DOB_Day}</option>
         ${screens.render("component://osafe/widget/CommonScreens.xml#ddDays")}
       </select>
-      <select id="dobLongYear" name="dobLongYear" class="dobYear">
-      <#assign dobYear = requestParameters.dobLongYear!dobYear!"">
+      <select id="dobLongYearUs" name="dobLongYearUs" class="dobYear">
+      <#assign dobYear = requestParameters.dobLongYearUs!dobYear!"">
       <#if dobYear?has_content && (dobYear?length gt 1)>
           <option value="${dobYear?if_exists}">${dobYear?if_exists}</option>
       </#if>

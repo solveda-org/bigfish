@@ -46,25 +46,34 @@
   </#if>
   <!-- List of products  -->
        <#if documentList?has_content>
-       <#assign PRODUCT_STORE_PARM_FACET = PLP_FACET_GROUP_VARIANT_SWATCH_IMG!""/>
-        ${setRequestAttribute("PRODUCT_STORE_PARM_FACET",PRODUCT_STORE_PARM_FACET)}
-       <#if PRODUCT_STORE_PARM_FACET?has_content>
-          <#assign PRODUCT_STORE_PARM_FACET=PRODUCT_STORE_PARM_FACET.toUpperCase()/>
-           ${setRequestAttribute("PRODUCT_STORE_PARM_FACET",PRODUCT_STORE_PARM_FACET)}
+       <#assign PLP_FACET_GROUP_VARIANT_SWATCH = PLP_FACET_GROUP_VARIANT_SWATCH_IMG!""/>
+        ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_SWATCH",PLP_FACET_GROUP_VARIANT_SWATCH)}
+       <#if PLP_FACET_GROUP_VARIANT_SWATCH?has_content>
+          <#assign PLP_FACET_GROUP_VARIANT_SWATCH=PLP_FACET_GROUP_VARIANT_SWATCH.toUpperCase()/>
+           ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_SWATCH",PLP_FACET_GROUP_VARIANT_SWATCH)}
+       </#if>
+       <#if PLP_FACET_GROUP_VARIANT_PDP_MATCH?has_content>
+          <#assign PLP_FACET_GROUP_VARIANT_STICKY=PLP_FACET_GROUP_VARIANT_PDP_MATCH.toUpperCase()/>
+           ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_STICKY",PLP_FACET_GROUP_VARIANT_STICKY)}
        </#if>
        <#assign featureValueSelected=""/>
        ${setRequestAttribute("featureValueSelected",featureValueSelected)}
-       <#if facetGroups?has_content && PRODUCT_STORE_PARM_FACET?has_content>
+       <#assign facetGroupMatch = FACET_GROUP_VARIANT_MATCH!""/>
+       <#if facetGroupMatch?has_content>
+          <#assign facetGroupMatch=facetGroupMatch.toUpperCase()/>
+           ${setRequestAttribute("FACET_GROUP_VARIANT_MATCH",facetGroupMatch)}
+       </#if>
+       <#if facetGroups?has_content && facetGroupMatch?has_content>
           <#list facetGroups as facet>
-            <#if PRODUCT_STORE_PARM_FACET == facet.facet>
+            <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                  ${setRequestAttribute("featureValueSelected",featureValueSelected)}
             </#if>
           </#list>
        </#if>
-       <#if searchTextGroups?has_content && PRODUCT_STORE_PARM_FACET?has_content>
+       <#if searchTextGroups?has_content && facetGroupMatch?has_content>
           <#list searchTextGroups as facet>
-            <#if PRODUCT_STORE_PARM_FACET == facet.facet>
+            <#if facetGroupMatch == facet.facet>
                 <#assign featureValueSelected=facet.facetValue!""/>
                 ${setRequestAttribute("featureValueSelected",featureValueSelected)}
             </#if>

@@ -22,9 +22,10 @@
                 <#assign internalName = topProduct.internalName!"">
                 <#assign quantityOrdered = product.quantityOrdered!"">
                 <#assign unitPrice = product.unitPrice!"">
-                <#assign productName = topProductContentWrappers[productId].get("PRODUCT_NAME")>
-                <#if !productName?string?has_content>
-                    <#assign productName = productId>
+                <#assign productWrapper = topProductContentWrappers[productId]!"">
+                <#assign productName=productId!""/>
+                <#if productWrapper?has_content>
+	                <#assign productName = productWrapper.get("PRODUCT_NAME")>
                 </#if>
                 <#if (productName.toString().length() > 35)>
                    <#assign productName = productName.toString().substring(0,34)>

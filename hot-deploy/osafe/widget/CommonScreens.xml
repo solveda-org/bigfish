@@ -88,6 +88,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
                 <service service-name="getVisualThemeResources">
@@ -95,7 +96,6 @@
                     <field-map field-name="themeResources" from-field="layoutSettings"/>
                 </service>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/setMainPanelStyle.groovy"/>
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy"/>
             </actions>
             <widgets>
                 <!--
@@ -206,6 +206,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
                 <service service-name="getVisualThemeResources">
@@ -213,7 +214,6 @@
                     <field-map field-name="themeResources" from-field="layoutSettings"/>
                 </service>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/setMainPanelStyle.groovy"/>
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy"/>
             </actions>
             <widgets>
                 <!--
@@ -434,10 +434,44 @@
     <screen name="ccTypes">
         <section>
             <actions>
-                <set field="thisDate" from-field="nowTimestamp"/>
+                <set field="enumTypeId" value="CREDIT_CARD_TYPE"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/enumTypes.groovy"/>
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/ccTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="contactReasonType">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="CONTACT_US_REASON"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/contactReasonType.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="titleTypes">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="PERSONAL_TITLE"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/titleTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="reviewAges">
+        <section>
+            <actions>
+                <set field="enumTypeId" value="REVIEW_AGE"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/enumTypes.groovy"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/reviewAge.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

@@ -11,7 +11,7 @@
               <#if contactMech.contactMechTypeId?if_exists = "POSTAL_ADDRESS">
                   <#assign postalAddress=contactMech.getRelatedOne("PostalAddress")!"">
                   <#if postalAddress?has_content>
-                      <input type="radio" id="${fieldPurpose?if_exists}_SELECT_ADDRESS" name="${fieldPurpose?if_exists}_SELECT_ADDRESS" value="${postalAddress.contactMechId!}" onchange="javascript:getPostalAddress('${postalAddress.contactMechId!}', '${fieldPurpose?if_exists}');"<#if selectedAddress == postalAddress.contactMechId >checked="checked"</#if>/>
+                      <input type="radio" class="${fieldPurpose?if_exists}_SELECT_ADDRESS" name="${fieldPurpose?if_exists}_SELECT_ADDRESS" value="${postalAddress.contactMechId!}" onchange="javascript:getPostalAddress('${postalAddress.contactMechId!}', '${fieldPurpose?if_exists}');"<#if selectedAddress == postalAddress.contactMechId >checked="checked"</#if>/>
                       <span><#if postalAddress.attnName?has_content>${postalAddress.attnName!}<#else>${postalAddress.address1!}</#if></span>
                   </#if>
               </#if>

@@ -3,7 +3,6 @@
 #############################
 solr-server=http://localhost:@port.http@/solr
 solr-product-index-file=${sys:getProperty('ofbiz.home')}/hot-deploy/solr/import/productsToIndex.csv
-solr-page-size=20
 product-category-facet-description=Category
 product-category-facet-cat-list-description=Refine by Category
 solr-schema-xml-file=${sys:getProperty('ofbiz.home')}/hot-deploy/solr/conf/schema.xml

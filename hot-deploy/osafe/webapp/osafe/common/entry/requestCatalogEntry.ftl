@@ -49,7 +49,7 @@
     <#if COUNTRY_MULTI?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI)>
         <div class="entry">
             <label for="REQ_CATALOG_COUNTRY"><@required/>${uiLabelMap.CountryCaption}</label>
-            <select name="REQ_CATALOG_COUNTRY" id="REQ_CATALOG_COUNTRY" class="dependentSelectMaster required">
+            <select name="REQ_CATALOG_COUNTRY" id="REQ_CATALOG_COUNTRY" class="dependentSelectMaster">
                 <#list countryList as country>
                     <option value='${country.geoId}' <#if selectedCountry = country.geoId >selected=selected</#if>>${country.get("geoName")?default(country.geoId)}</option>
                 </#list>
@@ -97,7 +97,7 @@
             <span class="REQ_CATALOG_OTHER">${uiLabelMap.StateOrProvinceCaption}</span>
             <span id="advice-required-REQ_CATALOG_STATE" style="display:none" class="errorMessage">(${uiLabelMap.CommonRequired})</span>
         </label>
-        <select id="REQ_CATALOG_STATE" name="REQ_CATALOG_STATE" class="select REQ_CATALOG_COUNTRY">
+        <select id="REQ_CATALOG_STATE" name="REQ_CATALOG_STATE" class="REQ_CATALOG_COUNTRY">
             <#list countryList as country>
                 <#if country.geoId == selectedCountry>
                   <#assign stateMap = dispatcher.runSync("getAssociatedStateList", Static["org.ofbiz.base.util.UtilMisc"].toMap("countryGeoId", country.geoId, "userLogin", userLogin, "listOrderBy", "geoCode"))/>

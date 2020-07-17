@@ -26,9 +26,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -67,7 +69,10 @@ import org.ofbiz.webapp.control.ConfigXMLReader.Event;
 import org.ofbiz.webapp.event.ServiceEventHandler;
 import org.ofbiz.webapp.event.EventHandlerException;
 import org.ofbiz.service.ServiceUtil;
-import com.osafe.util.OsafeAdminUtil;
+
+import java.text.ParseException;
+
+import com.ibm.icu.util.Calendar;
 
 /**
  * OsafeAdminScheduledJobServices - WebApp Events Related To Framework pieces
@@ -94,25 +99,56 @@ public class OsafeAdminScheduledJobServices {
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         Authorization authz = (Authorization) request.getAttribute("authz");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        //Delegator delegator = (Delegator) request.getAttribute("delegator");
         Locale locale = UtilHttp.getLocale(request);
         TimeZone timeZone = UtilHttp.getTimeZone(request);
+        List<String> error_list = new ArrayList<String>();
 
         Map<String, Object> params = UtilHttp.getParameterMap(request);
         // get the schedule parameters
         String jobName = (String) params.remove("JOB_NAME");
         String serviceName = (String) params.remove("SERVICE_NAME");
         String poolName = (String) params.remove("POOL_NAME");
+        String serviceDate = (String) params.remove("SERVICE_DATE");
         String serviceTime = (String) params.remove("SERVICE_TIME");
+        String serviceAMPMString= (String) params.remove("SERVICE_AMPM");
         String serviceEndTime = (String) params.remove("SERVICE_END_TIME");
         String serviceFreq = (String) params.remove("SERVICE_FREQUENCY");
         String serviceIntr = (String) params.remove("SERVICE_INTERVAL");
         String serviceCnt = (String) params.remove("SERVICE_COUNT");
         String retryCnt = (String) params.remove("SERVICE_MAXRETRY");
+        
+        String prefDateFormat = (String) params.remove("FORMAT_DATE");
         //default to -1
         retryCnt = "-1";
-        
-        List<String> error_list = new ArrayList<String>();
+      //set default to DAILY
+        if(serviceFreq.equals("0"))
+        {
+        	serviceFreq = "";
+        }
+        else if(serviceFreq.equals("2"))
+        {
+        	serviceFreq = "MINUTELY";
+        }
+        else if(serviceFreq.equals("3"))
+        {
+            serviceFreq = "HOURLY";
+        }
+        else if(serviceFreq.equals("4"))
+        {
+            serviceFreq = "DAILY";
+        }
+        else if(serviceFreq.equals("5"))
+        {
+            serviceFreq = "WEEKLY";
+        }
+        else if(serviceFreq.equals("6"))
+        {
+            serviceFreq = "MONTHLY";
+        }
+        else if(serviceFreq.equals("7"))
+        {
+            serviceFreq = "YEARLY";
+        }
         
         //validation
         //serviceName
@@ -137,16 +173,54 @@ public class OsafeAdminScheduledJobServices {
         	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "MissingJobNameError", locale));
         }
  
+        
+        //check start datetime
         long starterTime = (new Date()).getTime();
         long endingTime = 0;
-        //check start datetime
-        if (UtilValidate.isNotEmpty(serviceTime)) {
+        //SERVICE_TIME manipulation (serviceDate + serviceTime + serviceAMPM --> serviceDatetime)
+        String serviceDateTime = "";
+        if(UtilValidate.isNotEmpty(serviceDate) && UtilValidate.isNotEmpty(serviceTime))
+        {
+	        SimpleDateFormat prefFormat = null;
+	        if(!UtilValidate.isNotEmpty(prefDateFormat)) //if FORMAT_DATE sys parm is empty, this is the format datepicker will use
+	        {
+	        	prefDateFormat = "mm/dd/y";
+	        }
+	        prefFormat = new SimpleDateFormat(prefDateFormat + " H:mm a");
+	        Date dateTime = null;
+	        try
+	        {
+	        	dateTime = prefFormat.parse(serviceDate + " " + serviceTime);
+	        }
+	        catch (ParseException e)
+	        {
+	        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidStartDateError", locale));
+	        }
+	        GregorianCalendar calendar = new GregorianCalendar();
+	        calendar.setTime(dateTime);
+	        
+	        Timestamp time = new Timestamp(calendar.getTimeInMillis());
+	        if(serviceAMPMString.equals("2"))
+	        {
+	        	int hour = calendar.get(Calendar.HOUR_OF_DAY);
+	        	if(hour == 12){
+	        		//leave it alone
+	        	}
+	        	else
+	        	{
+	        		long TWELVE_HOURS_MILLISCONDS = 12 * 60 * 60 * 1000;
+	        		time = new Timestamp(calendar.getTimeInMillis() + TWELVE_HOURS_MILLISCONDS);
+	        	}
+	        }
+	        serviceDateTime = time.toString();
+        }
+        if (UtilValidate.isNotEmpty(serviceDateTime)) {
             try {
-                Timestamp ts1 = Timestamp.valueOf(serviceTime);
+                Timestamp ts1 = Timestamp.valueOf(serviceDateTime);
                 starterTime = ts1.getTime();
             } catch (IllegalArgumentException e) {
                 try {
-                	starterTime = Long.parseLong(serviceTime);
+                	starterTime = Long.parseLong(serviceDateTime);
                 } catch (NumberFormatException nfe) {
                     error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidStartDateError", locale));
                 }
@@ -155,6 +229,10 @@ public class OsafeAdminScheduledJobServices {
                 error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "StartTimePassedError", locale));
             }
         }
+        else
+        {
+        	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "BlankStartDateError", locale));
+        }
         //check end time
         if (UtilValidate.isNotEmpty(serviceEndTime)) {
             try {
@@ -162,7 +240,7 @@ public class OsafeAdminScheduledJobServices {
                 endingTime = ts1.getTime();
             } catch (IllegalArgumentException e) {
                 try {
-                	endingTime = Long.parseLong(serviceTime);
+                	endingTime = Long.parseLong(serviceDateTime);
                 } catch (NumberFormatException nfe) {
                 	error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "InvalidEndDateError", locale));
                 }
@@ -182,7 +260,7 @@ public class OsafeAdminScheduledJobServices {
             	validNumInt = false;
             }
             //check if it is between 1 and 999
-            if((!serviceFreq.equals("NONE")) && (validNumInt==true))
+            if((!serviceFreq.equals("0")) && (validNumInt==true))
             {
             	if(intervals < 1 || intervals > 999){
             		error_list.add(UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "OutRangeIntervalError", locale));
@@ -200,9 +278,9 @@ public class OsafeAdminScheduledJobServices {
             	validNumFreq = false;
             }
           //check if it is between 1 and 999
-            if((!serviceFreq.equals("NONE")) && (validNumFreq == true))
+            if((!serviceFreq.equals("0")) && (validNumFreq == true))
             {
-            	if(counter == 0 || ((counter > 1) || (counter < 999))){
+            	if(counter == -1 || ((counter > 0) && (counter < 1000))){
             		//do nothing
             	}
             	else
@@ -313,13 +391,13 @@ public class OsafeAdminScheduledJobServices {
         }
 
         // some conversions
-        if (UtilValidate.isNotEmpty(serviceTime)) {
+        if (UtilValidate.isNotEmpty(serviceDateTime)) {
             try {
-                Timestamp ts1 = Timestamp.valueOf(serviceTime);
+                Timestamp ts1 = Timestamp.valueOf(serviceDateTime);
                 startTime = ts1.getTime();
             } catch (IllegalArgumentException e) {
                 try {
-                    startTime = Long.parseLong(serviceTime);
+                    startTime = Long.parseLong(serviceDateTime);
                 } catch (NumberFormatException nfe) {
                     String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.invalid_format_time", locale);
                     errorBuf.append("<li>" + errMsg);
@@ -336,7 +414,7 @@ public class OsafeAdminScheduledJobServices {
                 endTime = ts1.getTime();
             } catch (IllegalArgumentException e) {
                 try {
-                    endTime = Long.parseLong(serviceTime);
+                    endTime = Long.parseLong(serviceDateTime);
                 } catch (NumberFormatException nfe) {
                     String errMsg = UtilProperties.getMessage(OsafeAdminScheduledJobServices.err_resource, "coreEvents.invalid_format_time", locale);
                     errorBuf.append("<li>" + errMsg);
@@ -365,11 +443,6 @@ public class OsafeAdminScheduledJobServices {
         }
         if (UtilValidate.isNotEmpty(serviceFreq)) {
             int parsedValue = 0;
-            //set default to DAILY
-            if(serviceFreq.equals("NONE"))
-            {
-            	serviceFreq = "DAILY";
-            }
 
             try {
                 parsedValue = Integer.parseInt(serviceFreq);
@@ -436,34 +509,54 @@ public class OsafeAdminScheduledJobServices {
         return "success";
     }
 
-    public static boolean checkValidJobDate(String date)
+    public static String getValidJobDate(String serviceDate, String serviceTime, String serviceAMPMString, String prefDateFormat)
     {
-    	 long starterTime = (new Date()).getTime();
-         long endingTime = 0;
-         //check start datetime
-         if (UtilValidate.isNotEmpty(date)) 
-         {
-             try {
-                 Timestamp ts1 = Timestamp.valueOf(date);
-                 starterTime = ts1.getTime();
-             } catch (IllegalArgumentException e) 
-             {
-                 try 
-                 {
-                 	starterTime = Long.parseLong(date);
-                 } catch (NumberFormatException nfe) 
-                 {
-                     return false;
-                 }
-             }
-         }
-         return true;
+    	 //check start datetime
+        //SERVICE_TIME manipulation (serviceDate + serviceTime + serviceAMPM --> serviceDatetime)
+        String serviceDateTime = "";
+        if(UtilValidate.isNotEmpty(serviceDate) && UtilValidate.isNotEmpty(serviceTime))
+        {
+	        SimpleDateFormat prefFormat = null;
+	        if(!UtilValidate.isNotEmpty(prefDateFormat)) //if FORMAT_DATE sys parm is empty, this is the format datepicker will use
+	        {
+	        	prefDateFormat = "mm/dd/y";
+	        }
+	        prefFormat = new SimpleDateFormat(prefDateFormat + " H:mm a");
+	        Date dateTime = null;
+	        try
+	        {
+	        	dateTime = prefFormat.parse(serviceDate + " " + serviceTime);
+	        }
+	        catch (ParseException e)
+	        {
+	        	return serviceDateTime;
+	        }
+	        GregorianCalendar calendar = new GregorianCalendar();
+	        calendar.setTime(dateTime);
+	        
+	        Timestamp time = new Timestamp(calendar.getTimeInMillis());
+	        if(serviceAMPMString.equals("2"))
+	        {
+	        	int hour = calendar.get(Calendar.HOUR_OF_DAY);
+	        	if(hour == 12){
+	        		//leave it alone
+	        	}
+	        	else
+	        	{
+	        		long TWELVE_HOURS_MILLISCONDS = 12 * 60 * 60 * 1000;
+	        		time = new Timestamp(calendar.getTimeInMillis() + TWELVE_HOURS_MILLISCONDS);
+	        	}
+	        }
+	        serviceDateTime = time.toString();
+	        return serviceDateTime;
+        }
+        return serviceDateTime;
     }
     
     public static boolean checkPassedJobDate(String date)
     {
+    	System.out.println("AAAAAAA date :  " + date);
     	 long starterTime = (new Date()).getTime();
-         long endingTime = 0;
          //check start datetime
          if (UtilValidate.isNotEmpty(date)) 
          {
@@ -481,8 +574,10 @@ public class OsafeAdminScheduledJobServices {
                      
                  }
              }
+             System.out.println("AAAAAAA new startertimeDATE :  " + starterTime);
              if (starterTime < (new Date()).getTime()) 
              {
+            	 System.out.println("AAAAAAA new startertimeDATE :  " + starterTime + " vs now: " + (new Date()).getTime());
                  return false;
              }
          }
@@ -537,7 +632,7 @@ public class OsafeAdminScheduledJobServices {
              	validNumInt = false;
              }
              //check if it is between 1 and 999
-             if((!serviceFreq.equals("NONE")) && (validNumInt==true))
+             if((!serviceFreq.equals("0")) && (validNumInt==true))
              {
              	if(intervals < 1 || intervals > 999)
              	{
@@ -559,7 +654,7 @@ public class OsafeAdminScheduledJobServices {
             	validNumFreq = false;
             }
           //check if it is between 1 and 999
-            if((!serviceFreq.equals("NONE")) && (validNumFreq == true))
+            if((!serviceFreq.equals("0")) && (validNumFreq == true))
             {
             	if(counter == 0 || ((counter > 1) || (counter < 999))){
             		//do nothing

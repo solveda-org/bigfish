@@ -8,6 +8,15 @@
     <a href="<@ofbizUrl>productImages?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'${uiLabelMap.ProductImagesTooltip}','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
   </#if>
   
+  <#if showProductFeatureLink?has_content && showProductFeatureLink == 'true'>
+   <#if (product.isVariant?if_exists == 'N')>
+     <#assign features = product.getRelated("ProductFeatureAppl")/>
+     <#if features?exists && features?has_content>
+       <a href="<@ofbizUrl>productFeatures?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductFeaturesTooltip}');" onMouseout="hideTooltip()"><span class="featureIcon"></span></a>
+     </#if>
+   </#if>
+  </#if>
+  
   <#if showVariantLink?has_content && showVariantLink == 'true'>
     <#if (product.isVirtual?if_exists == 'Y') && (product.isVariant?if_exists == 'N')>
       <#assign variants = delegator.findByAnd("ProductAssoc", {"productId" : product.productId, "productAssocTypeId" : "PRODUCT_VARIANT"})/>

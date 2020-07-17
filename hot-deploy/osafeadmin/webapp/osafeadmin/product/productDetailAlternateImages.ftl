@@ -36,7 +36,7 @@
             </#if>
           </div>
           <div class="infoText">
-            <label>${uiLabelMap.LargeAltPDPImageInfo}</label>
+            <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.LargeAltPDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
         </div>
       </div>
@@ -66,7 +66,7 @@
             </#if>
           </div>
           <div class="infoText">
-            <label>${uiLabelMap.ThumbAltPDPImageInfo}</label>
+            <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ThumbAltPDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
         </div>
       </div>
@@ -96,7 +96,7 @@
             </#if>
           </div>
           <div class="infoText">
-            <label>${uiLabelMap.DetailPOPUPImageInfo}</label>
+            <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.DetailPOPUPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
         </div>
       </div>

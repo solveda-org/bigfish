@@ -37,17 +37,19 @@
       </div>
       <div class="infoValue small">
         <input type="text"  class="textEntry" name="promoCodeUseLimitPerCode" maxlength="20" value='${parameters.promoCodeUseLimitPerCode!promoCodeUseLimitPerCode!""}'/>
+          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromoCodeUseLimitPerCodeHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
       </div>
 
       <div class="">
-        <label>${uiLabelMap.PromotionCodeLimitPerCustomerCaption}</label>
+        <label class="extraSmallLabel">${uiLabelMap.PromotionCodeLimitPerCustomerCaption}</label>
       </div>
       <div class="infoValue small">
         <input type="text"  class="textEntry" name="promoCodeUseLimitPerCustomer" maxlength="20" value='${parameters.promoCodeUseLimitPerCustomer!promoCodeUseLimitPerCustomer!""}'/>
+          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PromoCodeUseLimitPerCustomerHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
       </div>
 
       <div class="">
-        <label>${uiLabelMap.PromotionCodeUserEnterCaption}</label>
+        <label class="extraSmallLabel">${uiLabelMap.PromotionCodeUserEnterCaption}</label>
       </div>
       <div class="entry checkbox short">
         <input class="checkBoxEntry" type="radio" id="promoCodeUserEntered" name="promoCodeUserEntered" value="Y" <#if ((parameters.promoCodeUserEntered?exists && parameters.promoCodeUserEntered?string == "Y") || (promoCodeUserEntered?exists && promoCodeUserEntered?string == "Y"))>checked="checked"</#if>/>${uiLabelMap.PromotionCodeUserEnterYesLabel}
@@ -68,7 +70,7 @@
       </div>
 
       <div class="">
-        <label>${uiLabelMap.PromotionCodeActiveThruCaption}</label>
+        <label class="extraSmallLabel">${uiLabelMap.PromotionCodeActiveThruCaption}</label>
       </div>
       <div class="infoValue small">
         <div class="entryInput from">

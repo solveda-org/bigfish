@@ -30,6 +30,7 @@
     </div>
   </#if>
 </#if>
+ 
 <h3 class="CategoryFacetTitle">${CategoryFacetTitle}</h3>
 <#assign facetMinValue = FACET_VALUE_MIN?if_exists?number />
 <#assign facetMaxValue = FACET_VALUE_MAX?if_exists?number />
@@ -131,10 +132,21 @@
       </li>
     </#list>
   </#if>
-        
+  
+  <#assign includedSearchFacetGroup = Static["javolution.util.FastList"].newInstance()!""/>
+  <#if SEARCH_FACET_GROUP_INCLUDE?has_content>
+    <#assign includedSearchFacetGroupList = SEARCH_FACET_GROUP_INCLUDE?split(",") />
+  </#if>
+  <#if includedSearchFacetGroupList?has_content>
+	  <#list includedSearchFacetGroupList as searchFacetGroup>
+	    <#assign newSearchFacetGroup = includedSearchFacetGroup.add(searchFacetGroup?trim?upper_case)/>
+	  </#list>
+  </#if>
+    
   <#if facetList?has_content>
     <#list facetList as facet>
       <#if parameters.searchText?has_content && !parameters.productCategoryId?has_content>
+      <#if includedSearchFacetGroup?has_content && includedSearchFacetGroup.contains(facet.productFeatureGroupId?upper_case!)>
         <li>
           <h3 class="facetGroup">${facet.name}</h3>
           <#if facet.refinementValues?has_content>
@@ -173,6 +185,7 @@
             </ul>
           </#if>
         </li>
+      </#if>
       </#if>
       
       <#assign orderByList = Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum")/>

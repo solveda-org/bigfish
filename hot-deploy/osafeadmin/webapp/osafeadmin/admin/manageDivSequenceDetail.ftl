@@ -5,17 +5,22 @@
          <tr class="heading">
            <th class="nameCol firstCol">${uiLabelMap.DivTagLabel}</th>
            <th class="descCol">${uiLabelMap.DescLabel}</th>
-           <th class="seqCol">${uiLabelMap.SeqNumberLabel}</th> 
-           <#if parameters.screenType?exists && parameters.screenType == 'PDPTabs'>
-               <th class="numberCol">${uiLabelMap.GroupNumberLabel}</th>
+           <th class="seqCol">${uiLabelMap.SeqNumberLabel}
+           <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SeqIdHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+           </th> 
+           <#if parameters.screenType?exists && PDPTabsScreenType?exists  && parameters.screenType == PDPTabsScreenType>
+               <th class="numberCol">${uiLabelMap.GroupNumberLabel}
+               <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.PdpTabsGroupHelperInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+               </th>
            </#if>
          </tr>
        </thead>
        <tbody>
             
             <#assign rowClass = "1">
-            <#assign rowNo = 1/>   
-            <#assign seqNo = 1/> 
+            <#assign rowNo = 1/>
+            <#assign seqNo = 1/>
+            <#assign groupseqNo = 1/>
             <#list resultScreenList  as screenList>
                 <#assign hasNext = screenList_has_next>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
@@ -36,9 +41,16 @@
                        <input type="text" name="value_${rowNo}" class="small" id="seqNo" value="${parameters.get("value_${rowNo}")!"0"}" ></input>
                      </#if>
                      </td>
-                     <#if parameters.screenType?exists && parameters.screenType == 'PDPTabs'>
+                     <#if parameters.screenType?exists && PDPTabsScreenType?exists && parameters.screenType == PDPTabsScreenType>
                          <td class="numberCol <#if !hasNext>lastRow</#if>">
-                             <input type="text" name="group_${rowNo}" class="small" id="group_${rowNo}" value="${parameters.get("group_${rowNo}")!screenList.group!}" ></input>
+                             <#if screenList.group?has_content && screenList.group != 0?int>
+                                 <#if screenList.group != groupseqNo>
+                                     <#assign groupseqNo = groupseqNo+1/>
+                                 </#if>
+                                 <input type="text" name="group_${rowNo}" class="small" id="group_${rowNo}" value="${parameters.get("group_${rowNo}")!groupseqNo!}" ></input>
+                             <#else>
+                                 <input type="text" name="group_${rowNo}" class="small" id="group_${rowNo}" value="${parameters.get("group_${rowNo}")!"0"!}" ></input>
+                             </#if>
                          </td>
                      </#if>
                      <input type="hidden" name="screen_${rowNo}" value="${screenList.screen!}"></input>

@@ -73,7 +73,7 @@
         <attribute name="countryGeoId" type="String" mode="IN" optional="true"/>
         <attribute name="includeCountry" type="String" mode="IN" optional="true"/>
         <!-- order contact fields -->
-        <attribute name="orderContactMechId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderContactMechIds" type="List" mode="IN" optional="true"/>
 
         <!--  Order adjustments -->
         <attribute name="productPromoCodeId" mode="IN" type="String" optional="true"/>
@@ -214,7 +214,7 @@
         <attribute name="key" mode="INOUT" type="String" optional="true"/>
         <attribute name="category" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
-        <attribute name="value" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true" allow-html="safe"/>
     </service>
 
     <service name="createMissingDivGroup" engine="group" auth="false">
@@ -473,7 +473,7 @@
         <attribute name="key" mode="INOUT" type="String"/>
         <attribute name="category" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
-        <attribute name="value" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true" allow-html="safe"/>
     </service>
      <service name="updateDivSequenceGroup" engine="group" auth="false">
         <description>
@@ -709,6 +709,7 @@
         <description>
          Update Product data, expire and create ProductPrice.
         </description>
+        <attribute name="updateProductFeatureAppls" mode="IN" type="String" optional="true"/>
         <attribute name="productFeatureGroupId" mode="IN" type="String" optional="false"/>
         <attribute name="productFeatureId" type="Map" string-map-prefix="productFeatureId_" mode="IN" optional="true"/>
         <attribute name="fromDate" type="Map" string-map-prefix="fromDate_" mode="IN" optional="true"/>
@@ -1079,57 +1080,209 @@
         <override name="postalCode" optional="true"/>
     </service>
 
-    <service name="createNewEnumerationGroup" engine="group" auth="false">
+    <service name="createContactUsReasonGroup" engine="group" auth="false">
         <description>
-         create Enumeration and render success message
+         create Contact Us Reason and render success message
         </description>
         <group>
-            <invoke name="createNewEnum" result-to-context="true"/>
+            <invoke name="createContactUsReason" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-   <service name="createNewEnum" engine="simple" auth="true" default-entity-name="Enumeration" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createNewEnum">
-        <description>Create an Enumeration</description>
+   <service name="createContactUsReason" engine="simple" auth="true" default-entity-name="Enumeration" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createContactUsReason">
+        <description>Create Contact Us Reason</description>
         <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="enumId" mode="INOUT" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
     </service>
     
-    <service name="updateEnumerationGroup" engine="group" auth="false">
+    <service name="updateContactUsReasonGroup" engine="group" auth="false">
         <description>
-         update Enumeration and render success message
+         update Contact Us Reason and render success message
         </description>
         <group>
-            <invoke name="updateEnumer" result-to-context="true"/>
+            <invoke name="updateContactUsReason" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    
-    <service name="updateEnumer" engine="simple" auth="true"
-            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updateEnum">
+    <service name="updateContactUsReason" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updateContactUsReason">
         <description>
-         update Enumeration
+         update Contact Us Reason
         </description>
         <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
         <attribute name="enumId" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
     </service>
-    <service name="deleteEnumerationGroup" engine="group" auth="false">
+
+    <service name="deleteContactUsReasonGroup" engine="group" auth="false">
         <description>delete Enumeration and render success message</description>
         <group>
-            <invoke name="deleteEnumeration" result-to-context="true"/>
+            <invoke name="deleteContactUsReason" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
+    <service name="deleteContactUsReason" default-entity-name="Enumeration" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deleteContactUsReason">
+        <description>Delete Contact Us Reason</description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
+
+    <service name="createCreditCardTypeGroup" engine="group" auth="false">
+        <description>
+         create Credit Card Type and render success message
+        </description>
+        <group>
+            <invoke name="createCreditCardType" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+   <service name="createCreditCardType" engine="simple" auth="true" default-entity-name="Enumeration" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createCreditCardType">
+        <description>Create Credit Card Type</description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="enumCode" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
     
-    <service name="deleteEnumeration" default-entity-name="Enumeration" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
-            invoke="deleteEnum">
-        <description>Delete Enumeration </description>
+    <service name="updateCreditCardTypeGroup" engine="group" auth="false">
+        <description>
+         update Credit Card Type and render success message
+        </description>
+        <group>
+            <invoke name="updateCreditCardType" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service> 
+    <service name="updateCreditCardType" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updateCreditCardType">
+        <description>
+         update Credit Card Type
+        </description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="enumCode" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="deleteCreditCardTypeGroup" engine="group" auth="false">
+        <description>delete Credit Card Type and render success message</description>
+        <group>
+            <invoke name="deleteCreditCardType" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deleteCreditCardType" default-entity-name="Enumeration" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deleteCreditCardType">
+        <description>Delete Credit Card Type</description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
+
+    <service name="createPersonTitleGroup" engine="group" auth="false">
+        <description>
+         create Person Title and render success message
+        </description>
+        <group>
+            <invoke name="createPersonTitle" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+   <service name="createPersonTitle" engine="simple" auth="true" default-entity-name="Enumeration" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createPersonTitle">
+        <description>Create Person Title</description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="updatePersonTitleGroup" engine="group" auth="false">
+        <description>
+         update Person Title and render success message
+        </description>
+        <group>
+            <invoke name="updatePersonTitle" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service> 
+    <service name="updatePersonTitle" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updatePersonTitle">
+        <description>
+         update Person Title
+        </description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="deletePersonTitleGroup" engine="group" auth="false">
+        <description>delete Person Title and render success message</description>
+        <group>
+            <invoke name="deletePersonTitle" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deletePersonTitle" default-entity-name="Enumeration" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deletePersonTitle">
+        <description>Delete Person Title</description>
         <auto-attributes mode="IN" include="pk"/>
     </service>
     
+     
+    <service name="createReviewAgesGroup" engine="group" auth="false">
+        <description>
+         create Review Ages and render success message
+        </description>
+        <group>
+            <invoke name="createReviewAges" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+   <service name="createReviewAges" engine="simple" auth="true" default-entity-name="Enumeration" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createReviewAges">
+        <description>Create Person Title</description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="INOUT" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="updateReviewAgesGroup" engine="group" auth="false">
+        <description>
+         update Review Ages and render success message
+        </description>
+        <group>
+            <invoke name="updateReviewAges" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service> 
+    <service name="updateReviewAges" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="updateReviewAges">
+        <description>
+         update Review Ages
+        </description>
+        <attribute name="enumTypeId" type="String" mode="IN" optional="false"/>
+        <attribute name="enumId" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="sequenceId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="deleteReviewAgesGroup" engine="group" auth="false">
+        <description>delete Person Title and render success message</description>
+        <group>
+            <invoke name="deleteReviewAges" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deleteReviewAges" default-entity-name="Enumeration" engine="simple" auth="true"  location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deleteReviewAges">
+        <description>Delete Person Title</description>
+        <auto-attributes mode="IN" include="pk"/>
+    </service>
+
     <service name="updateMediaContentGroup" engine="group" auth="false" transaction-timeout="7200">
         <description>
          Update Media Images
@@ -1573,23 +1726,25 @@
         <attribute name="promoCodeThruDate" type="String" mode="IN" optional="true"/>
     </service>
 
-    <service name="createShipChargeGroup" engine="group" auth="false">
+    <service name="createShippingChargeGroup" engine="group" auth="false">
         <description>
          Create the Shipping Charge
         </description>
         <group>
-            <invoke name="createShipCharge" result-to-context="true"/>
+            <invoke name="createShippingCharge" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    <service name="createShipCharge" engine="simple" auth="false"
+    <service name="createShippingCharge" engine="simple" auth="false"
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
-            invoke="createShipCharge">
+            invoke="createShippingCharge">
         <description>Create the Shipping Charge</description>
         <implements service="commonFormHiddenFields"/>
         <attribute name="productStoreShipMethId" type="String" mode="IN" optional="true"/>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="carrierServiceCode" type="String" mode="IN" optional="true"/>
+        <attribute name="optionalMessage" type="String" mode="IN" optional="true"/>
         <attribute name="minTotal" type="String" mode="IN" optional="true"/>
         <attribute name="maxTotal" type="String" mode="IN" optional="true"/>
         <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
@@ -1597,18 +1752,18 @@
     </service>
     
     
-    <service name="updateShipChargeGroup" engine="group" auth="false">
+    <service name="updateShippingChargeGroup" engine="group" auth="false">
         <description>
          Update the Shipping Charge
         </description>
         <group>
-            <invoke name="updateShipCharge" result-to-context="true"/>
+            <invoke name="updateShippingCharge" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    <service name="updateShipCharge" engine="simple" auth="false"
+    <service name="updateShippingCharge" engine="simple" auth="false"
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
-            invoke="updateShipCharge">
+            invoke="updateShippingCharge">
         <description>
         Update the Shipping Charge
         </description>
@@ -1616,6 +1771,8 @@
         <attribute name="productStoreShipMethId" type="String" mode="IN" optional="true"/>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="carrierServiceCode" type="String" mode="IN" optional="true"/>
+        <attribute name="optionalMessage" type="String" mode="IN" optional="true"/>
         <attribute name="minTotal" type="String" mode="IN" optional="true"/>
         <attribute name="maxTotal" type="String" mode="IN" optional="true"/>
         <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
@@ -1623,36 +1780,54 @@
         <attribute name="shipmentCostEstimateId" type="String" mode="IN" optional="true"/>
     </service>
     
-    <service name="createShipChargeCarrierGroup" engine="group" auth="false">
+    <service name="updateCarrierGroup" engine="group" auth="false">
         <description>
          Create the Shipping Charge Carrier
         </description>
         <group>
-            <invoke name="createShipChargeCarrier" result-to-context="true"/>
+            <invoke name="updateCarrier" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    <service name="createShipChargeCarrier" engine="simple" auth="false"
+    <service name="updateCarrier" engine="simple" auth="false"
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
-            invoke="createShipChargeCarrier">
+            invoke="updateCarrier">
         <description>Create the Shipping Charge</description>
         <implements service="commonFormHiddenFields"/>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
         <attribute name="groupName" type="String" mode="IN" optional="true"/>
     </service>
     
-    <service name="deleteShipChargeGroup" engine="group" auth="false">
+    <service name="createCarrierGroup" engine="group" auth="false">
+        <description>
+         Create the Shipping Charge Carrier
+        </description>
+        <group>
+            <invoke name="createCarrier" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createCarrier" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="createCarrier">
+        <description>Create the Shipping Charge</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="groupName" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="deleteShippingChargeGroup" engine="group" auth="false">
         <description>
          Delete the Shipping Charge and render success message
         </description>
         <group>
-            <invoke name="deleteShipCharge" result-to-context="true"/>
+            <invoke name="deleteShippingCharge" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    <service name="deleteShipCharge" engine="simple" auth="false" 
+    <service name="deleteShippingCharge" engine="simple" auth="false" 
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
-            invoke="deleteShipCharge">
+            invoke="deleteShippingCharge">
         <description>
         Delete the Shipping Charge
         </description>
@@ -1705,24 +1880,44 @@
         <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
     </service> 
     
-    <service name="createShipmentMethodTypeGroup" engine="group" auth="false">
+    <service name="createShipmentMethodGroup" engine="group" auth="false">
         <description>
          Create Shipment Method Type
         </description>
         <group>
-            <invoke name="createShippingMethodType" result-to-context="true"/>
+            <invoke name="createShipmentMethod" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    <service name="createShippingMethodType" engine="simple" auth="false"
+    <service name="createShipmentMethod" engine="simple" auth="false"
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
-            invoke="createShipmentMethodType">
+            invoke="createShipmentMethod">
         <description>Create Shipment Method Type</description>
         <implements service="commonFormHiddenFields"/>
         <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
         <attribute name="description" type="String" mode="IN" optional="true"/>
         <attribute name="sequenceNum" type="String" mode="IN" optional="true"/>
     </service>
+    
+    <service name="updateShipmentMethodGroup" engine="group" auth="false">
+        <description>
+         Create Shipment Method Type
+        </description>
+        <group>
+            <invoke name="updateShipmentMethod" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateShipmentMethod" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="updateShipmentMethod">
+        <description>Update Shipment Method</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="String" mode="IN" optional="true"/>
+    </service>
+    
     <service name="cancelScheduledJobGroup" engine="group" auth="false">
         <description>
          Cancel a Scheduled Job
@@ -1757,11 +1952,14 @@
         <attribute name="jobId" type="String" mode="IN" optional="true"/>
         <attribute name="JOB_NAME" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_NAME" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_DATE" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_TIME" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_AMPM" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_END_TIME" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_FREQUENCY" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_INTERVAL" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_COUNT" type="String" mode="IN" optional="true"/>
+        <attribute name="FORMAT_DATE" type="String" mode="IN" optional="true"/>
     </service>
 
     <service name="updateCategoryMetatagGroup" engine="group" auth="false">
@@ -2275,12 +2473,21 @@
         </group>
     </service>
 
+    <service name="updateProductFeatureAppls" engine="java" transaction-timeout="7200" auth="true"
+            location="com.osafe.services.OsafeAdminCatalogServices" invoke="updateProductFeatureAppls">
+        <description>Update ProductFeatureAppl Sequence Number base on productFeatureId</description>
+        <attribute name="productFeatureId" type="String" mode="IN" optional="false"/>
+        <attribute name="sequenceNum" type="Long" mode="IN" optional="true"/>
+    </service>
 
     <service name="updateProductFeatureAppl" engine="java" transaction-timeout="7200" auth="true"
             location="com.osafe.services.OsafeAdminCatalogServices" invoke="updateProductFeatureAppl">
         <description>Update ProductFeatureAppl Sequence Number</description>
+        <attribute name="productId" type="String" mode="IN" optional="false"/>
         <attribute name="productFeatureId" type="String" mode="IN" optional="false"/>
+        <attribute name="fromDate" mode="IN" type="Timestamp" optional="false" />
         <attribute name="sequenceNum" type="Long" mode="IN" optional="true"/>
+        <attribute name="thruDate" mode="IN" type="Timestamp" optional="true" />
     </service>
 
     <!-- XContentXref services -->
@@ -2340,8 +2547,69 @@
          Test Email validation.
         </description>
         <implements service="commonFormHiddenFields"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
         <attribute name="emailType" type="String" mode="IN" optional="false"/>
-        <attribute name="testEmailAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="fromAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="toAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="emailSubject" type="String" mode="IN" optional="true"/>
         <attribute name="testEmailText" type="String" mode="IN" optional="true"/>
     </service>
+
+    <service name="updateProductFeatureGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         update product feature as well as render success message
+        </description>
+        <group>
+            <invoke name="updateProductFeatures" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="updateProductFeatures" engine="simple" auth="true" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateProductFeatures">
+        <description>
+         Update product feature.
+        </description>
+        <attribute name="productFeatureTypeId" mode="IN" type="String" optional="false"/>
+        <attribute name="productId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="productFeatureId" type="Map" string-map-prefix="productFeatureId_" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="Map" string-map-prefix="fromDate_" mode="IN" optional="true"/>
+        <attribute name="thruDate" type="Map" string-map-prefix="thruDate_" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Map" string-map-prefix="sequenceNum_" mode="IN" optional="true"/>
+    </service>
+
+    <service name="importProductRatingsXmlGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Import Product Ratings Feeds and Render Success Message
+        </description>
+        <group>
+            <invoke name="importProductRatingsXml" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="importProductRatingsXml" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminFeedServices.xml" invoke="importProductRatingsXml" auth="true" transaction-timeout="720000">
+        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="importStoresXmlGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Import Store Feeds and Render Success Message
+        </description>
+        <group>
+            <invoke name="importStoresXml" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="importStoresXml" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminFeedServices.xml" invoke="importStoresXml" auth="true" transaction-timeout="720000">
+        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
+    </service>
+    
 </services>

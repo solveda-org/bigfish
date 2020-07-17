@@ -39,11 +39,11 @@ uom = "Miles"; redius = 20; numDiplay = 10; gmapUrl ="";
 
 productStoreParmMap = Util.getProductStoreParmMap(request);
 if(UtilValidate.isNotEmpty(productStoreParmMap)) {
-    if (Util.isNumber(productStoreParmMap.GMAP_MAP_IMG_W)) {
-        width = productStoreParmMap.GMAP_MAP_IMG_W+"px";
+    if (Util.isNumber(productStoreParmMap.get(mapWidthParam))) {
+        width = productStoreParmMap.get(mapWidthParam)+"px";
     }
-    if (Util.isNumber(productStoreParmMap.GMAP_MAP_IMG_H)) {
-        height = productStoreParmMap.GMAP_MAP_IMG_H+"px";
+    if (Util.isNumber(productStoreParmMap.get(mapHeightParam))) {
+        height = productStoreParmMap.get(mapHeightParam)+"px";
     }
     if (Util.isNumber(productStoreParmMap.GMAP_MAP_ZOOM)) {
         zoom = productStoreParmMap.GMAP_MAP_ZOOM;

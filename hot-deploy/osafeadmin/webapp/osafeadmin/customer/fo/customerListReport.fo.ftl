@@ -130,7 +130,7 @@ under the License.
       <#assign faxNumbers = delegator.findByAnd("PartyContactMechPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",payToPartyId,"contactMechPurposeTypeId","FAX_NUMBER"))/>
       <#if faxNumbers?has_content>  
         <#assign faxNumbers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(faxNumbers, nowTimestamp, null, null, true)/>
-        <#assign companyFax = delegator.findOne("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",faxNumbers[0].contactMechId), false)/>;
+        <#assign companyFax = delegator.findOne("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",faxNumbers[0].contactMechId), false)/>
       </#if>
       <#-- Company Email -->
       <#assign emails = delegator.findByAnd("PartyContactMechPurpose",Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",payToPartyId,"contactMechPurposeTypeId","PRIMARY_EMAIL"))/>
@@ -184,6 +184,11 @@ under the License.
       </#if>
       
       <#-- Personal info --> 
+      <#assign title = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","TITLE"))/>
+      <#if title?has_content>
+          <#assign title = title.attrValue!"" >
+      </#if>
+
       <#assign gender = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","GENDER"))/>
       <#if gender?has_content>
 			  <#assign gender = gender.attrValue!"" >
@@ -198,6 +203,16 @@ under the License.
 	  <#if dob_MMDDYYYY?has_content>
 			  <#assign dob_MMDDYYYY = dob_MMDDYYYY.attrValue!"" >
 	  </#if>
+
+      <#assign dob_DDMM = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_DDMM"))/>
+      <#if dob_DDMM?has_content>
+              <#assign dob_DDMM = dob_DDMM.attrValue!"" >
+      </#if>
+      
+      <#assign dob_DDMMYYYY = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_DDMMYYYY"))/>
+      <#if dob_DDMMYYYY?has_content>
+              <#assign dob_DDMMYYYY = dob_DDMMYYYY.attrValue!"" >
+      </#if>
         
     <fo:page-sequence master-reference="${pageLayoutName?default("main-page")}">
 
@@ -476,7 +491,7 @@ under the License.
         <fo:block space-after="0.2in"/>
         
     
-    <#if gender?has_content || dob_MMDD?has_content || dob_MMDDYYYY?has_content>   
+    <#if title?has_content || gender?has_content || dob_MMDD?has_content || dob_MMDDYYYY?has_content || dob_DDMM?has_content || dob_DDMMYYYY?has_content>   
         
         <fo:table table-layout="fixed" width="100%">
           <fo:table-body>
@@ -489,7 +504,26 @@ under the License.
 				                    <fo:block font-weight="bold" font-size="10pt" text-align="center" background-color="#EEEEEE">${uiLabelMap.CustomerDetailPersonalInfoHeading} ${uiLabelMap.CustomerDetailPersonalInfoHeadingHelperInfo}</fo:block>
 				                  </fo:table-cell>
 			                 </fo:table-row>
-			                 
+
+                             <#if title?has_content>
+                                 <fo:table-row height="20px">
+                                      <fo:table-cell text-align="start" >
+                                            <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.TitleCaption}</fo:block>
+                                      </fo:table-cell>
+                                      <fo:table-cell text-align="start">
+                                            <fo:block font-size="8pt" start-indent="10pt">${title!""}</fo:block>
+                                      </fo:table-cell>
+                                      
+                                      <fo:table-cell text-align="start" >
+                                            <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+                                      </fo:table-cell>
+                                      <fo:table-cell text-align="start">
+                                            <fo:block font-size="8pt" start-indent="10pt">
+                                            </fo:block>
+                                      </fo:table-cell>
+                                 </fo:table-row>
+                             </#if>
+
 			                 <#if gender?has_content>
 			                 <fo:table-row height="20px">
 			                 
@@ -556,6 +590,42 @@ under the License.
 				                  
 			                 </fo:table-row>
 			                 </#if>               
+
+                             <#if dob_DDMM?has_content>
+                             <fo:table-row height="20px">
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.DOBCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">${dob_DDMM!""}</fo:block>
+                                  </fo:table-cell>
+                                 
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt"></fo:block>
+                                  </fo:table-cell>
+                             </fo:table-row>
+                             </#if>
+
+                             <#if dob_DDMMYYYY?has_content>
+                             <fo:table-row height="20px">
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.DOBCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt">${dob_DDMMYYYY!""}</fo:block>
+                                  </fo:table-cell>
+                                 
+                                  <fo:table-cell text-align="start" >
+                                        <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell text-align="start">
+                                        <fo:block font-size="8pt" start-indent="10pt"></fo:block>
+                                  </fo:table-cell>
+                             </fo:table-row>
+                             </#if>
 			                     
 		                </fo:table-body>
 	                 </fo:table>

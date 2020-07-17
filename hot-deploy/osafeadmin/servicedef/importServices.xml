@@ -132,9 +132,25 @@
         <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
         <attribute name="messages" type="List" mode="OUT" optional="true"/>
     </service>
+    
+    <service name="importClientProductRatingXMLTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="importProductRatingXML" auth="false" use-transaction="false">
+        <description>Import XML Elements, generate xml files in given directory using importDefinitionNames</description>
+        <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
+        <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
+        <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="messages" type="List" mode="OUT" optional="true"/>
+    </service>
 
     <service name="exportClientProductTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="exportProductXls" auth="false" use-transaction="false">
         <description>Export xls tabs as client product import template</description>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="sampleFile" mode="IN" type="String" optional="true" default-value="N"></attribute>
+        <attribute name="messages" type="List" mode="OUT" optional="false"/>
+    </service>
+    
+    <service name="exportClientProductTemplateXML" engine="java" location="com.osafe.services.ImportServices" invoke="exportProductXML" auth="false" use-transaction="false">
+        <description>Export xml elements as client product import template</description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="sampleFile" mode="IN" type="String" optional="true" default-value="N"></attribute>
@@ -173,6 +189,12 @@
         <attribute name="txTimeout" type="Integer" mode="IN" optional="true"/>
         <attribute name="filePause" type="Long" mode="IN" optional="true"/>
         <attribute name="messages" type="List" mode="OUT" optional="false"/>
+    </service>
+    <service name="importReevooCsvToFeed" engine="java" location="com.osafe.services.ImportServices" invoke="importReevooCsvToFeed" auth="false">
+        <description>Convert Reevoo CSV Files To Product Rating Feed XML</description>
+        <attribute name="reevooCsvFileLoc" mode="IN" type="String" optional="false"/>
+        <attribute name="feedFile" type="java.io.File" mode="OUT" optional="true"/>
+        <attribute name="feedFileAsString" type="String" mode="OUT" optional="true"/>
     </service>
 
 </services>

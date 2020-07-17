@@ -2,7 +2,6 @@
 
 /* === Big Fish Client Skin === */
 
-
 /*  Table of Contents 
 
 1. 	Reset and Default HTML Settings
@@ -56,6 +55,7 @@
 		
 7. 	Boxes
 	7.1 Display Boxes
+	7.2 Dialog Boxes
 
 8. 	Entry Forms	
 
@@ -126,12 +126,12 @@ input, select, option, textarea {
 }
 
 option {
-
+	border: none!important;
 }
 
 input[type="text"],
 input[type="password"] {
-
+    width: 211px;
 }
 
 textarea {
@@ -141,6 +141,7 @@ textarea {
 input:focus,
 select:focus,
 textarea:focus { /* Default Input Focus Styles */
+
 
 }
 
@@ -193,7 +194,7 @@ h1 {
 }
 
 h2 {
-
+    font-size: 2.2em;
 }
 
 h3 {
@@ -263,7 +264,7 @@ a.standardBtn:hover {
 
 input[type="submit"].standardBtn:active,
 input[type="button"].standardBtn:active,
-a.standardBtn:active {
+a.standardBtn:active  {
 
 }
 
@@ -348,10 +349,7 @@ body {
 }
 
 * html #eCommerceHeader,* html #eCommercePageBody, * html #eCommerceFooter ,* html #eCommerceProductDetailContainer { zoom: 1; } /* IE6 */
-*:first-child + html #eCommerceHeader, *:first-child + html #eCommercePageBody, *:first-child + html #eCommerceFooter, *:first-child + html #eCommerceProductDetailContainer { 
-	zoom: 1;
-} /*IE7*/
-
+*:first-child + html #eCommerceHeader, *:first-child + html #eCommercePageBody: , *:first-child + html #eCommerceFooter:, *:first-child + html #eCommerceProductDetailContainer:{ zoom: 1; } /*IE7*/
 #eCommerceHeader:after, #eCommercePageBody:after, #eCommerceFooter:after, #eCommerceProductDetailContainer:after { /* everything else */
 	visibility: hidden;
 	display: block;
@@ -384,12 +382,7 @@ body {
 }
 
 #eCommerceOuterBasicBevelWrap:after {
-	visibility: hidden;
-	display: block;
-	font-size: 0;
-	content: " ";
-	clear: both;
-	height: 0;
+
 }
 
 /* === 3. eCommerceContent and Descendant Sections === */
@@ -492,7 +485,8 @@ body {
 }
 
 #eCommerceHeader #siteCartStats a#siteShoppingCartSize {
-   
+
+       
 }
 
 #eCommerceHeader #siteCartStats a#siteShoppingCartSize:hover {
@@ -504,7 +498,7 @@ body {
 }
 
 #eCommerceHeader #siteSearch {
-
+  
 }
 
 span#searchInputContainer {
@@ -548,8 +542,8 @@ span#searchInputContainer {
 
 }
 
-#siteMailingList a {  /* added because previous text was in the image */
-
+#siteMailingList a { 
+   
 }
 
 #siteMailingList a:hover {
@@ -559,52 +553,9 @@ span#searchInputContainer {
 /* === 3.3 Navigation Bar  === */
 	
 #eCommerceNavBar {
-
-
-}
-
-#eCommerceNavBar ul#eCommerceNavBarMenu {
+  
 
 }
-
-#eCommerceNavBarMenu li {
-
-}
-
-#eCommerceNavBarMenu li.topLevel {
-
-}
-
-#eCommerceNavBarMenu li.topLevel.navlastitem a.topLevel {
-
-}
-
-#eCommerceNavBarMenu li.topLevel.navfirstitem a {
-
-}
-
-#eCommerceNavBarMenu li.subLevel.navfirstitem a { /* Psuedo class selector for first subnav item */
-
-}
-
-#eCommerceNavBarMenu li.topLevel.navlastitem{
-
-}
-
-#eCommerceNavBarMenu li:hover {
-    visibility: inherit; /* fixes IE7 'sticky bug' */
-}
-
-#eCommerceNavBarMenu li:hover ul,
-#eCommerceNavBarMenu li.sfHover ul {
-
-}
-
-#eCommerceNavBarMenu li:hover li ul,
-#eCommerceNavBarMenu li.sfHover li ul {
-   
-}
-
 #eCommerceNavBarMenu ul {
 
 }
@@ -613,9 +564,25 @@ span#searchInputContainer {
 
 }
 
+#eCommerceNavBarMenu li:hover {
+    visibility: inherit; /* fixes IE7 'sticky bug' */
+}
+
+#eCommerceNavBarMenu li {
+
+}
+#eCommerceNavBarMenu li:hover ul,
+#eCommerceNavBarMenu li.sfHover ul {
+
+}
+
+#eCommerceNavBarMenu li:hover li ul,
+#eCommerceNavBarMenu li.sfHover li ul {
+
+}
 #eCommerceNavBarMenu li li:hover li ul,
 #eCommerceNavBarMenu li li.sfHover li ul {
-   
+
 }
 
 #eCommerceNavBarMenu li li:hover ul,
@@ -627,11 +594,8 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 
 }
 
+/* If the drop-down menus disappear unexpectedly the bottom padding value may not be large enough */
 #eCommerceNavBarMenu a {
-
-}
-
-#eCommerceNavBarMenu a:visited {
 
 }
 
@@ -639,26 +603,59 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 
 }
 
+#eCommerceNavBarMenu a, #eCommerceNavBarMenu a:visited { /* visited pseudo selector so IE6 applies text color*/
+
+}
+#eCommerceNavBarMenu li.topLevel {
+
+}
+
 #eCommerceNavBarMenu a.topLevel {
 
+}
+
+#eCommerceNavBarMenu li.topLevel.navlastitem a.topLevel {
+
+}
+
+#eCommerceNavBarMenu li.topLevel.navfirstitem a {
+	
+}
+
+#eCommerceNavBarMenu li.subLevel.navfirstitem a { /* Psuedo class selector for first subnav item */
+
+}
+
+#eCommerceNavBarMenu li.topLevel.navlastitem {
+
+}
+
+#eCommerceNavBarMenu li:hover {
+	
 }
 
 #eCommerceNavBarMenu a.topLevel:hover {
 	
 }
 
-#eCommerceNavBarMenu li li a {
+#eCommerceNavBarMenu li li a {	
 
 }
+
 #eCommerceNavBarMenu li li {
 
 }
 
 #eCommerceNavBarMenu li:hover,
 #eCommerceNavBarMenu li.sfHover,
-#eCommerceNavBarMenu a:focus,
-#eCommerceNavBarMenu a:hover,
+#eCommerceNavBarMenu a:focus, #eCommerceNavBarMenu a:hover,
 #eCommerceNavBarMenu a:active {
+
+}
+
+#eCommerceNavBarMenu li li a:focus,
+#eCommerceNavBarMenu li li a:hover,
+#eCommerceNavBarMenu li li a:active {
 
 }
 
@@ -682,54 +679,37 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 
 }
 
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Apparel {
-
-}
-
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Designers {
-
-}
-
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Designers .designerMegamenuContent {
-
-}
-
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Designers .designerMegamenuContent img {
-
-}
-
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Designers .designerMegamenuContent p {
-
-}
-
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Designers .designerMegamenuContent p strong {
-
-}
-
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Designers .designerMegamenuContent a {
-
-}
-
-#eCommerceNavBarMenu ul.ecommerceMegaMenu.Designers .designerMegamenuContent a:hover {
-
-}
-
 #eCommerceNavBarMenu .ecommerceMegaMenu ul.topLevel {
 
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu li strong {/*for nav group heading */
+#eCommerceNavBarMenu .ecommerceMegaMenu ul.topLevel li {
 
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu li strong:hover { /* cancels out hover state of headings */
+#eCommerceNavBarMenu .ecommerceMegaMenu li strong {
 
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu li+li strong {/* targets child strong items only  */
+#eCommerceNavBarMenu .ecommerceMegaMenu li strong:hover {
 
 }
 
+#eCommerceNavBarMenu .ecommerceMegaMenu li + li strong {
+
+}
+
+#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel.navfirstitem {
+
+}
+
+#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel, #eCommerceNavBarMenu .ecommerceMegaMenu .subLevel a {
+
+}
+
+#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel:hover {
+
+}
 
 /* === 4. eCommercePageBody and Descendant Sections  === */
 
@@ -746,14 +726,10 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 }
 
 #eCommerceMainPanel.homePage {
-
+	
 }
 
 #eCommerceMainPanel.leftPanel { /* Main Content area used with #eCommerceLeftPanel (CLP) jS2 */
-
-}
-
-#eCommerceMainPanel.mainPanel .staticContent {
 
 }
 
@@ -776,6 +752,10 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 }
 
 .eCommerceHomeSpotContent {
+
+}
+
+.eCommerceHomeSpotContent.double { /*for second tier PHs that are twice as wide jS2 */
 
 }
 
@@ -859,6 +839,7 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 
 #breadcrumb li {
 
+	
 }
 
 #breadcrumb li.first {
@@ -882,6 +863,7 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 #breadcrumb li a:visited {
 
 }
+
 #breadcrumb li a:hover,
 #breadcrumb li a:active {
 
@@ -920,7 +902,7 @@ h1 span.searchCount {
 }
 
 .pdpAlternateImageSeq {
-	
+
 }
 
 .pdpVideo360Seq {
@@ -964,11 +946,11 @@ h1 span.searchCount {
 }
 
 .pdpReviewListSeq {
-
+	
 }
 
 .pdpSelectableFeatureSeq {
-	
+
 }
 
 .pdpAddToCartSeq {
@@ -980,11 +962,11 @@ h1 span.searchCount {
 }
 
 .pdpLongDescriptionSeq {
-	
+
 }
 
 .pdpDistinguishingFeatureSeq {
-	
+
 }
 
 .pdpSalesPitchSeq {
@@ -1020,10 +1002,6 @@ h1 span.searchCount {
 }
 
 .pdpComplementSeq {
-
-}
-
-.pdpSocialMediaSeq {
 
 }
 
@@ -1082,8 +1060,6 @@ h1 span.searchCount {
 .pdpTertiaryInformationSeq {
 	
 }
-
-
 
 /* === 5.2 PDPTabs Section  === */
 
@@ -1199,10 +1175,6 @@ pdpTabsMainImageSeq {
 	
 }
 
-.pdpTabsSocialMediaSeq {
-	
-}
-
 .pdpTabsRecentlyViewedSeq {
 	
 }
@@ -1266,11 +1238,11 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookMainImageSeq {
-	
+
 }
 
 .quicklookSeeLargerImageSeq {
-	
+
 }
 
 .quicklookAlternateImageSeq {
@@ -1338,7 +1310,7 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookDistinguishingFeatureSeq {
-	
+
 }
 
 .quicklookSalesPitchSeq {
@@ -1377,10 +1349,6 @@ pdpTabsMainImageSeq {
 	
 }
 
-.quicklookSocialMediaSeq {
-	
-}
-
 .quicklookRecentlyViewedSeq {
 
 }
@@ -1402,7 +1370,7 @@ pdpTabsMainImageSeq {
 }
 
 .quicklookContent02Seq {
-	
+
 }
 
 .quicklookContent03Seq {
@@ -1472,7 +1440,7 @@ pdpTabsMainImageSeq {
 }
 
 .plpTertiaryInfoSeq {
-	
+
 }
 
 .plpReviewStarsSeq {
@@ -1547,7 +1515,6 @@ pdpTabsMainImageSeq {
 
 .pdpComplementReviewStarsSeq {
 	
-
 }
 
 .pdpComplementReviewReadSeq {
@@ -1751,7 +1718,7 @@ pdpTabsMainImageSeq {
 }
 
 .orderSummaryShippingAddressSeq {
-	
+
 }
 
 .orderSummaryStorePickupSeq {
@@ -1815,7 +1782,7 @@ pdpTabsMainImageSeq {
 }
 
 .onePageCheckoutOrderItemsSeq {
-	 /* Default is Clear: Both In order to collapse 'same as billing' function */
+
 }
 
 .onePageCheckoutPromoCodeSeq {
@@ -1868,11 +1835,23 @@ pdpTabsMainImageSeq {
 	
 }
 
+.personalInfoTitleSeq {
+	
+}
+
 .personalInfoDateOfBirthMMDDYYYYSeq {
 	
 }
 
 .personalInfoDateOfBirthMMDDSeq {
+	
+}
+
+.personalInfoDateOfBirthDDMMYYYYSeq {
+	
+}
+
+.personalInfoDateOfBirthDDMMSeq {
 	
 }
 
@@ -1969,7 +1948,7 @@ pdpTabsMainImageSeq {
 }
 
 .plpReviewStars {
-
+	
 }
 
 .plpReviewStars .rating_bar {
@@ -2012,8 +1991,8 @@ pdpTabsMainImageSeq {
 	
 }
 
-.plpThumbImage .eCommerceThumbNailHolder {
 
+.plpThumbImage .eCommerceThumbNailHolder {
 
 }
 
@@ -2058,7 +2037,7 @@ pdpTabsMainImageSeq {
 }
 
 .plpSeeItemDetails a.seeItemDetail {
-	
+
 }
 
 .plpSeeItemDetails a.seeItemDetail:hover {
@@ -2117,6 +2096,7 @@ pdpTabsMainImageSeq {
 
 .clpProductListLink a.eCommerceProductLink:hover { 
 
+
 }
 
 .clpThumbImage { 
@@ -2164,7 +2144,7 @@ a.facetValueLink:hover {
 
 a.seeMoreLink,
 a.seeLessLink {
-
+	
 }
 
 a.seeMoreLink:hover,
@@ -2188,7 +2168,7 @@ img.customerRatingIcon {
 }
 
 #eCommerceProductListContainer h1 {
-	
+
 }
 
 #eCommerceProductList {
@@ -2549,7 +2529,7 @@ label.sortBy {
 }
 
 #eCommercePageBody h1 {
-  
+
 }
 
 #eCommerceProductDetailContainer {
@@ -2580,6 +2560,10 @@ label.sortBy {
 
 }
 
+.pdpAddToCart .addToCart span {
+
+}
+
 	/* ----- .pdpAlternateImage ----- */
 
 .pdpAlternateImage {
@@ -2593,19 +2577,19 @@ label.sortBy {
 }
 
 .pdpAlternateImage #eCommerceProductAddImage ul li  {
-    margin: 2px;
+    margin: 6px 2px;
     float: left;
 }
 
 .pdpAlternateImage #eCommerceProductAddImage a {
     display: block;
-    margin: 2px;
+    margin: 0 auto;
+    text-align: center;
 
 }
 
 .pdpAlternateImage #eCommerceProductAddImage a:hover {
     margin: 0;
-    border: 2px solid #666666;
 }
 
 .pdpAlternateImage .jcarousel-container {
@@ -2778,7 +2762,6 @@ label.sortBy {
 .pdpAlternateImage .jcarousel-prev-vertical:active {
 /*    background-position: 0 -64px;  */
 }
-
 
 .pdpAlternateImage .jcarousel-prev-disabled-vertical,
 .pdpAlternateImage .jcarousel-prev-disabled-vertical:hover,
@@ -2964,6 +2947,36 @@ label.sortBy {
 	
 }
 
+	/* ----- .pdpContent01 ----- */
+
+.pdpContent01 {
+
+}
+
+.pdpContent01 p {
+
+}
+
+.pdpContent01 a.facebookLink {
+
+}
+
+.pdpContent01 a.twitterLink, .pdpContent01 a.twitterLink  {
+
+}
+
+.pdpContent01 a.pinterestLink  {
+
+}
+
+.pdpContent01 a.printPageLink{
+
+}
+
+	/* ----- .pdpContent02 ----- */
+
+
+
 	/* ----- .pdpDeliveryInfo ----- */
 
 .pdpDeliveryInfo {
@@ -2991,7 +3004,11 @@ label.sortBy {
 }
 
 .pdpDistinguishingFeature .displayBox {
-
+    clear: none;
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 20px 0;
 }
 
 .pdpDistinguishingFeature .displayBox h3 {
@@ -3079,6 +3096,7 @@ label.sortBy {
 }
 
 .pdpMainImage #productDetailsImageContainer #MainImage {
+
 }
 
 .pdpMainImage #productDetailsImageContainer .productLargeImage {
@@ -3142,8 +3160,8 @@ label.sortBy {
 }
 
 .pdpManufacturerName .profileName {
-
 }
+
 	/* ----- .pdpPriceList ----- */
 
 .pdpPriceList {
@@ -3155,8 +3173,9 @@ label.sortBy {
 }
 
 .pdpPriceList .price {
-	
+
 }
+
 	/* ----- .pdpPriceOnLine ----- */
 
 .pdpPriceOnLine {
@@ -3474,7 +3493,7 @@ label.sortBy {
 }
 
 .pdpSeeMainImage a {
-; 
+
 }
 
 .pdpSeeMainImage a:hover {
@@ -3491,7 +3510,7 @@ label.sortBy {
 
 }
 
-.pdpSelectableFeature .selectableFeatures.COLOR {
+.pdpSelectableFeature .selectableFeatures.COLOR {    
 
 }
 
@@ -3502,7 +3521,7 @@ label.sortBy {
 /* ===== Alert: PDP pages should implement a UL or a selectbox but not both.  Apply Display:None; to the feature you wish to disable. ===== */
 
 .pdpSelectableFeature .selectableFeatures.COLOR select {
-
+  
 
 }
 .pdpSelectableFeature .selectableFeatures.COLOR ul {
@@ -3518,7 +3537,7 @@ label.sortBy {
 }
 
 .pdpSelectableFeature .selectableFeatures.COLOR ul li a:hover, 
-.pdpSelectableFeature .selectableFeatures.SIZE ul li.selected a {
+.pdpSelectableFeature .selectableFeatures.COLOR ul li.selected a {
 	
 }
 
@@ -3555,6 +3574,7 @@ label.sortBy {
 }
 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li a:hover, 
+.pdpSelectableFeature .selectableFeatures.SIZE ul li.selected a, 
 .pdpSelectableFeature .selectableFeatures.SIZE ul li.inStock a,
 .pdpStockLegend ul.stockKey li span.inStock {
 
@@ -3578,56 +3598,10 @@ label.sortBy {
 
 }
 
-	/* ----- .pdpSocialMedia ----- */
-
-.pdpSocialMedia {
-	
-}
-
-.pdpSocialMedia h3 {
-
-}
-
-.pdpSocialMedia #socialMediaButtonBar {
-
-}
-
-.pdpSocialMedia a.facebookLink {
-
-}
-
-.pdpSocialMedia a.facebookLink span {
-
-}
-
-.pdpSocialMedia a.twitterLink  {
-
-}
-
-.pdpSocialMedia a.twitterLink  span {
-
-}
-
-.pdpSocialMedia a:hover {
-
-}
-
-.pdpSocialMedia #socialMediaEmailToAFriend {
-
-}
-
-.pdpSocialMedia #socialMediaEmailToAFriend a {
-
-}
-
-.pdpSocialMedia #socialMediaEmailToAFriend a:hover {
-
-}
-
 	/* ----- .pdpSpecialInstructions ----- */
 
 .pdpSpecialInstructions {
-
+	
 }
 
 .pdpSpecialInstructions .displayBox {
@@ -3736,6 +3710,7 @@ label.sortBy {
 .pdpTabs.ui-tabs .ui-tabs-nav li {
 
 }
+
 .pdpTabs.ui-tabs .ui-tabs-nav li.ui-tabs-selected {
 
 }
@@ -3747,7 +3722,7 @@ label.sortBy {
 }
 
 .pdpVideo #productVideoLink a {
- 
+
 }
 
 .pdpVideo #productVideoLink a:hover {
@@ -3779,7 +3754,6 @@ label.sortBy {
 	/* ----- .pdpVolumePricing ----- */
 
 .pdpVolumePricing {
-
 }
 
 .volumePricing h2 {
@@ -3791,16 +3765,15 @@ label.sortBy {
 }
  
 .volumePricing .pricingCaption {
-
 }
 
 .volumePricing .priceRule {
 
- }
+}
  
 .volumePricing .price {
 
- }
+}
  
  	/* ----- .pdpWarnings ----- */
 
@@ -3810,14 +3783,14 @@ label.sortBy {
 
 /* === 7. Boxes  === */
 
-/* === 7.1 Display Box  === */
+/* === 7.1 Display Boxes  === */
 
 .displayBox {
 
 }
 
 .displayBox h2 {
- 
+
 }
 
 .displayBox h3 {
@@ -3841,6 +3814,12 @@ label.sortBy {
 }
 
 .pdpDisplayBox {
+
+}
+
+/* === 7.2 Dialog  Boxes  === */
+
+#storePickup_displayDialog #eCommerceStoreLocatorContainer {
 
 }
 
@@ -3886,6 +3865,7 @@ fieldset p {
 }
 
 .entry input[type="text"].cardNumber {
+
 }
 
 input[type="text"].phone3 {
@@ -3934,7 +3914,7 @@ input[type="text"].phoneExt {
 }
 
 .content-messages p {
-	margin: 10px;
+
 }
 
 .content-messages .errorImage,
@@ -4017,7 +3997,7 @@ input[type="text"].phoneExt {
 
 }
 
-#eCommerceCartButtons .positive { 
+#eCommerceCartButtons .positive {
 
 }
 
@@ -4034,6 +4014,10 @@ input[type="text"].phoneExt {
 }
 
 tr.cart_headers {
+
+}
+
+tr.cart_contents {
 
 }
 
@@ -4072,7 +4056,7 @@ tr.cart_headers {
 }
 
 #cart_display tr.cart_contents td {
- 
+
 }
 
 #cart_display tr.cart_headers th.image,
@@ -4273,18 +4257,30 @@ div.action {
 	/* ---- Default Footprint Styles --- */
 		
 #eCommerceCartFootprintContainer {
-
+    display: inline-block;
+    font-size: 1.5em;
+    margin: 1em 0;
+    width: 895px;
+	background: #666;
 }
 #eCommerceCartFootprintContainer li {
-
+    color: #fff;
+    float: left;
+    height: 23px;
+    margin: 0;
+    padding-left: 30px;
+    padding-top: 5px;
+    width: 146px;
+    font-size: 16px;
 }
 
 #eCommerceCartFootprintContainer li a {
-
+	color: #ffffff;
+	text-decoration: none;
 }
 
 #eCommerceCartFootprintContainer li a:hover {
-
+	text-decoration: underline;
 }
 
 #eCommerceCartFootprintContainer li.first {
@@ -4327,6 +4323,10 @@ div.action {
 
 }
 
+#eCommerceLoginContainer .entryButtons {
+
+}
+
 #eCommerceLoginContainer #ptsLogin {
 
 }
@@ -4352,6 +4352,7 @@ div.action {
 #eCommerceLoginContainer .withGuestCheckoutOption label {
 
 }
+
 #eCommerceLoginContainer .withGuestCheckoutOption input[type="text"],
 #eCommerceLoginContainer .withGuestCheckoutOption input[type="password"] {
 
@@ -4362,7 +4363,7 @@ div.action {
 }
 
 #returningCustomer h3,
-#newCustomer h3, 
+#newCustomer h3,
 .withGuestCheckoutOption h3 {
 	
 }
@@ -4389,7 +4390,7 @@ div.action {
 }
 
 #newCustomer {
-
+ 
 }
 
 /* === 11.1.1 Forgot Password  === */
@@ -4459,7 +4460,12 @@ div.infoAndEntrysec  {
 }
 
 #eCommerceShowcart:after {
-
+    visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
 
 	/* ----- Show Cart / Cart Items -----*/
@@ -4503,7 +4509,7 @@ div.infoAndEntrysec  {
 }
 
 #eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode {
-	
+
 }
 
 #eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode {
@@ -4520,7 +4526,7 @@ div.infoAndEntrysec  {
 }
 
 #eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeDesc {
-
+	
 }
 
 #eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeStatus {
@@ -4534,7 +4540,6 @@ div.infoAndEntrysec  {
 #eCommerceShowcart #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeAction a:hover {
 
 }
-
 
 	/* ----- Show Cart / Previous and Continue Buttons -----*/
 
@@ -4559,13 +4564,18 @@ div.infoAndEntrysec  {
 }
 
 #multiPageCustomerAddress:after {
-
+    visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
 }
 
 	/* ----- Shipping Address / Billing Address -----*/
 
 #multiPageCustomerAddress .billingAddress .displayBox {
-     width: 100%;
+
 }
 
 #multiPageCustomerAddress .billingAddress .displayBox h3 {
@@ -4575,7 +4585,7 @@ div.infoAndEntrysec  {
 	/* ----- Shipping Address / Shipping Address -----*/
 
 #multiPageCustomerAddress .shippingAddress .displayBox {
-     width: 100%;
+
 }
 
 #multiPageCustomerAddress .shippingAddress .displayBox h3 {
@@ -4619,7 +4629,7 @@ div.infoAndEntrysec  {
 }
 
 .editShippingAddress .entry ul li {
-    /* Used to push field level errors under associated edit js2 */
+
 }
 
 /* === 11.4 Shipping Options and Delivery Times  === */
@@ -5087,6 +5097,16 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 #singlePageCheckout .checkoutOrderPayments #orderPayment .displayBox input { 
 
 }
+
+#anonSinglePageCheckout .checkoutOrderPayments .paymentOptions, 
+#singlePageCheckout .checkoutOrderPayments .paymentOptions { 
+
+}
+
+#anonSinglePageCheckout .checkoutOrderPayments .paymentOptions h3, 
+#singlePageCheckout .checkoutOrderPayments .paymentOptions h3 { 
+
+}
 	/* ----- One Page Checkout / Promo Code -----*/ 
 	
 #anonSinglePageCheckout #eCommerceEnterPromoCode, 
@@ -5141,7 +5161,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeDesc,
 #singlePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeDesc {
-	
+
 }
 
 #anonSinglePageCheckout #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode .ecommercePromocodeStatus,
@@ -5168,7 +5188,6 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 #singlePageCheckout #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a:hover {
 
 }
-
 
 	/* ----- One Page Checkout / Shipping Address -----*/ 
 	
@@ -5211,6 +5230,47 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 #anonSinglePageCheckout #deliveryOptionBox .displayBox h3, 
 #singlePageCheckout #deliveryOptionBox .displayBox h3 { 
+
+}
+
+#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup, /* Appears when customer selects 'Store Pickup' */
+#singlePageCheckout #deliveryOptionBox #customerStorePickup { 
+
+}
+
+#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow, 
+#singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow { 
+
+}
+
+#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry, 
+#singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry { 
+
+}
+
+#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel, 
+#singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryLabel { 
+
+}
+
+#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span, 
+#singlePageCheckout #deliveryOptionBox #customerStorePickup .entryRow .entry .entryValue span { 
+
+}
+
+#anonSinglePageCheckout #deliveryOptionBox #customerStorePickup p, 
+#singlePageCheckout #deliveryOptionBox #customerStorePickup p { 
+
+}
+
+#anonSinglePageCheckout #deliveryOptionBox .deliveryOption, /* 'Deliver My Items' Button */
+#singlePageCheckout #deliveryOptionBox .deliveryOption { 
+
+}
+
+
+#anonSinglePageCheckout #deliveryOptionBox .deliveryOption span, 
+#singlePageCheckout #deliveryOptionBox .deliveryOption span { 
 
 }
 
@@ -5275,13 +5335,16 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 	
 }
 
-.personalInfoGender {
+.personalInfoTitle {
 
+}
+
+.personalInfoGender {
 
 }
 
 .personalInfoGender select {
-
+;
 }
 
 .personalInfoDateOfBirthMMDDYYYY {
@@ -5297,6 +5360,22 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .personalInfoDateOfBirthMMDD select {
+
+}
+
+.personalInfoDateOfBirthDDMMYYYY {
+
+}
+
+.personalInfoDateOfBirthDDMMYYYY select {
+
+}
+
+.personalInfoDateOfBirthDDMM {
+
+}
+
+.personalInfoDateOfBirthDDMM select {
 
 }
 
@@ -5319,7 +5398,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 #orderSalesHistory .orderNumber {
-    text-align: left;
+
 }
 
 #orderSalesHistory .orderDate {
@@ -5327,7 +5406,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 #orderSalesHistory .orderStatus {
-	
+
 }
 
 #orderSalesHistory .totalPrice {
@@ -5350,7 +5429,7 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .contactUsPhone .contactRow p {  
-
+ 
 }
 
 .contactUsFax {
@@ -5386,7 +5465,6 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 }
 
 .contactUsEmail .contactRow a {  
-
 }
 
 .contactUsEmail .contactRow a:hover {  
@@ -5566,6 +5644,18 @@ div#singlePageCheckout .entry h3 { /* For Paypal and Credit Card H3s */
 
 /* === 12.4 My Account  === */
 
+#eCommerceMyAccountContainer {
+
+}
+
+#eCommerceMyAccountContainer .displayBox {
+
+}
+
+#eCommerceMyAccountContainer .displayBox h3 {
+
+}
+
 #Customerpersonalinfo a,
 #Customerlogininfo a,
 #CustomerAddressBook a,
@@ -5685,7 +5775,6 @@ table#orderSalesHistory tbody tr {
 }
 
 table#orderSalesHistory tbody tr th {
-
 }
 
 table#orderSalesHistory thead tr {
@@ -5727,7 +5816,7 @@ table#orderSalesHistory tbody tr th {
 }
 
 .siteMap ul.subLevel {
- /* indents sub items */
+
 }
 
 .siteMap ul.subLevel li {
@@ -5735,7 +5824,7 @@ table#orderSalesHistory tbody tr th {
 }
 
 .siteMap li.subLevel {
- /* indents sub items */
+
 }
 
 /* === 12.6 Static Pages (About Us, Privacy Policy, Terms and Conditions, etc. === */
@@ -5811,11 +5900,12 @@ table#orderSalesHistory tbody tr th {
 }
 
 .reviewTextSection .reviewText {
-
+    color: #333333;
+    font-size: 12px;
 }
 
 .reviewRow .reviewPostDateSection {
-
+	
 }
 
 /* === 13.2 Write a Review  === */
@@ -5993,11 +6083,11 @@ table#rateObj2Filled {
 /* === 14. Footer Styles === */
 
 #eCommerceFooter {
-
+ 
 }
 
 #eCommerceFooterLinks {
-
+ 
 }
 
 #eCommerceFooter .footerCaption {
@@ -6009,14 +6099,17 @@ table#rateObj2Filled {
 }
 
 .footerColumn {
-	
 	/* 960px / 5 columns = 192px per col*/
     /* 960px / 4 columns = 240px per col*/
     /* 960px / 3 columns = 320px per col*/
+
 	/* 980px / 5 columns = 196px per col*/
     /* 980px / 4 columns = 244px per col*/
     /* 980px / 3 columns = 326px per col*/
 
+
+}
+.footerColumn h2 {
 
 }
 
@@ -6719,9 +6812,9 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 }
 		
 .showcase-content-wrapper { /* size is equal to image and hotspot size */
- 	text-align: center;
-	height: 411px;
-	width: 411px;
+	text-align: center;
+	height: 391px;
+	width: 960px;
 	display: table-cell;
 	vertical-align: middle;
 }
@@ -6943,7 +7036,6 @@ display: none;
 .cloud-zoom-title {
     background-color: #000000;
     color: #FFFFFF;
-    font-family: Arial,Helvetica,sans-serif;
     font-size: 10px;
     font-weight: bold;
     padding: 3px;
@@ -7083,5 +7175,4 @@ display: none;
 /*********************************************************/
 
 /* === 15.4 Custom Site Specific CSS For unique selectors, divs, markup for each Instance.  Not to be put in Trunk === */
-
 

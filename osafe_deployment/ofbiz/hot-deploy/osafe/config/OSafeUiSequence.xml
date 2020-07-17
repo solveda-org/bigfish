@@ -1465,6 +1465,12 @@
 <!-- *************************************** -->
 <!-- Person-Info -->
 <!-- *************************************** -->
+    <property key="title">
+        <value xml:lang="en">0</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoTitle</div>
+        <description>title</description>
+    </property>
     <property key="firstName">
         <value xml:lang="en">10</value>
         <screen>PersonalInfo</screen>
@@ -1494,6 +1500,18 @@
         <screen>PersonalInfo</screen>
         <div>personalInfoDateOfBirthMMDD</div>
         <description>Date of Birth in MMDD format</description>
+    </property>
+    <property key="dateOfBirthDDMMYYYY">
+        <value xml:lang="en">0</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoDateOfBirthDDMMYYYY</div>
+        <description>Date of Birth in DDMMYYYY format</description>
+    </property>
+    <property key="dateOfBirthDDMM">
+        <value xml:lang="en">0</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoDateOfBirthDDMM</div>
+        <description>Date of Birth in DDMM format</description>
     </property>
     <property key="phoneHome">
         <value xml:lang="en">60</value>
@@ -1569,5 +1587,230 @@
         <screen>AddressInfo</screen>
         <div>addressInfoZipPostcode</div>
         <description>Zip or Postcode</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review -->
+    <!-- *************************************** -->
+    <property key="productContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewProduct</div>
+        <description>Review Product Information.</description>
+    </property>
+    <property key="ratingContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewRating</div>
+        <description>Review Product Ratings.</description>
+    </property>
+    <property key="detailContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewDetail</div>
+        <description>Review Text.</description>
+    </property>
+    <property key="aboutYouContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewAboutYou</div>
+        <description>Review User Information.</description>
+    </property>
+    <property key="linkContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewLink</div>
+        <description>Help Links. </description>
+    </property>
+    <property key="buttonContainer">
+        <value xml:lang="en">0</value>
+        <screen>WriteReview</screen>
+        <div>writeReviewButton</div>
+        <description>Submit and Cancel Button.</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Product -->
+    <!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewProductName</div>
+        <description>Product Name</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewTertiaryInfo</div>
+        <description>Product Tertiary Information.</description>
+    </property>
+    <property key="thumbImage">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewProduct</screen>
+        <div>writeReviewTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Rating -->
+    <!-- *************************************** -->
+    <property key="rateOverallStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateOverallStars</div>
+        <description>The overall rating star selection</description>
+    </property>
+    <property key="rateQualityStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateQualityStars</div>
+        <description>The quality rating star selection</description>
+    </property>
+    <property key="rateEffectivenessStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateEffectivenessStars</div>
+        <description>The effectiveness rating star selection</description>
+    </property>
+    <property key="rateSatisfactionStars">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewRating</screen>
+        <div>writeReviewRateSatisfactionStars</div>
+        <description>The satisfaction rating star selection</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Detail -->
+    <!-- *************************************** -->
+    <property key="reviewerNickname">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerNickname</div>
+        <description>The Nickname of the reviewer</description>
+    </property>
+    <property key="reviewerTitle">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerTitle</div>
+        <description>The Title for the review</description>
+    </property>
+    <property key="reviewerText">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerText</div>
+        <description>The Text of the review</description>
+    </property>
+    <property key="reviewerTip">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewDetail</screen>
+        <div>writeReviewReviewerTip</div>
+        <description>Tips for writing a review, from Label file</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-AboutYou -->
+    <!-- *************************************** -->
+    <property key="reviewerLocation">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerLocation</div>
+        <description>Location of reviewer</description>
+    </property>
+    <property key="reviewerAge">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerAge</div>
+        <description>Age of reviewer</description>
+    </property>
+    <property key="reviewerGender">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewAboutYou</screen>
+        <div>writeReviewReviewerGender</div>
+        <description>Gender of reviewer</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Link -->
+    <!-- *************************************** -->
+    <property key="reviewTermsCondLink">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewLink</screen>
+        <div>writeReviewReviewTermsCondLink</div>
+        <description>The Terms and Conditions helper link .</description>
+    </property>
+    <property key="reviewGuidelinesLink">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewLink</screen>
+        <div>writeReviewReviewGuidelinesLink</div>
+        <description>The Guidelines helper link.</description>
+    </property>
+    <!-- *************************************** -->
+    <!-- Write-Review-Button -->
+    <!-- *************************************** -->
+    <property key="submitButton">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewButton</screen>
+        <div>writeReviewSubmitButton</div>
+        <description>The Submit button.</description>
+    </property>
+    <property key="cancelButton">
+        <value xml:lang="en">0</value>
+        <screen>WriteReviewButton</screen>
+        <div>writeReviewCancelButton</div>
+        <description>The Cancel button.</description>
     </property>
 </resource>

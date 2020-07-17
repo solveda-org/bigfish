@@ -9,8 +9,10 @@ ${sections.render('tooltipBody')?if_exists}
       ${sections.render('detailInfoBoxBody')!}
       ${sections.render('commonDetailActionButton')!}
       ${sections.render('commonDetailLinkButton')!}
+      ${sections.render('commonDetailHelperIcon')!}
     </div>
   </div>
   ${sections.render('additionalDetailInfo')!}
 </form>
 ${sections.render('commonConfirm')!}
+

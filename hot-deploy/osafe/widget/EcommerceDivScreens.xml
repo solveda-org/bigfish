@@ -3126,6 +3126,7 @@
             <actions>
                 <set field="uiSequenceScreen" value="ShippingOptions"/>
                 <set field="uiSequenceScreenPrefix" value=""/>
+                <set field="showCartFootprint" value="Y" />
             </actions>
             <widgets>
                 <include-screen name="ecommerceDivSequence"/>
@@ -4092,7 +4093,7 @@
             <actions>
             </actions>
             <widgets>
-                <container style="onePageCheckoutccountSeq">
+                <container style="onePageCheckoutAccountSeq">
                     <include-screen name="anonSinglePageCreateAccount" location="component://osafe/widget/EcommerceCheckoutScreens.xml"/>
                 </container>
             </widgets>
@@ -4145,6 +4146,19 @@
             </widgets>
         </section>
     </screen>
+    <screen name="personalInfoTitle">
+        <section>
+            <widgets>
+                <container style="personalInfoTitleSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoTitle.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
     <screen name="personalInfoFirstName">
         <section>
             <actions>
@@ -4190,7 +4204,7 @@
             </widgets>
         </section>
     </screen>
-        <screen name="personalInfoDateOfBirthMMDDYYYY">
+    <screen name="personalInfoDateOfBirthMMDDYYYY">
         <section>
             <actions>
             </actions>
@@ -4214,6 +4228,36 @@
                     <platform-specific>
                          <html>
                              <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoDobMMDD.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoDateOfBirthDDMMYYYY">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoDateOfBirthDDMMYYYYSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoDobDDMMYYYY.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personalInfoDateOfBirthDDMM">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personalInfoDateOfBirthDDMMSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoDobDDMM.ftl" />
                          </html>
                      </platform-specific>
                 </container>
@@ -4418,4 +4462,634 @@
             </widgets>
         </section>
     </screen>
-</screens>
+
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Write A review page.  
+     Sequencer Type  : WriteReview -->
+<!-- **********************************************************************  -->     
+    <screen name= "writeReviewDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WriteReview"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewProduct">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewProductSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewProduct/writeReviewProduct.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewRating">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewRatingSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewRating/writeReviewRating.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewDetail">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewDetailSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewDetail/writeReviewDetail.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewAboutYou">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewAboutYouSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewAboutYou/writeReviewAboutYou.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+        <screen name="writeReviewLink">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewLinkSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewLink/writeReviewLink.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewButtonSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewButton/writeReviewButton.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Write A review page.  
+     Sequencer Type  : WriteReviewProduct -->
+<!-- **********************************************************************  -->     
+
+    <screen name= "writeReviewProductDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WriteReviewProduct"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductDetail.groovy" />
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewProductName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewProductNameSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpProductName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewTertiaryInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewTertiaryInfoSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpTertiaryInfo.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewThumbImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewThumbImageSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpMainImage.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewReviewStars">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewStarsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpReviewStars.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewDescription">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewDescriptionSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpLongDescription.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewDistinguishingFeature">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewDistinguishingFeatureSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpDistinguishingFeature.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewSalesPitch">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewSalesPitchSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSalesPitch.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewSpecialInstructions">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewSpecialInstructionsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSpecialInstructions.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewDeliveryInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewDeliveryInfoSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpDeliveryInfo.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewDirections">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewDirectionsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpDirections.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewIngredients">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewIngredientsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpIngredients.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewWarnings">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewWarningsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpWarnings.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewTermsAndConditions">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewTermsAndConditionsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpTermsConditions.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Write A review page.  
+     Sequencer Type  : WriteReviewRating -->
+<!-- **********************************************************************  -->     
+
+    <screen name= "writeReviewRatingDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WriteReviewRating"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="writeReviewRateOverallStars">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewRateOverallStarsSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewRating/writeReviewRateOverallStars.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewRateQualityStars">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewRateQualityStarsSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewRating/writeReviewRateQualityStars.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewRateEffectivenessStars">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewRateEffectivenessStarsSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewRating/writeReviewRateEffectivenessStars.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewRateSatisfactionStars">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewRateSatisfactionStarsSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewRating/writeReviewRateSatisfactionStars.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Write A review page.  
+     Sequencer Type  : WriteReviewDetail -->
+<!-- **********************************************************************  -->     
+
+    <screen name= "WriteReviewDetailDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WriteReviewDetail"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewReviewerNickname">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewerNicknameSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewDetail/writeReviewReviewerNickname.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewReviewerTitle">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewerTitleSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewDetail/writeReviewReviewerTitle.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewReviewerText">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewerTextSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewDetail/writeReviewReviewerText.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewReviewerTip">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewerTipSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewDetail/writeReviewReviewerTip.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Write A review page.  
+     Sequencer Type  : WriteReviewAboutYou -->
+<!-- **********************************************************************  -->     
+
+    <screen name= "writeReviewAboutYouDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WriteReviewAboutYou"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="writeReviewReviewerLocation">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewerLocationSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewAboutYou/writeReviewReviewerLocation.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewReviewerAge">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewerAgeSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewAboutYou/writeReviewReviewerAge.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="writeReviewReviewerGender">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewerGenderSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewAboutYou/writeReviewReviewerGender.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Write A review page.  
+     Sequencer Type  : WriteReviewLink -->
+<!-- **********************************************************************  -->     
+
+    <screen name= "writeReviewLinkDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WriteReviewLink"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="writeReviewReviewTermsCondLink">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewTermsCondLinkSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewLink/writeReviewReviewTermsCondLink.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="writeReviewReviewGuidelinesLink">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewReviewGuidelinesLinkSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewLink/writeReviewReviewGuidelinesLink.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+<!-- **********************************************************************  -->     
+<!-- Sequence Screen : Write A review page.  
+     Sequencer Type  : WriteReviewButton -->
+<!-- **********************************************************************  -->     
+
+    <screen name= "writeReviewButtonDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="WriteReviewButton"/>
+                <set field="uiSequenceScreenPrefix" value=""/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="writeReviewSubmitButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewSubmitButtonSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewButton/writeReviewSubmitButton.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="writeReviewCancelButton">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="writeReviewCancelButtonSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/writeReview/writeReviewButton/writeReviewCancelButton.ftl"/>
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+ </screens>

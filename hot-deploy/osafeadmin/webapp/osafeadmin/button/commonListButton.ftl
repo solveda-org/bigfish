@@ -2,7 +2,7 @@
     <th colspan="0">
       <div>
         <#if backAction?exists && backAction?has_content>
-          <a href="<@ofbizUrl>${backAction}</@ofbizUrl>"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
+          <a href="<@ofbizUrl>${backAction}?backActionFlag=Y</@ofbizUrl>"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
         <#else>
           <a href="${backHref!}"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
         </#if>

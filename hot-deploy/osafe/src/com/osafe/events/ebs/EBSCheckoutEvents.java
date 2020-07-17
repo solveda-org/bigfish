@@ -23,12 +23,10 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
-import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.WeakHashMap;
@@ -40,24 +38,18 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
-import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
-import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.entity.condition.EntityCondition;
-import org.ofbiz.entity.condition.EntityExpr;
-import org.ofbiz.entity.condition.EntityOperator;
-import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.party.party.PartyHelper;
-import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.LocalDispatcher;
 
 /**
@@ -65,9 +57,6 @@ import org.ofbiz.service.LocalDispatcher;
  */
 public class EBSCheckoutEvents {
 
-    /** The Constant resourceErr. */
-    public static final String resourceErr = "AccountingErrorUiLabels";
-    
     /** The Constant module. */
     public static final String module = EBSCheckoutEvents.class.getName();
 
@@ -92,167 +81,122 @@ public class EBSCheckoutEvents {
      * @return the string
      */
     public static String ebsCheckoutRedirect(HttpServletRequest request, HttpServletResponse response) {
-        Locale locale = UtilHttp.getLocale(request);
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
-        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
-        ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
-        Map <String, Object> parameters = new LinkedHashMap <String, Object>();
+		Delegator delegator = (Delegator) request.getAttribute("delegator");
+		LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+		GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
+		ShoppingCart shoppingCart = ShoppingCartEvents.getCartObject(request);
+		Map<String, Object> parameters = new LinkedHashMap<String, Object>();
 
-        // get the orderId
-        String shoppingListId =  cart.getAutoOrderShoppingListId();
-		String orderPartyId =  cart.getOrderPartyId();
+        // Redirect URL
+        String redirectUrl = null;
+        
+        // Retrieves the orderPartyId
+		String orderPartyId = shoppingCart.getOrderPartyId();
 		if (UtilValidate.isEmpty(orderPartyId) && UtilValidate.isNotEmpty(userLogin)){
 			orderPartyId = userLogin.getString("partyId");
 		}
 
-		String redirectUrl = null;
-		String returnUrl = null;
-		String secretKey = null;
-		String account_id = null;
-		String mode = null;
-		String billingContactMechId = cart.getContactMech("BILLING_LOCATION");
-		GenericValue shippingAddress = cart.getShippingAddress();
-		GenericValue paymentGatewayEBS = null;
-		GenericValue shoppingList = null;
-		
-		try {
-			paymentGatewayEBS = delegator.findOne("PaymentGatewayEbs", UtilMisc.toMap("paymentGatewayConfigId", "EBS_CONFIG"), false);
-			
-			// gets the redirect URL
-			redirectUrl = paymentGatewayEBS.getString("redirectUrl");
-			// gets the return URL
-			returnUrl = paymentGatewayEBS.getString("returnUrl");
-			// gets the EBS secret key account
-			secretKey = paymentGatewayEBS.getString("secretKey");
-			// gets the EBS merchant account
-			account_id = paymentGatewayEBS.getString("merchantId");
-			// gets the EBS Mode account
-			mode = paymentGatewayEBS.getString("mode");
-   
-			// gets the order header
-			String token = null;
-			List<EntityExpr> exprs = FastList.newInstance();
-			exprs.add(EntityCondition.makeCondition("partyId", EntityOperator.EQUALS, orderPartyId));
-			exprs.add(EntityCondition.makeCondition("isActive", EntityOperator.EQUALS, "Y"));
-			exprs.add(EntityCondition.makeCondition("shoppingListTypeId", EntityOperator.EQUALS, "SLT_SPEC_PURP"));
-			List<GenericValue> shoppingLists = delegator.findList("ShoppingList", EntityCondition.makeCondition(exprs, EntityOperator.AND), null, null, null, false);
-			
-			if (shoppingLists != null) {
-				shoppingList = EntityUtil.getFirst(shoppingLists);
-				token = shoppingList.getString("shoppingListId");
-				cart.setAttribute("ebsCheckoutToken", token);
-				EBSTokenWrapper tokenWrapper = new EBSTokenWrapper(token);
-				cart.setAttribute("ebsCheckoutTokenObj", tokenWrapper);
-				EBSCheckoutEvents.tokenCartMap.put(tokenWrapper, new WeakReference<ShoppingCart>(cart));
-			}
-		} catch (GenericEntityException e) {
-			Debug.logError(e, "Cannot getting shopping list: " + shoppingListId, module);
-			request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resourceErr, "ProblemsGettingOrderHeaderError", locale));
-			return "error";
-		}
-   
         // gets the order total
         DecimalFormat df = new DecimalFormat("##.##");
-        String orderTotal = df.format(cart.getDisplayGrandTotal());
+        String orderTotal = df.format(shoppingCart.getDisplayGrandTotal());
    
         // get the product store
-        GenericValue productStore = ProductStoreWorker.getProductStore(request);
-   
+        // GA: why do we need this piece of code?
+        /*GenericValue productStore = ProductStoreWorker.getProductStore(request);
         if (productStore == null) {
             Debug.logError("ProductStore is null", module);
-            request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resourceErr, "ProblemsGettingMerchantConfigurationError", locale));
+            //request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resourceErr, "ProblemsGettingMerchantConfigurationError", locale));
             return "error";
-        }
+        }*///??
         
 		try {
+			String billingContactMechId = shoppingCart.getContactMech("BILLING_LOCATION");
+			GenericValue shippingAddress = shoppingCart.getShippingAddress();
+			
+			GenericValue paymentGatewayEBS = delegator.findOne("PaymentGatewayEbs", UtilMisc.toMap("paymentGatewayConfigId", "EBS_CONFIG"), false);
+			redirectUrl = paymentGatewayEBS.getString("redirectUrl");
+   
+			// Generates an unique token and save shopping cart against it
+			String refToken = UtilDateTime.nowAsString();
+			shoppingCart.setAttribute("ebsCheckoutToken", refToken);
+			EBSTokenWrapper tokenWrapper = new EBSTokenWrapper(refToken);
+			shoppingCart.setAttribute("ebsCheckoutTokenObj", tokenWrapper);
+			EBSCheckoutEvents.tokenCartMap.put(tokenWrapper, new WeakReference<ShoppingCart>(shoppingCart));
+			
 			if (UtilValidate.isEmpty(redirectUrl)) {
-				Debug.logError("Payment properties is not configured properly, some notify URL from IPG is not correctly defined!", module);
-				request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resourceErr, "ProblemsGettingMerchantConfiguration", locale));
+				Debug.logError("Redirect URL for EBS Payment Gateway is not correctly defined!", module);
 				return "error";
 			}
-
-			parameters.put("account_id", account_id);
-			parameters.put("reference_no", shoppingList.getString("shoppingListId"));
-			parameters.put("amount", orderTotal);
-			parameters.put("mode", mode);
-			parameters.put("description", "test");
-			parameters.put("return_url", returnUrl);
 
 			// Customer Address
 			GenericValue billingAddress = delegator.findOne("PostalAddress", UtilMisc.toMap("contactMechId", billingContactMechId), false);
 			String name = PartyHelper.getPartyName(delegator, orderPartyId, false);
+			
 			String emailAddress = null;
-			Map<String, Object> results = dispatcher.runSync("getPartyEmail", UtilMisc.toMap("partyId", orderPartyId, "userLogin", userLogin));
-			if (results.get("emailAddress") != null) {
-				emailAddress = (String) results.get("emailAddress");
+			Map<String, Object> emailResults = dispatcher.runSync("getPartyEmail", UtilMisc.toMap("partyId", orderPartyId, "userLogin", userLogin));
+			if (emailResults!= null && emailResults.get("emailAddress") != null) {
+				emailAddress = (String) emailResults.get("emailAddress");
 			}
-			parameters.put("name", name);
-			parameters.put("address", billingAddress.getString("address1") + billingAddress.getString("address2"));
-			parameters.put("city", billingAddress.getString("city"));
-			parameters.put("state", billingAddress.getString("stateProvinceGeoId"));
-			parameters.put("country", billingAddress.getString("countryGeoId"));
-			parameters.put("postal_code", billingAddress.getString("postalCode"));
-			parameters.put("phone", EBSCheckoutEvents.getPartyPhoneNumber(orderPartyId, "PRIMARY_PHONE", delegator));
-			parameters.put("email", emailAddress);
-			parameters.put("ship_name", shippingAddress.getString("toName"));
-			parameters.put("ship_address", shippingAddress.getString("address1") + shippingAddress.getString("address2"));
-			parameters.put("ship_city", shippingAddress.getString("city"));
-			parameters.put("ship_state", shippingAddress.getString("stateProvinceGeoId"));
-			parameters.put("ship_country", shippingAddress.getString("countryGeoId"));
-			parameters.put("ship_postal_code", shippingAddress.getString("postalCode"));
-			parameters.put("ship_phone", EBSCheckoutEvents.getPartyPhoneNumber(orderPartyId, "PHONE_HOME", delegator));
-
-			/*String pass = secretKey + "|" + account_id + "|" + orderTotal + "|" + shoppingListId + "|" + returnUrl + "|" + mode;
-			String has = HashCrypt.getDigestHash(pass, "MD5");
-
-			byte[] data = has.getBytes();
-			BigInteger i = new BigInteger(1, data);
-			String.format("%1${032}X", i).trim();*/
-		} catch (Exception e) {
-			Debug.log(e.getMessage());
+			
+			String phone = null;
+			String shippingPhone = null;
+			Map<String, Object> phoneResults = dispatcher.runSync("getPartyTelephone", UtilMisc.toMap("partyId", orderPartyId, "userLogin", userLogin));
+			if (phoneResults != null){
+				String contactMechPurTypeId = (String) phoneResults.get("contactMechPurposeTypeId");
+				String areaCode = (String) phoneResults.get("areaCode");
+				String contactNum = (String) phoneResults.get("contactNumber");
+				if (areaCode != null && contactNum != null) {
+					if ("PRIMARY_PHONE".equals(contactMechPurTypeId)) {
+						phone =  areaCode + "-" + contactNum;
+					}
+					if ("PHONE_HOME".equals(contactMechPurTypeId)) {
+						shippingPhone = areaCode + "-" + contactNum;
+					}
+				}
+			}
+			
+			validateParam(parameters, "account_id", paymentGatewayEBS.getString("merchantId"));
+			validateParam(parameters, "reference_no", refToken);
+			validateParam(parameters, "amount", orderTotal);
+			validateParam(parameters, "mode", paymentGatewayEBS.getString("mode"));
+			validateParam(parameters, "description", "test");
+			validateParam(parameters, "return_url", paymentGatewayEBS.getString("returnUrl"));
+			validateParam(parameters, "name", name);
+			validateParam(parameters, "address", billingAddress.getString("address1") + billingAddress.getString("address2"));
+			validateParam(parameters, "city", billingAddress.getString("city"));
+			validateParam(parameters, "state", billingAddress.getString("stateProvinceGeoId"));
+			validateParam(parameters, "country", billingAddress.getString("countryGeoId"));
+			validateParam(parameters, "postal_code", billingAddress.getString("postalCode"));
+			validateParam(parameters, "phone", phone);
+			validateParam(parameters, "email", emailAddress);
+			validateParam(parameters, "ship_name", shippingAddress.getString("toName"));
+			validateParam(parameters, "ship_address", shippingAddress.getString("address1") + shippingAddress.getString("address2"));
+			validateParam(parameters, "ship_city", shippingAddress.getString("city"));
+			validateParam(parameters, "ship_state", shippingAddress.getString("stateProvinceGeoId"));
+			validateParam(parameters, "ship_country", shippingAddress.getString("countryGeoId"));
+			validateParam(parameters, "ship_postal_code", shippingAddress.getString("postalCode"));
+			validateParam(parameters, "ship_phone", shippingPhone);
+		} catch (IllegalArgumentException e) {
+			Debug.logError(e, e.toString(), module);
+			return "error";
+		} catch (Exception ex) {
+			Debug.logError(ex, ex.toString(), module);
+			return "error";
 		}
    
         String encodedParameters = UtilHttp.urlEncodeArgs(parameters, false);
         String redirectString = redirectUrl + "?" + encodedParameters;
    
-        try {
-            response.sendRedirect(redirectString);
-        } catch (IOException e) {
-            Debug.logError(e, "Problems redirecting to IPG", module);
-            request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage(resourceErr, "ProblemsConnectingWithIPGError", locale));
-            return "error";
-        }
+		try {
+			response.sendRedirect(redirectString);
+		} catch (IOException e) {
+			String errMsg = "Problem redirecting to EBS: " + e.toString();
+			Debug.logError(e, errMsg, module);
+			return "error";
+		}
    
         return "success";
     }
-    
-    
-	/**
-	 * Gets the party phone number.
-	 *
-	 * @param partyId the party id
-	 * @param contactMechPurposeTypeId the contact mech purpose type id
-	 * @param delegator the delegator
-	 * @return the party phone number
-	 */
-	public static String getPartyPhoneNumber(String partyId, String contactMechPurposeTypeId, Delegator delegator) {
-		String partyPhoneNumber = "";
-		try {
-			GenericValue partyPhoneDetail = null;
-			List<GenericValue> partyPhoneDetails = delegator.findByAnd("PartyContactDetailByPurpose", 
-					UtilMisc.toMap("contactMechPurposeTypeId", contactMechPurposeTypeId, "partyId", partyId));
-			if(UtilValidate.isNotEmpty(partyPhoneDetails)) {
-				partyPhoneDetails = EntityUtil.filterByDate(partyPhoneDetails);
-				partyPhoneDetail = EntityUtil.getFirst(partyPhoneDetails);
-				partyPhoneNumber = (String) partyPhoneDetail.get("areaCode") + "-" + (String) partyPhoneDetail.get("contactNumber");
-    	    }
-		} catch (GenericEntityException e) {
-			Debug.logError(e, "Problems getting Party Phone Number", module);
-		}
-		return partyPhoneNumber;
-	}
-	
     
     /**
 	 * Express checkout return.
@@ -263,7 +207,6 @@ public class EBSCheckoutEvents {
 	 * @throws GenericEntityException the generic entity exception
 	 */
 	public static String ebsCheckoutReturn(HttpServletRequest request, HttpServletResponse response) throws GenericEntityException {
-
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         HttpSession session = request.getSession();
@@ -291,6 +234,7 @@ public class EBSCheckoutEvents {
 		try {
 			recvString1 = dataIn.readLine();
 		} catch (IOException e) {
+			Debug.logError(e, e.toString(), module);
 			return "error";
 		}
 
@@ -303,6 +247,7 @@ public class EBSCheckoutEvents {
 			try {
 				recvString1 = dataIn.readLine();
 			} catch (IOException e) {
+				Debug.logError(e, e.toString(), module);
 				return "error";
 			}
 		}
@@ -333,7 +278,7 @@ public class EBSCheckoutEvents {
 			}
 
 			if (cart == null) {
-				Debug.logError("Could locate the ShoppingCart for token " + token, module);
+				Debug.logError("Could not locate the ShoppingCart for token " + token, module);
 				return "error";
 			}
 			
@@ -372,7 +317,8 @@ public class EBSCheckoutEvents {
 				try {
 					newPmId = delegator.getNextSeqId("PaymentMethod");
 				} catch (IllegalArgumentException e) {
-					Debug.log(" Error in generating new paymentMethodId");
+					String errMsg = "Error in generating new paymentMethodId: " + e.toString();
+					Debug.logError(e, errMsg, module);
 				}
 			}
 
@@ -406,6 +352,22 @@ public class EBSCheckoutEvents {
 		
         return "success";
      }
+	
+	/**
+	 * Validate parameter.
+	 *
+	 * @param parameters the parameters
+	 * @param paramName the parameter name
+	 * @param paramValue the parameter value
+	 * @throws IllegalArgumentException the illegal argument exception
+	 */
+	private static void validateParam(Map<String, Object> parameters, String paramName, String paramValue) throws IllegalArgumentException {
+		if (UtilValidate.isNotEmpty(paramValue)) {
+			parameters.put(paramName, paramValue);
+		} else {
+			throw new IllegalArgumentException(paramName + " has an invalid value '" + paramValue + "'");
+		}
+	}
     
     /**
      * The Class EBSTokenWrapper.

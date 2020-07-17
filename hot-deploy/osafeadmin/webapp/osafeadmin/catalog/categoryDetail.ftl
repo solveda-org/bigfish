@@ -62,7 +62,8 @@
       <div class="infoCaption"><label>${uiLabelMap.SubNavCaption}</label></div>
       <div class="infoValue">
         <#if (mode?has_content && mode == "addTopNav")>
-          <input type="text" readOnly="readOnly"/> ${uiLabelMap.SubNavBarInfo}
+          <input type="text" readOnly="readOnly"/> 
+          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.SubNavBarInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
         <#elseif (mode?has_content && mode == "addSubNav")>
           <input type="text" name="subNavBar" value="${parameters.subNavBar!subNavBar?if_exists}" />
         <#elseif (mode?has_content && mode == "edit")>

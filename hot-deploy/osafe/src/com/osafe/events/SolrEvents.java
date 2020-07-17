@@ -83,7 +83,6 @@ public class SolrEvents {
             String catalogTopCategoryId = CatalogWorker.getCatalogTopCategoryId(request);
             
             String solrServer = OSAFE_PROPS.getString("solr-server");
-            int solrPageSize = NumberUtils.toInt(OSAFE_PROPS.getString("solr-page-size"), 10);
             CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
             solr.setRequestWriter(new BinaryRequestWriter());
 
@@ -105,6 +104,10 @@ public class SolrEvents {
                     GenericValue prodStoreParm = (GenericValue) productStoreParms.get(i);
                     mProductStoreParms.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
                 }
+            }
+            int solrPageSize = NumberUtils.toInt(mProductStoreParms.get("PLP_NUM_ITEMS_PER_PAGE"), 20);
+            if (solrPageSize == 0) {
+                solrPageSize = 20;
             }
             
 
@@ -189,7 +192,9 @@ public class SolrEvents {
             		for(GenericValue productFeatureGroup : productFeatureGroups) {
             			String productFeatureGroupId = SolrConstants.EXTRACT_PRODUCT_FEATURE_PREFIX + productFeatureGroup.getString("productFeatureGroupId");
             			facetGroups.add(productFeatureGroupId);
+            			facetGroupIds.put(productFeatureGroupId, productFeatureGroup.getString("productFeatureGroupId"));
             		}
+            		cc.setFilterGroupsIds(facetGroupIds);
             	}
             }
             
@@ -271,9 +276,6 @@ public class SolrEvents {
                 requestName = pathInfo.substring(1);
             }
             
-            String includeCategoryOnPLP = mProductStoreParms.get("FACET_CAT_ON_PLP");
-            
-            
                 queryFacet += " AND rowType:product";
                 try {
                     String productParentCategoryId="";
@@ -308,7 +310,7 @@ public class SolrEvents {
                             		queryCatFacet = "topMostProductCategoryId:" + productParentCategoryId + " AND ";
                             	}
                                 facetCatGroups.add(0, SolrConstants.TYPE_PRODUCT_CATEGORY);
-                                facetCatGroupDescriptions.put(SolrConstants.TYPE_PRODUCT_CATEGORY, facetSearchCategoryLabel);
+                                facetCatGroupDescriptions.put(SolrConstants.TYPE_PRODUCT_CATEGORY, facetProductCategoryLabel);
                             }
                             queryCatFacet += "rowType:product";
 
@@ -610,8 +612,14 @@ public class SolrEvents {
             List facetListPriceRange = (List) rh.processPriceRangeRefinements(resultsFacetQueries, results);
             List facetListCustomerRating = (List) rh.processCustomerRatingRefinements(resultsFacetQueries);
             List newresult = removeDuplicateEntry(results);
+            int startIndex = Integer.valueOf(NumberUtils.toInt(start, 0));
+            if (newresultComplete.size() > (startIndex+pageSize)) {
+                newresult = newresultComplete.subList(startIndex, (startIndex+pageSize));
+            } else {
+                newresult = newresultComplete.subList(startIndex, newresultComplete.size());
+            }
             
-            request.setAttribute("numFound", sdl.getNumFound());
+            request.setAttribute("numFound", newresultComplete.size());
             request.setAttribute("start", sdl.getStart());
             request.setAttribute("size", sdl.size());
             request.setAttribute("pageSize", pageSize);

@@ -53,11 +53,12 @@
                 <div class="infoCaption"><label>${uiLabelMap.DivCaption}</label></div>
                 <div class="infoValue">
                   <#if mode?has_content && mode == "add">
-                    <input type="text" name="uiDiv" value="${parameters.uiDiv!div!""}" /> ${uiLabelMap.DivTagPurposeHelperInfo}
+                    <input type="text" name="uiDiv" value="${parameters.uiDiv!div!""}" /> 
                   <#elseif mode?has_content && mode == "edit">
                     <input type="hidden" name="uiDiv" value="${div!""}" />${div!""}
                   </#if>
                </div>
+               <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.DivTagPurposeHelperInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
             </div>
         </div>
         <div class="infoRow">

@@ -121,8 +121,8 @@ if (UtilValidate.isNotEmpty(filterGroup))
 
   context.facetGroups = facetGroups;
 }
-plpFacet = Util.getProductStoreParm(request, "PLP_FACET_GROUP_VARIANT_SWATCH_IMG");
-if (UtilValidate.isNotEmpty(plpFacet))
+facetGroupMatch = Util.getProductStoreParm(request, "FACET_GROUP_VARIANT_MATCH");
+if (UtilValidate.isNotEmpty(facetGroupMatch))
 {
 	searchText = parameters.searchText ?: "";
 	if (UtilValidate.isNotEmpty(searchText))
@@ -140,7 +140,7 @@ if (UtilValidate.isNotEmpty(plpFacet))
           exprListForParameters.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("description"), EntityOperator.LIKE, EntityFunction.UPPER(text + "%")));
        }
       paramCond = EntityCondition.makeCondition(exprListForParameters, EntityOperator.OR); 
-      featureTypeCond = EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.EQUALS, plpFacet.toUpperCase());
+      featureTypeCond = EntityCondition.makeCondition("productFeatureTypeId", EntityOperator.EQUALS, facetGroupMatch.toUpperCase());
       paramCond = EntityCondition.makeCondition([paramCond, featureTypeCond], EntityOperator.AND);
       productFeatureList = delegator.findList("ProductFeature",paramCond, null, orderBy, null, true);
       if (UtilValidate.isNotEmpty(productFeatureList))

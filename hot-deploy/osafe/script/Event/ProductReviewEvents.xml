@@ -16,20 +16,59 @@
                 <process field="productStoreId"><copy to-field="productStoreId"/></process>
                 <process field="REVIEW_NICK_NAME"><copy to-field="reviewNickName"/><not-empty><fail-property resource="OSafeUiLabels" property="NicknameMissingError"/></not-empty></process>
                 <process field="REVIEW_TITLE"><copy to-field="reviewTitle"/><not-empty><fail-property resource="OSafeUiLabels" property="ReviewTitleMissingError"/></not-empty></process>
-                <process field="REVIEW_TEXT"><copy to-field="productReview"/><not-empty><fail-property resource="OSafeUiLabels" property="ReviewTextMissingError"/></not-empty></process>
+                <process field="REVIEW_TEXT"><copy to-field="productReview"/></process>
                 <process field="REVIEW_GENDER"><copy to-field="reviewGender"/></process>
                 <process field="REVIEW_AGE"><copy to-field="reviewAge"/></process>
                 <process field="REVIEW_LOCATION"><copy to-field="reviewLocation"/></process>
              </simple-map-processor>
 
          </call-map-processor>
+         
+         
         <if-not-empty field="parameters.REVIEW_TEXT">
-            <call-object-method method-name="length" obj-field="parameters.REVIEW_TEXT" ret-field="reviewTextDataLen"/>
-            <if-compare field="reviewTextDataLen" operator="less" value="50" type="Integer">
+			<call-object-method method-name="length" obj-field="parameters.REVIEW_TEXT" ret-field="reviewTextLength"/>
+			<else>
+				<set field="reviewTextLength" type="Integer" value="0"/>
+			</else>
+		</if-not-empty>
+			<!-- check if length of review is less than system param REVIEW_MIN_CHAR-->
+        	<if-empty field="parameters.REVIEW_MIN_CHAR">
+				<set field="parameters.REVIEW_MIN_CHAR" type="Integer" value="0"/>
+				<else><!-- check if it is an integer -->
+					<call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="minCharIsInt">
+			            <field field="parameters.REVIEW_MIN_CHAR" type="String"/>
+			        </call-class-method>
+			        <if-compare operator="equals" value="false" field="minCharIsInt" type="Boolean">
+			            <set field="parameters.REVIEW_MIN_CHAR" type="Integer" value="0"/>
+			        </if-compare>
+				</else>
+			</if-empty>
+            <if-compare field="reviewTextLength" operator="less" value="${parameters.REVIEW_MIN_CHAR}" type="Integer">
                 <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ReviewTextShortError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="REVIEW_TEXT" list="error_list"/>
             </if-compare>
-        </if-not-empty>
+			<!-- check if length of review is greater than system param REVIEW_MAX_CHAR-->
+			<if-empty field="parameters.REVIEW_MAX_CHAR">
+				<set field="parameters.REVIEW_MAX_CHAR" type="Integer" value="0"/>
+				<else><!-- check if it is an integer -->
+					<call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="maxCharIsInt">
+			            <field field="parameters.REVIEW_MAX_CHAR" type="String"/>
+			        </call-class-method>
+			        <if-compare operator="equals" value="false" field="maxCharIsInt" type="Boolean">
+			            <set field="parameters.REVIEW_MAX_CHAR" type="Integer" value="0"/>
+			        </if-compare>
+				</else>
+			</if-empty>
+			<!-- if REVIEW_MAX_CHAR equals 0 then is can have an unlimited amount of chars -->
+			<if-compare field="parameters.REVIEW_MAX_CHAR" operator="equals" value="0" type="Integer">
+				<else>
+					<if-compare field="reviewTextLength" operator="greater" value="${parameters.REVIEW_MAX_CHAR}" type="Integer">
+						<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ReviewTextLongError"/>
+						<string-to-list string="${tempErrorMessage}" message-field="REVIEW_TEXT" list="error_list"/>
+					</if-compare>
+				</else>
+			</if-compare>
+        
         <check-errors/>
         <set-service-fields service-name="createProductReview" map="reviewContext" to-map="createReviewCtx"/>
         <if-not-empty field="reviewContext.productRating">
@@ -45,8 +84,18 @@
         <if-not-empty field="reviewContext.satisfactionRating">
             <set field="createReviewCtx.satisfactionRating" type="BigDecimal" value="${reviewContext.satisfactionRating}"/>
         </if-not-empty>
+		
+		<set field="userLogin" from-field="parameters.userLogin"/>
+        <if-empty field="userLogin">
+            <entity-one entity-name="UserLogin" value-field="anonymousUserLogin">
+                <field-map field-name="userLoginId" value="anonymous"/>
+            </entity-one>
+            <set-current-user-login value-field="anonymousUserLogin"/>
+        <else>
+            <set-current-user-login value-field="userLogin"/>
+        </else>
+        </if-empty>
 
-        <call-service service-name="createProductReview" in-map-name="createReviewCtx" include-user-login="true"/>
-
+        <call-service service-name="createProductReview" in-map-name="createReviewCtx" include-user-login="true"/> 
     </simple-method>
 </simple-methods>

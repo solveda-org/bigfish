@@ -35,9 +35,10 @@
                 <#assign totItem = totItem + quantityOrdered />
                 <#assign unitPrice = product.unitPrice!"">
                 <#assign totSales = totSales + unitPrice />
-                <#assign productName = topProductContentWrappers[productId].get("PRODUCT_NAME")>
-                <#if !productName?string?has_content>
-                    <#assign productName = productId>
+                <#assign productWrapper = topProductContentWrappers[productId]!"">
+                <#assign productName=productId!""/>
+                <#if productWrapper?has_content>
+	                <#assign productName = productWrapper.get("PRODUCT_NAME")>
                 </#if>
                                 
                 <tr class="<#if rowClass == "2">even</#if>">

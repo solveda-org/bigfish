@@ -7,7 +7,7 @@
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
-        <label>${uiLabelMap.ProductXLSFileCaption}</label>
+        <label>${uiLabelMap.ProductFileFormatCaption}</label>
       </div>
       <div class="infoValue">
         <input type="file" size="40" name="productFile" accept="*.xls"/>

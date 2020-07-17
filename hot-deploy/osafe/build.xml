@@ -82,6 +82,9 @@
             <filterset>
               <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
               <filter token="service.name" value="${service.name}"/>
+              <filter token="Xms" value="${Xms}"/>
+              <filter token="Xmx" value="${Xmx}"/>
+              <filter token="MaxPermSize" value="${MaxPermSize}"/>
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/startofbiz.bat" todir="../../" overwrite="true" failonerror="false"/>
@@ -95,6 +98,9 @@
             <filterset>
               <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
               <filter token="service.name" value="${service.name}"/>
+              <filter token="Xms" value="${Xms}"/>
+              <filter token="Xmx" value="${Xmx}"/>
+              <filter token="MaxPermSize" value="${MaxPermSize}"/>
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/startofbiz.sh" todir="../../" overwrite="true" failonerror="false"/>
@@ -261,6 +267,8 @@
             <filterset>
               <filter token="service.name" value="${service.name}"/>
               <filter token="ofbiz.home" value="${ofbiz.home.dir}"/>
+              <filter token="Xms" value="${Xms}"/>
+              <filter token="Xmx" value="${Xmx}"/>
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/JavaService/Install_Osafe_Service.bat" todir="../../JavaService" overwrite="true" failonerror="false"/>

@@ -37,7 +37,7 @@ productPromoCodeId = StringUtils.trimToEmpty(parameters.productPromoCodeId);
 viewCompleted = StringUtils.trimToEmpty(parameters.viewcompleted);
 viewCancelled = StringUtils.trimToEmpty(parameters.viewcancelled);
 viewApproved = StringUtils.trimToEmpty(parameters.viewapproved);
-viewProcessing = StringUtils.trimToEmpty(parameters.viewprocessing);
+viewSent = StringUtils.trimToEmpty(parameters.viewsent);
 viewCreated = StringUtils.trimToEmpty(parameters.viewcreated);
 viewRejected = StringUtils.trimToEmpty(parameters.viewrejected);
 viewHold = StringUtils.trimToEmpty(parameters.viewhold);
@@ -111,12 +111,22 @@ if (UtilValidate.isNotEmpty(srchStorePickup)) {
     svcCtx.put("attrValue", "STORE_PICKUP");
 }
 
+List orderContactMechIds = FastList.newInstance();
 if (orderEmail) {
-    contactMech = delegator.findByAnd("PartyContactWithPurpose", [infoString : orderEmail, contactMechTypeId : "EMAIL_ADDRESS", contactMechPurposeTypeId : "PRIMARY_EMAIL"]);
-    if (UtilValidate.isNotEmpty(contactMech)) {
-        svcCtx.put("orderContactMechId", contactMech[0].contactMechId);
-    } else{
-        svcCtx.put("orderContactMechId", "NULL");
+	context.orderEmail = orderEmail;
+    contactMechs = delegator.findByAnd("PartyContactWithPurpose", [infoString : orderEmail, contactMechTypeId : "EMAIL_ADDRESS", contactMechPurposeTypeId : "PRIMARY_EMAIL"]);
+    if (UtilValidate.isNotEmpty(contactMechs)) 
+	{
+		for(GenericValue contactMech : contactMechs)
+		{
+			orderContactMechIds.add(contactMech.contactMechId);
+		}
+		svcCtx.put("orderContactMechIds", orderContactMechIds);
+    } else
+	{
+		//if no contactMechs are found, add a dummy Id of '0' so that no results will be displayed
+		orderContactMechIds.add("0");
+        svcCtx.put("orderContactMechIds", orderContactMechIds);
     }
 }
 
@@ -133,8 +143,8 @@ if(statusId) {
     if("ORDER_APPROVED".equals(statusId)) {
         viewApproved=statusId;
     }
-    if("ORDER_PROCESSING".equals(statusId)) {
-        viewProcessing=statusId;
+    if("ORDER_SENT".equals(statusId)) {
+        viewSent=statusId;
     }
     if("ORDER_CREATED".equals(statusId)) {
         viewCreated=statusId;
@@ -162,9 +172,9 @@ if(viewApproved) {
     orderStatusIds.add("ORDER_APPROVED");
     context.viewapproved=viewApproved;
 }
-if(viewProcessing) {
-    orderStatusIds.add("ORDER_PROCESSING");
-    context.viewprocessing=viewProcessing;
+if(viewSent) {
+    orderStatusIds.add("ORDER_SENT");
+    context.viewsent=viewSent;
 }
 if(viewCreated) {
     orderStatusIds.add("ORDER_CREATED");

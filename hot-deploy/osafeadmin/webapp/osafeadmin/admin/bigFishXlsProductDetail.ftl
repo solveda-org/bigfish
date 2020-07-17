@@ -3,7 +3,7 @@
       <input type="hidden" name="sampleFile" value="N" />
       <div class="infoRow">
           <div class="infoDetail">
-              <p>${uiLabelMap.CreateBigFishFromDBInfo}</p>
+              <p>${uiLabelMap.CreateBigFishLoadFromDBInfo}</p>
           </div>
       </div>
   <#else>

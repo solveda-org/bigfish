@@ -118,10 +118,18 @@
                               <td></td>
                             </tr>
                             <tr>
-                              <th class="caption"><label>${uiLabelMap.TotalLabel}</label></th>
-                              <td class="total numberCol">
-                                <@ofbizCurrency amount=orderGrandTotal rounding=2 isoCode=currencyUom/>
-                              </td>
+	                            <#-- show adjusted total if a promo is entered -->
+	                  			<#if promoText?has_content>
+									<th class="caption"><label>${uiLabelMap.AdjustedTotalLabel}</label></th>
+		                            <td class="total numberCol">
+		                                <div class="adjustedTotalLabel"><@ofbizCurrency amount=orderGrandTotal rounding=2 isoCode=currencyUom/></div>
+		                            </td>
+								<#else>
+									<th class="caption"><label>${uiLabelMap.TotalLabel}</label></th>
+	                              	<td class="total numberCol">
+	                                	<div class="adjustedTotalValue"><@ofbizCurrency amount=orderGrandTotal rounding=2 isoCode=currencyUom/></div>
+	                              	</td>
+	                  			</#if>
                             </tr>
                         </table>
                     </td>

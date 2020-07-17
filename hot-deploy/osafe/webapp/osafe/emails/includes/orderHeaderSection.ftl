@@ -169,7 +169,7 @@ under the License.
                                                   </#if>
                                                   <#if carrierPartyId?exists>
                                                      <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", carrierPartyId))?if_exists />
-                                                     <#if carrier?has_content>${carrier.groupName?default(carrier.carrierPartyId)}</#if>
+                                                     <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)}</#if>
                                                   </#if>
                                                   ${(shipmentMethodType.description)?default("N/A")}
                                                 </td>

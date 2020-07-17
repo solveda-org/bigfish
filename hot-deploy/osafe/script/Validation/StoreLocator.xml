@@ -118,6 +118,8 @@
                 <if-compare field="isStoreFound" operator="equals" value="true">
                     <field-to-request field="latitude"/>
                     <field-to-request field="longitude"/>
+                    <set field="showMap" value="Y"/>
+                    <field-to-request field="showMap"/>
                     <else>
                         <set field="argListNames[]" from-field="searchRedius"/>
                         <set field="argListNames[]" from-field="uom"/>

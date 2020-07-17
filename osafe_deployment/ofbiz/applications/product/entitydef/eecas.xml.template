@@ -20,7 +20,7 @@ under the License.
 
 <entity-eca xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entity-eca.xsd">
-    <!-- Product Keyword Indexing ECAs -->
+    <!-- Product Keyword Indexing ECAs
     <eca entity="Product" operation="create-store" event="return">
         <condition field-name="autoCreateKeywords" operator="not-equals" value="N"/>
         <action service="indexProductKeywords" mode="sync" value-attr="productInstance"/>
@@ -33,35 +33,35 @@ under the License.
     </eca>
     <eca entity="ProductContent" operation="create-store" event="return">
         <action service="indexProductKeywords" mode="sync"/>
-    </eca>
+    </eca> -->
     
 
-    <!-- inventory related ECAs -->
+    <!-- inventory related ECAs 
     <eca entity="InventoryItem" operation="create-store" event="return">
         <condition field-name="productId" operator="is-not-empty"/>
         <condition field-name="availableToPromiseTotal" operator="is-not-empty"/>
         <condition field-name="availableToPromiseTotal" operator="less-equals" value="0" type="BigDecimal"/>
         <action service="checkProductInventoryDiscontinuation" mode="async"/>
-    </eca>
-    <!-- update the totals for serialized inventory items -->
+    </eca> -->
+    <!-- update the totals for serialized inventory items
     <eca entity="InventoryItem" operation="create-store" event="return">
         <action service="updateSerializedInventoryTotals" mode="sync"/>
-    </eca>
-    <!-- Just in case an InventoryItem is ever created with ATP/QOH values, catch and handle that -->
+    </eca> -->
+    <!-- Just in case an InventoryItem is ever created with ATP/QOH values, catch and handle that
     <eca entity="InventoryItem" operation="create" event="return">
         <action service="createInventoryItemCheckSetAtpQoh" mode="sync"/>
-    </eca>
-    <!-- Create the initial status record -->
+    </eca> -->
+    <!-- Create the initial status record
     <eca entity="InventoryItem" operation="create" event="return">
         <condition field-name="statusId" operator="is-not-empty"/>
         <action service="createInventoryItemStatus" mode="sync"/>
-    </eca>
-    <!-- The InventoryItemDetail entity should never be updated/stored or deleted/removed, but we'll catch those too anyway... -->
+    </eca> -->
+    <!-- The InventoryItemDetail entity should never be updated/stored or deleted/removed, but we'll catch those too anyway...
     <eca entity="InventoryItemDetail" operation="create-store-remove" event="return">
         <action service="updateInventoryItemFromDetail" mode="sync"/>
     </eca>
     <eca entity="InventoryItemDetail" operation="create-store-remove" event="return">
         <condition field-name="availableToPromiseDiff" operator="not-equals" value="0" type="BigDecimal"/>
         <action service="setLastInventoryCount" mode="sync"/>
-    </eca>
+    </eca> -->
 </entity-eca>

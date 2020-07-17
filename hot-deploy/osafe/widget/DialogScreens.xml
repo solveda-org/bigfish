@@ -7,8 +7,8 @@
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="commonConfirmDialogTitle" from-field="confirmDialogTitle" default-value="${uiLabelMap.commonConfirmDialogTitle}"/>
-                <set field="commonConfirmDialogText" from-field="confirmDialogText" default-value="${uiLabelMap.commonConfirmDialogText}"/>
+                <set field="commonConfirmDialogTitle" from-field="confirmDialogTitle" default-value="${uiLabelMap.CommonConfirmDialogTitle}"/>
+                <set field="commonConfirmDialogText" from-field="confirmDialogText" default-value="${uiLabelMap.CommonConfirmDialogText}"/>
                 <set field="commonConfirmDialogYesBtn" from-field="confirmDialogYesBtnText" default-value="${uiLabelMap.YesBtn}"/>
                 <set field="commonConfirmDialogNoBtn" from-field="confirmDialogNoBtnText" default-value="${uiLabelMap.NoBtn}"/>
                 <set field="commonConfirmDialogForm" from-field="confirmDialogForm" default-value="detailForm"/>
@@ -44,7 +44,7 @@
         <section>
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="searchDialogTitle" value="${uiLabelMap.searchDialogTitle}"/>
+                <set field="searchDialogTitle" value="${uiLabelMap.SearchDialogTitle}"/>
                 <set field="searchDialogText" from-field="SEARCH_NO_ENTRY_ERROR"/>
                 <set field="searchDialogOkBtn" value="${uiLabelMap.OkBtn}"/>
                 <set field="dialogPurpose" value="search_"/>
@@ -74,7 +74,60 @@
             </widgets>
         </section>
     </screen>
-
+    <screen name="reviewTermConditionDialog">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="dialogPurpose" value="reviewTermCond_"/>
+                <set field="dialogBoxTitle" value="${uiLabelMap.ReviewTermCondTitle}"/>
+                <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
+            </actions>
+            <widgets>
+               <platform-specific>
+                 <html>
+                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                            <html-template-decorator-section name="reviewTermCond_DialogBox">
+                                <container id="reviewTermCond_Container">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/ratingsTermsAndConditions.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                 </html>
+               </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="reviewGuideLinesDialog">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="dialogPurpose" value="reviewGuideLines_"/>
+                <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
+                <set field="dialogBoxTitle" value="${uiLabelMap.ReviewGuideLinesTitle}"/>
+            </actions>
+            <widgets>
+               <platform-specific>
+                 <html>
+                        <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
+                            <html-template-decorator-section name="reviewGuideLines_DialogBox">
+                                <container id="reviewGuideLines_Container">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/ratingsGuideLines.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </html-template-decorator-section>
+                        </html-template-decorator>
+                 </html>
+               </platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="plpQuicklookDialog">
         <section>
             <actions>
@@ -164,6 +217,8 @@
                 <set field="pageTitle" value="${uiLabelMap.StoreLocatorTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="dataSourceId" value="GEOPT_GOOGLE" />
+                <set field="mapWidthParam" value="GMAP_PICKUP_MAP_IMG_W" />
+                <set field="mapHeightParam" value="GMAP_PICKUP_MAP_IMG_H" />
                 <set field="searchStoreFormName" value="searchStoreLocator" />
                 <set field="searchStoreFormAction" value="searchStorePickup" />
                 <set field="storePickupFormAction" value="setStorePickup" />
@@ -225,6 +280,8 @@
                 <set field="pageTitle" value="${uiLabelMap.StoreLocatorTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="dataSourceId" value="GEOPT_GOOGLE" />
+                <set field="mapWidthParam" value="GMAP_PICKUP_MAP_IMG_W" />
+                <set field="mapHeightParam" value="GMAP_PICKUP_MAP_IMG_H" />
                 <set field="searchStoreFormName" value="searchStoreLocator" />
                 <set field="searchStoreFormAction" value="searchStorePickup" />
                 <set field="storePickupFormAction" value="setStorePickup" />

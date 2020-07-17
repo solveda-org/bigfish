@@ -4,7 +4,7 @@
           ${sections.render('generalInfoBoxBody')}
     </div>
 </div>
-<#if gender?has_content || dob_MMDD?has_content || dob_MMDDYYYY?has_content>
+<#if title?has_content || gender?has_content || dob_MMDD?has_content || dob_MMDDYYYY?has_content || dob_DDMM?has_content || dob_DDMMYYYY?has_content>
 	<#if personalInfoBoxHeading?exists && personalInfoBoxHeading?has_content>
 	      ${sections.render('personalInfoBoxBody')!}
 	</#if>

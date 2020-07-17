@@ -41,27 +41,28 @@
         <sub-menu-item name="GeneralPDPContentSpotsNav" text="GeneralPDPContentSpotsNav" href="generalPDPSpotList" sequenceNumber="6" className="subLevel" heading="GeneralPDPContentSpotsHeading" description="GeneralPDPContentSpotsInfo"/>
         <sub-menu-item name="DynamicPLPContentSpotsNav" text="DynamicPLPContentSpotsNav" href="plpContentList" sequenceNumber="7" className="subLevel" heading="DynamicPLPContentSpotsHeading" description="DynamicPLPContentSpotsInfo"/>
     </menu-item>
+
     <menu-item name="ShippingNav" text="ShippingNav" href="shippingNavigation" entity="SPER_CONTENT" action="_VIEW" sequenceNumber="7" className="topLevel" navigationCategory="SHIPPING">
-    	<sub-menu-item name="CarrierNav" text="CarrierNav" href="carrierShipList" sequenceNumber="0" className="subLevel navfirstitem" heading="CarrierHeading" description="CarrierInfo"/>
-        <sub-menu-item name="ShipChargeNav" text="ShipChargeNav" href="shipChargeManagement" sequenceNumber="1" className="subLevel navfirstitem" heading="ShipChargeHeading" description="ShipChargeInfo"/>
+    	<sub-menu-item name="CarrierNav" text="CarrierNav" href="carrierManagement" sequenceNumber="0" className="subLevel navfirstitem" heading="CarrierHeading" description="CarrierInfo"/>
+        <sub-menu-item name="ShipmentMethodNav" text="ShipmentMethodNav" href="shipmentMethodManagement" sequenceNumber="1" className="subLevel" heading="ShipmentMethodHeading" description="ShipmentMethodInfo"/>
+        <sub-menu-item name="ShippingChargeNav" text="ShippingChargeNav" href="shippingChargeManagement" sequenceNumber="2" className="subLevel" heading="ShippingChargeHeading" description="ShippingChargeInfo"/>
     </menu-item>
     <menu-item name="AdminNav" text="AdminNav" href="adminNavigation" entity="SPER_ADMIN" action="_VIEW" sequenceNumber="8" className="topLevel" navigationCategory="ADMIN">
         <!-- sub-menu-item text="AdminConfigNav" href="underConstruction" sequenceNumber="0" className="subLevel" heading="" description=""/>
         <sub-menu-item name="AdminUserNav" text="AdminUserNav" href="underConstruction" sequenceNumber="0" className="subLevel" heading="AdminUserHeading" description="AdminUserInfo"/>-->
         <sub-menu-item name="AdminSystemParamNav" text="AdminSystemParamNav" href="parameterList" sequenceNumber="0" className="subLevel" heading="AdminSystemParamHeading" description="AdminParamInfo"/>
         <sub-menu-item name="AdminLabelCaptionNav" text="AdminLabelCaptionNav" href="manageUiLabel" sequenceNumber="1" className="subLevel" heading="AdminLabelCaptionHeading" description="AdminLabelCaptionInfo"/>
-        <sub-menu-item name="AdminEmailNav" text="AdminEmailNav" href="emailSpotList" sequenceNumber="2" className="subLevel" heading="AdminEmailHeading" description="AdminEmailInfo"/>
-        <sub-menu-item name="AdminEmailConfigNav" text="AdminEmailConfigNav" href="emailConfigList" sequenceNumber="3" className="subLevel" heading="AdminEmailConfigHeading" description="AdminEmailConfigInfo"/>
-        <sub-menu-item name="ManageFacetGroupsNav" text="ManageFacetGroupsNav" href="facetGroupList" sequenceNumber="4" className="subLevel" heading="ManageSOLRFacetGroupsHeading" description="ManageSOLRFacetGroupsInfo"/>
-        <sub-menu-item name="ManageFacetValuesNav" text="ManageFacetValuesNav" href="facetValueList" sequenceNumber="5" className="subLevel" heading="ManageSOLRFacetValueHeading" description="ManageSOLRFacetValueInfo"/>
-        <sub-menu-item name="PDPVariantCaptionNav" text="PDPVariantCaptionNav" href="pdpVariantCaptionList" sequenceNumber="6" className="subLevel" heading="PDPVariantCaptionsHeading" description="PDPVariantCaptionsInfo"/>
-        <sub-menu-item name="ManageContactUsReasonNav" text="ManageContactUsReasonNav" href="contactUsReasonList" sequenceNumber="7" className="subLevel" heading="ManageContactUsReasonHeading" description="ManageContactUsReasonInfo"/>
-        <sub-menu-item name="AdminPayGatwayNav" text="AdminPayGatwayNav" href="paymentGatewayConfigList" sequenceNumber="7" className="subLevel" heading="AdminPayGatewayHeading" description="AdminPayGatewayInfo"/>
-        <sub-menu-item name="AdminPaymentSettingNav" text="AdminPaymentSettingNav" href="paymentSettingManagement" sequenceNumber="8" className="subLevel" heading="AdminPaymentSettingHeading" description="AdminPaymentSettingInfo"/>
-        <sub-menu-item name="AdminPixelTrackingNav" text="AdminPixelTrackingNav" href="pixelTrackingManagement" sequenceNumber="10" className="subLevel" heading="AdminPixelTrackingHeading" description="AdminPixelTrackingInfo"/>
-        <sub-menu-item name="JobNav" text="JobNav" href="scheduledJob" sequenceNumber="11" className="subLevel" heading="ScheduledJobHeading" description="ScheduledJobInfo"/>
-        <sub-menu-item name="ProductLoaderNav" text="ProductLoaderNav" href="productLoaderList" sequenceNumber="12" className="subLevel" heading="ProductLoaderHeading" description="ProductLoaderInfo"/>
-        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="13" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>
+        <sub-menu-item name="ManageEmailNav" text="ManageEmailNav" href="manageEmailList" sequenceNumber="2" className="subLevel" heading="ManageEmailHeading" description="ManageEmailInfo"/>
+        <sub-menu-item name="SolrConfigNav" text="SolrConfigNav" href="solrConfigList" sequenceNumber="3" className="subLevel" heading="SolrConfigHeading" description="SolrConfigInfo"/>
+        <sub-menu-item name="EntityMaintenanceNav" text="EntityMaintenanceNav" href="entityMaintenanceList" sequenceNumber="4" className="subLevel" heading="EntityMaintenanceHeading" description="EntityMaintenanceInfo"/>
+        <sub-menu-item name="PDPVariantCaptionNav" text="PDPVariantCaptionNav" href="pdpVariantCaptionList" sequenceNumber="5" className="subLevel" heading="PDPVariantCaptionsHeading" description="PDPVariantCaptionsInfo"/>
+        <sub-menu-item name="PaymentSettingsNav" text="PaymentSettingsNav" href="paymentSettingsList" sequenceNumber="6" className="subLevel" heading="PaymentSettingsHeading" description="PaymentSettingsInfo"/>
+        <sub-menu-item name="ReviewAgesNav" text="ReviewAgesNav" href="reviewAgesList" sequenceNumber="6" className="subLevel" heading="ReviewAgesHeading" description="ReviewAgesInfo"/>
+        <sub-menu-item name="AdminPixelTrackingNav" text="AdminPixelTrackingNav" href="pixelTrackingManagement" sequenceNumber="7" className="subLevel" heading="AdminPixelTrackingHeading" description="AdminPixelTrackingInfo"/>
+        <sub-menu-item name="JobNav" text="JobNav" href="scheduledJob" sequenceNumber="8" className="subLevel" heading="ScheduledJobHeading" description="ScheduledJobInfo"/>
+        <sub-menu-item name="ProductLoaderNav" text="ProductLoaderNav" href="productLoaderList" sequenceNumber="9" className="subLevel" heading="ProductLoaderHeading" description="ProductLoaderInfo"/>
+        <sub-menu-item name="FeedsNav" text="FeedsNav" href="feedsList" sequenceNumber="10" className="subLevel" heading="FeedsHeading" description="FeedsInfo"/>
+        <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="11" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>
 <!--         <sub-menu-item name="AdminPayGatwayNav" text="AdminPayGatwayNav" href="underConstruction" sequenceNumber="9" className="subLevel" heading="AdminPayGatewayHeading" description="AdminPayGatewayInfo"/>
         <sub-menu-item name="AdminSysConfigNav" text="AdminSysConfigNav" href="underConstruction" sequenceNumber="11" className="subLevel" heading="AdminSysConfigfHeading" description="AdminSysConfigInfo"/>
         <sub-menu-item name="AdminDataLoderNav" text="AdminDataLoderNav" href="underConstruction" sequenceNumber="12" className="subLevel" heading="AdminDataLoaderHeading" description="AdminDataLoaderInfo"/>

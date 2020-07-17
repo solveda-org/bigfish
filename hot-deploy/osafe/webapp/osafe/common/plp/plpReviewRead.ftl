@@ -1,6 +1,9 @@
 <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(REVIEW_ACTIVE_FLAG!"")>
   <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(REVIEW_WRITE_REVIEW!"")>
      <#assign productFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${productId!""}&productCategoryId=${categoryId!""}')/>
+      <#if productFeatureType?has_content && featureValueSelected?has_content>
+          <#assign productFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${productId!""}&productCategoryId=${categoryId!productCategoryId!""}&productFeatureType=${productFeatureType!""}:${featureValueSelected!""}')/>
+      </#if>
       <div class="plpReviewRead">
         <div class="customerRatingLinks">
         <#assign averageCustomerRating = Static["org.ofbiz.product.product.ProductWorker"].getAverageProductRating(delegator,productId)>

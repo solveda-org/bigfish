@@ -1,6 +1,7 @@
 <tr class="heading">
   <th class="nameCol firstCol">${uiLabelMap.FileNameLabel}</th>
   <th class="actionCol"></th>
+  <th class="actionCol"></th>
   <th class="typeCol">${uiLabelMap.TypeLabel}</th>
   <th class="sizeCol">${uiLabelMap.SizeLabel}</th>
   <th class="sizeCol">${uiLabelMap.HeightLabel}</th>
@@ -15,6 +16,9 @@
         <#assign fileAttrMap = fileListMap.get("${fileName}")/>
       </#if>
       <td class="descCol firstCol" ><a href="<@ofbizUrl>mediaContentDetail?mediaName=${fileName?if_exists}&mediaType=${fileAttrMap.parentDirName!}</@ofbizUrl>">${fileName}</a></td>
+      <td class="actionCol">
+          <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ContentPathHelperInfo} <@ofbizContentUrl>${fileAttrMap.imagePath}</@ofbizContentUrl>');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+      </td>
       <td class="actionCol">
         <#if (fileAttrMap.height > 0 && fileAttrMap.width > 0)>
           <a href="javascript:void(0);" onMouseover="<#if fileAttrMap.imagePath?exists>showTooltipImage(event,'','${fileAttrMap.imagePath}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>

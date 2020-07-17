@@ -2,7 +2,7 @@
         To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
         Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
     --><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-    <property key="eCommerceApplication">
+    <property key="EcommerceApplication">
         <value xml:lang="en">Big Fish Commerce</value>
     </property>
     <!-- *** Caption *************************************** -->
@@ -201,6 +201,11 @@
         <value xml:lang="en">Gender:</value>
         <category>MY_ACCOUNT</category>
         <description>GenderCaption</description>
+    </property>
+     <property key="TitleCaption">
+        <value xml:lang="en">Title:</value>
+        <category>MY_ACCOUNT</category>
+        <description>TitleCaption</description>
     </property>
     <property key="CountryCaption">
         <value xml:lang="en">Country:</value>
@@ -478,6 +483,16 @@
         <description>PickupStoreInfo</description>
     </property>
     <!-- *** Label *************************************** -->
+    <property key="BuiltByLabel">
+        <value xml:lang="en">Built by</value>
+        <category>MULTI_USE</category>
+        <description>BuiltByLabel</description>
+    </property>
+    <property key="SalmonLLCLabel">
+        <value xml:lang="en">Salmon LLC</value>
+        <category>MULTI_USE</category>
+        <description>SalmonLLCLabel</description>
+    </property>
     <property key="CharactersLeftLabel">
         <value xml:lang="en">characters left</value>
         <category>MULTI_USE</category>
@@ -527,6 +542,11 @@
         <value xml:lang="en">Total</value>
         <category>MULTI_USE</category>
         <description>TotalLabel used in PDP, Show Cart and Order Status</description>
+    </property>
+    <property key="AdjustedTotalLabel">
+        <value xml:lang="en">Adjusted Total</value>
+        <category>MULTI_USE</category>
+        <description>AdjustedTotalLabel used in Show Cart when a promotion is applied</description>
     </property>
     <property key="SubTotalLabel">
         <value xml:lang="en">Sub Total</value>
@@ -850,12 +870,12 @@
         <category>CHECKOUT</category>
         <description>Remove Offer</description>
     </property>
-    <property key="promoCodeAddedOnlyInfo">
+    <property key="PromoCodeAddedOnlyInfo">
         <value xml:lang="en">Added but does not apply</value>
         <category>CHECKOUT</category>
         <description>promo code added</description>
     </property>
-    <property key="promoCodeAppliedInfo">
+    <property key="PromoCodeAppliedInfo">
         <value xml:lang="en">Applied, see Summary Below</value>
         <category>CHECKOUT</category>
         <description>promo code applied</description>
@@ -864,6 +884,11 @@
         <value xml:lang="en">Join Mailing List</value>
         <category>SITE_HEADER</category>
         <description>Join Mailing List label on Site Header</description>
+    </property>
+	<property key="EmailTestTitle">
+        <value xml:lang="en">Email Test</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>EmailTestTitle</description>
     </property>
     <property key="YourShoppingCartCurrentlyContains">
         <value xml:lang="en">Your shopping cart currently contains &lt;em&gt; ${shoppingCartSize!} item(s) &lt;/em&gt;</value>
@@ -1201,6 +1226,11 @@
         <category>PAGE_HEADING_H1</category>
         <description>ContactUsTitle</description>
     </property>
+	<property key="MailingListTitle">
+        <value xml:lang="en">Join Mailing List</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>MailingListTitle</description>
+    </property>
     <property key="BillingAddressTitle">
         <value xml:lang="en">Billing Address</value>
         <category>PAGE_HEADING_H1</category>
@@ -1271,6 +1301,11 @@
         <value xml:lang="en">About You</value>
         <category>PAGE_SUB_HEADING</category>
         <description>AboutYouHeading</description>
+    </property>
+    <property key="ChangeLoginHeading">
+        <value xml:lang="en">Update Login</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>ChangeLoginHeading</description>
     </property>
     <property key="CreateAnAccountHeading">
         <value xml:lang="en">Create an Account</value>
@@ -1538,30 +1573,20 @@
         <category>MESSAGE_INFO</category>
         <description>ReviewLoginInfo</description>
     </property>
-    <property key="BILLINGAddressHeadingInfo">
+    <property key="BillingAddressHeadingInfo">
         <value xml:lang="en">Where is your credit card statement sent?</value>
         <category>MESSAGE_INFO</category>
-        <description>BILLINGAddressHeadingInfo</description>
+        <description>BillingAddressHeadingInfo</description>
     </property>
-    <property key="BILLINGPhoneInfo">
-        <value xml:lang="en">We may contact you by phone for delivery updates</value>
+    <property key="ShippingAddressHeadingInfo">
+        <value xml:lang="en">Where would you like your items shipped?</value>
         <category>MESSAGE_INFO</category>
-        <description>BILLINGPhoneLabelInfo</description>
+        <description>ShippingAddressHeadingInfo</description>
     </property>
     <property key="CreateAccountInfo">
         <value xml:lang="en">Optional: For your convenience, to create an account (and expedite any future orders) please confirm your email and enter a password.:</value>
         <category>MESSAGE_INFO</category>
         <description>CreateAccountInfo</description>
-    </property>
-    <property key="SHIPPINGAddressHeadingInfo">
-        <value xml:lang="en">Where would you like your items shipped?</value>
-        <category>MESSAGE_INFO</category>
-        <description>SHIPPINGAddressHeadingInfo</description>
-    </property>
-    <property key="SHIPPINGPhoneInfo">
-        <value xml:lang="en">We may contact you by phone for delivery updates</value>
-        <category>MESSAGE_INFO</category>
-        <description>SHIPPINGPhoneLabelInfo</description>
     </property>
     <property key="ReturningCustomerLoginInfo">
         <value xml:lang="en">If you are returning customer and have registered with us, please login using your username (Email) and password below.</value>
@@ -1959,10 +1984,25 @@
         <category>MY_ACCOUNT</category>
         <description>EditCustomerInstructionsInfo</description>
     </property>
+    <property key="ChangeLoginInstructionsInfo">
+        <value xml:lang="en">Any information with an asterisk &lt;span class="required"&gt;*&lt;/span&gt; is required.</value>
+        <category>MY_ACCOUNT</category>
+        <description>ChangeLoginInstructionsInfo</description>
+    </property>
     <property key="RequiredInstructionsInfo">
         <value xml:lang="en">Any information with an asterisk &lt;span class="required"&gt;*&lt;/span&gt; is required.</value>
         <category>MY_ACCOUNT</category>
         <description>RequiredInstructionsInfo</description>
+    </property>
+    <property key="GenderMale">
+        <value xml:lang="en">Male</value>
+        <category>MY_ACCOUNT</category>
+        <description>GenderMale</description>
+    </property>
+    <property key="GenderFemale">
+        <value xml:lang="en">Female</value>
+        <category>MY_ACCOUNT</category>
+        <description>GenderFemale</description>
     </property>
     <!-- ******* Success Messages *************************************** -->
     <property key="UserLoginUpdatedSuccess">
@@ -1980,8 +2020,13 @@
         <category>MESSAGE_SUCCESS</category>
         <description>JoinMailingListSuccess</description>
     </property>
+    <property key="ForgotPasswordEmailedSuccess">
+        <value xml:lang="en">A new password has been sent to your contact email address. Please use the new password to sign in and for your security you will be prompted to reset your password.</value>
+        <category>MESSAGE_SUCCESS</category>
+        <description>ForgotPasswordEmailedSuccess</description>
+    </property>
     <!-- ******* Error Messages *************************************** -->
-    <property key="eCommerceViewPermissionError">
+    <property key="EcommerceViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
         <category>MESSAGE_ERROR</category>
         <description>eCommerceViewPermissionError</description>
@@ -2025,6 +2070,11 @@
         <value xml:lang="en">Please select your Gender</value>
         <category>MESSAGE_ERROR</category>
         <description>GenderMissingError</description>
+    </property>
+    <property key="TitleMissingError">
+        <value xml:lang="en">Please select your Title</value>
+        <category>MESSAGE_ERROR</category>
+        <description>TitleMissingError</description>
     </property>
     <property key="GetGeoCodeError">
         <value xml:lang="en">Please check that you have entered a valid Address, City, State or Zip and try again.</value>
@@ -2262,7 +2312,7 @@
         <description>LastNameOnCardMissingError</description>
     </property>
     <property key="CardTypeMissingError">
-        <value xml:lang="en">Please enter your Card Type</value>
+        <value xml:lang="en">A Credit Card type must be selected from the drop-down</value>
         <category>MESSAGE_ERROR</category>
         <description>CardTypeMissingError</description>
     </property>
@@ -2272,9 +2322,19 @@
         <description>CardNumberMissingError</description>
     </property>
     <property key="CreditCardNumberInvalidError">
-        <value xml:lang="en">${cardNumber} is not a valid ${cardType} credit card number. (It appears to be a ${validCardType}) credit card number)</value>
+        <value xml:lang="en">A valid Credit Card number must be entered. Please try again.</value>
         <category>MESSAGE_ERROR</category>
         <description>CreditCardNumberInvalidError</description>
+    </property>
+    <property key="CreditCardNumberInvalidSuggestError">
+        <value xml:lang="en">{0} is not a valid {1} credit card number. (It appears to be a {2} credit card number)</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CreditCardNumberInvalidError</description>
+    </property>
+    <property key="ProcessPaymentError">
+        <value xml:lang="en">We cannot process your payment information. Please check your information and retry.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ProcessPaymentError</description>
     </property>
     <property key="ExpirationMonthMissingError">
         <value xml:lang="en">Please enter your Expiration Month</value>
@@ -2282,7 +2342,7 @@
         <description>ExpirationMonthMissingError</description>
     </property>
     <property key="VerificationNumberMissingError">
-        <value xml:lang="en">Please enter your Verification Number</value>
+        <value xml:lang="en">A valid Verification Code must be entered. Please try again.</value>
         <category>MESSAGE_ERROR</category>
         <description>VerificationNumberMissingError</description>
     </property>
@@ -2297,7 +2357,7 @@
         <description>ExpirationYearMissingError</description>
     </property>
     <property key="ExpirationDateIsBeforeTodayError">
-        <value xml:lang="en">The expiration date is before today</value>
+        <value xml:lang="en">A valid Expiration Date must be selected. Please try again.</value>
         <category>MESSAGE_ERROR</category>
         <description>ExpirationDateIsBeforeTodayError</description>
     </property>
@@ -2352,15 +2412,15 @@
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>ReviewTitleMissingError</description>
     </property>
-    <property key="ReviewTextMissingError">
-        <value xml:lang="en">You must enter review text.</value>
-        <category>MESSAGE_REVIEW_ERROR</category>
-        <description>ReviewTextMissingError</description>
-    </property>
     <property key="ReviewTextShortError">
-        <value xml:lang="en">Written reviews must be over 50 characters in length.</value>
+        <value xml:lang="en">Please enter a review with at least [${parameters.REVIEW_MIN_CHAR}] characters</value>
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>ReviewTextShortError</description>
+    </property>
+	<property key="ReviewTextLongError">
+        <value xml:lang="en">You have exceeded the maximum length allowed for a review. The maximum is [${parameters.REVIEW_MAX_CHAR}] characters, you have entered [${reviewTextLength}] characters.</value>
+        <category>MESSAGE_REVIEW_ERROR</category>
+        <description>ReviewTextLongError</description>
     </property>
     <property key="PDPMinQtyError">
         <value xml:lang="en">The Quantity entered is less than the minimum allowed, please retry.</value>
@@ -2621,29 +2681,39 @@
         <description>Confirm Contact Us Text</description>
     </property>
     <!-- === Confirm dialog box ===== -->
-    <property key="commonConfirmDialogText">
+    <property key="CommonConfirmDialogText">
         <value xml:lang="en">Are you sure?</value>
         <category>CONFIRM_DIALOG</category>
         <description>Confirm Dialog Box Message</description>
     </property>
-    <property key="commonConfirmDialogTitle">
+    <property key="CommonConfirmDialogTitle">
         <value xml:lang="en">Please Confirm</value>
         <category>CONFIRM_DIALOG</category>
         <description>Confirm Dialog Box Title</description>
     </property>
-    <property key="deleteAddressConfirmText">
+    <property key="DeleteAddressConfirmText">
         <value xml:lang="en">Are you sure you want to DELETE this Address?</value>
         <category>CHECK_OUT</category>
         <description>Confirm Dialog Box Message</description>
     </property>
-    <property key="searchDialogText">
+    <property key="SearchDialogText">
         <value xml:lang="en">Please enter one or more terms to search for</value>
         <category>SEARCH_DIALOG</category>
         <description>Search Dialog Box Message</description>
     </property>
-    <property key="searchDialogTitle">
+    <property key="SearchDialogTitle">
         <value xml:lang="en">Please Confirm</value>
         <category>SEARCH_DIALOG</category>
         <description>Search Dialog Box Title</description>
+    </property>
+    <property key="ReviewTermCondTitle">
+        <value xml:lang="en">Customer Ratings and Reviews - Terms &amp; Conditions</value>
+        <category>PDP</category>
+        <description>Review Terms and conditions Dialog title</description>
+    </property>
+    <property key="ReviewGuideLinesTitle">
+        <value xml:lang="en">Review Guidelines</value>
+        <category>PDP</category>
+        <description>Review Guildelines Dialog title</description>
     </property>
 </resource>

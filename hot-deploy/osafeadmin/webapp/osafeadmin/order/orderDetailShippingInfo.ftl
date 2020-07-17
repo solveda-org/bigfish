@@ -58,7 +58,7 @@
                 <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_COMPLETED" && orderHeader.statusId != "ORDER_REJECTED">
                     <p><#if shipGroup.carrierPartyId?has_content>
                         <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
-                        <#if carrier?has_content>${carrier.groupName?default(carrier.carrierPartyId)}&nbsp;</#if>
+                        <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)}&nbsp;</#if>
                        </#if>
                        ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
                     </p>

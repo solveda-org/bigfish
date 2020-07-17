@@ -19,14 +19,13 @@
         </entity-one>
         <set-current-user-login value-field="systemUserLogin"/>
 
-        <!-- Get party email address -->
+        <!-- Get Company (Pay To Party) email address -->
         <set field="getPartyEmailMap.partyId" from-field="parameters.partyIdTo"/>
         <set field="getPartyEmailMap.userLogin" from-field="systemUserLogin"/>
         <call-service service-name="getPartyEmail" in-map-name="getPartyEmailMap">
-            <result-to-field result-name="emailAddress"/>
+            <result-to-field result-name="emailAddress" field="emailAddressCompany"/>
         </call-service>
 
-        <log level="info" message="Email Type: ${parameters.emailType}"/>
 
         <!-- Create Customer Request -->
         <if-not-empty field="parameters.custRequestTypeId">
@@ -50,8 +49,7 @@
             <set field="custRequestAttr.attrValue" value="N"/>
             <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
            <if-not-empty field="custRequestContext.content">
-                <set field="custRequestAttr.attrName" value="COMMENT"/>
-                <set field="contentValue" from-field="custRequestContext.content"/>
+           		<set field="contentValue" from-field="custRequestContext.content"/>
                 <call-object-method method-name="length" obj-field="custRequestContext.content" ret-field="contentLen"/>
                 <call-bsh><![CDATA[
                     if(contentLen > 255) {
@@ -60,6 +58,7 @@
                     }
                   ]]>
                 </call-bsh>
+                <set field="custRequestAttr.attrName" value="COMMENT"/>
                 <set field="custRequestAttr.attrValue" from-field="custRequestContext.content"/>
                 <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
             </if-not-empty>
@@ -161,15 +160,20 @@
         <set field="createComEventMap.userLogin" from-field="systemUserLogin"/>
         <set field="createComEventMap.reasonEnumId" from-field="parameters.emailType"/>
         <set field="createComEventMap.note" from-field="parameters.content"/>
-        <set field="createComEventMap.fromString" from-field="parameters.emailAddress"/>
+        <if-not-empty field="custRequestContext.emailAddress">
+             <set field="createComEventMap.fromString" from-field="custRequestContext.emailAddress"/>
+        <else>
+             <set field="createComEventMap.fromString" from-field="emailAddressCompany"/>
+        </else>
+        </if-not-empty>
         <if-not-empty field="parameters.custRequestName">
               <set field="createComEventMap.subject" from-field="parameters.custRequestName"/>
         </if-not-empty>
          <if-not-empty field="custRequestId">
         <set field="createComEventMap.custRequestId" from-field="custRequestId"/>
         </if-not-empty>
-        <if-not-empty field="productStoreEmailSetting">
-           <set field="createComEventMap.toString" from-field="productStoreEmailSetting.fromAddress"/>
+        <if-not-empty field="emailAddressCompany">
+           <set field="createComEventMap.toString" from-field="emailAddressCompany"/>
         </if-not-empty>
         <call-service service-name="createCommunicationEventWithoutPermission" in-map-name="createComEventMap"/>
 

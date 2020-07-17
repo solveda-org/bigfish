@@ -43,7 +43,7 @@ imageLargePlaceHolder="/osafe_theme/images/user_content/images/NotFoundImagePDPL
 
 selectOne = UtilProperties.getMessage("OSafeUiLabels", "SelectOneLabel", locale);
 jsBufDefault = new StringBuffer();
-jsBufDefault.append("<script language=\"JavaScript\" type=\"text/javascript\">");    
+jsBufDefault.append("<script language=\"JavaScript\" type=\"text/javascript\">jQuery(document).ready(function(){");    
 String buildNext(Map map, List order, String current, String prefix, Map featureTypes) {
     def ct = 0;
     def featureType = null;
@@ -71,8 +71,8 @@ String buildNext(Map map, List order, String current, String prefix, Map feature
     }
     buf.append(" }");
     if(map.size()==1)
-    {    
-        jsBufDefault.append("getList(\"FT" + current + "\", \""+featureIndex+"\", 1);");
+    {   
+        //jsBufDefault.append("getList(\"FT" + current + "\", \""+featureIndex+"\", 1);");
     }
         
     if (order.indexOf(current) < (order.size()-1)) {
@@ -424,8 +424,14 @@ if (UtilValidate.isNotEmpty(productId))
         {
      	    pdpFacetGroup = pdpFacetGroup.toUpperCase();
         }
-   	    context.PRODUCT_STORE_PARM_FACET = pdpFacetGroup;
+   	    context.PDP_FACET_GROUP_VARIANT_SWATCH = pdpFacetGroup;
 
+   	    pdpFacetGroupVariantMatch = Util.getProductStoreParm(request, "PDP_FACET_GROUP_VARIANT_MATCH");
+        if (UtilValidate.isNotEmpty(pdpFacetGroupVariantMatch))
+        {
+        	pdpFacetGroupVariantMatch = pdpFacetGroupVariantMatch.toUpperCase();
+        }
+	    context.PDP_FACET_GROUP_VARIANT_MATCH = pdpFacetGroupVariantMatch;
 
 
 		productContentList = delegator.findByAnd("ProductContent", UtilMisc.toMap("productId" ,gvProduct.productId));
@@ -577,7 +583,7 @@ if (UtilValidate.isNotEmpty(productId))
                                                EntityCondition.makeCondition("productFeatureGroupId", EntityOperator.IN, featureSet)], EntityOperator.AND);
                 }
                                                
-                productFeatureCatGroupAppls = delegator.findList("ProductFeatureCatGrpAppl", productFeatureCatGroupApplCond, null, orderBy, null, false);
+                productFeatureCatGroupAppls = delegator.findList("ProductFeatureCatGrpAppl", productFeatureCatGroupApplCond, null, orderBy, null, true);
                 if(UtilValidate.isNotEmpty(productFeatureCatGroupAppls))
                 {
                     featureSet = EntityUtil.getFieldListFromEntityList(productFeatureCatGroupAppls, "productFeatureGroupId", true);
@@ -659,6 +665,7 @@ if (UtilValidate.isNotEmpty(productId))
                         jsBuf.append("var OPT = new Array(" + featureOrder.size() + ");");
                         jsBuf.append("var VIR = new Array(" + virtualVariant.size() + ");");
                         jsBuf.append("var VARMAP = new Object();");
+                        jsBuf.append("var VARGROUPMAP = new Object();");
                         //jsBuf.append("var detailImageUrl = null;");
 
                         featureOrder.eachWithIndex { feature, i ->
@@ -677,6 +684,17 @@ if (UtilValidate.isNotEmpty(productId))
                                         featureExist.add(mapKey);
                                     }
                                 }
+                                if(UtilValidate.isNotEmpty(context.PDP_FACET_GROUP_VARIANT_MATCH))
+                                {
+                                    descriptiveProductFeatureApplList = delegator.findByAnd("ProductFeatureAndAppl", UtilMisc.toMap('productFeatureTypeId',context.PDP_FACET_GROUP_VARIANT_MATCH,'productFeatureApplTypeId','DISTINGUISHING_FEAT','productId',pAssoc.productIdTo), UtilMisc.toList("sequenceNum"));
+                                    descriptiveProductFeatureApplList = EntityUtil.filterByDate(descriptiveProductFeatureApplList);
+                                    if(UtilValidate.isNotEmpty(descriptiveProductFeatureApplList))
+                                    {
+                                    	descriptiveProductFeatureAppl = EntityUtil.getFirst(descriptiveProductFeatureApplList);
+                                    	jsBuf.append("VARGROUPMAP['" + pAssoc.productIdTo + "'] = \"" + descriptiveProductFeatureAppl.description + "\";");
+                                    }
+                                }
+                                
                             }
                             
                         }
@@ -819,7 +837,7 @@ if (UtilValidate.isNotEmpty(productId))
             }
         }
     }
-    jsBufDefault.append("</script>");
+    jsBufDefault.append("  });</script>");
     context.virtualDefaultJavaScript = jsBufDefault;
    //Get Sequence for PDP Div Containers 
    XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe.properties", "ecommerce-UiSequence-xml-file"), context);
@@ -850,7 +868,7 @@ if (UtilValidate.isNotEmpty(productId))
         }
     }
 
-    uiPdpTabSequenceGroupMaps = [:] as TreeMap;;
+    uiPdpTabSequenceGroupMaps = [:] as TreeMap;
     for(Map uiPdpTabSequenceScreenMap : uiPdpTabSequenceSearchList) {
         if ((UtilValidate.isNotEmpty(uiPdpTabSequenceScreenMap.group)) && (UtilValidate.isInteger(uiPdpTabSequenceScreenMap.group)) && (uiPdpTabSequenceScreenMap.group != "0")) {
             groupNum = Integer.parseInt(uiPdpTabSequenceScreenMap.group)

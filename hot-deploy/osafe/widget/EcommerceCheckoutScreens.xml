@@ -9,6 +9,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="cart" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <set field="showCartFootprint" value="Y" />
                 <set field="pageTitle" value="${uiLabelMap.ShoppingCartTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -44,7 +45,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -82,7 +83,8 @@
 
                 <set field="shippingAttnName" value="${uiLabelMap.ShippingAddressDefaultNickNameLabel}" />
                 <set field="isSameAsBilling" value="Y" />
-                <set field="fieldLevelErrors" value="Y" />
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
                 <set field="updateShippingOptionRequest" value="anonSinglePageUpdateShippingOption" />
                 <set field="setShippingOptionRequest" value="anonSinglePageSetShippingOption" />
                 <set field="addPromoCodeRequest" value="anonSinglePageValidatePromoCode"/>
@@ -124,7 +126,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -162,6 +164,7 @@
         <section>
             <actions>
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderSummaryTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -203,7 +206,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -241,7 +244,8 @@
                 <set field="addAddressAction" value="singlePageNewCheckoutAddress"/>
                 <set field="isCheckoutPage" value="true" />
 
-                <set field="fieldLevelErrors" value="Y" />
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
                 <set field="updateShippingOptionRequest" value="singlePageUpdateShippingOption" />
                 <set field="setShippingOptionRequest" value="singlePageSetShippingOption" />
                 <set field="addPromoCodeRequest" value="singlePageValidatePromoCode"/>
@@ -283,7 +287,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -327,6 +331,8 @@
                 <set field="title" from-field="pageTitle" />
                 <set field="formName" value="checkoutInfoForm" />
                 <set field="checkoutPage" value="payment" />
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
 
                 <set field="parameters.formNameValue" value="orderreview" global="true" />
 
@@ -363,7 +369,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -397,9 +403,11 @@
                 <set field="donePage" value="singlePageCheckout" />
 
                 <set field="title" from-field="pageTitle" />
+                <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
                 <set field="prevButtonVisible" value="N" />
                 <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -422,7 +430,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="cartBody">
@@ -462,6 +470,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <set field="showCartFootprint" value="Y" />
                 <set field="pageTitle" value="${uiLabelMap.CustomerAddressTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -497,7 +506,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -535,9 +544,11 @@
                 <set field="checkoutPage" value="shippingaddress" />
 
                 <set field="title" from-field="pageTitle" />
+                <set field="screenMessages" value="Y" />
                 <set field="fieldLevelErrors" value="Y" />
                 <set field="prevButtonVisible" value="N" />
                 <set field="nextButtonVisible" value="N" />
+                <set field="loadPca" value="Y" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -560,7 +571,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="cartBody">
@@ -587,6 +598,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shippingMethod" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <set field="pageTitle" value="${uiLabelMap.ShippingOptionsTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="formName" value="checkoutInfoForm" />
@@ -622,7 +634,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -654,6 +666,7 @@
             <actions>
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderSummaryTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -698,7 +711,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -727,6 +740,7 @@
             <actions>
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderSummaryTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -767,7 +781,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -796,6 +810,7 @@
             <actions>
                 <set field="selectedStep" value="confirmation" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderConfirmationTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -833,7 +848,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -866,6 +881,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shipping" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <set field="showCartFootprint" value="Y" />
                 <set field="pageTitle" value="${uiLabelMap.AnonCustomerInformationTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -902,7 +918,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -935,6 +951,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="selectedStep" value="shippingMethod" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <set field="pageTitle" value="${uiLabelMap.ShippingOptionsTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="formName" value="checkoutInfoForm" />
@@ -969,7 +986,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -1000,6 +1017,7 @@
             <actions>
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="${groovy:if(parameters.isPaymentProcessError == 'Y')return '' else return 'Y';}" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderSummaryTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1045,7 +1063,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="pageTopContent">
@@ -1074,6 +1092,7 @@
             <actions>
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.OrderSummaryTitle}" />
                 <set field="title" from-field="pageTitle" />
@@ -1115,7 +1134,7 @@
                                                 <html-template-decorator-section name="checkoutJS">
                                                     <include-screen name="checkoutJS"/>
                                                 </html-template-decorator-section>
-                                                <html-template-decorator-section name="pageMessage">
+                                                <html-template-decorator-section name="pageMessages">
                                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
                                                 </html-template-decorator-section>
                                                 <html-template-decorator-section name="cartFootprint">
@@ -1285,7 +1304,7 @@
     <screen name="singlePageBillingAddress">
         <section>
             <actions>
-                <set field="addressEntryInfo" value="(${uiLabelMap.BILLINGAddressHeadingInfo})"/>
+                <set field="addressEntryInfo" value="${uiLabelMap.BillingAddressHeadingInfo}"/>
             </actions>
             <widgets>
                 <include-screen name="addressBillingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
@@ -1296,7 +1315,7 @@
     <screen name="singlePageShippingAddress">
         <section>
             <actions>
-                <set field="addressEntryInfo" value="(${uiLabelMap.SHIPPINGAddressHeadingInfo})"/>
+                <set field="addressEntryInfo" value="${uiLabelMap.ShippingAddressHeadingInfo}"/>
                 <set field="isShipping" value="N"/>
                 <set field="showAttnName" value="N"/>
             </actions>
@@ -1401,7 +1420,7 @@
     <screen name="anonSinglePageBillingAddress">
         <section>
             <actions>
-                <set field="addressEntryInfo" value="(${uiLabelMap.BILLINGAddressHeadingInfo})"/>
+                <set field="addressEntryInfo" value="${uiLabelMap.BillingAddressHeadingInfo}"/>
             </actions>
             <widgets>
                 <include-screen name="addressBillingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
@@ -1412,7 +1431,7 @@
     <screen name="anonSinglePageShippingAddress">
         <section>
             <actions>
-                <set field="addressEntryInfo" value="(${uiLabelMap.SHIPPINGAddressHeadingInfo})"/>
+                <set field="addressEntryInfo" value="${uiLabelMap.ShippingAddressHeadingInfo}"/>
                 <set field="isShipping" value="Y"/>
             </actions>
             <widgets>
@@ -1523,7 +1542,7 @@
     <screen name="multiPageBillingAddress">
         <section>
             <actions>
-                <set field="addressEntryInfo" value="(${uiLabelMap.BILLINGAddressHeadingInfo})"/>
+                <set field="addressEntryInfo" value="${uiLabelMap.BillingAddressHeadingInfo}"/>
             </actions>
             <widgets>
                 <include-screen name="addressBillingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
@@ -1533,7 +1552,7 @@
     <screen name="anonMultiPageBillingAddress">
         <section>
             <actions>
-                <set field="addressEntryInfo" value="(${uiLabelMap.BILLINGAddressHeadingInfo})"/>
+                <set field="addressEntryInfo" value="${uiLabelMap.BillingAddressHeadingInfo}"/>
             </actions>
             <widgets>
                 <include-screen name="anonAddressBillingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
@@ -1545,7 +1564,7 @@
     <screen name="multiPageShippingAddress">
         <section>
             <actions>
-                <set field="addressEntryInfo" value="(${uiLabelMap.SHIPPINGAddressHeadingInfo})"/>
+                <set field="addressEntryInfo" value="${uiLabelMap.ShippingAddressHeadingInfo}"/>
             </actions>
             <widgets>
                 <include-screen name="addressShippingEntryForm" location="component://osafe/widget/EntryScreens.xml" />

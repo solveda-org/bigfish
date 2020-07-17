@@ -46,15 +46,34 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionDescError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
         </if-empty>
-        <if-not-empty field="parameters.useLimitPerOrder">
-            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
-                <field field="parameters.useLimitPerOrder"/>
-            </call-class-method>
-            <if-compare field="isNumber" operator="equals" value="false">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </if-compare>
-        </if-not-empty>
+        <if-empty field="parameters.useLimitPerOrder">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionUseLimitPerOrderError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+           <else>
+               <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                   <field field="parameters.useLimitPerOrder"/>
+               </call-class-method>
+               <if-compare field="isNumber" operator="equals" value="false">
+                   <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
+                   <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                   <else>
+                       <if>
+                           <condition>
+                               <and>
+                                   <if-compare operator="greater-equals" value="1" field="parameters.useLimitPerOrder" type="Integer"/>
+                                   <if-compare operator="less-equals" value="99" field="parameters.useLimitPerOrder" type="Integer"/>
+                               </and>
+                           </condition>
+                           <then></then>
+                           <else>
+                               <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
+                               <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                           </else>
+                       </if>
+                   </else>
+               </if-compare>
+           </else>
+        </if-empty>
         <if-not-empty field="parameters.useLimitPerCustomer">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                 <field field="parameters.useLimitPerCustomer"/>
@@ -513,6 +532,7 @@
                    <set field="createProductPromoCategoryCtx.productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
                    <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
                    <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <set field="createProductPromoCategoryCtx.includeSubCategories" value="Y"/>
                    <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
                        <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
                        <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>
@@ -564,6 +584,7 @@
                    <set field="createProductPromoCategoryCtx.productPromoCondSeqId" value="_NA_"/>
                    <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
                    <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <set field="createProductPromoCategoryCtx.includeSubCategories" value="Y"/>
                    <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
                        <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
                        <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>
@@ -611,15 +632,35 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionDescError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
         </if-empty>
-        <if-not-empty field="parameters.useLimitPerOrder">
-            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
-                <field field="parameters.useLimitPerOrder"/>
-            </call-class-method>
-            <if-compare field="isNumber" operator="equals" value="false">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
-                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-            </if-compare>
-        </if-not-empty>
+   
+        <if-empty field="parameters.useLimitPerOrder">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPromotionUseLimitPerOrderError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+           <else>
+               <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                   <field field="parameters.useLimitPerOrder"/>
+               </call-class-method>
+               <if-compare field="isNumber" operator="equals" value="false">
+                   <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
+                   <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                   <else>
+                       <if>
+                           <condition>
+                               <and>
+                                   <if-compare operator="greater-equals" value="1" field="parameters.useLimitPerOrder" type="Integer"/>
+                                   <if-compare operator="less-equals" value="99" field="parameters.useLimitPerOrder" type="Integer"/>
+                               </and>
+                           </condition>
+                           <then></then>
+                           <else>
+                               <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidPromotionUseLimitPerOrderError"/>
+                               <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                           </else>
+                       </if>
+                   </else>
+               </if-compare>
+           </else>
+        </if-empty>
         <if-not-empty field="parameters.useLimitPerCustomer">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
                 <field field="parameters.useLimitPerCustomer"/>
@@ -1069,6 +1110,7 @@
                    <set field="createProductPromoCategoryCtx.productPromoCondSeqId" from-field="parameters.productPromoCondSeqId"/>
                    <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
                    <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <set field="createProductPromoCategoryCtx.includeSubCategories" value="Y"/>
                    <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
                        <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
                        <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>
@@ -1139,6 +1181,7 @@
                    <set field="createProductPromoCategoryCtx.productPromoCondSeqId" value="_NA_"/>
                    <set field="createProductPromoCategoryCtx.productPromoId" from-field="parameters.productPromoId"/>
                    <set field="createProductPromoCategoryCtx.productPromoRuleId" from-field="parameters.productPromoRuleId"/>
+                   <set field="createProductPromoCategoryCtx.includeSubCategories" value="Y"/>
                    <entity-one entity-name="ProductPromoCategory" value-field="existingProductPromoCategory">
                        <field-map field-name="andGroupId" from-field="createProductPromoCategoryCtx.andGroupId"/>
                        <field-map field-name="productCategoryId" from-field="createProductPromoCategoryCtx.productCategoryId"/>

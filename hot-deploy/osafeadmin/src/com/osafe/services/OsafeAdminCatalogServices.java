@@ -495,13 +495,17 @@ public class OsafeAdminCatalogServices {
     public static Map<String, Object> updateProductFeatureAppl(DispatchContext dctx, Map<String, ? extends Object> context)
     {
         Delegator delegator = DelegatorFactory.getDelegator("default-no-eca");
+        String productId = (String) context.get("productId");
         String productFeatureId = (String) context.get("productFeatureId");
         Long sequenceNum = (Long) context.get("sequenceNum");
+        Timestamp fromDate = (Timestamp) context.get("fromDate");
+        Timestamp thruDate = (Timestamp) context.get("thruDate");
         try {
-        	List<GenericValue> productFeatureAppls = delegator.findByAnd("ProductFeatureAppl", UtilMisc.toMap("productFeatureId", productFeatureId));
+        	List<GenericValue> productFeatureAppls = delegator.findByAnd("ProductFeatureAppl", UtilMisc.toMap("productFeatureId", productFeatureId, "productId", productId, "fromDate", fromDate));
         	if(UtilValidate.isNotEmpty(productFeatureAppls)) {
         	    for(GenericValue productFeatureAppl : productFeatureAppls) {
 			        productFeatureAppl.set("sequenceNum", sequenceNum);
+			        productFeatureAppl.set("thruDate", thruDate);
 			        delegator.store(productFeatureAppl);
         	    }
         	}
@@ -510,5 +514,37 @@ public class OsafeAdminCatalogServices {
 		}
         return ServiceUtil.returnSuccess();
     }   
+   
+    public static Map<String, Object> updateProductFeatureAppls(DispatchContext dctx, Map<String, ? extends Object> context)
+    {
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Delegator delegator = dctx.getDelegator();
+        Map<String, Object> resp = null;
+        GenericValue userLogin = (GenericValue) context.get("userLogin");
+        String productFeatureId = (String) context.get("productFeatureId");
+        Long sequenceNum = (Long) context.get("sequenceNum");
+        try {
+        	List<GenericValue> productFeatureAppls = delegator.findByAnd("ProductFeatureAppl", UtilMisc.toMap("productFeatureId", productFeatureId));
+        	if(UtilValidate.isNotEmpty(productFeatureAppls)) {
+        	    for(GenericValue productFeatureAppl : productFeatureAppls) {
+                    Map updateProductFeatureApplParams = UtilMisc.toMap("productId", productFeatureAppl.getString("productId"),
+                            "productFeatureId",productFeatureAppl.getString("productFeatureId"),
+                            "fromDate",productFeatureAppl.getTimestamp("fromDate"),
+                            "sequenceNum", sequenceNum,
+                            "userLogin", userLogin);
+                   try {
+                   Map result = dispatcher.runSync("updateProductFeatureAppl", updateProductFeatureApplParams);
+                   } catch(GenericServiceException e){
+                       Debug.logError(e, module);
+                   }
+        	    }
+        	}
+		} catch (GenericEntityException e) {
+			Debug.logError(e, module);
+            resp = ServiceUtil.returnError(e.getMessage());
+		}
+		if (resp == null) resp = ServiceUtil.returnSuccess();
+        return resp;
+    }
     
 }

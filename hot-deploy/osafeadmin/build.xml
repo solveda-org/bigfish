@@ -154,6 +154,8 @@
 				</fileset>
 			</classpath>
 		</taskdef>
+		<delete dir="../../hot-deploy/osafeadmin/build" includeemptydirs="true" failonerror="false"/>
+
 		<mkdir dir="../../hot-deploy/osafeadmin/src"/>
 		
 		<xjc destdir="../../hot-deploy/osafeadmin/src" extension="true">

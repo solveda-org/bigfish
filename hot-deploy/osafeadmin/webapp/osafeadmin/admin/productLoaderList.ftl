@@ -11,6 +11,5 @@
         <#else>
             <#assign rowClass = "2">
         </#if>
-        </form>
     </#list>
 </#if>

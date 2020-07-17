@@ -3,7 +3,7 @@
       <input type="hidden" name="sampleFile" value="Y" />
       <div class="infoRow">
           <div class="infoDetail">
-              <p>${uiLabelMap.DownloadBigFishSampleXlsInfo}</p>
+              <p>${uiLabelMap.GenerateEmptyBigFishFileInfo}</p>
           </div>
       </div>
   <#else>

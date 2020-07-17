@@ -14,8 +14,8 @@
       <label for="USER_GENDER"><@required/>${uiLabelMap.GenderCaption}</label>
       <select name="USER_GENDER" id="USER_GENDER">
         <option value="">${uiLabelMap.SelectOneLabel}</option>
-        <option value="M" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "M") || (USER_GENDER?exists && USER_GENDER == "M"))>selected</#if>>${uiLabelMap.CommonMale}</option>
-        <option value="F" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "F") || (USER_GENDER?exists && USER_GENDER == "F"))>selected</#if>>${uiLabelMap.CommonFemale}</option>
+        <option value="M" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "M") || (USER_GENDER?exists && USER_GENDER == "M"))>selected</#if>>${uiLabelMap.GenderMale}</option>
+        <option value="F" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "F") || (USER_GENDER?exists && USER_GENDER == "F"))>selected</#if>>${uiLabelMap.GenderFemale}</option>
       </select>
       <@fieldErrors fieldName="USER_GENDER"/>
     </div>

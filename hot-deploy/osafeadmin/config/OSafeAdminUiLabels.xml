@@ -121,6 +121,9 @@
     <property key="CustomerViewNav">
         <value xml:lang="en">View Customers</value>
     </property>
+    <property key="FeedsNav">
+        <value xml:lang="en">Feeds</value>
+    </property>
     <property key="ManageFacetGroupsNav">
         <value xml:lang="en">Manage SOLR Facet Groups</value>
     </property>
@@ -132,6 +135,12 @@
     </property>
     <property key="ManageContactUsReasonNav">
         <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="ManageCreditCardTypeNav">
+        <value xml:lang="en">Credit Cards</value>
+    </property>
+    <property key="ManagePersonTitleNav">
+        <value xml:lang="en">Titles</value>
     </property>
     <property key="ManageDivSequenceNav">
         <value xml:lang="en">Manage &lt;DIV&gt; sequencing</value>
@@ -199,14 +208,32 @@
     <property key="ShippingNav">
 		<value xml:lang="en">Shipping</value>
 	</property>
-	<property key="ShipChargeNav">
-		<value xml:lang="en">Shipping Charges</value>
+	<property key="ShippingChargeNav">
+		<value xml:lang="en">Manage Shipping Charges</value>
 	</property>
 	<property key="CarrierNav">
-		<value xml:lang="en">Carriers &#38; Shipping Methods</value>
+		<value xml:lang="en">Manage Carriers</value>
+	</property>
+	<property key="ShipmentMethodNav">
+		<value xml:lang="en">Manage Shipping Methods</value>
 	</property>
 	<property key="JobNav">
 		<value xml:lang="en">Scheduled Jobs</value>
+	</property>
+	<property key="SolrConfigNav">
+		<value xml:lang="en">Manage SOLR Configuration</value>
+	</property>
+	<property key="EntityMaintenanceNav">
+		<value xml:lang="en">Entity Maintenance</value>
+	</property>
+	<property key="PaymentSettingsNav">
+		<value xml:lang="en">Payment Settings</value>
+	</property>
+	<property key="ReviewAgesNav">
+        <value xml:lang="en">Review Ages</value>
+    </property>
+	<property key="ManageEmailNav">
+		<value xml:lang="en">Manage Emails</value>
 	</property>
     <!-- *** Navigation Ends *************************************** -->
 
@@ -250,6 +277,12 @@
     <property key="AdminToolsHeading">
         <value xml:lang="en">Admin Tools</value>
     </property>
+    <property key="SolrConfigHeading">
+        <value xml:lang="en">Manage SOLR Configuration</value>
+    </property>
+    <property key="EntityMaintenanceHeading">
+        <value xml:lang="en">Entity Maintenance</value>
+    </property>
     <property key="AdminUserHeading">
         <value xml:lang="en">Manage Users</value>
     </property>
@@ -279,6 +312,9 @@
     </property>
     <property key="ContactUsReasonDetailHeading">
         <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="CreditTypeDetailHeading">
+        <value xml:lang="en">Credit Card</value>
     </property>
     <property key="CatalogEntryDetailHeading">
         <value xml:lang="en">Catalog Entry</value>
@@ -351,6 +387,9 @@
     </property>
     <property key="FacetValuesHeading">
         <value xml:lang="en">Facet VALUES</value>
+    </property>
+    <property key="FeedsHeading">
+        <value xml:lang="en">Feeds</value>
     </property>
     <property key="GeneralAddressHeading">
         <value xml:lang="en">General Address</value>
@@ -502,6 +541,15 @@
     <property key="ManageContactUsReasonHeading">
         <value xml:lang="en">Contact Us Reasons</value>
     </property>
+    <property key="ManageCreditCardTypeHeading">
+        <value xml:lang="en">Credit Cards</value>
+    </property>
+    <property key="ManagePersonTitleHeading">
+        <value xml:lang="en">Titles</value>
+    </property>
+    <property key="ManageReviewAgesHeading">
+        <value xml:lang="en">Review Ages</value>
+    </property>
     <property key="OrderAddHeading">
         <value xml:lang="en">Add Orders</value>
     </property>
@@ -557,7 +605,7 @@
         <value xml:lang="en">PDP Variant Caption:</value>
     </property>
     <property key="PixelTrackingDetailHeading">
-        <value xml:lang="en">Pixel Tracking Detail</value>
+        <value xml:lang="en">Pixel Tracking Detail: </value>
     </property>
     <property key="PixelTrackingListHeading">
         <value xml:lang="en">Pixel Tracking</value>
@@ -603,6 +651,12 @@
     </property>
     <property key="ProductVariantsHeading">
         <value xml:lang="en">Product Variants</value>
+    </property>
+    <property key="ProductFeaturesHeading">
+        <value xml:lang="en">Features for Product</value>
+    </property>
+    <property key="ProductFeaturesDetailHeading">
+        <value xml:lang="en">Feature Sequencing for</value>
     </property>
     <property key="PromotionConfigureHeading">
         <value xml:lang="en">Configure Promotions</value>
@@ -709,6 +763,9 @@
     <property key="EmailTestDetailHeading">
         <value xml:lang="en">Email Test</value>
     </property>
+    <property key="ExportBigfishContentDetailHeading">
+        <value xml:lang="en">Bigfish XML Exporter</value>
+    </property>
     <property key="SysConfigHeading">
         <value xml:lang="en">System Configuration</value>
     </property>
@@ -775,6 +832,12 @@
     <property key="ProductLoaderListHeading">
         <value xml:lang="en">Product Load Functions</value>
     </property>
+    <property key="BigFishFeedImportsListHeading">
+        <value xml:lang="en">BigFish Feed Imports</value>
+    </property>
+    <property key="BigFishFeedExportsListHeading">
+        <value xml:lang="en">BigFish Feed Exports</value>
+    </property>
     <property key="BigFishSampleFileDetailHeading">
         <value xml:lang="en">Create BigFish Product Load (Template) XLS File</value>
     </property>
@@ -787,26 +850,35 @@
     <property key="ImageLocationPreferencesDetailHeading">
         <value xml:lang="en">Image Location Preferences</value>
     </property>
-    <property key="ShipChargeHeading">
-		<value xml:lang="en">Shipping Charges</value>
+    <property key="ShippingChargeHeading">
+		<value xml:lang="en">manage shipping charges</value>
 	</property>
-	<property key="ShipChargeListHeading">
-		<value xml:lang="en">Matching Shipping Charges</value>
+	<property key="ShipmentMethodHeading">
+		<value xml:lang="en">manage shipping methods</value>
 	</property>
 	<property key="CarrierHeading">
-		<value xml:lang="en">Carriers &#38; Shipping Methods</value>
+		<value xml:lang="en">manage carriers</value>
 	</property>
-	<property key="ShipChargeDefinitionHeading">
-		<value xml:lang="en">Shipping Charge Definition</value>
+	<property key="ShipmentMethodDetailHeading">
+		<value xml:lang="en">Shipping Method Detail</value>
 	</property>
-	<property key="ShipChargeCarrierDefinitionHeading">
+	<property key="CarrierDetailHeading">
 		<value xml:lang="en">Carrier Detail</value>
 	</property>
-	<property key="CarrierShipListHeading">
-		<value xml:lang="en">Carrier and Shipping Methods List</value>
+	<property key="ShippingChargeListHeading">
+		<value xml:lang="en">Matching Shipping Charges</value>
 	</property>
-	<property key="CarrierShipDetailHeading">
-		<value xml:lang="en">Carrier and Shipping Method Detail</value>
+	<property key="ShipmentMethodListHeading">
+		<value xml:lang="en">Shipping Method List</value>
+	</property>
+	<property key="CarrierListHeading">
+		<value xml:lang="en">Carrier List</value>
+	</property>
+	<property key="ShippingChargeDetailHeading">
+		<value xml:lang="en">Shipping Charge Detail</value>
+	</property>
+	<property key="CarrierDefinitionHeading">
+		<value xml:lang="en">Carrier Detail</value>
 	</property>
 	<property key="CustomerDetailPersonalInfoHeading">
 		<value xml:lang="en">Personal Information</value>
@@ -826,6 +898,55 @@
 	<property key="ShipmentMethodTypeDetailHeading">
 		<value xml:lang="en">Shipping Method Detail</value>
 	</property>
+	<property key="BigFishFeedImportDetailHeading">
+		<value xml:lang="en">BigFish Feed Import</value>
+	</property>
+	<property key="BigFishFeedExportDetailHeading">
+		<value xml:lang="en">BigFish Feed Export</value>
+	</property>
+	<property key="OrderStatusChangesDetailHeading">
+		<value xml:lang="en">Order Status Changes</value>
+	</property>
+	<property key="ProductRatingsDetailHeading">
+		<value xml:lang="en">Product Ratings</value>
+	</property>
+	<property key="StoresDetailHeading">
+		<value xml:lang="en">Stores</value>
+	</property>
+	<property key="CustomersDetailHeading">
+		<value xml:lang="en">Customers</value>
+	</property>
+	<property key="OrdersDetailHeading">
+		<value xml:lang="en">Orders</value>
+	</property>
+	<property key="ContactUsDetailHeading">
+		<value xml:lang="en">Contact Us</value>
+	</property>
+	<property key="RequestCatalogDetailHeading">
+		<value xml:lang="en">Request Catalog</value>
+	</property>
+	<property key="ReviewAgesListHeading">
+		<value xml:lang="en">Review Ages</value>
+	</property>
+	<property key="ReviewAgesDetailHeading">
+		<value xml:lang="en">Review Age:</value>
+	</property>
+	<property key="PaymentSettingsHeading">
+		<value xml:lang="en">Payment Settings</value>
+	</property>
+	<property key="ReviewAgesHeading">
+        <value xml:lang="en">Review Ages</value>
+    </property>
+	<property key="PaymentSettingsListHeading">
+		<value xml:lang="en">Payment Settings</value>
+	</property>
+	<property key="ManageEmailHeading">
+		<value xml:lang="en">Manage Emails</value>
+	</property>
+	<property key="ManageEmailListHeading">
+		<value xml:lang="en">Manage Email</value>
+	</property>
+	
    <!-- *** Heading Ends*************************************** -->
 
     <!-- *** Caption Starts*************************************** -->
@@ -885,6 +1006,21 @@
     </property>
     <property key="CustomerNameCaption">
         <value xml:lang="en">Customer Name:</value>
+    </property>
+    <property key="ContactUsReasonIdCaption">
+        <value xml:lang="en">Credit Card ID:</value>
+    </property>
+    <property key="ContactUsReasonDescCaption">
+        <value xml:lang="en">Credit Card Desc:</value>
+    </property>
+    <property key="CreditCardTypeIdCaption">
+        <value xml:lang="en">Credit Card Id:</value>
+    </property>
+    <property key="CreditCardTypeDescCaption">
+        <value xml:lang="en">Credit Card Desc:</value>
+    </property>
+    <property key="CeditCardTypeCaption">
+        <value xml:lang="en">Credit Card Type:</value>
     </property>
     <property key="FirstNameCaption">
         <value xml:lang="en">First Name:</value>
@@ -946,6 +1082,9 @@
     <property key="EmailTypeCaption">
         <value xml:lang="en">Email Type:</value>
     </property>
+    <property key="EntitytoExportCaption">
+        <value xml:lang="en">Content Entities to Export:</value>
+    </property>
     <property key="FromCaption">
         <value xml:lang="en">From:</value>
     </property>
@@ -981,6 +1120,9 @@
     </property>
     <property key="BFWareHouseInventoryCaption">
         <value xml:lang="en">BF Warehouse Inventory:</value>
+    </property>
+    <property key="ImportXmlFileCaption">
+        <value xml:lang="en">Import XML File:</value>
     </property>
     <property key="IngredientsCaption">
         <value xml:lang="en">Ingredients:</value>
@@ -1062,6 +1204,12 @@
     </property>
     <property key="PLPImageTitleTextCaption">
         <value xml:lang="en">PLP Image Title Text:</value>
+    </property>
+    <property key="PersonTitleIdCaption">
+        <value xml:lang="en">Title ID:</value>
+    </property>
+    <property key="PersonTitleDescCaption">
+        <value xml:lang="en">Title Desc:</value>
     </property>
     <property key="SmallAltImageCaption">
         <value xml:lang="en">Small Image ALT:</value>
@@ -1162,8 +1310,11 @@
     <property key="ProcessingOptionCaption">
         <value xml:lang="en">Processing Option:</value>
     </property>
-    <property key="ProductXLSFileCaption">
-        <value xml:lang="en">Product File (XLS):</value>
+    <property key="ProductFileFormatCaption">
+        <value xml:lang="en">Product File (XLS or XML):</value>
+    </property>
+    <property key="ProductFileCaption">
+        <value xml:lang="en">Product File:</value>
     </property>
     <property key="ReadyCaption">
         <value xml:lang="en">Ready:</value>
@@ -1962,6 +2113,27 @@
 	<property key="FreqCountCaption">
 		<value xml:lang="en">Freq Count:</value>
 	</property>
+    <property key="GenderCaption">
+        <value xml:lang="en">Gender:</value>
+    </property>
+    <property key="TitleCaption">
+        <value xml:lang="en">Title:</value>
+    </property>
+    <property key="FROM_EMAIL_ADDRESS_Caption">
+        <value xml:lang="en">From:</value>
+    </property>
+    <property key="TO_EMAIL_ADDRESS_Caption">
+        <value xml:lang="en">To:</value>
+    </property>
+    <property key="EMAIL_SUBJECT_Caption">
+        <value xml:lang="en">Subject:</value>
+    </property>
+    <property key="ReviewAgesIdCaption">
+        <value xml:lang="en">Review Age ID:</value>
+    </property>
+    <property key="ReviewAgesDescCaption">
+        <value xml:lang="en">Review Age Desc:</value>
+    </property>
 	
     <!-- *** Caption Ends*************************************** -->
 
@@ -1971,6 +2143,9 @@
     </property>
     <property key="BigFishConetentIdLabel">
         <value xml:lang="en">BigFish Content ID</value>
+    </property>
+    <property key="BroadcastChangeToProductLabel">
+        <value xml:lang="en">Broadcast changes to ALL Products?</value>
     </property>
     <property key="ClrLblCacheLabel">
         <value xml:lang="en">Clear Bigfish Cache</value>
@@ -2002,6 +2177,21 @@
     <property key="ConfigIDLabel">
         <value xml:lang="en">Config Id</value>
     </property>
+    <property key="ContactUsReasonIdLabel">
+        <value xml:lang="en">Reason ID</value>
+    </property>
+    <property key="ContactUsReasonDescLabel">
+        <value xml:lang="en">Reason Desc</value>
+    </property>
+    <property key="CreditCardTypeIdLabel">
+        <value xml:lang="en">Credit Card ID</value>
+    </property>
+    <property key="CreditCardTypeDescLabel">
+        <value xml:lang="en">Credit Card Description</value>
+    </property>
+    <property key="CreditCardTypeLabel">
+        <value xml:lang="en">Credit Card Type</value>
+    </property>
     <property key="CharactersLeftLabel">
         <value xml:lang="en">characters left</value>
         <description>CharactersLeftLabel</description>
@@ -2030,6 +2220,12 @@
     </property>
     <property key="plpCategoryDescriptionLabel">
         <value xml:lang="en">Content Detail for category</value>
+    </property> 
+    <property key="PersonTitleIdLabel">
+        <value xml:lang="en">Title ID</value>
+    </property>
+    <property key="PersonTitleDescLabel">
+        <value xml:lang="en">Title Description</value>
     </property>
     <property key="ChangeStatusAllOrderItemLabel">
         <value xml:lang="en">Change ORDER Status, apply to all ITEMS</value>
@@ -2115,20 +2311,41 @@
     <property key="FacetEndLabel">
         <value xml:lang="en">Facet End</value>
     </property>
-    <property key="LoadBigFishXlsLabel">
-        <value xml:lang="en">Product Loader from BigFish XLS File</value>
+    <property key="LoadBigFishFormatLabel">
+        <value xml:lang="en">Product Loader from BigFish Format File</value>
     </property>
     <property key="CreateBigFishFromDBLabel">
-        <value xml:lang="en">Create BigFish XLS File from Database</value>
+        <value xml:lang="en">Create BigFish File from Database</value>
     </property>
     <property key="CreateBigFishFromEbayLabel">
-        <value xml:lang="en">Convert eBay/Amazon file to BigFish XLS</value>
-    </property>
-    <property key="DownloadBigFishSampleXlsLabel">
-        <value xml:lang="en">Create BigFish Empty Template XLS File</value>
+        <value xml:lang="en">Convert eBay/Amazon file to BigFish Format</value>
     </property>
     <property key="ImageLocationPreferencesLabel">
         <value xml:lang="en">Image Location Preferences</value>
+    </property>
+    <property key="DownloadBigFishSampleFileLabel">
+        <value xml:lang="en">Create BigFish Empty Template File</value>
+    </property>
+    <property key="OrderStatusChangesLabel">
+        <value xml:lang="en">Order Status Changes</value>
+    </property>
+    <property key="ProductRatingsLabel">
+        <value xml:lang="en">Product Ratings</value>
+    </property>
+    <property key="StoresLabel">
+        <value xml:lang="en">Stores</value>
+    </property>
+    <property key="CustomersExportLabel">
+        <value xml:lang="en">Customers</value>
+    </property>
+    <property key="OrdersExportLabel">
+        <value xml:lang="en">Orders</value>
+    </property>
+    <property key="ContactUsExportLabel">
+        <value xml:lang="en">Contact Us</value>
+    </property>
+    <property key="RequestCatalogExportLabel">
+        <value xml:lang="en">Request Catalog</value>
     </property>
     
     <!-- Leave so if we want to specific verbage we do not have to change the key -->
@@ -2319,10 +2536,13 @@
         <value xml:lang="en">Facet Group</value>
     </property>
     <property key="FacetValueLabel">
-        <value xml:lang="en">Facet Value</value>
+        <value xml:lang="en">Facet Values</value>
     </property>
     <property key="FacetIDLabel">
         <value xml:lang="en">Facet ID</value>
+    </property>
+    <property key="FeatureIDLabel">
+        <value xml:lang="en">Feature ID</value>
     </property>
     <property key="FacetsLabel">
         <value xml:lang="en">Facets</value>
@@ -2392,6 +2612,12 @@
     </property>
     <property key="CarrierLabel">
         <value xml:lang="en">Carrier</value>
+    </property>
+    <property key="ShipmentMethodLabel">
+        <value xml:lang="en">Shipping Method</value>
+    </property>
+    <property key="ShipmentDescriptionLabel">
+        <value xml:lang="en">Description</value>
     </property>
     <property key="TrackingLabel">
         <value xml:lang="en">Tracking#</value>
@@ -2510,6 +2736,9 @@
     <property key="ProcessingLabel">
         <value xml:lang="en">Processing</value>
     </property>
+    <property key="SentLabel">
+        <value xml:lang="en">Sent</value>
+    </property>
     <property key="ProductNameLabel">
         <value xml:lang="en">Product Name</value>
     </property>
@@ -2571,7 +2800,7 @@
         <value xml:lang="en">RE-LOAD: Remove all products and re-load from the input file</value>
     </property>
     <property key="RejectedLabel">
-        <value xml:lang="en">Deleted</value>
+        <value xml:lang="en">Rejected</value>
     </property>
     <property key="RequestDateLabel">
         <value xml:lang="en">Request Date</value>
@@ -2683,6 +2912,9 @@
     </property>
     <property key="SubTotalLabel">
         <value xml:lang="en">Sub Total</value>
+    </property>
+    <property key="AdjustedTotalLabel">
+        <value xml:lang="en">Adjusted Total:</value>
     </property>
     <property key="ItemTotalLabel">
         <value xml:lang="en">Item Total</value>
@@ -3111,16 +3343,22 @@
 		<value xml:lang="en">Carrier</value>
 	</property>
 	<property key="ShipMinTotalLabel">
-		<value xml:lang="en">Minimum Total</value>
+		<value xml:lang="en">Min Total</value>
 	</property>
 	<property key="ShipMaxTotalLabel">
-		<value xml:lang="en">Maximum Total</value>
+		<value xml:lang="en">Max Total</value>
 	</property>
 	<property key="ShipSeqLabel">
 		<value xml:lang="en">Seq#</value>
 	</property>
 	<property key="ShipFlatRateLabel">
 		<value xml:lang="en">Flat Rate</value>
+	</property>
+	<property key="CarrierIdLabel">
+		<value xml:lang="en">Carrier ID</value>
+	</property>
+	<property key="CarrierDescriptionLabel">
+		<value xml:lang="en">Description</value>
 	</property>
 	<property key="CarrierShipIdLabel">
 		<value xml:lang="en">Carrier ID</value>
@@ -3176,6 +3414,30 @@
     <property key="EmailTestLabel">
         <value xml:lang="en">Email Test</value>
     </property>
+    <property key="BFXmlExportLabel">
+        <value xml:lang="en">BigFish XML Exporter</value>
+    </property>
+    <property key="genderMaleLabel">
+        <value xml:lang="en">Male</value>
+    </property>
+    <property key="genderFemaleLabel">
+        <value xml:lang="en">Female</value>
+    </property>
+    <property key="functionLabel">
+        <value xml:lang="en">Function</value>
+    </property>
+    <property key="CommonAM">
+        <value xml:lang="en">AM</value>
+    </property>
+    <property key="CommonPM">
+        <value xml:lang="en">PM</value>
+    </property>
+    <property key="ReviewAgesIdLabel">
+        <value xml:lang="en">Review Age ID</value>
+    </property>
+    <property key="ReviewAgesDescLabel">
+        <value xml:lang="en">Review Age Description</value>
+    </property>
     <!-- **** Label Ends *************************************** -->
     
     <!-- **** Page Title  Starts*************************************** -->
@@ -3184,6 +3446,9 @@
     </property> 
     <property key="AdminToolTitle">
         <value xml:lang="en">admin tools</value>
+    </property> 
+    <property key="SolrConfigTitle">
+        <value xml:lang="en">manage SOLR configuration</value>
     </property> 
     <property key="AnalysisTitle">
         <value xml:lang="en">analysis</value>
@@ -3398,6 +3663,12 @@
     <property key="ProductVariantsTitle">
         <value xml:lang="en">product variants</value>
     </property>
+    <property key="ProductFeaturesTitle">
+        <value xml:lang="en">manage product feature sequencing</value>
+    </property>
+    <property key="ProductFeatureDetailTitle">
+        <value xml:lang="en">manage product feature sequencing</value>
+    </property>
     <property key="CategorySelectorTitle">
         <value xml:lang="en">Category Selector</value>
     </property>
@@ -3448,6 +3719,9 @@
     </property>
     <property key="EmailTestDetailTitle">
         <value xml:lang="en">Email Test</value>
+    </property>
+    <property key="ExportBigfishContentDetail">
+        <value xml:lang="en">bigfish XML exporter</value>
     </property>
     <property key="SysConfigFileTitle">
         <value xml:lang="en">system configuration files</value>
@@ -3521,6 +3795,27 @@
     <property key="ContactUsReasonDetailTitle">
         <value xml:lang="en">contact us reasons detail</value>
     </property>
+    <property key="CreditCardTypeTitle">
+        <value xml:lang="en">credit card list</value>
+    </property>
+    <property key="CreditCardTypeListHeading">
+        <value xml:lang="en">Credit Card</value>
+    </property>
+    <property key="CreditTypeDetailTitle">
+        <value xml:lang="en">credit card detail</value>
+    </property>
+    <property key="PersonTitleListTitle">
+        <value xml:lang="en">title list</value>
+    </property>
+    <property key="PersonTitleListHeading">
+        <value xml:lang="en">Titles</value>
+    </property>
+    <property key="PersonTitlDetailTitle">
+        <value xml:lang="en">title detail</value>
+    </property>
+    <property key="PersonTitlDetailHeading">
+        <value xml:lang="en">Title</value>
+    </property>
     <property key="StoreTitle">
         <value xml:lang="en">stores</value>
     </property>
@@ -3532,6 +3827,9 @@
     </property>
     <property key="ViewCustomersTitle">
         <value xml:lang="en">view customers</value>
+    </property>
+    <property key="BigfishFeedsTitle">
+        <value xml:lang="en">bigfish feeds</value>
     </property>
     <property key="ProductLoaderListTitle">
         <value xml:lang="en">product loader functions</value>
@@ -3557,23 +3855,23 @@
     <property key="ShippingTitle">
 		<value xml:lang="en">shipping charges</value>
 	</property>
-	<property key="">
-		<value xml:lang="en">view shipping charges</value>
-	</property>
-	<property key="ShipChargeDetailTitle">
+	<property key="ShippingChargeDetailTitle">
 		<value xml:lang="en">manage shipping charge</value>
 	</property>
-	<property key="ShipChargeCarrierDetailTitle">
+	<property key="CarrierDetailTitle">
 		<value xml:lang="en">manage carrier</value>
 	</property>
-	<property key="ShipChargeListTitle">
-		<value xml:lang="en">view shipping charges</value>
+	<property key="CarrierListTitle">
+		<value xml:lang="en">list carriers</value>
 	</property>
-	<property key="CarrierShipListTitle">
-		<value xml:lang="en">view carriers and shipping methods</value>
+	<property key="ShipmentMethodListTitle">
+		<value xml:lang="en">list shipping methods</value>
 	</property>
-	<property key="CarrierShipDetailTitle">
-		<value xml:lang="en">manage carrier and shipping method</value>
+	<property key="ShippingChargeListTitle">
+		<value xml:lang="en">list shipping charges</value>
+	</property>
+	<property key="ShipmentMethodDetailTitle">
+		<value xml:lang="en">manage shipping method</value>
 	</property>
 	<property key="ViewJobsTitle">
 		<value xml:lang="en">view scheduled jobs</value>
@@ -3584,6 +3882,24 @@
 	<property key="ShipmentMethodTypeDetailTitle">
 		<value xml:lang="en">manage shipping method</value>
 	</property>
+	<property key="BigFishFeedsDetailTitle">
+		<value xml:lang="en">bigfish feeds</value>
+	</property>
+	<property key="ReviewAgesListTitle">
+        <value xml:lang="en">review ages</value>
+    </property>
+    <property key="ReviewAgesDetailTitle">
+        <value xml:lang="en">review age detail</value>
+    </property>
+    <property key="PaymentSettingsListTitle">
+        <value xml:lang="en">payment settings</value>
+    </property>
+    <property key="ManageEmailListTitle">
+        <value xml:lang="en">manage email</value>
+    </property>
+    <property key="EntityMaintenanceTitle">
+        <value xml:lang="en">entity maintenance</value>
+    </property>
     <!-- ******* Page Title Ends *************************************** -->
     
     <!-- ******* Info Messages Starts*************************************** -->
@@ -3615,13 +3931,13 @@
         <value xml:lang="en">View system configuration files and other properties.</value>
     </property>
     <property key="AdminPayGatewayInfo">
-        <value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways.</value>
+        <value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways. This will include all parameters, API references, access information etc.</value>
     </property>
     <property key="AdminPixelTrackingInfo">
         <value xml:lang="en">Function to maintain 3rd party pixel tracking scripts on various pages throughout the eCommerce implementation.</value>
     </property>
     <property key="AdminPaymentSettingInfo">
-        <value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways.</value>
+        <value xml:lang="en">This function provides the ability to associated various OFBiz payment functions to specific Payment Gateways.</value>
     </property>
     <property key="ClrCacheInfo">
         <value xml:lang="en">This function will clear various memory cache that are used within the BigFish solution. These resources are loaded into memory once and if changes are made in these areas then cache needs to be cleared for the changes to take affect.</value>
@@ -3659,6 +3975,12 @@
     <property key="DownloadNewInfo">
         <value xml:lang="en">New</value>
     </property>
+    <property key="SeeHelperInfo">
+        <value xml:lang="en">See helper on List Screen</value>
+    </property>
+    <property key="SeeWarningInfo">
+        <value xml:lang="en">New content is only valid if you use a specific BF-Content-ID that is used in the eCommerce implementation. This function should only be used for emergency situations.</value>
+    </property>
     <property key="DeliveryShipToInfo">
         <value xml:lang="en">Ship To</value>
     </property>
@@ -3680,6 +4002,9 @@
     <property key="EmailTestInfo">
         <value xml:lang="en">This function will use your OFBiz and BigFish properties and send out a test email.</value>
     </property>
+    <property key="BFXmlExportInfo">
+        <value xml:lang="en">Various functions to export data, mainly focused on content, from the database to an XML format. These XML files will be suitable for load into another OFBiz database instance.</value>
+    </property>
     <property key="CustomerEnabledInfo">
         <value xml:lang="en">Enabled</value>
     </property>
@@ -3699,16 +4024,25 @@
         <value xml:lang="en">Used as the alternate primary image display in the PDP</value>
     </property>
     <property key="ManageSOLRFacetGroupsInfo">
-        <value xml:lang="en">Manage the facet GROUPS at a Product Category level</value>
+        <value xml:lang="en">The Facet GROUP are, for example, COLOR, MATERIAL etc. Facet GROUPS are managed for each level of the Product Category structure. The function provides the ability to hide or show specific facet GROUPS and sequence the GROUPS within the faceted navigation panel.</value>
     </property>
     <property key="ManageSOLRFacetValueInfo">
-        <value xml:lang="en">Manage the facet VALUES</value>
+        <value xml:lang="en">The Facet VALUES are the values within a group, for example, VALUES of Red, Green, Blue within the GROUP Color. This function provides the ability to manage the sequencing of the Facet VALUES on a global basis by broadcasting to every Product. For specific Product level sequencing of Facet VALUES, use the Catalog / Product / Facet Sequencing function.</value>
     </property>
     <property key="ManageDivSequenceInfo">
         <value xml:lang="en">Manage DIV Sequencing</value>
     </property>
     <property key="ManageContactUsReasonInfo">
         <value xml:lang="en">Control the reasons that are offered in the Contact Us form</value>
+    </property>
+    <property key="ManageCreditCardTypeInfo">
+        <value xml:lang="en">Ability to maintain which credit cards are offered during the Check Out process. Example: Visa, Mastercard etc.</value>
+    </property>
+    <property key="ManageReviewAgesInfo">
+        <value xml:lang="en">Ability to maintain which Ages are offered during the Write a Review process. Example: 10-21, 22-30 etc.</value>
+    </property>
+    <property key="ManagePersonTitleInfo">
+        <value xml:lang="en">Ability to maintain which Titles are offered during the Registration process. Example: Mr, Mrs etc.</value>
     </property>
     <property key="PartyNameNotFoundInfo">
         <value xml:lang="en">Name Not Found</value>
@@ -3782,6 +4116,9 @@
     <property key="PDPVariantCaptionsInfo">
         <value xml:lang="en">Maintain the captions in the PDP for the variant selectors (color, size etc.)</value>
     </property>
+    <property key="PayInStoreInfo">
+        <value xml:lang="en">Pay In Store.</value>
+    </property>
     <property key="EnterCriteriaInfo">
         <value xml:lang="en">Enter Criteria and click the Search button</value>
     </property>
@@ -3803,6 +4140,9 @@
     <property key="OrderViewInfo">
         <value xml:lang="en">This function provides the ability to search for orders in the database. A list of orders is displayed, with a click-through to the Order Detail screen</value>
     </property>
+    <property key="FeedsInfo">
+        <value xml:lang="en">Manage all BigFish feed processing. Import Products, Order Status. Export Customers, Orders and more.</value>
+    </property>
     <property key="PageContentSpotsInfo">
         <value xml:lang="en">Manage specific content spots for Login, Cart and other pages</value>
     </property>
@@ -3813,7 +4153,7 @@
         <value xml:lang="en">Import Product Catalog and Item data. Setup selectable and descriptive features.</value>
     </property>
     <property key="ProductLoaderDetailInfo">
-        <value xml:lang="en">This function will read an Excel import file that defines Product Information. There are options to re-load (remove existing and load fresh) or append to the Product entities.</value>
+        <value xml:lang="en">This function will read an XLS or XML import file that defines Product Information. There are options to re-load (remove existing and load fresh) or append to the Product entities.</value>
     </property>
     <property key="PromotionConfigureInfo">
         <value xml:lang="en">This function allows for the configuration of all promotions.</value>
@@ -3959,17 +4299,26 @@
     <property key="ThumbPDPImageInfo">
         <value xml:lang="en">Used as the thumbnail for the primary image image in the PDP</value>
     </property>
-    <property key="LoadBigFishXlsInfo">
-        <value xml:lang="en">Re-load the Category and Products from a BigFish format XLS file</value>
+    <property key="LoadBigFishFormatInfo">
+        <value xml:lang="en">Re-load the Category and Products from a BigFish format file</value>
     </property>
     <property key="CreateBigFishFromDBInfo">
-        <value xml:lang="en">From the existing database, create a BigFish format “Product Load” XLS file</value>
+        <value xml:lang="en">From the existing database, create a BigFish format file (XLS or XML)</value>
+    </property>
+    <property key="CreateBigFishLoadFromDBInfo">
+        <value xml:lang="en">From the existing database, create a BigFish format “Product Load” file</value>
+    </property>
+    <property key="CreateBigFishLoadFromEbayInfo">
+        <value xml:lang="en">Starting with a standard eBay/Amazon product load formatted file, convert to a BigFish “Product Load” format</value>
     </property>
     <property key="CreateBigFishFromEbayInfo">
-        <value xml:lang="en">Starting with a standard eBay/Amazon product load formatted file, convert to a BigFish XLS format</value>
+        <value xml:lang="en">Starting with a standard eBay/Amazon product load formatted file, convert to a BigFish format (XLS or XML)</value>
     </property>
-    <property key="DownloadBigFishSampleXlsInfo">
-        <value xml:lang="en">Generate an empty BigFish “Product Load TEMPLATE” XLS file</value>
+    <property key="DownloadBigFishSampleFileInfo">
+        <value xml:lang="en">Create an empty BigFish “template” file (XLS or XML)</value>
+    </property>
+    <property key="GenerateEmptyBigFishFileInfo">
+        <value xml:lang="en">Generate an empty BigFish “Product Load TEMPLATE” file</value>
     </property>
     <property key="ImageLocationPreferencesInfo">
         <value xml:lang="en">This will allow for the modification of the Product Loader Image Mapping file that controls the sub-directory that images should be available.</value>
@@ -3977,16 +4326,55 @@
     <property key="setToZeroMessage">
         <value xml:lang="en">* Set to 0(zero) if not required or hidden</value>
     </property>
-    <property key="ShipChargeInfo">
-		<value xml:lang="en">This function provides the ability to maintain all 
-		Shipping Charge options for use within the Shopping Cart.</value>
+    <property key="ShippingChargeInfo">
+		<value xml:lang="en">For a Carrier, Shipping Metho combination, view and maintain the actual shipping charges.</value>
 	</property>
 	<property key="CarrierInfo">
-		<value xml:lang="en">View and maintain all available Carriers (Fedex, DHL, UPS) and the associated Shipping Methods (Air, Next Day).</value>
+		<value xml:lang="en">View and maintain all available Carriers (Fedex, DHL, UPS).</value>
+	</property>
+	<property key="ShipmentMethodInfo">
+		<value xml:lang="en">View and maintain all available Shipping Methods (Air, Next Day).</value>
 	</property>
 	<property key="ScheduledJobInfo">
 		<value xml:lang="en">Manage execution, frequency and logging for the various Scheduled Jobs.</value>
 	</property>
+	<property key="OrderStatusChangesInfo">
+		<value xml:lang="en">Import the Order Status Change file</value>
+	</property>
+	<property key="ProductRatingsInfo">
+		<value xml:lang="en">Import the Product Rating file</value>
+	</property>
+	<property key="StoresInfo">
+		<value xml:lang="en">Import the Store file</value>
+	</property>
+	<property key="CustomersExportInfo">
+		<value xml:lang="en">Export all registered Customers</value>
+	</property>
+	<property key="OrdersExportInfo">
+		<value xml:lang="en">Export all placed Orders</value>
+	</property>
+	<property key="ContactUsExportInfo">
+		<value xml:lang="en">Export all Contact Us communication events</value>
+	</property>
+	<property key="RequestCatalogExportInfo">
+		<value xml:lang="en">Export all Request Catalog communication events</value>
+	</property>
+	<property key="SolrConfigInfo">
+		<value xml:lang="en">Options to configure both Facet GROUPS and VALUES</value>
+	</property>
+	<property key="EntityMaintenanceInfo">
+		<value xml:lang="en">Control the allowed Contact Us Reason, Titles, Review Ages, Credit Cards etc.</value>
+	</property>
+	<property key="PaymentSettingsInfo">
+		<value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways.</value>
+	</property>
+	<property key="ManageEmailInfo">
+		<value xml:lang="en">Manage the content within various Email Templates as well the configuration for sending.</value>
+	</property>
+	<property key="ReviewAgesInfo">
+        <value xml:lang="en">Ability to maintain which Ages are offered during the Write a Review process. Example: 10-21, 22-30 etc.</value>
+    </property>
+	
      <!-- ******* Info Messages Ends*************************************** -->
    
     <!-- ******* Success Messages  starts*************************************** -->
@@ -4001,6 +4389,9 @@
     </property>
     <property key="FacetValueSavedSuccess">
         <value xml:lang="en">Facet VALUES have been saved (changes may not take affect until SOLR is re-indexed)</value>
+    </property>
+    <property key="ProductFeatureSavedSuccess">
+        <value xml:lang="en">Your Product Feature Sequencing has been saved (changes may not take affect until SOLR is re-indexed)</value>
     </property>
     <property key="solrReIndexSuccess">
         <value xml:lang="en">The Solr Re-Index successfully completed</value>
@@ -4032,7 +4423,27 @@
     <property key="PaymentSettingSavedSuccess">
         <value xml:lang="en">Your changes have been saved</value>
     </property>
-    ImageLocationPreferencesSuccess
+    <property key="ContactUsReasonSavedSuccess">
+        <value xml:lang="en">Your changes to [{0}] have been saved.</value>
+    </property>
+    <property key="CreditCardTypeSavedSuccess">
+        <value xml:lang="en">Your changes to [{0}] have been saved.</value>
+    </property>
+    <property key="PersonTitleSavedSuccess">
+        <value xml:lang="en">Your changes to [{0}] have been saved.</value>
+    </property>
+    <property key="ReviewAgesSavedSuccess">
+        <value xml:lang="en">Your changes to [{0}] have been saved.</value>
+    </property>
+    <property key="TestEmailNotificationEnableRedirectSuccessMsg">
+        <value xml:lang="en">The Email was sent successfully. HOWEVER, the mail.notifications.redirectTo is set to {0} so all emails will be sent here. Check the client-deployment.properties file. Specific email properties are listed in the 'General Properties' section. For more information check the Help function "How To Set Up BigFish Emails".</value>
+    </property>
+    <property key="TestEmailNotificationEnableSuccessMsg">
+        <value xml:lang="en">The Email was sent successfully. If for some reason it was not delivered, check the client-deployment.properties file. Specific email properties are listed in the ‘General Properties’ section. It is possible that these are not configured correctly. For more information check the Help function "How To Set Up BigFish Emails".</value>
+    </property>
+    <property key="TestEmailNotificationNotEnableSuccessMsg">
+        <value xml:lang="en">The Email was sent successfully. HOWEVER, the mail.notifications.enabled is set to ''N' in the client.properties file so the email content was stored as a COMMUNICATION_EVENT in the database and no real email was delivered.</value>
+    </property>
       <!-- ******* Success Messages  Ends*************************************** -->
       
     <!-- ******* Error Messages  Starts*************************************** -->
@@ -4129,6 +4540,9 @@
     <property key="BlankProductFileError">
         <value xml:lang="en">You must identify a Product File</value>
     </property>
+    <property key="BlankFeedFileError">
+        <value xml:lang="en">You must identify a Feed File</value>
+    </property>
     <property key="BlankOrderStatusIdError">
         <value xml:lang="en">Status cannot be blank.</value>
     </property>
@@ -4137,6 +4551,9 @@
     </property>
     <property key="ProductFileNotXLSError">
         <value xml:lang="en">The Product Loader uses MS-Excel format files, please check the file name and try again</value>
+    </property>
+    <property key="FeedFileNotXmlError">
+        <value xml:lang="en">The Feeds Import uses XML format files, please check the file name and try again</value>
     </property>
     <property key="CancelledOrderStatusChangeError">
         <value xml:lang="en">Status cannot be change for cancelled order.</value>
@@ -4321,6 +4738,9 @@
     <property key="FacetValueSequenceNumNotVaildNumError">
         <value xml:lang="en">The Seq# must be numeric and between 1 and 2000.</value>
     </property>
+    <property key="FeatureSequenceNumNotVaildNumError">
+        <value xml:lang="en">The Seq# must be numeric and between 1 and 1000.</value>
+    </property>
     <property key="ShowAllError">
         <value xml:lang="en">“WARNING: List will exceed ${ADM_WARN_LIST_ROWS}. Are you sure you want to continue?”</value>
     </property>
@@ -4362,6 +4782,9 @@
     </property>
     <property key="BlankCaptionError">
         <value xml:lang="en">The Caption field cannot be blank.</value>
+    </property>
+    <property key="BadCaptionError">
+        <value xml:lang="en">The Caption field [${parameters.value}] cannot contain less-than (&lt;) or greater-than (&gt;) symbols</value>
     </property>
     <property key="BlankShipDateError">
         <value xml:lang="en">A Ship Date is required when changing the status to Completed.</value>
@@ -4481,7 +4904,7 @@
         <value xml:lang="en">Action Categories or Action Products is required.</value>
     </property>
     <property key="ValidPromotionUseLimitPerOrderError">
-        <value xml:lang="en">Please enter a Valid Limit Per Order. It must be a number.</value>
+        <value xml:lang="en">Please enter a Valid Limit Per Order. It must be a number and between 1 and 99.</value>
     </property>
     <property key="ValidPromotionUseLimitPerCustomerError">
         <value xml:lang="en">Please enter a Valid Limit Per Customer. It must be a number.</value>
@@ -4576,20 +4999,47 @@
     <property key="IdExistError">
         <value xml:lang="en">The Id field must be unique.</value>
     </property>
-    <property key="DescriptionError">
-        <value xml:lang="en">The Description field cannot be blank.</value>
+    <property key="ContactUsReasonIdError">
+        <value xml:lang="en">The Reason ID field cannot be blank.</value>
     </property>
-    <property key="SequenceIdError">
-        <value xml:lang="en">The Sequence field cannot be blank.</value>
+    <property key="ContactUsReasonIdLengthError">
+        <value xml:lang="en">The Reason Id field cannot be more than 20 characters.</value>
     </property>
-    <property key="SequenceIdNotVaildNumError">
-        <value xml:lang="en">The Sequence must be numeric.</value>
+    <property key="ContactUsReasonIdExistError">
+        <value xml:lang="en">The Reason ID field must be unique.</value>
     </property>
-    <property key="SequenceIdNotVaildNumError">
-        <value xml:lang="en">The Sequence must be numeric.</value>
+    <property key="ContactUsReasonDescriptionError">
+        <value xml:lang="en">The Reason DESC field cannot be blank.</value>
+    </property>
+    <property key="ContactUsReasonSequenceIdError">
+        <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999.</value>
+    </property>
+    <property key="CreditCardTypeIdError">
+        <value xml:lang="en">The Credit Card ID field cannot be blank.</value>
+    </property>
+    <property key="CreditCardTypeIdLengthError">
+        <value xml:lang="en">The Credit Card ID field cannot be more than 20 characters.</value>
+    </property>
+    <property key="PixelIdLengthError">
+        <value xml:lang="en">The Pixel ID field cannot be more than 20 characters.</value>
+    </property>
+    <property key="CreditCardTypeIdExistError">
+        <value xml:lang="en">The Credit Card ID field must be unique.</value>
+    </property>
+    <property key="CreditCardTypeDescriptionError">
+        <value xml:lang="en">The Credit Card DESC field cannot be blank.</value>
+    </property>
+    <property key="CreditCardTypeCodeError">
+        <value xml:lang="en">The Credit Card Code field cannot be blank.</value>
+    </property>
+    <property key="CreditCardTypeSequenceIdError">
+        <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999.</value>
     </property>
     <property key="BlankLongDescWarning">
         <value xml:lang="en">WARNING Row ${rowNo}: The Long Desc is blank</value>
+    </property>
+    <property key="BlankPromotionUseLimitPerOrderError">
+        <value xml:lang="en">Limit Per Order can not be blank.</value>
     </property>
     <property key="UniqueItemNoWarning">
         <value xml:lang="en">WARNING Row ${rowNo}: Item# is not unique</value>
@@ -4602,6 +5052,39 @@
     </property>
     <property key="PDPRegularImageNotFoundWarning">
         <value xml:lang="en">WARNING Row ${rowNo}: The PDP regular image not found</value>
+    </property>
+    <property key="ProductFeatureUpdateWarning">
+        <value xml:lang="en">You may need to re-index SOLR in Admin/Tools for these changes to take effect</value>
+    </property>
+    <property key="PersonTitleIdError">
+        <value xml:lang="en">The Title  ID field cannot be blank.</value>
+    </property>
+    <property key="ReviewAgesIdError">
+        <value xml:lang="en">The Review Age ID field cannot be blank</value>
+    </property>
+    <property key="PersonTitleIdLengthError">
+        <value xml:lang="en">The Title  Id field cannot be more than 20 characters.</value>
+    </property>
+    <property key="PersonTitleIdExistError">
+        <value xml:lang="en">The Title  ID field must be unique.</value>
+    </property>
+    <property key="PersonTitleDescriptionError">
+        <value xml:lang="en">The Title  DESC field cannot be blank.</value>
+    </property>
+    <property key="PersonTitleSequenceIdError">
+        <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999.</value>
+    </property>
+    <property key="ReviewAgesIdLengthError">
+        <value xml:lang="en">The Review Ages Id field cannot be more than 20 characters.</value>
+    </property>
+    <property key="ReviewAgesIdExistError">
+        <value xml:lang="en">The Review Age ID field must be unique</value>
+    </property>
+    <property key="ReviewAgesDescriptionError">
+        <value xml:lang="en">The Review Age DESC field cannot be blank</value>
+    </property>
+    <property key="ReviewAgesSequenceIdError">
+        <value xml:lang="en">The Seq# must be entered, numeric and between 0 and 9999</value>
     </property>
     <property key="BlankUploadFileError">
         <value xml:lang="en">File cannot be blank</value>
@@ -4619,11 +5102,8 @@
 	<property key="productStoreShipMethIdExistError">
 		<value xml:lang="en">The Shipping Charge Id must be unique.</value>
 	</property>
-	<property key="BlankShipmentMethodTypeIdError">
-		<value xml:lang="en">One Shipping Type must be selected from the drop-down.</value>
-	</property>
-	<property key="ShipmentMethodTypeIdLengthError">
-		<value xml:lang="en">The Shipping Method cannot be more than 20 characters.</value>
+	<property key="BlankShipmentMethodDescriptionError">
+		<value xml:lang="en">You must enter a value for Description</value>
 	</property>
 	<property key="ShipmentMethodTypeIdExistError">
 		<value xml:lang="en">The Shipping Method must be unique.</value>
@@ -4644,7 +5124,7 @@
 		<value xml:lang="en">Sequence number must contain a numeric value.</value>
 	</property>
 	<property key="BlankOrderFlatPriceError">
-		<value xml:lang="en">Flat Rate cannot be blank.</value>
+		<value xml:lang="en">You must enter a value for Flat Rate</value>
 	</property>
 	<property key="BlankPartyIdError">
 		<value xml:lang="en">You must enter a value for Carrier</value>
@@ -4661,19 +5141,19 @@
 		valid combination. Use the Carrier/Shipment-Method functions to create this combination</value>
 	</property>
 	<property key="BlankCarrierServiceCodeError">
-		<value xml:lang="en">Carrier Service Code cannot be blank.</value>
+		<value xml:lang="en">You must enter a value for Carrier Service Code</value>
 	</property>
 	<property key="BlankGroupNameError">
-		<value xml:lang="en">Description cannot be blank.</value>
+		<value xml:lang="en">You must enter a value for Description</value>
 	</property>
 	<property key="CarrierShipmentMethodExistError">
 		<value xml:lang="en">The Carrier ID and Shipping Method combination must be unique.</value>
 	</property>
-	<property key="BlankShipMethodTypeIdError">
-		<value xml:lang="en">Shipping Method cannot be blank.</value>
+	<property key="BlankShipmentMethodTypeIdError">
+		<value xml:lang="en">You must enter a value for Shipping Method</value>
 	</property>
-	<property key="BlankShipMethodTypeDescriptionError">
-		<value xml:lang="en">Description cannot be blank.</value>
+	<property key="BlankShipmentMethodTypeDescriptionError">
+		<value xml:lang="en">You must enter a value for Description</value>
 	</property>
 	<property key="ValidIdError">
 		<value xml:lang="en">Your entry [${errorKey}] is not valid. BigFish ID attributes must contain alpha, number digits, hyphens or underscores. Spaces and other special characters are not allowed.</value>
@@ -4688,10 +5168,10 @@
 		<value xml:lang="en">Job Name is a required field</value>
 	</property>
 	<property key="InvalidStartDateError">
-		<value xml:lang="en">Invalid Start Date and Time format. [ex. 07/08/2012 02:00]</value>
+		<value xml:lang="en">Invalid Run Date and Time format.</value>
 	</property>
 	<property key="StartTimePassedError">
-		<value xml:lang="en">The Start Date and Time you have selected has already passed.</value>
+		<value xml:lang="en">Run Date must be entered and for a Pending job it must be in the future</value>
 	</property>
 	<property key="InvalidEndDateError">
 		<value xml:lang="en">Invalid End Date and Time format. [ex. 07/08/2012 02:00]</value>
@@ -4714,6 +5194,13 @@
 	<property key="SuccessSchedulJob">
 		<value xml:lang="en">The job has successfully been scheduled</value>
 	</property>
+	<property key="BlankStartDateError">
+		<value xml:lang="en">Run Date must be entered and for a Pending job it must be in the future</value>
+	</property>
+    <property key="TestEmailSendFailError">
+        <value xml:lang="en">An error occurred attempting to send an email. Error is {0}. Check the client.properties file. Specific email properties are listed in the 'General Properties' section. It is possible that these are not configured correctly. For more information check the Help function "How To Set Up BigFish Emails".
+</value>
+    </property>
  <!-- ******* Error Messages  Ends*************************************** -->
  
  
@@ -4778,6 +5265,18 @@
     <property key="CreateBtn">
         <value xml:lang="en">Create</value>
     </property>
+    <property key="CreateXlsTemplateBtn">
+        <value xml:lang="en">Create XLS Template</value>
+    </property>
+    <property key="CreateXmlTemplateBtn">
+        <value xml:lang="en">Create XML Template</value>
+    </property>
+    <property key="CreateXlsFileBtn">
+        <value xml:lang="en">Create XLS File</value>
+    </property>
+    <property key="CreateXmlFileBtn">
+        <value xml:lang="en">Create XML File</value>
+    </property>
     <property key="CloseBtn">
         <value xml:lang="en">Close</value>
     </property>
@@ -4808,8 +5307,14 @@
     <property key="ExportToXMLBtn">
         <value xml:lang="en">Export To XML</value>
     </property>
+    <property key="ExportBtn">
+        <value xml:lang="en">Export</value>
+    </property>
     <property key="FeatureSwatchesButton">
         <value xml:lang="en">Feature Swatches</value>
+    </property>
+    <property key="ImportBtn">
+        <value xml:lang="en">Import</value>
     </property>
     <property key="InsertBtn">
         <value xml:lang="en">Insert</value>
@@ -4940,13 +5445,13 @@
     <property key="HelpBtn">
         <value xml:lang="en">Help</value>
     </property>
-    <property key="AddShipChargeBtn">
+    <property key="AddShippingChargeBtn">
 		<value xml:lang="en">Add Shipping Charge</value>
 	</property>
-	<property key="AddShipChargeCarrierBtn">
+	<property key="AddCarrierBtn">
 		<value xml:lang="en">Add Carrier</value>
 	</property>
-	<property key="AddShipMethodBtn">
+	<property key="AddShipmentMethodBtn">
 		<value xml:lang="en">Add Shipping Method</value>
 	</property>
 	<property key="AddCarrierShippingMethodBtn">
@@ -4960,6 +5465,9 @@
 	</property>
 	<property key="AddShipmentMethodTypeBtn">
 		<value xml:lang="en">Add Shipping Method</value>
+	</property>
+	<property key="SolrReIndxBtn">
+		<value xml:lang="en">Re-index SOLR</value>
 	</property>
     
     <!-- **** Button Ends*************************************** -->
@@ -5049,6 +5557,9 @@
     <property key="ProductVariantsTooltip">
         <value xml:lang="en">Show Product Variants</value>
     </property>
+    <property key="ProductFeaturesTooltip">
+        <value xml:lang="en">Manage Product Feature Sequencing</value>
+    </property>
     <property key="PreviewContentTooltip">
         <value xml:lang="en">Click to preview the content in a new window</value>
     </property>
@@ -5083,7 +5594,16 @@
         <value xml:lang="en">Are you sure you want to delete this video?</value>
     </property>
     <property key="deleteContactUsReasonConfirmText">
-        <value xml:lang="en">Are you sure you want to delete the reason?</value>
+        <value xml:lang="en">Are you sure you want to delete the reason [{0}]?</value>
+    </property>
+    <property key="deleteCreditCardTypeConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the Credit Card [{0}]?</value>
+    </property>
+    <property key="deletePersonTitleConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the Title [{0}]?</value>
+    </property>
+    <property key="deleteReviewAgesConfirmText">
+        <value xml:lang="en">Are you sure you want to delete the Title [{0}]?</value>
     </property>
     <property key="deleteMediaAssetConfirmText">
         <value xml:lang="en">Are you sure you want to delete the Media Asset?</value>
@@ -5187,9 +5707,21 @@
     </property>
     
     <!-- === Helper info Starts ===== -->
+    <property key="BroadcastChangeToProductHelpInfo">
+        <value xml:lang="en">Changing the sequence on this screen will modify the sequence shown in the Faceted Navigation. If you have specific Selectable or Descriptive feature sequencing then do NOT broadcast to all Products. If in doubt leave this box unchecked.</value>
+    </property>
     <property key="CacheResetHelperInfo">
 		<value xml:lang="en">* You will need to reset cache in Admin/Tools for your changes to take effect</value>
 	</property>
+	<property key="CacheResetWarningInfo">
+		<value xml:lang="en">You will need to reset cache in Admin/Tools for your changes to take effect</value>
+	</property>
+    <property key="FacetValueDetailWarningInfo">
+        <value xml:lang="en">You may need to re-index SOLR in Admin/Tools for these changes to take effect</value>
+    </property>
+	<property key="DivSeqCacheResetHelperInfo">
+        <value xml:lang="en">* You will need to reset cache in Admin/Tools for your changes to take effect. Changing the Screen, Key or DIV-Tag may result in unexpected results and should be used for emergency changes only.</value>
+    </property>
     <property key="PdpTabsGroupHelperInfo">
         <value xml:lang="en">* Group: use to group attributes to specific tabs for page PDPTabs</value>
     </property>
@@ -5200,11 +5732,78 @@
 		<value xml:lang="en">(collected as part of the registration process)</value>
 	</property>
 	<property key="SolrReIndexHelperInfo">
-		<value xml:lang="en">* You may need to re-index SOLR in Admin/Tools for PLP Prices and other changes to take effect</value>
+		<value xml:lang="en">* You may need to re-index SOLR in Admin/Tools for Product Prices and other changes to take effect</value>
 	</property>
 	<property key="CountNumberHelperInfo">
 		<value xml:lang="en">Use -1 to indicate forever</value>
 	</property>
+    <property key="CreditCardTypeHelpInfo">
+        <value xml:lang="en">Required by the Payment Gateway in order to match the customer Credit Card Number to the correct Credit Card Type.</value>
+    </property>
+    <property key="SeqHelpInfo">
+        <value xml:lang="en">Set to 0 (zero) to hide</value>
+    </property>
+    <property key="ContentPathHelperInfo">
+        <value xml:lang="en">Content Path Name is:</value>
+    </property>
+    <property key="SyntaxHelperInfo">
+        <value xml:lang="en">To include use syntax:&lt;@renderContentAsText contentId=&quot;</value>
+    </property>
+    <property key="EndTag">
+        <value xml:lang="en">&quot;/&gt;</value>
+    </property>
+    <property key="SeqIdHelpInfo">
+        <value xml:lang="en">Set to 0 (zero) if not required or hidden</value>
+    </property>
+    <property key="PromotionUseLimitPerOrderHelpInfo">
+        <value xml:lang="en">Limit Per Order: The total number of times a specific Promo can be applied to an Order. Remember that some promos are applied at the cart Product level. If a Promo is allowed to be applied to multiple Product line items then this should be set accordingly. Otherwise, and in most cases, this should be set to 1.</value>
+    </property>
+    <property key="PromotionUseLimitPerCustomerHelpInfo">
+        <value xml:lang="en">Limit Per Customer: The total number of times a specific Promo can be applied for a Customer. Remember that some promos are applied at the cart Product level. If a Promo is allowed to be applied to multiple Product line items then this should be set accordingly.</value>
+    </property>
+    <property key="PromotionUseLimitPerPromotionHelpInfo">
+        <value xml:lang="en">Limit Per Promotion: the total number of times a Promotion can be used. This will be the sum of the child Promo-Codes usage.</value>
+    </property>
+    <property key="PromoCodeUseLimitPerCodeHelpInfo">
+        <value xml:lang="en">Limit Per Code: The total number of times a specific Promo can be applied. Also consider the Limit-Per-Promotion setting on the Promotion.</value>
+    </property>
+    <property key="PromoCodeUseLimitPerCustomerHelpInfo">
+        <value xml:lang="en">Limit Per Customer: The total number of times a specific Promo can be applied for a Customer. Remember that some promos are applied at the cart Product level. If a Promo is allowed to be applied to multiple Product line items then this should be set accordingly.</value>
+    </property>
+    <property key="ExportFileNameHelpInfo">
+        <value xml:lang="en">This should identify the XML file that will be used to identify the actual output file.</value>
+    </property>
+    <property key="ImportDataHelperText">
+        <value xml:lang="en">Import this data? </value>
+    </property>
+    <property key="ImportDataHelperInfo">
+        <value xml:lang="en">To import the XML file into another BigFish instance: use standard OFBiz, click on Webtools, and use the Import XML function. More information is available in the Online Help.</value>
+    </property>
     
     <!-- === End of Helper info ===== -->
+     <!-- === End of Helper info ===== -->
+
+    <!-- *** content Type Descriptions Starts*************************************** -->
+    <property key="ContentType.description.BF_CONTENT_LIBRARY">
+        <value xml:lang="en">Content Library</value>
+    </property>
+    <property key="ContentType.description.BF_HOME_PAGE">
+        <value xml:lang="en">Home Page Content</value>
+    </property>
+    <property key="ContentType.description.BF_SITE_INFO">
+        <value xml:lang="en">Site Info</value>
+    </property>
+    <property key="ContentType.description.BF_STATIC_PAGE">
+        <value xml:lang="en">Static Page</value>
+    </property>
+    <property key="ContentType.description.BF_PAGE_TOP_SPOT">
+        <value xml:lang="en">Page Top Spots</value>
+    </property>
+    <property key="ContentType.description.BF_PDP_SPOT">
+        <value xml:lang="en">Page Top Spots</value>
+    </property>
+    <property key="ContentType.description.BF_EMAIL_TEMPLATE">
+        <value xml:lang="en">Email Address</value>
+    </property>
+     <!-- *** Contact Mech Purpose Type Descriptions Ends*************************************** -->
 </resource>

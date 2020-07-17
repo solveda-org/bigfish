@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="importProductRatingsXml" short-description="Method to Import Product Ratings.">
+        <if-empty field="parameters._uploadedFile_fileName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFeedFileError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="UPLOADEDFILE" list="error_list"/>
+        </if-empty>
+        <if-not-empty field="parameters._uploadedFile_fileName">
+            <call-object-method method-name="toUpperCase" obj-field="parameters._uploadedFile_fileName" ret-field="feedFileNameUpperCase"/>
+            <call-object-method method-name="endsWith" obj-field="feedFileNameUpperCase" ret-field="isXMLFile">
+                <string value=".XML"/>
+            </call-object-method>
+            <if-compare field="isXMLFile" operator="equals" value="false">
+                <property-to-field resource="OSafeAdminUiLabels" property="FeedFileNotXmlError" field="tempErrorMessage"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+        
+        <set-service-fields service-name="uploadFile" map="parameters" to-map="uploadFileCtx"/>
+        <if-not-empty field="parameters._uploadedFile_fileName">
+            <set field="uploadFileCtx.uploadedFile" from-field="parameters.uploadedFile"/>
+            <set field="uploadFileCtx._uploadedFile_fileName" from-field="parameters._uploadedFile_fileName"/>
+            <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+                <result-to-field result-name="uploadFileName" field="parameters.uploadFileName"/>
+                <result-to-field result-name="uploadFilePath" field="parameters.uploadFilePath"/>
+            </call-service>
+            <clear-field field="uploadFileCtx"/>
+        </if-not-empty>
+        
+        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
+        <set field="importClientProductRatingXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
+        <set field="importClientProductRatingXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
+        <set field="importClientProductRatingXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
+        <call-service service-name="importClientProductRatingXMLTemplate" in-map-name="importClientProductRatingXMLTemplateCtx"/>
+    </simple-method>
+    
+    <simple-method method-name="importStoresXml" short-description="Method to Import Stores.">
+        <if-empty field="parameters._uploadedFile_fileName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankFeedFileError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="UPLOADEDFILE" list="error_list"/>
+        </if-empty>
+        <if-not-empty field="parameters._uploadedFile_fileName">
+            <call-object-method method-name="toUpperCase" obj-field="parameters._uploadedFile_fileName" ret-field="feedFileNameUpperCase"/>
+            <call-object-method method-name="endsWith" obj-field="feedFileNameUpperCase" ret-field="isXMLFile">
+                <string value=".XML"/>
+            </call-object-method>
+            <if-compare field="isXMLFile" operator="equals" value="false">
+                <property-to-field resource="OSafeAdminUiLabels" property="FeedFileNotXmlError" field="tempErrorMessage"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        <check-errors/>
+        
+        <set-service-fields service-name="uploadFile" map="parameters" to-map="uploadFileCtx"/>
+        <if-not-empty field="parameters._uploadedFile_fileName">
+            <set field="uploadFileCtx.uploadedFile" from-field="parameters.uploadedFile"/>
+            <set field="uploadFileCtx._uploadedFile_fileName" from-field="parameters._uploadedFile_fileName"/>
+            <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+                <result-to-field result-name="uploadFileName" field="parameters.uploadFileName"/>
+                <result-to-field result-name="uploadFilePath" field="parameters.uploadFilePath"/>
+            </call-service>
+            <clear-field field="uploadFileCtx"/>
+        </if-not-empty>
+        
+        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
+        <set field="importClientStoreXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
+        <set field="importClientStoreXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
+        <set field="importClientStoreXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
+        <call-service service-name="importClientStoreXMLTemplate" in-map-name="importClientStoreXMLTemplateCtx" />
+    </simple-method>
+
+</simple-methods>

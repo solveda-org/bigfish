@@ -36,6 +36,10 @@
                         <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
                         <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
                     </process>
+	               <process field="CUSTOMER_EMAIL_CONFIRM">
+	                   <copy to-field="customerEmailConfirm"/>
+	                   <compare-field operator="equals" field="CUSTOMER_EMAIL"><fail-property resource="OSafeUiLabels" property="EmailMatchError"/></compare-field>
+	               </process>
                     <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
                 </simple-map-processor>
             </call-map-processor>
@@ -549,8 +553,6 @@
             <string-to-list string="${tempErrorMessage}" message-field="SUBSCRIBER_LAST_NAME" list="error_list"></string-to-list>
         </if-empty>
 
-
-
         <!-- see if we should continue now... -->
         <check-errors/>
 
@@ -614,7 +616,9 @@
         <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="JoinMailingListSuccess"/>
         <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
         <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
-
+        
+        <call-simple-method method-name="sendMailingListEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
+		
     </simple-method>
     <simple-method method-name="processShipSettings" short-description="Process Ship Settings; to be called as a Request Event" login-required="false">
         <call-map-processor in-map-name="parameters" out-map-name="addressContext">

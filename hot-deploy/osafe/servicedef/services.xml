@@ -183,11 +183,34 @@
         <attribute name="body" type="String" mode="OUT" optional="false"/>
     </service>
 
-    <service name="genReevooProductsFeed" engine="java" location="com.osafe.services.ReevooServices" invoke="genReevooProductsFeed" auth="false" transaction-timeout="7200">
+    <service name="genReevooProductsFeed" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="genReevooProductsFeed" auth="false" transaction-timeout="7200">
         <description>Create A text filr for Reevoo Products feed</description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" />
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" />
     </service>
+
+    <service name="getReevooXmlFeed" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="getReevooXmlFeed" auth="false" transaction-timeout="7200">
+        <description>down load csv feed</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false" />
+        <attribute name="apiAccessUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="apiCsvUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="apiUserName" type="String" mode="IN" optional="true"/>
+        <attribute name="apiPassword" type="String" mode="IN" optional="true"/>
+        <attribute name="xmlFile" type="java.io.File" mode="OUT" optional="true"/>
+        <attribute name="xmlFileAsString" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="getReevooCsvFeed" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="getReevooCsvFeed" auth="false" transaction-timeout="7200">
+        <description>down load csv feed</description>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false" />
+        <attribute name="apiAccessUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="apiCsvUrl" type="String" mode="IN" optional="true"/>
+        <attribute name="apiUserName" type="String" mode="IN" optional="true"/>
+        <attribute name="apiPassword" type="String" mode="IN" optional="true"/>
+        <attribute name="csvFile" type="java.io.File" mode="OUT" optional="true"/>
+        <attribute name="csvFileAsString" type="String" mode="OUT" optional="true"/>
+    </service>
+
     <service name="createUpdatePartyAttribute" engine="simple"
         location="component://osafe/script/services/OsafeServices.xml" invoke="createUpdatePartyAttribute" auth="false">
         <description>Create Update party attribute</description>
@@ -208,5 +231,10 @@
         <attribute name="stateProvinceGeoId" type="String" mode="OUT" optional="true"/>
         <attribute name="countyGeoId" type="String" mode="OUT" optional="true"/>
         <attribute name="countryGeoId" type="String" mode="OUT" optional="true"/>
+    </service>
+    <service name="sendOrderChangeNotification" engine="java" require-new-transaction="true" max-retry="3"
+            location="com.osafe.services.OrderServices" invoke="sendOrderChangeNotification">
+        <description>Send a order notification</description>
+        <implements service="orderNotificationInterface"/>
     </service>
 </services>

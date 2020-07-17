@@ -36,19 +36,16 @@
                 <if-not-empty field="emailAddress">
                     <set field="storeEmailLookup.productStoreId" from-field="productStoreId"/>
                     <set field="storeEmailLookup.emailType" value="PRDS_CUST_REGISTER"/>
-                    <find-by-primary-key map="storeEmailLookup" entity-name="ProductStoreEmailSetting" value-field="storeEmail"/>
-                    <if-not-empty field="storeEmail.bodyScreenLocation">
-                        <set field="bodyParameters.person" from-field="person"/>
-                        <set field="bodyParameters.productStoreId" from-field="productStoreId"/>
+                    <set field="bodyParameters.person" from-field="person"/>
+                    <set field="bodyParameters.productStoreId" from-field="productStoreId"/>
+                    <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
+                            <field-map field-name="productStoreId" from-field="storeEmailLookup.productStoreId"/>
+                            <field-map field-name="emailType" from-field="storeEmailLookup.emailType"/>
+                    </entity-one>
+                    <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+                        <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
                         <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
                         <set field="emailParams.sendTo" from-field="emailAddress"/>
-                        <set field="emailParams.subject" from-field="storeEmail.subject"/>
-                        <set field="emailParams.sendFrom" from-field="storeEmail.fromAddress"/>
-                        <set field="emailParams.sendCc" from-field="storeEmail.ccAddress"/>
-                        <set field="emailParams.sendBcc" from-field="storeEmail.bccAddress"/>
-                        <set field="emailParams.contentType" from-field="storeEmail.contentType"/>
-                        <set field="emailParams.bodyScreenUri" from-field="storeEmail.bodyScreenLocation"/>
-                        <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
                         <!-- Put additional information into context for email generation-->
                         <call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
                     </if-not-empty>
@@ -79,23 +76,57 @@
         <set field="bodyParameters.catalogName" from-field="parameters.catalogName"/>
         <set field="bodyParameters.message" from-field="parameters.content"/>
     
-        <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting"/>
+        <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
+            <field-map field-name="productStoreId" from-field="parameters.productStoreId"/>
+            <field-map field-name="emailType" from-field="parameters.emailType"/>
+        </entity-one>
         <!-- Send email-->
         <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+            <set field="emailParams.emailType" from-field="parameters.emailType"/>
             <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
             <set field="emailParams.userLogin" from-field="systemUserLogin"/>
-            <if-not-empty field="emailAddress">
-                <set field="emailParams.sendTo" from-field="emailAddress"/>
+            <if-not-empty field="parameters.emailAddress">
+                <set field="emailParams.sendTo" from-field="parameters.emailAddress"/>
             <else>
                 <set field="emailParams.sendTo" from-field="productStoreEmailSetting.fromAddress"/>
             </else>
             </if-not-empty>
-            <set field="emailParams.subject" from-field="productStoreEmailSetting.subject"/>
-            <set field="emailParams.sendFrom" from-field="parameters.emailAddress"/>
-            <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
-            <set field="emailParams.bodyScreenUri" from-field="productStoreEmailSetting.bodyScreenLocation"/>
             <call-service service-name="sendMailFromScreen" in-map-name="emailParams"/>
         </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="sendMailingListEmail" short-description="Send Mailing List Subscription E-mail" login-required="false">
+    
+        <if-not-empty field="parameters.SUBSCRIBER_EMAIL">
+        
+            <if-empty field="parameters.productStoreId">
+                        <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                            <field field="request" type="javax.servlet.ServletRequest"/>
+                        </call-class-method>
+                        <set field="parameters.productStoreId" from-field="productStoreId"/>
+                    <else>
+                        <set field="productStoreId" from-field="parameters.productStoreId"/>
+                    </else>
+            </if-empty>
+            <set field="storeEmailLookup.productStoreId" from-field="productStoreId"/>
+            <set field="storeEmailLookup.emailType" value="PRDS_MAILING_LIST"/>
+            <set field="bodyParameters.SUBSCRIBER_EMAIL" from-field="parameters.SUBSCRIBER_EMAIL"/>
+            <set field="bodyParameters.SUBSCRIBER_FIRST_NAME" from-field="parameters.SUBSCRIBER_FIRST_NAME"/>
+            <set field="bodyParameters.SUBSCRIBER_LAST_NAME" from-field="parameters.SUBSCRIBER_LAST_NAME"/>
+            <set field="bodyParameters.productStoreId" from-field="productStoreId"/>
+            <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
+                <field-map field-name="productStoreId" from-field="storeEmailLookup.productStoreId"/>
+                <field-map field-name="emailType" from-field="storeEmailLookup.emailType"/>
+            </entity-one>
+            <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+              <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
+              <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+              <set field="emailParams.userLogin" from-field="systemUserLogin"/>
+              <set field="emailParams.sendTo" from-field="parameters.SUBSCRIBER_EMAIL"/>
+              <call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
+              </if-not-empty>
+        </if-not-empty>
+        
     </simple-method>
 
 </simple-methods>

@@ -1,7 +1,10 @@
-
+  <#assign paramMap = Static["org.ofbiz.base.util.UtilHttp"].getParameterMap(request)!""/>
+  <#if paramMap?has_content>
+       <#assign previousParams = Static["org.ofbiz.base.util.UtilHttp"].urlEncodeArgs(paramMap)/>
+  </#if>
   <div class="entryButton">
     <#if backAction?exists && backAction?has_content>
-        <a href="<@ofbizUrl>${backAction}?backActionFlag=Y</@ofbizUrl>"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
+        <a href="<@ofbizUrl>${backAction}?backActionFlag=Y<#if previousParams?has_content>&${StringUtil.wrapString(previousParams)}</#if></@ofbizUrl>"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
     <#else>
         <a href="${backHref!}"  class="buttontext standardBtn action">${uiLabelMap.BackBtn}</a>
     </#if>

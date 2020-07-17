@@ -11,6 +11,7 @@
 <Content contentId="E_REQUEST_CATALOG" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_CONFIRM" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_CHANGE" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_MAILING_LIST" statusId="CTNT_PUBLISHED"/>
 <!-- COMMON CLIENT EMAIL HEADER -->
 <ElectronicText dataResourceId="E_COMMON_HEADER">
  <textData>
@@ -410,12 +411,9 @@
                     <td class="infoValue">
                          <#assign areaCode = parameters.contactPhoneArea!"">
                          <#assign contactPhoneContact = parameters.contactPhoneContact!"">
-                         <#assign fullPhone = areaCode + contactPhoneContact>
-                         <#if fullPhone?has_content && fullPhone?length == 10>
-                            <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(4)>
-                            <#assign fullPhone = areaCode + "-" + contactPhoneContact>
-                         </#if>
-                           ${fullPhone!""}
+						 <#assign fullPhone= Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(areaCode, contactPhoneContact?if_exists, FORMAT_TELEPHONE_NO!)/>
+
+						 ${fullPhone!""}
                     </td>
                 </tr>
                 <tr>
@@ -530,6 +528,18 @@
                                 <tr>
                                     <td style="border-top: 1px solid black;">
                                         <table cellpadding="0" cellspacing="0"style="width: 90%; margin: 10px; font-family:${EMAIL_FONT_FAMILY};">
+                                        <!-- handling 'Pay in the Store' case. --> 
+                                        <#if ((ORDER_PAYMENT_TYPE.paymentMethodTypeId?has_content) && (ORDER_PAYMENT_TYPE.paymentMethodTypeId == "EXT_COD"))>
+                                            <#if ORDER?has_content>
+                                                <#assign orderAttrPickupStore = ORDER.getRelatedByAnd("OrderAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName", "STORE_LOCATION"))>
+                                                <#if orderAttrPickupStore?has_content>
+                                                    <tr>
+                                                        <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.PaymentMethodCaption}</td>
+                                                        <td><p>${uiLabelMap.PayInStorelabel}</p><td>
+                                                    </tr>
+                                                </#if>
+                                            </#if>
+                                        </#if>
                                         <#list ORDER_PAYMENTS as paymentMethod>
                                           <#if "CREDIT_CARD" == paymentMethod.paymentMethodTypeId>
                                             <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>
@@ -564,6 +574,20 @@
                                             </#if>
 
                                             <#assign outputted = true>
+                                            
+                                             <#--sagepay token-->
+                                            <#if "SAGEPAY_TOKEN" == paymentMethod.paymentMethodTypeId>
+                                            	   <#assign creditCard = paymentMethod.getRelatedOne("CreditCard")>
+								                   <#if creditCard?has_content>
+								                   <tr>
+								                        <td style="width: 150px; text-align: left; vertical-align: top;">${uiLabelMap.CreditCardCaption}</td>
+								                        <td>
+								                            <#if creditCard.cardType?has_content><p> ${creditCard.cardType!""}</p></#if>
+								                        </td>
+								                   </tr>
+								                   </#if>
+								            </#if>
+                                            <#--end of sagepay token-->
                                         </#list>
                                         </table>
                                     </td>
@@ -797,11 +821,13 @@
                 <td><@ofbizCurrency amount=ORDER_SHIP_TOTAL isoCode=currencyUomId/></td>
                 <td>&nbsp;</td>
             </tr>
-            <tr>
-                <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
-                <td><@ofbizCurrency amount=ORDER_TAX_TOTAL isoCode=currencyUomId/></td>
-                <td>&nbsp;</td>
-            </tr>
+            <#if (!Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"")) || (ORDER_TAX_TOTAL?has_content && (ORDER_TAX_TOTAL &gt; 0))>
+                <tr>
+                    <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TaxLabel}</span></td>
+                    <td><@ofbizCurrency amount=ORDER_TAX_TOTAL isoCode=currencyUomId/></td>
+                    <td>&nbsp;</td>
+                </tr>
+            </#if>
             <tr>
                 <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.TotalLabel}</span></td>
                 <td><span style="font-weight: bold;"><@ofbizCurrency amount=ORDER_TOTAL isoCode=currencyUomId/></span></td>
@@ -905,6 +931,57 @@ ${userLogin.userLoginId}
 
 ]]>
    </textData>
+</ElectronicText>
+
+<!-- COMMON CLIENT EMAIL HEADER -->
+<ElectronicText dataResourceId="E_MAILING_LIST">
+ <textData>
+    <![CDATA[
+    
+<style type="text/css">
+            .emailTable{
+                margin: 15px 0 0 10px;
+            }
+
+            .emailTable td.infoCaption {
+                width: 150px;
+                vertical-align:top;
+            }
+
+            .emailTable td.infoValue {
+                margin: 0 0 0 3px;
+                font-weight: bold;
+                width: 350px;
+            }
+             p.info {
+                font-size: 15px;
+            }
+            </style>
+
+            
+
+            <table class="emailTable" style="font-family:${EMAIL_FONT_FAMILY};">
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.FirstNameCaption}</td>
+                    <td class="infoValue" style="margin-top:16px">
+                           ${SUBSCRIBER_FIRST_NAME!} 
+                    </td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.LastNameCaption}</td>
+                    <td class="infoValue">
+                           ${SUBSCRIBER_LAST_NAME!}
+                    </td>
+                </tr>
+                 <tr>
+                    <td class="infoCaption">${uiLabelMap.EmailAddressCaption}</td>
+                    <td class="infoValue">
+                           ${SUBSCRIBER_EMAIL!}
+                    </td>
+                </tr>
+            </table>
+            ]]>
+ </textData>
 </ElectronicText>
 
 </entity-engine-xml>

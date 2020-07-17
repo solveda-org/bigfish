@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 
-<!-- Product Store Parm count (127)-->
+<!-- Product Store Parm count (128)-->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MIN" description="Number of facet values to show; see less/More" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MAX" description="Max Number of facet values to show" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_CAT_ON_PLP" description="Display categories as a facet group on the PLP page true or false" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_SHOW_ITEM_CNT" description="Determines whether the facets show the number of items in parenthesis" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_PRICE_ROUND" description="Control the number of decimal places to be displayed in the listed prices" parmCategory="SOLR"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_GROUP_VARIANT_MATCH" description="If the customer clicks a value in this Facet Group then the system will attempt to find a matching Variant" parmCategory="SOLR"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_PDP_MATCH" description="This is the FACET GROUP that will used to control the Sticky link from the PLP Variant to the PDP Variant" parmCategory="SOLR"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_MONEY_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_PCT_THRESHOLD" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PDP"/>
@@ -19,21 +21,30 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_VERTICAL" description="TRUE or FALSE. A value of TRUE will display a Vertical scroller. A value of FALSE will display a Horizontal scroller." parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_IMAGES" description="The number of images that should be scrolled up or down when the arrow is clicked." parmCategory="PDP"/>
 
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_NUM_ITEMS_PER_PAGE" description="The number of items that should appear per page in the PLP." parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_DEFAULT_SORT" description="Controls the default sequence used on all PLP pages. Valid values are: HIGHEST_RATING, BEST_SELLING, MOST_VIEWED, MOST_POPULAR, NAME_ASCENDING, NAME_DESCENDING, HIGHEST_PRICE, LOWEST_PRICE" parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_SWATCH_IMG" description="This is the FACET GROUP that may have variant 'swatch' images on the PLP. For example, if this parameter is set to COLOR, and COLOR=Red is clicked on the Facets, then the PDP processing will look for images from the variant product Color=Red." parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_AVAILABLE_SORT" description="A comma separated list of available Sort options on the PLP. Valid values can contain one, more or all of the following: HIGHEST_RATING, BEST_SELLING, MOST_VIEWED, MOST_POPULAR, NAME_ASCENDING, NAME_DESCENDING, HIGHEST_PRICE, LOWEST_PRICE" parmCategory="PLP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_MATCH" description="This is the FACET GROUP that will be used for matching in the PLP. Example: customer clicks on Color=Blue facet, system needs to match on Color-Group facet to show similar products." parmCategory="PLP"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_ACTIVE_FLAG" description="This defines whether the ratings-and-reviews feature is active. are part of the implementation. If this flag is set ratings-and-reviews are displayed on the PDP (show reviews, review stars)." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AUTO_APPROVE" description="This defines whether Ratings and Reviews will be automatically approved. Setting this value to FALSE requires your approval of each Review posted. Approval is done in the Admin Module." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_SHOW_ON_PLP" description="Display Customer Ratings on the PLP page true or false." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_SEND_EMAIL" description="This defines whether BigFish sends out the email notification 'n' days after the Order has Shipped (EMAIL_REVIEW_SHP_DYS). Some clients may have an external service to perform this function - so even if Reviews are active this parameter may be False." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_WRITE_REVIEW" description="This is a specific review parameter to define whether the BigFish PDP page offers the 'Write a Review' link. In some implementations clients will use an external service to collect the review so the BF option is not required." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MIN_CHAR" description="The minimum number of characters allowed for a review. Zero indicates that a review may be left blank." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MAX_CHAR" description="The maximum number of characters allowed for a review. Zero indicates that a review may have unlimited characters." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AS_GUEST" description="TRUE indicates that the customer does NOT have to be logged in as a registered user. FALSE will force a login or registration" parmCategory="REVIEW"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_ACTIVE_FLAG" description="This defines whether the eCommerce site will support the Ratings and Reviews feature of REEVOO" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_SHOW_ON_PLP" description="Display Reevoo mark on the PLP page true or false" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_JS_URL" description="Request Url for instantiate the REEVOO mark processing" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_BADGE_URL" description="Request Url for showing REEVOO mark badge" parmCategory="REEVOO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_TRKREF" description="Track reference for communicate with  REEVOO" parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_USERNAME" description="Used for authentication purposes when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_PASSWORD" description="Used for authentication purposes when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_API_URL" description="Used to identify the Reevoo service when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_CSV_URL" description="Used to identify the file destination when retrieving the CSV file from Reevoo for Product ratings updates." parmCategory="REEVOO"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GA_SITE_VERIFICATION" description="Google analytics site verification" parmCategory="GOOGLE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GA_ACCOUNT_NO" description="Google analytics account number" parmCategory="GOOGLE"/>
@@ -52,7 +63,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_TBL_FONT_SIZE" description="HTML Table font size, referenced in email-templates" parmCategory="EMAIL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_REVIEW_SHP_DYS" description="Send email for product review after day ? shipped." parmCategory="EMAIL"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_MULTI" description="Does this client support multiple coutries" parmCategory="COUNTRY"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_MULTI" description="Does this client support multiple coutries. Value of TRUE or FALSE" parmCategory="COUNTRY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DEFAULT" description="The client's detault country" parmCategory="COUNTRY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DROPDOWN" description="If the client supports Multi-countries, this is the list of coutries supported." parmCategory="COUNTRY"/>
 
@@ -60,14 +71,14 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_W" description="Width of PLP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_REG_H" description="Height of PDP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_REG_W" description="Width of PDP Image" parmCategory="IMAGE"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_THUMB_H" description="Height of PLP Additional Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_THUMB_H" description="Height of PDP Additional Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_THUMB_W" description="Width of PDP Additional Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_POPUP_H" description="Height of PDP Popup Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_POPUP_W" description="Width of PDP Popup Image" parmCategory="IMAGE"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_RECENT_H" description="Height of PDP Related Image" parmCategory="IMAGE"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_RECENT_W" description="Width of PDP Related Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_RECENT_H" description="Height of PDP Recent Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_RECENT_W" description="Width of PDP Recent Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_COMPLEMENT_H" description="Height of PDP Complement Image" parmCategory="IMAGE"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_COMPLEMENT_W" description="Width of PDP ComplementImage" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_COMPLEMENT_W" description="Width of PDP Complement Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_MFG_H" description="Height of PDP Manufacturer logo Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_MFG_W" description="Width of PDP Manufacturer logo Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PROF_MFG_H" description="Height of Profile Manufacturer logo Image" parmCategory="IMAGE"/>
@@ -103,6 +114,8 @@
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_MAP_IMG_W" description="Width of store locator map" parmCategory="GMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_MAP_IMG_H" description="Height of store locator map" parmCategory="GMAP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_PICKUP_MAP_IMG_W" description="Width of store locator map when used in select a store" parmCategory="GMAP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_PICKUP_MAP_IMG_H" description="Height of store locator map when used in select a store" parmCategory="GMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_MAP_ZOOM" description="Initial zoom level of display map" parmCategory="GMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_UOM" description="Store Locator unit of measure. Values allowed are Miles or Kilometers." parmCategory="GMAP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GMAP_RADIUS" description="The Miles/Kilometers to use as the radius when matching" parmCategory="GMAP"/>
@@ -153,6 +166,8 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_KEY" description="Request Url Key for intracting with PCA product" parmCategory="PCA"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_APP_NO" description="Request url application number." parmCategory="PCA"/>
 
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SHOW_BUILT_BY" description="Simple TRUE or FALSE value that will determine if the Built by Salmon LLC link will be displayed" parmCategory="GENERAL"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IGNORE_REJECTED_ORDERS" description="Value of TRUE means that any Order with a status of Rejected will NOT be extracted. A value of FALSE will include Rejected Orders" parmCategory="FEEDS"/>
 <!-- ADMIN-->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_DEF_LIST_ROWS" description="Default view size" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_WARN_LIST_ROWS" description="Default max view size" parmCategory="ADM"/>
@@ -161,10 +176,19 @@
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_DEFAULT_TEXT" description="Default text for site search entry text box" parmCategory="SEARCH"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_NO_ENTRY_ERROR" description="Site search no entry error message" parmCategory="SEARCH"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_FACET_GROUP_INCLUDE" description="The comma separated list of Facet Groups that should be included after a Site Search." parmCategory="SEARCH"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_METHOD" description="The method used for tracking inventory: NONE: Inventory is not relevant to this implementation OFBIZ: use standard OFBiz inventory. Facility, reservations, ATP, QOH BIGFISH: simple inventory value" parmCategory="INVENTORY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_OUT_OF_STOCK_TO" description="If the current inventory is less than or equal to this value then the Product is considered to be Out-of-Stock." parmCategory="INVENTORY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_IN_STOCK_FROM" description="If the current inventory is greater than or equal to this value then the Product is considered to be In-Stock." parmCategory="INVENTORY"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
+
+<!-- role Type -->
+<RoleType roleTypeId="EMAIL_SUBSCRIBER" parentTypeId="CUSTOMER" description="Email Subscriber"/>
+<RoleType  roleTypeId="STORE_LOCATION" hasTable="N" parentTypeId="" description="store location" />
+<RoleType roleTypeId="GUEST_CUSTOMER" parentTypeId="CUSTOMER" description="Guest"/>
 
 <!-- PRODUCT STORE EMAIL SETTING (emailType) -->
 <Enumeration enumId="CONTI_NOTI_EMAIL" enumTypeId="PARTY_EMAIL" description="Contact-Us Notification" enumCode="CONT_EMAIL" sequenceId="05"/>
@@ -174,6 +198,7 @@
 <Enumeration enumId="PRDS_ABD_CART" enumTypeId="PRDS_EMAIL" description="Abandon Cart Email" enumCode="ABD_CART"  sequenceId="27"/>
 <Enumeration enumId="PRDS_SHIP_REVIEW" enumTypeId="PRDS_EMAIL" description="Ship Review Email" enumCode="SHIP_REVIEW"  sequenceId="28"/>
 <Enumeration enumId="PRDS_EMAIL_TEST" enumTypeId="PRDS_EMAIL" description="Test Email" enumCode="EMAIL_TEST"  sequenceId="29"/>
+<Enumeration enumId="PRDS_MAILING_LIST" enumTypeId="PRDS_EMAIL" description="Mailing List Subscription" enumCode="MAILING_LIST"  sequenceId="30"/>
 
 <!-- CONTACT US REASON -->
 <EnumerationType enumTypeId="CONTACT_US_REASON" parentTypeId="" hasTable="" description="Reason For Contact"/>
@@ -185,7 +210,15 @@
 <Enumeration enumId="CR_SUGGESTIONS" enumTypeId="CONTACT_US_REASON" enumCode="CR_SUGGESTIONS"/>
 <Enumeration enumId="CR_OTHER" enumTypeId="CONTACT_US_REASON" enumCode="CR_OTHER"/>
 
+<!-- PERSONAL TITLE -->
+<EnumerationType enumTypeId="PERSONAL_TITLE" parentTypeId="" hasTable="" description="Personal title"/>
+<Enumeration enumId="PT_MR" enumTypeId="PERSONAL_TITLE" description="Mr" enumCode="PT_MR" sequenceId="01"/>
+<Enumeration enumId="PT_MRS" enumTypeId="PERSONAL_TITLE" description="Mrs" enumCode="PT_MRS" sequenceId="02"/>
+<Enumeration enumId="PT_MISS" enumTypeId="PERSONAL_TITLE" description="Miss" enumCode="PT_MISS" sequenceId="03"/>
+
 <!-- Email Settings -->
+<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_MAILING_LIST" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#mailingListEmailNotification" xslfoAttachScreenLocation=""  />
+
 <!-- Email Settings for Test Email -->
 <ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_EMAIL_TEST" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#emailTest" xslfoAttachScreenLocation="" />
 
@@ -279,6 +312,7 @@
 <PartyContentType partyContentTypeId="PROFILE_IMAGE_URL" description="Profile Image Url" hasTable="N" parentTypeId=""/>
 <PartyContentType partyContentTypeId="STORE_HOURS" description="Store Working Hours" hasTable="N" parentTypeId=""/>
 <PartyContentType partyContentTypeId="STORE_NOTICE" description="Store Notice" hasTable="N" parentTypeId=""/>
+<PartyContentType partyContentTypeId="STORE_CONTENT_SPOT" description="Store Content Spot" hasTable="N" parentTypeId=""/>
 
 <!-- PRODUCT FEATURE DATA RESOURCE -->
 <ProdFeatureDataResourceType prodFeatureDataResourceTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Default Swatch Image URL" hasTable="N"/>
@@ -591,6 +625,9 @@
 <DataResource dataResourceId="SP_ERROR_PAGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SP_RETURN_POLICY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SP_CONTACT_US" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="SP_REVIEW_TERMS_COND" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="SP_REVIEW_GUIDELINES" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+
 <ElectronicText dataResourceId="SP_ABOUT_US"/>
 <ElectronicText dataResourceId="SP_PRIVACY_POLICY"/>
 <ElectronicText dataResourceId="SP_TERMS_CONDITIONS"/>
@@ -598,6 +635,9 @@
 <ElectronicText dataResourceId="SP_ERROR_PAGE"/>
 <ElectronicText dataResourceId="SP_RETURN_POLICY"/>
 <ElectronicText dataResourceId="SP_CONTACT_US"/>
+<ElectronicText dataResourceId="SP_REVIEW_TERMS_COND"/>
+<ElectronicText dataResourceId="SP_REVIEW_GUIDELINES"/>
+
 <Content contentId="SP_ABOUT_US" contentTypeId="BF_STATIC_PAGE"  description="About Us (Seeded SAMPLE)" contentName="About Us" dataResourceId="SP_ABOUT_US"/>
 <Content contentId="SP_PRIVACY_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Privacy Policy (Seeded SAMPLE)" contentName="Privacy Policy" dataResourceId="SP_PRIVACY_POLICY"/>
 <Content contentId="SP_TERMS_CONDITIONS" contentTypeId="BF_STATIC_PAGE"  description="Terms and Conditions (Seeded SAMPLE)" contentName="Terms and Conditions" dataResourceId="SP_TERMS_CONDITIONS"/>
@@ -605,6 +645,9 @@
 <Content contentId="SP_ERROR_PAGE" contentTypeId="BF_STATIC_PAGE"  description="System error page used for Page-Not-Found conditions. You should not edit the ID." contentName="Error Page" dataResourceId="SP_ERROR_PAGE"/>
 <Content contentId="SP_RETURN_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Return Policy (Seeded SAMPLE)" contentName="Return Policy" dataResourceId="SP_RETURN_POLICY"/>
 <Content contentId="SP_CONTACT_US" contentTypeId="BF_STATIC_PAGE"  description="Contact Us (Seeded SAMPLE)" contentName="Contact Us" dataResourceId="SP_CONTACT_US"/>
+<Content contentId="SP_REVIEW_TERMS_COND" contentTypeId="BF_STATIC_PAGE"  description="Review Terms and Conditions (Seeded SAMPLE)" contentName="Review Terms and Conditions" dataResourceId="SP_REVIEW_TERMS_COND"/>
+<Content contentId="SP_REVIEW_GUIDELINES" contentTypeId="BF_STATIC_PAGE"  description="Review Guidlines (Seeded SAMPLE)" contentName="Review Gudlines" dataResourceId="SP_REVIEW_GUIDELINES"/>
+
 <ContentPurpose contentId="SP_ABOUT_US" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_PRIVACY_POLICY" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_TERMS_CONDITIONS" contentPurposeTypeId="SECTION"/>
@@ -612,6 +655,9 @@
 <ContentPurpose contentId="SP_ERROR_PAGE" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_RETURN_POLICY" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_CONTACT_US" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_REVIEW_TERMS_COND" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SP_REVIEW_GUIDELINES" contentPurposeTypeId="SECTION"/>
+
 <!-- ********************************* -->
 
 <!-- CONTENT LIBRARY-->
@@ -634,6 +680,7 @@
 <DataResource dataResourceId="E_SHIP_REVIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_ORDER_DETAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_TEST_EMAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="E_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="E_COMMON_STYLES"/>
 <ElectronicText dataResourceId="E_COMMON_HEADER"/>
 <ElectronicText dataResourceId="E_COMMON_FOOTER"/>
@@ -649,6 +696,7 @@
 <ElectronicText dataResourceId="E_SHIP_REVIEW"/>
 <ElectronicText dataResourceId="E_ORDER_DETAIL"/>
 <ElectronicText dataResourceId="E_TEST_EMAIL"/>
+<ElectronicText dataResourceId="E_MAILING_LIST"/>
 <Content contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
 <Content contentId="E_COMMON_HEADER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included in the beginning of all BigFish generated emails. Use this to define standard heading information such as your logo and company information." contentName="Common Client Header" dataResourceId="E_COMMON_HEADER"/>
 <Content contentId="E_COMMON_FOOTER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included at the end of all BigFish generated emails. Use this to define standard closing information such as Yours-Sincerely and your company contact information. " contentName="Common Client Footer " dataResourceId="E_COMMON_FOOTER"/>
@@ -663,6 +711,7 @@
 <Content contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW"/>
 <Content contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
 <Content contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be used to send out a test email." contentName="Test Email" dataResourceId="E_TEST_EMAIL"/>
+<Content contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Mailing-List email. This email sent to both the customer and the client." contentName="Mailing List Email" dataResourceId="E_MAILING_LIST"/>
 <ContentPurpose contentId="E_COMMON_HEADER" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_STYLES" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_FOOTER" contentPurposeTypeId="SECTION"/>
@@ -677,6 +726,7 @@
 <ContentPurpose contentId="E_SHIP_REVIEW" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_ORDER_DETAIL" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_TEST_EMAIL" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_MAILING_LIST" contentPurposeTypeId="SECTION"/>
 
 <!-- XContentXref content product store reference -->
 <!-- SITE INFO-->
@@ -760,6 +810,9 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_ERROR_PAGE" contentId="SP_ERROR_PAGE" contentTypeId="BF_STATIC_PAGE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_RETURN_POLICY" contentId="SP_RETURN_POLICY" contentTypeId="BF_STATIC_PAGE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_CONTACT_US" contentId="SP_CONTACT_US" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_REVIEW_TERMS_COND" contentId="SP_REVIEW_TERMS_COND" contentTypeId="BF_STATIC_PAGE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SP_REVIEW_GUIDELINES" contentId="SP_REVIEW_GUIDELINES" contentTypeId="BF_STATIC_PAGE"/>
+
 
 <!-- CONTENT LIBRARY-->
 
@@ -778,6 +831,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SHIP_REVIEW" contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_DETAIL" contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_TEST_EMAIL" contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_MAILING_LIST" contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"/>
 
 <!-- END XContentXref content product store reference -->
 </entity-engine-xml>

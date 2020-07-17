@@ -18,6 +18,7 @@ if(UtilValidate.isNotEmpty(configFileList)) {
       for (configFile in configFileList) {
           sysConfigFile = FastMap.newInstance();
           sysConfigFile.put("fileName", configFile.getName());
+          sysConfigFile.put("filePath", configFile);
           fileList.add(sysConfigFile);
       }
       context.configFileResultList = UtilMisc.sortMaps(fileList, UtilMisc.toList("fileName"));

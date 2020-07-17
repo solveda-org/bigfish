@@ -117,7 +117,6 @@
                     <copy to-field="lastName"/>
                     <not-empty><fail-property resource="OSafeUiLabels" property="LastNameMissingError"/></not-empty>
                 </process>
-                <process field="USER_TITLE"><copy to-field="personalTitle"/></process>
                 <process field="USER_SUFFIX"><copy to-field="suffix"/></process>
                 <process field="USER_BIRTHDATE">
                     <convert type="Date" to-field="birthDate"><fail-property resource="OSafeUiLabels" property="BirthDateMissingError"/></convert>
@@ -134,6 +133,15 @@
                 <process field="USER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
             </simple-map-processor>
         </call-map-processor>
+            <!-- validating Title -->
+            <if-compare-field field="parameters.USER_TITLE" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.USER_TITLE">
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="TitleMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="USER_TITLE" list="error_list"/>
+                    </else>
+                </if-not-empty>
+            </if-compare-field>
             <!-- validating Gender -->
             <if-compare-field field="parameters.USER_GENDER" operator="not-equals" to-field="nullValue">
                 <if-not-empty field="parameters.USER_GENDER">
@@ -433,12 +441,12 @@
                         </if-not-empty>
                    </else>
             </if>
-            <!-- DOB Short(DDMM) validation -->
-            <if-compare-field field="parameters.dobShortMonth" operator="not-equals" to-field="nullValue">
-                <if-not-empty field="parameters.dobShortMonth">
-                    <if-not-empty field="parameters.dobShortDay">
-                        <set field="dobShortMonth" from-field="parameters.dobShortMonth"/>
-                        <set field="dobShortDay" from-field="parameters.dobShortDay"/>
+            <!-- DOB Short(MMDD) validation -->
+            <if-compare-field field="parameters.dobShortMonthUs" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.dobShortMonthUs">
+                    <if-not-empty field="parameters.dobShortDayUs">
+                        <set field="dobShortMonth" from-field="parameters.dobShortMonthUs"/>
+                        <set field="dobShortDay" from-field="parameters.dobShortDayUs"/>
                         <set field="tempDobYear" value="1972"/>
                         <string-append string="${dobShortMonth}" field="dobDateString"/>
                         <string-append string="/" field="dobDateString"/>
@@ -471,14 +479,14 @@
                 </if-not-empty>
             </if-compare-field>
             
-             <!-- DOB Long(DDMMYYYY) validation -->
-            <if-compare-field field="parameters.dobLongMonth" operator="not-equals" to-field="nullValue">
-                <if-not-empty field="parameters.dobLongMonth">
-                    <if-not-empty field="parameters.dobLongDay">
-                      <if-not-empty field="parameters.dobLongYear">
-                        <set field="dobMonth" from-field="parameters.dobLongMonth"/>
-                        <set field="dobDay" from-field="parameters.dobLongDay"/>
-                        <set field="dobYear" from-field="parameters.dobLongYear"/>
+             <!-- DOB Long(MMDDYYYY) validation -->
+            <if-compare-field field="parameters.dobLongMonthUs" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.dobLongMonthUs">
+                    <if-not-empty field="parameters.dobLongDayUs">
+                      <if-not-empty field="parameters.dobLongYearUs">
+                        <set field="dobMonth" from-field="parameters.dobLongMonthUs"/>
+                        <set field="dobDay" from-field="parameters.dobLongDayUs"/>
+                        <set field="dobYear" from-field="parameters.dobLongYearUs"/>
                         <string-append string="${dobMonth}" field="dobLongDateString"/>
                         <string-append string="/" field="dobLongDateString"/>
                         <string-append string="${dobDay}" field="dobLongDateString"/>
@@ -511,7 +519,89 @@
                 </else>
                 </if-not-empty>
             </if-compare-field>
-                    
+
+            <!-- DOB Short(DDMM) validation -->
+            <if-compare-field field="parameters.dobShortMonthUk" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.dobShortMonthUk">
+                    <if-not-empty field="parameters.dobShortDayUk">
+                        <set field="dobShortMonth" from-field="parameters.dobShortMonthUk"/>
+                        <set field="dobShortDay" from-field="parameters.dobShortDayUk"/>
+                        <set field="tempDobYear" value="1972"/>
+                        <string-append string="${dobShortMonth}" field="dobDateString"/>
+                        <string-append string="/" field="dobDateString"/>
+                        <string-append string="${dobShortDay}" field="dobDateString"/>
+                        <string-append string="/" field="dobDateString"/>
+                        <string-append string="${tempDobYear}" field="dobDateString"/>
+                        <!-- validates date -->
+                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
+                            <field field="dobDateString" type = "String" />
+                        </call-class-method>
+                        <if-compare operator="equals" value="true" field="isValidDate" type="Boolean">
+                            <string-append string="${dobShortDay}" field="dobShortDateString"/>
+                            <string-append string="/" field="dobShortDateString"/>
+                            <string-append string="${dobShortMonth}" field="dobShortDateString"/>
+                            <set field="DOB_DDMM" from-field="dobShortDateString"/>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMM" list="error_list"/>
+                        </else>
+                        </if-compare>
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMM" list="error_list"/>
+                    </else>
+                    </if-not-empty>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMM" list="error_list"/>
+                </else>
+                </if-not-empty>
+            </if-compare-field>
+            
+             <!-- DOB Long(DDMMYYYY) validation -->
+            <if-compare-field field="parameters.dobLongMonthUk" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.dobLongMonthUk">
+                    <if-not-empty field="parameters.dobLongDayUk">
+                      <if-not-empty field="parameters.dobLongYearUk">
+                        <set field="dobMonth" from-field="parameters.dobLongMonthUk"/>
+                        <set field="dobDay" from-field="parameters.dobLongDayUk"/>
+                        <set field="dobYear" from-field="parameters.dobLongYearUk"/>
+                        <string-append string="${dobMonth}" field="dobLongDateString"/>
+                        <string-append string="/" field="dobLongDateString"/>
+                        <string-append string="${dobDay}" field="dobLongDateString"/>
+                        <string-append string="/" field="dobLongDateString"/>
+                        <string-append string="${dobYear}" field="dobLongDateString"/>
+                        <!-- validates date -->
+                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
+                            <field field="dobLongDateString" type = "String" />
+                        </call-class-method>
+                        <if-compare operator="equals" value="true" field="isValidLongDate" type="Boolean">
+                            <string-append string="${dobDay}" field="DOB_DDMMYYYY"/>
+                            <string-append string="/" field="DOB_DDMMYYYY"/>
+                            <string-append string="${dobMonth}" field="DOB_DDMMYYYY"/>
+                            <string-append string="/" field="DOB_DDMMYYYY"/>
+                            <string-append string="${dobYear}" field="DOB_DDMMYYYY"/>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMMYYYY" list="error_list"/>
+                        </else>
+                        </if-compare>
+                       <else>
+                           <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                           <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMMYYYY" list="error_list"/>
+                       </else>
+                    </if-not-empty>
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMMYYYY" list="error_list"/>
+                    </else>
+                    </if-not-empty>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DOB_DDMMYYYY" list="error_list"/>
+                </else>
+                </if-not-empty>
+            </if-compare-field>
     </simple-method>
 
     <simple-method method-name="validateBillingAddress" short-description="validate Customer/Billing Address" login-required="false">
@@ -775,6 +865,7 @@
                 <process field="REQ_CATALOG_HOME_CONTACT4"><copy to-field="contactPhoneContact4"/></process>
                 <process field="REQ_CATALOG_HOME_CONTACT_OTHER"><copy to-field="phoneNumber"/></process>
                 <process field="REQ_CATALOG_EMAIL_ADDR"><copy to-field="emailAddress"/></process>
+                <process field="content"><copy to-field="content"/></process>
             </simple-map-processor>
         </call-map-processor>
 
@@ -1095,6 +1186,15 @@
                 <if-empty field="parameters.savedVerificationNo">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="savedVerificationNo" list="error_list"/>
+                    <else>
+                        <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+                             <field field="parameters.savedVerificationNo" type="String"/>
+                        </call-class-method>
+                        <if-compare operator="equals" value="false" field="isInteger">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="savedVerificationNo" list="error_list"/>
+                        </if-compare>
+                    </else>
                 </if-empty>
             </if-compare-field>
             <if-empty field="parameters.savedCard">
@@ -1123,6 +1223,15 @@
                 <if-empty field="parameters.verificationNo">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="verificationNo" list="error_list"/>
+                    <else>
+                        <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+                             <field field="parameters.verificationNo" type="String"/>
+                        </call-class-method>
+                        <if-compare operator="equals" value="false" field="isInteger">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="verificationNo" list="error_list"/>
+                        </if-compare>
+                    </else>
                 </if-empty>
             </if-compare-field>
              <call-map-processor in-map-name="parameters" out-map-name="creditCardContext">
@@ -1149,36 +1258,57 @@
                   </simple-map-processor>
     
              </call-map-processor>
-             <if-not-empty field="expMonth">
-               <if-validate-method field="creditCardContext.expireDate" method="isDateBeforeToday">
+             <if-not-empty field="parameters.expMonth">
+               <if-validate-method field="creditCardContext.expireDate" method="isDateBeforeToday" >
                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ExpirationDateIsBeforeTodayError"/>
                    <string-to-list string="${tempErrorMessage}" message-field="expMonth" list="error_list"/>
                </if-validate-method>
             </if-not-empty>
-            <!-- Check that the card type matches -->
-            <call-bsh><![CDATA[
-                List errorMessageList = javolution.util.FastList.newInstance();
-                parameters.put("errorMessageList", errorMessageList );
-                if (!org.ofbiz.base.util.UtilValidate.isCardMatch((String) creditCardContext.get("cardType"), (String) creditCardContext.get("cardNumber"))) {
-                          errorMessageList.add(
-                                              org.ofbiz.base.util.UtilProperties.getMessage("OSafeUiLabels", "CreditCardNumberInvalidError",
-                                                  org.ofbiz.base.util.UtilMisc.toMap(
-                                                      "cardNumber", (String) creditCardContext.get("cardNumber"),
-                                                      "cardType", (String) creditCardContext.get("cardType"),
-                                                      "validCardType", org.ofbiz.base.util.UtilValidate.getCardType((String) creditCardContext.get("cardNumber"))
-                                                  ),locale));
-                  }
-            ]]></call-bsh>
-    
-            <set field="errorMessageList" from-field="parameters.errorMessageList" />
-    
-            <!-- Get errors from method call and associate to field -->
-            <if-not-empty  field="errorMessageList">
-                <log level="info" message="isCardMatch found errors"/>
-                <iterate list="errorMessageList" entry="error">
-                    <string-to-list string="${error}" message-field="cardNumber" list="error_list"/>
-                </iterate>
+
+            <!-- credit card number validation -->
+            <if-not-empty field="creditCardContext.cardNumber">
+                <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+                     <field field="creditCardContext.cardNumber" type="String"/>
+                </call-class-method>
+                <if-compare operator="equals" value="false" field="isInteger">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                <else>
+                    <if-empty field="creditCardContext.cardType">
+                        <call-class-method method-name="isCreditCard" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isCreditCard">
+                             <field field="creditCardContext.cardNumber" type="String"/>
+                        </call-class-method>
+                        <if-compare field="isCreditCard" operator="equals" value="false">
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                        </if-compare>
+                    <else>
+                        <call-class-method method-name="isCardMatch" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isCardMatch">
+                            <field field="creditCardContext.cardType" type="String"/>
+                             <field field="creditCardContext.cardNumber" type="String"/>
+                        </call-class-method>
+                        <if-compare field="isCardMatch" operator="equals" value="false">
+                            <call-class-method method-name="getCardType" class-name="org.ofbiz.base.util.UtilValidate" ret-field="suggestCardType">
+                                 <field field="creditCardContext.cardNumber" type="String"/>
+                            </call-class-method>
+                            <if-compare field="suggestCardType" operator="equals" value="Unknown">
+                                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CreditCardNumberInvalidError"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                            <else>
+                                <set field="argListNames[]" from-field="creditCardContext.cardNumber"/>
+                                <set field="argListNames[]" from-field="creditCardContext.cardType"/>
+                                <set field="argListNames[]" from-field="suggestCardType"/>
+                                <property-to-field resource="OSafeUiLabels" property="CreditCardNumberInvalidSuggestError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+                            </else>
+                            </if-compare>
+                        </if-compare>
+                    </else>
+                    </if-empty>
+                </else>
+                </if-compare>
             </if-not-empty>
+
         </else>
         </if-compare>
     </simple-method>
@@ -1195,6 +1325,7 @@
                 <process field="contactPhoneArea"><copy/></process>
                 <process field="contactPhoneContact3"><copy/></process>
                 <process field="contactPhoneContact4"><copy/></process>
+                <process field="contactPhoneNumber"><copy to-field="phoneNumber"/></process>
                 <process field="orderIdNumber"><copy/></process>
             </simple-map-processor>
         </call-map-processor>

@@ -3,7 +3,9 @@
   <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', '${GA_ACCOUNT_NO!""}']);
-      _gaq.push(['H1', '${pageTitle!""}']);
+      <#if pageTitle?has_content> 
+       _gaq.push(['H1', '${pageTitle!""}']);
+      </#if>
       _gaq.push(['_trackPageview']);
   <#if orderConfirmed?has_content>
      <#if googleTransMap?has_content>

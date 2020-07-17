@@ -226,15 +226,18 @@
                       </div>
                     </li>
                   </#list>
+                  <#-- show adjusted total if a promo is entered -->
+                  <#if promoText?has_content>
+	                  <li>
+		                  <div class="labelText">
+		                    <div class="adjustedTotalLabel"><label>${uiLabelMap.AdjustedTotalLabel}</label></div>
+		                  </div>
+		                  <div class="labelValue">
+		                    <div class="adjustedTotalValue"><span class="amount"><@ofbizCurrency amount=shoppingCart.getGrandTotal() rounding=2 isoCode=currencyUom/></span></div>
+		                  </div>
+	                  </li>
+                  </#if>
                 </#if>
-                <#-- <li>
-                  <div class="labelText">
-                    <label>${uiLabelMap.TotalLabel}</label>
-                  </div>
-                  <div class="labelValue">
-                    <span class="amount"><@ofbizCurrency amount=shoppingCart.getGrandTotal() rounding=2 isoCode=currencyUom/></span>
-                  </div>
-                </li> -->
               </ul>
             </td>
           </tr>

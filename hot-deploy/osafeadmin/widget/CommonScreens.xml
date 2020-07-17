@@ -558,6 +558,28 @@
             </widgets>
         </section>
     </screen>
+    <screen name="commonDetailWarningIcon">
+        <section>
+            <widgets>
+                 <platform-specific>
+                     <html>
+                         <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonWarningIcon.ftl"/>
+                     </html>
+                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="commonDetailHelperIcon">
+        <section>
+            <widgets>
+                 <platform-specific>
+                     <html>
+                         <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonHelperIcon.ftl"/>
+                     </html>
+                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="commonListHelperText">
         <section>
             <widgets>
@@ -620,6 +642,17 @@
                       <html-template location="component://osafeadmin/webapp/osafeadmin/includes/commonFormHiddenFields.ftl"/>
                     </html>
                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="creditCardTypes">
+        <section>
+            <actions>
+                <set field="thisDate" from-field="nowTimestamp"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/includes/creditCardTypes.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

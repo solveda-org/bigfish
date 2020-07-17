@@ -94,7 +94,7 @@
     </div>
   </div>
 
-  <div class="infoRow row">
+  <div class="infoRow row promoActionCategory">
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>${uiLabelMap.PromotionActionCategoryCaption}</label>
@@ -168,7 +168,7 @@
     </div>
   </div>
 
-  <div class="infoRow row">
+  <div class="infoRow row promoActionProduct">
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>${uiLabelMap.PromotionActionProductCaption}</label>

@@ -29,12 +29,12 @@
     var selectedSwatch = '${StringUtil.wrapString(parameters.productFeatureType)!""}';
     if(selectedSwatch != '') {
         var featureArray = selectedSwatch.split(":");
-        jQuery('.pdpRecentlyViewed .'+featureArray[1]).click();
-        jQuery('.pdpComplement .'+featureArray[1]).click();
+        //jQuery('.pdpRecentlyViewed .'+featureArray[1]).click();
+        //jQuery('.pdpComplement .'+featureArray[1]).click();
         
     }
+    
   });
-
     var detailImageUrl = null;
     function setAddProductId(name) {
         document.addform.add_product_id.value = name;
@@ -211,20 +211,31 @@
         });
     }
 
-    function getList(name, index, src) {
+    function getList(name, index, src) 
+    {
         currentFeatureIndex = findIndex(name);
             // set the drop down index for swatch selection
             document.forms["addform"].elements[name].selectedIndex = (index*1)+1;
-        if (currentFeatureIndex < (OPT.length-1)) {
+        if (currentFeatureIndex < (OPT.length-1)) 
+        {
             // eval the next list if there are more
             var selectedValue = document.forms["addform"].elements[name].options[(index*1)+1].value;
             var selectedText = document.forms["addform"].elements[name].options[(index*1)+1].text;
+            
+            var mapKey = name+'_'+selectedText;
+            var featureGroupDesc = VARGROUPMAP[VARMAP[mapKey]];
+
+            jQuery('.pdpRecentlyViewed .'+featureGroupDesc).click();
+            jQuery('.pdpComplement .'+featureGroupDesc).click();
+            
             jQuery('.pdpRecentlyViewed .'+selectedText).click();
             jQuery('.pdpComplement .'+selectedText).click();
-            var mapKey = name+'_'+selectedText;
+            
             var detailImgUrl = '';
-            if(VARMAP[mapKey]) {
-                if(jQuery('#mainImage_'+VARMAP[mapKey]).length) { 
+            if(VARMAP[mapKey]) 
+            {
+                if(jQuery('#mainImage_'+VARMAP[mapKey]).length) 
+                { 
                     var variantMainImages = jQuery('#mainImage_'+VARMAP[mapKey]).clone();
                     //jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
                     jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
@@ -262,13 +273,14 @@
             } else {
                 var Variable1 = eval("list" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
                 var Variable2 = eval("listLi" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
-                jQuery('#Li'+OPT[(currentFeatureIndex)]+' li').click(function() {
                   
-                  if (currentFeatureIndex+1 <= (OPT.length-1) ) {
+                  if (currentFeatureIndex+1 <= (OPT.length-1) ) 
+                  {
                     var nextFeatureLength = document.forms["addform"].elements[OPT[(currentFeatureIndex+1)]].length;
                     if(nextFeatureLength == 2) {
                       getList(OPT[(currentFeatureIndex+1)],'0',1);
                       jQuery('#addToCart').removeClass("inactiveAddToCart");
+                      return;
                     } else {
                       jQuery('#addToCart').addClass("inactiveAddToCart");
                     }
@@ -276,20 +288,21 @@
                   var elm = document.getElementById("addToCart");
                   elm.setAttribute("onClick","javascript:addItem()");
                   
-                    //jQuery('#Li'+OPT[(currentFeatureIndex+1)]+' li').removeClass("selected");
-                });
+                   
             }
             // set the product ID to NULL to trigger the alerts
             setAddProductId('NULL');
 
             // set the variant price to NULL
             setVariantPrice('NULL');
-        } else {
+        }
+        else 
+        {
+            
             // this is the final selection -- locate the selected index of the last selection
             var indexSelected = document.forms["addform"].elements[name].selectedIndex;
             // using the selected index locate the sku
             var sku = document.forms["addform"].elements[name].options[indexSelected].value;
-
             // set the product ID
             setAddProductId(sku);
             setProductStock(sku);
@@ -299,34 +312,35 @@
             // check for amount box
             toggleAmt(checkAmtReq(sku));
         
-        var varProductId = jQuery('#add_product_id').val();
-        if(jQuery('#mainImage_'+varProductId).length) {
-            var variantMainImages = jQuery('#mainImage_'+varProductId).clone();
-            //jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
-            jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
-            detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
-            jQuery('#productDetailsImageContainer').html(variantMainImages.html());
-
-            var variantAltImages = jQuery('#altImage_'+varProductId).clone();
-            //jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
-            jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
-
-            var variantLargeImages = jQuery('#largeImageUrl_'+varProductId).clone();
-            jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
-            jQuery('#seeLargerImage').html(variantLargeImages.html());
-            
-            var variantProductVideo = jQuery('#productVideo_'+varProductId).html();
-            jQuery('#productVideo').html(variantProductVideo);
-            
-            var variantProductVideoLink = jQuery('#productVideoLink_'+varProductId).html();
-            jQuery('#productVideoLink').html(variantProductVideoLink);
-            
-            var variantProductVideo360 = jQuery('#productVideo360_'+varProductId).html();
-            jQuery('#productVideo360').html(variantProductVideo360);
-            
-            var variantProductVideo360Link = jQuery('#productVideo360Link_'+varProductId).html();
-            jQuery('#productVideo360Link').html(variantProductVideo360Link);
-        }
+            var varProductId = jQuery('#add_product_id').val();
+            if(jQuery('#mainImage_'+varProductId).length) 
+            {
+	            var variantMainImages = jQuery('#mainImage_'+varProductId).clone();
+	            //jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+	            jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
+	            detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
+	            jQuery('#productDetailsImageContainer').html(variantMainImages.html());
+	
+	            var variantAltImages = jQuery('#altImage_'+varProductId).clone();
+	            //jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+	            jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
+	
+	            var variantLargeImages = jQuery('#largeImageUrl_'+varProductId).clone();
+	            jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
+	            jQuery('#seeLargerImage').html(variantLargeImages.html());
+	            
+	            var variantProductVideo = jQuery('#productVideo_'+varProductId).html();
+	            jQuery('#productVideo').html(variantProductVideo);
+	            
+	            var variantProductVideoLink = jQuery('#productVideoLink_'+varProductId).html();
+	            jQuery('#productVideoLink').html(variantProductVideoLink);
+	            
+	            var variantProductVideo360 = jQuery('#productVideo360_'+varProductId).html();
+	            jQuery('#productVideo360').html(variantProductVideo360);
+	            
+	            var variantProductVideo360Link = jQuery('#productVideo360Link_'+varProductId).html();
+	            jQuery('#productVideo360Link').html(variantProductVideo360Link);
+            }
         }
         activateZoom(detailImgUrl);
         activateScroller();

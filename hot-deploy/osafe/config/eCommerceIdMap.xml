@@ -260,7 +260,9 @@
     <property key="EMAIL_TEST_EMAIL">
         <value xml:lang="en">E_TEST_EMAIL</value>
     </property>
-
+    <property key="EMAIL_MAILING_LIST">
+        <value xml:lang="en">E_MAILING_LIST</value>
+    </property>
     <property key="STATIC_PAGE_ABOUT_US">
         <value xml:lang="en">SP_ABOUT_US</value>
     </property>
@@ -275,6 +277,12 @@
     </property>
     <property key="STATIC_PAGE_ERROR_PAGE">
         <value xml:lang="en">SP_ERROR_PAGE</value>
+    </property>
+    <property key="STATIC_PAGE_REVIEW_TERMS_CONDITIONS">
+        <value xml:lang="en">SP_REVIEW_TERMS_COND</value>
+    </property>
+    <property key="STATIC_PAGE_REVIEW_GUIDELINES">
+        <value xml:lang="en">SP_REVIEW_GUIDELINES</value>
     </property>
 
     <property key="SITE_INFO_SITE_SEARCH">

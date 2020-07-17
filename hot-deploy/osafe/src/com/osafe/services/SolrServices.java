@@ -348,64 +348,20 @@ public class SolrServices {
                                    }
                                    productDocument.setTotalTimesViewed(totalTimesViewed);
                                     // Product Categories of product
-                                    List<GenericValue> currentProductCategories = ProductWorker.getCurrentProductCategories(product);
-
-                                    // For each Product Category a product is in find the "Top Most" category just before the
-                                    // "Catalog Root"
-                                    Map<String, String> topCatsMap = FastMap.newInstance();
-                                    for (GenericValue productCategory : currentProductCategories) {
-                                        productCategoryId = productCategory.getString("productCategoryId");
-                                        GenericValue gvTopMostCategory = getTopMostParentProductCategory(delegator, productCategoryId, browseRootProductCategoryId);
-                                        if (UtilValidate.isNotEmpty(gvTopMostCategory)) {
-                                            String topMostProductCategoryId = gvTopMostCategory.getString("productCategoryId");
-
-                                            // Check to see if we have processed this top category already
-                                            if (topCatsMap.containsKey(topMostProductCategoryId)) {
-                                                String productCategoryIds = productDocument.getProductCategoryId();
-                                                productCategoryIds = productCategoryIds + " " + productCategoryId;
-                                                productDocument.setProductCategoryId(productCategoryIds);
-                                            } else {
-
-                                                String lastTopMostProductCategoryId = productDocument.getTopMostProductCategoryId();
-                                                if (UtilValidate.isNotEmpty(lastTopMostProductCategoryId) && !topMostProductCategoryId.equals(lastTopMostProductCategoryId)) {
-
-                                                    // Change "Product Document" Id so it is unique
-                                                    productDocumentId = SolrConstants.ROW_TYPE_PRODUCT + "_" + productId + "_" + lastTopMostProductCategoryId;
-                                                    productDocument.setId(productDocumentId);
-
-                                                    // Save current "Product Document" before creating a copy
-                                                    documentList.add(productDocument);
-                                                    /*
-                                                     * We were having the same issue as this guy, SerializationUtils will be our
-                                                     * own class
-                                                     * http://www.philliprhodes.com/content/orgapachecommonslangserializationexception
-                                                     * - javalangclassnotfoundexception
-                                                     * org.apache.commons.lang.SerializationException:
-                                                     * java.lang.ClassNotFoundException Submitted by prhodes on Tue, 12/29/2009 -
-                                                     * 10:57
-                                                     *
-                                                     * Working on the spring batch examples, and got the following error. To
-                                                     * summarize, the classloader that the serializationtutils is using is not
-                                                     * able to find this class. I got around this error by creating my own copy of
-                                                     * "SerializationUtils.java" in a new package and using this. Since my
-                                                     * SerializationUtils is in my webapp, there are no classloader issues.
-                                                     */
-
-                                                    // Make copy and change "Product Document" Id so it is also unique
-                                                    ProductDocument cloneProductDocument = (ProductDocument) SerializationUtils.clone(productDocument);
-                                                    productDocument = cloneProductDocument;
-                                                    productDocumentId = SolrConstants.ROW_TYPE_PRODUCT + "_" + productId + "_" + topMostProductCategoryId;
-                                                    productDocument.setId(productDocumentId);
-                                                }
-                                                topCatsMap.put(topMostProductCategoryId, topMostProductCategoryId);
-                                                productDocument.setProductCategoryId(productCategoryId);
-                                                productDocument.setTopMostProductCategoryId(topMostProductCategoryId);
-                                            }
-                                        }
-
+                                    
+                                    GenericValue gvTopMostCategory = getTopMostParentProductCategory(delegator, productCategoryMember.getString("productCategoryId"), browseRootProductCategoryId);
+                                    
+                                    if (UtilValidate.isNotEmpty(gvTopMostCategory)) {
+                                        String topMostProductCategoryId = gvTopMostCategory.getString("productCategoryId");
+                                        productDocumentId = SolrConstants.ROW_TYPE_PRODUCT + "_" + productId + "_" + topMostProductCategoryId + "_" + productCategoryMember.getString("productCategoryId");
+                                        productDocument.setId(productDocumentId);
+                                        productDocument.setProductCategoryId(productCategoryMember.getString("productCategoryId"));
+                                        productDocument.setTopMostProductCategoryId(topMostProductCategoryId);
                                     }
 
                                     // Find "Facet Groups" available for each "Product Category"
+                                    List<GenericValue> currentProductCategories = ProductWorker.getCurrentProductCategories(product);
+                                    
                                     Map<String, String> productFeatureTypeMap = null;
                                     for (GenericValue productCategory : currentProductCategories) {
 

@@ -122,13 +122,14 @@
                 updateShippingOption();
                 jQuery(displayDialogId).dialog('close');
                 jQuery('.shippingOptionsStorePickup').hide();
-                if (jQuery('#storeCCRequired').val() == 'false') {
-                    jQuery('.creditCardEntry').hide();
-                }
-                if (jQuery('#storeCCRequired').val() == 'true') {
-                    if (jQuery('#storeCCValidate').val() == 'false') {
+                <#assign storeCC = Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC!)/>
+                <#assign storeCCReq = Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC_REQ!)/>
+                if (${storeCC.toString()}) {
+                    if (!${storeCCReq.toString()}) {
                         jQuery('.paymentOptions').show();
                     }
+                } else {
+                    jQuery('.creditCardEntry').hide();
                 }
             });
         });

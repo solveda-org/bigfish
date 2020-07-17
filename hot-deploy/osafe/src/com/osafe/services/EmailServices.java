@@ -81,11 +81,13 @@ public class EmailServices {
         Integer intervalHours = (Integer) context.get("intervalHours");
 
         // Check passed params
-        if (UtilValidate.isEmpty(intervalHours)) {
+        if (UtilValidate.isEmpty(intervalHours)) 
+        {
             intervalHours = UtilMisc.toInteger(Util.getProductStoreParm(productStoreId, "EMAIL_ABANDON_HRS"));
         }
 
-        if (UtilValidate.isEmpty(emailCount)) {
+        if (UtilValidate.isEmpty(emailCount)) 
+        {
             emailCount = UtilMisc.toInteger(Util.getProductStoreParm(productStoreId, "EMAIL_ABANDON_NUM"));
         }
 
@@ -93,32 +95,54 @@ public class EmailServices {
         String sendTo = null;
         try {
 
+            GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+        	
             String emailType = "PRDS_ABD_CART";
+            sendMap.put("emailType",emailType);
             GenericValue productStoreEmail = null;
             try {
                 productStoreEmail = delegator.findByPrimaryKey("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
             } catch (GenericEntityException e) {
                 Debug.logError(e, "Problem getting the ProductStoreEmailSetting for productStoreId=" + productStoreId + " and emailType=" + emailType, module);
             }
-            if (productStoreEmail == null) {
+            if (UtilValidate.isEmpty(productStoreEmail) || UtilValidate.isEmpty(productStore)) 
+            {
                 return ServiceUtil.returnFailure("No valid email setting for store with productStoreId=" + productStoreId + " and emailType=" + emailType);
             }
 
-            String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
-            if (UtilValidate.isEmpty(bodyScreenLocation)) {
-                bodyScreenLocation = ProductStoreWorker.getDefaultProductStoreEmailScreenLocation(emailType);
-            }
-            sendMap.put("bodyScreenUri", bodyScreenLocation);
+            String subjectString = productStoreEmail.getString("subject");
+            Map subjectMap = Util.getProductStoreParmMap(delegator, null,productStoreId);
+            subjectString = FlexibleStringExpander.expandString(subjectString, subjectMap);
 
+            //TODO: THIS BLOCK OF CODE SETTING THE SEND MAIL INFORMATION BASED ON THE PRODUCT STORE EMAILS SETTING
+            //HAS BEEN MOVED TO 'sendMailFromScrenn'.
+            //THIS CODE SHOULD BE REMOVED.
+//            sendMap.put("subject", subjectString);
+//            sendMap.put("contentType", productStoreEmail.get("contentType"));
+//            sendMap.put("sendFrom", productStoreEmail.get("fromAddress"));
+//            sendMap.put("sendCc", productStoreEmail.get("ccAddress"));
+//            sendMap.put("sendBcc", productStoreEmail.get("bccAddress"));
+//
+//            String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
+//            if (UtilValidate.isEmpty(bodyScreenLocation)) {
+//                bodyScreenLocation = ProductStoreWorker.getDefaultProductStoreEmailScreenLocation(emailType);
+//            }
+//            sendMap.put("bodyScreenUri", bodyScreenLocation);
+            //TODO:
+
+            
+           
             List<GenericValue> shoppingLists = delegator.findByAnd("ShoppingList", UtilMisc.toMap("productStoreId", productStoreId, "shoppingListTypeId", "SLT_SPEC_PURP"));
             Timestamp currentDateAsDate = UtilDateTime.getDayEnd(new Timestamp(System.currentTimeMillis()));
-            for (GenericValue shoppingList : shoppingLists) {
+            for (GenericValue shoppingList : shoppingLists) 
+            {
                 List<GenericValue> shoppingListItems = shoppingList.getRelated("ShoppingListItem");
-                if (UtilValidate.isNotEmpty(shoppingListItems)) {
+                if (UtilValidate.isNotEmpty(shoppingListItems)) 
+                {
                     GenericValue party = shoppingList.getRelatedOne("Party");
-                    if (UtilValidate.isNotEmpty(party)) {
+                    if (UtilValidate.isNotEmpty(party)) 
+                    {
                         String partyId = party.getString("partyId");
-    
                         GenericValue testShoppingListItem = EntityUtil.getFirst((List<GenericValue>) shoppingListItems);
                         Timestamp itemLastUpdatedStamp = testShoppingListItem.getTimestamp("lastUpdatedStamp");
     
@@ -130,25 +154,29 @@ public class EmailServices {
                         gcEnd.setTimeInMillis(currentDateAsDate.getTime());
     
                         // Has this shopping list been abandoned long enough
-                        if (gcStart.before(gcEnd)) {
-    
+                        if (gcStart.before(gcEnd)) 
+                        {
                             // Check to see if an email was sent previously
                             int communicationEventsCount = 0;
                             List<GenericValue> communicationEvents = delegator.findByAnd("CommunicationEvent", UtilMisc.toMap("partyIdTo", partyId, "reasonEnumId", "ABCART_EMAIL"));
                             ComparableRange itemLastUpdatedToCurrent = new ComparableRange(itemLastUpdatedStamp, currentDateAsDate);
     
-                            for (GenericValue event : communicationEvents) {
+                            for (GenericValue event : communicationEvents) 
+                            {
                                 Timestamp entryDate = event.getTimestamp("entryDate");
-                                if (itemLastUpdatedToCurrent.includes(entryDate)) {
+                                if (itemLastUpdatedToCurrent.includes(entryDate)) 
+                                {
                                     communicationEventsCount++;
                                 }
                             }
     
                             // Have we already sent the number of emails allowed
-                            if (communicationEventsCount < emailCount) {
+                            if (communicationEventsCount < emailCount) 
+                            {
     
                                 emailList = ContactHelper.getContactMechByType(party, "EMAIL_ADDRESS", false);
-                                if (UtilValidate.isNotEmpty(emailList)) {
+                                if (UtilValidate.isNotEmpty(emailList)) 
+                                {
                                     GenericValue email = EntityUtil.getFirst((List<GenericValue>) emailList);
                                     sendTo = email.getString("infoString");
     
@@ -160,52 +188,13 @@ public class EmailServices {
                                     GenericValue person = party.getRelatedOne("Person");
                                     bodyParameters.put("person", person);
     
-                                    GenericValue productStore = productStoreEmail.getRelatedOne("ProductStore");
-                                    String storeName = productStore.getString("storeName");
-    
-                                    // Store Phone Number
-                                    GenericValue payToParty = productStore.getRelatedOne("Party");
-                                    Collection<GenericValue> productStorePhoneList = ContactHelper.getContactMech(payToParty, "PRIMARY_PHONE", "TELECOM_NUMBER", false);
-    
-                                    if (UtilValidate.isNotEmpty(productStorePhoneList)) {
-                                        GenericValue productStorePhone = EntityUtil.getFirst((List<GenericValue>) productStorePhoneList);
-                                        GenericValue productStoreTelecomNumber = productStorePhone.getRelatedOne("TelecomNumber");
-                                        String customerServiceTelephone = Util.formatTelephone(productStoreTelecomNumber.getString("areaCode"), productStoreTelecomNumber.getString("contactNumber"));
-                                        bodyParameters.put("customerServiceTelephone", customerServiceTelephone);
-                                    }
-    
-                                    // Add debugging information to the email if we are redirecting to test addresses
-                                    String mailNnotificationsRedirectTo = UtilProperties.getPropertyValue("general.properties", "mail.notifications.redirectTo");
-                                    if (UtilValidate.isNotEmpty(mailNnotificationsRedirectTo)) {
-    
-                                        String abandonEmailDebugInfo = "";
-                                        String shoppingListId = shoppingList.getString("shoppingListId");
-    
-                                        abandonEmailDebugInfo += "<p>" + "shoppingListId:" + shoppingListId + "</p>";
-                                        abandonEmailDebugInfo += "<p>" + "itemLastUpdatedStamp:" + UtilDateTime.toDateTimeString(itemLastUpdatedStamp) + "</p>";
-                                        abandonEmailDebugInfo += "<p>" + "currentDateAsDate:" + UtilDateTime.toDateTimeString(currentDateAsDate) + "</p>";
-                                        abandonEmailDebugInfo += "<p>" + "communicationEventsCount:" + communicationEventsCount + "</p>";
-                                        abandonEmailDebugInfo += "<p>" + "intervalHours:" + intervalHours + "</p>";
-                                        abandonEmailDebugInfo += "<p>" + "emailCount:" + emailCount + "</p>";
-                                        abandonEmailDebugInfo += "<p>" + "productStoreId:" + productStoreId + "</p>";
-                                        bodyParameters.put("abandonEmailDebugInfo", abandonEmailDebugInfo);
-                                    }
                                     bodyParameters.put("shoppingListId", shoppingList.get("shoppingListId"));
                                     bodyParameters.put("productStoreId", productStoreId);
                                     sendMap.put("bodyParameters", bodyParameters);
                                     sendMap.put("userLogin", userLogin);
     
-                                    String subjectString = productStoreEmail.getString("subject");
-                                    Map subjectMap = Util.getProductStoreParmMap(delegator, null,productStoreId);
-                                    subjectString = FlexibleStringExpander.expandString(subjectString, subjectMap);
-                                    sendMap.put("subject", subjectString);
-    
-                                    sendMap.put("contentType", productStoreEmail.get("contentType"));
-                                    sendMap.put("sendFrom", productStoreEmail.get("fromAddress"));
-                                    sendMap.put("sendCc", productStoreEmail.get("ccAddress"));
-                                    sendMap.put("sendBcc", productStoreEmail.get("bccAddress"));
-    
-                                    if ((sendTo != null) && UtilValidate.isEmail(sendTo)) {
+                                    if ((sendTo != null) && UtilValidate.isEmail(sendTo)) 
+                                    {
                                         sendMap.put("sendTo", sendTo);
                                     } else {
                                         String msg = UtilProperties.getMessage("OSafeUiLabels", "ProductStoreAbandonCartEmailError", locale);
@@ -215,17 +204,16 @@ public class EmailServices {
     
                                     Debug.logInfo(sendTo, module);
                                     Map communicationEventMap = FastMap.newInstance();
-    
                                     communicationEventMap.put("userLogin", userLogin);
                                     communicationEventMap.put("partyIdTo", partyId);
                                     communicationEventMap.put("communicationEventTypeId", "EMAIL_COMMUNICATION");
                                     communicationEventMap.put("contactMechTypeId", "EMAIL_ADDRESS");
                                     communicationEventMap.put("reasonEnumId", "ABCART_EMAIL");
                                     communicationEventMap.put("subject", subjectString);
-    
                                     Map communicationEventResp = dispatcher.runSync("createCommunicationEventWithoutPermission", communicationEventMap);
     
-                                    if (ServiceUtil.isSuccess(communicationEventResp)) {
+                                    if (ServiceUtil.isSuccess(communicationEventResp)) 
+                                    {
                                         String communicationEventId = (String) communicationEventResp.get("communicationEventId");
                                         sendMap.put("communicationEventId", communicationEventId);
                                         Debug.logInfo(communicationEventId, module);
@@ -270,8 +258,10 @@ public class EmailServices {
         String emailType = "PRDS_SHIP_REVIEW";
         Map<String, String> productStoreParmMap = Util.getProductStoreParmMap(delegator, null, productStoreId);
 
-        try {
-            if (UtilValidate.isNotEmpty(productStoreParmMap)) {
+        try 
+        {
+            if (UtilValidate.isNotEmpty(productStoreParmMap)) 
+            {
                 intervaldays = Integer.parseInt(productStoreParmMap.get("EMAIL_REVIEW_SHP_DYS"));
                 reviewSendEmail = productStoreParmMap.get("REVIEW_SEND_EMAIL");
             }
@@ -279,36 +269,59 @@ public class EmailServices {
             Debug.logError(nfe, "Problem getting the XProductStoreParm for parmKey=EMAIL_REVIEW_SHP_DYS and emailType=" + emailType, module);
         }
         // Check intervaldays
-        if (UtilValidate.isEmpty(intervaldays)) {
+        if (UtilValidate.isEmpty(intervaldays)) 
+        {
             return ServiceUtil.returnFailure("No valid intervaldays to send email with productStoreId=" + productStoreId + " and emailType=" + emailType);
         }
 
         // Check reviewSendEmail
-        if (!Util.isProductStoreParmTrue(reviewSendEmail)) {
+        if (!Util.isProductStoreParmTrue(reviewSendEmail)) 
+        {
             return result;
         }
 
         Collection<GenericValue> emailList = null;
         String sendTo = null;
+        Map sendMap = FastMap.newInstance();
         try {
+
+        	
+            GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+        	
+            sendMap.put("emailType",emailType);
             GenericValue productStoreEmail = null;
-            try {
+            try 
+            {
                 productStoreEmail = delegator.findByPrimaryKey("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
             } catch (GenericEntityException e) {
                 Debug.logError(e, "Problem getting the ProductStoreEmailSetting for productStoreId=" + productStoreId + " and emailType=" + emailType, module);
             }
-            if (productStoreEmail == null) {
+            if (UtilValidate.isEmpty(productStoreEmail) || UtilValidate.isEmpty(productStore)) 
+            {
                 return ServiceUtil.returnFailure("No valid email setting for store with productStoreId=" + productStoreId + " and emailType=" + emailType);
             }
 
-            // prepare the email information
-            Map sendMap = FastMap.newInstance();
+            String subjectString = productStoreEmail.getString("subject");
+            Map subjectMap = Util.getProductStoreParmMap(delegator, null,productStoreId);
+            subjectString = FlexibleStringExpander.expandString(subjectString, subjectMap);
 
-            String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
-            if (UtilValidate.isEmpty(bodyScreenLocation)) {
-                bodyScreenLocation = ProductStoreWorker.getDefaultProductStoreEmailScreenLocation(emailType);
-            }
-            sendMap.put("bodyScreenUri", bodyScreenLocation);
+            //TODO: THIS BLOCK OF CODE SETTING THE SEND MAIL INFORMATION BASED ON THE PRODUCT STORE EMAILS SETTING
+            //HAS BEEN MOVED TO 'sendMailFromScrenn'.
+            //THIS CODE SHOULD BE REMOVED.
+            
+//            sendMap.put("subject", subjectString);
+//            sendMap.put("contentType", productStoreEmail.get("contentType"));
+//            sendMap.put("sendFrom", productStoreEmail.get("fromAddress"));
+//            sendMap.put("sendCc", productStoreEmail.get("ccAddress"));
+//            sendMap.put("sendBcc", productStoreEmail.get("bccAddress"));
+//
+//            String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
+//            if (UtilValidate.isEmpty(bodyScreenLocation)) {
+//                bodyScreenLocation = ProductStoreWorker.getDefaultProductStoreEmailScreenLocation(emailType);
+//            }
+//            sendMap.put("bodyScreenUri", bodyScreenLocation);
+            //TODO:
+        	
 
             List<GenericValue> communicationEvents = delegator.findByAnd("CommunicationEventAndOrder", UtilMisc.toMap("communicationEventTypeId", "EMAIL_COMMUNICATION", "reasonEnumId", "SHIPREVIEW_EMAIL"));
             List fieldListFromEntityList = EntityUtil.getFieldListFromEntityList(communicationEvents, "orderId", true);
@@ -329,7 +342,8 @@ public class EmailServices {
             
             List<GenericValue> orderHeaderList = delegator.findList("OrderHeader", whereConditions, null, null, null, false);
             Timestamp currentDateAsDate = UtilDateTime.getDayEnd(new Timestamp(System.currentTimeMillis()));
-            for (GenericValue orderHeader : orderHeaderList) {
+            for (GenericValue orderHeader : orderHeaderList) 
+            {
                 Timestamp itemLastUpdatedStamp = orderHeader.getTimestamp("lastUpdatedStamp");
                 if(UtilDateTime.getIntervalInDays(itemLastUpdatedStamp, currentDateAsDate) < intervaldays) continue;
 
@@ -338,61 +352,29 @@ public class EmailServices {
                 String partyId = party.getString("partyId");
 
                 emailList = ContactHelper.getContactMechByType(party, "EMAIL_ADDRESS", false);
-                if (UtilValidate.isNotEmpty(emailList)) {
+                if (UtilValidate.isNotEmpty(emailList)) 
+                {
                     GenericValue email = EntityUtil.getFirst((List<GenericValue>) emailList);
                     sendTo = email.getString("infoString");
 
                     ResourceBundleMapWrapper uiLabelMap = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeUiLabels", locale);
-
                     Map bodyParameters = UtilMisc.toMap("uiLabelMap", uiLabelMap, "locale", locale);
 
                     //GenericValue person = party.getRelatedOne("Person");
                     bodyParameters.put("person", party);
 
-                    GenericValue productStore = productStoreEmail.getRelatedOne("ProductStore");
-                    String storeName = productStore.getString("storeName");
-
-                        // Store Phone Number
-                    GenericValue payToParty = productStore.getRelatedOne("Party");
-                    Collection<GenericValue> productStorePhoneList = ContactHelper.getContactMech(payToParty, "PRIMARY_PHONE", "TELECOM_NUMBER", false);
-
-                    if (UtilValidate.isNotEmpty(productStorePhoneList)) {
-                        GenericValue productStorePhone = EntityUtil.getFirst((List<GenericValue>) productStorePhoneList);
-                        GenericValue productStoreTelecomNumber = productStorePhone.getRelatedOne("TelecomNumber");
-                        String customerServiceTelephone = Util.formatTelephone(productStoreTelecomNumber.getString("areaCode"), productStoreTelecomNumber.getString("contactNumber"));
-                        bodyParameters.put("customerServiceTelephone", customerServiceTelephone);
-                    }
-
-                    // Add debugging information to the email if we are redirecting to test addresses
-                    String mailNnotificationsRedirectTo = UtilProperties.getPropertyValue("general.properties", "mail.notifications.redirectTo");
                     String orderId = orderHeader.getString("orderId");
                     bodyParameters.put("orderId", orderId);
-                    if (UtilValidate.isNotEmpty(mailNnotificationsRedirectTo)) {
-                        String shipReviewEmailDebugInfo = "";
-
-                        shipReviewEmailDebugInfo += "<p>" + "orderListId:" + orderId + "</p>";
-                        shipReviewEmailDebugInfo += "<p>" + "itemLastUpdatedStamp:" + UtilDateTime.toDateTimeString(itemLastUpdatedStamp) + "</p>";
-                        shipReviewEmailDebugInfo += "<p>" + "currentDateAsDate:" + UtilDateTime.toDateTimeString(currentDateAsDate) + "</p>";
-                        shipReviewEmailDebugInfo += "<p>" + "intervaldays:" + intervaldays + "</p>";
-                        shipReviewEmailDebugInfo += "<p>" + "productStoreId:" + productStoreId + "</p>";
-                        bodyParameters.put("shipReviewEmailDebugInfo", shipReviewEmailDebugInfo);
-                    }
-
                     sendMap.put("bodyParameters", bodyParameters);
                     sendMap.put("userLogin", userLogin);
 
-                    String subjectString = productStoreEmail.getString("subject");
-                    subjectString = FlexibleStringExpander.expandString(subjectString, productStoreParmMap);
-                    sendMap.put("subject", subjectString);
 
-                    sendMap.put("contentType", productStoreEmail.get("contentType"));
-                    sendMap.put("sendFrom", productStoreEmail.get("fromAddress"));
-                    sendMap.put("sendCc", productStoreEmail.get("ccAddress"));
-                    sendMap.put("sendBcc", productStoreEmail.get("bccAddress"));
 
-                    if ((sendTo != null) && UtilValidate.isEmail(sendTo)) {
+                    if ((sendTo != null) && UtilValidate.isEmail(sendTo)) 
+                    {
                         sendMap.put("sendTo", sendTo);
-                    } else {
+                    } else 
+                    {
                         String msg = UtilProperties.getMessage("OSafeUiLabels", "ProductStoreAbandonCartEmailError", locale);
                         Debug.logError(msg, module);
                         return ServiceUtil.returnError(UtilProperties.getMessage("OSafeUiLabels", "ProductStoreShipReviewEmailError", locale));
@@ -410,7 +392,8 @@ public class EmailServices {
 
                     Map communicationEventResp = dispatcher.runSync("createCommunicationEventWithoutPermission", communicationEventMap);
 
-                    if (ServiceUtil.isSuccess(communicationEventResp)) {
+                    if (ServiceUtil.isSuccess(communicationEventResp)) 
+                    {
                         String communicationEventId = (String) communicationEventResp.get("communicationEventId");
                         sendMap.put("communicationEventId", communicationEventId);
 
@@ -449,7 +432,10 @@ public class EmailServices {
         String bodyScreenUri = (String) serviceContext.remove("bodyScreenUri");
         String xslfoAttachScreenLocation = (String) serviceContext.remove("xslfoAttachScreenLocation");
         String attachmentName = (String) serviceContext.remove("attachmentName");
+        String emailType = (String) serviceContext.remove("emailType");        
         Locale locale = (Locale) serviceContext.get("locale");
+        String sendFrom = (String) serviceContext.get("sendFrom");
+        String subjectString = (String) serviceContext.get("subject");
         System.out.println("sendfromscreen");
         Map<String, Object> bodyParameters = UtilGenerics.checkMap(serviceContext.remove("bodyParameters"));
         if (bodyParameters == null) {
@@ -464,6 +450,7 @@ public class EmailServices {
         if (partyId == null) {
             partyId = (String) bodyParameters.get("partyId");
         }
+
         String orderId = (String) bodyParameters.get("orderId");
         String productStoreId = (String) bodyParameters.get("productStoreId");
         if (UtilValidate.isEmpty(productStoreId))
@@ -505,6 +492,42 @@ public class EmailServices {
         	
         }
 
+        //TODO: getting the from address,ccAddress,bccaddress
+        if (UtilValidate.isNotEmpty(productStoreId) && UtilValidate.isNotEmpty(emailType))
+        {
+            GenericValue productStoreEmail = null;
+            try {
+                productStoreEmail = delegator.findByPrimaryKey("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
+            } catch (GenericEntityException e) {
+                Debug.logError(e, "Problem getting the ProductStoreEmailSetting for productStoreId=" + productStoreId + " and emailType=" + emailType, module);
+            }
+            if (UtilValidate.isNotEmpty(productStoreEmail)) 
+            {
+                if (UtilValidate.isEmpty(subjectString)) 
+                {
+                    subjectString = productStoreEmail.getString("subject");
+                }
+                Map subjectMap = Util.getProductStoreParmMap(delegator, null,productStoreId);
+                subjectString = FlexibleStringExpander.expandString(subjectString, subjectMap);
+                serviceContext.put("subject", subjectString);
+                serviceContext.put("contentType", productStoreEmail.get("contentType"));
+                if (UtilValidate.isEmpty(sendFrom)) 
+                {
+                    serviceContext.put("sendFrom", productStoreEmail.get("fromAddress"));
+                }
+            	serviceContext.put("sendCc", productStoreEmail.get("ccAddress"));
+            	serviceContext.put("sendBcc", productStoreEmail.get("bccAddress"));
+                String bodyScreenLocation = productStoreEmail.getString("bodyScreenLocation");
+                if (UtilValidate.isEmpty(bodyScreenLocation)) 
+                {
+                    bodyScreenLocation = ProductStoreWorker.getDefaultProductStoreEmailScreenLocation(emailType);
+                }
+                bodyScreenUri=bodyScreenLocation;
+            }
+        	
+        }
+
+        
         bodyParameters.put("productStoreId", productStoreId);
         bodyParameters.put("communicationEventId", serviceContext.get("communicationEventId"));
         NotificationServices.setBaseUrl(dctx.getDelegator(), webSiteId, bodyParameters);

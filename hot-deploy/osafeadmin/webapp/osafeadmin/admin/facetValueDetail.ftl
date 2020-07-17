@@ -51,6 +51,14 @@
           </tr>
           <#assign rowNo = rowNo+1/>
         </#list>
+        <tr class="footer">
+            <th colspan="5">
+            <div class="entryInput checkbox">
+              <input type="checkbox" class="checkBoxEntry" name="updateProductFeatureAppls" id="updateProductFeatureAppls" value="Y"<#if parameters.updateProductFeatureAppls?has_content>checked</#if> />${uiLabelMap.BroadcastChangeToProductLabel}
+              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.BroadcastChangeToProductHelpInfo}');" onMouseout="hideTooltip()"><span class="helpIcon"></span></a>
+            </div>
+            </th>
+        </tr>
       </tbody>
     </table>
 <#else>
