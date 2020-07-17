@@ -8,32 +8,45 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javolution.util.FastList;
 import javolution.util.FastMap;
 
 import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FileUtils;
 import org.jdom.JDOMException;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.GenericDataSourceException;
+import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.config.DatasourceInfo;
+import org.ofbiz.entity.config.EntityConfigUtil;
+import org.ofbiz.entity.datasource.GenericHelperInfo;
+import org.ofbiz.entity.jdbc.SQLProcessor;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 
+import com.osafe.constants.Constants;
 import com.osafe.util.OsafeAdminUtil;
 
 public class OsafeAdminServices {
     public static final String module = OsafeAdminServices.class.getName();
+    private static final SimpleDateFormat _sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     
     public static Map<String, Object> loadProductDataToDB(DispatchContext dctx, Map<String, ? extends Object> context) {
         LocalDispatcher dispatcher = dctx.getDispatcher();
@@ -74,22 +87,22 @@ public class OsafeAdminServices {
             Map<String, Object> importClientProductTemplateCtx = null;
             
             try {
-            	Map result  = FastMap.newInstance();
-            	if(xlsDataFile.endsWith(".xls")) {
-            		importClientProductTemplateCtx = UtilMisc.toMap("xlsDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
+                Map result  = FastMap.newInstance();
+                if(xlsDataFile.endsWith(".xls")) {
+                    importClientProductTemplateCtx = UtilMisc.toMap("xlsDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
                     result = dispatcher.runSync("importClientProductTemplate", importClientProductTemplateCtx);
-            	}
-            	if(xlsDataFile.endsWith(".xml")) {
-            		importClientProductTemplateCtx = UtilMisc.toMap("xmlDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
+                }
+                if(xlsDataFile.endsWith(".xml")) {
+                    importClientProductTemplateCtx = UtilMisc.toMap("xmlDataFile", xlsDataFile, "xmlDataDir", xmlDataDir,"productLoadImagesDir", productLoadImagesDir, "imageUrl", imageUrl, "removeAll",removeAll,"autoLoad",autoLoad,"userLogin",userLogin);
                     result = dispatcher.runSync("importClientProductXMLTemplate", importClientProductTemplateCtx);
-            	}
+                }
                 List<String> serviceMsg = (List)result.get("messages");
                 if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) {
-                	try {
-                	    FileUtils.deleteDirectory(new File(tempDir));
-                	} catch (IOException e) {
-                		Debug.logWarning(e, module);
-					}
+                    try {
+                        FileUtils.deleteDirectory(new File(tempDir));
+                    } catch (IOException e) {
+                        Debug.logWarning(e, module);
+                    }
                 }
             } catch (GenericServiceException e) {
                 Debug.logWarning(e, module);
@@ -112,15 +125,15 @@ public class OsafeAdminServices {
                 
                 if (!new File(uploadTempDir).exists()) 
                 {
-                	new File(uploadTempDir).mkdirs();
-        	    }
+                    new File(uploadTempDir).mkdirs();
+                }
                 
                 String filenameToUse = xlsFileName;
                 
                 File file = new File(uploadTempDir + filenameToUse);
                 
                 if(file.exists()) {
-                	file.delete();
+                    file.delete();
                 }
                 
                 try {
@@ -145,6 +158,89 @@ public class OsafeAdminServices {
         
         
         return result;
+    }
+    public static Map<String, Object> deleteEntityRows(DispatchContext dctx, Map<String, ? extends Object> context)throws IOException, JDOMException 
+    {
+        String nowDateTime = _sdf.format(UtilDateTime.nowTimestamp());
+        String dayBackDateTime = (UtilDateTime.addDaysToTimestamp(UtilDateTime.nowTimestamp(), -1)).toString();
+        LocalDispatcher dispatcher = dctx.getDispatcher();
+        Locale locale = (Locale) context.get("locale");
+        List<String> error_list = new ArrayList<String>();
+        Delegator delegator = dctx.getDelegator();
+        String entityName = (String)context.get("entityDBName");
+        SQLProcessor sqlP = null;
+        int deleteRowCount =0;
+        
+        if (UtilValidate.isNotEmpty(entityName)) {
+                try {
+                    String sql = null;
+                    if (entityName.equalsIgnoreCase("Visit")){
+                        List<String> relatedEntitiesList = FastList.newInstance();
+                        relatedEntitiesList.add("CartAbandonedLine");
+                        relatedEntitiesList.add("InventoryItemTempRes");
+                        relatedEntitiesList.add("PartyDataSource");
+                        relatedEntitiesList.add("PartyNeed");
+                        relatedEntitiesList.add("ProductSearchResult");
+                        relatedEntitiesList.add("ServerHit");
+                        relatedEntitiesList.add("TrackingCodeVisit");
+                        relatedEntitiesList.add("WorkEffortSearchResult");
+                        UtilProperties.setPropertyValueInMemory("serverstats.properties", "stats.persist.REQUEST.hit", "false");
+                        for(String relatedEntity : relatedEntitiesList){
+                            GenericHelperInfo helperInfo = delegator.getGroupHelperInfo(delegator.getEntityGroupName(relatedEntity));
+                            DatasourceInfo datasourceInfo = EntityConfigUtil.getDatasourceInfo(helperInfo.getHelperBaseName());
+                            String relatedEntityName = delegator.getModelEntity(relatedEntity).getTableName(datasourceInfo);
+                            //Preparing DELETE query
+                            sqlP = new SQLProcessor(helperInfo);
+                            sql = "DELETE FROM " + relatedEntityName;
+                            sqlP.prepareStatement(sql);
+                            deleteRowCount = sqlP.executeUpdate();
+                        }
+                        GenericHelperInfo helperInfo = delegator.getGroupHelperInfo(delegator.getEntityGroupName(entityName));
+                        DatasourceInfo datasourceInfo = EntityConfigUtil.getDatasourceInfo(helperInfo.getHelperBaseName());
+                        String entity = delegator.getModelEntity(entityName).getTableName(datasourceInfo);
+                      //Preparing DELETE query for Vist entity
+                        sqlP = new SQLProcessor(helperInfo);
+                        sql = "DELETE FROM " + entity;
+                        sql += " WHERE LAST_UPDATED_STAMP < '"+dayBackDateTime+"'";
+                        sqlP.prepareStatement(sql);
+                        deleteRowCount = sqlP.executeUpdate();
+                        UtilProperties.setPropertyValueInMemory("serverstats.properties", "stats.persist.REQUEST.hit", "true");
+                    }
+                    else {
+                        GenericHelperInfo helperInfo = delegator.getGroupHelperInfo(delegator.getEntityGroupName(entityName));
+                        DatasourceInfo datasourceInfo = EntityConfigUtil.getDatasourceInfo(helperInfo.getHelperBaseName());
+                        String tableName = delegator.getModelEntity(entityName).getTableName(datasourceInfo);
+                        //Preparing DELETE query
+                        sqlP = new SQLProcessor(helperInfo);
+                        sql = "DELETE FROM " + tableName;
+                        sqlP.prepareStatement(sql);
+                        deleteRowCount = sqlP.executeUpdate();
+                    }
+                } catch (Exception e) {
+                    Debug.logInfo("An error occurred executing query"+e, module);
+                    error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                    return ServiceUtil.returnError(error_list);
+                } finally {
+                    try {
+                        sqlP.close();
+                    } catch (GenericDataSourceException e) {
+                        Debug.logInfo("An error occurred in closing SQLProcessor"+e, module);
+                        error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                        return ServiceUtil.returnError(error_list);
+                    } catch (Exception e) {
+                        Debug.logInfo("An error occurred in closing SQLProcessor"+e, module);
+                        error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
+                        return ServiceUtil.returnError(error_list);
+                    } 
+                }
+        }
+        else {
+            error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankEntityName", locale));
+            return ServiceUtil.returnError(error_list);
+        }
+        // send the notification
+        List<String> successMessageList = UtilMisc.toList(deleteRowCount+" rows were successfully deleted from the "+entityName+" entity");
+        return ServiceUtil.returnSuccess(successMessageList);
     }
     
 }

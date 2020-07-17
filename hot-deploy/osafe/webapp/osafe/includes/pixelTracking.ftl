@@ -2,7 +2,7 @@
 <!-- Pixel Tracking -->
 <#if pixelTrackingList?has_content>
   <#list pixelTrackingList as trackingListItem>
-    <#assign pixelContent = trackingListItem.getRelatedOne("Content")!/>
+    <#assign pixelContent = trackingListItem.getRelatedOneCache("Content")!/>
     <#if pixelContent?has_content && ((pixelContent.statusId)?if_exists == "CTNT_PUBLISHED")>
       <#assign pixelScope = trackingListItem.pixelScope/>
       <#if orderConfirmed?has_content && orderConfirmed == "Y">

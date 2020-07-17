@@ -10,9 +10,10 @@ import org.ofbiz.entity.condition.EntityOperator;
 pixelId = parameters.pixelId;
 productStoreId = parameters.productStoreId;
 if (UtilValidate.isNotEmpty(pixelId) && UtilValidate.isNotEmpty(productStoreId)) {
-    pixelTrack = delegator.findOne("XPixelTracking",UtilMisc.toMap("pixelId", pixelId, "productStoreId", productStoreId), true);
-    if (UtilValidate.isNotEmpty(pixelTrack) && UtilValidate.isNotEmpty(pixelTrack.contentId)) {
-        pixelContent = delegator.findOne("Content",UtilMisc.toMap("contentId", pixelTrack.contentId), true);
+    pixelTrack = delegator.findOne("XPixelTracking",UtilMisc.toMap("pixelId", pixelId, "productStoreId", productStoreId), false);
+    if (UtilValidate.isNotEmpty(pixelTrack) && UtilValidate.isNotEmpty(pixelTrack.contentId)) 
+    {
+        pixelContent = delegator.findOne("Content",UtilMisc.toMap("contentId", pixelTrack.contentId), false);
         dataResource = pixelContent.getRelatedOne("DataResource");
         if (UtilValidate.isNotEmpty(dataResource))
          {

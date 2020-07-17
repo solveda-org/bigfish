@@ -75,7 +75,6 @@
         <set field="bodyParameters.orderIdNumber" from-field="parameters.orderIdNumber"/>
         <set field="bodyParameters.catalogName" from-field="parameters.catalogName"/>
         <set field="bodyParameters.message" from-field="parameters.content"/>
-    
         <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
             <field-map field-name="productStoreId" from-field="parameters.productStoreId"/>
             <field-map field-name="emailType" from-field="parameters.emailType"/>
@@ -85,8 +84,8 @@
             <set field="emailParams.emailType" from-field="parameters.emailType"/>
             <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
             <set field="emailParams.userLogin" from-field="systemUserLogin"/>
-            <if-not-empty field="parameters.emailAddress">
-                <set field="emailParams.sendTo" from-field="parameters.emailAddress"/>
+            <if-not-empty field="parameters.emailAddressCompany">
+                <set field="emailParams.sendTo" from-field="parameters.emailAddressCompany"/>
             <else>
                 <set field="emailParams.sendTo" from-field="productStoreEmailSetting.fromAddress"/>
             </else>

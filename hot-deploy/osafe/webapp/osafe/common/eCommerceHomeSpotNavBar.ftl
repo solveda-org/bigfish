@@ -22,7 +22,7 @@
   <#assign megaMenuContentId = "" />
   <#assign megaMenuProdCatContentTypeId = 'PLP_ESPOT_MEGA_MENU'/>
   <#if megaMenuProdCatContentTypeId?exists && megaMenuProdCatContentTypeId?has_content>
-    <#assign megaMenuProductCategoryContentList = delegator.findByAnd("ProductCategoryContent", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId" , category.productCategoryId?string, "prodCatContentTypeId" , megaMenuProdCatContentTypeId?if_exists)) />
+    <#assign megaMenuProductCategoryContentList = delegator.findByAndCache("ProductCategoryContent", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId" , category.productCategoryId?string, "prodCatContentTypeId" , megaMenuProdCatContentTypeId?if_exists)) />
     <#if megaMenuProductCategoryContentList?has_content>
       <#assign megaMenuProductCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(megaMenuProductCategoryContentList?if_exists) />
       <#assign prodCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(megaMenuProductCategoryContentList) />

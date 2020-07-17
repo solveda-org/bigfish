@@ -56,7 +56,7 @@ transItemList = [];
         {
             saleCategoryParts=new StringBuffer();
             orderItems.each { orderItem ->
-                itemProduct = orderItem.getRelatedOne("Product");
+                itemProduct = orderItem.getRelatedOneCache("Product");
                 productCategoryId = "";
                 categoryName = "";
                 transItemMap = [:];
@@ -69,12 +69,13 @@ transItemList = [];
                 
                 if (UtilValidate.isNotEmpty(categoryLookupProduct))
                 {
-                    productCategoryMemberList = delegator.findList("ProductCategoryMember", EntityCondition.makeCondition("productId", EntityOperator.EQUALS, categoryLookupProduct.productId), null, null, null, true);
-                    productCategoryMembers = EntityUtil.filterByDate(productCategoryMemberList);
-                    productCategoryMember = EntityUtil.getFirst(productCategoryMembers);
-                    if (UtilValidate.isNotEmpty(productCategoryMember))
+        	        productCategoryMemberList = itemProduct.getRelatedCache("ProductCategoryMember");
+                    productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
+            	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
+                    if (UtilValidate.isNotEmpty(productCategoryMemberList))
                     {
-                        productCategory = productCategoryMember.getRelatedOne("ProductCategory");
+        	            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+                        productCategory = productCategoryMember.getRelatedOneCache("ProductCategory");
                         categoryName = CategoryContentWrapper.getProductCategoryContentAsText(productCategory, "CATEGORY_NAME", locale, dispatcher);
                         transItemMap.categoryName;
                     }

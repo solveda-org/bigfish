@@ -30,7 +30,7 @@ if (!contentId)
 
 if(UtilValidate.isNotEmpty(contentId))
 {
-    content = delegator.findOne("Content",UtilMisc.toMap("contentId", contentId), true);
+    content = delegator.findOne("Content",UtilMisc.toMap("contentId", contentId), false);
 }
 if (UtilValidate.isNotEmpty(content))
  {

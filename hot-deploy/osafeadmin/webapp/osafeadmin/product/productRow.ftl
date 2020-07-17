@@ -26,7 +26,6 @@
            <td class="actionCol">
              <a href="javascript:setRowNo('');javascript:deletTableRow('${product.productId?if_exists}','${productName!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()" ><span class="crossIcon"></span></a>
              <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
-             <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
-           </td>
+             <a href="javascript:setRowNo('');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>           </td>
          </tr>
      </#if>

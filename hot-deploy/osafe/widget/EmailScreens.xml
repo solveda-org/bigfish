@@ -55,6 +55,34 @@ under the License.
         </section>
     </screen>
 
+    <screen name="displayContent">
+        <section>
+                <actions>
+                    <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+
+                    <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}" />
+                    <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}" />
+                    <set field="clientLogoPath" value="${OSafeConfig['client-logo-path']}" />
+                    <set field="emailFontFamily" value="${OSafeConfig['email-font-family']}" />
+                    <set field="contentId" from-field="contentId" />
+                    <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
+                </actions>
+            <widgets>
+                <section>
+                    <condition>
+                       <and>
+                        <not><if-empty field="content"/></not>
+                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                       </and>
+                    </condition>
+                    <widgets>
+                        <content content-id="${content.contentId}"/>
+                    </widgets>
+                </section>
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="emailHeadStylesContent">
         <section>
             <actions>
@@ -102,34 +130,6 @@ under the License.
             </actions>
             <widgets>
                 <include-screen name="displayContent" />
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="displayContent">
-        <section>
-                <actions>
-                    <property-map resource="osafe" map-name="OSafeConfig" global="true" />
-
-                    <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}" />
-                    <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}" />
-                    <set field="clientLogoPath" value="${OSafeConfig['client-logo-path']}" />
-                    <set field="emailFontFamily" value="${OSafeConfig['email-font-family']}" />
-                    <set field="contentId" from-field="contentId" />
-                    <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
-                </actions>
-            <widgets>
-                <section>
-                    <condition>
-                       <and>
-                        <not><if-empty field="content"/></not>
-                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
-                       </and>
-                    </condition>
-                    <widgets>
-                        <content content-id="${content.contentId}"/>
-                    </widgets>
-                </section>
             </widgets>
         </section>
     </screen>
@@ -321,7 +321,6 @@ under the License.
     <screen name="BackorderNotice">
         <section>
             <actions>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
@@ -363,14 +362,12 @@ under the License.
     <screen name="ShipmentCompleteNotice">
         <section>
             <actions>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
                 <set field="title" value="${uiLabelMap.PageTitleShipmentCompleteNotice}"/>
                 <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
                 <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/ShipmentStatus.groovy"/>
 
                 <set field="emailContentClass" value="orderEmailContent"/>
             </actions>
@@ -391,7 +388,7 @@ under the License.
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="title" value="${uiLabelMap.EmailTestTitle}"/>
-                <set field="contentEmailBodyId" value="${idMap.EMAIL_TEST_EMAIL}"/>
+                <set field="contentEmailBodyId" from-field="emailTemplateId"/>
             </actions>
             <widgets>
                 <decorator-screen name="email-decorator">
@@ -420,5 +417,7 @@ under the License.
             </widgets>
         </section>
     </screen>
+    
+    
 
 </screens>

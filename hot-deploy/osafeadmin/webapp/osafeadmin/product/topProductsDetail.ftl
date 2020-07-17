@@ -29,7 +29,7 @@
                     <#assign deliveryOption = productId.substring(productId.indexOf("^")+1)>
                     <#assign productId = productId.substring(0,productId.indexOf("^"))>
                 </#if>
-                <#assign topProduct = delegator.findByPrimaryKeyCache("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", productId))?if_exists>
+                <#assign topProduct = delegator.findByPrimaryKey("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", productId))?if_exists>
                 <#assign internalName = topProduct.internalName!"">
                 <#assign quantityOrdered = product.quantityOrdered!"">
                 <#assign totItem = totItem + quantityOrdered />

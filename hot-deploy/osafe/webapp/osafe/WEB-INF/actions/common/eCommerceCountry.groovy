@@ -4,8 +4,8 @@ import com.osafe.util.Util;
 import org.ofbiz.common.CommonWorkers;
 import org.ofbiz.base.util.*;
 
-defaultCountry = globalContext.get("COUNTRY_DEFAULT");
-countryDropDown = globalContext.get("COUNTRY_DROPDOWN");
+defaultCountry = Util.getProductStoreParm(request,"COUNTRY_DEFAULT");
+countryDropDown = Util.getProductStoreParm(request,"COUNTRY_DROPDOWN");
 defaultCountryGeoMap = [:];
 List countryList = FastList.newInstance();
 
@@ -18,7 +18,7 @@ if (UtilValidate.isNotEmpty(defaultCountry))
    }
  }
 
-if (Util.isProductStoreParmTrue(globalContext.get("COUNTRY_MULTI"))) 
+if (Util.isProductStoreParmTrue(request,"COUNTRY_MULTI")) 
  {
     if(countryDropDown.equals("All")) 
       {

@@ -188,6 +188,34 @@ public class OsafeAdminUtil {
     /**
      *return the parmValue of given parmKey.
      *
+     *@param request
+     *@param pramKey
+     *@return String of the pramKey
+     */
+
+    public static String getProductStoreParm(ServletRequest request, String parmKey) {
+        if (UtilValidate.isEmpty(parmKey)) {
+            return null;
+        }
+        return getProductStoreParm((Delegator)request.getAttribute("delegator"), ProductStoreWorker.getProductStoreId(request), parmKey);
+    }
+
+    /**
+     *return the parmValue of given parmKey.
+     *@param productStoreId 
+     *@param pramKey
+     *@return String of the pramKey
+     */
+
+    public static String getProductStoreParm(String productStoreId, String parmKey) {
+        if (UtilValidate.isEmpty(parmKey) || UtilValidate.isEmpty(productStoreId)) {
+            return null;
+        }
+        return getProductStoreParm(DelegatorFactory.getDelegator(null), productStoreId, parmKey);
+    }
+    /**
+     *return the parmValue of given parmKey.
+     *
      *@param Delegator
      *@param productStoreId 
      *@param pramKey
@@ -212,20 +240,22 @@ public class OsafeAdminUtil {
         return parmValue;
     }
 
-    /**
-     *return the parmValue of given parmKey.
-     *
-     *@param request
-     *@param pramKey
-     *@return String of the pramKey
-     */
-
-    public static String getProductStoreParm(ServletRequest request, String parmKey) {
-        if (UtilValidate.isEmpty(parmKey)) {
-            return null;
-        }
-        return getProductStoreParm((Delegator)request.getAttribute("delegator"), ProductStoreWorker.getProductStoreId(request), parmKey);
-    }
+    public static boolean isProductStoreParmTrue(String parmValue) {
+        if (UtilValidate.isEmpty(parmValue)) 
+         {
+             return false;
+         }
+         if ("TRUE".equals(parmValue.toUpperCase()))
+         {
+             return true;
+         }
+         return false;
+     }
+    
+    public static boolean isProductStoreParmTrue(ServletRequest request,String parmName) {
+         return isProductStoreParmTrue(getProductStoreParm(request,parmName));
+     }
+    
 
     public static Timestamp addDaysToTimestamp(Timestamp start, int days) {
         Calendar tempCal = UtilDateTime.toCalendar(start, TimeZone.getDefault(), Locale.getDefault());
@@ -424,18 +454,6 @@ public class OsafeAdminUtil {
         }
         return mProductStoreParm;
     }
-    
-    public static boolean isProductStoreParmTrue(String parmValue) {
-        if (UtilValidate.isEmpty(parmValue)) 
-         {
-             return false;
-         }
-         if ("TRUE".equals(parmValue.toUpperCase()))
-         {
-         	return true;
-         }
-         return false;
-     }
     
     private static Map<String, ?> context = FastMap.newInstance();
 	
@@ -832,32 +850,20 @@ public class OsafeAdminUtil {
         }
         return subStrCount;
     }
-
-    /**
-     *return the parmValue of given parmKey.
-     *
-     *@param pramKey
-     *@return String of the pramKey
-     */
-     @Deprecated
-    public static String getProductStoreParm(String parmKey) {
-        if (UtilValidate.isEmpty(parmKey)) {
-            return null;
-        }
-        String productStoreId = null;
-        Delegator delegator = DelegatorFactory.getDelegator(null);
-        try {
-            List<GenericValue> productStoreList = delegator.findList("ProductStore",null,null,null,null,true);
-            if (UtilValidate.isNotEmpty(productStoreList)) {
-                GenericValue productStore = EntityUtil.getFirst(productStoreList);
-                productStoreId = productStore.getString("productStoreId");
+    /** Trims all the trailing white spaces of a String. */
+    public static String trimTrailSpaces(String str) {
+    	String trimmedStr = null;
+    	if (UtilValidate.isNotEmpty(str)){
+            int i;  
+            for ( i = str.length()-1; i > 0; i--){  
+                char c = str.charAt(i);  
+                if (c != '\u0020') {  
+                    break;
+                }
             }
-        } catch (Exception e) {
-            Debug.logError(e, "Problem getting Product Store", module);
+        trimmedStr = str.substring(0, i+1);  
         }
-        if (UtilValidate.isEmpty(productStoreId)) {
-            return null;
-        }
-        return getProductStoreParm(delegator, productStoreId, parmKey);
+    	return trimmedStr;
     }
+
 }

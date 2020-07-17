@@ -1,4 +1,3 @@
-<!doctype html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7"> <![endif]-->
 <!--[if IE 8 ]>    <html lang="en" class="no-js ie8"> <![endif]-->
@@ -11,8 +10,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <meta content="all,index,follow" name="robots"/>
 	<#assign titleWithOutHtml = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(metaTitle!title!productStore.title!"")!"") />
-	<#assign seoTitle = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(globalContext.SEO_STORE_TITLE!productStore.storeName!"")!"") />
-	<#assign seoTitlePosition = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(globalContext.SEO_STORE_TITLE_POSITION!"")!"") />
+	<#assign SEO_TITLE = Static["com.osafe.util.Util"].getProductStoreParm(request,"SEO_STORE_TITLE")!""/>
+	<#assign seoTitle = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(SEO_TITLE!productStore.storeName!"")!"") />
+	<#assign SEO_TITLE_POSITION = Static["com.osafe.util.Util"].getProductStoreParm(request,"SEO_STORE_TITLE_POSITION")!""/>
+	<#assign seoTitlePosition = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(SEO_TITLE_POSITION!"")!"") />
 	<#if seoTitlePosition == "SUFFIX">
 		<title><#if titleWithOutHtml?has_content>${titleWithOutHtml!""}</#if> ${(seoTitle)?if_exists}  </title>
 	<#else>
@@ -60,17 +61,36 @@
       <meta name="verify-v1" content="${GA_SITE_VERIFY_V1!""}"/>
    </#if>
 
-   <#assign strippedMetaDescription = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(metaDescription!productStore.subtitle!"",SEO_META_DESC_LEN!"")!"") />
+   <#assign strippedMetaDescription = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(metaDescription!productStore.subtitle!"",Static["com.osafe.util.Util"].getProductStoreParm(request,"SEO_META_DESC_LEN"))!"")/>
    <meta name="description" content="${strippedMetaDescription!""}"/>
 
-    <#assign strippedMetaKeywords = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(metaKeywords!productStore.subtitle!"",SEO_META_KEY_LEN!"")!"") />
+    <#assign strippedMetaKeywords = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(metaKeywords!productStore.subtitle!"",Static["com.osafe.util.Util"].getProductStoreParm(request,"SEO_META_KEY_LEN"))!"")/>
     <meta name="keywords" content="${strippedMetaKeywords!""}"/>
 
-    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(PCA_ACTIVE_FLAG!"") && loadPca?has_content && loadPca == "Y">
+    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"PCA_ACTIVE_FLAG") && loadPca?has_content && loadPca == "Y">
         <#assign osafeCapturePlus = Static["com.osafe.captureplus.OsafeCapturePlus"].getInstance(globalContext.productStoreId!) />
         <#if osafeCapturePlus.isNotEmpty()>
             ${setRequestAttribute("osafeCapturePlus",osafeCapturePlus)}
         </#if>
     </#if>
-</head>
+    <#assign reviewMethod = Static["com.osafe.util.Util"].getProductStoreParm(request,"REVIEW_METHOD")!""/>
+    <#if reviewMethod?has_content >
+	    <#if reviewMethod = "REEVOO" >
+	        <#assign reevooJsurl = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_JS_URL")!"">
+	        <#assign reevooTrkref = Static["com.osafe.util.Util"].getProductStoreParm(request,"REEVOO_TRKREF")!"">
+	        <#assign reevooJsurl = reevooJsurl.concat("/").concat(reevooTrkref).concat(".js?async=true")>
+	        <script id="reevoomark-loader">
+	            (function() {
+	                var myscript = document.createElement('script');
+	                myscript.type = 'text/javascript';
+	                myscript.src=('${StringUtil.wrapString(reevooJsurl)}');
+	                var s = document.getElementById('reevoomark-loader');
+	                s.parentNode.insertBefore(myscript, s);
+	            })();
+	        </script>
+	    </#if>
+    </#if>
+    <#-- KEEP CUSTOM HEADER INFORMATION OF THE CLIENT AS THE LAST INCLUDE-->
+    ${screens.render("component://osafe/widget/EcommerceContentScreens.xml#SI_HEAD_TAG")}
+  </head>
 <body>

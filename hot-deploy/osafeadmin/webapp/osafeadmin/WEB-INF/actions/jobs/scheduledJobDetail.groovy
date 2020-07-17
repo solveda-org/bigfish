@@ -29,40 +29,36 @@ if (UtilValidate.isNotEmpty(jobId))
 {
     schedJob = delegator.findByPrimaryKey("JobSandbox", [jobId : jobId]);
     context.schedJob = schedJob;
-	
-	//break up the timestamp into a date for display(date, time, AMPM)
-	runDateTime = schedJob.runTime.toString();
-	
-	runDate = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, preferredDateFormat);
-	runTime = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, "h:mm");
-	runTimeAMPM = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, "a");
-	context.runDate = runDate;
-	context.runTime = runTime;
-	context.runTimeAMPM = runTimeAMPM;
-	
-	//get recurrence info
-	if (UtilValidate.isNotEmpty(schedJob.recurrenceInfoId))
-	{
-		recurrenceInfo = delegator.findByAnd("RecurrenceInfo", [recurrenceInfoId : schedJob.recurrenceInfoId]);
-		recurrenceInfo = EntityUtil.getFirst(recurrenceInfo);
-		context.recurrenceInfo = recurrenceInfo;
-		
-		//get recurrence rule
-		if (UtilValidate.isNotEmpty(recurrenceInfo.recurrenceRuleId))
-		{
-			recurrenceRule = delegator.findByAnd("RecurrenceRule", [recurrenceRuleId : recurrenceInfo.recurrenceRuleId]);
-			recurrenceRule = EntityUtil.getFirst(recurrenceRule);
-			context.recurrenceRule = recurrenceRule;
-		}
-	}
-	
+    
+    //break up the timestamp into a date for display(date, time, AMPM)
+    runDateTime = schedJob.runTime.toString();
+
+    if (UtilValidate.isNotEmpty(schedJob.runTime))
+    {
+        runDate = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, preferredDateFormat);
+        runHour = UtilDateTime.getHour(UtilDateTime.toTimestamp(schedJob.runTime), timeZone, locale);
+        runMinute = UtilDateTime.getMinute(UtilDateTime.toTimestamp(schedJob.runTime), timeZone, locale);
+        runTimeAMPM = ((runHour/12) < 1)?1:2;// 1 for AM and 2 for PM
+        runHour = ((runHour%12) == 0)?12:(runHour%12);
+        context.runDate = runDate;
+        context.runHour = Integer.toString(runHour);
+        context.runMinute = Integer.toString(runMinute);
+        context.runTimeAMPM = Integer.toString(runTimeAMPM);
+    }
+    //get recurrence info
+    if (UtilValidate.isNotEmpty(schedJob.recurrenceInfoId))
+    {
+        recurrenceInfo = delegator.findByAnd("RecurrenceInfo", [recurrenceInfoId : schedJob.recurrenceInfoId]);
+        recurrenceInfo = EntityUtil.getFirst(recurrenceInfo);
+        context.recurrenceInfo = recurrenceInfo;
+        
+        //get recurrence rule
+        if (UtilValidate.isNotEmpty(recurrenceInfo.recurrenceRuleId))
+        {
+            recurrenceRule = delegator.findByAnd("RecurrenceRule", [recurrenceRuleId : recurrenceInfo.recurrenceRuleId]);
+            recurrenceRule = EntityUtil.getFirst(recurrenceRule);
+            context.recurrenceRule = recurrenceRule;
+        }
+    }
+    
 }
-
-
-
-
-
-
-
-
-

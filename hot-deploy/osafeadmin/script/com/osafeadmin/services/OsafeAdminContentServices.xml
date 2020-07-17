@@ -97,6 +97,9 @@
             </else>
             </if-compare>
             <set-nonpk-fields value-field="content" map="parameters"/>
+            <if-not-empty field="parameters.locale">
+                <set field="content.localeString" from-field="parameters.locale" type="PlainString"/>
+            </if-not-empty>
             <store-value value-field="content"/>
         </if-not-empty>
         <field-to-result field="parameters.contentId" result-name="contentId"/>
@@ -158,6 +161,9 @@
         <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
         <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
         <set field="createTextContentCtx.contentTypeId" from-field="parameters.contentTypeId"/>
+        <if-not-empty field="parameters.locale">
+            <set field="createTextContentCtx.localeString" from-field="parameters.locale" type="PlainString"/>
+        </if-not-empty>
         <set field="createTextContentCtx.mapKey" value="link"/>
         <set field="createTextContentCtx.contentPurposeTypeId"  value="SECTION"/>
         <set field="createTextContentCtx.mimeTypeId"  value="text/html"/>

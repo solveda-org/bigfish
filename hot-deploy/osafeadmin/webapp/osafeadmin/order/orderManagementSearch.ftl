@@ -25,10 +25,10 @@
                 <input class="textEntry" type="text" id="partyId" name="partyId" maxlength="40" value="${parameters.partyId!""}"/>
           </div>
       </div>
-      <div class="entry">
+      <div class="entry medium">
           <label>${uiLabelMap.EmailCaption}</label>
           <div class="entryInput">
-                <input class="textEntry emailEntry" type="text" id="orderEmail" name="orderEmail" maxlength="40" value="${parameters.orderEmail!""}"/>
+                <input class="textEntry emailEntry long" type="text" id="orderEmail" name="orderEmail" maxlength="40" value="${parameters.orderEmail!""}"/>
           </div>
       </div>
      </div>
@@ -36,11 +36,21 @@
 	      <div class="entry long">
 	          <label>${uiLabelMap.OrderStatusCaption} </label>
 	          <#assign intiCb = "${initializedCB}"/>
-	          <div class="entryInput checkbox medium">
+	          <div class="entryInput checkbox large">
 	                    <input type="checkbox" class="checkBoxEntry" name="viewall" id="viewall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','view')" <#if parameters.viewall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
-	                    <input type="checkbox" class="checkBoxEntry" name="viewapproved" id="viewapproved" value="Y" <#if parameters.viewapproved?has_content || viewapproved?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ApprovedLabel}
-	                    <input type="checkbox" class="checkBoxEntry" name="viewcompleted" id="viewcompleted" value="Y" <#if parameters.viewcompleted?has_content || viewcompleted?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CompletedLabel}
-	                    <input type="checkbox" class="checkBoxEntry" name="viewcancelled" id="viewcancelled" value="Y" <#if parameters.viewcancelled?has_content || viewcancelled?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CancelledLabel}    
+	                    <#assign orderStatusIncSearch = ORDER_STATUS_INC_SEARCH!"" />
+	                    <#if orderStatusIncSearch?has_content>
+	                      <#assign orderStatusIncSearchList = Static["org.ofbiz.base.util.StringUtil"].split(orderStatusIncSearch, ",")/>
+	                      <#if orderStatusIncSearchList?has_content>
+	                        <#list orderStatusIncSearchList as orderStatusId>
+	                          <#assign statusItem = delegator.findOne("StatusItem", {"statusId" : orderStatusId?trim}, false)?if_exists/>
+	                          <#if statusItem?has_content && statusItem.description?has_content>
+	                            <#assign statusDescription = statusItem.description?lower_case />
+	                          </#if>
+	                          <input type="checkbox" class="checkBoxEntry" name="view${statusDescription!}" id="view${statusDescription!}" value="Y" <#if parameters.get('view${statusDescription!}')?has_content || context.get('view${statusDescription!}')?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${statusItem.description!}
+	                        </#list>
+	                      </#if>
+	                    </#if>    
 	          </div>
 	     </div>
      </div>
@@ -48,7 +58,8 @@
 	      <div class="entry short">
 	          <label>${uiLabelMap.ExportStatusCaption}</label>
 	          <div class="entryInput checkbox small">
-	                    <input type="checkbox" class="checkBoxEntry" name="downloadall" id="downloadall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','download')" <#if parameters.downloadall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
+	              <input type="checkbox" class="checkBoxEntry" name="downloadall" id="downloadall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','download')" <#if parameters.downloadall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.AllLabel}
+	                    
 	                    <input type="checkbox" class="checkBoxEntry" name="downloadnew" id="downloadnew" value="Y" <#if parameters.downloadnew?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.NewLabel}
 	                    <input type="checkbox" class="checkBoxEntry" name="downloadloaded" name="downloadloaded" value="Y" <#if parameters.downloadloaded?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.ExportedLabel}
 	          </div>

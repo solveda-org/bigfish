@@ -2,6 +2,7 @@ package com.osafe.services;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletRequest;
@@ -15,6 +16,7 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.GenericDispatcher;
 import org.ofbiz.service.GenericServiceException;
@@ -44,8 +46,14 @@ public class InventoryServices {
     	    GenericValue whInventoryProductAttribute = null;
     	    
     		try {
-    		    totalInventoryProductAttribute = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","BF_INVENTORY_TOT"), true);
-    		    whInventoryProductAttribute = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","BF_INVENTORY_WHS"), true);
+    			List<GenericValue> inventoryProductAttributes =  delegator.findByAndCache("ProductAttribute", UtilMisc.toMap("productId",productId));
+    			if(UtilValidate.isNotEmpty(inventoryProductAttributes)) {
+    			    List<GenericValue> totalInventoryProductAttributes = EntityUtil.filterByAnd(inventoryProductAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_TOT"));
+    			    totalInventoryProductAttribute = EntityUtil.getFirst(totalInventoryProductAttributes);
+    			    
+    			    List<GenericValue> whInventoryProductAttributes = EntityUtil.filterByAnd(inventoryProductAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_WHS"));
+    			    whInventoryProductAttribute = EntityUtil.getFirst(whInventoryProductAttributes);
+    			}
     		} catch (GenericEntityException ge) {
     		    Debug.logError(ge, ge.getMessage(), module);
 			}
@@ -99,7 +107,7 @@ public class InventoryServices {
     	String inventoryMethod = Util.getProductStoreParm(productStoreId, "INVENTORY_METHOD");
     	GenericValue userLogin = null;
 		try {
-			userLogin = delegator.findByPrimaryKey("UserLogin",UtilMisc.toMap("userLoginId", "system"));
+			userLogin = delegator.findByPrimaryKeyCache("UserLogin",UtilMisc.toMap("userLoginId", "system"));
 		} catch (GenericEntityException e1) {
 			e1.printStackTrace();
 		}
@@ -114,8 +122,14 @@ public class InventoryServices {
     	    BigDecimal newInventoryWarehouseLevel = BigDecimal.ZERO;
     	    
     		try {
-    		    totalInventoryProductAttribute = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","BF_INVENTORY_TOT"), true);
-    		    whInventoryProductAttribute = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","BF_INVENTORY_WHS"), true);
+    			List<GenericValue> inventoryProductAttributes =  delegator.findByAnd("ProductAttribute", UtilMisc.toMap("productId",productId));
+    			if(UtilValidate.isNotEmpty(inventoryProductAttributes)) {
+    			    List<GenericValue> totalInventoryProductAttributes = EntityUtil.filterByAnd(inventoryProductAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_TOT"));
+    			    totalInventoryProductAttribute = EntityUtil.getFirst(totalInventoryProductAttributes);
+    			    
+    			    List<GenericValue> whInventoryProductAttributes = EntityUtil.filterByAnd(inventoryProductAttributes, UtilMisc.toMap("attrName", "BF_INVENTORY_WHS"));
+    			    whInventoryProductAttribute = EntityUtil.getFirst(whInventoryProductAttributes);
+    			}
     		} catch (GenericEntityException ge) {
     		    Debug.logError(ge, ge.getMessage(), module);
 			}

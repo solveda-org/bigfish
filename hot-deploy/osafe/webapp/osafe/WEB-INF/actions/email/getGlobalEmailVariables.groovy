@@ -31,6 +31,17 @@ productStoreId = parameters.productStoreId;
 if (UtilValidate.isNotEmpty(productStoreId))
 {
   globalContext.put("PRODUCT_STORE_ID",productStoreId);
+  //PRODUCT STORE PARMS
+  productStoreParmList = delegator.findByAndCache("XProductStoreParm",UtilMisc.toMap("productStoreId",productStoreId));
+  if (UtilValidate.isNotEmpty(productStoreParmList))
+  {
+	  parmIter = productStoreParmList.iterator();
+	  while (parmIter.hasNext()) 
+	  {
+	    prodStoreParm = (GenericValue) parmIter.next();
+	    globalContext.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
+	  }
+  }
 
 }
 
@@ -89,10 +100,10 @@ globalContext.put("EMAIL_TITLE",context.title);
 
 if (UtilValidate.isNotEmpty(partyId)) 
 {
-    gvParty = delegator.findByPrimaryKey("Party", [partyId : partyId]);
+    gvParty = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
     if (UtilValidate.isNotEmpty(gvParty)) 
     {
-        person=gvParty.getRelatedOne("Person");
+        person=gvParty.getRelatedOneCache("Person");
         if (UtilValidate.isNotEmpty(person)) 
         {
           globalContext.put("PARTY_ID",partyId);
@@ -104,7 +115,7 @@ if (UtilValidate.isNotEmpty(partyId))
           globalContext.put("PERSONAL_TITLE",person.personalTitle);
           globalContext.put("NICKNAME",person.nickname);
         }
-        userLogins=gvParty.getRelated("UserLogin");
+        userLogins=gvParty.getRelatedCache("UserLogin");
         userLogin = EntityUtil.getFirst(userLogins);
         if (UtilValidate.isNotEmpty(userLogin)) 
         {
@@ -132,7 +143,7 @@ if (UtilValidate.isNotEmpty(orderId))
        orderTaxTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
        orderTaxTotal = orderTaxTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
 
-       orderGrandTotal = OrderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments);
+       orderGrandTotal = orderReadHelper.getOrderGrandTotal();
 
        shippingLocations = orderReadHelper.getShippingLocations();
        shippingAddress = EntityUtil.getFirst(shippingLocations);
@@ -151,7 +162,7 @@ if (UtilValidate.isNotEmpty(orderId))
         } 
         else 
         {
-          paymentMethodType = opp.getRelatedOne("PaymentMethodType");
+          paymentMethodType = opp.getRelatedOneCache("PaymentMethodType");
           if (paymentMethodType) 
           {
                 paymentMethodType = paymentMethodType;
@@ -192,6 +203,6 @@ if (UtilValidate.isNotEmpty(orderId))
 shoppingListId = context.shoppingListId;
 if (UtilValidate.isNotEmpty(shoppingListId)) 
 {
-	shoppingCartInfoList = delegator.findByAnd("ShoppingListItem", [shoppingListId : shoppingListId]);
+	shoppingCartInfoList = delegator.findByAndCache("ShoppingListItem", [shoppingListId : shoppingListId]);
 	globalContext.put("CART_ITEMS",shoppingCartInfoList);
 }

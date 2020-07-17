@@ -3,7 +3,7 @@
     <#assign partyId = userLogin.partyId!"">
 </#if>
 
-<#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content && CHECKOUT_STORE_CC?has_content && !Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC)>
+<#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content && !Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC")>
   <#assign ccRequired = "false" />
 <#else>
   <#assign ccRequired = "true" />
@@ -54,10 +54,12 @@
 	          <input type="hidden" name="description" id="cardSecurityCode" value="" />
 	          <input type="hidden" name="contactMechId" id="contactMechId" value="${billingContactMechId!""}" />
                 <input type="hidden" name="paymentMethodTypeId" id="paymentMethodTypeId" value="CREDIT_CARD" />
-                <input type="hidden" name="storeCCRequired" id="storeCCRequired" value="${CHECKOUT_STORE_CC!"true"}" />
-                <input type="hidden" name="storeCCValidate" id="storeCCValidate" value="${CHECKOUT_STORE_CC_REQ!"false"}" />
+                <#assign checkOutStoreCC= Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_STORE_CC")!""/>
+                <#assign checkOutStoreCCReq= Static["com.osafe.util.Util"].getProductStoreParm(request,"CHECKOUT_STORE_CC_REQ")!""/>
+                <input type="hidden" name="storeCCRequired" id="storeCCRequired" value="${checkOutStoreCC!"true"}" />
+                <input type="hidden" name="storeCCValidate" id="storeCCValidate" value="${checkOutStoreCCReq!"false"}" />
                <#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content>
-                <#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC_REQ) && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC)>
+                <#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC_REQ") && Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC")>
                    <#assign showPaymentOption = "true"/>
                 <#else>
                    <#assign showPaymentOption = "false" />
@@ -73,7 +75,7 @@
                   </div>
                 </div>
                 
-                <#if CHECKOUT_ALLOW_EBS?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_ALLOW_EBS)>
+                <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_EBS")>
                   <!-- EBS section Starts-->
                   <div class="entry ebs">
 	                <h3>${uiLabelMap.EBSHeading}</h3>
@@ -84,7 +86,7 @@
 	              </div>
                   <!-- EBS section Ends-->
 	            </#if>
-                <#if CHECKOUT_ALLOW_PAYPAL?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_ALLOW_PAYPAL)>
+                <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_ALLOW_PAYPAL")>
 	            <div class="entry paypal">
 	            <h3>${uiLabelMap.PayPalHeading}</h3>
 	              <label>${uiLabelMap.PayPalCaption}</label>
@@ -98,7 +100,7 @@
                  <div class="entry">
                     <h3>${uiLabelMap.CreditCardHeading}</h3>
                 </div>
-                <#if CHECKOUT_KEEP_PAYMENT_METHODS?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_KEEP_PAYMENT_METHODS) && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+                <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_KEEP_PAYMENT_METHODS") && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
                     <#assign savedPaymentMethodValueMaps = Static["org.ofbiz.accounting.payment.PaymentWorker"].getPartyPaymentMethodValueMaps(delegator, partyId!"") />
                     <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
                         <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
@@ -148,7 +150,7 @@
                             </select>
                             <@fieldErrors fieldName="savedCard"/>
                         </div>
-                        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_CC_VERIFICATION_REQ)>
+                        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_CC_VERIFICATION_REQ")>
                             <div class="entry">
                               <label for="savedVerificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
                                <input type="text" class="cardNumber" maxlength="30" id="savedVerificationNo"  name="savedVerificationNo" value="${requestParameters.savedVerificationNo!""}"/>
@@ -174,7 +176,7 @@
                           <#assign cardType = requestParameters.cardType?if_exists>
                         </#if>
                         <#if cardType?has_content>
-                          <#assign cardTypeEnums = delegator.findByAnd("Enumeration", {"enumCode" : cardType, "enumTypeId" : "CREDIT_CARD_TYPE"})?if_exists/>
+                          <#assign cardTypeEnums = delegator.findByAndCache("Enumeration", {"enumCode" : cardType, "enumTypeId" : "CREDIT_CARD_TYPE"})?if_exists/>
                           <#if cardTypeEnums?has_content>
                             <#assign cardTypeEnum = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(cardTypeEnums) />
                             <option value="${cardTypeEnum.enumCode!}">${cardTypeEnum.description!}</option>
@@ -231,7 +233,7 @@
 	              </select>
 	              <@fieldErrors fieldName="expYear"/>
 	            </div>
-	            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_CC_VERIFICATION_REQ)>
+                <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_CC_VERIFICATION_REQ")>
                     <div class="entry">
                       <label for="verificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
                        <input type="text" class="cardNumber" maxlength="30" id="verificationNo"  name="verificationNo" value="${requestParameters.verificationNo!""}"/>

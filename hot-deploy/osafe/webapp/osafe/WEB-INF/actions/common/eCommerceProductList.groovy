@@ -24,13 +24,12 @@ import com.osafe.services.OsafeManageXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 
 
-Delegator = request.getAttribute("delegator");
-
 String productCategoryId = parameters.productCategoryId;
 GenericValue gvProductCategory =  delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId",productCategoryId), true);
 
 String searchText = com.osafe.util.Util.stripHTML(parameters.searchText);
-if (gvProductCategory) {
+if (gvProductCategory) 
+{
     CategoryContentWrapper currentProductCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
     context.currentProductCategory = gvProductCategory;
     context.currentProductCategoryContentWrapper = currentProductCategoryContentWrapper;
@@ -64,7 +63,8 @@ if (gvProductCategory) {
         context.metaDescription = metaDescription;
     }
  
- } else {
+ } else 
+ {
     searchResultsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsTitle", locale);
     if(request.getAttribute("completeDocumentList"))
     {
@@ -78,13 +78,15 @@ if (gvProductCategory) {
 previousParamsMap = {};
 previousParamsList = [];
 previousParams = request.getQueryString();
-if (previousParams) {
+if (previousParams) 
+{
     previousParams = UtilHttp.stripNamedParamsFromQueryString(previousParams, ["start", "rows", "sortResults" , "sortBtn"]);
     previousParams = "?" + previousParams;
 
     previousParamsMap = UtilHttp.getParameterMap(request,UtilMisc.toSet("start", "rows", "sortResults" , "sortBtn"),false);
     previousParamsList = UtilMisc.toList(previousParamsMap.keySet());
-} else {
+} else 
+{
     previousParams = "";
 }
 context.previousParams = previousParams;
@@ -121,7 +123,7 @@ if (UtilValidate.isNotEmpty(filterGroup))
 
   context.facetGroups = facetGroups;
 }
-facetGroupMatch = Util.getProductStoreParm(request, "FACET_GROUP_VARIANT_MATCH");
+facetGroupMatch = Util.getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH");
 if (UtilValidate.isNotEmpty(facetGroupMatch))
 {
 	searchText = parameters.searchText ?: "";
@@ -163,15 +165,18 @@ searchRestrictionMap = FastMap.newInstance();
 searchRestrictionMap.put("screen", "Y");
 uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false,true);
 
-for(Map uiSequenceScreenMap : uiSequenceSearchList) {
-     if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) {
-         if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) {
+for(Map uiSequenceScreenMap : uiSequenceSearchList) 
+{
+     if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) 
+     {
+         if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) 
+         {
              uiSequenceScreenMap.value = Integer.parseInt(uiSequenceScreenMap.value);
          } else {
              uiSequenceScreenMap.value = 0;
          }
      }
- }
+}
 uiSequenceSearchList = UtilMisc.sortMaps(uiSequenceSearchList, UtilMisc.toList("value"));
 context.divSequenceList = uiSequenceSearchList;
 

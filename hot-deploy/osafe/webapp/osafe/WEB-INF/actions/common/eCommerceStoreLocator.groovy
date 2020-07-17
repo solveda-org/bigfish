@@ -2,163 +2,323 @@ package common;
 
 import java.util.List;
 import java.util.Map;
-
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.common.geo.*;
 import org.ofbiz.base.util.*;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.party.contact.ContactMechWorker;
-
 import com.osafe.util.Util;
 import com.osafe.geo.OsafeGeo;
 
 address = StringUtils.trimToEmpty(parameters.address);
 latitude = StringUtils.trimToEmpty(parameters.latitude);
 longitude = StringUtils.trimToEmpty(parameters.longitude);
-searchOsafeGeo = new OsafeGeo(latitude, longitude);
-
+showMap = StringUtils.trimToEmpty(parameters.showMap);
+searchOsafeGeo = "";
+context.searchedAddress = address;
+storePartyList = FastList.newInstance();
 session = context.session;
-Map<String, Object> svcCtx = FastMap.newInstance();
-userLogin = session.getAttribute("userLogin");
-svcCtx.put("lookupFlag", "Y");
-svcCtx.put("showAll", "N");
-svcCtx.put("statusId", "ANY");
-svcCtx.put("extInfo", "N");
-svcCtx.put("partyTypeId", "PARTY_GROUP");
-svcCtx.put("roleTypeId", "STORE_LOCATION");
-svcCtx.put("statusId", "PARTY_ENABLED");
-svcRes = dispatcher.runSync("findParty", svcCtx);
-partyList = svcRes.get("completePartyList");
 
-width = "600px"; height = "300px"; zoom = "4";
-uom = "Miles"; redius = 20; numDiplay = 10; gmapUrl ="";
+//Check if we are showing a single store detail or a list of available stores
+if (UtilValidate.isNotEmpty(context.storeDetail) && "Y".equals(context.storeDetail)) 
+{
+	//Check if a sepcific store id was passed
+	storeId = parameters.storeId;
+	if (UtilValidate.isEmpty(storeId)) 
+	{
+	    shoppingCart = session.getAttribute("shoppingCart");
+	    if (UtilValidate.isNotEmpty(shoppingCart))
+	    {
+	        storeId = shoppingCart.getOrderAttribute("STORE_LOCATION");
+	        context.shoppingCart = shoppingCart;
+	    }
 
-productStoreParmMap = Util.getProductStoreParmMap(request);
-if(UtilValidate.isNotEmpty(productStoreParmMap)) {
-    if (Util.isNumber(productStoreParmMap.get(mapWidthParam))) {
-        width = productStoreParmMap.get(mapWidthParam)+"px";
-    }
-    if (Util.isNumber(productStoreParmMap.get(mapHeightParam))) {
-        height = productStoreParmMap.get(mapHeightParam)+"px";
-    }
-    if (Util.isNumber(productStoreParmMap.GMAP_MAP_ZOOM)) {
-        zoom = productStoreParmMap.GMAP_MAP_ZOOM;
-    }
-    if (UtilValidate.isNotEmpty(productStoreParmMap.GMAP_UOM) && (productStoreParmMap.GMAP_UOM.equalsIgnoreCase("Kilometers") || productStoreParmMap.GMAP_UOM.equalsIgnoreCase("Miles"))) {
-        uom = productStoreParmMap.GMAP_UOM;
-    }
-    if (Util.isNumber(productStoreParmMap.GMAP_RADIUS)) {
-        redius = Integer.parseInt(productStoreParmMap.GMAP_RADIUS);
-    }
-    if (Util.isNumber(productStoreParmMap.GMAP_NUM_TO_DISPLAY)) {
-        numDiplay = Integer.parseInt(productStoreParmMap.GMAP_NUM_TO_DISPLAY);
-    }
-    if (UtilValidate.isNotEmpty(productStoreParmMap.GMAP_JS_API_URL)) {
-        gmapUrl = productStoreParmMap.GMAP_JS_API_URL;
-    }
-    if (UtilValidate.isNotEmpty(productStoreParmMap.GMAP_JS_API_KEY)) {
-        gmapUrl = gmapUrl+productStoreParmMap.GMAP_JS_API_KEY;
-    }
+	    orderId = parameters.orderId;
+	    if (UtilValidate.isNotEmpty(orderId)) 
+	    {
+	        orderAttrPickupStore = delegator.findOne("OrderAttribute", ["orderId" : orderId, "attrName" : "STORE_LOCATION"], true);
+	        if (UtilValidate.isNotEmpty(orderAttrPickupStore)) 
+	        {
+	            storeId = orderAttrPickupStore.attrValue;
+	        }
+	    }
+	}
+	if (UtilValidate.isNotEmpty(storeId))
+	{
+	    party = delegator.findByPrimaryKeyCache("Party", [partyId : storeId]);
+	    if (UtilValidate.isNotEmpty(party)) 
+	    {
+	    	storePartyList = FastList.newInstance();
+	    	storePartyList.add(party);
+	        partyGroup = party.getRelatedOneCache("PartyGroup");
+	        if (UtilValidate.isNotEmpty(partyGroup)) 
+	        {
+	            context.storeInfo = partyGroup;
+	        }
+	    	
+	    }
+	}
 }
+else
+{
+	if(UtilValidate.isNotEmpty(showMap) && "Y".equals(showMap)) 
+	{
+	     storePartyList = delegator.findByAndCache("PartyRoleAndPartyDetail", UtilMisc.toMap("partyTypeId", "PARTY_GROUP","roleTypeId","STORE_LOCATION","statusId","PARTY_ENABLED"));
+	 	 searchOsafeGeo = new OsafeGeo(latitude, longitude);
+	}
+	
+}
+
+
+
+
+
+//Initial GMAP settings
+width = "600px"; 
+height = "300px"; 
+zoom = "4";
+uom = "Miles"; 
+redius = 20; 
+numDiplay = 10; 
+gmapUrl ="";
 
 geoPoints = FastList.newInstance();
 partyDetailList = FastList.newInstance();
-if(UtilValidate.isNotEmpty(partyList)) {
-    for(partyRow in partyList) {
-        partyId = partyRow.partyId;
-        latestPartyGeoPoint = GeoWorker.findLatestGeoPoint(delegator, "PartyGeoPoint", "partyId", partyId, null, null);
+partyDetailExistsList = FastList.newInstance();
+if(UtilValidate.isNotEmpty(storePartyList)) 
+{
+	mapWidth = Util.getProductStoreParm(request,"GMAP_MAP_IMG_W");
+	mapHeight = Util.getProductStoreParm(request,"GMAP_MAP_IMG_H");
+	mapZoom = Util.getProductStoreParm(request,"GMAP_MAP_ZOOM");
+	mapUom = Util.getProductStoreParm(request,"GMAP_UOM");
+	mapRadius = Util.getProductStoreParm(request,"GMAP_RADIUS");
+	mapNumDisplay = Util.getProductStoreParm(request,"GMAP_NUM_TO_DISPLAY");
+	mapApiUrl = Util.getProductStoreParm(request,"GMAP_JS_API_URL");
+	mapApiKey = Util.getProductStoreParm(request,"GMAP_JS_API_KEY");
+    if (Util.isNumber(mapWidth)) 
+    {
+        width = mapWidth +"px";
+    }
+    if (Util.isNumber(mapHeight)) 
+    {
+        height = mapHeight + "px";
+    }
+    if (Util.isNumber(mapZoom)) 
+    {
+        zoom = mapZoom;
+    }
+    if (UtilValidate.isNotEmpty(mapUom) && (mapUom.equalsIgnoreCase("Kilometers") || mapUom.equalsIgnoreCase("Miles"))) 
+    {
+        uom = mapUom;
+    }
+    if (Util.isNumber(mapRadius)) 
+    {
+        redius = Integer.parseInt(mapRadius);
+    }
+    if (Util.isNumber(mapNumDisplay)) 
+    {
+        numDiplay = Integer.parseInt(mapNumDisplay);
+    }
+    if (UtilValidate.isNotEmpty(mapApiUrl)) 
+    {
+        gmapUrl = mapApiUrl;
+    }
+    if (UtilValidate.isNotEmpty(mapApiKey)) 
+    {
+        gmapUrl = mapApiUrl+mapApiKey;
+    }
+    for(partyRow in storePartyList) 
+    {
+      partyId = partyRow.partyId;
+      if (!partyDetailExistsList.contains(partyId))
+      {
+    	  partyDetailExistsList.add(partyId);
+          party = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
+          if (UtilValidate.isNotEmpty(party)) 
+          {        
+            latestPartyGeoPoint = GeoWorker.findLatestGeoPoint(delegator, "PartyGeoPoint", "partyId", partyId, null, null);
 
-        if(UtilValidate.isNotEmpty(latestPartyGeoPoint)) {
-            latestGeoPoint = delegator.findByPrimaryKey("GeoPoint", [geoPointId : latestPartyGeoPoint.geoPointId]);
-            latestOsafeGeo = new OsafeGeo(latestGeoPoint.latitude.toString(), latestGeoPoint.longitude.toString());
-            distance = Math.round(Util.distFrom(searchOsafeGeo, latestOsafeGeo, uom) * 10) / 10;
-            if (latestGeoPoint.dataSourceId == dataSourceId && geoPoints.size() < numDiplay && distance <= redius) {
+            if(UtilValidate.isNotEmpty(latestPartyGeoPoint)) 
+            {
+                latestGeoPoint = delegator.findByPrimaryKeyCache("GeoPoint", [geoPointId : latestPartyGeoPoint.geoPointId]);
+                latestOsafeGeo = new OsafeGeo(latestGeoPoint.latitude.toString(), latestGeoPoint.longitude.toString());
+                distance = Math.round(Util.distFrom(searchOsafeGeo, latestOsafeGeo, uom) * 10) / 10;
+                if (latestGeoPoint.dataSourceId == dataSourceId && distance <= redius) 
+                {
 
-                groupName = ""; groupNameLocal = ""; address1 = ""; address2 = "";
-                address3 = ""; city = ""; stateProvinceGeoId = ""; postalCode = "";
-                countryGeoId = ""; countryName = ""; areaCode = ""; contactNumber = ""; 
-                contactNumber3 = ""; contactNumber4 = ""; openingHoursContentId = ""; storeNoticeContentId = "";
+                    groupName = ""; 
+                    groupNameLocal = "";
+                    
+                    storeAddress = ""; 
+                    context.storeAddress =storeAddress;
+                    address1 = ""; 
+                    address2 = "";
+                    address3 = ""; 
+                    city = ""; 
+                    stateProvinceGeoId = ""; 
+                    postalCode = "";
+                    countryGeoId = ""; 
+                    countryName = "";
+                    
+                    storePhone = ""; 
+                    context.storePhone =storePhone;
+                    areaCode = ""; 
+                    contactNumber = ""; 
+                    contactNumber3 = ""; 
+                    contactNumber4 = "";
+                    
+                    openingHoursContentId = ""; 
+                    context.storeHoursContentId = openingHoursContentId;
+              	    storeHoursDataResourceId = "";
+                    context.storeHoursDataResourceId = storeHoursDataResourceId;
+                    
+                    storeNoticeContentId = "";
+                    context.storeNoticeContentId = storeNoticeContentId;
+             	    storeNoticeDataResourceId = "";
+                    context.storeNoticeDataResourceId = storeNoticeDataResourceId;
 
-                partyGroup = delegator.findOne("PartyGroup", [partyId : partyId], true);
-                if (UtilValidate.isNotEmpty(partyGroup)) {
-                    groupName = partyGroup.groupName;
-                    groupNameLocal = partyGroup.groupNameLocal;
-                }
+                    storeContentSpotContentId = "";
+                 	context.storeContentSpotContentId = storeContentSpotContentId;
+              	    storeContentSpotDataResourceId = "";
+         		    context.storeContentSpotDataResourceId = storeContentSpotDataResourceId;
 
-                partyContactMechValueMaps = ContactMechWorker.getPartyContactMechValueMaps(delegator, partyId, false);
-                if (partyContactMechValueMaps) {
-                    partyContactMechValueMaps.each { partyContactMechValueMap ->
-                        contactMechPurposes = partyContactMechValueMap.partyContactMechPurposes;
-                        contactMechPurposes.each { contactMechPurpose ->
-                            if (contactMechPurpose.contactMechPurposeTypeId.equals("GENERAL_LOCATION")) {
-                                partyPostalAddressContactMech = partyContactMechValueMap.postalAddress;
-                                address1 = partyPostalAddressContactMech.address1;
-                                address2 = partyPostalAddressContactMech.address2;
-                                address3 = partyPostalAddressContactMech.address3;
-                                city = partyPostalAddressContactMech.city;
-                                stateProvinceGeoId = partyPostalAddressContactMech.stateProvinceGeoId;
-                                postalCode = partyPostalAddressContactMech.postalCode;
-                                countryGeoId = partyPostalAddressContactMech.countryGeoId;
-                                GenericValue countryGeo = delegator.findOne("Geo", UtilMisc.toMap("geoId", partyPostalAddressContactMech.countryGeoId), false);
-                                if (UtilValidate.isNotEmpty(countryGeo)) {
-                                    countryName = countryGeo.geoName;
-                                }
-                            } else if (contactMechPurpose.contactMechPurposeTypeId.equals("PRIMARY_PHONE")) {
-                                partyTelecomNumberContactMech = partyContactMechValueMap.telecomNumber;
-                                areaCode = partyTelecomNumberContactMech.areaCode;
-                                contactNumber = partyTelecomNumberContactMech.contactNumber;
-                                if (contactNumber.length() >= 7) {
-                                    contactNumber3 = contactNumber.substring(0, 3);
-                                    contactNumber4 = contactNumber.substring(3, 7);
-                                }
-                            }
+                    partyGroup = party.getRelatedOneCache("PartyGroup");
+                    if (UtilValidate.isNotEmpty(partyGroup)) 
+                    {
+                        groupName = partyGroup.groupName;
+                        groupNameLocal = partyGroup.groupNameLocal;
+                    }
+
+                    partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
+                    partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+                    partyContactMechPurpose = EntityUtil.orderBy(partyContactMechPurpose,UtilMisc.toList("-fromDate"));
+                    
+                    storeLocationLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
+                    if (UtilValidate.isNotEmpty(storeLocationLocations)) 
+                    {
+                    	storeLocationLocation = EntityUtil.getFirst(storeLocationLocations);
+                    	storeAddress = storeLocationLocation.getRelatedOneCache("PostalAddress");
+                        context.storeAddress =storeAddress;
+                        address1 = storeAddress.address1;
+                        address2 = storeAddress.address2;
+                        address3 = storeAddress.address3;
+                        city = storeAddress.city;
+                        stateProvinceGeoId = storeAddress.stateProvinceGeoId;
+                        postalCode = storeAddress.postalCode;
+                        countryGeoId = storeAddress.countryGeoId;
+                        GenericValue countryGeo = delegator.findOne("Geo", UtilMisc.toMap("geoId", storeAddress.countryGeoId), true);
+                        if (UtilValidate.isNotEmpty(countryGeo)) 
+                        {
+                            countryName = countryGeo.geoName;
                         }
                     }
-                }
-
-                partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "STORE_HOURS"]))
-                if (UtilValidate.isNotEmpty(partyContent)) {
-                    content = partyContent.getRelatedOne("Content");
-                    if (UtilValidate.isNotEmpty(content))
+                    
+                    storeTelephoneLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_PHONE"));
+                    if (UtilValidate.isNotEmpty(storeTelephoneLocations)) 
                     {
-                       openingHoursContentId = content.contentId;
+                    	storeTelephoneLocation = EntityUtil.getFirst(storeTelephoneLocations);
+                    	storePhone = storeTelephoneLocation.getRelatedOneCache("TelecomNumber");
+                        context.storePhone =storePhone;
+                        partyTelecomNumberContactMech = storePhone.telecomNumber;
+                        areaCode = storePhone.areaCode;
+                        contactNumber = storePhone.contactNumber;
+                        if (contactNumber.length() >= 7) 
+                        {
+                            contactNumber3 = contactNumber.substring(0, 3);
+                            contactNumber4 = contactNumber.substring(3, 7);
+                        }
                     }
-                }
-                partyContent = EntityUtil.getFirst(delegator.findByAnd("PartyContent", [partyId : partyId, 	partyContentTypeId : "STORE_NOTICE"]))
-                if (UtilValidate.isNotEmpty(partyContent)) {
-                    content = partyContent.getRelatedOne("Content");
-                    if (UtilValidate.isNotEmpty(content))
+                    
+                    partyContent = party.getRelatedCache("PartyContent");
+                    partyContent = EntityUtil.filterByDate(partyContent,true);
+                    partyContent = EntityUtil.orderBy(partyContent,UtilMisc.toList("-fromDate"));
+
+                    storeHours = EntityUtil.filterByAnd(partyContent, UtilMisc.toMap("partyContentTypeId", "STORE_HOURS"));
+                    if (UtilValidate.isNotEmpty(storeHours)) 
                     {
-                       storeNoticeContentId = content.contentId;
+                    	storeHour = EntityUtil.getFirst(storeHours);
+                        content = storeHour.getRelatedOneCache("Content");
+                        if (UtilValidate.isNotEmpty(content))
+                        {
+                           openingHoursContentId = content.contentId;
+                           context.storeHoursContentId = openingHoursContentId;
+                           dataResource = content.getRelatedOneCache("DataResource");
+                           if (UtilValidate.isNotEmpty(dataResource))
+                           {
+                        	   storeHoursDataResourceId = dataResource.dataResourceId;
+                               context.storeHoursDataResourceId = storeHoursDataResourceId;
+                           }
+                        }
                     }
-                }
-                data = groupName+" ("+groupNameLocal+")";
+                    
+                    storeNotices = EntityUtil.filterByAnd(partyContent, UtilMisc.toMap("partyContentTypeId", "STORE_NOTICE"));
+                    if (UtilValidate.isNotEmpty(storeNotices)) 
+                    {
+                    	storeNotice = EntityUtil.getFirst(storeNotices);
+                        content = storeNotice.getRelatedOneCache("Content");
+                        if (UtilValidate.isNotEmpty(content))
+                        {
+                           storeNoticeContentId = content.contentId;
+                           context.storeNoticeContentId = storeNoticeContentId;
+                           dataResource = content.getRelatedOneCache("DataResource");
+                           if (UtilValidate.isNotEmpty(dataResource))
+                           {
+                        	   storeNoticeDataResourceId = dataResource.dataResourceId;
+                               context.storeNoticeDataResourceId = storeNoticeDataResourceId;
+                           }
+                        }
+                    }
+                    storeContentSpots = EntityUtil.filterByAnd(partyContent, UtilMisc.toMap("partyContentTypeId", "STORE_CONTENT_SPOT"));
+                    if (UtilValidate.isNotEmpty(storeContentSpots)) 
+                    {
+                    	storeContentSpot = EntityUtil.getFirst(storeContentSpots);
+                        content = storeContentSpot.getRelatedOneCache("Content");
+                        if (UtilValidate.isNotEmpty(content))
+                        {
+                     	   storeContentSpotContentId = content.contentId;
+                     	   context.storeContentSpotContentId = storeContentSpotContentId;
+                           dataResource = content.getRelatedOneCache("DataResource");
+                           if (UtilValidate.isNotEmpty(dataResource))
+                           {
+                        	  storeContentSpotDataResourceId = dataResource.dataResourceId;
+                     		  context.storeContentSpotDataResourceId = storeContentSpotDataResourceId;
+                           }
+                        }
+                    }
+                    
+                    data = groupName+" ("+groupNameLocal+")";
 
-                distanceValue = distance;
-                if (uom.equalsIgnoreCase("Kilometers")) {
-                    distance = distance+" Kilometers";
-                } else if (uom.equalsIgnoreCase("Miles")) {
-                    distance = distance+" Miles";
-                } else {
-                    distance = distance+" "+uom;
-                }
+                    distanceValue = distance;
+                    if (uom.equalsIgnoreCase("Kilometers")) 
+                    {
+                        distance = distance+" Kilometers";
+                    } else if (uom.equalsIgnoreCase("Miles")) 
+                    {
+                        distance = distance+" Miles";
+                    } else 
+                    {
+                        distance = distance+" "+uom;
+                    }
 
-                partyDetailMap = UtilMisc.toMap("partyId", partyId, "storeCode", groupNameLocal, "storeName", groupName, "address1", address1,
-                                                "address2", address2,  "address3", address3, "city", city, "stateProvinceGeoId", stateProvinceGeoId,
-                                                "postalCode", postalCode,"countryGeoId", countryGeoId,"countryName", countryName, "areaCode", areaCode, "contactNumber", contactNumber,
-                                                "contactNumber3", contactNumber3, "contactNumber4", contactNumber4, "openingHoursContentId", openingHoursContentId, "storeNoticeContentId", storeNoticeContentId,"distance", distance, "distanceValue", distanceValue,
-                                                "latitude", latestGeoPoint.latitude, "longitude", latestGeoPoint.longitude, "searchAddress", address, "searchlatitude", latitude, "searchlongitude", longitude);
-                geoPoints.add(UtilMisc.toMap("lat", latestGeoPoint.latitude, "lon", latestGeoPoint.longitude, "userLocation", "N", "closures", UtilMisc.toMap("data", data, "storeDetail", partyDetailMap)));
-                partyDetailList.add(partyDetailMap);
+                    partyDetailMap = UtilMisc.toMap("partyId", partyId, "storeCode", groupNameLocal, "storeName", groupName, "address1", address1,
+                            "address2", address2,  "address3", address3, "city", city, "stateProvinceGeoId", stateProvinceGeoId,
+                            "postalCode", postalCode,"countryGeoId", countryGeoId,"countryName", countryName, "areaCode", areaCode, "contactNumber", contactNumber,
+                            "contactNumber3", contactNumber3, "contactNumber4", contactNumber4, "openingHoursContentId", openingHoursContentId, "storeNoticeContentId", storeNoticeContentId, "storeContentSpotContentId", storeContentSpotContentId, "distance", distance, "distanceValue", distanceValue,
+                            "latitude", latestGeoPoint.latitude, "longitude", latestGeoPoint.longitude, "searchAddress", address, "searchlatitude", latitude, "searchlongitude", longitude);
+                    
+                    geoPoints.add(UtilMisc.toMap("lat", latestGeoPoint.latitude, "lon", latestGeoPoint.longitude, "userLocation", "N", "closures", UtilMisc.toMap("data", data, "storeDetail", partyDetailMap)));
+                    partyDetailList.add(partyDetailMap);
+                }
             }
-        }
+          }    	  
+      }
     }
 }
-if (searchOsafeGeo.isNotEmpty()) {
+if (UtilValidate.isNotEmpty(searchOsafeGeo) && searchOsafeGeo.isNotEmpty()) 
+{
     geoPoints.add(UtilMisc.toMap("lat", Double.valueOf(searchOsafeGeo.latitude()), "lon", Double.valueOf(searchOsafeGeo.longitude()), "userLocation", "Y", "closures", UtilMisc.toMap("data", address)));
     context.userLocation = "Y";
 }
@@ -166,3 +326,4 @@ Map geoChart = UtilMisc.toMap("GeoMapRequestUrl", gmapUrl, "width", width, "heig
 context.geoChart = geoChart;
 partyDetailList = UtilMisc.sortMaps(partyDetailList, UtilMisc.toList("distanceValue"));
 context.storeDetailList = partyDetailList;
+context.gmapNumDisplay = numDiplay;

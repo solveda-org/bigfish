@@ -41,10 +41,18 @@
 <#elseif (mode?has_content && mode == "edit")>
   <div class="infoRow">
     <div class="infoEntry">
-      <div class="infoCaption"><label>${uiLabelMap.NavBarCaption}</label></div>
+      <div class="infoCaption"><label>${uiLabelMap.CategoryIDCaption}</label></div>
+      <div class="infoValue">
+          ${productCategoryId!}
+      </div>
+    </div>
+  </div>
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption"><label>${uiLabelMap.TopNavCaption}</label></div>
       <div class="infoValue" id="primaryParentCategoryName">
         <#if parentProductCategoryId?exists>
-          <#assign productCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", parentProductCategoryId?if_exists), true)/>
+          <#assign productCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", parentProductCategoryId?if_exists), false)/>
           ${productCategory.categoryName!parameters.primaryParentCategoryId?if_exists}
         </#if>
       </div>
@@ -91,6 +99,9 @@
     <div class="infoCaption"><label>${uiLabelMap.SequenceCaption}</label></div>
     <div class="infoValue">
       <input type="text" name="sequenceNum" value="${parameters.sequenceNum!sequenceNum?if_exists}" />
+    </div>
+    <div class="infoIcon">
+      <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.CategorySequenceNumInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
     </div>
   </div>
 </div>

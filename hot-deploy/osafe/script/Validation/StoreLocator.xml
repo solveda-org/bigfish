@@ -32,28 +32,32 @@
                     <field field="longitude" type="String"/>
                 </create-object>
 
-                <!--    product store param  Map      -->
-                <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParmMap" ret-field="productStoreParmMap">
-                    <field field="request" type="javax.servlet.ServletRequest"/>
-                </call-class-method>
                 <!--    product store param  GMAP_RADIUS      -->
                 <set field="searchRedius" value="20"/>
+		        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="gmapRadius">
+		            <field field="request" type="javax.servlet.ServletRequest"/>
+		            <string value="GMAP_RADIUS"/>
+		        </call-class-method>
                 <call-class-method class-name="com.osafe.util.Util" method-name="isNumber" ret-field="isNumber">
-                    <field field="productStoreParmMap.GMAP_RADIUS" type="String"/>
+                    <field field="gmapRadius" type="String"/>
                 </call-class-method>
                 <if-compare field="isNumber" operator="equals" value="true">
-                    <set field="searchRedius" from-field="productStoreParmMap.GMAP_RADIUS"/>
+                    <set field="searchRedius" from-field="gmapRadius"/>
                 </if-compare>
                 <!--    product store param  GMAP_UOM      -->
                 <set field="uom" value="Miles"/>
+		        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="gmapUom">
+		            <field field="request" type="javax.servlet.ServletRequest"/>
+		            <string value="GMAP_UOM"/>
+		        </call-class-method>
                 <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isParamUomNotEmpty">
-                    <field field="productStoreParmMap.GMAP_UOM" type="String"/>
+                    <field field="gmapUom" type="String"/>
                 </call-class-method>
                 <if-compare field="isParamUomNotEmpty" operator="equals" value="true">
-                    <call-object-method method-name="equalsIgnoreCase" obj-field="productStoreParmMap.GMAP_UOM" ret-field="isParamUomKm">
+                    <call-object-method method-name="equalsIgnoreCase" obj-field="gmapUom" ret-field="isParamUomKm">
                         <string value="Kilometers"/>
                     </call-object-method>
-                    <call-object-method method-name="equalsIgnoreCase" obj-field="productStoreParmMap.GMAP_UOM" ret-field="isParamUomMi">
+                    <call-object-method method-name="equalsIgnoreCase" obj-field="gmapUom" ret-field="isParamUomMi">
                         <string value="Miles"/>
                     </call-object-method>
                 </if-compare>
@@ -65,21 +69,19 @@
                         </or>
                     </condition>
                     <then>
-                        <set field="uom" from-field="productStoreParmMap.GMAP_UOM"/>
+                        <set field="uom" from-field="gmapUom"/>
                     </then>
                 </if>
 
                 <!--    find store near by address        -->
                 <set field="isStoreFound" value="false" type="Boolean"/>
-                <set field="findStoreCtx.lookupFlag" value="Y"/>
-                <set field="findStoreCtx.showAll" value="N"/>
-                <set field="findStoreCtx.extInfo" value="N"/>
-                <set field="findStoreCtx.statusId" value="PARTY_ENABLED"/>
-                <set field="findStoreCtx.partyTypeId" value="PARTY_GROUP"/>
-                <set field="findStoreCtx.roleTypeId" value="STORE_LOCATION"/>
-                <call-service service-name="findParty" in-map-name="findStoreCtx">
-                    <result-to-field result-name="completePartyList" field="storeList"/>
-                </call-service>
+		        <entity-condition entity-name="PartyRoleAndPartyDetail" list="storeList" use-cache="true">
+		            <condition-list>
+		                <condition-expr field-name="partyTypeId" operator="equals" value="PARTY_GROUP"/>
+		                <condition-expr field-name="roleTypeId" operator="equals" value="STORE_LOCATION"/>
+		                <condition-expr field-name="statusId" operator="equals" value="PARTY_ENABLED"/>
+		            </condition-list>
+		        </entity-condition>
                 <iterate list="storeList" entry="Party" >
                     <call-class-method class-name="org.ofbiz.common.geo.GeoWorker" method-name="findLatestGeoPoint" ret-field="storeGeoPoint">
                         <field field="delegator" type="org.ofbiz.entity.Delegator"/>

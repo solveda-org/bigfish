@@ -37,10 +37,10 @@ import com.ibm.icu.util.Calendar;
 import org.ofbiz.base.util.ObjectType;
 
 // Paging variables
-viewIndex = Integer.valueOf(parameters.viewIndex  ?: 1);
-viewSize = Integer.valueOf(parameters.viewSize ?: UtilProperties.getPropertyValue("osafeAdmin", "default-view-size"));
-context.viewSize=viewSize;
-context.viewIndex=viewIndex;
+//viewIndex = Integer.valueOf(parameters.viewIndex  ?: 1);
+//viewSize = Integer.valueOf(parameters.viewSize ?: UtilProperties.getPropertyValue("osafeAdmin", "default-view-size"));
+//context.viewSize=viewSize;
+//context.viewIndex=viewIndex;
 
 //input
 String srchJobName = StringUtils.trimToEmpty(parameters.srchJobName);
@@ -99,8 +99,9 @@ if(srchJobId)
 {
     jobId=srchJobId;
     findJobCond = EntityCondition.makeCondition(EntityFunction.UPPER(EntityFieldValue.makeFieldValue("jobId")), EntityOperator.EQUALS, srchJobId.toUpperCase());
-    jobs = delegator.findList("JobSandbox",findJobCond, null, null, null, true);
-    if (jobs) {
+    jobs = delegator.findList("JobSandbox",findJobCond, null, null, null, false);
+    if (UtilValidate.isNotEmpty(jobs)) 
+    {
         jobs=EntityUtil.getFirst(jobs);
         jobId=jobs.jobId;
     }
@@ -126,7 +127,7 @@ if(srchServiceName)
 }
 
 //handle all the dates 
-if(srchRunDateFrom)
+if (UtilValidate.isNotEmpty(srchRunDateFrom))
 {
 	try {
 		  srchRunDateFrom = ObjectType.simpleTypeConvert(srchRunDateFrom, "Timestamp", preferredDateFormat, locale);
@@ -138,7 +139,7 @@ if(srchRunDateFrom)
 	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("runTime"), EntityOperator.GREATER_THAN_EQUAL_TO, runDateFrom));
 	context.srchRunDateFrom=srchRunDateFrom;
 }
-if(srchRunDateTo)
+if (UtilValidate.isNotEmpty(srchRunDateTo))
 {
 	try {
 		  srchRunDateTo = ObjectType.simpleTypeConvert(srchRunDateTo, "Timestamp", preferredDateFormat, locale);
@@ -151,7 +152,7 @@ if(srchRunDateTo)
 	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("runTime"), EntityOperator.LESS_THAN_EQUAL_TO, runDateTo));
 	context.srchRunDateTo=srchRunDateTo;
 }
-if(srchStartDateFrom)
+if (UtilValidate.isNotEmpty(srchStartDateFrom))
 {
 	try {
 		  srchStartDateFrom = ObjectType.simpleTypeConvert(srchStartDateFrom, "Timestamp", preferredDateFormat, locale);
@@ -163,7 +164,7 @@ if(srchStartDateFrom)
 	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("startDateTime"), EntityOperator.GREATER_THAN_EQUAL_TO, startDateFrom));
 	context.srchStartDateFrom=srchStartDateFrom;
 }
-if(srchStartDateTo)
+if (UtilValidate.isNotEmpty(srchStartDateTo))
 {
 	try {
 		  srchStartDateTo = ObjectType.simpleTypeConvert(srchStartDateTo, "Timestamp", preferredDateFormat, locale);
@@ -178,7 +179,7 @@ if(srchStartDateTo)
 	context.srchStartDateTo=srchStartDateTo;
 }
 
-if(srchEndDateFrom)
+if (UtilValidate.isNotEmpty(srchEndDateFrom))
 {
 	try {
 		  srchEndDateFrom = ObjectType.simpleTypeConvert(srchEndDateFrom, "Timestamp", preferredDateFormat, locale);
@@ -190,7 +191,7 @@ if(srchEndDateFrom)
 	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("finishDateTime"), EntityOperator.GREATER_THAN_EQUAL_TO, endDateFrom));
 	context.srchEndDateFrom=srchEndDateFrom;
 }
-if(srchEndDateTo)
+if (UtilValidate.isNotEmpty(srchEndDateTo))
 {
 	try {
 		  srchEndDateTo = ObjectType.simpleTypeConvert(srchEndDateTo, "Timestamp", preferredDateFormat, locale);
@@ -212,27 +213,27 @@ if (UtilValidate.isNotEmpty(exprs))
 
 // Review Status with CheckBox implementation
 statusExpr= FastList.newInstance();
-if(srchCanceled)
+if (UtilValidate.isNotEmpty(srchCanceled))
 {
     statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_CANCELLED"));
    context.srchCanceled=srchCanceled
 }
-if(srchCrashed)
+if (UtilValidate.isNotEmpty(srchCrashed))
 {
     statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_CRASHED"));
    context.srchCrashed=srchCrashed
 }
-if(srchFailed)
+if (UtilValidate.isNotEmpty(srchFailed))
 {
     statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_FAILED"));
    context.srchFailed=srchFailed
 }
-if(srchFinished)
+if (UtilValidate.isNotEmpty(srchFinished))
 {
 	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_FINISHED"));
    context.srchFinished=srchFinished
 }
-if(srchPending)
+if (UtilValidate.isNotEmpty(srchPending))
 {
 	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_PENDING"));
    context.srchPending=srchPending
@@ -242,7 +243,7 @@ if(srchQueued)
 	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_QUEUED"));
    context.srchQueued=srchQueued
 }
-if(srchRunning)
+if (UtilValidate.isNotEmpty(srchRunning))
 {
 	statusExpr.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "SERVICE_RUNNING"));
    context.srchRunning=srchRunning
@@ -264,10 +265,10 @@ if (UtilValidate.isNotEmpty(statusExpr))
 //orderBy = ["runTime"];
 
 scheduledJobs=FastList.newInstance();
-if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") 
- {
-	scheduledJobs = delegator.findList("JobSandbox",mainCond, null, null, null, true);
- }
+if (UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") 
+{
+	scheduledJobs = delegator.findList("JobSandbox",mainCond, null, ["runTime DESC"], null, false); 
+}
  
 
  

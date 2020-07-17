@@ -49,11 +49,13 @@ userLogin = session.getAttribute("userLogin");
 
 session = context.session;
 svcCtx = session.getAttribute("customerPDFMap");
-if (UtilValidate.isEmpty(svcCtx)) {
+if (UtilValidate.isEmpty(svcCtx)) 
+{
     svcCtx = FastMap.newInstance();
 }
 
-if (UtilValidate.isNotEmpty(partyId)) {
+if (UtilValidate.isNotEmpty(partyId))
+{
     svcCtx.put("partyId", partyId);
 }
 
@@ -88,41 +90,38 @@ if (UtilValidate.isNotEmpty(svcCtx))
 
         for(GenericValue party : customerPDFList)
         {
-            person = delegator.findOne("Person",["partyId":party.partyId], true);
+            person = delegator.findOne("Person",["partyId":party.partyId], false);
             
-            partyAttrIsDownload = delegator.findOne("PartyAttribute", ["partyId" : party.partyId, "attrName" : "IS_DOWNLOADED"], true);
+            partyAttrIsDownload = delegator.findOne("PartyAttribute", ["partyId" : party.partyId, "attrName" : "IS_DOWNLOADED"], false);
             Map<String, Object> isDownloadedPartyAttrCtx = FastMap.newInstance();
             isDownloadedPartyAttrCtx.put("partyId", party.partyId);
             isDownloadedPartyAttrCtx.put("userLogin",userLogin);
             isDownloadedPartyAttrCtx.put("attrName","IS_DOWNLOADED");
             isDownloadedPartyAttrCtx.put("attrValue","Y");
             Map<String, Object> isDownloadedPartyAttrMap = null;
-            if (UtilValidate.isNotEmpty(partyAttrIsDownload)) {
+            if (UtilValidate.isNotEmpty(partyAttrIsDownload)) 
+            {
                 isDownloadedPartyAttrMap = dispatcher.runSync("updatePartyAttribute", isDownloadedPartyAttrCtx);
-            } else {
+            } else 
+            {
                 isDownloadedPartyAttrMap = dispatcher.runSync("createPartyAttribute", isDownloadedPartyAttrCtx);
             }
             
-            partyAttrDateTimeDownload = delegator.findOne("PartyAttribute", ["partyId" : party.partyId, "attrName" : "DATETIME_DOWNLOADED"], true);
+            partyAttrDateTimeDownload = delegator.findOne("PartyAttribute", ["partyId" : party.partyId, "attrName" : "DATETIME_DOWNLOADED"], false);
             Map<String, Object> dateTimeDownloadedPartyAttrCtx = FastMap.newInstance();
             dateTimeDownloadedPartyAttrCtx.put("partyId", party.partyId);
             dateTimeDownloadedPartyAttrCtx.put("userLogin",userLogin);
             dateTimeDownloadedPartyAttrCtx.put("attrName","DATETIME_DOWNLOADED");
             dateTimeDownloadedPartyAttrCtx.put("attrValue",UtilDateTime.nowTimestamp().toString());
             Map<String, Object> dateTimeDownloadedPartyAttrMap = null;
-            if (UtilValidate.isNotEmpty(partyAttrDateTimeDownload)) {
+            if (UtilValidate.isNotEmpty(partyAttrDateTimeDownload)) 
+            {
                 dateTimeDownloadedPartyAttrMap = dispatcher.runSync("updatePartyAttribute", dateTimeDownloadedPartyAttrCtx);
-            } else {
+            } else 
+            {
                 dateTimeDownloadedPartyAttrMap = dispatcher.runSync("createPartyAttribute", dateTimeDownloadedPartyAttrCtx);
             }
  
-            if (UtilValidate.isNotEmpty(person))
-            {
-	            upPartyCtx.put("partyId",party.partyId);
-	            upPartyCtx.put("firstName",person.firstName);
-	            upPartyCtx.put("lastName",person.lastName);
-	            //Map<String, Object> resultMap = dispatcher.runSync("updatePartyDownload", upPartyCtx);
-            }
         }
         
     }

@@ -5,7 +5,8 @@ import com.osafe.services.CatalogUrlServlet;
 import com.osafe.util.Util;
 
 clpItem = request.getAttribute("clpItem");
-if(UtilValidate.isNotEmpty(clpItem)) {
+if(UtilValidate.isNotEmpty(clpItem)) 
+{
     categoryImageUrl = "";
     categoryName =  "";
     categorySupportingText = "";
@@ -13,16 +14,20 @@ if(UtilValidate.isNotEmpty(clpItem)) {
     categoryImageUrl = "";
     productCategoryUrl = "";
     
-    if(UtilValidate.isNotEmpty(clpItem.displayImage)){
+    if(UtilValidate.isNotEmpty(clpItem.displayImage))
+    {
         categoryImageUrl = clpItem.displayImage;
     }
-    if(UtilValidate.isNotEmpty(clpItem.displayName)){
+    if(UtilValidate.isNotEmpty(clpItem.displayName))
+    {
         categoryName = clpItem.displayName;
     }
-    if(UtilValidate.isNotEmpty(clpItem.supportingText)){
+    if(UtilValidate.isNotEmpty(clpItem.supportingText))
+    {
         categorySupportingText = clpItem.supportingText;
     }
-    if(UtilValidate.isNotEmpty(clpItem.name)){
+    if(UtilValidate.isNotEmpty(clpItem.name))
+    {
         productCategoryId = clpItem.name;
     }
     productCategoryUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductList?productCategoryId='+productCategoryId);
@@ -33,7 +38,5 @@ if(UtilValidate.isNotEmpty(clpItem)) {
     context.productCategoryId = productCategoryId;
     context.categoryImageUrl = categoryImageUrl;
     context.productCategoryUrl = productCategoryUrl;
-                        
-
 }
 

@@ -22,7 +22,7 @@
               ${productFeatureGrpAppl.productFeatureId!}
             </td>
             <td class="valueCol">
-              <#assign productFeature = delegator.findOne("ProductFeature", {"productFeatureId" : productFeatureGrpAppl.productFeatureId}, true) />
+              <#assign productFeature = delegator.findOne("ProductFeature", {"productFeatureId" : productFeatureGrpAppl.productFeatureId}, false) />
               <#assign description = request.getParameter("description_${productFeatureGrpAppl_index}")!productFeature.description!''/>
               <input type="text" name="description_${productFeatureGrpAppl_index}" value="${description!}"/>
               <input type="hidden" name="productFeatureTypeId_${productFeatureGrpAppl_index}" value="${productFeature.productFeatureTypeId!}"/>

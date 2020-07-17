@@ -5,11 +5,17 @@
             <meta http-equiv="imagetoolbar" content="no" />
             <#assign productStoreId = session.getAttribute("productStoreId")?if_exists>
             <#if productStore?has_content>
-               <title>${productStore.storeName!""}&nbsp;:&nbsp;${uiLabelMap.eCommerceAdminModuleTitle}</title>
+	            <#if pageTitle?has_content>
+	               <#assign titleOfPage = Static["com.osafe.util.Util"].stripHTML(pageTitle)>
+	            </#if>
+	            <title>${productStore.storeName!""}&nbsp;:&nbsp;${uiLabelMap.eCommerceAdminModuleTitle}
+	            <#if pageTitle?has_content>, ${StringUtil.wrapString(titleOfPage)}</#if>
+                </title>
             <#else>
-               <title>${uiLabelMap.eCommerceAdminModuleTitle}</title>
+               <title>${uiLabelMap.eCommerceAdminModuleTitle}
+                 <#if pageTitle?has_content>, ${StringUtil.wrapString(pageTitle)}</#if>
+               </title>
             </#if>
-            <title>${uiLabelMap.eCommerceAdminModuleTitle}</title>
             <#if layoutSettings.VT_SHORTCUT_ICON?has_content>
               <#assign shortcutIcon = layoutSettings.VT_SHORTCUT_ICON.get(0)/>
             <#elseif layoutSettings.shortcutIcon?has_content>

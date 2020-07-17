@@ -9,7 +9,7 @@
 <#else>
     <#assign shoppingCartSize = 0>
 </#if>
-<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_AS_GUEST) && parameters.guest?has_content && parameters.guest == "guest">
+<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_AS_GUEST") && parameters.guest?has_content && parameters.guest == "guest">
     <#if (shoppingCartSize > 0)>
         <#assign className = "withGuestCheckoutOption" />
     </#if>
@@ -62,7 +62,7 @@
     </form>
 </div>
 
-<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_AS_GUEST) && parameters.guest?has_content && parameters.guest == "guest">
+<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_AS_GUEST") && parameters.guest?has_content && parameters.guest == "guest">
 <#if (shoppingCartSize > 0)>
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
   <div id="guestCheckoutBox" class="displayBox<#if className?exists && className?has_content> ${className}</#if>">

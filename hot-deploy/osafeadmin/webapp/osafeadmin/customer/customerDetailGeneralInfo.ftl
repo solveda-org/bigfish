@@ -71,7 +71,10 @@
           <#assign userLoginId = userLogins.get(0).userLoginId>
         </#if>
         <#if userLoginId?has_content>
-           ${userLoginId}
+           <p>${userLoginId}</p>
+           <div class="infoIcon">
+           		<a href="userDetail?userLoginId=${userLoginId}" onMouseover="showTooltip(event,'${uiLabelMap.UserLoginInfo}');" onMouseout="hideTooltip()"><span class="lockIcon"></span></a>
+           </div>
         <#else>
            ${uiLabelMap.NoUserLoginIdInfo}
         </#if>
@@ -81,7 +84,7 @@
      </div>
      <div class="infoValue">
         <#if party?has_content>
-            <#assign partyAttrIsDownload = delegator.findOne("PartyAttribute", {"partyId" : party.partyId, "attrName" : "IS_DOWNLOADED"}, true)?if_exists>
+            <#assign partyAttrIsDownload = delegator.findOne("PartyAttribute", {"partyId" : party.partyId, "attrName" : "IS_DOWNLOADED"}, false)?if_exists>
             <#if partyAttrIsDownload?has_content>
               <#assign downloadStatus = partyAttrIsDownload.attrValue!"">
             </#if>

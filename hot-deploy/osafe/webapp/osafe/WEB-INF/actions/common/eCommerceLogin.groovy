@@ -5,18 +5,20 @@ import org.ofbiz.common.CommonWorkers;
 import org.ofbiz.webapp.control.*;
 
 context.autoUserLogin = session.getAttribute("autoUserLogin");
-context.autoLogoutUrl = LoginWorker.makeLoginUrl(request, "autoLogout");
 
 previousParams = session.getAttribute("_PREVIOUS_PARAMS_");
-if (previousParams) {
+if (UtilValidate.isNotEmpty(previousParams)) 
+{
     previousParams = UtilHttp.stripNamedParamsFromQueryString(previousParams, ["USERNAME", "PASSWORD"]);
     previousParams = "?" + previousParams;
-} else {
+} else 
+{
     previousParams = "";
 }
 context.previousParams = previousParams;
 
-if (UtilValidate.isNotEmpty(parameters.review) && "review".equals(parameters.review)) {
+if (UtilValidate.isNotEmpty(parameters.review) && "review".equals(parameters.review)) 
+{
     messageMap=[:];
     context.infoMessage = UtilProperties.getMessage("OSafeUiLabels","ReviewLoginInfo",messageMap, locale );
 }

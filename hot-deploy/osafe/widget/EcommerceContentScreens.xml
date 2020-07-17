@@ -8,6 +8,7 @@
                 <set field="containerId" from-field="contentContainerId"/>
                 <set field="containerStyle" from-field="contentContainerStyle"/>
                 <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
             </actions>
             <widgets>
@@ -24,7 +25,7 @@
                         </container>
                     </widgets>
                     <fail-widgets>
-                        <container id="${containerId}">
+                        <container id="${containerId}" style="${containerStyle}">
                         </container>
                     </fail-widgets>
                 </section>
@@ -39,8 +40,8 @@
                 <set field="containerId" value="${containerId}" default-value="${contentId}"/>
                 <set field="containerStyle" value="${containerStyle}" default-value="staticContent"/>
                 <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContentAttribute.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContentAndAttribute.groovy" />
             </actions>
             <widgets>
                         <section>
@@ -76,8 +77,8 @@
                 <set field="containerId" value="${containerId}" default-value="${contentId}"/>
                 <set field="containerStyle" value="${containerStyle}" default-value="staticContent"/>
                 <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContentAttribute.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContentAndAttribute.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -483,6 +484,35 @@
             </widgets>
         </section>
     </screen>
+    <screen name="SI_HEAD_TAG">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.SITE_INFO_HEAD_TAG_CONTENT}"/>
+                <set field="contentId" from-field="id"/>
+                <set field="containerId" from-field="contentContainerId"/>
+                <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
+            </actions>
+            <widgets>
+                <section>
+                    <condition>
+                       <and>
+                        <not><if-empty field="content"/></not>
+                        <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                       </and>
+                    </condition>
+                    <widgets>
+                            <content content-id="${content.contentId}"/>
+                    </widgets>
+                    <fail-widgets>
+                        <container id="${containerId}">
+                        </container>
+                    </fail-widgets>
+                </section>
+            </widgets>
+        </section>
+    </screen>
     <screen name="SP_REVIEW_GUIDELINES">
         <section>
             <actions>
@@ -539,6 +569,20 @@
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="id" value="${idMap.PAGE_TOP_SPOT_STORE_LOCATOR}"/>
                 <set field="contentContainerId" value="ptsStoreLocator"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="PTS_STORE_PICKUP">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_STORE_PICKUP}"/>
+                <set field="contentContainerId" value="ptsStorePickup"/>
                 <set field="contentContainerStyle" value="ptsSpot"/>
             </actions>
             <widgets>
@@ -607,6 +651,19 @@
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="id" value="${idMap.PAGE_END_SPOT_STORE_LOCATOR}"/>
                 <set field="contentContainerId" value="pesStoreLocator"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_STORE_PICKUP">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_STORE_PICKUP}"/>
+                <set field="contentContainerId" value="pesStorePickup"/>
                 <set field="contentContainerStyle" value="pesSpot"/>
             </actions>
             <widgets>

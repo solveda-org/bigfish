@@ -531,6 +531,7 @@
         <implements service="commonFormHiddenFields"/>
         <attribute name="productId" mode="IN" type="String" optional="true"/>
         <attribute name="internalName" mode="IN" type="String" optional="true"/>
+        <attribute name="productName" mode="IN" type="String" optional="true"/>
         <attribute name="productDetailName" mode="IN" type="String" optional="true" allow-html="any"/>
         <attribute name="longDescription" mode="IN" type="String" optional="true" allow-html="any"/>
         <attribute name="introductionDate" mode="IN" type="String" optional="true"/>
@@ -572,6 +573,7 @@
         </description>
         <group>
             <invoke name="createNewProduct" result-to-context="true"/>
+            <invoke name="manageProductFeature" result-to-context="true"/>
             <invoke name="updateProductContent" result-to-context="true"/>
             <invoke name="updateProductIdentification" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
@@ -601,6 +603,21 @@
         <attribute name="isVariant" mode="IN" type="String" optional="true"/>
         <attribute name="idValue" type="Map" string-map-prefix="idValue_" mode="IN" optional="true"/>
         <attribute name="goodIdentificationTypeId" type="Map" string-map-prefix="goodIdentificationTypeId_" mode="IN" optional="true"/>
+        <attribute name="productFeatureGroupIds" type="Map" string-map-prefix="productFeatureGroupId_" mode="IN" optional="true"/>
+        <attribute name="productFeatureApplTypeIds" type="Map" string-map-prefix="productFeatureApplTypeId_" mode="IN" optional="true"/>
+        <attribute name="productFeatureIds" type="Map" string-map-prefix="productFeatureId_" mode="IN" optional="true"/>
+    </service>
+
+    <service name="manageProductFeature" engine="simple" auth="true" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="manageProductFeature">
+        <description>
+         make product feature association
+        </description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="isVirtual" mode="IN" type="String" optional="true"/>
+        <attribute name="productFeatureGroupIds" type="Map" string-map-prefix="productFeatureGroupId_" mode="IN" optional="true"/>
+        <attribute name="productFeatureApplTypeIds" type="Map" string-map-prefix="productFeatureApplTypeId_" mode="IN" optional="true"/>
+        <attribute name="productFeatureIds" type="Map" string-map-prefix="productFeatureId_" mode="IN" optional="true"/>
     </service>
  
     <service name="createProductVariantGroup" engine="group" auth="false">
@@ -631,7 +648,46 @@
         <attribute name="variantSalePrice" mode="IN" type="String" optional="true"/>
         <attribute name="bfTotalInventory" type="String" mode="IN" optional="true" allow-html="any"/>
         <attribute name="bfWHInventory" type="String" mode="IN" optional="true" allow-html="any"/>
-        <attribute name="productFeature" type="Map" string-map-prefix="productFeature_" mode="IN" optional="true"/>
+        <attribute name="selectableProductFeature" type="Map" string-map-prefix="selectableProductFeature_" mode="IN" optional="true"/>
+        <attribute name="distinguishProductFeature" type="Map" string-map-prefix="distinguishProductFeature_" mode="IN" optional="true"/>
+    </service>
+
+    <service name="updateProductVariantsGroup" engine="group" auth="false">
+        <description>
+         update product variant detail in group as well as render success message
+        </description>
+        <group>
+            <invoke name="updateProductVariants" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="updateProductVariants" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
+            invoke="updateProductVariants">
+        <description>
+         update product variant detail in group
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productId" mode="INOUT" type="String" optional="false"/>
+        <attribute name="variantProductIds" mode="IN" type="String" optional="false"/>
+        <attribute name="internalName" mode="IN" type="String" optional="true"/>
+        <attribute name="longDescription" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="shortSalesPitch" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="specialInstruction" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="deliveryInfo" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="directions" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="termsAndConds" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="ingredients" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="warnings" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="introductionDate" mode="IN" type="String" optional="true"/>
+        <attribute name="salesDiscontinuationDate" mode="IN" type="String" optional="true"/>
+        <attribute name="variantListPrice" mode="IN" type="String" optional="true"/>
+        <attribute name="variantSalePrice" mode="IN" type="String" optional="true"/>
+        <attribute name="currencyUomId" mode="IN" type="String" optional="true"/>
+        <attribute name="bfTotalInventory" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="bfWHInventory" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="idValue" type="Map" string-map-prefix="idValue_" mode="IN" optional="true"/>
+        <attribute name="goodIdentificationTypeId" type="Map" string-map-prefix="goodIdentificationTypeId_" mode="IN" optional="true"/>
     </service>
 
     <service name="updateProductIdentification" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
@@ -801,7 +857,7 @@
          Update Product data, expire and create ProductPrice.
         </description>
         <attribute name="productFeatureId" mode="IN" type="String" optional="false"/>
-        <attribute name="prodFeatureDataResourceTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="featureDataResourceTypeId" mode="IN" type="String" optional="true"/>
         <attribute name="dataResourceName" mode="IN" type="String" optional="true"/>
         <attribute name="objectInfo" mode="IN" type="String" optional="true"/>
     </service>
@@ -1042,15 +1098,25 @@
         <override name="lastName" optional="false"/>
     </service>
     
+    
+    <service name="updatePLPSequenceGroup" engine="group" auth="false">
+        <description>
+         update PLP sequence and render success message
+        </description>
+        <group>
+            <invoke name="updatePLPSequence" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
     <service name="updatePLPSequence" engine="simple" default-entity-name="ProducCategoryMember" auth="true" require-new-transaction="false"
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updatePLPSequence">
         <description>
          Update Product PLP sequence.
         </description>
-        <attribute name="productId" mode="INOUT" type="String" />
-        <attribute name="productCategoryId" mode="INOUT" type="String"/>
-        <attribute name="fromDate" type="String" mode="INOUT"/>
-        <attribute name="sequenceNum" type="String" mode="IN" optional="true"/>
+        <attribute name="productCategoryId" mode="INOUT" type="String" optional="false"/>
+        <attribute name="productId" type="Map" string-map-prefix="productId_" mode="IN" optional="true"/>
+        <attribute name="fromDate" type="Map" string-map-prefix="fromDate_" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="Map" string-map-prefix="sequenceNum_" mode="IN" optional="true"/>
     </service>
     
     <service name="updateProductMetatagGroup" engine="group" auth="false">
@@ -1094,8 +1160,10 @@
         <implements service="genPartyGeoPoint"/>
         <attribute name="storeHoursDataResourceId" mode="IN" type="String" optional="true"></attribute>
         <attribute name="storeNoticeDataResourceId" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="storeContentSpotDataResourceId" mode="IN" type="String" optional="true"></attribute>
         <attribute name="storeHoursTextData" mode="IN" type="String" optional="true"></attribute>
         <attribute name="storeNoticeTextData" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="storeContentSpotData" mode="IN" type="String" optional="true" allow-html="any"></attribute>
         <attribute name="addressContactMechId" type="String" mode="IN" optional="false"/>
         <attribute name="phoneContactMechId" type="String" mode="IN" optional="false"/>
         <attribute name="contactNumberOther" mode="IN" type="String" optional="true"/>
@@ -1127,6 +1195,7 @@
         <implements service="genPartyGeoPoint"/>
         <attribute name="storeHoursTextData" mode="IN" type="String" optional="true"></attribute>
         <attribute name="storeNoticeTextData" mode="IN" type="String" optional="true"></attribute>
+        <attribute name="storeContentSpotData" mode="IN" type="String" optional="true" allow-html="any"></attribute>
         <attribute name="contactNumberOther" mode="IN" type="String" optional="true"/>
         <attribute name="contactNumber3" mode="IN" type="String" optional="true"/>
         <attribute name="contactNumber4" mode="IN" type="String" optional="true"/>
@@ -1134,6 +1203,25 @@
         <override name="address1" optional="true"/>
         <override name="city" optional="true"/>
         <override name="postalCode" optional="true"/>
+    </service>
+
+    <service name="deleteStoreLocationGroup" engine="group" auth="false">
+        <description>
+         Deletes a store
+        </description>
+        <group>
+            <invoke name="deleteStoreLocation" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="deleteStoreLocation" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminStoreLocationServices.xml"
+            invoke="deleteStoreLocation">
+        <description>
+        Deletes a store
+        </description>
+        <attribute name="partyId" mode="IN" type="String" optional="false"/>
     </service>
 
     <service name="createContactUsReasonGroup" engine="group" auth="false">
@@ -1357,6 +1445,30 @@
         <attribute name="uploadedMediaFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
         <attribute name="_uploadedMediaFile_fileName" type="String" mode="IN" optional="true"/>
     </service>
+    <service name="updateStyleBoxGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update Media Images
+        </description>
+        <group>
+            <invoke name="updateStyleBox" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateStyleBox" engine="simple" auth="false" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateStyleBox">
+        <description>
+        update style css file
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
+        <attribute name="replaceWithFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="fileName" type="String" mode="INOUT" optional="true"/>
+        <attribute name="activeStyleFilePath" type="String" mode="INOUT" optional="true"/>
+    </service>
+    
     <service name="addMediaContentGroup" engine="group" auth="false" transaction-timeout="7200" >
         <description>
          Create media content and render success mesage.
@@ -1489,8 +1601,10 @@
         <implements service="commonFormHiddenFields"/>
         <implements service="getStyleFilePath"/>
         <attribute name="textData" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="activeStyleFilePath" type="String" mode="IN" optional="true" allow-html="any"/>
         <attribute name="visualThemeId" type="String" mode="IN" optional="true"/>
     </service>
+    
 
     <service name="loadNewStyleGroup" engine="group" auth="false" >
         <description>
@@ -2009,12 +2123,14 @@
         <attribute name="JOB_NAME" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_NAME" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_DATE" type="String" mode="IN" optional="true"/>
-        <attribute name="SERVICE_TIME" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_HOUR" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_MINUTE" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_AMPM" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_END_TIME" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_FREQUENCY" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_INTERVAL" type="String" mode="IN" optional="true"/>
         <attribute name="SERVICE_COUNT" type="String" mode="IN" optional="true"/>
+        <attribute name="jobStatus" type="String" mode="IN" optional="true"/>
     </service>
     
     <service name="deleteScheduledJobGroup" engine="group" auth="false">
@@ -2053,7 +2169,10 @@
         <attribute name="isSystem" type="String" mode="IN" optional="true"/>
         <attribute name="enabled" type="String" mode="IN" optional="true"/>
         <attribute name="requirePasswordChange" type="String" mode="IN" optional="true"/>
-        <attribute name="disabledDateTime" type="String" mode="IN" optional="true"/>
+        <attribute name="DISABLED_DATE" type="String" mode="IN" optional="true"/>
+        <attribute name="DISABLED_HOUR" type="String" mode="IN" optional="true"/>
+        <attribute name="DISABLED_MINUTE" type="String" mode="IN" optional="true"/>
+        <attribute name="DISABLED_AMPM" type="String" mode="IN" optional="true"/>
     </service>
     
     <service name="updateUserGroup" engine="group" auth="false">
@@ -2078,8 +2197,11 @@
         <attribute name="isSystem" type="String" mode="IN" optional="true"/>
         <attribute name="enabled" type="String" mode="IN" optional="true"/>
         <attribute name="requirePasswordChange" type="String" mode="IN" optional="true"/>
-        <attribute name="disabledDateTime" type="String" mode="IN" optional="true"/>
-        <attribute name="successiveFailedLogins" type="Integer" mode="IN" optional="true"/>
+        <attribute name="DISABLED_DATE" type="String" mode="IN" optional="true"/>
+        <attribute name="DISABLED_HOUR" type="String" mode="IN" optional="true"/>
+        <attribute name="DISABLED_MINUTE" type="String" mode="IN" optional="true"/>
+        <attribute name="DISABLED_AMPM" type="String" mode="IN" optional="true"/>
+        <attribute name="successiveFailedLogins" type="String" mode="IN" optional="true"/>
     </service>
     
     <service name="createSecurityGroupGroup" engine="group" auth="false">
@@ -2098,6 +2220,58 @@
         <implements service="commonFormHiddenFields"/>
         <attribute name="groupId" type="String" mode="IN" optional="true"/>
         <attribute name="description" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateSecurityGroupGroup" engine="group" auth="false">
+        <description>
+         Update a User
+        </description>
+        <group>
+            <invoke name="updateSecurityGroup" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateSecurityGroup" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminUserServices.xml"
+            invoke="updateSecurityGroup">
+        <description>Update a User</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="groupId" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateUserSecurityGroupGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update user security groups and render success message.
+        </description>
+        <group>
+            <invoke name="updateUserSecurityGroup" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="updateUserSecurityGroup" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminUserServices.xml" invoke="updateUserSecurityGroup" auth="true">
+        <description>Update user security groups</description>
+        <attribute name="userLoginId" mode="IN" type="String" optional="false"/>
+        <attribute name="relatedGroupId" type="Map" string-map-prefix="relatedGroupId_" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateSecurityGroupPermissionGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update security group permissions and render success message.
+        </description>
+        <group>
+            <invoke name="updateSecurityGroupPermission" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="updateSecurityGroupPermission" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminUserServices.xml" invoke="updateSecurityGroupPermission" auth="true">
+        <description>Update security group permissions</description>
+        <attribute name="groupId" mode="IN" type="String" optional="false"/>
+        <attribute name="relatedPermissionId" type="Map" string-map-prefix="relatedPermissionId_" mode="IN" optional="true"/>
     </service>
     
 
@@ -2456,6 +2630,7 @@
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
 
     <service name="createPixelTrackingGroup" engine="group" auth="false">
@@ -2553,6 +2728,7 @@
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
     
     <service name="exportCustRequestContactUsXML" engine="java" transaction-timeout="7200" auth="true"
@@ -2562,6 +2738,7 @@
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
     
     <service name="exportCustRequestCatalogXML" engine="java" transaction-timeout="7200" auth="true"
@@ -2571,6 +2748,7 @@
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
 
     <service name="createXPixelTracking" default-entity-name="XPixelTracking" engine="entity-auto" invoke="create" auth="true">
@@ -2680,24 +2858,27 @@
         <attribute name="attrValues" type="Map" string-map-prefix="attrValue_" mode="IN" optional="true"/>
     </service>
     
-    <service name="validateTestEmailGroup" engine="group" auth="false">
+    <service name="sendEmailTestGroup" engine="group" auth="false">
         <description>
          Send Test Email Group.
         </description>
         <group>
-            <invoke name="validateTestEmail" result-to-context="true"/>
+            <invoke name="sendEmailTest" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
     
-    <service name="validateTestEmail" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminEmailServices.xml"
-            invoke="validateTestEmail">
+    <service name="sendEmailTest" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminEmailServices.xml"
+            invoke="sendEmailTest">
         <description>
-         Test Email validation.
+         Send Test Email.
         </description>
         <implements service="commonFormHiddenFields"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
-        <attribute name="emailType" type="String" mode="IN" optional="false"/>
+        <attribute name="simpleTest" type="String" mode="IN" optional="true"/>
+        <attribute name="emailTemplateId" type="String" mode="IN" optional="true"/>
+        <attribute name="customerId" type="String" mode="IN" optional="true"/>
+        <attribute name="orderId" type="String" mode="IN" optional="true"/>
         <attribute name="fromAddress" type="String" mode="IN" optional="true"/>
         <attribute name="toAddress" type="String" mode="IN" optional="true"/>
         <attribute name="emailSubject" type="String" mode="IN" optional="true"/>
@@ -2744,6 +2925,41 @@
         <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
     </service>
     
+    <service name="importOrderStatusChangeXmlGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Import Order Status Change Feeds and Render Success Message
+        </description>
+        <group>
+            <invoke name="importOrderStatusChangeXml" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="importOrderStatusChangeXml" engine="java"
+            location="com.osafe.services.OsafeAdminFeedServices" invoke="importOrderStatusChangeXml" auth="true" transaction-timeout="720000">
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="importCustomerXmlGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Import Customer Feeds and Render Success Message
+        </description>
+        <group>
+            <invoke name="importCustomerXml" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="importCustomerXml" engine="java"
+            location="com.osafe.services.OsafeAdminFeedServices" invoke="importCustomerXml" auth="true" transaction-timeout="720000">
+        <attribute name="uploadedFile" type="java.nio.ByteBuffer" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
+        <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
+    </service>
+    
     <service name="importStoresXmlGroup" engine="group" auth="false" transaction-timeout="7200">
         <description>
          Import Store Feeds and Render Success Message
@@ -2778,11 +2994,11 @@
         <attribute name="setFlagAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="allowSaveAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutCustomerDir" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutCustomerPrefix" type="String" mode="IN" optional="true"/>
         <attribute name="exportedFilePath" type="String" mode="OUT" optional="true"/>
         <attribute name="exportedFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="downloadedFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="exportId" type="String" mode="IN" optional="true"/>
+        <attribute name="exportIdList" type="List" mode="IN" optional="true"/>
     </service>
     
     <service name="exportBigfishOrderXmlGroup" engine="group" auth="false" transaction-timeout="7200">
@@ -2802,11 +3018,11 @@
         <attribute name="setFlagAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="allowSaveAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutOrderDir" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutOrderPrefix" type="String" mode="IN" optional="true"/>
         <attribute name="exportedFilePath" type="String" mode="OUT" optional="true"/>
         <attribute name="exportedFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="downloadedFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="exportId" type="String" mode="IN" optional="true"/>
+        <attribute name="exportIdList" type="List" mode="IN" optional="true"/>
     </service>
     
     <service name="exportBigfishContactUsXmlGroup" engine="group" auth="false" transaction-timeout="7200">
@@ -2825,11 +3041,11 @@
         <attribute name="setFlagAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="allowSaveAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutContactUsDir" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutContactUsPrefix" type="String" mode="IN" optional="true"/>
         <attribute name="exportedFilePath" type="String" mode="OUT" optional="true"/>
         <attribute name="exportedFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="downloadedFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="exportId" type="String" mode="IN" optional="true"/>
+        <attribute name="exportIdList" type="List" mode="IN" optional="true"/>
     </service>
     
     <service name="exportBigfishRequestCatalogXmlGroup" engine="group" auth="false" transaction-timeout="7200">
@@ -2848,11 +3064,11 @@
         <attribute name="setFlagAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="allowSaveAfterExport" type="String" mode="IN" optional="true"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutRequestCatalogDir" type="String" mode="IN" optional="true"/>
-        <attribute name="feedsOutRequestCatalogPrefix" type="String" mode="IN" optional="true"/>
         <attribute name="exportedFilePath" type="String" mode="OUT" optional="true"/>
         <attribute name="exportedFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="downloadedFileName" type="String" mode="OUT" optional="true"/>
+        <attribute name="exportId" type="String" mode="IN" optional="true"/>
+        <attribute name="exportIdList" type="List" mode="IN" optional="true"/>
     </service>
     
     <service name="sendScheduledJobNotification" engine="simple"
@@ -2880,8 +3096,9 @@
     <service name="deleteFinishedJobs" engine="simple"
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="deleteFinishedJobs" auth="true" >
         <attribute name="isOld" type="String" mode="IN" optional="true"/>
+        <attribute name="showDetail" type="String" mode="OUT" optional="true"/>
     </service>
-    <service name="deleteEntityRowsGroup" engine="group" auth="false">
+    <service name="deleteEntityRowsGroup" engine="group" auth="false" transaction-timeout="7200">
         <description>
          delete Entity Rows.
         </description>
@@ -2890,8 +3107,39 @@
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    <service name="deleteEntityRows" engine="simple"
-            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="deleteEntityRows" auth="true" >
+    <service name="deleteEntityRows" engine="java"
+        location="com.osafe.services.OsafeAdminServices" invoke="deleteEntityRows" auth="true" transaction-timeout="720000">
         <attribute name="entityDBName" type="String" mode="IN" optional="true"/>
+        <attribute name="showDetail" type="String" mode="OUT" optional="true"/>
+    </service>
+    
+    <service name="manageProductCategoryMembershipsGroup" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         Update product category member and render success message.
+        </description>
+        <group>
+            <invoke name="manageProductCategoryMemberships" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="manageProductCategoryMemberships" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="manageProductCategoryMemberships" auth="true">
+        <description>Update product category member</description>
+        <attribute name="productId" mode="IN" type="String" optional="false"/>
+        <attribute name="productCategoryMemberId" type="Map" string-map-prefix="productCategoryMemberId_" mode="IN" optional="true"/>
+    </service>
+    <service name="sendOrderChangeNotification" engine="java" require-new-transaction="true" max-retry="3"
+            location="com.osafe.services.OrderServices" invoke="sendOrderChangeNotification">
+        <description>Send a order notification</description>
+        <implements service="orderNotificationInterface"/>
+    </service>
+    
+    <service name="createUpdateDownloadedArrtibute" engine="simple"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="createUpdateDownloadedArrtibute">
+        <description>Create or Update the Downloaded Attribute</description>
+        <attribute name="feedsExportedIdList" type="java.util.List" mode="IN" optional="false"/>
+        <attribute name="entityName" type="String" mode="IN" optional="true"/>
+        <attribute name="entityPrimaryColumnName" type="String" mode="IN" optional="true"/>
     </service>
 </services>

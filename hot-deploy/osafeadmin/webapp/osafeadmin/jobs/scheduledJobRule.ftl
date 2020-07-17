@@ -19,9 +19,6 @@
         <#elseif frequencyDisplay = "YEARLY">
             <#assign frequency = "7" />
             <#assign frequencyDisplay = uiLabelMap.CommonYearly />
-        <#elseif frequencyDisplay = "NONE">
-            <#assign frequency = "0" />
-            <#assign frequencyDisplay = uiLabelMap.CommonNone />
         </#if>
 	    <#assign intervalNumber = recurrenceRule.intervalNumber!"" />
 	    <#assign countNumber = recurrenceRule.countNumber!"" />
@@ -50,7 +47,6 @@
 	      <div class="infoValue">
 	      	<#if statusId=="PENDING">
 		        <select name="SERVICE_FREQUENCY" id="SERVICE_FREQUENCY" class="small intervalUnitSet">
-		        	<option value='0' <#if selectedFrequency == "0" >selected=selected</#if>>${uiLabelMap.CommonNone}</option>
 		        	<option value='4' <#if selectedFrequency == "4" >selected=selected</#if>>${uiLabelMap.CommonDaily}</option>
 		        	<option value='5' <#if selectedFrequency == "5" >selected=selected</#if>>${uiLabelMap.CommonWeekly}</option>
 		        	<option value='6' <#if selectedFrequency == "6" >selected=selected</#if>>${uiLabelMap.CommonMonthly}</option>

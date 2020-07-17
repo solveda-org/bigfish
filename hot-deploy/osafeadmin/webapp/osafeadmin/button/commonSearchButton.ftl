@@ -2,7 +2,7 @@
 <div class="entryButtonRow">
   <div class="entry">
     <div class="searchButton">
-      <input type="submit" class="standardBtn action" name="searchOrderBtn" value="${uiLabelMap.SearchBtn}"/>
+      <input type="submit" class="standardBtn action" name="searchOrderBtn" value='${searchBtn!"${uiLabelMap.SearchBtn}"}'/>
     </div>
   </div>
 </div>

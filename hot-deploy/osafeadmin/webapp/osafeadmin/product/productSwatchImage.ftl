@@ -6,10 +6,10 @@
         <#assign plpSwatchImageURL = productContentWrapper.get("PLP_SWATCH_IMAGE_URL")!""/>
         <#assign pdpSwatchImageURL = productContentWrapper.get("PDP_SWATCH_IMAGE_URL")!""/>
       </#if>
-      <#assign plpSwatchImageHeight= IMG_SIZE_PLP_SWATCH_H!""/>
-      <#assign plpSwatchImageWidth= IMG_SIZE_PLP_SWATCH_W!""/>
-      <#assign pdpSwatchImageHeight= IMG_SIZE_PDP_SWATCH_H!""/>
-      <#assign pdpSwatchImageWidth= IMG_SIZE_PDP_SWATCH_W!""/>
+      <#assign plpSwatchImageHeight= globalContext.IMG_SIZE_PLP_SWATCH_H!""/>
+      <#assign plpSwatchImageWidth= globalContext.IMG_SIZE_PLP_SWATCH_W!""/>
+      <#assign pdpSwatchImageHeight= globalContext.IMG_SIZE_PDP_SWATCH_H!""/>
+      <#assign pdpSwatchImageWidth= globalContext.IMG_SIZE_PDP_SWATCH_W!""/>
       <#assign curDateTime = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp().toString()/>
       <div class="infoRow">
         <div class="infoEntry">

@@ -45,7 +45,7 @@
             <actions>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="searchDialogTitle" value="${uiLabelMap.SearchDialogTitle}"/>
-                <set field="searchDialogText" from-field="SEARCH_NO_ENTRY_ERROR"/>
+                <set field="searchDialogText" value="${uiLabelMap.EmptySiteSearchInfo}"/>
                 <set field="searchDialogOkBtn" value="${uiLabelMap.OkBtn}"/>
                 <set field="dialogPurpose" value="search_"/>
                 <set field="dialogBoxTitle" value=""/>
@@ -152,7 +152,6 @@
     <screen name="eCommercePlpQuickLook">
         <section>
             <actions>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <property-map resource="osafe" map-name="OSafeConfig" global="true" />
@@ -241,7 +240,7 @@
                                 <container id="eCommerceStoreLocatorContainer">
                                     <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
                                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
-                                    <include-screen name="PTS_STORE_LOCATOR" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                    <include-screen name="PTS_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                     <platform-specific>
                                         <html>
                                             <html-template-decorator  location="component://osafe/webapp/osafe/common/commonGeoLocation.ftl" >
@@ -264,6 +263,7 @@
                                             </html-template-decorator >
                                         </html>
                                     </platform-specific>
+                                    <include-screen name="PES_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                 </container>
                             </html-template-decorator-section>
                         </html-template-decorator>
@@ -299,7 +299,7 @@
                 <container id="eCommerceStoreLocatorContainer">
                     <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
                     <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}"/>
-                    <include-screen name="PTS_STORE_LOCATOR" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                    <include-screen name="PTS_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
                     <platform-specific>
                         <html>
                             <html-template-decorator  location="component://osafe/webapp/osafe/common/commonGeoLocation.ftl" >
@@ -322,6 +322,7 @@
                             </html-template-decorator >
                         </html>
                     </platform-specific>
+                    <include-screen name="PES_STORE_PICKUP" location="component://osafe/widget/EcommerceContentScreens.xml" />
                 </container>
             </widgets>
         </section>

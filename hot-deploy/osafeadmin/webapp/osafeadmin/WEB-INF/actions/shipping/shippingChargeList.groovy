@@ -59,20 +59,22 @@ mainCond=null;
 prodCond=null;
 statusCond=null;
 
-if(productStoreId) {
+if (UtilValidate.isNotEmpty(productStoreId))
+{
 
 	exprs.add(EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, productStoreId));
 }
 
 // Product Store Ship Method Id
-if(srchProductStoreShipMethId)
+if (UtilValidate.isNotEmpty(srchProductStoreShipMethId))
 {
 	productStoreShipMethId=srchProductStoreShipMethId;
 	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productStoreShipMethId"), EntityOperator.LIKE, "%" + productStoreShipMethId.toUpperCase() + "%"));
 	context.productStoreShipMethId=productStoreShipMethId;
 }
 
-if (UtilValidate.isNotEmpty(exprs)) {
+if (UtilValidate.isNotEmpty(exprs))
+{
 	prodCond=EntityCondition.makeCondition(exprs, EntityOperator.AND);
 	mainCond=prodCond;
 }
@@ -82,7 +84,7 @@ orderBy = ["productStoreShipMethId"];
 productStoreShipmentMethList=FastList.newInstance();
 if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
 {
-	productStoreShipmentMethList = delegator.findList("ProductStoreShipmentMeth",mainCond, null, orderBy, null, true);
+	productStoreShipmentMethList = delegator.findList("ProductStoreShipmentMeth",mainCond, null, orderBy, null, false);
 }
 
 

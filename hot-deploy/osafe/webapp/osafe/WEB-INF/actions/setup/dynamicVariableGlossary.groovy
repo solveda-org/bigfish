@@ -14,9 +14,23 @@ import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.*;
 import java.math.BigDecimal;
 
-productStore = ProductStoreWorker.getProductStore(request);
-prodCatalog = CatalogWorker.getProdCatalog(request);
 //SET USER_VARIABLES GLOSSARY
+productStore = ProductStoreWorker.getProductStore(request);
+//PRODUCT STORE PARMS
+if (UtilValidate.isNotEmpty(productStore))
+{
+  productStoreParmList = productStore.getRelatedCache("XProductStoreParm");
+  if (UtilValidate.isNotEmpty(productStoreParmList))
+  {
+    parmIter = productStoreParmList.iterator();
+    while (parmIter.hasNext()) 
+    {
+      prodStoreParm = (GenericValue) parmIter.next();
+      globalContext.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
+    }
+  }
+ 
+}
 
 // Get the Cart and Prepare Size
 shoppingCart = ShoppingCartEvents.getCartObject(request);
@@ -103,6 +117,7 @@ if (UtilValidate.isNotEmpty(orderId))
        context.ORDER_TOTAL_TAX=orderTaxTotal;
        context.ORDER_TOTAL_PROMO=orderAdjustTotal;
        context.ORDER_TOTAL_MONEY=orderGrandTotal;
+       context.ORDER_TOTAL_NET=orderGrandTotal.setScale(2).toString();
 
        //Not Used Yet
        context.ORDER_HELPER=orderReadHelper;

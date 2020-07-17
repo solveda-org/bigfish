@@ -4,6 +4,8 @@
  <#assign profileName = partyContentWrapper.get("PROFILE_NAME")!"">
  <#assign profileFbLikeUrl = partyContentWrapper.get("PROFILE_NAME")!"">
  <#assign profileTweetUrl = partyContentWrapper.get("PROFILE_TWEET_URL")!"">
+ <#assign IMG_SIZE_PROF_MFG_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PROF_MFG_H")!""/>
+ <#assign IMG_SIZE_PROF_MFG_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PROF_MFG_W")!""/>
      <img alt="${profileName}" src="${profileImageUrl!""}" class="profileImage" height="${IMG_SIZE_PROF_MFG_H!""}" width="${IMG_SIZE_PROF_MFG_W!""}">
       <p class="profileName">${profileName!""}</p>
       <p class="profileDescription">${description!""}</p>
@@ -20,7 +22,10 @@
               <#assign productPrice = dispatcher.runSync("calculateProductPrice", Static["org.ofbiz.base.util.UtilMisc"].toMap("product", product, "userLogin", userLogin))/>
               <#assign plpLabel = Static['org.ofbiz.product.product.ProductContentWrapper'].getProductContentAsText(product, 'PLP_LABEL', request)?if_exists>
               <#assign productName = Static['org.ofbiz.product.product.ProductContentWrapper'].getProductContentAsText(product, 'PRODUCT_NAME', request)?if_exists>
-              <#assign productImageUrl = Static['org.ofbiz.product.product.ProductContentWrapper'].getProductContentAsText(product, 'SMALL_IMAGE_URL', request)?if_exists>
+              <#if productName?has_content>
+              	<#assign productName = Static["com.osafe.util.Util"].getFormattedText(productName) >
+              </#if>
+	      <#assign productImageUrl = Static['org.ofbiz.product.product.ProductContentWrapper'].getProductContentAsText(product, 'SMALL_IMAGE_URL', request)?if_exists>
 
               <div class="eCommerceListItem productListItem">
                    <div class="eCommerceThumbNailHolder">

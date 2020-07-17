@@ -17,6 +17,9 @@
     <property key="SITE_INFO_SITE_LOGO">
         <value xml:lang="en">SI_LOGO</value>
     </property>
+    <property key="SITE_INFO_HEAD_TAG_CONTENT">
+        <value xml:lang="en">SI_HEAD_TAG_CONTENT</value>
+    </property>
 
     <!-- *** ECOMMERCE HOME PAGE SPOT MENU *************************************** -->
     <property key="HOME_PAGE_SPOT_01">
@@ -211,6 +214,12 @@
     <property key="PDP_CONTENT_05">
         <value xml:lang="en">PDP_CONTENT_05</value>
     </property>
+    <property key="PAGE_TOP_SPOT_STORE_PICKUP">
+        <value xml:lang="en">PTS_STORE_PICKUP</value>
+    </property>
+    <property key="PAGE_END_SPOT_STORE_PICKUP">
+        <value xml:lang="en">PES_STORE_PICKUP</value>
+    </property>
 
     <!-- *** ECOMMERCE PDP SPOT MENU HOT SPOTS *************************************** -->
     <property key="PDP_SPOT_INTRODUCED">
@@ -256,9 +265,6 @@
     </property>
     <property key="EMAIL_ORDER_CHANGE">
         <value xml:lang="en">E_ORDER_CHANGE</value>
-    </property>
-    <property key="EMAIL_TEST_EMAIL">
-        <value xml:lang="en">E_TEST_EMAIL</value>
     </property>
     <property key="EMAIL_SCHEDULED_JOB">
         <value xml:lang="en">E_SCHED_JOB_ALERT</value>

@@ -1,4 +1,3 @@
-<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(REVIEW_ACTIVE_FLAG!"")>
 <script language="JavaScript" type="text/javascript">
 <!--
     function sortReviews() {
@@ -9,6 +8,7 @@
 </script>
 
 <#if productReviews?has_content>
+<#assign FORMAT_DATE_TIME = Static["com.osafe.util.Util"].getProductStoreParm(request,"FORMAT_DATE_TIME")!""/>
 <a name="productReviews"></a>
 <form type="POST" action="<@ofbizUrl>eCommerceProductDetail#productReviews</@ofbizUrl>" name="sortReviewForm">
     <input type="hidden" name="productId" value="${productId?if_exists}">
@@ -104,5 +104,4 @@
 	
 	</div>
 </div>
-</#if>
 </#if>

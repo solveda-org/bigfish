@@ -1,4 +1,4 @@
-<#assign productFeatureDataResourcesPDP = delegator.findByAnd("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",parameters.productFeatureId!,"prodFeatureDataResourceTypeId","PDP_SWATCH_IMAGE_URL"))/>
+<#assign productFeatureDataResourcesPDP = delegator.findByAnd("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",parameters.productFeatureId!,"featureDataResourceTypeId","PDP_SWATCH_IMAGE_URL"))/>
 <#if productFeatureDataResourcesPDP?has_content>
   <#assign productFeatureDataResourcePDP = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productFeatureDataResourcesPDP) />
   <#assign dataResourcePDP = productFeatureDataResourcePDP.getRelatedOne("DataResource")/>
@@ -8,7 +8,7 @@
   </#if>
 </#if>
 
-<#assign productFeatureDataResourcesPLP = delegator.findByAnd("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",parameters.productFeatureId!,"prodFeatureDataResourceTypeId","PLP_SWATCH_IMAGE_URL"))/>
+<#assign productFeatureDataResourcesPLP = delegator.findByAnd("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",parameters.productFeatureId!,"featureDataResourceTypeId","PLP_SWATCH_IMAGE_URL"))/>
 <#if productFeatureDataResourcesPLP?has_content>
   <#assign productFeatureDataResourcePLP = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productFeatureDataResourcesPLP) />
   <#assign dataResourcePLP = productFeatureDataResourcePLP.getRelatedOne("DataResource")/>
@@ -40,7 +40,6 @@
               </div>
           </div>
        </div>
-       <hr/>
        <div class="infoRow bottomRow">
           <div class="infoEntry">
               <div class="infoCaption">

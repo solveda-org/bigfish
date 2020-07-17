@@ -17,6 +17,9 @@ VALUES ("@PRODUCT_STORE_ID@", "PRDS_SCHED_JOB_ALERT", "component://osafe/widget/
 09/13/12 issue#26978
 update X_PRODUCT_STORE_PARM set DESCRIPTION='The time in hours to wait before sending the Abandoned Cart email. Set to 0 to disable the Abandoned Cart email.' where PARM_KEY='EMAIL_ABANDON_HRS';
 update X_PRODUCT_STORE_PARM set DESCRIPTION='The number of times to send the Abandoned Cart email, reset if the customer purchases. Set to 0 to disable the Abandoned Cart email.' where PARM_KEY='EMAIL_ABANDON_NUM';
+09/10/2012 issue#26889
+DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_MONEY_THRESHOLD';
+DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_PCT_THRESHOLD';
 
 //********************************************************************************************
 //BIGFISH PARAMETERS UPDATES
@@ -264,6 +267,12 @@ update X_PRODUCT_STORE_PARM set DESCRIPTION='The number of times to send the Aba
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PRODUCT_PCT_THRESHOLD" parmValue="5" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PRODUCT"/>
 09/13/2012 Issue #26853 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CART_DEFAULT_SHIP_METHOD" description="The default Shipping Charge ID that will be used in the View Cart. This will allow for an estimation of shipping to be computed. Leave blank if no shipping charge defaults should be in the cart." parmCategory="CHECKOUT"/>
+
+09/11/12 issue#26844
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_SCHED_JOB_ALERT" parmValue="" description="List of recipients, comma separated, who will receive a Scheduled Job alert email." parmCategory="EMAIL"/>
+<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_SCHED_JOB_ALERT" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#sendScheduledJobNotification" xslfoAttachScreenLocation="" fromAddress="bigfishtest@salmonllc.com" ccAddress="" bccAddress="bigfish@salmonllc.com" subject="${EMAIL_CLNT_NAME}: Scheduled Job ${SCHEDULED_JOB_NAME} has ${SCHEDULED_JOB_STATUS}" contentType="" />
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHED_JOB_ALERT " contentTypeId="BF_EMAIL_TEMPLATE"/>
+
 //Remove
 05/09/2012
 <ProductStore productStoreId="MODA_STORE" primaryStoreGroupId="" storeName="MODA Store Name" companyName="Company Name" title="Store Title" subtitle="Store Sub Title" payToPartyId="MODA_COMPANY" daysToCancelNonPay="30" manualAuthIsCapture="Y" prorateShipping="Y" prorateTaxes="Y" viewCartOnAdd="N" autoSaveCart="Y" autoApproveReviews="N" isDemoStore="N" isImmediatelyFulfilled="Y" inventoryFacilityId="MODA_FAC" oneInventoryFacility="Y" checkInventory="N" reserveInventory="N" reserveOrderEnumId="" requireInventory="N" balanceResOnOrderCreation="N" requirementMethodEnumId="" orderNumberPrefix="WS" defaultLocaleString="en_US" defaultCurrencyUomId="GBP" defaultSalesChannelEnumId="WEB_SALES_CHANNEL" allowPassword="Y" defaultPassword="" explodeOrderItems="N" checkGcBalance="N" retryFailedAuths="N" headerApprovedStatus="ORDER_APPROVED" itemApprovedStatus="ITEM_APPROVED" digitalItemApprovedStatus="ITEM_APPROVED" headerDeclinedStatus="ORDER_REJECTED" itemDeclinedStatus="ITEM_REJECTED" headerCancelStatus="ORDER_CANCELLED" itemCancelStatus="ITEM_CANCELLED" authDeclinedMessage="There has been a problem with your method of payment. Please  try a  different method or call customer service." authFraudMessage="Your order has been rejected and  your account  has been disabled due to fraud." authErrorMessage="" visualThemeId="OSAFE_DEFAULT" storeCreditAccountEnumId="FIN_ACCOUNT" usePrimaryEmailUsername="N" requireCustomerRole="N" autoInvoiceDigitalItems="Y" reqShipAddrForDigItems="Y" showCheckoutGiftOptions="Y" selectPaymentTypePerItem="N" showPricesWithVatTax="N" showTaxIsExempt="Y" vatTaxAuthGeoId="" vatTaxAuthPartyId="" enableAutoSuggestionList="Y" enableDigProdUpload="N" prodSearchExcludeVariants="Y" digProdUploadCategoryId="" autoOrderCcTryExp="Y" autoOrderCcTryOtherCards="Y" autoOrderCcTryLaterNsf="Y" autoOrderCcTryLaterMax="" storeCreditValidDays="90" autoApproveInvoice="Y" autoApproveOrder="Y" shipIfCaptureFails="Y" setOwnerUponIssuance="N" reqReturnInventoryReceive="N" addToCartRemoveIncompat="N" addToCartReplaceUpsell="N" splitPayPrefPerShpGrp="N" showOutOfStockProducts="N" />
@@ -272,10 +281,6 @@ update X_PRODUCT_STORE_PARM set DESCRIPTION='The number of times to send the Aba
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_MONEY_THRESHOLD" parmValue="15" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_PCT_THRESHOLD" parmValue="5" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PDP"/>
 
-09/11/12 issue#26844
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_SCHED_JOB_ALERT" parmValue="" description="List of recipients, comma separated, who will receive a Scheduled Job alert email." parmCategory="EMAIL"/>
-<ProductStoreEmailSetting productStoreId="@store.productStoreId@" emailType="PRDS_SCHED_JOB_ALERT" bodyScreenLocation="component://osafe/widget/EmailScreens.xml#sendScheduledJobNotification" xslfoAttachScreenLocation="" fromAddress="bigfishtest@salmonllc.com" ccAddress="" bccAddress="bigfish@salmonllc.com" subject="${EMAIL_CLNT_NAME}: Scheduled Job ${SCHEDULED_JOB_NAME} has ${SCHEDULED_JOB_STATUS}" contentType="" />
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHED_JOB_ALERT " contentTypeId="BF_EMAIL_TEMPLATE"/>
 
 //comment out all services
 

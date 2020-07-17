@@ -9,7 +9,7 @@
           <#assign  selectedAddress = parameters.get(fieldPurpose+"_SELECT_ADDRESS")!postalAddressContactMechId!""/>
           <#list contactMechList as contactMech>
               <#if contactMech.contactMechTypeId?if_exists = "POSTAL_ADDRESS">
-                  <#assign postalAddress=contactMech.getRelatedOne("PostalAddress")!"">
+                  <#assign postalAddress=contactMech.getRelatedOneCache("PostalAddress")!"">
                   <#if postalAddress?has_content>
                       <input type="radio" class="${fieldPurpose?if_exists}_SELECT_ADDRESS" name="${fieldPurpose?if_exists}_SELECT_ADDRESS" value="${postalAddress.contactMechId!}" onchange="javascript:getPostalAddress('${postalAddress.contactMechId!}', '${fieldPurpose?if_exists}');"<#if selectedAddress == postalAddress.contactMechId >checked="checked"</#if>/>
                       <span><#if postalAddress.attnName?has_content>${postalAddress.attnName!}<#else>${postalAddress.address1!}</#if></span>

@@ -10,7 +10,9 @@
         <td class="idCol firstCol" ><a class="leftMargin10" href="javascript:set_values('${category.productCategoryId!?if_exists}','${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}')">${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}</a></td>
       </tr>
       <#if showSubNav?exists && showSubNav =='Y'>
-        <#assign subCatList = Static["org.ofbiz.product.category.CategoryWorker"].getRelatedCategoriesRet(request, "subCatList", category.getString("productCategoryId"), true)>
+		 <#if subCatRollUpMap?has_content>
+		    <#assign subCatList = subCatRollUpMap.get(category.productCategoryId)!/>
+		 </#if> 
           <#if subCatList?exists && subCatList?has_content>
           <#list subCatList as subCategory>
             <tr class="dataRow">

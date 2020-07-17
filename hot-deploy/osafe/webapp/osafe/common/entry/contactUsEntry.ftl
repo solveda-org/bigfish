@@ -14,7 +14,7 @@
     <input type="hidden" name="custRequestName" value="${custRequestName!""}" />
     <#if userLogin?has_content>
        <#assign emailLogin=userLogin.userLoginId>
-       <#assign person = userLogin.getRelatedOne("Person")>
+       <#assign person = userLogin.getRelatedOneCache("Person")>
        <#if person?has_content>
          <#assign firstName=person.firstName>
          <#assign lastName=person.lastName>
@@ -33,13 +33,13 @@
       <@fieldErrors fieldName="firstName"/>
     </div>
     <div class="entry">
-      <label for="lastName"><@required/>${uiLabelMap.FormFieldTitle_lastName}</label>
+      <label for="lastName"><@required/>${uiLabelMap.LastNameCaption}</label>
       <input type="text"  maxlength="100" name="lastName" id="lastName" value="${parameters.lastName!lastName!""}"/>
       <@fieldErrors fieldName="lastName"/>
     </div>
     <div class="entry">
       <label for="emailAddress"><@required/>${uiLabelMap.EmailAddressCaption}</label>
-      <input type="text"  maxlength="100" name="emailAddress" id="emailAddress" value="${parameters.emailAddress!emailLogin!""}"/>
+      <input type="email"  maxlength="100" name="emailAddress" id="emailAddress" value="${parameters.emailAddress!emailLogin!""}"/>
       <@fieldErrors fieldName="emailAddress"/>
     </div>
     <#assign countryDefault=COUNTRY_DEFAULT!""/>
@@ -49,15 +49,15 @@
     <#if countryDefault?has_content && (countryDefault =="USA" || countryDefault="CAN")>
     <div class="entry">
       <label for="contactPhoneContact">${uiLabelMap.ContactPhoneCaption}</label>
-      <input type="text" class="phone3" name="contactPhoneArea" size="5" value="${parameters.contactPhoneArea!""}" /></td>
+      <input type="number" class="phone3" name="contactPhoneArea" size="5" value="${parameters.contactPhoneArea!""}" /></td>
       <input type="hidden" id="contactPhoneContact" name="contactPhoneContact" value="${parameters.contactPhoneContact!""}"/>
-      <input type="text" class="phone3" id="contactPhoneContact3" name="contactPhoneContact3" value="${parameters.contactPhoneContact3!""}" maxlength="3" /></td>
-      <input type="text" class="phone4" id="contactPhoneContact4" name="contactPhoneContact4" value="${parameters.contactPhoneContact4!""}" maxlength="255"/></td>
+      <input type="number" class="phone3" id="contactPhoneContact3" name="contactPhoneContact3" value="${parameters.contactPhoneContact3!""}" maxlength="3" /></td>
+      <input type="number" class="phone4" id="contactPhoneContact4" name="contactPhoneContact4" value="${parameters.contactPhoneContact4!""}" maxlength="255"/></td>
     </div>
     <#else>
     <div class="entry">
       <label for="contactPhoneContact">${uiLabelMap.ContactPhoneCaption}</label>
-      <input type="text" class="phone" name="contactPhoneNumber" maxlength="100" value="${parameters.contactPhoneNumber!""}" /></td>
+      <input type="number" class="phone" name="contactPhoneNumber" maxlength="100" value="${parameters.contactPhoneNumber!""}" /></td>
     </div>
     </#if>
     <div class="entry">

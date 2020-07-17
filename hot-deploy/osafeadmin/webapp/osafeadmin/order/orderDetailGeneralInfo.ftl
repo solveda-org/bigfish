@@ -21,6 +21,8 @@
      </div>
    </div>
 </div>
+
+
 <div class="infoRow">
    <div class="infoEntry">
      <div class="infoCaption">
@@ -36,7 +38,7 @@
      </div>
      <div class="infoValue">
         <#if orderHeader?has_content>
-          <#assign orderAttribute = delegator.findOne("OrderAttribute", {"orderId" : orderHeader.orderId, "attrName" : "IS_DOWNLOADED"}, true)!"" />
+          <#assign orderAttribute = delegator.findOne("OrderAttribute", {"orderId" : orderHeader.orderId, "attrName" : "IS_DOWNLOADED"}, false)!"" />
           <#if orderAttribute?has_content>
             <#assign downloadStatus = orderAttribute.attrValue!"">
           </#if>
@@ -46,6 +48,28 @@
             <#else>
                ${uiLabelMap.DownloadNewInfo}
             </#if>
+        </#if>
+     </div>
+   </div>
+</div>
+
+
+<div class="infoRow">
+   <div class="infoEntry">
+     <div class="infoCaption">
+      <label>${uiLabelMap.OrderVisitIdCaption}</label>
+     </div>
+     <div class="infoValue medium">
+        <#if orderHeader?has_content>
+            <a href="<@ofbizUrl>visitDetail?visitId=${orderHeader.visitId!}</@ofbizUrl>">${orderHeader.visitId!}</a>
+        </#if>
+     </div>
+     <div class="infoValue">
+      <label>${uiLabelMap.CreatedByCaption}</label>
+     </div>
+     <div class="infoValue">
+        <#if orderHeader?has_content>
+            ${orderHeader.createdBy!}
         </#if>
      </div>
    </div>

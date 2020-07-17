@@ -73,14 +73,14 @@ under the License.
                         </td>
                     </tr>
                    <#assign features = "">
-                   <#assign standardFeatureList = product.getRelated("ProductFeatureAndAppl")/>
+                   <#assign standardFeatureList = product.getRelatedCache("ProductFeatureAndAppl")/>
                    <#assign standardFeatureList = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(standardFeatureList,Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureApplTypeId","STANDARD_FEATURE"))![]>
                    <#if standardFeatureList?has_content>
                        <#assign features = standardFeatureList>
                    </#if>
                    <#if features?has_content>
                      <#list features as feature>
-                        <#assign productFeatureType = feature.getRelatedOne("ProductFeatureType")>
+                        <#assign productFeatureType = feature.getRelatedOneCache("ProductFeatureType")>
                         <tr>
                             <td>${productFeatureType.description!""}: ${feature.description?default("")}</td>
                         </tr>

@@ -1,5 +1,6 @@
 <#if orderHeader?has_content>
     <div id="orderStatusBlock">
+    <#assign FORMAT_DATE = Static["com.osafe.util.Util"].getProductStoreParm(request,"FORMAT_DATE")!""/>
 
 
     <#if showThankYouStatus?exists && showThankYouStatus == "Y">

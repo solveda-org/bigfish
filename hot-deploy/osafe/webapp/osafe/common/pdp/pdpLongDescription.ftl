@@ -10,9 +10,12 @@
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
     <#assign contentId = ''/>
-    <#assign productContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(delegator.findByAnd("ProductContent", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" , "${key}", "productContentTypeId" , "LONG_DESCRIPTION")))?if_exists />
-    <#if productContentList?has_content>
-      <#assign productContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productContentList) />
+    <#assign variantProduct = delegator.findOne("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",key), true)/>
+    <#assign productVariantContent = variantProduct.getRelatedCache("ProductContent") />
+    <#assign productVariantContent = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productVariantContent,true)/>
+    <#assign productVariantLongDesc = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productVariantContent,Static["org.ofbiz.base.util.UtilMisc"].toMap('productContentTypeId','LONG_DESCRIPTION'))/>
+    <#if productVariantLongDesc?has_content>
+      <#assign productContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productVariantLongDesc) />
       <#assign contentId = productContent.contentId?if_exists />
     </#if>
     <#if contentId?has_content>

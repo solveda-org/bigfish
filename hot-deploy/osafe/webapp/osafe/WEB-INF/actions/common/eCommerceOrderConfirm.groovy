@@ -39,7 +39,7 @@ if (UtilValidate.isEmpty(partyId))
  {
     if (UtilValidate.isNotEmpty(userLogin)) 
     {
-        party = userLogin.getRelatedOne("Party");
+        party = userLogin.getRelatedOneCache("Party");
         partyId = party.partyId;
     }
  } 
@@ -73,15 +73,19 @@ if (!userLogin)
             } else {
                 filteredOrderStatusList = EntityUtil.filterByCondition(orderStatuses, EntityCondition.makeCondition("statusId", EntityOperator.IN, ["ORDER_COMPLETED", "ORDER_APPROVED"]));
             }            
-            if (UtilValidate.isNotEmpty(filteredOrderStatusList)) {
-                if (filteredOrderStatusList.size() < 2) {
+            if (UtilValidate.isNotEmpty(filteredOrderStatusList)) 
+            {
+                if (filteredOrderStatusList.size() < 2) 
+                {
                     statusUserLogin = EntityUtil.getFirst(filteredOrderStatusList).statusUserLogin;
-                    userLogin = delegator.findOne("UserLogin", [userLoginId : statusUserLogin], false);
-                } else {
+                    userLogin = delegator.findOne("UserLogin", [userLoginId : statusUserLogin], true);
+                } else 
+                {
                     filteredOrderStatusList.each { orderStatus ->
-                        if ("ORDER_COMPLETED".equals(orderStatus.statusId)) {
+                        if ("ORDER_COMPLETED".equals(orderStatus.statusId)) 
+                        {
                             statusUserLogin = orderStatus.statusUserLogin;
-                            userLogin = delegator.findOne("UserLogin", [userLoginId :statusUserLogin], false);
+                            userLogin = delegator.findOne("UserLogin", [userLoginId :statusUserLogin], true);
                         }
                     }
                 }
@@ -109,9 +113,9 @@ if (orderHeader)
     orderTaxTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
     orderTaxTotal = orderTaxTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
 
-    placingCustomerOrderRoles = delegator.findByAnd("OrderRole", [orderId : orderId, roleTypeId : roleTypeId]);
+    placingCustomerOrderRoles = delegator.findByAndCache("OrderRole", [orderId : orderId, roleTypeId : roleTypeId]);
     placingCustomerOrderRole = EntityUtil.getFirst(placingCustomerOrderRoles);
-    placingCustomerPerson = placingCustomerOrderRole == null ? null : delegator.findByPrimaryKey("Person", [partyId : placingCustomerOrderRole.partyId]);
+    placingCustomerPerson = placingCustomerOrderRole == null ? null : delegator.findByPrimaryKeyCache("Person", [partyId : placingCustomerOrderRole.partyId]);
 
     billingAccount = orderHeader.getRelatedOne("BillingAccount");
 
@@ -122,7 +126,7 @@ if (orderHeader)
         if (paymentMethod) {
             paymentMethods.add(paymentMethod);
         } else {
-            paymentMethodType = opp.getRelatedOne("PaymentMethodType");
+            paymentMethodType = opp.getRelatedOneCache("PaymentMethodType");
             if (paymentMethodType) {
                 context.paymentMethodType = paymentMethodType;
             }
@@ -202,7 +206,7 @@ if (orderHeader)
     context.orderShipmentInfoSummaryList = orderShipmentInfoSummaryList;
     context.customerPoNumberSet = customerPoNumberSet;
 
-    orderItemChangeReasons = delegator.findByAnd("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
+    orderItemChangeReasons = delegator.findByAndCache("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
     context.orderItemChangeReasons = orderItemChangeReasons;
     
     //Address Locations
@@ -232,7 +236,7 @@ if("Y".equals (showThankYouStatus))
 
 
 //Retrieve CC Types for Display purposes
-creditCardTypes = delegator.findByAnd("Enumeration", [enumTypeId : "CREDIT_CARD_TYPE"], ["sequenceId"]);
+creditCardTypes = delegator.findByAndCache("Enumeration", [enumTypeId : "CREDIT_CARD_TYPE"], ["sequenceId"]);
 creditCardTypesMap = [:];
  for (GenericValue creditCardType :  creditCardTypes) 
  {
@@ -241,9 +245,11 @@ creditCardTypesMap = [:];
 
 context.creditCardTypesMap = creditCardTypesMap;
 
-if (UtilValidate.isNotEmpty(orderId)) {
-    orderAttrPickupStore = delegator.findOne("OrderAttribute", ["orderId" : orderId, "attrName" : "STORE_LOCATION"], true);
-    if (UtilValidate.isNotEmpty(orderAttrPickupStore)) {
+if (UtilValidate.isNotEmpty(orderId)) 
+{
+    orderAttrPickupStore = delegator.findOne("OrderAttribute", ["orderId" : orderId, "attrName" : "STORE_LOCATION"], false);
+    if (UtilValidate.isNotEmpty(orderAttrPickupStore)) 
+    {
         storeId = orderAttrPickupStore.attrValue;
         context.isStorePickUp = "true"
     }

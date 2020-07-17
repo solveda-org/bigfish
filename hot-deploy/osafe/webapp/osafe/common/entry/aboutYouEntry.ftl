@@ -15,6 +15,7 @@
 
      <input type="hidden" name="partyId" value="${partyId!""}"/>
      <input type="hidden" name="productStoreId" value="${productStore.productStoreId}" />
+     <#assign COUNTRY_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"COUNTRY_DEFAULT")!""/>
      <input type="hidden" name="USER_COUNTRY" id="USER_COUNTRY" value="${COUNTRY_DEFAULT!}"/>
      <input type="hidden" name="USER_MIDDLE_NAME" value=""/>
      <input type="hidden" name="USER_EMAIL" value="${parameters.USER_EMAIL!parameters.USERNAME!parameters.USERNAME_NEW!parameters.USERNAME_GUEST!userEmailAddress!}"/>

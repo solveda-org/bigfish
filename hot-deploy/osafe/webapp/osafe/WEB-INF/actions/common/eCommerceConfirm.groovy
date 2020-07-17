@@ -38,6 +38,6 @@ if (UtilValidate.isNotEmpty(messageVariables))
 context.pageTitle = confirmH1MapValue;
 context.title = pageTitle;
 globalContext.confirmHeadingH2 = confirmH2MapValue;
-globalContext.confirmTextMapValue = confirmTextMapValue;
+globalContext.confirmMessage = confirmTextMapValue;
 
 

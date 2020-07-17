@@ -6,7 +6,7 @@
          <#assign previousParams = ""/>
       </#if>
       <#if previousParams?has_content>
-         <#assign previousParams = Static["org.ofbiz.base.util.UtilHttp"].stripNamedParamsFromQueryString(previousParams,Static["org.ofbiz.base.util.UtilMisc"].toSet("viewSize","viewIndex"))/>
+         <#assign previousParams = Static["org.ofbiz.base.util.UtilHttp"].stripNamedParamsFromQueryString(previousParams,Static["org.ofbiz.base.util.UtilMisc"].toSet("viewSize","viewIndex","rowDeleted"))/>
       </#if>
         <div class="pagingLinksBox">
           <ul class="pagingLinksBody">
@@ -26,12 +26,15 @@
                           <#else>
                             <form action="<@ofbizUrl>${confirmAction!""}</@ofbizUrl>" method="post" name="showAllForm">
                               <input type="hidden" name="showPagesLink" value="Y" />
-                              <li class="pagingLinks"><a href="javascript:submitDetailForm('showAllForm', 'CF');">${uiLabelMap.ShowAllLinkLabel}</a></li>
+                              <li class="pagingLinks"><a href="javascript:setConfirmDialogContent('','${uiLabelMap.ShowAllError}','${confirmAction}');javascript:submitDetailForm('showAllForm', 'CF');">${uiLabelMap.ShowAllLinkLabel}</a></li>
                             </form>
                           </#if>
                         <#else>
-                          <#if parameters.showPagesLink?exists && (pagingListSize == viewSize) >
-                            <li class="pagingLinks showPagesLink"><a href="${request.getRequestURI()!""}<#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${showPages!}&viewIndex=${showAll!}">${uiLabelMap.ShowPagesLabel}</a></li>
+                          <#if parameters.showPagesLink?exists && ((pagingListSize == viewSize) || (parameters.rowDeleted?has_content && parameters.rowDeleted=='Y' && (pagingListSize &gt; ADM_DEF_LIST_ROWS?number))) >
+                          	<#if previousParams?has_content>
+                          		<#assign previousParams = Static["org.ofbiz.base.util.UtilHttp"].stripNamedParamsFromQueryString(previousParams,Static["org.ofbiz.base.util.UtilMisc"].toSet("preRetrieved"))/>
+                          	</#if>
+                            <li class="pagingLinks showPagesLink"><a href="<#if searchRequest?has_content><@ofbizUrl>${searchRequest!""}</@ofbizUrl><#else>${request.getRequestURI()!""}</#if><#if previousParams?has_content>?${previousParams}&<#else>?</#if>viewSize=${showPages!}&viewIndex=${showAll!}&preRetrieved=Y">${uiLabelMap.ShowPagesLabel}</a></li>
                           </#if>
                         </#if>
                         </#if>

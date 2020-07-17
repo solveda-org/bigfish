@@ -31,37 +31,40 @@ if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
 
 
     storeId = "";
-    orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], true);
-    if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP") {
+    orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], false);
+    if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP") 
+    {
         context.isStorePickup = "Y";
-        orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], true);
-        if (UtilValidate.isNotEmpty(orderStoreLocationAttr)) {
+        orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], false);
+        if (UtilValidate.isNotEmpty(orderStoreLocationAttr)) 
+        {
             storeId = orderStoreLocationAttr.attrValue;
         }
     }
 
-    if (UtilValidate.isNotEmpty(storeId)) {
+    if (UtilValidate.isNotEmpty(storeId)) 
+    {
         context.storeId = storeId;
-        store = delegator.findOne("Party", [partyId : storeId], true);
+        store = delegator.findOne("Party", [partyId : storeId], false);
         context.store = store;
-        storeInfo = delegator.findOne("PartyGroup", [partyId : storeId], true);
-        if (UtilValidate.isNotEmpty(storeInfo)) {
+        storeInfo = delegator.findOne("PartyGroup", [partyId : storeId], false);
+        if (UtilValidate.isNotEmpty(storeInfo)) 
+        {
             context.storeInfo = storeInfo;
         }
         
         partyContactMechValueMaps = ContactMechWorker.getPartyContactMechValueMaps(delegator, storeId, false);
-        if (UtilValidate.isNotEmpty(partyContactMechValueMaps)) {
+        if (UtilValidate.isNotEmpty(partyContactMechValueMaps)) 
+        {
             partyContactMechValueMaps.each { partyContactMechValueMap ->
                 contactMechPurposes = partyContactMechValueMap.partyContactMechPurposes;
                 contactMechPurposes.each { contactMechPurpose ->
-                    if (contactMechPurpose.contactMechPurposeTypeId.equals("GENERAL_LOCATION")) {
+                    if (contactMechPurpose.contactMechPurposeTypeId.equals("GENERAL_LOCATION")) 
+                    {
                         context.storeContactMechValueMap = partyContactMechValueMap;
                     }
                 }
             }
         }
     }
-
-
-
 }

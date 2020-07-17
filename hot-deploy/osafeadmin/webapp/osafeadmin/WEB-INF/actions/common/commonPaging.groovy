@@ -3,19 +3,22 @@ import java.util.Map;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilValidate;
+import com.osafe.util.OsafeAdminUtil;
 
  // set the page parameters
-if(pagingListSize && pagingList) {
+if(pagingListSize && pagingList) 
+{
     viewIndex = Integer.valueOf(parameters.viewIndex  ?: 1);
     context.viewIndex= viewIndex;
-    defaultViewSize = globalContext.get("ADM_DEF_LIST_ROWS");
+    defaultViewSize = OsafeAdminUtil.getProductStoreParm(request, "ADM_DEF_LIST_ROWS");
     if(UtilValidate.isEmpty(defaultViewSize)){
         defaultViewSize = UtilProperties.getPropertyValue("osafeAdmin", "default-view-size");
     }
     viewSize = Integer.valueOf(parameters.viewSize ?: defaultViewSize);
     
-    defaultViewSizeMax = globalContext.get("ADM_WARN_LIST_ROWS");
-    if(UtilValidate.isEmpty(defaultViewSizeMax)) {
+    defaultViewSizeMax = OsafeAdminUtil.getProductStoreParm(request, "ADM_WARN_LIST_ROWS");
+    if(UtilValidate.isEmpty(defaultViewSizeMax)) 
+    {
         defaultViewSizeMax = UtilProperties.getPropertyValue("osafeAdmin", "default-view-size-max");
     }
     viewSizeMax = Integer.valueOf(parameters.viewSizeMax ?: defaultViewSizeMax);
@@ -26,15 +29,18 @@ if(pagingListSize && pagingList) {
        viewIndex = viewIndex + 1;
     }
     lowIndex = (viewIndex -1) * viewSize + 1;
-    if(lowIndex > pagingListSize) {
+    if(lowIndex > pagingListSize) 
+    {
        lowIndex = pagingListSize;
     }
     context.lowIndex=lowIndex;
-    if(viewIndex == 0) {
+    if(viewIndex == 0) 
+    {
        viewIndex = viewIndex + 1;
     }
     highIndex = viewIndex * viewSize;
-    if (highIndex > pagingListSize) {
+    if (highIndex > pagingListSize) 
+    {
        highIndex = pagingListSize;
     }
     context.highIndex=highIndex;

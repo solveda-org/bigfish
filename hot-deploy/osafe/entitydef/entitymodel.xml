@@ -40,19 +40,19 @@
         <field name="address3" type="long-varchar"></field>
     </extend-entity>
 
-    <entity entity-name="ProdFeatureDataResourceType"
+    <entity entity-name="FeatureDataResourceType"
             package-name="org.ofbiz.product.feature"
             title="Product Feature Data Resource Type Entity">
-      <field name="prodFeatureDataResourceTypeId" type="id-ne"></field>
+      <field name="featureDataResourceTypeId" type="id-ne"></field>
       <field name="hasTable" type="indicator"></field>
       <field name="description" type="description"></field>
-      <prim-key field="prodFeatureDataResourceTypeId"/>
+      <prim-key field="featureDataResourceTypeId"/>
     </entity>
 
     <extend-entity entity-name="ProductFeatureDataResource">
-        <field name="prodFeatureDataResourceTypeId" type="id"></field>
-       <relation type="one" fk-name="PROD_FEAT_TYPRES" rel-entity-name="ProdFeatureDataResourceType">
-        <key-map field-name="prodFeatureDataResourceTypeId"/>
+        <field name="featureDataResourceTypeId" type="id"></field>
+       <relation type="one" fk-name="PFDR_TYPE" rel-entity-name="FeatureDataResourceType">
+        <key-map field-name="featureDataResourceTypeId"/>
       </relation>
     </extend-entity>
 
@@ -69,13 +69,13 @@
       <field name="thruDate" type="date-time"></field>
       <prim-key field="pixelId"/>
       <prim-key field="productStoreId"/>
-        <relation type="one" fk-name="PROD_STORE_PXT" rel-entity-name="ProductStore">
+        <relation type="one" fk-name="XPT_PRODUCTSTORE" rel-entity-name="ProductStore">
             <key-map field-name="productStoreId"/>
         </relation>
-       <relation type="one" fk-name="CONTENT_PXT_ULGN" title="CreatedBy" rel-entity-name="UserLogin">
+       <relation type="one" fk-name="XPT_USERLOGIN" title="CreatedBy" rel-entity-name="UserLogin">
         <key-map field-name="createdByUserLogin" rel-field-name="userLoginId"/>
        </relation>
-       <relation type="one" fk-name="CONTENT_PXT_CNT" rel-entity-name="Content">
+       <relation type="one" fk-name="XPT_CONTENT" rel-entity-name="Content">
         <key-map field-name="contentId"/>
       </relation>
     </entity>
@@ -88,13 +88,13 @@
       <field name="sagePayToken" type="short-varchar"></field>
       <field name="contactMechId" type="id-ne"></field>
       <prim-key field="paymentMethodId"/>
-      <relation type="one" fk-name="SAGEPAYTKN_PMNTMETH" rel-entity-name="PaymentMethod">
+      <relation type="one" fk-name="SPTPM_PM" rel-entity-name="PaymentMethod">
         <key-map field-name="paymentMethodId"/>
       </relation>
-      <relation type="one" fk-name="SAGEPAYTKN_CMECH" rel-entity-name="ContactMech">
+      <relation type="one" fk-name="SPTPM_CM" rel-entity-name="ContactMech">
         <key-map field-name="contactMechId"/>
       </relation>
-      <relation type="one" fk-name="SAGEPAYTKN_PADDR" rel-entity-name="PostalAddress">
+      <relation type="one" fk-name="SPTM_ADDRESS" rel-entity-name="PostalAddress">
         <key-map field-name="contactMechId"/>
       </relation>
     </entity>
@@ -136,13 +136,13 @@
       <field name="contentTypeId" type="id"></field>
       <prim-key field="bfContentId"/>
       <prim-key field="productStoreId"/>
-      <relation type="one" fk-name="XCTNTXREF_TO_PROD_STORE" rel-entity-name="ProductStore">
+      <relation type="one" fk-name="XCX_PRODUCTSTORE" rel-entity-name="ProductStore">
           <key-map field-name="productStoreId"/>
       </relation>
-       <relation type="one" fk-name="XCTNTXREF_TO_CTNT" rel-entity-name="Content">
+       <relation type="one" fk-name="XCX_CONTENT" rel-entity-name="Content">
         <key-map field-name="contentId"/>
       </relation>
-      <relation type="one" fk-name="XCTNTXREF_TO_CTNT_TYPE" rel-entity-name="ContentType">
+      <relation type="one" fk-name="XCX_CONTENTTYPE" rel-entity-name="ContentType">
         <key-map field-name="contentTypeId"/>
       </relation>
     </entity>
@@ -156,9 +156,9 @@
         <field name="secretKey" type="value"><description>Secret key provided by EBS</description></field>
         <field name="redirectUrl" type="value"><description>EBS Redirect URL (Sandbox/Production)</description></field>
         <field name="referenceNo" type="value"><description>Reference number</description></field>
-        <field name="mode" type="value"><description>Mode type LIVE or TEST</description></field>
+        <field name="ebsMode" type="value"><description>Mode type LIVE or TEST</description></field>
         <prim-key field="paymentGatewayConfigId"/>
-        <relation type="one" fk-name="PGPP_PGC" rel-entity-name="PaymentGatewayConfig">
+        <relation type="one" fk-name="PGE_PGC" rel-entity-name="PaymentGatewayConfig">
             <key-map field-name="paymentGatewayConfigId"/>
         </relation>
     </entity>
@@ -177,7 +177,7 @@
         <field name="amount" type="short-varchar"></field>
         <field name="paymentMethod" type="short-varchar"></field>
         <prim-key field="paymentMethodId"/>
-        <relation type="one" fk-name="EBS_PMNTMETH" rel-entity-name="PaymentMethod">
+        <relation type="one" fk-name="EBS_PM" rel-entity-name="PaymentMethod">
             <key-map field-name="paymentMethodId"/>
         </relation>
     </entity>

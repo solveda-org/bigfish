@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createUser" short-description="Create a User">
+ 		<!-- check for bad or missing values --> 
+        <if-empty field="parameters.userLoginId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+            	<call-object-method method-name="length" obj-field="parameters.userLoginId" ret-field="userLoginIdLength"/>
+            	<set field="minUserLoginIdLength" value="5"/>
+                
+                <if-compare-field field="userLoginIdLength" operator="less" to-field="minUserLoginIdLength" type="Integer">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+				    	 <call-object-method obj-field="parameters.userLoginId" method-name="toLowerCase" ret-field="parameters.userLoginId"/>
+				    	 <entity-one entity-name="UserLogin" value-field="existingUserLoginId">
+                            <field-map field-name="userLoginId" from-field="parameters.userLoginId"/>
+                        </entity-one>
+                        <if-not-empty field="existingUserLoginId">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <else></else>
+                        </if-not-empty>
+                    </else>
+                </if-compare-field>
+                <!-- check if userLoginId contains an @ symbol -->
+                <call-class-method class-name="com.osafe.util.Util"  method-name="isSubString" ret-field="isSubString">
+                	<string value="@"/>
+	                <field field="parameters.userLoginId"/>
+	            </call-class-method>
+	            <if-compare-field field="isSubString" operator="equals" to-field="true" type="Boolean">
+	            		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIdEmailAddressError"/>
+                        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            </if-compare-field>
+            </else>
+        </if-empty>
+    
+        <if-not-empty field="parameters.newPassword">
+        	<if-empty field="parameters.confirmPassword">
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+		        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		        <else>
+		        	<if-compare-field field="parameters.newPassword" operator="equals" to-field="parameters.confirmPassword" type="String">
+			        	<call-object-method method-name="length" obj-field="parameters.newPassword" ret-field="userLoginPasswordLength"/>
+	            		<set field="minUserLoginPasswordLength" value="6"/>
+	            		<if-compare-field field="userLoginPasswordLength" operator="less" to-field="minUserLoginPasswordLength" type="Integer">
+	            			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+		        			<string-to-list string="${tempErrorMessage}" list="error_list"/>
+		        			<else>
+					            <set field="parameters.currentPassword" from-field="parameters.newPassword"/>
+					            <set field="parameters.currentPasswordVerify" from-field="parameters.confirmPassword"/>
+		        			</else>
+	            		</if-compare-field>
+			        	<else>
+			        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+			        		<string-to-list string="${tempErrorMessage}" list="error_list"/>
+			        	</else>
+		        	</if-compare-field>
+		        </else>
+        	</if-empty>
+        	<else>
+       			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+	        	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+        	</else>
+        </if-not-empty>
+    
+        <if-empty field="parameters.passwordHint">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPasswordHintError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        
+        <if-not-empty field="parameters.DISABLED_DATE">
+	        <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="getValidJobDate" ret-field="ValidDisabledDateTime">
+	            <field field="parameters.DISABLED_DATE"/>
+	            <field field="parameters.DISABLED_HOUR"/>
+	            <field field="parameters.DISABLED_MINUTE"/>
+	            <field field="parameters.DISABLED_AMPM"/>
+	            <field field="parameters.preferredDateFormat"/>
+	        </call-class-method>
+	        <if-empty field="ValidDisabledDateTime">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidDisabledDateError"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		        <else>
+		            <set from-field="ValidDisabledDateTime" field="parameters.disabledDateTime"/> 
+		            <!-- check if datetime passed already -->
+		            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedDisabledTime">
+		                <field field="parameters.disabledDateTime"/>
+		            </call-class-method>
+		            <if-compare field="PassedDisabledTime" operator="equals" value="false">
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DisabledTimePassedError"/>
+		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            </if-compare>
+		        </else>
+	        </if-empty>
+		 </if-not-empty>
+        
+        <set field="parameters.partyId" from-field="parameters.userLoginId"/>
+        <set field="parameters.statusId" value="PARTY_ENABLED"/>
+        <set field="parameters.roleTypeId" value="_NA_"/>
+        
+        <now-timestamp field="nowTimestamp"/>
+        <set field="parameters.fromDate" from-field="nowTimestamp"/>
+        <set field="parameters.groupId" value="OSAFEADMIN"/>
+
+        <check-errors/>
+      
+        <!-- create record in entities: Party, PartyRole, UserLogin, UserLoginSecurityGroup -->  
+	    <make-value value-field="createPartyEntity" entity-name="Party"/>
+	    <set-pk-fields map="parameters" value-field="createPartyEntity"/>
+	    <set-nonpk-fields map="parameters" value-field="createPartyEntity"/>
+	    <create-value value-field="createPartyEntity"/>
+	    
+	    <set-service-fields service-name="createPartyRole" map="parameters" to-map="createPartyRoleCtx"/>
+	    <make-value value-field="createPartyRoleEntity" entity-name="PartyRole"/>
+	    <set-pk-fields map="createPartyRoleCtx" value-field="createPartyRoleEntity"/>
+	    <set-nonpk-fields map="createPartyRoleCtx" value-field="createPartyRoleEntity"/>
+	    <create-value value-field="createPartyRoleEntity"/>
+	    
+	    <set-service-fields service-name="createUserLogin" map="parameters" to-map="createUserLoginEntity"/>        
+        <call-service service-name="createUserLogin" in-map-name="createUserLoginEntity"/>
+        
+        <make-value value-field="createUserLoginSecurityGroupEntity" entity-name="UserLoginSecurityGroup"/>
+	    <set-pk-fields map="parameters" value-field="createUserLoginSecurityGroupEntity"/>
+	    <set-nonpk-fields map="parameters" value-field="createUserLoginSecurityGroupEntity"/>
+	    <create-value value-field="createUserLoginSecurityGroupEntity"/>
+        
+        
+	    
+	    <if-not-empty field="createPartyEntity">
+	    	<if-not-empty field="createPartyRoleEntity">
+	    		<if-not-empty field="createUserLoginEntity">
+			    	<set field="editUser" from-field="parameters.userLoginId"/>
+		            <property-to-field resource="OSafeAdminUiLabels" property="EditUserSuccess" field="editUserSuccessMessage"/>
+		            <string-to-list string="${editUserSuccessMessage}" list="successMessageList"/>
+            	</if-not-empty>
+            </if-not-empty>
+        </if-not-empty>
+	    
+    </simple-method>
+  
+    <simple-method method-name="updateUser" short-description="Update a User">
+    	<!-- check for bad or missing values -->  
+    	
+    	<if-empty field="parameters.isSystem">
+    	   
+		    	<if-empty field="parameters.userLoginId">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
+		            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            <else>
+		            	<call-object-method method-name="length" obj-field="parameters.userLoginId" ret-field="userLoginIdLength"/>
+		            	<set field="minUserLoginIdLength" value="5"/>
+		                <if-compare-field field="userLoginIdLength" operator="less" to-field="minUserLoginIdLength" type="Integer">
+		                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadUserLoginIdError"/>
+		                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		                    <else>
+						    	 <call-object-method obj-field="parameters.userLoginId" method-name="toLowerCase" ret-field="parameters.userLoginId"/>
+		                    </else>
+		                </if-compare-field>
+		            </else>
+		        </if-empty>
+		        
+		        <entity-one entity-name="UserLogin" value-field="userLoginMap">
+			          <field-map field-name="userLoginId" from-field="parameters.userLoginId"/>
+			    </entity-one>
+			        
+		        <set field="changePassCheck" value="false"/>
+		        <if-not-empty field="parameters.currentPassword">
+			        <!-- If password encryption is enabled, encrpyt it now -->
+					<call-bsh><![CDATA[
+						boolean useEncryption = "true".equals(org.ofbiz.base.util.UtilProperties.getPropertyValue("security", "password.encrypt"));
+						if (useEncryption) { parameters.put("encryptPassword", org.ofbiz.base.crypto.HashCrypt.getDigestHash((String) parameters.get("currentPassword"))); }
+					]]></call-bsh>
+					<set field="parameters.currentPassword" from-field="parameters.encryptPassword"/>
+			        <if-compare-field field="parameters.currentPassword" operator="not-equals" to-field="userLoginMap.currentPassword" type="String">
+			        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginIncorrectPasswordError"/>
+				        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        <else>
+				        	<!-- the user has entered the correct password -->
+				        	<set field="changePassCheck" value="true"/>
+				        </else>
+			        </if-compare-field>
+		        </if-not-empty>
+		
+		        <if-not-empty field="parameters.newPassword">
+		        	<if-empty field="parameters.confirmPassword">
+		        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+				        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        <set field="changePassCheck" value="false"/>
+				        <else>
+				        	<if-compare-field field="parameters.newPassword" operator="equals" to-field="parameters.confirmPassword" type="String">
+					        	<call-object-method method-name="length" obj-field="parameters.newPassword" ret-field="userLoginPasswordLength"/>
+			            		<set field="minUserLoginPasswordLength" value="6"/>
+			            		<if-compare-field field="userLoginPasswordLength" operator="less" to-field="minUserLoginPasswordLength" type="Integer">
+			            			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+				        			<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        			<set field="changePassCheck" value="false"/>
+				        			<else>
+				        				<set field="encryptPassword" from-field="parameters.newPassword"/>
+				        				<!-- If password encryption is enabled, encrpyt it now -->
+							            <call-bsh><![CDATA[
+							                boolean useEncryption = "true".equals(org.ofbiz.base.util.UtilProperties.getPropertyValue("security", "password.encrypt"));
+							                if (useEncryption) { parameters.put("encryptPassword", org.ofbiz.base.crypto.HashCrypt.getDigestHash((String) parameters.get("newPassword"))); }
+							            ]]></call-bsh>
+				        			</else>
+			            		</if-compare-field>
+					        	<else>
+					        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+					        		<string-to-list string="${tempErrorMessage}" list="error_list"/>
+					        		<set field="changePassCheck" value="false"/>
+					        	</else>
+				        	</if-compare-field>
+				        </else>
+		        	</if-empty>
+		        	<else>
+		        		<if-not-empty field="parameters.confirmPassword">
+		        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+				        	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        	<set field="changePassCheck" value="false"/>
+		        		</if-not-empty>
+		        		<if-not-empty field="parameters.currentPassword">
+		        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UserLoginPasswordError"/>
+				        	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        	<set field="changePassCheck" value="false"/>
+		        		</if-not-empty>
+		        	</else>
+		        </if-not-empty>
+		        
+		        <if-compare field="changePassCheck" operator="equals" value="true" type="String">
+		        	<set field="parameters.currentPassword" from-field="parameters.encryptPassword"/>
+		        	<else>
+		        		<set field="parameters.currentPassword" from-field="userLoginMap.currentPassword"/>
+		        	</else>
+		        </if-compare>
+		
+		        <if-empty field="parameters.passwordHint">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPasswordHintError"/>
+		            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		        </if-empty>
+		        
+		        
+		        
+		        
+		        
+		        
+		        
+		        
+		        
+		        
+		        
+		        
+		        <if-not-empty field="parameters.DISABLED_DATE">
+			        <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="getValidJobDate" ret-field="ValidDisabledDateTime">
+			            <field field="parameters.DISABLED_DATE"/>
+			            <field field="parameters.DISABLED_HOUR"/>
+			            <field field="parameters.DISABLED_MINUTE"/>
+			            <field field="parameters.DISABLED_AMPM"/>
+			            <field field="parameters.preferredDateFormat"/>
+			        </call-class-method>
+			        <if-empty field="ValidDisabledDateTime">
+			            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidDisabledDateError"/>
+			            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+				        <else>
+				            <set from-field="ValidDisabledDateTime" field="parameters.disabledDateTime"/> 
+				            <!-- check if datetime passed already -->
+				            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedDisabledTime">
+				                <field field="parameters.disabledDateTime"/>
+				            </call-class-method>
+				            <if-compare field="PassedDisabledTime" operator="equals" value="false">
+				                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DisabledTimePassedError"/>
+				                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+				            </if-compare>
+				        </else>
+			        </if-empty>
+		        </if-not-empty>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+		  
+		        <if-not-empty field="parameters.successiveFailedLogins">
+		            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+		                <field field="parameters.successiveFailedLogins"/>
+		            </call-class-method>
+		            <if-compare field="isNumber" operator="equals" value="false">
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSuccessiveFailedLoginsError"/>
+		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            </if-compare>
+		        </if-not-empty> 
+		        
+		        <else>
+		        	<if-compare field="parameters.isSystem" operator="equals" value="Y" type="String">
+		        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="isSystemSaveError"/>
+		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		        	</if-compare>
+		        </else>
+        
+        </if-empty>
+
+        <check-errors/>
+        
+        <!-- update record in entities: UserLogin -->        
+        <make-value entity-name="UserLogin" value-field="lookupPKMap"/>
+        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <store-value value-field="lookedUpValue"/>
+        
+        <if-not-empty field="lookedUpValue">
+	    	<set field="editUser" from-field="parameters.userLoginId"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="EditUserSuccess" field="editUserSuccessMessage"/>
+            <string-to-list string="${editUserSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+
+
+    </simple-method>
+    
+    
+    <simple-method method-name="createSecurityGroup" short-description="Create a Security Group">
+ 		<!-- check for bad or missing values --> 
+        <if-empty field="parameters.groupId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGroupIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					<field field="parameters.groupId"/>
+				</call-class-method>
+				<if-compare field="isValidId" operator="equals" value="false">
+					<set field="errorKey" from-field="parameters.groupId"/>
+					<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+					<string-to-list string="${tempErrorMessage}" list="error_list"/>
+					<else> 
+						<call-object-method obj-field="parameters.groupId" method-name="toUpperCase" ret-field="parameters.groupId"/>
+						<entity-one entity-name="SecurityGroup" value-field="existingGroupId">
+					    	<field-map field-name="groupId" from-field="parameters.groupId"/>
+					    </entity-one>
+					    <if-not-empty field="existingGroupId">
+						    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="GroupIdExistError"/>
+						    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+					    </if-not-empty>
+					</else>
+				</if-compare> 
+            </else>
+        </if-empty>
+        
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSecurityGroupDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        
+        <check-errors/>
+      
+        <!-- create record in entities: SecurityGroup -->  
+	    <set-service-fields service-name="createSecurityGroup" map="parameters" to-map="createSecurityGroupCtx"/>
+	    <make-value value-field="createSecurityGroupEntity" entity-name="SecurityGroup"/>
+	    <set-pk-fields map="createSecurityGroupCtx" value-field="createSecurityGroupEntity"/>
+	    <set-nonpk-fields map="createSecurityGroupCtx" value-field="createSecurityGroupEntity"/>
+	    <now-timestamp field="nowTimestamp"/>
+	    <set from-field="nowTimestamp" field="createSecurityGroupEntity.createdTxStamp"/>
+	    <set from-field="nowTimestamp" field="ccreateSecurityGroupEntity.createdStamp"/>
+	    <set from-field="nowTimestamp" field="createSecurityGroupEntity.lastUpdatedTxStamp"/>
+	    <set from-field="nowTimestamp" field="createSecurityGroupEntity.lastUpdatedStamp"/>
+	    <create-value value-field="createSecurityGroupEntity"/>
+	    
+	    <if-not-empty field="createSecurityGroupEntity">
+	    	<set field="editGroup" from-field="parameters.groupId"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="EditSecurityGroupSuccess" field="editSecurityGroupSuccessMessage"/>
+            <string-to-list string="${editSecurityGroupSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+	    
+    </simple-method>
+    
+    
+    <simple-method method-name="updateSecurityGroup" short-description="Update a Security Group">
+ 		<!-- check for bad or missing values --> 
+        <if-empty field="parameters.groupId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGroupIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					<field field="parameters.groupId"/>
+				</call-class-method>
+				<if-compare field="isValidId" operator="equals" value="false">
+					<set field="errorKey" from-field="parameters.groupId"/>
+					<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+					<string-to-list string="${tempErrorMessage}" list="error_list"/>
+					<else> 
+						<call-object-method obj-field="parameters.groupId" method-name="toUpperCase" ret-field="parameters.groupId"/>
+					</else>
+				</if-compare> 
+            </else>
+        </if-empty>
+        
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSecurityGroupDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        
+        <check-errors/>
+	    
+	    <!-- update record in entities: SecurityGroup -->        
+        <make-value entity-name="SecurityGroup" value-field="lookupPKMap"/>
+        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
+        <store-value value-field="lookedUpValue"/>
+	    
+	    <if-not-empty field="lookedUpValue">
+	    	<set field="editGroup" from-field="parameters.groupId"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="EditSecurityGroupSuccess" field="editSecurityGroupSuccessMessage"/>
+            <string-to-list string="${editSecurityGroupSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+	    
+    </simple-method>
+
+    <simple-method method-name="updateUserSecurityGroup" short-description="Method to update user security groups">
+        <iterate-map key="groupIdKey" value="groupIdValue" map="parameters.relatedGroupId">
+            <field-to-list field="groupIdValue" list="newGroupIdList"/>
+        </iterate-map>
+        <if-not-empty field="newGroupIdList">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="findDuplicates" ret-field="dupGroupIdList">
+                <field field="newGroupIdList" type="List"/>
+            </call-class-method>
+        </if-not-empty>
+        <if-not-empty field="dupGroupIdList">
+        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DuplicateSecurityGroupError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-not-empty>
+
+        <check-errors/>
+        
+        <set field="userLoginSecurityGroupMap.userLoginId" from-field="parameters.userLoginId" />
+        
+        <!-- delete all security groups from this user -->
+        <set field="secGroupDeleteMap.userLoginId" from-field="parameters.userLoginId" />
+        <find-by-and entity-name="UserLoginSecurityGroup" map="userLoginSecurityGroupMap" list="userLoginSecurityGroupList" use-cache="true"/>
+        <call-object-method obj-field="userLoginSecurityGroupList" method-name="size" ret-field="userLoginSecurityGroupListSize"/>
+       	<if-compare field="userLoginSecurityGroupListSize" operator="greater" value="0" type="Integer">
+       		<iterate entry="secGroup" list="userLoginSecurityGroupList">
+       			<set field="secGroupDeleteMap.groupId" from-field="secGroup.groupId" />
+       			<find-by-and entity-name="UserLoginSecurityGroup" map="secGroupDeleteMap" list="secGroupDeleteList" use-cache="true"/>
+       			<call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="secGroupToDeleteValue">
+	               <field field="secGroupDeleteList" type="List"/>
+	            </call-class-method>
+	            <remove-value value-field="secGroupToDeleteValue"/>
+        	</iterate>
+       	</if-compare>
+       	
+       	<!-- add selected security groups -->
+       	<now-timestamp field="nowTimestamp"/>
+	    <set from-field="nowTimestamp" field="userLoginSecurityGroupMap.fromDate"/>
+        <iterate-map key="groupIdKey" value="groupIdValue" map="parameters.relatedGroupId">
+        	<set field="userLoginSecurityGroupMap.groupId" from-field="groupIdValue" />
+        	<make-value value-field="createUserLoginSecurityGroupEntity" entity-name="UserLoginSecurityGroup"/>
+	        <set-pk-fields map="userLoginSecurityGroupMap" value-field="createUserLoginSecurityGroupEntity"/>
+            <create-value value-field="createUserLoginSecurityGroupEntity"/>
+        </iterate-map>
+        
+        <if-not-empty field="createUserLoginSecurityGroupEntity">
+	    	<set field="editUser" from-field="parameters.userLoginId"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="EditUserSuccess" field="editUserSuccessMessage"/>
+            <string-to-list string="${editUserSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+      
+    </simple-method>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <simple-method method-name="updateSecurityGroupPermission" short-description="Method to update security group permissions">
+        <iterate-map key="permissionIdKey" value="permissionIdValue" map="parameters.relatedPermissionId">
+            <field-to-list field="permissionIdValue" list="newPermissionIdList"/>
+        </iterate-map>
+        <if-not-empty field="newPermissionIdList">
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="findDuplicates" ret-field="dupPermissionIdList">
+                <field field="newPermissionIdList" type="List"/>
+            </call-class-method>
+        </if-not-empty>
+        <if-not-empty field="dupPermissionIdList">
+        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DuplicatePermissionError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-not-empty>
+
+        <check-errors/>
+        
+        <set field="securityGroupPermissionMap.groupId" from-field="parameters.groupId" />
+        
+        <!-- delete all permissions from this security group -->
+        <set field="permissionDeleteMap.groupId" from-field="parameters.groupId" />
+        <find-by-and entity-name="SecurityGroupPermission" map="securityGroupPermissionMap" list="securityGroupPermissionList" use-cache="true"/>
+        <call-object-method obj-field="securityGroupPermissionList" method-name="size" ret-field="securityGroupPermissionListSize"/>
+       	<if-compare field="securityGroupPermissionListSize" operator="greater" value="0" type="Integer">
+       		<iterate entry="perm" list="securityGroupPermissionList">
+       			<set field="permissionDeleteMap.permissionId" from-field="perm.permissionId" />
+       			<find-by-and entity-name="SecurityGroupPermission" map="permissionDeleteMap" list="permDeleteList" use-cache="true"/>
+       			<call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="permToDeleteValue">
+	               <field field="permDeleteList" type="List"/>
+	            </call-class-method>
+	            <remove-value value-field="permToDeleteValue"/>
+        	</iterate>
+       	</if-compare>
+       	
+       	<!-- add selected security groups -->
+       	<now-timestamp field="nowTimestamp"/>
+	    <set from-field="nowTimestamp" field="securityGroupPermissionMap.fromDate"/>
+        <iterate-map key="permissionIdKey" value="permissionIdValue" map="parameters.relatedPermissionId">
+        	<set field="securityGroupPermissionMap.permissionId" from-field="permissionIdValue" />
+        	<make-value value-field="createSecurityGroupPermissionEntity" entity-name="SecurityGroupPermission"/>
+	        <set-pk-fields map="securityGroupPermissionMap" value-field="createSecurityGroupPermissionEntity"/>
+            <create-value value-field="createSecurityGroupPermissionEntity"/>
+        </iterate-map>
+      
+    </simple-method>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    
+
+
+    
+</simple-methods>

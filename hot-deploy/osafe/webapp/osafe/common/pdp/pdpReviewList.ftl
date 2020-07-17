@@ -27,6 +27,7 @@
                      </select>
                  </div>
             <div class="reviewBody">
+             <#assign FORMAT_DATE_TIME = Static["com.osafe.util.Util"].getProductStoreParm(request,"FORMAT_DATE_TIME")!""/>
              <#list productReviews as productReview>
                <#assign overallRate=productReview.getBigDecimal("productRating").setScale(decimals,rounding)/>
                <#assign quality=productReview.getBigDecimal("qualityRating")?if_exists/>

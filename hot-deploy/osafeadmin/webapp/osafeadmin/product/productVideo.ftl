@@ -26,7 +26,6 @@
               </div>
           </div>
        </div>
-       <hr/>
        <div class="infoRow bottomRow">
           <div class="infoEntry">
               <div class="infoCaption">

@@ -117,6 +117,11 @@
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/framework/base/config/ofbiz-containers.xml" todir="../../framework/base/config" overwrite="true" failonerror="false"/>
 
+        <!-- component-load.xml template-->
+          <copy file="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml.template" tofile="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml">
+          </copy>
+          <move file="${osafe.deployemt.home}/ofbiz/framework/base/config/component-load.xml" todir="../../framework/base/config" overwrite="true" failonerror="false"/>
+
         <copy file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties.template" tofile="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties">
             <filterset >
               <filter token="url.port.https" value="${url.port.https}"/>

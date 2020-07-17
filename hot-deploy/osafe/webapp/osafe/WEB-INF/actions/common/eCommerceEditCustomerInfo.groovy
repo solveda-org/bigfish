@@ -11,96 +11,141 @@ import org.ofbiz.base.util.*;
 context.allowSolicitation= "";
 context.partyEmailPreference="";
 
-if (userLogin) {
+if (UtilValidate.isNotEmpty(userLogin)) 
+{
     context.userLoginId = userLogin.userLoginId;
-    party = userLogin.getRelatedOne("Party");
-
-
-    person = party.getRelatedOne("Person");
+    party = userLogin.getRelatedOneCache("Party");
+    person = party.getRelatedOneCache("Person");
     context.person=person;
     partyId=person.partyId
     context.partyId = partyId;
-    partyAttribute = delegator.findByAnd("PartyAttribute", UtilMisc.toMap("partyId",partyId,"attrName","PARTY_EMAIL_PREFERENCE"));
+    partyAttribute = delegator.findByAndCache("PartyAttribute", UtilMisc.toMap("partyId",partyId,"attrName","PARTY_EMAIL_PREFERENCE"));
     if (UtilValidate.isNotEmpty(partyAttribute))
     { 
       partyAttribute=EntityUtil.getFirst(partyAttribute);
       context.partyEmailPreference=partyAttribute.attrValue;
     }
 
-    // get the Phone Numbers
-    context.homePhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
-            [partyId : partyId, contactMechPurposeTypeId : "PHONE_HOME"], UtilMisc.toList("-fromDate"))));
-    context.workPhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
-            [partyId : partyId, contactMechPurposeTypeId : "PHONE_WORK"], UtilMisc.toList("-fromDate"))));
-    context.mobilePhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
-                    [partyId : partyId, contactMechPurposeTypeId : "PHONE_MOBILE"], UtilMisc.toList("-fromDate"))));
-
-    contactMech = EntityUtil.getFirst(ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false));
-    context.contactMech = contactMech;
-    postalAddressData = contactMech.getRelatedOne("PostalAddress");
-    context.postalAddressData = postalAddressData;
-    if (postalAddressData){
-        if (postalAddressData.toName != null){
-            String toName = postalAddressData.toName;
-            toNameParts  = StringUtil.split(toName, " ");
-            if (toNameParts){
-                if (toNameParts.size() > 0){
-                    context.toNameFirst = toNameParts[0];
-                    context.toNameLast = StringUtil.join(toNameParts.subList(1,toNameParts.size()), " ");
-                }
-            }
-        }
+    // get Party Phone Numbers
+    context.homePhonePartyContactDetail = "";
+    context.workPhonePartyContactDetail = "";
+    context.mobilePhonePartyContactDetail = "";
+    partyContactDetailByPurpose = delegator.findByAndCache("PartyContactDetailByPurpose",UtilMisc.toMap("partyId", partyId), UtilMisc.toList("-fromDate"));
+    partyContactDetailByPurpose = EntityUtil.filterByDate(partyContactDetailByPurpose,true);
+    
+    partyHomePhone = EntityUtil.filterByAnd(partyContactDetailByPurpose,UtilMisc.toMap("contactMechPurposeTypeId", "PHONE_HOME"));
+    if (UtilValidate.isNotEmpty(partyHomePhone))
+    { 
+       context.homePhonePartyContactDetail = EntityUtil.getFirst(partyHomePhone);
+    }
+    partyWorkPhone = EntityUtil.filterByAnd(partyContactDetailByPurpose,UtilMisc.toMap("contactMechPurposeTypeId", "PHONE_WORK"));
+    if (UtilValidate.isNotEmpty(partyWorkPhone))
+    { 
+       context.workPhonePartyContactDetail = EntityUtil.getFirst(partyWorkPhone);
+    }
+    partyMobilePhone = EntityUtil.filterByAnd(partyContactDetailByPurpose,UtilMisc.toMap("contactMechPurposeTypeId", "PHONE_MOBILE"));
+    if (UtilValidate.isNotEmpty(partyMobilePhone))
+    { 
+       context.mobilePhonePartyContactDetail = EntityUtil.getFirst(partyMobilePhone);
     }
 
-
-    if (parameters.CUSTOMER_STATE) {
-        geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : parameters.CUSTOMER_STATE]);
-        if (geoValue) {
-            context.selectedStateName = geoValue.geoName;
+    context.contactMech = "";
+    contactMechBilling = "";
+    partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
+    partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+    
+    
+    partyPurposeEmails = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL"));
+    if (UtilValidate.isNotEmpty(partyPurposeEmails)) 
+    {
+    	partyPurposeEmail = EntityUtil.getFirst(partyPurposeEmails);
+        contactMech = partyPurposeEmail.getRelatedOneCache("ContactMech");
+        context.userEmailContactMech = contactMech;
+        context.userEmailAddress = contactMech.infoString;
+        partyContactMechs = partyPurposeEmail.getRelatedCache("PartyContactMech");
+        partyContactMechs = EntityUtil.filterByAnd(partyContactMechs, UtilMisc.toMap("contactMechId", contactMech.contactMechId));
+        if (UtilValidate.isNotEmpty(partyContactMechs))
+        {
+        	partyContactMech = EntityUtil.getFirst(partyContactMechs);
+            context.userEmailAllowSolicitation= partyContactMech.allowSolicitation;
+        	
         }
-    } else if (postalAddressData?.stateProvinceGeoId) {
-        geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : postalAddressData.stateProvinceGeoId]);
-        if (geoValue) {
-            context.selectedStateName = geoValue.geoName;
-        }
+        
+    }
+    
+    
+    partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
+    if (UtilValidate.isNotEmpty(partyBillingLocations))
+    {
+        contactMechBilling = EntityUtil.getFirst(partyBillingLocations);
     }
 
-    contactMech = context.contactMech;
+    postalAddressData = "";
     phoneNumberMap = [:];
-    if(contactMech){
-        contactMechIdFrom = contactMech.contactMechId;
-        contactMechLinkList = delegator.findByAnd("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechIdFrom))
+    if (UtilValidate.isNotEmpty(contactMechBilling))
+    {
+        context.contactMech = contactMechBilling;
+	    postalAddressData = contactMechBilling.getRelatedOneCache("PostalAddress");
+	    context.postalAddressData = postalAddressData;
+	    if (UtilValidate.isNotEmpty(postalAddressData))
+	    {
+	        if (postalAddressData.toName != null)
+	        {
+	            String toName = postalAddressData.toName;
+	            toNameParts  = StringUtil.split(toName, " ");
+	            if (UtilValidate.isNotEmpty(toNameParts))
+	            {
+	                if (toNameParts.size() > 0)
+	                {
+	                    context.toNameFirst = toNameParts[0];
+	                    context.toNameLast = StringUtil.join(toNameParts.subList(1,toNameParts.size()), " ");
+	                }
+	            }
+	        }
+	    }
+	    
+        contactMechLinkList = delegator.findByAndCache("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechBilling.contactMechId));
+	    if (UtilValidate.isNotEmpty(contactMechLinkList))
+	    {
+	        for (GenericValue link: contactMechLinkList)
+	        {
+	            contactMechIdTo = link.contactMechIdTo
+	            contactMech = delegator.findByPrimaryKeyCache("ContactMech", [contactMechId : contactMechIdTo]);
+	            if(UtilValidate.isNotEmpty(contactMech)) 
+	            {
+	                phonePurposeList  = contactMech.getRelatedCache("PartyContactMechPurpose");
+	                phonePurposeList  = EntityUtil.filterByDate(phonePurposeList, true);
+	                if(UtilValidate.isNotEmpty(phonePurposeList)) 
+	                {
+	                    partyContactMechPurpose = EntityUtil.getFirst(phonePurposeList)
+	                    if(UtilValidate.isNotEmpty(partyContactMechPurpose)) 
+	                    {
+	                        telecomNumber = partyContactMechPurpose.getRelatedOneCache("TelecomNumber");
+	                        phoneNumberMap[partyContactMechPurpose.contactMechPurposeTypeId]=telecomNumber;
+	                    }
+	                }
+	            }
 
-        for (GenericValue link: contactMechLinkList){
-            contactMechIdTo = link.contactMechIdTo
-            contactMech = delegator.findByPrimaryKey("ContactMech", [contactMechId : contactMechIdTo]);
-            phonePurposeList  = EntityUtil.filterByDate(contactMech.getRelated("PartyContactMechPurpose"), true);
-            partyContactMechPurpose = EntityUtil.getFirst(phonePurposeList)
-
-            telecomNumber = null;
-            if(partyContactMechPurpose) {
-                telecomNumber = partyContactMechPurpose.getRelatedOne("TelecomNumber");
-            }
-
-            if(telecomNumber) {
-                phoneNumberMap[partyContactMechPurpose.contactMechPurposeTypeId]=telecomNumber;
-            }
-        }
+	        }
+	    }
     }
+
     context.phoneNumberMap = phoneNumberMap;
 
 
-    userEmailContactMechList = ContactHelper.getContactMech(party, "PRIMARY_EMAIL", "EMAIL_ADDRESS", false)
-    userEmailContactMech = EntityUtil.getFirst(userEmailContactMechList);
-    if (UtilValidate.isNotEmpty(userEmailContactMech)) {
-        context.userEmailContactMech = userEmailContactMech;
-        context.userEmailAddress = userEmailContactMech.infoString;
-        partyContactMech = delegator.findByAnd("PartyContactMech", UtilMisc.toMap("partyId",partyId,"contactMechId", userEmailContactMech.contactMechId));
-        partyContactMech = EntityUtil.filterByDate(partyContactMech);
-        if (UtilValidate.isNotEmpty(partyContactMech))
+    if (UtilValidate.isNotEmpty(parameters.CUSTOMER_STATE)) 
+    {
+        geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : parameters.CUSTOMER_STATE]);
+        if (UtilValidate.isNotEmpty(geoValue))
         {
-          partyContactMech = EntityUtil.getFirst(partyContactMech);
-          context.userEmailAllowSolicitation= partyContactMech.allowSolicitation;
+            context.selectedStateName = geoValue.geoName;
+        }
+    } else if (UtilValidate.isNotEmpty(postalAddressData) && UtilValidate.isNotEmpty(postalAddressData.stateProvinceGeoId)) 
+    {
+        geoValue = delegator.findByPrimaryKeyCache("Geo", [geoId : postalAddressData.stateProvinceGeoId]);
+        if (UtilValidate.isNotEmpty(geoValue))
+        {
+            context.selectedStateName = geoValue.geoName;
         }
     }
 }

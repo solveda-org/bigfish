@@ -463,6 +463,7 @@
         <field name="productImageSmallAltUrl" type="string" indexed="false" stored="true" required="false"/>
         <field name="productImageMediumUrl" type="string" indexed="false" stored="true" required="false"/>
         <field name="productImageLargeUrl" type="string" indexed="false" stored="true" required="false"/>
+        <field name="listPrice" type="float" indexed="true" stored="true" required="false"/>
         <field name="price" type="float" indexed="true" stored="true" required="false"/>
         <field name="customerRating" type="float" indexed="true" stored="true" required="false"/>
         <field name="sequenceNum" type="string" indexed="true" stored="true" multiValued="true" required="false"/>

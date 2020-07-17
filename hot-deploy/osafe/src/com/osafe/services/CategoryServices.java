@@ -62,7 +62,12 @@ public class CategoryServices extends HttpServlet {
         super();
     }
 
-    public static List<Map<String, Object>> getRelatedCategories(Delegator delegator, String parentId, List<String> categoryTrail, boolean limitView, boolean excludeEmpty, boolean recursive) 
+    public static List<Map<String, Object>> getRelatedCategories(Delegator delegator, String parentId, List<String> categoryTrail, boolean limitView, boolean excludeEmpty, boolean recursive)
+    {
+    	return getRelatedCategories(delegator, parentId, categoryTrail, limitView, excludeEmpty, recursive, true);
+    }
+    
+    public static List<Map<String, Object>> getRelatedCategories(Delegator delegator, String parentId, List<String> categoryTrail, boolean limitView, boolean excludeEmpty, boolean recursive, boolean useCache) 
     {
         List<Map<String, Object>> categories = FastList.newInstance();
         if (categoryTrail == null) {
@@ -78,7 +83,15 @@ public class CategoryServices extends HttpServlet {
         List<GenericValue> rollups = null;
 
         try {
-            rollups = delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("parentProductCategoryId", parentId), UtilMisc.toList("sequenceNum"));
+            if (useCache)
+            {
+            	rollups = delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("parentProductCategoryId", parentId), UtilMisc.toList("sequenceNum"));
+            }
+            else
+            {
+            	rollups = delegator.findByAnd("ProductCategoryRollup", UtilMisc.toMap("parentProductCategoryId", parentId), UtilMisc.toList("sequenceNum"));
+            	
+            }
             if (limitView) {
                 rollups = EntityUtil.filterByDate(rollups, true);
             }
@@ -93,7 +106,15 @@ public class CategoryServices extends HttpServlet {
                 Map<String, Object> cvMap = FastMap.newInstance();
 
                 try {
-                    cv = parent.getRelatedOneCache("CurrentProductCategory");
+                    if (useCache)
+                    {
+                    	cv = parent.getRelatedOneCache("CurrentProductCategory");
+                    }
+                    else
+                    {
+                    	cv = parent.getRelatedOne("CurrentProductCategory");
+                    	
+                    }
                 } catch (GenericEntityException e) {
                     Debug.logWarning(e.getMessage(), module);
                 }
@@ -108,7 +129,7 @@ public class CategoryServices extends HttpServlet {
                             categories.add(cvMap);
                             if (recursive) 
                             {
-                                categories.addAll(getRelatedCategories(delegator, cv.getString("productCategoryId"), categoryTrail, limitView, excludeEmpty, recursive));
+                                categories.addAll(getRelatedCategories(delegator, cv.getString("productCategoryId"), categoryTrail, limitView, excludeEmpty, recursive,useCache));
                             }
                             List<String> popList = FastList.newInstance();
                             popList.addAll(categoryTrail);
@@ -124,7 +145,7 @@ public class CategoryServices extends HttpServlet {
                         categories.add(cvMap);
                         if (recursive) 
                         {
-                            categories.addAll(getRelatedCategories(delegator, cv.getString("productCategoryId"), categoryTrail, limitView, excludeEmpty, recursive));
+                            categories.addAll(getRelatedCategories(delegator, cv.getString("productCategoryId"), categoryTrail, limitView, excludeEmpty, recursive,useCache));
                         }
                         List<String> popList = FastList.newInstance();
                         popList.addAll(categoryTrail);

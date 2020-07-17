@@ -1,5 +1,7 @@
 <div class="pdpMainImage">
-<#assign activeZoom = Static["com.osafe.util.Util"].isProductStoreParmTrue(context.get(activeZoomParam!"")!"") />
+<#assign activeZoom = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"PDP_IMG_ZOOM_ACTIVE_FLAG") />
+<#assign IMG_SIZE_PDP_REG_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_REG_H")!""/>
+<#assign IMG_SIZE_PDP_REG_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_REG_W")!""/>
 <div id="productDetailsImageContainer">
   <#if activeZoom><a href="<@ofbizContentUrl>${productDetailImageUrl!}</@ofbizContentUrl>" <#if productDetailImageUrl?has_content> class="innerZoom"</#if>></#if>
   <img src="<@ofbizContentUrl>${productLargeImageUrl!}</@ofbizContentUrl>" id="mainImage" name="mainImage" class="productLargeImage<#if !IMG_SIZE_PDP_REG_W?has_content> productLargeImageDefaultWidth</#if>" <#if IMG_SIZE_PDP_REG_H?has_content> height="${IMG_SIZE_PDP_REG_H!""}"</#if> <#if IMG_SIZE_PDP_REG_W?has_content> width="${IMG_SIZE_PDP_REG_W!""}"</#if> onerror="onImgError(this, 'PDP-Large');"/>

@@ -24,6 +24,9 @@
         </table>
         <table class="osafe">
            ${sections.render('commonListButton')?if_exists}
+           ${sections.render('commonDetailLinkButton')?if_exists}
+           ${sections.render('commonOrderLinkButton')?if_exists}
         </table>
     </div>
+      
 </div>

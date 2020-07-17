@@ -22,7 +22,8 @@ import org.ofbiz.entity.util.EntityFindOptions;
 srchPromoName = StringUtils.trimToEmpty(parameters.srchPromoName);
 srchPromoDesc = StringUtils.trimToEmpty(parameters.srchPromoDesc);
 productPromoCode = StringUtils.trimToEmpty(parameters.productPromoCodeId);
-if(productPromoCode){
+if (UtilValidate.isNotEmpty(productPromoCode))
+{
     parameters.srchPromoCode=productPromoCode;
 }
 srchPromoCode = StringUtils.trimToEmpty(parameters.srchPromoCode);
@@ -73,14 +74,15 @@ if ((UtilValidate.isNotEmpty(srchPromoActive) && UtilValidate.isEmpty(srchPromoE
     svcCtx.put("productStorePromoApplStatus", "ACTIVE");
 }
 
-if ( UtilValidate.isEmpty(srchPromoActive) && UtilValidate.isNotEmpty(srchPromoExpired))
+if (UtilValidate.isEmpty(srchPromoActive) && UtilValidate.isNotEmpty(srchPromoExpired))
 {
     //svcCtx.put("productPromoCodeStatus", "INACTIVE");
     svcCtx.put("productStorePromoApplStatus", "INACTIVE");
 }
 Map<String, Object> svcRes;
 List<GenericValue> productPromoList = FastList.newInstance();
-if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") {
+if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
+{
 
     svcRes = dispatcher.runSync("findPromotion", svcCtx);
     context.pagingList = svcRes.get("completeProductPromoList");
@@ -120,7 +122,8 @@ if (UtilValidate.isNotEmpty(context.pagingList))
     topPromotionFindOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
 
 
-    for (productPromo in context.pagingList) {
+    for (productPromo in context.pagingList) 
+    {
 
          ecl = EntityCondition.makeCondition([
              EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
@@ -130,7 +133,8 @@ if (UtilValidate.isNotEmpty(context.pagingList))
     
          eli = delegator.findListIteratorByCondition(topPromotionDve, ecl, null, topPromotionFields, orderBy, topPromotionFindOpts);
          productPromoUses = eli.getCompleteList();
-         if (eli != null) {
+         if (eli != null) 
+         {
              try {
                  eli.close();
              } catch (GenericEntityException e) {}

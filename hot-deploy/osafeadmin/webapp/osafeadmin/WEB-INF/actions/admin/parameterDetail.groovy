@@ -21,7 +21,7 @@ if (UtilValidate.isNotEmpty(productStore))
     parmKey = parameters.parmKey;
     if (UtilValidate.isNotEmpty(parmKey))
     {
-      context.productStoreParm = delegator.findOne("XProductStoreParm",["productStoreId":productStoreId,"parmKey":parmKey], true);
+      context.productStoreParm = delegator.findOne("XProductStoreParm",["productStoreId":productStoreId,"parmKey":parmKey], false);
     }
 }
 

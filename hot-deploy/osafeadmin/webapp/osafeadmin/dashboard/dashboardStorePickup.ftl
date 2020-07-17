@@ -1,5 +1,5 @@
 <!-- start displayBox -->
-<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_PICKUP!"")>
+<#if Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(CHECKOUT_STORE_PICKUP!"")>
 <div class="displayBox dashboardSummary">
     <div class="header"><h2>${uiLabelMap.DashboardStorePickupHeading}</h2></div>
     <div class="boxBody">
@@ -15,12 +15,22 @@
                 <td class="boxNumber">&nbsp;</td>
                 <td class="boxNumber">
                     <#if (storePickupOrderCount!0) != 0>
-                        <#assign defaultStatusList = "viewcreated" + "=" + "Y">
-                        <#assign defaultStatusList = defaultStatusList + "&" + "viewprocessing" + "=" + "Y">
-                        <#assign defaultStatusList = defaultStatusList + "&" + "viewapproved" + "=" + "Y">
-                        <#assign defaultStatusList = defaultStatusList + "&" + "viewhold" + "=" + "Y">
-                        <#assign defaultStatusList = defaultStatusList + "&" + "viewcompleted" + "=" + "Y">
-
+                    
+                        <#assign defaultStatusList = "">
+                        <#assign orderStatusIncDashboard = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request, "ORDER_STATUS_INC_DASHBOARD")!"" />
+	                    <#if orderStatusIncDashboard?has_content>
+	                      <#assign orderStatusIncDashboardList = Static["org.ofbiz.base.util.StringUtil"].split(orderStatusIncDashboard, ",")/>
+	                      <#if orderStatusIncDashboardList?has_content>
+	                        <#list orderStatusIncDashboardList as orderStatusId>
+	                          <#assign statusItem = delegator.findOne("StatusItem", {"statusId" : orderStatusId?trim}, false)?if_exists/>
+	                          <#if statusItem?has_content && statusItem.description?has_content>
+	                            <#assign statusDescription = statusItem.description?lower_case />
+	                          </#if>
+	                          <#assign defaultStatusList = defaultStatusList + "&" + "view${statusDescription!}" + "=" + "Y">
+	                        </#list>
+	                      </#if>
+	                    </#if>
+	                    
                         <#assign orderDateFrom = "&orderDateFrom" + "=" + (periodFrom!parameters.periodFrom!"")>
                         <#assign orderDateTo = "&orderDateTo" + "=" + (periodTo!parameters.periodTo!"")>
                         <#assign initializedCB = "&initializedCB" + "=" + "Y">

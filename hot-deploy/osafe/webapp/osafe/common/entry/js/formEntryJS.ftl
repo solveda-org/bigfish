@@ -120,7 +120,7 @@
   function getPostalAddress(contactMechId, purpose) {
     jQuery.ajaxSetup({async:false});
     jQuery.post("<@ofbizUrl>getPostalAddress</@ofbizUrl>", {contactMechId: contactMechId}, function(data) {
-    <#if COUNTRY_MULTI?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI)>
+    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"COUNTRY_MULTI")>
         jQuery("#"+purpose+"_COUNTRY > option").each(function() {
             if (this.value == data.countryGeoId) {
                jQuery(this).attr('selected', 'selected');
@@ -148,16 +148,16 @@
     var maxchar = jQuery(textArea).attr('maxlength');
     var curLen = jQuery(textArea).val().length;
     var regCharLen = lineBreakCount(jQuery(textArea).val());
-    jQuery(textArea).next('.textCounter').html("* "+maxchar+" ${uiLabelMap.CharactersLeftLabel} ("+(maxchar - (curLen+regCharLen))+" ${uiLabelMap.CharactersLeftLabel})");
+    jQuery(textArea).next('.textCounter').html("* "+(maxchar - (curLen+regCharLen))+" ${uiLabelMap.CharactersLeftLabel}");
     jQuery(textArea).keyup(function() {
         var cnt = jQuery(this).val().length;
         var regCharLen = lineBreakCount(jQuery(this).val());
         var remainingchar = maxchar - (cnt + regCharLen);
         if(remainingchar < 0){
-            jQuery(this).next('.textCounter').html("* "+maxchar+' ${uiLabelMap.CharactersLeftLabel} (0 ${uiLabelMap.CharactersLeftLabel})');
+            jQuery(this).next('.textCounter').html("* "+'0 ${uiLabelMap.CharactersLeftLabel}');
             jQuery(this).val(jQuery(this).val().slice(0, (maxchar-regCharLen)));
         } else{
-            jQuery(this).next('.textCounter').html("* "+maxchar+' ${uiLabelMap.CharactersLeftLabel} ('+remainingchar+' ${uiLabelMap.CharactersLeftLabel})');
+            jQuery(this).next('.textCounter').html("* "+remainingchar+' ${uiLabelMap.CharactersLeftLabel}');
         }
     });
  }

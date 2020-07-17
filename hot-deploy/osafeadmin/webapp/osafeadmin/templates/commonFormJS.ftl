@@ -1,6 +1,76 @@
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
+    
+    	//handle the disable date
+		var enabledCheckBox = jQuery('input:radio[name=enabled]:checked').val();
+		if(enabledCheckBox == "Y")
+		{
+			//if it equals Y, then disable the disable date USER_DISABLED_DATE_TIME
+			jQuery('#USER_DISABLED_DATE').prop('disabled', true);	
+			jQuery('#USER_DISABLED_DATE').val('');
+			jQuery('#USER_DISABLED_HOUR').prop('disabled', true);	
+			jQuery('#USER_DISABLED_HOUR').val('');
+			jQuery('#USER_DISABLED_MINUTE').prop('disabled', true);	
+			jQuery('#USER_DISABLED_MINUTE').val('');
+			jQuery('#USER_DISABLED_AMPM').prop('disabled', true);	
+			jQuery('#USER_DISABLED_AMPM').val('');
+			
+			jQuery(".ui-datepicker-trigger").hide();
+			jQuery("#USER_DISABLED_DATE_TIME").attr('class', 'textEntry');
+			
+		}	
+		if(enabledCheckBox == "N")
+		{
+			user_disabled_date = jQuery('#USER_DISABLED_DATE').val();
+			user_disabled_hour = jQuery('#USER_DISABLED_HOUR').val();
+			user_disabled_min = jQuery('#USER_DISABLED_MINUTE').val();
+			user_disabled_ampm = jQuery('#USER_DISABLED_AMPM').val();
+		
+			//else enable the disable date USER_DISABLED_DATE_TIME
+			jQuery('#USER_DISABLED_DATE').prop('disabled', false);	
+			jQuery('#USER_DISABLED_HOUR').prop('disabled', false);	
+			jQuery('#USER_DISABLED_MINUTE').prop('disabled', false);
+			jQuery('#USER_DISABLED_AMPM').prop('disabled', false);	
+			
+			jQuery("#USER_DISABLED_DATE_TIME").attr('class', 'dateEntry');
+			jQuery(".ui-datepicker-trigger").show();
+		}	
+	
+		//when values are changed, run this:
+		jQuery('.USER_ENABLED_CHECKBOX_').change(function() {
+			var enabledCheckBox = jQuery('input:radio[name=enabled]:checked').val();
+			if(enabledCheckBox == "Y")
+			{
+				//if it equals Y, then disable the disable date USER_DISABLED_DATE_TIME
+				jQuery('#USER_DISABLED_DATE').prop('disabled', true);	
+				jQuery('#USER_DISABLED_DATE').val('');
+				jQuery('#USER_DISABLED_HOUR').prop('disabled', true);	
+				jQuery('#USER_DISABLED_HOUR').val('');
+				jQuery('#USER_DISABLED_MINUTE').prop('disabled', true);	
+				jQuery('#USER_DISABLED_MINUTE').val('');
+				jQuery('#USER_DISABLED_AMPM').prop('disabled', true);	
+				jQuery('#USER_DISABLED_AMPM').val('');
+				
+				jQuery(".ui-datepicker-trigger").hide();
+				jQuery("#USER_DISABLED_DATE_TIME").attr('class', 'textEntry');
+	
+			}	
+			if(enabledCheckBox == "N")
+			{
+				//else enable the disable date USER_DISABLED_DATE_TIME
+				jQuery('#USER_DISABLED_DATE').prop('disabled', false);	
+				jQuery('#USER_DISABLED_HOUR').prop('disabled', false);	
+				jQuery('#USER_DISABLED_MINUTE').prop('disabled', false);
+				jQuery('#USER_DISABLED_AMPM').prop('disabled', false);	
+				
+				jQuery("#USER_DISABLED_DATE_TIME").attr('class', 'dateEntry');
+				jQuery(".ui-datepicker-trigger").show();
+			}
+			
+		});
+	
+	
         jQuery('.displayBox.slidingClose').each(function(){
             slidingInit(this, 'slidePlusIcon');
         });
@@ -63,8 +133,95 @@
            updateReview("${parameters.statusId!review.statusId}");
            setStars("${parameters.productRating!review.productRating}");
        </#if>
+
+       if (jQuery('#productCategoryId').length){
+           <#if !(errorMessage?has_content || errorMessageList?has_content) >
+               loadProductCategoryFeture('#productCategoryId');
+           </#if>
+           jQuery('#productCategoryId').change(function(){
+               loadProductCategoryFeture('#productCategoryId');
+           });
+       }
+        if (jQuery('#simpleTest').length){
+            getEmailTestFormat(jQuery('input:radio[name=simpleTest]:checked').val());
+        }
+        if (jQuery('#emailTemplateId').length){
+            jQuery('#emailTemplateId').change(function(){
+                getEmailTemplateFormat('#emailTemplateId');
+            });
+        }
+        
+       jQuery("div.actionIconMenu").mouseenter(function(event)
+       {
+           showActionIcontip(event, this)
+       }).mouseleave(function(event)
+       {
+           hideActionIcontip(event, this)
+       });
     });
-    
+
+    function getEmailTestFormat(simpleTestValue) {
+        if (simpleTestValue == "N") {
+            jQuery('.emailTemplateDdDiv').show();
+            getEmailTemplateFormat('#emailTemplateId');
+        } else {
+            jQuery('.emailTemplateDdDiv').hide();
+            jQuery('.customerIdDiv').hide();
+            jQuery('.orderIdDiv').hide();
+        }
+    }
+
+    function getEmailTemplateFormat(emailTemplateId) {
+        var templateId = jQuery(emailTemplateId).val();
+        if ((templateId == "E_ABANDON_CART") || (templateId == "E_SCHED_JOB_ALERT")) {
+            //TBD;
+        } else if ((templateId == "E_CHANGE_CUSTOMER") || (templateId == "E_NEW_CUSTOMER") || (templateId == "E_FORGOT_PASSWORD") ) {
+            jQuery('.customerIdDiv').show();
+            jQuery('.orderIdDiv').hide();
+        } else if ((templateId == "E_ORDER_CHANGE") || (templateId == "E_ORDER_CONFIRM") || (templateId == "E_ORDER_DETAIL") || (templateId == "E_SHIP_REVIEW")) {
+            jQuery('.customerIdDiv').hide();
+            jQuery('.orderIdDiv').show();
+        } else if ((templateId == "E_CONTACT_US") || (templateId == "E_REQUEST_CATALOG") || (templateId == "E_MAILING_LIST")) {
+            jQuery('.customerIdDiv').hide();
+            jQuery('.orderIdDiv').hide();
+        }
+    }
+    function setDateRange(dateFrom,dateTo,formName) {
+        var form = jQuery(formName);
+        jQuery(formName).find('input[name="dateFrom"]').val(dateFrom);
+        jQuery(formName).find('input[name="dateTo"]').val(dateTo);
+        jQuery(formName).submit();
+    }
+    function setReviewSearchParams(statusId,dateFrom,dateTo,searchDays,count) {
+        jQuery('#status').val(statusId);
+        jQuery('#from').val(dateFrom);
+        jQuery('#to').val(dateTo);
+        jQuery('#srchDays').val(searchDays);
+        if(count > ${ADM_WARN_LIST_ROWS!"0"})
+        {
+            setConfirmDialogContent('','${uiLabelMap.ShowAllError}','reviewManagement');
+            submitDetailForm('', 'CF');
+        } else{
+            jQuery('#reviewSummary').submit();
+        }
+        
+    }
+    function loadProductCategoryFeture(productCategoryId) {
+       productCategoryId = jQuery(productCategoryId).val();
+       productId = jQuery('#productId').val();
+       jQuery.get('<@ofbizUrl>loadProductCategoryFeture?productId='+productId+'&productCategoryId='+productCategoryId+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+            jQuery('#productCategoryFetureDetail').replaceWith(data);
+        });
+    }
+
+    function showFeature(elm, index) {
+        if (jQuery(elm).val() == "DISTINGUISHING_FEAT") {
+            jQuery('#productFeatureId_' + index).show();
+        } else {
+            jQuery('#productFeatureId_' + index).hide();
+        }
+    }
+
     function slidingInit(elm, slidingClass) {
         if(slidingClass == 'slidePlusIcon') {
             jQuery(elm).find('.boxBody').hide();
@@ -157,15 +314,32 @@
 	    var obj2 = document.getElementById('tooltipText');
 	    obj2.innerHTML = text;
 	    tooltipBox.style.display = 'block';
-        var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
+	    var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
 	    var leftPos = e.clientX - 100;
 	    if (leftPos<0)leftPos = 0;
 	    tooltipBox.style.left = leftPos + 'px';
-	    tooltipBox.style.top = e.clientY - tooltipBox.offsetHeight -1 + st + 'px';
+	    
+        var tooltipBoxHeight = jQuery(tooltipBox).height();
+        var elemPosBottom = e.clientY;
+        var browserVieportHeight = jQuery(window).height();
+        
+	    if((tooltipBoxHeight + elemPosBottom + 25) > browserVieportHeight)
+	    {
+	        tooltipBox.style.top = e.clientY - tooltipBox.offsetHeight -1 + st + 'px';
+	        jQuery('#tooltipBottom').addClass("tooltipBottomArrow");
+	        jQuery('#tooltipTop').removeClass("tooltipTopArrow");
+	    }
+	    else
+	    {
+	        tooltipBox.style.top = e.clientY + 5 + st + 'px';
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomArrow");
+	        jQuery('#tooltipTop').addClass("tooltipTopArrow");
+	    }
     }
     
     function showTooltipImage(e, text, imageUrl)
     {
+    
         if(document.all)e = event;
         var tooltipBox = document.getElementById('tooltip');
 	    var obj2 = document.getElementById('tooltipText');
@@ -176,13 +350,68 @@
 	    resize(img);
 	    obj2.style.display = 'block';
 	    tooltipBox.style.display = 'block';
-        var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
+	    var st = Math.max(document.body.scrollTop,document.documentElement.scrollTop);
 	    var leftPos = e.clientX - 100;
-	    if(leftPos<0)leftPos = 0;
+	    if (leftPos<0)leftPos = 0;
 	    tooltipBox.style.left = leftPos + 'px';
-	    tooltipBox.style.top = e.clientY - tooltipBox.offsetHeight -1 + st + 'px';
+	    
+        var tooltipBoxHeight = jQuery(tooltipBox).height();
+        var elemPosBottom = e.clientY;
+        var browserVieportHeight = jQuery(window).height();
+        
+	    if((tooltipBoxHeight + elemPosBottom + 25) > browserVieportHeight)
+	    {
+	        tooltipBox.style.top = e.clientY - tooltipBox.offsetHeight -1 + st + 'px';
+	        jQuery('#tooltipBottom').addClass("tooltipBottomArrow");
+	        jQuery('#tooltipTop').removeClass("tooltipTopArrow");
+	    }
+	    else
+	    {
+	        tooltipBox.style.top = e.clientY + 5 + st + 'px';
+	        jQuery('#tooltipBottom').removeClass("tooltipBottomArrow");
+	        jQuery('#tooltipTop').addClass("tooltipTopArrow");
+	    }
+        
     }
+
+    function showActionIcontip(e, elm, nextDiv)
+    {
     
+        var actionIconBox = jQuery(elm).find('div:first');
+        var actionIconBoxHeight = jQuery(actionIconBox).height();
+        var elemPosBottom = e.clientY;
+        var browserVieportHeight = jQuery(window).height();
+        if(actionIconBox+':hidden')
+        {
+	        if(document.all)e = event;
+	        jQuery(actionIconBox).css(
+	          {
+	             position:'absolute'
+	          }
+	        );
+	        
+	        if((actionIconBoxHeight + elemPosBottom) > browserVieportHeight)
+	        {
+	            jQuery(actionIconBox).addClass("actionIconBoxArrowBottomRight");
+	            jQuery(actionIconBox).removeClass("actionIconBoxArrowTopRight");
+	        }
+	        else
+	        {
+	            jQuery(actionIconBox).removeClass("actionIconBoxArrowBottomRight");
+	            jQuery(actionIconBox).addClass("actionIconBoxArrowTopRight");
+	        }
+	        jQuery(actionIconBox).show();
+        }
+    } 
+    
+    function hideActionIcontip(e, elm, nextDiv)
+    {
+        if(document.all)e = event;
+        
+        var actionIconBox = jQuery(elm).find('div:first');
+        jQuery(actionIconBox).hide();
+    } 
+
     function resize(img)
     {
         if(img.width >= 3500)
@@ -272,6 +501,8 @@
 	    }
 	}
 	
+
+	
 	function submitDetailUploadForm(form) {
         if(form.action == "")
 	    {
@@ -288,13 +519,17 @@
 	
 	function postConfirmDialog() {
 	    form = document.${detailFormName!"detailForm"};
-	    form.action="<@ofbizUrl>${confirmAction!"confirmAction"}</@ofbizUrl>";
+	    var action = "${confirmAction!'confirmAction'}";
+	    if(action.substr(0, 6) == "delete")
+	    {
+	    	form.action="<@ofbizUrl>${confirmAction!'confirmAction'}?rowDeleted=Y</@ofbizUrl>";
+	    }
+	    else
+	    {
+	    	form.action="<@ofbizUrl>${confirmAction!'confirmAction'}</@ofbizUrl>";
+	    }
 	    form.submit();
 	}
-	
-	
-	
-	
 	
 	function confirmDialogResultAction(result,action) {
         hideDialog('#dialog', '#displayDialog');
@@ -305,10 +540,21 @@
 	        jQuery(".buttontext")[0].onclick = null;
         }
     }
-    
+    function hideShowCssDetail(showDiv,hideDiv) {
+        jQuery("#"+showDiv).show();
+        jQuery("#"+hideDiv).hide();
+    }
     function postConfirmDialogAction(action) {
 	    form = document.${detailFormName!"detailForm"};
 	    form.action="<@ofbizUrl>" + action + "</@ofbizUrl>";
+	    if(action.substr(0, 6) == "delete")
+	    {
+	    	form.action="<@ofbizUrl>" + action + "?rowDeleted=Y</@ofbizUrl>";
+	    }
+	    else
+	    {
+	    	form.action="<@ofbizUrl>" + action + "</@ofbizUrl>";
+	    }
 	    form.submit();
 	}
 	
@@ -770,8 +1016,8 @@
         var input=document.getElementById(inputId);
         input.style.backgroundColor = "white";
     }
-    function setStyleName(styleFileName) {
-        document.getElementById("styleFileName").value = styleFileName;
+    function setStyleName(styleFileName,inputField) {
+        document.getElementById(inputField).value = styleFileName;
         <#if detailFormName?has_content>
           submitDetailForm(document.${detailFormName!""}, 'MA');
         </#if>
@@ -801,7 +1047,7 @@
             jQuery('.PRR_PENDING').show();
             jQuery('.PRR_DELETED').hide();
         } else if(status=='PRR_DELETED'){
-            jQuery('#reviewStatus').html("${uiLabelMap.RejectedLabel}");
+            jQuery('#reviewStatus').html("${uiLabelMap.DeletedLabel}");
             jQuery('.PRR_APPROVED').hide();
             jQuery('.PRR_PENDING').hide();
             jQuery('.PRR_DELETED').show();
@@ -825,18 +1071,9 @@ jQuery(document).ready(function(){
 		var intervalUnit = "";
 		if(servFreq != "")
 		{
-			if(servFreq == "0")
-			{//not set	
-					jQuery("#SERVICE_INTERVAL").prop('disabled', true);	
-					jQuery("#SERVICE_INTERVAL").val('');
-					jQuery("#SERVICE_COUNT").prop('disabled', true);	
-					jQuery("#SERVICE_COUNT").val('');
-			}	
+			
 			if(servInter != "")
 			{
-				if(servFreq == "0")
-				{//not set					
-				}
 				if(servFreq == "4")
 				{
 					intervalUnit= "${uiLabelMap.Days}";
@@ -895,23 +1132,8 @@ jQuery(document).ready(function(){
 		var intervalUnit = "";
 		if(servFreq != "")
 		{
-			if(servFreq == "0")
-			{//not set
-					jQuery("#SERVICE_INTERVAL").prop('disabled', true);	
-					jQuery("#SERVICE_INTERVAL").val('');
-					jQuery("#SERVICE_COUNT").prop('disabled', true);	
-					jQuery("#SERVICE_COUNT").val('');
-			}	
-			if(servFreq != "0")
-			{//not set
-					jQuery("#SERVICE_INTERVAL").prop('disabled', false);	
-					jQuery("#SERVICE_COUNT").prop('disabled', false);
-			}	
 			if(servInter != "")
 			{
-				if(servFreq == "0")
-				{//not set					
-				}
 				if(servFreq == "4")
 				{
 					intervalUnit= "${uiLabelMap.Days}";
@@ -965,4 +1187,164 @@ jQuery(document).ready(function(){
 		}	
 	});
 });//end of JQuery for scheduledJobsRule
+
+function deleteCategoryMemberRow(categoryName, parentCategoryName)
+{
+    jQuery('#confirmDeleteTxt').html('${confirmDialogText!""} '+parentCategoryName+'/'+categoryName+'?');
+    displayDialogBox();
+}
+
+function removeCategoryMemberRow(tableId){
+    var table=document.getElementById(tableId);
+    var inputRow = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    table.deleteRow(indexPos);
+    hideDialog('#dialog', '#displayDialog');
+    setTableIndexPos(table);
+}
+function addCategoryMemberRow(tableId) 
+{
+    var table = document.getElementById(tableId);
+    var rows = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    var row = table.insertRow(indexPos);
+    
+    productCategoryId =  jQuery('#productCategoryId').val();
+    productCategoryName = jQuery('#productCategoryName').val(); 
+    
+    jQuery.get('<@ofbizUrl>addCategoryMemberRow?productCategoryId='+productCategoryId+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+        jQuery(row).replaceWith(data);
+        setTableIndexPos(table);
+    });
+}
+
+//jQuery for userSecurityGroup
+
+function deleteGroupTableRow(groupId)
+{
+    var textConfirmDelete = "${confirmDialogText!""}";
+	textConfirmDelete = textConfirmDelete.replace("_SECURITY_GROUP_ID_", groupId);
+    jQuery('#confirmDeleteTxt').html(textConfirmDelete);
+    displayDialogBox();
+}
+
+function removeGroupRow(tableId){
+    var table=document.getElementById(tableId);
+    var inputRow = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    table.deleteRow(indexPos);
+    hideDialog('#dialog', '#displayDialog');
+    setTableIndexPos(table);
+}
+function addGroupRow(tableId) 
+{
+    var table = document.getElementById(tableId);
+    var rows = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    var row = table.insertRow(indexPos);
+    
+    groupId =  jQuery('#addGroupId').val();
+    jQuery.get('<@ofbizUrl>addSecurityGroupRow?groupId='+groupId+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+        jQuery(row).replaceWith(data);
+        setTableIndexPos(table);
+    });
+}
+//end of jQuery for userSecurityGroup
+
+//jQuery for securityGroupPermission
+function deletePermissionTableRow(permissionId)
+{
+	var textConfirmDelete = "${confirmDialogText!""}";
+	textConfirmDelete = textConfirmDelete.replace("_PERMISSION_ID_", permissionId);
+    jQuery('#confirmDeleteTxt').html(textConfirmDelete);
+    displayDialogBox();
+}
+
+function removePermissionRow(tableId){
+    var table=document.getElementById(tableId);
+    var inputRow = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    table.deleteRow(indexPos);
+    hideDialog('#dialog', '#displayDialog');
+    setTableIndexPos(table);
+}
+function addPermissionRow(tableId) 
+{
+    var table = document.getElementById(tableId);
+    var rows = table.getElementsByTagName('tr');
+    var indexPos = jQuery('#rowNo').val();
+    var row = table.insertRow(indexPos);
+    
+    permissionId =  jQuery('#addPermissionId').val();
+    jQuery.get('<@ofbizUrl>addPermissionRow?permissionId='+permissionId+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
+        jQuery(row).replaceWith(data);
+        setTableIndexPos(table);
+    });
+}
+//end of jQuery for securityGroupPermission
+function setTableIndexPos(table)
+{
+    var rows = table.getElementsByTagName('tr');
+    for (i = 1; i < rows.length; i++) {
+        var columns = rows[i].getElementsByTagName('td');
+        for (j = 0; j < columns.length; j++) {
+            if(j == 1) {
+                var anchors = columns[j].getElementsByTagName('a');
+                if(anchors.length == 3) {
+                    var deleteAnchor = anchors[0];
+                    var deleteTagSecondMethodIndex = deleteAnchor.getAttribute("href").indexOf(";");
+                    var deleteTagSecondMethod = deleteAnchor.getAttribute("href").substring(deleteTagSecondMethodIndex+1,deleteAnchor.getAttribute("href").length);
+                    deleteAnchor.setAttribute("href", "javascript:setRowNo('"+i+"');"+deleteTagSecondMethod);
+                    
+                    var insertBeforeAnchor = anchors[1];
+                    var insertBeforeTagSecondMethodIndex = insertBeforeAnchor.getAttribute("href").indexOf(";");
+                    var insertBeforeTagSecondMethod = insertBeforeAnchor.getAttribute("href").substring(insertBeforeTagSecondMethodIndex+1,insertBeforeAnchor.getAttribute("href").length);
+                    insertBeforeAnchor.setAttribute("href", "javascript:setRowNo('"+i+"');"+insertBeforeTagSecondMethod);
+                    
+                    var insertAfterAnchor = anchors[2];
+                    var insertAfterTagSecondMethodIndex = insertAfterAnchor.getAttribute("href").indexOf(";");
+                    var insertAfterTagSecondMethod = insertAfterAnchor.getAttribute("href").substring(insertAfterTagSecondMethodIndex+1,insertAfterAnchor.getAttribute("href").length);
+                    insertAfterAnchor.setAttribute("href", "javascript:setRowNo('"+(i+1)+"');"+insertAfterTagSecondMethod);
+                }
+                    
+                if(anchors.length == 1) {
+                    var insertBeforeAnchor = anchors[0];
+                    var insertBeforeTagSecondMethodIndex = insertBeforeAnchor.getAttribute("href").indexOf(";");
+                    var insertBeforeTagSecondMethod = insertBeforeAnchor.getAttribute("href").substring(insertBeforeTagSecondMethodIndex+1,insertBeforeAnchor.getAttribute("href").length);
+                    insertBeforeAnchor.setAttribute("href", "javascript:setRowNo('"+i+"');"+insertBeforeTagSecondMethod);
+                }
+            }
+        }
+        var inputs = rows[i].getElementsByTagName('input');
+        for (j = 0; j < inputs.length; j++) {
+            attrId = inputs[j].getAttribute("id");
+            inputs[j].setAttribute("name",attrId+"_"+i)
+        }
+    }
+    if(rows.length > 2) {
+       jQuery('#addIconRow').hide();
+    } else {
+       jQuery('#addIconRow').show();
+    }
+    $('totalRows').value = rows.length-2;
+}
+function setRowNo(rowNo) {
+    jQuery('#rowNo').val(rowNo);
+}
+
+
+ function setParamsForList(status,size) { 
+ 	if(status != "")
+ 	{
+ 		jQuery('.confirmHiddenParamStatusId').val(status);
+ 	}
+ 	if(size != "")
+ 	{
+ 		jQuery('.confirmHiddenParamViewSize').val(size);
+ 	}
+ }
+ 
+
+
+ 
 </script>

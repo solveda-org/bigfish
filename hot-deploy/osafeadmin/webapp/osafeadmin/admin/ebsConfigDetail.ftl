@@ -54,9 +54,9 @@
                        <label>${uiLabelMap.EBSModeCaption!""}</label>
                      </td>
                      <td class="seqCol">
-                       <select name="mode">
-                           <option <#if paymentGatewayEBS.mode == 'TEST'> selected </#if>>${parameters.mode!"TEST"}</option>
-                           <option <#if paymentGatewayEBS.mode == 'LIVE'> selected </#if>>${parameters.mode!"LIVE"}</option>
+                       <select name="ebsMode">
+                           <option <#if paymentGatewayEBS.ebsMode == 'TEST'> selected </#if>>${parameters.ebsMode!"TEST"}</option>
+                           <option <#if paymentGatewayEBS.ebsMode == 'LIVE'> selected </#if>>${parameters.ebsMode!"LIVE"}</option>
                        </select>
                      </td>
                 </tr>

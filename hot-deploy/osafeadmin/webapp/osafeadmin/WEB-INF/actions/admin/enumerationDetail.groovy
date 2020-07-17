@@ -24,13 +24,13 @@ enumId="";
 
 enumId = requestParams.get("enumId");
 if (!enumId) 
-  {
+{
     enumId = parameters.enumId;
-  }
+}
 
 if(UtilValidate.isNotEmpty(enumId))
 {
-    enumeration = delegator.findOne("Enumeration",UtilMisc.toMap("enumId", enumId), true);
+    enumeration = delegator.findOne("Enumeration",UtilMisc.toMap("enumId", enumId), false);
 }
 context.enum = enumeration;
 context.enumId = enumId;

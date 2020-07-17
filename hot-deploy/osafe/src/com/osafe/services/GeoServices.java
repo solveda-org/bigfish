@@ -48,13 +48,13 @@ public class GeoServices {
             List<GenericValue> partyRoleList = delegator.findByAnd("PartyRole", conditions);
             for (GenericValue partyRole : partyRoleList) {
                 try {
-                    GenericValue party = partyRole.getRelatedOne("Party");
+                    GenericValue party = partyRole.getRelatedOneCache("Party");
                     partyId = party.getString("partyId");
 
                     Collection<GenericValue> contactMechList = ContactHelper.getContactMechByType(party, "POSTAL_ADDRESS", false);
                     if (UtilValidate.isNotEmpty(contactMechList)) {
                         GenericValue contactMech  = EntityUtil.getFirst((List<GenericValue>) contactMechList);
-                        GenericValue postalAddress  = contactMech.getRelatedOne("PostalAddress");
+                        GenericValue postalAddress  = contactMech.getRelatedOneCache("PostalAddress");
                         StringBuilder  address = new StringBuilder();
                         if (UtilValidate.isNotEmpty(postalAddress.getString("address1"))) {
                             address.append(postalAddress.getString("address1")+ ", ");
@@ -67,7 +67,7 @@ public class GeoServices {
                         }
                         // Google Map api give appropriate result with GeoName
                         if (UtilValidate.isNotEmpty(postalAddress.getString("stateProvinceGeoId"))) {
-                            GenericValue stateGeo = delegator.findOne("Geo", UtilMisc.toMap("geoId", postalAddress.getString("stateProvinceGeoId")), false);
+                            GenericValue stateGeo = delegator.findOne("Geo", UtilMisc.toMap("geoId", postalAddress.getString("stateProvinceGeoId")), true);
                             if (UtilValidate.isNotEmpty(stateGeo.getString("geoName"))) {
                                 address.append(stateGeo.getString("geoName")+", ");
                             }
@@ -75,7 +75,7 @@ public class GeoServices {
                             address.append(postalAddress.getString("address3")+", ");
                         }
                         if (UtilValidate.isNotEmpty(postalAddress.getString("countryGeoId"))) {
-                            GenericValue countryGeo = delegator.findOne("Geo", UtilMisc.toMap("geoId", postalAddress.getString("countryGeoId")), false);
+                            GenericValue countryGeo = delegator.findOne("Geo", UtilMisc.toMap("geoId", postalAddress.getString("countryGeoId")), true);
                             if (UtilValidate.isNotEmpty(countryGeo.getString("geoName"))) {
                                 address.append(countryGeo.getString("geoName"));
                             }
@@ -84,11 +84,11 @@ public class GeoServices {
                         osafeGeo = OsafeGeo.fromAddress(address.toString(),productStoreId);
                     }
 
-                    List<GenericValue> partyGeoPointList = delegator.findByAnd("PartyGeoPoint", UtilMisc.toMap("partyId", partyId));
+                    List<GenericValue> partyGeoPointList = delegator.findByAndCache("PartyGeoPoint", UtilMisc.toMap("partyId", partyId));
                     partyGeoPointList = EntityUtil.filterByDate(partyGeoPointList, true);
-                    if (UtilValidate.isNotEmpty(partyGeoPointList)) {
+                    if (UtilValidate.isNotEmpty(partyGeoPointList) && osafeGeo.isNotEmpty()) {
                         GenericValue partyGeoPoint  = EntityUtil.getFirst((List<GenericValue>) partyGeoPointList);
-                        GenericValue geoPoint  = partyGeoPoint.getRelatedOne("GeoPoint");
+                        GenericValue geoPoint  = partyGeoPoint.getRelatedOneCache("GeoPoint");
                         OsafeGeo preOsafeGeo = new OsafeGeo(geoPoint.getString("latitude"), geoPoint.getString("longitude"));
                         if (preOsafeGeo.isEmpty() || !preOsafeGeo.equals(osafeGeo)) {
                             Map updateGeoPointParams = UtilMisc.toMap("geoPointId", geoPoint.getString("geoPointId"),

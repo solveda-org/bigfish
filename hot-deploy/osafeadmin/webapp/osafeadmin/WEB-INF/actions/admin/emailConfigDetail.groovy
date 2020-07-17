@@ -14,7 +14,7 @@ if (UtilValidate.isNotEmpty(productStore))
 	emailType = parameters.emailType;
     if (UtilValidate.isNotEmpty(emailType))
     {
-      context.emailConfiguration = delegator.findOne("ProductStoreEmailSetting",["productStoreId":productStoreId,"emailType":emailType], true);
+      context.emailConfiguration = delegator.findOne("ProductStoreEmailSetting",["productStoreId":productStoreId,"emailType":emailType], false);
     }
 }
       

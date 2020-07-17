@@ -29,11 +29,11 @@
                 <#assign displayParty = orh.getPlacingParty()?if_exists>
                 <#assign statusItem = orHeader.getRelatedOneCache("StatusItem")>
                 <#assign downloadStatus = "N">
-                <#assign orderDownloadAttribute = delegator.findOne("OrderAttribute", {"orderId" : orderHeader.orderId, "attrName" : "IS_DOWNLOADED"}, true)!"" />
+                <#assign orderDownloadAttribute = delegator.findOne("OrderAttribute", {"orderId" : orderHeader.orderId, "attrName" : "IS_DOWNLOADED"}, false)!"" />
                 <#if orderDownloadAttribute?has_content>
                   <#assign downloadStatus = orderDownloadAttribute.attrValue!"">
                 </#if>
-                <#assign orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", {"orderId" : orderHeader.orderId, "attrName" : "DELIVERY_OPTION"}, true)!"" />
+                <#assign orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", {"orderId" : orderHeader.orderId, "attrName" : "DELIVERY_OPTION"}, false)!"" />
                 <#assign isStorePickup = "N">
                 <#if orderDeliveryOptionAttr?has_content && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP">
                   <#assign isStorePickup = "Y">

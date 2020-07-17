@@ -196,5 +196,13 @@
         <attribute name="feedFile" type="java.io.File" mode="OUT" optional="true"/>
         <attribute name="feedFileAsString" type="String" mode="OUT" optional="true"/>
     </service>
+    
+    <service name="importCustomerXMLTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="importCustomerXML" auth="false" use-transaction="false">
+        <description>Import XML Elements, generate xml files in given directory using importDefinitionNames</description>
+        <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
+        <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
+        <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="messages" type="List" mode="OUT" optional="true"/>
+    </service>
 
 </services>

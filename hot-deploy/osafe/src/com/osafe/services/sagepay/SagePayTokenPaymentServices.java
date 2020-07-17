@@ -152,7 +152,7 @@ public class SagePayTokenPaymentServices {
                         billingInfo.put("billingCity", billingAddress.getString("city"));
                         billingInfo.put("billingState", billingAddress.getString("stateProvinceGeoId"));
                         billingInfo.put("billingPostCode", billingAddress.getString("postalCode"));
-                        GenericValue GeoCountry = (GenericValue) billingAddress.getRelatedOne("CountryGeo");
+                        GenericValue GeoCountry = (GenericValue) billingAddress.getRelatedOneCache("CountryGeo");
                         if (UtilValidate.isNotEmpty(GeoCountry))
                         {
                             billingInfo.put("billingCountry", GeoCountry.getString("geoCode"));
@@ -173,7 +173,7 @@ public class SagePayTokenPaymentServices {
                         billingInfo.put("deliveryCity", deliveryAddress.getString("city"));
                         billingInfo.put("deliveryState", deliveryAddress.getString("stateProvinceGeoId"));
                         billingInfo.put("deliveryPostCode", deliveryAddress.getString("postalCode"));
-                        GenericValue GeoDeliverCountry = (GenericValue) deliveryAddress.getRelatedOne("CountryGeo");
+                        GenericValue GeoDeliverCountry = (GenericValue) deliveryAddress.getRelatedOneCache("CountryGeo");
                         billingInfo.put("deliveryCountry", GeoDeliverCountry.getString("geoCode"));
                         billingInfo.put("deliveryPhone", null);
                     	
@@ -500,7 +500,7 @@ public class SagePayTokenPaymentServices {
            	GenericValue paymentMethod = (GenericValue) authTransaction.getRelatedOne("PaymentMethod");
         	GenericValue sagePayTokenPaymentMethod = (GenericValue) paymentMethod.getRelatedOne("SagePayTokenPaymentMethod");
         	String token=sagePayTokenPaymentMethod.getString("sagePayToken");
-        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOne("PostalAddress");
+        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOneCache("PostalAddress");
         	context.put("billingAddress", billingAddress);
         	context.put("processAmount", amount);
             Map<String, String> billingInfo = buildCustomerBillingInfo(context);
@@ -628,7 +628,7 @@ public class SagePayTokenPaymentServices {
         	GenericValue paymentMethod = (GenericValue) captureTransaction.getRelatedOne("PaymentMethod");
         	GenericValue sagePayTokenPaymentMethod = (GenericValue) paymentMethod.getRelatedOne("SagePayTokenPaymentMethod");
         	String token=sagePayTokenPaymentMethod.getString("sagePayToken");
-        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOne("PostalAddress");
+        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOneCache("PostalAddress");
         	context.put("billingAddress", billingAddress);
         	context.put("processAmount", amount);
             Map<String, String> billingInfo = buildCustomerBillingInfo(context);
@@ -695,7 +695,7 @@ public class SagePayTokenPaymentServices {
         	GenericValue paymentMethod = (GenericValue) captureTransaction.getRelatedOne("PaymentMethod");
         	GenericValue sagePayTokenPaymentMethod = (GenericValue) paymentMethod.getRelatedOne("SagePayTokenPaymentMethod");
         	String token=sagePayTokenPaymentMethod.getString("sagePayToken");
-        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOne("PostalAddress");
+        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOneCache("PostalAddress");
         	context.put("billingAddress", billingAddress);
         	context.put("processAmount", amount);
             Map<String, String> billingInfo = buildCustomerBillingInfo(context);
@@ -806,7 +806,7 @@ public class SagePayTokenPaymentServices {
            	GenericValue paymentMethod = (GenericValue) authTransaction.getRelatedOne("PaymentMethod");
         	GenericValue sagePayTokenPaymentMethod = (GenericValue) paymentMethod.getRelatedOne("SagePayTokenPaymentMethod");
         	String token=sagePayTokenPaymentMethod.getString("sagePayToken");
-        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOne("PostalAddress");
+        	GenericValue billingAddress = (GenericValue) sagePayTokenPaymentMethod.getRelatedOneCache("PostalAddress");
         	context.put("billingAddress", billingAddress);
         	context.put("processAmount", amount);
             Map<String, String> billingInfo = buildCustomerBillingInfo(context);

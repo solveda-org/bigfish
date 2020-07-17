@@ -10,6 +10,7 @@
         </tr>
       </thead>
       <tbody>
+        <#assign FORMAT_DATE = Static["com.osafe.util.Util"].getProductStoreParm(request,"FORMAT_DATE")!""/>
         <#if orderHeaderList?has_content>
           <#list orderHeaderList as orderHeader>
             <#assign status = orderHeader.getRelatedOneCache("StatusItem") />

@@ -30,6 +30,9 @@ import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
 import org.ofbiz.order.shoppingcart.shipping.ShippingEstimateWrapper;
 import org.ofbiz.party.contact.*;
 import org.ofbiz.order.shoppingcart.CheckOutEvents;
+import org.ofbiz.product.product.ProductWorker;
+import com.osafe.services.CatalogUrlServlet;
+
 // Get the Product Store
 productStore = ProductStoreWorker.getProductStore(request);
 context.productStore = productStore;
@@ -44,7 +47,7 @@ context.shoppingCartSize = shoppingCart?.size() ?: 0;
 context.shoppingCart = shoppingCart;
 
 // check if a parameter is passed
-if (parameters.add_product_id) 
+if (UtilValidate.isNotEmpty(parameters.add_product_id)) 
 { 
     add_product_id = parameters.add_product_id;
     product = delegator.findByPrimaryKeyCache("Product", [productId : add_product_id]);
@@ -59,7 +62,7 @@ context.contentPathPrefix = CatalogWorker.getContentPathPrefix(request);
 shipmentMethodTypeId= shoppingCart.getShipmentMethodTypeId();
 if(UtilValidate.isEmpty(shipmentMethodTypeId))
 {
-   defaultProductStoreShipMethodId = Util.getProductStoreParm(productStoreId, "CHECKOUT_CART_DEFAULT_SHIP_METHOD");
+   defaultProductStoreShipMethodId = Util.getProductStoreParm(request, "CHECKOUT_CART_DEFAULT_SHIP_METHOD");
    if(UtilValidate.isNotEmpty(defaultProductStoreShipMethodId))
    {
      try 
@@ -78,12 +81,19 @@ if(UtilValidate.isEmpty(shipmentMethodTypeId))
               partyId = userLogin.partyId;
               if (UtilValidate.isNotEmpty(partyId)) 
               {
-                party = delegator.findByPrimaryKey("Party", [partyId : partyId]);    
-                shippingContactMechList = ContactHelper.getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
-                shippingAddressContactMech = EntityUtil.getFirst(shippingContactMechList);
-                if (UtilValidate.isNotEmpty(shippingAddressContactMech)) 
+                party = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
+                if (UtilValidate.isNotEmpty(party))
                 {
-                  shoppingCart.setShippingContactMechId(shippingAddressContactMech.contactMechId);
+                    partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
+                    partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+                    partyContactMechPurpose = EntityUtil.orderBy(partyContactMechPurpose,UtilMisc.toList("-fromDate"));
+                    
+                    partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+                    if (UtilValidate.isNotEmpty(partyShippingLocations)) 
+                    {
+                            partyShippingLocation = EntityUtil.getFirst(partyShippingLocations);
+                            shoppingCart.setShippingContactMechId(partyShippingLocation.contactMechId);
+                    }
                 }
               }
             }
@@ -103,7 +113,7 @@ if(UtilValidate.isEmpty(shipmentMethodTypeId))
 }
 
 // Selected Shipping Method
-if (shoppingCart.getShipmentMethodTypeId() && shoppingCart.getCarrierPartyId()) 
+if (UtilValidate.isNotEmpty(shoppingCart.getShipmentMethodTypeId()) && UtilValidate.isNotEmpty(shoppingCart.getCarrierPartyId())) 
 {
     context.chosenShippingMethod = shoppingCart.getShipmentMethodTypeId() + '@' + shoppingCart.getCarrierPartyId();
     context.chosenShippingMethodDescription = shoppingCart.getCarrierPartyId() + " " + shoppingCart.getShipmentMethodType(0).description;
@@ -122,3 +132,65 @@ context.orderShippingTotal = shoppingCart.getTotalShipping();
 context.orderTaxTotal = shoppingCart.getTotalSalesTax();
 context.orderGrandTotal = shoppingCart.getGrandTotal();
 
+// set previos continue button url 
+continueShoppingLink = Util.getProductStoreParm(request, "CHECKOUT_CONTINUE_SHOPPING_LINK");
+if (UtilValidate.isNotEmpty(continueShoppingLink)) 
+{
+	productId = "";
+	productCategoryId = "";
+	// check passed parameter first if user comes after add to cart
+	if (UtilValidate.isNotEmpty(parameters.product_id)) 
+	{
+        productId = parameters.product_id;
+        product = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
+    	if (UtilValidate.isNotEmpty(product))
+    	{
+        	if (UtilValidate.isNotEmpty(parameters.add_category_id)) 
+        	{
+        		productCategoryId = parameters.add_category_id;
+        	}
+        	else
+        	{
+    	        productCategoryMemberList = product.getRelatedCache("ProductCategoryMember");
+                productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
+        	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
+    	        if(UtilValidate.isNotEmpty(productCategoryMemberList))
+    	        {
+    	            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+    	            productCategoryId = productCategoryMember.productCategoryId; 
+    	        }    
+        	}
+    		
+    	}
+	}
+	// take 0 index value from shopping cart
+	else if (context.shoppingCartSize > 0)
+	{
+	    sci = shoppingCart.findCartItem(0);
+		parentProduct = ProductWorker.getParentProduct(sci.getProductId(), delegator);
+        productId = parentProduct.productId;
+    	if (UtilValidate.isNotEmpty(sci.getProductCategoryId())) 
+    	{
+    		productCategoryId = sci.getProductCategoryId();
+    	}
+    	else
+    	{
+	        productCategoryMemberList = parentProduct.getRelatedCache("ProductCategoryMember");
+            productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
+    	    productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
+	        if(UtilValidate.isNotEmpty(productCategoryMemberList))
+	        {
+	            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+	            productCategoryId = productCategoryMember.productCategoryId; 
+	        }    
+    	}
+	}
+	//set url as per productId and product category id
+    if (continueShoppingLink.equalsIgnoreCase("PLP") && UtilValidate.isNotEmpty(productCategoryId))
+    {
+    	context.prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductList?productCategoryId="+productCategoryId);
+    } else if (continueShoppingLink.equalsIgnoreCase("PDP") && UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productCategoryId)) 
+    {
+    	context.prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
+    }
+}

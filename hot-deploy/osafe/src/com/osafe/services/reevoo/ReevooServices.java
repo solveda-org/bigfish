@@ -52,7 +52,7 @@ public class ReevooServices {
         try {
 
             // Find Product Store - to find store's currency setting
-            GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), false);
+            GenericValue productStore = delegator.findOne("ProductStore", UtilMisc.toMap("productStoreId", productStoreId), true);
 
             // Get all unexpired Product Categories (Top Level Catalog Category)
             List<Map<String, Object>> allUnexpiredCategories = getRelatedCategories(delegator, browseRootProductCategoryId, null, true, true, true);
@@ -63,13 +63,13 @@ public class ReevooServices {
                 if ("CATALOG_CATEGORY".equals(workingCategory.getString("productCategoryTypeId"))) {
 
                     // For each category get all products
-                    List<GenericValue> productCategoryMembers = workingCategory.getRelated("ProductCategoryMember");
+                    List<GenericValue> productCategoryMembers = workingCategory.getRelatedCache("ProductCategoryMember");
                     productCategoryMembers = EntityUtil.orderBy(productCategoryMembers,UtilMisc.toList("sequenceNum"));
 
                     // Remove any expired
                     productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
                     for (GenericValue productCategoryMember : productCategoryMembers) {
-                        GenericValue product = productCategoryMember.getRelatedOne("Product");
+                        GenericValue product = productCategoryMember.getRelatedOneCache("Product");
                         if (UtilValidate.isNotEmpty(product)) {
                             String isVariant = product.getString("isVariant");
                             if (UtilValidate.isEmpty(isVariant)) {
@@ -193,8 +193,7 @@ public class ReevooServices {
         return gvTopMost;
     }
 
-
-    public static Map reevooProductRatingUpdates(DispatchContext dctx, Map context) {
+    public static Map reevooGetProductRatingScore(DispatchContext dctx, Map context) {
 
         Map<String, Object> result = ServiceUtil.returnSuccess();
         Delegator delegator = dctx.getDelegator();
@@ -202,77 +201,33 @@ public class ReevooServices {
         GenericValue userLogin = (GenericValue) context.get("userLogin");
 
         String productStoreId = (String) context.get("productStoreId");
-
+        String reevooApiUrl = (String) context.get("reevooApiUrl");
+        String reevooApiCsvUrl = (String) context.get("reevooApiCsvUrl");
+        String reevooApiUserName = (String) context.get("reevooApiUserName");
+        String reevooApiPassword = (String) context.get("reevooApiPassword");
         String feedsInRatingDir = (String)context.get("feedsInRatingDir");
-        String feedsInSuccessSubDir = (String)context.get("feedsInSuccessSubDir");
-        String feedsInErrorSubDir = (String)context.get("feedsInErrorSubDir");
 
-        String reevooApiUrl = (String) context.get("reevooApiUrl");
-        String reevooApiCsvUrl = (String) context.get("reevooApiCsvUrl");
-        String reevooApiUserName = (String) context.get("reevooApiUserName");
-        String reevooApiPassword = (String) context.get("reevooApiPassword");
-        
-        try {
-            Map<String, Object> xmlInput = UtilMisc.toMap("userLogin", userLogin,
-                    "productStoreId", productStoreId, "reevooApiUrl", reevooApiUrl,
-                    "reevooApiCsvUrl", reevooApiCsvUrl, "reevooApiUserName", reevooApiUserName, "reevooApiPassword", reevooApiPassword);
-            try {
-               
-                Map<String, Object> xmlOutputMap = dispatcher.runSync("reevooGetProductRatingScores", xmlInput);
-                if (ModelService.RESPOND_ERROR.equals(xmlOutputMap.get(ModelService.RESPONSE_MESSAGE))) {
-                    return ServiceUtil.returnError((String) xmlOutputMap.get(ModelService.ERROR_MESSAGE));
-                } else {
-                    File xmlFile = (File) xmlOutputMap.get("xmlFile");
-
-                    // copy xml file in feed in rating directory
-                    if (UtilValidate.isNotEmpty(feedsInRatingDir)) {
-                        File baseDir = new File(feedsInRatingDir);
-                        if (baseDir.isDirectory() && baseDir.canWrite()) {
-                            try {
-                                FileUtils.copyFileToDirectory(xmlFile, baseDir);
-                                xmlFile.delete();
-                                //call import rating file service
-                                Map<String, Object> importInput = UtilMisc.toMap("userLogin", userLogin, "productStoreId", productStoreId, 
-                                        "feedsInRatingDir", feedsInRatingDir, "feedsInSuccessSubDir", feedsInSuccessSubDir, "feedsInErrorSubDir", feedsInErrorSubDir);
-                                Map<String, Object> importOutputMap = dispatcher.runSync("clientProductRatingUpdates", importInput);
-
-                                if (ModelService.RESPOND_ERROR.equals(importOutputMap.get(ModelService.RESPONSE_MESSAGE))) {
-                                    return ServiceUtil.returnError((String) importOutputMap.get(ModelService.ERROR_MESSAGE));
-                                }
-                            } catch (IOException e) {
-                                Debug.logError(e, "Error occured in import reevoo product rating", module);
-                                ServiceUtil.returnError("Error occured in import reevoo product rating");
-                            }
-                        } else {
-                            Debug.logError("Error occured while copy xml file feed In Rating Dir", module);
-                            ServiceUtil.returnError("Error occured while copy xml file feed In Rating Dir");
-                        }
-                    }
-                }
-            } catch (GenericServiceException e) {
-                Debug.logError(e, module);
-                return ServiceUtil.returnError(e.getMessage());
-            }
-        } catch (Exception e) {
-            Debug.logError(e, "Error occured in update reevoo product rating", module);
-            ServiceUtil.returnError("Error occured in update reevoo product rating");
+        // Check passed params
+        if (UtilValidate.isEmpty(feedsInRatingDir)) 
+        {
+        	feedsInRatingDir = Util.getProductStoreParm(productStoreId, "FEEDS_IN_RATING_URL_DIR");
         }
-        return result;
-    }
-
-    public static Map reevooGetProductRatingScores(DispatchContext dctx, Map context) {
-
-        Map<String, Object> result = ServiceUtil.returnSuccess();
-        Delegator delegator = dctx.getDelegator();
-        LocalDispatcher dispatcher = dctx.getDispatcher();
-        GenericValue userLogin = (GenericValue) context.get("userLogin");
-
-        String productStoreId = (String) context.get("productStoreId");
-        String reevooApiUrl = (String) context.get("reevooApiUrl");
-        String reevooApiCsvUrl = (String) context.get("reevooApiCsvUrl");
-        String reevooApiUserName = (String) context.get("reevooApiUserName");
-        String reevooApiPassword = (String) context.get("reevooApiPassword");
-        
+        if (UtilValidate.isEmpty(reevooApiUrl)) 
+        {
+        	reevooApiUrl = Util.getProductStoreParm(productStoreId, "REEVOO_API_URL");
+        }
+        if (UtilValidate.isEmpty(reevooApiCsvUrl)) 
+        {
+        	reevooApiCsvUrl = Util.getProductStoreParm(productStoreId, "REEVOO_CSV_URL");
+        }
+        if (UtilValidate.isEmpty(reevooApiUserName)) 
+        {
+        	reevooApiUserName = Util.getProductStoreParm(productStoreId, "REEVOO_USERNAME");
+        }
+        if (UtilValidate.isEmpty(reevooApiPassword)) 
+        {
+        	reevooApiPassword = Util.getProductStoreParm(productStoreId, "REEVOO_PASSWORD");
+        }
         try {
             File csvFile = null;
             File xmlFile = null;
@@ -295,6 +250,21 @@ public class ReevooServices {
                     } else {
                         xmlFile = (File) feedOutputMap.get("feedFile");
                         xmlFileAsString = (String) feedOutputMap.get("feedFileAsString");
+                        // copy xml file in feed in rating directory
+                        if (UtilValidate.isNotEmpty(feedsInRatingDir)) {
+                            File baseDir = new File(feedsInRatingDir);
+                            if (baseDir.isDirectory() && baseDir.canWrite()) {
+                                try {
+                                    FileUtils.copyFileToDirectory(xmlFile, baseDir);
+                                } catch (IOException e) {
+                                    Debug.logError(e, "Error occured while copy xml file feed In Rating Dir", module);
+                                    ServiceUtil.returnError("Error occured while copy xml file feed In Rating Dir");
+                                }
+                            } else {
+                                Debug.logError("Error occured while copy xml file feed In Rating Dir", module);
+                                ServiceUtil.returnError("Error occured while copy xml file feed In Rating Dir");
+                            }
+                        }
                     }
                 }
             } catch (GenericServiceException e) {

@@ -29,23 +29,18 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URL;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.io.FileUtils;
 import org.ofbiz.product.category.CategoryContentWrapper;
-import org.ofbiz.product.category.CategoryWorker;
-import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
-import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilMisc; 
-import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilXml;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
@@ -57,6 +52,7 @@ import com.osafe.util.Util;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
+import com.osafe.services.CategoryServices;
 
 public class SiteMapServices {
 
@@ -160,12 +156,12 @@ public class SiteMapServices {
                     categoryTrail = (List<String>) workingCategoryMap.get("categoryTrail");
                     categoryLevel = categoryTrail.size() - 1;
                     
-                    List<GenericValue> productCategoryMembers = workingCategory.getRelated("ProductCategoryMember");
+                    List<GenericValue> productCategoryMembers = workingCategory.getRelatedCache("ProductCategoryMember");
                     // Remove any expired
                     productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
                     for (GenericValue productCategoryMember : productCategoryMembers) 
                     {
-                        GenericValue product = productCategoryMember.getRelatedOne("Product");
+                        GenericValue product = productCategoryMember.getRelatedOneCache("Product");
                         if (UtilValidate.isNotEmpty(product)) 
                         {
                             String isVariant = product.getString("isVariant");
@@ -183,7 +179,7 @@ public class SiteMapServices {
                                     createSiteMapNode(url);
                                     if (UtilValidate.isNotEmpty(SITEMAP_VARIANT_FEATURES))
                                     {
-                                       List<GenericValue> lProductFeatureAndAppl = delegator.findByAnd("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
+                                       List<GenericValue> lProductFeatureAndAppl = delegator.findByAndCache("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
                                         lProductFeatureAndAppl = EntityUtil.filterByDate(lProductFeatureAndAppl);
                                         if (UtilValidate.isNotEmpty(lProductFeatureAndAppl))
                                         {
@@ -210,7 +206,7 @@ public class SiteMapServices {
             {
                 for (GenericValue xContentXref : xContentXrefs)
                 {
-                    GenericValue content = xContentXref.getRelatedOne("Content");
+                    GenericValue content = xContentXref.getRelatedOneCache("Content");
                     if (UtilValidate.isNotEmpty(content) && "CTNT_PUBLISHED".equals(content.getString("statusId")))
                     {
                         url = makeCatalogUrl(null, null, null, null, xContentXref.getString("bfContentId"),null);
@@ -325,12 +321,12 @@ public class SiteMapServices {
                     categoryTrail = (List<String>) workingCategoryMap.get("categoryTrail");
                     categoryLevel = categoryTrail.size() - 1;
                     
-                    List<GenericValue> productCategoryMembers = workingCategory.getRelated("ProductCategoryMember");
+                    List<GenericValue> productCategoryMembers = workingCategory.getRelatedCache("ProductCategoryMember");
                     // Remove any expired
                     productCategoryMembers = EntityUtil.filterByDate(productCategoryMembers, true);
                     for (GenericValue productCategoryMember : productCategoryMembers) 
                     {
-                        GenericValue product = productCategoryMember.getRelatedOne("Product");
+                        GenericValue product = productCategoryMember.getRelatedOneCache("Product");
                         if (UtilValidate.isNotEmpty(product)) 
                         {
                             String isVariant = product.getString("isVariant");
@@ -349,7 +345,7 @@ public class SiteMapServices {
                                     createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,null,null, null);
                                     if (UtilValidate.isNotEmpty(SITEMAP_VARIANT_FEATURES))
                                     {
-                                       List<GenericValue> lProductFeatureAndAppl = delegator.findByAnd("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
+                                       List<GenericValue> lProductFeatureAndAppl = delegator.findByAndCache("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
                                         lProductFeatureAndAppl = EntityUtil.filterByDate(lProductFeatureAndAppl);
                                         if (UtilValidate.isNotEmpty(lProductFeatureAndAppl))
                                         {
@@ -376,11 +372,11 @@ public class SiteMapServices {
             {
                 for (GenericValue xContentXref : xContentXrefs)
                 {
-                    GenericValue content = xContentXref.getRelatedOne("Content");
+                    GenericValue content = xContentXref.getRelatedOneCache("Content");
                     if (UtilValidate.isNotEmpty(content) && "CTNT_PUBLISHED".equals(content.getString("statusId")))
                     {
                         String seoUrlValue = content.getString("contentName");
-                        GenericValue contentAttribute = delegator.findOne("ContentAttribute", UtilMisc.toMap("contentId",content.getString("contentId"),"attrName","SEO_FRIENDLY_URL"), false);
+                        GenericValue contentAttribute = delegator.findOne("ContentAttribute", UtilMisc.toMap("contentId",content.getString("contentId"),"attrName","SEO_FRIENDLY_URL"), true);
                         if (UtilValidate.isNotEmpty(contentAttribute))
                         {
                             seoUrlValue = contentAttribute.getString("attrValue");
@@ -412,7 +408,7 @@ public class SiteMapServices {
             List<String> pathElements = StringUtil.split(URL, "/");
             String sUrlTarget=pathElements.get(pathElements.size() - 1);
         	String friendlyKey=StringUtil.replaceString(sUrlTarget,"&","~");
-        	friendlyKey=StringUtil.replaceString(friendlyKey,"=","-");
+        	friendlyKey=StringUtil.replaceString(friendlyKey,"=","^^");
         	String friendlyUrl =null;
         	
         	if (OSAFE_FRIENDLY_URL.containsKey(friendlyKey))
@@ -464,7 +460,7 @@ public class SiteMapServices {
             String sUrlTarget=pathElements.get(pathElements.size() - 1);
             
         	friendlyKey=StringUtil.replaceString(sUrlTarget,"&","~");
-        	friendlyKey=StringUtil.replaceString(friendlyKey,"=","-");
+        	friendlyKey=StringUtil.replaceString(friendlyKey,"=","^^");
             
         	if (productContentWrapper != null)
         	{

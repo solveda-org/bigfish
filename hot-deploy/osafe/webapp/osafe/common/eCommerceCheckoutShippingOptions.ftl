@@ -27,8 +27,8 @@
               </#if>
               <span class="radioOptionText"> <#-- use margin left -->
                 <#if carrierMethod.partyId != "_NA_" && carrierShipmentMethod?has_content>
-                  <#assign carrierParty = carrierShipmentMethod.getRelatedOne("Party")/>
-                  <#assign carrierPartyGroup = carrierParty.getRelatedOne("PartyGroup")/>
+                  <#assign carrierParty = carrierShipmentMethod.getRelatedOneCache("Party")/>
+                  <#assign carrierPartyGroup = carrierParty.getRelatedOneCache("PartyGroup")/>
                   ${carrierPartyGroup.groupName?if_exists}&nbsp;
                 </#if>
                 ${carrierMethod.description?if_exists}

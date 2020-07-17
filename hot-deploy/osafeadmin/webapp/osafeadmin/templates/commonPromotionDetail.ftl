@@ -46,7 +46,7 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
     </div>
 </#if>
 <div class="displayBox footerInfo">
-    <div class="boxBody">
+    <div>
         ${sections.render('commonDetailActionButton')?if_exists}
     </div>
 </div>

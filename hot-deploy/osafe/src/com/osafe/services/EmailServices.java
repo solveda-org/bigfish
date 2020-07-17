@@ -85,25 +85,43 @@ public class EmailServices {
         // Check passed params
         if (UtilValidate.isEmpty(intervalHours)) 
         {
-            intervalHours = UtilMisc.toInteger(Util.getProductStoreParm(productStoreId, "EMAIL_ABANDON_HRS"));
+        	try {
+                intervalHours = UtilMisc.toInteger(Util.getProductStoreParm(productStoreId, "EMAIL_ABANDON_HRS"));
+        		
+        	}
+        	  catch (Exception e)
+        	  {
+        		  intervalHours=-1;
+                  Debug.logError(e, "Problem getting EMAIL_ABANDON_HRS for productStoreId=" + productStoreId);
+        		  
+        	  }
         }
 
         if (UtilValidate.isEmpty(emailCount)) 
         {
-            emailCount = UtilMisc.toInteger(Util.getProductStoreParm(productStoreId, "EMAIL_ABANDON_NUM"));
+        	try {
+                emailCount = UtilMisc.toInteger(Util.getProductStoreParm(productStoreId, "EMAIL_ABANDON_NUM"));
+        		
+        	}
+        	  catch (Exception e)
+        	  {
+        		  emailCount=-1;
+                  Debug.logError(e, "Problem getting EMAIL_ABANDON_NUM for productStoreId=" + productStoreId);
+        		  
+        	  }
         }
 
         Collection<GenericValue> emailList = null;
         String sendTo = null;
         try {
 
-            GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+            GenericValue productStore = delegator.findByPrimaryKeyCache("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         	
             String emailType = "PRDS_ABD_CART";
             sendMap.put("emailType",emailType);
             GenericValue productStoreEmail = null;
             try {
-                productStoreEmail = delegator.findByPrimaryKey("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
+                productStoreEmail = delegator.findByPrimaryKeyCache("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
             } catch (GenericEntityException e) {
                 Debug.logError(e, "Problem getting the ProductStoreEmailSetting for productStoreId=" + productStoreId + " and emailType=" + emailType, module);
             }
@@ -134,14 +152,20 @@ public class EmailServices {
 
             
            
-            List<GenericValue> shoppingLists = delegator.findByAnd("ShoppingList", UtilMisc.toMap("productStoreId", productStoreId, "shoppingListTypeId", "SLT_SPEC_PURP"));
+            EntityConditionList whereConditions = EntityCondition.makeCondition(UtilMisc.toList(
+                    EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, productStoreId),
+                    EntityCondition.makeCondition("shoppingListTypeId", EntityOperator.EQUALS, "SLT_SPEC_PURP"),
+                    EntityCondition.makeCondition("partyId", EntityOperator.NOT_EQUAL, "")
+                    ), EntityOperator.AND);
+//            List<GenericValue> shoppingLists = delegator.findByAnd("ShoppingList", UtilMisc.toMap("productStoreId", productStoreId, "shoppingListTypeId", "SLT_SPEC_PURP"));
+            List<GenericValue> shoppingLists = delegator.findList("ShoppingList", whereConditions, null, null, null, false);
             Timestamp currentDateAsDate = UtilDateTime.getDayEnd(new Timestamp(System.currentTimeMillis()));
             for (GenericValue shoppingList : shoppingLists) 
             {
                 List<GenericValue> shoppingListItems = shoppingList.getRelated("ShoppingListItem");
                 if (UtilValidate.isNotEmpty(shoppingListItems)) 
                 {
-                    GenericValue party = shoppingList.getRelatedOne("Party");
+                    GenericValue party = shoppingList.getRelatedOneCache("Party");
                     if (UtilValidate.isNotEmpty(party)) 
                     {
                         String partyId = party.getString("partyId");
@@ -185,9 +209,10 @@ public class EmailServices {
                                     Debug.logInfo(sendTo, module);
                                     ResourceBundleMapWrapper uiLabelMap = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeUiLabels", locale);
     
-                                    Map bodyParameters = UtilMisc.toMap("uiLabelMap", uiLabelMap, "locale", locale);
+                                    Map bodyParameters = FastMap.newInstance();
     
-                                    GenericValue person = party.getRelatedOne("Person");
+                                    GenericValue person = party.getRelatedOneCache("Person");
+                                    bodyParameters.put("locale", locale);
                                     bodyParameters.put("person", person);
     
                                     bodyParameters.put("shoppingListId", shoppingList.get("shoppingListId"));
@@ -223,10 +248,10 @@ public class EmailServices {
                                         // send the notification
                                         Map sendResp = null;
                                         try {
-                                            sendResp = dispatcher.runSync("sendMailFromScreen", sendMap);
+                                            dispatcher.runAsync("sendMailFromScreen", sendMap);
                                         } catch (Exception e) {
                                             Debug.logError(e, module);
-                                            return ServiceUtil.returnError(UtilProperties.getMessage("OSafeUiLabels", "ProductStoreAbandonCartEmailError", locale));
+//                                            return ServiceUtil.returnError(UtilProperties.getMessage("OSafeUiLabels", "ProductStoreAbandonCartEmailError", locale));
                                         }
                                     }
                                 }
@@ -288,13 +313,13 @@ public class EmailServices {
         try {
 
         	
-            GenericValue productStore = delegator.findByPrimaryKey("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
+            GenericValue productStore = delegator.findByPrimaryKeyCache("ProductStore", UtilMisc.toMap("productStoreId", productStoreId));
         	
             sendMap.put("emailType",emailType);
             GenericValue productStoreEmail = null;
             try 
             {
-                productStoreEmail = delegator.findByPrimaryKey("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
+                productStoreEmail = delegator.findByPrimaryKeyCache("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
             } catch (GenericEntityException e) {
                 Debug.logError(e, "Problem getting the ProductStoreEmailSetting for productStoreId=" + productStoreId + " and emailType=" + emailType, module);
             }
@@ -360,9 +385,10 @@ public class EmailServices {
                     sendTo = email.getString("infoString");
 
                     ResourceBundleMapWrapper uiLabelMap = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeUiLabels", locale);
-                    Map bodyParameters = UtilMisc.toMap("uiLabelMap", uiLabelMap, "locale", locale);
+                    Map bodyParameters = FastMap.newInstance();
 
                     //GenericValue person = party.getRelatedOne("Person");
+                    bodyParameters.put("locale", locale);
                     bodyParameters.put("person", party);
 
                     String orderId = orderHeader.getString("orderId");
@@ -402,10 +428,10 @@ public class EmailServices {
                         // send the notification
                         Map sendResp = null;
                         try {
-                            sendResp = dispatcher.runSync("sendMailFromScreen", sendMap);
+                            dispatcher.runAsync("sendMailFromScreen", sendMap);
                         } catch (Exception e) {
                             Debug.logError(e, module);
-                            return ServiceUtil.returnError(UtilProperties.getMessage("OSafeUiLabels", "ProductStoreShipReviewEmailError", locale));
+//                            return ServiceUtil.returnError(UtilProperties.getMessage("OSafeUiLabels", "ProductStoreShipReviewEmailError", locale));
                         }
                     }
                 }
@@ -484,6 +510,7 @@ public class EmailServices {
         //I give up getting the first productStoreId
         if (UtilValidate.isEmpty(productStoreId) && UtilValidate.isEmpty(webSiteId))
         {
+            Debug.logInfo("Problem getting Product Store For Email Services getting first store from DB list", module);
             try {
             	List productStoreList = delegator.findList("ProductStore",null,null,null,null,true);
             	GenericValue productStore = EntityUtil.getFirst(productStoreList);
@@ -499,7 +526,7 @@ public class EmailServices {
         {
             GenericValue productStoreEmail = null;
             try {
-                productStoreEmail = delegator.findByPrimaryKey("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
+                productStoreEmail = delegator.findByPrimaryKeyCache("ProductStoreEmailSetting", UtilMisc.toMap("productStoreId", productStoreId, "emailType", emailType));
             } catch (GenericEntityException e) {
                 Debug.logError(e, "Problem getting the ProductStoreEmailSetting for productStoreId=" + productStoreId + " and emailType=" + emailType, module);
             }

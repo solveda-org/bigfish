@@ -316,9 +316,10 @@ public class Util {
         try {
             Debug.logInfo("geoId: " + geoId, module);
 
-            geo = EntityUtil.getFirst((delegator.findByAnd("Geo", UtilMisc.toMap("geoId", geoId.toUpperCase(),"geoTypeId","COUNTRY"))));
+            geo = delegator.findByPrimaryKeyCache("Geo", UtilMisc.toMap("geoId", geoId.toUpperCase()));
             Debug.logInfo("Found a geo entity " + geo, module);
-            if (UtilValidate.isNotEmpty(geo)) {
+            if (UtilValidate.isNotEmpty(geo)) 
+            {
                 result.put("geoId", (String) geo.get("geoId"));
                 result.put("geoName", (String) geo.get("geoName"));
             }
@@ -375,7 +376,7 @@ public class Util {
         String parmValue = null;
         GenericValue xProductStoreParam = null;
         try {
-            xProductStoreParam = delegator.findOne("XProductStoreParm", UtilMisc.toMap("productStoreId", productStoreId, "parmKey", parmKey), false);
+            xProductStoreParam = delegator.findOne("XProductStoreParm", UtilMisc.toMap("productStoreId", productStoreId, "parmKey", parmKey), true);
             if (UtilValidate.isNotEmpty(xProductStoreParam)) {
                 parmValue = xProductStoreParam.getString("parmValue");
             }
@@ -432,7 +433,7 @@ public class Util {
                 }
                 if (UtilValidate.isNotEmpty(storeId))
                 {
-                    List lProductStoreParam = delegator.findByAnd("XProductStoreParm", UtilMisc.toMap("productStoreId", storeId));
+                    List lProductStoreParam = delegator.findByAndCache("XProductStoreParm", UtilMisc.toMap("productStoreId", storeId));
                     if (UtilValidate.isNotEmpty(lProductStoreParam))
                     {
                           Iterator parmIter = lProductStoreParam.iterator();
@@ -457,6 +458,21 @@ public class Util {
         return getProductStoreParmMap((Delegator)request.getAttribute("delegator"), null, ProductStoreWorker.getProductStoreId(request));
     }
 
+    public static boolean isProductStoreParmTrue(String parmValue) {
+        if (UtilValidate.isEmpty(parmValue)) 
+         {
+             return false;
+         }
+         if ("TRUE".equals(parmValue.toUpperCase()))
+         {
+             return true;
+         }
+         return false;
+     }
+    
+    public static boolean isProductStoreParmTrue(ServletRequest request,String parmName) {
+         return isProductStoreParmTrue(getProductStoreParm(request,parmName));
+     }
     /**
      * Return a string formatted as format 
      * if format is wrong or null return dateString for the default locale
@@ -490,18 +506,6 @@ public class Util {
         return true;
     }
 
-    public static boolean isProductStoreParmTrue(String parmValue) {
-        if (UtilValidate.isEmpty(parmValue)) 
-         {
-             return false;
-         }
-         if ("TRUE".equals(parmValue.toUpperCase()))
-         {
-             return true;
-         }
-         return false;
-     }
-    
     public static boolean isNumber(String number) {
         if (UtilValidate.isEmpty(number)) {
             return false;

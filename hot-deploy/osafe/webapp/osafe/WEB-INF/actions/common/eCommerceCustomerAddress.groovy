@@ -2,64 +2,99 @@ package common;
 
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
-
+import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.contact.ContactHelper;
 
 partyId = null;
-
 userLogin = context.userLogin;
-if (userLogin) {
+
+productStore = ProductStoreWorker.getProductStore(request);
+context.productStoreId = productStore.productStoreId;
+context.productStore = productStore;
+
+context.createAllowPassword = "Y".equals(productStore.allowPassword);
+context.getUsername = !"Y".equals(productStore.usePrimaryEmailUsername);
+
+previousParams = parameters._PREVIOUS_PARAMS_;
+if (UtilValidate.isNotEmpty(previousParams)) 
+{
+    previousParams = "?" + previousParams;
+} else 
+{
+    previousParams = "";
+}
+context.previousParams = previousParams;
+
+if (UtilValidate.isNotEmpty(userLogin)) 
+{
     partyId = userLogin.partyId;
 }
 
-if (partyId) {
+if (UtilValidate.isNotEmpty(partyId)) 
+{
 
-    party = delegator.findByPrimaryKey("Party", [partyId : partyId]);
-    person = party.getRelatedOne("Person");
-    // This should return the current billing address
-    billingContactMechList = ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false);
-    shippingContactMechList = ContactHelper.getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
-    userEmailContactMechList = ContactHelper.getContactMech(party, "PRIMARY_EMAIL", "EMAIL_ADDRESS", false)
+    party = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
+    if (UtilValidate.isNotEmpty(party)) 
+    {
+        context.party = party;
+        context.partyId = partyId;
+        context.person = party.getRelatedOneCache("Person");
+        
+        partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
+        partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
 
-    billingAddressContactMech = EntityUtil.getFirst(billingContactMechList);
-    if (UtilValidate.isNotEmpty(billingAddressContactMech)) {
-        billingPostalAddress = delegator.findOne("PostalAddress", [contactMechId : billingAddressContactMech.contactMechId], true);
-        context.BILLINGPostalAddress = billingPostalAddress;
-        context.billingContactMechId = billingPostalAddress.contactMechId;
-    }
-
-    shippingAddressContactMech = EntityUtil.getFirst(shippingContactMechList);
-    if (UtilValidate.isNotEmpty(shippingAddressContactMech)) {
-        shippingPostalAddress = delegator.findOne("PostalAddress", [contactMechId : shippingAddressContactMech.contactMechId], true);
-        context.SHIPPINGPostalAddress = shippingPostalAddress;
-    }
-
-    userEmailContactMech = EntityUtil.getFirst(userEmailContactMechList);
-    if (UtilValidate.isNotEmpty(userEmailContactMech)) {
-        context.userEmailContactMech = userEmailContactMech;
-        context.userEmailAddress = userEmailContactMech.infoString;
-        partyContactMech = delegator.findByAnd("PartyContactMech", UtilMisc.toMap("partyId",partyId,"contactMechId", userEmailContactMech.contactMechId));
-        partyContactMech = EntityUtil.filterByDate(partyContactMech);
-        if (UtilValidate.isNotEmpty(partyContactMech))
+        partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
+        if (UtilValidate.isNotEmpty(partyBillingLocations)) 
         {
-          partyContactMech = EntityUtil.getFirst(partyContactMech);
-          context.userEmailAllowSolicitation= partyContactMech.allowSolicitation;
+        	partyBillingLocation = EntityUtil.getFirst(partyBillingLocations);
+        	billingPostalAddress = partyBillingLocation.getRelatedOneCache("PostalAddress");
+            context.BILLINGPostalAddress = billingPostalAddress;
+            context.billingContactMechId = billingPostalAddress.contactMechId;
+            billingContactMechList = EntityUtil.getRelatedByAnd("ContactMech", UtilMisc.toMap("contactMechTypeId", "POSTAL_ADDRESS"), partyBillingLocations);
+            context.BILLINGContactMechList = billingContactMechList;
         }
+        
+        partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
+        if (UtilValidate.isNotEmpty(partyShippingLocations)) 
+        {
+            partyShippingLocation = EntityUtil.getFirst(partyShippingLocations);
+            shippingPostalAddress = partyShippingLocation.getRelatedOneCache("PostalAddress");
+            context.SHIPPINGPostalAddress = shippingPostalAddress;
+            shippingContactMechList=EntityUtil.getRelatedByAnd("ContactMech", UtilMisc.toMap("contactMechTypeId", "POSTAL_ADDRESS"), partyShippingLocations);
+            context.SHIPPINGContactMechList = shippingContactMechList;
+        }
+        
+        partyPurposeEmails = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_EMAIL"));
+        if (UtilValidate.isNotEmpty(partyPurposeEmails)) 
+        {
+        	partyPurposeEmail = EntityUtil.getFirst(partyPurposeEmails);
+            contactMech = partyPurposeEmail.getRelatedOneCache("ContactMech");
+            context.userEmailContactMech = contactMech;
+            context.userEmailAddress = contactMech.infoString;
+            userEmailContactMechList= EntityUtil.getRelatedByAnd("ContactMech", UtilMisc.toMap("contactMechTypeId", "EMAIL_ADDRESS"), partyPurposeEmails);
+            context.userEmailContactMechList = userEmailContactMechList;
+            partyContactMechs = partyPurposeEmail.getRelatedCache("PartyContactMech");
+            partyContactMechs = EntityUtil.filterByAnd(partyContactMechs, UtilMisc.toMap("contactMechId", contactMech.contactMechId));
+            if (UtilValidate.isNotEmpty(partyContactMechs))
+            {
+            	partyContactMech = EntityUtil.getFirst(partyContactMechs);
+                context.userEmailAllowSolicitation= partyContactMech.allowSolicitation;
+            	
+            }
+            
+        }
+        
     }
-    context.BILLINGContactMechList = billingContactMechList;
-    context.SHIPPINGContactMechList = shippingContactMechList;
-    context.userEmailContactMechList = userEmailContactMechList;
-    context.party = party;
-    context.partyId = partyId;
-    context.person=person;
 }
 
 shoppingCart = session.getAttribute("shoppingCart");
-if (UtilValidate.isNotEmpty(shoppingCart)){
+if (UtilValidate.isNotEmpty(shoppingCart))
+{
     isSameAsBilling = shoppingCart.getAttribute("isSameAsBilling");
-    if (UtilValidate.isNotEmpty(isSameAsBilling)){
+    if (UtilValidate.isNotEmpty(isSameAsBilling))
+    {
         context.isSameAsBilling = isSameAsBilling;
     }
 }

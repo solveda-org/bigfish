@@ -56,9 +56,74 @@
         <call-service service-name="updateEnum" in-map-name="updateEnumCtx" />
     </simple-method>
     
-    <simple-method method-name="validateTestEmail" short-description="This Service Validates the email id and email body">
-    
-    	<if-empty field="parameters.fromAddress">
+    <simple-method method-name="sendEmailTest" short-description="This Service Validates and send the email id and email body">
+
+        <if-empty field="parameters.simpleTest">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTestModeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        <else>
+            <if-compare field="parameters.simpleTest" operator="equals" value="N">
+                <if-empty field="parameters.emailTemplateId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTemplateIdError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                     <if>
+                         <condition>
+                             <or>
+                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_CHANGE_CUSTOMER"/>
+                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_NEW_CUSTOMER"/>
+                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_FORGOT_PASSWORD"/>
+                             </or>
+                         </condition>
+                         <then>
+                             <if-empty field="parameters.customerId">
+                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCustomerIdError"/>
+                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                             <else>
+                                 <entity-one value-field="party" entity-name="Party">
+                                     <field-map field-name="partyId" from-field="parameters.customerId"/>
+                                 </entity-one>
+                                 <if-empty field="party">
+					                 <set field="argListNames[]" from-field="parameters.customerId"/>
+					                 <property-to-field resource="OSafeAdminUiLabels" property="CustomerIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 </if-empty>
+                             </else>
+                             </if-empty>
+                         </then>
+                     <else-if>
+                         <condition>
+                             <or>
+                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_ORDER_CHANGE"/>
+                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_ORDER_CONFIRM"/>
+                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_ORDER_DETAIL"/>
+                                 <if-compare field="parameters.emailTemplateId" operator="equals" value="E_SHIP_REVIEW"/>
+                             </or>
+                         </condition>
+                         <then>
+                             <if-empty field="parameters.orderId">
+                                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderIdError"/>
+                                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                             <else>
+                                 <entity-one value-field="orderHeader" entity-name="OrderHeader">
+                                     <field-map field-name="orderId" from-field="parameters.orderId"/>
+                                 </entity-one>
+                                 <if-empty field="orderHeader">
+                                     <set field="argListNames[]" from-field="parameters.orderId"/>
+                                     <property-to-field resource="OSafeAdminUiLabels" property="OrderIdExistError" field="tempErrorMessage" arg-list-name="argListNames"/>
+                                     <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                 </if-empty>
+                             </else>
+                             </if-empty>
+                         </then>
+                     </else-if>
+                     </if>
+                </else>
+                </if-empty>
+            </if-compare>
+        </else>
+        </if-empty>
+        <if-empty field="parameters.fromAddress">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankEmailAddressError"/>
             <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
         <else>
@@ -86,87 +151,100 @@
         </else>
         </if-empty>
         <check-errors/>
-        
-        <if-empty field="parameters.partyId">
-           <set field="partyId" from-field="userLogin.partyId"/>
-           <else>
-             <set field="partyId" from-field="parameters.partyId"/>
-           </else>
-        </if-empty>
-        
+
+        <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
+            <field-map field-name="userLoginId" value="system"/>
+        </entity-one>
+
         <if-empty field="parameters.productStoreId">
-                        <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
-                            <field field="request" type="javax.servlet.ServletRequest"/>
-                        </call-class-method>
-                        <set field="parameters.productStoreId" from-field="productStoreId"/>
-                    <else>
-                        <set field="productStoreId" from-field="parameters.productStoreId"/>
-                    </else>
-            </if-empty>
-        
-        <set field="bodyParameters.productStoreId" from-field="parameters.productStoreId"/>
-        <set field="bodyParameters.emailType" from-field="parameters.emailType"/>
-        <set field="bodyParameters.partyId" from-field="partyId"/>
-        <set field="bodyParameters.message" from-field="parameters.testEmailText"/>
-        <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting"/>
-        <!-- Send email-->
-        <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
-            <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+            <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                <field field="request" type="javax.servlet.ServletRequest"/>
+            </call-class-method>
+            <set field="parameters.productStoreId" from-field="productStoreId"/>
+        <else>
+            <set field="productStoreId" from-field="parameters.productStoreId"/>
+        </else>
+        </if-empty>
+
+        <if-compare field="parameters.simpleTest" operator="equals" value="Y">
+            <set field="emailParams.body" from-field="parameters.testEmailText"/>
             <set field="emailParams.userLogin" from-field="systemUserLogin"/>
             <set field="emailParams.sendTo" from-field="parameters.toAddress"/>
             <set field="emailParams.subject" from-field="parameters.emailSubject"/>
             <set field="emailParams.sendFrom" from-field="parameters.fromAddress"/>
-        	<set field="emailParams.emailType" from-field="parameters.emailType"/>
-            <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
-            <set field="emailParams.bodyScreenUri" from-field="productStoreEmailSetting.bodyScreenLocation"/>
-            <call-service service-name="sendMailFromScreen" in-map-name="emailParams">
+            <call-service service-name="sendMail" in-map-name="emailParams">
                 <result-to-field result-name="errorMessageList" field="mailSendErrorMessageList"/>
                 <result-to-field result-name="errorMessage" field="mailSendErrorMessage"/>
             </call-service>
+        <else>
+            <set field="emailType" value="PRDS_EMAIL_TEST"/>
+            <set field="bodyParameters.productStoreId" from-field="parameters.productStoreId"/>
+            <set field="bodyParameters.emailType" from-field="emailType"/>
+            <set field="bodyParameters.emailTemplateId" from-field="parameters.emailTemplateId"/>
+            <set field="bodyParameters.partyId" from-field="parameters.customerId"/>
+            <set field="bodyParameters.orderId" from-field="parameters.orderId"/>
+            <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
+                <field-map field-name="productStoreId" from-field="parameters.productStoreId"/>
+                <field-map field-name="emailType" value="PRDS_EMAIL_TEST"/>
+            </entity-one>
+            <!-- Send email-->
+            <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+                <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+                <set field="emailParams.userLogin" from-field="systemUserLogin"/>
+                <set field="emailParams.sendTo" from-field="parameters.toAddress"/>
+                <set field="emailParams.subject" from-field="parameters.emailSubject"/>
+                <set field="emailParams.sendFrom" from-field="parameters.fromAddress"/>
+                <set field="emailParams.emailType" from-field="emailType"/>
+                <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
+                <call-service service-name="sendMailFromScreen" in-map-name="emailParams">
+                    <result-to-field result-name="errorMessageList" field="mailSendErrorMessageList"/>
+                    <result-to-field result-name="errorMessage" field="mailSendErrorMessage"/>
+                </call-service>
+            </if-not-empty>
+        </else>
+        </if-compare>
 
-            <if>
-                <condition>
-                    <or>
-                    <not><if-empty field="mailSendErrorMessageList"/></not>
-                    <not><if-empty field="mailSendErrorMessage"/></not>
-                    </or>
-                </condition>
-                <then>
-                    <if-not-empty field="mailSendErrorMessage">
-                        <set field="argListNames[]" from-field="mailSendErrorMessage"/>
-	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestEmailSendFailError" arg-list-name="argListNames"/>
-	                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-	                <else>
-	                     <if-not-empty field="mailSendErrorMessageList">
-                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestEmailSendFailError" arg-list-name="mailSendErrorMessageList"/>
-                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
-	                     </if-not-empty>
-	                </else>
-	                </if-not-empty>
-	                <check-errors/>
-                </then>
-            <else>
-	            <property-to-field field="mailEnable" resource="client-deployment" property="mail.notifications.enabled"/>
-	            <if-compare operator="equals" value="Y" field="mailEnable">
-                    <property-to-field field="redirectTo" resource="client-deployment" property="mail.notifications.redirectTo"/>
-                    <if-not-empty field="redirectTo">
-                        <set field="argListNames[]" from-field="redirectTo"/>
-                        <property-to-field resource="OSafeAdminUiLabels" property="TestEmailNotificationEnableRedirectSuccessMsg" field="testEmailNotificationEnableYesSuccessMsg" arg-list-name="argListNames"/>
-	                    <string-to-list string="${testEmailNotificationEnableYesSuccessMsg}" list="successMessageList"/>
-	                <else>
-                        <property-to-field resource="OSafeAdminUiLabels" property="TestEmailNotificationEnableSuccessMsg" field="testEmailNotificationEnableYesSuccessMsg"/>
-                        <string-to-list string="${testEmailNotificationEnableYesSuccessMsg}" list="successMessageList"/>
-	                </else>
-	                </if-not-empty>
-	                <else>
-		                <property-to-field resource="OSafeAdminUiLabels" property="TestEmailNotificationNotEnableSuccessMsg" field="testEmailNotificationEnableNoSuccessMsg"/>
-		                <string-to-list string="${testEmailNotificationEnableNoSuccessMsg}" list="successMessageList"/>
-	                </else>
-	            </if-compare>
-            </else>
-            </if>
-            
-        </if-not-empty>
+        <if>
+            <condition>
+                <or>
+                <not><if-empty field="mailSendErrorMessageList"/></not>
+                <not><if-empty field="mailSendErrorMessage"/></not>
+                </or>
+            </condition>
+            <then>
+                <if-not-empty field="mailSendErrorMessage">
+                    <set field="argListNames[]" from-field="mailSendErrorMessage"/>
+                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestEmailSendFailError" arg-list-name="argListNames"/>
+                 <string-to-list string="${tempErrorMessage}" list="error_list"/>
+             <else>
+                  <if-not-empty field="mailSendErrorMessageList">
+                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TestEmailSendFailError" arg-list-name="mailSendErrorMessageList"/>
+                         <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                  </if-not-empty>
+             </else>
+             </if-not-empty>
+             <check-errors/>
+            </then>
+        <else>
+         <property-to-field field="mailEnable" resource="client-deployment" property="mail.notifications.enabled"/>
+         <if-compare operator="equals" value="Y" field="mailEnable">
+                <property-to-field field="redirectTo" resource="client-deployment" property="mail.notifications.redirectTo"/>
+                <if-not-empty field="redirectTo">
+                    <set field="argListNames[]" from-field="redirectTo"/>
+                    <property-to-field resource="OSafeAdminUiLabels" property="TestEmailNotificationEnableRedirectSuccessMsg" field="testEmailNotificationEnableYesSuccessMsg" arg-list-name="argListNames"/>
+                 <string-to-list string="${testEmailNotificationEnableYesSuccessMsg}" list="successMessageList"/>
+             <else>
+                    <property-to-field resource="OSafeAdminUiLabels" property="TestEmailNotificationEnableSuccessMsg" field="testEmailNotificationEnableYesSuccessMsg"/>
+                    <string-to-list string="${testEmailNotificationEnableYesSuccessMsg}" list="successMessageList"/>
+             </else>
+             </if-not-empty>
+             <else>
+              <property-to-field resource="OSafeAdminUiLabels" property="TestEmailNotificationNotEnableSuccessMsg" field="testEmailNotificationEnableNoSuccessMsg"/>
+              <string-to-list string="${testEmailNotificationEnableNoSuccessMsg}" list="successMessageList"/>
+             </else>
+         </if-compare>
+        </else>
+        </if>
     </simple-method>
     
     <simple-method method-name="sendScheduledJobNotification" short-description="This Service Sends the scheduled jobs email notification">
@@ -206,11 +284,7 @@
                   <set field="productStoreId" from-field="parameters.productStoreId"/>
              </else>
         </if-empty>
-        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="ToEmails">
-	            <field field="productStoreId" type="String"/>
-	            <string value="EMAIL_SCHED_JOB_ALERT"/>
-	    </call-class-method>
-	    <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="preferredDateFormat">
+	    <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="preferredDateFormat">
 	            <field field="productStoreId" type="String"/>
 	            <string value="FORMAT_DATE"/>
 	    </call-class-method>
@@ -218,33 +292,43 @@
 	    	<set field="preferredDateFormat" from-field="MM/dd/y"/>
 	    </if-empty>
 	    <now-timestamp field="nowTimeStamp"/>
-        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="parameters.nowDateTime">
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="parameters.nowDate">
             <field field="nowTimeStamp" type="Timestamp"/>
             <field field="preferredDateFormat" type="String"/>
         </call-class-method>
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="parameters.nowTime">
+            <field field="nowTimeStamp" type="Timestamp"/>
+            <string value="h:mma"/>
+        </call-class-method>
+        
         <property-to-field resource="OSafeAdminUiLabels" property="ScheduledJobInfoText" field="scheduledJobInfoText"/>
+
         <!-- if the service returns a message then append this message to the Job info -->
 		<if-not-empty field="scheduledJobReturnMessageText">
 			<string-append field="scheduledJobInfoText" string=" [${scheduledJobReturnMessageText}]"/>
 		</if-not-empty>
-		<set field="bodyParameters.scheduledJobMessage" from-field="scheduledJobInfoText"/>
+		
         <set field="bodyParameters.productStoreId" from-field="productStoreId"/>
         <set field="bodyParameters.emailType" value="PRDS_SCHED_JOB_ALERT"/>
-        <set field="bodyParameters.scheduledJobName" from-field="parameters.scheduledJobName"/>
-        <set field="bodyParameters.scheduledJobStatus" from-field="scheduledJobStatus"/>
-        <set field="bodyParameters.nowDateTime" from-field="parameters.nowDateTime"/>
+        <!-- These parameters are used in the email title -->
         <set field="bodyParameters.SCHEDULED_JOB_NAME" from-field="parameters.scheduledJobName"/>
         <set field="bodyParameters.SCHEDULED_JOB_STATUS" from-field="scheduledJobStatus"/>
+        <!-- These parameters are used in the body. See getGlobalEmailVariables.groovy -->
+        <set field="bodyParameters.scheduledJobMessage" from-field="scheduledJobInfoText"/>
+		<set field="bodyParameters.scheduledJobName" from-field="parameters.scheduledJobName"/>
+        <set field="bodyParameters.scheduledJobStatus" from-field="scheduledJobStatus"/>
+        
         <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting">
                 <field-map field-name="productStoreId" from-field="bodyParameters.productStoreId"/>
                 <field-map field-name="emailType" from-field="bodyParameters.emailType"/>
         </entity-one>
+        
         <!-- Send email-->
         <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
-            
             <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
             <set field="emailParams.userLogin" from-field="systemUserLogin"/>
-            <set field="emailParams.sendTo" value="${ToEmails}"/>
+            <set field="emptyToEmail" value=""/>
+            <set field="emailParams.sendTo" value="${emptyToEmail}"/> <!-- email will not send without a 'To' value, even if it is empty -->
         	<set field="emailParams.emailType" from-field="bodyParameters.emailType"/>
             <call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
         </if-not-empty>

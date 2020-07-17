@@ -24,7 +24,19 @@ import com.ibm.icu.util.Calendar;
 import org.ofbiz.order.order.OrderReadHelper;
 import com.osafe.util.OsafeAdminUtil;
 
-BigDecimal calcItemTotal(List headers) {
+orderStatusIncDashboard = globalContext.get("ORDER_STATUS_INC_DASHBOARD");
+List includedOrderStatusList = FastList.newInstance();
+if(UtilValidate.isNotEmpty(orderStatusIncDashboard))
+{
+    orderStatusIncDashboardList = StringUtil.split(orderStatusIncDashboard,",")
+	  for (String orderStatus : orderStatusIncDashboardList) 
+	  {
+	      includedOrderStatusList.add(orderStatus.trim());
+	  }
+}
+
+BigDecimal calcItemTotal(List headers) 
+{
     BigDecimal total = BigDecimal.ZERO;
     headers.each { header ->
         orderReadHelper = new OrderReadHelper(OrderReadHelper.getOrderHeader(delegator, header.orderId));
@@ -33,12 +45,16 @@ BigDecimal calcItemTotal(List headers) {
     return total;
 }
 
-void sumCol(GenericValue gv1, GenericValue gv2, String columnName) {
+void sumCol(GenericValue gv1, GenericValue gv2, String columnName) 
+{
     BigDecimal result = BigDecimal.ZERO;
     result = gv1.getBigDecimal(columnName);
-    if (result != null) {
+    if (result != null) 
+    {
         result = result.add(gv2.getBigDecimal(columnName));
-    } else {
+    } 
+    else 
+    {
         result = gv2.getBigDecimal(columnName);
     }
     gv1.set(columnName, result);
@@ -48,12 +64,13 @@ rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
 nowTs = UtilDateTime.nowTimestamp();
 periodFromTs= context.periodFromTs
 periodToTs= context.periodToTs
-if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs)){
+if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
+{
     // Get Currency UOM
     defaultCurrencyUomId = UtilProperties.getPropertyValue("general.properties", "currency.uom.id.default", "USD");
     context.put("defaultCurrencyUomId", defaultCurrencyUomId);
     productStore = globalContext.productStore;
-    if(productStore)
+    if(UtilValidate.isNotEmpty(productStore))
     {
         context.defaultCurrencyUomId = productStore.defaultCurrencyUomId;
     }
@@ -74,8 +91,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 //ONLINE SALE SUMMARY
     ecl = EntityCondition.makeCondition([
         EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+        EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
         EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
         EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromTs),
         EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToTs),
@@ -86,12 +102,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
     eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
     allOnlineSaleHeaders = eli.getCompleteList();
-    if (eli != null) {
-        try {
+    if (eli != null) 
+    {
+        try 
+        {
             eli.close();
-        } catch (GenericEntityException e) {}
+        } 
+        catch (GenericEntityException e) 
+        {}
     }
-    if (allOnlineSaleHeaders){
+    if (UtilValidate.isNotEmpty(allOnlineSaleHeaders))
+    {
         orderCount = allOnlineSaleHeaders.size();
         context.orderCount = orderCount;
 
@@ -105,14 +126,12 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
     {
        totalRevenue = BigDecimal.ZERO;
        orderCount = BigDecimal.ZERO;
-
     }
 
 //STORE PICK UP CONDITION
     ecl = EntityCondition.makeCondition([
         EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+        EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
         EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
         EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromTs),
         EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToTs),
@@ -122,12 +141,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
     EntityOperator.AND);
     eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
     allStorePickupHeaders = eli.getCompleteList();
-    if (eli != null) {
-        try {
+    if (eli != null) 
+    {
+        try 
+        {
             eli.close();
-        } catch (GenericEntityException e) {}
+        } 
+        catch (GenericEntityException e) 
+        {}
     }
-    if (allStorePickupHeaders){
+    if (UtilValidate.isNotEmpty(allStorePickupHeaders))
+    {
         storePickupOrderCount = allStorePickupHeaders.size();
         context.storePickupOrderCount = storePickupOrderCount;
 
@@ -141,7 +165,6 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
     {
        storePickupTotalRevenue = BigDecimal.ZERO;
        storePickupOrderCount = BigDecimal.ZERO;
-
     }
 
     diffCurrentDays = UtilDateTime.getInterval(UtilDateTime.getDayEnd(nowTs),periodToTs);
@@ -186,8 +209,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
             // Summary
             ecl = EntityCondition.makeCondition([
                 EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
                 EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
                 EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromRecTrendTs),
                 EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToRecTrendTs),
@@ -198,12 +220,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
             eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
             allOnlineSaleHeaders = eli.getCompleteList();
-            if (eli != null) {
-                try {
+            if (eli != null) 
+            {
+                try 
+                {
                     eli.close();
-                } catch (GenericEntityException e) {}
+                } 
+                catch (GenericEntityException e) 
+                {}
             }
-            if (allOnlineSaleHeaders){
+            if (UtilValidate.isNotEmpty(allOnlineSaleHeaders))
+            {
 
                 trendTotalRevenue = calcItemTotal(allOnlineSaleHeaders);
                 context.recentTrendTotalRevenue = trendTotalRevenue;
@@ -226,8 +253,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
             //store pick up
             ecl = EntityCondition.makeCondition([
                 EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
                 EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
                 EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromRecTrendTs),
                 EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToRecTrendTs),
@@ -238,13 +264,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
             eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
             allStorePickupHeaders = eli.getCompleteList();
-            if (eli != null) {
-                try {
+            if (eli != null) 
+            {
+                try 
+                {
                     eli.close();
-                } catch (GenericEntityException e) {}
+                } 
+                catch (GenericEntityException e) 
+                {}
             }
-            if (allStorePickupHeaders){
-
+            if (UtilValidate.isNotEmpty(allStorePickupHeaders))
+            {
                 storePickupTrendTotalRevenue = calcItemTotal(allStorePickupHeaders);
                 context.storePickupRecentTrendTotalRevenue = storePickupTrendTotalRevenue;
                 storePickupRecentOrderCount = allStorePickupHeaders.size();
@@ -280,8 +310,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
             // Summary
             ecl = EntityCondition.makeCondition([
                 EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
                 EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
                 EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromPriorTrendTs),
                 EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToPriorTrendTs),
@@ -292,12 +321,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
             eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
             allOnlineSaleHeaders = eli.getCompleteList();
-            if (eli != null) {
-                try {
+            if (eli != null) 
+            {
+                try 
+                {
                     eli.close();
-                } catch (GenericEntityException e) {}
+                } 
+                catch (GenericEntityException e) 
+                {}
             }
-            if (allOnlineSaleHeaders){
+            if (UtilValidate.isNotEmpty(allOnlineSaleHeaders))
+            {
 
                 trendTotalRevenue = calcItemTotal(allOnlineSaleHeaders);
                 context.priorTrendTotalRevenue = trendTotalRevenue;
@@ -321,8 +355,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
             // store pick up
             ecl = EntityCondition.makeCondition([
                 EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-                EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+                EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
                 EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
                 EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromPriorTrendTs),
                 EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToPriorTrendTs),
@@ -333,12 +366,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
             eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
             allStorePickupHeaders = eli.getCompleteList();
-            if (eli != null) {
-                try {
+            if (eli != null) 
+            {
+                try 
+                {
                     eli.close();
-                } catch (GenericEntityException e) {}
+                } 
+                catch (GenericEntityException e) 
+                {}
             }
-            if (allStorePickupHeaders){
+            if (UtilValidate.isNotEmpty(allStorePickupHeaders))
+            {
 
                 storePickupTrendTotalRevenue = calcItemTotal(allStorePickupHeaders);
                 context.storePickupPriorTrendTotalRevenue = storePickupTrendTotalRevenue;
@@ -384,8 +422,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
          // Summary
          ecl = EntityCondition.makeCondition([
              EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+             EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
              EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
              EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromRecTrendTs),
              EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToRecTrendTs),
@@ -396,12 +433,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
          eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
          allOnlineSaleHeaders = eli.getCompleteList();
-         if (eli != null) {
-             try {
+         if (eli != null) 
+         {
+             try 
+             {
                  eli.close();
-             } catch (GenericEntityException e) {}
+             } 
+             catch (GenericEntityException e) 
+             {}
          }
-         if (allOnlineSaleHeaders){
+         if (UtilValidate.isNotEmpty(allOnlineSaleHeaders))
+         {
 
              trendTotalRevenue = calcItemTotal(allOnlineSaleHeaders);
              context.recentTrendTotalRevenue = trendTotalRevenue;
@@ -424,8 +466,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
          //store pick up
          ecl = EntityCondition.makeCondition([
              EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+             EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
              EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
              EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromRecTrendTs),
              EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToRecTrendTs),
@@ -436,12 +477,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
          eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
          allStorePickupHeaders = eli.getCompleteList();
-         if (eli != null) {
-             try {
+         if (eli != null) 
+         {
+             try 
+             {
                  eli.close();
-             } catch (GenericEntityException e) {}
+             } 
+             catch (GenericEntityException e) 
+             {}
          }
-         if (allStorePickupHeaders){
+         if (UtilValidate.isNotEmpty(allStorePickupHeaders))
+         {
 
              storePickupTrendTotalRevenue = calcItemTotal(allStorePickupHeaders);
              context.storePickupRecentTrendTotalRevenue = storePickupTrendTotalRevenue;
@@ -476,8 +522,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
          // Summary
          ecl = EntityCondition.makeCondition([
              EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+             EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
              EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
              EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromPriorTrendTs),
              EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToPriorTrendTs),
@@ -488,12 +533,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
          eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
          allOnlineSaleHeaders = eli.getCompleteList();
-         if (eli != null) {
-             try {
+         if (eli != null) 
+         {
+             try 
+             {
                  eli.close();
-             } catch (GenericEntityException e) {}
+             } 
+             catch (GenericEntityException e) 
+             {}
          }
-         if (allOnlineSaleHeaders){
+         if (UtilValidate.isNotEmpty(allOnlineSaleHeaders))
+         {
 
              trendTotalRevenue = calcItemTotal(allOnlineSaleHeaders);
              context.priorTrendTotalRevenue = trendTotalRevenue;
@@ -517,8 +567,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
          // store pick up
          ecl = EntityCondition.makeCondition([
              EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+             EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
              EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
              EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromPriorTrendTs),
              EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToPriorTrendTs),
@@ -529,12 +578,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
          eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
          allStorePickupHeaders = eli.getCompleteList();
-         if (eli != null) {
-             try {
+         if (eli != null) 
+         {
+             try 
+             {
                  eli.close();
-             } catch (GenericEntityException e) {}
+             } 
+             catch (GenericEntityException e) 
+             {}
          }
-         if (allStorePickupHeaders){
+         if (UtilValidate.isNotEmpty(allStorePickupHeaders))
+         {
 
              storePickupTrendTotalRevenue = calcItemTotal(allStorePickupHeaders);
              context.storePickupPriorTrendTotalRevenue = storePickupTrendTotalRevenue;
@@ -572,8 +626,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
          // Summary
          ecl = EntityCondition.makeCondition([
              EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+             EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
              EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
              EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromRecTrendTs),
              EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToRecTrendTs),
@@ -584,12 +637,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
          eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
          allOnlineSaleHeaders = eli.getCompleteList();
-         if (eli != null) {
-             try {
+         if (eli != null) 
+         {
+             try 
+             {
                  eli.close();
-             } catch (GenericEntityException e) {}
+             } 
+             catch (GenericEntityException e) 
+             {}
          }
-         if (allOnlineSaleHeaders){
+         if (UtilValidate.isNotEmpty(allOnlineSaleHeaders))
+         {
 
              trendTotalRevenue = calcItemTotal(allOnlineSaleHeaders);
              context.recentTrendTotalRevenue = trendTotalRevenue;
@@ -612,8 +670,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
          //store pick up
          ecl = EntityCondition.makeCondition([
              EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-             EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+             EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
              EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER"),
              EntityCondition.makeCondition("orderDate", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromRecTrendTs),
              EntityCondition.makeCondition("orderDate", EntityOperator.LESS_THAN_EQUAL_TO, periodToRecTrendTs),
@@ -624,12 +681,17 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
          eli = delegator.findListIteratorByCondition(dve, ecl, null, fieldsToSelect, null, findOpts);
          allStorePickupHeaders = eli.getCompleteList();
-         if (eli != null) {
-             try {
+         if (eli != null) 
+         {
+             try 
+             {
                  eli.close();
-             } catch (GenericEntityException e) {}
+             } 
+             catch (GenericEntityException e) 
+             {}
          }
-         if (allStorePickupHeaders){
+         if (UtilValidate.isNotEmpty(allStorePickupHeaders))
+         {
 
              storePickupTrendTotalRevenue = calcItemTotal(allStorePickupHeaders);
              context.storePickupRecentTrendTotalRevenue = storePickupTrendTotalRevenue;
@@ -655,178 +717,6 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
     }
 //TRENDS
 
-//ORDERS REQUIRING WORK
-    orderBy = ["sequenceId"];
-    statusItems = delegator.findByAnd("StatusItem", UtilMisc.toMap("statusTypeId", "ORDER_STATUS"), orderBy);
-    ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_COMPLETED")
-    ],
-    EntityOperator.AND);
-
-    statusItems  =EntityUtil.filterByCondition(statusItems, ecl);
-
-    // For each status, count the number of orders
-
-    // All Sales Orders
-    ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_COMPLETED"),
-        EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER")
-    ],
-    EntityOperator.AND);
-
-    ordersRequiringWorkList =[];
-    requiringWorkHeaders = delegator.findList("OrderHeader", ecl, null, null, null, false);
-    for(GenericValue status : statusItems){
-        statusIdToExclude = status.statusId;
-        statusIdHeaders = EntityUtil.filterByAnd(requiringWorkHeaders, ["statusId" : statusIdToExclude]);
-        headerCount = statusIdHeaders.size();
-        workMap = [:];
-        workMap["description"] = status.description;
-        workMap["count"] = headerCount;
-        workMap["statusId"] = status.statusId;
-        ordersRequiringWorkList.add(workMap);
-    }
-    context.ordersRequiringWork= ordersRequiringWorkList
-//ORDERS REQUIRING WORK
-
-//PENDING RATINGS & REVIEWS
-    //
-    List <GenericValue> allPendingReviews  = FastList.newInstance();
-    List <GenericValue> oneToFiveDaysPendingReviews  = FastList.newInstance();
-    List <GenericValue> fiveToTenDaysPendingReviews  = FastList.newInstance();
-    List <GenericValue> tenPlusDaysPendingReviews  = FastList.newInstance();
-
-    ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PRR_PENDING")
-    ],
-    EntityOperator.AND);
-
-    pendingReviews = delegator.findList("ProductReview", ecl, null, null, null, false);
-
-	if (UtilValidate.isNotEmpty(pendingReviews))
-	{
-	  if (UtilValidate.isNotEmpty(globalContext.currentCategories))
-	  {
-	    currentCategories =globalContext.currentCategories; 
-	    for (GenericValue productReview  : pendingReviews)
-	    {
-		    for (GenericValue currentCategory  : currentCategories)
-		    {
-		      if (CategoryWorker.isProductInCategory(delegator,productReview.productId,currentCategory.productCategoryId))
-		      {
-	            allPendingReviews.add(productReview);
-	            break;
-		      }
-		    }
-	    }
-	  }  
-	}
-
-
-    // 1-5 DAYS
-    // NOW - 5 Days
-    Calendar fiveDaysAgoCal = UtilDateTime.toCalendar(nowTs);
-    fiveDaysAgoCal.add(Calendar.DAY_OF_MONTH, -5);
-    Timestamp fiveDaysAgo = new Timestamp(fiveDaysAgoCal.getTimeInMillis());
-
-    ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, fiveDaysAgo),
-        EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, nowTs),
-        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PRR_PENDING")
-    ],
-    EntityOperator.AND);
-
-    pendingReviews = delegator.findList("ProductReview", ecl, null, null, null, false);
-	if (UtilValidate.isNotEmpty(pendingReviews))
-	{
-	  if (UtilValidate.isNotEmpty(globalContext.currentCategories))
-	  {
-	    currentCategories =globalContext.currentCategories; 
-	    for (GenericValue productReview  : pendingReviews)
-	    {
-		    for (GenericValue currentCategory  : currentCategories)
-		    {
-		      if (CategoryWorker.isProductInCategory(delegator,productReview.productId,currentCategory.productCategoryId))
-		      {
-	            oneToFiveDaysPendingReviews.add(productReview);
-	            break;
-		      }
-		    }
-	    }
-	  }  
-	}
-
-    // 5-10 Days
-    // 5 - 10 Days
-    Calendar tenDaysAgoCal = UtilDateTime.toCalendar(nowTs);
-    tenDaysAgoCal.add(Calendar.DAY_OF_MONTH, -10);
-    Timestamp tenDaysAgo = new Timestamp(tenDaysAgoCal.getTimeInMillis());
-
-    ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, tenDaysAgo),
-        EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, fiveDaysAgo),
-        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PRR_PENDING")
-    ],
-    EntityOperator.AND);
-
-    pendingReviews = delegator.findList("ProductReview", ecl, null, null, null, false);
-	if (UtilValidate.isNotEmpty(pendingReviews))
-	{
-	  if (UtilValidate.isNotEmpty(globalContext.currentCategories))
-	  {
-	    currentCategories =globalContext.currentCategories; 
-	    for (GenericValue productReview  : pendingReviews)
-	    {
-		    for (GenericValue currentCategory  : currentCategories)
-		    {
-		      if (CategoryWorker.isProductInCategory(delegator,productReview.productId,currentCategory.productCategoryId))
-		      {
-	            fiveToTenDaysPendingReviews.add(productReview);
-	            break;
-		      }
-		    }
-	    }
-	  }  
-	}
-
-    // 10+ Days
-    // 10 - ... Days
-    ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, tenDaysAgo),
-        EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, "PRR_PENDING")
-    ],
-    EntityOperator.AND);
-
-    pendingReviews = delegator.findList("ProductReview", ecl, null, null, null, false);
-	if (UtilValidate.isNotEmpty(pendingReviews))
-	{
-	  if (UtilValidate.isNotEmpty(globalContext.currentCategories))
-	  {
-	    currentCategories =globalContext.currentCategories; 
-	    for (GenericValue productReview  : pendingReviews)
-	    {
-		    for (GenericValue currentCategory  : currentCategories)
-		    {
-		      if (CategoryWorker.isProductInCategory(delegator,productReview.productId,currentCategory.productCategoryId))
-		      {
-	            tenPlusDaysPendingReviews.add(productReview);
-	            break;
-		      }
-		    }
-	    }
-	  }  
-	}
-    
-    context.pendingReviewCount = allPendingReviews.size();
-    context.oneToFiveDaysCount = oneToFiveDaysPendingReviews.size();
-    context.fiveToTenDaysCount = fiveToTenDaysPendingReviews.size();
-    context.tenPlusDayCount = tenPlusDaysPendingReviews.size();
-//PENDING RATINGS & REVIEWS
 
 //TOP PRODUCTS
 
@@ -885,46 +775,61 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
     EntityOperator.AND);
     eli = delegator.findListIteratorByCondition(topProductDve, ecl, null, topProductFields, orderBy, topProductFindOpts);
     topOrderSalesProductList = eli.getCompleteList();
-    if (eli != null) {
-        try {
+    if (eli != null) 
+    {
+        try 
+        {
             eli.close();
-        } catch (GenericEntityException e) {}
+        } 
+        catch (GenericEntityException e) 
+        {}
     }
 
     // for each product look up content wrapper
     if (topOrderSalesProductList != null) 
     {
-        for (GenericValue orderReportProduct : topOrderSalesProductList) {
-            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), true);
+        for (GenericValue orderReportProduct : topOrderSalesProductList) 
+        {
+            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), false);
             orderItemList = delegator.findByAnd("OrderItem", UtilMisc.toMap("productId", orderReportProduct.getString("productId")));
             orderItemListItr = orderItemList.iterator();
             GenericValue orderItemGv = null;
-            while (orderItemListItr.hasNext()){
+            while (orderItemListItr.hasNext())
+            {
                 orderItemGv = (GenericValue)orderItemListItr.next();
             }
             totalPrice = orderReportProduct.getBigDecimal("quantityOrdered") * orderItemGv.getBigDecimal("unitPrice");
             orderReportProduct.set("unitPrice", totalPrice);
             productId = product.getString("productId");
-            if ("Y".equals(product.getString("isVariant"))) {
+            if ("Y".equals(product.getString("isVariant"))) 
+            {
                 // look up the virtual product
                 GenericValue parent = ProductWorker.getParentProduct(productId, delegator);
-                if (parent != null) {
+                if (parent != null) 
+                {
                     productId = parent.getString("productId");
                     workingReportProduct = allTopProductsMap.get(productId);
-                    if (workingReportProduct == null) {
+                    if (workingReportProduct == null) 
+                    {
                         workingReportProduct = GenericValue.create(orderReportProduct);
                         workingReportProduct.setString("productId", productId);
-                    } else {
+                    } else 
+                    {
                         sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                         sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                     }
                     allTopProductsMap.put(productId, workingReportProduct);
                 }
-            } else {
+            } 
+            else 
+            {
                 workingReportProduct = allTopProductsMap.get(productId);
-                if (workingReportProduct == null) {
+                if (workingReportProduct == null) 
+                {
                     workingReportProduct = GenericValue.create(orderReportProduct);
-                } else {
+                }
+                else 
+                {
                     sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                     sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                 }
@@ -937,17 +842,18 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
     // for each product look up content wrapper
     Map topProductContentWrappers = null;
-    if (topProductsList)
+    if (UtilValidate.isNotEmpty(topProductsList))
     {
         // Trim list
-        if(topProductsList.size() >5) {
+        if(topProductsList.size() >5) 
+        {
             topProductsList = topProductsList.subList(0,5);
         }
 
         topProductContentWrappers = FastMap.newInstance();
         for (GenericValue topProduct: topProductsList) 
         {
-            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", topProduct.productId), true);
+            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", topProduct.productId), false);
             ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
             topProductContentWrappers.put(topProduct.productId, productContentWrapper);
         }
@@ -973,17 +879,22 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
     EntityOperator.AND);
     eli = delegator.findListIteratorByCondition(topProductDve, ecl, null, topProductFields, orderBy, topProductFindOpts);
     topOrderSalesProductList = eli.getCompleteList();
-    if (eli != null) {
-        try {
+    if (eli != null) 
+    {
+        try 
+        {
             eli.close();
-        } catch (GenericEntityException e) {}
+        } 
+        catch (GenericEntityException e) 
+        {}
     }
 
     // for each product look up content wrapper
     if (topOrderSalesProductList != null) 
     {
-        for (GenericValue orderReportProduct : topOrderSalesProductList) {
-            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), true);
+        for (GenericValue orderReportProduct : topOrderSalesProductList) 
+        {
+            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), false);
             orderItemList = delegator.findByAnd("OrderItem", UtilMisc.toMap("productId", orderReportProduct.getString("productId")));
             orderItemListItr = orderItemList.iterator();
             GenericValue orderItemGv = null;
@@ -994,26 +905,35 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
             totalPrice = orderReportProduct.getBigDecimal("quantityOrdered") * orderItemGv.getBigDecimal("unitPrice");
             orderReportProduct.set("unitPrice", totalPrice);
             productId = product.getString("productId");
-            if ("Y".equals(product.getString("isVariant"))) {
+            if ("Y".equals(product.getString("isVariant"))) 
+            {
                 // look up the virtual product
                 GenericValue parent = ProductWorker.getParentProduct(productId, delegator);
-                if (parent != null) {
+                if (parent != null) 
+                {
                     productId = parent.getString("productId");
                     workingReportProduct = allTopProductsMap.get(productId);
                     if (workingReportProduct == null) {
                         workingReportProduct = GenericValue.create(orderReportProduct);
                         workingReportProduct.setString("productId", productId);
-                    } else {
+                    }
+                    else 
+                    {
                         sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                         sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                     }
                     allTopProductsMap.put(productId, workingReportProduct);
                 }
-            } else {
+            } 
+            else 
+            {
                 workingReportProduct = allTopProductsMap.get(productId);
-                if (workingReportProduct == null) {
+                if (workingReportProduct == null) 
+                {
                     workingReportProduct = GenericValue.create(orderReportProduct);
-                } else {
+                }
+                else 
+                {
                     sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                     sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                 }
@@ -1026,7 +946,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
     // for each product look up content wrapper
     Map storePickupTopProductContentWrappers = null;
-    if (storePickupTopProductsList)
+    if (UtilValidate.isNotEmpty(storePickupTopProductsList))
     {
         // Trim list
         if(storePickupTopProductsList.size() > 5) 
@@ -1037,7 +957,7 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
         storePickupTopProductContentWrappers = FastMap.newInstance();
         for (GenericValue topProduct: storePickupTopProductsList) 
         {
-            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", topProduct.productId), true);
+            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", topProduct.productId), false);
             ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
             storePickupTopProductContentWrappers.put(topProduct.productId, productContentWrapper);
         }
@@ -1045,57 +965,6 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
     }
     context.storePickupTopProductsList = storePickupTopProductsList;
 //TOP PRODUCTS
-
-//BEST REVIEWED PRODUCTS
-    List <GenericValue> bestReviewedProductsList  = FastList.newInstance();
-
-    ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("averageCustomerRating", EntityOperator.GREATER_THAN, BigDecimal.ZERO),
-        EntityCondition.makeCondition("lastUpdatedStamp", EntityOperator.GREATER_THAN_EQUAL_TO, periodFromTs),
-        EntityCondition.makeCondition("lastUpdatedStamp", EntityOperator.LESS_THAN_EQUAL_TO, periodToTs)
-    ],
-    EntityOperator.AND);
-
-    orderBy = ["-averageCustomerRating"];
-
-    productCalculatedInfoList = delegator.findList("ProductCalculatedInfo", ecl, null, orderBy, null, false);
-    if (productCalculatedInfoList)
-    {
-		  if (UtilValidate.isNotEmpty(globalContext.currentCategories))
-		  {
-		    currentCategories =globalContext.currentCategories; 
-		    for (GenericValue productCalculatedInfo  : productCalculatedInfoList)
-		    {
-			    for (GenericValue currentCategory  : currentCategories)
-			    {
-			      if (CategoryWorker.isProductInCategory(delegator,productCalculatedInfo.productId,currentCategory.productCategoryId))
-			      {
-		            bestReviewedProductsList.add(productCalculatedInfo);
-		            break;
-			      }
-			    }
-		    }
-		  }  
-    }
-    // for each product look up content wrapper
-    Map bestReviewedProductContentWrappers = null;
-    if (bestReviewedProductsList)
-    {
-        if(bestReviewedProductsList.size() > 5) {
-            bestReviewedProductsList = bestReviewedProductsList.subList(0,5);
-        }
-
-        bestReviewedProductContentWrappers = FastMap.newInstance();
-        for (GenericValue bestProduct: bestReviewedProductsList) 
-        {
-            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", bestProduct.productId), true);
-            ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
-            bestReviewedProductContentWrappers.put(bestProduct.productId, productContentWrapper);
-        }
-        context.bestReviewedProductContentWrappers = bestReviewedProductContentWrappers;
-    }
-    context.bestReviewedProductsList = bestReviewedProductsList;
-//BEST REVIEWED PRODUCTS
     
 //TOP PROMOTIONS
     // top promotion dynamic view entity
@@ -1132,14 +1001,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
 
     eli = delegator.findListIteratorByCondition(topPromotionDve, ecl, null, topPromotionFields, orderBy, topPromotionFindOpts);
     topPromotionsList = eli.getCompleteList();
-    if (eli != null) {
-        try {
-            eli.close();
-        } catch (GenericEntityException e) {}
-    }
-    if (topPromotionsList)
+    if (eli != null) 
     {
-        if(topPromotionsList.size() >5) {
+        try 
+        {
+            eli.close();
+        } 
+        catch (GenericEntityException e) 
+        {}
+    }
+    if (UtilValidate.isNotEmpty(topPromotionsList))
+    {
+        if(topPromotionsList.size() >5) 
+        {
             topPromotionsList = topPromotionsList.subList(0,5);
         }
     }

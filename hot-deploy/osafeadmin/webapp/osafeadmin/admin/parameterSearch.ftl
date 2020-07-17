@@ -3,10 +3,10 @@
     <div class="entryIcon">  
         <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.ParameterSearchHelperInfo!""}');" onMouseout="hideTooltip()"><span class="wildcardIcon"></span></a>
     </div>
-    <div class="entry">
+    <div class="entry long">
       <label>${uiLabelMap.SearchForCaption}</label>
       <div class="entryInput">
-        <input class="textEntry" type="text" id="searchString" name="searchString" maxlength="40" value="${parameters.searchString!""}"/>
+        <input class="largeTextEntry" type="text" id="searchString" name="searchString" maxlength="40" value="${parameters.searchString!""}"/>
       </div>
     </div>
   </div>

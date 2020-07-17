@@ -11,13 +11,14 @@
      <#assign pageSize =10/>
 </#if>
 <#assign sortUrl = request.getRequestURI() >
+<#if productCategoryId?exists && productCategoryId?has_content>
+    <#assign sortUrl = "?productCategoryId=" + productCategoryId/>
+    <#assign sortUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${sortUrl}')/>
+</#if>  
 
 <div class="resultsNavigation">
     <div class="sortingOptions">
         <form method="get" id="frmSortResults" name="frmSortResults" action="${sortUrl}">
-        <#if productCategoryId?exists && productCategoryId?has_content>
-         <input type="hidden" name="productCategoryId"  value="${productCategoryId}">
-       </#if>
         <#if filterGroup?exists && filterGroup?has_content>
          <input type="hidden" name="filterGroup"  value="${filterGroup}">
        </#if>
@@ -41,20 +42,22 @@
         </form>
     </div>
     <div class="pagingLinks">
-            <#--  Paging Links -->
 			<#if productCategoryId?exists && productCategoryId?has_content>
-			  <#assign nextPrevUrl = request.getRequestURI() + "?productCategoryId=" + productCategoryId/>
+			  <#assign nextPrevUrl = "?productCategoryId=" + productCategoryId/>
 			  <#if filterGroup?exists && filterGroup?has_content>
 			    <#assign nextPrevUrl = nextPrevUrl+ "&filterGroup=" + filterGroup/>
 			  </#if>
 			  <#if sortResults?exists && sortResults?has_content>
 			    <#assign nextPrevUrl = nextPrevUrl+ "&sortResults=" + sortResults/>
 			  </#if>
+              <#assign nextPrevUrl = nextPrevUrl + "&sortResults=" + parameters.sortResults!"" >
+	          <#assign nextPrevUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>
 			<#else>
                 <#assign nextPrevUrl = request.getRequestURI() + previousParams >
-			</#if>
+                <#assign nextPrevUrl = nextPrevUrl + "&sortResults=" + parameters.sortResults!"" >
+  		    </#if>
 
-            <#assign nextPrevUrl = nextPrevUrl + "&sortResults=" + parameters.sortResults!"" >
+
             <#assign pageIndex = (start/pageSize) + 1>
             <#assign totalPages = numFound / pageSize>
             <#assign pageIndex = pageIndex?int>
@@ -92,7 +95,7 @@
                         <li class="pagingBtn last disabled">${uiLabelMap.LastLabel}</li>
                     </#if>
                     <#if (((start + pageSize) lt numFound) || (pageIndex != 1 && pageIndex ==  totalPages))>
-                         <li class="pagingBtn showall"><a href="${nextPrevUrl}&rows=${numFound!0}">${uiLabelMap.ViewAllLabel} </a></li>
+                         <li class="pagingBtn showall"><a href="${nextPrevUrl}&rows=${numFound!0}">${uiLabelMap.ViewAllLabel}</a></li>
                     </#if>
                     </#if>
                     <#if parameters.rows?has_content>

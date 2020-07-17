@@ -10,6 +10,11 @@
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="documentListCount" type="Integer" mode="OUT" optional="false"/>
     </service>
+    <service name="genSeoFriendlyUrl" engine="java" location="com.osafe.services.SiteMapServices" invoke="buildFriendlyUrlMap" auth="false" transaction-timeout="7200">
+        <description>Create Friendlu URL Mapping File based on Product Catalog</description>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
+        <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
+    </service>
     <service name="abandonCartEmail" engine="java" location="com.osafe.services.EmailServices" invoke="abandonCartEmail" auth="false" transaction-timeout="7200">
         <description>Send Abandon Cart Emails </description>
         <implements service="sendScheduledJobNotificationInterface"/>
@@ -22,17 +27,45 @@
         <implements service="sendScheduledJobNotificationInterface"/>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
     </service>
-    <service name="reevooProductRatingUpdates" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="reevooProductRatingUpdates" auth="false" transaction-timeout="7200">
-        <description>update reevoo product rating</description>
-        <implements service="sendScheduledJobNotificationInterface"/>
+    <service name="reevooGetProductRatingScore" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="reevooGetProductRatingScore" auth="false" transaction-timeout="7200">
+        <description>down load xml feed</description>
         <attribute name="productStoreId" type="String" mode="IN" optional="false" />
-        <attribute name="feedsInRatingDir" mode="IN" type="String" optional="true" />
-        <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
-        <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
         <attribute name="reevooApiUrl" type="String" mode="IN" optional="true"/>
         <attribute name="reevooApiCsvUrl" type="String" mode="IN" optional="true"/>
         <attribute name="reevooApiUserName" type="String" mode="IN" optional="true"/>
         <attribute name="reevooApiPassword" type="String" mode="IN" optional="true"/>
+        <attribute name="feedsInRatingDir" mode="IN" type="String" optional="true" />
+        <attribute name="xmlFile" type="java.io.File" mode="OUT" optional="true"/>
+        <attribute name="xmlFileAsString" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="reevooProductRatingUpdate" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         update reevoo product rating
+        </description>
+        <group>
+            <invoke name="reevooGetProductRatingScore" result-to-context="true"/>
+            <invoke name="clientProductRatingUpdate" result-to-context="true"/>
+        </group>
+    </service>
+
+    <service name="clientProductUpdateIndexSeoFriendlyUrl" engine="group" auth="false" transaction-timeout="7200">
+        <description>
+         update product, SOLR Indexing and make SEO friendly url
+        </description>
+        <group>
+            <invoke name="clientProductUpdate" result-to-context="true"/>
+            <invoke name="genProductsIndex" result-to-context="true"/>
+            <invoke name="genSeoFriendlyUrl" result-to-context="true"/>
+        </group>
+    </service>
+    <!-- Party Geo services -->
+    <service name="genPartyGeoPoint" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.GeoServices" invoke="genPartyGeoPoint">
+        <description>Create geo point and validate existing for party .if roleTypeId is null, consider STORE_LOCATION roletype as default.</description>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
     </service>
     <!-- REMOVE THE TEST JOB -->
     <service name="testJob" engine="java" location="com.osafe.services.SolrServices" invoke="testJob" auth="false" transaction-timeout="7200">
@@ -41,7 +74,6 @@
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
     </service> 
-    
     <service name="sendScheduledJobNotificationInterface" engine="interface" location="" invoke="">
         <description>Scheduled Job Notification Interface</description>
         <attribute name="scheduledJobName" type="String" mode="IN" optional="true"/>

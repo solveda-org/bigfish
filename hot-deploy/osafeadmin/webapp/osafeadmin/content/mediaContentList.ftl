@@ -13,7 +13,7 @@
   <#list resultList as fileName>
     <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
       <#if fileListMap?exists && fileListMap?has_content>
-        <#assign fileAttrMap = fileListMap.get("${fileName}")/>
+        <#assign fileAttrMap = fileListMap.get("${fileName}")!""/>
       </#if>
       <td class="descCol firstCol" ><a href="<@ofbizUrl>mediaContentDetail?mediaName=${fileName?if_exists}&mediaType=${fileAttrMap.parentDirName!}</@ofbizUrl>">${fileName}</a></td>
       <td class="actionCol">
@@ -39,7 +39,9 @@
       <td class="sizeCol" >${fileAttrMap.fileSize?string}kb</td>
       <td class="sizeCol" >${fileAttrMap.height}px</td>
       <td class="sizeCol" >${fileAttrMap.width}px</td>
-      <td class="actionColSmall"><a href="javascript:setConfirmDialogContent('${fileName?html}:${fileAttrMap.parentDirName!}','${uiLabelMap.deleteMediaAssetConfirmText}','deleteMediaContentFromList');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a></td>
+      <td class="actionCol">
+       <a href="javascript:setConfirmDialogContent('${fileName?html}:${fileAttrMap.parentDirName!}','${uiLabelMap.deleteMediaAssetConfirmText}','deleteMediaContentFromList');javascript:submitDetailForm(document.${detailFormName!""}, 'CF');"><span class="crossIcon"></span></a>
+      </td>      
     </tr>
     <#if rowClass == "2">
       <#assign rowClass = "1">

@@ -3,6 +3,7 @@
 <input type="hidden" name="intervalHours" value="${EMAIL_ABANDON_HRS!""}" />
 <input type="hidden" name="feedsInRatingDir" value="${FEEDS_IN_RATING_URL_DIR!""}" />
 <input type="hidden" name="feedsInProductDir" value="${FEEDS_IN_PRODUCT_URL_DIR!""}" />
+<input type="hidden" name="feedsInOrderStatusDir" value="${FEEDS_IN_ORDER_STATUS_URL_DIR!""}" />
 <input type="hidden" name="feedsInStoreDir" value="${FEEDS_IN_STORE_URL_DIR!""}" />
 <input type="hidden" name="feedsInSuccessSubDir" value="${FEEDS_IN_SUCCESS_SUB_DIR!""}" />
 <input type="hidden" name="feedsInErrorSubDir" value="${FEEDS_IN_ERROR_SUB_DIR!""}" />

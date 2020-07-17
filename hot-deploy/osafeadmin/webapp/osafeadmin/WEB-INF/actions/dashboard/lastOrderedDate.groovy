@@ -24,10 +24,20 @@ import com.osafe.util.OsafeAdminUtil;
 import com.ibm.icu.util.Calendar;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression.Context;
 
+orderStatusIncDashboard = globalContext.get("ORDER_STATUS_INC_DASHBOARD");
+List includedOrderStatusList = FastList.newInstance();
+if(UtilValidate.isNotEmpty(orderStatusIncDashboard))
+{
+    orderStatusIncDashboardList = StringUtil.split(orderStatusIncDashboard,",")
+	for (String orderStatus : orderStatusIncDashboardList) 
+	{
+	    includedOrderStatusList.add(orderStatus.trim());
+	}
+}
+
 // Last Order
 ecl = EntityCondition.makeCondition([
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_REJECTED"),
-        EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "ORDER_CANCELLED"),
+        EntityCondition.makeCondition("statusId", EntityOperator.IN, includedOrderStatusList),
         EntityCondition.makeCondition("orderTypeId", EntityOperator.EQUALS, "SALES_ORDER")
 ],
 EntityOperator.AND);
@@ -35,7 +45,7 @@ EntityOperator.AND);
 List orderBy = UtilMisc.toList("-orderDate");
 
 List lastOrderHeaders = delegator.findList("OrderHeader", ecl, null, orderBy, null, false);
-if (lastOrderHeaders)
+if (UtilValidate.isNotEmpty(lastOrderHeaders))
 {
     GenericValue lastOrder = EntityUtil.getFirst(lastOrderHeaders);
     context.lastOrderAmount = lastOrder.grandTotal ?: BigDecimal.ZERO;

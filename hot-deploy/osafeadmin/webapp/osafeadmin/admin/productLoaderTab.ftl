@@ -9,5 +9,5 @@
   
   <input type="button" class="standardBtn productLoaderTab" name="featureSwatchesButton" id="featureSwatchesButton" value="${uiLabelMap.FeatureSwatchesButton}" onClick="javascript:showXLSData('featureSwatchesData','','${detailInfoBoxHeading!}: ${uiLabelMap.FeatureSwatchesHeading}');"/>
   
-  <input type="button" class="standardBtn productLoaderTab" name="manufacturerButton" id="manufacturerButton" value="${uiLabelMap.ManufacturerBtn}" onClick="javascript:showXLSData('manufacturerData','','${detailInfoBoxHeading!}: ${uiLabelMap.ManufacturerHeading}');"/>
+  <input type="button" class="standardBtn productLoaderTab <#if (productManufacturerErrorList?has_content)>errorMark</#if>" name="manufacturerButton" id="manufacturerButton" value="${uiLabelMap.ManufacturerBtn}" onClick="javascript:showXLSData('manufacturerData','productManufacturerError','${detailInfoBoxHeading!}: ${uiLabelMap.ManufacturerHeading}');"/>
 </div>

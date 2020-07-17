@@ -662,7 +662,7 @@ public class RefinementsHelperSolr {
 
         Long sequenceNum = Long.valueOf(0);
         try {
-            List<GenericValue> productCategoryRollups = delegator.findByAnd("ProductCategoryRollup", UtilMisc.toMap("productCategoryId", key));
+            List<GenericValue> productCategoryRollups = delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("productCategoryId", key));
             productCategoryRollups = EntityUtil.filterByDate(productCategoryRollups);
             if (UtilValidate.isNotEmpty(productCategoryRollups)) {
                 GenericValue productCategoryRollup = EntityUtil.getFirst(productCategoryRollups);

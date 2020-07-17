@@ -16,16 +16,19 @@ if(parameters.activeFromDate)
 {
     activeFromDate = (Timestamp) ObjectType.simpleTypeConvert(parameters.activeFromDate, "Timestamp", null, null);
 }
-if (parameters.productCategoryId) {
+if (parameters.productCategoryId) 
+{
 
     exprBldr =  new EntityConditionBuilder();
-    categoryCond = exprBldr.AND() {
+    categoryCond = exprBldr.AND() 
+    {
         EQUALS(productCategoryId: parameters.productCategoryId)
         EQUALS(parentProductCategoryId: parentProductCategoryId)
         EQUALS(fromDate: activeFromDate)
     }
     productCategoryRollupAndChilds = delegator.findList("ProductCategoryRollupAndChild", categoryCond, null, null, null, false);
-    if (productCategoryRollupAndChilds) {
+    if (productCategoryRollupAndChilds) 
+    {
         productCategoryRollupAndChild = EntityUtil.getFirst(productCategoryRollupAndChilds);
     }
     

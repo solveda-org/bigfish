@@ -1,4 +1,5 @@
 <#-- virtual product javascript -->
+<#if currentProduct?exists && currentProduct?has_content>
 ${virtualJavaScript?if_exists}
 <form method="post" action="<@ofbizUrl>additem</@ofbizUrl>" name="addform"  style="margin: 0;" onSubmit="return addItem();">
 <#if uiSequenceSearchList?has_content>
@@ -11,3 +12,4 @@ ${virtualJavaScript?if_exists}
 </#if>
 </form>
 ${virtualDefaultJavaScript?if_exists}
+</#if>

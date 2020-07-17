@@ -70,7 +70,7 @@ under the License.
     <#if userLogins?has_content>
          <#assign userLoginId = userLogins.get(0).userLoginId>
     </#if>
-    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "IS_DOWNLOADED"}, true)!"" />
+    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "IS_DOWNLOADED"}, false)!"" />
     <#if partyAttribute?has_content>
       <#assign downloadStatus = partyAttribute.attrValue!"">
     </#if>

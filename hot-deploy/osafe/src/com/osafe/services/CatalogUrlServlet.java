@@ -186,7 +186,7 @@ public class CatalogUrlServlet extends HttpServlet {
         	
             OSAFE_FRIENDLY_URL = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeSeoUrlMap", Locale.getDefault());        	
         	String friendlyKey=StringUtil.replaceString(origURL,"&","~");
-        	friendlyKey=StringUtil.replaceString(friendlyKey,"=","-");
+        	friendlyKey=StringUtil.replaceString(friendlyKey,"=","^^");
         	if (OSAFE_FRIENDLY_URL.containsKey(friendlyKey))
         	{
         		urlBuilder.setLength(0);  
@@ -236,7 +236,7 @@ public class CatalogUrlServlet extends HttpServlet {
         		if (sValue.equals(sURLvalue))
         		{
         			URL=StringUtil.replaceString(sKey,"~","&");
-        			URL=StringUtil.replaceString(URL,"-","=");
+        			URL=StringUtil.replaceString(URL,"^^","=");
                 	if (solrIdx > -1)
                 	{
                 		URL = URL + "&" + solrURLParam;

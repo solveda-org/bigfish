@@ -35,11 +35,14 @@ srchall = StringUtils.trimToEmpty(parameters.srchall);
 srchShipTo = StringUtils.trimToEmpty(parameters.srchShipTo);
 srchStorePickup = StringUtils.trimToEmpty(parameters.srchStorePickup);
 deliveryOption = "";
-if (UtilValidate.isNotEmpty(srchShipTo) && UtilValidate.isEmpty(srchStorePickup)) {
+if (UtilValidate.isNotEmpty(srchShipTo) && UtilValidate.isEmpty(srchStorePickup)) 
+{
     deliveryOption = "SHIP_TO";
-} else if(UtilValidate.isEmpty(srchShipTo) && UtilValidate.isNotEmpty(srchStorePickup)) {
+} else if(UtilValidate.isEmpty(srchShipTo) && UtilValidate.isNotEmpty(srchStorePickup)) 
+{
     deliveryOption = "STORE_PICKUP";
-} else {
+} else 
+{
     deliveryOption = "ANY";
 }
 
@@ -135,15 +138,18 @@ periodToTs= context.periodToTs
         virtualProductOrder = 0;
         noOfOrders = 0;
         // for each product look up content wrapper
-        if (orderReportSalesList != null) {
-            for (GenericValue orderReportProduct : orderReportSalesList) {
-                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), true);
+        if (UtilValidate.isNotEmpty(orderReportSalesList))
+        {
+            for (GenericValue orderReportProduct : orderReportSalesList) 
+            {
+                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), false);
                 
                 /*get the unit price of a product and multiply it with the quantity ordered */
                 orderItemList = delegator.findByAnd("OrderItem", UtilMisc.toMap("productId", orderReportProduct.getString("productId")));
                 orderItemListItr = orderItemList.iterator();
                 GenericValue orderItemGv = null;
-                while (orderItemListItr.hasNext()){
+                while (orderItemListItr.hasNext())
+                {
                     orderItemGv = (GenericValue)orderItemListItr.next();
                 }
                 totalPrice = orderReportProduct.getBigDecimal("quantityOrdered") * orderItemGv.getBigDecimal("unitPrice");
@@ -167,24 +173,29 @@ periodToTs= context.periodToTs
 //                orderList = delegator.findList("OrderHeaderItemAndRoles", eclOrder, null, null, null, false);
                 eli = delegator.findListIteratorByCondition(dve, eclOrder, null, fieldsToSelect, null, findOpts);
                 orderList = eli.getCompleteList();
-                if (eli != null) {
+                if (eli != null) 
+                {
                     try {
                         eli.close();
                     } catch (GenericEntityException e) {}
                 }
                 noOfOrders = orderList.size();
-                if ("Y".equals(product.getString("isVariant"))) {
+                if ("Y".equals(product.getString("isVariant"))) 
+                {
                     // look up the virtual product
                     GenericValue parent = ProductWorker.getParentProduct(productId, delegator);
-                    if (parent != null) {
+                    if (UtilValidate.isNotEmpty(parent))
+                    {
                         productId = parent.getString("productId");
                         productId = productId+"^SHIP_TO";
                         workingReportProduct = allTopProductsMap.get(productId);
-                        if (workingReportProduct == null) {
+                        if (workingReportProduct == null) 
+                        {
                             workingReportProduct = GenericValue.create(orderReportProduct);
                             workingReportProduct.setString("productId", productId);
                             varientProductOrder = noOfOrders;
-                        } else {
+                        } else 
+                        {
                             sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                             sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                             varientProductOrder = noOfOrders + allTopProductsOrderMap.get(productId);
@@ -192,14 +203,17 @@ periodToTs= context.periodToTs
                         allTopProductsMap.put(productId, workingReportProduct);
                         allTopProductsOrderMap.put(productId, varientProductOrder);
                     }
-                } else {
+                } else 
+                {
                     productId = product.getString("productId")+"^SHIP_TO";
                     workingReportProduct = allTopProductsMap.get(productId);
-                    if (workingReportProduct == null) {
+                    if (workingReportProduct == null) 
+                    {
                         workingReportProduct = GenericValue.create(orderReportProduct);
                         workingReportProduct.setString("productId", productId);
                         virtualProductOrder = noOfOrders;
-                    } else {
+                    } else 
+                    {
                         sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                         sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                         virtualProductOrder = noOfOrders + allTopProductsOrderMap.get(productId);
@@ -223,7 +237,8 @@ periodToTs= context.periodToTs
         EntityOperator.AND);
         eli = delegator.findListIteratorByCondition(topProductDve, ecl, null, topProductFields, orderBy, topProductFindOpts);
         orderReportSalesList = eli.getCompleteList();
-        if (eli != null) {
+        if (eli != null) 
+        {
             try {
                 eli.close();
             } catch (GenericEntityException e) {}
@@ -232,15 +247,18 @@ periodToTs= context.periodToTs
         virtualProductOrder = 0;
         noOfOrders = 0;
         // for each product look up content wrapper
-        if (orderReportSalesList != null) {
-            for (GenericValue orderReportProduct : orderReportSalesList) {
-                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), true);
+        if (UtilValidate.isNotEmpty(orderReportSalesList))
+        {
+            for (GenericValue orderReportProduct : orderReportSalesList) 
+            {
+                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), false);
                 
                 /*get the unit price of a product and multiply it with the quantity ordered */
                 orderItemList = delegator.findByAnd("OrderItem", UtilMisc.toMap("productId", orderReportProduct.getString("productId")));
                 orderItemListItr = orderItemList.iterator();
                 GenericValue orderItemGv = null;
-                while (orderItemListItr.hasNext()){
+                while (orderItemListItr.hasNext())
+                {
                     orderItemGv = (GenericValue)orderItemListItr.next();
                 }
                 totalPrice = orderReportProduct.getBigDecimal("quantityOrdered") * orderItemGv.getBigDecimal("unitPrice");
@@ -264,24 +282,29 @@ periodToTs= context.periodToTs
 //                orderList = delegator.findList("OrderHeaderItemAndRoles", eclOrder, null, null, null, false);
                 eli = delegator.findListIteratorByCondition(dve, eclOrder, null, fieldsToSelect, null, findOpts);
                 orderList = eli.getCompleteList();
-                if (eli != null) {
+                if (eli != null) 
+                {
                     try {
                         eli.close();
                     } catch (GenericEntityException e) {}
                 }
                 noOfOrders = orderList.size();
-                if ("Y".equals(product.getString("isVariant"))) {
+                if ("Y".equals(product.getString("isVariant"))) 
+                {
                     // look up the virtual product
                     GenericValue parent = ProductWorker.getParentProduct(productId, delegator);
-                    if (parent != null) {
+                    if (UtilValidate.isNotEmpty(parent))
+                    {
                         productId = parent.getString("productId");
                         productId = productId+"^STORE_PICKUP";
                         workingReportProduct = allTopProductsMap.get(productId);
-                        if (workingReportProduct == null) {
+                        if (workingReportProduct == null) 
+                        {
                             workingReportProduct = GenericValue.create(orderReportProduct);
                             workingReportProduct.setString("productId", productId);
                             varientProductOrder = noOfOrders;
-                        } else {
+                        } else 
+                        {
                             sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                             sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                             varientProductOrder = noOfOrders + allTopProductsOrderMap.get(productId);
@@ -289,14 +312,17 @@ periodToTs= context.periodToTs
                         allTopProductsMap.put(productId, workingReportProduct);
                         allTopProductsOrderMap.put(productId, varientProductOrder);
                     }
-                } else {
+                } else 
+                {
                     productId = product.getString("productId")+"^STORE_PICKUP";
                     workingReportProduct = allTopProductsMap.get(productId);
-                    if (workingReportProduct == null) {
+                    if (workingReportProduct == null) 
+                    {
                         workingReportProduct = GenericValue.create(orderReportProduct);
                         workingReportProduct.setString("productId", productId);
                         virtualProductOrder = noOfOrders;
-                    } else {
+                    } else 
+                    {
                         sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                         sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                         virtualProductOrder = noOfOrders + allTopProductsOrderMap.get(productId);
@@ -321,7 +347,8 @@ periodToTs= context.periodToTs
         EntityOperator.AND);
         eli = delegator.findListIteratorByCondition(topProductDve, ecl, null, topProductFields, orderBy, topProductFindOpts);
         orderReportSalesList = eli.getCompleteList();
-        if (eli != null) {
+        if (eli != null) 
+        {
             try {
                 eli.close();
             } catch (GenericEntityException e) {}
@@ -330,15 +357,18 @@ periodToTs= context.periodToTs
         virtualProductOrder = 0;
         noOfOrders = 0;
         // for each product look up content wrapper
-        if (orderReportSalesList != null) {
-            for (GenericValue orderReportProduct : orderReportSalesList) {
-                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), true);
+        if (UtilValidate.isNotEmpty(orderReportSalesList)) 
+        {
+            for (GenericValue orderReportProduct : orderReportSalesList) 
+            {
+                GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", orderReportProduct.getString("productId")), false);
                 
                 /*get the unit price of a product and multiply it with the quantity ordered */
                 orderItemList = delegator.findByAnd("OrderItem", UtilMisc.toMap("productId", orderReportProduct.getString("productId")));
                 orderItemListItr = orderItemList.iterator();
                 GenericValue orderItemGv = null;
-                while (orderItemListItr.hasNext()){
+                while (orderItemListItr.hasNext())
+                {
                     orderItemGv = (GenericValue)orderItemListItr.next();
                 }
                 totalPrice = orderReportProduct.getBigDecimal("quantityOrdered") * orderItemGv.getBigDecimal("unitPrice");
@@ -362,24 +392,29 @@ periodToTs= context.periodToTs
 //                orderList = delegator.findList("OrderHeaderItemAndRoles", eclOrder, null, null, null, false);
                 eli = delegator.findListIteratorByCondition(dve, eclOrder, null, fieldsToSelect, null, findOpts);
                 orderList = eli.getCompleteList();
-                if (eli != null) {
+                if (eli != null) 
+                {
                     try {
                         eli.close();
                     } catch (GenericEntityException e) {}
                 }
                 noOfOrders = orderList.size();
-                if ("Y".equals(product.getString("isVariant"))) {
+                if ("Y".equals(product.getString("isVariant"))) 
+                {
                     // look up the virtual product
                     GenericValue parent = ProductWorker.getParentProduct(productId, delegator);
-                    if (parent != null) {
+                    if (UtilValidate.isNotEmpty(parent))
+                    {
                         productId = parent.getString("productId");
                         productId = productId+"^"+deliveryOption;
                         workingReportProduct = allTopProductsMap.get(productId);
-                        if (workingReportProduct == null) {
+                        if (workingReportProduct == null) 
+                        {
                             workingReportProduct = GenericValue.create(orderReportProduct);
                             workingReportProduct.setString("productId", productId);
                             varientProductOrder = noOfOrders;
-                        } else {
+                        } else 
+                        {
                             sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                             sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                             varientProductOrder = noOfOrders + allTopProductsOrderMap.get(productId);
@@ -387,14 +422,17 @@ periodToTs= context.periodToTs
                         allTopProductsMap.put(productId, workingReportProduct);
                         allTopProductsOrderMap.put(productId, varientProductOrder);
                     }
-                } else {
+                } else 
+                {
                     productId = product.getString("productId")+"^"+deliveryOption;
                     workingReportProduct = allTopProductsMap.get(productId);
-                    if (workingReportProduct == null) {
+                    if (workingReportProduct == null) 
+                    {
                         workingReportProduct = GenericValue.create(orderReportProduct);
                         workingReportProduct.setString("productId", productId);
                         virtualProductOrder = noOfOrders;
-                    } else {
+                    } else 
+                    {
                         sumCol(workingReportProduct, orderReportProduct, "quantityOrdered");
                         sumCol(workingReportProduct, orderReportProduct, "unitPrice");
                         virtualProductOrder = noOfOrders + allTopProductsOrderMap.get(productId);
@@ -408,15 +446,17 @@ periodToTs= context.periodToTs
     topProductsList.addAll(allTopProductsMap.values());
     // for each product look up content wrapper
     Map topProductContentWrappers = null;
-    if (topProductsList)
+    if (UtilValidate.isNotEmpty(topProductsList))
     {
         topProductContentWrappers = FastMap.newInstance();
-        for (GenericValue topProduct: topProductsList) {
+        for (GenericValue topProduct: topProductsList) 
+        {
             productId = topProduct.productId;
-            if(productId.indexOf("^")!= -1) {
+            if(productId.indexOf("^")!= -1) 
+            {
                 productId = productId.substring(0,productId.indexOf("^"))
             }
-            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), true);
+            GenericValue product = delegator.findOne("Product", UtilMisc.toMap("productId", productId), false);
             ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
             topProductContentWrappers.put(productId, productContentWrapper);
         }

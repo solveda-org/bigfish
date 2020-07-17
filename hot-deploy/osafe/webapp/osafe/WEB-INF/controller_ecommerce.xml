@@ -13,19 +13,25 @@
     <!-- Events run from here for the first hit in a visit -->
     <firstvisit>
         <event name="autoLoginCheck" type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="autoLoginCheck"/>
+        <!-- LS 11/12/2012 - Commenting Out - not needed for Bigfish
         <event name="checkTrackingCodeCookies" type="java" path="org.ofbiz.marketing.tracking.TrackingCodeEvents" invoke="checkTrackingCodeCookies"/>
+        -->
         <event name="setDefaultStoreSettings" type="java" path="org.ofbiz.product.product.ProductEvents" invoke="setDefaultStoreSettings"/>
     </firstvisit>
 
     <!-- Events to run on every request before security (chains exempt) -->
     <preprocessor>
-        <!-- This event allows affilate/distributor entry on any page -->
+        <!-- LS 11/12/2012 - Commenting Out - not needed for Bigfish
+        This event allows affilate/distributor entry on any page
         <event name="checkExternalLoginKey" type="java" path="org.ofbiz.webapp.control.LoginWorker" invoke="checkExternalLoginKey"/>
+        -->
         <!-- LS 08/22/2012 - Commenting Out, not using Ofbiz OOTB affiliate,distributor code 
         <event name="setAssociationId" type="java" path="org.ofbiz.ecommerce.misc.ThirdPartyEvents" invoke="setAssociationId"/>
         -->
+        <!-- LS 11/12/2012 - Commenting Out - not needed for Bigfish, using checkoutConfirmCookies intead.
         <event name="checkTrackingCodeUrlParam" type="java" path="org.ofbiz.marketing.tracking.TrackingCodeEvents" invoke="checkTrackingCodeUrlParam"/>
         <event name="checkPartnerTrackingCodeUrlParam" type="java" path="org.ofbiz.marketing.tracking.TrackingCodeEvents" invoke="checkPartnerTrackingCodeUrlParam"/>
+        -->
         <event name="keepCartUpdated" type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="keepCartUpdated"/>
         <event name="checkoutConfirmCookies" type="java" path="com.osafe.events.TrackCookieEvents" invoke="checkoutConfirmCookies"/>
     </preprocessor>
@@ -38,7 +44,9 @@
     -->
 
     <after-login>
+        <!-- LS 11/12/2012 - Commenting Out - not needed for Bigfish
         <event name="updateAssociatedDistributor" type="java" path="org.ofbiz.ecommerce.misc.ThirdPartyEvents" invoke="updateAssociatedDistributor"/>
+        -->
         <event name="keepCartUpdated" type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="keepCartUpdated"/>
         <!-- after login, get everything from the auto-save list -->
         <event name="restoreAutoSaveList" type="java" path="com.osafe.events.ShoppingListEvents" invoke="restoreAutoSaveList"/>
@@ -86,7 +94,7 @@
         <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Validation/Login.xml" invoke="validateLogin"/>
         <response name="success" type="request" value="eCommerceLogin"/>
-        <response name="error" type="view-last"/>
+        <response name="error" type="view" value="eCommerceLogin"/>
     </request-map>
 
     <request-map uri="eCommerceLogin">
@@ -96,6 +104,15 @@
         <response name="requirePasswordChange" type="view" value="eCommerceRequirePasswordChange"/>
         <response name="error" type="view" value="eCommerceLogin"/>
     </request-map>
+    
+    <request-map uri="eCommerceLoginChangePassword">
+        <security https="true" auth="false"/>
+        <event type="java" path="org.ofbiz.securityext.login.LoginEvents" invoke="storeLogin"/>
+        <response name="success" type="view" value="MyAccount"/>
+        <response name="requirePasswordChange" type="view" value="eCommerceRequirePasswordChange"/>
+        <response name="error" type="view" value="eCommerceRequirePasswordChange"/>
+    </request-map>
+    
     <request-map uri="validateNewCustomerEmail">
         <security https="true" auth="false"/>
         <event type="simple" path="component://osafe/script/Validation/Login.xml" invoke="validateNewCustomerEmail"/>
@@ -427,10 +444,9 @@
     <request-map uri="resetPaymentMethod">
         <security https="false" auth="false"/>
         <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="resetPaymentMethod"/>
-        <response name="success" type="request-redirect" value="eCommerceShowcart"/>
+        <response name="success" type="request" value="eCommerceShowcart"/>
         <response name="error" type="view" value="eCommerceShowcart"/>
     </request-map>
-
 
     <request-map uri="deleteFromCart">
         <security https="false" auth="false"/>
@@ -442,10 +458,17 @@
     <request-map uri="additem">
         <security https="true" auth="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.ShoppingCartEvents" invoke="addToCart"/>
-        <response name="success" type="request" value="resetPaymentMethod"/>
+        <response name="success" type="request" value="setProductCategory"/>
         <response name="survey" type="view" value="survey"/>
         <response name="product" type="view" value="product"/>
         <response name="viewcart" type="request-redirect" value="eCommerceShowcart"/>
+        <response name="error" type="view" value="eCommerceShowcart"/>
+    </request-map>
+
+    <request-map uri="setProductCategory">
+        <security https="false" auth="false"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="setProductCategoryId"/>
+        <response name="success" type="request" value="resetPaymentMethod"/>
         <response name="error" type="view" value="eCommerceShowcart"/>
     </request-map>
 
@@ -534,7 +557,7 @@
 
     <request-map uri="anonSinglePageSetShippingOption">
         <security https="true" auth="false"/>
-        <event type="simple" path="component://ecommerce/script/org/ofbiz/ecommerce/customer/CustomerEvents.xml" invoke="setShippingOption"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setShippingOption"/>
         <response name="success" type="view" value="anonSinglePageOrderDetail"/>
         <response name="error" type="view" value="anonSinglePageOrderDetail"/>
     </request-map>
@@ -670,7 +693,7 @@
     <request-map uri="anonSinglePageCheckExternalPayment">
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="checkExternalPayment"/>
-        <response name="none" type="request" value="emailorder"/>
+        <response name="none" type="request" value="autoCapturePayments"/>
         <response name="offline" type="request" value="emailorder"/>
         <response name="worldpay" type="request" value="callWorldPay"/>
         <response name="paypal" type="request" value="callPayPal"/>
@@ -748,7 +771,7 @@
 
     <request-map uri="singlePageSetShippingOption">
         <security https="true" auth="false"/>
-        <event type="simple" path="component://ecommerce/script/org/ofbiz/ecommerce/customer/CustomerEvents.xml" invoke="setShippingOption"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setShippingOption"/>
         <response name="success" type="view" value="singlePageOrderDetail"/>
         <response name="error" type="view" value="singlePageOrderDetail"/>
     </request-map>
@@ -891,7 +914,7 @@
     <request-map uri="singlePageCheckExternalPayment">
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="checkExternalPayment"/>
-        <response name="none" type="request" value="emailorder"/>
+        <response name="none" type="request" value="autoCapturePayments"/>
         <response name="offline" type="request" value="emailorder"/>
         <response name="worldpay" type="request" value="callWorldPay"/>
         <response name="paypal" type="request" value="callPayPal"/>
@@ -941,7 +964,7 @@
     
     <request-map uri="anonMultiPageSetShippingOption">
         <security https="true" auth="false"/>
-        <event type="simple" path="component://ecommerce/script/org/ofbiz/ecommerce/customer/CustomerEvents.xml" invoke="setShippingOption"/>
+        <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="setShippingOption"/>
         <response name="success" type="request" value="anonMultiPageCalcTaxPrePmnt"/>
         <response name="error" type="request" value="anonMultiPageShippingOptions"/>
     </request-map>
@@ -1089,7 +1112,7 @@
     <request-map uri="anonMultiPageCheckExternalPayment">
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="checkExternalPayment"/>
-        <response name="none" type="request" value="emailorder"/>
+        <response name="none" type="request" value="autoCapturePayments"/>
         <response name="offline" type="request" value="emailorder"/>
         <response name="worldpay" type="request" value="callWorldPay"/>
         <response name="paypal" type="request" value="callPayPal"/>
@@ -1295,7 +1318,7 @@
     <request-map uri="multiPageCheckExternalPayment">
         <security https="true" direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="checkExternalPayment"/>
-        <response name="none" type="request" value="emailorder"/>
+        <response name="none" type="request" value="autoCapturePayments"/>
         <response name="offline" type="request" value="emailorder"/>
         <response name="worldpay" type="request" value="callWorldPay"/>
         <response name="paypal" type="request" value="callPayPal"/>
@@ -1552,6 +1575,10 @@
         <response name="success" type="none"/>
         <response name="error" type="view" value="storePickup"/>
     </request-map>
+    <request-map uri="eCommerceStoreDetail">
+        <security https="false" auth="false"/>
+        <response name="success" type="view" value="eCommerceStoreDetail"/>
+    </request-map>
 
     <!-- View Mappings -->
     <view-map name="main" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceHomePage"/>
@@ -1651,6 +1678,7 @@
     <!-- Store Location -->
     <view-map name="storeLocator" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceStoreLocator"/>
     <view-map name="storePickup" type="screen" page="component://osafe/widget/DialogScreens.xml#storePickupSearchResult"/>
+    <view-map name="eCommerceStoreDetail" type="screen" page="component://osafe/widget/EcommerceScreens.xml#eCommerceStoreDetail"/>
 
 
     <!-- Dialog Screens -->

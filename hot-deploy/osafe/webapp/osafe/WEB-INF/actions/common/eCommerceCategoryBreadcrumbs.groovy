@@ -21,7 +21,7 @@ request.setAttribute("curTopMostCategoryId", curTopMostCategoryId);
 
 CategoryWorker.setTrail(request, curCategoryId);
 topCategoryList = request.getAttribute("topLevelList");
-if (topCategoryList)
+if (UtilValidate.isNotEmpty(topCategoryList))
 {
     catContentWrappers = FastMap.newInstance();
     CategoryWorker.getCategoryContentWrappers(catContentWrappers, topCategoryList, request);
@@ -42,11 +42,15 @@ if (UtilValidate.isNotEmpty(filterGroup))
   for (int i = 0; i < filterGroupArr.size(); i++)
   {
         facetGroupName = filterGroupArr[i];
-        if(facetGroupName.indexOf("productCategoryId") > -1){
+        if(facetGroupName.indexOf("productCategoryId") > -1)
+        {
             context.productCategoryIdFacet = "Y";
-        } else if (facetGroupName.indexOf("topMostProductCategoryId") > -1 ){
+        } else if (facetGroupName.indexOf("topMostProductCategoryId") > -1 )
+        {
             context.topMostProductCategoryIdFacet = "Y";
-        }else{
+        }
+        else
+        {
             // Only replace "_" underscores for facetGroups that are not productCategoryId
             // This is because the productCategoryId facetGroup value needs to be looked up
             // the actual "Product Category" information and we do not want to change the productCategoryId value.

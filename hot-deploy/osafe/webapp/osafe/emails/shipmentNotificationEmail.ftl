@@ -33,7 +33,7 @@ under the License.
             <td>
               Code: ${orderShipmentInfoSummary.trackingCode?default("[Not Yet Known]")}
               <#if orderShipmentInfoSummary.carrierPartyId?has_content>
-	              <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", orderShipmentInfoSummary.carrierPartyId))?if_exists />
+	              <#assign carrier =  delegator.findByPrimaryKeyCache("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", orderShipmentInfoSummary.carrierPartyId))?if_exists />
 	              <#if carrier?has_content>(${uiLabelMap.ProductCarrier}: ${carrier.groupName?default(carrier.partyId)})</#if>
               </#if>
             </td>
@@ -54,7 +54,7 @@ under the License.
       <tr><td colspan="10"><hr /></td></tr>
       <#list shipmentItems as shipmentItem>
         <#assign productId = shipmentItem.productId>
-        <#assign product = shipmentItem.getRelatedOne("Product")>
+        <#assign product = shipmentItem.getRelatedOneCache("Product")>
         <tr>
           <td colspan="1" valign="top"> ${productId?if_exists} - ${product.internalName?if_exists}</td>
           <td align="right" valign="top"> ${shipmentItem.quantity?if_exists}</td>

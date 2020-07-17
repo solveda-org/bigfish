@@ -59,9 +59,13 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
         </div>
     </div>
 </#if>
+
 <div class="displayBox footerInfo">
-    <div class="boxBody">
-        ${sections.render('footerBoxBody')!}
+    <div>
+          ${sections.render('footerBoxBody')}
+    </div>
+    <div class="infoDetailIcon">
+      ${sections.render('commonDetailLinkButton')!}
     </div>
 </div>
 </form>

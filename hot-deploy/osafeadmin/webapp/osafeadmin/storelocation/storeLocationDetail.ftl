@@ -65,6 +65,13 @@
         <#assign storeNoticeTextData = ""/>
       </#if>
     </#if>
+    
+    <#if storeContentSpotContentId?has_content>
+      <#assign storeContentSpotData = Static["org.ofbiz.content.content.ContentWorker"].renderContentAsText(dispatcher, delegator, storeContentSpotContentId, Static["javolution.util.FastMap"].newInstance(), locale, "", true)/>
+      <#if storeContentSpotData?has_content && storeContentSpotData.equals("null")>
+        <#assign storeContentSpotData = ""/>
+      </#if>
+    </#if>
 
     <#if geoPoint?has_content>
       <#assign longitude = geoPoint.longitude!""/>
@@ -87,17 +94,14 @@
   <input type="hidden" name="partyId" value="${parameters.partyId!partyId!""}" />
   <input type="hidden" name="storeHoursDataResourceId" value="${parameters.storeHoursDataResourceId!storeHoursDataResourceId!""}" />
   <input type="hidden" name="storeNoticeDataResourceId" value="${parameters.storeNoticeDataResourceId!storeNoticeDataResourceId!""}" />
+  <input type="hidden" name="storeContentSpotDataResourceId" value="${parameters.storeContentSpotDataResourceId!storeContentSpotDataResourceId!""}" />
   <div class="infoRow row">
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>${uiLabelMap.StoreLocationCodeCaption}</label>
       </div>
       <div class="infoValue">
-        <#if mode?has_content && mode == "add">
-          <input class="medium" name="groupNameLocal" type="text" id="groupNameLocal" maxlength="100" value="${parameters.groupNameLocal?default("")}"/>
-        <#elseif mode?has_content && mode == "edit">
-          <input type="hidden" name="groupNameLocal" value="${parameters.groupNameLocal!groupNameLocal!""}" />${groupNameLocal!""}
-        </#if>
+        <input class="medium" type="text" name="groupNameLocal" maxlength="100" id="groupNameLocal" value="${parameters.groupNameLocal!groupNameLocal!""}" />
       </div>
     </div>
   </div>
@@ -223,9 +227,9 @@
         <label>${uiLabelMap.PhoneCaption}</label>
       </div>
       <div class="infoValue USA CAN">
-        <input class="small" type="text" maxlength="3" name="areaCode" value="${parameters.areaCode!areaCode!""}"/>&nbsp;&nbsp;&nbsp;
-        <input class="small" type="text" maxlength="3" name="contactNumber3" value="${parameters.contactNumber3!contactNumber3!""}"/>&nbsp;&nbsp;
-        <input class="small" type="text" maxlength="4" name="contactNumber4" value="${parameters.contactNumber4!contactNumber4!""}"/>
+        <input class="phone3" type="text" maxlength="3" name="areaCode" value="${parameters.areaCode!areaCode!""}"/>
+        <input class="phone3" type="text" maxlength="3" name="contactNumber3" value="${parameters.contactNumber3!contactNumber3!""}"/>
+        <input class="phone4" type="text" maxlength="4" name="contactNumber4" value="${parameters.contactNumber4!contactNumber4!""}"/>
       </div>
       <div class="infoValue OTHER">
         <input class="medium" type="text" maxlength="15" name="contactNumberOther" value="${parameters.contactNumberOther!contactNumber!""}"/>
@@ -251,6 +255,17 @@
       </div>
       <div class="infoValue">
         <textarea class="shortArea" name="storeNoticeTextData" cols="50">${parameters.storeNoticeTextData!storeNoticeTextData!""}</textarea>
+      </div>
+    </div>
+  </div>
+  
+  <div class="infoRow row">
+    <div class="infoEntry long">
+      <div class="infoCaption">
+        <label>${uiLabelMap.StoreContentSpotCaption}</label>
+      </div>
+      <div class="infoValue">
+        <textarea class="" name="storeContentSpotData" cols="50" rows="5">${parameters.storeContentSpotData!storeContentSpotData!""}</textarea>
       </div>
     </div>
   </div>

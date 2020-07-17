@@ -54,7 +54,7 @@ public class CheckOutEvents {
              * A bit of a hack here to get the admin user since to capture payments and complete the order requires a user who has
              * the proper security permissions
              */
-            GenericValue sysLogin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
+            GenericValue sysLogin = delegator.findByPrimaryKeyCache("UserLogin", UtilMisc.toMap("userLoginId", "admin"));
             List lOrderPaymentPreference = delegator.findByAnd("OrderPaymentPreference", UtilMisc.toMap("orderId", orderId, "statusId", "PAYMENT_AUTHORIZED"));
             if (UtilValidate.isNotEmpty(lOrderPaymentPreference)) {
                 /*

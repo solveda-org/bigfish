@@ -38,7 +38,7 @@
                         break;
                 }
              }
-            <#if COUNTRY_MULTI?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI)>
+            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"COUNTRY_MULTI")>
                 jQuery("#${fieldPurpose!}_COUNTRY > option").each(function() {
                     if (this.value == countryCode) {
                        jQuery(this).attr('selected', 'selected');

@@ -307,23 +307,6 @@
         </section>
     </screen>
     
-    <screen name="eCommerceProductCustomerRatings">
-        <section>
-            <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductCustomerRatings.groovy" />
-            </actions>
-            <widgets>
-                <container id="eCommerceProductCustomerRatingContainer">
-                    <platform-specific>
-                        <html>
-                            <html-template location="component://osafe/webapp/osafe/common/eCommerceProductCustomerRatings.ftl" />
-                        </html>
-                    </platform-specific>
-                </container>
-            </widgets>
-        </section>
-    </screen>
-  
     <screen name="eCommerceProductReviewSubmitLogged">
         <section>
             <actions>
@@ -348,9 +331,9 @@
                                     <platform-specific>
                                         <html>
                                             <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
-                                            <html-template-decorator-section name="entryFormJS">
-                                                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" /></html></platform-specific>
-                                            </html-template-decorator-section>
+	                                            <html-template-decorator-section name="entryFormJS">
+	                                                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" /></html></platform-specific>
+	                                            </html-template-decorator-section>
                                                 <html-template-decorator-section name="entryForm">
                                                     <include-screen name="productReviewSubmitForm" location="component://osafe/widget/EntryScreens.xml" />
                                                 </html-template-decorator-section>
@@ -390,6 +373,9 @@
                                     <platform-specific>
                                         <html>
                                             <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
+                                                <html-template-decorator-section name="entryFormJS">
+                                                    <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl" /></html></platform-specific>
+                                                </html-template-decorator-section>
                                                 <html-template-decorator-section name="entryForm">
                                                     <include-screen name="productReviewSubmitForm" location="component://osafe/widget/EntryScreens.xml" />
                                                 </html-template-decorator-section>
@@ -572,7 +558,6 @@
                 <set field="fieldLevelErrors" value="Y" />
                 <set field="shippingAttnName" value="${uiLabelMap.ShippingAddressDefaultNickNameLabel}" />
                 <set field="isSameAsBilling" value="Y" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/NewCustomer.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                 <set field="formAction" value="eCommerceCreateNewCustomer" />
                 <set field="formName" value="newuserform" />
@@ -840,7 +825,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ShippingAddressTitle}" />
                 <set field="title" from-field="pageTitle" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditContactMech.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/EditContactMech.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceEditContactMech.groovy" />
                 <set field="fieldLevelErrors" value="Y" />
                 <set field="prevButtonVisible" value="N" />
@@ -878,7 +863,6 @@
                 <set field="pageTitle" value="${uiLabelMap.OrderHistoryTitle}" />
                 <set field="title" from-field="pageTitle" />
 
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/OrderHistory.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderHistory.groovy" />
             </actions>
             <widgets>
@@ -912,7 +896,7 @@
             <actions>
                 <set field="formAction" from-field="formAction" default-value="validateCheckoutAddress" />
                 <set field="formName" value="shippingaddressform" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditContactMech.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/EditContactMech.groovy" />
             </actions>
             <widgets>
                 <platform-specific>
@@ -943,7 +927,7 @@
                 <set field="formAction" value="validateAddressBook" />
                 <set field="formName" value="shippingaddressform" />
                 <set field="fieldPurpose" value="CUSTOMER" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditContactMech.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/EditContactMech.groovy" />
             </actions>
             <widgets>
                 <platform-specific>
@@ -984,7 +968,6 @@
                 <set field="pageTitle" value="${uiLabelMap.OrderStatusTitle}" />
                 <set field="title" from-field="pageTitle" />
 
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/OrderStatus.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderStatus.groovy" />
 
                 <set field="useAvailability" value="N" />
@@ -1249,24 +1232,24 @@
             <widgets>
                 <section>
                     <widgets>
-                            <iterate-section entry="content" list="spotsList" view-size="999">
+                     <container style="eCommerceHomeSpots">
+                            <iterate-section entry="xContentXref" list="spotsList" view-size="999">
                                 <section>
                                     <widgets>
-                                        <container style="eCommerceHomeSpots">
                                             <section>
-                                                <condition>
-                                                    <if-compare field="content.statusId" operator="equals" value="CTNT_PUBLISHED" />
-                                                </condition>
+                                                <actions>
+									                <set field="id" value="${xContentXref.bfContentId}"/>
+									                <set field="contentContainerId" value="eCommerceHomeSpot_${itemIndex+1}"/>
+									                <set field="contentContainerStyle" value="eCommerceHotSpot"/>
+                                                </actions>
                                                 <widgets>
-                                                    <container id="eCommerceHomeSpot_${itemIndex+1}" style="eCommerceHotSpot">
-                                                        <content content-id="${content.contentId}" />
-                                                    </container>
+                                                   <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                                 </widgets>
                                             </section>
-                                        </container>
                                     </widgets>
                                 </section>
                             </iterate-section>
+                     </container>
                     </widgets>
                 </section>
             </widgets>
@@ -1473,6 +1456,11 @@
                         <section>
                             <widgets>
                                 <container id="eCommerceStoreLocatorContainer">
+	                                <platform-specific>
+	                                    <html>
+                                			<html-template location="component://osafe/webapp/osafe/common/entry/js/eCommerceStoreLocatorJS.ftl"/>
+                                    	</html>
+                                    </platform-specific>
                                     <include-screen name="PTS_STORE_LOCATOR" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                     <platform-specific>
                                         <html>
@@ -1526,6 +1514,43 @@
         </section>
     </screen>
 
+    <screen name="eCommerceStoreDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.StoreDetailTitle}" />
+                <set field="title" from-field="pageTitle" />
+		        <set field="dataSourceId" value="GEOPT_GOOGLE" />
+                <set field="mapWidthParam" value="GMAP_MAP_IMG_W" />
+                <set field="mapHeightParam" value="GMAP_MAP_IMG_H" />
+                <set field="displayInitialStores" value="N" />
+                <set field="storeDetail" value="Y" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceStoreLocator.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceStoreDetailContainer">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceLookupStoreDetail.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                    <include-screen name="commonGeoLocationChart" location="component://osafe/widget/CommonScreens.xml"/>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="storeDetail">
         <section>
             <actions>
@@ -1540,4 +1565,6 @@
             </widgets>
         </section>
     </screen>
+
+
 </screens>

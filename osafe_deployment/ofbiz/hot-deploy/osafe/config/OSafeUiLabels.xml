@@ -186,6 +186,16 @@
         <category>STORE_LOCATOR</category>
         <description>StoreLocatorDistanceCaption</description>
     </property>
+    <property key="StoreNameCaption">
+        <value xml:lang="en">Store Name:</value>
+        <category>STORE_LOCATOR</category>
+        <description>StoreNameCaption</description>
+    </property>
+    <property key="StoreNoticesCaption">
+        <value xml:lang="en">Notices:</value>
+        <category>STORE_LOCATOR</category>
+        <description>StoreNoticesCaption</description>
+    </property>
     <!-- *** My Account / Registration Caption *************************************** -->
     <property key="AddressNickNameCaption">
         <value xml:lang="en">Address Nickname:</value>
@@ -1315,6 +1325,21 @@
         <value xml:lang="en">Abandon Cart Notification</value>
         <category>PAGE_HEADING_H1</category>
         <description>AbandonCartEmailTitle</description>
+    </property>
+    <property key="PageTitleOrderConfirmationNotice">
+        <value xml:lang="en">Order Confirmation Notification</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>PageTitleOrderConfirmationNotice</description>
+    </property>
+    <property key="PageTitleOrderChangeNotice">
+        <value xml:lang="en">Order Change Notification</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>PageTitleOrderChangeNotice</description>
+    </property>
+    <property key="PageTitleOrderCompleteNotice">
+        <value xml:lang="en">Order Complete Notification</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>PageTitleOrderCompleteNotice</description>
     </property>
     <property key="ShipReviewEmailTitle">
         <value xml:lang="en">Product Review Notification</value>
@@ -2475,6 +2500,11 @@
         <value xml:lang="en">Sales Tax</value>
         <category>ORDER_STATUS</category>
         <description>SalesTaxLabel</description>
+    </property>
+    <property key="StatusLabel">
+        <value xml:lang="en">Status</value>
+        <category>ORDER_STATUS</category>
+        <description>StatusLabel</description>
     </property>
     <!-- Product review Error messages -->
     <property key="OverallRatingMissingError">

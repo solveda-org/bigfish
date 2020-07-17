@@ -123,8 +123,22 @@
   <#if product.salesDiscontinuationDate?has_content>
     <#assign salesDiscontinuationDate = (product.salesDiscontinuationDate)?string(preferredDateFormat)>
   </#if>
+  <#if passedVariantProductIds?has_content || parameters.variantProductIds?has_content>
+      <#assign isVariant = "Y" />
+      <#assign isVirtual = "N" />
+  </#if>
 </#if>
-      
+
+      <#if passedVariantProductIds?has_content>
+          <#assign variantProductIds = ""/>
+          <#list passedVariantProductIds as variantProductId>
+               <#assign variantProductIds = variantProductIds+variantProductId/>
+               <#if variantProductId_has_next?if_exists>
+                   <#assign variantProductIds = variantProductIds+"|"/>
+               </#if>
+          </#list>
+      </#if>
+      <input type="hidden" name="variantProductIds" value="${parameters.variantProductIds!variantProductIds!""}" />
       <input type="hidden" name="productTypeId" value="FINISHED_GOOD" />
       <#assign currencyUomId = CURRENCY_UOM_DEFAULT!currencyUomId />
       <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId!currencyUomId!}" />
@@ -141,7 +155,9 @@
               <#list topLevelList as category>
                 <#if catContentWrappers?exists>
                   <option value="${category.productCategoryId?if_exists}" <#if (parameters.productCategoryId!"") == "${category.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}</option>
-                  <#assign subCatList = Static["org.ofbiz.product.category.CategoryWorker"].getRelatedCategoriesRet(request, "subCatList", category.getString("productCategoryId"), true)>
+				  <#if subCatRollUpMap?has_content>
+				    <#assign subCatList = subCatRollUpMap.get(category.productCategoryId)!/>
+				  </#if> 
                   <#if subCatList?exists && subCatList?has_content>
                     <#list subCatList as subCategory>
                       <option value="${subCategory.productCategoryId?if_exists}" <#if (parameters.productCategoryId!"") == "${subCategory.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;${catContentWrappers[subCategory.productCategoryId].get("CATEGORY_NAME")?if_exists}</option>
@@ -155,8 +171,8 @@
           </div>
         </div>
       <#elseif mode?has_content && mode == "edit">
-        <#if productCategory?exists>
-            <#assign primaryProdCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", productCategory.primaryParentCategoryId?if_exists), true)/>
+        <#if productCategory?exists && isVirtual?exists && isVirtual == 'Y'>
+            <#assign primaryProdCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", productCategory.primaryParentCategoryId?if_exists), false)/>
             <#if primaryProdCategory?exists>
               <div class="infoRow column">
                 <div class="infoEntry">
@@ -166,9 +182,6 @@
                   <div class="infoValue">
                     ${primaryProdCategory.categoryName!""}
                     <input type="hidden" name="primaryParentCategoryId" id="primaryParentCategoryId" value="${primaryProdCategory.productCategoryId!""}"/>
-                  </div>
-                  <div>
-                    <input type="button" class="standardBtn secondary" name="moveButton" id="moveButton" value="${uiLabelMap.MoveBtn}" onClick="javascript:void(0);"/>
                   </div>
                 </div>
               </div>
@@ -182,8 +195,8 @@
                   ${productCategory.categoryName!""}
                   <input type="hidden" name="productCategoryId" id="productCategoryId" value="${productCategory.productCategoryId!""}"/>
                 </div>
-                <div>
-                  <input type="button" class="standardBtn secondary" name="moveButton" id="moveButton" value="${uiLabelMap.MoveBtn}" onClick="javascript:void(0);"/>
+                <div class="infoIcon">
+                  <a href="<@ofbizUrl>productCategoryMembershipDetail?productId=${parameters.productId!product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductcategoryMembershipTooltip}');" onMouseout="hideTooltip()"><span class="membershipIcon"></span></a>
                 </div>
               </div>
             </div>
@@ -201,7 +214,7 @@
                     </#if>
                     <input type="hidden" name="productId" id="productId" maxlength="20" value="${parameters.productId!productSeqId!""}"/>${parameters.productId!productSeqId!""}
                   <#elseif mode?has_content && mode == "edit">
-                    <input type="hidden" name="productId" value="${parameters.productId!product.productId?if_exists}" />${parameters.productId!product.productId?if_exists}
+                    <input type="hidden" name="productId" id="productId" value="${parameters.productId!product.productId?if_exists}" />${parameters.productId!product.productId?if_exists}
                   </#if>
               </div>
           </div>
@@ -216,16 +229,16 @@
                </div>
            </div>
        </div>
-       <div class="infoRow column">
+       <div class="infoRow <#if (mode?has_content && mode == "add")>row<#else>column</#if>">
            <div class="infoEntry">
                <div class="infoCaption">
                    <label>${uiLabelMap.VirtualCaption}</label>
                </div>
                <div class="infoValue">
                  <#if (mode?has_content && mode == "add")>
-                   <div class="entry checkbox short">
-                     <input class="checkBoxEntry" type="radio" name="isVirtual"  value="Y" <#if parameters.isVirtual?exists && parameters.isVirtual?string == "Y">checked="checked"<#elseif !parameters.isVirtual?exists>checked="checked"</#if>/>${uiLabelMap.YesLabel}
-                     <input class="checkBoxEntry" type="radio" name="isVirtual" value="N" <#if  parameters.isVirtual?exists && parameters.isVirtual?string == "N">checked="checked"</#if>/>${uiLabelMap.NoLabel}
+                   <div class="entry checkbox medium">
+                     <input class="checkBoxEntry" type="radio" name="isVirtual"  value="Y" <#if parameters.isVirtual?exists && parameters.isVirtual?string == "Y">checked="checked"<#elseif !parameters.isVirtual?exists>checked="checked"</#if>/>${uiLabelMap.VirtualYesLabel}
+                     <input class="checkBoxEntry" type="radio" name="isVirtual" value="N" <#if  parameters.isVirtual?exists && parameters.isVirtual?string == "N">checked="checked"</#if>/>${uiLabelMap.VirtualNoLabel}
                    </div>
                  <#elseif mode?has_content && mode == "edit">
                    ${isVirtual!""}
@@ -233,19 +246,20 @@
                </div>
            </div>
        </div>
-       <#if (mode?has_content && mode == "edit")>
          <div class="infoRow column">
            <div class="infoEntry">
                <div class="infoCaption">
                    <label>${uiLabelMap.VariantCaption}</label>
                </div>
                <div class="infoValue">
-                   ${product.isVariant!""}
-                   <input type="hidden" name="isVariant" id="isVariant" value="${product.isVariant!""}"/>
+                   <#if (mode?has_content && mode == "add")>N
+                   <#elseif (mode?has_content && mode == "edit")>
+                       ${isVariant!""}
+                       <input type="hidden" name="isVariant" id="isVariant" value="${isVariant!""}"/>
+                   </#if>
                </div>
            </div>
          </div>
-       </#if>
        
        <div class="infoRow row">
            <div class="infoEntry long">
@@ -254,7 +268,8 @@
                </div>
                <div class="infoValue">
                <#if isVariant?exists && isVariant == 'Y'>
-                 ${parameters.productDetailName!productDetailName!""}
+               		<#assign productVariantName = Static["org.apache.commons.lang.StringEscapeUtils"].unescapeHtml(productDetailName) >
+                 	${productVariantName!""}
                <#else>
                  <textarea class="shortArea" name="productDetailName" id="productDetailName" cols="50" rows="1">${parameters.productDetailName!productDetailName!""}</textarea>
                </#if>
@@ -296,11 +311,7 @@
                    <label>${uiLabelMap.PDPLongDescriptionHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.longDescription!longDescription!""}
-                 <#else>
                    <textarea name="longDescription" cols="50" rows="5">${parameters.longDescription!longDescription!""}</textarea>
-                 </#if>
                </div>
            </div>
        </div>
@@ -311,11 +322,7 @@
                    <label>${uiLabelMap.PDPSalesPitchHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.shortSalesPitch!shortSalesPitch!""}
-                 <#else>
                    <textarea class="shortArea" name="shortSalesPitch" id="shortSalesPitch" cols="50" rows="1">${parameters.shortSalesPitch!shortSalesPitch!""}</textarea>
-                 </#if>
                </div>
            </div>
        </div>
@@ -326,11 +333,7 @@
                    <label>${uiLabelMap.PDPSpecialInstructionsHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.specialInstruction!specialInstruction!""}
-                 <#else>
                    <textarea class="shortArea" name="specialInstruction" cols="50" rows="5">${parameters.specialInstruction!specialInstruction!""}</textarea>
-                 </#if>
                </div>
            </div>
        </div>
@@ -340,11 +343,7 @@
                    <label>${uiLabelMap.PDPDeliveryInfoHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.deliveryInfo!deliveryInfo!""}
-                 <#else>
                    <textarea class="shortArea" name="deliveryInfo" cols="50" rows="5">${parameters.deliveryInfo!deliveryInfo!""}</textarea>
-                 </#if>
                </div>
            </div>
        </div>
@@ -354,11 +353,7 @@
                    <label>${uiLabelMap.PDPDirectionsHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.directions!directions!""}
-                 <#else>
                    <textarea class="shortArea" name="directions" cols="50" rows="5">${parameters.directions!directions!""}</textarea>
-                 </#if>
                </div>
            </div>
        </div>
@@ -368,12 +363,7 @@
                    <label>${uiLabelMap.PDPTermsConditionsHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.termsAndConds!termsAndConds!""}
-                 <#else>
                    <textarea class="shortArea" name="termsAndConds" cols="50" rows="5">${parameters.termsAndConds!termsAndConds!""}</textarea>
-                 </#if>
-                   
                </div>
            </div>
        </div>
@@ -383,11 +373,7 @@
                    <label>${uiLabelMap.PDPIngredientsHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.ingredients!ingredients!""}
-                 <#else>
                    <textarea class="shortArea" name="ingredients" cols="50" rows="5">${parameters.ingredients!ingredients!""}</textarea>
-                 </#if>
                </div>
            </div>
        </div>
@@ -397,55 +383,41 @@
                    <label>${uiLabelMap.PDPWarningsHeading}</label>
                </div>
                <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   ${parameters.warnings!warnings!""}
-                 <#else>
                    <textarea class="shortArea" name="warnings" cols="50" rows="5">${parameters.warnings!warnings!""}</textarea>
-                 </#if>
                </div>
            </div>
        </div>
-       <div class="infoRow column">
-           <div class="infoEntry">
-               <div class="infoCaption">
-                   <label>${uiLabelMap.ListPriceCaption}</label>
-               </div>
-               <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   <#if productListPrice?has_content>
-                     <@ofbizCurrency amount=productListPrice.price! isoCode=productListPrice.currencyUomId!/>
-                   </#if>
-                 <#else>
-                   <#if (mode?has_content && mode == "add")>
-                     <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="${parameters.listPrice!listPrice!}"/>
-                   <#elseif mode?has_content && mode == "edit">
-                     <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="<#if parameters.listPrice?has_content || listPrice?has_content>${parameters.listPrice!listPrice?string("0.00")!}</#if>"/>
-                   </#if>
-                 </#if>
+       <#if (isVariant?exists && isVariant == 'N') || (mode?has_content && mode == "add")>
+           <div class="infoRow column">
+               <div class="infoEntry">
+                   <div class="infoCaption">
+                       <label>${uiLabelMap.ListPriceCaption}</label>
+                   </div>
+                   <div class="infoValue">
+                       <#if (mode?has_content && mode == "add")>
+                         <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="${parameters.listPrice!listPrice!}"/>
+                       <#elseif mode?has_content && mode == "edit">
+                         <input type="text" class="textEntry textAlignRight" name="listPrice" id="listPrice" value="<#if parameters.listPrice?has_content || listPrice?has_content>${parameters.listPrice!listPrice?string("0.00")!}</#if>"/>
+                       </#if>
+                   </div>
                </div>
            </div>
-       </div>
-       <div class="infoRow column">
-           <div class="infoEntry">
-               <div class="infoCaption">
-                   <label>${uiLabelMap.SalePriceCaption}</label>
-               </div>
-               <div class="infoValue">
-                 <#if isVariant?exists && isVariant == 'Y'>
-                   <#if productDefaultPrice?has_content>
-                     <@ofbizCurrency amount=productDefaultPrice.price! isoCode=productDefaultPrice.currencyUomId!/>
-                   </#if>
-                 <#else>
-                   <#if (mode?has_content && mode == "add")>
-                     <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="${parameters.defaultPrice!defaultPrice!}"/>
-                   <#elseif mode?has_content && mode == "edit">
-                     <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="<#if parameters.defaultPrice?has_content || defaultPrice?has_content>${parameters.defaultPrice!defaultPrice?string("0.00")!}</#if>"/>
-                     <#if productPriceCondList?has_content><span class="pricingInfo">${uiLabelMap.PricingRulesApplyInfo}</span></#if>
-                   </#if>
-                 </#if>
-               </div>
+           <div class="infoRow column">
+               <div class="infoEntry">
+                   <div class="infoCaption">
+                       <label>${uiLabelMap.SalePriceCaption}</label>
+                   </div>
+                   <div class="infoValue">
+                       <#if (mode?has_content && mode == "add")>
+                         <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="${parameters.defaultPrice!defaultPrice!}"/>
+                       <#elseif mode?has_content && mode == "edit">
+                         <input type="text"  class="textEntry textAlignRight" name="defaultPrice" id="defaultPrice" value="<#if parameters.defaultPrice?has_content || defaultPrice?has_content>${parameters.defaultPrice!defaultPrice?string("0.00")!}</#if>"/>
+                         <#if productPriceCondList?has_content><span class="pricingInfo">${uiLabelMap.PricingRulesApplyInfo}</span></#if>
+                       </#if>
+                   </div>
+                </div>
             </div>
-        </div>
+        </#if>
         
         <#if (isVariant?exists && isVariant == 'Y') && (mode?has_content && mode == "edit")>
           <div class="infoRow column">
@@ -456,9 +428,10 @@
               <div class="infoValue">
                 <input type="text" class="textEntry textAlignRight" name="variantListPrice" id="variantListPrice" value="<#if parameters.variantListPrice?has_content || variantListPrice?has_content>${parameters.variantListPrice!variantListPrice?string("0.00")!}</#if>"/>
               </div>
-   	          <div class="infoIcon">
-               <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VariantListPriceInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-		      </div>
+              <div class="infoIcon">
+                  <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "VariantListPriceInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${globalContext.currencySymbol!}${productListPrice.price!}"), locale)/>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+              </div>
             </div>
           </div>
           
@@ -470,10 +443,12 @@
               <div class="infoValue">
                 <input type="text"  class="textEntry textAlignRight" name="variantSalePrice" id="variantSalePrice" value="<#if parameters.variantSalePrice?has_content || variantSalePrice?has_content>${parameters.variantSalePrice!variantSalePrice?string("0.00")!}</#if>"/>
               </div>
-	  	      <div class="infoIcon">
-	              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VariantSalePriceInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-			  </div>
+              <div class="infoIcon">
+                  <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "VariantSalePriceInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${globalContext.currencySymbol!}${productDefaultPrice.price!}"), locale)/>
+                  <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+              </div>
             </div>
+            <#if productPriceCondList?has_content><span class="pricingInfo">${uiLabelMap.PricingRulesApplyInfo}</span></#if>
           </div>
         </#if>
         
@@ -502,12 +477,12 @@
              </div>
         </div>
         <#if product?exists>
-          <#assign bfTotalInventoryProductAttribute = delegator.findOne("ProductAttribute", {"productId" : product.productId, "attrName" : "BF_INVENTORY_TOT"}, true)?if_exists/> 
+          <#assign bfTotalInventoryProductAttribute = delegator.findOne("ProductAttribute", {"productId" : product.productId, "attrName" : "BF_INVENTORY_TOT"}, false)?if_exists/> 
           <#if bfTotalInventoryProductAttribute?exists>
             <#assign bfTotalInventory = bfTotalInventoryProductAttribute.attrValue!>
           </#if>
           
-          <#assign bfWHInventoryProductAttribute = delegator.findOne("ProductAttribute", {"productId" : product.productId, "attrName" : "BF_INVENTORY_WHS"}, true)?if_exists/> 
+          <#assign bfWHInventoryProductAttribute = delegator.findOne("ProductAttribute", {"productId" : product.productId, "attrName" : "BF_INVENTORY_WHS"}, false)?if_exists/> 
           <#if bfWHInventoryProductAttribute?exists>
             <#assign bfWHInventory = bfWHInventoryProductAttribute.attrValue!>
           </#if>
@@ -533,4 +508,5 @@
                </div>
            </div>
        </div>
+<#include "component://osafeadmin/webapp/osafeadmin/product/productCategoryFetureDetail.ftl"/>
 <#include "component://osafeadmin/webapp/osafeadmin/product/productIdentificationDetail.ftl"/>

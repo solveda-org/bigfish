@@ -5,5 +5,4 @@
         <div class="paymentMethodImg paypal"></div>
         <p class="instructions">${uiLabelMap.PayPalValidatedInfo}</p>
     </div>
- </div>
 </div>

@@ -96,7 +96,7 @@ public class SolrEvents {
             Map<String, String> facetGroupFacetSorts = FastMap.newInstance();
 
             //Build product Store Parms
-            List<GenericValue> productStoreParms = delegator.findByAnd("XProductStoreParm",UtilMisc.toMap("productStoreId",productStoreId));
+            List<GenericValue> productStoreParms = delegator.findByAndCache("XProductStoreParm",UtilMisc.toMap("productStoreId",productStoreId));
             if (UtilValidate.isNotEmpty(productStoreParms))
             {
                 for (int i=0;i < productStoreParms.size();i++)

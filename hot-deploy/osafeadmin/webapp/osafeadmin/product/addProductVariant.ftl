@@ -3,7 +3,7 @@
     <#assign currencyUomId = CURRENCY_UOM_DEFAULT!currencyUomId />
     <input type="hidden" name="currencyUomId" value="${parameters.currencyUomId!currencyUomId!}" />
     <#if productCategory?exists>
-        <#assign primaryProdCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", productCategory.primaryParentCategoryId?if_exists), true)/>
+        <#assign primaryProdCategory = delegator.findOne("ProductCategory", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", productCategory.primaryParentCategoryId?if_exists), false)/>
         <#if primaryProdCategory?exists>
             <div class="infoRow column">
                 <div class="infoEntry">
@@ -80,9 +80,37 @@
                 <#if productDefaultPrice?has_content>
                     <@ofbizCurrency amount=productDefaultPrice.price! isoCode=productDefaultPrice.currencyUomId!/>
                 </#if>
+                <#if productPriceCondList?has_content><span class="pricingInfo">${uiLabelMap.PricingRulesApplyInfo}</span></#if>
             </div>
          </div>
      </div>
+
+    <#if productDistinguishingFeatureTypes?has_content>
+        <#list productDistinguishingFeatureTypes as productFeatureGroupView>
+            <#assign productFeatureGroup = delegator.findByPrimaryKey("ProductFeatureGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureGroupId" , productFeatureGroupView.productFeatureGroupId))>
+            <div class="infoRow column">
+                <div class="infoEntry">
+                    <div class="infoCaption">
+                      <label>${productFeatureGroup.description!productFeatureGroup.productFeatureGroupId!}:</label>
+                    </div>
+                    <div class="infoValue">
+                        <#assign productFeatureGroupAndAppls = delegator.findByAnd("ProdFeaGrpAppAndProdFeaApp", {"productId" : parameters.productId!"", "productFeatureGroupId" : productFeatureGroupView.productFeatureGroupId!""})>
+                        <#if productFeatureGroupAndAppls?has_content>
+                            <#assign productFeatureGroupAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productFeatureGroupAndAppls) />
+                            <#assign productFeatureApplType = productFeatureGroupAndAppl.productFeatureApplTypeId! />
+                            <#assign productFeatureId = productFeatureGroupAndAppl.productFeatureId! />
+                            <#assign productFeature = delegator.findByPrimaryKey("ProductFeature", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId" , productFeatureId!))>
+                            ${productFeature.description!productFeature.productFeatureId!}
+                        </#if>
+                    </div>
+                </div>
+             </div>
+        </#list>
+    </#if>
+
+    <div class="infoRow row">
+        <div class="header"><h2>${uiLabelMap.ProductVariantAttributesHeading}</h2></div>
+    </div>
 
     <div class="infoRow column">
         <div class="infoEntry">
@@ -93,7 +121,8 @@
                 <input type="text" class="textEntry textAlignRight" name="variantListPrice" id="variantListPrice" value="${parameters.variantListPrice!""}"/>
             </div>
             <div class="infoIcon">
-                <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VariantListPriceInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "VariantListPriceInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${globalContext.currencySymbol!}${productListPrice.price!}"), locale)/>
+                <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
             </div>
         </div>
     </div>
@@ -107,7 +136,8 @@
                 <input type="text"  class="textEntry textAlignRight" name="variantSalePrice" id="variantSalePrice" value="${parameters.variantSalePrice!""}"/>
             </div>
             <div class="infoIcon">
-                <a href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VariantSalePriceInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "VariantSalePriceInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${globalContext.currencySymbol!}${productDefaultPrice.price!}"), locale)/>
+                <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
             </div>
         </div>
     </div>
@@ -166,31 +196,73 @@
         </div>
     </div>
 
-    <#list productFeatureTypes as productFeatureType>
-        <#assign productFeatureAndApplList = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" , product.productId, "productFeatureTypeId", productFeatureType.productFeatureTypeId), Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum"))/>
-        <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndApplList!)/>
-        <#if productFeatureAndAppls?has_content>
-            <div class="infoRow column">
-                <div class="infoEntry">
-                    <div class="infoCaption">
-                      <label>${productFeatureType.description!productFeatureType.productFeatureTypeId!}:</label>
+
+    <div class="infoRow row">
+        <div class="header"><h2>${uiLabelMap.ProductSelectableFeaturesHeading}</h2></div>
+    </div>
+
+    <#if productSelectableFeatureTypes?has_content>
+        <#list productSelectableFeatureTypes as productFeatureGroupView>
+            <#assign productFeatureGroupApplList = delegator.findByAnd("ProductFeatureGroupAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureGroupId" , productFeatureGroupView.productFeatureGroupId), Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum"))/>
+            <#assign productFeatureGroupAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureGroupApplList!)/>
+            <#if productFeatureGroupAppls?has_content>
+                <#assign productFeatureGroup = delegator.findByPrimaryKey("ProductFeatureGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureGroupId" , productFeatureGroupView.productFeatureGroupId))>
+                <div class="infoRow column">
+                    <div class="infoEntry">
+                        <div class="infoCaption">
+                          <label>${productFeatureGroup.description!productFeatureGroup.productFeatureGroupId!}:</label>
+                        </div>
+                        <div class="infoValue">
+                            <select id="selectableProductFeature_${productFeatureGroup.productFeatureGroupId!}" name="selectableProductFeature_${productFeatureGroup.productFeatureGroupId!}" class="short">
+                                <option value="">Select</option>
+                                <#assign selectedFeture = parameters.get("selectableProductFeature_${productFeatureGroup.productFeatureGroupId}")?if_exists>
+                                <#list productFeatureGroupAppls as productFeatureGroupAppl>
+                                    <#assign productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature")/>
+                                    <#assign productFeatureName = productFeature.description?trim/>
+                                    <#assign optionValue = "${productFeature.productFeatureId!}@SELECTABLE_FEATURE">
+                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>><#if productFeatureName?has_content>${productFeatureName?if_exists}<#else>${productFeature.productFeatureId?if_exists}</#if></option>
+                                 </#list>
+                            </select>
+                        </div>
                     </div>
-                    <div class="infoValue">
-                        <select id="productFeature_${productFeatureType.productFeatureTypeId!}" name="productFeature_${productFeatureType.productFeatureTypeId!}" class="short">
-                            <option value="">Select</option>
-                            <#assign selectedFeture = parameters.get("productFeature_${productFeatureType.productFeatureTypeId}")?if_exists>
-                            <#assign usedFeatureIdList = Static["javolution.util.FastList"].newInstance()/>
-                            <#list productFeatureAndAppls as productFeatureAndAppl>
-                                <#if !usedFeatureIdList.contains(productFeatureAndAppl.productFeatureId!"")>
-                                    <#assign optionValue = "${productFeatureAndAppl.productFeatureId!}@${productFeatureAndAppl.productFeatureApplTypeId!}">
-                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>>${productFeatureAndAppl.description!productFeatureAndAppl.productFeatureId!""}</option>
-                                    <#assign changed = usedFeatureIdList.add(productFeatureAndAppl.productFeatureId!"")/>
-                                </#if>
-                             </#list>
-                        </select>
+                 </div>
+             </#if>
+        </#list>
+    </#if>
+
+    <div class="infoRow row">
+        <div class="header"><h2>${uiLabelMap.ProductDistinguishingFeaturesHeading}</h2></div>
+    </div>
+
+    <#if productDistinguishingFeatureTypes?has_content>
+        <#list productDistinguishingFeatureTypes as productFeatureGroupView>
+            <#assign productFeatureGroupApplList = delegator.findByAnd("ProductFeatureGroupAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureGroupId" , productFeatureGroupView.productFeatureGroupId), Static["org.ofbiz.base.util.UtilMisc"].toList("sequenceNum"))/>
+            <#assign productFeatureGroupAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureGroupApplList!)/>
+            <#if productFeatureGroupAppls?has_content>
+                <#assign productFeatureGroup = delegator.findByPrimaryKey("ProductFeatureGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureGroupId" , productFeatureGroupView.productFeatureGroupId))>
+                <div class="infoRow column">
+                    <div class="infoEntry">
+                        <div class="infoCaption">
+                          <label>${productFeatureGroup.description!productFeatureGroup.productFeatureGroupId!}:</label>
+                        </div>
+                        <div class="infoValue">
+                            <select id="distinguishProductFeature_${productFeatureGroup.productFeatureGroupId!}" name="distinguishProductFeature_${productFeatureGroup.productFeatureGroupId!}" class="short">
+                                <option value="">Select</option>
+                                <#assign selectedFeture = parameters.get("distinguishProductFeature_${productFeatureGroup.productFeatureGroupId}")?if_exists>
+                                <#list productFeatureGroupAppls as productFeatureGroupAppl>
+                                    <#assign productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature")/>
+                                    <#assign productFeatureName = productFeature.description?trim/>
+                                    <#assign optionValue = "${productFeature.productFeatureId!}@DISTINGUISHING_FEAT">
+                                    <option value="${optionValue!}" <#if selectedFeture?has_content && selectedFeture.equals(optionValue)>selected</#if>><#if productFeatureName?has_content>${productFeatureName?if_exists}<#else>${productFeature.productFeatureId?if_exists}</#if></option>
+                                 </#list>
+                            </select>
+                        </div>
+                        <div class="infoIcon">
+                            <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.AddDescriptiveFeatureHelpInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                        </div>
                     </div>
-                </div>
-             </div>
-         </#if>
-    </#list>
+                 </div>
+             </#if>
+        </#list>
+    </#if>
 </#if>

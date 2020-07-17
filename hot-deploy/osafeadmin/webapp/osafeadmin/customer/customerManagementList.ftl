@@ -19,7 +19,7 @@
                    <#assign person = delegator.findByPrimaryKey("Person", {"partyId", partyRow.partyId})/>
                    <#assign party = delegator.findByPrimaryKey("Party", {"partyId", partyRow.partyId})/>
                     <#assign downloadStatus = "">
-                    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyRow.partyId, "attrName" : "IS_DOWNLOADED"}, true)!"" />
+                    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyRow.partyId, "attrName" : "IS_DOWNLOADED"}, false)!"" />
                     <#if partyAttribute?has_content>
                       <#assign downloadStatus = partyAttribute.attrValue!"">
                     </#if>

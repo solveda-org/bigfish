@@ -47,36 +47,60 @@
             </else>    
         </if-empty>
  
-        <if-empty field="parameters.SERVICE_TIME">
-        	<!-- if no date is entered, then take now datetime -->
-            <now-timestamp field="nowTimestamp"/>
-        	<set from-field="nowTimestamp" field="parameters.SERVICE_TIME"/>
-            <else>
-	            <!-- check if this is a valid date -->
-	            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="getValidJobDate" ret-field="ValidServTime">
+        <!-- check if this is a valid date -->
+        <if-not-empty field="parameters.SERVICE_DATE">
+	        <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="getValidJobDate" ret-field="ValidServDateTime">
+	            <field field="parameters.SERVICE_DATE"/>
+	            <field field="parameters.SERVICE_HOUR"/>
+	               <field field="parameters.SERVICE_MINUTE"/>
+	            <field field="parameters.SERVICE_AMPM"/>
+	            <field field="parameters.preferredDateFormat"/>
+	        </call-class-method>
+	        <if-empty field="ValidServDateTime">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidStartDateError"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	        <else>
+	            <set from-field="ValidServDateTime" field="parameters.SERVICE_DATE"/> 
+	            <!-- check if datetime passed already -->
+	            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedServTime">
 	                <field field="parameters.SERVICE_DATE"/>
-	                <field field="parameters.SERVICE_TIME"/>
-	                <field field="parameters.SERVICE_AMPM"/>
-	                <field field="parameters.preferredDateFormat"/>
 	            </call-class-method>
-	            <if-empty field="ValidServTime">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidStartDateError"/>
+	            <if-compare field="PassedServTime" operator="equals" value="false">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StartTimePassedError"/>
 	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-	                <else>
-		                <set from-field="ValidServTime" field="parameters.SERVICE_TIME"/> 
-		                <!-- check if datetime passed already -->
-		                <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedServTime">
-		                	<field field="parameters.SERVICE_TIME"/>
-		            	</call-class-method>
-		            	<if-compare field="PassedServTime" operator="equals" value="false">
-			                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StartTimePassedError"/>
-			                <string-to-list string="${tempErrorMessage}" list="error_list"/>
-		            	</if-compare>
-	                </else>
-	            </if-empty>
-            </else>
-        </if-empty>
+	            </if-compare>
+	        </else>
+	        </if-empty>
+        <else>
+        	<if-compare field="parameters.jobStatus" operator="equals" value="PENDING">
+	        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStartDateError"/>
+	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-not-empty>
         
+         <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="hourIsNumber">
+                   <field field="parameters.SERVICE_HOUR"/>
+         </call-class-method>
+         <if-compare field="hourIsNumber" operator="equals" value="false">
+         	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="HHNotSelectedError"/>
+	        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+         </if-compare>
+         <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="minuteIsNumber">
+                   <field field="parameters.SERVICE_MINUTE"/>
+         </call-class-method>
+         <if-compare field="minuteIsNumber" operator="equals" value="false">
+         	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MMNotSelectedError"/>
+	        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+         </if-compare>
+         <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="ampmIsNumber">
+                   <field field="parameters.SERVICE_AMPM"/>
+         </call-class-method>
+         <if-compare field="ampmIsNumber" operator="equals" value="false">
+         	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AMPMNotSelectedError"/>
+	        <string-to-list string="${tempErrorMessage}" list="error_list"/>
+         </if-compare>
+         
         <if-compare field="parameters.SERVICE_FREQUENCY" operator="equals" value="0">
         	<set field="parameters.SERVICE_FREQUENCY" value="DAILY" type="String"/>
         </if-compare>
@@ -152,7 +176,7 @@
         <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
         <set from-field="parameters.JOB_NAME" field="lookedUpValue.jobName"/>
         <set from-field="parameters.SERVICE_NAME" field="lookedUpValue.serviceName"/>
-        <set from-field="parameters.SERVICE_TIME" field="lookedUpValue.runTime" type="Timestamp"/>
+        <set from-field="parameters.SERVICE_DATE" field="lookedUpValue.runTime" type="Timestamp"/>
         <store-value value-field="lookedUpValue"/>
         
         <!-- get reccurenceInfoId from JobSandbox -->
@@ -161,22 +185,23 @@
         <find-by-primary-key map="JobSandBoxValues" value-field="JobSandBoxValuesMap"/>
         <set from-field="JobSandBoxValuesMap.recurrenceInfoId" field="parameters.recurrenceInfoId"/>
         
-        <!-- get the recurrenceInfo table using the recurrenceInfoId and then get the RecurrenceRuleId  -->
-        <make-value entity-name="RecurrenceInfo" value-field="RecurrenceInfoValues"/>
-        <set from-field="parameters.recurrenceInfoId" field="RecurrenceInfoValues.recurrenceInfoId"/>
-        <find-by-primary-key map="RecurrenceInfoValues" value-field="RecurrenceInfoValuesMap"/>
-        <set from-field="RecurrenceInfoValuesMap.recurrenceRuleId" field="parameters.recurrenceRuleId"/>
-        
-        <!-- get the recurrenceRule table and store the updated values using the recurrenceRuleId -->
-        <make-value entity-name="RecurrenceRule" value-field="RecurrenceRuleLookupPKMap"/>
-        <set-pk-fields map="parameters" value-field="RecurrenceRuleLookupPKMap"/>
-        <find-by-primary-key map="RecurrenceRuleLookupPKMap" value-field="RecurrenceRuleLookedUpValue"/>
-        <!-- <set from-field="parameters.SERVICE_END_TIME" field="RecurrenceRuleLookedUpValue.lastUpdatedTxStamp"/>-->
-        <set from-field="parameters.SERVICE_FREQUENCY" field="RecurrenceRuleLookedUpValue.frequency"/>
-        <set from-field="parameters.SERVICE_INTERVAL" field="RecurrenceRuleLookedUpValue.intervalNumber" type="Long"/>
-        <set from-field="parameters.SERVICE_COUNT" field="RecurrenceRuleLookedUpValue.countNumber" type="Long"/>
-        <store-value value-field="RecurrenceRuleLookedUpValue"/>
-        
+        <if-not-empty field="parameters.recurrenceInfoId">
+	        <!-- get the recurrenceInfo table using the recurrenceInfoId and then get the RecurrenceRuleId  -->
+	        <make-value entity-name="RecurrenceInfo" value-field="RecurrenceInfoValues"/>
+	        <set from-field="parameters.recurrenceInfoId" field="RecurrenceInfoValues.recurrenceInfoId"/>
+	        <find-by-primary-key map="RecurrenceInfoValues" value-field="RecurrenceInfoValuesMap"/>
+	        <set from-field="RecurrenceInfoValuesMap.recurrenceRuleId" field="parameters.recurrenceRuleId"/>
+	        
+	        <!-- get the recurrenceRule table and store the updated values using the recurrenceRuleId -->
+	        <make-value entity-name="RecurrenceRule" value-field="RecurrenceRuleLookupPKMap"/>
+	        <set-pk-fields map="parameters" value-field="RecurrenceRuleLookupPKMap"/>
+	        <find-by-primary-key map="RecurrenceRuleLookupPKMap" value-field="RecurrenceRuleLookedUpValue"/>
+	        <!-- <set from-field="parameters.SERVICE_END_TIME" field="RecurrenceRuleLookedUpValue.lastUpdatedTxStamp"/>-->
+	        <set from-field="parameters.SERVICE_FREQUENCY" field="RecurrenceRuleLookedUpValue.frequency"/>
+	        <set from-field="parameters.SERVICE_INTERVAL" field="RecurrenceRuleLookedUpValue.intervalNumber" type="Long"/>
+	        <set from-field="parameters.SERVICE_COUNT" field="RecurrenceRuleLookedUpValue.countNumber" type="Long"/>
+	        <store-value value-field="RecurrenceRuleLookedUpValue"/>
+        </if-not-empty>
     </simple-method>
     
     <simple-method method-name="deleteScheduledJob" short-description="Delete a Scheduled Job">

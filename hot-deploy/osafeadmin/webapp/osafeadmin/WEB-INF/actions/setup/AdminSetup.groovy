@@ -21,88 +21,187 @@ import com.osafe.util.OsafeAdminUtil;
 import com.osafe.services.CategoryServices;
 import javolution.util.FastMap;
 import javolution.util.FastList;
+import org.apache.commons.lang.StringUtils;
 
 
 
-globalContext.stores = delegator.findList("ProductStore",EntityCondition.makeCondition([isDemoStore : "N"]), null, null, null, true);
-
+globalContext.stores = delegator.findList("ProductStore",EntityCondition.makeCondition([isDemoStore : "N"]), null, null, null, false);
+adminModuleName ="";
+productStore="";
+productStoreId="";
 selectedProductStoreId = parameters.selectedProductStoreId;
+boolean retrieveProductStoreData = false;
+
+
+ServletContext application = ((ServletContext) request.getAttribute("servletContext"));
+if(UtilValidate.isNotEmpty(application))
+{
+    adminModuleName = application.getInitParameter("adminModuleName");
+
+}
+if(UtilValidate.isEmpty(adminModuleName))
+{
+    website = WebSiteWorker.getWebSite(request);
+    if(UtilValidate.isNotEmpty(website))
+    {
+        adminModuleName = website.siteName;
+    }
+    if(UtilValidate.isEmpty(adminModuleName))
+    {
+        adminModuleName = website.webSiteId;
+    }
+}
+context.adminModuleName = adminModuleName;
+
+
 if (UtilValidate.isNotEmpty(selectedProductStoreId))
 {
 
-   store = delegator.findOne("ProductStore",["productStoreId":selectedProductStoreId], true);
+   store = delegator.findOne("ProductStore",["productStoreId":selectedProductStoreId], false);
    if (UtilValidate.isNotEmpty(store))
    {
+	 productStore =store;
+	 productStoreId=store.getString("productStoreId");
      globalContext.selectedStore = store;
+     globalContext.selectedStoreId=productStoreId;
+	 globalContext.productStore = store;
+	 globalContext.productStoreName = store.storeName;
+	 globalContext.productStoreId = store.productStoreId;
      session.setAttribute("selectedStore",store);
+     retrieveProductStoreData=true;
    }
 }
 
-
-
 selectedStore = session.getAttribute("selectedStore");
-if (UtilValidate.isNotEmpty(selectedStore))
+if (UtilValidate.isEmpty(selectedStore))
 {
-   productStore = selectedStore;
-   globalContext.selectedStoreId=productStore.productStoreId;
+   store = ProductStoreWorker.getProductStore(request);
+   if (UtilValidate.isNotEmpty(store))
+   {
+		 productStore =store;
+		 productStoreId=store.getString("productStoreId");
+	     globalContext.selectedStore = store;
+	     globalContext.selectedStoreId=productStoreId;
+		 globalContext.productStore = store;
+		 globalContext.productStoreName = store.storeName;
+		 globalContext.productStoreId = store.productStoreId;
+	     session.setAttribute("selectedStore",store);
+	     retrieveProductStoreData=true;
+   }
 }
-else
+
+if (retrieveProductStoreData && UtilValidate.isNotEmpty(productStore))
 {
-   productStore = ProductStoreWorker.getProductStore(request);
 
-}
-
-
-if (UtilValidate.isNotEmpty(productStore))
-{
-      session.setAttribute("selectedStore",productStore);
-      
-	  String productStoreId=productStore.getString("productStoreId");
-	  productStoreParmList = delegator.findByAnd("XProductStoreParm",UtilMisc.toMap("productStoreId",productStoreId));
-	  if (UtilValidate.isNotEmpty(productStoreParmList))
-	  {
+	 webSites =delegator.findByAnd("WebSite", UtilMisc.toMap("productStoreId", productStore.productStoreId));
+	 webSite = EntityUtil.getFirst(webSites);
+     if (UtilValidate.isNotEmpty(webSite))
+	 {
+		 globalContext.webSite = webSite;
+		 globalContext.webSiteId =webSite.webSiteId;
+	     session.setAttribute("selectedWebsite",store);
+		 
+	 }
+	
+	 productStoreParmList = delegator.findByAnd("XProductStoreParm",UtilMisc.toMap("productStoreId",productStore.productStoreId));
+	 if (UtilValidate.isNotEmpty(productStoreParmList))
+	 {
 	    parmIter = productStoreParmList.iterator();
 	    while (parmIter.hasNext()) 
 	    {
 	      prodStoreParm = (GenericValue) parmIter.next();
 	      globalContext.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
 	    }
-	  }
-	
-	
-	 globalContext.productStore = productStore;
-	 globalContext.productStoreId = productStore.productStoreId;
-	 globalContext.productStoreName = productStore.storeName;
-
-	 storeCatalogs = EntityUtil.filterByDate(delegator.findByAndCache("ProductStoreCatalog", UtilMisc.toMap("productStoreId", productStoreId), UtilMisc.toList("sequenceNum", "prodCatalogId")), true);
+	     session.setAttribute("selectedProductStoreParm",productStoreParmList);
+	    
+	 }
+	 
+	 //PRODUCT STORE CATALOG
+	 storeCatalogs = delegator.findByAnd("ProductStoreCatalog", UtilMisc.toMap("productStoreId", productStore.productStoreId), UtilMisc.toList("sequenceNum", "prodCatalogId"));
+	 storeCatalogs = EntityUtil.filterByDate(storeCatalogs, true);
 	 currentCatalog= EntityUtil.getFirst(storeCatalogs);
-	 
-	 globalContext.prodCatalogId = currentCatalog.prodCatalogId;
-	 globalContext.prodCatalogName = CatalogWorker.getCatalogName(request,currentCatalog.prodCatalogId);
-	 globalContext.rootProductCategoryId = CatalogWorker.getCatalogTopCategoryId(request,currentCatalog.prodCatalogId);
-	 
-	 webSites =delegator.findByAndCache("WebSite", UtilMisc.toMap("productStoreId", productStoreId));
-	 webSite = EntityUtil.getFirst(webSites);
-     if (UtilValidate.isNotEmpty(webSite))
+	 if (UtilValidate.isNotEmpty(currentCatalog))
 	 {
-		 globalContext.webSite = webSite;
-		 globalContext.webSiteId =webSite.webSiteId;
-	 }
+		 globalContext.prodCatalogId = currentCatalog.prodCatalogId;
+         prodCatalog = currentCatalog.getRelatedOne("ProdCatalog");
+    	 globalContext.prodCatalogName = prodCatalog.catalogName;
+	     session.setAttribute("selectedProdCatalog",prodCatalog);
+    	 
+         prodCatalogCategories = delegator.findByAnd("ProdCatalogCategory",UtilMisc.toMap("prodCatalogId", currentCatalog.prodCatalogId,"prodCatalogCategoryTypeId","PCCT_BROWSE_ROOT"),UtilMisc.toList("sequenceNum", "productCategoryId"));
+         prodCatalogCategories = EntityUtil.filterByDate(prodCatalogCategories, true);
+         if (UtilValidate.isNotEmpty(prodCatalogCategories))
+         {
+             prodCatalogCategory = EntityUtil.getFirst(prodCatalogCategories);
+    	     session.setAttribute("selectedProdCatalogCategory",prodCatalogCategory);
+             globalContext.rootProductCategoryId=prodCatalogCategory.productCategoryId;
+             
+    	     currentCategories = FastList.newInstance();
+    	     allUnexpiredCategories = CategoryServices.getRelatedCategories(delegator, prodCatalogCategory.productCategoryId, null, true, false, true,false);
+    	     for (Map<String, Object> workingCategoryMap : allUnexpiredCategories) 
+    	     {
+    	        workingCategory = (GenericValue) workingCategoryMap.get("ProductCategory");
+    	        currentCategories.add(workingCategory);
+    	     }
+    	     globalContext.currentCategories = currentCategories;
+    	     session.setAttribute("selectedCategories",currentCategories);
 
+         }
+
+	 }
 	 
-
-	 if (UtilValidate.isNotEmpty(globalContext.rootProductCategoryId))
-	 {
-	     currentCategories = FastList.newInstance();
-	     allUnexpiredCategories = CategoryServices.getRelatedCategories(delegator, globalContext.rootProductCategoryId, null, true, false, true);
-	     for (Map<String, Object> workingCategoryMap : allUnexpiredCategories) 
-	     {
-	        workingCategory = (GenericValue) workingCategoryMap.get("ProductCategory");
-	        currentCategories.add(workingCategory);
-	     }
-	   globalContext.currentCategories = currentCategories;
-	 }
+	
 }
+else
+{
+	selectedStore = session.getAttribute("selectedStore");
+    if (UtilValidate.isNotEmpty(selectedStore))
+	{
+        globalContext.selectedStore = selectedStore;
+        globalContext.selectedStoreId=selectedStore.productStoreId;
+    	 globalContext.productStore = selectedStore;
+    	globalContext.productStoreName = selectedStore.storeName;
+    	globalContext.productStoreId = selectedStore.productStoreId;
+	}
+
+	selectedWebsite = session.getAttribute("selectedWebsite");
+    if (UtilValidate.isNotEmpty(selectedWebsite))
+	{
+		globalContext.webSite = selectedWebsite;
+		globalContext.webSiteId =selectedWebsite.webSiteId;
+	}
+
+	selectedProductStoreParm =session.getAttribute("selectedProductStoreParm");
+    if (UtilValidate.isNotEmpty(selectedProductStoreParm))
+    {
+    	parmIter = selectedProductStoreParm.iterator();
+        while (parmIter.hasNext()) 
+        {
+          prodStoreParm = (GenericValue) parmIter.next();
+          globalContext.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
+        }
+    }
+
+    selectedProdCatalog = session.getAttribute("selectedProdCatalog");
+    if (UtilValidate.isNotEmpty(selectedProdCatalog))
+    {
+    	globalContext.prodCatalogId = selectedProdCatalog.prodCatalogId;
+    	globalContext.prodCatalogName = selectedProdCatalog.catalogName;
+    }
+		
+    selectedCategories = session.getAttribute("selectedCategories");
+    if (UtilValidate.isNotEmpty(selectedCategories))
+    {
+    	globalContext.currentCategories = selectedCategories;
+    }
+
+	selectedProdCatalogCategory = session.getAttribute("selectedProdCatalogCategory");
+    if (UtilValidate.isNotEmpty(selectedProdCatalogCategory))
+    {
+    	globalContext.rootProductCategoryId=selectedProdCatalogCategory.productCategoryId;
+    }
+	
+}
+
 defaultCurrencyUomId = globalContext.get("CURRENCY_UOM_DEFAULT");
 
 if (UtilValidate.isEmpty(defaultCurrencyUomId)) 
@@ -116,32 +215,47 @@ globalContext.currencySymbol=currencySymbol;
 
 context.userLoginFullName ="";
 userLogin = session.getAttribute("userLogin");
-if(UtilValidate.isNotEmpty(userLogin)){
+if (UtilValidate.isNotEmpty(userLogin))
+{
     party = userLogin.getRelatedOne("Party");
-    if(UtilValidate.isNotEmpty(party)){
+    if(UtilValidate.isNotEmpty(party))
+    {
         userLoginFullName = PartyHelper.getPartyName(party);
         context.userLoginFullName =userLoginFullName;
     }
 }
-adminModuleName ="";
-ServletContext application = ((ServletContext) request.getAttribute("servletContext"));
-if(UtilValidate.isNotEmpty(application)){
-    adminModuleName = application.getInitParameter("adminModuleName");
-
-}
-if(UtilValidate.isEmpty(adminModuleName)){
-    website = WebSiteWorker.getWebSite(request);
-    if(UtilValidate.isNotEmpty(website)){
-        adminModuleName = website.siteName;
-    }
-    if(UtilValidate.isEmpty(adminModuleName)){
-        adminModuleName = website.webSiteId;
-    }
-}
-context.adminModuleName = adminModuleName;
 
 preferredDateFormat = globalContext.FORMAT_DATE;
 preferredDateTimeFormat = globalContext.FORMAT_DATE_TIME;
 globalContext.preferredDateFormat = OsafeAdminUtil.isValidDateFormat(preferredDateFormat)?preferredDateFormat:"MM/dd/yy";
 globalContext.preferredDateTimeFormat = OsafeAdminUtil.isValidDateFormat(preferredDateTimeFormat)?preferredDateTimeFormat:"MM/dd/yy h:mma";
+globalContext.preferredTimeFormat = "h:mma";
 
+//ADMIN CONTEXT PROCESSING
+adminContext = FastMap.newInstance();
+if (UtilValidate.isNotEmpty(session.getAttribute("ADMIN_CONTEXT")))
+{
+    adminContext = UtilGenerics.checkMap(session.getAttribute("ADMIN_CONTEXT"), String.class, String.class);
+}
+partyId = StringUtils.trimToEmpty(parameters.partyId);
+orderId = StringUtils.trimToEmpty(parameters.orderId);
+storePartyId = StringUtils.trimToEmpty(parameters.storePartyId);
+productId = StringUtils.trimToEmpty(parameters.productId);
+if (UtilValidate.isNotEmpty(partyId))
+{
+    adminContext.put("CONTEXT_PARTY_ID", partyId);
+}
+if (UtilValidate.isNotEmpty(orderId))
+{
+    adminContext.put("CONTEXT_ORDER_ID", orderId);
+}
+if (UtilValidate.isNotEmpty(storePartyId))
+{
+    adminContext.put("CONTEXT_STORE_PARTY_ID", storePartyId);
+}
+if (UtilValidate.isNotEmpty(productId))
+{
+    adminContext.put("CONTEXT_PRODUCT_ID", productId);
+}
+context.adminContext = adminContext;
+session.setAttribute("ADMIN_CONTEXT", adminContext);

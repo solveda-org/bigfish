@@ -25,11 +25,16 @@
         <call-service service-name="getPartyEmail" in-map-name="getPartyEmailMap">
             <result-to-field result-name="emailAddress" field="emailAddressCompany"/>
         </call-service>
+        <set field="custRequestContext.emailAddressCompany" from-field="emailAddressCompany"/>
 
 
         <!-- Create Customer Request -->
         <if-not-empty field="parameters.custRequestTypeId">
             <set field="custRequest.userLogin" from-field="systemUserLogin"/>
+            <session-to-field field="userLogin"/>
+            <if-not-empty field="userLogin">
+                <set field="custRequest.fromPartyId" from-field="userLogin.partyId"/>
+            </if-not-empty>
             <set field="custRequest.custRequestTypeId" from-field="parameters.custRequestTypeId"/>
             <if-not-empty field="parameters.custRequestName">
                 <set field="custRequest.custRequestName" from-field="parameters.custRequestName"/>

@@ -39,6 +39,7 @@ public class ProductDocument implements Serializable {
     private Long totalTimesViewed;
     private String productCategoryFacetGroups;
 
+    private BigDecimal listPrice;
     private BigDecimal price;
     private BigDecimal customerRating;
     private Double totalQuantityOrdered;
@@ -243,6 +244,14 @@ public class ProductDocument implements Serializable {
         this.productCategoryFacetGroups = productCategoryFacetGroups;
     }
 
+    public BigDecimal getListPrice() {
+        return listPrice;
+    }
+
+    public void setListPrice(BigDecimal listPrice) {
+        this.listPrice = listPrice;
+    }
+    
     public BigDecimal getPrice() {
         return price;
     }

@@ -51,7 +51,7 @@
                 </td>
                 <td class="idCol <#if !orderItem_has_next>lastRow</#if>"><a href="<@ofbizUrl>productDetail?productId=${itemProduct.productId?if_exists}</@ofbizUrl>">${itemProduct.productId!"N/A"}</a></td>
                 <td class="itemCol <#if !orderItem_has_next>lastRow</#if>">${itemProduct.internalName!itemProduct.productId!""}</td>
-                <td class="nameCol <#if !orderItem_has_next>lastRow</#if>"><#if (productName?has_content) && (productName?length gt 0)>${productName!}<#else>${itemProduct.internalName!itemProduct.productId!""}</#if></td>
+                <td class="nameCol <#if !orderItem_has_next>lastRow</#if>">${productName?if_exists} ${itemProduct.productId}</td>
                 <td class="statusCol <#if !orderItem_has_next>lastRow</#if>">${itemStatus.get("description",locale)}</td>
                 <td class="nameCol <#if !orderItem_has_next>lastRow</#if>">${carrierPartyGroupName!} ${description!}</td>
                 <td class="dateCol <#if !orderItem_has_next>lastRow</#if>">${shipDate!}</td>

@@ -539,18 +539,18 @@
         <set-service-fields service-name="createOrderNote" map="parameters" to-map="orderNoteCtx"/>
         <call-service service-name="createOrderNote" in-map-name="orderNoteCtx"/>
 
-        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="reviewActiveFlag">
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="reviewActiveFlag">
             <field field="parameters.productStoreId" type="String"/>
             <string value="REVIEW_ACTIVE_FLAG"/>
         </call-class-method>
-        <call-class-method class-name="com.osafe.util.Util" method-name="isProductStoreParmTrue" ret-field="isReviewActive">
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="isProductStoreParmTrue" ret-field="isReviewActive">
             <field field="reviewActiveFlag"/>
         </call-class-method>
-        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="reviewSendEmail">
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="reviewSendEmail">
             <field field="parameters.productStoreId" type="String"/>
             <string value="REVIEW_SEND_EMAIL"/>
         </call-class-method>
-        <call-class-method class-name="com.osafe.util.Util" method-name="isProductStoreParmTrue" ret-field="isReviewSendEmailActive">
+        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="isProductStoreParmTrue" ret-field="isReviewSendEmailActive">
             <field field="reviewSendEmail"/>
         </call-class-method>
         <if>
@@ -562,7 +562,7 @@
                 </and>
             </condition>
             <then>
-                <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="reviewShipDays">
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="reviewShipDays">
                     <field field="parameters.productStoreId" type="String"/>
                     <string value="EMAIL_REVIEW_SHP_DYS"/>
                 </call-class-method>
@@ -596,5 +596,36 @@
             </else>
         </if>
         <field-to-result field="parameters.statusId" result-name="oldStatusId"/>
+
+        <!--   send the order status change email   -->
+        <set field="allCanceled" value="true" type="Boolean"/>
+        <set field="allComplete" value="true" type="Boolean"/>
+        <entity-and entity-name="OrderItem" list="orderItemList">
+            <field-map field-name="orderId" from-field="parameters.orderId"/>
+            <order-by field-name="+orderItemSeqId"/>
+        </entity-and>
+        <iterate entry="orderItem" list="orderItemList">
+            <if-compare field="orderItem.statusId" operator="not-equals" value="ITEM_CANCELLED" type="String">
+                <set field="allCanceled" value="false" type="Boolean"/>
+                <if-compare field="orderItem.statusId" operator="not-equals" value="ITEM_COMPLETED" type="String">
+                    <set field="allComplete" value="false" type="Boolean"/>
+                </if-compare>
+            </if-compare>
+        </iterate>
+        <if>
+            <condition>
+                <or>
+                <if-compare field="allCanceled" operator="equals" value="true"/>
+                <if-compare field="allComplete" operator="equals" value="false"/>
+                </or>
+            </condition>
+            <then>
+                <set field="resetGrandTotalCtx.orderId" from-field="parameters.orderId"/>
+                <call-service service-name="resetGrandTotal" in-map-name="resetGrandTotalCtx"/>
+                <set field="sendOrderChangeNotificationCtx.orderId" from-field="parameters.orderId"/>
+                <call-service-asynch service-name="sendOrderChangeNotification" in-map-name="sendOrderChangeNotificationCtx"/>
+            </then>
+        </if>
+
     </simple-method>
 </simple-methods>

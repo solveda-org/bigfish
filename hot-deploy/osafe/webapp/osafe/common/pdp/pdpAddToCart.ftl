@@ -14,6 +14,7 @@
 <#if !isSellable>
  <#assign inStock=false/>
 </#if>
+<input type="hidden" name= "add_category_id" id="add_category_id" value="${parameters.add_category_id!productCategoryId!}" /> 
 <#if inStock>
   <div class="addToCart">
 	<label>${uiLabelMap.QuantityLabel}:</label><input type="text" class="quantity" size="5" name="quantity" value="1" maxlength="5"/>

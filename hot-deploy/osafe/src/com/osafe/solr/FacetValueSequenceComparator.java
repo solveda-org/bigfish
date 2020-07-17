@@ -126,7 +126,7 @@ public class FacetValueSequenceComparator implements Comparator {
         String[] orderedValues = null;
         if (UtilValidate.isNotEmpty(this.productFeatureGroupId)) {
             try {
-                List<GenericValue> productFeatureGroupAppls = delegator.findByAnd("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureGroupId", this.productFeatureGroupId));
+                List<GenericValue> productFeatureGroupAppls = delegator.findByAndCache("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureGroupId", this.productFeatureGroupId));
                 productFeatureGroupAppls = EntityUtil.filterByDate(productFeatureGroupAppls);
                 productFeatureGroupAppls = EntityUtil.orderBy(productFeatureGroupAppls, UtilMisc.toList("sequenceNum"));
                 List<GenericValue> productFeatures = FastList.newInstance();
@@ -135,7 +135,7 @@ public class FacetValueSequenceComparator implements Comparator {
                 // Build a list of descriptions in order
                 if (UtilValidate.isNotEmpty(productFeatureGroupAppls)) {
                     for (GenericValue productFeatureGroupAppl : productFeatureGroupAppls) {
-                        productFeature = productFeatureGroupAppl.getRelatedOne("ProductFeature");
+                        productFeature = productFeatureGroupAppl.getRelatedOneCache("ProductFeature");
                         if (UtilValidate.isNotEmpty(productFeature)) {
                             productFeatures.add(productFeature);
                         }

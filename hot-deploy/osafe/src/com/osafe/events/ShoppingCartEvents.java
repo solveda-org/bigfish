@@ -2,6 +2,7 @@ package com.osafe.events;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.CheckOutHelper;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCart.CartPaymentInfo;
+import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.service.LocalDispatcher;
 
 public class ShoppingCartEvents {
@@ -26,6 +28,7 @@ public class ShoppingCartEvents {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         String securityCode = request.getParameter("verificationNo");
+        
         if (sc.items().size() > 0) {
 
             Map selectedPaymentMethods = new HashMap();
@@ -62,4 +65,22 @@ public class ShoppingCartEvents {
         return "success";
     }
 
+    public static String setProductCategoryId(HttpServletRequest request, HttpServletResponse response) {
+        ShoppingCart sc = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
+        String productCategoryId = request.getParameter("add_category_id");
+        String productId = request.getParameter("add_product_id");
+        if(UtilValidate.isNotEmpty(productCategoryId) && UtilValidate.isNotEmpty(productId)) 
+        {
+        	for (Iterator<?> item = sc.iterator(); item.hasNext();) 
+        	{
+            	ShoppingCartItem sci = (ShoppingCartItem)item.next();
+            	if (sci.getProductId().equals(productId)) 
+            	{
+            		sci.setProductCategoryId(productCategoryId);
+            		break;
+            	}
+            }	
+        }
+        return "success";
+    }
 }

@@ -6,37 +6,43 @@
   <div class="infoRow">
    <div class="infoEntry">
      <div class="infoCaption">
-     <label>${uiLabelMap.ShipMethodCaption}</label>
+       <label>${uiLabelMap.ShipMethodCaption}</label>
      </div>
-     <div class="infoValue">
+     
         <#if isStorePickup?has_content && isStorePickup == "Y">
-            <p>${uiLabelMap.PickupInStoreLabel}</p>
+	        <div class="infoValue">
+	            <p>${uiLabelMap.PickupInStoreLabel}</p>
+	     	</div> 
         <#else>
-        <#-- the setting of shipping method is only supported for sales orders at this time -->
-        <#if orderHeader.orderTypeId == "SALES_ORDER" && shipGroup.shipmentMethodTypeId?has_content>
-            <#if shipGroup.carrierPartyId?has_content || shipmentMethodType?has_content>
-                <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED">
-                    <p>
-                       <#if shipGroup.carrierPartyId?has_content>
-                        <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
-                        <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)!}&nbsp;</#if>
-                       </#if>
-                      ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
-                   </p>
-                </#if>
-            </#if>
-        </#if>
-
-        <#-- tracking number -->
-        <#if shipGroup.trackingNumber?has_content || orderShipmentInfoSummaryList?has_content>
-              <#-- TODO: add links to UPS/FEDEX/etc based on carrier partyId  -->
-              <#if shipGroup.trackingNumber?has_content>
-                <p>${shipGroup.trackingNumber}</p>
-              </#if>
-        </#if>
-        </#if>
-
-     </div>
+	        <div class="infoValue">
+		        <#-- the setting of shipping method is only supported for sales orders at this time -->
+		        <#if orderHeader.orderTypeId == "SALES_ORDER" && shipGroup.shipmentMethodTypeId?has_content>
+		            <#if shipGroup.carrierPartyId?has_content || shipmentMethodType?has_content>
+		                <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED">
+		                    <p>
+		                       <#if shipGroup.carrierPartyId?has_content>
+		                        <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shipGroup.carrierPartyId))?if_exists />
+		                        <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)!}&nbsp;</#if>
+		                       </#if>
+		                      ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
+		                   </p>
+		                </#if>
+		            </#if>
+		        </#if>
+	     	</div>
+	        <#-- tracking number -->
+	        <#if shipGroup.trackingNumber?has_content || orderShipmentInfoSummaryList?has_content>
+	          <div class="infoCaption">
+	            <label>${uiLabelMap.TrackingNoCaption}</label>
+	          </div>
+	          <div class="infoValue">
+	              <#-- TODO: add links to UPS/FEDEX/etc based on carrier partyId  -->
+	              <#if shipGroup.trackingNumber?has_content>
+	                <p>${shipGroup.trackingNumber}</p>
+	              </#if>
+	          </div>
+	        </#if>
+      </#if>
    </div>
   </div>
  <#else>
@@ -88,11 +94,14 @@
            <#list orderPayments as orderPaymentPreference>
               <#assign oppStatusItem = orderPaymentPreference.getRelatedOne("StatusItem")>
               <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>
+              <#assign orderPaymentPreferenceId = orderPaymentPreference.getString("orderPaymentPreferenceId")?if_exists>
+              <#assign paymentMethodId = orderPaymentPreference.getString("paymentMethodId")?if_exists>
               <#assign paymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")?if_exists>
               <#assign gatewayResponses = orderPaymentPreference.getRelated("PaymentGatewayResponse")>
               <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "CREDIT_CARD") && (orderPaymentPreference.getString("paymentMethodId")?has_content))>
                     <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
-                    <p>${creditCard.get("cardType")?if_exists}</p>
+                    <p class="leftFloat">${creditCard.get("cardType")?if_exists}</p>
+                    <a href="<@ofbizUrl>orderPaymentDetail?orderPaymentPreferenceId=${orderPaymentPreferenceId!""}&orderId=${parameters.orderId}</@ofbizUrl>"><span class="paymentDetailIcon"></span></a>
               <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD") && isStorePickup?has_content && isStorePickup == "Y") >
                   <p>${uiLabelMap.PayInStoreInfo}</p>
               <#else>
@@ -100,7 +109,8 @@
                   <#if paymentMethod?has_content>
 		              <#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")?if_exists>
 		              <#if paymentMethodType?has_content>
-		               <p>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</p>
+		               <p class="leftFloat">${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</p>
+                       <a href="<@ofbizUrl>orderPaymentDetail?orderPaymentPreferenceId=${orderPaymentPreferenceId!""}&orderId=${parameters.orderId}</@ofbizUrl>"><span class="paymentDetailIcon"></span></a>
 		              </#if>
                   </#if>
               </#if>

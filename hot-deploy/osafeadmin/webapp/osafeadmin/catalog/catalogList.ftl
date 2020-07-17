@@ -34,6 +34,9 @@
       <#local macroLevelUrl = "categoryDetail">
     </#if>
   </#if>
+  <#assign categoryMembers = delegator.findByAnd("ProductCategoryMember",Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", category.productCategoryId))>
+  <#assign categoryMembers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(categoryMembers)>
+  <#assign prodCatMembershipCount = categoryMembers.size()!0/>
 
     <#if levelValue?has_content && levelValue="1">
       <tr class="dataRow ${levelClass} ${itemIndexClass} <#if rowClass == "2">even<#else>odd</#if>">
@@ -44,17 +47,24 @@
         <td class="dateCol">${(category.fromDate?string(preferredDateFormat))!""}</td>
         <td class="dateCol">${(category.thruDate?string(preferredDateFormat))!""}</td>
         <td class="actionCol">
-          <span class="noAction"></span>
-          <#assign categoryMembers = delegator.findByAnd("ProductCategoryMember",Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId", category.productCategoryId))>
-          <#assign categoryMembers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(categoryMembers)>
-	      <#if categoryMembers?has_content> 
-            <a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductCategoryTooltip}');" onMouseout="hideTooltip()"><span class="productIcon"></span></a>
-            <a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductSequenceTooltip}');" onMouseout="hideTooltip()"><span class="sequenceIcon"></span></a>
-          <#else>
-            <span class="noAction"></span>
-            <span class="noAction"></span>
-          </#if>
-          <a href="<@ofbizUrl>categoryMetatag?productCategoryId=${category.productCategoryId!}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
+	          <div class="actionIconMenu">
+	            <a class="toolIcon" href="javascript:void(o);"></a>
+	            <div class="actionIconBox" style="display:none">
+	            <div class="actionIcon">
+	              <#if category.categoryImageUrl?has_content>
+	                  <img class="actionIconMenuImage" src="<@ofbizContentUrl>${category.categoryImageUrl}</@ofbizContentUrl>" alt="${category.categoryImageUrl}"/>
+	              </#if>            
+	            <ul>
+                  <li><a href="<@ofbizUrl>categoryImageDetail?productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>"><span class="imageIcon"></span>${uiLabelMap.CategoryImageTooltip}</a></li>
+        	      <#if categoryMembers?has_content> 
+		            <li><a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="productIcon"></span>${uiLabelMap.ProductCategoryTooltip}[${prodCatMembershipCount!}]</a></li>
+		            <li><a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="sequenceIcon"></span>${uiLabelMap.ProductSequenceTooltip}[${prodCatMembershipCount!}]</a></li>
+                  </#if>
+                  <li><a href="<@ofbizUrl>categoryMetatag?productCategoryId=${category.productCategoryId!}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
+		        </ul>
+		       </div>
+		       </div>
+		      </div>             
         </td>
 	  </tr>
 	</#if>
@@ -66,20 +76,25 @@
 	    <td class="descCol" colspan="0"><a class="${levelClass}" href="<@ofbizUrl>categoryDetail?productCategoryId=${category.productCategoryId}&amp;parentProductCategoryId=${category.parentProductCategoryId?if_exists}&amp;activeFromDate=${category.fromDate?if_exists}</@ofbizUrl>"><#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if></a></td>
         <td class="dateCol">${(category.fromDate?string(preferredDateFormat))!""}</td>
         <td class="dateCol">${(category.thruDate?string(preferredDateFormat))!""}</td>
-        <#assign productIds = Static["com.osafe.util.OsafeAdminUtil"].getAssociatedProductFromCategory(request,category.productCategoryId)/>
         <td class="actionCol">
-          <a href="<@ofbizUrl>categoryImageDetail?productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>" onMouseover="<#if category.categoryImageUrl?has_content>showTooltipImage(event,'${uiLabelMap.CategoryImageTooltip}','${category.categoryImageUrl!}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.CategoryImageTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
-	      <#if productIds?has_content> 
-            <a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductCategoryTooltip}');" onMouseout="hideTooltip()"><span class="productIcon"></span></a>
-          <#else>
-            <span class="noAction"></span>
-          </#if>
-          <#if productIds?has_content> 
-            <a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductSequenceTooltip}');" onMouseout="hideTooltip()"><span class="sequenceIcon"></span></a>
-          <#else>
-            <span class="noAction"></span>
-          </#if>
-          <a href="<@ofbizUrl>categoryMetatag?productCategoryId=${category.productCategoryId!}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
+	          <div class="actionIconMenu">
+	            <a class="toolIcon" href="javascript:void(o);"></a>
+	            <div class="actionIconBox" style="display:none">
+	            <div class="actionIcon">
+	              <#if category.categoryImageUrl?has_content>
+	                  <img class="actionIconMenuImage" src="<@ofbizContentUrl>${category.categoryImageUrl}</@ofbizContentUrl>" alt="${category.categoryImageUrl}"/>
+	              </#if>            
+	            <ul>
+                  <li><a href="<@ofbizUrl>categoryImageDetail?productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>"><span class="imageIcon"></span>${uiLabelMap.CategoryImageTooltip}</a></li>
+  			      <#if (prodCatMembershipCount?has_content && prodCatMembershipCount > 0)> 
+		            <li><a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="productIcon"></span>${uiLabelMap.ProductCategoryTooltip} [${prodCatMembershipCount!}]</a></li>
+		            <li><a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="sequenceIcon"></span>${uiLabelMap.ProductSequenceTooltip} [${prodCatMembershipCount!}]</a></li>
+                  </#if>
+                  <li><a href="<@ofbizUrl>categoryMetatag?productCategoryId=${category.productCategoryId!}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
+		        </ul>
+		       </div>
+		       </div>
+		      </div>             
         </td>
 	  </tr>
 	</#if>

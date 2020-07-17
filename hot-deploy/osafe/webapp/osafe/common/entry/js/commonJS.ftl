@@ -41,6 +41,7 @@
 
     function submitSearchForm(form) {
         var searchText = form.searchText.value;
+        <#assign SEARCH_DEFAULT_TEXT = Static["com.osafe.util.Util"].getProductStoreParm(request,"SEARCH_DEFAULT_TEXT")!""/>
         if(searchText == "" || searchText == "${StringUtil.wrapString(SEARCH_DEFAULT_TEXT!)}") {
             displayDialogBox('search_');
             return false;

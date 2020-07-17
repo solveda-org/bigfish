@@ -14,13 +14,13 @@
   <#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
     <#list resultList as partyRow>
-      <#assign partyGroup = delegator.findOne("PartyGroup", {"partyId": partyRow.partyId}, true)/>
+      <#assign partyGroup = delegator.findOne("PartyGroup", {"partyId": partyRow.partyId}, false)/>
       <#if partyGroup?has_content>
         <#assign groupName = partyGroup.groupName!""/>
         <#assign groupNameLocal = partyGroup.groupNameLocal!""/>
       </#if>
       <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
-        <td class="idCol <#if !partyRow_has_next>lastRow</#if> firstCol" ><a href="<@ofbizUrl>storeLocationDetail?partyId=${partyRow.partyId}&groupNameLocal=${groupNameLocal!""}</@ofbizUrl>">${groupNameLocal!""}</a></td>
+        <td class="idCol <#if !partyRow_has_next>lastRow</#if> firstCol" ><a href="<@ofbizUrl>storeLocationDetail?storePartyId=${partyRow.partyId}&groupNameLocal=${groupNameLocal!""}</@ofbizUrl>">${groupNameLocal!""}</a></td>
         <td class="nameCol <#if !partyRow_has_next>lastRow</#if>">${groupName!""}</td>
         <td class="statusCol <#if !partyRow_has_next>lastRow</#if>">
           <#if (partyRow.statusId?has_content && partyRow.statusId=="PARTY_ENABLED")>

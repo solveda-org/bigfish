@@ -3,74 +3,10 @@
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
 
-    <screen name="main-decorator">
-        <section>
-            <actions>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.jcarousel.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
-                <set field="layoutSettings.companyName" from-field="uiLabelMap.eCommerceCompanyName" global="true"/>
-                <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.eCommerceCompanySubtitle" global="true"/>
-
-                <set field="activeApp" value="osafe" global="true"/>
-                <set field="applicationMenuName" value="MainAppBar" global="true"/>
-                <set field="applicationMenuLocation" value="" global="true"/>
-                <set field="applicationTitle" value="${uiLabelMap.eCommerceApplication}" global="true"/>
-            </actions>
-            <widgets>
-                <include-screen name="GlobalDecorator" location="component://common/widget/CommonScreens.xml"/>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="PageMessages">
-        <section>
-            <actions>
-            </actions>
-            <widgets>
-                <platform-specific>
-                    <html>
-                       <html-template location="component://osafe/webapp/osafe/common/eCommerceErrorMessages.ftl"/>
-                    </html>
-                </platform-specific>
-            </widgets>
-        </section>
-    </screen>
-    <screen name="screen-macro-decorator">
-        <section>
-            <widgets>
-               <include-screen name="CommonMacros"/>
-               <decorator-section-include name="screenBody"/>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="CommonMacros">
-        <section>
-            <widgets>
-                <platform-specific>
-                    <html>
-                       <html-template location="component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
-                    </html>
-                </platform-specific>
-               <decorator-section-include name="screenBody"/>
-            </widgets>
-        </section>
-    </screen>
-
     <screen name="ecommerce-basic-decorator">
         <section>
             <actions>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
@@ -88,7 +24,6 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
                 <service service-name="getVisualThemeResources">
@@ -108,11 +43,6 @@
                     </html>
                 </platform-specific>
                 <container id="eCommeceOuterBasicWrap">
-                    <platform-specific>
-                        <html>
-                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonJquery.ftl"/>
-                        </html>
-                    </platform-specific>
                     <container id="eCommerceInnerBasicWrapper">
                         <container id="eCommerceContent" style="${contentPanelStyle}">
                             <!-- header -->
@@ -187,7 +117,6 @@
         <section>
             <actions>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
@@ -206,7 +135,6 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/dynamicVariableGlossary.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
                 <service service-name="getVisualThemeResources">
@@ -226,11 +154,6 @@
                     </html>
                 </platform-specific>
                 <container id="eCommerceOuterBasicBevelWrap">
-                    <platform-specific>
-                        <html>
-                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonJquery.ftl"/>
-                        </html>
-                    </platform-specific>
                     <include-screen name="searchDialog" location="component://osafe/widget/DialogScreens.xml"/>
                     <container id="eCommerceHeaderLinksBevelWrapper">
                         <include-screen name="eCommerceHeaderLinks" location="${parameters.eCommerceScreensLocation}"/>
@@ -300,6 +223,41 @@
                         <html-template location="component://osafe/webapp/osafe/common/eCommerceHtmlClose.ftl"/>
                     </html>
                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="PageMessages">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafe/webapp/osafe/common/eCommerceErrorMessages.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="screen-macro-decorator">
+        <section>
+            <widgets>
+               <include-screen name="CommonMacros"/>
+               <decorator-section-include name="screenBody"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="CommonMacros">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                       <html-template location="component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
+                    </html>
+                </platform-specific>
+               <decorator-section-include name="screenBody"/>
             </widgets>
         </section>
     </screen>

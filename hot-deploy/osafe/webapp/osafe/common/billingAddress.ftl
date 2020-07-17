@@ -3,7 +3,7 @@
 	<div class="displayBox">
         <h3>${uiLabelMap.BillingAddressTitle}</h3>
 	    <#-- Billing addresses -->
-	       <#assign billingAddress = billingContactMechAddress.getRelatedOne("PostalAddress")>
+	       <#assign billingAddress = billingContactMechAddress.getRelatedOneCache("PostalAddress")>
 	       <div class="address">
 	       <#if billingAddress?has_content>
 	             <#if billingAddress.toName?has_content><p>${billingAddress.toName}</p></#if>

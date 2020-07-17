@@ -9,7 +9,6 @@
                 <!-- base/top/specific map first, then more common map added for shared labels -->
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OrderUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>
@@ -99,7 +98,6 @@
             <actions>
                 <!-- base/top/specific map first, then more common map added for shared labels -->
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <property-map resource="EcommerceUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
             </actions>
             <widgets>
@@ -385,7 +383,7 @@
             </widgets>
         </section>
     </screen>
-    <screen name="commonDetailButton">
+    <screen name="commonOrderLinkButton">
         <section>
             <actions>
                 <set field="backHref" value="javascript:history.go(-1)"/>
@@ -393,14 +391,12 @@
             <widgets>
                 <platform-specific>
                     <html>
-                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonDetailButton.ftl"/>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonOrderLinkButton.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>
         </section>
     </screen>
-
-
     <screen name="commonSearchButton">
         <section>
             <widgets>
@@ -499,6 +495,18 @@
         </section>
     </screen>
     
+    <screen name="commonCustomerLinkButton">
+        <section>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/button/commonCustomerLinkButton.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="navigationDescriptor">
         <section>
             <actions>
@@ -580,6 +588,17 @@
             </widgets>
         </section>
     </screen>
+    <screen name="commonDetailHelperInfoIcon">
+        <section>
+            <widgets>
+                 <platform-specific>
+                     <html>
+                         <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonHelperInfoIcon.ftl"/>
+                     </html>
+                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
     <screen name="commonListHelperText">
         <section>
             <widgets>
@@ -653,6 +672,26 @@
             </actions>
             <widgets>
                 <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/includes/creditCardTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ddHours">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/includes/ddHours.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ddMinuts">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafeadmin/webapp/osafeadmin/includes/ddMinuts.ftl"/></html></platform-specific>
             </widgets>
         </section>
     </screen>

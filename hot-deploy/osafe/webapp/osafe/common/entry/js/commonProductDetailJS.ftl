@@ -1,5 +1,5 @@
 <script language="JavaScript" type="text/javascript">
-
+  <#if currentProduct?exists>
   function sortReviews() {
       document.addform.sortReviewBy.value=document.getElementById('reviewSort').value;
       var reviewParams = jQuery('.pdpReviewList').find('input.reviewParam').serialize();
@@ -111,25 +111,7 @@
             elm.setAttribute("onClick","javascript:addItem()");
         }
     }
-    function setVariantPrice(sku) {
-        if (sku == '' || sku == 'NULL' || isVirtual(sku) == true) {
-            return;
-        }
-        else {
-            
-            var elemOnlinePrice = document.getElementById('pdpPriceOnline');
-            var onlinePrice = getVariantOnlinePrice(sku);
-            var txtOnlinePrice = document.createTextNode(onlinePrice);
-            if(elemOnlinePrice != null)
-            {
-	            if(elemOnlinePrice.hasChildNodes()) {
-	                elemOnlinePrice.replaceChild(txtOnlinePrice, elemOnlinePrice.firstChild);
-	            } else {
-	                elemOnlinePrice.appendChild(txtOnlinePrice);
-	            }
-            }
-        }
-    }
+    
     function isVirtual(product) {
         var isVirtual = false;
         <#if virtualJavaScript?exists>
@@ -197,7 +179,7 @@
             jQuery('#productDetailsImageContainer').html(mainImages.html());
             jQuery('#seeMainImage a').attr("href", "javascript:replaceDetailImage('"+largeImageUrl+"', '"+detailImageUrl+"');");
         }
-        <#assign activeZoom = Static["com.osafe.util.Util"].isProductStoreParmTrue(context.get(activeZoomParam!"")!"") />
+        <#assign activeZoom = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"PDP_IMG_ZOOM_ACTIVE_FLAG")/>
         <#if activeZoom>
             var mainImages = jQuery('#mainImageDiv').clone();
             jQuery(mainImages).find('img.productLargeImage').attr('id', 'mainImage');
@@ -217,6 +199,7 @@
             if(document.getElementById('largeImage')) {
                 setDetailImage(detailImageUrl);
             }
+            <#assign IMG_SIZE_PDP_REG_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_REG_W")!""/>
             document.getElementById("mainImage").setAttribute("class","productLargeImage<#if !IMG_SIZE_PDP_REG_W?has_content> productLargeImageDefaultWidth</#if>");
             detailimagePath = "javascript:displayDialogBox('largeImage_')";
             if (jQuery('#mainImageLink').length) {
@@ -299,7 +282,7 @@
                     jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
                     detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
                     jQuery('#productDetailsImageContainer').html(variantMainImages.html());
-
+                }
                     var variantAltImages = jQuery('#altImage_'+VARMAP[mapKey]).clone();
                     //jQuery(variantAltImages).find('img').each(function(){ jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
                     jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
@@ -335,15 +318,16 @@
                     var variantPdpPriceOnLine = jQuery('#pdpPriceOnLine_'+VARMAP[mapKey]).html();
                     jQuery('#pdpPriceOnLine').html(variantPdpPriceOnLine);
                     
+                    var variantPdpVolumePricing = jQuery('#pdpVolumePricing_'+VARMAP[mapKey]).html();
+                    jQuery('#pdpVolumePricing').html(variantPdpVolumePricing);
+                    
                     var variantPdpLongDescription = jQuery('#pdpLongDescription_'+VARMAP[mapKey]).html();
                     jQuery('#pdpLongDescription').html(variantPdpLongDescription);
                     
                     var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_'+VARMAP[mapKey]).html();
                     jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
                 
-                    // set the variant price
-                    //setVariantPrice(VARMAP[mapKey]);
-                }
+                    
             }
             if (index == -1) {
               <#if featureOrderFirst?exists>
@@ -383,8 +367,6 @@
             // set the product ID
             setAddProductId(sku);
             setProductStock(sku);
-            // set the variant price
-            //setVariantPrice(sku);
 
             // check for amount box
             toggleAmt(checkAmtReq(sku));
@@ -397,7 +379,7 @@
 	            jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
 	            detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
 	            jQuery('#productDetailsImageContainer').html(variantMainImages.html());
-	
+	        }
 	            var variantAltImages = jQuery('#altImage_'+varProductId).clone();
 	            //jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
 	            jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
@@ -423,6 +405,9 @@
                 
                 var variantPdpPriceSavingPercent = jQuery('#pdpPriceSavingPercent_'+varProductId).html();
                 jQuery('#pdpPriceSavingPercent').html(variantPdpPriceSavingPercent);
+
+                var variantPdpVolumePricing = jQuery('#pdpVolumePricing_'+varProductId).html();
+                jQuery('#pdpVolumePricing').html(variantPdpVolumePricing);
                 
                 var variantPdpPriceList = jQuery('#pdpPriceList_'+varProductId).html();
                 jQuery('#pdpPriceList').html(variantPdpPriceList);
@@ -430,12 +415,14 @@
                 var variantPdpPriceOnLine = jQuery('#pdpPriceOnLine_'+varProductId).html();
                 jQuery('#pdpPriceOnLine').html(variantPdpPriceOnLine);
                 
+                
+                
                 var variantPdpLongDescription = jQuery('#pdpLongDescription_'+varProductId).html();
                 jQuery('#pdpLongDescription').html(variantPdpLongDescription);
                 
                 var variantPdpDistinguishingFeature = jQuery('#pdpDistinguishingFeature_'+varProductId).html();
                 jQuery('#pdpDistinguishingFeature').html(variantPdpDistinguishingFeature);
-            }
+            
         }
         activateZoom(detailImgUrl);
         activateScroller();
@@ -463,40 +450,7 @@
         return (y[0]+"-"+y[1]+"-"+y[2]);
     }
 
-    function additemSubmit(){
-        <#if product.productTypeId?if_exists == "ASSET_USAGE">
-        newdatevalue = validate(document.addform.reservStart.value);
-        if (newdatevalue == false) {
-            document.addform.reservStart.focus();
-        } else {
-            document.addform.reservStart.value = newdatevalue;
-            document.addform.submit();
-        }
-        <#else>
-        document.addform.submit();
-        </#if>
-    }
-
-    function addShoplistSubmit(){
-        <#if product.productTypeId?if_exists == "ASSET_USAGE">
-        if (document.addToShoppingList.reservStartStr.value == "") {
-            document.addToShoppingList.submit();
-        } else {
-            newdatevalue = validate(document.addToShoppingList.reservStartStr.value);
-            if (newdatevalue == false) {
-                document.addToShoppingList.reservStartStr.focus();
-            } else {
-                document.addToShoppingList.reservStartStr.value = newdatevalue;
-                // document.addToShoppingList.reservStart.value = ;
-                document.addToShoppingList.reservStartStr.value.slice(0,9)+" 00:00:00.000000000";
-                document.addToShoppingList.submit();
-            }
-        }
-        <#else>
-        document.addToShoppingList.submit();
-        </#if>
-    }
-    <#if product.virtualVariantMethodEnum?if_exists == "VV_FEATURETREE" && featureLists?has_content>
+    <#if currentProduct.virtualVariantMethodEnum?if_exists == "VV_FEATURETREE" && featureLists?has_content>
         function checkRadioButton() {
             var block1 = document.getElementById("addCart1");
             var block2 = document.getElementById("addCart2");
@@ -547,13 +501,13 @@
     }
 
     function activateScroller() {
-        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(PDP_ALT_IMG_SCROLLER_ACTIVE)>
+           <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"PDP_ALT_IMG_SCROLLER_ACTIVE")>
             if(!jQuery('#altImageThumbnails').length) {
                 jQuery('#eCommerceProductAddImage').find('ul').attr('id', 'altImageThumbnails');
             }
             jQuery('#altImageThumbnails').addClass('imageScroller');
             jQuery('#altImageThumbnails').jcarousel({
-            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(PDP_ALT_IMG_SCROLLER_VERTICAL)>
+            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"PDP_ALT_IMG_SCROLLER_VERTICAL")>
                 vertical: true,
             </#if>
                 scroll: ${PDP_ALT_IMG_SCROLLER_IMAGES!"2"},
@@ -615,6 +569,6 @@ function changeObjectVisibility(objectId, newVisibility) {
     }
 }
 
-
+</#if>
 
  </script>

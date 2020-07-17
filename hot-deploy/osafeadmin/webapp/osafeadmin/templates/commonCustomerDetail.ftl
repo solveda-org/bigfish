@@ -1,3 +1,5 @@
+${sections.render('commonFormJS')?if_exists}
+${sections.render('tooltipBody')?if_exists}
 <div class="displayBox generalInfo">
     <div class="header"><h2>${generalInfoBoxHeading}</h2></div>
     <div class="boxBody">
@@ -17,7 +19,10 @@ ${sections.render('addressInfoBoxBody')}
     </div>
 </div>
 <div class="displayBox footerInfo">
-    <div class="boxBody">
+    <div>
           ${sections.render('footerBoxBody')}
+    </div>
+    <div class="infoDetailIcon">
+      ${sections.render('commonDetailLinkButton')!}
     </div>
 </div>

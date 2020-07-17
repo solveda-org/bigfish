@@ -55,7 +55,6 @@
 		
 7. 	Boxes
 	7.1 Display Boxes
-	7.2 Dialog Boxes
 
 8. 	Entry Forms	
 
@@ -126,12 +125,12 @@ input, select, option, textarea {
 }
 
 option {
-	border: none!important;
+
 }
 
 input[type="text"],
 input[type="password"] {
-    width: 211px;
+
 }
 
 textarea {
@@ -194,7 +193,7 @@ h1 {
 }
 
 h2 {
-    font-size: 2.2em;
+
 }
 
 h3 {
@@ -703,7 +702,8 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 
 }
 
-#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel, #eCommerceNavBarMenu .ecommerceMegaMenu .subLevel a {
+#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel,
+#eCommerceNavBarMenu .ecommerceMegaMenu .subLevel a {
 
 }
 
@@ -752,10 +752,6 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 }
 
 .eCommerceHomeSpotContent {
-
-}
-
-.eCommerceHomeSpotContent.double { /*for second tier PHs that are twice as wide jS2 */
 
 }
 
@@ -838,7 +834,6 @@ ul#eCommerceNavBarMenu li li.sfHover ul {
 }
 
 #breadcrumb li {
-
 	
 }
 
@@ -2567,33 +2562,27 @@ label.sortBy {
 	/* ----- .pdpAlternateImage ----- */
 
 .pdpAlternateImage {
-    position: absolute;
-    top: 325px; /* To Clear pdpMainImage dic */
+
 }
 
 .pdpAlternateImage #eCommerceProductAddImage ul  {
-    float: left;
 
 }
 
 .pdpAlternateImage #eCommerceProductAddImage ul li  {
-    margin: 6px 2px;
-    float: left;
+
 }
 
 .pdpAlternateImage #eCommerceProductAddImage a {
-    display: block;
-    margin: 0 auto;
-    text-align: center;
 
 }
 
 .pdpAlternateImage #eCommerceProductAddImage a:hover {
-    margin: 0;
+
 }
 
 .pdpAlternateImage .jcarousel-container {
-    border: 1px solid #000;
+
 }
 
 .pdpAlternateImage .jcarousel-direction-rtl {
@@ -2949,32 +2938,8 @@ label.sortBy {
 
 	/* ----- .pdpContent01 ----- */
 
-.pdpContent01 {
-
-}
-
-.pdpContent01 p {
-
-}
-
-.pdpContent01 a.facebookLink {
-
-}
-
-.pdpContent01 a.twitterLink, .pdpContent01 a.twitterLink  {
-
-}
-
-.pdpContent01 a.pinterestLink  {
-
-}
-
-.pdpContent01 a.printPageLink{
-
-}
 
 	/* ----- .pdpContent02 ----- */
-
 
 
 	/* ----- .pdpDeliveryInfo ----- */
@@ -3004,11 +2969,7 @@ label.sortBy {
 }
 
 .pdpDistinguishingFeature .displayBox {
-    clear: none;
-    float: none;
-    width: auto;
-    margin: 0;
-    padding: 20px 0;
+	
 }
 
 .pdpDistinguishingFeature .displayBox h3 {
@@ -3029,7 +2990,6 @@ label.sortBy {
 .pdpDistinguishingFeature .displayBox ul ul {
 
 }
-
 
 .pdpDistinguishingFeature .displayBox ul ul li {
 
@@ -5900,8 +5860,7 @@ table#orderSalesHistory tbody tr th {
 }
 
 .reviewTextSection .reviewText {
-    color: #333333;
-    font-size: 12px;
+
 }
 
 .reviewRow .reviewPostDateSection {

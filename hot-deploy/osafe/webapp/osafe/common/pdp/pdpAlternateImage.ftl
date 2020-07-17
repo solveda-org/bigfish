@@ -1,5 +1,14 @@
+<script language="JavaScript" type="text/javascript">
+
+jQuery(document).ready(function(){
+    activateScroller();
+    }); 
+
+</script>
 <div class="pdpAlternateImage">
 <div id="eCommerceProductAddImage">
+  <#assign IMG_SIZE_PDP_THUMB_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_THUMB_H")!""/>
+  <#assign IMG_SIZE_PDP_THUMB_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_THUMB_W")!""/>
   <#if !maxAltImages?exists>
    <#assign maxAltImages=10/>
   </#if>

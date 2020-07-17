@@ -89,4 +89,43 @@
             return 0;
 		}
 	}
+
+
+    function showContextInfotip(e, elm, nextDiv)
+    {
+        var contextIconBox = jQuery(elm).find('div.'+nextDiv+':first');
+        var contextIconBoxHeight = jQuery(contextIconBox).height();
+        var elemPosBottom = e.clientY;
+        var browserVieportHeight = jQuery(window).height();
+        if(contextIconBox+':hidden')
+        {
+        if(document.all)e = event;
+        jQuery(contextIconBox).css(
+          {
+             position:'absolute',
+             'z-index': '9999'
+          }
+        );
+        
+        if((contextIconBoxHeight + elemPosBottom) > browserVieportHeight)
+        {
+            jQuery(contextIconBox).addClass("contextIconBoxArrowBottomRight");
+            jQuery(contextIconBox).removeClass("contextIconBoxArrowTopRight");
+        }
+        else
+        {
+            jQuery(contextIconBox).removeClass("contextIconBoxArrowBottomRight");
+            jQuery(contextIconBox).addClass("contextIconBoxArrowTopRight");
+        }
+        jQuery(contextIconBox).show();
+        }
+    } 
+    
+    function hideContextInfotip(e, elm, nextDiv)
+    {
+        if(document.all)e = event;
+        
+        var contextIconBox = jQuery(elm).find('div.'+nextDiv+':first');
+        jQuery(contextIconBox).hide();
+    }
 </script>

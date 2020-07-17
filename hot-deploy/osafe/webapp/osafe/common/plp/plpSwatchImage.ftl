@@ -1,19 +1,17 @@
 <#if productSelectableFeatureAndAppl?has_content>
+ <#assign plpSwatchImageHeight = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PLP_SWATCH_H")!""/>
+ <#assign plpSwatchImageWidth = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PLP_SWATCH_W")!""/>
+ <#assign IMG_SIZE_PLP_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PLP_H")!""/>
+ <#assign IMG_SIZE_PLP_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PLP_W")!""/>
+ <#assign PRODUCT_MONEY_THRESHOLD = Static["com.osafe.util.Util"].getProductStoreParm(request,"PRODUCT_MONEY_THRESHOLD")!"0"/>
+ <#assign PRODUCT_PCT_THRESHOLD = Static["com.osafe.util.Util"].getProductStoreParm(request,"PRODUCT_PCT_THRESHOLD")!"0"/>
+ <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
 <div class="plpSwatchImage">
   <div class="swatch">
     <#list productSelectableFeatureAndAppl as productFeatureAppls>
-      <#assign plpSwatchImageHeight= IMG_SIZE_PLP_SWATCH_H!""/>
-      <#assign plpSwatchImageWidth= IMG_SIZE_PLP_SWATCH_W!""/>
       <#assign productFeatureId=productFeatureAppls.productFeatureId/>
       <#assign productFeatureTypeId=productFeatureAppls.productFeatureTypeId/>
       <#assign productFeatureDescription=productFeatureAppls.description!""/>
-      <#assign productFeatureDataResources = delegator.findByAnd("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",productFeatureId,"prodFeatureDataResourceTypeId","PLP_SWATCH_IMAGE_URL"))/>
-      <#if productFeatureDataResources?has_content>
-        <#list productFeatureDataResources as productFeatureDataResource>
-          <#assign dataResource = productFeatureDataResource.getRelatedOne("DataResource")/>
-          <#assign productFeatureUrl = dataResource.objectInfo!""/>
-        </#list>
-      </#if>
 
       <#assign productFeatureVariantId=""/>
       <#list productVariantFeatureList as productVariantFeatureListInfo>
@@ -36,9 +34,15 @@
         <#assign productVariantSmallURL = productVariantContentWrapper.get("SMALL_IMAGE_URL")!"">
         <#assign productVariantSmallAltURL = productVariantContentWrapper.get("SMALL_IMAGE_ALT_URL")!"">
         <#assign productVariantPlpSwatchURL = productVariantContentWrapper.get("PLP_SWATCH_IMAGE_URL")!"">
-        <#if (productVariantPlpSwatchURL?string?has_content)>
+        <#if productVariantPlpSwatchURL?has_content>
           <img src="<@ofbizContentUrl>${productVariantPlpSwatchURL}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
         <#else>
+	      <#assign productFeatureDataResources = delegator.findByAndCache("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",productFeatureId,"featureDataResourceTypeId","PLP_SWATCH_IMAGE_URL"))/>
+	      <#if productFeatureDataResources?has_content>
+            <#assign productFeatureDataResource = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productFeatureDataResources) />
+            <#assign dataResource = productFeatureDataResource.getRelatedOneCache("DataResource")/>
+            <#assign productFeatureUrl = dataResource.objectInfo!""/>
+	      </#if>
           <#if productFeatureUrl?has_content>
             <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" id="${productFeatureTypeId!}:${productFeatureDescription!}|${productId!}" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if> ${productFeatureDescription!""} ${descriptiveFeatureGroupDesc!""}" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureVariantId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
           </#if>
@@ -61,14 +65,16 @@
         
         <div class="swatchVariantSaveMoney" style="display:none">
           <#assign showSavingMoneyAbove = PRODUCT_MONEY_THRESHOLD!"0"/>
-          <#assign youSaveMoney = (variantListPrice - variantOnlinePrice)/>
-          <#if youSaveMoney gt showSavingMoneyAbove?number>  
-            <p class="price">${uiLabelMap.YouSaveCaption}<@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+          <#if variantListPrice?has_content && variantOnlinePrice?has_content>
+            <#assign youSaveMoney = (variantListPrice - variantOnlinePrice)/>
+            <#if (youSaveMoney?has_content) && (youSaveMoney gt showSavingMoneyAbove?number)>  
+              <p class="price">${uiLabelMap.YouSaveCaption}<@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!productStore.defaultCurrencyUomId!"" /></p>
+            </#if>
           </#if>
         </div>
         
         <div class="swatchVariantSavingPercent" style="display:none">
-          <#if variantListPrice != 0>
+          <#if variantListPrice?has_content && variantListPrice != 0>
             <#assign showSavingPercentAbove = PRODUCT_PCT_THRESHOLD!"0"/>
             <#assign showSavingPercentAbove = (showSavingPercentAbove?number)/100.0 />
             <#assign youSavePercent = ((variantListPrice - variantOnlinePrice)/variantListPrice) />
@@ -77,11 +83,6 @@
             </#if>
           </#if>
         </div>
-        
-      <#else>
-        <#if productFeatureUrl?has_content>
-          <img src="<@ofbizContentUrl>${productFeatureUrl}</@ofbizContentUrl>" class="plpFeatureSwatchImage <#if featureValueSelected==productFeatureDescription>selected</#if>" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="${productFeatureId!""}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
-        </#if>
       </#if>
     </#list>
   </div>

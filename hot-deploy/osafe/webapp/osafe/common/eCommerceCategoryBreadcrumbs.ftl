@@ -20,6 +20,7 @@ under the License.
 <#assign topLevelList = requestAttributes.topLevelList?if_exists>
 <#assign curCategoryId = requestAttributes.curCategoryId?if_exists>
 <#assign curTopMostCategoryId = requestAttributes.curTopMostCategoryId?if_exists>
+<#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
 
 <#-- looping macro -->
 <#macro topCategoryList category>

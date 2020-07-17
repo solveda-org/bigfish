@@ -48,7 +48,9 @@
               <#list topLevelList as category>
                 <#if catContentWrappers?exists>
                   <option value="${category.productCategoryId?if_exists}" <#if (parameters.srchCategoryId!"") == "${category.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;${catContentWrappers[category.productCategoryId].get("CATEGORY_NAME")?if_exists}</option>
-                  <#assign subCatList = Static["org.ofbiz.product.category.CategoryWorker"].getRelatedCategoriesRet(request, "subCatList", category.getString("productCategoryId"), true)>
+				  <#if subCatRollUpMap?has_content>
+				    <#assign subCatList = subCatRollUpMap.get(category.productCategoryId)!/>
+				  </#if> 
                   <#if subCatList?exists && subCatList?has_content>
                     <#list subCatList as subCategory>
                       <option value="${subCategory.productCategoryId?if_exists}" <#if (parameters.srchCategoryId!"") == "${subCategory.productCategoryId?if_exists}">selected</#if>>&nbsp;&nbsp;&nbsp;&nbsp;${catContentWrappers[subCategory.productCategoryId].get("CATEGORY_NAME")?if_exists}</option>

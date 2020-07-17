@@ -22,14 +22,15 @@ import org.ofbiz.entity.util.EntityFindOptions;
 // productStoreId    productPromoApplEnums  selectedProductPromoApplEnum
 // inputParamEnums  selectedInputParamEnum  condOperEnums  selectedCondOperEnum
 // productPromoActionEnums selectedProductPromoActionEnum
-if(globalContext.productStore)
+if (UtilValidate.isNotEmpty(globalContext.productStore))
 {
     productStoreId = productStore.productStoreId;
     context.productStoreId = productStoreId;
 }
 // list to find all the shipmentMethods from the view named "ProductStoreShipmentMethView".
-if (context.productStoreId) {
-    context.productStoreShipmentMethList = delegator.findByAndCache('ProductStoreShipmentMethView', [productStoreId: context.productStoreId], ['sequenceNumber']);
+if (UtilValidate.isNotEmpty(context.productStoreId)) 
+{
+    context.productStoreShipmentMethList = delegator.findByAnd('ProductStoreShipmentMethView', [productStoreId: context.productStoreId], ['sequenceNumber']);
 }
 conditions = FastList.newInstance();
 conditions.add(EntityCondition.makeCondition("enumTypeId", EntityOperator.EQUALS, "PROD_PROMO_PCAPPL"));
@@ -238,7 +239,8 @@ if (UtilValidate.isNotEmpty(productPromoId))
             topPromotionFindOpts = new EntityFindOptions(true, EntityFindOptions.TYPE_SCROLL_INSENSITIVE, EntityFindOptions.CONCUR_READ_ONLY, true);
 
 
-            for (productPromo in context.productPromoList) {
+            for (productPromo in context.productPromoList) 
+            {
 
                  ecl = EntityCondition.makeCondition([
                      EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, globalContext.productStoreId),
@@ -248,15 +250,18 @@ if (UtilValidate.isNotEmpty(productPromoId))
             
                  eli = delegator.findListIteratorByCondition(topPromotionDve, ecl, null, topPromotionFields, orderBy, topPromotionFindOpts);
                  productPromoUses = eli.getCompleteList();
-                 if (eli != null) {
+                 if (eli != null) 
+                 {
                      try {
                          eli.close();
                      } catch (GenericEntityException e) {}
                  }
-                 if (UtilValidate.isNotEmpty(productPromoUses)) {
+                 if (UtilValidate.isNotEmpty(productPromoUses)) 
+                 {
                      productPromoUse = EntityUtil.getFirst(productPromoUses);
                      productPromoUsage.put(productPromo.productPromoCodeId, productPromoUse.totalOrders);
-                 } else if (UtilValidate.isNotEmpty(productPromo.productPromoCodeId)){
+                 } else if (UtilValidate.isNotEmpty(productPromo.productPromoCodeId))
+                 {
                      productPromoUsage.put(productPromo.productPromoCodeId, 0);
                  }
             }

@@ -3,7 +3,7 @@
     <description>OSafe Services</description>
     <vendor/>
     <version>1.0</version>
-    <service name="clientProductRatingUpdates" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientProductRatingUpdates" auth="false" transaction-timeout="7200" use-transaction="false">
+    <service name="clientProductRatingUpdate" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientProductRatingUpdate" auth="false" transaction-timeout="7200" use-transaction="false">
         <description>Import Client Product Ratings Template </description>
         <implements service="sendScheduledJobNotificationInterface"/>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" />
@@ -11,7 +11,7 @@
         <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
         <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
     </service>
-    <service name="clientProductUpdates" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientProductUpdates" auth="false" transaction-timeout="7200" use-transaction="false">
+    <service name="clientProductUpdate" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientProductUpdate" auth="false" transaction-timeout="7200" use-transaction="false">
         <description>Import Client Product Template</description>
         <implements service="sendScheduledJobNotificationInterface"/>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" />
@@ -19,7 +19,7 @@
         <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
         <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
     </service>
-    <service name="clientStoreUpdates" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientStoreUpdates" auth="false" transaction-timeout="7200" use-transaction="false">
+    <service name="clientStoreUpdate" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientStoreUpdate" auth="false" transaction-timeout="7200" use-transaction="false">
         <description>Import Client Store Template</description>
         <implements service="sendScheduledJobNotificationInterface"/>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" />
@@ -27,6 +27,16 @@
         <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
         <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
     </service>
+    
+    <service name="clientOrderStatusUpdate" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="clientOrderStatusUpdate" auth="false" transaction-timeout="7200" use-transaction="false">
+        <description>Import Client Order Status Change Template</description>
+        <implements service="sendScheduledJobNotificationInterface"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="false" />
+        <attribute name="feedsInOrderStatusDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInSuccessSubDir" mode="IN" type="String" optional="true" />
+        <attribute name="feedsInErrorSubDir" mode="IN" type="String" optional="true" />
+    </service>
+
     <service name="bigFishCustomerFeed" engine="java" location="com.osafe.services.OsafeAdminFeedServices" invoke="bigFishCustomerFeed" auth="false" transaction-timeout="7200">
         <description>Export Bigfish Customers</description>
         <implements service="sendScheduledJobNotificationInterface"/>

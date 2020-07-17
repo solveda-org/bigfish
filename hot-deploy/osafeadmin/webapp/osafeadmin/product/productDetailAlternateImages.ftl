@@ -29,7 +29,7 @@
           </div>
           <div class="infoValue">
             <#if altLargeImage != "">
-              <img src="<@ofbizContentUrl>${altLargeImage!}?${curDateTime!}</@ofbizContentUrl>" alt="${altLargeImage!}" height="${IMG_SIZE_PDP_REG_H!""}" width="${IMG_SIZE_PDP_REG_W!""}" class="imageBorder"/>
+              <img src="<@ofbizContentUrl>${altLargeImage!}?${curDateTime!}</@ofbizContentUrl>" alt="${altLargeImage!}" height="${globalContext.IMG_SIZE_PDP_REG_H!""}" width="${globalContext.IMG_SIZE_PDP_REG_W!""}" class="imageBorder"/>
             <#else>
               <span class="noImage imageBorder"></span>
             </#if>
@@ -61,7 +61,7 @@
           </div>
           <div class="infoValue">
             <#if altThumbnailImage != "">
-              <img src="<@ofbizContentUrl>${altThumbnailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${altThumbnailImage}" height="${IMG_SIZE_PDP_THUMB_H!""}" width="${IMG_SIZE_PDP_THUMB_W!""}" class="imageBorder"/>
+              <img src="<@ofbizContentUrl>${altThumbnailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${altThumbnailImage}" height="${globalContext.IMG_SIZE_PDP_THUMB_H!""}" width="${globalContext.IMG_SIZE_PDP_THUMB_W!""}" class="imageBorder"/>
             <#else>
               <span class="noImage imageBorder"></span>
             </#if>
@@ -93,7 +93,7 @@
           </div>
           <div class="infoValue">
             <#if altDetailImage != "">
-              <img src="<@ofbizContentUrl>${altDetailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${altDetailImage}" height="${IMG_SIZE_PDP_POPUP_H!""}" width="${IMG_SIZE_PDP_POPUP_W!""}" class="imageBorder"/>
+              <img src="<@ofbizContentUrl>${altDetailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${altDetailImage}" height="${globalContext.IMG_SIZE_PDP_POPUP_H!""}" width="${globalContext.IMG_SIZE_PDP_POPUP_W!""}" class="imageBorder"/>
             <#else>
               <span class="noImage imageBorder"></span>
             </#if>

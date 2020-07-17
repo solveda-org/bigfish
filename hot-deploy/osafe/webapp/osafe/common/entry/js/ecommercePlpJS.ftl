@@ -1,6 +1,6 @@
 <script type="text/javascript">
 jQuery(document).ready(function () {
-  <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(QUICKLOOK_ACTIVE)>
+  <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"QUICKLOOK_ACTIVE")>
     <#if QUICKLOOK_DELAY_MS?has_content && Static["com.osafe.util.Util"].isNumber(QUICKLOOK_DELAY_MS) && QUICKLOOK_DELAY_MS != "0">
       jQuery("div.eCommerceThumbNailHolder").hover(function(){jQuery(this).find("div.plpQuicklook").fadeIn(${QUICKLOOK_DELAY_MS});},function () {jQuery(this).find("div.plpQuicklook").fadeOut(${QUICKLOOK_DELAY_MS});});
     <#else>

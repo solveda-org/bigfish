@@ -75,7 +75,7 @@ function toggleBillingAccount(box) {
                 <#if shippingContactMechList?has_content>
                  <#list shippingContactMechList as shippingContactMech>
 
-                   <#assign shippingAddress = shippingContactMech.getRelatedOne("PostalAddress")>
+                   <#assign shippingAddress = shippingContactMech.getRelatedOneCache("PostalAddress")>
                    <#assign checkThisAddress = (shippingContactMech_index == 0 && !cart.getShippingContactMechId()?has_content) || (cart.getShippingContactMechId()?default("") == shippingAddress.contactMechId)/>
 
                    <div class="displayBox addressTitle">

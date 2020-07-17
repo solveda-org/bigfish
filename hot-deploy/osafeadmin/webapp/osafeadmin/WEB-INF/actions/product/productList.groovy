@@ -53,26 +53,30 @@ prodCtntExprDesc = FastList.newInstance();
 prodCtntExprName = FastList.newInstance();
 exprBldr =  new EntityConditionBuilder();
 
-if(UtilValidate.isNotEmpty(searchText)) {
-    if(UtilValidate.isEmpty(request.getParameter("searchText"))) {
+if(UtilValidate.isNotEmpty(searchText)) 
+{
+    if(UtilValidate.isEmpty(request.getParameter("searchText"))) 
+    {
         request.setAttribute("searchText", searchText);
     }
     webSearchResult = SolrEvents.solrSearch(request,response);
     completeDocumentList = FastList.newInstance();
-    if(webSearchResult == 'success') {
+    if(webSearchResult == 'success') 
+    {
         completeDocumentList = request.getAttribute("completeDocumentList");
     }
     productSearchByCategoryList = completeDocumentList;
     context.searchText = searchText;
-} else {
-    if (productId){
-        /* paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productId"),
-                EntityOperator.LIKE, "%"+productId.toUpperCase()+"%"));*/
+} else 
+{
+    if (UtilValidate.isNotEmpty(productId))
+    {
         paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("productId"), EntityOperator.EQUALS, productId.toUpperCase()));
         context.productId=productId;
     }
     //Start Fetch the Record from Product Content.
-    if (description){
+    if (UtilValidate.isNotEmpty(description))
+    {
         prodCtntExprDesc.add(EntityCondition.makeCondition(
         		EntityFunction.UPPER_FIELD("textData"),
                 EntityOperator.LIKE, "%"+description.toUpperCase() + "%"));
@@ -84,7 +88,8 @@ if(UtilValidate.isNotEmpty(searchText)) {
         context.description=description;
     }
     
-    if(productName){
+    if (UtilValidate.isNotEmpty(productName))
+    {
         prodCtntExprName.add(EntityCondition.makeCondition(
                 EntityFunction.UPPER_FIELD("textData"),
                 EntityOperator.LIKE, "%"+productName.toUpperCase() + "%"));
@@ -96,36 +101,47 @@ if(UtilValidate.isNotEmpty(searchText)) {
         context.productName=productName;
     }
     //End Fetch the Record from Product Content.
-    if(internalName){
+    if (UtilValidate.isNotEmpty(internalName))
+    {
         paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("internalName"),
                 EntityOperator.LIKE, "%"+internalName.toUpperCase()+"%"));
         context.internalName=internalName;
     }
     
-    if(srchCategoryId && srchCategoryId != 'all') {
-    	productIds = OsafeAdminUtil.getAssociatedProductFromCategory(request, srchCategoryId);
-    	paramsExpr.add(EntityCondition.makeCondition("productId", EntityOperator.IN, productIds));
+    if (UtilValidate.isNotEmpty(srchCategoryId) && srchCategoryId != 'all') 
+    {
+    	productCategoryMembers = delegator.findByAnd("ProductCategoryMember", UtilMisc.toMap("productCategoryId", srchCategoryId));
+    	productIds = EntityUtil.getFieldListFromEntityList(productCategoryMembers, "productId", true);
+        if (UtilValidate.isNotEmpty(productIds))
+        {
+        	paramsExpr.add(EntityCondition.makeCondition("productId", EntityOperator.IN, productIds));
+        	
+        }
     }
  // Reterive Only Virtual Product with CheckBox implementation
     virtualExpr= FastList.newInstance();
-    if(srchVirtualOnly){
+    if (UtilValidate.isNotEmpty(srchVirtualOnly))
+    {
     	virtualExpr.add(EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, "Y"));
         context.srchVirtualOnly=srchVirtualOnly
     }
-    else {
+    else 
+    {
     	virtualExpr.add(EntityCondition.makeCondition("isVariant", EntityOperator.NOT_EQUAL, "Y"));
     	virtualExpr.add(EntityCondition.makeCondition("isVirtual", EntityOperator.EQUALS, null));
     	virtualExpr.add(EntityCondition.makeCondition("isVariant", EntityOperator.EQUALS, null));
     }
     dateExpr= FastList.newInstance();
     introDateExpr= FastList.newInstance();
-    if(!notYetIntroduced){
+    if(!notYetIntroduced)
+    {
         introDateExpr.add(EntityCondition.makeCondition("introductionDate", EntityOperator.LESS_THAN_EQUAL_TO, atTime));
         introDateExpr.add(EntityCondition.makeCondition("introductionDate", EntityOperator.EQUALS, null));
         dateExpr.add(EntityCondition.makeCondition(introDateExpr, EntityOperator.OR));
     }
     discoDateExpr= FastList.newInstance();
-    if(!discontinued){
+    if(!discontinued)
+    {
         discoDateExpr.add(EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.GREATER_THAN, atTime));
         discoDateExpr.add(EntityCondition.makeCondition("salesDiscontinuationDate", EntityOperator.EQUALS, null));
         dateExpr.add(EntityCondition.makeCondition(discoDateExpr, EntityOperator.OR));
@@ -136,15 +152,18 @@ if(UtilValidate.isNotEmpty(searchText)) {
         dateCond = EntityCondition.makeCondition(dateExpr, EntityOperator.AND);
     }
     prodCond=null;
-    if (UtilValidate.isNotEmpty(paramsExpr)) {
+    if (UtilValidate.isNotEmpty(paramsExpr)) 
+    {
         prodCond=EntityCondition.makeCondition(paramsExpr, EntityOperator.AND);
         mainCond=prodCond;
     }
     
     paramCond=null;
-    if (UtilValidate.isNotEmpty(virtualExpr)) {
+    if (UtilValidate.isNotEmpty(virtualExpr)) 
+    {
     	virtCond = EntityCondition.makeCondition(virtualExpr, EntityOperator.OR);
-   	   if (prodCond) {
+   	   if (UtilValidate.isNotEmpty(prodCond))
+   	   {
  	      mainCond = EntityCondition.makeCondition([prodCond, virtCond], EntityOperator.AND);
    	   }
    	   else
@@ -152,7 +171,7 @@ if(UtilValidate.isNotEmpty(searchText)) {
    	     mainCond=virtCond;
    	   }
     }
-    if (dateCond) 
+    if (UtilValidate.isNotEmpty(dateCond)) 
     {
         mainCond = EntityCondition.makeCondition([mainCond, dateCond], EntityOperator.AND);
     }

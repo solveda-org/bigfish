@@ -3,6 +3,7 @@
     <th class="idCol firstCol">${uiLabelMap.EmailTypeLabel}</th>
     <th class="descCol">${uiLabelMap.SubjectLabel}</th>
     <th class="descCol">${uiLabelMap.FromLabel}</th>
+    <th class="actionCol"></th>
   </tr>
   <#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
@@ -12,6 +13,10 @@
         <td class="idCol <#if !email_has_next?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>emailConfigDetail?emailType=${email.emailType!""}</@ofbizUrl>">${email.emailType!""}</a></td>
         <td class="descCol <#if !email_has_next?if_exists>lastRow</#if>">${email.subject!""}</td>
         <td class="descCol <#if !email_has_next?if_exists>lastRow</#if>">${email.fromAddress!""}</td>
+        <td class="actionCol <#if !email_has_next?if_exists>lastRow</#if>">
+        	${setRequestAttribute("emailTypeId",email.emailType)}
+        	${screens.render("component://osafeadmin/widget/AdminScreens.xml#emailConfigTemplateActionList")}
+        </td> 
       </tr>
       <#if rowClass == "2">
         <#assign rowClass = "1">

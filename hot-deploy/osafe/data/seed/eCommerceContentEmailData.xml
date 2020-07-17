@@ -995,7 +995,7 @@ ${userLogin.userLoginId}
 <!-- SCHEDULED JOB NOTIFICATION EMAIL -->
 <ElectronicText dataResourceId="E_SCHED_JOB_ALERT">
  <textData>
-    <![CDATA[<p>${uiLabelMap.JobNameLabel}${SCHED_JOB_NAME!}</p>
+    <![CDATA[<p>${uiLabelMap.JobNameLabel}Job Name: ${SCHED_JOB_NAME!}</p>
 <p>${uiLabelMap.JobStatusLabel} ${SCHED_JOB_STATUS!}</p>
 <p>${uiLabelMap.JobInfoLabel} ${SCHED_JOB_INFO!}</p>
             ]]>

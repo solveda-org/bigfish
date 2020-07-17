@@ -35,29 +35,34 @@
                  <#if PDP_FACET_GROUP_VARIANT_SWATCH?has_content && productFeatureTypeId ==PDP_FACET_GROUP_VARIANT_SWATCH>
                      <#assign productFeatureSelectVariantId=""/>
 	                 <#list productVariantMapKeys as pAssoc>
-		                 <#assign productFeatureAndAppl = delegator.findByAnd("ProductFeatureAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" ,pAssoc,'productFeatureApplTypeId','STANDARD_FEATURE')) />
-		                 <#assign productFeatureAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndAppl?if_exists)/>
+                         <#assign productAssoc = delegator.findByPrimaryKeyCache("Product", {"productId" : pAssoc})/>
+		                 <#assign productFeatureAndAppl = productAssoc.getRelatedCache("ProductFeatureAppl") />
+		                 <#assign productFeatureAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndAppl,true)/>
+		                 <#assign productFeatureAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(productFeatureAndAppl,Static["org.ofbiz.base.util.UtilMisc"].toMap('productFeatureApplTypeId','STANDARD_FEATURE'))/>
+		                 <#assign productFeatureAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productFeatureAndAppl,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
                          <#list productFeatureAndAppl as pFeatureAndAppl>
        	                    <#assign productFeatureStandardId =pFeatureAndAppl.productFeatureId/>
-       	                    <#if productFeatureStandardId ==productFeatureSelectableId && !productFeatureSelectVariantId?has_content>
-                               <#assign productFeatureId=productFeatureStandardId/>
-                               <#assign productFeatureSelectVariantId=pFeatureAndAppl.productId/>
+       	                    <#if productFeatureStandardId ==productFeatureSelectableId>
+       	                       <#assign isSellableVariant = Static["org.ofbiz.product.product.ProductWorker"].isSellable(delegator, pFeatureAndAppl.productId?if_exists) />
+       	                       <#if isSellableVariant && !productFeatureSelectVariantId?has_content>
+       	                         <#assign productFeatureId=productFeatureStandardId/>
+                                 <#assign productFeatureSelectVariantId=pFeatureAndAppl.productId/>
+       	                       </#if>
        	                    </#if>
                          </#list>
 		             </#list>
 		             
                      <#if productFeatureSelectVariantId?has_content>
-                       
                            <#if !alreadyShownProductFeatureId.contains(productFeatureId)>
-	 	                       <#assign variantProdCtntWrapper = productVariantMap.get('${productFeatureSelectVariantId}')/>
+	 	                       <#assign variantProdCtntWrapper = productVariantMap.get('${productFeatureSelectVariantId!}')/>
 	  	                       <#assign productVariantPlpSwatchURL = variantProdCtntWrapper.get("PDP_SWATCH_IMAGE_URL")!"">
 		                       <#if (productVariantPlpSwatchURL?string?has_content)>
 		                         <#assign productFeatureSwatchURL=productVariantPlpSwatchURL/>
 		                       <#else>
-	                             <#assign productFeatureDataResources = delegator.findByAnd("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",productFeatureId,"prodFeatureDataResourceTypeId","PDP_SWATCH_IMAGE_URL"))/>
+	                             <#assign productFeatureDataResources = delegator.findByAndCache("ProductFeatureDataResource", Static["org.ofbiz.base.util.UtilMisc"].toMap("productFeatureId",productFeatureId,"featureDataResourceTypeId","PDP_SWATCH_IMAGE_URL"))/>
 				                 <#if productFeatureDataResources?has_content>
 	                               <#assign productFeatureDataResource = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productFeatureDataResources) />
-					               <#assign dataResource = productFeatureDataResource.getRelatedOne("DataResource")/>
+					               <#assign dataResource = productFeatureDataResource.getRelatedOneCache("DataResource")/>
 					               <#assign productFeatureResourceUrl = dataResource.objectInfo!""/>
 					               <#if productFeatureResourceUrl?has_content>
 	     	                         <#assign productFeatureSwatchURL=productFeatureResourceUrl/>
@@ -92,8 +97,8 @@
 		 					       <#assign selectedClass="true"/>
 		 					     </#if>
 		 					   </#if>
-		 					   <#assign pdpSwatchImageHeight= IMG_SIZE_PDP_SWATCH_H!""/>
-                               <#assign pdpSwatchImageWidth= IMG_SIZE_PDP_SWATCH_W!""/>
+							   <#assign pdpSwatchImageHeight = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_SWATCH_H")!""/>
+							   <#assign pdpSwatchImageWidth = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_SWATCH_W")!""/>
                                <#if !parameters.productFeatureType?exists || productFeatureTypeId != productFeatureTypeIdParm[0]!"">
                                  <#if selectedIdx == 0>
                                    <#assign selectedClass="true"/>

@@ -41,7 +41,12 @@
         <td class="descCol" colspan="0">&nbsp;</td>
         <td class="dateCol">${(category.fromDate?string(preferredDateFormat))!""}</td>
         <td class="dateCol">${(category.thruDate?string(preferredDateFormat))!""}</td>
-        <td class="actionCol">&nbsp;</td>
+        <td class="actionCol">
+        <#assign productCategoryRollup = delegator.findByAnd("ProductCategoryRollup", {"parentProductCategoryId" : category.productCategoryId})>
+          <#if !productCategoryRollup?has_content>
+              <a class="editLink" href="<@ofbizUrl>${facetGroupDetail!}?productCategoryId=${category.productCategoryId}</@ofbizUrl>">${uiLabelMap.EditLabel}</a>
+          </#if>
+        </td>
       </tr>
     </#if>
     <#if levelValue?has_content && levelValue="2">

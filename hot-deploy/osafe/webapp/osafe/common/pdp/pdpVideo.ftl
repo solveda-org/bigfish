@@ -1,4 +1,6 @@
 <div class="pdpVideo">
+<#assign IMG_SIZE_PDP_VIDEO_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_VIDEO_H")!""/>
+<#assign IMG_SIZE_PDP_VIDEO_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_VIDEO_W")!""/>
   <div id="productVideoLink">
     <#if pdpVideoUrl?has_content && pdpVideoUrl!=''>
       <a href="javascript:void(0);" id="pdpShowVideo" onclick="javascript:showProductVideo('productVideo')"><span>${uiLabelMap.PdpVideoLabel}</span></a>

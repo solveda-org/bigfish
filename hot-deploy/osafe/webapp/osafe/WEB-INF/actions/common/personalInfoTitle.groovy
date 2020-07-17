@@ -3,13 +3,17 @@ import javolution.util.FastMap;
 import javolution.util.FastList;
 import java.lang.*;
 
-personTitleList = delegator.findByAnd("Enumeration", [enumTypeId : "PERSONAL_TITLE"], ["sequenceId"]);
-if(UtilValidate.isNotEmpty(personTitleList)){
+personTitleList = delegator.findByAndCache("Enumeration", [enumTypeId : "PERSONAL_TITLE"], ["sequenceId"]);
+if(UtilValidate.isNotEmpty(personTitleList))
+{
     personTitles = FastList.newInstance();
-    for (GenericValue personTitle :  personTitleList) {
-        if(UtilValidate.isNotEmpty(personTitle.sequenceId) && (personTitle.sequenceId instanceof String) && (UtilValidate.isInteger(personTitle.sequenceId))){
+    for (GenericValue personTitle :  personTitleList) 
+    {
+        if(UtilValidate.isNotEmpty(personTitle.sequenceId) && (personTitle.sequenceId instanceof String) && (UtilValidate.isInteger(personTitle.sequenceId)))
+        {
             seqId = Integer.parseInt(personTitle.sequenceId);
-            if(seqId > 0){
+            if(seqId > 0)
+            {
                 personTitles.add(personTitle);
             }
         }

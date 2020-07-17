@@ -46,7 +46,7 @@
             <#assign selectedCountry = defaultCountryGeoMap.geoId/>
         </#if>
     </#if>
-    <#if COUNTRY_MULTI?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI)>
+    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"COUNTRY_MULTI")>
         <div class="entry">
             <label for="REQ_CATALOG_COUNTRY"><@required/>${uiLabelMap.CountryCaption}</label>
             <select name="REQ_CATALOG_COUNTRY" id="REQ_CATALOG_COUNTRY" class="dependentSelectMaster">

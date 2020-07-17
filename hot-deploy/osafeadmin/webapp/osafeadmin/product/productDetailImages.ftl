@@ -17,7 +17,7 @@
               </div>
               <div class="infoValue">
                 <#if productLargeImage != "">
-                  <img src="<@ofbizContentUrl>${productLargeImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productLargeImage}" height="${IMG_SIZE_PDP_REG_H!""}" width="${IMG_SIZE_PDP_REG_W!""}" class="imageBorder"/>
+                  <img src="<@ofbizContentUrl>${productLargeImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productLargeImage}" height="${globalContext.IMG_SIZE_PDP_REG_H!""}" width="${globalContext.IMG_SIZE_PDP_REG_W!""}" class="imageBorder"/>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>
@@ -27,7 +27,6 @@
               <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.LargePDPImageInfo}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
           </div>
        </div>
-       <hr/>
        <div class="infoRow bottomRow">
           <div class="infoEntry">
               <div class="infoCaption">
@@ -45,7 +44,7 @@
               </div>
               <div class="infoValue">
                 <#if productThumbnailImage != "">
-                  <img src="<@ofbizContentUrl>${productThumbnailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productThumbnailImage}" height="${IMG_SIZE_PDP_THUMB_H!""}" width="${IMG_SIZE_PDP_THUMB_W!""}" class="imageBorder"/>
+                  <img src="<@ofbizContentUrl>${productThumbnailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productThumbnailImage}" height="${globalContext.IMG_SIZE_PDP_THUMB_H!""}" width="${globalContext.IMG_SIZE_PDP_THUMB_W!""}" class="imageBorder"/>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>
@@ -77,7 +76,7 @@
               </div>
               <div class="infoValue">
                 <#if productDetailImage != "">
-                  <img src="<@ofbizContentUrl>${productDetailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productDetailImage}" height="${IMG_SIZE_PDP_POPUP_H!""}" width="${IMG_SIZE_PDP_POPUP_W!""}" class="imageBorder"/>
+                  <img src="<@ofbizContentUrl>${productDetailImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productDetailImage}" height="${globalContext.IMG_SIZE_PDP_POPUP_H!""}" width="${globalContext.IMG_SIZE_PDP_POPUP_W!""}" class="imageBorder"/>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>
@@ -109,7 +108,7 @@
               </div>
               <div class="infoValue">
                 <#if productSmallImage != "">
-                 <img src="<@ofbizContentUrl>${productSmallImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productSmallImage}" height="${IMG_SIZE_PLP_H!""}" width="${IMG_SIZE_PLP_W!""}" class="imageBorder"/>
+                 <img src="<@ofbizContentUrl>${productSmallImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productSmallImage}" height="${globalContext.IMG_SIZE_PLP_H!""}" width="${globalContext.IMG_SIZE_PLP_W!""}" class="imageBorder"/>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>
@@ -152,7 +151,7 @@
               </div>
               <div class="infoValue">
                 <#if productSmallAltImage != "">
-                  <img src="<@ofbizContentUrl>${productSmallAltImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productSmallAltImage}" height="${IMG_SIZE_PLP_H!""}" width="${IMG_SIZE_PLP_W!""}" class="imageBorder"/>
+                  <img src="<@ofbizContentUrl>${productSmallAltImage}?${curDateTime!}</@ofbizContentUrl>" alt="${productSmallAltImage}" height="${globalContext.IMG_SIZE_PLP_H!""}" width="${globalContext.IMG_SIZE_PLP_W!""}" class="imageBorder"/>
                 <#else>
                   <span class="noImage imageBorder"></span>
                 </#if>

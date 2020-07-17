@@ -48,6 +48,8 @@ public class SolrIndexDocument {
     @Field
     private String productCategoryFacetGroups;
     @Field
+    private Float listPrice;
+    @Field
     private Float price;
     @Field
     private Float customerRating;
@@ -235,6 +237,14 @@ public class SolrIndexDocument {
         this.productCategoryFacetGroups = productCategoryFacetGroups;
     }
 
+    public Float getListPrice() {
+        return listPrice;
+    }
+
+    public void setListPrice(Float listPrice) {
+        this.listPrice = listPrice;
+    }
+    
     public Float getPrice() {
         return price;
     }

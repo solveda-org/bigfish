@@ -8,26 +8,34 @@ import org.ofbiz.base.util.*;
 import javolution.util.FastMap;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.service.LocalDispatcher;
+import org.apache.commons.lang.StringEscapeUtils;
 
-if (UtilValidate.isNotEmpty(parameters.productId)) {
-    product = delegator.findOne("Product",["productId":parameters.productId], true);
+if (UtilValidate.isNotEmpty(parameters.productId)) 
+{
+    product = delegator.findOne("Product",["productId":parameters.productId], false);
     context.product = product;
-    if (product) 
+    if (UtilValidate.isNotEmpty(product)) 
      {
         productContentWrapper = new ProductContentWrapper(product, request);
         String productDetailHeading = "";
-        if(productContentWrapper)
+        if (UtilValidate.isNotEmpty(productContentWrapper))
         {
-            productDetailHeading = productContentWrapper.get("PRODUCT_NAME");
-            if (UtilValidate.isEmpty(productDetailHeading)) {
+            productDetailHeading = StringEscapeUtils.unescapeHtml(productContentWrapper.get("PRODUCT_NAME").toString());
+            if (UtilValidate.isEmpty(productDetailHeading)) 
+            {
                 productDetailHeading = product.get("productName");
             }
-            if (UtilValidate.isEmpty(productDetailHeading)) {
+            if (UtilValidate.isEmpty(productDetailHeading)) 
+            {
                 productDetailHeading = product.get("internalName");
             }
             context.productDetailHeading = productDetailHeading;
             context.productContentWrapper = productContentWrapper;
         }
-        context.resultList = EntityUtil.filterByDate(delegator.findByAnd("ProductAssoc", [productIdTo : parameters.productId, productAssocTypeId : "PRODUCT_COMPLEMENT"],UtilMisc.toList("sequenceNum ASC")),true);
+        productAssoc = product.getRelated("MainProductAssoc");
+        productAssoc = EntityUtil.filterByDate(productAssoc,true);
+        productAssoc = EntityUtil.filterByAnd(productAssoc, UtilMisc.toMap("productAssocTypeId","PRODUCT_COMPLEMENT"));
+	    productAssoc = EntityUtil.orderBy(productAssoc,UtilMisc.toList("sequenceNum"));
+        context.resultList =productAssoc;
      }
 }

@@ -96,15 +96,33 @@
                     <td class="dateCol <#if !hasNext>lastRow</#if> lastCol">
                         ${(thisContent.createdDate?string(preferredDateFormat))!""}
                     </td>
-                    <td class="actionColSmall <#if !hasNext>lastRow</#if> lastCol">
-                      <#if contentTypeId?exists && staticPageContentTypeId?exists && contentTypeId == staticPageContentTypeId>
-                        <a href="<@ofbizUrl>staticPageMetatag?contentId=${thisContent.contentId!}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
-                      </#if>
-                      <#if previewAction?exists && previewAction?has_content>
-                        <a href="<@ofbizUrl>${previewAction}?contentId=${thisContent.contentId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.PreviewContentTooltip}');" onMouseout="hideTooltip()" class="previewIcon" target="_new"></a>
-                      </#if>
+                    <td class="actionCol <#if !hasNext>lastRow</#if> lastCol">
+                     <#if (contentTypeId?exists && staticPageContentTypeId?exists) || (previewAction?exists && previewAction?has_content)>
+			          <div class="actionIconMenu">
+			            <a class="toolIcon" href="javascript:void(o);"></a>
+			            <div class="actionIconBox" style="display:none">
+			            <div class="actionIcon">
+		              <#if productLargeImageUrl?has_content>
+		                  <img class="actionIconMenuImage" src="<@ofbizContentUrl>${productLargeImageUrl}</@ofbizContentUrl>" alt="${productLargeImageUrl}"/>
+		              </#if>            
+				            <ul>
+		                      <#if contentTypeId?exists && staticPageContentTypeId?exists && contentTypeId == staticPageContentTypeId>
+		                        <li><a href="<@ofbizUrl>staticPageMetatag?contentId=${thisContent.contentId!}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
+		                      </#if>
+		                      <#if previewAction?exists && previewAction?has_content>
+		                        <li><a href="<@ofbizUrl>${previewAction}?contentId=${thisContent.contentId?if_exists}</@ofbizUrl>" target="_new"><span class="previewIcon"></span>${uiLabelMap.PreviewContentTooltip}</a></li>
+		                      </#if>
+					        </ul>
+			       
+				        </div>
+				        </div>
+				      </div>
+                     </#if>
                       <#if previewHomeSpotAction?exists>
                         <input type="checkbox" value="${thisContent.contentId?if_exists}" class="homeSpotCheck" name="contentId" />
+                      </#if>
+                      <#if contentTypeId?exists && emailContentTypeId?exists && contentTypeId == emailContentTypeId>
+                          <a href="<@ofbizUrl>adminToolDetail?detailScreen=emailTestDetail&simpleTest=N&emailTemplateId=${thisContent.contentId}</@ofbizUrl>"><span class="emailIcon"></span></a>
                       </#if>
                     </td>
                 </tr>

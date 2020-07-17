@@ -5,7 +5,7 @@
     <div id="volumepricing" style="display:none">
   </#if>  
      
-  <table id="volumePriceTable" class="osafe">
+  <table id="volumePriceTable">
     <thead>
       <tr>
         <th>&nbsp;</th>
@@ -63,7 +63,7 @@
                 <a href="javascript:setNewRowNo('${rowNo}');javascript:removeRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeletePriceRowTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
                 <a href="javascript:setNewRowNo('${rowNo}');javascript:addNewRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
                 <a href="javascript:setNewRowNo('${rowNo+1}');javascript:addNewRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
-           </td>
+              </td>
             </tr>
             <#assign rowNo = rowNo+1/>
           </#if>
@@ -93,8 +93,7 @@
             <td class="actionCol">
               <a href="javascript:setNewRowNo('${x}');javascript:removeRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeletePriceRowTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
               <a href="javascript:setNewRowNo('${x}');javascript:addNewRow('${detailEntryTable}');" ><span class="insertBeforeIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>
-              <a href="javascript:setNewRowNo('${x+1}');javascript:addNewRow('${detailEntryTable}');" ><span class="insertAfterIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>
-           </td>
+              <a href="javascript:setNewRowNo('${x+1}');javascript:addNewRow('${detailEntryTable}');" ><span class="insertAfterIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>           </td>
           </tr>
         </#list>
       </#if>
@@ -103,12 +102,11 @@
       <td class="actionCol">
         <span class="noAction"></span>
         <a href="javascript:setNewRowNo(jQuery('tr').length-2);javascript:addNewRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
-        <span class="noAction"></span>
-      </td>
+        <span class="noAction"></span>      </td>
     </tr>
     </tbody>
   </table>
-  <table style="display:none" id="newRow" class="osafe">
+  <table style="display:none" id="newRow">
     <tr>
         <td>&nbsp;</td>
         <td>
@@ -126,7 +124,6 @@
         <td class="actionCol">
           <a href="javascript:setNewRowNo('');javascript:removeRow('${detailEntryTable}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeletePriceRowTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
           <a href="javascript:setNewRowNo('');javascript:addNewRow('${detailEntryTable}');" ><span class="insertBeforeIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>
-          <a href="javascript:setNewRowNo('');javascript:addNewRow('${detailEntryTable}');" ><span class="insertAfterIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>
-        </td>
+          <a href="javascript:setNewRowNo('');javascript:addNewRow('${detailEntryTable}');" ><span class="insertAfterIcon" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewPiceRowTooltip}');" onMouseout="hideTooltip()"></span></a>        </td>
       </tr>
   </table>

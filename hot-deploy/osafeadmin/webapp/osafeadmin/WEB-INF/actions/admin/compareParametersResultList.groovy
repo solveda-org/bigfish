@@ -14,7 +14,8 @@ String searchParamKeysNotInUploadedFile = StringUtils.trimToEmpty(parameters.sea
 String searchParamKeysNotInYourDatabase = StringUtils.trimToEmpty(parameters.searchParamKeysNotInYourDatabase);
 String searchParamKeysInBoth = StringUtils.trimToEmpty(parameters.searchParamKeysInBoth);
 boolean initial = false;
-if (searchParamKeysNotInUploadedFile.equals("") && searchParamKeysNotInYourDatabase.equals("") && searchParamKeysInBoth.equals("")) {
+if (searchParamKeysNotInUploadedFile.equals("") && searchParamKeysNotInYourDatabase.equals("") && searchParamKeysInBoth.equals("")) 
+{
     initial = true;
 }
 
@@ -45,21 +46,28 @@ XmlFileToPath =  uploadedFile.getAbsolutePath();
 paramToList =  UtilMisc.sortMaps(OsafeManageXml.getListMapsFromXmlFile(XmlFileToPath, "XProductStoreParm"), UtilMisc.toList("parmKey"));
 if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") {
     //type  1 searchParamKeysNotInYourDatabase |  2 searchParamKeysNotInUploadedFile  |  3  searchParamKeysInBoth
-    for (fromMapEntry in systemParamList) {
+    for (fromMapEntry in systemParamList) 
+    {
         toMapEntry = OsafeManageXml.findByKeyFromListMaps(paramToList, "parmKey", fromMapEntry.parmKey);
-        if (UtilValidate.isNotEmpty(toMapEntry)) {
-            if (searchParamKeysInBoth.equals("Y")) {
+        if (UtilValidate.isNotEmpty(toMapEntry)) 
+        {
+            if (searchParamKeysInBoth.equals("Y")) 
+            {
                 compareParamList.add(UtilMisc.toMap("key", fromMapEntry.parmKey, "fromMap", fromMapEntry, "toMap", toMapEntry, "type", "3"));
             }
             paramToList.remove(toMapEntry);
-        } else {
-            if (initial || searchParamKeysNotInUploadedFile.equals("Y")) {
+        } else 
+        {
+            if (initial || searchParamKeysNotInUploadedFile.equals("Y")) 
+            {
                 compareParamList.add(UtilMisc.toMap("key", fromMapEntry.parmKey, "fromMap", fromMapEntry, "toMap", toMapEntry, "type", "1"));
             }
         }
     }
-    for (toMapEntry in paramToList) {
-        if (initial || searchParamKeysNotInYourDatabase.equals("Y")) {
+    for (toMapEntry in paramToList) 
+    {
+        if (initial || searchParamKeysNotInYourDatabase.equals("Y")) 
+        {
             compareParamList.add(UtilMisc.toMap("key", toMapEntry.parmKey, "fromMap", FastMap.newInstance(), "toMap", toMapEntry, "type", "2"));
         }
     }

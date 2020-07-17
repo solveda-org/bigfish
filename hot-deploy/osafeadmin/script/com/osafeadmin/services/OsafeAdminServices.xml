@@ -78,6 +78,10 @@
         <create-value value-field="lookedUpValue"/>
         <field-to-result field="parameters.productStoreId" result-name="productStoreId"/>
         <field-to-result field="parameters.parmKey" result-name="parmKey"/>
+        
+        <set field="editProductStoreParm" from-field="parameters.parmKey"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="EditProductStoreParmSuccess" field="editProductStoreParmSuccessMessage"/>
+        <string-to-list string="${editProductStoreParmSuccessMessage}" list="successMessageList"/>
     </simple-method>
 
     <simple-method method-name="deleteProductStoreParm" short-description="Create a Product Store Parm">
@@ -142,6 +146,10 @@
         </if-compare>
         <field-to-result field="parameters.productStoreId" result-name="productStoreId"/>
         <field-to-result field="parameters.parmKey" result-name="parmKey"/>
+        
+        <set field="editProductStoreParm" from-field="parameters.parmKey"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="EditProductStoreParmSuccess" field="editProductStoreParmSuccessMessage"/>
+        <string-to-list string="${editProductStoreParmSuccessMessage}" list="successMessageList"/>
     </simple-method>
 
     <simple-method method-name="updateUiLabel" short-description="Update a uilabel">
@@ -178,6 +186,10 @@
         <set-service-fields service-name="updateLabelXml" map="parameters" to-map="updateLabelXmlCtx"/>
         <call-service service-name="updateLabelXml" in-map-name="updateLabelXmlCtx"/>
         <field-to-result field="parameters.key" result-name="key"/>
+        
+        <set field="editUiLabelKey" from-field="parameters.key"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="EditUiLabelKeySuccess" field="editUiLabelKeySuccessMessage"/>
+        <string-to-list string="${editUiLabelKeySuccessMessage}" list="successMessageList"/>
     </simple-method>
     
     <simple-method method-name="createUiLabel" short-description="Create a uilabel">
@@ -259,6 +271,10 @@
         <set-service-fields service-name="addUiLabelXml" map="parameters" to-map="addUiLabelXmlCtx"/>
         <call-service service-name="addUiLabelXml" in-map-name="addUiLabelXmlCtx"/>
         <field-to-result field="parameters.key" result-name="key"/>
+        
+        <set field="editUiLabelKey" from-field="parameters.key"/>
+        <property-to-field resource="OSafeAdminUiLabels" property="EditUiLabelKeySuccess" field="editUiLabelKeySuccessMessage"/>
+        <string-to-list string="${editUiLabelKeySuccessMessage}" list="successMessageList"/>
     </simple-method>
     
     <simple-method method-name="updateDivSequenceItem" short-description="Update a ui Div Seq item">
@@ -1072,14 +1088,12 @@
            <string-to-list string="${tempErrorMessage}" list="error_list"/>
        </if-empty>
        <check-errors/>
-       <set-service-fields service-name="getStyleFilePath" map="parameters" to-map="getStyleFilePathCtx"/>
-       <call-service service-name="getStyleFilePath" in-map-name="getStyleFilePathCtx">
-           <result-to-field result-name="styleFilePath" field="styleFilePath"/>
-       </call-service>
+       <set field="styleFilePath" value="${parameters.activeStyleFilePath}"/>
        <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
            <field field="styleFilePath" type="String"/>
        </call-class-method>
        <if-compare field="isNotEmpty" operator="equals" value="true">
+       <!-- check for existence. -->
            <create-object class-name="java.io.File" field="styleFile">
                <field field="styleFilePath" type="String"/>
            </create-object>
@@ -1091,11 +1105,45 @@
                <field field="parameters.textData" type="String"/>
                <field field="styleFile" type="java.io.File"/>
            </call-class-method>
+           <call-object-method obj-field="styleFile" method-name="getName" ret-field="fileName"/>
        </if-compare>
        <property-to-field resource="OSafeAdminUiLabels" property="UpdateStyleSuccess" field="updateStyleSuccess"/>
        <string-to-list string="${updateStyleSuccess}" list="successMessageList"/>
     </simple-method>
-
+    
+    <simple-method method-name="updateStyleBox" short-description="upload the css file and put content in style edit box" login-required="true">
+        <set field="cssFileExtension" value="CSS"/>
+         <set-service-fields service-name="uploadFile" map="parameters" to-map="uploadFileCtx"/>
+         <call-service service-name="uploadFile" in-map-name="uploadFileCtx">
+             <result-to-field result-name="uploadFileName" field="uploadFileName"/>
+             <result-to-field result-name="uploadFilePath" field="uploadFilePath"/>
+         </call-service>
+        <set field="uploadedStyleFileName" from-field="uploadFileName"/>
+       <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isNotEmpty" ret-field="isNotEmpty">
+           <field field="uploadedStyleFileName" type="String"/>
+       </call-class-method>
+       <if-compare field="isNotEmpty" operator="equals" value="true">
+           <call-object-method method-name="toUpperCase" obj-field="uploadedStyleFileName" ret-field="uploadedStyleFileNameUpperCase"/>
+           <call-object-method method-name="endsWith" obj-field="uploadedStyleFileNameUpperCase" ret-field="isCSSFile">
+               <field field="cssFileExtension" type="String"/>
+           </call-object-method>
+           <if-compare field="isCSSFile" operator="not-equals" value="true">
+               <add-error><fail-property resource="OSafeAdminUiLabels" property="ReplaceWithFileNotCssError"/></add-error>
+           </if-compare>
+       <else>
+           <add-error><fail-property resource="OSafeAdminUiLabels" property="ReplaceWithFileExistError"/></add-error>
+       </else>
+       </if-compare>
+       <check-errors/>
+       <property-to-field resource="OSafeAdminUiLabels" property="UpdateStyleBoxSuccess" field="updateStyleBoxSuccess"/>
+       <string-to-list string="${updateStyleBoxSuccess}" list="osafeSuccessMessageList"/>
+       <field-to-request field="osafeSuccessMessageList"/>
+       
+       <field-to-result field="uploadedStyleFileName" result-name="replaceWithFileName"/>
+       <field-to-result field="fileName"/>
+       <field-to-result field="activeStyleFilePath"/>
+    </simple-method>
+    
     <simple-method method-name="loadNewStyle" short-description="upload the css file and save file in current theme directory">
         <if-empty field="parameters._uploadedFile_fileName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UploadedFileExistError"/>
@@ -1754,72 +1802,80 @@
         </call-class-method>
         <!-- isOld = Y will delete Rows Excluding the last 30 days-->
         <if-compare operator="equals" value="Y" field="parameters.isOld">
-            <entity-condition list="finishedExclList" entity-name="JobSandbox">
+            <entity-condition list="finishedList" entity-name="JobSandbox">
                 <condition-list>
                     <condition-expr field-name="statusId" operator="equals" value="SERVICE_FINISHED"/>
                     <condition-expr field-name="finishDateTime" operator="less" value="${daysBackTimeStamp}"/>
                 </condition-list>
             </entity-condition>
-            <call-object-method obj-field="finishedExclList" method-name="size" ret-field="ListSize"/>
-            <remove-list list="finishedExclList"/>
-            <property-to-field resource="OSafeAdminUiLabels" property="DeletedJobsSuccessMessage" field="DeletedJobsSuccessMessage"/>
-            <string-append field="deleteSuccessMsg" string="${ListSize}"/>
-            <string-append field="deleteSuccessMsg" string=" "/>
-            <string-append field="deleteSuccessMsg" string="${DeletedJobsSuccessMessage}"/>
-            <string-to-list string="${deleteSuccessMsg}" list="successMessageList"/>
         <else>
         <!-- isOld = N will delete Rows Including the last 30 days-->
-            <entity-condition list="finishedWithinList" entity-name="JobSandbox">
+            <entity-condition list="finishedList" entity-name="JobSandbox">
                 <condition-list>
                     <condition-expr field-name="statusId" operator="equals" value="SERVICE_FINISHED"/>
                     <condition-expr field-name="finishDateTime" operator="greater" value="${daysBackTimeStamp}"/>
                 </condition-list>
             </entity-condition>
-            <call-object-method obj-field="finishedWithinList" method-name="size" ret-field="ListSize"/>
-            <remove-list list="finishedWithinList"/>
-            <property-to-field resource="OSafeAdminUiLabels" property="DeletedJobsSuccessMessage" field="DeletedJobsSuccessMessage"/>
-            <string-append field="deleteSuccessMsg" string="${ListSize}"/>
-            <string-append field="deleteSuccessMsg" string=" "/>
-            <string-append field="deleteSuccessMsg" string="${DeletedJobsSuccessMessage}"/>
-            <string-to-list string="${deleteSuccessMsg}" list="successMessageList"/>
         </else>
         </if-compare>
+            <call-object-method obj-field="finishedList" method-name="size" ret-field="ListSize"/>
+            <remove-list list="finishedList"/>
+            <set field="argListNames[]" from-field="ListSize"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedJobsSuccessMessage" field="DeletedJobsSuccessMessage" arg-list-name="argListNames"/>
+            <string-to-list string="${DeletedJobsSuccessMessage}" list="successMessageList"/>
+            <set field="showDetail" value="true"/>
+            <field-to-result field="showDetail" result-name="showDetail"/>
     </simple-method>
     
-    <simple-method method-name="deleteEntityRows" short-description="Delete Entity rows">
-        <now-timestamp field="nowStamp"/>
-        <!-- daysGap is the time interval from the current date to the date from which Admin wants to delete the Entity Rows  -->
-        <set field="daysGap" value="0" type="Integer"/>
-        <call-class-method class-name="org.ofbiz.base.util.UtilDateTime"  method-name="addDaysToTimestamp" ret-field="daysBackTimeStamp">
-              <field field="nowStamp" type="java.sql.Timestamp"/>
-              <field field="daysGap" type="int"/>
-        </call-class-method>
-        <set field="entityName" value="${parameters.entityDBName}"/>
-        <if-not-empty field="entityName">
-            <entity-condition list="entityRowsList" entity-name="${entityName}">
-                <condition-list>
-                    <condition-expr field-name="lastUpdatedStamp" operator="less" value="${daysBackTimeStamp}"/>
-                </condition-list>
-            </entity-condition>
-            <call-object-method obj-field="entityRowsList" method-name="size" ret-field="ListSize"/>
-            <if-compare operator="equals" value="Visit" field="parameters.entityDBName">
-                <iterate entry="entityRow" list="entityRowsList">
-                    <remove-related relation-name="CartAbandonedLine" value-field="entityRow"/>
-                    <remove-related relation-name="InventoryItemTempRes" value-field="entityRow"/>
-                    <remove-related relation-name="InventoryItemTempRes" value-field="entityRow"/>
-                    <remove-related relation-name="PartyDataSource" value-field="entityRow"/>
-                    <remove-related relation-name="PartyNeed" value-field="entityRow"/>
-                    <remove-related relation-name="ProductSearchResult" value-field="entityRow"/>
-                    <remove-related relation-name="ServerHit" value-field="entityRow"/>
-                    <remove-related relation-name="TrackingCodeVisit" value-field="entityRow"/>
-                    <remove-related relation-name="WorkEffortSearchResult" value-field="entityRow"/>
-                </iterate>
-            </if-compare>
-            <remove-list list="entityRowsList"/>
-            <set field="argListNames[]" from-field="ListSize"/>
-            <set field="argListNames[]" from-field="parameters.entityDBName"/>
-            <property-to-field resource="OSafeAdminUiLabels" property="DeletedRowsSuccessMessage" field="deletedRowsSuccessMessage" arg-list-name="argListNames"/>
-            <string-to-list string="${deletedRowsSuccessMessage}" list="successMessageList"/>
+    <simple-method method-name="createUpdateDownloadedArrtibute" short-description="Create or Update the Downloaded Attribute">
+        
+        <if-not-empty field="parameters.feedsExportedIdList">
+            <iterate entry="exportedId" list="parameters.feedsExportedIdList">
+                <set field="entityName" from-field="parameters.entityName" />
+                <set field="entityPrimaryColumnName" from-field="parameters.entityPrimaryColumnName" />
+                
+                <call-bsh><![CDATA[
+                    List attributeList = javolution.util.FastList.newInstance();
+                    attributeList = delegator.findByAnd(entityName, org.ofbiz.base.util.UtilMisc.toMap(entityPrimaryColumnName, exportedId));
+                    parameters.put("attributeList", attributeList);
+                ]]></call-bsh>
+                <set field="attributeList" from-field="parameters.attributeList"/>
+                
+                <set field="attributeFilter.attrName" value="IS_DOWNLOADED"/>
+                <filter-list-by-and list="attributeList" map="attributeFilter" to-list="attributeIsDownloadList"/>
+                <clear-field field="attributeFilter.attrName"/>
+                
+                <!-- Create or Update the IS_DOWNLOADED attribute -->
+                <make-value entity-name="${entityName}" value-field="lookedUpValue"/>
+                <set field="lookedUpValue.${entityPrimaryColumnName}" from-field="exportedId"/>
+                <set field="lookedUpValue.attrName" value="IS_DOWNLOADED"/>
+                <set field="lookedUpValue.attrValue" value="Y"/>
+                
+                <if-not-empty field="attributeIsDownloadList">
+                    <store-value value-field="lookedUpValue"/>
+                <else>
+                    <create-value value-field="lookedUpValue"/>
+                </else>
+                </if-not-empty>
+                
+                <set field="attributeFilter.attrName" value="DATETIME_DOWNLOADED"/>
+                <filter-list-by-and list="attributeList" map="attributeFilter" to-list="attributeDateTimeDownloadList"/>
+                <clear-field field="attributeFilter.attrName"/>
+                
+                <!-- Create or Update the DATETIME_DOWNLOADED attribute -->
+                <now-timestamp field="nowStamp"/>                
+                <make-value entity-name="${entityName}" value-field="lookedUpValue"/>
+                <set field="lookedUpValue.${entityPrimaryColumnName}" from-field="exportedId"/>
+                <set field="lookedUpValue.attrName" value="DATETIME_DOWNLOADED"/>
+                <set field="lookedUpValue.attrValue" from-field="nowStamp" type="String"/>
+                
+                <if-not-empty field="attributeDateTimeDownloadList">
+                    <store-value value-field="lookedUpValue"/>
+                <else>
+                    <create-value value-field="lookedUpValue"/>
+                </else>
+                </if-not-empty>
+            </iterate>
         </if-not-empty>
     </simple-method>
 </simple-methods>

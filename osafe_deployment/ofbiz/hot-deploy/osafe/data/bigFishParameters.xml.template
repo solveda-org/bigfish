@@ -28,11 +28,9 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_AVAILABLE_SORT" description="A comma separated list of available Sort options on the PLP. Valid values can contain one, more or all of the following: HIGHEST_RATING, BEST_SELLING, MOST_VIEWED, MOST_POPULAR, NAME_ASCENDING, NAME_DESCENDING, HIGHEST_PRICE, LOWEST_PRICE" parmCategory="PLP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_MATCH" description="This is the FACET GROUP that will be used for matching in the PLP. Example: customer clicks on Color=Blue facet, system needs to match on Color-Group facet to show similar products." parmCategory="PLP"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_ACTIVE_FLAG" description="This defines whether the ratings-and-reviews feature is active. are part of the implementation. If this flag is set ratings-and-reviews are displayed on the PDP (show reviews, review stars)." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AUTO_APPROVE" description="This defines whether Ratings and Reviews will be automatically approved. Setting this value to FALSE requires your approval of each Review posted. Approval is done in the Admin Module." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_SHOW_ON_PLP" description="Display Customer Ratings on the PLP page true or false." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_SEND_EMAIL" description="This defines whether BigFish sends out the email notification 'n' days after the Order has Shipped (EMAIL_REVIEW_SHP_DYS). Some clients may have an external service to perform this function - so even if Reviews are active this parameter may be False." parmCategory="REVIEW"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_WRITE_REVIEW" description="This is a specific review parameter to define whether the BigFish PDP page offers the 'Write a Review' link. In some implementations clients will use an external service to collect the review so the BF option is not required." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MIN_CHAR" description="The minimum number of characters allowed for a review. Zero indicates that a review may be left blank." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_MAX_CHAR" description="The maximum number of characters allowed for a review. Zero indicates that a review may have unlimited characters." parmCategory="REVIEW"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AS_GUEST" description="TRUE indicates that the customer does NOT have to be logged in as a registered user. FALSE will force a login or registration" parmCategory="REVIEW"/>
@@ -63,7 +61,6 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_TBL_HEAD_COLOR" description="HTML Table color, referenced in email-templates" parmCategory="EMAIL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_TBL_FONT_SIZE" description="HTML Table font size, referenced in email-templates" parmCategory="EMAIL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_REVIEW_SHP_DYS" description="Send email for product review after day ? shipped." parmCategory="EMAIL"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="EMAIL_SCHED_JOB_ALERT" description="List of recipients, comma separated, who will receive a Scheduled Job alert email." parmCategory="EMAIL"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_MULTI" description="Does this client support multiple coutries. Value of TRUE or FALSE" parmCategory="COUNTRY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="COUNTRY_DEFAULT" description="The client's default country" parmCategory="COUNTRY"/>
@@ -147,6 +144,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_SUPPRESS_TAX_IF_ZERO" description="This will suppress the Sales-Tax line during the checkout if the tax is zero. Used for UK clients where the VAT is included in the purchase price." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CONFIRM_GET_COOKIE" description="A comma separated list of Cookies that should be read for possible content. The Order Confirmation will use the content of each cookie, if it exists, to store additional attributes for the Order. Typically used for Affiliate Tracking." parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CART_DEFAULT_SHIP_METHOD" description="The default Shipping Charge ID that will be used in the View Cart. This will allow for an estimation of shipping to be computed. Leave blank if no shipping charge defaults should be in the cart." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CONTINUE_SHOPPING_LINK" description="The link from the Continue-Shopping button. Values are HOMEPAGE, PDP or PLP" parmCategory="CHECKOUT"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_ACTIVE" description="Display quick view on the PLP page for each product." parmCategory="QUICKLOOK"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_DELAY_MS" description="The time, in milliseconds, that the site will wait before displaying the Quick Look icon" parmCategory="QUICKLOOK"/>
@@ -171,7 +169,6 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_APP_NO" description="Request url application number." parmCategory="PCA"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SHOW_BUILT_BY" description="Simple TRUE or FALSE value that will determine if the Built by Salmon LLC link will be displayed" parmCategory="GENERAL"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IGNORE_REJECTED_ORDERS" description="Value of TRUE means that any Order with a status of Rejected will NOT be extracted. A value of FALSE will include Rejected Orders" parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_PRODUCT_URL_DIR" description="Client to Bigfish Incoming Product File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_ORDER_STATUS_URL_DIR" description="Client to Bigfish Incoming Order Status File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_IN_RATING_URL_DIR" description="Client to Bigfish Incoming Rating File, indicates the default URL or Directory location to look for files for processing." parmCategory="FEEDS"/>
@@ -202,6 +199,10 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_METHOD" description="The method used for tracking inventory: NONE: Inventory is not relevant to this implementation OFBIZ: use standard OFBiz inventory. Facility, reservations, ATP, QOH BIGFISH: simple inventory value" parmCategory="INVENTORY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_OUT_OF_STOCK_TO" description="If the current inventory is less than or equal to this value then the Product is considered to be Out-of-Stock." parmCategory="INVENTORY"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_IN_STOCK_FROM" description="If the current inventory is greater than or equal to this value then the Product is considered to be In-Stock." parmCategory="INVENTORY"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ORDER_STATUS_INC_DASHBOARD" description="A comma separated list of Order Status IDs that should be included in the Dashboard sales numbers. Can include ORDER_CREATED, ORDER_SENT, ORDER_PROCESSING, ORDER_APPROVED, ORDER_HOLD, ORDER_COMPLETED, ORDER_REJECTED, ORDER_CANCELLED" parmCategory="ORDER"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ORDER_STATUS_INC_SEARCH" description="A comma separated list of Order Status IDs that should be used on the Order List screen. ORDER_CREATED, ORDER_SENT, ORDER_PROCESSING, ORDER_APPROVED, ORDER_HOLD, ORDER_COMPLETED, ORDER_REJECTED, ORDER_CANCELLED" parmCategory="ORDER"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ORDER_STATUS_INC_EXPORT" description="A comma separated list of Order Status IDs that should be included in the Order Export process. Can include ORDER_CREATED, ORDER_SENT, ORDER_PROCESSING, ORDER_APPROVED, ORDER_HOLD, ORDER_COMPLETED, ORDER_REJECTED, ORDER_CANCELLED" parmCategory="ORDER"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
@@ -337,9 +338,9 @@
 <PartyContentType partyContentTypeId="STORE_NOTICE" description="Store Notice" hasTable="N" parentTypeId=""/>
 <PartyContentType partyContentTypeId="STORE_CONTENT_SPOT" description="Store Content Spot" hasTable="N" parentTypeId=""/>
 
-<!-- PRODUCT FEATURE DATA RESOURCE -->
-<ProdFeatureDataResourceType prodFeatureDataResourceTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Default Swatch Image URL" hasTable="N"/>
-<ProdFeatureDataResourceType prodFeatureDataResourceTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Default Swatch Image URL" hasTable="N"/>
+<!-- FEATURE DATA RESOURCE TYPE -->
+<FeatureDataResourceType featureDataResourceTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Default Swatch Image URL" hasTable="N"/>
+<FeatureDataResourceType featureDataResourceTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Default Swatch Image URL" hasTable="N"/>
 
 <!-- Payment Gateway Config -->
 <PaymentGatewayConfigType paymentGatewayConfigTypeId="SAGEPAYTOKEN" hasTable="N" description="SagePay Token Payment Gateway"/>
@@ -389,24 +390,29 @@
 <DataResource dataResourceId="SI_SHOPPING_CART" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SI_SEARCH" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SI_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="SI_HEAD_TAG_CONTENT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="SI_HEADER_CONTENT"/>
 <ElectronicText dataResourceId="SI_FOOTER_CONTENT"/>
 <ElectronicText dataResourceId="SI_LOGO"/>
 <ElectronicText dataResourceId="SI_SHOPPING_CART"/>
 <ElectronicText dataResourceId="SI_SEARCH"/>
 <ElectronicText dataResourceId="SI_MAILING_LIST"/>
+<ElectronicText dataResourceId="SI_HEAD_TAG_CONTENT"/>
 <Content contentId="SI_HEADER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER_CONTENT"/>
 <Content contentId="SI_FOOTER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER_CONTENT"/>
 <Content contentId="SI_LOGO" contentTypeId="BF_SITE_INFO"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO"/>
 <Content contentId="SI_SHOPPING_CART" contentTypeId="BF_SITE_INFO"  description="Main Site View Cart displayed on every page" contentName="Site Shopping Cart" dataResourceId="SI_SHOPPING_CART"/>
 <Content contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH"/>
 <Content contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING_LIST"/>
+<Content contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG_CONTENT"/>
+<Content contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG_CONTENT"/>
 <ContentPurpose contentId="SI_HEADER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_FOOTER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_LOGO" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_SHOPPING_CART" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_SEARCH" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_MAILING_LIST" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_HEAD_TAG_CONTENT" contentPurposeTypeId="SECTION"/>
 <!-- ********************************* -->
 
 
@@ -481,6 +487,7 @@
 <DataResource dataResourceId="PTS_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_ONE_STEP_CHKOUT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="PTS_STORE_PICKUP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_ADDR_BOOK_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_ADDR_BOOK_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_MY_ACCOUNT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
@@ -499,6 +506,7 @@
 <DataResource dataResourceId="PES_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_ONE_STEP_CHKOUT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="PES_STORE_PICKUP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PDP_CONTENT_01" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_01"/>
 <DataResource dataResourceId="PDP_CONTENT_02" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_02"/>
 <DataResource dataResourceId="PDP_CONTENT_03" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_03"/>
@@ -522,6 +530,7 @@
 <ElectronicText dataResourceId="PTS_CONFIRM"/>
 <ElectronicText dataResourceId="PTS_SEARCH_NO_RESULT"/>
 <ElectronicText dataResourceId="PTS_ONE_STEP_CHKOUT"/>
+<ElectronicText dataResourceId="PTS_STORE_PICKUP"/>
 <ElectronicText dataResourceId="PES_ADDR_BOOK_VIEW"/>
 <ElectronicText dataResourceId="PES_ADDR_BOOK_EDIT"/>
 <ElectronicText dataResourceId="PES_MY_ACCOUNT"/>
@@ -540,6 +549,7 @@
 <ElectronicText dataResourceId="PES_CONFIRM"/>
 <ElectronicText dataResourceId="PES_SEARCH_NO_RESULT"/>
 <ElectronicText dataResourceId="PES_ONE_STEP_CHKOUT"/>
+<ElectronicText dataResourceId="PES_STORE_PICKUP"/>
 <ElectronicText dataResourceId="PDP_CONTENT_01"/>
 <ElectronicText dataResourceId="PDP_CONTENT_02"/>
 <ElectronicText dataResourceId="PDP_CONTENT_03"/>
@@ -563,6 +573,7 @@
 <Content contentId="PTS_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONFIRM" description="Content Spot displayed on the TOP of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PTS_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SEARCH_NO_RESULT" description="Content Spot displayed on TOP of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PTS_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ONE_STEP_CHKOUT" description="Content Spot displayed at the top of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_STORE_PICKUP" description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box " contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_VIEW" description="Content Spot displayed on the END of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_EDIT" description="Content Spot displayed on the END of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MY_ACCOUNT" description="Content Spot displayed on the END of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
@@ -581,6 +592,7 @@
 <Content contentId="PES_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONFIRM" description="Content Spot displayed on the END of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SEARCH_NO_RESULT" description="Content Spot displayed on END of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ONE_STEP_CHKOUT" description="Content Spot displayed at the END of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_STORE_PICKUP" description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box " contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PDP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_01"/>
 <Content contentId="PDP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_02"/>
 <Content contentId="PDP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_03"/>
@@ -604,6 +616,7 @@
 <ContentRole contentId="PTS_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PTS_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ONE_STEP_CHKOUT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_STORE_PICKUP" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_MY_ACCOUNT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -622,6 +635,7 @@
 <ContentRole contentId="PES_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PES_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ONE_STEP_CHKOUT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_STORE_PICKUP" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_01" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_02" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_03" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -690,7 +704,6 @@
 <DataResource dataResourceId="E_ORDER_CHANGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_SHIP_REVIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_ORDER_DETAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_TEST_EMAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_SCHED_JOB_ALERT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="E_COMMON_STYLES"/>
@@ -707,7 +720,6 @@
 <ElectronicText dataResourceId="E_ORDER_CHANGE"/>
 <ElectronicText dataResourceId="E_SHIP_REVIEW"/>
 <ElectronicText dataResourceId="E_ORDER_DETAIL"/>
-<ElectronicText dataResourceId="E_TEST_EMAIL"/>
 <ElectronicText dataResourceId="E_MAILING_LIST"/>
 <ElectronicText dataResourceId="E_SCHED_JOB_ALERT"/>
 <Content contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
@@ -717,13 +729,12 @@
 <Content contentId="E_CHANGE_CUSTOMER" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Change-Customer email (when the customer updates their profile)." contentName="Change Party Email" dataResourceId="E_CHANGE_CUSTOMER"/>
 <Content contentId="E_FORGOT_PASSWORD" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Forgot-Password email." contentName="Forgot Password Email" dataResourceId="E_FORGOT_PASSWORD"/>
 <Content contentId="E_ABANDON_CART" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Abandoned Cart email. Other PARAMETERS control the timing of this email." contentName="Abandon Cart Email" dataResourceId="E_ABANDON_CART"/>
-<Content contentId="E_CONTACT_US" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Contact-Us email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form." contentName="Contact Us Email" dataResourceId="E_CONTACT_US"/>
-<Content contentId="E_REQUEST_CATALOG" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form. " contentName="Request Catalog Email" dataResourceId="E_REQUEST_CATALOG"/>
+<Content contentId="E_CONTACT_US" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Contact-Us email. This email is sent to both the customer and the client." contentName="Contact Us Email" dataResourceId="E_CONTACT_US"/>
+<Content contentId="E_REQUEST_CATALOG" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client." contentName="Request Catalog Email" dataResourceId="E_REQUEST_CATALOG"/>
 <Content contentId="E_ORDER_CONFIRM" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Confirm Email" dataResourceId="E_ORDER_CONFIRM"/>
 <Content contentId="E_ORDER_CHANGE" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Change email (when the Status on the Order gets modified from one state to another)." contentName="Order Notice Email" dataResourceId="E_ORDER_CHANGE"/>
 <Content contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW"/>
 <Content contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
-<Content contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be used to send out a test email." contentName="Test Email" dataResourceId="E_TEST_EMAIL"/>
 <Content contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Mailing-List email. This email sent to both the customer and the client." contentName="Mailing List Email" dataResourceId="E_MAILING_LIST"/>
 <Content contentId="E_SCHED_JOB_ALERT" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Scheduled Job email. This email sent to both the customer and the client." contentName="Scheduled Job Email" dataResourceId="E_SCHED_JOB_ALERT"/>
 <ContentPurpose contentId="E_COMMON_HEADER" contentPurposeTypeId="SECTION"/>
@@ -739,7 +750,6 @@
 <ContentPurpose contentId="E_ORDER_CHANGE" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_SHIP_REVIEW" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_ORDER_DETAIL" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_TEST_EMAIL" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_MAILING_LIST" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_SCHED_JOB_ALERT" contentPurposeTypeId="SECTION"/>
 
@@ -751,6 +761,8 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SHOPPING_CART" contentId="SI_SHOPPING_CART" contentTypeId="BF_SITE_INFO"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SEARCH" contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_MAILING_LIST" contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_HEAD_TAG_CONTENT" contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"/>
+
 
 <!-- HOME PAGE SPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_01" contentId="HPS_01" contentTypeId="BF_HOME_PAGE"/>
@@ -789,6 +801,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_CONFIRM" contentId="PTS_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SEARCH_NO_RESULT" contentId="PTS_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_ONE_STEP_CHKOUT" contentId="PTS_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_STORE_PICKUP" contentId="PTS_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_VIEW" contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_EDIT" contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_MY_ACCOUNT" contentId="PES_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -807,6 +820,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_CONFIRM" contentId="PES_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_SEARCH_NO_RESULT" contentId="PES_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ONE_STEP_CHKOUT" contentId="PES_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_STORE_PICKUP" contentId="PES_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_01" contentId="PDP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_02" contentId="PDP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PDP_CONTENT_03" contentId="PDP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -842,7 +856,6 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_CHANGE" contentId="E_ORDER_CHANGE" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SHIP_REVIEW" contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_ORDER_DETAIL" contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"/>
-<XContentXref productStoreId="@store.productStoreId@" bfContentId="E_TEST_EMAIL" contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_MAILING_LIST" contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="E_SCHED_JOB_ALERT" contentId="E_SCHED_JOB_ALERT " contentTypeId="BF_EMAIL_TEMPLATE"/>
 

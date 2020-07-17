@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <entity-engine-xml>
 
 <!-- Header Content -->
@@ -509,6 +509,14 @@ Farmingdale NY 11735
  </textData>
 </ElectronicText>
 <Content contentId="SP_CONTACT_US" statusId="CTNT_PUBLISHED"/>
+
+<ElectronicText dataResourceId="PTS_STORE_PICKUP">
+ <textData>
+   <![CDATA[
+
+   ]]>
+ </textData>
+</ElectronicText>
 
 
 </entity-engine-xml>

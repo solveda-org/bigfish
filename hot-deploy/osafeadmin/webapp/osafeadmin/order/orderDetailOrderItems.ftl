@@ -1,6 +1,7 @@
 <!-- start listBox -->
         <table class="osafe">
             <tr class="heading">
+		<th class="seqCol">${uiLabelMap.ItemSeqIdLabel}</th>
                 <th class="idCol firstCol">${uiLabelMap.ProductNoLabel}</th>
                 <th class="nameCol">${uiLabelMap.ItemNoLabel}</th>
                 <th class="nameCol">${uiLabelMap.ProductNameLabel}</th>
@@ -22,7 +23,7 @@
                 <#assign shippingAmount = Static["org.ofbiz.order.order.OrderReadHelper"].getAllOrderItemsAdjustmentsTotal(resultList, orderAdjustments, false, false, true)>
                 <#assign shippingAmount = shippingAmount.add(Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true))>
                 <#assign taxAmount = Static["org.ofbiz.order.order.OrderReadHelper"].getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal>
-                <#assign grandTotal = Static["org.ofbiz.order.order.OrderReadHelper"].getOrderGrandTotal(resultList, orderAdjustments)>
+                <#assign grandTotal = orderReadHelper.getOrderGrandTotal()/>
             <#list resultList as orderItem>
                 <#assign orderItemType = orderItem.getRelatedOne("OrderItemType")?if_exists>
                 <#assign productId = orderItem.productId?if_exists>
@@ -32,6 +33,12 @@
                 <#assign itemAdjustment = Static["org.ofbiz.order.order.OrderReadHelper"].getOrderItemAdjustmentsTotal(orderItem, orderAdjustments, true, false, false)>
                 <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(itemProduct,request)>
                 <#assign productName = productContentWrapper.get("PRODUCT_NAME")!itemProduct.productName!"">
+                <#if productName="">
+                	<#if itemProduct.isVariant?if_exists?upper_case == "Y">
+                       	<#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(productId, delegator)?if_exists>
+                   	</#if>
+                   	<#assign productName = Static['org.ofbiz.product.product.ProductContentWrapper'].getProductContentAsText(virtualProduct, 'PRODUCT_NAME', request)?if_exists>
+                </#if>
                 <!-- offer price from promo -->
                 <#assign itemPromoAdjustment = (orderReadHelper.getOrderItemAdjustmentsTotal(orderItem, true, false, false)/orderItem.quantity)/>
                 <#assign offerPrice = orderItem.unitPrice + itemPromoAdjustment/>
@@ -63,11 +70,14 @@
                     </#list>
                 </#if>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd></#if>">
-                    <td class="idCol <#if !orderItem_has_next>lastRow</#if> firstCol"><a href="<@ofbizUrl>productDetail?productId=${itemProduct.productId?if_exists}</@ofbizUrl>">${itemProduct.internalName!itemProduct.productId!"N/A"}</a></td>
-                    <td class="itemCol <#if !orderItem_has_next>lastRow</#if> firstCol">
+
+		   <td class="seqCol <#if !orderItem_has_next>lastRow</#if>">${(orderItem.orderItemSeqId)!""}</td>
+
+                    <td class="idCol <#if !orderItem_has_next>lastRow</#if> firstCol"><a href="<@ofbizUrl>productDetail?productId=${itemProduct.productId?if_exists}</@ofbizUrl>">${itemProduct.productId!"N/A"}</a></td>
+                    <td class="itemCol <#if !orderItem_has_next>lastRow</#if>">
                       <#assign product = orderItem.getRelatedOne("Product") />${(product.internalName)!""}
                     </td>
-                    <td class="nameCol <#if !orderItem_has_next>lastRow</#if>">${productName?if_exists} ${itemProduct.productId}</td>
+                    <td class="nameCol <#if !orderItem_has_next>lastRow</#if>">${productName?if_exists}</td>
                     <td class="statusCol <#if !orderItem_has_next>lastRow</#if>">${itemStatus.get("description",locale)}</td>
                     <td class="dollarCol <#if !orderItem_has_next>lastRow</#if>">${orderItem.quantity?string.number}</td>
                     <td class="dollarCol <#if !orderItem_has_next>lastRow</#if>"><@ofbizCurrency amount=orderItem.unitPrice isoCode=currencyUomId/></td>
@@ -85,7 +95,7 @@
             </#list>
          <tfoot>
             <tr>
-                <td colspan="9">
+                <td colspan="10">
                     <table class="osafe orderSummary">
                         <tr>
                           <td class="totalCaption"><label>${uiLabelMap.SubtotalCaption}</label></td>
@@ -123,7 +133,7 @@
                           <td class="totalCaption"><label>${uiLabelMap.ShipHandleCaption}</label></td>
                           <td class="totalValue"><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId/></td>
                         </tr>
-                        <#if (!Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"")) || (taxAmount?has_content && (taxAmount &gt; 0))>
+                        <#if (!Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO")) || (taxAmount?has_content && (taxAmount &gt; 0))>
                             <tr>
                               <td class="totalCaption"><label><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></label></td>
                               <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></td>

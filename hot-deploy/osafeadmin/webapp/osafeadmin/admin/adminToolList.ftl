@@ -1,4 +1,11 @@
-<#if resultList?exists && resultList?has_content>
+	<thead>
+        <tr class="heading">
+            <th class="idCol firstCol">${uiLabelMap.functionLabel}</th>
+            <th class="nameCol">${uiLabelMap.DescriptionLabel}</th>
+         </tr>
+     </thead>
+     
+     <#if resultList?exists && resultList?has_content>
     <#assign rowClass = "1"/>
     <#list resultList as adminTool>
         <#assign hasNext = adminTool_has_next>

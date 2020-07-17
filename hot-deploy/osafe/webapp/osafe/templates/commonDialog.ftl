@@ -1,5 +1,7 @@
 <div id="${dialogPurpose!}dialog" class="dialogOverlay"></div>
 <div id="${dialogPurpose!}displayDialog" style="display:none" class="${dialogBoxStyle!""}">
+  <#assign IMG_SIZE_PDP_REG_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_REG_H")!""/>
+  <#assign IMG_SIZE_PDP_REG_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_REG_W")!""/>
   <input type="hidden" name="${dialogPurpose!}dialogBoxTitle" id="${dialogPurpose!}dialogBoxTitle" value="${dialogBoxTitle!}"/>
   <#if dialogPurpose?has_content>
     <#assign dialogBoxSection = "${dialogPurpose!}DialogBox" />

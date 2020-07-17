@@ -2,7 +2,7 @@
   <#if disFeatureTypesList?has_content>
     <div class="displayBox">
       <h3>${uiLabelMap.FeaturesHeading}</h3>
-        <ul>
+        <ul class="pdpDistinguishingFeatureList">
           <#list disFeatureTypesList as disFeatureType>
             <#assign index= 0/>
             <#if disFeatureByTypeMap?has_content>
@@ -11,19 +11,20 @@
                 <#assign index = index + 1/>
                 <#assign size = disFeatureAndApplList.size()/>
                 <#assign disFeatureDescription = disFeatureAndAppl.description!"">
-                <#assign productFeatureType = disFeatureAndAppl.getRelatedOne("ProductFeatureType")!"" />
+                <#assign productFeatureType = disFeatureAndAppl.getRelatedOneCache("ProductFeatureType")!"" />
                 <#if productFeatureType?has_content && productFeatureType.description != disFeatureTypeDescription!"">
                   <#assign disFeatureTypeDescription = productFeatureType.description!"">
                    <#if (index > 1)>
-                     </ul></li>
+                     </ul>
+                     </li>
                    </#if>
-	               <li>
-	                 <label>${disFeatureTypeDescription!""}:</label>
-	                   <ul>
+                   <li>
+                     <label>${disFeatureTypeDescription!""}:</label>
+                       <ul>
                 </#if>
-	            <li>
-	              <span>${disFeatureDescription!""}</span>
-	            </li>
+                <li>
+                  <span>${disFeatureDescription!""}</span>
+                </li>
                 <#if (index == size)>
                   </ul>
                   </li>
@@ -35,9 +36,10 @@
     </div>
   </#if>
 </div>
+
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
-    <#assign disFeatureMap = dispatcher.runSync("getProductFeaturesByType", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", key,"productFeatureApplTypeId", "DISTINGUISHING_FEAT", "userLogin", userLogin))?if_exists/>
+    <#assign disFeatureMap = productVariantDisFeatureTypeMap.get('${key}')/>
 
     <#assign varDisFeatureTypesList = disFeatureMap.productFeatureTypes!/>
     <#assign varDisFeatureByTypeMap = disFeatureMap.productFeaturesByType!/>
@@ -51,7 +53,7 @@
       <#if varDisFeatureTypesList?has_content>
         <div class="displayBox">
         <h3>${uiLabelMap.FeaturesHeading}</h3>
-        <ul>
+        <ul class="pdpDistinguishingFeatureList">
           <#list varDisFeatureTypesList as disFeatureType>
             <#assign index= 0/>
             <#if varDisFeatureByTypeMap?has_content>
@@ -60,22 +62,23 @@
                 <#assign index = index + 1/>
                 <#assign size = disFeatureAndApplList.size()/>
                 <#assign disFeatureDescription = disFeatureAndAppl.description!"">
-                <#assign productFeatureType = disFeatureAndAppl.getRelatedOne("ProductFeatureType")!"" />
+                <#assign productFeatureType = disFeatureAndAppl.getRelatedOneCache("ProductFeatureType")!"" />
                 <#if productFeatureType?has_content && productFeatureType.description != disFeatureTypeDescription!"">
                   <#assign disFeatureTypeDescription = productFeatureType.description!"">
                    <#if (index > 1)>
-                     </ul></li>
+                     </ul>
+                     </li>
                    </#if>
-	               <li>
-	                 <label>${disFeatureTypeDescription!""}:</label>
-	                   <ul>
+                 <li>
+                   <label>${disFeatureTypeDescription!""}:</label>
+                   <ul>
                 </#if>
-	            <li>
-	              <span>${disFeatureDescription!""}</span>
-	            </li>
+                 <li>
+                   <span>${disFeatureDescription!""}</span>
+                 </li>
                 <#if (index == size)>
-                  </ul>
-                  </li>
+                   </ul>
+                 </li>
                 </#if>
               </#list>
             </#if>

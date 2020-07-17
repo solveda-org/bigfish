@@ -4,7 +4,7 @@
     <#assign groupIdx = 0>
     <#list orderItemShipGroups as shipGroup>
       <#if orderHeader?has_content>
-        <#assign shippingAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
+        <#assign shippingAddress = shipGroup.getRelatedOneCache("PostalAddress")?if_exists>
         <#assign groupNumber = shipGroup.shipGroupSeqId?if_exists>
       <#else>
         <#assign shippingAddress = cart.getShippingAddress(groupIdx)?if_exists>

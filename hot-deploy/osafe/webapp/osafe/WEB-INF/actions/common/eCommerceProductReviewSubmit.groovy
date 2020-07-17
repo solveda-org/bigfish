@@ -50,7 +50,7 @@ if (UtilValidate.isNotEmpty(productId))
 
 
        //Check Product Attribute for Meta Data Overrides
-        productAttr = delegator.findByAnd("ProductAttribute", UtilMisc.toMap("productId", gvProduct.productId));
+        productAttr = delegator.findByAndCache("ProductAttribute", UtilMisc.toMap("productId", gvProduct.productId));
         productAttrMap = FastMap.newInstance();
 
         if (UtilValidate.isNotEmpty(productAttr))

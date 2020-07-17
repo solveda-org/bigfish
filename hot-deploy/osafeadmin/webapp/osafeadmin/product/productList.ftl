@@ -20,7 +20,7 @@
       ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpPagingControlsTop")}
     </#if-->
     <#list resultList as result>
-      <#assign product = delegator.findOne("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",result.productId), true)/>
+      <#assign product = delegator.findOne("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",result.productId), false)/>
       <#assign hasNext = result_has_next>
       <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product, request)!""/>
       <#assign productLargeImageUrl = productContentWrapper.get("LARGE_IMAGE_URL")!"">
@@ -28,7 +28,7 @@
         <td class="idCol <#if !result_has_next?if_exists>lastRow</#if> firstCol" ><a href="<@ofbizUrl>productDetail?productId=${product.productId?if_exists}</@ofbizUrl>">${product.productId?if_exists}</a></td>
         <td class="descCol <#if !result_has_next?if_exists>lastRow</#if>">${product.internalName?if_exists}</td>
         <td class="descCol">
-          ${productContentWrapper.get("PRODUCT_NAME")?html!""}
+          ${productContentWrapper.get("PRODUCT_NAME")!""}
         </td>
         <td class="actionCol">
         <#assign productLongDescription = productContentWrapper.get("LONG_DESCRIPTION")!""/>
@@ -42,43 +42,54 @@
         <td class="dateCol <#if !result_has_next?if_exists>lastRow</#if>">${(product.introductionDate?string(preferredDateFormat))!""}</td>
         <td class="dateCol <#if !result_has_next?if_exists>lastRow</#if>">${(product.salesDiscontinuationDate?string(preferredDateFormat))!""}</td>
         <#assign productListPrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, product.productId, "LIST_PRICE")!/>
-        <td class="dollarCol">
+        <td class="dollarCol <#if !result_has_next?if_exists>lastRow</#if>">
         <#if productListPrice?has_content>
           <@ofbizCurrency amount=productListPrice.price isoCode=productListPrice.currencyUomId />
         </#if>
         </td>
         <#assign productDefaultPrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, product.productId, "DEFAULT_PRICE")!/>
-          <td class="dollarCol">
+          <td class="dollarCol <#if !result_has_next?if_exists>lastRow</#if>">
           <#if productDefaultPrice?has_content>
             <@ofbizCurrency amount=productDefaultPrice.price isoCode=productDefaultPrice.currencyUomId />
           </#if>
           </td>
-        <td class="actionCol">
-           <a href="<@ofbizUrl>productImages?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'${uiLabelMap.ProductImagesTooltip}','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
-           <a href="<@ofbizUrl>productPrice?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductPricingTooltip}');" onMouseout="hideTooltip()"><span class="priceIcon"></span></a>
-           <a href="<@ofbizUrl>productMetatag?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
-           <#if (product.isVariant?if_exists == 'N')>
-             <#assign features = product.getRelated("ProductFeatureAppl")/>
-             <#if features?exists && features?has_content>
-               <a href="<@ofbizUrl>productFeatures?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductFeaturesTooltip}');" onMouseout="hideTooltip()"><span class="featureIcon"></span></a>
-             <#else>
-               <span class="noAction"></span>
-             </#if>
-           <#else>
-               <span class="noAction"></span>
-           </#if>
-           <#if (product.isVirtual?if_exists == 'Y') && (product.isVariant?if_exists == 'N')>
-             <#assign variants = delegator.findByAnd("ProductAssoc", {"productId" : product.productId, "productAssocTypeId" : "PRODUCT_VARIANT"})/>
-             <#if variants?exists && variants?has_content>
-               <a href="<@ofbizUrl>productVariants?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductVariantsTooltip}');" onMouseout="hideTooltip()"><span class="variantIcon"></span></a>
-             <#else>
-               <span class="noAction"></span>
-             </#if>
-           <#else>
-               <span class="noAction"></span>
-           </#if>
-           <a href="<@ofbizUrl>relatedProductsDetail?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageRelatedProductsTooltip}');" onMouseout="hideTooltip()"><span class="relatedIcon"></span></a>
-           <a href="<@ofbizUrl>productVideo?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ManageProductVideoTooltip}');" onMouseout="hideTooltip()"><span class="videoIcon"></span></a>
+        <td class="actionCol <#if !result_has_next?if_exists>lastRow</#if> <#if !result_has_next?if_exists>bottomActionIconRow</#if>">
+          <div class="actionIconMenu">
+            <a class="toolIcon" href="javascript:void(o);"></a>
+            <div class="actionIconBox" style="display:none">
+            <div class="actionIcon">
+              <#if productLargeImageUrl?has_content>
+                  <img class="actionIconMenuImage" src="<@ofbizContentUrl>${productLargeImageUrl}</@ofbizContentUrl>" alt="${productLargeImageUrl}"/>
+              </#if>            
+            <ul>
+	           <li><a href="<@ofbizUrl>productImages?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="imageIcon"></span>${uiLabelMap.ProductImagesTooltip}</a></li>
+	           <li><a href="<@ofbizUrl>productPrice?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="priceIcon"></span>${uiLabelMap.ProductPricingTooltip}</a></li>
+	           <li><a href="<@ofbizUrl>productMetatag?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
+	           <#if (product.isVariant?if_exists == 'N')>
+	               <li><a href="<@ofbizUrl>productFeatures?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="featureIcon"></span>${uiLabelMap.ProductFeaturesTooltip}</a></li>
+	           </#if>
+	           <#if (product.isVirtual?if_exists == 'Y')>
+			       <#assign prodVariants = delegator.findByAnd("ProductAssoc",Static["org.ofbiz.base.util.UtilMisc"].toMap("productId", product.productId,"productAssocTypeId","PRODUCT_VARIANT"))!"">
+                   <#assign prodVariantCount = prodVariants.size()!0/>
+	               <li><a href="<@ofbizUrl>productVariants?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="variantIcon"></span>${uiLabelMap.ProductVariantsTooltip} [${prodVariantCount!}]</a></li>
+	           </#if>
+	           <#if (product.isVariant?if_exists == 'N')>
+			       <#assign prodRelated = delegator.findByAnd("ProductAssoc",Static["org.ofbiz.base.util.UtilMisc"].toMap("productIdTo", product.productId,"productAssocTypeId","PRODUCT_COMPLEMENT"))>
+			       <#assign prodRelated = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(prodRelated)>
+                   <#assign prodRelatedCount = prodRelated.size()!0/>
+         	        <li><a href="<@ofbizUrl>relatedProductsDetail?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="relatedIcon"></span>${uiLabelMap.ManageRelatedProductsTooltip} [${prodRelatedCount!}]</a></li>
+	           </#if>
+	           <#if (product.isVariant?if_exists == 'N')>
+                   <#assign categoryMembers = product.getRelated("ProductCategoryMember")!""/>
+                   <#assign categoryMembers = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(categoryMembers)>
+                   <#assign prodCatMembershipCount = categoryMembers.size()!0/>
+	               <li><a href="<@ofbizUrl>productCategoryMembershipDetail?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="membershipIcon"></span>${uiLabelMap.ManageProductcategoryMembershipTooltip} [${prodCatMembershipCount!}]</a></li>
+	           </#if>
+	           <li><a href="<@ofbizUrl>productVideo?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="videoIcon"></span>${uiLabelMap.ManageProductVideoTooltip}</a></li>
+	        </ul>
+	       </div>
+	       </div>
+	      </div>
         </td>
       </tr>
       <#if rowClass == "2">
@@ -90,5 +101,6 @@
     <#--if numFound?if_exists gt pageSize>
       ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpPagingControlsTop")}
     </#if-->
+    
   </#if>
 <!-- end listBox -->

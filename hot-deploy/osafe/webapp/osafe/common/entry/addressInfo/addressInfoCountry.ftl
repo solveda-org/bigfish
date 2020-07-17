@@ -14,7 +14,7 @@
 
 <!-- address country entry -->
 <div class="addressInfoCountry">
-    <#if COUNTRY_MULTI?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI)>
+    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"COUNTRY_MULTI")>
         <div class="entry">
             <label for="${fieldPurpose?if_exists}_COUNTRY"><@required/>${uiLabelMap.CountryCaption}</label>
             <select name="${fieldPurpose?if_exists}_COUNTRY" id="${fieldPurpose?if_exists}_COUNTRY" class="dependentSelectMaster">

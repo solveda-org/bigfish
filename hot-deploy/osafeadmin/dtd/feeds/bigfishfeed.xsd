@@ -9,43 +9,58 @@
   </xsd:complexType>
   <xsd:complexType name="CustomerType">
     <xsd:sequence>
-      <xsd:element name="ProductStore" type="xsd:string" />
-      <xsd:element name="CustomerId" type="xsd:string" />
-      <xsd:element name="FirstName" type="xsd:string" />
-      <xsd:element name="LastName" type="xsd:string" />
-      <xsd:element name="Gender" type="xsd:string" />
-      <xsd:element name="DateRegistered" type="xsd:string" />
-      <xsd:element name="EmailAddress" type="xsd:string" />
-      <xsd:element name="EmailFormat" type="xsd:string" />
-      <xsd:element name="EmailOptIn" type="xsd:string" />
-      <xsd:element name="HomePhone" type="xsd:string" />
-      <xsd:element name="CellPhone" type="xsd:string" />
-      <xsd:element name="WorkPhone" type="xsd:string" />
-      <xsd:element name="WorkPhoneExt" type="xsd:string" />
+      <xsd:element name="ProductStore" type="xsd:string" default=""/>
+      <xsd:element name="CustomerId" type="xsd:string" default=""/>
+      <xsd:element name="FirstName" type="xsd:string" default=""/>
+      <xsd:element name="LastName" type="xsd:string" default=""/>
+      <xsd:element name="Title" type="xsd:string" default=""/>
+      <xsd:element name="Gender" type="xsd:string" default=""/>
+      <xsd:element name="IsDownloaded" type="xsd:string" default=""/>
+      <xsd:element name="DateRegistered" type="xsd:string" default=""/>
+      <xsd:element name="EmailAddress" type="xsd:string" default=""/>
+      <xsd:element name="EmailFormat" type="xsd:string" default=""/>
+      <xsd:element name="EmailOptIn" type="xsd:string" default=""/>
+      <xsd:element name="DOB_DDMMYYYY" type="xsd:string" default=""/>
+      <xsd:element name="DOB_DDMM" type="xsd:string" default=""/>
+      <xsd:element name="DOB_MMDDYYYY" type="xsd:string" default=""/>
+      <xsd:element name="DOB_MMDD" type="xsd:string" default=""/>
+      <xsd:element name="HomePhone" type="xsd:string" default=""/>
+      <xsd:element name="CellPhone" type="xsd:string" default=""/>
+      <xsd:element name="WorkPhone" type="xsd:string" default=""/>
+      <xsd:element name="WorkPhoneExt" type="xsd:string" default=""/>
       <xsd:element maxOccurs="unbounded" name="BillingAddress" type="BillingAddressType" />
       <xsd:element maxOccurs="unbounded" name="ShippingAddress" type="ShippingAddressType" />
+      <xsd:element name="UserLogin" type="UserLoginType" />
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="ShippingAddressType">
     <xsd:sequence>
-      <xsd:element name="Country" type="xsd:string" />
-      <xsd:element name="Address1" type="xsd:string" />
-      <xsd:element name="Address2" type="xsd:string" />
-      <xsd:element name="Address3" type="xsd:string" />
-      <xsd:element name="CityTown" type="xsd:string" />
-      <xsd:element name="StateProvince" type="xsd:string" />
-      <xsd:element name="ZipPostCode" type="xsd:string" />
+      <xsd:element name="Country" type="xsd:string" default=""/>
+      <xsd:element name="Address1" type="xsd:string" default=""/>
+      <xsd:element name="Address2" type="xsd:string" default=""/>
+      <xsd:element name="Address3" type="xsd:string" default=""/>
+      <xsd:element name="CityTown" type="xsd:string" default=""/>
+      <xsd:element name="StateProvince" type="xsd:string" default=""/>
+      <xsd:element name="ZipPostCode" type="xsd:string" default=""/>
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="BillingAddressType">
     <xsd:sequence>
-      <xsd:element name="Country" type="xsd:string" />
-      <xsd:element name="Address1" type="xsd:string" />
-      <xsd:element name="Address2" type="xsd:string" />
-      <xsd:element name="Address3" type="xsd:string" />
-      <xsd:element name="CityTown" type="xsd:string" />
-      <xsd:element name="StateProvince" type="xsd:string" />
-      <xsd:element name="ZipPostCode" type="xsd:string" />
+      <xsd:element name="Country" type="xsd:string" default=""/>
+      <xsd:element name="Address1" type="xsd:string" default=""/>
+      <xsd:element name="Address2" type="xsd:string" default=""/>
+      <xsd:element name="Address3" type="xsd:string" default=""/>
+      <xsd:element name="CityTown" type="xsd:string" default=""/>
+      <xsd:element name="StateProvince" type="xsd:string" default=""/>
+      <xsd:element name="ZipPostCode" type="xsd:string" default=""/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="UserLoginType">
+    <xsd:sequence>
+      <xsd:element name="UserName" type="xsd:string" default=""/>
+      <xsd:element name="Password" type="xsd:string" default=""/>
+      <xsd:element name="UserEnabled" type="xsd:string" default=""/>
+      <xsd:element name="UserIsSystem" type="xsd:string" default=""/>
     </xsd:sequence>
   </xsd:complexType>
   
@@ -92,9 +107,8 @@
   </xsd:complexType>
   <xsd:complexType name="OrderLineType">
     <xsd:sequence>
-      <xsd:element name="LineNumber" type="xsd:string" />
-      <xsd:element name="OrderLineId" type="xsd:string" />
       <xsd:element name="ProductId" type="xsd:string" />
+      <xsd:element name="SequenceId" type="xsd:string" />
       <xsd:element name="Quantity" type="xsd:int" />
       <xsd:element name="Price" type="xsd:string" />
       <xsd:element name="OfferPrice" type="xsd:string" />
@@ -262,7 +276,6 @@
       <xsd:element type="xsd:string" name="ManufacturerId" default=""/>
       <xsd:element type="xsd:string" name="FromDate" default=""/>
       <xsd:element type="xsd:string" name="ThruDate" default=""/>
-      <xsd:element type="xsd:string" name="UseVariantPricing" default=""/>
       <xsd:element type="ProductPriceType" name="ProductPrice"/>
       <xsd:element type="ProductCategoryMemberType" name="ProductCategoryMember"/>
       <xsd:element type="ProductSelectableFeatureType" name="ProductSelectableFeature"/>
@@ -559,7 +572,8 @@
   
   <xsd:complexType name="OrderItemType">
     <xsd:sequence>
-      <xsd:element type="xsd:string" name="OrderItemId"/>
+      <xsd:element type="xsd:string" name="ProductId"/>
+      <xsd:element type="xsd:string" name="SequenceId" default=""/>
       <xsd:element type="xsd:string" name="OrderItemStatus"/>
       <xsd:element type="xsd:string" name="OrderItemShipDate" default=""/>
       <xsd:element type="xsd:string" name="OrderItemCarrier" default=""/>

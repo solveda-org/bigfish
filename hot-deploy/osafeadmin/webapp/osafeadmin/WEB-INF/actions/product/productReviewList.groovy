@@ -9,6 +9,7 @@ import java.util.Map;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import com.osafe.util.Util;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilGenerics;
@@ -31,7 +32,12 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import com.ibm.icu.util.Calendar;
+import org.ofbiz.base.util.*;
+import org.ofbiz.entity.util.*;
+import java.sql.Date;
+import com.osafe.util.OsafeAdminUtil;
 
+String entryDateFormat = preferredDateFormat;
 String srchProductId = StringUtils.trimToEmpty(parameters.srchProductId);
 String srchReviewId = StringUtils.trimToEmpty(parameters.srchReviewId);
 String srchReviewer = StringUtils.trimToEmpty(parameters.srchReviewer);
@@ -44,7 +50,9 @@ srchAll=StringUtils.trimToEmpty(parameters.srchall);
 context.srchall=srchAll;
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
-
+fromDateShort = StringUtils.trimToEmpty(parameters.from);
+toDateShort = StringUtils.trimToEmpty(parameters.to);
+statusId = StringUtils.trimToEmpty(parameters.status);
 if (UtilValidate.isNotEmpty(preRetrieved))
 {
    context.preRetrieved=preRetrieved;
@@ -71,14 +79,19 @@ exprs = FastList.newInstance();
 mainCond=null;
 prodCond=null;
 statusCond=null;
+dateCond=null;
+searchCond=null;
+statusIdCond=null;
 
 // Product Id
-if(srchProductId){
+if(UtilValidate.isNotEmpty(srchProductId))
+{
 
     productId=srchProductId;
     findProdCond = EntityCondition.makeCondition(EntityFunction.UPPER(EntityFieldValue.makeFieldValue("internalName")), EntityOperator.EQUALS, srchProductId.toUpperCase());
     products = delegator.findList("Product",findProdCond, null, null, null, true);
-    if (products) {
+    if (UtilValidate.isNotEmpty(products)) 
+    {
         product=EntityUtil.getFirst(products);
         productId=product.productId;
     }
@@ -86,54 +99,74 @@ if(srchProductId){
     exprs.add(EntityCondition.makeCondition("productId", EntityOperator.EQUALS, productId));
     context.srchProductId=srchProductId
 }
-if(srchReviewId){
-
+if(srchReviewId)
+{
     exprs.add(EntityCondition.makeCondition("productReviewId", EntityOperator.EQUALS, srchReviewId));
     context.srchReviewId=srchReviewId
 }
 
 // Review Status with DD implementation
-if(UtilValidate.isNotEmpty(srchReviewStatus)){
+if(UtilValidate.isNotEmpty(srchReviewStatus))
+{
     exprs.add(EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, srchReviewStatus));
     context.srchReviewStatus=srchReviewStatus
 }
 
+if(UtilValidate.isNotEmpty(toDateShort) && Util.isDateTime(toDateShort))
+{
+    nowTs = ObjectType.simpleTypeConvert(toDateShort, "Timestamp", entryDateFormat, locale);
+    nowTs = UtilDateTime.getDayEnd(nowTs);
+}
+
 // Days
-if(UtilValidate.isNotEmpty(srchDays)){
+if(UtilValidate.isNotEmpty(srchDays))
+{
 
-    Calendar fiveDaysAgoCal = UtilDateTime.toCalendar(nowTs);
-    fiveDaysAgoCal.add(Calendar.DAY_OF_MONTH, -5);
-    Timestamp fiveDaysAgo = new Timestamp(fiveDaysAgoCal.getTimeInMillis());
+	Timestamp fiveDaysAgo = UtilDateTime.addDaysToTimestamp(nowTs,-5);
+	Timestamp tenDaysAgo = UtilDateTime.addDaysToTimestamp(nowTs,-10);
+	Timestamp twentyDaysAgo = UtilDateTime.addDaysToTimestamp(nowTs,-20);
 
-    Calendar tenDaysAgoCal = UtilDateTime.toCalendar(nowTs);
-    tenDaysAgoCal.add(Calendar.DAY_OF_MONTH, -10);
-    Timestamp tenDaysAgo = new Timestamp(tenDaysAgoCal.getTimeInMillis());
-
-    if("oneToFive".equals(srchDays)){
+    if("oneToFive".equals(srchDays))
+    {
         // 1-5 Days
         // Now - 5 Days
 
         ecl = EntityCondition.makeCondition([
             EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, fiveDaysAgo),
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, nowTs)
+            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, nowTs)
         ],
         EntityOperator.AND);
         exprs.add(ecl);
-    }else if("fiveToTen".equals(srchDays)){
+    }
+    else if("sixToTen".equals(srchDays))
+    {
         // 5-10 Days
         // 5 - 10 Days
 
         ecl = EntityCondition.makeCondition([
             EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, tenDaysAgo),
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, fiveDaysAgo)
+            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, fiveDaysAgo)
         ],
         EntityOperator.AND);
         exprs.add(ecl);
-    }else if("tenPlus".equals(srchDays)){
-        // 10+ Days
-        // 10 - ... Days
+    }
+    else if("elevenToTwenty".equals(srchDays))
+    {
+        // 10-20 Days
+        // 10 - 20... Days
         ecl = EntityCondition.makeCondition([
-            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, tenDaysAgo)
+            EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, twentyDaysAgo),
+            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, tenDaysAgo)
+        ],
+        EntityOperator.AND);
+        exprs.add(ecl);
+    }
+    else if("twentyPlus".equals(srchDays))
+    {
+        // 20+ Days
+        // 20 - ... Days
+        ecl = EntityCondition.makeCondition([
+            EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN, twentyDaysAgo)
         ],
         EntityOperator.AND);
         exprs.add(ecl);
@@ -142,12 +175,14 @@ if(UtilValidate.isNotEmpty(srchDays)){
 }
 
 // Reviewer
-if(srchReviewer){
+if(srchReviewer)
+{
     exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER(EntityFieldValue.makeFieldValue("reviewNickName")), EntityOperator.LIKE, srchReviewer.toUpperCase() +"%"));
     context.srchReviewer=srchReviewer
 }
 
-if (UtilValidate.isNotEmpty(exprs)) {
+if (UtilValidate.isNotEmpty(exprs))
+{
     prodCond=EntityCondition.makeCondition(exprs, EntityOperator.AND);
     mainCond=prodCond;
 }
@@ -169,17 +204,52 @@ if(srchReviewReject){
    context.srchReviewReject=srchReviewReject
 
 }
+dateExpr= FastList.newInstance();
+//SUMMARY PAGE to LIST PAGE CONDITION.
+if(UtilValidate.isNotEmpty(fromDateShort) && Util.isDateTime(fromDateShort))
+{
+    fromDate = ObjectType.simpleTypeConvert(fromDateShort, "Timestamp", entryDateFormat, locale);
+    fromDate  = UtilDateTime.getDayStart(fromDate);
+    dateExpr.add(EntityCondition.makeCondition("postedDateTime", EntityOperator.GREATER_THAN_EQUAL_TO, fromDate));
+}
+if(UtilValidate.isNotEmpty(toDateShort) && Util.isDateTime(toDateShort))
+{
+    toDate = ObjectType.simpleTypeConvert(toDateShort, "Timestamp", entryDateFormat, locale);
+    toDate  = UtilDateTime.getDayEnd(toDate);
+    dateExpr.add(EntityCondition.makeCondition("postedDateTime", EntityOperator.LESS_THAN_EQUAL_TO, toDate));
+}
+if(UtilValidate.isNotEmpty(dateExpr))
+{   
+    dateCond = EntityCondition.makeCondition(dateExpr, EntityOperator.AND);
+    searchCond = dateCond;
+}
+if(UtilValidate.isNotEmpty(statusId)){
+	statusIdCond = EntityCondition.makeCondition("statusId", EntityOperator.EQUALS, statusId);
+	searchCond = statusIdCond;
+}
+if(UtilValidate.isNotEmpty(statusIdCond) && UtilValidate.isNotEmpty(dateCond)){
+	searchCond = EntityCondition.makeCondition([dateCond, statusIdCond], EntityOperator.AND);
+}
 
 if (UtilValidate.isNotEmpty(statusExpr))
 {
    statusCond = EntityCondition.makeCondition(statusExpr, EntityOperator.OR);
-   if (prodCond) {
+   if (UtilValidate.isNotEmpty(prodCond))
+   {
       mainCond = EntityCondition.makeCondition([prodCond, statusCond], EntityOperator.AND);
    }
    else
    {
      mainCond=statusCond;
    }
+}
+if(UtilValidate.isNotEmpty(searchCond) && UtilValidate.isNotEmpty(mainCond))
+{
+	mainCond = EntityCondition.makeCondition([mainCond, searchCond], EntityOperator.AND);
+}
+if(UtilValidate.isNotEmpty(searchCond) && UtilValidate.isEmpty(mainCond))
+{
+	mainCond = searchCond;
 }
 
 orderBy = ["productReviewId"];

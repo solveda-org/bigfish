@@ -19,7 +19,7 @@
                 <set field="shoppingCartSize" value="${groovy:org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request).size();}"/>
                 <set field="addPromoCodeRequest" value="validateShowCartPromoCode"/>
                 <set field="removePromoCodeRequest" value="removeShowCartPromoCode"/>
-                <set field="backAction" value="main" />
+                <set field="prevButtonUrl" value="main" />
                 <set field="prevButtonDescription" value="${uiLabelMap.ContinueShoppingBtn}"/>
                 <set field="prevButtonClass" value="${groovy:if(shoppingCartSize > 0)return 'standardBtn negative' else return 'standardBtn positive';}"/>
                 <set field="doneAction" value="checkout" />
@@ -178,10 +178,8 @@
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutPayment.groovy" />
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditPaymentMethod.groovy" />
 
-                <!-- Used to be in eCommerceCheckoutReview -->
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
 
                 <set field="useAvailability" value="Y" />
@@ -343,10 +341,7 @@
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutPayment.groovy" />
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditPaymentMethod.groovy" />
-
-                <!-- Used to be in eCommerceCheckoutReview -->
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
 
                 <set field="useAvailability" value="Y" />
@@ -683,10 +678,7 @@
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutPayment.groovy" />
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditPaymentMethod.groovy" />
-
-                <!-- Used to be in eCommerceCheckoutReview -->
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
 
                 <set field="useAvailability" value="Y" />
@@ -755,10 +747,7 @@
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutPayment.groovy" />
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditPaymentMethod.groovy" />
-
-                <!-- Used to be in eCommerceCheckoutReview -->
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
 
                 <set field="useAvailability" value="Y" />
@@ -1035,10 +1024,7 @@
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutPayment.groovy" />
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditPaymentMethod.groovy" />
-
-                <!-- Used to be in eCommerceCheckoutReview -->
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
 
                 <set field="useAvailability" value="Y" />
@@ -1108,10 +1094,7 @@
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutPayment.groovy" />
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/EditPaymentMethod.groovy" />
-
-                <!-- Used to be in eCommerceCheckoutReview -->
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
 
                 <set field="useAvailability" value="Y" />
@@ -1375,7 +1358,7 @@
             <actions>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <set field="useAvailability" value="Y" />
             </actions>
             <widgets>
@@ -1492,7 +1475,7 @@
             <actions>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/order/CheckoutReview.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <set field="useAvailability" value="Y" />
             </actions>
             <widgets>

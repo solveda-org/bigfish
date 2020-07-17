@@ -5,7 +5,7 @@
 
 <div id="changePassword" class="displayBox">
     <h3>${uiLabelMap.CommonPasswordChange?if_exists}</h3>
-      <form method="post" action="<@ofbizUrl>eCommerceLogin${previousParams}</@ofbizUrl>" name="loginform">
+      <form method="post" action="<@ofbizUrl>eCommerceLoginChangePassword${previousParams}</@ofbizUrl>" name="loginform">
           <input type="hidden" name="requirePasswordChange" value="Y"/>
           <input type="hidden" name="USERNAME" value="${username}" maxlength="200"/>
             <div class="entry">

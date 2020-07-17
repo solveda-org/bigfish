@@ -56,52 +56,63 @@ exprBldr =  new EntityConditionBuilder();
 paramCond=null;
 List exprListForParameters = [];
 
-if (parameters.srchall) {
+if (parameters.srchall) 
+{
     exprListForParameters.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("parmKey"), EntityOperator.LIKE, EntityFunction.UPPER(("%" + searchString) + "%")));
     exprListForParameters.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("description"), EntityOperator.LIKE, EntityFunction.UPPER(("%" + searchString) + "%")));
     exprListForParameters.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("parmValue"), EntityOperator.LIKE, EntityFunction.UPPER(("%" + searchString) + "%")));
     exprListForParameters.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("parmCategory"), EntityOperator.LIKE, EntityFunction.UPPER(("%" + searchString) + "%")));
     paramCond = EntityCondition.makeCondition(exprListForParameters, EntityOperator.OR); 
     
-} else {
-    if (searchByName){
+} else 
+{
+    if (UtilValidate.isNotEmpty(searchByName))
+    {
         paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("parmKey"),
                 EntityOperator.LIKE, EntityFunction.UPPER("%"+searchString+"%")));
         context.searchByName=searchByName;
     }
-    if (searchByDescription){
+    if (UtilValidate.isNotEmpty(searchByDescription))
+    {
        paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("description"),
                 EntityOperator.LIKE, EntityFunction.UPPER("%"+searchString+"%")));
         context.searchByDescription=searchByDescription;
     }
-    if(searchByValue){
+    if (UtilValidate.isNotEmpty(searchByValue))
+    {
        paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("parmValue"),
                 EntityOperator.LIKE, EntityFunction.UPPER("%"+searchString+"%")));
         context.searchByValue=searchByValue;
     }
-    if(searchByCategory){
+    if (UtilValidate.isNotEmpty(searchByCategory))
+    {
        paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("parmCategory"),
                 EntityOperator.LIKE, EntityFunction.UPPER("%"+searchString+"%")));
         context.searchByValue=searchByValue;
     }
 }
-if (UtilValidate.isNotEmpty(paramsExpr)) {
+if (UtilValidate.isNotEmpty(paramsExpr)) 
+{
     prodCond=EntityCondition.makeCondition(paramsExpr, EntityOperator.OR);
     mainCond=prodCond;
 }
 
-if (UtilValidate.isNotEmpty(paramsExpr)) {
+if (UtilValidate.isNotEmpty(paramsExpr)) 
+{
     statusCond = EntityCondition.makeCondition(paramsExpr, EntityOperator.OR);
-    if (prodCond) {
+    if (UtilValidate.isNotEmpty(prodCond)) 
+    {
         paramCond = EntityCondition.makeCondition([prodCond, statusCond], EntityOperator.OR);
-    } else {
+    }
+    else 
+    {
        mainCond=statusCond;
     }
 }
 
 
 storeCond = EntityCondition.makeCondition("productStoreId", EntityOperator.EQUALS, productStoreId);
-if (paramCond) 
+if (UtilValidate.isNotEmpty(paramCond)) 
  {
    paramCond = EntityCondition.makeCondition([paramCond, storeCond], EntityOperator.AND);
  } 
@@ -118,7 +129,7 @@ productStoreParamsList=FastList.newInstance();
 
 if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N") 
  {
-    productStoreParamsList = delegator.findList("XProductStoreParm",paramCond, null, orderBy, null, true);
+    productStoreParamsList = delegator.findList("XProductStoreParm",paramCond, null, orderBy, null, false);
  }
 pagingListSize=productStoreParamsList.size();
 context.pagingListSize=pagingListSize;

@@ -20,24 +20,28 @@
 <DataResource dataResourceId="SI_SHOPPING_CART" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SI_SEARCH" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="SI_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="SI_HEAD_TAG_CONTENT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="SI_HEADER_CONTENT"/>
 <ElectronicText dataResourceId="SI_FOOTER_CONTENT"/>
 <ElectronicText dataResourceId="SI_LOGO"/>
 <ElectronicText dataResourceId="SI_SHOPPING_CART"/>
 <ElectronicText dataResourceId="SI_SEARCH"/>
 <ElectronicText dataResourceId="SI_MAILING_LIST"/>
+<ElectronicText dataResourceId="SI_HEAD_TAG_CONTENT"/>
 <Content contentId="SI_HEADER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER_CONTENT"/>
 <Content contentId="SI_FOOTER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER_CONTENT"/>
 <Content contentId="SI_LOGO" contentTypeId="BF_SITE_INFO"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO"/>
 <Content contentId="SI_SHOPPING_CART" contentTypeId="BF_SITE_INFO"  description="Main Site View Cart displayed on every page" contentName="Site Shopping Cart" dataResourceId="SI_SHOPPING_CART"/>
 <Content contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH"/>
 <Content contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING_LIST"/>
+<Content contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG_CONTENT"/>
 <ContentPurpose contentId="SI_HEADER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_FOOTER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_LOGO" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_SHOPPING_CART" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_SEARCH" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_MAILING_LIST" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_HEAD_TAG_CONTENT" contentPurposeTypeId="SECTION"/>
 <!-- ********************************* -->
 
 
@@ -112,6 +116,7 @@
 <DataResource dataResourceId="PTS_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_ONE_STEP_CHKOUT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="PTS_STORE_PICKUP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_ADDR_BOOK_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_ADDR_BOOK_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_MY_ACCOUNT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
@@ -130,6 +135,7 @@
 <DataResource dataResourceId="PES_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_ONE_STEP_CHKOUT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="PES_STORE_PICKUP" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PDP_CONTENT_01" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_01"/>
 <DataResource dataResourceId="PDP_CONTENT_02" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_02"/>
 <DataResource dataResourceId="PDP_CONTENT_03" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_03"/>
@@ -153,6 +159,7 @@
 <ElectronicText dataResourceId="PTS_CONFIRM"/>
 <ElectronicText dataResourceId="PTS_SEARCH_NO_RESULT"/>
 <ElectronicText dataResourceId="PTS_ONE_STEP_CHKOUT"/>
+<ElectronicText dataResourceId="PTS_STORE_PICKUP"/>
 <ElectronicText dataResourceId="PES_ADDR_BOOK_VIEW"/>
 <ElectronicText dataResourceId="PES_ADDR_BOOK_EDIT"/>
 <ElectronicText dataResourceId="PES_MY_ACCOUNT"/>
@@ -171,6 +178,7 @@
 <ElectronicText dataResourceId="PES_CONFIRM"/>
 <ElectronicText dataResourceId="PES_SEARCH_NO_RESULT"/>
 <ElectronicText dataResourceId="PES_ONE_STEP_CHKOUT"/>
+<ElectronicText dataResourceId="PES_STORE_PICKUP"/>
 <ElectronicText dataResourceId="PDP_CONTENT_01"/>
 <ElectronicText dataResourceId="PDP_CONTENT_02"/>
 <ElectronicText dataResourceId="PDP_CONTENT_03"/>
@@ -194,6 +202,7 @@
 <Content contentId="PTS_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PTS_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SEARCH_NO_RESULT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on TOP of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PTS_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ONE_STEP_CHKOUT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the top of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_STORE_PICKUP" statusId="CTNT_PUBLISHED"  description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box" contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MY_ACCOUNT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
@@ -212,6 +221,7 @@
 <Content contentId="PES_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SEARCH_NO_RESULT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on END of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PES_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ONE_STEP_CHKOUT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the END of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_STORE_PICKUP" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_STORE_PICKUP" statusId="CTNT_PUBLISHED"  description="Content Spot displayed on the YYY of the Store-Pickup 'pop' box" contentName="Store Pickup" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <Content contentId="PDP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_01"/>
 <Content contentId="PDP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_02"/>
 <Content contentId="PDP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_03"/>
@@ -235,6 +245,7 @@
 <ContentRole contentId="PTS_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PTS_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ONE_STEP_CHKOUT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_STORE_PICKUP" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_MY_ACCOUNT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -253,6 +264,7 @@
 <ContentRole contentId="PES_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PES_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ONE_STEP_CHKOUT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_STORE_PICKUP" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_01" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_02" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PDP_CONTENT_03" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -328,7 +340,6 @@
 <DataResource dataResourceId="E_ORDER_CHANGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_SHIP_REVIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_ORDER_DETAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
-<DataResource dataResourceId="E_TEST_EMAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_SCHED_JOB_ALERT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="E_COMMON_STYLES"/>
@@ -345,7 +356,6 @@
 <ElectronicText dataResourceId="E_ORDER_CHANGE"/>
 <ElectronicText dataResourceId="E_SHIP_REVIEW"/>
 <ElectronicText dataResourceId="E_ORDER_DETAIL"/>
-<ElectronicText dataResourceId="E_TEST_EMAIL"/>
 <ElectronicText dataResourceId="E_MAILING_LIST"/>
 <ElectronicText dataResourceId="E_SCHED_JOB_ALERT"/>
 <Content contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
@@ -361,7 +371,6 @@
 <Content contentId="E_ORDER_CHANGE" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Change email (when the Status on the Order gets modified from one state to another)." contentName="Order Notice Email" dataResourceId="E_ORDER_CHANGE"/>
 <Content contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW"/>
 <Content contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
-<Content contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be used to send out a test email." contentName="Test Email" dataResourceId="E_TEST_EMAIL"/>
 <Content contentId="E_MAILING_LIST" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Mailing-List email. This email sent to both the customer and the client." contentName="Mailing List Email" dataResourceId="E_MAILING_LIST"/>
 <Content contentId="E_SCHED_JOB_ALERT" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Scheduled Job email. This email sent to both the customer and the client." contentName="Scheduled Job Email" dataResourceId="E_SCHED_JOB_ALERT"/>
 <ContentPurpose contentId="E_COMMON_HEADER" contentPurposeTypeId="SECTION"/>
@@ -377,7 +386,6 @@
 <ContentPurpose contentId="E_ORDER_CHANGE" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_SHIP_REVIEW" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_ORDER_DETAIL" contentPurposeTypeId="SECTION"/>
-<ContentPurpose contentId="E_TEST_EMAIL" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_MAILING_LIST" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_SCHED_JOB_ALERT" contentPurposeTypeId="SECTION"/>
 <Content contentId="E_COMMON_HEADER" statusId="CTNT_PUBLISHED"/>
@@ -393,7 +401,6 @@
 <Content contentId="E_ORDER_CHANGE" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_SHIP_REVIEW" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_DETAIL" statusId="CTNT_PUBLISHED"/>
-<Content contentId="E_TEST_EMAIL" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_MAILING_LIST" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_SCHED_JOB_ALERT" statusId="CTNT_PUBLISHED"/>
 

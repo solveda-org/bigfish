@@ -65,14 +65,6 @@
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
     </service>
-    <!-- Party Geo services -->
-    <service name="genPartyGeoPoint" engine="java" transaction-timeout="300" auth="true"
-            location="com.osafe.services.GeoServices" invoke="genPartyGeoPoint">
-        <description>Create geo point and validate existing for party .if roleTypeId is null, consider STORE_LOCATION roletype as default.</description>
-        <attribute name="partyId" type="String" mode="IN" optional="true"/>
-        <attribute name="roleTypeId" type="String" mode="IN" optional="true"/>
-        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
-    </service>
 
     <!-- PartyGeoPoint services -->
     <service name="createPartyGeoPoint" default-entity-name="PartyGeoPoint" engine="entity-auto" invoke="create" auth="true">
@@ -171,17 +163,6 @@
         <description>Create A text filr for Reevoo Products feed</description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" />
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" />
-    </service>
-
-    <service name="reevooGetProductRatingScores" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="reevooGetProductRatingScores" auth="false" transaction-timeout="7200">
-        <description>down load xml feed</description>
-        <attribute name="productStoreId" type="String" mode="IN" optional="false" />
-        <attribute name="reevooApiUrl" type="String" mode="IN" optional="true"/>
-        <attribute name="reevooApiCsvUrl" type="String" mode="IN" optional="true"/>
-        <attribute name="reevooApiUserName" type="String" mode="IN" optional="true"/>
-        <attribute name="reevooApiPassword" type="String" mode="IN" optional="true"/>
-        <attribute name="xmlFile" type="java.io.File" mode="OUT" optional="true"/>
-        <attribute name="xmlFileAsString" type="String" mode="OUT" optional="true"/>
     </service>
 
     <service name="getReevooCsvFeed" engine="java" location="com.osafe.services.reevoo.ReevooServices" invoke="getReevooCsvFeed" auth="false" transaction-timeout="7200">

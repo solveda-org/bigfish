@@ -8,14 +8,15 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.contact.ContactHelper;
 
 cart = session.getAttribute("shoppingCart");
-party = userLogin.getRelatedOne("Party");
+party = userLogin.getRelatedOneCache("Party");
 partyId = party.partyId;
 context.party = party;
 
 context.shippingContactMechList = ContactHelper.getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
 // This should return the current billing address
 context.billingContactMechList = ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false);
-if(UtilValidate.isNotEmpty(context.billingContactMechList)){
+if(UtilValidate.isNotEmpty(context.billingContactMechList))
+{
     billingContactMech = context.billingContactMechList.get(0);
 
     // Moving the billing address to the front of the list
@@ -28,24 +29,23 @@ if(UtilValidate.isNotEmpty(context.billingContactMechList)){
 
 shippingContactMechList = context.shippingContactMechList
 shippingContactMechPhoneMap = [:];
-for (GenericValue contactMech : shippingContactMechList){
+for (GenericValue contactMech : shippingContactMechList)
+{
     phoneNumberMap = [:];
-    if(contactMech){
+    if(contactMech)
+    {
         contactMechIdFrom = contactMech.contactMechId;
-        contactMechLinkList = delegator.findByAnd("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechIdFrom))
+        contactMechLinkList = delegator.findByAndCache("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechIdFrom))
 
         for (GenericValue link: contactMechLinkList){
             contactMechIdTo = link.contactMechIdTo
-            contactMech = delegator.findByPrimaryKey("ContactMech", [contactMechId : contactMechIdTo]);
-            phonePurposeList  = EntityUtil.filterByDate(contactMech.getRelated("PartyContactMechPurpose"), true);
+            contactMech = delegator.findByPrimaryKeyCache("ContactMech", [contactMechId : contactMechIdTo]);
+            phonePurposeList  = EntityUtil.filterByDate(contactMech.getRelatedCache("PartyContactMechPurpose"), true);
             partyContactMechPurpose = EntityUtil.getFirst(phonePurposeList)
 
-            telecomNumber = null;
-            if(partyContactMechPurpose) {
-                telecomNumber = partyContactMechPurpose.getRelatedOne("TelecomNumber");
-            }
-
-            if(telecomNumber) {
+            if(partyContactMechPurpose) 
+            {
+                telecomNumber = partyContactMechPurpose.getRelatedOneCache("TelecomNumber");
                 phoneNumberMap[partyContactMechPurpose.contactMechPurposeTypeId]=telecomNumber;
             }
         }
@@ -54,12 +54,14 @@ for (GenericValue contactMech : shippingContactMechList){
 }
 context.shippingContactMechPhoneMap = shippingContactMechPhoneMap;
 billingAddressContactMech = EntityUtil.getFirst(context.billingContactMechList);
-if (UtilValidate.isNotEmpty(billingAddressContactMech)) {
+if (UtilValidate.isNotEmpty(billingAddressContactMech)) 
+{
     billingPostalAddress = delegator.findOne("PostalAddress", [contactMechId : billingAddressContactMech.contactMechId], true);
     context.BILLINGPostalAddress = billingPostalAddress;
 }
 shippingAddressContactMech = EntityUtil.getFirst(context.shippingContactMechList);
-if (UtilValidate.isNotEmpty(shippingAddressContactMech)) {
+if (UtilValidate.isNotEmpty(shippingAddressContactMech)) 
+{
     shippingPostalAddress = delegator.findOne("PostalAddress", [contactMechId : shippingAddressContactMech.contactMechId], true);
     context.SHIPPINGPostalAddress = shippingPostalAddress;
 }

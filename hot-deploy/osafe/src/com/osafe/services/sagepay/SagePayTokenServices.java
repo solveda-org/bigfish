@@ -52,7 +52,7 @@ public class SagePayTokenServices
 
         if (UtilValidate.isNotEmpty(paymentGatewayConfigId)) {
             try {
-                GenericValue sagePay = delegator.findOne("PaymentGatewaySagePayToken", UtilMisc.toMap("paymentGatewayConfigId", paymentGatewayConfigId), false);
+                GenericValue sagePay = delegator.findOne("PaymentGatewaySagePayToken", UtilMisc.toMap("paymentGatewayConfigId", paymentGatewayConfigId), true);
                 if (UtilValidate.isNotEmpty(sagePay)) {
                     Map<String, Object> tmp = sagePay.getAllFields();
                     Set<String> keys = tmp.keySet();
@@ -119,7 +119,7 @@ public class SagePayTokenServices
         if (cardHolder != null) { parameters.put("CardHolder", cardHolder); }
         if (cardNumber != null) { parameters.put("CardNumber", cardNumber); }
         if (expiryDate != null) { parameters.put("ExpiryDate", expiryDate); }
-        if (cardType != null) { parameters.put("CardType", cardType); }
+        if (cardType != null) { parameters.put("CardType", cardType.toUpperCase()); }
 
 
         //start - optional parameters
@@ -269,7 +269,7 @@ public class SagePayTokenServices
         if (billingCountry != null) 
          { 
         	parameters.put("BillingCountry", billingCountry); 
-        	if ("USA".equals(billingCountry))
+        	if ("USA".equals(billingCountry) || "CAN".equals(billingCountry))
         	{
               if (UtilValidate.isNotEmpty(billingState)) 
               {
@@ -302,7 +302,7 @@ public class SagePayTokenServices
             if (deliveryCountry != null) 
             { 
             	parameters.put("DeliveryCountry", deliveryCountry);
-	           	if ("USA".equals(deliveryCountry))
+	           	if ("USA".equals(deliveryCountry) || "CAN".equals(deliveryCountry))
 	           	{
 	                 if (UtilValidate.isNotEmpty(deliveryState)) 
 	                 {

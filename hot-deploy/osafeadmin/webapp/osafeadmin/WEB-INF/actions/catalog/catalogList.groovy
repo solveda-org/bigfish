@@ -56,7 +56,8 @@ if (UtilValidate.isNotEmpty(productStore))
 		paramCond = null;
         mainCond = null;
         dateCond = null;
-        if (UtilValidate.isNotEmpty(paramsExpr)) {
+        if (UtilValidate.isNotEmpty(paramsExpr)) 
+        {
             paramCond=EntityCondition.makeCondition(paramsExpr, EntityOperator.AND);
             mainCond=paramCond;
         }
@@ -64,7 +65,8 @@ if (UtilValidate.isNotEmpty(productStore))
 		activeThruDateExpr = FastList.newInstance();
 		if(UtilValidate.isEmpty(showAll))
 		{
-    		if(UtilValidate.isNotEmpty(catalogActiveDate)) {
+    		if(UtilValidate.isNotEmpty(catalogActiveDate)) 
+    		{
     		    catalogActiveDateTs =UtilDateTime.nowTimestamp(); 
                 try {
     		        catalogActiveDateTs =ObjectType.simpleTypeConvert(catalogActiveDate, "Timestamp", entryDateFormat, locale);
@@ -73,7 +75,8 @@ if (UtilValidate.isNotEmpty(productStore))
     		        context.catalogActiveDate=UtilDateTime.nowDateString(entryDateFormat);
                     errMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","AsOfDateError",locale));
     		    }
-    		} else {
+    		} else 
+    		{
     		    catalogActiveDateTs =UtilDateTime.nowTimestamp();
     		    context.catalogActiveDate=UtilDateTime.nowDateString(entryDateFormat);
     		}
@@ -98,24 +101,28 @@ if (UtilValidate.isNotEmpty(productStore))
 		}
 		    categoryRollupList = delegator.findList("ProductCategoryRollupAndChild", mainCond, null, orderBy, null, false);
 	    
-		//CategoryWorker.getRelatedCategories(request, "topLevelActiveList", topCategoryId, true);
-		//categoryList = request.getAttribute("topLevelList");
-		//categoryList = delegator.findByAnd("ProductCategoryRollupAndChild", UtilMisc.toMap("parentProductCategoryId", topCategoryId),UtilMisc.toList("sequenceNum"));
 		context.resultList = categoryRollupList;
 		request.setAttribute("topLevelList", categoryRollupList);
-		if (categoryRollupList) {
+		if (categoryRollupList) 
+		{
 		    catContentWrappers = FastMap.newInstance();
-		    CategoryWorker.getCategoryContentWrappers(catContentWrappers, categoryRollupList, request);
-		    context.catContentWrappers = catContentWrappers;
 		    subCatRollUpMap = FastMap.newInstance();
 		    for (GenericValue categoryRollUp : categoryRollupList)
 		    {
 		        String mapKey = categoryRollUp.productCategoryId;
+	            if (!catContentWrappers.containsKey(mapKey)) 
+	            {
+	            	gvProductCategory = delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId",mapKey));
+	    	        CategoryContentWrapper productCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
+	    	        catContentWrappers.put(mapKey,productCategoryContentWrapper);
+	            	
+	            }
 		        paramsExpr = FastList.newInstance();
 		        paramsExpr.add(EntityCondition.makeCondition("parentProductCategoryId", EntityOperator.EQUALS, categoryRollUp.productCategoryId));
 		        paramCond = null;
 		        mainCond = null;
-		        if (UtilValidate.isNotEmpty(paramsExpr)) {
+		        if (UtilValidate.isNotEmpty(paramsExpr)) 
+		        {
 		            paramCond = EntityCondition.makeCondition(paramsExpr, EntityOperator.AND);
 		            mainCond = paramCond;
 		        }
@@ -128,12 +135,27 @@ if (UtilValidate.isNotEmpty(productStore))
 		        {
 		            subCatRollUpMap.put(mapKey, subCatRollupList);
 		            context.subCatRollUpMap = subCatRollUpMap;
+				    for (GenericValue subCategoryRollUp : subCatRollupList)
+				    {
+				    	productCategoryId=subCategoryRollUp.productCategoryId;
+			            if (!catContentWrappers.containsKey(productCategoryId)) 
+			            {
+			            	gvProductCategory = delegator.findByPrimaryKey("ProductCategory",UtilMisc.toMap("productCategoryId",productCategoryId));
+			    	        CategoryContentWrapper productCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
+			    	        catContentWrappers.put(productCategoryId,productCategoryContentWrapper);
+			            	
+			            }
+				    	
+				    }
+		            
 		        }
 		    }
+		    context.catContentWrappers = catContentWrappers;
 		}
 	}
 	
-     if (errMsgList) {
+     if (errMsgList) 
+     {
         request.setAttribute("_ERROR_MESSAGE_LIST_", errMsgList);
      }
 	

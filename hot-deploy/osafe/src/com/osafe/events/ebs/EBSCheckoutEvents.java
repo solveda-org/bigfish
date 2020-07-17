@@ -113,7 +113,7 @@ public class EBSCheckoutEvents {
 			String billingContactMechId = shoppingCart.getContactMech("BILLING_LOCATION");
 			GenericValue shippingAddress = shoppingCart.getShippingAddress();
 			
-			GenericValue paymentGatewayEBS = delegator.findOne("PaymentGatewayEbs", UtilMisc.toMap("paymentGatewayConfigId", "EBS_CONFIG"), false);
+			GenericValue paymentGatewayEBS = delegator.findOne("PaymentGatewayEbs", UtilMisc.toMap("paymentGatewayConfigId", "EBS_CONFIG"), true);
 			redirectUrl = paymentGatewayEBS.getString("redirectUrl");
    
 			// Generates an unique token and save shopping cart against it
@@ -129,7 +129,7 @@ public class EBSCheckoutEvents {
 			}
 
 			// Customer Address
-			GenericValue billingAddress = delegator.findOne("PostalAddress", UtilMisc.toMap("contactMechId", billingContactMechId), false);
+			GenericValue billingAddress = delegator.findOne("PostalAddress", UtilMisc.toMap("contactMechId", billingContactMechId), true);
 			String name = PartyHelper.getPartyName(delegator, orderPartyId, false);
 			
 			String emailAddress = null;
@@ -212,7 +212,7 @@ public class EBSCheckoutEvents {
         HttpSession session = request.getSession();
         GenericValue userLogin = (GenericValue) session.getAttribute("userLogin");
         
-		GenericValue paymentGatewayEBS = delegator.findOne("PaymentGatewayEbs", UtilMisc.toMap("paymentGatewayConfigId", "EBS_CONFIG"), false);
+		GenericValue paymentGatewayEBS = delegator.findOne("PaymentGatewayEbs", UtilMisc.toMap("paymentGatewayConfigId", "EBS_CONFIG"), true);
 		String key = paymentGatewayEBS.getString("secretKey");
         
         StringBuffer responseData = new StringBuffer().append(request.getParameter("DR"));
@@ -289,7 +289,7 @@ public class EBSCheckoutEvents {
 					userLoginId = userLoginVal.getString("userLoginId");
 				}
 
-				userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId != null ? userLoginId : "anonymous"), false);
+				userLogin = delegator.findOne("UserLogin", UtilMisc.toMap("userLoginId", userLoginId != null ? userLoginId : "anonymous"), true);
 				userLogin.setString("partyId", cart.getOrderPartyId());
 				session.setAttribute("userLogin", userLogin);
 				

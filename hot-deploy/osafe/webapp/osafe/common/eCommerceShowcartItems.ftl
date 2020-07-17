@@ -1,4 +1,5 @@
  <#if (shoppingCartSize > 0)>
+  <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
   <div class="showCartItems">
   <#assign offerPriceVisible= "N"/>
   <#list shoppingCart.items() as cartLine>
@@ -88,6 +89,8 @@
          </#if>
 
          <#assign productFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${urlProductId}&productCategoryId=${productCategoryId!""}')/>
+         <#assign IMG_SIZE_CART_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_CART_H")!""/>
+         <#assign IMG_SIZE_CART_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_CART_W")!""/>
 
             <tr class="cart_contents">
                 <td class="image firstCol <#if !cartLine_has_next>lastRow</#if>" scope="row">
@@ -102,10 +105,12 @@
                         <dd class="description">
                           <a href="${productFriendlyUrl}">${StringUtil.wrapString(productName!)}</a>
                         </dd>
-                        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" , cartLine.getProductId())) />
+		                 <#assign productFeatureAndAppls = product.getRelatedCache("ProductFeatureAndAppl") />
+		                 <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndAppls,true)/>
+		                 <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productFeatureAndAppls,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
                         <#if productFeatureAndAppls?has_content>
                           <#list productFeatureAndAppls as productFeatureAndAppl>
-                            <#assign productFeature = productFeatureAndAppl.getRelatedOne("ProductFeatureCategory")?if_exists />
+                            <#assign productFeature = productFeatureAndAppl.getRelatedOneCache("ProductFeatureCategory")?if_exists />
                             <dd>${productFeature.description!}:${productFeatureAndAppl.description!}</dd>
                           </#list>
                         </#if>

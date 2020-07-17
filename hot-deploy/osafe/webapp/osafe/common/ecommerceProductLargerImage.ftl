@@ -1,5 +1,7 @@
 <div>
   <#assign productLargeImageUrl = request.getAttribute('largeImageUrl')!"" />
+  <#assign IMG_SIZE_PDP_POPUP_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_POPUP_H")!""/>
+  <#assign IMG_SIZE_PDP_POPUP_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_POPUP_W")!""/>
   <#if productLargeImageUrl == "">
       <#assign productLargeImageUrl = "/osafe_theme/images/user_content/images/NotFoundImagePDPDetail.jpg">
   </#if>

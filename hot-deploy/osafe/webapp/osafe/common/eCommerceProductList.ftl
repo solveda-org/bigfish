@@ -1,4 +1,8 @@
 <#-- variable setup and worker calls -->
+<#if (requestAttributes.documentList)?exists><#assign documentList = requestAttributes.documentList></#if>
+<#if (requestAttributes.pageSize)?exists><#assign pageSize = requestAttributes.pageSize!10></#if>
+<#if (requestAttributes.numFound)?exists><#assign numFound = requestAttributes.numFound!></#if>
+
 <#assign categoryId = ""/>
 <#if (currentProductCategoryContentWrapper)?exists>
     <#assign categoryName = currentProductCategoryContentWrapper.get("CATEGORY_NAME")!currentProductCategory.categoryName!"">
@@ -9,31 +13,43 @@
 <#if !categoryId?has_content>
   <#assign categoryId = parameters.productCategoryId?if_exists />
 </#if>
-<#if (requestAttributes.documentList)?exists><#assign documentList = requestAttributes.documentList></#if>
-<#if (requestAttributes.pageSize)?exists><#assign pageSize = requestAttributes.pageSize!10></#if>
-<#if (requestAttributes.numFound)?exists><#assign numFound = requestAttributes.numFound!></#if>
 
-<#assign pageTopProdCatContentTypeId = 'PLP_ESPOT_PAGE_TOP'/>
-<#if pageTopProdCatContentTypeId?exists && pageTopProdCatContentTypeId?has_content>
-  <#assign pageTopProductCategoryContentList = delegator.findByAnd("ProductCategoryContent", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId" , categoryId?string, "prodCatContentTypeId" , pageTopProdCatContentTypeId?if_exists)) />
-  
-  <#if pageTopProductCategoryContentList?has_content>
-    <#assign pageTopProductCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(pageTopProductCategoryContentList?if_exists) />
-    <#assign prodCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(pageTopProductCategoryContentList) />
-    <#assign pageTopContentId = prodCategoryContent.contentId?if_exists />
+<#if currentProductCategory?has_content>
+  <#assign categoryContentList = currentProductCategory.getRelatedCache("ProductCategoryContent")/>
+  <#assign categoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(categoryContentList,true) />
+  <#if categoryContentList?has_content>
+   <#assign pageTopCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(categoryContentList,Static["org.ofbiz.base.util.UtilMisc"].toMap("prodCatContentTypeId","PLP_ESPOT_PAGE_TOP")) />
+   <#if pageTopCategoryContentList?has_content>
+	   <#assign pageTopCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(pageTopCategoryContentList) />
+	   <#assign pageTopContent = pageTopCategoryContent.getRelatedOneCache("Content")/>
+	   <#if pageTopContent.statusId?has_content>
+		   <#if (pageTopContent.statusId == "CTNT_PUBLISHED")>
+		        <#assign pageTopContentId = pageTopContent.contentId/>
+		   </#if>
+	   </#if>
+   </#if>
+
+   <#assign pageEndCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(categoryContentList,Static["org.ofbiz.base.util.UtilMisc"].toMap("prodCatContentTypeId","PLP_ESPOT_PAGE_END")) />
+   <#if pageEndCategoryContentList?has_content>
+	   <#assign pageEndCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(pageEndCategoryContentList) />
+	   <#assign pageEndContent = pageEndCategoryContent.getRelatedOneCache("Content")/>
+	   <#if pageEndContent.statusId?has_content>
+		   <#if (pageEndContent.statusId == "CTNT_PUBLISHED")>
+		        <#assign pageEndContentId = pageEndContent.contentId/>
+		   </#if>
+	   </#if>
+   </#if>
+
   </#if>
-  <#if pageTopContentId?exists >
-    <#assign pageTopPlpEspotContent = delegator.findOne("Content", Static["org.ofbiz.base.util.UtilMisc"].toMap("contentId", pageTopContentId), true) />
-  </#if>
-</#if>
+</#if>  
+
+
 <h1>${StringUtil.wrapString(categoryName!pageTitle!"")}</h1>
 
-  <#if pageTopPlpEspotContent?has_content>
-    <#if ((pageTopPlpEspotContent.statusId)?if_exists == "CTNT_PUBLISHED")>
+  <#if pageTopContentId?has_content>
       <div id="eCommercePlpEspot_${categoryId}" class="plpEspot">
         <@renderContentAsText contentId="${pageTopContentId}" ignoreTemplate="true"/>
       </div>
-    </#if>
   </#if>
 
 <div class="resultListContainer">
@@ -46,23 +62,29 @@
   </#if>
   <!-- List of products  -->
        <#if documentList?has_content>
-       <#assign PLP_FACET_GROUP_VARIANT_SWATCH = PLP_FACET_GROUP_VARIANT_SWATCH_IMG!""/>
-        ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_SWATCH",PLP_FACET_GROUP_VARIANT_SWATCH)}
-       <#if PLP_FACET_GROUP_VARIANT_SWATCH?has_content>
-          <#assign PLP_FACET_GROUP_VARIANT_SWATCH=PLP_FACET_GROUP_VARIANT_SWATCH.toUpperCase()/>
-           ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_SWATCH",PLP_FACET_GROUP_VARIANT_SWATCH)}
+       <#assign plpFacetGroupVariantSwatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_SWATCH_IMG")!""/>
+       <#assign plpFacetGroupVariantSticky =  Static["com.osafe.util.Util"].getProductStoreParm(request,"PLP_FACET_GROUP_VARIANT_PDP_MATCH")!""/>
+       <#assign facetGroupMatch = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_GROUP_VARIANT_MATCH")!""/>
+       
+       ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_SWATCH",plpFacetGroupVariantSwatch)}
+       <#if plpFacetGroupVariantSwatch?has_content>
+          <#assign plpFacetGroupVariantSwatch=plpFacetGroupVariantSwatch.toUpperCase()/>
+           ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_SWATCH",plpFacetGroupVariantSwatch)}
        </#if>
-       <#if PLP_FACET_GROUP_VARIANT_PDP_MATCH?has_content>
-          <#assign PLP_FACET_GROUP_VARIANT_STICKY=PLP_FACET_GROUP_VARIANT_PDP_MATCH.toUpperCase()/>
-           ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_STICKY",PLP_FACET_GROUP_VARIANT_STICKY)}
+       
+       <#if plpFacetGroupVariantSticky?has_content>
+          <#assign plpFacetGroupVariantSticky=plpFacetGroupVariantSticky.toUpperCase()/>
+           ${setRequestAttribute("PLP_FACET_GROUP_VARIANT_STICKY",plpFacetGroupVariantSticky)}
        </#if>
+       
        <#assign featureValueSelected=""/>
        ${setRequestAttribute("featureValueSelected",featureValueSelected)}
-       <#assign facetGroupMatch = FACET_GROUP_VARIANT_MATCH!""/>
+
        <#if facetGroupMatch?has_content>
           <#assign facetGroupMatch=facetGroupMatch.toUpperCase()/>
            ${setRequestAttribute("FACET_GROUP_VARIANT_MATCH",facetGroupMatch)}
        </#if>
+       
        <#if facetGroups?has_content && facetGroupMatch?has_content>
           <#list facetGroups as facet>
             <#if facetGroupMatch == facet.facet>
@@ -71,6 +93,7 @@
             </#if>
           </#list>
        </#if>
+       
        <#if searchTextGroups?has_content && facetGroupMatch?has_content>
           <#list searchTextGroups as facet>
             <#if facetGroupMatch == facet.facet>
@@ -99,24 +122,8 @@
           ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpPagingControlsBottom")}
         </#if>
 </div>
-<#assign pageEndProdCatContentTypeId = 'PLP_ESPOT_PAGE_END'/>
-<#if pageEndProdCatContentTypeId?exists && pageEndProdCatContentTypeId?has_content>
-  <#assign pageEndProductCategoryContentList = delegator.findByAnd("ProductCategoryContent", Static["org.ofbiz.base.util.UtilMisc"].toMap("productCategoryId" , categoryId?string, "prodCatContentTypeId" , pageEndProdCatContentTypeId?if_exists)) />
-  
-  <#if pageEndProductCategoryContentList?has_content>
-    <#assign pageEndProductCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(pageEndProductCategoryContentList?if_exists) />
-    <#assign pageEndProdCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(pageEndProductCategoryContentList) />
-    <#assign pageEndContentId = pageEndProdCategoryContent.contentId?if_exists />
-  </#if>
-  <#if pageEndContentId?exists >
-    <#assign pageEndPlpEspotContent = delegator.findOne("Content", Static["org.ofbiz.base.util.UtilMisc"].toMap("contentId", pageEndContentId), true) />
-  </#if>
-</#if>
-
-<#if pageEndPlpEspotContent?has_content>
-  <#if ((pageEndPlpEspotContent.statusId)?if_exists == "CTNT_PUBLISHED")>
-    <div id="eCommercePlpEspot_${categoryId}" class="plpEspot">
-      <@renderContentAsText contentId="${pageEndContentId}" ignoreTemplate="true"/>
-    </div>
-  </#if>
+<#if pageEndContentId?has_content>
+	<div id="eCommercePlpEspot_${categoryId}" class="plpEspot endContent">
+	  <@renderContentAsText contentId="${pageEndContentId}" ignoreTemplate="true"/>
+	</div>
 </#if>

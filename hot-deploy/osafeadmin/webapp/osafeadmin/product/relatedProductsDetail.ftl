@@ -106,7 +106,7 @@ function setRowNo(rowNo) {
     <#if resultList?exists && resultList?has_content && !parameters.totalRows?exists>
       <#list resultList as relatedProduct>
         <#assign rowSeq = rowNo * 10>
-        <#assign relatedProdDetail = relatedProduct.getRelatedOneCache("MainProduct")>
+        <#assign relatedProdDetail = relatedProduct.getRelatedOne("MainProduct")>
         <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(relatedProdDetail, request)!""/>
          <#assign productLargeImageUrl = productContentWrapper.get("LARGE_IMAGE_URL")!"">
          <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
@@ -116,7 +116,7 @@ function setRowNo(rowNo) {
            <td class="nameCol">${(relatedProdDetail.internalName)?if_exists}</td>
            <td class="longDescCol ">
            <input type="hidden" name="relatedProductName_${rowNo}" id="relatedProductName" value="${productContentWrapper.get("PRODUCT_NAME")!""}"/>
-           ${productContentWrapper.get("PRODUCT_NAME")?html!""}
+           ${productContentWrapper.get("PRODUCT_NAME")!""}
            </td>
            <td class="actionCol">
              <#assign productLongDescription = productContentWrapper.get("LONG_DESCRIPTION")!""/>
@@ -133,8 +133,7 @@ function setRowNo(rowNo) {
            <td class="actionCol">
              <a href="javascript:setRowNo('${rowNo}');javascript:deletTableRow('${relatedProduct.productId?if_exists}','${productName!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
              <a href="javascript:setRowNo('${rowNo}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
-             <a href="javascript:setRowNo('${rowNo+1}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
-           </td>
+             <a href="javascript:setRowNo('${rowNo+1}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>           </td>
         </tr>
         <#if rowClass == "2">
           <#assign rowClass = "1">
@@ -150,7 +149,7 @@ function setRowNo(rowNo) {
         <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
            <#assign relatedProductId = request.getParameter("relatedProductId_${x}")!/>
            <input type="hidden" name="relatedProductId_${x}" id="relatedProductId" value="${relatedProductId!}"/>
-           <#assign relatedProdDetail = delegator.findOne("Product", {"productId" : relatedProductId}, true) />
+           <#assign relatedProdDetail = delegator.findOne("Product", {"productId" : relatedProductId}, false) />
            <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(relatedProdDetail, request)!""/>
            <#assign productLargeImageUrl = productContentWrapper.get("LARGE_IMAGE_URL")!"">
            <td class="idCol firstCol" ><a href="<@ofbizUrl>productDetail?productId=${relatedProductId?if_exists}</@ofbizUrl>">${(relatedProductId)?if_exists}</a></td>
@@ -175,8 +174,7 @@ function setRowNo(rowNo) {
            <td class="actionCol">
              <a href="javascript:setRowNo('${x}');javascript:deletTableRow('${relatedProdDetail.productId?if_exists}','${productName!}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
              <a href="javascript:setRowNo('${x}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
-             <a href="javascript:setRowNo('${x+1}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
-           </td>
+             <a href="javascript:setRowNo('${x+1}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>           </td>
         </tr>
         <#if rowClass == "2">
           <#assign rowClass = "1">

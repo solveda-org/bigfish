@@ -110,9 +110,9 @@
               <#list 0..productPromoActionCategoryDataRows as row>
                 <#assign rowNo = row/>
                 <#assign productPromoActionCategoryApplEnumId = request.getParameter("productPromoActionCategoryApplEnumId_${rowNo}")!/>
-                <#assign productPromoActionCategoryApplEnum = delegator.findByPrimaryKeyCache("Enumeration", {"enumId" : productPromoActionCategoryApplEnumId})/>
+                <#assign productPromoActionCategoryApplEnum = delegator.findByPrimaryKey("Enumeration", {"enumId" : productPromoActionCategoryApplEnumId})/>
                 <#assign productPromoActionCategoryId = request.getParameter("productPromoActionCategoryId_${rowNo}")!/>
-                <#assign productCategory = delegator.findByPrimaryKeyCache("ProductCategory", {"productCategoryId" : productPromoActionCategoryId})/>
+                <#assign productCategory = delegator.findByPrimaryKey("ProductCategory", {"productCategoryId" : productPromoActionCategoryId})/>
                 <div class="dataRow">
                   <div class="dataColumn operDataColumn">
                     ${productPromoActionCategoryApplEnum.description!productPromoActionCategoryApplEnum.enumId!}
@@ -133,10 +133,10 @@
               <#list productPromoActionCategoryList as productPromoActionCategory>
                 <div class="dataRow">
                   <div class="dataColumn operDataColumn">
-                    <#assign productPromoActionCategoryApplEnum = delegator.findByPrimaryKeyCache("Enumeration", {"enumId" : productPromoActionCategory.productPromoApplEnumId})/>
+                    <#assign productPromoActionCategoryApplEnum = delegator.findByPrimaryKey("Enumeration", {"enumId" : productPromoActionCategory.productPromoApplEnumId})/>
                     ${productPromoActionCategoryApplEnum.description!productPromoActionCategoryApplEnum.enumId!}
                   </div><div class="dataColumn nameDataColumn">
-                    <#assign productCategory = delegator.findByPrimaryKeyCache("ProductCategory", {"productCategoryId" : productPromoActionCategory.productCategoryId})/>
+                    <#assign productCategory = delegator.findByPrimaryKey("ProductCategory", {"productCategoryId" : productPromoActionCategory.productCategoryId})/>
                     ${productCategory.categoryName!""}
                   </div><div class="dataColumn actionDataColumn">
                     <a href="javascript:deleteDivRow('productPromoActionCategoryDiv', 'productPromoActionCategoryDataRows', ${rowNo})" class="standardBtn secondary">${uiLabelMap.RemoveBtn}</a>
@@ -184,9 +184,9 @@
             <#list 0..productPromoActionProductDataRows as row>
               <#assign rowNo = row/>
               <#assign productPromoActionProductApplEnumId = request.getParameter("productPromoActionProductApplEnumId_${rowNo}")!/>
-              <#assign productPromoActionProductApplEnum = delegator.findByPrimaryKeyCache("Enumeration", {"enumId" : productPromoActionProductApplEnumId})/>
+              <#assign productPromoActionProductApplEnum = delegator.findByPrimaryKey("Enumeration", {"enumId" : productPromoActionProductApplEnumId})/>
               <#assign productPromoActionProductId = request.getParameter("productPromoActionProductId_${rowNo}")!/>
-              <#assign product = delegator.findByPrimaryKeyCache("Product", {"productId" : productPromoActionProductId})/>
+              <#assign product = delegator.findByPrimaryKey("Product", {"productId" : productPromoActionProductId})/>
               <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product, request)!""/>
               <div class="dataRow">
                 <div class="dataColumn operDataColumn">
@@ -208,7 +208,7 @@
             <#list productPromoActionProductList as productPromoActionProduct>
               <div class="dataRow">
                 <div class="dataColumn operDataColumn">
-                  <#assign productPromoActionProductApplEnum = delegator.findByPrimaryKeyCache("Enumeration", {"enumId" : productPromoActionProduct.productPromoApplEnumId})/>
+                  <#assign productPromoActionProductApplEnum = delegator.findByPrimaryKey("Enumeration", {"enumId" : productPromoActionProduct.productPromoApplEnumId})/>
                   ${productPromoActionProductApplEnum.description!productPromoActionProductApplEnum.enumId!}
                 </div><div class="dataColumn nameDataColumn">
                   <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(productPromoActionProduct.getRelatedOne("Product"), request)!""/>

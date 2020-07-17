@@ -7,6 +7,14 @@ import org.ofbiz.base.util.UtilMisc;
 feedImportList = FastList.newInstance();
 
 
+//Customer Imports
+feedsImport = FastMap.newInstance();
+feedsImport.put("toolSeq","1");
+feedsImport.put("toolType", uiLabelMap.CustomerSetupFeedLabel);
+feedsImport.put("toolDesc", uiLabelMap.CustomerSetupFeedInfo);
+feedsImport.put("toolDetail", "customerSetupFeedImport");
+feedImportList.add(feedsImport);
+
 //Order Status Change Imports
 feedsImport = FastMap.newInstance();
 feedsImport.put("toolSeq","1");

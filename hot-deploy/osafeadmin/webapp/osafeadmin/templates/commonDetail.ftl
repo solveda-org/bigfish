@@ -26,6 +26,7 @@ ${sections.render('commonFormDialog')?if_exists}
       ${sections.render('commonDetailHelperText')!}
       ${sections.render('commonDetailHelperIcon')!}
       ${sections.render('commonDetailWarningIcon')!}
+      ${sections.render('commonDetailHelperInfoIcon')!}
      </div>
     </div>
 </div>

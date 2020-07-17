@@ -18,6 +18,7 @@ import com.osafe.util.OsafeAdminUtil;
 import com.osafe.services.OsafeManageXml;
 import org.ofbiz.base.util.string.*
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.product.product.ProductWorker;
 
 String productLoadImagesDir = parameters.productLoadImagesDir;
 
@@ -29,6 +30,8 @@ List productWarningList = FastList.newInstance();
 
 List productAssocErrorList = FastList.newInstance();
 List productAssocWarningList = FastList.newInstance();
+
+List productManufacturerErrorList = FastList.newInstance();
 
 List productCatDataList = context.productCatDataList;
 List productDataList = context.productDataList;
@@ -71,6 +74,15 @@ for(Map productCategory : productCatDataList) {
     String description = (String)productCategory.get("description");
     String longDescription = (String)productCategory.get("longDescription");
     String plpImageName = (String)productCategory.get("plpImageName");
+    
+    if(UtilValidate.isNotEmpty(productCategoryId))
+    {
+        if(!OsafeAdminUtil.isValidId(productCategoryId))
+        {
+            prodCatErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "InValidIdError", UtilMisc.toMap("rowNo", rowNo, "idField", "CategoryId"), locale));
+        }
+    }
+    
     if(UtilValidate.isNotEmpty(parentCategoryId))
     {
         if(UtilValidate.isEmpty(productCategoryId))
@@ -125,7 +137,7 @@ Map longDescMap = FastMap.newInstance();
 for(Map product : productDataList) {
     String masterProductId = (String)product.get("masterProductId");
     String longDescription = (String)product.get("longDescription");
-    if(UtilValidate.isNotEmpty(longDescription)) {
+    if(UtilValidate.isNotEmpty(longDescription) && UtilValidate.isNotEmpty(masterProductId)) {
         longDescMap.put(masterProductId,longDescription);
     }
 }
@@ -146,6 +158,9 @@ if(UtilValidate.isNotEmpty(existingProdCatList))
     existingProdCatIdList = EntityUtil.getFieldListFromEntityList(existingProdCatList, "productCategoryId", true);
 }
 Map longDescErrorMap = FastMap.newInstance();
+Map masterProductIdMap = FastMap.newInstance();
+List virtualFinishProductIdList = FastList.newInstance();
+
 for(Map product : productDataList) {
     String productCategoryId = (String)product.get("productCategoryId");
     String longDescription = (String)product.get("longDescription");
@@ -155,13 +170,85 @@ for(Map product : productDataList) {
     String plpImage = (String)product.get("smallImage");
     String pdpRegularImage = (String)product.get("largeImage");
     String masterProductId = (String)product.get("masterProductId");
+    String productId = (String)product.get("productId");
     String manufacturerId = (String)product.get("manufacturerId");
     String bfTotalInventory = (String)product.get("bfInventoryTot");
     String bfWHInventory = (String)product.get("bfInventoryWhs");
     
     if(UtilValidate.isNotEmpty(masterProductId))
     {
+        if(!OsafeAdminUtil.isValidId(masterProductId))
+        {
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "InValidIdError", UtilMisc.toMap("rowNo", rowNo, "idField", "MasterProductId"), locale));
+        }
+    }
+    if(UtilValidate.isNotEmpty(productId))
+    {
+        if(!OsafeAdminUtil.isValidId(productId))
+        {
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "InValidIdError", UtilMisc.toMap("rowNo", rowNo, "idField", "ProductId"), locale));
+        }
+    }
+    
+    
+    if(UtilValidate.isEmpty(masterProductId))
+    {
+        productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "MasterProductIdMissingError", UtilMisc.toMap("rowNo", rowNo), locale));
+    }
+    if(UtilValidate.isNotEmpty(masterProductId))
+    {
         newProductIdList.add(masterProductId);
+    }
+    
+    if(UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(masterProductId))
+    {
+        if(masterProductId.equals(productId)) {
+            masterProductIdMap.put(masterProductId, masterProductId);
+            if(!virtualFinishProductIdList.contains(masterProductId))
+            {
+                virtualFinishProductIdList.add(masterProductId);
+            }
+            else
+            {
+                productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "VirtualFinishProductIdExistingError", UtilMisc.toMap("rowNo", rowNo, "masterProductId", masterProductId, "productId", productId), locale));
+            }
+            
+        }
+    }
+    
+    if(UtilValidate.isEmpty(productId) && UtilValidate.isNotEmpty(masterProductId))
+    {
+        if(!virtualFinishProductIdList.contains(masterProductId))
+        {
+            virtualFinishProductIdList.add(masterProductId);
+        }
+        else
+        {
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "VirtualFinishProductIdExistingError", UtilMisc.toMap("rowNo", rowNo, "masterProductId", masterProductId), locale));
+        }
+    }
+    
+    if(UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(masterProductId))
+    {
+        if(!masterProductId.equals(productId)) {
+            boolean virtualProductExists = false;
+	        if(masterProductIdMap.containsKey(masterProductId))
+	        {
+	            virtualProductExists = true;
+	        }
+	        else
+	        {
+	            if(ProductWorker.isVirtual(delegator,masterProductId))
+	            {
+	                virtualProductExists = true;
+	            } 
+	        }
+	        if(!virtualProductExists)
+	        {
+	            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidVirtualProductReferenceError", UtilMisc.toMap("rowNo", rowNo, "productId", productId, "masterProductId", masterProductId), locale));
+	        }
+        }
+        
     }
     
     if(UtilValidate.isNotEmpty(productCategoryId))
@@ -190,12 +277,17 @@ for(Map product : productDataList) {
            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "CategoryIdMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
        }
     }
-    String longDescErrorAdded = longDescErrorMap.get(masterProductId);
-    if(!longDescMap.containsKey(masterProductId) && longDescErrorAdded != 'Y')
-    {
-        productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo), locale));
-        longDescErrorMap.put(masterProductId,"Y");
-    }
+     String longDescErrorAdded = "";
+     if(UtilValidate.isNotEmpty(masterProductId)) {
+         longDescErrorAdded = longDescErrorMap.get(masterProductId);
+         if(!longDescMap.containsKey(masterProductId) && longDescErrorAdded != 'Y')
+         {
+             productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo), locale));
+             longDescErrorMap.put(masterProductId,"Y");
+         }
+     }
+    
+    
     if(UtilValidate.isNotEmpty(defaultPrice))
     {
         boolean checkFloatResult = OsafeAdminUtil.isFloat(defaultPrice);
@@ -329,9 +421,26 @@ for(Map productAssoc : productAssocDataList) {
     }
     rowNo++;
 }
+
+//Validation for Product Manufacturers
+rowNo = 1;
+for(Map manufacturer : manufacturerDataList) {
+    String manufacturerId = (String)manufacturer.get("partyId");
+    
+    if(UtilValidate.isNotEmpty(manufacturerId))
+    {
+        if(!OsafeAdminUtil.isValidId(manufacturerId))
+        {
+            productManufacturerErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "InValidIdError", UtilMisc.toMap("rowNo", rowNo, "idField", "ManuId"), locale));
+        }
+    }
+    rowNo++;
+}
+
 context.prodCatErrorList = prodCatErrorList;
 context.prodCatWarningList = prodCatWarningList;
 context.productErrorList = productErrorList;
 context.productWarningList = productWarningList;
 context.productAssocErrorList = productAssocErrorList;
 context.productAssocWarningList = productAssocWarningList;
+context.productManufacturerErrorList = productManufacturerErrorList;

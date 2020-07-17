@@ -1,5 +1,5 @@
 <!-- start displayBox -->
-<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_PICKUP!"")>
+<#if Static["com.osafe.util.OsafeAdminUtil"].isProductStoreParmTrue(CHECKOUT_STORE_PICKUP!"")>
 <div class="displayBox topProducts">
     <div class="header"><h2>${uiLabelMap.TopProductsStorePickupAnalysisHeading}
       <#if storePickupTopProductsList?has_content>

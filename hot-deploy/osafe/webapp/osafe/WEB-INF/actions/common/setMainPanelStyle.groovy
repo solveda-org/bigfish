@@ -10,23 +10,28 @@ import org.ofbiz.base.util.UtilValidate;
  */
 
 
-if (UtilValidate.isEmpty(context.mainPanelStyle)){
+if (UtilValidate.isEmpty(context.mainPanelStyle))
+{
     context.mainPanelStyle="mainPanel";
     context.contentPanelStyle="mainPanel";
 }
 
-if (UtilValidate.isNotEmpty(context.contentPanelStyle)){
+if (UtilValidate.isNotEmpty(context.contentPanelStyle))
+{
     context.contentPanelStyle=context.contentPanelStyle;
 }
 
 String eCommerceLeftPanel = context.eCommerceLeftPanel;
 String eCommerceRightPanel = context.eCommerceRightPanel;
-if (UtilValidate.isNotEmpty(eCommerceLeftPanel) && UtilValidate.isNotEmpty(eCommerceRightPanel)){
+if (UtilValidate.isNotEmpty(eCommerceLeftPanel) && UtilValidate.isNotEmpty(eCommerceRightPanel))
+{
     context.mainPanelStyle="leftRightPanel";
 }
-else if (UtilValidate.isNotEmpty(eCommerceLeftPanel)){
+else if (UtilValidate.isNotEmpty(eCommerceLeftPanel))
+{
     context.mainPanelStyle="leftPanel";
 }
-else if (UtilValidate.isNotEmpty(eCommerceRightPanel)){
+else if (UtilValidate.isNotEmpty(eCommerceRightPanel))
+{
     context.mainPanelStyle="rightPanel";
 }

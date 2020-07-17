@@ -53,6 +53,14 @@
        ${productName}
      </div>
    </div>
+   <div class="infoEntry">
+     <div class="infoCaption">
+      <label>${uiLabelMap.DaysSincePostedCaption}</label>
+     </div>
+     <div class="infoValue">
+       ${postedInterval!""}
+     </div>
+   </div>
 </div>
 <div class="infoRow">
    <div class="infoEntry long">
@@ -103,10 +111,10 @@
     <div class="statusButtons">
         <div class="PRR_PENDING">
             <input type="button" class="standardBtn secondary" name="approveBtn" value="${uiLabelMap.ApproveBtn}" onClick="updateReview('PRR_APPROVED');"/>
-            <input type="button" class="standardBtn secondary" name="rejectBtn" value="${uiLabelMap.RejectBtn}"  onClick="updateReview('PRR_DELETED');"/>
+            <input type="button" class="standardBtn secondary" name="rejectBtn" value="${uiLabelMap.DeleteBtn}"  onClick="updateReview('PRR_DELETED');"/>
         </div>
         <div class="PRR_APPROVED">
-            <input type="button" class="standardBtn secondary" name="rejectBtn" value="${uiLabelMap.RejectBtn}"  onClick="updateReview('PRR_DELETED');"/>
+            <input type="button" class="standardBtn secondary" name="rejectBtn" value="${uiLabelMap.DeleteBtn}"  onClick="updateReview('PRR_DELETED');"/>
             <input type="button" class="standardBtn secondary" name="rejectBtn" value="${uiLabelMap.PendingBtn}"  onClick="updateReview('PRR_PENDING');"/>
         </div>
         <div class="PRR_DELETED">

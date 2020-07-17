@@ -87,7 +87,7 @@ public class SolrServices {
         headerColumns.addAll(UtilMisc.toList("productCategoryId", "topMostProductCategoryId", "categoryLevel", "categoryName", "categoryImageUrl"));
         headerColumns.addAll(UtilMisc.toList("productImageSmallUrl", "productImageSmallAlt","productImageSmallAltUrl","productImageMediumUrl", "productImageLargeUrl"));
         headerColumns.addAll(UtilMisc.toList("productFeatureGroupId", "productFeatureGroupDescription","productCategoryFacetGroups"));
-        headerColumns.addAll(UtilMisc.toList("price", "customerRating","sequenceNum"));
+        headerColumns.addAll(UtilMisc.toList("listPrice","price", "customerRating","sequenceNum"));
         headerColumns.addAll(UtilMisc.toList("totalTimesViewed","totalQuantityOrdered"));
 
         List<CellProcessor> cellProcessors = FastList.newInstance();
@@ -97,7 +97,7 @@ public class SolrServices {
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""),new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo("")));
-        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""),new ConvertNullTo("")));
+        cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo(""), new ConvertNullTo(""),new ConvertNullTo("")));
         cellProcessors.addAll(UtilMisc.toList(new ConvertNullTo(""), new ConvertNullTo("")));
         
         List<String> prodFeatureColNames = FastList.newInstance();
@@ -325,6 +325,7 @@ public class SolrServices {
                                     // Product Prices
                                     String currencyUomId = productStore.getString("defaultCurrencyUomId");
                                     results = dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "currencyUomId", currencyUomId));
+                                    productDocument.setListPrice((BigDecimal) results.get("listPrice"));
                                     productDocument.setPrice((BigDecimal) results.get("price"));
 
                                     GenericValue ProductCalculatedInfo = delegator.findOne("ProductCalculatedInfo", UtilMisc.toMap("productId", productId), false);

@@ -12,14 +12,14 @@
     <entity entity-name="XProductStoreParm"
             package-name="org.ofbiz.osafe.admin"
             title="Parameters for a specific product store">
-      <field name="productStoreId" type="id-long-ne"></field>
+      <field name="productStoreId" type="id-ne"></field>
       <field name="parmCategory" type="description"></field>
       <field name="parmKey" type="id-long-ne"></field>
       <field name="parmValue" type="value"></field>
       <field name="description" type="description"></field>
       <prim-key field="productStoreId"/>
       <prim-key field="parmKey"/>
-        <relation type="one" fk-name="PROD_STORE_PARAMS" rel-entity-name="ProductStore">
+        <relation type="one" fk-name="XPSP_PRODUCTSTORE" rel-entity-name="ProductStore">
             <key-map field-name="productStoreId"/>
         </relation>
     </entity>

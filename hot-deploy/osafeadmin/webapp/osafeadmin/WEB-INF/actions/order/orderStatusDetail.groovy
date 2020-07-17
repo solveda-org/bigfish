@@ -18,7 +18,8 @@ import org.ofbiz.base.util.*;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
-if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session)){
+if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session))
+{
     messageMap=[:];
     messageMap.put("orderId", orderId);
 
@@ -36,11 +37,13 @@ context.statusItems = statusItems;
 
 //is it a store pickup?
 storeId = "";
-orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], true);
-if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP") {
+orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], false);
+if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP") 
+{
 	context.isStorePickup = "Y";
-	orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], true);
-	if (UtilValidate.isNotEmpty(orderStoreLocationAttr)) {
+	orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], false);
+	if (UtilValidate.isNotEmpty(orderStoreLocationAttr)) 
+	{
 		storeId = orderStoreLocationAttr.attrValue;
 	}
 }

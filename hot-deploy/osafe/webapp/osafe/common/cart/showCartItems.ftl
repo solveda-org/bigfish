@@ -28,6 +28,7 @@
         </thead>
         <tbody>
         <#assign itemsFromList = false>
+        <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
         <#assign currencyUom = CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() />
         <#list shoppingCart.items() as cartLine>
           <#assign cartLineIndex = shoppingCart.getItemIndex(cartLine)>
@@ -35,22 +36,27 @@
           <#assign product = cartLine.getProduct()>
           <#assign urlProductId = cartLine.getProductId()>
           <#assign productCategoryId = product.primaryProductCategoryId!""/>
+          <#assign productCategoryId = cartLine.getProductCategoryId()?if_exists>
           <#if !productCategoryId?has_content>
-              <#assign currentProductCategories = Static["org.ofbiz.product.product.ProductWorker"].getCurrentProductCategories(product)![]>
-              <#if currentProductCategories?has_content>
-                  <#assign productCategoryId = currentProductCategories[0].productCategoryId!"">
+             <#assign productCategoryMemberList = product.getRelatedCache("ProductCategoryMember") />
+             <#assign productCategoryMemberList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryMemberList,true)/>
+             <#assign productCategoryMemberList = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productCategoryMemberList,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
+              <#if productCategoryMemberList?has_content>
+    	          <#assign productCategoryMember = EntityUtil.getFirst(productCategoryMemberList)/>
+                  <#assign productCategoryId = productCategoryMember.productCategoryId!"">
               </#if>
-           
           </#if>
           <#if product.isVariant?if_exists?upper_case == "Y">
              <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(cartLine.getProductId(), delegator)?if_exists>
              <#assign urlProductId=virtualProduct.productId>
-             <#assign productCategoryId = virtualProduct.primaryProductCategoryId!""/>
              <#if !productCategoryId?has_content>
-                  <#assign currentProductCategories = Static["org.ofbiz.product.product.ProductWorker"].getCurrentProductCategories(virtualProduct)![]>
-                  <#if currentProductCategories?has_content>
-                      <#assign productCategoryId = currentProductCategories[0].productCategoryId!"">
-                  </#if>
+	             <#assign productCategoryMemberList = virtualProduct.getRelatedCache("ProductCategoryMember") />
+	             <#assign productCategoryMemberList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryMemberList,true)/>
+	             <#assign productCategoryMemberList = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productCategoryMemberList,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
+	              <#if productCategoryMemberList?has_content>
+	    	          <#assign productCategoryMember =Static["org.ofbiz.entity.util.EntityUtil"].getFirst(productCategoryMemberList)/>
+	                  <#assign productCategoryId = productCategoryMember.productCategoryId!"">
+	              </#if>
               </#if>
           </#if>
 
@@ -95,6 +101,8 @@
                 <td class="image firstCol <#if !cartLine_has_next>lastRow</#if>" scope="row">
 
                     <a href="${productFriendlyUrl}" id="image_${urlProductId}">
+                      <#assign IMG_SIZE_CART_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_CART_H")!""/>
+                      <#assign IMG_SIZE_CART_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_CART_W")!""/>
                         <img alt="${StringUtil.wrapString(productName)}" src="${productImageUrl}" class="productCartListImage" height="${IMG_SIZE_CART_H!""}" width="${IMG_SIZE_CART_W!""}">
                     </a>
                 </td>
@@ -104,10 +112,12 @@
                         <dd class="description">
                           <a href="${productFriendlyUrl}">${StringUtil.wrapString(productName!)}</a>
                         </dd>
-                        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" , cartLine.getProductId())) />
+		                 <#assign productFeatureAndAppls = product.getRelatedCache("ProductFeatureAndAppl") />
+		                 <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndAppls,true)/>
+		                 <#assign productFeatureAndAppls = Static["org.ofbiz.entity.util.EntityUtil"].orderBy(productFeatureAndAppls,Static["org.ofbiz.base.util.UtilMisc"].toList('sequenceNum'))/>
                         <#if productFeatureAndAppls?has_content>
                           <#list productFeatureAndAppls as productFeatureAndAppl>
-                            <#assign productFeature = productFeatureAndAppl.getRelatedOne("ProductFeatureCategory")?if_exists />
+                            <#assign productFeature = productFeatureAndAppl.getRelatedOneCache("ProductFeatureCategory")?if_exists />
                             <dd>${productFeature.description!}:${productFeatureAndAppl.description!}</dd>
                           </#list>
                         </#if>
@@ -193,7 +203,7 @@
                    <#if (shoppingCart.getShipmentMethodTypeId()?has_content)>
                      <#assign selectedStoreId = shoppingCart.getOrderAttribute("STORE_LOCATION")?if_exists />
                      <#if !selectedStoreId?has_content && shoppingCart.getShipmentMethodTypeId()?has_content && shoppingCart.getCarrierPartyId()?has_content>
-                         <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shoppingCart.getCarrierPartyId()))?if_exists />
+                         <#assign carrier =  delegator.findByPrimaryKeyCache("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", shoppingCart.getCarrierPartyId()))?if_exists />
                          <#assign chosenShippingMethodDescription = carrier.groupName?default(carrier.partyId) + " " + shoppingCart.getShipmentMethodType(0).description />
                      </#if>
                    <li>
@@ -213,7 +223,7 @@
                       </div>
                    </li>
                   </#if>
-                  <#if userLogin?has_content && (!Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"") || (orderTaxTotal?has_content && (orderTaxTotal &gt; 0)))>
+                  <#if userLogin?has_content && (!Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_SUPPRESS_TAX_IF_ZERO") || (orderTaxTotal?has_content && (orderTaxTotal &gt; 0)))>
                    <li>
                         <div class="labelText">
                             <label>${uiLabelMap.CartTaxLabel}</label>

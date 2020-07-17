@@ -1,6 +1,7 @@
 <script type="text/javascript">
 
-    function submitCheckoutForm(form, mode, value) {
+    function submitCheckoutForm(form, mode, value) 
+    {
         if (mode == "DN") {
             // done action; checkout
             form.action="<@ofbizUrl>${doneAction!""}</@ofbizUrl>";
@@ -40,6 +41,8 @@
 
     function updateCart() {
       var cartItemsNo = ${shoppingCartSize!"0"};
+      <#assign PDP_QTY_MIN = Static["com.osafe.util.Util"].getProductStoreParm(request,"PDP_QTY_MIN")!"1"/>
+      <#assign PDP_QTY_MAX = Static["com.osafe.util.Util"].getProductStoreParm(request,"PDP_QTY_MAX")!"99"/>
       var lowerLimit = ${PDP_QTY_MIN!"1"};
       var upperLimit = ${PDP_QTY_MAX!"99"};
       var zeroQty = false;
@@ -123,8 +126,8 @@
                 updateShippingOption('N');
                 jQuery(displayDialogId).dialog('close');
                 jQuery('.shippingOptionsStorePickup').hide();
-                <#assign storeCC = Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC!)/>
-                <#assign storeCCReq = Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC_REQ!)/>
+                <#assign storeCC = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC")/>
+                <#assign storeCCReq = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"CHECKOUT_STORE_CC_REQ")/>
                 if (${storeCC.toString()}) {
                     if (!${storeCCReq.toString()}) {
                         jQuery('.paymentOptions').show();

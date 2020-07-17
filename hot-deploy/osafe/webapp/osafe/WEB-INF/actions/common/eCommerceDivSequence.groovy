@@ -14,11 +14,16 @@ searchRestrictionMap = FastMap.newInstance();
 searchRestrictionMap.put("screen", "Y");
 uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false, true);
 
-for(Map uiSequenceScreenMap : uiSequenceSearchList) {
-     if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) {
-         if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) {
+for(Map uiSequenceScreenMap : uiSequenceSearchList) 
+{
+     if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) 
+     {
+         if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) 
+         {
              uiSequenceScreenMap.value = Integer.parseInt(uiSequenceScreenMap.value);
-         } else {
+         } 
+         else 
+         {
              uiSequenceScreenMap.value = 0;
          }
      }

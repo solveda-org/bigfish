@@ -1,5 +1,6 @@
 <#-- Check Savings Percent -->
-<#if pdpPriceMap?exists && pdpPriceMap?has_content && pdpPriceMap.listPrice != 0>
+<#assign PRODUCT_PCT_THRESHOLD = Static["com.osafe.util.Util"].getProductStoreParm(request,"PRODUCT_PCT_THRESHOLD")!"0"/>
+<#if pdpPriceMap?exists && pdpPriceMap?has_content && pdpPriceMap.listPrice?has_content && pdpPriceMap.listPrice != 0>
   <#assign showSavingPercentAbove = PRODUCT_PCT_THRESHOLD!"0"/>
   <#assign showSavingPercentAbove = (showSavingPercentAbove?number)/100.0 />
   <#assign youSavePercent = ((pdpPriceMap.listPrice - pdpPriceMap.price)/pdpPriceMap.listPrice) />
@@ -14,8 +15,8 @@
 <#if productVariantMapKeys?exists && productVariantMapKeys?has_content>
   <#list productVariantMapKeys as key>
     <#assign product = delegator.findOne("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",key), true)/>
-    <#assign productPrice = dispatcher.runSync("calculateProductPrice", Static["org.ofbiz.base.util.UtilMisc"].toMap("product", product, "userLogin", userLogin))/>
-    <#if productPrice?has_content && productPrice.listPrice != 0>
+    <#assign productPrice = dispatcher.runSync("calculateProductPrice", Static["org.ofbiz.base.util.UtilMisc"].toMap("product", product,"productStoreId",productStoreId, "userLogin", userLogin))/>
+    <#if productPrice?has_content && productPrice.listPrice?has_content && productPrice.listPrice != 0>
       <#assign showSavingPercentAbove = PRODUCT_PCT_THRESHOLD!"0"/>
       <#assign showSavingPercentAbove = (showSavingPercentAbove?number)/100.0 />
       <#assign youSavePercent = ((productPrice.listPrice - productPrice.basePrice)/productPrice.listPrice) />

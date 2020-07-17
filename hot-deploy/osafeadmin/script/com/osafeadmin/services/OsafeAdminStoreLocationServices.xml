@@ -223,6 +223,20 @@
         <set field="createPartyNoticeContentCtx.partyContentTypeId" value="STORE_NOTICE"/>
         <call-service service-name="createPartyContent" in-map-name="createPartyNoticeContentCtx"/>
         <!-- End of Create Store notice -->
+        <!-- Create Store content spot  -->
+        <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyContentSpotContentCtx"/>
+        <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentSpotContentCtx"/>
+        <set field="createTextContentSpotContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createTextContentSpotContentCtx.dataTemplateTypeId" value="FTL"/>
+        <set field="createTextContentSpotContentCtx.contentTypeId" value="DOCUMENT"/>
+        <set field="createTextContentSpotContentCtx.statusId" value="CTNT_PUBLISHED"/>
+        <set field="createTextContentSpotContentCtx.textData" from-field="parameters.storeContentSpotData"/>
+        <call-service service-name="createTextContent" in-map-name="createTextContentSpotContentCtx">
+            <result-to-field result-name="contentId" field="createPartyContentSpotContentCtx.contentId"/>
+        </call-service>
+        <set field="createPartyContentSpotContentCtx.partyContentTypeId" value="STORE_CONTENT_SPOT"/>
+        <call-service service-name="createPartyContent" in-map-name="createPartyContentSpotContentCtx"/>
+        <!-- End of Create Store content spot -->
         <set-service-fields service-name="genPartyGeoPoint" map="parameters" to-map="genPartyGeoPointCtx"/>
         <call-service service-name="genPartyGeoPoint" in-map-name="genPartyGeoPointCtx"/>
 
@@ -233,6 +247,10 @@
 
     <simple-method method-name="updateStoreLocation" short-description="Update a store location information">
         <set field="address" value=""/>
+        <if-empty field="parameters.groupNameLocal">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
         <if-empty field="parameters.groupName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreNameError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
@@ -414,6 +432,29 @@
         </else>
         </if-not-empty>
         <!-- End of Update Store Notice -->
+        
+        <!-- Update Store Content Spot -->
+        <if-not-empty field="parameters.storeContentSpotDataResourceId">
+            <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextContentSpotCtx"/>
+            <set field="updateElectronicTextContentSpotCtx.dataResourceId" from-field="parameters.storeContentSpotDataResourceId"/>
+            <set field="updateElectronicTextContentSpotCtx.textData" from-field="parameters.storeContentSpotData" set-if-null="true"/>
+            <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextContentSpotCtx"/>
+        <else>
+            <set-service-fields service-name="createPartyContent" map="parameters" to-map="createPartyContentSpotCtx"/>
+            <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentSpotCtx"/>
+            <set field="createTextContentSpotCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+            <set field="createTextContentSpotCtx.dataTemplateTypeId" value="FTL"/>
+            <set field="createTextContentSpotCtx.contentTypeId" value="DOCUMENT"/>
+            <set field="createTextContentSpotCtx.statusId" value="CTNT_PUBLISHED"/>
+            <set field="createTextContentSpotCtx.textData" from-field="parameters.storeContentSpotData"/>
+            <call-service service-name="createTextContent" in-map-name="createTextContentSpotCtx">
+                <result-to-field result-name="contentId" field="createPartyContentSpotCtx.contentId"/>
+            </call-service>
+            <set field="createPartyContentSpotCtx.partyContentTypeId" value="STORE_CONTENT_SPOT"/>
+            <call-service service-name="createPartyContent" in-map-name="createPartyContentSpotCtx"/>
+        </else>
+        </if-not-empty>
+        <!-- End of Update Store Content Spot -->
 
         <set-service-fields service-name="updatePartyGroup" map="parameters" to-map="updatePartyGroupCtx"/>
         <call-service service-name="updatePartyGroup" in-map-name="updatePartyGroupCtx"/>
@@ -436,4 +477,17 @@
         <field-to-result field="parameters.dataResourceId" result-name="dataResourceId"/>
     </simple-method>
 
+
+    <simple-method method-name="deleteStoreLocation" short-description="Deletes a store location">
+        <!-- Delete PartyRole -->
+        <entity-one value-field="partyRole" entity-name="PartyRole">
+            <field-map field-name="partyId" from-field="parameters.partyId"/>
+            <field-map field-name="roleTypeId" value="STORE_LOCATION"/>
+        </entity-one>
+        <if-not-empty field="partyRole">
+            <set field="deletePartyRoleCtx.partyId" from-field="partyRole.partyId"/>
+            <set field="deletePartyRoleCtx.roleTypeId" from-field="partyRole.roleTypeId"/>
+            <call-service service-name="deletePartyRole" in-map-name="deletePartyRoleCtx"/>
+        </if-not-empty>
+    </simple-method>
 </simple-methods>

@@ -33,7 +33,7 @@
     <Enumeration enumId="PRDS_SHIP_REVIEW" enumTypeId="PRDS_EMAIL" description="Ship Review Email" enumCode="SHIP_REVIEW"  sequenceId="28"/>
     <Enumeration enumId="PRDS_EMAIL_TEST" enumTypeId="PRDS_EMAIL" description="Test Email" enumCode="EMAIL_TEST"  sequenceId="29"/>
     <Enumeration enumId="PRDS_MAILING_LIST" enumTypeId="PRDS_EMAIL" description="Mailing List Subscription" enumCode="MAILING_LIST"  sequenceId="30"/>
-    <Enumeration enumId="PRDS_SCHED_JOB_ALERT" enumTypeId="PRDS_EMAIL" description="Scheduled Job Notification" enumCode="SCHED_JOB_ALERT"  sequenceId="31"/>
+    <Enumeration enumId="PRDS_SCHED_JOB_ALERT" enumTypeId="PRDS_EMAIL" description="Scheduled Job Notification" enumCode="SCHED_JOB"  sequenceId="31"/>
 
     <!-- CONTACT US REASON -->
     <EnumerationType enumTypeId="CONTACT_US_REASON" parentTypeId="" hasTable="" description="Reason For Contact"/>
@@ -50,20 +50,21 @@
     <Enumeration enumId="PT_MR" enumTypeId="PERSONAL_TITLE" description="Mr" enumCode="PT_MR" sequenceId="01"/>
     <Enumeration enumId="PT_MRS" enumTypeId="PERSONAL_TITLE" description="Mrs" enumCode="PT_MRS" sequenceId="02"/>
     <Enumeration enumId="PT_MISS" enumTypeId="PERSONAL_TITLE" description="Miss" enumCode="PT_MISS" sequenceId="03"/>
-
-    <!-- REVIEW AGES -->
-    <EnumerationType enumTypeId="REVIEW_AGE" parentTypeId="" hasTable="" description="Review Ages"/>
-    <Enumeration enumId="RA_0_TO_10" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_0_TO_10" sequenceId="01"/>
-    <Enumeration enumId="RA_0_TO_20" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_0_TO_20" sequenceId="01"/>
-    <Enumeration enumId="RA_21_TO_30" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_21_TO_30" sequenceId="01"/>
-    <Enumeration enumId="RA_31_TO_40" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_31_TO_40" sequenceId="01"/>
-    <Enumeration enumId="RA_41_TO_50" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_41_TO_50" sequenceId="01"/>
-    <Enumeration enumId="RA_51_TO_60" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_51_TO_60" sequenceId="01"/>
-    <Enumeration enumId="RA_61_AND_OLDER" enumTypeId="REVIEW_AGE" description="0 - 10" enumCode="RA_61_AND_OLDER" sequenceId="01"/>
+	
+	<!-- REVIEW AGES -->
+    <EnumerationType enumTypeId="REVIEW_AGE" parentTypeId="" hasTable="" description="Personal title"/>
+    <Enumeration enumId="RA_0_TO_10" enumTypeId="REVIEW_AGE" description="0 – 10" enumCode="RA_0_TO_10" sequenceId="01"/>
+    <Enumeration enumId="RA_11_TO_20" enumTypeId="REVIEW_AGE" description="11 - 20" enumCode="RA_11_TO_20" sequenceId="02"/>
+    <Enumeration enumId="RA_21_TO_30" enumTypeId="REVIEW_AGE" description="21 – 30" enumCode="RA_21_TO_30" sequenceId="03"/>
+	<Enumeration enumId="RA_31_TO_40" enumTypeId="REVIEW_AGE" description="31 - 40" enumCode="RA_31_TO_40" sequenceId="04"/>
+	<Enumeration enumId="RA_41_TO_50" enumTypeId="REVIEW_AGE" description="41 – 50" enumCode="RA_41_TO_50" sequenceId="05"/>
+	<Enumeration enumId="RA_51_TO_60" enumTypeId="REVIEW_AGE" description="51 – 60" enumCode="RA_51_TO_60" sequenceId="06"/>
+	<Enumeration enumId="RA_61_AND_OLDER" enumTypeId="REVIEW_AGE" description="61 and older" enumCode="RA_61_AND_OLDER" sequenceId="07"/>
 
     <!-- CUSTOMER REQUEST TYPE -->
     <CustRequestType custRequestTypeId="RF_CATALOG" parentTypeId="" hasTable="N" description="Request For Catalog"/>
     <CustRequestType custRequestTypeId="RF_CONTACT_US" parentTypeId="" hasTable="N" description="Request For Contact"/>
+
 
     <!-- PRODUCT CATEGORY CONTENT TYPE -->
     <ProductCategoryContentType prodCatContentTypeId="PDP_ADDITIONAL" description="Product Detail Page (PDP) Additional Content By Category" hasTable="N" parentTypeId=""/>
@@ -151,9 +152,9 @@
     <PartyContentType partyContentTypeId="STORE_HOURS" description="Store Working Hours" hasTable="N" parentTypeId=""/>
     <PartyContentType partyContentTypeId="STORE_NOTICE" description="Store Notice" hasTable="N" parentTypeId=""/>
     <PartyContentType partyContentTypeId="STORE_CONTENT_SPOT" description="Store Content Spot" hasTable="N" parentTypeId=""/>
-    <!-- PRODUCT FEATURE DATA RESOURCE -->
-    <ProdFeatureDataResourceType prodFeatureDataResourceTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Default Swatch Image URL" hasTable="N"/>
-    <ProdFeatureDataResourceType prodFeatureDataResourceTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Default Swatch Image URL" hasTable="N"/>
+    <!-- FEATURE DATA RESOURCE TYPE-->
+    <FeatureDataResourceType featureDataResourceTypeId="PLP_SWATCH_IMAGE_URL" description="PLP Default Swatch Image URL" hasTable="N"/>
+    <FeatureDataResourceType featureDataResourceTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Default Swatch Image URL" hasTable="N"/>
 
     <!-- CONTENT STATUS DESCRIPTIONS -->
     <StatusItem statusId="CTNT_INITIAL_DRAFT" description="Initial Draft"/>
@@ -185,5 +186,6 @@
     <ContentType contentTypeId="BF_PAGE_TOP_SPOT" description="page spot" hasTable="N" parentTypeId=""/>
     <ContentType contentTypeId="BF_PDP_SPOT" description="PDP spot" hasTable="N" parentTypeId=""/>
     <ContentType contentTypeId="BF_EMAIL_TEMPLATE" description="email template" hasTable="N" parentTypeId=""/>
+
 
 </entity-engine-xml>

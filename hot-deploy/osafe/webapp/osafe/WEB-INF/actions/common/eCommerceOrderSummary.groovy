@@ -18,13 +18,14 @@ context.shoppingCart  = shoppingCart;
 productStoreId = shoppingCart.getProductStoreId();
 context.productStoreId = productStoreId;
 
-party = userLogin.getRelatedOne("Party");
+party = userLogin.getRelatedOneCache("Party");
 partyId = party.partyId;
 
-person = party.getRelatedOne("Person");
+person = party.getRelatedOneCache("Person");
 
 // Billing
-if(person) {
+if(person) 
+{
     context.billingPersonFirstName = person.firstName?person.firstName:"";
     context.billingPersonLastName = person.lastName?person.lastName:"";
 }
@@ -52,7 +53,7 @@ else
     {
       billingContactMechAddressList = ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false);
       billingContactMechAddress = EntityUtil.getFirst(billingContactMechAddressList);
-      billingAddress=billingContactMechAddress.getRelatedOne("PostalAddress");
+      billingAddress=billingContactMechAddress.getRelatedOneCache("PostalAddress");
       context.billingAddress = billingAddress;
       context.billingContactMechId = billingAddress.contactMechId;
     }
@@ -62,7 +63,7 @@ else
 context.shippingAddress = shoppingCart.getShippingAddress();
 
 // Credit Card Info
-creditCardTypes = delegator.findByAnd("Enumeration", [enumTypeId : "CREDIT_CARD_TYPE"], ["sequenceId"]);
+creditCardTypes = delegator.findByAndCache("Enumeration", [enumTypeId : "CREDIT_CARD_TYPE"], ["sequenceId"]);
 creditCardTypesMap = [:];
 for (GenericValue creditCardType :  creditCardTypes)
 {
@@ -72,7 +73,8 @@ for (GenericValue creditCardType :  creditCardTypes)
 context.creditCardTypesMap = creditCardTypesMap;
 
 // Selected Shipping Method
-if (shoppingCart.getShipmentMethodTypeId() && shoppingCart.getCarrierPartyId()) {
+if (shoppingCart.getShipmentMethodTypeId() && shoppingCart.getCarrierPartyId()) 
+{
     context.chosenShippingMethod = shoppingCart.getShipmentMethodTypeId() + '@' + shoppingCart.getCarrierPartyId();
     context.chosenShippingMethodDescription = shoppingCart.getCarrierPartyId() + " " + shoppingCart.getShipmentMethodType(0).description;
 }

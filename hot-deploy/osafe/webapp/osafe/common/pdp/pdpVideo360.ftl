@@ -1,4 +1,6 @@
 <div class="pdpVideo360">
+<#assign IMG_SIZE_PDP_VIDEO_360_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_VIDEO_360_H")!""/>
+<#assign IMG_SIZE_PDP_VIDEO_360_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_PDP_VIDEO_360_W")!""/>
   <div id="productVideo360Link">
     <#if pdpVideo360Url?has_content && pdpVideo360Url!=''>
       <a href="javascript:void(0);" id="pdpShowVideo360" onclick="javascript:showProductVideo('productVideo360')"><span>${uiLabelMap.PdpVideo360Label}</span></a>
