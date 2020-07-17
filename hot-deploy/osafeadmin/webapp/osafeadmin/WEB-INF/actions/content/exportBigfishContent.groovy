@@ -55,6 +55,8 @@ exportPageTagging = StringUtils.trimToEmpty(parameters.exportPageTagging);
 exportPaymentGatewaySettings = StringUtils.trimToEmpty(parameters.exportPaymentGatewaySettings);
 exportShippingCharges = StringUtils.trimToEmpty(parameters.exportShippingCharges);
 exportSalesTaxes = StringUtils.trimToEmpty(parameters.exportSalesTaxes);
+exportStores = StringUtils.trimToEmpty(parameters.exportStores);
+exportPromotions = StringUtils.trimToEmpty(parameters.exportPromotions);
 
 initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 
@@ -137,6 +139,16 @@ if(UtilValidate.isNotEmpty(exportSalesTaxes))
     context.exportSalesTaxes = exportSalesTaxes;
 }
 
+if(UtilValidate.isNotEmpty(exportStores)) 
+{
+    context.exportStores = exportStores;
+}
+
+if(UtilValidate.isNotEmpty(exportPromotions)) 
+{
+    context.exportPromotions = exportPromotions;
+}
+
 context.passedContentTypeIds = passedContentTypeIds;
 context.passedProdCatContentTypeIds = passedProdCatContentTypeIds;
 
@@ -178,10 +190,10 @@ if (UtilValidate.isNotEmpty(exportFile))
                         {
                             dataResource.writeXmlText(writer, "");
                             numberWritten++;
-	                        content.writeXmlText(writer, "");
-	                        numberWritten++;
-	                        xContentXref.writeXmlText(writer, "");
-	                        numberWritten++;
+                            content.writeXmlText(writer, "");
+                            numberWritten++;
+                            xContentXref.writeXmlText(writer, "");
+                            numberWritten++;
                             electronicText = dataResource.getRelatedOne("ElectronicText");
                             if (electronicText != null) 
                             {
@@ -191,10 +203,10 @@ if (UtilValidate.isNotEmpty(exportFile))
                         }
                         else
                         {
-	                        content.writeXmlText(writer, "");
-	                        numberWritten++;
-	                        xContentXref.writeXmlText(writer, "");
-	                        numberWritten++;
+                            content.writeXmlText(writer, "");
+                            numberWritten++;
+                            xContentXref.writeXmlText(writer, "");
+                            numberWritten++;
                         }
                         if (contentTypeId.equals("BF_STATIC_PAGE")) 
                         {
@@ -238,10 +250,10 @@ if (UtilValidate.isNotEmpty(exportFile))
                         {
                             dataResource.writeXmlText(writer, "");
                             numberWritten++;
-	                        content.writeXmlText(writer, "");
-	                        numberWritten++;
-	                        productCategoryContent.writeXmlText(writer, "");
-	                        numberWritten++;
+                            content.writeXmlText(writer, "");
+                            numberWritten++;
+                            productCategoryContent.writeXmlText(writer, "");
+                            numberWritten++;
                             
                             electronicText = dataResource.getRelatedOne("ElectronicText");
                             if (electronicText != null) 
@@ -252,10 +264,10 @@ if (UtilValidate.isNotEmpty(exportFile))
                         }
                         else
                         {
-	                        content.writeXmlText(writer, "");
-	                        numberWritten++;
-	                        productCategoryContent.writeXmlText(writer, "");
-	                        numberWritten++;
+                            content.writeXmlText(writer, "");
+                            numberWritten++;
+                            productCategoryContent.writeXmlText(writer, "");
+                            numberWritten++;
                         }
                     }
                 
@@ -646,6 +658,235 @@ if (UtilValidate.isNotEmpty(exportFile))
                 }  
             }
             
+        } 
+        catch (Exception exc) 
+        {
+            String thisResult = "wrote $numberWritten records";
+            Debug.logError(exc, thisResult, "JSP");
+            TransactionUtil.rollback(beganTransaction, thisResult, exc);
+        }
+        finally 
+        {
+            // only commit the transaction if we started one... this will throw an exception if it fails
+            TransactionUtil.commit(beganTransaction);
+        } 
+    }
+    
+    if(UtilValidate.isNotEmpty(exportStores)) 
+    {
+        beganTransaction = TransactionUtil.begin(3600);
+        try 
+        {
+            TransactionUtil.commit(beganTransaction);
+            List<GenericValue> productStoreRoles = delegator.findByAnd("ProductStoreRole", UtilMisc.toMap("productStoreId", productStoreId, "roleTypeId", "STORE_LOCATION"));
+            if(UtilValidate.isNotEmpty(productStoreRoles))
+            {
+                for(GenericValue productStoreRole : productStoreRoles)
+                {
+                    
+                    party = productStoreRole.getRelatedOne("Party");
+                    if(UtilValidate.isNotEmpty(party))
+                    {
+                        party.writeXmlText(writer, "");
+                        numberWritten++;
+                        partyRole = productStoreRole.getRelatedOne("PartyRole");
+                        if(UtilValidate.isNotEmpty(partyRole))
+                        {
+                            partyRole.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        productStoreRole.writeXmlText(writer, "");
+                        numberWritten++;
+                        partyGroup = party.getRelatedOne("PartyGroup");
+                        if(UtilValidate.isNotEmpty(partyGroup))
+                        {
+                            partyGroup.writeXmlText(writer, "");
+                            numberWritten++;
+                        }
+                        partyContactMechs = party.getRelated("PartyContactMech");
+                        if(UtilValidate.isNotEmpty(partyContactMechs))
+                        {
+                            for(GenericValue partyContactMech : partyContactMechs)
+                            {
+                                contactMech = partyContactMech.getRelatedOne("ContactMech");
+                                contactMech.writeXmlText(writer, "");
+                                numberWritten++;
+                                
+                                partyContactMechPurposes = contactMech.getRelated("PartyContactMechPurpose");
+                                partyContactMechPurposes = EntityUtil.filterByDate(partyContactMechPurposes);
+                                if(UtilValidate.isNotEmpty(partyContactMechPurposes))
+                                {
+                                    for(GenericValue partyContactMechPurpose : partyContactMechPurposes)
+                                    {
+                                        partyContactMechPurpose.writeXmlText(writer, "");
+                                        numberWritten++;
+                                        
+                                        postalAddress = partyContactMechPurpose.getRelatedOne("PostalAddress");
+                                        if(UtilValidate.isNotEmpty(postalAddress))
+                                        {
+                                            postalAddress.writeXmlText(writer, "");
+                                            numberWritten++;
+                                        } 
+                                        
+                                        telecomNumber = partyContactMechPurpose.getRelatedOne("TelecomNumber");
+                                        if(UtilValidate.isNotEmpty(telecomNumber))
+                                        {
+                                            telecomNumber.writeXmlText(writer, "");
+                                            numberWritten++;
+                                        } 
+                                    }
+                                }
+                                partyContactMech.writeXmlText(writer, "");
+                                numberWritten++;
+                            }
+                        }
+                        partyContents = party.getRelated("PartyContent");
+                        if(UtilValidate.isNotEmpty(partyContents))
+                        {
+                            for(GenericValue partyContent : partyContents)
+                            {
+                                content = partyContent.getRelatedOne("Content");
+                                if (content != null)
+                                {
+                                    dataResource = content.getRelatedOne("DataResource");
+                                    if (dataResource != null)
+                                    {
+                                        dataResource.writeXmlText(writer, "");
+                                        numberWritten++;
+                                        content.writeXmlText(writer, "");
+                                        numberWritten++;
+                                        partyContent.writeXmlText(writer, "");
+                                        numberWritten++;
+                                        
+                                        electronicText = dataResource.getRelatedOne("ElectronicText");
+                                        if (electronicText != null)
+                                        {
+                                            electronicText.writeXmlText(writer, "");
+                                            numberWritten++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        content.writeXmlText(writer, "");
+                                        numberWritten++;
+                                        partyContent.writeXmlText(writer, "");
+                                        numberWritten++;
+                                    }
+                                }
+                            }
+                        }
+                        partyGeoPoints = party.getRelated("PartyGeoPoint");
+                        if(UtilValidate.isNotEmpty(partyGeoPoints))
+                        {
+                            for(GenericValue partyGeoPoint : partyGeoPoints)
+                            {
+                                geoPoint = partyGeoPoint.getRelatedOne("GeoPoint");
+                                if (geoPoint != null)
+                                {
+                                    geoPoint.writeXmlText(writer, "");
+                                    numberWritten++;
+                                    partyGeoPoint.writeXmlText(writer, "");
+                                    numberWritten++;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            }
+            
+        } 
+        catch (Exception exc) 
+        {
+            String thisResult = "wrote $numberWritten records";
+            Debug.logError(exc, thisResult, "JSP");
+            TransactionUtil.rollback(beganTransaction, thisResult, exc);
+        }
+        finally 
+        {
+            // only commit the transaction if we started one... this will throw an exception if it fails
+            TransactionUtil.commit(beganTransaction);
+        } 
+    }
+    
+    if(UtilValidate.isNotEmpty(exportPromotions)) 
+    {
+        beganTransaction = TransactionUtil.begin(3600);
+        try 
+        {
+            TransactionUtil.commit(beganTransaction);
+            List<GenericValue> productStorePromoAppls = delegator.findByAnd("ProductStorePromoAppl", UtilMisc.toMap("productStoreId", productStoreId));
+            if(UtilValidate.isNotEmpty(productStorePromoAppls))
+            {
+                for(GenericValue productStorePromoAppl : productStorePromoAppls)
+                {
+                    productPromo = productStorePromoAppl.getRelatedOne("ProductPromo");
+                    if(UtilValidate.isNotEmpty(productPromo))
+                    {
+                        productPromo.writeXmlText(writer, "");
+                        numberWritten++;
+                        productStorePromoAppl.writeXmlText(writer, "");
+                        numberWritten++;
+                        productPromoConds = productPromo.getRelated("ProductPromoCond");
+                        if(UtilValidate.isNotEmpty(productPromoConds))
+                        {
+                            for(GenericValue productPromoCond : productPromoConds)
+                            {
+	                            productPromoRule = productPromoCond.getRelatedOne("ProductPromoRule");
+	                            if (productPromoRule != null)
+	                            {
+	                                productPromoRule.writeXmlText(writer, "");
+	                                numberWritten++;
+	                            }
+                                productPromoCond.writeXmlText(writer, "");
+                                numberWritten++;
+                            }
+                        }
+                        productPromoActions = productPromo.getRelated("ProductPromoAction");
+                        if(UtilValidate.isNotEmpty(productPromoActions))
+                        {
+                            for(GenericValue productPromoAction : productPromoActions)
+                            {
+                                productPromoRule = productPromoAction.getRelatedOne("ProductPromoRule");
+                                if (productPromoRule != null)
+                                {
+                                    productPromoRule.writeXmlText(writer, "");
+                                    numberWritten++;
+                                }
+                                productPromoAction.writeXmlText(writer, "");
+                                numberWritten++;
+                            }
+                        }
+                        productPromoCategories = productPromo.getRelated("ProductPromoCategory");
+                        if(UtilValidate.isNotEmpty(productPromoCategories))
+                        {
+                            for(GenericValue productPromoCategory : productPromoCategories)
+                            {
+                                productPromoCategory.writeXmlText(writer, "");
+                                numberWritten++;
+                            }
+                        }
+                        productPromoProducts = productPromo.getRelated("ProductPromoProduct");
+                        if(UtilValidate.isNotEmpty(productPromoProducts))
+                        {
+                            for(GenericValue productPromoProduct : productPromoProducts)
+                            {
+                                productPromoProduct.writeXmlText(writer, "");
+                                numberWritten++;
+                            }
+                        }
+                        productPromoCodes = productPromo.getRelated("ProductPromoCode");
+                        if(UtilValidate.isNotEmpty(productPromoCodes))
+                        {
+                            for(GenericValue productPromoCode : productPromoCodes)
+                            {
+                                productPromoCode.writeXmlText(writer, "");
+                                numberWritten++;
+                            }
+                        }
+                    }
+                }
+            }
         } 
         catch (Exception exc) 
         {

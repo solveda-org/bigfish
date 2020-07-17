@@ -83,6 +83,9 @@
                     <p>${userLoginId?if_exists}</p>
                     <div class="infoIcon">
                         <a href="userDetail?userLoginId=${userLoginId?if_exists}" onMouseover="showTooltip(event,'${uiLabelMap.UserLoginInfo}');" onMouseout="hideTooltip()"><span class="lockIcon"></span></a>
+                        <#if userFbUser?has_content && userFbUser =="TRUE">
+                        	<span class="facebookIcon"></span>
+                        </#if>
                     </div>
                 </#if>
             </div>
@@ -118,7 +121,7 @@
                 <#if (partyStatusItem?has_content)>
                     <#if (method?has_content)>
                         <select name="statusId" class="short">
-                            <#assign selectedStatusId = parameters.statusId!party.statusId!"">
+                            <#assign selectedStatusId = parameters.statusId!party?if_exists.statusId!"">
                             <#list partyStatusItem as statusItem>
                                 <option value="${statusItem.statusId}" <#if statusItem.statusId.equals(selectedStatusId!"")>selected=selected</#if>>
                                     ${statusItem.description}
@@ -166,8 +169,8 @@
                 <#if (method?has_content)>
                      <#assign selectedExportStatus = parameters.exportStatus!IS_DOWNLOADED!"N">
                     <select name="exportStatus" class="short">
-                        <option value="N" <#if selectedExportStatus.equals("N") >selected=selected</#if>>${uiLabelMap.DownloadNewInfo}</option>
-                        <option value="Y" <#if selectedExportStatus.equals("Y") >selected=selected</#if>>${uiLabelMap.ExportStatusInfo}</option>
+                        <option value="N" <#if selectedExportStatus == "N" >selected=selected</#if>>${uiLabelMap.DownloadNewInfo}</option>
+                        <option value="Y" <#if selectedExportStatus == "Y" >selected=selected</#if>>${uiLabelMap.ExportStatusInfo}</option>
                     </select>
                 <#else>
                     <#if IS_DOWNLOADED?has_content && IS_DOWNLOADED == 'Y'>

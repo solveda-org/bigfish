@@ -31,9 +31,8 @@
                                 </div>
 					        </div>
 					    </div>
-					</div>
                    <#if shipmentItems?has_content>
-						<div class="boxBody">
+						<div class="infoRow row">
 						    <table class="osafe">
 						        <tr class="heading">
 						            <th class="idCol firstCol">${uiLabelMap.ItemNoLabel}</th>
@@ -58,7 +57,6 @@
                     <#list shipmentPackages as shipmentPackage>
 			            <#assign dimensionUom = delegator.findByPrimaryKey('Uom', {"uomId" : shipmentPackage.dimensionUomId!})!"" />
 			            <#assign weightUom = delegator.findByPrimaryKey('Uom', {"uomId" : shipmentPackage.weightUomId!})!"" />
-						<div class="boxBody">
 						    <div class="heading">${uiLabelMap.OrderShippingPackageInfoHeading!}</div>
 						    <div class="infoRow column">
 						        <div class="infoEntry">
@@ -115,9 +113,9 @@
 						            </div>
 						        </div>
 						    </div>
-						</div>
 					</#list>
-				</div>
+                </div>
+			</div>
     </#list>
  </#if>
 </#if>

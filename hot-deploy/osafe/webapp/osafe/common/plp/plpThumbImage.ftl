@@ -7,14 +7,14 @@
         </a>
     </div>
 	<#if Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"QUICKLOOK_ACTIVE") && uiSequenceScreen?has_content && uiSequenceScreen == 'PLP'>
-	  <div id="plpQuicklook_${plpProductId!""}" class="js_plpQuicklook plpQuicklookIcon" style="display:none">
+	  <div id="plpQuicklook_${plpProductId!""}" class="js_plpQuicklook plpQuicklookIcon">
 	    <input type="hidden" class="param" name="productId" id="productId" value="${plpProductId!}"/>
 	    <input type="hidden" class="param" name="productCategoryId" value="${plpCategoryId!}"/>
 	    <#if plpProductFeatureType?has_content && featureValueSelected?has_content>
             <#assign featureValue = plpProductFeatureType+':'+featureValueSelected/>
         </#if>
 	    <input type="hidden" class="param" name="productFeatureType" id="${plpProductId!}_productFeatureType" value="${featureValue!""}"/>
-	    <a href="javaScript:void(0);" onClick="displayActionDialogBox('${dialogPurpose!}',this);"><img alt="${plpProductName!""}" src="/osafe_theme/images/user_content/images/quickLook.png"></a>
+	    <a href="javaScript:void(0);" onClick="displayActionDialogBoxQuicklook('${dialogPurpose!}',this);"><img style="display:none" alt="${plpProductName!""}" src="/osafe_theme/images/user_content/images/quickLook.png" /></a>
 	  </div>
 	</#if>
  </div>

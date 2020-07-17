@@ -8,7 +8,7 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.StringUtil;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.party.content.PartyContentWrapper;
 import org.ofbiz.entity.util.EntityUtil;
@@ -31,6 +31,7 @@ if(UtilValidate.isNotEmpty(plpItem))
 	context.plpProductId = productId;
 }
 plpPdpSelectMultiVariant = "";
+isPlpPdpInStoreOnly = "N";
 //***************************************************VIRTUAL JS FUNCTIONS START*********************************************//
 selectOne = UtilProperties.getMessage("OSafeUiLabels", "SelectOneLabel", locale);
 
@@ -101,7 +102,7 @@ String buildNext(Map map, List order, String current, String prefix)
 }
 
 //BUILD JS TO CREATE 'LI' FOR ALL SELECTABLE FEATURE EXCEPT FIRST ONE
-String buildNextLi(Map map, List order, String current, String prefix, Map productVariantInventoryMap) 
+String buildNextLi(Map map, List order, String current, String prefix, Map productVariantInventoryMap, Map productVariantProductAttributeMap) 
 {
     def ct = 0;
     def featureType = null;
@@ -148,7 +149,7 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
 	  context.productVariantStockMap = productVariantStockMap;
     }
     buf.append("function listLiFT" + current + "_" + uiSequenceScreen+"_"+productId + prefix + "() { ");
-    buf.append("document.getElementById(\"LiFT" + current + "_" + uiSequenceScreen+"_"+productId+ "\").innerHTML = \"\";");
+    buf.append("jQuery(\"#LiFT" + current + "_" + uiSequenceScreen+"_"+productId+ "\").html(\"\");");
     map.each { key, value ->
         def optValue = null;
         def stockClass = "";
@@ -178,6 +179,14 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
                 }
             }
             buf.append("VARSTOCK['" + optValue + "'] = \"" + stockClass + "\";");
+            def plpPdpInStoreOnly = "N";
+            variantProductAttribute = productVariantProductAttributeMap.get(optValue);
+	        if(UtilValidate.isNotEmpty(variantProductAttribute) && UtilValidate.isNotEmpty(variantProductAttribute.PDP_IN_STORE_ONLY))
+	        {
+	        	plpPdpInStoreOnly = variantProductAttribute.PDP_IN_STORE_ONLY;
+			}
+			
+            buf.append("VARINSTORE['" + optValue + "'] = \"" + plpPdpInStoreOnly + "\";");
         } 
         else 
         {
@@ -217,7 +226,7 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
         }
         
         liText = "<a href=javascript:void(0); onclick=getListPlp('FT" + current + "_" +uiSequenceScreen+"_"+productId + "','" + ct + "',1,'"+uiSequenceScreen+"_"+productId+"');>" + OsafeAdminUtil.formatSimpleText(key) + "</a>";
-        buf.append("document.getElementById(\"LiFT" + current + "_" + uiSequenceScreen+"_"+productId + "\").appendChild(li);");
+        buf.append("jQuery(\"#LiFT" + current + "_" + uiSequenceScreen+"_"+productId + "\").append(li);");
         buf.append("li.innerHTML = \"" + liText + "\";");
         ct++;
     }
@@ -229,7 +238,7 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
         map.each { key, value ->
             def nextOrder = order.get(order.indexOf(current)+1);
             def newPrefix = prefix + "_" + ct;
-            buf.append(buildNextLi(value, order, nextOrder, newPrefix,productVariantInventoryMap));
+            buf.append(buildNextLi(value, order, nextOrder, newPrefix,productVariantInventoryMap, productVariantProductAttributeMap));
             ct++;
         }
     }
@@ -374,7 +383,7 @@ String buildSelectableFeatureMapJS(List featureOrder, Map productFeatureAndApplS
 		    buf.append("function listFT" + feature + "_" + uiSequenceScreen+"_"+productId + "() { ");
 		    
 		    liBuf.append("function listLiFT" + feature + "_" + uiSequenceScreen+"_"+productId + "() { ");
-		    liBuf.append("document.getElementById(\"LiFT" + feature + "_" + uiSequenceScreen+"_"+productId+ "\").innerHTML = \"\";");
+		    liBuf.append("jQuery(\"#LiFT" + feature + "_" + uiSequenceScreen+"_"+productId+ "\").html(\"\");");
 		    
 		    
 		    buf.append("var select = document.createElement('select');");
@@ -401,7 +410,7 @@ String buildSelectableFeatureMapJS(List featureOrder, Map productFeatureAndApplS
 		    	
 		    	liBuf.append("var li = document.createElement('li');");
 		    	liText = "<a href=javascript:void(0); onclick=javascript:void(0);>" + OsafeAdminUtil.formatSimpleText(productFeatureAndAppl.description) + "</a>";
-		    	liBuf.append("document.getElementById(\"LiFT" + feature + "_" + uiSequenceScreen+"_"+productId + "\").appendChild(li);");
+		    	liBuf.append("jQuery(\"#LiFT" + feature + "_" + uiSequenceScreen+"_"+productId + "\").append(li);");
 		    	liBuf.append("li.innerHTML = \"" + liText + "\";");
 		        
 		    	ct++;
@@ -424,12 +433,13 @@ String buildSelectableFeatureMapJS(List featureOrder, Map productFeatureAndApplS
 
 //BUILD JS TO CREATE DROPDOWN FOR FIRST SELECTABLE FEATURE AND CALL THE FUNCTION TO CREATE DROPDOWN FOR REST FEATURES
 firstSelectableFeatureSize = 0;
-String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInventoryMap)
+String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInventoryMap, Map productVariantProductAttributeMap)
 {
     def nextFeatureJsBuf = new StringBuffer();
     def buf = new StringBuffer();
     topLevelName = featureOrder[0];
     buf.append("var VARSTOCK = new Object();");
+    buf.append("var VARINSTORE = new Object();");
     
     buf.append("function getFormOption" + uiSequenceScreen + "_" + productId + "() {");
     buf.append("var OPT = new Array(" + featureOrder.size() + ");");
@@ -487,6 +497,13 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
             }
             //ADD STOCK LEVEL CLASSES TO THE MAP IF THERE IS ONLY ONE SELECTABLE FEATURE FOR THAT PRODUCT.
             buf.append("VARSTOCK['" + opt + "'] = \"" + stockClass + "\";");
+            def plpPdpInStoreOnly = "N";
+            variantProductAttribute = productVariantProductAttributeMap.get(opt);
+	        if(UtilValidate.isNotEmpty(variantProductAttribute) && UtilValidate.isNotEmpty(variantProductAttribute.PDP_IN_STORE_ONLY))
+	        {
+	        	plpPdpInStoreOnly = variantProductAttribute.PDP_IN_STORE_ONLY;
+			}
+            buf.append("VARINSTORE['" + opt + "'] = \"" + plpPdpInStoreOnly + "\";");
         } 
         else 
         {
@@ -513,7 +530,7 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
         if (value instanceof Map) 
         {
             nextFeatureJsBuf.append(buildNext(varTree, featureOrder, featureOrder[1], cnt));
-            nextFeatureJsBuf.append(buildNextLi(varTree, featureOrder, featureOrder[1], cnt, productVariantInventoryMap));
+            nextFeatureJsBuf.append(buildNextLi(varTree, featureOrder, featureOrder[1], cnt, productVariantInventoryMap, productVariantProductAttributeMap));
         }
         counter++;
     }
@@ -560,7 +577,7 @@ if(UtilValidate.isNotEmpty(productId))
     plpProductFeatureType = "";
     productLongDesc = "";
     bfTotalInventory = "";
-    
+
     ProductContentWrapper productContentWrapper = new ProductContentWrapper(product, request);
     productStore = ProductStoreWorker.getProductStore(request);
 	productStoreId = productStore.get("productStoreId");
@@ -611,6 +628,10 @@ if(UtilValidate.isNotEmpty(productId))
 		{
 			bfTotalInventory = productAttrMap.get("BF_INVENTORY_TOT");
 		}
+		if (UtilValidate.isNotEmpty(productAttrMap.get("PDP_IN_STORE_ONLY")))
+	    {
+	    	isPlpPdpInStoreOnly = productAttrMap.get("PDP_IN_STORE_ONLY");
+	    }
 		
 	}
 	context.plpProductAtrributeMap = productAttrMap;
@@ -736,7 +757,7 @@ if(UtilValidate.isNotEmpty(productId))
  	    productLongDesc = productLongDesc;
     }
 	
-	productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
+	productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
     pdpUrl = 'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId;
     
 
@@ -798,6 +819,33 @@ if(UtilValidate.isNotEmpty(productId))
 						}
 					}
 				}
+			}
+		}
+	}
+	
+	for (GenericValue distfeature: productDistinguishingFeatures)
+	{
+		featureType = distfeature.getString("productFeatureTypeId");
+		if (!productFeatureTypes.contains(featureType))
+		{
+			productFeatureTypes.add(featureType);
+			//get the sorted list of values in the group
+			productFeatureGroupAppls = delegator.findByAndCache("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureGroupId", featureType), UtilMisc.toList("sequenceNum"));
+			productFeatureGroupAppls = EntityUtil.filterByDate(productFeatureGroupAppls, true);
+			if (UtilValidate.isNotEmpty(productFeatureGroupAppls))
+			{
+				prodFeaturesList = FastList.newInstance();
+				for(GenericValue productFeatureGroupAppl: productFeatureGroupAppls)
+				{
+					//pull the feature from the list of distinguishing features we already have
+					features = EntityUtil.filterByAnd(productDistinguishingFeatures, UtilMisc.toMap("productFeatureId", productFeatureGroupAppl.productFeatureId));
+					prodFeature = EntityUtil.getFirst(features);
+					if (UtilValidate.isNotEmpty(prodFeature))
+					{
+						prodFeaturesList.add(prodFeature);
+					}
+				}
+				productFeaturesByType.put(featureType, prodFeaturesList);
 			}
 		}
 	}
@@ -1003,6 +1051,7 @@ if(UtilValidate.isNotEmpty(productId))
 				
 				
 				//GET PRODUCT VARIANT ATTRIBUTE LIST AND SET INTO CONTEXT
+                productVariantProductAttributeMap.put("virtualProduct", productAttrMap);
 				assocProductAttr = assocVariantProduct.getRelatedCache("ProductAttribute");
 				assocProductAttrMap = FastMap.newInstance();
 				if (UtilValidate.isNotEmpty(assocProductAttr))
@@ -1107,11 +1156,11 @@ if(UtilValidate.isNotEmpty(productId))
 	   	        if (UtilValidate.isNotEmpty(plpFacetGroupVariantSticky))
 	   	        {
 	        	    plpProductFeatureType = plpFacetGroupVariantSticky;
-	        	    productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId+'&productFeatureType='+plpFacetGroupVariantSticky+':'+featureValueSelected);
+	        	    productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId+'&productFeatureType='+plpFacetGroupVariantSticky+':'+featureValueSelected);
 	   	        }
 	   	        else
 	   	        {
-	   	        	productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
+	   	        	productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
 	   	        }
 	        }
 	        if(UtilValidate.isNotEmpty(productVariantSelectSmallURL))
@@ -1162,6 +1211,7 @@ if(UtilValidate.isNotEmpty(productId))
         
             //BUILD PRODUCT FEATURE SET (SELECTABLE FEATURES BY FEATURE TYPE)
             plpFeatureSet = new LinkedHashSet();
+            plpFeatureSetAll = new LinkedHashSet();
             if (UtilValidate.isNotEmpty(productSelectableFeatures))
             {
                 for (GenericValue prodSelectableFeatureAndAppl : productSelectableFeatures)
@@ -1174,6 +1224,10 @@ if(UtilValidate.isNotEmpty(productId))
             if (UtilValidate.isNotEmpty(plpFeatureSet)) 
             {
                 context.plpFeatureSet = plpFeatureSet;
+                for(String plpFeatureType : plpFeatureSet)
+                {
+                	plpFeatureSetAll.add(plpFeatureType);
+                }
                 String lastProductFeatureTypeId="";
                 List productFeatureAndApplSelectList = FastList.newInstance();
                 Map plpProductFeatureAndApplSelectMap = FastMap.newInstance();
@@ -1217,6 +1271,13 @@ if(UtilValidate.isNotEmpty(productId))
                     
                 }
 
+                for(String plpFeatureType : plpFeatureSetAll)
+                {
+                	if(!plpFeatureSet.contains(plpFeatureType))
+                	{
+                		plpFeatureSet.add(plpFeatureType);
+                	}
+                }
                 //CREATE A MAP FOR CONTEXT OF PRODUCT FEATURE AND APPL: SELECTABLE FEATURES
                 for(GenericValue productFeatureAndAppl : productSelectableFeatures) 
                 {
@@ -1329,7 +1390,7 @@ if(UtilValidate.isNotEmpty(productId))
                     // CALL THE FUNCTION TO CREATE DROPDOWN FOR ALL SELECTABLE FEATURE, LI FOR ALL SELECTABLE FEATURE EXCEPT FIRST.
                     if(UtilValidate.isNotEmpty(plpVariantTree))
                     {
-                        jsBuf.append(buildFeatureJS(plpFeatureOrder, plpVariantTree, plpProductVariantInventoryMap));
+                        jsBuf.append(buildFeatureJS(plpFeatureOrder, plpVariantTree, plpProductVariantInventoryMap, productVariantProductAttributeMap));
                     }
                     
                     jsBuf.append("</script>");
@@ -1443,7 +1504,6 @@ if(UtilValidate.isNotEmpty(productId))
 		isFinishedGood = true;
 	}
 	context.isFinishedGood = isFinishedGood;
-	
-
+	context.isPlpPdpInStoreOnly = isPlpPdpInStoreOnly;
   }    
 }

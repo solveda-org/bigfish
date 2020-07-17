@@ -20,7 +20,7 @@
         <if-not-empty field="parameters.fromDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.fromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
@@ -28,7 +28,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.fromDate">
                         <field field="parameters.fromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -36,7 +36,7 @@
         <if-not-empty field="parameters.thruDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.thruDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
@@ -44,7 +44,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.thruDate">
                         <field field="parameters.thruDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -91,17 +91,26 @@
                 </if-compare>
         </else>
         </if-empty>
+        
+        <if-not-empty field="parameters.description">
+            <call-object-method method-name="length" obj-field="parameters.description" ret-field="categoryDescriptionLength"/>
+	        <if-compare operator="greater" value="255" field="categoryDescriptionLength" type="Integer">
+	        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongCategoryDescriptionError"/>
+           		<string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        
         <check-errors/>
         <if-not-empty field="parameters.formattedFromDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.formattedFromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.formattedFromDate">
                         <field field="parameters.formattedFromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -157,16 +166,59 @@
             <string-to-list string="${tempErrorMessage}" message-field="productId" list="error_list"/>
         </if-empty>
         <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+            <call-object-method method-name="trim" obj-field="parameters.productDetailName" ret-field="parameters.productDetailName"/>
+            <call-object-method method-name="toUpperCase" obj-field="parameters.productDetailName" ret-field="productDetailNameUpCase"/>
 	        <if-empty field="parameters.productDetailName">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductNameError"/>
 	            <string-to-list string="${tempErrorMessage}" message-field="productDetailName" list="error_list"/>
-	            <else>
-	            	<call-object-method method-name="length" obj-field="parameters.productDetailName" ret-field="productDetailNameLength"/>
-			        <if-compare operator="greater" value="100" field="productDetailNameLength" type="Integer">
-			        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongProductNameError"/>
-	            		<string-to-list string="${tempErrorMessage}" message-field="productDetailName" list="error_list"/>
-			        </if-compare>
-	        	</else>
+	        <else>
+            	<call-object-method method-name="length" obj-field="parameters.productDetailName" ret-field="productDetailNameLength"/>
+		        <if-compare operator="greater" value="100" field="productDetailNameLength" type="Integer">
+		        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongProductNameError"/>
+            		<string-to-list string="${tempErrorMessage}" message-field="productDetailName" list="error_list"/>
+                <else>
+		            <set field="productNameUnique" value="true"/>
+		            <entity-condition list="productList" entity-name="Product">
+			            <condition-list combine="and">
+			                <condition-expr field-name="productName" from-field="productDetailNameUpCase" ignore-case="true"/>
+			                <condition-expr field-name="isVariant" value="N"/>
+			            </condition-list>
+			        </entity-condition>
+		            <if-not-empty field="productList">
+		                <iterate entry="product" list="productList">
+		                    <if-compare-field operator="not-equals" field="product.productId" to-field="parameters.productId">
+		                        <set field="productNameUnique" value="false"/>
+		                    </if-compare-field>
+		                </iterate>
+		            </if-not-empty>
+		            <if-compare operator="equals" value="true" field="productNameUnique">
+		            	<set value="PRODUCT_NAME" field="productContentAndTextMap.productContentTypeId"/>
+            			<find-by-and list="productContentAndTextList" map="productContentAndTextMap" entity-name="ProductContentAndText"/>
+			            <if-not-empty field="productContentAndTextList">
+			                <iterate entry="productContentAndText" list="productContentAndTextList">
+			                	<set field="productTextDataName" from-field="productContentAndText.textData" type="String"/>
+			                	<call-object-method obj-field="productTextDataName" method-name="toUpperCase" ret-field="productTextDataName"/>
+			                	<if-compare-field operator="equals" field="productTextDataName" to-field="productDetailNameUpCase">
+				                    <if-compare-field operator="not-equals" field="productContentAndText.productId" to-field="parameters.productId">
+				                        <set field="findProductCtx.productId" from-field="productContentAndText.productId"/>
+				                        <find-by-primary-key value-field="productByContent" map="findProductCtx" entity-name="Product"/>
+				                        <if-compare operator="equals" field="productByContent.isVariant" value="N">
+				                            <set field="productNameUnique" value="false"/>
+				                        </if-compare>
+				                    </if-compare-field>
+			                    </if-compare-field>
+			                </iterate>
+			            </if-not-empty>
+		            </if-compare>
+		            <if-compare operator="equals" value="false" field="productNameUnique" type="String">
+		                <set field="argListNames[]" from-field="parameters.productDetailName"/>
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UniqueProductNameAdminError" arg-list-name="argListNames"/>
+            		    <string-to-list string="${tempErrorMessage}" message-field="productDetailName" list="error_list"/>
+            		    <clear-field field="argListNames"/>
+		            </if-compare>
+                </else>
+		        </if-compare>
+	        </else>
 	        </if-empty>
 	        <if-empty field="parameters.longDescription">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDetailFieldError"/>
@@ -379,7 +431,7 @@
         <if-not-empty field="parameters.introductionDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.introductionDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIntroDateError"/>
@@ -387,7 +439,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.introductionDate">
                         <field field="parameters.introductionDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -396,7 +448,7 @@
         <if-not-empty field="parameters.salesDiscontinuationDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.salesDiscontinuationDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDiscontDateError"/>
@@ -404,7 +456,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.salesDiscontinuationDate">
                         <field field="parameters.salesDiscontinuationDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -473,11 +525,6 @@
             </else>
             </if-compare>
         </if-not-empty>
-        
-        <if-compare-field field="bfWHInventory" operator="greater" to-field="bfTotalInventory" type="Long">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryCompareError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
-        </if-compare-field>
         
         <set field="productHeight" from-field="parameters.productHeight" />
         <if-not-empty field="productHeight">
@@ -766,6 +813,18 @@
         <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
         <clear-field field="manageProductAttributeCtx"/>
         
+        <if-not-empty field="parameters.pdpInStoreOnly">
+            <set field="pdpInStoreOnly" from-field="parameters.pdpInStoreOnly"/>
+        <else>
+            <set field="pdpInStoreOnly" value="N"/>
+        </else>
+        </if-not-empty>
+        <set-service-fields service-name="manageProductAttribute" to-map="manageProductAttributeCtx" map="parameters"/>
+        <set field="manageProductAttributeCtx.attrName" value="PDP_IN_STORE_ONLY"/>
+        <set field="manageProductAttributeCtx.attrValue" from-field="pdpInStoreOnly"/>
+        <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
+        <clear-field field="manageProductAttributeCtx"/>
+        
         <if-compare field="parameters.isVirtual" operator="equals" value="Y">
             <set-service-fields service-name="manageProductAttribute" to-map="manageProductAttributeCtx" map="parameters"/>
             <set field="manageProductAttributeCtx.attrName" value="PDP_SELECT_MULTI_VARIANT"/>
@@ -832,7 +891,7 @@
 					                    <set field="createVirtualProductFeatureApplCtx.productId" from-field="parameters.productId"/>
 	                                    <set field="createVirtualProductFeatureApplCtx.productFeatureId" from-field="productFeatureIdValue"/>
 	                                    <set field="createVirtualProductFeatureApplCtx.productFeatureApplTypeId" value="DISTINGUISHING_FEAT"/>
-	                                    <set field="createVirtualProductFeatureApplCtx.fromDate" from-field="nowStamp"/>
+	                                    <set field="createVirtualProductFeatureApplCtx.fromDate" from-field="nowStamp" type="Timestamp"/>
 					                    <call-service service-name="createProductFeatureAppl" in-map-name="createVirtualProductFeatureApplCtx"/>
 	                                </if-not-empty>
 	                            </if-compare-field>
@@ -860,7 +919,7 @@
 							                <set field="createVirtualProductFeatureApplCtx.productId" from-field="parameters.productId"/>
 		                                    <set field="createVirtualProductFeatureApplCtx.productFeatureId" from-field="parameters.productFeatureId"/>
 		                                    <set field="createVirtualProductFeatureApplCtx.productFeatureApplTypeId" value="DISTINGUISHING_FEAT"/>
-		                                    <set field="createVirtualProductFeatureApplCtx.fromDate" from-field="nowStamp"/>
+		                                    <set field="createVirtualProductFeatureApplCtx.fromDate" from-field="nowStamp" type="Timestamp"/>
 						                    <call-service service-name="createProductFeatureAppl" in-map-name="createVirtualProductFeatureApplCtx"/>
 							                
 							            </iterate>
@@ -1095,7 +1154,7 @@
         <store-value value-field="lookedUpValue"/>
 
         <set from-field="lookedUpValue.productId" field="productId"/>
-        <call-simple-method method-name="updateProductWithReviewRatingAvg"/>
+        <call-simple-method method-name="updateProductWithReviewRatingAvg" />
     </simple-method>
     <simple-method method-name="updateProductWithReviewRatingAvg" short-description="Update Product with new Review Rating Avg" login-required="false">
         <!-- this method is meant to be called in-line and depends in a productId parameter -->
@@ -1381,33 +1440,7 @@
         </if-compare>
         <!-- Validating SEQUENCE NUM"-->
         <set field="sequenceNumValue" from-field="parameters.grpSequenceNum"/>
-        <if-not-empty field="sequenceNumValue">
-            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                <string value="${sequenceNumValue}"></string>
-            </call-class-method>
-            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                <set field="invalidSeqNum" value="true"/>
-            <else>
-                <if>
-                    <condition>
-                        <and>
-                            <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                            <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                        </and>
-                    </condition>
-                    <then>
-                    </then>
-                    <else>
-                        <set field="invalidSeqNumRange" value="true"/>
-                    </else>
-                </if>
-            </else>
-            </if-compare>
-        <else>
-            <set field="invalidSeqNum" value="true"/>
-        </else>
-        </if-not-empty>
-        
+        <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         <if>
             <condition>
                 <or>
@@ -1416,7 +1449,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
                 <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
             </then>
         </if>
@@ -1485,29 +1518,7 @@
         </if-compare>
         <!-- Validating Entered SEQUENCE NUMS(Product Feature Ids) -->
         <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
-            <if-not-empty field="sequenceNumValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                    <string value="${sequenceNumValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                    <set field="invalidSeqNum" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidSeqNumRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-            </if-not-empty>
+                <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         </iterate-map>
         <if>
             <condition>
@@ -1517,7 +1528,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetValueSequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
                 <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
             </then>
         </if>
@@ -1665,29 +1676,8 @@
         <iterate-map key="productFeatureGroupIdKey" value="productFeatureGroupIdValue" map="parameters.productFeatureGroupId">
             <set field="sequenceNumMap" from-field="parameters.sequenceNum" />
             <set field="sequenceNumValue" from-field="sequenceNumMap.${productFeatureGroupIdKey}"/>
-            <if-not-empty field="sequenceNumValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                    <string value="${sequenceNumValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                    <set field="invalidSeqNum" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidSeqNumRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-            </if-not-empty>
+                <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
+            
             <set field="descriptionMap" from-field="parameters.description" />
             <set field="descriptionValue" from-field="descriptionMap.${productFeatureGroupIdKey}"/>
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidDesc" ret-field="isValidDesc">
@@ -1804,7 +1794,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
                 <string-to-list string="${tempErrorMessage}" message-field="SEQUENCENUM" list="error_list"/>
             </then>
         </if>
@@ -1816,7 +1806,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMinValueNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMinValueNotValidNumError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="FACETVALUEMIN" list="error_list"/>
             </then>
         </if>
@@ -1828,7 +1818,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMaxValueNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMaxValueNotValidNumError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="FACETVALUEMAX" list="error_list"/>
             </then>
         </if>
@@ -1909,30 +1899,9 @@
     <simple-method method-name="updateFacetGroup" short-description="Updates a facet group" use-transaction="false">
     
     	   <!--  sequenceNum -->
-           <if-not-empty field="parameters.grpSequenceNum">
-               <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                   <string value="${parameters.grpSequenceNum}"></string>
-               </call-class-method>
-               <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                   <set field="invalidSeqNum" value="true"/>
-               <else>
-                   <if>
-                       <condition>
-                           <and>
-                               <if-compare operator="greater-equals" value="1" field="parameters.grpSequenceNum" type="Long"/>
-                               <if-compare operator="less-equals" value="1000" field="parameters.grpSequenceNum" type="Long"/>
-                           </and>
-                       </condition>
-                       <then>
-                       </then>
-                       <else>
-                           <set field="invalidSeqNumRange" value="true"/>
-                       </else>
-                   </if>
-               </else>
-               </if-compare>
-           </if-not-empty>
-           
+           <set field="sequenceNumValue" from-field="parameters.grpSequenceNum"/>
+            <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
+
            <!--  description -->
            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidDesc" ret-field="isValidDesc">
                <field field="parameters.grpDescription"/>
@@ -2045,7 +2014,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
                 <string-to-list string="${tempErrorMessage}" message-field="SEQUENCENUM" list="error_list"/>
             </then>
         </if>
@@ -2057,7 +2026,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMinValueNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMinValueNotValidNumError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="FACETVALUEMIN" list="error_list"/>
             </then>
         </if>
@@ -2069,7 +2038,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMaxValueNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetMaxValueNotValidNumError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="FACETVALUEMAX" list="error_list"/>
             </then>
         </if>
@@ -2125,7 +2094,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PLPSequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PLPSequenceNumNotValidNumError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
             </then>
         </if>
@@ -3285,37 +3254,12 @@
         </if-not-empty>
         
         <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.compSequenceNum">
-            <if-not-empty field="sequenceNumValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                    <string value="${sequenceNumValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                    <set field="invalidSeqNum" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidSeqNumRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-            </if-not-empty>
+            <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         </iterate-map>
 
         <if>
             <condition>
-                <or>
                     <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
-                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
-                </or>
             </condition>
             <then>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidComplementSequenceNumber"/>
@@ -3352,37 +3296,12 @@
         <set field="invalidSeqNum" value="false"/>
         <set field="invalidSeqNumRange" value="false"/>
         <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.accessSequenceNum">
-            <if-not-empty field="sequenceNumValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                    <string value="${sequenceNumValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                    <set field="invalidSeqNum" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidSeqNumRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-            </if-not-empty>
+            <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         </iterate-map>
 
         <if>
             <condition>
-                <or>
                     <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
-                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
-                </or>
             </condition>
             <then>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidAccessorySequenceNumber"/>
@@ -3569,6 +3488,8 @@
             </if-not-empty>
         </else>
         </if-empty>
+        <call-object-method method-name="trim" obj-field="parameters.productDetailName" ret-field="parameters.productDetailName"/>
+        <call-object-method method-name="toUpperCase" obj-field="parameters.productDetailName" ret-field="productDetailNameUpCase"/>
         <if-empty field="parameters.productDetailName">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductNameError"/>
             <string-to-list string="${tempErrorMessage}" message-field="productDetailName" list="error_list"/>
@@ -3577,6 +3498,42 @@
 		        <if-compare operator="greater" value="100" field="productDetailNameLength" type="Integer">
 		        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongProductNameError"/>
             		<string-to-list string="${tempErrorMessage}" message-field="productDetailName" list="error_list"/>
+                <else>
+		            <set field="productNameUnique" value="true"/>
+		            <entity-condition list="productList" entity-name="Product">
+			            <condition-list combine="and">
+			                <condition-expr field-name="productName" from-field="productDetailNameUpCase" ignore-case="true"/>
+			                <condition-expr field-name="isVariant" value="N"/>
+			            </condition-list>
+			        </entity-condition>
+		            
+		            <if-not-empty field="productList">
+		                <set field="productNameUnique" value="false"/>
+		            </if-not-empty>		            
+		            <if-compare operator="equals" value="true" field="productNameUnique">
+			            <set value="PRODUCT_NAME" field="productContentAndTextMap.productContentTypeId"/>
+            			<find-by-and list="productContentAndTextList" map="productContentAndTextMap" entity-name="ProductContentAndText"/>
+			            <if-not-empty field="productContentAndTextList">
+			                <iterate entry="productContentAndText" list="productContentAndTextList">
+			                	<set field="productTextDataName" from-field="productContentAndText.textData" type="String"/>
+			                	<call-object-method obj-field="productTextDataName" method-name="toUpperCase" ret-field="productTextDataName"/>
+			                	<if-compare-field operator="equals" field="productTextDataName" to-field="productDetailNameUpCase">
+			                        <set field="findProductCtx.productId" from-field="productContentAndText.productId"/>
+			                        <find-by-primary-key value-field="productByContent" map="findProductCtx" entity-name="Product"/>
+			                        <if-compare operator="equals" field="productByContent.isVariant" value="N">
+			                            <set field="productNameUnique" value="false"/>
+			                        </if-compare>
+		                        </if-compare-field>
+			                </iterate>
+			            </if-not-empty>
+		            </if-compare>
+		            <if-compare operator="equals" value="false" field="productNameUnique" type="String">
+		                <set field="argListNames[]" from-field="parameters.productDetailName"/>
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UniqueProductNameAdminError" arg-list-name="argListNames"/>
+            		    <string-to-list string="${tempErrorMessage}" message-field="productDetailName" list="error_list"/>
+            		    <clear-field field="argListNames"/>
+		            </if-compare>
+                </else>
 		        </if-compare>
         	</else>
 	    </if-empty>
@@ -3622,7 +3579,7 @@
         <if-not-empty field="parameters.introductionDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.introductionDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIntroDateError"/>
@@ -3630,7 +3587,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.introductionDate">
                         <field field="parameters.introductionDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -3638,7 +3595,7 @@
         <if-not-empty field="parameters.salesDiscontinuationDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.salesDiscontinuationDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDiscontDateError"/>
@@ -3646,7 +3603,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.salesDiscontinuationDate">
                         <field field="parameters.salesDiscontinuationDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -3716,12 +3673,7 @@
             </if-compare>
         </if-not-empty>
         
-        <if-compare-field field="bfWHInventory" operator="greater" to-field="bfTotalInventory" type="Long">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryCompareError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
-        </if-compare-field>
-        
-                <set field="productHeight" from-field="parameters.productHeight" />
+        <set field="productHeight" from-field="parameters.productHeight" />
         <if-not-empty field="productHeight">
              <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isFloat" ret-field="heightVaild">
                 <field field="productHeight"/>
@@ -3993,6 +3945,18 @@
         <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
         <clear-field field="manageProductAttributeCtx"/>
         
+        <if-not-empty field="parameters.pdpInStoreOnly">
+            <set field="pdpInStoreOnly" from-field="parameters.pdpInStoreOnly"/>
+        <else>
+            <set field="pdpInStoreOnly" value="N"/>
+        </else>
+        </if-not-empty>
+        <set-service-fields service-name="manageProductAttribute" to-map="manageProductAttributeCtx" map="parameters"/>
+        <set field="manageProductAttributeCtx.attrName" value="PDP_IN_STORE_ONLY"/>
+        <set field="manageProductAttributeCtx.attrValue" from-field="pdpInStoreOnly"/>
+        <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
+        <clear-field field="manageProductAttributeCtx"/>
+        
         <if-compare field="parameters.isVirtual" operator="equals" value="Y">
             <set-service-fields service-name="manageProductAttribute" to-map="manageProductAttributeCtx" map="parameters"/>
             <set field="manageProductAttributeCtx.attrName" value="PDP_SELECT_MULTI_VARIANT"/>
@@ -4035,26 +3999,43 @@
     </simple-method>
     
     <simple-method method-name="createTopProductCategory" short-description="Method to create top category and rollup">
-        <if-empty field="parameters.topNavBar">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTopNavBarError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+    
+        <if-empty field="parameters.topNavId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTopNavIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNavId" list="error_list"/>
         <else>
             <entity-and entity-name="ProductCategory" list="productCategoryList">
-                <field-map field-name="categoryName" from-field="parameters.topNavBar"/>
+                <field-map field-name="productCategoryId" from-field="parameters.topNavId"/>
             </entity-and>
             <if-not-empty field="productCategoryList">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidTopNavBarError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UniqueCatalogIdError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="topNavId" list="error_list"/>
+            <else>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+	                <field field="parameters.topNavId"/>
+	            </call-class-method>
+	            <if-compare field="isValidId" operator="equals" value="false">
+	                <set field="errorKey" from-field="parameters.topNavId"/>
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="topNavId" list="error_list"/>
+	            </if-compare>
+            </else>
             </if-not-empty>
         </else>
         </if-empty>
+    
+        <if-empty field="parameters.topNavBar">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTopNavBarError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNavBar" list="error_list"/>
+        </if-empty>
+        
         <if-empty field="parameters.fromDate">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankActiveFromDateError"/>
             <string-to-list string="${tempErrorMessage}" message-field="fromDate" list="error_list"/>
         <else>
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.fromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
@@ -4062,7 +4043,7 @@
                 <else>
                 	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="fromDateCheck">
                         <field field="parameters.fromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -4071,7 +4052,7 @@
         <if-not-empty field="parameters.thruDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.thruDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateDateError"/>
@@ -4079,7 +4060,7 @@
                 <else>
                 	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="thruDateCheck">
                         <field field="parameters.thruDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -4125,10 +4106,18 @@
             </if-compare>
         </else>
         </if-empty>
+        <if-not-empty field="parameters.description">
+            <call-object-method method-name="length" obj-field="parameters.description" ret-field="categoryDescriptionLength"/>
+	        <if-compare operator="greater" value="255" field="categoryDescriptionLength" type="Integer">
+	        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongCategoryDescriptionError"/>
+           		<string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
         <check-errors/>
         
         <set-service-fields service-name="createProductCategoryAndRollup" map="parameters" to-map="createProductCategoryCtx"/>
         <set field="createProductCategoryCtx.productCategoryTypeId" value="CATALOG_CATEGORY"/>
+        <set field="createProductCategoryCtx.productCategoryId" from-field="parameters.topNavId"/>
         <set field="createProductCategoryCtx.primaryParentCategoryId" from-field="parameters.catalogTopCategoryId"/>
         <set field="createProductCategoryCtx.categoryName" from-field="parameters.topNavBar"/>
         <call-service service-name="createProductCategoryAndRollup" in-map-name="createProductCategoryCtx"/>
@@ -4136,9 +4125,34 @@
     
     <simple-method method-name="createSubProductCategory" short-description="Method to create sub category and rollup">
         <if-empty field="parameters.topNavBarId">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankTopNavBarError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="topNavBarId" list="error_list"/>
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="TopNavNotExistsError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="topNav" list="error_list"/>
         </if-empty>
+        
+        <if-empty field="parameters.subNavId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSubNavIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="subNavId" list="error_list"/>
+        <else>
+            <entity-and entity-name="ProductCategory" list="productCategoryList">
+                <field-map field-name="productCategoryId" from-field="parameters.subNavId"/>
+            </entity-and>
+            <if-not-empty field="productCategoryList">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="UniqueCatalogIdError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="subNavId" list="error_list"/>
+            <else>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+	                <field field="parameters.subNavId"/>
+	            </call-class-method>
+	            <if-compare field="isValidId" operator="equals" value="false">
+	                <set field="errorKey" from-field="parameters.subNavId"/>
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+	                <string-to-list string="${tempErrorMessage}" message-field="subNavId" list="error_list"/>
+	            </if-compare>
+            </else>
+            </if-not-empty>
+        </else>
+        </if-empty>
+        
         <if-empty field="parameters.subNavBar">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankSubNavBarError"/>
             <string-to-list string="${tempErrorMessage}" message-field="subNavBar" list="error_list"/>
@@ -4149,7 +4163,7 @@
         <else>
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.fromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
@@ -4157,7 +4171,7 @@
                 <else>
                 	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="fromDateCheck">
                         <field field="parameters.fromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -4166,7 +4180,7 @@
         <if-not-empty field="parameters.thruDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.thruDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateDateError"/>
@@ -4174,7 +4188,7 @@
                 <else>
                 	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="thruDateCheck">
                         <field field="parameters.thruDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -4220,11 +4234,19 @@
         </if-compare>
         </else>
         </if-empty>
+        <if-not-empty field="parameters.description">
+            <call-object-method method-name="length" obj-field="parameters.description" ret-field="categoryDescriptionLength"/>
+	        <if-compare operator="greater" value="255" field="categoryDescriptionLength" type="Integer">
+	        	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LongCategoryDescriptionError"/>
+           		<string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
         <check-errors/>
         
         <set-service-fields service-name="createProductCategoryAndRollup" map="parameters" to-map="createProductCategoryCtx"/>
         <set field="createProductCategoryCtx.productCategoryTypeId" value="CATALOG_CATEGORY"/>
         <set field="createProductCategoryCtx.primaryParentCategoryId" from-field="parameters.topNavBarId"/>
+        <set field="createProductCategoryCtx.productCategoryId" from-field="parameters.subNavId"/>
         <set field="createProductCategoryCtx.categoryName" from-field="parameters.subNavBar"/>
         <call-service service-name="createProductCategoryAndRollup" in-map-name="createProductCategoryCtx"/>
     </simple-method>
@@ -4335,29 +4357,7 @@
         </iterate-map>
         <!-- Validating SequenceNum For UPDATING -->
         <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
-            <if-not-empty field="sequenceNumValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                    <string value="${sequenceNumValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                    <set field="invalidSeqNum" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidSeqNumRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-            </if-not-empty>
+            <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         </iterate-map>
         <if-compare field="descriptionBlank" value="true" operator="equals">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetValueBlankError"/>
@@ -4371,7 +4371,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetValueSequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
                 <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
             </then>
         </if>
@@ -4793,32 +4793,7 @@
 
     <simple-method method-name="updateProductFeatures" short-description="Update product feature">
         <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
-            <if-not-empty field="sequenceNumValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                    <string value="${sequenceNumValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                    <set field="invalidSeqNum" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidSeqNumRange" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
-                <else>
-                    <set field="invalidSeqNum" value="true"/>
-                </else>
-            </if-not-empty>
+            <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         </iterate-map>
         <if>
             <condition>
@@ -4828,7 +4803,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FeatureSequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
                 <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
             </then>
         </if>
@@ -4928,7 +4903,7 @@
         <if-not-empty field="parameters.introductionDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.introductionDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIntroDateError"/>
@@ -4936,7 +4911,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.introductionDate">
                         <field field="parameters.introductionDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -4944,7 +4919,7 @@
         <if-not-empty field="parameters.salesDiscontinuationDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.salesDiscontinuationDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDiscontDateError"/>
@@ -4952,7 +4927,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.salesDiscontinuationDate">
                         <field field="parameters.salesDiscontinuationDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -5021,11 +4996,6 @@
             </else>
             </if-compare>
         </if-not-empty>
-        
-        <if-compare-field field="bfWHInventory" operator="greater" to-field="bfTotalInventory" type="Long">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryCompareError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
-        </if-compare-field>
         
         <set field="productHeight" from-field="parameters.productHeight" />
         <if-not-empty field="productHeight">
@@ -5423,6 +5393,19 @@
         <set field="manageProductAttributeCtx.attrValue" from-field="bfWHInventory"/>
         <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
 
+        <if-not-empty field="parameters.pdpInStoreOnly">
+            <set field="pdpInStoreOnly" from-field="parameters.pdpInStoreOnly"/>
+        <else>
+            <set field="pdpInStoreOnly" value="N"/>
+        </else>
+        </if-not-empty>
+        <set-service-fields service-name="manageProductAttribute" to-map="manageProductAttributeCtx" map="parameters"/>
+        <set field="manageProductAttributeCtx.productId" from-field="parameters.productIdTo"/>
+        <set field="manageProductAttributeCtx.attrName" value="PDP_IN_STORE_ONLY"/>
+        <set field="manageProductAttributeCtx.attrValue" from-field="pdpInStoreOnly"/>
+        <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
+        <clear-field field="manageProductAttributeCtx"/>
+
         <set-service-fields service-name="manageProductAttribute" to-map="manageProductAttributeCtx" map="parameters"/>
         <set field="manageProductAttributeCtx.productId" from-field="parameters.productIdTo"/>
         <set field="manageProductAttributeCtx.attrName" value="CHECKOUT_GIFT_MESSAGE"/>
@@ -5548,7 +5531,7 @@
         <if-not-empty field="parameters.introductionDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.introductionDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductIntroDateError"/>
@@ -5556,7 +5539,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.introductionDate">
                         <field field="parameters.introductionDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -5565,7 +5548,7 @@
         <if-not-empty field="parameters.salesDiscontinuationDate">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.salesDiscontinuationDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidProductDiscontDateError"/>
@@ -5573,7 +5556,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="toTimestamp" ret-field="parameters.salesDiscontinuationDate">
                         <field field="parameters.salesDiscontinuationDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -5644,11 +5627,6 @@
             </else>
             </if-compare>
         </if-not-empty>
-        
-        <if-compare-field field="bfWHInventory" operator="greater" to-field="bfTotalInventory" type="Long">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryCompareError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="bfWHInventory" list="error_list"/>
-        </if-compare-field>
         
         <set field="productHeight" from-field="parameters.productHeight" />
         <if-not-empty field="productHeight">
@@ -5801,6 +5779,19 @@
 		        <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
 		        <clear-field field="manageProductAttributeCtx"/>
         
+                <if-not-empty field="parameters.pdpInStoreOnly">
+		            <set field="pdpInStoreOnly" from-field="parameters.pdpInStoreOnly"/>
+		        <else>
+		            <set field="pdpInStoreOnly" value="N"/>
+		        </else>
+		        </if-not-empty>
+                <set-service-fields service-name="manageProductAttribute" to-map="manageProductAttributeCtx" map="parameters"/>
+                <set field="manageProductAttributeCtx.productId" from-field="variantProductId"/>
+		        <set field="manageProductAttributeCtx.attrName" value="PDP_IN_STORE_ONLY"/>
+		        <set field="manageProductAttributeCtx.attrValue" from-field="pdpInStoreOnly"/>
+		        <call-service service-name="manageProductAttribute" in-map-name="manageProductAttributeCtx"/>
+		        <clear-field field="manageProductAttributeCtx"/>
+                
 		        <!-- For LONG_DESCRIPTION Product Content -->
 		        <set-service-fields service-name="updateProductContentText" map="parameters" to-map="updateProductLongText"/>
                 <set field="updateProductLongText.productId" from-field="variantProductId"/>

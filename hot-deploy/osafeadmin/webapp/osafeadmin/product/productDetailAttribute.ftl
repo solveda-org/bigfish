@@ -14,10 +14,10 @@
   </#if>
   
   <#if currentProduct.introductionDate?has_content>
-    <#assign introductionDate = (currentProduct.introductionDate)?string(preferredDateFormat)>
+    <#assign introductionDate = (currentProduct.introductionDate)?string(entryDateTimeFormat)>
   </#if>
   <#if currentProduct.salesDiscontinuationDate?has_content>
-    <#assign salesDiscontinuationDate = (currentProduct.salesDiscontinuationDate)?string(preferredDateFormat)>
+    <#assign salesDiscontinuationDate = (currentProduct.salesDiscontinuationDate)?string(entryDateTimeFormat)>
   </#if>
   
   <#if currentProduct.productHeight?has_content>
@@ -59,6 +59,43 @@
                </div>
            </div>
        </div>
+   <#else>
+       <div class="infoRow column">
+        <div class="infoEntry">
+          <div class="infoCaption">
+            <label>${uiLabelMap.ListPriceCaption}</label>
+          </div>
+          <div class="infoValue">
+            <input type="text" class="textEntry textAlignRight" name="variantListPrice" id="variantListPrice" value="<#if parameters.variantListPrice?has_content || variantListPrice?has_content>${parameters.variantListPrice!variantListPrice!}</#if>"/>
+          </div>
+          <div class="infoIcon">
+              <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "VariantListPriceInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${globalContext.currencySymbol!}${listPrice!}"), locale)/>
+              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+          </div>
+        </div>
+      </div>
+   </#if>
+   
+   <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.ProductHeightCaption}</label>
+            </div>
+            <div class="infoValue">
+                <#if (mode?has_content)>
+                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productHeight" name="productHeight" value="${parameters.productHeight!productHeight!""}"/>
+                </#if>
+            </div>
+            <div class="infoIcon">
+                <#if lengthUom?has_content>
+                    ${lengthUom.abbreviation!""}
+  					<input type="hidden" name="heightUomId" id="heightUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
+                </#if>
+            </div>
+        </div>
+    </div>
+    
+   <#if (mode?has_content && mode =='edit' && isVariant != 'Y') || (mode?has_content && mode =='add' && !virtualProduct?has_content)>
        <div class="infoRow column">
            <div class="infoEntry">
                <div class="infoCaption">
@@ -78,21 +115,6 @@
       <div class="infoRow column">
         <div class="infoEntry">
           <div class="infoCaption">
-            <label>${uiLabelMap.ListPriceCaption}</label>
-          </div>
-          <div class="infoValue">
-            <input type="text" class="textEntry textAlignRight" name="variantListPrice" id="variantListPrice" value="<#if parameters.variantListPrice?has_content || variantListPrice?has_content>${parameters.variantListPrice!variantListPrice!}</#if>"/>
-          </div>
-          <div class="infoIcon">
-              <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "VariantListPriceInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${globalContext.currencySymbol!}${listPrice!}"), locale)/>
-              <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
-          </div>
-        </div>
-      </div>
-      
-      <div class="infoRow column">
-        <div class="infoEntry">
-          <div class="infoCaption">
             <label>${uiLabelMap.SalePriceCaption}</label>
           </div>
           <div class="infoValue">
@@ -107,58 +129,6 @@
       </div>
     </#if>
     
-   <div class="infoRow column">
-        <div class="infoEntry">
-            <div class="infoCaption">
-                <label>${uiLabelMap.IntroducedDateCaption}</label>
-            </div>
-            <div class="infoValue">
-                <div class="entryInput from">
-                  <#if (mode?has_content && mode == "add")>
-                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!""}"/>
-                  <#elseif mode?has_content && mode == "edit">
-                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!introductionDate!""}"/>
-                  </#if>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="infoRow column">
-        <div class="infoEntry">
-            <div class="infoCaption">
-                <label>${uiLabelMap.DiscontinuedDateCaption}</label>
-            </div>
-            <div class="infoValue">
-                <div class="entryInput from">
-                  <#if (mode?has_content && mode == "add")>
-                    <input class="dateEntry datePicker" type="text" id="salesDiscontinuationDate" name="salesDiscontinuationDate" maxlength="40" value="${parameters.salesDiscontinuationDate!""}"/>
-                  <#elseif mode?has_content && mode == "edit">
-                    <input class="dateEntry datePicker" type="text" id="salesDiscontinuationDate" name="salesDiscontinuationDate" maxlength="40" value="${parameters.salesDiscontinuationDate!salesDiscontinuationDate!""}"/>
-                  </#if>
-                 </div>
-            </div>
-         </div>
-    </div>
-    
-    <div class="infoRow column">
-        <div class="infoEntry">
-            <div class="infoCaption">
-                <label>${uiLabelMap.ProductHeightCaption}</label>
-            </div>
-            <div class="infoValue">
-                <#if (mode?has_content)>
-                    <input class="textEntry textAlignRight" maxlength="10" type="text" id="productHeight" name="productHeight" value="${parameters.productHeight!productHeight!""}"/>
-                </#if>
-            </div>
-            <div class="infoIcon">
-                <#if lengthUom?has_content>
-                    ${lengthUom.abbreviation!""}
-  					<input type="hidden" name="heightUomId" id="heightUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
-                </#if>
-            </div>
-        </div>
-    </div>
-
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
@@ -181,6 +151,23 @@
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
+                <label>${uiLabelMap.DiscontinuedDateCaption}</label>
+            </div>
+            <div class="infoValue">
+                <div class="entryInput from">
+                  <#if (mode?has_content && mode == "add")>
+                    <input class="dateEntry datePicker" type="text" id="salesDiscontinuationDate" name="salesDiscontinuationDate" maxlength="40" value="${parameters.salesDiscontinuationDate!""}"/>
+                  <#elseif mode?has_content && mode == "edit">
+                    <input class="dateEntry datePicker" type="text" id="salesDiscontinuationDate" name="salesDiscontinuationDate" maxlength="40" value="${parameters.salesDiscontinuationDate!salesDiscontinuationDate!""}"/>
+                  </#if>
+                 </div>
+            </div>
+         </div>
+    </div>
+    
+    <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
                 <label>${uiLabelMap.ProductDepthCaption}</label>
             </div>
             <#if (mode?has_content)>
@@ -194,6 +181,23 @@
                    </#if>
                </div>
             </#if>
+        </div>
+    </div>    
+    
+   <div class="infoRow column">
+        <div class="infoEntry">
+            <div class="infoCaption">
+                <label>${uiLabelMap.IntroducedDateCaption}</label>
+            </div>
+            <div class="infoValue">
+                <div class="entryInput from">
+                  <#if (mode?has_content && mode == "add")>
+                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!""}"/>
+                  <#elseif mode?has_content && mode == "edit">
+                    <input class="dateEntry datePicker" type="text" id="introductionDate" name="introductionDate" maxlength="40" value="${parameters.introductionDate!introductionDate!""}"/>
+                  </#if>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -221,6 +225,7 @@
       <#if bfProductAllAttributes?has_content>
         <#assign bfTotalInventoryProductAttributes = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(bfProductAllAttributes,Static["org.ofbiz.base.util.UtilMisc"].toMap('attrName','BF_INVENTORY_TOT'))/> 
         <#assign bfWHInventoryProductAttributes = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(bfProductAllAttributes,Static["org.ofbiz.base.util.UtilMisc"].toMap('attrName','BF_INVENTORY_WHS'))/>
+        <#assign pdpInStoreOnlyProductAttributes = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(bfProductAllAttributes,Static["org.ofbiz.base.util.UtilMisc"].toMap('attrName','PDP_IN_STORE_ONLY'))/>
       </#if>
       <#if bfTotalInventoryProductAttributes?has_content>
         <#assign bfTotalInventoryProductAttribute = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(bfTotalInventoryProductAttributes) />
@@ -230,6 +235,11 @@
       <#if bfWHInventoryProductAttributes?has_content>
         <#assign bfWHInventoryProductAttribute = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(bfWHInventoryProductAttributes) />
         <#assign bfWHInventory = bfWHInventoryProductAttribute.attrValue!>
+      </#if>
+      
+      <#if pdpInStoreOnlyProductAttributes?has_content>
+        <#assign pdpInStoreOnlyProductAttribute = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(pdpInStoreOnlyProductAttributes) />
+        <#assign pdpInStoreOnly = pdpInStoreOnlyProductAttribute.attrValue!>
       </#if>
     </#if>
     <div class="infoRow column">
@@ -248,6 +258,27 @@
     </div>
     
     <div class="infoRow column">
+      <div class="infoEntry long">
+        <div class="infoCaption">
+          <label>${uiLabelMap.InStoreOnlyCaption}</label>
+        </div>
+        <div class="entry checkbox short">
+          <#if mode?has_content && mode == "add">
+              <#assign pdpInStoreOnly = parameters.pdpInStoreOnly!"" />
+              <input class="checkBoxEntry" type="checkbox" name="pdpInStoreOnly" value="Y" <#if pdpInStoreOnly?upper_case == "Y">checked="checked"</#if>/>
+          <#elseif mode?has_content && mode == "edit">
+              <#if errorMessageList?has_content>
+                  <#assign pdpInStoreOnly = parameters.pdpInStoreOnly!"" />
+              <#else>
+                  <#assign pdpInStoreOnly = pdpInStoreOnly!"" />
+              </#if>
+              <input class="checkBoxEntry" type="checkbox" name="pdpInStoreOnly" value="Y" <#if pdpInStoreOnly?upper_case == "Y">checked="checked"</#if>/>
+          </#if>
+        </div>
+      </div>
+    </div>
+    
+    <div class="infoRow Row">
        <div class="infoEntry">
            <div class="infoCaption">
                <label>${uiLabelMap.BFWareHouseInventoryCaption}</label>

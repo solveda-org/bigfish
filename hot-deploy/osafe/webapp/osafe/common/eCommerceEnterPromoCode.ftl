@@ -9,7 +9,7 @@
       <li>
        <div>
         <label>${uiLabelMap.EnterPromoCodeLabel}</label>
-        <input type="text" id="js_manualOfferCode" name="manualOfferCode" value="${requestParameters.manualOfferCode!""}" maxlength="20"/>
+        <input type="text" id="js_manualOfferCode" name="manualOfferCode" value="${requestParameters.manualOfferCode!""}" maxlength="20" onkeypress="javascript:setCheckoutFormAction(document.${formName!}, 'APC', '');"/>
         <a class="standardBtn action" href="javascript:addManualPromoCode();"><span>${uiLabelMap.ApplyOfferBtn}</span></a>
        </div>
       </li>

@@ -637,11 +637,47 @@
 	            </iterate>
             </if-compare>
         
+        <!-- Validate Website Login -->
+        <call-simple-method method-name="validateWebsiteLogin" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
+        
         <check-errors/>
 
         <!-- update person -->
         <set-service-fields service-name="updatePerson" to-map="updatePersonCtx" map="parameters"/>
         <call-service service-name="updatePerson" in-map-name="updatePersonCtx"/>
+        
+        <!-- create/Update party attribute -->
+        <call-simple-method method-name="createUpdatePartyAttributes"/>
+        
+        <call-simple-method method-name="createUpdateCustomPartyAttributes"/>
+        <property-to-field field="tempSuccessMessage" resource="OSafeAdminUiLabels" property="UpdatedSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="successMessageList"/>
+        <field-to-request field="successMessageList" request-name="osafeSuccessMessageList"/>
+        
+        <!-- create Website  login -->
+        <if-not-empty field="parameters.loginEmail">
+        	<property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
+	        <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
+	        <!-- if username and/or password should be lowercased, do that now -->
+	        <if-compare field="username_lowercase" operator="equals" value="true">
+	            <call-object-method obj-field="parameters.loginEmail" method-name="toLowerCase" ret-field="parameters.loginEmail"/>
+	        </if-compare>
+	        <if-compare field="password_lowercase" operator="equals" value="true">
+	            <call-object-method obj-field="parameters.password" method-name="toLowerCase" ret-field="parameters.password"/>
+	        </if-compare>
+	        
+	        <set-service-fields service-name="createUserLogin" to-map="createUserLoginContext" map="parameters"/>
+	        <set field="createUserLoginContext.userLoginId" from-field="parameters.loginEmail"/>
+	        <set field="createUserLoginContext.currentPassword" from-field="parameters.password"/>
+	        <set field="createUserLoginContext.currentPasswordVerify" from-field="parameters.passwordConfirm"/>
+	        <if-compare operator="equals" value="PARTY_DISABLED" field="parameters.statusId">
+	            <set field="createUserLoginContext.enabled" value="N"/>
+	        <else>
+	            <set field="createUserLoginContext.enabled" value="Y"/>
+	        </else>
+	        </if-compare>
+	        <call-service service-name="createUserLogin" in-map-name="createUserLoginContext"/>
+        </if-not-empty>
 
         <!-- update phone contact -->
         <!-- home phone -->
@@ -730,27 +766,20 @@
 
         <!-- create/Update user's email address -->
         <if-not-empty field="parameters.emailAddressContactMechId">
-            <set-service-fields service-name="updatePartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
-            <set field="emailAddressContext.contactMechId" from-field="parameters.emailAddressContactMechId"/>
             <if-not-empty field="parameters.emailAddress">
+	            <set-service-fields service-name="updatePartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
+	            <set field="emailAddressContext.contactMechId" from-field="parameters.emailAddressContactMechId"/>
 	            <call-service service-name="updatePartyEmailAddress" in-map-name="emailAddressContext"/>
             </if-not-empty>
         <else>
-            <set-service-fields service-name="createPartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
-            <set value="PRIMARY_EMAIL" field="emailAddressContext.contactMechPurposeTypeId"/>
             <if-not-empty field="parameters.emailAddress">
+	            <set-service-fields service-name="createPartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
+	            <set value="PRIMARY_EMAIL" field="emailAddressContext.contactMechPurposeTypeId"/>
                 <call-service service-name="createPartyEmailAddress" in-map-name="emailAddressContext"/>
             </if-not-empty>
         </else>
         </if-not-empty>
 
-        <!-- create/Update party attribute -->
-        <call-simple-method method-name="createUpdatePartyAttributes"/>
-        
-        <call-simple-method method-name="createUpdateCustomPartyAttributes"/>
-        <property-to-field field="tempSuccessMessage" resource="OSafeAdminUiLabels" property="UpdatedSuccess"/>
-        <string-to-list string="${tempSuccessMessage}"  list="successMessageList"/>
-        <field-to-request field="successMessageList" request-name="osafeSuccessMessageList"/>
     </simple-method>
 
     <simple-method method-name="createUpdateCustomPartyAttributes" short-description="Update Custom Party Attributes" login-required="false" >
@@ -1020,77 +1049,119 @@
 
     <simple-method method-name="createUpdateCustomerAddress" short-description="create/Update Customer Address">
         <!-- Check address fields on the Postal Address -->
-        <if-not-empty field="parameters.customer_fullName">
-            <set field="parameters.fullName" from-field="parameters.customer_fullName"/>
-         <else>
-             <if-not-empty field="parameters.customer_firstName">
-                 <set field="parameters.fullName" value="${parameters.customer_firstName}"/>
-             </if-not-empty>
-             <if-not-empty field="parameters.customer_lastName">
-                 <if-not-empty field="parameters.CUSTOMER_FIRST_NAME">
-                     <set field="parameters.fullName" value="${parameters.fullName} ${parameters.customer_lastName}"/>
-                 <else>
-                     <set field="parameters.fullName" value="${parameters.customer_lastName}"/>
-                 </else>
-                 </if-not-empty>
-             </if-not-empty>
-         </else>
-         </if-not-empty>
-
+        
+        <if-compare field="parameters.customer_fullName_mandatory" operator="equals" value="Y">
+        	<if-empty field="parameters.customer_firstName">
+        		<property-to-field field="field" resource="OSafeUiLabels" property="FirstNameCaption"/>
+        		<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGenericError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="customer_firstName" list="error_list"/>
+        	</if-empty>
+        	<if-empty field="parameters.customer_lastName">
+        		<property-to-field field="field" resource="OSafeUiLabels" property="LastNameCaption"/>
+        		<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGenericError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="customer_lastName" list="error_list"/>
+        	</if-empty>
+        </if-compare>
+        <if-not-empty field="parameters.customer_firstName">
+            <set field="parameters.customer_fullName" value="${parameters.customer_firstName}"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.customer_lastName">
+            <if-not-empty field="parameters.customer_firstName">
+                <set field="parameters.customer_fullName" value="${parameters.customer_firstName} ${parameters.customer_lastName}"/>
+            <else>
+                <set field="parameters.customer_fullName" value="${parameters.customer_lastName}"/>
+            </else>
+            </if-not-empty>
+        </if-not-empty>
+        
         <if-compare field="parameters.customer_attnName_mandatory" operator="equals" value="Y">
 	        <if-empty field="parameters.customer_attnName">
-	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressNickNameError"/>
+	            <property-to-field field="field" resource="OSafeUiLabels" property="AddressNickNameCaption"/>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGenericError"/>
 	            <string-to-list string="${tempErrorMessage}" message-field="customer_attnName" list="error_list"/>
 	        </if-empty>
         </if-compare>
-         
-        <if-compare field="parameters.customer_fullName_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.customer_fullName">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressFullNameError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="customer_fullName" list="error_list"/>
-            </if-empty>
-        </if-compare>
         
-        <if-compare field="parameters.customer_firstName_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.customer_firstName">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressFirstNameError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="customer_firstName" list="error_list"/>
-            </if-empty>
-        </if-compare>
+        <if-not-empty field="parameters.customer_attnName">
+            <set from-field="parameters.partyId" field="customerPostalAddressMap.partyId"/>
+            <find-by-and list="customerPostalAddressList" map="customerPostalAddressMap" entity-name="PartyAndPostalAddress"/>
+            <call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="filterByDate" ret-field="customerPostalAddressList">
+                <field field="customerPostalAddressList" type="List"/>
+            </call-class-method>
+            <!-- Check if ATTN_NAME already exists for this party -->
+            <if-not-empty field="customerPostalAddressList">
+           		<!-- Iterate all customers addresses, if we find a match, check if it is the same address we are updating before throwing error -->
+           		<iterate entry="customerPostalAddress" list="customerPostalAddressList">
+           			<if-not-empty field="customerPostalAddress.attnName">
+           				<set field="customerPostalAddressAttnName" from-field="customerPostalAddress.attnName"/>
+	           			<call-object-method method-name="toUpperCase" obj-field="customerPostalAddressAttnName" ret-field="customerPostalAddressAttnName"/>
+	           			<call-object-method method-name="toUpperCase" obj-field="parameters.customer_attnName" ret-field="parameterCustomerAttnName"/>
+	           			<if-compare-field operator="equals" field="customerPostalAddressAttnName" to-field="parameterCustomerAttnName">
+	           				<!-- if we are updating, then we will already have a contactMechId, else if we are adding we will not have a contactMechId -->
+	           				<if-not-empty field="parameters.contactMechId">
+	            				<if-compare-field operator="not-equals" field="customerPostalAddress.contactMechId" to-field="parameters.contactMechId">
+	            					<set from-field="parameters.customer_attnName" field="nickName"/>
+	            					<property-to-field field="field" resource="OSafeUiLabels" property="AddressNickNameCaption"/>
+	            					<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+						                <field field="field"/>
+						            </call-class-method>
+				            		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddressNickNameUniqueError"/>
+				            		<string-to-list string="${tempErrorMessage}" message-field="customer_attnName" list="error_list"/>
+	            				</if-compare-field>
+	            				<else>
+	            					<!-- We are adding a new Address, error if ATTN_NAME exists -->
+				            		<set from-field="parameters.customer_attnName" field="nickName"/>
+				            		<property-to-field field="field" resource="OSafeUiLabels" property="AddressNickNameCaption"/>
+				            		<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+						                <field field="field"/>
+						            </call-class-method>
+				            		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddressNickNameUniqueError"/>
+				            		<string-to-list string="${tempErrorMessage}" message-field="customer_attnName" list="error_list"/>
+	            				</else>
+	           				</if-not-empty>
+	           			</if-compare-field>
+           			</if-not-empty>
+           		</iterate>
+            </if-not-empty>
+        </if-not-empty>
         
-        <if-compare field="parameters.customer_lastName_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.customer_lastName">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddressLastNameError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="customer_lastName" list="error_list"/>
-            </if-empty>
-        </if-compare>
         <if-compare field="parameters.customer_address1_mandatory" operator="equals" value="Y">
 	        <if-empty field="parameters.customer_address1">
-	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress1Error"/>
+	            <property-to-field field="field" resource="OSafeUiLabels" property="AddressLine1Caption"/>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGenericError"/>
 	            <string-to-list string="${tempErrorMessage}" message-field="customer_address1" list="error_list"/>
 	        </if-empty>
         </if-compare>
-        <if-compare field="parameters.customer_address2_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.customer_address2">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress2Error"/>
-                <string-to-list string="${tempErrorMessage}" message-field="customer_address2" list="error_list"/>
-            </if-empty>
-        </if-compare>
-        <if-compare field="parameters.customer_address3_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.customer_address3">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankAddress3Error"/>
-                <string-to-list string="${tempErrorMessage}" message-field="customer_address3" list="error_list"/>
-            </if-empty>
-        </if-compare>
+
         <if-compare field="parameters.customer_city_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.customer_city">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCityError"/>
+                <property-to-field field="field" resource="OSafeUiLabels" property="TownOrCityCaption"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGenericError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="customer_city" list="error_list"/>
             </if-empty>
         </if-compare>
         <if-compare field="parameters.customer_postalCode_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.customer_postalCode">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPostalCodeError"/>
+                <property-to-field field="field" resource="OSafeUiLabels" property="PostalCodeOrZipCaption"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGenericError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="customer_postalCode" list="error_list"/>
             </if-empty>
         </if-compare>
@@ -1101,6 +1172,10 @@
                 </call-class-method>
             </if-compare>
             <if-compare field="isZipCode" operator="equals"  value="false">
+            	<property-to-field field="field" resource="OSafeUiLabels" property="PostalCodeOrZipCaption"/>
+            	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidPostalCodeError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="customer_postalCode" list="error_list"/>
             </if-compare>
@@ -1113,7 +1188,11 @@
         <if-compare field="parameters.customer_state_mandatory" operator="equals" value="Y">
             <if-not-empty field="statesList">
 	            <if-empty field="parameters.customer_state">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStateError"/>
+	                <property-to-field field="field" resource="OSafeUiLabels" property="StateOrProvinceCaption"/>
+	                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+		                <field field="field"/>
+		            </call-class-method>
+        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGenericError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="customer_state" list="error_list"/>
 	            </if-empty>
             </if-not-empty>
@@ -1138,6 +1217,13 @@
                     </if-empty>
                 </else>
         </if>
+        
+        <set field="partyProfileDefaultCtx.partyId" from-field="parameters.partyId"/>
+        <set field="partyProfileDefaultCtx.productStoreId" from-field="parameters.productStoreId"/>
+        <set field="partyProfileDefaultCtx.defaultShipAddr" from-field="parameters.contactMechId"/>
+        <find-by-and entity-name="PartyProfileDefault" list="partyProfileDefaultList" map="partyProfileDefaultCtx"/>
+            
+            
         <set-service-fields service-name="createUpdatePartyPostalAddress" to-map="createUpdatePartyPostalAddressctx" map="parameters"/>
         <set field="createUpdatePartyPostalAddressctx.countryGeoId" from-field="parameters.customer_country"/>
         <set field="createUpdatePartyPostalAddressctx.toName" from-field="parameters.customer_fullName"/>
@@ -1151,6 +1237,18 @@
         <call-service service-name="createUpdatePartyPostalAddress" in-map-name="createUpdatePartyPostalAddressctx">
                 <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
         </call-service>
+        
+        <if-not-empty field="partyProfileDefaultList">
+           	<set field="newContactMechId" from-field="addressPurposeContext.contactMechId"/>
+	        <if-not-empty field="newContactMechId">
+	           <set-service-fields service-name="setPartyProfileDefaults" map="parameters" to-map="partyProfileDefaultsCtx"/>
+	           <set field="partyProfileDefaultsCtx.defaultShipAddr" from-field="newContactMechId"/>
+	           <set field="partyProfileDefaultsCtx.partyId" from-field="parameters.partyId"/>
+	           <set field="partyProfileDefaultsCtx.productStoreId" from-field="parameters.productStoreId"/>
+	           <call-service service-name="setPartyProfileDefaults" in-map-name="partyProfileDefaultsCtx"/>
+	        </if-not-empty>
+       	</if-not-empty>
+        
         <if-empty field="parameters.contactMechId">
 	        <!-- create the shipping location -->
 	        <set field="addressPurposeContext.contactMechPurposeTypeId" value="SHIPPING_LOCATION"/>
@@ -1472,78 +1570,76 @@
         </if-compare>
                     
         <!-- Check address fields on the Billing Address -->
-         <if-not-empty field="parameters.billing_fullName">
-            <set field="parameters.fullName" from-field="parameters.billing_fullName"/>
-         <else>
-             <if-not-empty field="parameters.billing_firstName">
-                 <set field="parameters.fullName" value="${parameters.billing_firstName}"/>
-             </if-not-empty>
-             <if-not-empty field="parameters.billing_lastName">
-                 <if-not-empty field="parameters.billing_FIRST_NAME">
-                     <set field="parameters.fullName" value="${parameters.fullName} ${parameters.billing_lastName}"/>
-                 <else>
-                     <set field="parameters.fullName" value="${parameters.billing_lastName}"/>
-                 </else>
-                 </if-not-empty>
-             </if-not-empty>
-         </else>
-         </if-not-empty>
+         <if-compare field="parameters.billing_fullName_mandatory" operator="equals" value="Y">
+        	<if-empty field="parameters.billing_firstName">
+        		<property-to-field field="field" resource="OSafeUiLabels" property="FirstNameCaption"/>
+        		<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressGenericError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="billing_firstName" list="error_list"/>
+        	</if-empty>
+        	<if-empty field="parameters.billing_lastName">
+        		<property-to-field field="field" resource="OSafeUiLabels" property="LastNameCaption"/>
+        		<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressGenericError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="billing_lastName" list="error_list"/>
+        	</if-empty>
+        </if-compare>
+        <if-not-empty field="parameters.billing_firstName">
+            <set field="parameters.billing_fullName" value="${parameters.billing_firstName}"/>
+        </if-not-empty>
+        <if-not-empty field="parameters.billing_lastName">
+            <if-not-empty field="parameters.billing_firstName">
+                <set field="parameters.billing_fullName" value="${parameters.billing_firstName} ${parameters.billing_lastName}"/>
+            <else>
+                <set field="parameters.billing_fullName" value="${parameters.billing_lastName}"/>
+            </else>
+            </if-not-empty>
+        </if-not-empty>
 
         <if-compare field="parameters.billing_attnName_mandatory" operator="equals" value="Y">
 	        <if-empty field="parameters.billing_attnName">
-	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressNickNameError"/>
+	            <property-to-field field="field" resource="OSafeUiLabels" property="AddressNickNameCaption"/>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressGenericError"/>
 	            <string-to-list string="${tempErrorMessage}" message-field="billing_attnName" list="error_list"/>
 	        </if-empty>
-        </if-compare>
-         
-        <if-compare field="parameters.billing_fullName_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.billing_fullName">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressFullNameError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="billing_fullName" list="error_list"/>
-            </if-empty>
-        </if-compare>
-        
-        <if-compare field="parameters.billing_firstName_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.billing_firstName">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressFirstNameError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="billing_firstName" list="error_list"/>
-            </if-empty>
-        </if-compare>
-        
-        <if-compare field="parameters.billing_lastName_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.billing_lastName">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressLastNameError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="billing_lastName" list="error_list"/>
-            </if-empty>
         </if-compare>
 
         <if-compare field="parameters.billing_address1_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.billing_address1">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddress1Error"/>
+                <property-to-field field="field" resource="OSafeUiLabels" property="AddressLine1Caption"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressGenericError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="billing_address1" list="error_list"/>
             </if-empty>
         </if-compare>
-        <if-compare field="parameters.billing_address2_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.billing_address2">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddress2Error"/>
-                <string-to-list string="${tempErrorMessage}" message-field="billing_address2" list="error_list"/>
-            </if-empty>
-        </if-compare>
-        <if-compare field="parameters.billing_address3_mandatory" operator="equals" value="Y">
-            <if-empty field="parameters.billing_address3">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddress3Error"/>
-                <string-to-list string="${tempErrorMessage}" message-field="billing_address3" list="error_list"/>
-            </if-empty>
-        </if-compare>
+
         <if-compare field="parameters.billing_city_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.billing_city">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingCityError"/>
+                <property-to-field field="field" resource="OSafeUiLabels" property="TownOrCityCaption"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressGenericError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="billing_city" list="error_list"/>
             </if-empty>
         </if-compare>
+        
         <if-compare field="parameters.billing_postalCode_mandatory" operator="equals" value="Y">
             <if-empty field="parameters.billing_postalCode">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingPostalCodeError"/>
+                <property-to-field field="field" resource="OSafeUiLabels" property="PostalCodeOrZipCaption"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressGenericError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="billing_postalCode" list="error_list"/>
             </if-empty>
         </if-compare>
@@ -1554,10 +1650,15 @@
                 </call-class-method>
             </if-compare>
             <if-compare field="isZipCode" operator="equals"  value="false">
+            	<property-to-field field="field" resource="OSafeUiLabels" property="PostalCodeOrZipCaption"/>
+            	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidBillingPostalCodeError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="billing_postalCode" list="error_list"/>
             </if-compare>
         </if-not-empty>
+        
         <!-- if a country has States than state is mandatory. -->
          <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
              <field field="delegator" type="org.ofbiz.entity.Delegator"/>
@@ -1566,85 +1667,86 @@
         <if-compare field="parameters.billing_state_mandatory" operator="equals" value="Y">
             <if-not-empty field="statesList">
                 <if-empty field="parameters.billing_state">
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingStateError"/>
+                    <property-to-field field="field" resource="OSafeUiLabels" property="StateOrProvinceCaption"/>
+                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+	                <field field="field"/>
+	            </call-class-method>
+        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankBillingAddressGenericError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="billing_state" list="error_list"/>
                 </if-empty>
             </if-not-empty>
         </if-compare>
 
         <!-- Check address fields on the Shipping Address -->
-         <if-not-empty field="parameters.shipping_fullName">
-            <set field="parameters.fullName" from-field="parameters.shipping_fullName"/>
-         <else>
-             <if-not-empty field="parameters.shipping_firstName">
-                 <set field="parameters.fullName" value="${parameters.shipping_firstName}"/>
-             </if-not-empty>
-             <if-not-empty field="parameters.shipping_lastName">
-                 <if-not-empty field="parameters.shipping_FIRST_NAME">
-                     <set field="parameters.fullName" value="${parameters.fullName} ${parameters.shipping_lastName}"/>
-                 <else>
-                     <set field="parameters.fullName" value="${parameters.shipping_lastName}"/>
-                 </else>
-                 </if-not-empty>
-             </if-not-empty>
-         </else>
-         </if-not-empty>
         <if-empty field="parameters.isSameAsBilling">
-	        <if-compare field="parameters.shipping_fullName_mandatory" operator="equals" value="Y">
+        	<if-not-empty field="parameters.shipping_firstName">
+	            <set field="parameters.shipping_fullName" value="${parameters.shipping_firstName}"/>
+	        </if-not-empty>
+	        <if-not-empty field="parameters.shipping_lastName">
+	            <if-not-empty field="parameters.shipping_firstName">
+	                <set field="parameters.shipping_fullName" value="${parameters.shipping_firstName} ${parameters.shipping_lastName}"/>
+	            <else>
+	                <set field="parameters.shipping_fullName" value="${parameters.shipping_lastName}"/>
+	            </else>
+	            </if-not-empty>
+	        </if-not-empty>
+	        
+	        <if-compare field="parameters.shipping_attnName_mandatory" operator="equals" value="Y">
 	            <if-empty field="parameters.shipping_attnName">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressNickNameError"/>
+	                <property-to-field field="field" resource="OSafeUiLabels" property="AddressNickNameCaption"/>
+	                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+		                <field field="field"/>
+		            </call-class-method>
+        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressGenericError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="shipping_attnName" list="error_list"/>
 	            </if-empty>
 	         </if-compare>
-	         
-	        <if-compare field="parameters.shipping_fullName_mandatory" operator="equals" value="Y">
-	            <if-empty field="parameters.shipping_fullName">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressFullNameError"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="shipping_fullName" list="error_list"/>
-	            </if-empty>
-	        </if-compare>
-	        
-	        <if-compare field="parameters.shipping_firstName_mandatory" operator="equals" value="Y">
-	            <if-empty field="parameters.shipping_firstName">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressFirstNameError"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="shipping_firstName" list="error_list"/>
-	            </if-empty>
-	        </if-compare>
-	        
-	        <if-compare field="parameters.shipping_lastName_mandatory" operator="equals" value="Y">
-	            <if-empty field="parameters.shipping_lastName">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressLastNameError"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="shipping_lastName" list="error_list"/>
-	            </if-empty>
-	        </if-compare>
+	         <!-- Check that Billing and Shipping Nicknames are different -->
+	         <if-not-empty field="parameters.billing_attnName">
+	         	<if-not-empty field="parameters.shipping_attnName">
+	         		<call-object-method method-name="toUpperCase" obj-field="parameters.billing_attnName" ret-field="billingPostalAddressAttnName"/>
+	           		<call-object-method method-name="toUpperCase" obj-field="parameters.shipping_attnName" ret-field="shippingPostalAddressAttnName"/>
+	           		<if-compare-field operator="equals" field="billingPostalAddressAttnName" to-field="shippingPostalAddressAttnName">
+				        <set from-field="parameters.shipping_attnName" field="nickName"/>
+				         <property-to-field field="field" resource="OSafeUiLabels" property="AddressNickNameCaption"/>
+				         <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+			                <field field="field"/>
+			            </call-class-method>
+				        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddressNickNameUniqueError"/>
+				        <string-to-list string="${tempErrorMessage}" message-field="shipping_attnName" list="error_list"/>
+	           		</if-compare-field>
+	         	</if-not-empty>
+	         </if-not-empty>
 
 	        <if-compare field="parameters.shipping_address1_mandatory" operator="equals" value="Y">
 	            <if-empty field="parameters.shipping_address1">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddress1Error"/>
+	                <property-to-field field="field" resource="OSafeUiLabels" property="AddressLine1Caption"/>
+	                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+		                <field field="field"/>
+		            </call-class-method>
+        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressGenericError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="shipping_address1" list="error_list"/>
 	            </if-empty>
 	        </if-compare>
-	        <if-compare field="parameters.shipping_address2_mandatory" operator="equals" value="Y">
-	            <if-empty field="parameters.shipping_address2">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddress2Error"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="shipping_address2" list="error_list"/>
-	            </if-empty>
-	        </if-compare>
-	        <if-compare field="parameters.shipping_address3_mandatory" operator="equals" value="Y">
-	            <if-empty field="parameters.shipping_address3">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddress3Error"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="shipping_address3" list="error_list"/>
-	            </if-empty>
-	        </if-compare>
+	        
 	        <if-compare field="parameters.shipping_city_mandatory" operator="equals" value="Y">
 	            <if-empty field="parameters.shipping_city">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingCityError"/>
+	                <property-to-field field="field" resource="OSafeUiLabels" property="TownOrCityCaption"/>
+	                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+		                <field field="field"/>
+		            </call-class-method>
+        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressGenericError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="shipping_city" list="error_list"/>
 	            </if-empty>
 	        </if-compare>
+	        
 	        <if-compare field="parameters.shipping_postalCode_mandatory" operator="equals" value="Y">
 	            <if-empty field="parameters.shipping_postalCode">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingPostalCodeError"/>
+	                <property-to-field field="field" resource="OSafeUiLabels" property="PostalCodeOrZipCaption"/>
+	                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+		                <field field="field"/>
+		            </call-class-method>
+        			<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressGenericError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="shipping_postalCode" list="error_list"/>
 	            </if-empty>
 	        </if-compare>
@@ -1655,10 +1757,15 @@
 	                </call-class-method>
 	            </if-compare>
 	            <if-compare field="isZipCode" operator="equals"  value="false">
+		            <property-to-field field="field" resource="OSafeUiLabels" property="PostalCodeOrZipCaption"/>
+		            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+		                <field field="field"/>
+		            </call-class-method>
 	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidShippingPostalCodeError"/>
 	                <string-to-list string="${tempErrorMessage}" message-field="shipping_postalCode" list="error_list"/>
 	            </if-compare>
 	        </if-not-empty>
+	        
 	        <!-- if a country has States than state is mandatory. -->
 	         <call-class-method class-name="org.ofbiz.common.CommonWorkers"  method-name="getAssociatedStateList" ret-field="statesList">
 	             <field field="delegator" type="org.ofbiz.entity.Delegator"/>
@@ -1667,90 +1774,20 @@
 	        <if-compare field="parameters.shipping_state_mandatory" operator="equals" value="Y">
 	            <if-not-empty field="statesList">
 	                <if-empty field="parameters.shipping_state">
-	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingStateError"/>
+	                    <property-to-field field="field" resource="OSafeUiLabels" property="StateOrProvinceCaption"/>
+	                    <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="stripTrailingColon" ret-field="field">
+			                <field field="field"/>
+			            </call-class-method>
+        				<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShippingAddressGenericError"/>
 	                    <string-to-list string="${tempErrorMessage}" message-field="shipping_state" list="error_list"/>
 	                </if-empty>
 	            </if-not-empty>
 	        </if-compare>
+	        
         </if-empty>
-
-        <!-- validate the website login -->
-        <if-empty field="parameters.loginEmail">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailAddressMissingError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
-        <else>
-            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="isEmail">
-                <field field="parameters.loginEmail"/>
-            </call-class-method>
-            <if-compare field="isEmail" operator="equals" value="false">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailAddressNotFormattedCorrectlyError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
-            <else>
-                <call-object-method obj-field="parameters.loginEmail" method-name="toLowerCase" ret-field="loginEmailLowerCase"/>
-                <entity-one entity-name="UserLogin" value-field="existingUserLogin">
-                    <field-map field-name="userLoginId" from-field="loginEmailLowerCase"/>
-                </entity-one>
-                <if-not-empty field="existingUserLogin">
-			        <set field="partyMap.partyId" from-field="existingUserLogin.partyId" />
-			        <find-by-primary-key entity-name="Party" map="partyMap" value-field="existingUserLoginParty"/>
-			        <call-class-method class-name="org.ofbiz.party.party.PartyHelper" method-name="getPartyName" ret-field="userLoginName">
-			            <field field="existingUserLoginParty" type="org.ofbiz.entity.GenericValue"/>
-			        </call-class-method>
-	                <set field="argListNames[]" from-field="parameters.loginEmail"/>
-	                <set field="argListNames[]" from-field="existingUserLogin.partyId"/>
-                    <set field="argListNames[]" from-field="userLoginName"/>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailAlreadyExistError" arg-list-name="argListNames"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
-                <else>
-                    <if-compare-field operator="not-equals" field="parameters.loginEmail" to-field="parameters.loginEmailConfirm">
-		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginEmailMatchError"/>
-		                <string-to-list string="${tempErrorMessage}" message-field="loginEmail" list="error_list"/>
-                    </if-compare-field>
-                </else>
-                </if-not-empty>
-            </else>
-            </if-compare>
-        </else>
-        </if-empty>
-
-        <!-- validate the website login password-->
-        <if-empty field="parameters.password">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginPasswordMissingError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="password" list="error_list"/>
-        <else>
-	        <!-- Check Password Strength -->
-	        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="pwdLenStr">
-	            <field field="parameters.productStoreId" type="String"/>
-	            <string value="REG_PWD_MIN_CHAR"/>
-	        </call-class-method>
-	        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="minDigitStr">
-	            <field field="parameters.productStoreId" type="String"/>
-	            <string value="REG_PWD_MIN_NUM"/>
-	        </call-class-method>
-	        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="getProductStoreParm" ret-field="minUpCaseStr">
-	            <field field="parameters.productStoreId" type="String"/>
-	            <string value="REG_PWD_MIN_UPPER"/>
-	        </call-class-method>
-	        <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="passPattern" ret-field="isValidPass">
-	            <field field="parameters.password" type="String"/>
-                <field field="pwdLenStr" type="String"/>
-                <field field="minDigitStr" type="String"/>
-                <field field="minUpCaseStr" type="String"/>
-	        </call-class-method>
-	        <if-compare field="isValidPass" operator="not-equals" value="success">
-	             <set field="tempErrorMessage" from-field="isValidPass"/>
-	             <string-to-list string="${tempErrorMessage}" message-field="password" list="error_list"/>
-	        <else>
-                <if-compare-field operator="not-equals" field="parameters.password" to-field="parameters.passwordConfirm">
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="LoginPasswordMatchError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="password" list="error_list"/>
-                </if-compare-field>
-	        </else>
-	        </if-compare>
-        </else>
-        </if-empty>
-
-
+        
+        <!-- Validate Website Login -->
+        <call-simple-method method-name="validateWebsiteLogin" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         
         <!-- Validate Custom Party Attributes -->
             <property-to-field resource="OsafeProperties" property="ecommerceUiSequenceXmlFile" field="XmlFileStr"/>
@@ -2114,19 +2151,6 @@
         <set-nonpk-fields map="parameters" value-field="createPersonEntity"/>
         <create-value value-field="createPersonEntity"/>
 
-        <!-- create user login -->
-        <set-service-fields service-name="createUserLogin" to-map="createUserLoginContext" map="parameters"/>
-        <set field="createUserLoginContext.userLoginId" from-field="parameters.loginEmail"/>
-        <set field="createUserLoginContext.currentPassword" from-field="parameters.password"/>
-        <set field="createUserLoginContext.currentPasswordVerify" from-field="parameters.passwordConfirm"/>
-        <if-compare operator="equals" value="PARTY_DISABLED" field="parameters.statusId">
-            <set field="createUserLoginContext.enabled" value="N"/>
-        <else>
-            <set field="createUserLoginContext.enabled" value="Y"/>
-        </else>
-        </if-compare>
-        <call-service service-name="createUserLogin" in-map-name="createUserLoginContext"/>
-
         <!-- create party role -->
         <set-service-fields service-name="createPartyRole" to-map="partyRoleContext" map="parameters"/>
         <call-service service-name="createPartyRole" in-map-name="partyRoleContext"/>
@@ -2138,12 +2162,42 @@
         <set field="productStoreRole.productStoreId" from-field="parameters.productStoreId"/>
         <now-timestamp field="productStoreRole.fromDate"/>  
         <create-value value-field="productStoreRole"/>
-
-        <!-- login email - address -->
-        <set-service-fields service-name="createPartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
-        <set value="PRIMARY_EMAIL" field="emailAddressContext.contactMechPurposeTypeId"/>
-        <set from-field="parameters.loginEmail" field="emailAddressContext.emailAddress"/>
+        
+        <!-- create Website  login -->
         <if-not-empty field="parameters.loginEmail">
+        	<property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
+	        <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
+	        <!-- if username and/or password should be lowercased, do that now -->
+	        <if-compare field="username_lowercase" operator="equals" value="true">
+	            <call-object-method obj-field="parameters.loginEmail" method-name="toLowerCase" ret-field="parameters.loginEmail"/>
+	        </if-compare>
+	        <if-compare field="password_lowercase" operator="equals" value="true">
+	            <call-object-method obj-field="parameters.password" method-name="toLowerCase" ret-field="parameters.password"/>
+	        </if-compare>
+	        
+	        <set-service-fields service-name="createUserLogin" to-map="createUserLoginContext" map="parameters"/>
+	        <set field="createUserLoginContext.userLoginId" from-field="parameters.loginEmail"/>
+	        <set field="createUserLoginContext.currentPassword" from-field="parameters.password"/>
+	        <set field="createUserLoginContext.currentPasswordVerify" from-field="parameters.passwordConfirm"/>
+	        <if-compare operator="equals" value="PARTY_DISABLED" field="parameters.statusId">
+	            <set field="createUserLoginContext.enabled" value="N"/>
+	        <else>
+	            <set field="createUserLoginContext.enabled" value="Y"/>
+	        </else>
+	        </if-compare>
+	        <call-service service-name="createUserLogin" in-map-name="createUserLoginContext"/>
+
+            <!-- create email address from login email  (This code has to come after party role is created)-->
+	        <set-service-fields service-name="createPartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
+	        <set value="PRIMARY_EMAIL" field="emailAddressContext.contactMechPurposeTypeId"/>
+	        <set field="emailAddressContext.emailAddress" from-field="parameters.loginEmail"/>
+            <call-service service-name="createPartyEmailAddress" in-map-name="emailAddressContext"/>
+        </if-not-empty>
+        
+        <!-- email - address -->
+        <if-not-empty field="parameters.emailAddress">
+	        <set-service-fields service-name="createPartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
+	        <set value="PRIMARY_EMAIL" field="emailAddressContext.contactMechPurposeTypeId"/>
             <call-service service-name="createPartyEmailAddress" in-map-name="emailAddressContext"/>
         </if-not-empty>
 
@@ -2193,13 +2247,6 @@
             <call-service service-name="createPartyContactMechPurpose" in-map-name="workPhonePurposeContext"/>
         </if-not-empty>
 
-        <!-- email - address -->
-        <set-service-fields service-name="createPartyEmailAddress" to-map="emailAddressContext" map="parameters"/>
-        <set value="PRIMARY_EMAIL" field="emailAddressContext.contactMechPurposeTypeId"/>
-        <if-not-empty field="parameters.emailAddress">
-            <call-service service-name="createPartyEmailAddress" in-map-name="emailAddressContext"/>
-        </if-not-empty>
-
         <!-- CREATE BILLING ADDRESS -->
         <!--Set the Value for City and Postal Code if they are empty as they are required fields by the service -->
         <if>
@@ -2237,42 +2284,42 @@
         <set field="addressPurposeContext.contactMechPurposeTypeId" value="BILLING_LOCATION"/>
         <set field="addressPurposeContext.partyId" from-field="parameters.partyId" />
         <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
-
-        <!-- CREATE SHIPPING ADDRESS -->
-        <!--Set the Value for City and Postal Code if they are empty as they are required fields by the service -->
-        <if>
-                <condition>
-                    <or>
-                        <if-compare value="CAN" operator="equals" field="parameters.shipping_country"></if-compare>
-                        <if-compare value="USA" operator="equals" field="parameters.shipping_country"></if-compare>
-                    </or>
-                </condition>
-                <then></then>
-                <else>
-                    <if-empty field="parameters.shipping_city">
-                        <set field="parameters.shipping_city" value="_NA_"/>
-                    </if-empty>
-                    <if-empty field="parameters.shipping_postalCode">
-                        <set field="parameters.shipping_postalCode" value="_NA_"/>
-                    </if-empty>
-                </else>
-        </if>
-        <set-service-fields service-name="createUpdatePartyPostalAddress" to-map="createUpdatePartyPostalAddressctx" map="parameters"/>
-        <set field="createUpdatePartyPostalAddressctx.toName" from-field="parameters.shipping_fullName"/>
-        <set field="createUpdatePartyPostalAddressctx.countryGeoId" from-field="parameters.shipping_country"/>
+        
         <if-empty field="parameters.isSameAsBilling">
-            <set field="createUpdatePartyPostalAddressctx.attnName" from-field="parameters.shipping_attnName"/>
-        <else>
-            <property-to-field field="defaultShippingAttnName" resource="OSafeAdminUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
-            <set field="createUpdatePartyPostalAddressctx.attnName" from-field="defaultShippingAttnName"/>
-        </else>
+	        <!-- CREATE SHIPPING ADDRESS -->
+	        <!--Set the Value for City and Postal Code if they are empty as they are required fields by the service -->
+	        <if>
+	                <condition>
+	                    <or>
+	                        <if-compare value="CAN" operator="equals" field="parameters.shipping_country"></if-compare>
+	                        <if-compare value="USA" operator="equals" field="parameters.shipping_country"></if-compare>
+	                    </or>
+	                </condition>
+	                <then></then>
+	                <else>
+	                    <if-empty field="parameters.shipping_city">
+	                        <set field="parameters.shipping_city" value="_NA_"/>
+	                    </if-empty>
+	                    <if-empty field="parameters.shipping_postalCode">
+	                        <set field="parameters.shipping_postalCode" value="_NA_"/>
+	                    </if-empty>
+	                </else>
+	        </if>
+	        <set-service-fields service-name="createUpdatePartyPostalAddress" to-map="createUpdatePartyPostalAddressctx" map="parameters"/>
+	        <set field="createUpdatePartyPostalAddressctx.toName" from-field="parameters.shipping_fullName"/>
+	        <set field="createUpdatePartyPostalAddressctx.countryGeoId" from-field="parameters.shipping_country"/>
+	        <set field="createUpdatePartyPostalAddressctx.attnName" from-field="parameters.shipping_attnName"/>
+	        <set field="createUpdatePartyPostalAddressctx.address1" from-field="parameters.shipping_address1"/>
+	        <set field="createUpdatePartyPostalAddressctx.address2" from-field="parameters.shipping_address2"/>
+	        <set field="createUpdatePartyPostalAddressctx.address3" from-field="parameters.shipping_address3"/>
+	        <set field="createUpdatePartyPostalAddressctx.city" from-field="parameters.shipping_city"/>
+	        <set field="createUpdatePartyPostalAddressctx.stateProvinceGeoId" from-field="parameters.shipping_state"/>
+	        <set field="createUpdatePartyPostalAddressctx.postalCode" from-field="parameters.shipping_postalCode"/>
+	        <else>
+	            <property-to-field field="defaultShippingAttnName" resource="OSafeAdminUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+	            <set field="createUpdatePartyPostalAddressctx.attnName" from-field="defaultShippingAttnName"/>
+	        </else>
         </if-empty>
-        <set field="createUpdatePartyPostalAddressctx.address1" from-field="parameters.shipping_address1"/>
-        <set field="createUpdatePartyPostalAddressctx.address2" from-field="parameters.shipping_address2"/>
-        <set field="createUpdatePartyPostalAddressctx.address3" from-field="parameters.shipping_address3"/>
-        <set field="createUpdatePartyPostalAddressctx.city" from-field="parameters.shipping_city"/>
-        <set field="createUpdatePartyPostalAddressctx.stateProvinceGeoId" from-field="parameters.shipping_state"/>
-        <set field="createUpdatePartyPostalAddressctx.postalCode" from-field="parameters.shipping_postalCode"/>
         <call-service service-name="createUpdatePartyPostalAddress" in-map-name="createUpdatePartyPostalAddressctx">
                 <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
         </call-service>

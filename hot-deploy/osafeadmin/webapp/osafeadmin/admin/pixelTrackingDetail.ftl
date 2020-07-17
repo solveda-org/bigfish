@@ -3,6 +3,7 @@
     <#if pixelTrack?has_content>
         <#assign pixelId = pixelTrack.pixelId!"" />
         <#assign pixelScope = pixelTrack.pixelScope!"" />
+        <#assign pixelUrl = pixelTrack.pixelUrl!"" />
         <#assign description = pixelTrack.description!"" />
         <#assign pixelPagePosition = pixelTrack.pixelPagePosition!"" />
         <#assign pixelSequenceNum = pixelTrack.pixelSequenceNum!"" />
@@ -20,6 +21,7 @@
     <#assign statusItem = delegator.findOne("StatusItem", {"statusId" : statusId}, false) />
     <#assign statusDesc = statusItem.description!statusItem.get("description",locale)!statusItem.statusId /> 
        <input type="hidden" name="statusId" id="statusId" value="${statusId!""}" />
+       <input type="hidden" name="dataResourceTypeId" value="ELECTRONIC_TEXT" />
        <#if !(createdDate?has_content)>
            <#assign createdDate = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />
        </#if>
@@ -31,7 +33,7 @@
            <#-- ===== Content ID ==== -->
            <div class="infoValue">
              <#if mode?has_content && mode == "add">
-               <input name="pixelId" type="text" id="pixelId" value="${parameters.pixelId?default("")}"/>
+               <input name="pixelId" type="text" id="pixelId" value="${parameters.pixelId?default("")}" maxlength="20"/>
              <#elseif mode?has_content && mode == "edit">
                <input type="hidden" name="pixelId" value="${pixelId!""}" />${pixelId!""}
                <input type="hidden" name="contentId" value="${contentId!""}"/>
@@ -52,10 +54,19 @@
                   <option value="SHOW_CART"<#if parameters.pixelScope?default(pixelScope!"") == "SHOW_CART"> selected=selected</#if>>${uiLabelMap.ShowCartPageTaggingLabel}</option>
                   <option value="CREATE_ACCOUNT_SUCCESS"<#if parameters.pixelScope?default(pixelScope!"") == "CREATE_ACCOUNT_SUCCESS"> selected=selected</#if>>${uiLabelMap.CreateAccountPageTaggingLabel}</option>
                   <option value="SUBSCRIBE_NEWSLETTER_SUCCESS"<#if parameters.pixelScope?default(pixelScope!"") == "SUBSCRIBE_NEWSLETTER_SUCCESS"> selected=selected</#if>>${uiLabelMap.EmailSubscriberTaggingLabel}</option>
+                  <option value="SPECIFIC_URL"<#if parameters.pixelScope?default(pixelScope!"") == "SPECIFIC_URL"> selected=selected</#if>>${uiLabelMap.SpecificUrlLabel}</option>
                 </select>
               </div>
             </div>
           </div>
+          <div class="infoRow">
+            <div class="infoEntry">
+                <div class="infoCaption"><label>${uiLabelMap.PixelUrlCaption}</label></div>
+                <div class="infoValue">
+                    <input type="text" name="pixelUrl" value="${parameters.pixelUrl!pixelUrl!""}" class="large" maxlength="255"/>
+                </div>
+            </div>
+        </div>
           <#-- ==== Pixel Page Postion === -->
           <div class="infoRow">
             <div class="infoEntry">
@@ -76,7 +87,7 @@
             <div class="infoEntry">
                 <div class="infoCaption"><label>${uiLabelMap.SeqNumberCaption}</label></div>
                     <div class="infoValue">
-                        <input type="text" name="pixelSequenceNum" value="${parameters.pixelSequenceNum!pixelSequenceNum!""}" class="small"/>
+                        <input type="text" name="pixelSequenceNum" value="${parameters.pixelSequenceNum!pixelSequenceNum!""}" class="small" maxlength="10"/>
                     </div>
             </div>
         </div>

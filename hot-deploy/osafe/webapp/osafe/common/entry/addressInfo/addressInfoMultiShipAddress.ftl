@@ -8,7 +8,11 @@
 		<div class="${request.getAttribute("attributeClass")!}">
 		        <label>&nbsp;</label>
 		        <div class="entryField">
+                 <#if multiAddressAction?exists && multiAddressAction?has_content>
+    	              <a href="javascript:submitCheckoutForm(document.${formName!}, 'MAU', '')" title="${uiLabelMap.ShipToMultiAddressLabel}"><span>${uiLabelMap.ShipToMultiAddressLabel}</span></a>
+   	             <#else>
 		          <a href="<@ofbizUrl>${multiAddressUrl?if_exists}</@ofbizUrl>" title="${uiLabelMap.ShipToMultiAddressLabel}"><span>${uiLabelMap.ShipToMultiAddressLabel}</span></a>
+		         </#if>
 		        </div>
 		</div>
 	 </#if>

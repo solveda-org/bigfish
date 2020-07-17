@@ -25,7 +25,9 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
             </#if>
         </div>
         <div class="boxBody">
-            ${sections.render('generalInfoBoxBody')!}
+        	<#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('generalInfoBoxBody')!}
+            </#if>
         </div>
     </div>
 </#if>
@@ -33,7 +35,9 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
     <div class="displayBox customerInfo">
         <div class="header"><h2 class="centerText">${customerInfoBoxHeading!}</h2></div>
         <div class="boxBody">
-            ${sections.render('customerInfoBoxBody')}
+        	<#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('customerInfoBoxBody')}
+            </#if>
         </div>
     </div>
 </#if>
@@ -41,7 +45,19 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
     <div class="displayBox paymentInfo">
         <div class="header"><h2 class="centerText">${paymentInfoBoxHeading!}</h2></div>
         <div class="boxBody">
-            ${sections.render('paymentInfoBoxBody')!}
+        	<#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('paymentInfoBoxBody')!}
+            </#if>
+        </div>
+    </div>
+</#if>
+<#if shippingInfoBoxHeading?exists && shippingInfoBoxHeading?has_content>
+    <div class="displayBox shippingInfo">
+        <div class="header"><h2 class="centerText">${shippingInfoBoxHeading!}</h2></div>
+        <div class="boxBody">
+            <#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('shippingInfoBoxBody')!}
+            </#if>
         </div>
     </div>
 </#if>
@@ -49,18 +65,24 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
     <div class="displayBox detailInfo">
         <div class="header"><h2>${orderStatusBoxHeading!}</h2></div>
         <div class="boxBody">
-            ${sections.render('orderStatusBoxBody')!}
+        	<#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('orderStatusBoxBody')!}
+            </#if>
         </div>
     </div>
 </#if>
 <#if orderItemInfoBoxHeading?exists && orderItemInfoBoxHeading?has_content>
     <div class="displayListBox orderItemInfo">
-        ${sections.render('listPagingBody')}
-        ${sections.render('commonFormJS')?if_exists}
-        ${sections.render('commonConfirm')}
+    	<#if parameters.orderId?exists && orderHeader?has_content>
+          ${sections.render('listPagingBody')}
+          ${sections.render('commonFormJS')?if_exists}
+          ${sections.render('commonConfirm')}
+        </#if>
         <div class="header"><h2>${orderItemInfoBoxHeading!}</h2></div>
         <div class="boxBody">
-             ${sections.render('orderItemBoxBody')!}
+        	<#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('orderItemBoxBody')!}
+            </#if>
         </div>
     </div>
 </#if>
@@ -69,7 +91,9 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
         ${sections.render('listPagingBody')}
         <div class="header"><h2>${orderNoteInfoBoxHeading!}</h2></div>
         <div class="boxBody">
-            ${sections.render('orderNoteBoxBody')!}
+        	<#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('orderNoteBoxBody')!}
+            </#if>
         </div>
     </div>
 </#if>
@@ -77,7 +101,9 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
     <div class="displayListBox orderItemInfo">
         <div class="header"><h2>${orderAttributeInfoBoxHeading!}</h2></div>
         <div class="boxBody">
-            ${sections.render('orderAttributeBoxBody')!}
+        	<#if parameters.orderId?exists && orderHeader?has_content>
+              ${sections.render('orderAttributeBoxBody')!}
+            </#if>
         </div>
     </div>
 </#if>
@@ -92,7 +118,9 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
           ${sections.render('footerBoxBody')}
     </div>
     <div class="infoDetailIcon">
-      ${sections.render('commonDetailLinkButton')!}
+      <#if parameters.orderId?exists && orderHeader?has_content>
+        ${sections.render('commonDetailLinkButton')!}
+      </#if>
     </div>
 </div>
 </form>

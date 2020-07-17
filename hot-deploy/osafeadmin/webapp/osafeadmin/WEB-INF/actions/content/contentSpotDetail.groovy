@@ -2,6 +2,8 @@ package content;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.product.product.ProductContentWrapper;
+import org.apache.commons.lang.StringEscapeUtils;
 
 userLogin = session.getAttribute("userLogin");
 requestParams = UtilHttp.getParameterMap(request);
@@ -41,9 +43,32 @@ if(UtilValidate.isNotEmpty(bfContentId))
 	    if (UtilValidate.isNotEmpty(dataResource))
 	    {
 	        electronicText = dataResource.getRelatedOne("ElectronicText");
-	        context.eText = electronicText.textData;
+	        if(UtilValidate.isNotEmpty(electronicText))
+	        {
+	        	context.eText = electronicText.textData;
+	        }
+	        context.dataResource = dataResource;
 	    }
 	 }
+}
+if(UtilValidate.isNotEmpty(parameters.productId))
+{
+	product = delegator.findOne("Product",["productId":parameters.productId], false);
+    productContentWrapper = new ProductContentWrapper(product, request);
+    String productDetailHeading = "";
+    if (UtilValidate.isNotEmpty(productContentWrapper))
+    {
+        productDetailHeading = StringEscapeUtils.unescapeHtml(productContentWrapper.get("PRODUCT_NAME").toString());
+        if (UtilValidate.isEmpty(productDetailHeading)) 
+        {
+            productDetailHeading = product.get("productName");
+        }
+        if (UtilValidate.isEmpty(productDetailHeading)) 
+        {
+            productDetailHeading = product.get("internalName");
+        }
+        context.productDetailHeading = productDetailHeading;
+    }
 }
 context.content = content;
 context.bfContentId = bfContentId;

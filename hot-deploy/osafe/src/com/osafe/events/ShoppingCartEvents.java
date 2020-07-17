@@ -25,17 +25,22 @@ import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.order.shoppingcart.CheckOutHelper;
 import org.ofbiz.order.shoppingcart.ItemNotFoundException;
 import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCart.CartPaymentInfo;
+import org.ofbiz.order.shoppingcart.ShoppingCart.CartShipInfo;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.security.Security;
@@ -50,10 +55,13 @@ import com.osafe.util.Util;
 import org.ofbiz.order.shoppingcart.product.ProductPromoWorker;  
 import org.ofbiz.product.product.ProductWorker;
 
+import com.osafe.control.SeoUrlHelper;
+
 public class ShoppingCartEvents {
 	
     public static final String label_resource = "OSafeUiLabels";
     public static String module = ShoppingCartEvents.class.getName();
+    public static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
 
     public static String setPaymentMethodOnCart(HttpServletRequest request, HttpServletResponse response) 
     {
@@ -105,6 +113,7 @@ public class ShoppingCartEvents {
         }
         if(UtilValidate.isEmpty(sc.items())) 
         {
+        	removeLoyaltyPoints(request, response);
             return org.ofbiz.order.shoppingcart.ShoppingCartEvents.clearCart(request, response);
         }
         return "success";
@@ -115,6 +124,7 @@ public class ShoppingCartEvents {
         ShoppingCart sc = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         String productCategoryId = request.getParameter("add_category_id");
         String productId = request.getParameter("add_product_id");
+        
         if(UtilValidate.isNotEmpty(productCategoryId) && UtilValidate.isNotEmpty(productId)) 
         {
         	for (Iterator<?> item = sc.iterator(); item.hasNext();) 
@@ -185,6 +195,7 @@ public class ShoppingCartEvents {
            }
         }
     }
+    
     
     public static String addMultiItemsToCart(HttpServletRequest request, HttpServletResponse response) 
     {
@@ -330,7 +341,7 @@ public class ShoppingCartEvents {
         		ShoppingCartItem cartItem = (ShoppingCartItem) cartItemIter.next();
         		shoppingCart.clearItemShipInfo(cartItem);
         		shoppingCart.setItemShipGroupQty(cartItem,cartItem.getQuantity(),0);
-        		
+        		        		
         		
         		Map<String, String> orderItemAttributesMap = cartItem.getOrderItemAttributes();
         		List<String> lOrderItemAttributeDel = FastList.newInstance();
@@ -386,6 +397,8 @@ public class ShoppingCartEvents {
         		}
         		iCartLineIdx++;
     		}
+        	
+        	shoppingCart.cleanUpShipGroups();
     	}
 
         
@@ -398,6 +411,7 @@ public class ShoppingCartEvents {
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
       
+        Debug.logError("Start",module);
         if (shoppingCart.items().size() > 0)
     	{
     		
@@ -411,26 +425,84 @@ public class ShoppingCartEvents {
 				Map<String, String> mOrderItemAttributeAdd=FastMap.newInstance();
         		if (UtilValidate.isNotEmpty(orderItemAttributesMap))
         		{
+            		Map shipItemQtyGroupMap = shoppingCart.getShipGroups(cartItem);
+            		Map mShipItemQtyGroupIndexMap = FastMap.newInstance();
+            		
+            		Iterator shipGroupQtyIter = shipItemQtyGroupMap.keySet().iterator();
+            		int shipGroupQty = cartItem.getQuantity().intValue();
+                	int iShipGroupQtyIdx = 0;
+                	String sShipGroupSeq="";
+                	/* Get each of the Ship Groups the item is in
+                	 * This is a map of the ship group sequence id and the quantity being shipped in the group 
+                	 */
+                	while (shipGroupQtyIter.hasNext())
+                	{
+                		String sShipGroupIndex = shipGroupQtyIter.next().toString();
+                		int iShipGroupIndex=Integer.valueOf(sShipGroupIndex);
+                		BigDecimal bShipGroupQty =(BigDecimal)shipItemQtyGroupMap.get(iShipGroupIndex);
+
+                		Map mShipItemGroupInfoMap = FastMap.newInstance();
+                		mShipItemGroupInfoMap.put("shipGroupSeqId",sShipGroupIndex);
+                		mShipItemGroupInfoMap.put("shipGroupQty", bShipGroupQty.intValue());
+
+                		mShipItemQtyGroupIndexMap.put(""+ iShipGroupQtyIdx, mShipItemGroupInfoMap);
+                		if (iShipGroupQtyIdx == 0)
+                		{
+                    		shipGroupQty = bShipGroupQty.intValue();
+                    		sShipGroupSeq = sShipGroupIndex;
+                			
+                		}
+                		iShipGroupQtyIdx++;
+                	}
+        			
+                	iShipGroupQtyIdx = 0;
+                	
             		for(Entry<String, String> itemAttr : orderItemAttributesMap.entrySet()) 
             		{
             			String sAttrName = (String)itemAttr.getKey();
             			if (sAttrName.startsWith("GIFT_MSG_FROM_") || sAttrName.startsWith("GIFT_MSG_TO_") || sAttrName.startsWith("GIFT_MSG_TEXT_"))
             			{
-                			int iShipId=sAttrName.lastIndexOf('_');
-                			int iSeqId=sAttrName.substring(0,iShipId).lastIndexOf('_');
-                			String sOrderItemSeq = sAttrName.substring(iSeqId + 1,iShipId);
-                			String sShipGroupSeq = sAttrName.substring(iShipId + 1);
                 			try 
                 			{
-                		        String orderItemSeqId = UtilFormatOut.formatPaddedNumber(Long.valueOf(sOrderItemSeq), 2);
-                		        String shipGroupSeqId = UtilFormatOut.formatPaddedNumber(Long.valueOf(sShipGroupSeq), 5);
+                    			int iShipId=sAttrName.lastIndexOf('_');
+                    			int iSeqId=sAttrName.substring(0,iShipId).lastIndexOf('_');
+                    			
+                    			String sOrderItemSeq = sAttrName.substring(iSeqId + 1,iShipId);
+                    			int iOrderItemSeq = Integer.valueOf(sOrderItemSeq).intValue();
+                    			
+                    			/* The order item sequence indicates how many gift messages there are for this item
+                    			 * For example if the sequence is 4 there were three previous messages.
+                    			 * Since the item quantity could be spread across many ship groups
+                    			 * If the sequence is greater than the ship group quantity set the gift message 
+                    			 * to the items next ship group
+                    			 */
+                    			if (iOrderItemSeq > shipGroupQty)
+                    			{
+                    				iShipGroupQtyIdx++;
+                    				Map mShipItemGroupInfoMap =(Map)mShipItemQtyGroupIndexMap.get(""+ iShipGroupQtyIdx);
+                    				sShipGroupSeq = "" + mShipItemGroupInfoMap.get("shipGroupSeqId");
+                    				int shipGroupQtyTemp = Integer.valueOf("" + mShipItemGroupInfoMap.get("shipGroupQty")).intValue();
+                    				shipGroupQty = shipGroupQty + shipGroupQtyTemp;
+                    			}
+                    			
+                    			int iShipGroupSeq = Integer.valueOf(sShipGroupSeq).intValue();
+
+                    			/* Pad with zeroes both the order item sequence and ship group sequence ids
+                    			 * First Add one since the ship group sdequence starts at zero, for example display 1 instead of 0.
+                    			 */
+                    			iShipGroupSeq++;
+                    			String orderItemSeqId = UtilFormatOut.formatPaddedNumber(Long.valueOf(sOrderItemSeq), 2);
+                		        String shipGroupSeqId = UtilFormatOut.formatPaddedNumber(Long.valueOf(iShipGroupSeq), 5);
+                		        
             					lOrderItemAttributeDel.add(sAttrName);
             					mOrderItemAttributeAdd.put(sAttrName.substring(0,iSeqId) + "_" + orderItemSeqId + "_" +   shipGroupSeqId ,(String)itemAttr.getValue());
 
+                    			/* Subtract one to set the index back to its correct position*/
+                    			iShipGroupSeq--;
                 			}
                 			catch (Exception e)
                 			{
-                				
+                				Debug.logError("formatGiftMessageOrderItemAttribute:" + e, module);
                 			}
             				
             			}
@@ -564,8 +636,204 @@ public class ShoppingCartEvents {
         return "success";
     }
     
+    //COMMENTING THIS METHOD, CAN BE USED IF ONLY ONE ITEM ATTRIBUTE NEED TO BE UPADTE ELSE REMOVE THIS METHOD
+    /*public static String setOrderGiftMessage(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	Map<String, Object> context = FastMap.newInstance();
+    	
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
+        LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+    	
+    	Map<String, Object> params = UtilHttp.getParameterMap(request);
+        String shipGroupSeqId = (String) params.get("shipGroupSeqId");
+        String countString  = (String)params.get("countString");
+        String orderItemSeqId = (String)params.get("orderItemSeqId");
+        String orderId = (String)params.get("orderId");
+        
+        String from = (String) params.get("from_"+countString);
+        String to = (String) params.get("to_"+countString);
+        String giftMessageText = (String) params.get("giftMessageText_"+countString);
+        
+        List<GenericValue> orderItemAttributes = FastList.newInstance();
+		try {
+			orderItemAttributes = delegator.findByAnd("OrderItemAttribute", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+		} catch (GenericEntityException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        if(UtilValidate.isNotEmpty(orderItemAttributes))
+        {
+        	for(GenericValue orderItemAttribute : orderItemAttributes)
+        	{
+        		String attrName = orderItemAttribute.getString("attrName");
+        		if(attrName.equals("GIFT_MSG_TEXT_"+countString+"_"+shipGroupSeqId) || attrName.equals("GIFT_MSG_FROM_"+countString+"_"+shipGroupSeqId) || attrName.equals("GIFT_MSG_TO_"+countString+"_"+shipGroupSeqId))
+        		{
+        			try {
+						delegator.removeValue(orderItemAttribute);
+					} catch (GenericEntityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+        		}
+        	}
+        }
+        
+        Map attrMap = FastMap.newInstance();
+		attrMap.put("orderId", orderId);
+		attrMap.put("orderItemSeqId", orderItemSeqId);
+        
+        if(UtilValidate.isNotEmpty(from))
+        {
+			
+        	attrMap.put("attrName", "GIFT_MSG_FROM_"+countString+"_"+shipGroupSeqId);
+        	attrMap.put("attrValue", from);
+        	
+        	try {
+    			
+        		GenericValue orderItemAttribute = delegator.create("OrderItemAttribute", attrMap);
+			} catch (GenericEntityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        }
+        
+        if(UtilValidate.isNotEmpty(to))
+        {
+        	attrMap.put("attrName", "GIFT_MSG_TO_"+countString+"_"+shipGroupSeqId);
+        	attrMap.put("attrValue", to);
+        	try {
+    			
+        		GenericValue orderItemAttribute = delegator.create("OrderItemAttribute", attrMap);
+			} catch (GenericEntityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        }
+        
+        if(UtilValidate.isNotEmpty(giftMessageText))
+        {
+        	attrMap.put("attrName", "GIFT_MSG_TEXT_"+countString+"_"+shipGroupSeqId);
+        	attrMap.put("attrValue", giftMessageText);
+        	try {
+    			
+        		GenericValue orderItemAttribute = delegator.create("OrderItemAttribute", attrMap);
+			} catch (GenericEntityException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+        }
+        
+        return "success";
+    }*/
     
-    
+    public static String setGiftMessageConfirm(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	Map<String, Object> context = FastMap.newInstance();
+    	
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
+    	
+    	Map<String, Object> params = UtilHttp.getParameterMap(request);
+        String shipGroupSeqId = (String) params.get("shipGroupSeqId");
+        String orderItemSeqId = (String)params.get("orderItemSeqId");
+        String orderId = (String)params.get("orderId");
+        
+        //REMOVE EXISTING ORDER_ITEM_ATTRIBUTES
+        List<GenericValue> orderItemAttributes = FastList.newInstance();
+		try {
+			orderItemAttributes = delegator.findByAnd("OrderItemAttribute", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId));
+		} catch (GenericEntityException e1) {
+			e1.printStackTrace();
+		}
+        if(UtilValidate.isNotEmpty(orderItemAttributes))
+        {
+        	for(GenericValue orderItemAttribute : orderItemAttributes)
+        	{
+        		String attrName = orderItemAttribute.getString("attrName");
+        		if(attrName.startsWith("GIFT_MSG_TEXT_") || attrName.startsWith("GIFT_MSG_FROM_") || attrName.startsWith("GIFT_MSG_TO_"))
+        		{
+        			int iShipId = attrName.lastIndexOf('_');
+        	        if(iShipId > -1 && attrName.substring(iShipId+1).equals(shipGroupSeqId))
+        	        {
+        	        	try {
+    						delegator.removeValue(orderItemAttribute);
+    					} catch (GenericEntityException e) {
+    						// TODO Auto-generated catch block
+    						e.printStackTrace();
+    					}
+        	        }
+        		}
+        	}
+        }
+        
+        GenericValue orderItemShipGroupAssoc = null;
+        if(UtilValidate.isNotEmpty(orderItemSeqId) && UtilValidate.isNotEmpty(orderItemSeqId))
+        {
+        	try {
+				orderItemShipGroupAssoc = delegator.findByPrimaryKey("OrderItemShipGroupAssoc", UtilMisc.toMap("orderId", orderId, "orderItemSeqId", orderItemSeqId, "shipGroupSeqId", shipGroupSeqId));
+			} catch (GenericEntityException e) {
+				e.printStackTrace();
+			}
+        }
+        
+        if(UtilValidate.isNotEmpty(orderItemShipGroupAssoc))
+        {
+        	int quantity = orderItemShipGroupAssoc.getBigDecimal("quantity").intValue();
+        	for(int i = 1; i <= quantity; i++)
+        	{
+        		String from = (String) params.get("from_"+i);
+                String to = (String) params.get("to_"+i);
+                String giftMessageText = (String) params.get("giftMessageText_"+i);
+                
+                Map attrMap = FastMap.newInstance();
+        		attrMap.put("orderId", orderId);
+        		attrMap.put("orderItemSeqId", orderItemSeqId);
+        		
+        		String seqIdFormatted = UtilFormatOut.formatPaddedNumber(Long.valueOf(i), 2);
+        		
+                if(UtilValidate.isNotEmpty(from))
+                {
+                	attrMap.put("attrName", "GIFT_MSG_FROM_"+seqIdFormatted+"_"+shipGroupSeqId);
+                	attrMap.put("attrValue", from);
+                	
+                	try {
+            			
+                		GenericValue orderItemAttribute = delegator.create("OrderItemAttribute", attrMap);
+        			} catch (GenericEntityException e1) {
+        				// TODO Auto-generated catch block
+        				e1.printStackTrace();
+        			}
+                }
+                
+                if(UtilValidate.isNotEmpty(to))
+                {
+                	attrMap.put("attrName", "GIFT_MSG_TO_"+seqIdFormatted+"_"+shipGroupSeqId);
+                	attrMap.put("attrValue", to);
+                	try {
+            			
+                		GenericValue orderItemAttribute = delegator.create("OrderItemAttribute", attrMap);
+        			} catch (GenericEntityException e1) {
+        				// TODO Auto-generated catch block
+        				e1.printStackTrace();
+        			}
+                }
+                
+                if(UtilValidate.isNotEmpty(giftMessageText))
+                {
+                	attrMap.put("attrName", "GIFT_MSG_TEXT_"+seqIdFormatted+"_"+shipGroupSeqId);
+                	attrMap.put("attrValue", giftMessageText);
+                	try {
+            			
+                		GenericValue orderItemAttribute = delegator.create("OrderItemAttribute", attrMap);
+        			} catch (GenericEntityException e1) {
+        				// TODO Auto-generated catch block
+        				e1.printStackTrace();
+        			}
+                }
+        	}
+        }
+        
+        return "success";
+    }
     public static String addPlpItemToCart(HttpServletRequest request, HttpServletResponse response) 
     {
     	Map<String, Object> context = FastMap.newInstance(); 
@@ -635,7 +903,8 @@ public class ShoppingCartEvents {
         	//Get values for success message variables
         	Map<String, String> messageMap = UtilMisc.toMap("productName", productName);
         	String urlLabel = UtilProperties.getMessage(ShoppingCartEvents.label_resource, "ShowCartLink", locale); 
-        	messageMap.put("cartLink", "<a href='eCommerceShowcart'>"+ urlLabel +"</a>");
+        	String showCartUrl = SeoUrlHelper.makeFullUrl(request,"eCommerceShowcart");
+        	messageMap.put("cartLink", "<a href='" + showCartUrl + "'>"+ urlLabel +"</a>");
         	//Set the success message
         	String successMess = UtilProperties.getMessage(ShoppingCartEvents.label_resource, "AddToCartPLPSuccess", messageMap, locale);    
             List osafeSuccessMessageList = UtilMisc.toList(successMess);
@@ -729,11 +998,6 @@ public class ShoppingCartEvents {
             }
         }
     	BigDecimal totalLoyaltyPointsAmountBD = (BigDecimal) request.getAttribute("loyaltyPointsAmount");
-    	String totalLoyaltyPointsAmountStr = "";
-    	if (UtilValidate.isNotEmpty(totalLoyaltyPointsAmountBD)) 
-        {
-    		totalLoyaltyPointsAmountStr = totalLoyaltyPointsAmountBD.toString();
-        }
     	
     	List orderAdjustmentAttributeList = (List) session.getAttribute("orderAdjustmentAttributeList");
     	if(UtilValidate.isEmpty(orderAdjustmentAttributeList))
@@ -791,11 +1055,9 @@ public class ShoppingCartEvents {
         }
     	
     	BigDecimal totalLoyaltyPointsCurrencyBD = BigDecimal.ZERO;
-    	String totalLoyaltyPointsCurrencyStr = "";
     	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
     	{
     		totalLoyaltyPointsCurrencyBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsCurrency");
-    		totalLoyaltyPointsCurrencyStr = totalLoyaltyPointsCurrencyBD.toString();
     	}
     	
     	//Add Loyalty Points Adjustment to the Cart and add orderAdjustmentAttributeList Object to session
@@ -803,18 +1065,17 @@ public class ShoppingCartEvents {
     	{
     		//initially set the applied values to the totals
     		BigDecimal loyaltyPointsCurrencyBD = totalLoyaltyPointsCurrencyBD;
-    		String loyaltyPointsCurrencyStr = totalLoyaltyPointsCurrencyStr;
     		BigDecimal loyaltyPointsAmountBD = totalLoyaltyPointsAmountBD;
-    		String loyaltyPointsAmountStr = totalLoyaltyPointsAmountStr;
     		//compare loyaltyPointsCurrency applied by Loyalty Points to the balance left on the order
-    		BigDecimal cartGrandTotal = cart.getGrandTotal().stripTrailingZeros();
+    		BigDecimal cartGrandTotal = cart.getGrandTotal();
+    		BigDecimal cartTotalTaxes = cart.getTotalSalesTax();
+    		cartGrandTotal  = cartGrandTotal.subtract(cartTotalTaxes);
     		if ((loyaltyPointsCurrencyBD.compareTo(cartGrandTotal) > 0)) 
             {
     			//show warning mesage
     			session.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
     			request.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
     			loyaltyPointsCurrencyBD = cartGrandTotal;
-    			loyaltyPointsCurrencyStr = loyaltyPointsCurrencyBD.toString();
     			
     			//convert Currency to Loyalty Points Amount
             	serviceContext = FastMap.newInstance();
@@ -835,14 +1096,7 @@ public class ShoppingCartEvents {
             	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
             	{
             		loyaltyPointsAmountBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsAmount");
-            		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD)) 
-                    {
-            			loyaltyPointsAmountStr = loyaltyPointsAmountBD.toString();
-                    }
             	}
-            	//String warningMess = UtilProperties.getMessage(ShoppingCartEvents.label_resource, "LoyaltyPointsExceedCartBalanceWarning", locale);    
-                //List warningMessageList = UtilMisc.toList(warningMess);
-                //request.setAttribute("warningMessageList", warningMessageList);
             }
     		else
     		{
@@ -871,16 +1125,16 @@ public class ShoppingCartEvents {
             orderAdjustmentAttributeInfoMap.put("ADJUST_TYPE", "LOYALTY_POINTS");
             orderAdjustmentAttributeInfoMap.put("ADJUST_METHOD", checkoutLoyaltyMethod);
             orderAdjustmentAttributeInfoMap.put("MEMBER_ID", loyaltyPointsId);
-            orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountStr);
+            orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountBD);
             if (UtilValidate.isNotEmpty(expDate)) 
             {
             	orderAdjustmentAttributeInfoMap.put("EXP_DATE", expDate);
             }
             orderAdjustmentAttributeInfoMap.put("CONVERSION_FACTOR", checkoutLoyaltyConversion);
-            orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyStr);
+            orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyBD.setScale(2, rounding));
             //these Adjustment Attributes will not be saved to Order, but are used for processing
-            orderAdjustmentAttributeInfoMap.put("TOTAL_POINTS", totalLoyaltyPointsAmountStr);
-            orderAdjustmentAttributeInfoMap.put("TOTAL_AMOUNT", totalLoyaltyPointsCurrencyStr);
+            orderAdjustmentAttributeInfoMap.put("TOTAL_POINTS", totalLoyaltyPointsAmountBD);
+            orderAdjustmentAttributeInfoMap.put("TOTAL_AMOUNT", totalLoyaltyPointsCurrencyBD);
             orderAdjustmentAttributeInfoMap.put("INCLUDE_IN_TAX", "Y");
             
             //add to session object
@@ -930,6 +1184,12 @@ public class ShoppingCartEvents {
 	    		listIndexCount++;
 	    	}
     	}
+    	//remove all session variables that may be set
+    	String showLoyaltyPointsAdjustedWarning = (String) session.getAttribute("showLoyaltyPointsAdjustedWarning");
+		if(UtilValidate.isNotEmpty(showLoyaltyPointsAdjustedWarning))
+		{
+			session.removeAttribute("showLoyaltyPointsAdjustedWarning");
+		}
     	//Send this request variable to updateCartOnChange
     	String doCartLoyalty = "N";
     	session.setAttribute("DO_CART_LOYALTY", doCartLoyalty);
@@ -975,22 +1235,20 @@ public class ShoppingCartEvents {
 	    	            return "error";
 	    	        }
 	    	    	
-	    	    	String loyaltyPointsCurrencyStr = "";
 	    	    	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
 	    	    	{
 	    	    		loyaltyPointsCurrencyBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsCurrency");
-	    	    		loyaltyPointsCurrencyStr = loyaltyPointsCurrencyBD.toString();
 	    	    	}
-	    	    	String currentLoyaltyPointsCurrencyStr = (String) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
-    	    		BigDecimal currentLoyaltyPointsCurrencyBD = new BigDecimal(currentLoyaltyPointsCurrencyStr);
-	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD).stripTrailingZeros();
+    	    		BigDecimal currentLoyaltyPointsCurrencyBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
+	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD);
+	    	    	BigDecimal cartTotalTaxes = cart.getTotalSalesTax();
+	        		cartGrandTotal  = cartGrandTotal.subtract(cartTotalTaxes);
 	    	    	if(loyaltyPointsCurrencyBD.compareTo(cartGrandTotal) > 0) 
 		            {
 	    	    		//show warning mesage
 	        			session.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
 	        			request.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
 		    			loyaltyPointsCurrencyBD = cartGrandTotal;
-		    			loyaltyPointsCurrencyStr = loyaltyPointsCurrencyBD.toString();
 		    			
 		    			//convert Currency to Loyalty Points Amount
 		            	serviceContext = FastMap.newInstance();
@@ -1011,14 +1269,7 @@ public class ShoppingCartEvents {
 		            	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
 		            	{
 		            		loyaltyPointsAmountBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsAmount");
-		            		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD)) 
-		                    {
-		            			loyaltyPointsAmountStr = loyaltyPointsAmountBD.toString();
-		                    }
 		            	}
-		            	//String warningMess = UtilProperties.getMessage(ShoppingCartEvents.label_resource, "LoyaltyPointsRedeemedExceedCartBalanceWarning", locale);    
-		                //List warningMessageList = UtilMisc.toList(warningMess);
-		                //request.setAttribute("warningMessageList", warningMessageList);
 		            }
 	    	    	else
 	        		{
@@ -1029,9 +1280,8 @@ public class ShoppingCartEvents {
 	        				session.removeAttribute("showLoyaltyPointsAdjustedWarning");
 	        			}
 	        		}
-	    	    	orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountStr);
-	    			orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyStr);
-	    			
+	    	    	orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountBD);
+	    			orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyBD.setScale(2, rounding));
 	    		}
 	    	}
     		
@@ -1075,9 +1325,10 @@ public class ShoppingCartEvents {
 		    		{
     	    			String checkoutLoyaltyConversionStr = (String) orderAdjustmentAttributeInfoMap.get("CONVERSION_FACTOR");
     	    			BigDecimal checkoutLoyaltyConversionBD = new BigDecimal(checkoutLoyaltyConversionStr);
-			    		String currentLoyaltyPointsCurrencyStr = (String) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
-        	    		BigDecimal currentLoyaltyPointsCurrencyBD = new BigDecimal(currentLoyaltyPointsCurrencyStr);
-    	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD).stripTrailingZeros();
+    	    			BigDecimal currentLoyaltyPointsCurrencyBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
+    	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD);
+    	    	    	BigDecimal cartTotalTaxes = cart.getTotalSalesTax();
+    	        		cartGrandTotal  = cartGrandTotal.subtract(cartTotalTaxes);
 			    		if(currentLoyaltyPointsCurrencyBD.compareTo(cartGrandTotal) > 0) 
 			            {
 			    			//show warning mesage
@@ -1107,9 +1358,8 @@ public class ShoppingCartEvents {
 			            		BigDecimal loyaltyPointsAmountBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsAmount");
 			            		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD)) 
 			                    {
-			            			String loyaltyPointsAmountStr = loyaltyPointsAmountBD.toString();
-			            			orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountStr);
-					            	orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyStr);
+			            			orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountBD);
+					            	orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyBD.setScale(2, rounding));
 			            			
 			            			List cartAdjustments = cart.getAdjustments();
 			            			BigDecimal loyaltyPointsCurrencyNegateBD = loyaltyPointsCurrencyBD.multiply(BigDecimal.valueOf(-1));
@@ -1119,7 +1369,7 @@ public class ShoppingCartEvents {
 			                			String cartAdjustmentTypeId = cartAdjustment.getString("orderAdjustmentTypeId");
 			                			if(UtilValidate.isNotEmpty(cartAdjustmentTypeId) && "LOYALTY_POINTS".equalsIgnoreCase(cartAdjustmentTypeId))
 			                			{
-			                				cartAdjustment.set("amount", loyaltyPointsCurrencyNegateBD);
+			                				cartAdjustment.set("amount", loyaltyPointsCurrencyNegateBD.setScale(2, rounding));
 			                			}
 			            	    	}
 			                    }
@@ -1146,6 +1396,7 @@ public class ShoppingCartEvents {
     	org.ofbiz.order.shoppingcart.ShoppingCartEvents.clearCart(request, response);
         HttpSession session = request.getSession();
         //remove any attributes related to the shopping cart that is not cleared in clearCart
+        removeLoyaltyPoints(request, response);
         session.removeAttribute("orderAdjustmentList");
         return "success";
     }
@@ -1223,21 +1474,21 @@ public class ShoppingCartEvents {
                     		{
                     			//min error
                     			//invalid whole number error
-                        		tmp = new MessageString(UtilProperties.getMessage("OsafeUiLabels", "PDPMinQtyError", arguments, locale),parameterName,true);
+                        		tmp = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "PDPMinQtyError", arguments, locale),parameterName,true);
                             	error_list.add(tmp);
                     		}
                     		else if(quantity.compareTo(pdpQtyMaxBD) > 0)
                     		{
                     			//max error
                     			//invalid whole number error
-                        		tmp = new MessageString(UtilProperties.getMessage("OsafeUiLabels", "PDPMaxQtyError", arguments, locale),parameterName,true);
+                        		tmp = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "PDPMaxQtyError", arguments, locale),parameterName,true);
                             	error_list.add(tmp);
                     		}
                     	}
                     	else
                     	{
                     		//invalid whole number error
-                    		tmp = new MessageString(UtilProperties.getMessage("OsafeUiLabels", "PDPQtyDecimalNumberError", arguments, locale),parameterName,true);
+                    		tmp = new MessageString(UtilProperties.getMessage("OSafeUiLabels", "PDPQtyDecimalNumberError", arguments, locale),parameterName,true);
                         	error_list.add(tmp);
                     	}
                     }

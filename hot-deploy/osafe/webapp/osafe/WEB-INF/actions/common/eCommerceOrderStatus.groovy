@@ -95,13 +95,13 @@ if (!userLogin) {
     // then userLogin is not found when Order Complete Mail is send to user.
     if (!userLogin) {
         if (orderId) {
-            orderHeader = delegator.findOne("OrderHeader", [orderId : orderId], false);
-            orderStatuses = orderHeader.getRelated("OrderStatus");
+            orderHeader = delegator.findOne("OrderHeader", [orderId : orderId], true);
+            orderStatuses = orderHeader.getRelatedCache("OrderStatus");
             filteredOrderStatusList = [];
             extOfflineModeExists = false;
             
             // Handled the case of OFFLINE payment method.
-            orderPaymentPreferences = orderHeader.getRelated("OrderPaymentPreference", UtilMisc.toList("orderPaymentPreferenceId"));
+            orderPaymentPreferences = orderHeader.getRelatedCache("OrderPaymentPreference", UtilMisc.toList("orderPaymentPreferenceId"));
             filteredOrderPaymentPreferences = EntityUtil.filterByCondition(orderPaymentPreferences, EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.IN, ["EXT_OFFLINE"]));
             if (filteredOrderPaymentPreferences) {
                 extOfflineModeExists = true;
@@ -157,7 +157,7 @@ if (orderId) {
     // check OrderRole to make sure the user can view this order.  This check must be done for any order which is not anonymously placed and
     // any anonymous order when the allowAnonymousView security flag (see above) is not set to Y, to prevent peeking
     if (orderHeader && (!"anonymous".equals(orderHeader.createdBy) || ("anonymous".equals(orderHeader.createdBy) && !"Y".equals(allowAnonymousView)))) {
-        orderRole = EntityUtil.getFirst(delegator.findByAnd("OrderRole", [orderId : orderId, partyId : partyId, roleTypeId : roleTypeId]));
+        orderRole = EntityUtil.getFirst(delegator.findByAndCache("OrderRole", [orderId : orderId, partyId : partyId, roleTypeId : roleTypeId]));
 
         if (!userLogin || !orderRole) {
             context.remove("orderHeader");
@@ -187,20 +187,20 @@ if (orderHeader) {
     orderTaxTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
     orderTaxTotal = orderTaxTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
 
-    placingCustomerOrderRoles = delegator.findByAnd("OrderRole", [orderId : orderId, roleTypeId : roleTypeId]);
+    placingCustomerOrderRoles = delegator.findByAndCache("OrderRole", [orderId : orderId, roleTypeId : roleTypeId]);
     placingCustomerOrderRole = EntityUtil.getFirst(placingCustomerOrderRoles);
-    placingCustomerPerson = placingCustomerOrderRole == null ? null : delegator.findByPrimaryKey("Person", [partyId : placingCustomerOrderRole.partyId]);
+    placingCustomerPerson = placingCustomerOrderRole == null ? null : delegator.findByPrimaryKeyCache("Person", [partyId : placingCustomerOrderRole.partyId]);
 
-    billingAccount = orderHeader.getRelatedOne("BillingAccount");
+    billingAccount = orderHeader.getRelatedOneCache("BillingAccount");
 
-    orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelated("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
+    orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelatedCache("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
     paymentMethods = [];
     orderPaymentPreferences.each { opp ->
-        paymentMethod = opp.getRelatedOne("PaymentMethod");
+        paymentMethod = opp.getRelatedOneCache("PaymentMethod");
         if (paymentMethod) {
             paymentMethods.add(paymentMethod);
         } else {
-            paymentMethodType = opp.getRelatedOne("PaymentMethodType");
+            paymentMethodType = opp.getRelatedOneCache("PaymentMethodType");
             if (paymentMethodType) {
                 context.paymentMethodType = paymentMethodType;
             }
@@ -222,7 +222,7 @@ if (orderHeader) {
     osisFields.add("boxNumber");
     osisFindOptions = new EntityFindOptions();
     osisFindOptions.setDistinct(true);
-    orderShipmentInfoSummaryList = delegator.findList("OrderShipmentInfoSummary", osisCond, osisFields, osisOrder, osisFindOptions, false);
+    orderShipmentInfoSummaryList = delegator.findList("OrderShipmentInfoSummary", osisCond, osisFields, osisOrder, osisFindOptions, true);
 
     customerPoNumberSet = new TreeSet();
     orderItems.each { orderItemPo ->
@@ -237,9 +237,9 @@ if (orderHeader) {
     totalItems = 0.00;
     orderItems.each { oitem ->
         totalItems += oitem.quantity;
-        ritems = oitem.getRelated("ReturnItem");
+        ritems = oitem.getRelatedCache("ReturnItem");
         ritems.each { ritem ->
-            rh = ritem.getRelatedOne("ReturnHeader");
+            rh = ritem.getRelatedOneCache("ReturnHeader");
             if (!rh.statusId.equals("RETURN_CANCELLED")) {
                 returned += ritem.returnQuantity;
             }
@@ -275,7 +275,7 @@ if (orderHeader) {
     context.orderShipmentInfoSummaryList = orderShipmentInfoSummaryList;
     context.customerPoNumberSet = customerPoNumberSet;
 
-    orderItemChangeReasons = delegator.findByAnd("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
+    orderItemChangeReasons = delegator.findByAndCache("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
     context.orderItemChangeReasons = orderItemChangeReasons;
 	
 	context.shippingApplies = shippingApplies;

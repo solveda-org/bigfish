@@ -7,6 +7,7 @@ import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.base.util.UtilDateTime;
 
 cart = session.getAttribute("shoppingCart");
 party = userLogin.getRelatedOneCache("Party");
@@ -19,14 +20,16 @@ billingContactMechList = FastList.newInstance();
 addressContactMechList = FastList.newInstance();
 if (UtilValidate.isNotEmpty(party))
 {
-	partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
-	partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+	
+	partyLocations = party.getRelatedCache("PartyContactMech");
+	partyLocations = EntityUtil.filterByDate(partyLocations,UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp()),"fromDate","thruDate",true);
+	partyLocations = EntityUtil.getRelatedCache("PartyContactMechPurpose", partyLocations);
+	partyLocations = EntityUtil.filterByDate(partyLocations,UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp()),"fromDate","thruDate",true);
+	partyLocations = EntityUtil.orderBy(partyLocations, UtilMisc.toList("fromDate DESC"));
+	
 
 	// This should return the current billing address
-	partyBillingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
-	partyBillingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyBillingLocations);
-	partyBillingLocations = EntityUtil.filterByDate(partyBillingLocations,true);
-	partyBillingLocations = EntityUtil.orderBy(partyBillingLocations, UtilMisc.toList("fromDate DESC"));
+	partyBillingLocations = EntityUtil.filterByAnd(partyLocations, UtilMisc.toMap("contactMechPurposeTypeId", "BILLING_LOCATION"));
     if (UtilValidate.isNotEmpty(partyBillingLocations)) 
     {
         billingContactMechList = EntityUtil.getRelatedCache("ContactMech",partyBillingLocations);
@@ -41,10 +44,7 @@ if (UtilValidate.isNotEmpty(party))
         
     }
 	
-    partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
-    partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyShippingLocations);
-    partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
-    partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
+    partyShippingLocations = EntityUtil.filterByAnd(partyLocations, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
     if (UtilValidate.isNotEmpty(partyShippingLocations)) 
     {
         shippingContactMechList=EntityUtil.getRelatedCache("ContactMech",partyShippingLocations);

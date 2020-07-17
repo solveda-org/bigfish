@@ -20,7 +20,7 @@ import com.osafe.services.OsafeManageXml;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 
 import com.osafe.services.SolrIndexDocument;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import java.util.Map;
@@ -89,6 +89,7 @@ if (UtilValidate.isNotEmpty(gvProductCategory))
  else 
  {
     searchResultsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsTitle", locale);
+    String SearchResultsPageTitle = "";
     if(request.getAttribute("completeDocumentList"))
     {
         String SearchResultsCountsTitle = "";
@@ -102,11 +103,19 @@ if (UtilValidate.isNotEmpty(gvProductCategory))
         	SearchResultsPageTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsNotFoundTitle", UtilMisc.toMap("searchText", searchText), locale)
         	SearchResultsSubPageTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsNotFoundSuggestionTitle", UtilMisc.toMap("searchTextSpellCheck", searchTextSpellCheck), locale)
         }
-        if(UtilValidate.isEmpty(SearchResultsSubPageTitle))
+        if(UtilValidate.isNotEmpty(SearchResultsSubPageTitle))
         {
         	context.pageSubTitle = SearchResultsSubPageTitle;
         }
         context.pageTitle = SearchResultsPageTitle;
+    }
+    else
+    {
+    	if(request.getAttribute("searchTermsMap"))
+    	{
+    		SearchResultsPageTitle = UtilProperties.getMessage("OSafeUiLabels", "ShoppingListSearchResultsTitle", locale)
+    	}
+    	context.pageTitle = SearchResultsPageTitle;
     }
     context.title = searchResultsTitle + " - " + searchText;
  }
@@ -190,7 +199,7 @@ if (UtilValidate.isNotEmpty(facetGroupMatch))
       orderBy = ["description"];
    
 	  searchTextArr = StringUtil.split(searchText, " ");
-      for (List textSearched: searchTextArr) 
+      for (String textSearched: searchTextArr) 
       {
           text =textSearched.trim().toUpperCase();
           exprListForParameters.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("description"), EntityOperator.LIKE, EntityFunction.UPPER(text + "%")));
@@ -290,12 +299,12 @@ for (SolrIndexDocument productInfo : productDocumentList)
 	{
 		   if (UtilValidate.isNotEmpty(plpFacetGroupVariantSticky)  && UtilValidate.isNotEmpty(featureValueSelected) && productFeatureTypeExists)
 		   {
-			   productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productInfoId+'&productCategoryId='+categoryId+'&productFeatureType='+plpFacetGroupVariantSticky+':'+featureValueSelected);
+			   productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productInfoId+'&productCategoryId='+categoryId+'&productFeatureType='+plpFacetGroupVariantSticky+':'+featureValueSelected);
 		   }
 		   //if sticky was not defined or if featureValueSelected is empty
 		   if (UtilValidate.isEmpty(productFriendlyUrl))
 		   {
-			   productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productInfoId+'&productCategoryId='+categoryId);
+			   productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productInfoId+'&productCategoryId='+categoryId);
 		   }
 	}
 	

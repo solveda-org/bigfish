@@ -37,12 +37,12 @@ context.detailInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","C
 List contentList = FastList.newInstance();
 if (UtilValidate.isNotEmpty(shoppingListId))
 {
+   orderBy = ["shoppingListItemSeqId ASC"];
    mainCond = EntityCondition.makeCondition("shoppingListId", EntityOperator.EQUALS, shoppingListId);
    contentList = delegator.findList("ShoppingListItem",mainCond, null, orderBy, null, false);
    context.resultList = contentList;
 }
 
-orderBy = ["shoppingListItemSeqId ASC"];
 
 
 context.userLoginId = userLogin.userLoginId;

@@ -50,8 +50,6 @@
                             <include-screen name="pincodeCheckDialog" location="component://osafe/widget/DialogScreens.xml"/>
                             <include-screen name="eCommerceHeader" location="${parameters.eCommerceScreensLocation}"/>
 
-                            <include-screen name="eCommerceNavBar" location="${parameters.eCommerceScreensLocation}"/>
-
                             <container id="eCommercePageBody">
                                 <include-screen name="PageScroller"/>
                                 <section>
@@ -160,7 +158,6 @@
                         <container id="eCommerceContent" style="${contentPanelStyle}">
                             <!-- header -->
                             <include-screen name="eCommerceHeader" location="${parameters.eCommerceScreensLocation}"/>
-                            <include-screen name="eCommerceNavBar" location="${parameters.eCommerceScreensLocation}"/>
                             <container id="eCommercePageBody">
                                 <include-screen name="PageScroller"/>
                                 <section>

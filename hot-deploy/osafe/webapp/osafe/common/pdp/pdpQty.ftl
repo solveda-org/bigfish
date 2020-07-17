@@ -1,6 +1,6 @@
 <#if !(pdpSelectMultiVariant?has_content) || (pdpSelectMultiVariant.toUpperCase() != "QTY" && pdpSelectMultiVariant.toUpperCase() != "CHECKBOX") >
   <li class="${request.getAttribute("attributeClass")!}">
-    <div>
+    <div id="js_quantity_div">
       <#if currentProduct.isVirtual?if_exists?upper_case != "Y">
         <#if productAtrributeMap?exists && productAtrributeMap.get("PDP_QTY_DEFAULT")?has_content>
       	  <#assign productAttrPdpQtyDefault = productAtrributeMap.get("PDP_QTY_DEFAULT")!""/>

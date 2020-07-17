@@ -102,6 +102,9 @@
               <div class="infoValue">
                   <input type="file" name="videoUrl" size="50" value=""/>
               </div>
+              <div class="infoIcon">
+                  <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VideoFormatInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+              </div>
           </div>
        </div>
        
@@ -114,7 +117,7 @@
                   <input type="text" name="videoUrlUrlRef" id="videoUrlUrlRef" class="large" value="${parameters.videoUrlUrlRef!videoUrlUrlRef!""}" />
               </div>
               <div class="infoIcon">
-                  <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UrlReferenceInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                  <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VideoFormatInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>
@@ -213,6 +216,9 @@
               <div class="infoValue">
                   <input type="file" name="video360Url" size="50" value=""/>
               </div>
+              <div class="infoIcon">
+                  <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VideoFormatInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+              </div>
           </div>
        </div>
        
@@ -225,7 +231,7 @@
                   <input type="text" name="video360UrlUrlRef" id="video360UrlUrlRef" class="large" value="${parameters.video360UrlUrlRef!video360UrlUrlRef!""}" />
               </div>
               <div class="infoIcon">
-                  <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.UrlReferenceInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                  <a class="helper" href="javascript:void(0);" onMouseover="showTooltip(event,'${uiLabelMap.VideoFormatInfo!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
               </div>
           </div>
        </div>

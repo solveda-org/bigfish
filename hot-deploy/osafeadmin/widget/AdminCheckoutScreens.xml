@@ -14,6 +14,7 @@
                 <set field="helperFileName" value ="adminCheckoutHelp.htm"/>
                 <set field="detailFormName" value="adminCheckoutFORM"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/cartSalesTaxInfo.groovy"/>
                 
                 <set field="salesChannelBoxHeading" value="${uiLabelMap.SalesChannelBoxHeading}"/>
                 <set field="shoppingCartBoxHeading" value="${uiLabelMap.ShoppingCartHeading}"/>
@@ -36,6 +37,8 @@
                 <set field="removeLoyaltyPointsRequest" value="adminRemoveLoyaltyPoints"/>
                 <set field="updateLoyaltyPointsRequest" value="adminValidateUpdateLoyaltyPoints"/>
                 <!-- <set field="refreshLoyaltyPointsRequest" value="singlePageRefreshLoyaltyPoints"/> -->
+                
+                <set field="screen" value="checkout"/>
                 
             </actions>
             <widgets>
@@ -89,7 +92,7 @@
                                              <include-screen name="giftCardOption"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="paymentOptionBoxBody">
-                                             <include-screen name="paymentOption"/>
+                                             <include-screen name="paymentOptionCheckout"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="footerBoxBody">
                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
@@ -138,6 +141,7 @@
                 <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
                 <set field="cartSection" value="TOP"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/cartSalesTaxInfo.groovy"/>
             </actions>
             <widgets>
             <container id="shoppingCartContainer">
@@ -158,6 +162,7 @@
                 <set field="pageTitle" value="${uiLabelMap.CheckoutTitle}"/>
                 <set field="cartSection" value="BOTTOM"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/cartSalesTaxInfo.groovy"/>
             </actions>
             <widgets>
             <container id="shoppingCartBottomContainer">
@@ -218,6 +223,7 @@
             <actions>
               <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
               <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/adminCheckout.groovy"/>
+              <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/checkout/cartSalesTaxInfo.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -325,6 +331,17 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="paymentOptionCheckout">
+        <section>
+            <actions>
+                <set field="screen" value="checkout"/>
+            </actions>
+            <widgets>
+                <include-screen name="paymentOption"/>
+            </widgets>
+        </section>
+    </screen>
 
     <screen name="enteredPromoCode">
         <section>
@@ -372,113 +389,6 @@
                             <html-template location="component://osafeadmin/webapp/osafeadmin/checkout/enteredLoyaltyPoints.ftl" />
                         </html>
                     </platform-specific>
-            </widgets>
-        </section>
-    </screen>
-    
-    <screen name="adminOrderConfirm">
-        <section>
-            <actions>
-                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.OrderManagementOrderDetailTitle} &lt;span class='pageTitleAdditionalText'&gt;(${parameters.orderId})&lt;/span&gt;"/>
-                <set field="title" from-field="pageTitle"/>
-                <set field="detailId" value="${parameters.orderId}"/>
-                <set field="detailParamKey" value="orderId"/>
-                <set field="orderStatusChangeBtnVisible" value="Y"/>
-                <set field="orderStatusChangeAction" value="orderStatusDetail"/>
-                <set field="generalInfoBoxHeading" value="${uiLabelMap.OrderDetailInfoHeading}"/>
-                <set field="customerInfoBoxHeading" value="${uiLabelMap.CustomerInfoHeading}"/>
-                <set field="paymentInfoBoxHeading" value="${uiLabelMap.PaymentInfoHeading}"/>
-                <set field="orderItemInfoBoxHeading" value="${uiLabelMap.OrderItemsHeading}"/>
-                <set field="orderAttributeInfoBoxHeading" value="${uiLabelMap.OrderAttributeHeading}"/>
-                <set field="helperFileName" value ="orderDetailHelp.htm"/>
-                <set field="detailRequest" value ="N" global="true" />
-                <set field="activeTopMenuItem" value="OrderMgmntNav"/>
-                <set field="activeSubMenuItem" value="OrderViewNav"/>
-                <set field="showStatusUpdateLink" value = "true"/>
-                <set field="showPDFLink" value = "true"/>
-                <set field="showXMLLink" value = "true"/>
-                <set field="showOrderNotesLink" value = "true"/>
-                <set field="showOrderDetailLink" value = "true"/>
-                <set field="showOrderAttributeHeading" value = "true"/>
-                <set field="showOrderItemsPaging" value = "true"/>
-                <set field="showProductStoreInfo" value ="Y"/>
-                <!-- This set has to be before the groovy invocation -->
-                <set field="showThankYouStatus" value="Y" />
-            </actions>
-            <widgets>
-                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
-                    <decorator-section name="body">
-                     <section>
-                      <actions>
-                          <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderDetail.groovy"/>
-                          <set field="argListNames[]" from-field="notesCount"/>
-                          <property-to-field resource="OSafeAdminUiLabels" property="OrderNotesLabel" field="orderNotesTooltipText" arg-list-name="argListNames"/>
-                      </actions>
-                      <widgets>
-                        <container id="orderManagementOrderDetail" style="commonOrderDetail">
-                            <platform-specific>
-                                <html>
-                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonOrderDetail.ftl">
-                                        <html-template-decorator-section name="generalInfoBoxBody">
-                                             <platform-specific>
-                                                <html>
-                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailGeneralInfo.ftl"/>
-                                                </html>
-                                            </platform-specific>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="commonFormJS">
-                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="customerInfoBoxBody">
-                                             <platform-specific>
-                                                <html>
-                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailCustomerInfo.ftl"/>
-                                                </html>
-                                            </platform-specific>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="paymentInfoBoxBody">
-                                             <platform-specific>
-                                                <html>
-                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailPaymentInfo.ftl"/>
-                                                </html>
-                                            </platform-specific>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="listPagingBody">
-                                             <include-screen name="ListPaging" location="component://osafeadmin/widget/CommonScreens.xml"/>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="orderItemBoxBody">
-                                            <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
-                                            <platform-specific>
-                                                <html>
-                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailOrderItems.ftl"/>
-                                                </html>
-                                            </platform-specific>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="orderAttributeBoxBody">
-                                            <platform-specific>
-                                                <html>
-                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderAttributeList.ftl"/>
-                                                </html>
-                                            </platform-specific>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="footerBoxBody">
-                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="commonDetailLinkButton">
-                                            <include-screen name="commonOrderLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="commonConfirm">
-                                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
-                                        </html-template-decorator-section>
-                                    </html-template-decorator>
-                                </html>
-                            </platform-specific>
-                        </container>
-                       </widgets>
-                      </section>
-                    </decorator-section>
-                </decorator-screen>
             </widgets>
         </section>
     </screen>

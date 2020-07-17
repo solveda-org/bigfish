@@ -32,6 +32,26 @@
       <#if pixelScope =="ALL">
         <@renderContentAsText contentId="${trackingListItem.contentId}" ignoreTemplate="true"/>
       </#if>
+      <#if pixelScope =="SPECIFIC_URL">
+          <#assign pixelUrl = trackingListItem.pixelUrl!"" />
+          <#if pixelUrl?has_content>
+              <#assign currentRequest = parameters.get("_SERVER_ROOT_URL_")!"">
+              <#if parameters.get("javax.servlet.forward.request_uri")?has_content>
+                  <#assign currentRequest = currentRequest.concat(parameters.get("javax.servlet.forward.request_uri")?if_exists) >
+              <#else>
+                  <#assign currentRequest = currentRequest.concat(request.getRequestURI()?if_exists) >
+              </#if>
+              <#if (currentRequest.indexOf(";jsessionid") > 0) >
+                  <#assign currentRequest = currentRequest.substring(0, currentRequest.indexOf(";jsessionid"))>
+              </#if>
+              <#if (currentRequest.indexOf("?") > 0) >
+                  <#assign currentRequest = currentRequest.substring(0, currentRequest.indexOf("?"))>
+              </#if>
+              <#if currentRequest?has_content && currentRequest.equals(pixelUrl)>
+                  <@renderContentAsText contentId="${trackingListItem.contentId}" ignoreTemplate="true"/>
+              </#if>
+          </#if>
+      </#if>
     </#if>
   </#list>
 </#if>

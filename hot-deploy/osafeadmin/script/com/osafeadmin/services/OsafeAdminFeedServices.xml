@@ -42,15 +42,20 @@
         <set field="validateProductRatingDataCtx.productRatingDataList" from-field="parameters.productRatingDataList"/>
         <call-service service-name="validateProductRatingData" in-map-name="validateProductRatingDataCtx">
             <result-to-field result-name="errorMessageList" field="parameters.validateErrorMessageList"/>
+            <result-to-field result-name="validateMessageList" field="parameters.validateMessageList"/>
+            <result-to-field result-name="processedProductIdList" field="parameters.processedProductIdList"/>
         </call-service>
-        <list-to-list to-list="error_list" list="parameters.validateErrorMessageList"/>
+        <list-to-list to-list="error_list" list="parameters.errorMessageList"/>
         <check-errors/>
         
-        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
-        <set field="importClientProductRatingXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
-        <set field="importClientProductRatingXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
-        <set field="importClientProductRatingXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
-        <call-service service-name="importClientProductRatingXMLTemplate" in-map-name="importClientProductRatingXMLTemplateCtx"/>
+        <if-not-empty field="parameters.processedProductIdList">
+	        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
+	        <set field="importClientProductRatingXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
+	        <set field="importClientProductRatingXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
+	        <set field="importClientProductRatingXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
+	        <set field="importClientProductRatingXMLTemplateCtx.processedProductIdList" from-field="parameters.processedProductIdList" type="List"/>
+	        <call-service service-name="importClientProductRatingXMLTemplate" in-map-name="importClientProductRatingXMLTemplateCtx"/>
+        </if-not-empty>
     </simple-method>
     
     <simple-method method-name="importOrderStatusChangeXml" short-description="Method to Import Order Status Change Feeds.">
@@ -92,16 +97,25 @@
         <set field="validateOrderStatusDataCtx.orderStatusDataList" from-field="parameters.orderStatusDataList"/>
         <set field="validateOrderStatusDataCtx.productStoreId" from-field="parameters.productStoreId"/>
         <call-service service-name="validateOrderStatusData" in-map-name="validateOrderStatusDataCtx">
-            <result-to-field result-name="errorMessageList" field="parameters.validateErrorMessageList"/>
+            <result-to-field result-name="errorMessageList" field="parameters.serviceErrorMessageList"/>
+            <result-to-field result-name="validateMessageList" field="parameters.validateMessageList"/>
+            <result-to-field result-name="processedOrderIdList" field="parameters.processedOrderIdList"/>
         </call-service>
-        <list-to-list to-list="error_list" list="parameters.validateErrorMessageList"/>
+        <list-to-list to-list="error_list" list="parameters.errorMessageList"/>
         <check-errors/>
         
-        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
-        <set field="importOrderStatusChangeXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
-        <set field="importOrderStatusChangeXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
-        <set field="importOrderStatusChangeXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
-        <call-service service-name="importClientOrderStatusXMLTemplate" in-map-name="importOrderStatusChangeXMLTemplateCtx"/>
+        <if-not-empty field="parameters.processedOrderIdList">
+	        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
+	        <set field="importOrderStatusChangeXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
+	        <set field="importOrderStatusChangeXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
+	        <set field="importOrderStatusChangeXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
+	        <set field="importOrderStatusChangeXMLTemplateCtx.processedOrderIdList" from-field="parameters.processedOrderIdList" type="List"/>
+	        <call-service service-name="importClientOrderStatusXMLTemplate" in-map-name="importOrderStatusChangeXMLTemplateCtx"/>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.validateMessageList">
+            <field-to-result field="parameters.validateMessageList" result-name="warningMessageList"/>
+        </if-not-empty>
     </simple-method>
     
     
@@ -133,11 +147,31 @@
             <clear-field field="uploadFileCtx"/>
         </if-not-empty>
         
-        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
-        <set field="importClientStoreXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
-        <set field="importClientStoreXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
-        <set field="importClientStoreXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
-        <call-service service-name="importClientStoreXMLTemplate" in-map-name="importClientStoreXMLTemplateCtx" />
+        <set field="getStoreDataListFromFileCtx.storeFilePath" from-field="parameters.uploadFilePath"/>
+        <set field="getStoreDataListFromFileCtx.storeFileName" from-field="parameters.uploadFileName"/>
+        <call-service service-name="getStoreDataListFromFile" in-map-name="getStoreDataListFromFileCtx">
+            <result-to-field result-name="storeDataList" field="parameters.storeDataList"/>
+            <result-to-field result-name="errorMessageList" field="error_list"/>
+        </call-service>
+        <check-errors/>
+        
+        <set field="validateStoreDataCtx.storeDataList" from-field="parameters.storeDataList"/>
+        <call-service service-name="validateStoreData" in-map-name="validateStoreDataCtx">
+            <result-to-field result-name="errorMessageList" field="parameters.validateErrorMessageList"/>
+            <result-to-field result-name="validateMessageList" field="parameters.validateMessageList"/>
+            <result-to-field result-name="processedStoreCodeList" field="parameters.processedStoreCodeList"/>
+        </call-service>
+        <list-to-list to-list="error_list" list="parameters.errorMessageList"/>
+        <check-errors/>
+        
+        <if-not-empty field="parameters.processedStoreCodeList">
+	        <set field="xmlDataFile" value="${parameters.uploadFilePath}${parameters.uploadFileName}"/>
+	        <set field="importClientStoreXMLTemplateCtx.xmlDataFile" from-field="xmlDataFile"/>
+	        <set field="importClientStoreXMLTemplateCtx.xmlDataDir" from-field="parameters.uploadFilePath"/>
+	        <set field="importClientStoreXMLTemplateCtx.autoLoad" value="true" type="Boolean"/>
+	        <set field="importClientStoreXMLTemplateCtx.processedStoreCodeList" from-field="parameters.processedStoreCodeList" type="List"/>
+	        <call-service service-name="importClientStoreXMLTemplate" in-map-name="importClientStoreXMLTemplateCtx" />
+	    </if-not-empty>
     </simple-method>
 
 
@@ -318,20 +352,65 @@
                 <set field="searchOrdersCtx.isDownloaded" value="N"/>
             </if-compare>
         </if-not-empty>
-        <call-service service-name="searchOrders" in-map-name="searchOrdersCtx">
-            <result-to-field result-name="completeOrderList" field="completeOrderList"/>
-        </call-service>
-        <iterate entry="order" list="completeOrderList">
-            <string-to-list string="${order.orderId}" list="orderList"/>
-        </iterate>
         
-        <if-not-empty field="parameters.exportIdList">
-            <set field="orderList" from-field="parameters.exportIdList" type="List"/>
+        <set field="exportedOrderStatusList" type="List"/>
+        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="includeExportOrderStatus">
+            <field field="parameters.productStoreId"/>
+            <string value="ORDER_STATUS_INC_EXPORT"/>
+        </call-class-method>
+        <if-not-empty field="includeExportOrderStatus">
+            <call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="includeExportOrderStatusList">
+			    <field field="includeExportOrderStatus" type="String"/>
+			    <string value="," />
+			</call-class-method>
+			<if-not-empty field="includeExportOrderStatusList">
+			    <iterate entry="orderStatus" list="includeExportOrderStatusList">
+			        <call-object-method method-name="trim" obj-field="orderStatus" ret-field="orderStatusTrim"/>
+			        <field-to-list list="exportedOrderStatusList" field="orderStatusTrim"/>
+			    </iterate>
+			</if-not-empty>
         </if-not-empty>
         
+        <set field="orderIdToExportList" type="List"/>
+        <if-not-empty field="parameters.exportIdList">
+            <set field="orderIdToExportList" from-field="parameters.exportIdList" type="List"/>
+        <else>
+            <call-service service-name="searchOrders" in-map-name="searchOrdersCtx">
+	            <result-to-field result-name="completeOrderList" field="completeOrderList"/>
+	        </call-service>
+	        <iterate entry="order" list="completeOrderList">
+	            <string-to-list string="${order.orderId}" list="orderList"/>
+	        </iterate>
+	        <if-not-empty field="exportedOrderStatusList">
+		        <if-not-empty field="orderList">
+		            <iterate entry="orderId" list="orderList">
+		                <entity-one value-field="orderHeader" entity-name="OrderHeader">
+		                    <field-map field-name="orderId" from-field="orderId"/>
+		                </entity-one>
+		                <if-not-empty field="orderHeader">
+		                    <set field="orderStatus" from-field="orderHeader.statusId"/>
+		                    <if-not-empty field="orderStatus">
+			                    <call-object-method obj-field="exportedOrderStatusList" method-name="contains" ret-field="isStatusInList" >
+			                        <field field="orderStatus" type="java.lang.Object"/>
+			                    </call-object-method>
+			                    <if-compare operator="equals" value="true" field="isStatusInList" type="Boolean">
+			                        <field-to-list list="orderIdToExportList" field="orderId"/>
+			                    </if-compare>
+		                    </if-not-empty>
+		                </if-not-empty>
+		            </iterate>
+		        </if-not-empty>
+	        <else>
+	            <list-to-list to-list="orderIdToExportList" list="orderList"/>
+	        </else>
+	        </if-not-empty>
+        </else>
+        </if-not-empty>
+        
+        
         <!-- Export Orders to Xml Feeds -->
-        <if-not-empty field="orderList">
-            <set field="exportOrderXMLCtx.orderList" from-field="orderList"/>
+        <if-not-empty field="orderIdToExportList">
+            <set field="exportOrderXMLCtx.orderList" from-field="orderIdToExportList"/>
             <set field="exportOrderXMLCtx.productStoreId" from-field="parameters.productStoreId"/>
             <call-service service-name="exportOrderXML" in-map-name="exportOrderXMLCtx">
                 <result-to-field result-name="feedsDirectoryPath" field="feedsDirectoryPath"/>

@@ -13,7 +13,7 @@
 <#assign sortUrl = request.getRequestURI() >
 <#if productCategoryId?exists && productCategoryId?has_content>
     <#assign sortUrl = "?productCategoryId=" + productCategoryId/>
-    <#assign sortUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${sortUrl}')/>
+    <#assign sortUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'eCommerceProductList${sortUrl}')/>
 </#if>  
 
 <div class="resultsNavigation">
@@ -48,7 +48,7 @@
 			    <#assign nextPrevUrl = nextPrevUrl+ "&filterGroup=" + filterGroup/>
 			  <#else>
 			    <#-- if there is no filter group then get the SEO friendly 'base' URL -->
-			    <#assign nextPrevUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>
+			    <#assign nextPrevUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>
 			  </#if>
 			  <#if sortResults?exists && sortResults?has_content>
 			  	<#if filterGroup?exists && filterGroup?has_content>
@@ -65,7 +65,7 @@
               </#if>
               <#if filterGroup?exists && filterGroup?has_content>
               		<#-- if there is filter group then call makeCatalogFriendlyURL -->
-	          		<#assign nextPrevUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>
+	          		<#assign nextPrevUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'eCommerceProductList${nextPrevUrl}')/>
 	          </#if>
 			<#else>
                 <#assign nextPrevUrl = request.getRequestURI() + previousParams >

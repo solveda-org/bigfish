@@ -1,7 +1,7 @@
 
 <script type="text/javascript">
     jQuery(document).ready(function () {
-        jQuery('.dateEntry').each(function(){datePicker(this);});
+        jQuery('.dateEntry').each(function(){dateTimePicker(this);});
         jQuery('.characterLimit').each(function(){restrictTextLength(this);});
 
         var ts = jQuery.tablesorter;
@@ -41,27 +41,33 @@
 
     });
 
+<#if entryDateFormat?exists && entryDateFormat?has_content>
+     <#assign dateformat = StringUtil.wrapString(entryDateFormat.toLowerCase()) />
+     <#assign dateformat = format?replace("yy", "y") />
+<#else>
+     <#assign dateformat = "mm/dd/y" />
+</#if>
+<#if entryTimeFormat?exists && entryTimeFormat?has_content>
+     <#assign timeformat = StringUtil.wrapString(entryTimeFormat.toLowerCase()) />
+<#else>
+     <#assign timeformat = "HH:mm:ss" />
+</#if>
+
  function datePicker(triger){
    jQuery(triger).datepicker({
        showOn: 'button',
        buttonImage: '<@ofbizContentUrl>/images/cal.gif</@ofbizContentUrl>',
        buttonImageOnly: false,
-       <#if FORMAT_DATE?exists && FORMAT_DATE?has_content>
-         <#assign format = StringUtil.wrapString(FORMAT_DATE.toLowerCase()) />
-         <#assign format = format?replace("yy", "y") />
-       <#else>
-         <#assign format = "mm/dd/y" />
-       </#if>
-       dateFormat: '${format}'
+       dateFormat: '${dateformat}'
    });
  }
  function dateTimePicker(triger){
-	 <#assign datform = FORMAT_DATE?default("mm/dd/y") />
- 	  jQuery(triger).dateTimepicker({
+ 	  jQuery(triger).datetimepicker({
            showOn: 'button',
            buttonImage: '<@ofbizContentUrl>/images/cal.gif</@ofbizContentUrl>',
            buttonImageOnly: false,
-           dateFormat:datform
+           dateFormat: '${dateformat}',
+           timeFormat: '${timeformat}'
          });
  }
  function restrictTextLength(textArea){

@@ -6,6 +6,7 @@
     <xsd:sequence>
       <xsd:element maxOccurs="unbounded" name="Customer" type="CustomerType" />
     </xsd:sequence>
+    <xsd:attribute name="Count"/>
   </xsd:complexType>
   <xsd:complexType name="CustomerType">
     <xsd:sequence>
@@ -66,10 +67,12 @@
   
   <!-- definition of Order elements -->
   <xsd:element name="BigFishOrderFeed" type="BigFishOrderFeedType" />
+    
   <xsd:complexType name="BigFishOrderFeedType">
     <xsd:sequence>
       <xsd:element name="Order" type="OrderType" maxOccurs="unbounded"/>
     </xsd:sequence>
+    <xsd:attribute name="Count"/>
   </xsd:complexType>
   <xsd:complexType name="OrderType">
     <xsd:sequence>
@@ -269,6 +272,7 @@
     <xsd:sequence>
       <xsd:element name="ContactUs" type="ContactUsType" maxOccurs="unbounded"/>
     </xsd:sequence>
+    <xsd:attribute name="Count"/>
   </xsd:complexType>
   <xsd:complexType name="ContactUsType">
     <xsd:sequence>
@@ -290,6 +294,7 @@
     <xsd:sequence>
       <xsd:element name="RequestCatalog" type="RequestCatalogType" maxOccurs="unbounded"/>
     </xsd:sequence>
+    <xsd:attribute name="Count"/>
   </xsd:complexType>
   <xsd:complexType name="RequestCatalogType">
     <xsd:sequence>
@@ -318,7 +323,10 @@
       <xsd:element name="ProductCategory" type="ProductCategoryType" minOccurs="0"/>
       <xsd:element name="Products" type="ProductsType" minOccurs="0"/>
       <xsd:element name="ProductAssociation" type="ProductAssociationType" minOccurs="0"/>
-      <xsd:element name="ProductFeatureSwatch" type="ProductFeatureSwatchType" minOccurs="0"/>
+      
+      <xsd:element name="ProductFacetGroup" type="ProductFacetCatGroupType" minOccurs="0"/>
+      <xsd:element name="ProductFacetValue" type="ProductFacetValueType" minOccurs="0"/>
+      
       <xsd:element name="ProductManufacturer" type="ProductManufacturerType" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
@@ -598,6 +606,7 @@
       <xsd:element type="xsd:string" name="PdpQtyMin" default="" minOccurs="0"/>
       <xsd:element type="xsd:string" name="PdpQtyMax" default="" minOccurs="0"/>
       <xsd:element type="xsd:string" name="PdpQtyDefault" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="PdpInStoreOnly" default="" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
   
@@ -618,22 +627,52 @@
     </xsd:all>
   </xsd:complexType>
   
-  <!-- definition of Product Feature Swatch elements -->
-  <xsd:complexType name="ProductFeatureSwatchType">
+  <xsd:complexType name="ProductFacetCatGroupType">
     <xsd:sequence>
-      <xsd:element type="FeatureSwatchType" name="Feature" minOccurs="0" maxOccurs="unbounded"/>
+      <xsd:element type="FacetCatGroupType" name="FacetCatGroup" minOccurs="0" maxOccurs="unbounded"/>
     </xsd:sequence>
   </xsd:complexType>
   
-  <xsd:complexType name="FeatureSwatchType">
+  <xsd:complexType name="FacetCatGroupType">
     <xsd:all>
-      <xsd:element type="xsd:string" name="FeatureId" default="" minOccurs="1"/>
-      <xsd:element type="xsd:string" name="Value" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ProductCategoryId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="SequenceNum" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="MinDisplay" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="MaxDisplay" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Tooltip" default="" minOccurs="0"/>
+      <xsd:element type="FacetGroupType" name="FacetGroup" minOccurs="0"/>
+    </xsd:all>
+  </xsd:complexType>
+  
+  <xsd:complexType name="FacetGroupType">
+    <xsd:all>
+      <xsd:element type="xsd:string" name="FacetGroupId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="Description" default="" minOccurs="1"/>
+    </xsd:all>
+  </xsd:complexType>
+  
+  
+  <xsd:complexType name="ProductFacetValueType">
+    <xsd:sequence>
+      <xsd:element type="FacetValueType" name="FacetValue" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="FacetValueType">
+    <xsd:all>
+      <xsd:element type="xsd:string" name="ProductFeatureGroupId" default="" minOccurs="1"/>
+      <xsd:element type="xsd:string" name="ProductFeatureId" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="Description" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="FromDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="ThruDate" default="" minOccurs="0"/>
+      <xsd:element type="xsd:string" name="SequenceNum" default="" minOccurs="0"/>
       <xsd:element type="PlpSwatchType" name="PlpSwatch" minOccurs="0"/>
       <xsd:element type="PdpSwatchType" name="PdpSwatch" minOccurs="0"/>
     </xsd:all>
   </xsd:complexType>
-  
+
   <!-- definition of Product Feature Swatch elements -->
   <xsd:complexType name="ProductManufacturerType">
     <xsd:sequence>
@@ -675,6 +714,7 @@
     <xsd:sequence>
       <xsd:element maxOccurs="unbounded" name="Order" type="OrderStatusType"/>
     </xsd:sequence>
+    <xsd:attribute name="Count"/>
   </xsd:complexType>
   
   <xsd:complexType name="OrderStatusType">
@@ -711,6 +751,7 @@
     <xsd:sequence>
       <xsd:element maxOccurs="unbounded" name="Store" type="StoreType" />
     </xsd:sequence>
+    <xsd:attribute name="Count"/>
   </xsd:complexType>
   
   <xsd:complexType name="StoreType">
@@ -748,6 +789,7 @@
     <xsd:sequence>
       <xsd:element name="ProductRating" type="ProductRatingType" maxOccurs="unbounded"/>
     </xsd:sequence>
+    <xsd:attribute name="Count"/>
   </xsd:complexType>
   <xsd:complexType name="ProductRatingType">
     <xsd:all>

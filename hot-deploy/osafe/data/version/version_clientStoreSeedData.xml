@@ -288,6 +288,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_ORDER_PREFIX" parmValue="order-" description="Bigfish to Client Outgoing Order File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CONTACT_US_PREFIX" parmValue="contact-us-" description="Bigfish to Client Outgoing Contact-Us File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_REQUEST_CATALOG_PREFIX" parmValue="request-catalog-" description="Bigfish to Client Outgoing Request-Catalog File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_MASK_ACCOUNT_INFO" parmValue="TRUE" description="Apply Mask (e.g. *1234) to Account information (Credit Card, Bank Account, Routing Numbers) on all outgoing FEEDS. TRUE or FALSE.  Default is TRUE." parmCategory="FEEDS"/>
 
 <!-- ADMIN-->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_DEF_LIST_ROWS" parmValue="50" description="Default View Size" parmCategory="ADM"/>
@@ -313,8 +314,12 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" parmValue="http://www.yoursite.com" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" parmValue="https://www.yoursite.com" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SHOW_BUILT_BY" parmValue="TRUE" description="Simple TRUE or FALSE value that will determine if the Built by Salmon LLC link will be displayed" parmCategory="GENERAL"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADD_TO_CART_REDIRECT" parmValue="CART" description="Defines the next page after adding an item to the cart. CART (default) will redirect to the Show Cart page. CHECKOUT will redirect to the checkout flow." parmCategory="GENERAL"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_METHOD" parmValue="" description="Indicates if Text Messaging (SMS) is an option and which service to use for delivery. Valid values are NONE, CLICKATELL, PINNACLE" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_FROM_MAX_CHAR" parmValue="50" description="The maximum number of characters that can be entered in the FROM field within the Gift Message feature. Default is 50." parmCategory="GIFT_MSG"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_TO_MAX_CHAR" parmValue="50" description="The maximum number of characters that can be entered in the TO field within the Gift Message feature. Default is 50." parmCategory="GIFT_MSG"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_TEXT_MAX_CHAR" parmValue="255" description="The maximum number of characters that can be entered in the TEXT field within the Gift Message feature. Default is 255." parmCategory="GIFT_MSG"/>
 
 <!-- Website -->
 <WebSite webSiteId="@store.webSiteId@" siteName="@store.storePrefix@ Site" httpHost="@url.http.host@" httpPort="@url.port.http@" httpsHost="@url.https.host@" httpsPort="@url.port.https@" enableHttps="Y" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />

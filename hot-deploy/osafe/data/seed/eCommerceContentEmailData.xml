@@ -35,13 +35,12 @@
 <ElectronicText dataResourceId="E_COMMON_HEADER">
  <textData>
     <![CDATA[
-<#assign HOME_SUB_URL="/online/control/main" />
-<#assign SHOP_SUB_URL="/online/shop" />
-<#assign RINGS="${HTTP_HOST!}${SHOP_SUB_URL!}/rings" />
-<#assign NECKLACE="${HTTP_HOST!}${SHOP_SUB_URL!}/necklace" />
-<#assign BRACELET="${HTTP_HOST!}${SHOP_SUB_URL!}/bracelet-and-anklets" />
-<#assign EARRINGS="${HTTP_HOST!}${SHOP_SUB_URL!}/earrings" />
-<#assign GIFT="${HTTP_HOST!}${SHOP_SUB_URL!}/gift-ideas" />
+<#assign HOME_SUB_URL="/main" />
+<#assign RINGS="${HTTP_HOST!}/rings" />
+<#assign NECKLACE="${HTTP_HOST!}/necklace" />
+<#assign BRACELET="${HTTP_HOST!}/bracelet-and-anklets" />
+<#assign EARRINGS="${HTTP_HOST!}/earrings" />
+<#assign GIFT="${HTTP_HOST!}/gift-ideas" />
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" style="word-wrap:break-word;table-layout:fixed;">
                                                                            
@@ -274,7 +273,7 @@
                                     </p>
 
                                     <p>
-                                        You can change the password from the <a href="${HTTPS_HOST}/${DISPATCHER_NAME}/control/MyAccount" style="${E_LINK!""}">My Account</a> page.
+                                        You can change the password from the <a href="${HTTPS_HOST}/MyAccount" style="${E_LINK!""}">My Account</a> page.
                                     </p>
 
                                 <!-- **************************** -->
@@ -937,14 +936,12 @@
 <ElectronicText dataResourceId="E_ORDER_SHIPMENTS">
   <textData><![CDATA[
     <#if ORDER_ITEM_SHIP_GROUP?has_content>
-        <table style="${ORDER_COMPONENT!}">
-            <tr>
-                <td colspan="2"><h3 style="${H3!}">${uiLabelMap.ShippingInformationHeading}</h3></td>
-            </tr>
-            <#assign groupIdx = 0>
-
+        <table style="${ORDER_COMPONENT!}">                                                                                      
+        <#assign groupIdx = 0>                                                                                                                                                                                                                                                                                
             <#list ORDER_ITEM_SHIP_GROUP as shipGroup>
-
+	            <tr>
+	                <td colspan="2"><h3 style="${H3!}">${uiLabelMap.ShippingInformationHeading}</h3></td>
+	            </tr>
                 <#assign storeGroup = "">
 				<#assign orderAttrPickupStore = ORDER.getRelatedByAnd("OrderAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName", "STORE_LOCATION"))/>
 				<#if orderAttrPickupStore?has_content>
@@ -982,34 +979,34 @@
                     <#else>
 	                    <tr>
 	                        <td style="${E_LABEL!""}">${uiLabelMap.DestinationCaption}</td>
-	                        <td>&nbsp;</td>
+	                        <td> </td>
 	                    </tr>
                     </#if>
 
                     <#if shippingAddress.toName?has_content>
                         <tr>
-                            <td>&nbsp;</td>
+                            <td> </td>
                             <td>${shippingAddress.toName}</td>
                         </tr>
                     </#if>
 
                     <#if shippingAddress.address1?has_content>
                         <tr>
-                            <td>&nbsp;</td>
+                            <td> </td>
                             <td>${shippingAddress.address1}</td>
                         </tr>
                     </#if>
 
                     <#if shippingAddress.address2?has_content>
                         <tr>
-                            <td>&nbsp;</td>
+                            <td> </td>
                             <td>${shippingAddress.address2}</td>
                         </tr>
                     </#if>
 
                     <#if shippingAddress.address3?has_content>
                         <tr>
-                            <td>&nbsp;</td>
+                            <td> </td>
                             <td>${shippingAddress.address3}</td>
                         </tr>
                     </#if>
@@ -1017,7 +1014,7 @@
                     <#if shippingAddress.city?has_content>
                         <#assign shippingStateGeo = (delegator.findOne("Geo", {"geoId", shippingAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
                         <tr>
-                            <td>&nbsp;</td>
+                            <td> </td>
                             <td>${shippingAddress.city}, ${shippingStateGeo.geoName!""} ${shippingAddress.postalCode!""}</td>
                         </tr>
                     </#if>
@@ -1025,7 +1022,7 @@
                     <#assign shippingCountryGeo = (delegator.findOne("Geo", {"geoId", shippingAddress.countryGeoId?if_exists}, false))?if_exists />
                     <#if shippingCountryGeo?has_content>
                         <tr>
-                            <td>&nbsp;</td>
+                            <td> </td>
                             <td>${shippingCountryGeo.geoName!""}</td>
                         </tr>
                     </#if>
@@ -1037,7 +1034,7 @@
 
                 <tr>
                     <td style="${E_LABEL!""}">${uiLabelMap.ShippingMethodCaption}</td>
-                    <td>${carrierPartyId!""}&nbsp;<#if shipmentMethodType?exists>${shipmentMethodType.description!""}</#if></td>
+                    <td>${carrierPartyId!""} <#if shipmentMethodType?exists>${shipmentMethodType.description!""}</#if></td>
                 </tr>
                 <#if shipGroup.trackingNumber?has_content>
                       <#assign trackingURLPartyContents = delegator.findByAnd("PartyContent", {"partyId": shipGroup.carrierPartyId, "partyContentTypeId": "TRACKING_URL"})/>
@@ -1077,13 +1074,13 @@
                       <td colspan="2">
                           <table cellpadding="2" cellspacing="0" width="100%" style="${ORDER_COMPONENT!}">
                               <tr class="heading">
-                                   <td>&nbsp;</td>
-                                   <td>&nbsp;</td>
+                                   <td> </td>
+                                   <td> </td>
                                    <td style="${QUANTITY!""}${E_LABEL!""}">${uiLabelMap.QuantityLabel}</td>
                                    <td style="${PRICE!""}${E_LABEL!""}">${uiLabelMap.PriceLabel}</td>
                                    <td style="${PRICE!""}${E_LABEL!""}">${uiLabelMap.TotalLabel}</td>
                               </tr>
-                              <#list orderItemShipGroupAssoc as shipGroupAssoc>
+                              <#list orderItemShipGroupAssoc as shipGroupAssoc>                                                                                                                                                                                                                                                                                                  <#assign alreadyProcessedOrderItemAttributes = Static["javolution.util.FastList"].newInstance()/>                                                                                                                         
                                   <#assign orderItem =shipGroupAssoc.getRelatedOne("OrderItem")!""/>
                                   <#assign product = orderItem.getRelatedOne("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
                                   <#assign urlProductId = product.productId>
@@ -1108,12 +1105,12 @@
                                   <#assign itemOrderStatus = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(itemOrderStatus)/>
                                   <tr style="${TABULAR_DATA!""}">
                                       <td class="span image product">
-                                            <a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
+                                            <a href="${HTTP_HOST}/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
                                              <img style="${E_IMAGE}" alt="${StringUtil.wrapString(orderItem.itemDescription!)}" src="${HTTP_HOST}${productImageUrl}" height="${IMG_SIZE_CART_H}" width="${IMG_SIZE_CART_W}">
                                             </a>                
                                       </td>
                                       <td>
-                                          <a style="${E_LINK!""}" href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(orderItem.itemDescription!)}</a>
+                                          <a style="${E_LINK!""}" href="${HTTP_HOST}/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(orderItem.itemDescription!)}</a>
                                               <#if features?has_content>
                                                    <table class="displayList">
                                                        <#list features as feature>
@@ -1129,8 +1126,75 @@
                                       <td style="${QUANTITY!""}">${shipGroupAssoc.quantity?string.number}</td>
                                       <td style="${PRICE!""}"><@ofbizCurrency amount=orderItem.unitPrice isoCode=ORDER_HELPER.getCurrency()/></td>
                                       <#assign itemTotal = (orderItem.unitPrice?number) * (shipGroupAssoc.quantity?number)>
-                                      <td style="${PRICE!""}"><@ofbizCurrency amount=itemTotal isoCode=ORDER_HELPER.getCurrency()/></td>
-                                  </tr>
+                                      <td style="${PRICE!""}"><@ofbizCurrency amount=itemTotal isoCode=ORDER_HELPER.getCurrency()/></td>                                                                                                                                                                                                                                                                                                                                                                             
+                                  </tr>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     <#-- GIFT MESSAGE INFO -->
+	                                  <#assign shipGroupAssocQty = shipGroupAssoc.quantity!/>
+								      <#assign shipGroupSeqId = shipGroupAssoc.shipGroupSeqId!/>
+								      
+								      <#list 1 .. shipGroupAssocQty as count>
+								          <#assign orderItemAttributes = orderItem.getRelated("OrderItemAttribute")!""/>
+								          
+								          <#assign attrValue = ""/>
+								          <#assign countString = "" + count />
+							              <#assign from = ""/>
+							              <#assign to = "" />
+							              <#assign giftMessageText = ""/>
+							              <#assign seqId = ""/>
+							             
+								          <#list orderItemAttributes as orderItemAttribute>
+								              <#assign attrName = orderItemAttribute.attrName!""/>
+								              <#if !seqId?has_content>
+									             <#if attrName.startsWith("GIFT_MSG_FROM_")>
+										             <#assign iShipId = attrName.lastIndexOf("_")/>
+										             <#assign seqId = attrName.substring("GIFT_MSG_FROM_"?length, iShipId)!""/>
+										             <#if alreadyProcessedOrderItemAttributes.contains(seqId)>
+										                 <#assign seqId = ""/>
+										             </#if>
+										         </#if>
+									         </#if>
+									         <#if !seqId?has_content>
+									             <#if attrName.startsWith("GIFT_MSG_TO_")>
+										             <#assign iShipId = attrName.lastIndexOf("_")/>
+										             <#assign seqId = attrName.substring("GIFT_MSG_TO_"?length, iShipId)!""/>
+										             <#if alreadyProcessedOrderItemAttributes.contains(seqId)>
+										                 <#assign seqId = ""/>
+										             </#if>
+										         </#if>
+									         </#if>
+									         <#if !seqId?has_content>
+									             <#if attrName.startsWith("GIFT_MSG_TEXT_")>
+										             <#assign iShipId = attrName.lastIndexOf("_")/>
+										             <#assign seqId = attrName.substring("GIFT_MSG_TEXT_"?length, iShipId)!""/>
+										             <#if alreadyProcessedOrderItemAttributes.contains(seqId)>
+										                 <#assign seqId = ""/>
+										             </#if>
+										         </#if>
+									         </#if>
+									      </#list>
+									      
+								          <#assign changed = alreadyProcessedOrderItemAttributes.add(seqId)/>
+		
+								          <#list orderItemAttributes as orderItemAttribute>
+								             <#assign attrName = orderItemAttribute.attrName!""/>
+								             <#if attrName.equals("GIFT_MSG_FROM_"+seqId+"_"+shipGroupSeqId)>
+									             <#assign from = orderItemAttribute.attrValue! />
+									         </#if>    
+									         <#if attrName.equals("GIFT_MSG_TO_"+seqId+"_"+shipGroupSeqId)>
+									             <#assign to = orderItemAttribute.attrValue! />
+									         </#if>     
+									         <#if attrName.equals("GIFT_MSG_TEXT_"+seqId+"_"+shipGroupSeqId)>
+									             <#assign giftMessageText = orderItemAttribute.attrValue! />
+									         </#if>
+								          </#list>
+								          <tr style="${TABULAR_DATA!""}">
+								            <td colspan="100%">
+								              <#if to?has_content || giftMessageText?has_content || from?has_content>
+							                  	${uiLabelMap.GiftMessageLabel}<#if shipGroupAssocQty &gt; 1> ${count!}</#if>: ${to!}  ${giftMessageText!}  ${from!}
+							                  </#if>
+							                </td>
+							              </tr>
+								      </#list>
+	                                  <#-- END GIFT MESSAGE-->                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
                               </#list>    
                           </table>
                       </td>
@@ -1192,13 +1256,13 @@
                <#assign itemOrderStatus = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(itemOrderStatus)/>
                <tr style="${TABULAR_DATA!""}">
                     <td>
-                         <a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
+                         <a href="${HTTP_HOST}/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
                               <img style="${E_IMAGE}" alt="${StringUtil.wrapString(orderItem.itemDescription)}" src="${HTTP_HOST}${productImageUrl}" height="${IMG_SIZE_CART_H}" width="${IMG_SIZE_CART_W}">
                          </a>                
                     </td>
                
                     <td>
-                         <a style="${E_LINK!""}" href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(orderItem.itemDescription)}</a>
+                         <a style="${E_LINK!""}" href="${HTTP_HOST}/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(orderItem.itemDescription)}</a>
                               <#if features?has_content>
                                    <table class="displayList">
                                         <#list features as feature>
@@ -1363,13 +1427,13 @@
 						                       <#assign productImageUrl = "/osafe_theme/images/user_content/image/place_holder_small.jpg">
 						                   </#if>
 						                   <tr>
-						                       <td><a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
+						                       <td><a href="${HTTP_HOST}/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
 						                           <img style="${E_IMAGE}" height="${IMG_SIZE_CART_H}" width="${IMG_SIZE_CART_W}"  alt="${StringUtil.wrapString(orderItem.itemDescription)}" src="${HTTP_HOST}${productImageUrl}">
 						                           </a>
 						                       </td>
 						                       <td>${StringUtil.wrapString(orderItem.itemDescription)}</td>
 						                       <td>
-						                          <a href="${HTTP_HOST}/${DISPATCHER_NAME}/control/eCommerceProductReviewSubmit?productId=${urlProductId}" style="${E_LINK!""}">${uiLabelMap.ReviewLabel}</a>
+						                          <a href="${HTTP_HOST}/eCommerceProductReviewSubmit?productId=${urlProductId}" style="${E_LINK!""}">${uiLabelMap.ReviewLabel}</a>
 						                       </td>
 						                   </tr>
 						               </#list>

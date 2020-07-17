@@ -19,7 +19,7 @@
           <#assign variantOnlinePrice = productVariantFeatureMap.get("basePrice")!""/>
       </#if>
       <#if productFeatureVariantId?has_content>
-        <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, StringUtil.wrapString(plpPdpUrl) + "&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
+        <#assign variantProductUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request, StringUtil.wrapString(plpPdpUrl) + "&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
         <input type = "hidden" id="${plpProductId}${productFeatureTypeId!}:${productFeatureDescription!}" value="${variantProductUrl!}"/>
         <input type = "hidden" class="js_featureGroup" value="${descriptiveFeatureGroupDesc!}"/>
         

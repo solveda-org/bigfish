@@ -17,7 +17,7 @@
                 <th class="actionColSmall">
                   <#if previewHomeSpotAction?exists>
                     <input type="hidden" id="previewHomeSpotAction" value="<@ofbizUrl>${previewHomeSpotAction}</@ofbizUrl>" />
-                    <a href="<@ofbizUrl>${previewHomeSpotAction}</@ofbizUrl>" id="previewHomeSpot" onMouseover="showTooltip(event,'${uiLabelMap.PreviewContentTooltip}');" onMouseout="hideTooltip()" class="previewIcon"></a>
+                    <a href="<@ofbizUrl>${previewHomeSpotAction}</@ofbizUrl>" id="previewHomeSpot" onMouseover="showTooltip(event,'${uiLabelMap.PreviewContentTooltip}');" onMouseout="hideTooltip()"><span class="previewIcon"></span></a>
                   </#if>
                 </th>
             </tr>
@@ -108,6 +108,9 @@
 				            <ul>
 		                      <#if contentTypeId?exists && staticPageContentTypeId?exists && contentTypeId == staticPageContentTypeId>
 		                        <li><a href="<@ofbizUrl>staticPageMetatag?contentId=${thisContent.contentId!}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
+		                      </#if>
+		                      <#if editAction?exists && editAction?has_content>
+		                        <li><a href="<@ofbizUrl>${editAction}?contentId=${thisContent.contentId?if_exists}</@ofbizUrl>"><span class="detailIcon"></span>${uiLabelMap.EditContentTooltip}</a></li>
 		                      </#if>
 		                      <#if previewAction?exists && previewAction?has_content>
 		                        <li><a href="<@ofbizUrl>${previewAction}?contentId=${thisContent.contentId?if_exists}</@ofbizUrl>" target="_new"><span class="previewIcon"></span>${uiLabelMap.PreviewContentTooltip}</a></li>

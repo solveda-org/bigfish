@@ -87,7 +87,7 @@
 
     <!-- EBS Payment Gateway Config -->
     <PaymentGatewayConfig paymentGatewayConfigId="EBS_CONFIG" paymentGatewayConfigTypeId="EBS" description="EBS Config"/>
-    <PaymentGatewayEbs paymentGatewayConfigId="EBS_CONFIG" apiUrl="https://secure.ebs.in/api/1_0" merchantId="MERCHANT ID" secretKey="MERCHANT SECRET KEY" mode="TEST" redirectUrl="https://secure.ebs.in/pg/ma/sale/pay/" returnUrl="https://www.yourdomainname.com/online/control/ebsCheckoutReturn?DR={DR}"/>
+    <PaymentGatewayEbs paymentGatewayConfigId="EBS_CONFIG" apiUrl="https://secure.ebs.in/api/1_0" merchantId="MERCHANT ID" secretKey="MERCHANT SECRET KEY" mode="TEST" redirectUrl="https://secure.ebs.in/pg/ma/sale/pay/" returnUrl="https://www.yourdomainname.com/ebsCheckoutReturn?DR={DR}"/>
 
     <!-- BLUEDART Shipment Gateways Settings -->
     <ShipmentGatewayConfig shipmentGatewayConfigId="BLUEDART_CONFIG" shipmentGatewayConfTypeId="BLUEDART" description="BLUEDART Config"/>
@@ -99,6 +99,6 @@
 
     <!-- Atom PayNetz Payment Gateway Config -->
     <PaymentGatewayConfig paymentGatewayConfigId="PAYNETZ_CONFIG" paymentGatewayConfigTypeId="PAYNETZ" description="Atom PayNetz Config"/>
-    <PaymentGatewayPayNetz paymentGatewayConfigId="PAYNETZ_CONFIG" apiUrl="" loginId="160" password="Test@123" productId="NSE" payNetzMode="TEST" redirectUrl="http://203.114.240.183/paynetz/epi/fts" returnUrl="https://www.yourdomainname.com/online/control/payNetzCheckoutReturn" transactionType="NBFundTransfer"/>
+    <PaymentGatewayPayNetz paymentGatewayConfigId="PAYNETZ_CONFIG" apiUrl="" loginId="160" password="Test@123" productId="NSE" payNetzMode="TEST" redirectUrl="http://203.114.240.183/paynetz/epi/fts" returnUrl="https://www.yourdomainname.com/payNetzCheckoutReturn" transactionType="NBFundTransfer"/>
 
 </entity-engine-xml>

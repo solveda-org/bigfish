@@ -152,6 +152,20 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="pdpInStoreOnlyContent">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/pdp/pdpInStoreOnlyContent.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="pdpPriceList">
 		<section>
 			<actions>
@@ -592,6 +606,48 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="pdpSpecificContent01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpSpecificContent02">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent02.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpSpecificContent03">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent03.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 	<screen name="pdpManufacturerDescription">
 		<section>
 			<actions>
@@ -895,6 +951,20 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="pdpTabsInStoreOnlyContent">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/pdp/pdpInStoreOnlyContent.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="pdpTabsPriceList">
 		<section>
 			<actions>
@@ -1330,6 +1400,48 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="pdpTabsSpecificContent01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpTabsSpecificContent02">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent02.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="pdpTabsSpecificContent03">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent03.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 	<screen name="pdpTabsManufacturerDescription">
 		<section>
 			<actions>
@@ -1636,6 +1748,20 @@
 			</widgets>
 		</section>
 	</screen>
+    <screen name="quicklookInStoreOnlyContent">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                        <html-template
+                            location="component://osafe/webapp/osafe/common/pdp/pdpInStoreOnlyContent.ftl" />
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 	<screen name="quicklookPriceList">
 		<section>
 			<actions>
@@ -2080,6 +2206,48 @@
 					<html>
 						<html-template
 							location="component://osafe/webapp/osafe/common/pdp/pdpAdditional.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="quicklookSpecificContent01">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent01.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="quicklookSpecificContent02">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent02.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="quicklookSpecificContent03">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/pdp/pdpSpecificContent03.ftl" />
 					</html>
 				</platform-specific>
 			</widgets>
@@ -6173,6 +6341,7 @@
 	<screen name="orderSummaryShippingGroupSummary">
 		<section>
 			<actions>
+				<set field="checkDeliveryOptionMulti" value="N" />
 			</actions>
 			<widgets>
 				<include-screen name="cartShippingGroups"
@@ -6629,6 +6798,7 @@
 	<screen name="anonorderSummaryShippingGroupSummary">
 		<section>
 			<actions>
+				<set field="checkDeliveryOptionMulti" value="N" />
 			</actions>
 			<widgets>
 				<include-screen name="cartShippingGroups"
@@ -7054,6 +7224,7 @@
 	<screen name="paypalorderSummaryShippingGroupSummary">
 		<section>
 			<actions>
+				<set field="checkDeliveryOptionMulti" value="N" />
 			</actions>
 			<widgets>
 				<include-screen name="cartShippingGroups"
@@ -7501,6 +7672,7 @@
 	<screen name="anonPaypalorderSummaryShippingGroupSummary">
 		<section>
 			<actions>
+				<set field="checkDeliveryOptionMulti" value="N" />
 			</actions>
 			<widgets>
 				<include-screen name="cartShippingGroups"
@@ -8341,8 +8513,8 @@
 			<actions>
 				<set field="uiSequenceScreen" value="OnePageCheckout" />
 				<set field="uiSequenceScreenPrefix" value="" />
-				<script
-					location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 				<set field="useAvailability" value="Y" />
 				<set field="uiBoxListItemGridName" value="" />
 				<set field="uiBoxListItemTabName" value="" />
@@ -8396,10 +8568,9 @@
 				<property-map resource="OSafeUiLabels" map-name="uiLabelMap"
 					global="true" />
 				<set field="summaryScreen" value="onePageCheckout" />
-				<script
-					location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
-				<script
-					location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 			</actions>
 			<widgets>
 				<container style="js_onePageCheckoutOrderItemsSummary">
@@ -8477,10 +8648,10 @@
 		<section>
 			<actions>
 				<set field="multiAddressUrl" value="singlePageMultiAddress" />
+				<set field="checkDeliveryOptionMulti" value="Y" />
 			</actions>
 			<widgets>
-				<include-screen name="cartShippingGroups"
-					location="component://osafe/widget/EcommerceCheckoutScreens.xml" />
+				<include-screen name="cartShippingGroups" location="component://osafe/widget/EcommerceCheckoutScreens.xml" />
 			</widgets>
 		</section>
 	</screen>
@@ -8573,8 +8744,8 @@
 			<actions>
 				<set field="uiSequenceScreen" value="OnePageCheckout" />
 				<set field="uiSequenceScreenPrefix" value="anon" />
-				<script
-					location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 				<set field="uiBoxListItemGridName" value="" />
 				<set field="uiBoxListItemTabName" value="" />
 				<set field="uiDisplayListName" value="" />
@@ -8627,10 +8798,9 @@
 				<property-map resource="OSafeUiLabels" map-name="uiLabelMap"
 					global="true" />
 				<set field="summaryScreen" value="anononePageCheckout" />
-				<script
-					location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
-				<script
-					location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 			</actions>
 			<widgets>
 				<container style="js_onePageCheckoutOrderItemsSummary">
@@ -8708,11 +8878,8 @@
 	<screen name="anononePageCheckoutShippingGroupSummary">
 		<section>
 			<actions>
-				<set field="multiAddressUrl" value="singlePageMultiAddress" />
 			</actions>
 			<widgets>
-				<include-screen name="cartShippingGroups"
-					location="component://osafe/widget/EcommerceCheckoutScreens.xml" />
 			</widgets>
 		</section>
 	</screen>
@@ -12345,6 +12512,20 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="siteHeaderNavigation">
+		<section>
+			<actions>
+				<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/siteNavigation.groovy" />
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template location="component://osafe/webapp/osafe/common/siteHeader/siteNavigation.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : Contact Us Form Sequencer Type : ContactUs -->
@@ -13150,6 +13331,20 @@
 			</widgets>
 		</section>
 	</screen>
+	<screen name="signInFacebook">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/signIn/signInFacebook.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
 	<!-- ********************************************************************** -->
 	<!-- Sequence Screen : Registration Items Sequencer Type : Registration -->
 	<!-- ********************************************************************** -->
@@ -13563,6 +13758,228 @@
 			</widgets>
 		</section>
 	</screen>
+
+
+    <!-- ********************************************************************** -->
+	<!-- Sequence Screen : Gift Message Order Confirm Page Sequencer Type : GiftMessageOrderConfirm -->
+	<!-- ********************************************************************** -->
+	<screen name="giftMessageConfirmDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="GiftMessageConfirm" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="" />
+				<set field="uiDisplayListName" value="" />
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItems">
+		<section>
+			<actions>
+				<property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/giftMessage/giftMessageConfirmOrderLineInfo.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmMessageEntry">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/giftMessage/giftMessageConfirmEntryForm.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmPreviousButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/giftMessage/giftMessagePreviousButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmContinueButton">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/giftMessage/giftMessageContinueButton.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
+
+    <!-- ********************************************************************** -->
+	<!-- Sequence Screen : Show Cart Order Items Sequencer Type : GiftMessageConfirmOrderItems -->
+	<!-- ********************************************************************** -->
+	<screen name="giftMessageConfirmOrderItemsDivSequence">
+		<section>
+			<actions>
+				<set field="uiSequenceScreen" value="GiftMessageConfirmOrderItems" />
+				<set field="uiBoxListItemGridName" value="" />
+				<set field="uiBoxListItemTabName" value="cartItem" />
+				<set field="uiDisplayListName" value="cartItemList" />
+				<!-- <set field="formName" value="cartform" /> <set field="doneAction" 
+					value="checkout" /> -->
+			</actions>
+			<widgets>
+				<include-screen name="ecommerceDivSequence" />
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemImage">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemImage.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemName">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemName.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemDescription">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemDescription.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemQty">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemQuantity.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemPrice">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemPrice.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemPriceRecurrence">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemPriceRecurrence.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemTotal">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemPriceTotal.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemOfferPrice">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemOfferPrice.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+	<screen name="giftMessageConfirmOrderItemsItemAvailability">
+		<section>
+			<actions>
+			</actions>
+			<widgets>
+				<platform-specific>
+					<html>
+						<html-template
+							location="component://osafe/webapp/osafe/common/cart/cartItemItemAvailability.ftl" />
+					</html>
+				</platform-specific>
+			</widgets>
+		</section>
+	</screen>
+
 
     <!-- ********************************************************************** -->
     <!-- Sequence Screen : Order Detail Page Sequencer Type : OrderDetail -->

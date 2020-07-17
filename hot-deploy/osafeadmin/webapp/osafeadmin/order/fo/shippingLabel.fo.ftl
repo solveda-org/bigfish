@@ -198,14 +198,14 @@ under the License.
                          <fo:table-cell>       
                                 <fo:block font-size="8pt">
                                 <fo:block font-size="12pt" font-weight="bold" text-indent="10mm">${companyName?upper_case}</fo:block>
+                                <fo:block wrap-option="wrap" text-indent="10mm">
                                 <#if companyAddress?exists>
                                     <#if companyAddress?has_content>
-                                        <fo:block text-indent="10mm">${companyAddress.address1?if_exists}</fo:block>
-                                        <fo:block text-indent="10mm"><#if companyAddress.address2?has_content>${companyAddress.address2?if_exists}</#if></fo:block>
-                                        <#assign stateGeo = (delegator.findOne("Geo", {"geoId", companyAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
-                                        <fo:block text-indent="10mm">${companyAddress.city?if_exists}<#if stateGeo?has_content && stateGeo.geoId != '_NA_'>, ${stateGeo.geoName?if_exists}</#if> ${companyAddress.postalCode?if_exists}, ${countryName?if_exists}</fo:block>
+                                      ${setRequestAttribute("PostalAddress",companyAddress)}
+                                      ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
                                     </#if>
                                 </#if>
+                                </fo:block>
                             
                                 
                                 <fo:list-block provisional-distance-between-starts=".3in">
@@ -286,46 +286,31 @@ under the License.
                 <fo:table-column column-number="3" column-width="proportional-column-width(40)"/>
                 <fo:table-body>
                   <fo:table-row>
-                    <fo:table-cell number-columns-spanned="2">
+                    <fo:table-cell number-columns-spanned="2" margin-left="2pt">
                       <fo:table table-layout="fixed" >
                       <fo:table-column column-number="1" column-width="proportional-column-width(40)"/>
                 	  <fo:table-column column-number="2" column-width="proportional-column-width(60)"/>
                     	<fo:table-body>                 
                   		 <fo:table-row >
                           <fo:table-cell>
-                            <fo:block text-align="start" font-weight="bold" text-indent="5mm" text-decoration="underline"> ${uiLabelMap.DeliverToLabel}</fo:block>
+                            <fo:block text-align="start" font-weight="bold" text-indent="0.001mm" text-decoration="underline"> ${uiLabelMap.DeliverToLabel}</fo:block>
                             <fo:block text-align="start" text-indent="5mm">
-                     			<fo:block font-size="10pt" font-weight="bold" text-indent="5mm" wrap-option="wrap">${displayPartyNameResult.fullName?default("[${uiLabelMap.PartyNameNotFoundInfo}]")?upper_case}</fo:block>
-			                    <#assign orderContactMechs = Static["org.ofbiz.party.contact.ContactMechWorker"].getOrderContactMechValueMaps(delegator, orderHeader.get("orderId"))>
-			                    <#list orderContactMechs as orderContactMechValueMap>
-			                     <#assign contactMech = orderContactMechValueMap.contactMech>
-			                     <#assign contactMechPurpose = orderContactMechValueMap.contactMechPurposeType>
-			                     <#if contactMech.contactMechTypeId == "POSTAL_ADDRESS">
-			                      <#if (contactMechPurpose.contactMechPurposeTypeId == "SHIPPING_LOCATION" && (!isStorePickup?has_content || isStorePickup != "Y"))>
-			                      <#assign postalAddress = orderContactMechValueMap.postalAddress>
-			                       <fo:block font-size="10pt" font-weight="bold" wrap-option="wrap">
-			                        <#if postalAddress?has_content>			                        
-			                         <#if postalAddress.address1?has_content><fo:block>${postalAddress.address1?if_exists}</fo:block></#if>
-			                         <#if postalAddress.address2?has_content><fo:block>${postalAddress.address2?if_exists}</fo:block></#if>
-			                          <fo:block wrap-option="wrap">
-			                           <#assign stateGeo = (delegator.findOne("Geo", {"geoId", postalAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
-			                           ${postalAddress.city}<#if stateGeo?has_content && stateGeo.geoId != '_NA_'>, ${stateGeo.geoName?if_exists}</#if> 
-			                          </fo:block>
-			                          <fo:block wrap-option="wrap">
-			                            <#assign postalCode = postalAddress.postalCode!/>
-			                            ${postalCode!}
-			                            <#assign bluedartDstarcd = (delegator.findOne("BlueDartPrepaid", {"pincode", postalCode?if_exists}, false))?if_exists />
-			                            <#if bluedartDstarcd?has_content>
-			                               - ${bluedartDstarcd.dstarcd!}
-			                            </#if>
-			                          </fo:block>
-			                        </#if>
-			                       </fo:block>
-			                    </#if>
-			                   </#if>
-			                  </#list>                            
+                     			<fo:block font-size="10pt" font-weight="bold" text-indent="0.001mm" wrap-option="wrap">${displayPartyNameResult.fullName?default("[${uiLabelMap.PartyNameNotFoundInfo}]")?upper_case}</fo:block>
+                                   <#assign postalAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
+                                   <fo:block font-size="10pt" font-weight="bold" wrap-option="wrap" text-indent="0.001mm">
+                                    <#if postalAddress?has_content>
+                                      ${setRequestAttribute("PostalAddress",postalAddress)}
+                                      ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
+                                      <fo:block wrap-option="wrap" text-indent="0.1mm">
+                                        <#assign bluedartDstarcd = (delegator.findOne("BlueDartPrepaid", {"pincode", postalCode?if_exists}, false))?if_exists />
+                                        <#if bluedartDstarcd?has_content>
+                                           - ${bluedartDstarcd.dstarcd!}
+                                        </#if>
+                                      </fo:block>
+                                    </#if>
+                                   </fo:block>
                             </fo:block>
-                            <fo:block text-align="start" font-size="10pt"  text-indent="5mm">
+                            <fo:block text-align="start" font-size="10pt" text-indent="0.001mm">
                                 ${uiLabelMap.PhCaption}
                                 <#assign writeComa = false/>
                                 <#if formattedHomePhone?has_content>
@@ -686,19 +671,18 @@ under the License.
                 </fo:table-cell>
                 <fo:table-cell>
                     <fo:table table-layout="fixed" width="100%">
-                        <fo:table-column column-number="1" column-width="4in"/>
-                        <fo:table-column column-number="2" column-width="2in"/>
+                        <fo:table-column column-number="1" column-width="5in"/>
+                        <fo:table-column column-number="2" column-width="1in"/>
                         <fo:table-body>
                             <fo:table-row>
                                 <fo:table-cell>
                                     <fo:block font-size="10pt">
 			                             <#if companyAddress?exists>
-			                                 <#if companyAddress?has_content>
-			                                    ${companyAddress.address1?if_exists}
-			                                    <#if companyAddress.address2?has_content>${companyAddress.address2?if_exists}</#if>
-			                                    <#assign stateGeo = (delegator.findOne("Geo", {"geoId", companyAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
-			                                    ${companyAddress.city?if_exists}<#if stateGeo?has_content && stateGeo.geoId != '_NA_'>, ${stateGeo.geoName?if_exists}</#if>, ${countryName?if_exists}
-			                                 </#if>
+                                            <#if companyAddress?has_content>
+                                              ${setRequestAttribute("DISPLAY_FORMAT","SINGLE_LINE_FULL_ADDRESS")}
+                                              ${setRequestAttribute("PostalAddress",companyAddress)}
+                                              ${screens.render("component://osafeadmin/widget/CommonScreens.xml#displayPostalAddressPDF")}
+                                            </#if>
 			                             </#if>
                                      </fo:block>
                                 </fo:table-cell>

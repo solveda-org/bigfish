@@ -7,7 +7,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.base.util.*;
 import org.ofbiz.product.product.ProductWorker;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.party.party.PartyHelper;
 import com.osafe.util.Util;
 
@@ -55,7 +55,7 @@ if(UtilValidate.isNotEmpty(parameters.productId))
 	}
 	if (UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productCategoryId))
 	{
-		 prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
+		 prevButtonUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
 	}
 }
  context.prevButtonUrl = prevButtonUrl;

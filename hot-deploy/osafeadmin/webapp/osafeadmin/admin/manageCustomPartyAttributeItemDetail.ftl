@@ -29,9 +29,9 @@
                 <div class="infoCaption"><label>${uiLabelMap.SeqNoCaption}</label></div>
                 <div class="infoValue">
                   <#if mode?has_content && mode == "add">
-                    <input type="text" class="small" name="sequenceNum" value="${parameters.sequenceNum!sequenceNum!""}" />
+                    <input type="text" class="small" name="sequenceNum" value="${parameters.sequenceNum!sequenceNum!""}" maxlength="10"/>
                   <#elseif mode?has_content && mode == "edit">
-                    <input type="text" class="small" name="sequenceNum" value="${sequenceNum!""}" />
+                    <input type="text" class="small" name="sequenceNum" value="${sequenceNum!""}" maxlength="10"/>
                   </#if>
                </div>
                <div class="infoIcon">

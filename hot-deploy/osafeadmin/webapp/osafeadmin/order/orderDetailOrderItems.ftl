@@ -7,6 +7,8 @@
                 <th class="nameCol">${uiLabelMap.ProductNameLabel}</th>
                 <th class="statusCol">${uiLabelMap.ItemStatusLabel}</th>
                 <th class="dollarCol">${uiLabelMap.QtyLabel}</th>
+                <th class="dollarCol">${uiLabelMap.ReturnQtyLabel}</th>
+                <th class="dollarCol">${uiLabelMap.CancelQtyLabel}</th>
                 <th class="dollarCol">${uiLabelMap.UnitPriceLabel}</th>
                 <th class="dollarCol">${uiLabelMap.OfferPriceLabel}</th>
                 <th class="dollarCol">${uiLabelMap.AdjustAmountLabel}</th>
@@ -14,20 +16,23 @@
             </tr>
         <#if resultList?exists && resultList?has_content>
             <#assign rowClass = "1"/>
+                <#assign currencyUomId = orderReadHelper.getCurrency()>
+                <#assign orderValidItems = orderReadHelper.getOrderItems()/>
                 <#assign orderAdjustments = orderReadHelper.getAdjustments()>
                 <#assign orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments()>
-                <#assign headerAdjustmentsToShow = orderReadHelper.filterOrderAdjustments(orderHeaderAdjustments, true, false, false, false, false)/>
-                <#assign orderSubTotal = orderReadHelper.getOrderItemsSubTotal()>
-                <#assign currencyUomId = orderReadHelper.getCurrency()>
-                <#assign orderItems = orderReadHelper.getOrderItems()/>
-                <#assign orderAdjustments = orderReadHelper.getAdjustments()/> 
-                <#assign otherAdjustmentsList = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(orderAdjustments, [Static["org.ofbiz.entity.condition.EntityCondition"].makeCondition("orderAdjustmentTypeId", Static["org.ofbiz.entity.condition.EntityOperator"].NOT_EQUAL, "PROMOTION_ADJUSTMENT")])/>
-                <#assign otherAdjustmentsList = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(otherAdjustmentsList, [Static["org.ofbiz.entity.condition.EntityCondition"].makeCondition("orderAdjustmentTypeId", Static["org.ofbiz.entity.condition.EntityOperator"].NOT_EQUAL, "LOYALTY_POINTS")])/>
-                <#assign otherAdjustmentsAmount = Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustments(otherAdjustmentsList, orderSubTotal, true, false, false)/>
-                <#assign shippingAmount = Static["org.ofbiz.order.order.OrderReadHelper"].getAllOrderItemsAdjustmentsTotal(resultList, orderAdjustments, false, false, true)>
-                <#assign shippingAmount = shippingAmount.add(Static["org.ofbiz.order.order.OrderReadHelper"].calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true))>
-                <#assign taxAmount = Static["org.ofbiz.order.order.OrderReadHelper"].getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal>
-                <#assign grandTotal = orderReadHelper.getOrderGrandTotal()/>
+                <#assign otherOrderHeaderAdjustments = orderReadHelper.filterOrderAdjustments(orderHeaderAdjustments, true, false, false, false, false)/>
+                <#assign orderSubTotal = orderReadHelper.getOrderItemsSubTotal(orderValidItems,orderAdjustments)/>
+                <#assign otherOrderHeaderAdjustmentsList = Static["javolution.util.FastList"].newInstance()/>
+                <#list otherOrderHeaderAdjustments as orderHeaderAdjustment>
+                  <#if orderHeaderAdjustment.orderAdjustmentTypeId != "LOYALTY_POINTS" && !orderHeaderAdjustment.productPromoId?has_content>
+        		    <#assign changed = otherOrderHeaderAdjustmentsList.add(orderHeaderAdjustment)/>
+        		   </#if>
+        		</#list>
+                <#assign otherAdjustmentsAmount = orderReadHelper.calcOrderAdjustments(otherOrderHeaderAdjustmentsList, orderSubTotal, true, false, false)/>
+                <#assign shippingAmount = orderReadHelper.calcOrderAdjustments(orderAdjustments, orderSubTotal, false, false, true)> 
+                <#assign taxAmount = orderReadHelper.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal!"0.00"/>
+                <#assign grandTotal = orderReadHelper.getOrderGrandTotal(orderValidItems, orderAdjustments)/>
+                <#assign returnQuantityMap = orderReadHelper.getOrderItemReturnedQuantities()>
             <#list resultList as orderItem>
                 <#assign hasNext = orderItem_has_next/>
                 <#assign orderItemType = orderItem.getRelatedOne("OrderItemType")?if_exists>
@@ -35,7 +40,8 @@
                 <#assign itemProduct = orderItem.getRelatedOne("Product")/>
                 <#assign itemStatus = orderItem.getRelatedOne("StatusItem")/>
                 <#assign remainingQuantity = (orderItem.quantity?default(0) - orderItem.cancelQuantity?default(0))>
-                <#assign itemAdjustment = Static["org.ofbiz.order.order.OrderReadHelper"].getOrderItemAdjustmentsTotal(orderItem, orderAdjustments, true, false, false)>
+                <#assign returnedQty = returnQuantityMap.get(orderItem.orderItemSeqId)?default(0) />
+                <#assign itemAdjustment = orderReadHelper.getOrderItemAdjustmentsTotal(orderItem, orderAdjustments, true, false, false)>
                 <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(itemProduct,request)>
                 <#assign productName = productContentWrapper.get("PRODUCT_NAME")!itemProduct.productName!"">
                 <#if productName="">
@@ -90,7 +96,7 @@
                           <#assign orderHeader = delegator.findByPrimaryKey("OrderHeader", {"orderId": orderItem.orderId})/>
                           <#if orderHeader?has_content && (orderHeader.statusId == "ORDER_COMPLETED" || orderItem.statusId == "ITEM_COMPLETED") >
                               <#assign trackingNumber = shipGroup.trackingNumber!""/>
-                              <#if shipGroup.carrierPartyId != "_NA_">
+                              <#if (shipGroup.carrierPartyId?has_content && shipGroup.carrierPartyId != "_NA_")>
                                   <#assign trackingURLPartyContents = delegator.findByAnd("PartyContent", {"partyId": shipGroup.carrierPartyId, "partyContentTypeId": "TRACKING_URL"})/>
                                   <#if trackingURLPartyContents?has_content>
                                       <#assign trackingURLPartyContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(trackingURLPartyContents)/>
@@ -138,10 +144,14 @@
                       </#if>
                     </td>
                     <td class="dollarCol <#if !hasNext>lastRow</#if>">${orderItem.quantity?string.number}</td>
+                    <td class="dollarCol <#if !hasNext>lastRow</#if>">${returnedQty?string.number}</td>
+                    <td class="dollarCol <#if !hasNext>lastRow</#if>">${orderItem.cancelQuantity?default(0)?string.number}</td>
                     <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderItem.unitPrice rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                     <td class="dollarCol <#if !hasNext>lastRow</#if>"><#if (itemPromoAdjustment < 0)><a onMouseover="showTooltip(event,'${toolTipData!}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></a><@ofbizCurrency amount=offerPrice rounding=globalContext.currencyRounding isoCode=currencyUomId/></#if></td>
                     <td class="dollarCol <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemAdjustmentsTotal(orderItem) rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
-                    <td class="dollarCol total <#if !hasNext>lastRow</#if>"><@ofbizCurrency amount=orderReadHelper.getOrderItemSubTotal(orderItem,orderReadHelper.getAdjustments()) rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
+                    <td class="dollarCol total <#if !hasNext>lastRow</#if>">
+                            <@ofbizCurrency amount=orderReadHelper.getOrderItemSubTotal(orderItem, orderAdjustments) isoCode=currencyUomId/>
+                    </td>
                 </tr>
 
                 <#-- toggle the row color -->
@@ -154,13 +164,13 @@
          </tbody>
          <tfoot>
             <tr>
-                <td colspan="10">
+                <td colspan="12">
                     <table class="osafe orderSummary">
                         <tr>
                           <td class="totalCaption"><label>${uiLabelMap.SubtotalCaption}</label></td>
                           <td class="totalValue"><@ofbizCurrency amount=orderSubTotal rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                         </tr>
-                        <#list headerAdjustmentsToShow as orderHeaderAdjustment>
+                        <#list otherOrderHeaderAdjustments as orderHeaderAdjustment>
                           <#assign adjustmentType = orderHeaderAdjustment.getRelatedOne("OrderAdjustmentType")>
                           <#assign productPromo = orderHeaderAdjustment.getRelatedOne("ProductPromo")!"">
                           <#if productPromo?has_content>
@@ -190,7 +200,7 @@
 	                         </tr>
                           </#if>
                         </#list>
-                        <#list headerAdjustmentsToShow as orderHeaderAdjustment>
+                        <#list otherOrderHeaderAdjustments as orderHeaderAdjustment>
                           <#assign adjustmentType = orderHeaderAdjustment.getRelatedOne("OrderAdjustmentType")/>
                           <#assign loyaltyOrderAdjustmentTypeId = adjustmentType.orderAdjustmentTypeId/>
                           <#if loyaltyOrderAdjustmentTypeId == "LOYALTY_POINTS">
@@ -210,11 +220,11 @@
                             <tr>
 					      	  <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", totalTaxPercent)>
 					          <#assign salesTaxCaption = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SummarySalesTaxCaption",taxInfoStringMap, locale ) />
-                              <td class="totalCaption"><label>${salesTaxCaption!}</label></td>
+                              <td class="totalCaption"><label><#if shipGroupSalesTaxSame>${salesTaxCaption!}<#else>${uiLabelMap.SummarySalesTaxShortCaption!}</#if></label></td>
                               <td class="totalValue"><@ofbizCurrency amount=taxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                             </tr>
                           <#else>
-                            <#if appliedTaxList?exists && appliedTaxList?has_content>
+                            <#if appliedTaxList?exists && appliedTaxList?has_content && shipGroupSalesTaxSame>
 						      <#list appliedTaxList as appliedTax >  
 						        <tr>
 						          <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", appliedTax.sourcePercentage, "description", appliedTax.description)>
@@ -227,7 +237,7 @@
 						      <tr>
 					      	    <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", totalTaxPercent)>
 					            <#assign salesTaxCaption = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels","SummarySalesTaxCaption",taxInfoStringMap, locale ) />
-                                <td class="totalCaption"><label>${salesTaxCaption!}</label></td>
+                                <td class="totalCaption"><label><#if shipGroupSalesTaxSame>${salesTaxCaption!}<#else>${uiLabelMap.SummarySalesTaxShortCaption!}</#if></label></td>
                                 <td class="totalValue"><@ofbizCurrency amount=taxAmount rounding=globalContext.currencyRounding isoCode=currencyUomId/></td>
                               </tr>
 						    </#if>

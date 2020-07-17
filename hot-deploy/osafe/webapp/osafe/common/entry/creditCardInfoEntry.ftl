@@ -17,8 +17,10 @@
 <#if paymentMethodId?has_content && userLogin?has_content && mode == "edit">
     <#assign partyId = userLogin.partyId!"">
     <#assign partyProfileDefault = delegator.findOne("PartyProfileDefault", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId, "productStoreId", productStore.productStoreId), true)?if_exists/>
-    <#if partyProfileDefault?has_content && (partyProfileDefault.defaultPayMeth == paymentMethodId)>
-        <#assign setAsDefaultCard = "Y" />
+    <#if partyProfileDefault?has_content>
+    	<#if partyProfileDefault.defaultPayMeth?has_content && (partyProfileDefault.defaultPayMeth == paymentMethodId)>
+        	<#assign setAsDefaultCard = "Y" />
+        </#if>
     </#if>
 </#if>
 <div id="creditCardInfo" class="displayBox">

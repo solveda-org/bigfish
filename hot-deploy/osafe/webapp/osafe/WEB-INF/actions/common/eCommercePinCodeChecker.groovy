@@ -42,7 +42,7 @@ if(UtilValidate.isNotEmpty(deliveryAvailable))
 	context.deliveryAvailable = deliveryAvailable;
 	 if (deliveryAvailable == "N" && isValidPinCode == "Y")
 	 {
-		request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage("OsafeUiLabels", "DeliveryNotAvailableInfo", locale));
+		request.setAttribute("_ERROR_MESSAGE_", UtilProperties.getMessage("OSafeUiLabels", "DeliveryNotAvailableInfo", locale));
 		return "error";
 	 }
 }

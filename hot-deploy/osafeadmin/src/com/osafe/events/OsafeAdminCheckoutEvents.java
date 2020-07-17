@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -16,14 +17,17 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.MessageString;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.order.order.OrderChangeHelper;
 import org.ofbiz.order.shoppingcart.CartItemModifyException;
 import org.ofbiz.order.shoppingcart.CheckOutHelper;
 import org.ofbiz.order.shoppingcart.ItemNotFoundException;
@@ -33,6 +37,7 @@ import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.product.config.ProductConfigWrapper;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ModelService;
 import org.ofbiz.service.ServiceUtil;
 import org.ofbiz.order.shoppingcart.ShoppingCartHelper;
 import org.apache.commons.lang.StringUtils;
@@ -41,129 +46,9 @@ import com.osafe.util.OsafeAdminUtil;
 public class OsafeAdminCheckoutEvents {
 	
 	public static final String module = OsafeAdminCheckoutEvents.class.getName();
+    public static final int rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
 
-	public static String setGiftMessage(HttpServletRequest request, HttpServletResponse response) 
-    {
-    	Map<String, Object> context = FastMap.newInstance(); 
-    	Map<String, Object> params = UtilHttp.getParameterMap(request);
-        String cartLineIndexStr = (String) params.get("cartLineIndex");
-        ShoppingCart sc = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
-        
-        int cartLineIndex = -1;
-        if (UtilValidate.isNotEmpty(cartLineIndexStr)) 
-        {
-            try 
-            {
-            	cartLineIndex = Integer.parseInt(cartLineIndexStr);
-            } 
-            catch (NumberFormatException nfe) 
-            {
-                return "error";
-            }
-        }
-        
-        if(UtilValidate.isNotEmpty(sc) && UtilValidate.isNotEmpty(cartLineIndex) && cartLineIndex>-1)
-        {
-        	ShoppingCartItem sci = sc.findCartItem(cartLineIndex);
-        	if(UtilValidate.isNotEmpty(sci)) 
-            {
-        		for(Entry<String, Object> entry : params.entrySet()) 
-                {
-        			String attrName = entry.getKey();
-        			int underscorePos = attrName.lastIndexOf('_');
-            		if (underscorePos >= 0) 
-            		{
-            			try 
-            			{
-            				//If we have more than one product, index will tell us which one we are referencing [GIFT_MSG_FROM_{index}, GIFT_MSG_TO_{index}, GIFT_MSG_TEXT_{index}]
-            				String indexStr = attrName.substring(underscorePos + 1);
-            				int index;
-                            try 
-                            {
-                            	index = Integer.parseInt(indexStr);
-                            } 
-                            catch (NumberFormatException nfe) 
-                            {
-                                return "error";
-                            }
-                            
-                            //prefix with "0" if index is less than 10
-                            if(UtilValidate.isNotEmpty(index) && index < 10)
-                            {
-                            	indexStr = String.format("%02d", index);
-                            }
-                            
-                            //from
-                            if (attrName.startsWith("from_"))
-                        	{
-                            	String trimValue = StringUtils.trimToEmpty((String) entry.getValue());
-                            	if(UtilValidate.isNotEmpty(trimValue))
-                            	{
-                            		sci.setOrderItemAttribute("GIFT_MSG_FROM_" + indexStr , (String) entry.getValue());
-                            	}
-                            	else
-                            	{
-                            		//remove this attribute if it is empty
-                            		if(null != sci.getOrderItemAttribute("GIFT_MSG_FROM_" + indexStr))
-                            		{
-                            			sci.removeOrderItemAttribute("GIFT_MSG_FROM_" + indexStr);
-                            		}
-                            	}
-                        	}
-                			
-                			//to
-                            if (attrName.startsWith("to_"))
-                        	{
-                            	String trimValue = StringUtils.trimToEmpty((String) entry.getValue());
-                            	if(UtilValidate.isNotEmpty(trimValue))
-                            	{
-                            		sci.setOrderItemAttribute("GIFT_MSG_TO_" + indexStr , (String) entry.getValue());
-                            	}
-                            	else
-                            	{
-                            		//remove this attribute if it is empty
-                            		if(null != sci.getOrderItemAttribute("GIFT_MSG_TO_" + indexStr))
-                            		{
-                            			sci.removeOrderItemAttribute("GIFT_MSG_TO_" + indexStr);
-                            		}
-                            	}
-                        	}
-                			
-                          //text
-                            if (attrName.startsWith("giftMessageText_"))
-                        	{
-                            	String trimValue = StringUtils.trimToEmpty((String) entry.getValue());
-                            	String trimEnumValue = StringUtils.trimToEmpty((String) params.get("giftMessageEnum_" + indexStr));
-                            	if(UtilValidate.isNotEmpty(trimValue))
-                            	{
-                            		sci.setOrderItemAttribute("GIFT_MSG_TEXT_" + indexStr , (String) entry.getValue());
-                            	}
-                            	else if(UtilValidate.isEmpty(trimEnumValue) && null != sci.getOrderItemAttribute("GIFT_MSG_TEXT_" + indexStr))
-                            	{
-                            		sci.removeOrderItemAttribute("GIFT_MSG_TEXT_" + indexStr);
-                            	}
-                        	}
-                            else if(attrName.startsWith("giftMessageEnum_") && UtilValidate.isNotEmpty(StringUtils.trimToEmpty((String) entry.getValue())) && UtilValidate.isEmpty(params.get("giftMessageText_" + index)))
-                            {
-                            	sci.setOrderItemAttribute("GIFT_MSG_TEXT_" + indexStr , (String) entry.getValue());
-                            }
-            			}
-            			catch (NumberFormatException nfe) 
-            			{
-            				return "error";
-                        } 
-            			catch (Exception e) 
-            			{
-            				return "error";
-                        }
-            		}
-                }
-            }
-        }
-        
-        return "success";
-    }
-	
+
 	public static String addOrderAdjustment(HttpServletRequest request, HttpServletResponse response) 
     {
 		HttpSession session = request.getSession();
@@ -312,11 +197,6 @@ public class OsafeAdminCheckoutEvents {
             }
         }
     	BigDecimal totalLoyaltyPointsAmountBD = (BigDecimal) request.getAttribute("loyaltyPointsAmount");
-    	String totalLoyaltyPointsAmountStr = "";
-    	if (UtilValidate.isNotEmpty(totalLoyaltyPointsAmountBD)) 
-        {
-    		totalLoyaltyPointsAmountStr = totalLoyaltyPointsAmountBD.toString();
-        }
     	
     	List orderAdjustmentAttributeList = (List) session.getAttribute("orderAdjustmentAttributeList");
     	if(UtilValidate.isEmpty(orderAdjustmentAttributeList))
@@ -374,11 +254,9 @@ public class OsafeAdminCheckoutEvents {
         }
     	
     	BigDecimal totalLoyaltyPointsCurrencyBD = BigDecimal.ZERO;
-    	String totalLoyaltyPointsCurrencyStr = "";
     	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
     	{
     		totalLoyaltyPointsCurrencyBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsCurrency");
-    		totalLoyaltyPointsCurrencyStr = totalLoyaltyPointsCurrencyBD.toString();
     	}
     	
     	//Add Loyalty Points Adjustment to the Cart and add orderAdjustmentAttributeList Object to session
@@ -386,18 +264,17 @@ public class OsafeAdminCheckoutEvents {
     	{
     		//initially set the applied values to the totals
     		BigDecimal loyaltyPointsCurrencyBD = totalLoyaltyPointsCurrencyBD;
-    		String loyaltyPointsCurrencyStr = totalLoyaltyPointsCurrencyStr;
     		BigDecimal loyaltyPointsAmountBD = totalLoyaltyPointsAmountBD;
-    		String loyaltyPointsAmountStr = totalLoyaltyPointsAmountStr;
     		//compare loyaltyPointsCurrency applied by Loyalty Points to the balance left on the order
-    		BigDecimal cartGrandTotal = cart.getGrandTotal().stripTrailingZeros();
+    		BigDecimal cartGrandTotal = cart.getGrandTotal();
+    		BigDecimal cartTotalTaxes = cart.getTotalSalesTax();
+    		cartGrandTotal  = cartGrandTotal.subtract(cartTotalTaxes);
     		if ((loyaltyPointsCurrencyBD.compareTo(cartGrandTotal) > 0)) 
             {
     			//show warning mesage
     			session.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
     			request.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
     			loyaltyPointsCurrencyBD = cartGrandTotal;
-    			loyaltyPointsCurrencyStr = loyaltyPointsCurrencyBD.toString();
     			
     			//convert Currency to Loyalty Points Amount
             	serviceContext = FastMap.newInstance();
@@ -418,14 +295,7 @@ public class OsafeAdminCheckoutEvents {
             	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
             	{
             		loyaltyPointsAmountBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsAmount");
-            		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD)) 
-                    {
-            			loyaltyPointsAmountStr = loyaltyPointsAmountBD.toString();
-                    }
             	}
-            	//String warningMess = UtilProperties.getMessage(ShoppingCartEvents.label_resource, "LoyaltyPointsExceedCartBalanceWarning", locale);    
-                //List warningMessageList = UtilMisc.toList(warningMess);
-                //request.setAttribute("warningMessageList", warningMessageList);
             }
     		else
     		{
@@ -454,16 +324,16 @@ public class OsafeAdminCheckoutEvents {
             orderAdjustmentAttributeInfoMap.put("ADJUST_TYPE", "LOYALTY_POINTS");
             orderAdjustmentAttributeInfoMap.put("ADJUST_METHOD", checkoutLoyaltyMethod);
             orderAdjustmentAttributeInfoMap.put("MEMBER_ID", loyaltyPointsId);
-            orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountStr);
+            orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountBD);
             if (UtilValidate.isNotEmpty(expDate)) 
             {
             	orderAdjustmentAttributeInfoMap.put("EXP_DATE", expDate);
             }
             orderAdjustmentAttributeInfoMap.put("CONVERSION_FACTOR", checkoutLoyaltyConversion);
-            orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyStr);
+            orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyBD.setScale(2, rounding));
             //these Adjustment Attributes will not be saved to Order, but are used for processing
-            orderAdjustmentAttributeInfoMap.put("TOTAL_POINTS", totalLoyaltyPointsAmountStr);
-            orderAdjustmentAttributeInfoMap.put("TOTAL_AMOUNT", totalLoyaltyPointsCurrencyStr);
+            orderAdjustmentAttributeInfoMap.put("TOTAL_POINTS", totalLoyaltyPointsAmountBD);
+            orderAdjustmentAttributeInfoMap.put("TOTAL_AMOUNT", totalLoyaltyPointsCurrencyBD);
             orderAdjustmentAttributeInfoMap.put("INCLUDE_IN_TAX", "Y");
             
             //add to session object
@@ -560,22 +430,20 @@ public class OsafeAdminCheckoutEvents {
 	    	            return "error";
 	    	        }
 	    	    	
-	    	    	String loyaltyPointsCurrencyStr = "";
 	    	    	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
 	    	    	{
 	    	    		loyaltyPointsCurrencyBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsCurrency");
-	    	    		loyaltyPointsCurrencyStr = loyaltyPointsCurrencyBD.toString();
 	    	    	}
-	    	    	String currentLoyaltyPointsCurrencyStr = (String) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
-    	    		BigDecimal currentLoyaltyPointsCurrencyBD = new BigDecimal(currentLoyaltyPointsCurrencyStr);
-	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD).stripTrailingZeros();
+    	    		BigDecimal currentLoyaltyPointsCurrencyBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
+	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD);
+	    	    	BigDecimal cartTotalTaxes = cart.getTotalSalesTax();
+	        		cartGrandTotal  = cartGrandTotal.subtract(cartTotalTaxes);
 	    	    	if(loyaltyPointsCurrencyBD.compareTo(cartGrandTotal) > 0) 
 		            {
 	    	    		//show warning mesage
 	        			session.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
 	        			request.setAttribute("showLoyaltyPointsAdjustedWarning", "Y");
 		    			loyaltyPointsCurrencyBD = cartGrandTotal;
-		    			loyaltyPointsCurrencyStr = loyaltyPointsCurrencyBD.toString();
 		    			
 		    			//convert Currency to Loyalty Points Amount
 		            	serviceContext = FastMap.newInstance();
@@ -596,14 +464,7 @@ public class OsafeAdminCheckoutEvents {
 		            	if(UtilValidate.isNotEmpty(loyaltyConversionMap))
 		            	{
 		            		loyaltyPointsAmountBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsAmount");
-		            		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD)) 
-		                    {
-		            			loyaltyPointsAmountStr = loyaltyPointsAmountBD.toString();
-		                    }
 		            	}
-		            	//String warningMess = UtilProperties.getMessage(ShoppingCartEvents.label_resource, "LoyaltyPointsRedeemedExceedCartBalanceWarning", locale);    
-		                //List warningMessageList = UtilMisc.toList(warningMess);
-		                //request.setAttribute("warningMessageList", warningMessageList);
 		            }
 	    	    	else
 	        		{
@@ -614,9 +475,8 @@ public class OsafeAdminCheckoutEvents {
 	        				session.removeAttribute("showLoyaltyPointsAdjustedWarning");
 	        			}
 	        		}
-	    	    	orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountStr);
-	    			orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyStr);
-	    			
+	    	    	orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountBD);
+	    			orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyBD.setScale(2, rounding));
 	    		}
 	    	}
     		
@@ -660,9 +520,10 @@ public class OsafeAdminCheckoutEvents {
 		    		{
     	    			String checkoutLoyaltyConversionStr = (String) orderAdjustmentAttributeInfoMap.get("CONVERSION_FACTOR");
     	    			BigDecimal checkoutLoyaltyConversionBD = new BigDecimal(checkoutLoyaltyConversionStr);
-			    		String currentLoyaltyPointsCurrencyStr = (String) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
-        	    		BigDecimal currentLoyaltyPointsCurrencyBD = new BigDecimal(currentLoyaltyPointsCurrencyStr);
-    	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD).stripTrailingZeros();
+    	    			BigDecimal currentLoyaltyPointsCurrencyBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
+    	    	    	BigDecimal cartGrandTotal = cart.getGrandTotal().add(currentLoyaltyPointsCurrencyBD);
+    	    	    	BigDecimal cartTotalTaxes = cart.getTotalSalesTax();
+    	        		cartGrandTotal  = cartGrandTotal.subtract(cartTotalTaxes);
 			    		if(currentLoyaltyPointsCurrencyBD.compareTo(cartGrandTotal) > 0) 
 			            {
 			    			//show warning mesage
@@ -692,9 +553,8 @@ public class OsafeAdminCheckoutEvents {
 			            		BigDecimal loyaltyPointsAmountBD = (BigDecimal) loyaltyConversionMap.get("loyaltyPointsAmount");
 			            		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD)) 
 			                    {
-			            			String loyaltyPointsAmountStr = loyaltyPointsAmountBD.toString();
-			            			orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountStr);
-					            	orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyStr);
+			            			orderAdjustmentAttributeInfoMap.put("ADJUST_POINTS", loyaltyPointsAmountBD);
+					            	orderAdjustmentAttributeInfoMap.put("CURRENCY_AMOUNT", loyaltyPointsCurrencyBD.setScale(2, rounding));
 			            			
 			            			List cartAdjustments = cart.getAdjustments();
 			            			BigDecimal loyaltyPointsCurrencyNegateBD = loyaltyPointsCurrencyBD.multiply(BigDecimal.valueOf(-1));
@@ -704,7 +564,7 @@ public class OsafeAdminCheckoutEvents {
 			                			String cartAdjustmentTypeId = cartAdjustment.getString("orderAdjustmentTypeId");
 			                			if(UtilValidate.isNotEmpty(cartAdjustmentTypeId) && "LOYALTY_POINTS".equalsIgnoreCase(cartAdjustmentTypeId))
 			                			{
-			                				cartAdjustment.set("amount", loyaltyPointsCurrencyNegateBD);
+			                				cartAdjustment.set("amount", loyaltyPointsCurrencyNegateBD.setScale(2, rounding));
 			                			}
 			            	    	}
 			                    }
@@ -727,7 +587,7 @@ public class OsafeAdminCheckoutEvents {
     } 
     
     public static String processOrderAdjustmentAttributes(HttpServletRequest request, HttpServletResponse response) {
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         GenericValue userLogin = (GenericValue) request.getSession().getAttribute("userLogin");
         ShoppingCart sc = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
@@ -766,24 +626,19 @@ public class OsafeAdminCheckoutEvents {
     	    	{
     	    		Map orderAdjustmentAttributeInfoMap = (Map)orderAdjustmentAttributeInfo;
     	    		String loyaltyPointsIndex = (String) orderAdjustmentAttributeInfoMap.get("INDEX");
-    	    		String loyaltyPointsAmount = (String) orderAdjustmentAttributeInfoMap.get("ADJUST_POINTS");
+    	    		BigDecimal loyaltyPointsAmountBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("ADJUST_POINTS");
     	    		String adjustMethod = (String) orderAdjustmentAttributeInfoMap.get("ADJUST_METHOD");
     	            String loyaltyPointsId = (String) orderAdjustmentAttributeInfoMap.get("MEMBER_ID");
     	            String checkoutLoyaltyConversion = (String) orderAdjustmentAttributeInfoMap.get("CONVERSION_FACTOR");
     	            String expDate = (String) orderAdjustmentAttributeInfoMap.get("EXP_DATE");
-    	            String currencyAmount = (String) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
-    	            BigDecimal currencyAmountBD = BigDecimal.ZERO;
-    	            if (UtilValidate.isNotEmpty(currencyAmount)) 
+    	            BigDecimal currencyAmountBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
+    	            if (UtilValidate.isEmpty(loyaltyPointsAmountBD)) 
     	            {
-    	        		try 
-    	                {
-    	        			currencyAmountBD = new BigDecimal(currencyAmount);
-    	                } 
-    	                catch (NumberFormatException nfe) 
-    	                {
-    	                	Debug.logError(nfe, "Problems converting currencyAmount to BigDecimal", module);
-    	                	currencyAmountBD = BigDecimal.ZERO;
-    	                }
+    	            	loyaltyPointsAmountBD = BigDecimal.ZERO;
+    	            }
+    	            if (UtilValidate.isEmpty(currencyAmountBD)) 
+    	            {
+    	            	currencyAmountBD = BigDecimal.ZERO;
     	            }
     	            int loyaltyPointsIndexInt = -1;
     	            try {
@@ -801,7 +656,7 @@ public class OsafeAdminCheckoutEvents {
     	        		orderAdjustmentAttributeInfoMap.put("ORDER_ADJUSTMENT_ID", orderAdjustmentId);
     	        		try
     	                {
-    		        		if (UtilValidate.isNotEmpty(loyaltyPointsAmount))
+    		        		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD))
     		            	{
     		            		GenericValue orderAdjustmentAttr = delegator.makeValue("OrderAdjustmentAttribute");
     		            		orderAdjustmentAttr.set("orderAdjustmentId", orderAdjustmentId);
@@ -819,12 +674,12 @@ public class OsafeAdminCheckoutEvents {
     		            		orderAdjustmentAttr.create();
     		            	}
     		        		
-    		        		if (UtilValidate.isNotEmpty(currencyAmount))
+    		        		if (UtilValidate.isNotEmpty(currencyAmountBD))
     		            	{
     		            		GenericValue orderAdjustmentAttr = delegator.makeValue("OrderAdjustmentAttribute");
     		            		orderAdjustmentAttr.set("orderAdjustmentId", orderAdjustmentId);
     		            		orderAdjustmentAttr.set("attrName", "ADJUST_POINTS");
-    		            		orderAdjustmentAttr.set("attrValue", currencyAmount);
+    		            		orderAdjustmentAttr.set("attrValue", currencyAmountBD.toPlainString());
     		            		orderAdjustmentAttr.create();
     		            	}
     		        		
@@ -860,7 +715,7 @@ public class OsafeAdminCheckoutEvents {
     }
     
     public static String redeemMemberLoyaltyPoints(HttpServletRequest request, HttpServletResponse response) {
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
         LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         ShoppingCart sc = org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request);
         String orderId = sc.getOrderId();
@@ -888,6 +743,103 @@ public class OsafeAdminCheckoutEvents {
     	}
     	
         return "success";
+    }
+    
+    
+    public static String processPayment(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+    	Locale locale = UtilHttp.getLocale(request);
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
+    	Map parameters = UtilHttp.getParameterMap(request);
+        String orderId = (String) parameters.get("orderId");
+        String maxAmountStr = (String) request.getAttribute("maxAmount");
+        BigDecimal maxAmount = BigDecimal.ZERO;
+        String orderPaymentPreferenceId = (String) request.getAttribute("orderPaymentPreferenceId");
+        Map serviceContext = FastMap.newInstance();
+        Map<String, Object> serviceResult = null;
+        List<MessageString> error_list = new ArrayList<MessageString>();
+        MessageString errorString = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "AddPaymentCCProcessingError", locale),"maxAmount",true);
+        error_list.add(errorString);
+        GenericValue sysUserLogin = null;
+        try 
+    	{            
+        	sysUserLogin = delegator.findByPrimaryKey("UserLogin", UtilMisc.toMap("userLoginId", "system"));
+        } 
+    	catch (Exception e) 
+    	{
+            String errMsg = e.toString();
+            Debug.logError(e, errMsg, module);
+            request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
+        	return "error";
+        }
+        
+        if (UtilValidate.isNotEmpty(orderId))
+    	{
+	    	//CALL SERVICE TO AUTH PAYMENTS
+	    	serviceContext.put("orderPaymentPreferenceId", orderPaymentPreferenceId);
+	    	serviceContext.put("userLogin", sysUserLogin);
+	    	try 
+	    	{            
+	    		serviceResult = dispatcher.runSync("authOrderPaymentPreference", serviceContext);
+	        } 
+	    	catch (Exception e) 
+	    	{
+	            String errMsg = "Error attempting to authenticate order payment preference :" + e.toString();
+	            Debug.logError(e, errMsg, module);
+	            request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
+	            return "error";
+	        }
+	    	if (UtilValidate.isNotEmpty(serviceResult))
+	    	{
+	    		if (ServiceUtil.isError(serviceResult)) 
+	            { 
+	    			request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
+	            	return "error";
+	            }
+	    	}
+	    	
+	    	serviceContext.clear();
+	    	serviceResult.clear();
+	    	//CALL SERVICE TO CAPTURE PAYMENTS
+	    	serviceContext.put("orderId", orderId);
+	    	if (UtilValidate.isNotEmpty(maxAmountStr))
+	    	{
+	    		maxAmount = new BigDecimal(maxAmountStr);
+	    	}
+	    	serviceContext.put("captureAmount", maxAmount);
+	    	serviceContext.put("userLogin", sysUserLogin);
+	    	try 
+	    	{            
+	    		serviceResult = dispatcher.runSync("captureOrderPayments", serviceContext);
+	        } 
+	    	catch (Exception e) 
+	    	{
+	            String errMsg = "Error attempting to authenticate order payment preference :" + e.toString();
+	            Debug.logError(e, errMsg, module);
+	            request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
+	            return "error";
+	        }
+	    	String captureResp = "";
+	    	if (UtilValidate.isNotEmpty(serviceResult))
+	    	{
+		    	if (ModelService.RESPOND_ERROR.equals(serviceResult.get(ModelService.RESPONSE_MESSAGE)))
+	            {
+	                captureResp = "ERROR";
+	            }
+	            else
+	            {
+	                captureResp = (String) serviceResult.get("processResult");
+	            }
+		    	if (captureResp.equals("FAILED") || captureResp.equals("ERROR"))
+	            {
+		    		request.setAttribute("_ERROR_MESSAGE_LIST_", error_list);
+	            	return "error";
+	            }
+	    	}
+    	}
+        return "sucess";
+    	
     }
     
 }

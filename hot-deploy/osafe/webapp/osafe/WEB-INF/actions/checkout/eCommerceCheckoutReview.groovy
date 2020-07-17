@@ -75,7 +75,7 @@ context.headerAdjustmentsToShow = OrderReadHelper.filterOrderAdjustments(orderHe
 
 orderSubTotal = OrderReadHelper.getOrderItemsSubTotal(orderItems, orderAdjustments, workEfforts);
 context.orderSubTotal = orderSubTotal;
-context.placingCustomerPerson = userLogin?.getRelatedOne("Person");
+context.placingCustomerPerson = userLogin?.getRelatedOneCache("Person");
 context.paymentMethods = cart.getPaymentMethods();
 
 paymentMethodTypeIds = cart.getPaymentMethodTypeIds();
@@ -84,7 +84,7 @@ paymentMethodTypeId = null;
 if (paymentMethodTypeIds) 
 {
     paymentMethodTypeId = paymentMethodTypeIds[0];
-    paymentMethodType = delegator.findByPrimaryKey("PaymentMethodType", [paymentMethodTypeId : paymentMethodTypeId]);
+    paymentMethodType = delegator.findByPrimaryKeyCache("PaymentMethodType", [paymentMethodTypeId : paymentMethodTypeId]);
     context.paymentMethodType = paymentMethodType;
 }
 
@@ -117,7 +117,7 @@ context.giftMessage = cart.getGiftMessage();
 context.isGift = cart.getIsGift();
 context.currencyUomId = cart.getCurrency();
 
-shipmentMethodType = delegator.findByPrimaryKey("ShipmentMethodType", [shipmentMethodTypeId : cart.getShipmentMethodTypeId()]);
+shipmentMethodType = delegator.findByPrimaryKeyCache("ShipmentMethodType", [shipmentMethodTypeId : cart.getShipmentMethodTypeId()]);
 if (shipmentMethodType) context.shipMethDescription = shipmentMethodType.description;
 
 orh = new OrderReadHelper(orderAdjustments, orderItems);

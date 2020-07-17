@@ -19,7 +19,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilMisc;
 import com.osafe.services.InventoryServices;
 import org.ofbiz.party.content.PartyContentWrapper;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilNumber;
@@ -50,13 +50,14 @@ cart = ShoppingCartEvents.getCartObject(request);
 webSiteId = CatalogWorker.getWebSiteId(request);
 autoUserLogin = request.getSession().getAttribute("autoUserLogin");
 currencyUomId = Util.getProductStoreParm(request, "CURRENCY_UOM_DEFAULT");
+addToCartRedirect = Util.getProductStoreParm(request,"ADD_TO_CART_REDIRECT");
 pdpSelectMultiVariant = "";
+isPdpInStoreOnly = "N";
 
 imagePlaceHolder="/osafe_theme/images/user_content/images/NotFoundImage.jpg";
 imageLargePlaceHolder="/osafe_theme/images/user_content/images/NotFoundImagePDPLarge.jpg";
 
 inventoryMethod = Util.getProductStoreParm(request,"INVENTORY_METHOD");
-context.inventoryMethod = inventoryMethod;
 
 if(UtilValidate.isEmpty(currencyUomId))
 {
@@ -112,7 +113,7 @@ String buildNext(Map map, List order, String current, String prefix)
 }
 
 //BUILD JS TO CREATE 'LI' FOR ALL SELECTABLE FEATURE EXCEPT FIRST ONE
-String buildNextLi(Map map, List order, String current, String prefix, Map productVariantInventoryMap) 
+String buildNextLi(Map map, List order, String current, String prefix, Map productVariantInventoryMap, Map productVariantProductAttributeMap) 
 {
     def ct = 0;
     def featureType = null;
@@ -189,6 +190,14 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
                 }
             }
             buf.append("VARSTOCK['" + optValue + "'] = \"" + stockClass + "\";");
+			
+			def pdpInStoreOnly = "N";
+            variantProductAttribute = productVariantProductAttributeMap.get(optValue);
+	        if(UtilValidate.isNotEmpty(variantProductAttribute) && UtilValidate.isNotEmpty(variantProductAttribute.PDP_IN_STORE_ONLY))
+	        {
+				pdpInStoreOnly = variantProductAttribute.PDP_IN_STORE_ONLY;
+			}
+            buf.append("VARINSTORE['" + optValue + "'] = \"" + pdpInStoreOnly + "\";");
         } 
         else 
         {
@@ -218,13 +227,15 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
             }
         }
         buf.append("var li = document.createElement('li');");
+		filteredKey = Util.removeNonAlphaNumeric(key);
+		
         if(selectedClass == true)
         {
-            buf.append("li.setAttribute(\"class\",\"selected "+stockClass+"\");");
+            buf.append("li.setAttribute(\"class\",\"selected "+filteredKey+" "+stockClass+"\");");
         } 
         else 
         {
-            buf.append("li.setAttribute(\"class\",\""+stockClass+"\");");
+            buf.append("li.setAttribute(\"class\",\""+filteredKey+" "+stockClass+"\");");
         }
         
         liText = "<a href=javascript:void(0); onclick=getList('FT" + current + "','" + ct + "',1);>" + OsafeAdminUtil.formatSimpleText(key) + "</a>";
@@ -240,7 +251,7 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
         map.each { key, value ->
             def nextOrder = order.get(order.indexOf(current)+1);
             def newPrefix = prefix + "_" + ct;
-            buf.append(buildNextLi(value, order, nextOrder, newPrefix,productVariantInventoryMap));
+            buf.append(buildNextLi(value, order, nextOrder, newPrefix,productVariantInventoryMap, productVariantProductAttributeMap));
             ct++;
         }
     }
@@ -249,12 +260,13 @@ String buildNextLi(Map map, List order, String current, String prefix, Map produ
 
 //BUILD JS TO CREATE DROPDOWN FOR FIRST SELECTABLE FEATURE AND CALL THE FUNCTION TO CREATE DROPDOWN FOR REST FEATURES
 firstSelectableFeatureSize = 0;
-String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInventoryMap)
+String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInventoryMap, Map productVariantProductAttributeMap)
 {
     def nextFeatureJsBuf = new StringBuffer();
     def buf = new StringBuffer();
     topLevelName = featureOrder[0];
     buf.append("var VARSTOCK = new Object();");
+    buf.append("var VARINSTORE = new Object();");
     buf.append("function getFormOption() {");
     buf.append("var OPT = new Array(" + featureOrder.size() + ");");
     featureOrder.eachWithIndex { feature, i ->
@@ -281,7 +293,7 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
         {
             opt = value.iterator().next();
             inventoryLevelMap = productVariantInventoryMap.get(opt);
-
+			
             inventoryOutOfStockTo = inventoryLevelMap.get("inventoryLevelOutOfStockTo");
             inventoryInStockFrom = inventoryLevelMap.get("inventoryLevelInStockFrom");
             inventoryLevel = inventoryLevelMap.get("inventoryLevel");
@@ -303,6 +315,15 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
             }
             //ADD STOCK LEVEL CLASSES TO THE MAP IF THERE IS ONLY ONE SELECTABLE FEATURE FOR THAT PRODUCT.
             buf.append("VARSTOCK['" + opt + "'] = \"" + stockClass + "\";");
+			
+			def pdpInStoreOnly = "N";
+            variantProductAttribute = productVariantProductAttributeMap.get(opt);
+	        if(UtilValidate.isNotEmpty(variantProductAttribute) && UtilValidate.isNotEmpty(variantProductAttribute.PDP_IN_STORE_ONLY))
+	        {
+				pdpInStoreOnly = variantProductAttribute.PDP_IN_STORE_ONLY;
+			}
+            buf.append("VARINSTORE['" + opt + "'] = \"" + pdpInStoreOnly + "\";");
+			
         } 
         else 
         {
@@ -310,11 +331,9 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
         }
         
         buf.append("document.forms[\"addform\"].elements[\"FT" + topLevelName + "\"].options[" + (counter+1) + "] = new Option(\"" + OsafeAdminUtil.formatSimpleText(key) + "\",\"" + opt + "\");");
-        
         productFeatureType = topLevelName+":"+key;
         if(parameters.productFeatureType)
         {
-            
             if(parameters.productFeatureType == productFeatureType)
             {
                 featureCnt = counter;
@@ -328,7 +347,7 @@ String buildFeatureJS(List featureOrder, Map variantTree, Map productVariantInve
         if (value instanceof Map) 
         {
             nextFeatureJsBuf.append(buildNext(varTree, featureOrder, featureOrder[1], cnt));
-            nextFeatureJsBuf.append(buildNextLi(varTree, featureOrder, featureOrder[1], cnt, productVariantInventoryMap));
+            nextFeatureJsBuf.append(buildNextLi(varTree, featureOrder, featureOrder[1], cnt, productVariantInventoryMap, productVariantProductAttributeMap));
         }
         counter++;
     }
@@ -394,7 +413,9 @@ String buildSelectableFeatureMapJS(List featureOrder, Map productFeatureAndApplS
 		    	buf.append("document.forms[\"addform\"].elements[\"FT" + feature + "\"].options[" + (ct + 1) + "].setAttribute(\"disabled\",\"disabled\");");
 		    	
 		    	liBuf.append("var li = document.createElement('li');");
-		    	liText = "<a href=javascript:void(0); onclick=javascript:void(0);>" + OsafeAdminUtil.formatSimpleText(productFeatureAndAppl.description) + "</a>";
+				filteredKey = Util.removeNonAlphaNumeric(OsafeAdminUtil.formatSimpleText(productFeatureAndAppl.description));
+				liBuf.append("li.setAttribute(\"class\",\""+filteredKey+"\");");
+   		    	liText = "<a href=javascript:void(0); onclick=javascript:void(0);>" + OsafeAdminUtil.formatSimpleText(productFeatureAndAppl.description) + "</a>";
 		    	liBuf.append("document.getElementById(\"LiFT" + feature + "\").appendChild(li);");
 		    	liBuf.append("li.innerHTML = \"" + liText + "\";");
 		        
@@ -665,6 +686,8 @@ if (UtilValidate.isNotEmpty(productId))
             for (GenericValue productContent: productContentList) 
             {
                productContentTypeId = productContent.productContentTypeId;
+               content = productContent.getRelatedOneCache("Content");
+               context.put(productContent.contentId, content);
                context.put(productContent.productContentTypeId,productContent.contentId);
                productContentIdMap.put(productContent.productContentTypeId,productContent.contentId);
             }
@@ -682,10 +705,10 @@ if (UtilValidate.isNotEmpty(productId))
         if (UtilValidate.isNotEmpty(productContentId))
         {
             productName = productContentWrapper.get("PRODUCT_NAME");
-              productName = StringEscapeUtils.unescapeHtml(productName.toString());
-             context.pdpProductName = productName;
-			 context.wrappedPdpProductName = StringUtil.wrapString(productName);
-            productName = productName;
+            productName = StringEscapeUtils.unescapeHtml(productName.toString());
+            context.pdpProductName = productName;
+            wrappedPdpProductName = OsafeAdminUtil.formatSimpleText(productName);
+			context.wrappedPdpProductName = StringUtil.wrapString(wrappedPdpProductName);
         }
         context.productName = productName;
         
@@ -696,9 +719,9 @@ if (UtilValidate.isNotEmpty(productId))
         {
             productLongDesc = productContentWrapper.get("LONG_DESCRIPTION");
             productLongDesc = StringEscapeUtils.unescapeHtml(productLongDesc.toString());
-             productLongDesc = productLongDesc;
+            productLongDesc = productLongDesc;
         }
-         context.pdpLongDescription = productLongDesc;
+        context.pdpLongDescription = productLongDesc;
         
         //GET PRODUCT ATTRIBUTE LIST AND SET INTO LOCAL MAP(productAttrMap)
         productAttr = gvProduct.getRelatedCache("ProductAttribute");
@@ -718,6 +741,10 @@ if (UtilValidate.isNotEmpty(productId))
             	pdpSelectMultiVariant = productAttrMap.get("PDP_SELECT_MULTI_VARIANT");
 
             }
+            if (UtilValidate.isNotEmpty(productAttrMap.get("PDP_IN_STORE_ONLY")))
+            {
+            	isPdpInStoreOnly = productAttrMap.get("PDP_IN_STORE_ONLY");
+            }
                        
         }
         context.productAtrributeMap = productAttrMap;
@@ -726,7 +753,7 @@ if (UtilValidate.isNotEmpty(productId))
         //SET META INFORMATION WITH PRODUCT DATA
         if (UtilValidate.isEmpty(productName)) 
         {
-            productName = gvProduct.productName;
+            productName = StringEscapeUtils.unescapeHtml((gvProduct.productName).toString());
         }
         if(UtilValidate.isNotEmpty(productName)) 
         {
@@ -781,7 +808,7 @@ if (UtilValidate.isNotEmpty(productId))
         {
             if (UtilValidate.isNotEmpty(productAttrMap.get("SEO_DESCRIPTION")))
             {
-                    context.metaKeywords = productAttrMap.get("SEO_DESCRIPTION");
+                context.metaKeywords = productAttrMap.get("SEO_DESCRIPTION");
             }
         }
 
@@ -915,7 +942,7 @@ if (UtilValidate.isNotEmpty(productId))
         
         if(UtilValidate.isNotEmpty(gvProduct.internalName)) 
         {
-            context.pdpInternalName = gvProduct.internalName;
+            context.pdpInternalName = StringEscapeUtils.unescapeHtml((gvProduct.internalName).toString());
         }
         
         pdpFacetGroupVariantSwatch = Util.getProductStoreParm(request, "PDP_FACET_GROUP_VARIANT_SWATCH_IMG");
@@ -1105,6 +1132,34 @@ if (UtilValidate.isNotEmpty(productId))
 				}
 			}
 		}
+		
+		for (GenericValue distfeature: productDistinguishingFeatures)
+		{
+			featureType = distfeature.getString("productFeatureTypeId");
+			if (!productFeatureTypes.contains(featureType))
+			{
+				productFeatureTypes.add(featureType);
+				//get the sorted list of values in the group
+				productFeatureGroupAppls = delegator.findByAndCache("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureGroupId", featureType), UtilMisc.toList("sequenceNum"));
+				productFeatureGroupAppls = EntityUtil.filterByDate(productFeatureGroupAppls, true);
+				if (UtilValidate.isNotEmpty(productFeatureGroupAppls))
+				{
+					prodFeaturesList = FastList.newInstance();
+					for(GenericValue productFeatureGroupAppl: productFeatureGroupAppls)
+					{
+						//pull the feature from the list of distinguishing features we already have
+						features = EntityUtil.filterByAnd(productDistinguishingFeatures, UtilMisc.toMap("productFeatureId", productFeatureGroupAppl.productFeatureId));
+						prodFeature = EntityUtil.getFirst(features);
+						if (UtilValidate.isNotEmpty(prodFeature))
+						{
+							prodFeaturesList.add(prodFeature);
+						}
+					}
+					productFeaturesByType.put(featureType, prodFeaturesList);
+				}
+			}
+		}
+		
 		context.disFeatureTypesList = productFeatureTypes;
 		context.disFeatureByTypeMap = productFeaturesByType;
 		        
@@ -1208,6 +1263,7 @@ if (UtilValidate.isNotEmpty(productId))
             
                 //BUILD PRODUCT FEATURE SET (SELECTABLE FEATURES BY FEATURE TYPE)
                 featureSet = new LinkedHashSet();
+                featureSetAll = new LinkedHashSet();
                 if (UtilValidate.isNotEmpty(productSelectableFeatures))
                 {
                     for (GenericValue productSelectableFeatureAndAppl : productSelectableFeatures)
@@ -1220,6 +1276,10 @@ if (UtilValidate.isNotEmpty(productId))
                 if (UtilValidate.isNotEmpty(featureSet)) 
                 {
                     context.featureSet = featureSet;
+                    for(String featureType : featureSet)
+                    {
+                    	featureSetAll.add(featureType);
+                    }
                     String lastProductFeatureTypeId="";
                     List productFeatureAndApplSelectList = FastList.newInstance();
                     Map productFeatureAndApplSelectMap = FastMap.newInstance();
@@ -1232,6 +1292,7 @@ if (UtilValidate.isNotEmpty(productId))
                     Map variantVolumePricingRuleMapMap = FastMap.newInstance();
                     Map productVariantInventoryMap = FastMap.newInstance();
                     Map productVariantProductContentIdMap = FastMap.newInstance();
+                    Map productVariantContentMap = FastMap.newInstance();
 					Map productVariantProductAttributeMap = FastMap.newInstance();
                     Map productFeatureFirstVariantIdMap = FastMap.newInstance();
 					Map productFacetTooltipMap = FastMap.newInstance();
@@ -1266,6 +1327,14 @@ if (UtilValidate.isNotEmpty(productId))
                         }
                     }
 
+                    for(String featureTyepe : featureSetAll)
+                    {
+                    	if(!featureSet.contains(featureTyepe))
+                    	{
+                    		featureSet.add(featureTyepe);
+                    	}
+                    }
+                    
                     //BUILD CONTEXT MAP FOR PRODUCT_FEATURE_DATA_RESOURCE (productFeatureId, objectInfo)
                     if (UtilValidate.isNotEmpty(pdpFacetGroupVariantSwatch))
                     {
@@ -1349,6 +1418,8 @@ if (UtilValidate.isNotEmpty(productId))
                                     {
                                        productContentTypeId = productContent.productContentTypeId;
                                        variantProductContentMap.put(productContent.productContentTypeId,productContent.contentId);
+                                       variantContent = productContent.getRelatedOneCache("Content");
+                                       productVariantContentMap.put(productContent.contentId, variantContent);
                                     }
                                     productVariantProductContentIdMap.put(assocVariantProduct.productId,variantProductContentMap);
                                     
@@ -1366,6 +1437,7 @@ if (UtilValidate.isNotEmpty(productId))
 									}
 									productVariantProductAttributeMap.put(assocVariantProduct.productId,assocProductAttrMap);
 								}
+								
 								
     
                                 //CHECK IF THERE IS ANY VOLUME PRICING FOR EACH VARIANT
@@ -1549,7 +1621,7 @@ if (UtilValidate.isNotEmpty(productId))
                         // CALL THE FUNCTION TO CREATE DROPDOWN FOR ALL SELECTABLE FEATURE, LI FOR ALL SELECTABLE FEATURE EXCEPT FIRST.
                         if(UtilValidate.isNotEmpty(variantTree))
                         {
-                            jsBuf.append(buildFeatureJS(featureOrder, variantTree, productVariantInventoryMap));
+                            jsBuf.append(buildFeatureJS(featureOrder, variantTree, productVariantInventoryMap, productVariantProductAttributeMap));
                         }
                         
                         jsBuf.append("</script>");
@@ -1579,6 +1651,7 @@ if (UtilValidate.isNotEmpty(productId))
                         context.productVariantDisFeatureTypeMap = productVariantDisFeatureMap;
                         context.productVariantStandardFeatureMap = productVariantStandardFeatureMap;
                         context.productVariantProductContentIdMap = productVariantProductContentIdMap;
+                        context.productVariantContentMap = productVariantContentMap;
 						context.productVariantProductAttributeMap = productVariantProductAttributeMap;
                         context.variantVolumePricingRuleMap = variantVolumePricingRuleMap;
                         context.variantVolumePricingRuleMapMap = variantVolumePricingRuleMapMap;
@@ -1589,28 +1662,6 @@ if (UtilValidate.isNotEmpty(productId))
         }
         
         
-       //Get Sequence for PDP Div Containers 
-//       XmlFilePath = FlexibleStringExpander.expandString(osafeProperties.ecommerceUiSequenceXmlFile, context);
-//       searchRestrictionMap = FastMap.newInstance();
-//       searchRestrictionMap.put("screen", "Y");
-//       uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false,true);
-//       for(Map uiSequenceScreenMap : uiSequenceSearchList) 
-//       {
-//            if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) 
-//            {
-//                if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) 
-//                {
-//                    uiSequenceScreenMap.value = Integer.parseInt(uiSequenceScreenMap.value);
-//                } 
-//                else 
-//                {
-//                    uiSequenceScreenMap.value = 0;
-//                }
-//            }
-//        }
-//       uiSequenceSearchList = UtilMisc.sortMaps(uiSequenceSearchList, UtilMisc.toList("value"));
-//       context.uiSequenceSearchList = uiSequenceSearchList;
-		
 		
 	   XmlFilePath = FlexibleStringExpander.expandString(osafeProperties.ecommerceUiSequenceXmlFile, context);
 	   searchRestrictionMap = FastMap.newInstance();
@@ -1655,15 +1706,8 @@ if (UtilValidate.isNotEmpty(productId))
        context.PRODUCT_NAME=context.productName;
        context.PRODUCT_IMAGE_URL=context.productLargeImageUrl;   
        context.CATEGORY_ID=context.productCategoryId;
-       context.REQUEST_URL=CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+productCategoryId);
-        
-	   
-	   
-	   
-	   
-	   
-	   
-	   
+       context.REQUEST_URL=SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+productCategoryId);
+
 	   //add to cart and qty
 	   inStock = true;
 	   isSellable = true;
@@ -1708,6 +1752,9 @@ if (UtilValidate.isNotEmpty(productId))
 	   context.inventoryOutOfStockTo = inventoryOutOfStockTo;
 	   context.pdpAverageStarRating = averageCustomerRating;
        context.pdpSelectMultiVariant = pdpSelectMultiVariant;
+       context.isPdpInStoreOnly = isPdpInStoreOnly;
     }
-	
 }
+
+context.inventoryMethod = inventoryMethod;
+context.addToCartRedirect = addToCartRedirect;

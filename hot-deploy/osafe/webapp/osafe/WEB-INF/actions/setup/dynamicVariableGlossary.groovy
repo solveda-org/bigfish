@@ -13,6 +13,7 @@ import org.ofbiz.order.order.*;
 import org.ofbiz.entity.condition.*;
 import org.ofbiz.entity.util.*;
 import java.math.BigDecimal;
+import org.ofbiz.base.util.UtilNumber;
 
 //SET USER_VARIABLES GLOSSARY
 productStore = ProductStoreWorker.getProductStore(request);
@@ -45,7 +46,7 @@ if (UtilValidate.isNotEmpty(shoppingCart))
    context.CART_TOTAL_SHIP = shoppingCart.getTotalShipping();
    context.CART_TOTAL_TAX = shoppingCart.getTotalSalesTax();
    context.CART_TOTAL_MONEY = shoppingCart.getGrandTotal();
-   context.CART_TOTAL_NET = shoppingCart.getGrandTotal().setScale(2).toString();
+   context.CART_TOTAL_NET = shoppingCart.getGrandTotal().setScale(2, UtilNumber.getBigDecimalRoundingMode("order.rounding")).toString();
 }
 
 
@@ -113,7 +114,7 @@ if (UtilValidate.isNotEmpty(orderId))
        billingLocations = orderReadHelper.getBillingLocations();
        billingAddress = EntityUtil.getFirst(billingLocations);
        
-       orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelated("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
+       orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelatedCache("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
        paymentMethods = [];
        paymentMethodType = "";
        orderPaymentPreferences.each { opp ->
@@ -149,7 +150,7 @@ if (UtilValidate.isNotEmpty(orderId))
        context.ORDER_TOTAL_TAX=orderTaxTotal;
        context.ORDER_TOTAL_PROMO=orderAdjustTotal;
        context.ORDER_TOTAL_MONEY=orderGrandTotal;
-       context.ORDER_TOTAL_NET=orderGrandTotal.setScale(2).toString();
+       context.ORDER_TOTAL_NET=orderGrandTotal.setScale(2, UtilNumber.getBigDecimalRoundingMode("order.rounding")).toString();
 
        //Not Used Yet
        context.ORDER_HELPER=orderReadHelper;
@@ -165,9 +166,4 @@ if (UtilValidate.isNotEmpty(orderId))
        context.ORDER_ITEM_SHIP_GROUP=orderItemShipGroups;
     }
 
-}
-localDispatcherName = UtilProperties.getPropertyValue("client-deployment.properties", "localDispatcherName");
-if (UtilValidate.isNotEmpty(localDispatcherName))
-{
-	context.DISPATCHER_NAME = localDispatcherName;
 }

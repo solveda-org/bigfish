@@ -58,5 +58,5 @@ fi
 #BUILD_ID=dontKillMe
 
 # start ofbiz
-#$JAVA $VMARGS -jar ofbiz.jar $* >>$OFBIZ_LOG 2>>$OFBIZ_LOG&
-exec "$JAVA" $VMARGS $SOLRPARMS -jar ofbiz.jar "$@"
+$JAVA $VMARGS $SOLRPARMS -jar ofbiz.jar $* >>$OFBIZ_LOG 2>>$OFBIZ_LOG&
+#exec "$JAVA" $VMARGS $SOLRPARMS -jar ofbiz.jar "$@"

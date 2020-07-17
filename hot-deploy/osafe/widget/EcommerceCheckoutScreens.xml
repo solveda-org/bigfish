@@ -82,12 +82,12 @@
                 <set field="title" from-field="pageTitle" />
                 <!-- For Page Tagging to be generated -->
                 <set field="showCartPageTagging" value="Y" />
-
-                <set field="formName" value="cartform" />
-                <set field="formAction" value="modifycart" />
-                <set field="formSubmitJsMethod" value="updateCart()" />
-                <set field="updateCartAction" value="modifycart"/>
                 <set field="shoppingCartSize" value="${groovy:org.ofbiz.order.shoppingcart.ShoppingCartEvents.getCartObject(request).size();}"/>
+                <set field="formName" value="cartform" />
+                <set field="formAction" value="${groovy:if(shoppingCartSize > 0)return 'checkout' else return 'main';}"/>
+                <set field="formSubmitJsMethod" value="updateCart()" />
+                <set field="submitButtonVisible" value="Y" />
+                <set field="updateCartAction" value="modifycart"/>
                 <set field="addPromoCodeRequest" value="validateShowCartPromoCode"/>
                 <set field="removePromoCodeRequest" value="removeShowCartPromoCode"/>
                 
@@ -98,11 +98,12 @@
                 <set field="prevButtonUrl" value="main" />
                 <set field="prevButtonDescription" value="${uiLabelMap.ContinueShoppingBtn}"/>
                 <set field="prevButtonClass" value="${groovy:if(shoppingCartSize > 0)return 'standardBtn negative' else return 'standardBtn positive';}"/>
-                <set field="doneAction" value="checkout" />
+                <set field="doneAction" value="${groovy:if(shoppingCartSize > 0)return 'checkout' else return 'main';}" />
                 <set field="nextButtonVisible" value="${groovy:if(shoppingCartSize > 0)return 'Y' else return 'N';}"/>
                 <set field="nextButtonUrl" value="javascript:submitCheckoutForm(document.cartform, 'VDN', '');"/>
                 <set field="nextButtonDescription" value="${uiLabelMap.CheckoutBtn}"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -272,6 +273,7 @@
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 
                 <set field="useAvailability" value="Y" />
                 <set field="nextButtonVisible" value="N" />
@@ -450,6 +452,7 @@
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 
                 <set field="useAvailability" value="Y" />
                 <set field="nextButtonVisible" value="N" />
@@ -644,7 +647,13 @@
 
                 <set field="prevButtonUrl" value="eCommerceShowcart" />
                 <set field="doneAction" value="multiPageUpdateCustomerAddress"/>
+                <set field="multiAddressAction" value="multiPageCustomerAddressValidation"/>
                 <set field="addAddressAction" value="multiPageNewCheckoutAddress"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="multiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="multiPageShippingOptions"/>
                 <set field="loadPca" value="Y" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
             </actions>
@@ -895,6 +904,11 @@
                 <set field="doneAction" value="multiPageValidateShippingOption"/>
                 <set field="backAction" value="multiPageCustomerAddress"/>
 
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="multiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="multiPageShippingOptions"/>
+
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -968,6 +982,7 @@
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 
                 <set field="storePickupUrl" value="storePickup" />
                 <set field="dialogPurpose" value="storePickup_"/>
@@ -982,6 +997,11 @@
                 <set field="payPalAction" value="setPayPalCheckout"/>
                 <set field="ebsAction" value="multiPageEBSCheckout"/>
                 <set field="payNetzAction" value="multiPagePayNetzCheckout"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="multiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="multiPageShippingOptions"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1046,6 +1066,7 @@
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 
                 <set field="useAvailability" value="Y" />
                 <set field="nextButtonVisible" value="N" />
@@ -1115,6 +1136,7 @@
                 <set field="isStorePickUp" value="N" />
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/eCommerceOrderConfirm.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/orderSalesTaxInfo.groovy" />
 
                 <set field="showCartFootprint" value="Y" />
                 <set field="useAvailability" value="N" />
@@ -1181,14 +1203,18 @@
                 <set field="showCartFootprint" value="Y" />
                 <set field="pageTitle" value="${uiLabelMap.AnonCustomerInformationTitle}" />
                 <set field="title" from-field="pageTitle" />
-
-                <set field="addressAttnName" value="${uiLabelMap.ShippingAddressDefaultNickNameLabel}" />
+                
                 <set field="formName" value="checkoutInfoForm" />
                 <set field="checkoutPage" value="shippingaddress" />
                 <set field="isCheckoutPage" value="true" />
 
                 <set field="prevButtonUrl" value="eCommerceShowcart" />
-                <set field="doneAction" value="annonMultiPageCreateCustomer"/>
+                <set field="doneAction" value="anonMultiPageCreateCustomer"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="anonMultiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="anonMultiPageShippingOptions"/>
                 <set field="loadPca" value="Y" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
             </actions>
@@ -1258,6 +1284,11 @@
                 <set field="storePickupAction" value="setStorePickup"/>
                 <set field="doneAction" value="anonMultiPageValidateShippingOption"/>
                 <set field="backAction" value="anonMultiPageCustomerAddress"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="anonMultiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="anonMultiPageShippingOptions"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1331,6 +1362,7 @@
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 
                 <set field="storePickupUrl" value="storePickup" />
                 <set field="dialogPurpose" value="storePickup_"/>
@@ -1345,6 +1377,11 @@
                 <set field="payPalAction" value="anonMultiPageSetPayPalCheckout"/>
                 <set field="ebsAction" value="anonMultiPageEBSCheckout"/>
                 <set field="payNetzAction" value="anonMultiPagePayNetzCheckout"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="anonMultiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="anonMultiPageShippingOptions"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1410,6 +1447,7 @@
                 <script location="component://order/webapp/ordermgr/WEB-INF/actions/entry/StorePaymentOptions.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/checkout/eCommerceCheckoutReview.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderSummary.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
 
                 <set field="useAvailability" value="Y" />
                 <set field="nextButtonVisible" value="N" />
@@ -1811,6 +1849,7 @@
         <section>
             <actions>
                 <set field="addressEntryInfo" value="${uiLabelMap.ShippingAddressHeadingInfo}"/>
+                <set field="addressAttnName" value="${uiLabelMap.ShippingAddressDefaultNickNameLabel}" />
                 <set field="isShipping" value="Y"/>
             </actions>
             <widgets>
@@ -1922,6 +1961,7 @@
         <section>
             <actions>
                 <set field="addressEntryInfo" value="${uiLabelMap.BillingAddressHeadingInfo}"/>
+                <set field="addressAttnName" value="${uiLabelMap.BillingAddressLabel}" />
             </actions>
             <widgets>
                 <include-screen name="addressBillingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
@@ -1946,6 +1986,7 @@
                 <set field="addressEntryInfo" value="${uiLabelMap.ShippingAddressHeadingInfo}"/>
                 <set field="multiAddressUrl" value="multiPageMultiAddress"/>
                 <set field="showAddressEntry" value="Y"/>
+                <set field="addressAttnName" value="${uiLabelMap.ShippingAddressDefaultNickNameLabel}" />
             </actions>
             <widgets>
                 <include-screen name="addressShippingEntryForm" location="component://osafe/widget/EntryScreens.xml" />
@@ -2137,6 +2178,63 @@
         </section>
     </screen>
     
+    <screen name="eCommerceOrderConfirmGiftMessage">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="screenMessages" value="Y" />
+                <set field="fieldLevelErrors" value="Y" />
+                <set field="pageTitle" value="${uiLabelMap.AddGiftMessageTitle}" />
+                <set field="title" from-field="pageTitle" />
+                
+                <set field="formName" value="giftMessageForm" />
+                <set field="doneAction" value="setGiftMessageConfirm"/>
+                <set field="nextButtonDescription" value="${uiLabelMap.SaveBtn}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/giftMessageOrderItem.groovy" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" location="component://osafe/widget/EcommerceScreens.xml"/>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceShowcart" style="eCommerceShowcart">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template-decorator location="component://osafe/webapp/osafe/templates/commonCheckout.ftl">
+                                                <html-template-decorator-section name="entryFormJS">
+                                                    <include-screen name="entryFormJS"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="checkoutJS">
+                                                    <include-screen name="checkoutJS"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="pageMessages">
+                                                    <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="pageTopContent">
+                                                    <include-screen name="PTS_GIFT_MESSAGE" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="cartBody">
+                                                	<include-screen name="giftMessageConfirmDivSequence" location="component://osafe/widget/EcommerceDivScreens.xml" />
+                                                </html-template-decorator-section>
+                                                <html-template-decorator-section name="pageEndContent">
+                                                    <include-screen name="PES_GIFT_MESSAGE" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+                                                </html-template-decorator-section>
+                                            </html-template-decorator>
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    
     <screen name="giftMessageCartLineInfo">
         <section>
             <actions>
@@ -2196,6 +2294,11 @@
                 <set field="formAction" value="multiPageValidateMultiAddress" />
                 <set field="prevButtonUrl" value="multiPageCustomerAddress"/>
                 <set field="addAddressAction" value="multiPageNewCheckoutMultiAddress"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="multiPageMultiAddress"/>
+                <set field="shippingOptionsBackAction" value="multiPageMultiShippingOptions"/>
             
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/shipMultiAddress.groovy" />
             </actions>
@@ -2253,7 +2356,11 @@
                 <set field="formAction" value="anonMultiPageValidateMultiAddress" />
                 <set field="prevButtonUrl" value="anonMultiPageCustomerAddress"/>
                 <set field="addAddressAction" value="anonMultiPageNewCheckoutMultiAddress"/>
-            
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="anonMultiPageMultiAddress"/>
+                <set field="shippingOptionsBackAction" value="anonMultiPageMultiShippingOptions"/>
             
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/shipMultiAddress.groovy" />
             </actions>
@@ -2446,6 +2553,11 @@
                 <set field="formName" value="multiShipOptionsForm" />
                 <set field="formAction" value="multiPageValidateMultiShippingOptions" />
                 <set field="nextButtonDescription" value="${uiLabelMap.ContinueBtn}"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="multiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="multiPageMultiShippingOptions"/>
             
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/shipMultiOptions.groovy" />
             </actions>
@@ -2503,6 +2615,11 @@
                 <set field="formName" value="anonMultiShipOptionsForm" />
                 <set field="formAction" value="anonMultiPageValidateMultiShippingOptions" />
                 <set field="nextButtonDescription" value="${uiLabelMap.ContinueBtn}"/>
+
+                <!-- Cart footprint action -->
+                <set field="showCartBackAction" value="eCommerceShowcart"/>
+                <set field="customerAddressBackAction" value="anonMultiPageCustomerAddress"/>
+                <set field="shippingOptionsBackAction" value="anonMultiPageMultiShippingOptions"/>
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/shipMultiOptions.groovy" />
             </actions>

@@ -70,6 +70,7 @@
             title="Merchant Pixel Tracking" >
       <field name="pixelId" type="id-ne"></field>
       <field name="pixelScope" type="description"></field>
+      <field name="pixelUrl" type="description"></field>
       <field name="pixelPagePosition" type="name"></field>
       <field name="pixelSequenceNum" type="numeric"></field>
       <field name="productStoreId" type="id-ne"></field>

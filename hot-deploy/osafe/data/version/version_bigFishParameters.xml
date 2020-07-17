@@ -192,6 +192,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_ORDER_PREFIX" description="Bigfish to Client Outgoing Order File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_CONTACT_US_PREFIX" description="Bigfish to Client Outgoing Contact-Us File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_OUT_REQUEST_CATALOG_PREFIX" description="Bigfish to Client Outgoing Request-Catalog File, indicates the prefix of the actual file name, will be suffixed with date-time stamp for uniqueness." parmCategory="FEEDS"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FEEDS_MASK_ACCOUNT_INFO" description="Apply Mask (e.g. *1234) to Account information (Credit Card, Bank Account, Routing Numbers) on all outgoing FEEDS. TRUE or FALSE.  Default is TRUE." parmCategory="FEEDS"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_DEF_LIST_ROWS" description="Default view size" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_WARN_LIST_ROWS" description="Default max view size" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_TOOLTIP_MAX_CHAR" description="The maximum number of characters to display in a Tooltip within the Admin Module" parmCategory="ADM"/>
@@ -209,4 +210,9 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTP_HOST" description="A general system parameter that defines the primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="HTTPS_HOST" description="A general system parameter that defines the secure primary host name of the application. Typically used in email or content spots." parmCategory="GENERAL"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="TXT_MESSAGE_METHOD" description="Indicates if Text Messaging (SMS) is an option and which service to use for delivery. Valid values are NONE, CLICKATELL, PINNACLE" parmCategory="TEXT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADD_TO_CART_REDIRECT" description="Defines the next page after adding an item to the cart. CART (default) will redirect to the Show Cart page. CHECKOUT will redirect to the checkout flow." parmCategory="GENERAL"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_FROM_MAX_CHAR" description="The maximum number of characters that can be entered in the FROM field within the Gift Message feature. Default is 50." parmCategory="GIFT_MSG"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_TO_MAX_CHAR" description="The maximum number of characters that can be entered in the TO field within the Gift Message feature. Default is 50." parmCategory="GIFT_MSG"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GIFT_MESSAGE_TEXT_MAX_CHAR" description="The maximum number of characters that can be entered in the TEXT field within the Gift Message feature. Default is 255." parmCategory="GIFT_MSG"/>
 </entity-engine-xml>

@@ -26,19 +26,23 @@ statusId = parameters.statusId;
 BigDecimal originalOrderShippingAmount = BigDecimal.ZERO;
 BigDecimal originalOrderTaxAmount = BigDecimal.ZERO;
 BigDecimal originalOrderPromoAmount = BigDecimal.ZERO;
+BigDecimal originalOrderOtherAmount = BigDecimal.ZERO;
 
 BigDecimal priorItemAdjustmentTotal = BigDecimal.ZERO;
 BigDecimal priorPromoAdjustmentTotal = BigDecimal.ZERO;
 BigDecimal priorShippingAdjustmentTotal = BigDecimal.ZERO;
 BigDecimal priorTaxAdjustmentTotal = BigDecimal.ZERO;
+BigDecimal priorMiscAdjustmentTotal = BigDecimal.ZERO;
+BigDecimal totalChargeRefunded = BigDecimal.ZERO;
 List<String> processedReturnIds = FastList.newInstance();
-
 if (UtilValidate.isNotEmpty(orderHeader)) 
 {
 	
 	orderReadHelper = new OrderReadHelper(orderHeader);
 	orderAdjustments = orderReadHelper.getAdjustments();
 	context.orderAdjustments = orderAdjustments;
+	orderPaymentPreferences = orderReadHelper.getPaymentPreferences();
+	orderPaymentPreferences = EntityUtil.filterByAnd(orderPaymentPreferences, UtilMisc.toMap("statusId", "PAYMENT_SETTLED"));
 
 	currencyUomId = orderReadHelper.getCurrency();
 	orderItems = orderReadHelper.getOrderItems();
@@ -78,6 +82,45 @@ if (UtilValidate.isNotEmpty(orderHeader))
 			}
 		}
 	}
+	if(UtilValidate.isNotEmpty(orderAdjustments))
+	{
+		for(GenericValue orderAdjustment : orderAdjustments)
+		{
+			String orderAdjustmentTypeId=orderAdjustment.getString("orderAdjustmentTypeId");
+			if (!orderAdjustmentTypeId.equalsIgnoreCase("PROMOTION_ADJUSTMENT") && !orderAdjustmentTypeId.equalsIgnoreCase("SALES_TAX") && !orderAdjustmentTypeId.equalsIgnoreCase("SHIPPING_CHARGES"))
+			{
+				if(orderAdjustmentTypeId.equalsIgnoreCase("PROMOTION_ADJUSTMENT"))
+				{
+					if(UtilValidate.isEmpty(orderAdjustment.getString("productPromoId")))
+					{
+						originalOrderOtherAmount = originalOrderOtherAmount.add(orderAdjustment.getBigDecimal("amount"));
+					}
+				}
+				else
+				{
+					originalOrderOtherAmount = originalOrderOtherAmount.add(orderAdjustment.getBigDecimal("amount"));
+					
+				}
+				
+			}
+		}
+	}
+	if(UtilValidate.isNotEmpty(orderPaymentPreferences))
+	{
+		for(GenericValue orderPaymentPreference : orderPaymentPreferences)
+		{
+			preferencePayments = orderPaymentPreference.getRelatedByAnd("Payment", ["paymentTypeId" : "CUSTOMER_REFUND","statusId" : "PMNT_SENT"]);
+			if(UtilValidate.isNotEmpty(preferencePayments))
+			{
+				for(GenericValue payment : preferencePayments)
+				{
+					paymentGatewayResponse = payment.getRelatedOne("PaymentGatewayResponse");
+					totalChargeRefunded = totalChargeRefunded.add(paymentGatewayResponse.getBigDecimal("amount"));
+				}
+			}
+		}
+	}
+	
 	if(statusId.equalsIgnoreCase("PRODUCT_RETURN"))
 	{
 		List<GenericValue> returnOrderItems = orderReadHelper.getOrderReturnItems();
@@ -120,6 +163,16 @@ if (UtilValidate.isNotEmpty(orderHeader))
 							for(GenericValue returnAdjustmetTax : returnAdjustmetsTax)
 							{
 								priorTaxAdjustmentTotal = priorTaxAdjustmentTotal.add(returnAdjustmetTax.amount);
+							}
+						}
+						
+						//Misc Adjustments
+						List<GenericValue> returnAdjustmentsMisc = EntityUtil.filterByAnd(returnAdjustmets, UtilMisc.toMap("returnId",returnOrderItem.returnId, "returnTypeId", "RTN_REFUND", "returnAdjustmentTypeId", "RET_MAN_ADJ"));
+						if(UtilValidate.isNotEmpty(returnAdjustmentsMisc))
+						{
+							for(GenericValue returnAdjustmentMisc : returnAdjustmentsMisc)
+							{
+								priorMiscAdjustmentTotal = priorMiscAdjustmentTotal.add(returnAdjustmentMisc.amount);
 							}
 						}
 					}
@@ -239,11 +292,14 @@ context.originalOrderItemSubtotal = originalOrderItemSubtotal;
 context.originalOrderShippingAmount = originalOrderShippingAmount;
 context.originalOrderTaxAmount = originalOrderTaxAmount;
 context.originalOrderPromoAmount = originalOrderPromoAmount;
+context.originalOrderOtherAmount = originalOrderOtherAmount;
 
 context.priorItemAdjustmentTotal = priorItemAdjustmentTotal;
 context.priorShippingAdjustmentTotal = priorShippingAdjustmentTotal;
 context.priorPromoAdjustmentTotal = priorPromoAdjustmentTotal;
 context.priorTaxAdjustmentTotal = priorTaxAdjustmentTotal;
+context.priorMiscAdjustmentTotal = priorMiscAdjustmentTotal;
+context.totalChargeRefunded=totalChargeRefunded;
 
 context.orderItems = orderItems;
 context.currencyUomId = currencyUomId;

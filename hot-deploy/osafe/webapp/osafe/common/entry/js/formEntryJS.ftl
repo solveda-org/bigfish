@@ -8,24 +8,9 @@
   function changeEmail() {
     jQuery('#js_USERNAME').val(jQuery('#js_CUSTOMER_EMAIL').val());
   }
-
+  
   jQuery(document).ready(function () 
   {
-    if(jQuery('#js_content').length) {
-        var curLen = jQuery('#js_content').val().length;
-        jQuery('#js_textCounter').html(255 - curLen+" ${uiLabelMap.CharactersLeftLabel}");
-        jQuery('#js_content').bind('keyup', function() {
-            var maxchar = 255;
-            var cnt = jQuery(this).val().length;
-            var remainingchar = maxchar - cnt;
-            if(remainingchar < 0){
-                jQuery('#js_textCounter').html('0 ${uiLabelMap.CharactersLeftLabel}');
-                jQuery(this).val(jQuery(this).val().slice(0, maxchar));
-            }else{
-                jQuery('#js_textCounter').html(remainingchar+' ${uiLabelMap.CharactersLeftLabel}');
-            }
-        });
-      }
     jQuery('.characterLimit').each(function(){
             restrictTextLength(this);
         });
@@ -74,7 +59,8 @@
   }
 
   //This method exists in geoAutoCompleter.js named 'getAssociatedStateList'. we have reused and customized.
-  function getAssociatedStateList(countryId, stateId, errorId, divId) {
+  function getAssociatedStateList(countryId, stateId, errorId, divId) 
+  {
     var optionList = "";
     jQuery.ajaxSetup({async:false});
     jQuery.post("<@ofbizUrl>getAssociatedStateList</@ofbizUrl>", {countryGeoId: jQuery("#"+countryId).val()}, function(data) {
@@ -149,16 +135,16 @@
     var maxchar = jQuery(textArea).attr('maxlength');
     var curLen = jQuery(textArea).val().length;
     var regCharLen = lineBreakCount(jQuery(textArea).val());
-    jQuery(textArea).next('.js_textCounter').html("* "+(maxchar - (curLen+regCharLen))+" ${uiLabelMap.CharactersLeftLabel}");
+    jQuery(textArea).next('.js_textCounter').html((maxchar - (curLen+regCharLen))+" ${uiLabelMap.CharactersLeftLabel}");
     jQuery(textArea).keyup(function() {
         var cnt = jQuery(this).val().length;
         var regCharLen = lineBreakCount(jQuery(this).val());
         var remainingchar = maxchar - (cnt + regCharLen);
         if(remainingchar < 0){
-            jQuery(this).next('.js_textCounter').html("* "+'0 ${uiLabelMap.CharactersLeftLabel}');
+            jQuery(this).next('.js_textCounter').html('0 ${uiLabelMap.CharactersLeftLabel}');
             jQuery(this).val(jQuery(this).val().slice(0, (maxchar-regCharLen)));
         } else{
-            jQuery(this).next('.js_textCounter').html("* "+remainingchar+' ${uiLabelMap.CharactersLeftLabel}');
+            jQuery(this).next('.js_textCounter').html(remainingchar+' ${uiLabelMap.CharactersLeftLabel}');
         }
     });
  }
@@ -205,6 +191,8 @@
 		if(helpText != "")
 		{
 			jQuery("#js_giftMessageText_"+count).val(helpText);
+			
+			restrictTextLength(jQuery("#js_giftMessageText_"+count));
 		}
     }
     

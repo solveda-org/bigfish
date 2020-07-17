@@ -241,13 +241,18 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                     if (totalRevenue < trendTotalRevenue)
                     {
                         recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / totalRevenue) * 100
+                        recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
+                        context.recentTrendRevenue = recentTrendRevenue;
                     }
                     else
                     {
-                        recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                    	if (trendTotalRevenue != 0)
+                    	{
+                            recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                            recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
+                            context.recentTrendRevenue = recentTrendRevenue;
+                    	}
                     }
-                    recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
-                    context.recentTrendRevenue = recentTrendRevenue;
                 }
             }
             //store pick up
@@ -284,13 +289,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                     if (storePickupTotalRevenue < storePickupTrendTotalRevenue)
                     {
                         storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTotalRevenue) * 100
+                        storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
+                        context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
                     }
                     else
                     {
-                        storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                    	if (storePickupTrendTotalRevenue != 0) 
+                    	{
+                            storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                            storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
+                            context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
+                    		
+                    	}
                     }
-                    storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
-                    context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
                 }
             }
            if (diffDays == 1)
@@ -342,13 +353,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                     if (totalRevenue < trendTotalRevenue)
                     {
                         priorTrendRevenue= ((totalRevenue - trendTotalRevenue) / totalRevenue) * 100
+                        priorTrendRevenue= priorTrendRevenue.setScale(1,rounding);
+                        context.priorTrendRevenue = priorTrendRevenue;
                     }
                     else
                     {
-                        priorTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                    	if (trendTotalRevenue != 0)
+                    	{
+                            priorTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                            priorTrendRevenue= priorTrendRevenue.setScale(1,rounding);
+                            context.priorTrendRevenue = priorTrendRevenue;
+                    		
+                    	}
                     }
-                    priorTrendRevenue= priorTrendRevenue.setScale(1,rounding);
-                    context.priorTrendRevenue = priorTrendRevenue;
                 }
             }
 
@@ -387,13 +404,18 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                     if (storePickupTotalRevenue < storePickupTrendTotalRevenue)
                     {
                         storePickupPriorTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTotalRevenue) * 100
+                        storePickupPriorTrendRevenue= storePickupPriorTrendRevenue.setScale(1,rounding);
+                        context.storePickupPriorTrendRevenue = storePickupPriorTrendRevenue;
                     }
                     else
                     {
-                        storePickupPriorTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                   	 if (storePickupTrendTotalRevenue != 0)
+                	 {
+                         storePickupPriorTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                         storePickupPriorTrendRevenue= storePickupPriorTrendRevenue.setScale(1,rounding);
+                         context.storePickupPriorTrendRevenue = storePickupPriorTrendRevenue;
+                	 }
                     }
-                    storePickupPriorTrendRevenue= storePickupPriorTrendRevenue.setScale(1,rounding);
-                    context.storePickupPriorTrendRevenue = storePickupPriorTrendRevenue;
                 }
             }
            if (diffDays == 1)
@@ -454,13 +476,18 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                  if (totalRevenue < trendTotalRevenue)
                  {
                      recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / totalRevenue) * 100
+                     recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
+                     context.recentTrendRevenue = recentTrendRevenue;
                  }
                  else
                  {
-                     recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                	 if (trendTotalRevenue != 0)
+                	 {
+                         recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                         recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
+                         context.recentTrendRevenue = recentTrendRevenue;
+                	 }
                  }
-                 recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
-                 context.recentTrendRevenue = recentTrendRevenue;
              }
          }
          //store pick up
@@ -498,13 +525,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                  if (storePickupTotalRevenue < storePickupTrendTotalRevenue)
                  {
                      storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTotalRevenue) * 100
+                     storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
+                     context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
                  }
                  else
                  {
-                     storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                	 if (storePickupTrendTotalRevenue != 0)
+                	 {
+                         storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                         storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
+                         context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
+                		 
+                	 }
                  }
-                 storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
-                 context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
              }
          }
          context.periodRecTrendRange=UtilDateTime.toDateString(periodFromRecTrendTs,displayDateFormat) + " to " + UtilDateTime.toDateString(periodToRecTrendTs,displayDateFormat);
@@ -554,13 +587,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                  if (totalRevenue < trendTotalRevenue)
                  {
                      priorTrendRevenue= ((totalRevenue - trendTotalRevenue) / totalRevenue) * 100
+                     priorTrendRevenue= priorTrendRevenue.setScale(1,rounding);
+                     context.priorTrendRevenue = priorTrendRevenue;
                  }
                  else
                  {
-                     priorTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                	 if (trendTotalRevenue != 0)
+                	 {
+                         priorTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                         priorTrendRevenue= priorTrendRevenue.setScale(1,rounding);
+                         context.priorTrendRevenue = priorTrendRevenue;
+                		 
+                	 }
                  }
-                 priorTrendRevenue= priorTrendRevenue.setScale(1,rounding);
-                 context.priorTrendRevenue = priorTrendRevenue;
              }
          }
 
@@ -599,13 +638,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                  if (storePickupTotalRevenue < storePickupTrendTotalRevenue)
                  {
                      storePickupPriorTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTotalRevenue) * 100
+                     storePickupPriorTrendRevenue= storePickupPriorTrendRevenue.setScale(1,rounding);
+                     context.storePickupPriorTrendRevenue = storePickupPriorTrendRevenue;
                  }
                  else
                  {
-                     storePickupPriorTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                	 if (storePickupTrendTotalRevenue != 0)
+                	 {
+                         storePickupPriorTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                         storePickupPriorTrendRevenue= storePickupPriorTrendRevenue.setScale(1,rounding);
+                         context.storePickupPriorTrendRevenue = storePickupPriorTrendRevenue;
+                		 
+                	 }
                  }
-                 storePickupPriorTrendRevenue= storePickupPriorTrendRevenue.setScale(1,rounding);
-                 context.storePickupPriorTrendRevenue = storePickupPriorTrendRevenue;
              }
          }
          context.periodPriorTrendRange=UtilDateTime.toDateString(periodFromPriorTrendTs,displayDateFormat) + " to " +  UtilDateTime.toDateString(periodToPriorTrendTs,displayDateFormat);
@@ -658,13 +703,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                  if (totalRevenue < trendTotalRevenue)
                  {
                      recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / totalRevenue) * 100
+                     recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
+                     context.recentTrendRevenue = recentTrendRevenue;
                  }
                  else
                  {
-                     recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                	 if (trendTotalRevenue != 0) 
+                	 {
+                         recentTrendRevenue= ((totalRevenue - trendTotalRevenue) / trendTotalRevenue) * 100
+                         recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
+                         context.recentTrendRevenue = recentTrendRevenue;
+                		 
+                	 }
                  }
-                 recentTrendRevenue= recentTrendRevenue.setScale(1,rounding);
-                 context.recentTrendRevenue = recentTrendRevenue;
              }
          }
          //store pick up
@@ -702,13 +753,19 @@ if(UtilValidate.isNotEmpty(periodFromTs) && UtilValidate.isNotEmpty(periodToTs))
                  if (storePickupTotalRevenue < storePickupTrendTotalRevenue)
                  {
                      storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTotalRevenue) * 100
+                     storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
+                     context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
                  }
                  else
                  {
-                     storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                	 if (storePickupTrendTotalRevenue != 0)
+                	 {
+                         storePickupRecentTrendRevenue= ((storePickupTotalRevenue - storePickupTrendTotalRevenue) / storePickupTrendTotalRevenue) * 100
+                         storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
+                         context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
+                		 
+                	 }
                  }
-                 storePickupRecentTrendRevenue= storePickupRecentTrendRevenue.setScale(1,rounding);
-                 context.storePickupRecentTrendRevenue = storePickupRecentTrendRevenue;
              }
          }
          context.periodRecTrendRange=UtilDateTime.toDateString(periodFromRecTrendTs,displayDateFormat) + " to " + UtilDateTime.toDateString(periodToRecTrendTs,displayDateFormat);

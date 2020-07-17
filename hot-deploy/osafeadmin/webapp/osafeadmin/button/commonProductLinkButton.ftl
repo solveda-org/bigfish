@@ -32,6 +32,9 @@
   <#if !showCartLink?has_content>
       <#assign showCartLink = "true"/>
   </#if>
+  <#if !showProductContentLink?has_content>
+      <#assign showProductContentLink = "true"/>
+  </#if>
   
   <#if showDetailLink == 'true'>
     <#if product.isVirtual?if_exists == 'Y'>
@@ -131,13 +134,13 @@
       <#assign notIntroduced = false />
       <#if product.introductionDate?has_content>
         <#assign introDate = product.introductionDate! />
-        <#assign introductionDate = (introDate)?string(preferredDateFormat)>
+        <#assign introductionDate = (introDate)?string(entryDateTimeFormat)>
         <#if nowTimestamp.before(introDate)><#assign notIntroduced = true /></#if>
       </#if>
       <#assign hasExpired = false />
       <#if product.salesDiscontinuationDate?has_content>
         <#assign discDate = product.salesDiscontinuationDate! />
-        <#assign salesDiscontinuationDate = (discDate)?string(preferredDateFormat)>
+        <#assign salesDiscontinuationDate = (discDate)?string(entryDateTimeFormat)>
         <#if nowTimestamp.after(discDate)><#assign hasExpired = true /></#if>
       </#if>
       <#if notIntroduced == true || hasExpired == true>
@@ -199,6 +202,10 @@
     <#else>
       <a href="javascript:void(0);javascript:alert('${uiLabelMap.VirtualProductAddToCartError}');" onMouseover="showTooltip(event,'${uiLabelMap.AddToCartTooltip}');" onMouseout="hideTooltip()"><span class="adminAddCartIcon"></span></a>
     </#if>
+  </#if>
+  
+  <#if showProductContentLink == 'true'>
+    <a href="<@ofbizUrl>${productContentSpotListAction}?productId=${product.productId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.ProductContentSpotTooltip}');" onMouseout="hideTooltip()"><span class="contentSpotIcon"></span></a>
   </#if>
 </div>
 </#if>

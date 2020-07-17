@@ -10,6 +10,8 @@
         <attribute name="browseRootProductCategoryId" type="String" mode="IN" optional="true"/>
         <attribute name="preferredDateFormat" type="String" mode="IN" optional="true"/>
         <attribute name="preferredDateTimeFormat" type="String" mode="IN" optional="true"/>
+        <attribute name="entryDateFormat" type="String" mode="IN" optional="true"/>
+        <attribute name="entryDateTimeFormat" type="String" mode="IN" optional="true"/>
     </service>
 
     <!-- order lookup services -->
@@ -424,6 +426,8 @@
         <implements service="updateContent"/>
         <attribute name="textData" type="String" mode="IN" optional="true" allow-html="any"/>
         <attribute name="description" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="objectInfo" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="dataResourceTypeId" type="String" mode="IN" optional="true" allow-html="any"/>
     </service>
 
     <service name="createCategoryTextContent" engine="simple" auth="true" 
@@ -440,6 +444,8 @@
         <attribute name="prodCatContentTypeId" type="String" mode="IN" optional="true"/>
         <attribute name="productCategoryId" type="String" mode="INOUT" optional="true"/>
         <attribute name="contentId" type="String" mode="OUT" optional="true" />
+        <attribute name="objectInfo" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="dataResourceTypeId" type="String" mode="IN" optional="true" allow-html="any"/>
     </service>
     <service name="updateProductCategoryRollupGroup" engine="group" auth="false">
         <description>
@@ -466,6 +472,7 @@
         <attribute name="sequenceNum" type="String" mode="IN" optional="true"/>
         <attribute name="fromDate" type="String" mode="IN" optional="true"/>
         <attribute name="thruDate" type="String" mode="IN" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="longDescription" mode="IN" type="String" optional="true"/>
         <attribute name="currentFromDate" type="Timestamp" mode="IN" optional="false"/>
         <attribute name="formattedFromDate" type="String" mode="IN" optional="true"/>
@@ -685,6 +692,7 @@
         <attribute name="productWidth" mode="IN" type="String" optional="true"/>
         <attribute name="productDepth" mode="IN" type="String" optional="true"/>
         <attribute name="weight" mode="IN" type="String" optional="true"/>
+        <attribute name="pdpInStoreOnly" mode="IN" type="String" optional="true"/>
     </service>
     <service name="updateProductContent" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
             invoke="updateProductContent">
@@ -762,6 +770,7 @@
         <attribute name="productWidth" mode="IN" type="String" optional="true"/>
         <attribute name="productDepth" mode="IN" type="String" optional="true"/>
         <attribute name="weight" mode="IN" type="String" optional="true"/>
+        <attribute name="pdpInStoreOnly" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="manageProductFeature" engine="simple" auth="true" 
@@ -833,6 +842,7 @@
         <attribute name="productWidth" mode="IN" type="String" optional="true"/>
         <attribute name="productDepth" mode="IN" type="String" optional="true"/>
         <attribute name="weight" mode="IN" type="String" optional="true"/>
+        <attribute name="pdpInStoreOnly" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="updateProductVariantsGroup" engine="group" auth="false">
@@ -885,6 +895,7 @@
         <attribute name="productWidth" mode="IN" type="String" optional="true"/>
         <attribute name="productDepth" mode="IN" type="String" optional="true"/>
         <attribute name="weight" mode="IN" type="String" optional="true"/>
+        <attribute name="pdpInStoreOnly" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="updateProductIdentification" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
@@ -938,7 +949,9 @@
         </description>
         <attribute name="errorMessageList" type="List" mode="IN" optional="true" />
         <attribute name="successMessageList" type="List" mode="IN" optional="true" />
+        <attribute name="warningMessageList" type="List" mode="IN" optional="true" />
         <attribute name="osafeSuccessMessageList" type="List" mode="OUT" optional="true" />
+        <attribute name="warningMessageList" type="List" mode="OUT" optional="true" />
     </service>
     <service name="updateProductReview" engine="simple" default-entity-name="ProductReview"
             location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml" invoke="updateProductReview" auth="true">
@@ -2921,7 +2934,15 @@
         <attribute name="lengthUomId" mode="IN" type="String" optional="true"/>
         
         <attribute name="generateShippingLabel" mode="IN" type="String" optional="true"/>
+        
+        <attribute name="orderItemShipGroupSeqId" type="Map" string-map-prefix="orderItemShipGroupSeqId_" mode="IN" optional="true"/>
+        <attribute name="orderItemAndShipGroupSeqId" type="Map" string-map-prefix="orderItemAndShipGroupSeqId_" mode="IN" optional="true"/>
+        <attribute name="toShipQuantity" type="Map" string-map-prefix="toShipQuantity_" mode="IN" optional="true"/>
+        
         <attribute name="shipmentId" mode="OUT" type="String" optional="true"/>
+        <attribute name="orderAdjustmentTypeId" mode="IN" type="String" optional="true"/>
+        <attribute name="orderAdjustmentDescription" mode="IN" type="String" optional="true"/>
+        <attribute name="orderAdjustmentAmount" mode="IN" type="String" optional="true"/>
         
         <override name="note" mode="IN" type="String" optional="true" allow-html="safe"/>
         <override name="shipGroupSeqId" mode="IN" type="String" optional="true"/>
@@ -2985,7 +3006,9 @@
         <attribute name="fromDate" mode="IN" type="String" optional="true"/>
         <attribute name="thruDate" mode="IN" type="String" optional="true"/>
         <attribute name="topNavBar" mode="IN" type="String" optional="true"/>
+        <attribute name="topNavId" mode="IN" type="String" optional="true"/>
         <attribute name="sequenceNum" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="longDescription" mode="IN" type="String" optional="true"/>
         <attribute name="catalogTopCategoryId" mode="IN" type="String" optional="true"/>
     </service>
@@ -3008,7 +3031,9 @@
         <attribute name="fromDate" mode="IN" type="String" optional="true"/>
         <attribute name="thruDate" mode="IN" type="String" optional="true"/>
         <attribute name="subNavBar" mode="IN" type="String" optional="true"/>
+        <attribute name="subNavId" mode="IN" type="String" optional="true"/>
         <attribute name="sequenceNum" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="longDescription" mode="IN" type="String" optional="true"/>
         <attribute name="topNavBarId" mode="IN" type="String" optional="true"/>
     </service>
@@ -3106,6 +3131,7 @@
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
+        <attribute name="exportMessageList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
 
     <service name="createPixelTrackingGroup" engine="group" auth="false">
@@ -3234,24 +3260,29 @@
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
+        <attribute name="exportMessageList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
     
     <service name="exportCustRequestContactUsXML" engine="java" transaction-timeout="7200" auth="true"
             location="com.osafe.services.ImportServices" invoke="exportCustRequestContactUsXML">
         <description>Export ContactUs XML</description>
         <attribute name="custRequestIdList" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
+        <attribute name="exportMessageList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
     
     <service name="exportCustRequestCatalogXML" engine="java" transaction-timeout="7200" auth="true"
             location="com.osafe.services.ImportServices" invoke="exportCustRequestCatalogXML">
         <description>Export Request Catalog XML</description>
         <attribute name="custRequestIdList" type="java.util.List" mode="IN" optional="true"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
         <attribute name="feedsDirectoryPath" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsFileName" type="String" mode="OUT" optional="true"/>
         <attribute name="feedsExportedIdList" type="java.util.List" mode="OUT" optional="true"/>
+        <attribute name="exportMessageList" type="java.util.List" mode="OUT" optional="true"/>
     </service>
 
     <service name="createXPixelTracking" default-entity-name="XPixelTracking" engine="entity-auto" invoke="create" auth="true">
@@ -3516,6 +3547,7 @@
         <attribute name="_uploadedFile_fileName" type="String" mode="IN" optional="true"/>
         <attribute name="_uploadedFile_contentType" type="String" mode="IN" optional="true"/>
         <attribute name="productStoreId" type="String" mode="IN" optional="true"/>
+        <attribute name="warningMessageList" type="List" mode="OUT" optional="true"/>
     </service>
     
     
@@ -3694,17 +3726,19 @@
         <attribute name="_SUCCESS_MESSAGE_" type="String" mode="IN" optional="true"/>
         <attribute name="successMessage" type="String" mode="IN" optional="true"/>
     </service>
-    <service name="deleteFinishedJobsGroup" engine="group" auth="false">
+    <service name="deleteScheduledJobsGroup" engine="group" auth="false">
         <description>
          delete finished Jobs.
         </description>
         <group>
-            <invoke name="deleteFinishedJobs" result-to-context="true"/>
+            <invoke name="deleteScheduledJobs" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
-    <service name="deleteFinishedJobs" engine="simple"
-            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml" invoke="deleteFinishedJobs" auth="true" >
+    <service name="deleteScheduledJobs" engine="java"
+            location="com.osafe.services.OsafeAdminServices" invoke="deleteScheduledJobs" auth="true" transaction-timeout="7200">
+        <attribute name="statusId" type="String" mode="IN" optional="false"/>
+        <attribute name="serviceName" type="String" mode="IN" optional="false"/>
         <attribute name="isOld" type="String" mode="IN" optional="true"/>
         <attribute name="showDetail" type="String" mode="OUT" optional="true"/>
     </service>
@@ -4325,7 +4359,9 @@
         <attribute name="skipInventoryChecks" type="Boolean" mode="IN" optional="true"/>
         <attribute name="skipProductChecks" type="Boolean" mode="IN" optional="true"/>
         <attribute name="includePromoItems" type="Boolean" mode="IN" optional="true"/>
-        <attribute name="orderItemSequenceIds" type="List" mode="IN" optional="false"/>
+        <attribute name="includePriorItemAdjustments" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="includePriorHeaderAdjustments" type="Boolean" mode="IN" optional="true"/>
+        <attribute name="orderItemSequenceIds" type="List" mode="IN" optional="true"/>
         <attribute name="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart" mode="OUT" optional="false"/>
     </service>
     
@@ -4346,6 +4382,70 @@
         <attribute name="orderId" type="String" mode="IN" optional="false"/>
         <attribute name="shipmentShipGroupSeqId" type="String" mode="IN" optional="true"/>
         <attribute name="orderItemSeqIdList" type="List" mode="IN" optional="true"/>
+        <attribute name="packageWeight" mode="IN" type="String" optional="true"/>
+        <attribute name="packageHeight" mode="IN" type="String" optional="true"/>
+        <attribute name="packageWidth" mode="IN" type="String" optional="true"/>
+        <attribute name="packageDepth" mode="IN" type="String" optional="true"/>
+        <attribute name="weightUomId" mode="IN" type="String" optional="true"/>
+        <attribute name="lengthUomId" mode="IN" type="String" optional="true"/>
+    </service>
+    
+    <service name="changeShipGroupOrderItemStatus" engine="java" auth="true"
+            location="com.osafe.services.ImportServices"
+            invoke="changeShipGroupOrderItemStatus">
+        <description>
+            Change Order Item Status Based on Ship Group Quantity
+        </description>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipGroupOrderItemStatusMap" type="Map" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateProductTextContentGroup" engine="group" auth="false">
+        <description>
+         update content and render success message
+        </description>
+        <!-- uses updateContent internally; additonal permission(s) not necessary -->
+        <group>
+            <invoke name="updateProductTextContent" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateProductTextContent" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="updateProductTextContent">
+        <description>
+         update content 
+        </description>
+        <implements service="updateContent"/>
+        <attribute name="textData" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="description" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="productId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="objectInfo" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="dataResourceTypeId" type="String" mode="IN" optional="true" allow-html="any"/>
+    </service>
+    
+    <service name="createProductTextContent" engine="simple" auth="true" 
+        location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml" 
+        invoke="createProductTextContent">
+        <description>
+            Create record for following entity:
+            DataResource
+            Content
+            ElectronicText
+            ProductContent
+        </description>
+        
+        <attribute name="productContentTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="productId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="contentId" type="String" mode="OUT" optional="true" />
+    </service>
+    
+    <service name="recreateOrderAdjustments" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminOrderServices.xml" invoke="recreateOrderPromotionAdjustments">
+        <description>Overrides existing ofbiz service, which is called during the cancelOrderItem eca rule. Checks existing promotional adjustments against the new cart (remaining items after cancel)and adds an OrderAdjustment if there is a differnece.</description>
+        <permission-service service-name="orderAdjustmentPermissionCheck" main-action="UPDATE"/>
+        <attribute name="orderId" type="String" mode="IN" optional="false"/>
     </service>
     
 </services>

@@ -18,7 +18,8 @@
       <#if product?has_content>
         <div class="pdpInternalName" id="js_pdpInternalName_${key}" style="display:none">
           <label>${uiLabelMap.PDPInternalNameLabel}</label>
-          <span>${product.internalName!""}</span>
+          <#assign productInternalName = product.internalName!""/>
+          <span>${Static["org.apache.commons.lang.StringEscapeUtils"].unescapeHtml(productInternalName)}</span>
         </div>
       </#if>
     </#list>

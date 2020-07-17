@@ -1,5 +1,4 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
-<input type="hidden" name="partyId" value="${partyId!""}"/>
 <div id="emailPasswordEntry" class="displayBox">
     <h3>${uiLabelMap.LoginInformationHeading}</h3>
     <p class="instructions">${StringUtil.wrapString(uiLabelMap.ChangeLoginInstructionsInfo)}</p>

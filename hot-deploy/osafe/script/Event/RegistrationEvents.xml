@@ -9,6 +9,25 @@
         <call-object-method  obj-field="shoppingCart" method-name="shippingApplies" ret-field="shippingApplies"/>
 
         <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
+        <if-compare operator="equals" value="Y" field="parameters.isFBLogin">
+        	<!-- Create random password -->
+        	<call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="regPwdMinChar">
+	            <field field="request" type="javax.servlet.ServletRequest"/>
+	            <string value="REG_PWD_MIN_CHAR"/>
+	        </call-class-method>
+	        <if-empty field="regPwdMinChar">
+	            <set field="regPwdMinChar" value="6"/>
+	        </if-empty>
+        	<call-bsh>
+	            <![CDATA[ 
+	            	import org.apache.commons.lang.RandomStringUtils;
+	            	
+	                String randomPassword = RandomStringUtils.randomAlphanumeric(Integer.parseInt(regPwdMinChar));
+	                parameters.put("PASSWORD", randomPassword);
+	                parameters.put("CONFIRM_PASSWORD", randomPassword);
+	            ]]>
+	        </call-bsh>
+        </if-compare>
         <if-compare operator="equals" value="Y" field="parameters.PARTY_TEXT_PREFERENCE">
             <set field="parameters.PHONE_MOBILE_MANDATORY" value="Y" />
         </if-compare>
@@ -56,29 +75,15 @@
         	<else>
         		<map-to-map map="billingAddressContext" to-map="shippingAddressContext"/>
         		<clear-field field="shippingAddressContext.attnName"/>
+	        	<property-to-field field="defaultShippingNickname" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+	        	<set field="shippingAddressContext.attnName" from-field="defaultShippingNickname"/>
         	</else>
         </if-not-empty>
         
         <!-- Create the email address -->
 
         <!-- Check for required E-Mail -->
-        <if-compare field="parameters.REQUIRE_EMAIL" operator="not-equals" value="false">
-            <call-map-processor in-map-name="parameters" out-map-name="emailContext">
-                <simple-map-processor name="newEmail">
-                    <process field="roleTypeId"><copy/></process>
-                    <process field="CUSTOMER_EMAIL">
-                        <copy to-field="emailAddress"/>
-                        <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
-                        <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
-                    </process>
-	               <process field="CUSTOMER_EMAIL_CONFIRM">
-	                   <copy to-field="customerEmailConfirm"/>
-	                   <compare-field operator="equals" field="CUSTOMER_EMAIL"><fail-property resource="OSafeUiLabels" property="EmailMatchError"/></compare-field>
-	               </process>
-                    <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
-                </simple-map-processor>
-            </call-map-processor>
-        <else>
+        <if-compare field="parameters.REQUIRE_EMAIL" operator="equals" value="false">
             <call-map-processor in-map-name="parameters" out-map-name="emailContext">
                 <simple-map-processor name="newEmail">
                     <process field="roleTypeId"><copy/></process>
@@ -89,7 +94,6 @@
                     <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
                 </simple-map-processor>
             </call-map-processor>
-        </else>
         </if-compare>
         <check-errors/>
 
@@ -371,100 +375,6 @@
     </simple-method>
 
 
-    <simple-method method-name="validateCustomerInfo" short-description="validateCustomerInfo" login-required="false">
-        <!-- timestamp to be used -->
-        <now-timestamp field="nowStamp"/>
-
-        <!-- setup the party/person -->
-        <if-not-empty field="parameters.birthDateYear">
-            <set field="parameters.birthDate" value="${parameters.birthDateYear}-${parameters.birthDateMonth}-${parameters.birthDateDay}" type="Long"/>
-        </if-not-empty>
-        <call-map-processor in-map-name="parameters" out-map-name="personMap">
-            <simple-map-processor name="newPerson">
-                <process field="personalTitle"><copy/></process>
-                <process field="firstName">
-                    <copy/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="FirstNameMissingError"/></not-empty>
-                </process>
-                <process field="middleName"><copy/></process>
-                <process field="lastName">
-                    <copy/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="LastNameMissingError"/></not-empty>
-                </process>
-                <process field="suffix"><copy/></process>
-                <process field="birthDate">
-                    <convert type="Date" to-field="birthDate"><fail-property resource="OSafeUiLabels" property="BirthDateMissingError"/></convert>
-                </process>
-                <process field="gender"><copy/></process>
-
-                <process field="residenceStatusEnumId"><copy/></process>
-                <process field="maritalStatus"><copy/></process>
-                <process field="employmentStatusEnumId"><copy/></process>
-                <process field="occupation"><copy/></process>
-                <process field="yearsWithEmployer"><convert type="Long"><fail-message message="Years with Employer was not a valid number: ${parameters.yearsWithEmployer}"/></convert></process>
-                <process field="monthsWithEmployer"><convert type="Long"><fail-message message="Months with Employer was not a valid number: ${parameters.monthsWithEmployer}"/></convert></process>
-                <process field="existingCustomer"><copy/></process>
-            </simple-map-processor>
-        </call-map-processor>
-
-        <!-- setup the email -->
-        <call-map-processor in-map-name="parameters" out-map-name="emailMap">
-            <simple-map-processor name="newEmail">
-                <process field="emailAddress">
-                    <copy/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
-                    <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
-                </process>
-                <process field="emailSol"><copy to-field="allowSolicitation"/></process>
-            </simple-map-processor>
-        </call-map-processor>
-
-        <!-- Create the Home Phone -->
-        <call-map-processor in-map-name="parameters" out-map-name="homePhoneMap">
-            <simple-map-processor name="newTelecomNumber">
-                <process field="homeCountryCode">
-                    <copy to-field="countryCode"/>
-                </process>
-                <process field="homeAreaCode">
-                    <copy to-field="areaCode"/>
-                </process>
-                <process field="homeContactNumber">
-                    <copy to-field="contactNumber"/>
-                    <not-empty><fail-message message="Home Phone Contact Number is missing."/></not-empty>
-                </process>
-                <process field="homeExt"><copy to-field="extension"/></process>
-                <process field="homeSol"><copy to-field="allowSolicitation"/></process>
-            </simple-map-processor>
-        </call-map-processor>
-
-        <!-- Create the Work Phone -->
-        <call-map-processor in-map-name="parameters" out-map-name="workPhoneMap">
-            <simple-map-processor name="newTelecomNumber">
-                <process field="workCountryCode">
-                    <copy to-field="countryCode"/>
-                </process>
-                <process field="workAreaCode">
-                    <copy to-field="areaCode"/>
-                </process>
-                <process field="workContactNumber">
-                    <copy to-field="contactNumber"/>
-                </process>
-                <process field="workSol"><copy to-field="allowSolicitation"/></process>
-                <process field="workExt"><copy to-field="extension"/></process>
-            </simple-map-processor>
-        </call-map-processor>
-
-        <!-- Create the Quick Calls Phone -->
-        <call-map-processor in-map-name="parameters" out-map-name="quickCallsPhoneMap">
-            <simple-map-processor name="newTelecomNumber">
-                <process field="quickCallsContactNumber">
-                    <copy to-field="contactNumber"/>
-                </process>
-                <process field="quickCallsSol"><copy to-field="allowSolicitation"/></process>
-            </simple-map-processor>
-        </call-map-processor>
-    </simple-method>
-
     <simple-method method-name="createUpdateCustomerInfo" short-description="Create or Update Customer Info" login-required="false">
         <!-- update the email address -->
         <if-not-empty field="parameters.emailContactMechId">
@@ -519,7 +429,7 @@
     <simple-method method-name="updateCustomer" short-description="Update Customer" login-required="true">
         <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
 
-        <call-simple-method method-name="validateCustomerInfo"/>
+        <call-simple-method method-name="validateCustomerInfo" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
 
         <!-- see if we should continue now... -->
         <check-errors/>
@@ -533,7 +443,7 @@
         <call-simple-method method-name="createUpdateCustomerInfo"/>
     </simple-method>
     <simple-method method-name="createAnonymousCustomer" short-description="Create Customer" login-required="false">
-        <call-simple-method method-name="validateCustomerInfo"/>
+        <call-simple-method method-name="validateCustomerInfo" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
 
         <!-- see if we should continue now... -->
         <check-errors/>

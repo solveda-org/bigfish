@@ -20,6 +20,7 @@
 <DataResource dataResourceId="SI_SEARCH" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="SI_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="SI_HEAD_TAG_CONTENT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_SUPER_MEGA_MENU" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 
 <ElectronicText dataResourceId="SI_HEADER_CONTENT"/>
 <ElectronicText dataResourceId="SI_FOOTER_CONTENT"/>
@@ -28,6 +29,7 @@
 <ElectronicText dataResourceId="SI_SEARCH"/>
 <ElectronicText dataResourceId="SI_MAILING_LIST"/>
 <ElectronicText dataResourceId="SI_HEAD_TAG_CONTENT"/>
+<ElectronicText dataResourceId="SI_SUPER_MEGA_MENU"/>
 
 <Content contentId="SI_HEADER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER_CONTENT" localeString="en_US"/>
 <Content contentId="SI_FOOTER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER_CONTENT" localeString="en_US"/>
@@ -36,6 +38,7 @@
 <Content contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH" localeString="en_US"/>
 <Content contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING_LIST" localeString="en_US"/>
 <Content contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG_CONTENT" localeString="en_US"/>
+<Content contentId="SI_SUPER_MEGA_MENU" contentTypeId="BF_SITE_INFO"  description="Menu that completely replaces the standard navigation bar" contentName="Super Mega Menu" dataResourceId="SI_SUPER_MEGA_MENU" localeString="en_US"/>
 
 <ContentPurpose contentId="SI_HEADER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_FOOTER_CONTENT" contentPurposeTypeId="SECTION"/>
@@ -44,6 +47,7 @@
 <ContentPurpose contentId="SI_SEARCH" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_MAILING_LIST" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_HEAD_TAG_CONTENT" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_SUPER_MEGA_MENU" contentPurposeTypeId="SECTION"/>
 <!-- **************END SITE INFO******************* -->
 
 
@@ -124,6 +128,7 @@
 <DataResource dataResourceId="PTS_PMT_METHOD_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_GIFT_MESSAGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PTS_EMAIL_A_FRIEND" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="PTS_SHOP_LIST_SEARCH" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 
 <DataResource dataResourceId="PES_ADDR_BOOK_VIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="PES_ADDR_BOOK_EDIT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
@@ -159,6 +164,7 @@
 <DataResource dataResourceId="MULTI_ADDR_ESPOT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_ADDR_ESPOT" localeString="en_US"/>
 <DataResource dataResourceId="MULTI_SHIPPING_ESPOT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_SHIPPING_ESPOT" localeString="en_US"/>
 <DataResource dataResourceId="PS_OUT_OF_STOCK" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PS_OUT_OF_STOCK" localeString="en_US"/>
+<DataResource dataResourceId="PS_IN_STORE_ONLY" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PS_IN_STORE_ONLY" localeString="en_US"/>
 
 <ElectronicText dataResourceId="PTS_ADDR_BOOK_VIEW"/>
 <ElectronicText dataResourceId="PTS_ADDR_BOOK_EDIT"/>
@@ -184,6 +190,7 @@
 <ElectronicText dataResourceId="PTS_PMT_METHOD_EDIT"/>
 <ElectronicText dataResourceId="PTS_GIFT_MESSAGE"/>
 <ElectronicText dataResourceId="PTS_EMAIL_A_FRIEND"/>
+<ElectronicText dataResourceId="PTS_SHOP_LIST_SEARCH"/>
 
 <ElectronicText dataResourceId="PES_ADDR_BOOK_VIEW"/>
 <ElectronicText dataResourceId="PES_ADDR_BOOK_EDIT"/>
@@ -220,6 +227,8 @@
 <ElectronicText dataResourceId="MULTI_ADDR_ESPOT"/>
 <ElectronicText dataResourceId="MULTI_SHIPPING_ESPOT"/>
 <ElectronicText dataResourceId="PS_OUT_OF_STOCK"/>
+<ElectronicText dataResourceId="PS_IN_STORE_ONLY"/>
+
 
 <Content contentId="PTS_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BOOK_VIEW"  description="Content Spot displayed on the TOP of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BOOK_EDIT"  description="Content Spot displayed on the TOP of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
@@ -245,6 +254,7 @@
 <Content contentId="PTS_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PMT_METHOD_EDIT"  description="Content Spot displayed on the TOP of the Payment-Information page (part of My-Account)" contentName="Edit Payment Methods" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_GIFT_MESSAGE" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_GIFT_MESSAGE"  description="Content Spot displayed on the TOP of the Gift-Message page" contentName="Gift Message" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_EMAIL_A_FRIEND" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_EMAIL_A_FRIEND"  description="Content Spot displayed on the TOP of the Email A Friend page" contentName="Email A Friend" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PTS_SHOP_LIST_SEARCH" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHOP_LIST_SEARCH"  description="Content Spot displayed on the TOP of Shopping List Search Page" contentName="Shopping List Search" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 
 <Content contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_VIEW"  description="Content Spot displayed on the END of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_EDIT"  description="Content Spot displayed on the END of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
@@ -281,6 +291,7 @@
 <Content contentId="MULTI_ADDR_ESPOT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="MULTI_ADDR_ESPOT" description="Content Spot displayed on the TOP of the Multi Shipping Address page" contentName="Multi Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="MULTI_SHIPPING_ESPOT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="MULTI_SHIPPING_ESPOT" description="Content Spot displayed on the TOP of the Multi Shipping Option page" contentName="Multi Shipping" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PS_OUT_OF_STOCK" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PS_OUT_OF_STOCK" description="Out of Stock Content. Specific Page Content that may be included informing the customer that the Product is not available for purchase." contentName="out of stock" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
+<Content contentId="PS_IN_STORE_ONLY" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PS_IN_STORE_ONLY" description="In Store Only Content. Specific Page Content that may be included informing the customer that the Product is only available for in store purchase." contentName="In Store Only Content" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 
 <ContentRole contentId="PTS_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -308,6 +319,7 @@
 <ContentRole contentId="PTS_WISHLIST" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_GIFT_MESSAGE" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_EMAIL_A_FRIEND" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_SHOP_LIST_SEARCH" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 
 <ContentRole contentId="PES_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -342,6 +354,7 @@
 <ContentRole contentId="MULTI_ADDR_ESPOT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="MULTI_SHIPPING_ESPOT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PS_OUT_OF_STOCK" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PS_IN_STORE_ONLY" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 
 <!-- *****************END ESPOTS**************** -->
 
@@ -537,7 +550,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SEARCH" contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_MAILING_LIST" contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_HEAD_TAG_CONTENT" contentId="SI_HEAD_TAG_CONTENT" contentTypeId="BF_SITE_INFO"/>
-
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SUPER_MEGA_MENU" contentId="SI_SUPER_MEGA_MENU" contentTypeId="BF_SITE_INFO"/>
 
 <!-- HOME PAGE SPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_01" contentId="HPS_01" contentTypeId="BF_HOME_PAGE"/>
@@ -582,6 +595,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_EDIT" contentId="PTS_PMT_METHOD_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_GIFT_MESSAGE" contentId="PTS_GIFT_MESSAGE" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_EMAIL_A_FRIEND" contentId="PTS_EMAIL_A_FRIEND" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHOP_LIST_SEARCH" contentId="PTS_SHOP_LIST_SEARCH" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_VIEW" contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_EDIT" contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -618,6 +632,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_ADDR_ESPOT" contentId="MULTI_ADDR_ESPOT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_SHIPPING_ESPOT" contentId="MULTI_SHIPPING_ESPOT" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_OUT_OF_STOCK" contentId="PS_OUT_OF_STOCK" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_IN_STORE_ONLY" contentId="PS_IN_STORE_ONLY" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <!-- PDP SPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_INTRODUCED" contentId="PS_INTRODUCED" contentTypeId="BF_PDP_SPOT"/>

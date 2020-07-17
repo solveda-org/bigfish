@@ -10,66 +10,69 @@
 	    <ul class="multiVariantList">
 	      <#assign idCount = 0 />
 	      <#-- Traverse through sorted list of variant products -->
-	      <#list variantList as variantProductAssocs>
-	        <#list variantProductAssocs as variantProductAssocItemProductId>
-	          <#assign variantProductAssocProductId = variantProductAssocItemProductId/>
-	          <#break>
-	        </#list>
-	        <#-- Use the Maps made in the groovy to get product info [Note: Only sellable items are in Map] -->
-	        <#if productVariantProductMap.get(variantProductAssocProductId)?exists && productVariantProductMap.get(variantProductAssocProductId)?has_content >
-	          <li>
-	            <#-- build string with all selectable features to display -->
-	            <#if productVariantStandardFeatureMap.get(variantProductAssocProductId)?exists && productVariantStandardFeatureMap.get(variantProductAssocProductId)?has_content >
-			      <#assign featureDescriptionList = productVariantStandardFeatureMap.get(variantProductAssocProductId)! />
-			      <#assign featureDescListString = "">
-			      <#assign featureSetSize = featureSet?size />
-			      <#-- For display of the variants features, featureSet contains the sorted feature types -->
-			      <#list featureSet as productFeatureTypeId>
-			        <#list featureDescriptionList as featureValue >
-			          <#if featureValue.productFeatureCategoryId?has_content && featureValue.productFeatureCategoryId.equalsIgnoreCase(productFeatureTypeId)>  
-			            <#assign featureDescListString = featureDescListString + featureValue.description />
-			            <#assign featureSetSize = featureSetSize - 1 />
-			          </#if>
-			        </#list>
-			        <#if !(featureSetSize == 0)>
-			          <#assign featureDescListString = featureDescListString + ", " />
-			        </#if>
-			      </#list>
-			    </#if>
-			    <#-- check if outOfStock -->
-			    <#assign isInStock = true />
-			    <#if (inventoryMethod?exists && inventoryMethod?has_content)>
-			      <#if inventoryMethod.toUpperCase() == "BIGFISH">
-			        <#if (productVariantStockMap?exists && productVariantStockMap?has_content)>
-			         <#assign productAssocProductIdTo = productVariantStockMap.get(variantProductAssocProductId)!""/>
-			         <#if productAssocProductIdTo?has_content>
-			            <#if productAssocProductIdTo == "outOfStock">
-   			                 <#assign isInStock = false />
-			            </#if>
-			         </#if>
-			        </#if>
-			      </#if>
-			    </#if>
-	            <#-- Use Checkbox implementation -->
-	            <#if (pdpSelectMultiVariant.toUpperCase() == "CHECKBOX") >
-	              <div class="entry multiVariantCheckbox <#if !isInStock >outOfStockCheckBox</#if>">
-	                <label class="checkboxOptionLabel">
-	                  <input type="checkbox" class="checkbox add_multi_product_id" name="add_multi_product_id_${idCount}" id="js_add_multi_product_id_${idCount}" value="${variantProductAssocProductId}" <#if ((add_multi_product_id?has_content && add_multi_product_id == "${variantProductAssocProductId}") || (variantProductAssocList?size == 1))>checked</#if> <#if !isInStock >disabled="disabled"</#if> />
-	                  <span>${featureDescListString}</span>
-	                </label>
-	                <input type="hidden" class="js_add_multi_product_quantity" name="add_multi_product_quantity_${idCount}" id="js_add_multi_product_quantity_${idCount}" value="1" />
-	              </div>
-	            <#-- Use Quantity input implementation --> 
-	            <#elseif (pdpSelectMultiVariant.toUpperCase() == "QTY")>
-	        	  <div class="entry multiVariantQty <#if !isInStock >outOfStockInput</#if>">
-	        	    <input type="input" class="js_add_multi_product_quantity" name="add_multi_product_quantity_${idCount}" id="js_add_multi_product_quantity_${idCount}" value="" <#if !isInStock >disabled="disabled"</#if> /><span>${featureDescListString}</span>
-	                <input type="hidden" class="add_multi_product_id" name="add_multi_product_id_${idCount}" id="js_add_multi_product_id_${idCount}" value="${variantProductAssocProductId}"/>
-	              </div>
-	            </#if>
-	          </li>
-	          <#assign idCount = idCount + 1 />
-	        </#if>
-	      </#list>
+	      <#if variantList?exists>
+		      <#list variantList as variantProductAssocs>
+		        <#list variantProductAssocs as variantProductAssocItemProductId>
+		          <#assign variantProductAssocProductId = variantProductAssocItemProductId/>
+		          <#break>
+		        </#list>
+		        <#-- Use the Maps made in the groovy to get product info [Note: Only sellable items are in Map] -->
+		        <#if productVariantProductMap.get(variantProductAssocProductId)?exists && productVariantProductMap.get(variantProductAssocProductId)?has_content >
+		            <#-- build string with all selectable features to display -->
+		            <#if productVariantStandardFeatureMap.get(variantProductAssocProductId)?exists && productVariantStandardFeatureMap.get(variantProductAssocProductId)?has_content >
+				      <#assign featureDescriptionList = productVariantStandardFeatureMap.get(variantProductAssocProductId)! />
+				      <#assign featureDescListString = "">
+				      <#assign featureSetSize = featureSet?size />
+				      <#-- For display of the variants features, featureSet contains the sorted feature types -->
+				      <#list featureSet as productFeatureTypeId>
+				        <#list featureDescriptionList as featureValue >
+				          <#if featureValue.productFeatureCategoryId?has_content && featureValue.productFeatureCategoryId.equalsIgnoreCase(productFeatureTypeId)>  
+				            <#assign featureDescListString = featureDescListString + featureValue.description />
+				            <#assign featureSetSize = featureSetSize - 1 />
+				          </#if>
+				        </#list>
+				        <#if !(featureSetSize == 0)>
+				          <#assign featureDescListString = featureDescListString + ", " />
+				        </#if>
+				      </#list>
+				    </#if>
+				    <#-- check if outOfStock -->
+				    <#assign isInStock = true />
+				    <#if (inventoryMethod?exists && inventoryMethod?has_content)>
+				      <#if inventoryMethod.toUpperCase() == "BIGFISH">
+				        <#if (productVariantStockMap?exists && productVariantStockMap?has_content)>
+				         <#assign productAssocProductIdTo = productVariantStockMap.get(variantProductAssocProductId)!""/>
+				         <#if productAssocProductIdTo?has_content>
+				            <#if productAssocProductIdTo == "outOfStock">
+	   			                 <#assign isInStock = false />
+				            </#if>
+				         </#if>
+				        </#if>
+				      </#if>
+				    </#if>
+		            <#-- Use Checkbox implementation -->
+                  <#assign featureClass=  Static["com.osafe.util.Util"].removeNonAlphaNumeric(featureDescListString)!""/> 
+		          <li class="${featureClass!}">
+		            <#if (pdpSelectMultiVariant.toUpperCase() == "CHECKBOX") >
+		              <div class="entry multiVariantCheckbox <#if !isInStock >outOfStockCheckBox</#if>">
+		                <label class="checkboxOptionLabel">
+		                  <input type="checkbox" class="checkbox add_multi_product_id" name="add_multi_product_id_${idCount}" id="js_add_multi_product_id_${idCount}" value="${variantProductAssocProductId}" <#if ((add_multi_product_id?has_content && add_multi_product_id == "${variantProductAssocProductId}") || (variantProductAssocList?size == 1))>checked</#if> <#if !isInStock >disabled="disabled"</#if> />
+		                  <span>${featureDescListString}</span>
+		                </label>
+		                <input type="hidden" class="js_add_multi_product_quantity" name="add_multi_product_quantity_${idCount}" id="js_add_multi_product_quantity_${idCount}" value="1" />
+		              </div>
+		            <#-- Use Quantity input implementation --> 
+		            <#elseif (pdpSelectMultiVariant.toUpperCase() == "QTY")>
+		        	  <div class="entry multiVariantQty <#if !isInStock >outOfStockInput</#if>">
+		        	    <input type="input" class="js_add_multi_product_quantity" name="add_multi_product_quantity_${idCount}" id="js_add_multi_product_quantity_${idCount}" value="" <#if !isInStock >disabled="disabled"</#if> /><span>${featureDescListString}</span>
+		                <input type="hidden" class="add_multi_product_id" name="add_multi_product_id_${idCount}" id="js_add_multi_product_id_${idCount}" value="${variantProductAssocProductId}"/>
+		              </div>
+		            </#if>
+		          </li>
+		          <#assign idCount = idCount + 1 />
+		        </#if>
+		      </#list>
+		   </#if>
 	    </ul>	    
 	  <#else>
 	    <#-- If PLP_SELECT_MULTI_VARIANT does not equal QTY or CHECKBOX then display the appropriate display on PDP -->
@@ -108,6 +111,7 @@
 	            <ul class="js_selectableFeature_${featureIdx}" id="LiFT${productFeatureTypeId}" name="LiFT${productFeatureTypeId}">
 	              <#list productFeatureAndApplsSelects as productFeatureAndApplsSelect>
 	                <#assign productFeatureDescription =productFeatureAndApplsSelect.description/>
+                    <#assign featureClass=  Static["com.osafe.util.Util"].removeNonAlphaNumeric(productFeatureDescription)!""/> 
 	                <#assign productFeatureSelectableId =productFeatureAndApplsSelect.productFeatureId/>
 	                <#if PDP_FACET_GROUP_VARIANT_SWATCH?has_content && productFeatureTypeId.equalsIgnoreCase(PDP_FACET_GROUP_VARIANT_SWATCH)>
 	                  <#assign productFeatureSelectVariantId= productFeatureFirstVariantIdMap.get(productFeatureSelectableId)!""/>
@@ -149,7 +153,7 @@
 	                        </#if>
 	                      </#if>
 	                      <#assign productFeatureType = "${productFeatureTypeId!}:${productFeatureDescription!}"/>
-	                      <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, "eCommerceProductDetail?productId=${productId!}&productCategoryId=${productCategoryId!}&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
+	                      <#assign variantProductUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request, "eCommerceProductDetail?productId=${productId!}&productCategoryId=${productCategoryId!}&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
 	                      <input type="hidden" id="${jqueryIdPrefix!}Url_${productFeatureDescription!}" value="${variantProductUrl!}"/>
 	                      <#assign selectedClass="false"/>
 	                      <#if parameters.productFeatureType?exists>
@@ -164,7 +168,7 @@
 	                          <#assign selectedClass="true"/>
 	                        </#if>
 	                      </#if>
-	                      <li class="<#if selectedClass == "true">selected</#if><#if stockClass?exists> ${stockClass}</#if>">
+	                      <li class="${featureClass!} <#if selectedClass == "true">selected</#if><#if stockClass?exists> ${stockClass}</#if>">
 	                        <a href="javascript:void(0);" class="pdpFeatureSwatchLink" onclick="javascript:getList('FT${productFeatureTypeId}','${selectedIdx}', 1);">
 	                          <img src="<@ofbizContentUrl>${productFeatureSwatchURL!""}</@ofbizContentUrl>" class="js_pdpFeatureSwatchImage" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="FT${productFeatureTypeId}" <#if pdpSwatchImageHeight != '0' && pdpSwatchImageHeight != ''>height = "${pdpSwatchImageHeight}"</#if> <#if pdpSwatchImageWidth != '0' && pdpSwatchImageWidth != ''>width = "${pdpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PDP-Swatch');"/>
 	                        </a>
@@ -173,7 +177,7 @@
 	                    </#if>
 	                  </#if>
 	                <#else>
-	                  <li>
+	                  <li class="${featureClass!}">
 	                    <a href="javascript:void(0);" onclick="javascript:getList('FT${productFeatureTypeId}','${selectedIdx}', 1);">
 	                      ${productFeatureDescription!""}
 	                    </a>

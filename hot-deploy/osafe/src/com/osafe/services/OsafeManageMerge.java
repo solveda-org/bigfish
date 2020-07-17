@@ -26,18 +26,14 @@ import javolution.util.FastMap;
 
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
-import org.ofbiz.base.util.UtilXml.LocalErrorHandler;
-import org.ofbiz.base.util.UtilXml.LocalResolver;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
@@ -50,9 +46,15 @@ public class OsafeManageMerge {
 
     public static final String delimiter = ",";
     public static final String keyAtrrName = "key";
+    public static final String readerAtrrName = "reader-name";
+    public static final String serviceResourceNodeName = "service-resource";
+    public static final String testSuiteNodeName = "test-suite";
+    public static final String keyStoreNodeName = "keystore";
+    public static final String webappNodeName = "webapp";
     public static final String divNodeName = "div";
     public static final String screenNodeName = "screen";
     public static final String excludeKeyForUpdate = "style,value,group,mandatory";
+    public static final String includeValueForUpdate = "SYS_YES,SYS_NO,NA";
     public static Map<String, String> screenNamePrefixMap = new HashMap<String, String>();
     static
     {
@@ -78,28 +80,138 @@ public class OsafeManageMerge {
 
     public static void main(String args[]) throws Exception
     {
-        if (args.length == 2 || args.length == 5)
+        if (args.length == 2 || args.length == 3 || args.length == 5)
         {
             if (args.length == 2)
             {
-            	createToFile(args[0], args[1]);
+                createToFile(args[0], args[1]);
+            }
+            if (args.length == 3)
+            {
+                customizeMergeXmlFile(args[0], args[1], args[2]);
             }
             if (args.length == 5)
             {
-	            if ("XML".equalsIgnoreCase(args[3]))
-	            {
-	                mergeXmlFile(args[0], args[1], args[2], args[4]);
-	            }
-	            else if ("PROPERTIES".equalsIgnoreCase(args[3]))
-	            {
-	                mergePropertiesFile(args[0], args[1], args[2], args[4]);
-	            }
+                if ("XML".equalsIgnoreCase(args[3]))
+                {
+                    mergeXmlFile(args[0], args[1], args[2], args[4]);
+                }
+                else if ("PROPERTIES".equalsIgnoreCase(args[3]))
+                {
+                    mergePropertiesFile(args[0], args[1], args[2], args[4]);
+                }
             }
         }
         else
         {
             System.out.println("Please include the paths for merge file.");
         }
+    }
+
+    public static void customizeMergeXmlFile(String fromXmlFilePath, String toXmlFilePath, String readerNames)
+    {
+        try
+        {
+            if (isEmpty(fromXmlFilePath) || isEmpty(toXmlFilePath) || isEmpty(readerNames))
+            {
+                return;
+            }
+
+            // chaeck xml existance on instance; if its not exist then copy the from file on that location
+            if (!(new File(toXmlFilePath)).exists())
+            {
+                FileUtils.copyFile(new File(fromXmlFilePath), new File(toXmlFilePath));
+                return;
+            }
+
+            List<Map<Object, Object>> fromEntryList = getListMapsFromXmlFile(fromXmlFilePath, null);
+            List<Map<Object, Object>> toEntryList = getListMapsFromXmlFile(toXmlFilePath, null);
+            String[] readerList = StringUtils.split(readerNames, delimiter);
+
+            Document fromXmlDocument = readXmlDocument(fromXmlFilePath);
+            Document toXmlDocument = readXmlDocument(toXmlFilePath);
+
+            /* Logic
+            Step 1: First update instance file XML document(toXmlDocument) with newly added version file node in respect of reader name
+            Step 2: Write the modified instance file XML document object to instance file location */
+
+            // Step 1 begin
+            if (isNotEmpty(fromXmlDocument))
+            {
+                Iterator<Map<Object, Object>> fromEntryListIter = fromEntryList.iterator();
+                while (fromEntryListIter.hasNext())
+                {
+                    try
+                    {
+                        Map<Object, Object> fromMapEntry = fromEntryListIter.next();
+                        if (isNotEmpty(fromMapEntry.get(readerAtrrName)))
+                        {
+                            for (String reader : readerList)
+                            {
+                                if (reader.equals(fromMapEntry.get(readerAtrrName).toString()))
+                                {
+                                    // check the existence in instance file
+                                    Map<Object, Object> toMapEntry = findFromListMaps(toEntryList, fromMapEntry);
+                                    if (isEmpty(toMapEntry))
+                                    {
+                                        List<? extends Node> nodeList = UtilXml.childNodeList(fromXmlDocument.getDocumentElement().getFirstChild());
+                                        for (Node node: nodeList)
+                                        {
+                                            // Get the node from version file
+                                            Boolean found = Boolean.FALSE;
+                                            if (node.getNodeType() == Node.ELEMENT_NODE) 
+                                            {
+                                                if (isMatch(getAllNameValueMap(node), fromMapEntry))
+                                                {
+                                                    found = Boolean.TRUE;
+                                                }
+                                            }
+                                            if (found)
+                                            {
+                                                List<? extends Node> tonodeList = UtilXml.childNodeList(toXmlDocument.getDocumentElement().getFirstChild());
+                                                for (Node tonode: tonodeList)
+                                                {
+                                                    // Add the node in instance file
+                                                    Boolean tofound = Boolean.FALSE;
+                                                    if (tonode.getNodeType() == Node.ELEMENT_NODE) 
+                                                    {
+                                                        if (tonode.getNodeName().equals(serviceResourceNodeName) || tonode.getNodeName().equals(testSuiteNodeName) || tonode.getNodeName().equals(keyStoreNodeName) || tonode.getNodeName().equals(webappNodeName))
+                                                        {
+                                                            tofound = Boolean.TRUE;
+                                                        }
+                                                    }
+                                                    if (tofound)
+                                                    {
+                                                        Node importNode = toXmlDocument.importNode(node, true);
+                                                        toXmlDocument.getDocumentElement().insertBefore(importNode, tonode);
+                                                        break;
+                                                    }
+                                                }
+                                                break;
+                                            }
+                                        }
+                                    
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    catch (Exception exc)
+                    {
+                        System.err.println("Error in runRequisite=="+exc.getMessage());
+                    }
+                }
+            }
+            // Step 1 End
+            // Step 2 begin
+            writeXmlDocument(toXmlDocument, toXmlFilePath);
+            // Step 2 End
+        }
+        catch (Exception exc)
+        {
+            System.err.println("Error in runRequisite=="+exc.getMessage());
+        }
+    
     }
 
     public static void createToFile(String fromFilePath, String toFilePath)
@@ -235,6 +347,7 @@ public class OsafeManageMerge {
             List<Map<Object, Object>> toEntryList = getListMapsFromXmlFile(toXmlFilePath, null);
             String[] keyList = StringUtils.split(keyValues, delimiter);
             List<String> excludeKeyList = UtilMisc.toListArray(StringUtils.split(excludeKeyForUpdate, delimiter));
+            List<String> includeValueList = UtilMisc.toListArray(StringUtils.split(includeValueForUpdate, delimiter));
 
             Document fromXmlDocument = readXmlDocument(fromXmlFilePath);
             Document toXmlDocument = readXmlDocument(toXmlFilePath);
@@ -294,7 +407,7 @@ public class OsafeManageMerge {
 
                         if (isNotEmpty(toMapEntry))
                         {
-                            fromXmlDocument = updateXmlEntry(fromXmlDocument, fromMapEntry, toMapEntry, excludeKeyList);
+                            fromXmlDocument = updateXmlEntry(fromXmlDocument, fromMapEntry, toMapEntry, excludeKeyList, includeValueList);
                             toXmlDocument = removeXmlEntry(toXmlDocument, toMapEntry);
                         }
                     }
@@ -399,7 +512,7 @@ public class OsafeManageMerge {
         return xmlDocument;
     }
 
-    public static Document updateXmlEntry(Document fromXmlDocument, Map<Object, Object> fromXmlEntry, Map<Object, Object> toXmlEntry, List<String> excludeKeyList) throws Exception
+    public static Document updateXmlEntry(Document fromXmlDocument, Map<Object, Object> fromXmlEntry, Map<Object, Object> toXmlEntry, List<String> excludeKeyList, List<String> includeValueList) throws Exception
     {
         if (isNotEmpty(fromXmlDocument)) 
         {
@@ -419,7 +532,7 @@ public class OsafeManageMerge {
                     List<? extends Node> childNodeList = UtilXml.childNodeList(node.getFirstChild());
                     for(Node childNode: childNodeList)
                     {
-                        if (excludeKeyList.contains(childNode.getNodeName()) && isNotEmpty(toXmlEntry.get(childNode.getNodeName())))
+                        if (excludeKeyList.contains(childNode.getNodeName()) && isNotEmpty(toXmlEntry.get(childNode.getNodeName())) && !(includeValueList.contains((String)toXmlEntry.get(childNode.getNodeName()))))
                         {
                             childNode.setTextContent((String)toXmlEntry.get(childNode.getNodeName()));
                         }
@@ -647,7 +760,7 @@ public class OsafeManageMerge {
         Document xmlDocument = null;
 
         URL xmlFileUrl = fromFilename(XmlFilePath);
-        if (isEmpty(xmlFileUrl) || !StringUtils.equalsIgnoreCase(FilenameUtils.getExtension(XmlFilePath), "xml"))
+        if (isEmpty(xmlFileUrl))
         {
             return null;
         }
@@ -703,11 +816,8 @@ public class OsafeManageMerge {
         DocumentBuilder builder = factory.newDocumentBuilder();
         if (validate)
         {
-            LocalResolver lr = new LocalResolver(new DefaultHandler());
-            ErrorHandler eh = new LocalErrorHandler(docDescription, lr);
-
-            builder.setEntityResolver(lr);
-            builder.setErrorHandler(eh);
+            builder.setEntityResolver(new DefaultHandler());
+            builder.setErrorHandler(new DefaultHandler());
         }
         document = builder.parse(is);
 

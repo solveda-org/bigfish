@@ -29,7 +29,7 @@ if (Util.isProductStoreParmTrue(request,"COUNTRY_MULTI"))
 	    else
 	    {
 		  countryGeoCodeList = StringUtil.split(countryDropDown,",")
-		  for (List geoId: countryGeoCodeList) 
+		  for (String geoId: countryGeoCodeList) 
 		   {
 	          countryGeoId = geoId;
 	          countryGeoMap = Util.getCountryGeoInfo(delegator, countryGeoId.trim());

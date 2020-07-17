@@ -202,12 +202,12 @@ public class LoyaltyPointsServices {
 	    				String attrListOrderAdjustmentId = (String) orderAdjustmentAttributeInfoMap.get("ORDER_ADJUSTMENT_ID");
 	    				if(orderAdjustmentId.equalsIgnoreCase(attrListOrderAdjustmentId))
 	    	    		{
-	    					String loyaltyPointsAmount = (String) orderAdjustmentAttributeInfoMap.get("ADJUST_POINTS");
+	    					BigDecimal loyaltyPointsAmount = (BigDecimal) orderAdjustmentAttributeInfoMap.get("ADJUST_POINTS");
 	    		    		String adjustMethod = (String) orderAdjustmentAttributeInfoMap.get("ADJUST_METHOD");
 	    		            String loyaltyPointsId = (String) orderAdjustmentAttributeInfoMap.get("MEMBER_ID");
 	    		            String checkoutLoyaltyConversion = (String) orderAdjustmentAttributeInfoMap.get("CONVERSION_FACTOR");
 	    		            String expDate = (String) orderAdjustmentAttributeInfoMap.get("EXP_DATE");
-	    		            String currencyAmount = (String) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
+	    		            BigDecimal currencyAmount = (BigDecimal) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
 	    		            
 	    		            if (UtilValidate.isNotEmpty(adjustMethod))
 	    		        	{

@@ -24,7 +24,7 @@
       <li>
        <div>
         <label>${uiLabelMap.LoyaltyPointsLabel}</label>
-        <input type="text" id="js_loyaltyPointsId" name="loyaltyPointsId" value="${loyaltyPointsId!loyaltyPointsIdFromDB!""}" maxlength="20"<#if (loyaltyPointsId?has_content)>readonly</#if>/>
+        <input type="text" id="js_loyaltyPointsId" name="loyaltyPointsId" value="${loyaltyPointsId!loyaltyPointsIdFromDB!""}" maxlength="20"<#if (loyaltyPointsId?has_content)>readonly</#if> onkeypress="javascript:setCheckoutFormAction(document.${formName!}, 'ALP', '');"/>
         <#if (!orderAdjustmentAttributeList?has_content)>
           <a class="standardBtn action" id="js_applyLoyaltyCard" href="javascript:addLoyaltyPoints();"><span>${uiLabelMap.ApplyLoyaltyCardBtn}</span></a>
         </#if>

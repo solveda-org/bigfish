@@ -118,6 +118,14 @@
         <group>0</group>
         <description>Out of Stock Content. Specific Page Content that may be included informing the customer that the Product is not available for purchase.</description>
     </property>
+    <property key="pdpInStoreOnlyContent">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>In Store Only Content. Specific Page Content that may be included informing the customer that the Product is only available for in store purchase.</description>
+    </property>
     <property key="pdpPriceList">
         <value xml:lang="en">0</value>
         <screen>PDP</screen>
@@ -318,6 +326,30 @@
         <group>0</group>
         <description>Additional Content By Category. Display of Product level content maintained at the Category level.</description>
     </property>
+    <property key="pdpSpecificContent01">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
+    <property key="pdpSpecificContent02">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
+    <property key="pdpSpecificContent03">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
     <property key="pdpManufacturerDescription">
         <value xml:lang="en">0</value>
         <screen>PDP</screen>
@@ -489,6 +521,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>Out of Stock Content. Specific Page Content that may be included informing the customer that the Product is not available for purchase.</description>
+    </property>
+    <property key="pdpTabsInStoreOnlyContent">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>In Store Only Content. Specific Page Content that may be included informing the customer that the Product is only available for in store purchase.</description>
     </property>
     <property key="pdpTabsPriceList">
         <value xml:lang="en">0</value>
@@ -730,6 +770,30 @@
         <mandatory>NA</mandatory>
         <description>Additional Content By Category. Display of Product level content maintained at the Category level.</description>
     </property>
+    <property key="pdpTabsSpecificContent01">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
+    <property key="pdpTabsSpecificContent02">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
+    <property key="pdpTabsSpecificContent03">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
     <property key="pdpTabsManufacturerDescription">
         <value xml:lang="en">0</value>
         <screen>PDPTabs</screen>
@@ -900,6 +964,14 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>Out of Stock Content. Specific Page Content that may be included informing the customer that the Product is not available for purchase.</description>
+    </property>
+    <property key="quicklookInStoreOnlyContent">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>In Store Only Content. Specific Page Content that may be included informing the customer that the Product is only available for in store purchase.</description>
     </property>
     <property key="quicklookPriceList">
         <value xml:lang="en">0</value>
@@ -1148,6 +1220,30 @@
         <mandatory>NA</mandatory>
         <group>0</group>
         <description>Additional Content By Category. Display of Product level content maintained at the Category level.</description>
+    </property>
+    <property key="quicklookSpecificContent01">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
+    <property key="quicklookSpecificContent02">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
+    </property>
+    <property key="quicklookSpecificContent03">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Specific PDP content</description>
     </property>
     <property key="quicklookManufacturerDescription">
         <value xml:lang="en">0</value>
@@ -5742,6 +5838,14 @@
         <group>0</group>
         <description>Mailing List</description>
     </property>
+    <property key="siteHeaderNavigation">
+        <value xml:lang="en">60</value>
+        <screen>SiteHeader</screen>
+        <style>content</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Site navigation Component</description>
+    </property>
 
 <!-- *************************************** -->
 <!-- ContactUs -->
@@ -6159,6 +6263,14 @@
         <group>0</group>
         <description>Guest Customer Sign In</description>
     </property>
+    <property key="signInFacebook">
+        <value xml:lang="en">0</value>
+        <screen>SignIn</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Facebook Sign In</description>
+    </property>
 <!-- *************************************** -->
 <!-- Registration -->
 <!-- *************************************** -->
@@ -6217,7 +6329,7 @@
         <value xml:lang="en">10</value>
         <screen>CreateAccount</screen>
         <style>entry</style>
-        <mandatory>SYS_YES</mandatory>
+        <mandatory>NO</mandatory>
         <group>0</group>
         <description>User Login Email Address</description>
     </property>
@@ -6225,7 +6337,7 @@
         <value xml:lang="en">20</value>
         <screen>CreateAccount</screen>
         <style>entry</style>
-        <mandatory>SYS_YES</mandatory>
+        <mandatory>NO</mandatory>
         <group>0</group>
         <description>User Login Email Address Confirm</description>
     </property>
@@ -6233,7 +6345,7 @@
         <value xml:lang="en">30</value>
         <screen>CreateAccount</screen>
         <style>entry</style>
-        <mandatory>SYS_YES</mandatory>
+        <mandatory>NO</mandatory>
         <group>0</group>
         <description>User Login Password</description>
     </property>
@@ -6241,7 +6353,7 @@
         <value xml:lang="en">40</value>
         <screen>CreateAccount</screen>
         <style>entry</style>
-        <mandatory>SYS_YES</mandatory>
+        <mandatory>NO</mandatory>
         <group>0</group>
         <description>User Login Password Confirm</description>
     </property>
@@ -6373,6 +6485,121 @@
         <group>0</group>
         <description>The total (quantity * price) of the item.</description>
     </property>
+    
+
+<!-- *************************************** -->
+<!-- GiftMessageConfirm -->
+<!-- *************************************** -->
+    <property key="giftMessageConfirmOrderItems">
+        <value xml:lang="en">10</value>
+        <screen>GiftMessageConfirm</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Selected item from Order</description>
+    </property>
+    <property key="giftMessageConfirmMessageEntry">
+        <value xml:lang="en">20</value>
+        <screen>GiftMessageConfirm</screen>
+        <style>container</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The form to enter mesage for order items</description>
+    </property>
+    <property key="giftMessageConfirmPreviousButton">
+        <value xml:lang="en">30</value>
+        <screen>GiftMessageConfirm</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="giftMessageConfirmContinueButton">
+        <value xml:lang="en">40</value>
+        <screen>GiftMessageConfirm</screen>
+        <style>action</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The CONTINUE button that will return the customer to the next step.</description>
+    </property>
+    
+    
+<!-- *************************************** -->
+<!-- GiftMessageConfirmOrderItems -->
+<!-- *************************************** -->
+    <property key="giftMessageConfirmOrderItemsItemImage">
+        <value xml:lang="en">10</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>image</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item image</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemName">
+        <value xml:lang="en">20</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item Name</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemDescription">
+        <value xml:lang="en">30</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item Description (Selected Features)</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemQty">
+        <value xml:lang="en">40</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>number</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The item quantity</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemPrice">
+        <value xml:lang="en">50</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The unit price of the item</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemOfferPrice">
+        <value xml:lang="en">0</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The offer price of the item</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemPriceRecurrence">
+        <value xml:lang="en">0</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>Recurrence price. The price the customer will pay for this item if placed as a recurring order.</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemAvailability">
+        <value xml:lang="en">0</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>string</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The items stock level (In Stock, Out of Stock , Low Stock)</description>
+    </property>
+    <property key="giftMessageConfirmOrderItemsItemTotal">
+        <value xml:lang="en">60</value>
+        <screen>GiftMessageConfirmOrderItems</screen>
+        <style>currency</style>
+        <mandatory>NA</mandatory>
+        <group>0</group>
+        <description>The total (quantity * price) of the item.</description>
+    </property>
+        
     
 <!-- *************************************** -->
 <!-- OrderDetail -->

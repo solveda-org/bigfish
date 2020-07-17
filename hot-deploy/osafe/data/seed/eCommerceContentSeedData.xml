@@ -4,19 +4,27 @@
 <Content contentId="SI_HEADER_CONTENT" statusId="CTNT_PUBLISHED"/>
 <ElectronicText dataResourceId="SI_HEADER_CONTENT">
 <textData><![CDATA[
-<!-- defaultDevice renders on the fullscreen/desktop versions and is hidden on mobile/small device versions --> 
-
-<div class="defaultDevice">
-    <ul>
+   <ul>
         <li><a href="<@ofbizUrl>MyAccount</@ofbizUrl>">My Account</a></li>
-        <li><a href="<@ofbizUrl>contactUs</@ofbizUrl>">Contact Us</a></li>
+        <li class="mobileRemove"><a href="<@ofbizUrl>contactUs</@ofbizUrl>">Contact Us</a></li>
+        <li class="mobileRemove"><a href="<@ofbizUrl>requestCatalog</@ofbizUrl>">Request Catalog</a></li>
+        <li class="mobileRemove"><a href="<@ofbizUrl>storeLocator</@ofbizUrl>">Find Store</a></li>
             <#if userLogin?has_content && userLogin.userLoginId != "anonymous">
                 <li class="last"><a href="<@ofbizUrl>logout</@ofbizUrl>">Logout</a></li>
             <#else/>
                 <li class="last"><a href="<@ofbizUrl>checkLogin</@ofbizUrl>">Sign In</a></li>
             </#if>
     </ul>
-</div>
+]]>
+</textData>
+</ElectronicText>
+
+<!-- Head Content -->
+<Content contentId="SI_HEAD_TAG_CONTENT" statusId="CTNT_PUBLISHED"/>
+<ElectronicText dataResourceId="SI_HEAD_TAG_CONTENT">
+<textData><![CDATA[
+    <meta name="viewport" content="width=device-width; initial-scale=1.0">
+     <link rel="stylesheet" media="screen" href="/osafe_theme/css/bigFishRwdAdjustments.css" type="text/css"/>
 ]]>
 </textData>
 </ElectronicText>
@@ -25,60 +33,43 @@
 <Content contentId="SI_FOOTER_CONTENT" statusId="CTNT_PUBLISHED"/>
 <ElectronicText dataResourceId="SI_FOOTER_CONTENT">
 <textData><![CDATA[
-<!-- defaultDevice renders on the fullscreen/desktop versions and is hidden on mobile/small device versions --> 
+     <div class="footerColumn">
+        <h3>Footer Group</h3>
+        <ul class="footerLinks">
+            <li><a href="<@ofbizUrl>contactUs</@ofbizUrl>">Contact Us</a></li>
+            <li><a href="<@ofbizSeoUrl contentId='SP_ABOUT_US'/>">About Us</a></li>
+            <li><a href="<@ofbizSeoUrl contentId='SP_RETURN_POLICY'/>">Return Policy</a></li>
+            <li><a href="<@ofbizSeoUrl contentId='SP_PRIVACY_POLICY'/>">Privacy Policy</a></li>
+        </ul>
+    </div>
+    <div class="footerColumn">
+       <h3>Footer Group</h3>
+        <ul class="footerLinks">
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+        </ul>
+    </div>
+    <div class="footerColumn">
+       <h3>Footer Group</h3>
+        <ul class="footerLinks">
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+        </ul>
+    </div>
+    <div class="footerColumn">
+       <h3>Footer Group</h3>
+        <ul class="footerLinks">
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+            <li><a href="#">Footer Link</a></li>
+        </ul>
+    </div>
 
-<div class="defaultDevice">
-    <div class="footerColumn">
-        <span class="footerCaption">Footer Column Caption</span>
-        <ul class="footerLinks">
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-        </ul>
-    </div>
-    <div class="footerColumn">
-        <span class="footerCaption">Footer Column Caption</span>
-        <ul class="footerLinks">
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-        </ul>
-    </div>
-    <div class="footerColumn">
-        <span class="footerCaption">Footer Column Caption</span>
-        <ul class="footerLinks">
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-        </ul>
-    </div>
-    <div class="footerColumn">
-        <span class="footerCaption">Footer Column Caption</span>
-        <ul class="footerLinks">
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-            <li><a href="#">Footer Link</a></li>
-        </ul>
-    </div>
-</div>
-
-<!-- smallDevice renders on the mobile/small device versions and is hidden on fullscreen/desktop versions --> 
-
-<div class="smallDevice">
-    <div class="footerColumn">
-        <span class="footerCaption">Mobile Footer Column Caption</span>
-        <ul class="footerLinks">
-            <li><a href="#">Mobile Footer Link</a></li>
-            <li><a href="#">Mobile Footer Link</a></li>
-            <li><a href="#">Mobile Footer Link</a></li>
-            <li><a href="#">Mobile Footer Link</a></li>
-        </ul>
-    </div>
-</div>
 ]]>
 </textData>
 </ElectronicText>
@@ -87,36 +78,9 @@
 <Content contentId="SI_LOGO" statusId="CTNT_PUBLISHED"/>
 <ElectronicText dataResourceId="SI_LOGO">
 <textData><![CDATA[
-<!-- defaultDevice renders on the fullscreen/desktop versions and is hidden on mobile/small device versions --> 
-
-<div class="defaultDevice">
     <a href="<@ofbizUrl>main</@ofbizUrl>">
         <img alt="HomeS" src="/osafe_theme/images/user_content/images/siteLogo.png"/>
     </a>
-</div>
- 
-<!-- Below contains the site logo and the My Cart button.  The My Cart button is placed here to allow for best alignment with the scalable logo image -->
-
-<!-- smallDevice renders on the mobile/small device versions and is hidden on fullscreen/desktop versions --> 
- 
-<div class="smallDevice">
-    <div class="logoCartContainer">
-        <div class="siteLogo">
-            <div class="siteLogoContainer">
-                <div class="inner">
-                    <a href="<@ofbizUrl>main</@ofbizUrl>">
-                        <img src="/osafe_theme/images/user_content/images/siteLogo.png" />
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="cartButtonContainer">
-            <div class="inner">
-                <a class="mobileShowCart" href="/online/control/eCommerceShowcart">My Cart</a>
-            </div>
-        </div>
-    </div>
- </div>
 ]]>
 </textData>
 </ElectronicText>
@@ -134,13 +98,10 @@
 <Content contentId="SI_SHOPPING_CART" statusId="CTNT_PUBLISHED"/>
 <ElectronicText dataResourceId="SI_SHOPPING_CART">
 <textData><![CDATA[
-<!-- defaultDevice renders on the fullscreen/desktop versions and is hidden on mobile/small device versions --> 
-
-<div class="defaultDevice">
-    <p>Cart</p>
+   <p>Cart</p>
         <div id="siteCartStats">
             <div class="highlightGroup">
-                <a href="<@ofbizUrl>eCommerceShowcart</@ofbizUrl>" id="siteShoppingCartSize" class="">
+                <a href="<@ofbizUrl>eCommerceShowcart</@ofbizUrl>" id="siteShoppingCartSize" class=" showLightBoxCart">
                     <span>${CART_ITEMS_QTY!}</span>
                     <#if  CART_ITEMS_QTY?has_content && ((CART_ITEMS_QTY gt 1) || (CART_ITEMS_QTY == 0))>Items<#else>Item</#if></a>
                     <#if  CART_ITEMS_QTY?has_content && (CART_ITEMS_QTY gt 0)>
@@ -150,10 +111,7 @@
                     </#if>
            </div>
       </div>
- </div>
 
-<!-- shopping cart code for mobile/small devices is found in CONTENT / SITE INFO / SI_LOGO --> 
- 
 ]]>
 </textData>
 </ElectronicText>
@@ -163,6 +121,7 @@
 <ElectronicText dataResourceId="SI_SEARCH">
 <textData><![CDATA[
 <script type="text/javascript">
+ 
  function clearIt(what)
  {
  if(what.value == what.defaultValue) what.value = '';
@@ -173,19 +132,22 @@
  }
  </script>
  
-<form id="frmSearchForm" onsubmit="return submitSearchForm(document.frmSearchForm);" action="siteSearch" name="frmSearchForm" method="get">
-    <fieldset class="formstyle" title="Search this site...">
-        <div id="searchContainer" class="targetMobile">
-            <div id="searchField">
-                <input type="text" value="${SEARCH_DEFAULT_TEXT!""}" name="searchText" id="searchText" onblur="setIt(this)" onfocus="clearIt(this)" autocomplete="off" />
-            </div>
-            <div id="searchButton">
-                <input type="submit" class="searchSubmit" value="" />
-            </div>
-        </div>
-    </fieldset>
-    <div class="searchAutoComplete" id="searchAutoComplete"></div>
-</form>
+ <form id="frmSearchForm" onsubmit="return submitSearchForm(document.frmSearchForm);" action="<@ofbizUrl>siteSearch</@ofbizUrl>" name="frmSearchForm" method="get">
+         <fieldset class="formstyle" title="Search this site...">
+             <div id="searchContainer" class="targetMobile">
+                 <div id="searchButton">
+                     <input type="submit" class="searchSubmit" value="" />
+                 </div>
+                 <div id="searchField">
+                     <input type="text" value="${SEARCH_DEFAULT_TEXT!""}" name="searchText" id="searchText" onblur="setIt(this)" onfocus="clearIt(this)" autocomplete="off" />
+                 </div>
+                 <div id="shoppingListSearch">
+                     <a href="<@ofbizUrl>shoppingListSearch</@ofbizUrl>">Shopping List Search</a>
+                 </div>
+             </div>
+         </fieldset>
+     <div class="searchAutoComplete" id="searchAutoComplete"></div>
+     </form>
 ]]>
 </textData>
 </ElectronicText>
@@ -415,7 +377,7 @@ You agree that regardless of any statute or law to the contrary, any claim or ca
 <div id="guidelines">
 <p class="header">We value your feedback!</p>
 <p>When writing your review, please consider the following guidelines:</p> <ul> <li>Focus on the product and your individual experience using it</li> <li>Provide details about why you liked or disliked a product</li> <li>All submitted reviews are subject to the terms set forth in our Terms of Use</li> </ul> <p>We reserve the right not to post your review if it contains any of the following types of content or violates other guidelines:</p> <ul> <li>Obscenities, discriminatory language, or other language not suitable for a public forum</li> <li>Advertisements, "spam" content, or references to other products, offers, or websites</li> <li>Email addresses, URLs, phone numbers, physical addresses or other forms of contact information</li> <li>Critical or spiteful comments on other reviews posted on the page or their authors</li> </ul> 
-<p>In addition, if you wish to share feedback with us about product selection, pricing, ordering, delivery or other customer service issues, please do not submit this feedback through a product review. Instead, <a href="contactUs" target="_blank">contact us</a> directly.</p> <p>Enjoy writing your review!</p> 
+<p>In addition, if you wish to share feedback with us about product selection, pricing, ordering, delivery or other customer service issues, please do not submit this feedback through a product review. Instead, <a href="<@ofbizUrl>contactUs</@ofbizUrl>" target="_blank">contact us</a> directly.</p> <p>Enjoy writing your review!</p> 
 <div class="BVCloseWindowLinkDiv" align="center">
 </div>
 </div>

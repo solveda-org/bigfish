@@ -256,7 +256,7 @@
                       <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId rounding=globalContext.currencyRounding/></td>
                     </tr>
 				  <#else>
-				    <#if appliedTaxList?exists && appliedTaxList?has_content>
+				    <#if appliedTaxList?exists && appliedTaxList?has_content && shipGroupSalesTaxSame>
 				      <#list appliedTaxList as appliedTax >   
 				        <tr>
 					      <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", appliedTax.sourcePercentage, "description", appliedTax.description)>

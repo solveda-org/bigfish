@@ -110,11 +110,32 @@
                 <check-errors/>
                 <return response-code="error"/>
                 <else>
-                	<if-compare field="existingUserLogin.enabled" operator="equals" value="N">
-                		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="DisabledForgotPasswordUsernameError"/>
-		                <string-to-list string="${tempErrorMessage}" message-field="USERNAME" list="error_list"/>
-		                <check-errors/>
-		                <return response-code="error"/>
+                	<set field="userLoginPartyId" from-field="existingUserLogin.partyId" />
+                	<set field="isFbUser" value="N"/>
+                	<if-not-empty field="userLoginPartyId">
+                		<entity-one entity-name="PartyAttribute" value-field="fbPartyAttribute" use-cache="true" auto-field-map="false">
+				            <field-map field-name="partyId" from-field="userLoginPartyId"/>
+				            <field-map field-name="attrName" value="FACEBOOK_USER"/>
+				        </entity-one>
+				        <if-not-empty field="fbPartyAttribute">
+				        	<if-compare operator="equals" value="TRUE" field="fbPartyAttribute.attrValue" type="String">
+				        		<set field="isFbUser" value="Y"/>
+				        	</if-compare>
+				        </if-not-empty>
+                	</if-not-empty>
+                	<if-compare operator="equals" value="N" field="isFbUser">
+                		<if-compare field="existingUserLogin.enabled" operator="equals" value="N">
+	                		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="DisabledForgotPasswordUsernameError"/>
+			                <string-to-list string="${tempErrorMessage}" message-field="USERNAME" list="error_list"/>
+			                <check-errors/>
+			                <return response-code="error"/>
+	                	</if-compare>
+	                	<else>
+	                		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="FbForgotPasswordUsernameError"/>
+			                <string-to-list string="${tempErrorMessage}" message-field="USERNAME" list="error_list"/>
+			                <check-errors/>
+			                <return response-code="error"/>
+	                	</else>
                 	</if-compare>
                 </else>
             </if-empty>

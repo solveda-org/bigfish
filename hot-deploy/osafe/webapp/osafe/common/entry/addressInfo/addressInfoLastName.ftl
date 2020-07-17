@@ -14,6 +14,9 @@
         </#if>
       </#if>
     </#if>
+<#-- for Facebook login -->
+<#elseif parameters.fbLast_name?has_content>
+  <#assign lastName= parameters.fbLast_name!""/>
 </#if>
 
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>

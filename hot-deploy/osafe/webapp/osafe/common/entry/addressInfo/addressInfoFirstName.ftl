@@ -11,6 +11,9 @@
         <#assign firstName = fullName[0]!/>
       </#if>
     </#if>
+<#-- for Facebook login -->
+<#elseif parameters.fbFirst_name?has_content>
+  <#assign firstName= parameters.fbFirst_name!""/>
 </#if>
 
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>

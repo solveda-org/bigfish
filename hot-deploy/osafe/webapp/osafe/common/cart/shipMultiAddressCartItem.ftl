@@ -50,7 +50,7 @@
       <#assign qtyInput= parameters.get("qtyInCart_${lineIndex}")!1/>
 	  <div>
 	    <label>${uiLabelMap.CartItemQuantityCaption}</label>
-	      <input size="6" type="text" name="qtyInCart_${lineIndex}" id="qtyInCart_${lineIndex}" value="${qtyInput}" maxlength="5"/>
+	      <input size="6" type="text" name="qtyInCart_${lineIndex}" id="qtyInCart_${lineIndex}" value="${qtyInput}" maxlength="5" <#if cartLine.getIsPromo()> readOnly="true"</#if>/>
 	      
 	  </div>
 	</li>
@@ -80,7 +80,26 @@
 	  <div>
         <label>${uiLabelMap.ChooseShipAddressLabel}</label>
         <#if shippingContactMechList?has_content>
-	         <#assign paramChosenShippingContactMechId= parameters.get("shippingContactMechId_${lineIndex}")!""/>
+             <#if defaultShipAddr?has_content>
+                <#assign index=0/>
+                <#assign defaultInList="false">
+  	            <#list shippingContactMechList as shippingContactMech>
+    		      <#assign postalAddress = shippingContactMech.getRelatedOneCache("PostalAddress")>
+	  	          <#if index==0>
+		                <#assign firstContactMechId= postalAddress.contactMechId/>
+	  	          </#if>
+	  	          <#if postalAddress.contactMechId == defaultShipAddr>
+                     <#assign defaultInList="true">
+                     <#break>
+                  </#if>
+		          <#assign index = index + 1/>
+  		        </#list>
+  		        <#if defaultInList == "false">
+  		          <#assign defaultShipAddr = firstContactMechId/>
+  		        </#if>
+  		     </#if>
+             
+	         <#assign paramChosenShippingContactMechId= parameters.get("shippingContactMechId_${lineIndex}")!defaultShipAddr!""/>
 	         <#list shippingContactMechList as shippingContactMech>
 		        <#assign postalAddress = shippingContactMech.getRelatedOneCache("PostalAddress")>
 		        <#if paramChosenShippingContactMechId?has_content>
@@ -94,11 +113,11 @@
 		        <label class="radioOptionLabel">
 		         <input type="radio" name="shippingContactMechId_${lineIndex}" value="${postalAddress.contactMechId}" <#if (chosenShippingContactMechId == postalAddress.contactMechId)> checked</#if> />
                  <span class="radioOptionText">
-				     ${setRequestAttribute("PostalAddress", postalAddress)}
-				     ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_STREET_CITY")}
-				     ${screens.render("component://osafe/widget/CommonScreens.xml#displayPostalAddress")}
+				    ${setRequestAttribute("PostalAddress", postalAddress)}
+				    ${setRequestAttribute("DISPLAY_FORMAT", "SINGLE_LINE_STREET_CITY")}
+				    ${screens.render("component://osafe/widget/CommonScreens.xml#displayPostalAddress")}
 				 </span>
-				 </label>
+			    </label>
 		        </div>
 		     </#list>
 		  </#if>

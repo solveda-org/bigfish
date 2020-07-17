@@ -268,6 +268,12 @@
     <property key="DivSequenceDetailTitle">
         <value xml:lang="en">DIV Sequence</value>
     </property>
+    <property key="ProductContentListTitle">
+        <value xml:lang="en">Product Content List</value>
+    </property>
+    <property key="ProductContentDetailTitle">
+        <value xml:lang="en">Product Content Detail</value>
+    </property>
     <property key="ShipmentGatewaysListTitle">
         <value xml:lang="en">Shipment Gateway Settings</value>
     </property>
@@ -632,7 +638,7 @@
         <value xml:lang="en">Static Page</value>
     </property>
     <property key="StoreLocationManagementTitle">
-        <value xml:lang="en">Stores</value>
+        <value xml:lang="en">View Stores</value>
     </property>
     <property key="StoreLocationDetailTitle">
         <value xml:lang="en">Store Detail </value>
@@ -692,7 +698,7 @@
         <value xml:lang="en">View Orders</value>
     </property>
     <property key="ViewCustomersTitle">
-        <value xml:lang="en">View Customers</value>
+        <value xml:lang="en">Customers</value>
     </property>
     <property key="BigfishFeedsTitle">
         <value xml:lang="en">Bigfish Feeds</value>
@@ -889,11 +895,23 @@
     <property key="ManufacturerManagementDetailTitle">
         <value xml:lang="en">manufacturer detail</value>
     </property>
+    <property key="OrderAddPaymentDetailTitle">
+        <value xml:lang="en">apply a payment</value>
+    </property>
+    <property key="PersonTitleDetailTitle">
+        <value xml:lang="en">title detail</value>
+    </property>
     <!-- ******* Page Title Ends *************************************** -->
     
     <!-- *** Heading Starts*************************************** -->
     <property key="ContactUsReasonListHeading">
         <value xml:lang="en">Contact Us Reasons</value>
+    </property>
+    <property key="ProductContentListHeading">
+        <value xml:lang="en">Content List for Product</value>
+    </property>
+    <property key="MiscFinancialAdjustmentsHeading">
+        <value xml:lang="en">Misc Financial Adjustments</value>
     </property>
     <property key="CreditCardTypeListHeading">
         <value xml:lang="en">Credit Card Details</value>
@@ -1267,8 +1285,11 @@
     <property key="ProductIdentificationHeading">
         <value xml:lang="en">Product Identifications &amp; Attributes</value>
     </property>
-    <property key="FeatureSwatchesHeading">
-        <value xml:lang="en">Feature Swatches</value>
+    <property key="FacetGroupsHeading">
+        <value xml:lang="en">Facet Groups</value>
+    </property>
+    <property key="ProductFacetValuesHeading">
+        <value xml:lang="en">Facet Values</value>
     </property>
     <property key="ManufacturerHeading">
         <value xml:lang="en">Matching Manufacturers</value>
@@ -1293,6 +1314,21 @@
     </property>
     <property key="PaymentTypeLabel">
         <value xml:lang="en">Payment Type</value>
+    </property>
+    <property key="EmbeddedLabel">
+        <value xml:lang="en">Embedded</value>
+    </property>
+    <property key="FileReferenceLabel">
+        <value xml:lang="en">File Reference</value>
+    </property>
+    <property key="ErrorLogTextLabel">
+        <value xml:lang="en">*** ERROR *** Row #${rowNo} is ignored. </value>
+    </property>
+    <property key="WarningLogTextLabel">
+        <value xml:lang="en">* WARNING * Row #${rowNo}. </value>
+    </property>
+    <property key="BigFishContentTypeLabel">
+        <value xml:lang="en">BigFish Content Type</value>
     </property>
     <property key="IncludeLabel">
         <value xml:lang="en">Include</value>
@@ -1320,6 +1356,9 @@
     </property>
     <property key="CustomerViewHeading">
         <value xml:lang="en">View Customers</value>
+    </property>
+    <property key="CustomerDetailInfoWithNameHeading">
+        <value xml:lang="en">Customer ${partyId} ${firstName} ${lastName}</value>
     </property>
     <property key="CustomerDetailInfoHeading">
         <value xml:lang="en">Customer ${partyId} Information</value>
@@ -1399,6 +1438,9 @@
     <property key="PaymentInfoHeading">
         <value xml:lang="en">Payment Information</value>
     </property>
+    <property key="ShippingInfoHeading">
+        <value xml:lang="en">Shipping Information</value>
+    </property>
     <property key="PaymentHeading">
         <value xml:lang="en">Payment</value>
     </property>
@@ -1447,8 +1489,11 @@
     <property key="ProductVariantGroupDetailsHeading">
         <value xml:lang="en">Product Details: VARIANT GROUP for Virtual</value>
     </property>
-    <property key="ProductHeading">
+    <property key="MatchingProductHeading">
         <value xml:lang="en">Matching Products</value>
+    </property>
+    <property key="ProductHeading">
+        <value xml:lang="en">Products</value>
     </property>
     <property key="ProductImagesHeading">
         <value xml:lang="en">Product Images</value>
@@ -1584,9 +1629,6 @@
     </property>
     <property key="ShippingAddressHeading">
         <value xml:lang="en">Shipping Address</value>
-    </property>
-    <property key="ShippingInfoHeading">
-        <value xml:lang="en">Shipping/Payment Information</value>
     </property>
     <property key="SiteInfoHeading">
         <value xml:lang="en">Site Info</value>
@@ -2042,6 +2084,9 @@
     <property key="MandatoryCaption">
         <value xml:lang="en">Mandatory:</value>
     </property>
+    <property key="FileCaption">
+        <value xml:lang="en">File:</value>
+    </property>
     <property key="StyleCaption">
         <value xml:lang="en">Style:</value>
     </property>
@@ -2146,6 +2191,9 @@
     </property>
     <property key="TaxAdjustCaption">
         <value xml:lang="en">Tax Adjust:</value>
+    </property>
+    <property key="MiscAdjustCaption">
+        <value xml:lang="en">Misc Adjust:</value>
     </property>
     <property key="AdjustedChargeCaption">
         <value xml:lang="en">Adjusted Charge:</value>
@@ -2366,6 +2414,9 @@
     <property key="BFWareHouseInventoryCaption">
         <value xml:lang="en">BF Warehouse Inventory:</value>
     </property>
+    <property key="InStoreOnlyCaption">
+        <value xml:lang="en">In Store Only:</value>
+    </property>
     <property key="ImportXmlFileCaption">
         <value xml:lang="en">Import XML File:</value>
     </property>
@@ -2557,6 +2608,9 @@
     </property>
     <property key="PixelScopeCaption">
         <value xml:lang="en">Scope:</value>
+    </property>
+    <property key="PixelUrlCaption">
+        <value xml:lang="en">URL:</value>
     </property>
     <property key="PagePositionCaption">
         <value xml:lang="en">Page Position:</value>
@@ -2752,6 +2806,18 @@
     </property>
     <property key="TopNavCaption">
         <value xml:lang="en">Top Nav:</value>
+    </property>
+    <property key="TopNavIdCaption">
+        <value xml:lang="en">Top Nav ID:</value>
+    </property>
+    <property key="TopNavNameCaption">
+        <value xml:lang="en">Top Nav Name:</value>
+    </property>
+    <property key="SubNavIdCaption">
+        <value xml:lang="en">Sub Nav ID:</value>
+    </property>
+    <property key="SubNavNameCaption">
+        <value xml:lang="en">Sub Nav Name:</value>
     </property>
     <property key="ZipCodeCaption">
         <value xml:lang="en">Zip:</value>
@@ -3300,6 +3366,9 @@
     </property>
     <property key="TrackingNoCaption">
         <value xml:lang="en">Tracking#:</value>
+    </property>
+    <property key="ShipTrackingNumberLabel">
+        <value xml:lang="en">Tracking#</value>
     </property>
     <property key="UpdatedDateCaption">
         <value xml:lang="en">Updated Date:</value>
@@ -4036,6 +4105,9 @@
     <property key="TotalChargeCaption">
         <value xml:lang="en">Total Charge:</value>
     </property>
+    <property key="TotalChargeRefundedCaption">
+        <value xml:lang="en">Total Charge Refunded:</value>
+    </property>
     <property key="TotalRefundsCaption">
         <value xml:lang="en">Total Refunds:</value>
     </property>
@@ -4089,6 +4161,9 @@
     </property>
     <property key="ShipGroupCaption">
         <value xml:lang="en">Ship Group:</value>
+    </property>
+    <property key="ShipGroupLabel">
+        <value xml:lang="en">Ship Group</value>
     </property>
     <property key="OrderItemSubtotalCaption">
         <value xml:lang="en">Sub Total:</value>
@@ -4288,6 +4363,12 @@
     <property key="pdpQuantityDefaultCaption">
         <value xml:lang="en">PDP Qty Default:</value>
     </property>
+    <property key="OfflinePaymentCaption">
+        <value xml:lang="en">Offline Payment:</value>
+    </property>
+    <property key="AmountPaidCaption">
+        <value xml:lang="en">Amount Paid:</value>
+    </property>
 
     <!-- *** Caption Ends*************************************** -->
 
@@ -4339,6 +4420,9 @@
     </property>
     <property key="BodyEndLabel">
         <value xml:lang="en">BODY_END</value>
+    </property>
+    <property key="BalanceDueLabel">
+        <value xml:lang="en">Balance Due</value>
     </property>
     <property key="HeadEndLabel">
         <value xml:lang="en">HEAD_END</value>
@@ -4424,6 +4508,9 @@
     <property key="FacetGroupIdLabel">
         <value xml:lang="en">Facet Group ID</value>
     </property>
+    <property key="FacetValueIdLabel">
+        <value xml:lang="en">Facet Value ID</value>
+    </property>
     <property key="FacetGroupDescLabel">
         <value xml:lang="en">Facet Group Description</value>
     </property>
@@ -4462,7 +4549,6 @@
         <value xml:lang="en">character limit</value>
         <description>Character limit</description>
     </property>
-    
     <property key="DescriptionLabel">
         <value xml:lang="en">Description</value>
     </property>
@@ -4508,6 +4594,12 @@
     <property key="ExportShippingChargesLabel">
         <value xml:lang="en">Shipping Charges</value>
     </property>
+	<property key="ExportStoresLabel">
+        <value xml:lang="en">Stores</value>
+    </property>
+    <property key="ExportPromotionsLabel">
+        <value xml:lang="en">Promotions</value>
+    </property>
     <property key="ExportSalesTaxesLabel">
         <value xml:lang="en">Sales Taxes</value>
     </property>
@@ -4532,6 +4624,12 @@
     <property key="plpCategoryDescriptionLabel">
         <value xml:lang="en">Content Detail for category</value>
     </property> 
+    <property key="ProductContentDescriptionLabel">
+        <value xml:lang="en">Content Description</value>
+    </property>
+    <property key="ProductContentNameLabel">
+        <value xml:lang="en">Content Name</value>
+    </property>
     <property key="PersonTitleIdLabel">
         <value xml:lang="en">Title ID</value>
     </property>
@@ -4787,6 +4885,9 @@
     <property key="ShippedQtyLabel">
         <value xml:lang="en">Shipped Qty</value>
     </property>
+    <property key="ShipQtyLabel">
+        <value xml:lang="en">Ship Qty</value>
+    </property>
     <property key="ReturnedQtyLabel">
         <value xml:lang="en">Returned Qty</value>
     </property>
@@ -4856,6 +4957,9 @@
     </property>
     <property key="EmailSubscriberTaggingLabel">
         <value xml:lang="en">SUBSCRIBE_NEWSLETTER_SUCCESS</value>
+    </property>
+    <property key="SpecificUrlLabel">
+        <value xml:lang="en">SPECIFIC_URL</value>
     </property>
     <property key="AllLabel">
         <value xml:lang="en">All</value>
@@ -5304,6 +5408,12 @@
     <property key="QtyLabel">
         <value xml:lang="en">Qty</value>
     </property>
+    <property key="ReturnQtyLabel">
+        <value xml:lang="en">Return Qty</value>
+    </property>
+    <property key="CancelQtyLabel">
+        <value xml:lang="en">Cancel Qty</value>
+    </property>
     <property key="RELOADInfoLabel">
         <value xml:lang="en">RE-LOAD: Remove all products and re-load from the input file</value>
     </property>
@@ -5730,6 +5840,9 @@
     <property key="PdpQtyDefaultLabel">
         <value xml:lang="en">PDP Qty Default</value>
     </property>
+    <property key="PdpInStoreOnlyLabel">
+        <value xml:lang="en">PDP In Store Only (Y/N)</value>
+    </property>
     <property key="BFInventoryWarehouseLabel">
         <value xml:lang="en">BF Inventory Warehouse</value>
     </property>
@@ -5858,6 +5971,9 @@
     </property>
     <property key="ShipMethodTypeLabel">
         <value xml:lang="en">Shipping Method</value>
+    </property>
+    <property key="ShipMethodLabel">
+        <value xml:lang="en">Ship Method</value>
     </property>
     <property key="ShipCarrierLabel">
         <value xml:lang="en">Carrier</value>
@@ -5989,7 +6105,7 @@
         <value xml:lang="en">Active settings are:</value>
     </property>
     <property key="FinishedExclLabel">
-        <value xml:lang="en">FINISHED (excluding last 30 days)</value>
+        <value xml:lang="en">FINISHED (more than 30 days ago)</value>
     </property>
     <property key="FinishedWithinLabel">
         <value xml:lang="en">FINISHED (within the last 30 days)</value>
@@ -6059,6 +6175,15 @@
     </property>
     <property key="ScheduledJobEmailFailError">
         <value xml:lang="en">*** FAILED ***</value>
+    </property>
+    <property key="MiscFinancialAdjustmentDescriptionEmptyError">
+        <value xml:lang="en">Misc Financial Adjustment Description can not be empty</value>
+    </property>
+    <property key="MiscFinancialAdjustmentAmountEmptyError">
+        <value xml:lang="en">Misc Financial Adjustment Amount can not be empty</value>
+    </property>
+    <property key="OrderAdjustmentAmountValidInvalidNumberError">
+        <value xml:lang="en">Misc Financial Adjustment Amount is not a valid number</value>
     </property>
     <property key="UserLoginIdLabel">
         <value xml:lang="en">User Login ID</value>
@@ -6414,6 +6539,9 @@
     <property key="SummarySalesTaxMultiCaption">
         <value xml:lang="en">Sales Tax(${description} ${taxPercent}%):</value>
     </property>
+    <property key="SummarySalesTaxShortCaption">
+        <value xml:lang="en">Sales Tax:</value>
+    </property>
     <property key="AdjustmentTypeLabel">
         <value xml:lang="en">Adjustment Type</value>
     </property>
@@ -6432,12 +6560,49 @@
     <property key="AmountRedeemedLabel">
         <value xml:lang="en">Amount Redeemed</value>
     </property>
+    <property key="PlpSwatchUrlLabel">
+        <value xml:lang="en">PLP Swatch Url</value>
+    </property>
+    <property key="PdpSwatchUrlLabel">
+        <value xml:lang="en">PDP Swatch Url</value>
+    </property>
+    <property key="ProductCategoryIdLabel">
+        <value xml:lang="en">Product Category ID</value>
+    </property>
+    <property key="TooltipLabel">
+        <value xml:lang="en">Tooltip</value>
+    </property>
+    <property key="CashLabel">
+        <value xml:lang="en">Cash</value>
+    </property>
+    <property key="CertifiedCheckLabel">
+        <value xml:lang="en">Certified Check</value>
+    </property>
+    <property key="CompanyAccountLabel">
+        <value xml:lang="en">Company Account</value>
+    </property>
+    <property key="CompanyCheckLabel">
+        <value xml:lang="en">Company Check</value>
+    </property>
+    <property key="MoneyOrderLabel">
+        <value xml:lang="en">Money Order</value>
+    </property>
+    <property key="PersonalCheckLabel">
+        <value xml:lang="en">Personal Check</value>
+    </property>
+    
     <!-- **** Label Ends *************************************** -->
     
     
     <!-- ******* Info Messages Starts*************************************** -->
     <property key="ShippingInstructionInfo">
         <value xml:lang="en">Confirm with the customer if there are any special delivery considerations in order to successfully deliver the items</value>
+    </property>
+    <property key="FileReferenceContentHelpInfo">
+        <value xml:lang="en">The file is expected to already exist on the server. The file reference is relative to the Web Application Root Directory. Your root directory is [{0}]. An entry  example could be \\fileContent\\staticPages\\returnPolicy.txt</value>
+    </property>
+    <property key="StoreOnlyProductInfo">
+        <value xml:lang="en">This is an IN STORE ONLY product</value>
     </property>
     <property key="AddPromoCodeInfo">
         <value xml:lang="en">Add a new PROMO-CODE for {0}</value>
@@ -6574,6 +6739,9 @@
     </property>
     <property key="UrlReferenceInfo">
         <value xml:lang="en">Enter complete URL, including the file name, where the asset is located</value>
+    </property>
+    <property key="VideoFormatInfo">
+        <value xml:lang="en">Videos should be in SWF format or a URL reference to YouTube or a similar hosted environment. Any other formats may not be viewable as expected.</value>
     </property>
     <property key="LoggingParamsHealthCheckInfo">
         <value xml:lang="en">This check will review the settings for general logging of your implementation with recommendations on production settings. </value>
@@ -6807,7 +6975,7 @@
         <value xml:lang="en">Note: preview image resized from original H=${height}px, W=${originalWidth}px to H=${height}px, W=${width}px</value>
     </property>
     <property key="PayInStoreInfo">
-        <value xml:lang="en">Pay In Store.</value>
+        <value xml:lang="en">Pickup in Store</value>
     </property>
     <property key="CashOnDeliveryInfo">
         <value xml:lang="en">Cash On Delivery</value>
@@ -6883,6 +7051,12 @@
     </property>
     <property key="SubNavBarInfo">
         <value xml:lang="en">* Must be blank to define a new Top Category Item</value>
+    </property>
+    <property key="CategoryDescriptionInfo">
+        <value xml:lang="en">This optional attribute is used for the SEO Meta Keywords page tag</value>
+    </property>
+    <property key="CategoryLongDescriptionInfo">
+        <value xml:lang="en">This optional attribute is available on the CLP via the DIV Sequencing strategy</value>
     </property>
     <property key="SmallAltImageInfo">
         <value xml:lang="en">Used in PLP “alternate” image view (typically on hover)</value>
@@ -7298,6 +7472,9 @@
     <property key="EditUiLabelKeySuccess">
         <value xml:lang="en">Your changes to ${editUiLabelKey} have been saved. You will need to reset cache in Admin/Tools for your changes to take effect.</value>
     </property>
+    <property key="EditUiLabelKeyContainsBackslashSuccess">
+        <value xml:lang="en">WARNING :You have successfully saved your information. However, note that your content contained a single backslash (\) which may be displayed inconsistently within your eCommerce implementation.</value>
+    </property>
     <property key="EditUserSecurityGroupSuccess">
         <value xml:lang="en">Your Security Group changes for user ${editUser} have been saved</value>
     </property>
@@ -7358,6 +7535,9 @@
     <property key="BlankCategoryImageError">
         <value xml:lang="en">Category image file cannot be blank</value>
     </property>
+    <property key="FeedCountMismatchError">
+        <value xml:lang="en">File has a mismatching Count. Count is [${count}]. Number of &lt;${feedName}&gt; entries is [${noOfEntries}]</value>
+    </property>
     <property key="BlankCategoryNameError">
         <value xml:lang="en">ERROR Row ${rowNo}: The Category-Name cannot be blank</value>
     </property>
@@ -7390,6 +7570,9 @@
     </property>
     <property key="BlankOrderIdError">
         <value xml:lang="en">The Order field cannot be blank.</value>
+    </property>
+    <property key="BlankDescriptionError">
+        <value xml:lang="en">ERROR Row ${rowNo}: The Description cannot be blank</value>
     </property>
     <property key="BlankDescriptionError">
         <value xml:lang="en">ERROR Row ${rowNo}: The Description cannot be blank</value>
@@ -7472,8 +7655,11 @@
     <property key="AddressIncompleteError">
         <value xml:lang="en">Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province are required.</value>
     </property>
+    <property key="BlankGenericError">
+        <value xml:lang="en">The ${field} field cannot be blank</value>
+    </property>
     <property key="BlankAddressNickNameError">
-        <value xml:lang="en">The NickName field cannot be blank</value>
+        <value xml:lang="en">The Nickname field cannot be blank</value>
     </property>
     <property key="BlankAddressFullNameError">
         <value xml:lang="en">The Full Name field cannot be blank</value>
@@ -7508,6 +7694,12 @@
     <property key="BlankBillingAddressFullNameError">
         <value xml:lang="en">The Billing Full Name field cannot be blank</value>
     </property>
+    <property key="BlankBillingAddressGenericError">
+        <value xml:lang="en">The Billing ${field} field cannot be blank</value>
+    </property>
+    <property key="BlankShippingAddressGenericError">
+        <value xml:lang="en">The Shipping ${field} field cannot be blank</value>
+    </property>
     <property key="BlankBillingAddressFirstNameError">
         <value xml:lang="en">The Billing First Name field cannot be blank</value>
     </property>
@@ -7515,13 +7707,16 @@
         <value xml:lang="en">The Billing Last Name field cannot be blank</value>
     </property>
     <property key="BlankBillingAddressNickNameError">
-        <value xml:lang="en">The Billing NickName field cannot be blank</value>
+        <value xml:lang="en">The Billing Nickname field cannot be blank</value>
+    </property>
+    <property key="AddressNickNameUniqueError">
+        <value xml:lang="en">The entered ${field} ${nickName} has already been used in your address book. This must be unique, please retry.</value>
     </property>
     <property key="BillingAddressIncompleteError">
         <value xml:lang="en">Two of either Billing Address-2, Address-3, Zip/Postal, City/Town or State/Province are required.</value>
     </property>
     <property key="InvalidBillingPostalCodeError">
-        <value xml:lang="en">Please Enter a valid Billing Zip Code.</value>
+        <value xml:lang="en">Please Enter a valid Billing ${field}.</value>
     </property>
     <property key="BlankShippingAddress1Error">
         <value xml:lang="en">The Shipping Address 1 field cannot be blank</value>
@@ -7542,7 +7737,7 @@
         <value xml:lang="en">The Shipping Zip or Postcode Code field cannot be blank</value>
     </property>
     <property key="BlankShippingAddressNickNameError">
-        <value xml:lang="en">The Shipping NickName field cannot be blank</value>
+        <value xml:lang="en">The Shipping Nickname field cannot be blank</value>
     </property>
     <property key="BlankShippingAddressFullNameError">
         <value xml:lang="en">The Shipping Full Name field cannot be blank</value>
@@ -7557,7 +7752,7 @@
         <value xml:lang="en">Two of either Shipping Address-2, Address-3, Zip/Postal, City/Town or State/Province are required.</value>
     </property>
     <property key="InvalidShippingPostalCodeError">
-        <value xml:lang="en">Please Enter a valid Shipping Zip Code.</value>
+        <value xml:lang="en">Please Enter a valid Shipping ${field}.</value>
     </property>
     <property key="BlankProductCategoryError">
         <value xml:lang="en">Please Select a Category.</value>
@@ -7584,13 +7779,25 @@
         <value xml:lang="en">The Item# cannot be blank.</value>
     </property>
     <property key="BlankTopNavBarError">
+        <value xml:lang="en">The Top Nav Name field cannot be blank</value>
+    </property>
+    <property key="TopNavNotExistsError">
         <value xml:lang="en">The Top Nav field cannot be blank</value>
     </property>
+    <property key="BlankTopNavIdError">
+        <value xml:lang="en">The Top Nav ID cannot be blank</value>
+    </property>
+    <property key="BlankSubNavIdError">
+        <value xml:lang="en">The Sub Nav ID cannot be blank</value>
+    </property>
+    <property key="UniqueCatalogIdError">
+        <value xml:lang="en">When adding a navigation category the ID must be unique within the catalog</value>
+    </property>
     <property key="BlankSubNavBarError">
-        <value xml:lang="en">The Sub Nav field cannot be blank</value>
+        <value xml:lang="en">The Sub Nav Name field cannot be blank</value>
     </property>
     <property key="InvalidPostalCodeError">
-        <value xml:lang="en">Please Enter a valid Zip Code.</value>
+        <value xml:lang="en">Please Enter a valid ${field}.</value>
     </property>
     <property key="BlankContactNumberError">
         <value xml:lang="en">The Phone field cannot be blank</value>
@@ -7778,6 +7985,9 @@
     <property key="InvalidMultiVariantError">
         <value xml:lang="en">ERROR Row ${rowNo}: For PDP Select Multi Variant [${idData}], valid values are NONE, CHECKBOX and QTY.</value>
     </property>
+    <property key="InvalidPdpInStoreOnlyRowError">
+        <value xml:lang="en">ERROR Row ${rowNo}: PDP-In-Store-Only [${idData}], when provided, must be Y or N.</value>
+    </property>
     <property key="InvalidNumberError">
         <value xml:lang="en">ERROR Row ${rowNo}: ${idField} [${idData}], when provided, must be a valid number.</value>
     </property>
@@ -7853,14 +8063,26 @@
     <property key="MasterProductIdMissingError">
         <value xml:lang="en">ERROR Row ${rowNo}: Master Product ID must be specified and cannot be blank or empty</value>
     </property>
-    <property key="VariantProductNotExistsError">
-        <value xml:lang="en">ERROR Row ${rowNo}: VIRTUAL Master Product ID [${masterProductId}] does NOT have any Variant products defined</value>
+    <property key="VariantProductNotExistsWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: VIRTUAL Master Product ID [${masterProductId}] does NOT have any Variant products defined</value>
+    </property>
+    <property key="ProductDefinitionChangeError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Master Product ID [${masterProductId}] Product Id [${productId}] is already defined as [${productDefinitionDefined}] and cannot be changed to [${productDefinitionToChange}] product.</value>
+    </property>
+    <property key="BlankCategoryDescWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: The Category Description is blank. It is used to the Meta Keywords SEO page tag.</value>
+    </property>
+    <property key="BlankCategoryLongDescWarning">
+        <value xml:lang="en">WARNING Row ${rowNo}: The Category Long Description is blank. It can be used to display additional information on the CLP.</value>
     </property>
     <property key="VirtualFinishProductIdExistingError">
         <value xml:lang="en">ERROR Row ${rowNo}: Master-Product-ID ${masterProductId} and Product-ID ${productId} are duplicates of another entry in this file.</value>
     </property>
     <property key="VirtualSelectableFeatureError">
         <value xml:lang="en">ERROR Row ${rowNo}: [${productType}] Master Product ID [${idData}] has Selectable-Features defined, they are only valid for Variant products.</value>
+    </property>
+    <property key="AtLeastOneCategoryMemberShipRequiredError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Master Product [${idData}] must be a member of at least one Category. This applies to FINISHED-GOODS and VIRTUAL products.</value>
     </property>
     <property key="PixelIdNotExistError">
         <value xml:lang="en">Page Tracking does not exist</value>
@@ -7886,12 +8108,6 @@
     <property key="ProductVariantGroupEmptyError">
         <value xml:lang="en">Please select any variant product(s).</value>
     </property>
-    <property key="SequenceNumNotVaildError">
-        <value xml:lang="en">The Sequence '${sequenceNum}' must be between 1 and 1000.</value>
-    </property>
-    <property key="SequenceNumNotVaildNumError">
-        <value xml:lang="en">The Sequence# must be numeric and between 1 and 1000.</value>
-    </property>
     <property key="BlankSeqNumError">
         <value xml:lang="en">The Seq# cannot be blank.</value>
     </property>
@@ -7901,10 +8117,10 @@
     <property key="BlankBigfishParameterKeyError">
         <value xml:lang="en">The Key cannot be blank.</value>
     </property>
-    <property key="FacetMinValueNotVaildNumError">
+    <property key="FacetMinValueNotValidNumError">
         <value xml:lang="en">The Min Display must be numeric and between 0 and 99.</value>
     </property>
-    <property key="FacetMaxValueNotVaildNumError">
+    <property key="FacetMaxValueNotValidNumError">
         <value xml:lang="en">The Max Display must be numeric and between 1 and 99.</value>
     </property>
     <property key="InvalidFacetMaxValueError">
@@ -7923,15 +8139,12 @@
         <value xml:lang="en">The Seq# must be numeric and between 1 and 9000.</value>
     </property>
     <property key="InvalidComplementSequenceNumber">
-        <value xml:lang="en">Complement Error. The Seq# must be numeric and between 1 and 1000.</value>
+        <value xml:lang="en">Complement Error. The Seq# must be numeric.</value>
     </property>
     <property key="InvalidAccessorySequenceNumber">
-        <value xml:lang="en">Accessory Error. The Seq# must be numeric and between 1 and 1000.</value>
+        <value xml:lang="en">Accessory Error. The Seq# must be numeric.</value>
     </property>
-    <property key="PLPSequenceNumNotVaildNumError">
-        <value xml:lang="en">The Seq# must be numeric.</value>
-    </property>
-    <property key="SequenceNumInVaildError">
+    <property key="PLPSequenceNumNotValidNumError">
         <value xml:lang="en">The Seq# must be numeric.</value>
     </property>
     <property key="ValidGroupNumberError">
@@ -7949,14 +8162,11 @@
     <property key="ValidItemGroupNumberError">
         <value xml:lang="en">Group must be a valid number between 1 and 10.</value>
     </property>
-    <property key="FacetValueSequenceNumNotVaildNumError">
-        <value xml:lang="en">The Seq# must be numeric and between 1 and 1000.</value>
-    </property>
-    <property key="FeatureSequenceNumNotVaildNumError">
-        <value xml:lang="en">The Seq# must be numeric and between 1 and 1000.</value>
-    </property>
     <property key="ImagePathNotExistError">
         <value xml:lang="en">The Image-Path {0} for the {1} image does not already exist</value>
+    </property>
+    <property key="ContentFileNotExistError">
+        <value xml:lang="en">File [{0}] does not exist on the server. Please check and retry.</value>
     </property>
     <property key="ImagePathBlankError">
         <value xml:lang="en">The Image-Path for the {0} image cannot be blank</value>
@@ -7986,43 +8196,43 @@
         <value xml:lang="en">Ship Group Sequence ID [${shipGroupSeqId}] does not reference a Ship-Group for Order [${orderId}].</value>
     </property>
     <property key="OrderStatusMatchingError">
-        <value xml:lang="en">Order Status [${orderStatus}] must be either COMPLETED or CANCELLED</value>
+        <value xml:lang="en">Order Status [${orderStatus}] must be either COMPLETED or CANCELLED for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderShipDateBeforeOrderDateError">
-        <value xml:lang="en">The Order Ship Date can not be before the Order Created Date</value>
+        <value xml:lang="en">The Order Ship Date can not be before the Order Created Date for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderItemShipDateBeforeOrderDateError">
-        <value xml:lang="en">The Order Item Ship Date can not be before the Order Created Date</value>
+        <value xml:lang="en">The Order Item Ship Date can not be before the Order Created Date for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderStatusApprovedError">
-        <value xml:lang="en">Changing status is only applicable for Orders with an existing status of APPROVED. Current status is [${currentOrderStatus}]</value>
+        <value xml:lang="en">Changing status is only applicable for Orders with an existing status of APPROVED. Current status is [${currentOrderStatus}] for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderItemStatusMatchingError">
-        <value xml:lang="en">Order Item Status [${orderItemStatus}] must be either COMPLETED or CANCELLED</value>
+        <value xml:lang="en">Order Item Status [${orderItemStatus}] must be either COMPLETED or CANCELLED for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderItemStatusApprovedError">
-        <value xml:lang="en">Changing status is only applicable for Order Items with an existing status of APPROVED. Current status is [${currentOrderItemStatus}]</value>
+        <value xml:lang="en">Changing status is only applicable for Order Items with an existing status of APPROVED. Current status is [${currentOrderItemStatus}] for Order [${currentOrderId}]</value>
     </property>
     <property key="InValidOrderShipDateError">
-        <value xml:lang="en">The Order Ship Date [${orderShipDate}] must be a valid date</value>
+        <value xml:lang="en">The Order Ship Date [${orderShipDate}] must be a valid date for Order [${currentOrderId}]</value>
     </property>
     <property key="InValidOrderItemShipDateError">
-        <value xml:lang="en">The Order Item Ship Date [${orderItemShipDate}] must be a valid date</value>
+        <value xml:lang="en">The Order Item Ship Date [${orderItemShipDate}] must be a valid date for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderCarrierMatchingError">
-        <value xml:lang="en">The Order Ship Carrier [${carrierId}] must match to an existing Carrier in the system.</value>
+        <value xml:lang="en">The Order Ship Carrier [${carrierId}] must match to an existing Carrier in the system for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderShippingMethodMatchingError">
-        <value xml:lang="en">The Order Ship Method [${shippingMethodId}] must match to an existing Shipping Method in the system.</value>
+        <value xml:lang="en">The Order Ship Method [${shippingMethodId}] must match to an existing Shipping Method in the system for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderCarrierShippingMethodMatchingError">
-        <value xml:lang="en">Unable to match to an existing Carrier Shipping Method using Carrier ${carrierId} and Ship Method ${shippingMethodId}</value>
+        <value xml:lang="en">Unable to match to an existing Carrier Shipping Method using Carrier ${carrierId} and Ship Method ${shippingMethodId} for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderItemCarrierMatchingError">
-        <value xml:lang="en">The Order Item Ship Carrier [${orderItemCarrierId}] must match to an existing Carrier in the system.</value>
+        <value xml:lang="en">The Order Item Ship Carrier [${orderItemCarrierId}] must match to an existing Carrier in the system for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderItemShippingMethodMatchingError">
-        <value xml:lang="en">The Order Item Ship Method [${orderItemShippingMethodId}] must match to an existing Shipping Method in the system.</value>
+        <value xml:lang="en">The Order Item Ship Method [${orderItemShippingMethodId}] must match to an existing Shipping Method in the system for Order [${currentOrderId}]</value>
     </property>
     <property key="OrderItemProductIdSeqIdMatchingError">
         <value xml:lang="en">Sequence Id does not reference a Product for Order [${orderId}].</value>
@@ -8077,6 +8287,9 @@
     </property>
     <property key="SpotContentError">
         <value xml:lang="en">The Content field cannot be blank.</value>
+    </property>
+    <property key="FileReferenceBlankError">
+        <value xml:lang="en">The File field cannot be blank.</value>
     </property>
     <property key="SpotContentIdError">
         <value xml:lang="en">The Content Id cannot be blank.</value>
@@ -8135,7 +8348,10 @@
     <property key="ValidCategorySeqNumError">
         <value xml:lang="en">Seq# Must be entered, and a valid number between 0 and 9999</value>
     </property>
-     <property key="ValidHeightError">
+    <property key="BlankCategoryDescriptionError">
+        <value xml:lang="en">The Description cannot be blank</value>
+    </property>
+    <property key="ValidHeightError">
         <value xml:lang="en">The Product Height must be numeric</value>
     </property>
     <property key="ValidWidthError">
@@ -8282,8 +8498,29 @@
     <property key="ProductFeatureRequiredError">
         <value xml:lang="en">A value must be selected for Feature {0}.</value>
     </property>
+    <property key="EmptyToShipQuantityError">
+        <value xml:lang="en">The Ship-Qty cannot be empty</value>
+    </property>
+    <property key="ToShipQuantityItemInvalidNumberError">
+        <value xml:lang="en">The entered Ship-Qty must be numeric</value>
+    </property>
+    <property key="ToShipQuantityZeroError">
+        <value xml:lang="en">The entered Ship-Qty must be greater than the 0</value>
+    </property>
+    <property key="InvalidToShipQuantityError">
+        <value xml:lang="en">The entered Ship-Qty [{0}] cannot be greater than the Order-Qty [{1}]</value>
+    </property>
     <property key="InvalidReturnQuantityError">
         <value xml:lang="en">The entered Returning-Qty [{0}] cannot be greater than the Remaining-Qty-at-Customer [{1}]</value>
+    </property>
+    <property key="EmptyReturnQuantityError">
+        <value xml:lang="en">The Returning-Qty cannot be empty</value>
+    </property>
+    <property key="ReturnQuantityZeroError">
+        <value xml:lang="en">The entered Returning-Qty must be greater than the 0</value>
+    </property>
+    <property key="ReturnQuantityInvalidNumberError">
+        <value xml:lang="en">The entered Returning-Qty must be numeric</value>
     </property>
     <property key="BlankProductFeturesError">
         <value xml:lang="en">Master product have not any feature. First add the feature to this master product.</value>
@@ -8444,8 +8681,11 @@
     <property key="BlankPromotionUseLimitPerOrderError">
         <value xml:lang="en">Limit Per Order can not be blank.</value>
     </property>
+    <property key="UniqueProductNameAdminError">
+        <value xml:lang="en">For SEO-Friendly purposes the Product Name must be unique. There is already a product with a name of [{0}]</value>
+    </property>
     <property key="UniqueProductNameError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Product Name must be unique</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Product ID [${productId}] must have an unique Product Name</value>
     </property>
     <property key="UniqueItemNoWarning">
         <value xml:lang="en">WARNING Row ${rowNo}: Internal Name [${internalName}] is not unique</value>
@@ -8465,6 +8705,22 @@
     <property key="InvalidToDateInfo">
         <value xml:lang="en">Date field [To Date] contains invalid data and is not recognized as a valid date. Please retry.</value>
     </property>
+    <property key="AllItemsReturnedInfo">
+        <value xml:lang="en">All items have already been returned in previous actions</value>
+    </property>
+    <property key="ItemNotReturnableInfo">
+        <value xml:lang="en">This Product is marked as NOT Returnable</value>
+    </property>
+    <property key="ItemsCancelInfo">
+        <value xml:lang="en">An Item can only be CANCELLED if the status is APPROVED</value>
+    </property>
+    <property key="ItemCompletedInfo">
+        <value xml:lang="en">An Item can only be COMPLETED if the status is APPROVED</value>
+    </property>
+    <property key="ItemsNotCompletedInfo">
+        <value xml:lang="en">An Item can only be RETURNED if the status is COMPLETED</value>
+    </property>
+    
     <property key="PDPRegularImageNotFoundWarning">
         <value xml:lang="en">WARNING Row ${rowNo}: The PDP regular image [${pdpRegularImage}] not found</value>
     </property>
@@ -8897,6 +9153,9 @@
     <property key="LongProductNameError">
         <value xml:lang="en">The Product Name cannot exceed 100 characters</value>
     </property>
+    <property key="LongCategoryDescriptionError">
+        <value xml:lang="en">Category Description cannot exceed 255 characters in length.</value>
+    </property>
     <property key="ProductNameLengthExceedRowError">
         <value xml:lang="en">ERROR Row ${rowNo}: Product Name is limited to 100 characters</value>
     </property>
@@ -8904,7 +9163,16 @@
         <value xml:lang="en">ERROR Row ${rowNo}: Product Name is invalid, name fields are limited to alphanumeric and some special characters (! @  # $ % ? , - _ : ; . /)</value>
     </property>
     <property key="InvalidFeatureError">
-        <value xml:lang="en">ERROR Row ${rowNo}: Feature ID [${featureData}] cannot contain special characters '&lt;' or '&gt;' or ','</value>
+        <value xml:lang="en">ERROR Row ${rowNo}: Feature Group [${featureData}] is not valid. BigFish ID attributes must contain alpha, number digits, hyphens or underscores. Spaces and other special characters are not allowed.</value>
+    </property>
+    <property key="InvalidFeatureIDError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Feature ID [${featureData}] is not valid. Valid format has Feature Group and Feature Value(s) separated by a colon. (Ex. Color: Blue or Color: Blue, Red)</value>
+    </property>
+    <property key="InvalidFacetGroupError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Facet Group ID [${featureData}] is not valid. BigFish ID attributes must contain alpha, number digits, hyphens or underscores. Spaces and other special characters are not allowed.</value>
+    </property>
+    <property key="InvalidFacetValueError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Facet Value ID [${featureData}] is not valid. Valid format has Feature Group and Feature Value separated by a colon. (Ex. Color: Blue)</value>
     </property>
     <property key="InternalNameExceedsLengthError">
         <value xml:lang="en">The Item# cannot exceed 255 characters</value>
@@ -8918,11 +9186,11 @@
     <property key="EmptyNewFolderError">
         <value xml:lang="en">If New Folder is selected, you must enter a folder name.</value>
     </property>
-    <property key="PageTaggingSeqNumInvaildError">
-        <value xml:lang="en">Seq# must be numeric and between 1 and 1000.</value>
-    </property>
     <property key="ShippingAddressMissingError">
         <value xml:lang="en">Please select a Shipping Address.</value>
+    </property>
+    <property key="BillingAddressMissingError">
+        <value xml:lang="en">Please select a Billing Address.</value>
     </property>
     <property key="ManufacturerPartyIdLengthError">
         <value xml:lang="en">The Manufacturer # cannot be more than 20 characters.</value>
@@ -8939,7 +9207,7 @@
     <property key="InvalidAttrNameError">
         <value xml:lang="en">The attribute name cannot contain spaces and must be alpha characters, numbers, hyphens or underscores only</value>
     </property>
-    <property key="AttributeSequenceNumNotVaildError">
+    <property key="AttributeSequenceNumNotValidError">
         <value xml:lang="en">Seq# is a required field and must be a numeric value between 0 and 1000</value>
     </property>
     <property key="BlankCaptionError">
@@ -9004,6 +9272,60 @@
     </property>
     <property key="LoyaltyPointsExceedCartBalanceWarning">
         <value xml:lang="en">The Total Number of Points available exceeds what you owe! We have adjusted the Points Redeemed accordingly</value>
+    </property>
+    <property key="RefundExceedsTotalChargeError">
+        <value xml:lang="en">Total Order Refunded ${refundAmt} cannot exceed Original Total Charge</value>
+    </property>
+    <property key="RefundLessThanZeroError">
+        <value xml:lang="en">Total Order Refunded ${refundAmt} cannot be less than zero</value>
+    </property>
+    <property key="OrderShipDateWarning">
+        <value xml:lang="en">WARNING: Ship-Date is in the future</value>
+    </property>
+    <property key="ProductFacetGroupValueMatchError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Facet-Group [${facetGroup}] and Facet-Value [${featureId}] must match to a newly loaded or existing Facet Group/Value</value>
+    </property>
+    <property key="ProductCategoryIdMatchError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Product-Category-ID [${productCategoryId}] must match to a newly loaded or existing Product Category (relationship to the Product Category tab)</value>
+    </property>
+    <property key="ProductFacetSeqError">
+        <value xml:lang="en">ERROR Row ${rowNo}: The Sequence-Number [${sequenceNum}] must be numeric and a whole number</value>
+    </property>
+    <property key="ProductFacetGroupFromDateError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Facet-Group [${featureGroup}] has an invalid From-Date [${fromDate}]. Formats supported are YYYYMMDD, YYYY-MM-DD and YYYY/MM/DD</value>
+    </property>
+    <property key="ProductFacetGroupThruDateError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Facet-Group [${featureGroup}] has an invalid Thru-Date [${thruDate}]. Formats supported are YYYYMMDD, YYYY-MM-DD and YYYY/MM/DD</value>
+    </property>
+    <property key="ProductFacetValueFromDateError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Facet-Value [${productFeatureId}] has an invalid From-Date [${fromDate}]. Formats supported are YYYYMMDD, YYYY-MM-DD and YYYY/MM/DD</value>
+    </property>
+    <property key="ProductFacetValueThruDateError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Facet-Value [${productFeatureId}] has an invalid Thru-Date [${thruDate}]. Formats supported are YYYYMMDD, YYYY-MM-DD and YYYY/MM/DD</value>
+    </property>
+    <property key="ProductFacetMinDisplayError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Min-Display [${minDisplay}] must be numeric and a whole number</value>
+    </property>
+    <property key="ProductFacetMaxDisplayError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Max-Display [${maxDisplay}] must be numeric and a whole number</value>
+    </property>
+    <property key="ProductFacetMinMaxDisplayError">
+        <value xml:lang="en">ERROR Row ${rowNo}: Min-Display [${minDisplay}] must be less than or equal to Max-Display [${maxDisplay}]</value>
+    </property>
+    <property key="AddPaymentAmountError">
+        <value xml:lang="en">The Amount Paid is required, it must be greater than zero and cannot exceed the Balance Due</value>
+    </property>
+    <property key="AddPaymentReferenceError">
+        <value xml:lang="en">The Reference is required, it should reflect the Check#, Money Order# or a Cash reference</value>
+    </property>
+    <property key="AddPaymentMethodTypeError">
+        <value xml:lang="en">One Offline Payment option must be selected from the drop down.</value>
+    </property>
+    <property key="WebsiteLoginCreationError">
+        <value xml:lang="en">Website Login Creation: if any data is entered then ALL attributes must be completed. If you do not want to setup a WebSite Login then leave all attributes blank.</value>
+    </property>
+    <property key="AddPaymentCCProcessingError">
+        <value xml:lang="en">Please check your credit card details, we were unable to process your payment.</value>
     </property>
     
  <!-- ******* Error Messages  Ends*************************************** -->
@@ -9142,8 +9464,11 @@
     <property key="ExportBtn">
         <value xml:lang="en">Export</value>
     </property>
-    <property key="FeatureSwatchesButton">
-        <value xml:lang="en">Feature Swatches</value>
+    <property key="FacetGroupsButton">
+        <value xml:lang="en">Facet Groups</value>
+    </property>
+    <property key="FacetValuesButton">
+        <value xml:lang="en">Facet Values</value>
     </property>
     <property key="GetBtn">
         <value xml:lang="en">Get</value>
@@ -9225,6 +9550,12 @@
     </property>
     <property key="SaveBtn">
         <value xml:lang="en">Save</value>
+    </property>
+    <property key="CancelOrderBtn">
+        <value xml:lang="en">Cancel Order</value>
+    </property>
+    <property key="ProcessReturnsBtn">
+        <value xml:lang="en">Process Returns</value>
     </property>
     <property key="SaveAndRefreshBtn">
         <value xml:lang="en">Save and Refresh</value>
@@ -9358,6 +9689,9 @@
     <property key="AddTemplateBtn">
         <value xml:lang="en">Add Template</value>
     </property>
+    <property key="ApplyPaymentBtn">
+        <value xml:lang="en">Apply Payment</value>
+    </property>
     <!-- **** Button Ends*************************************** -->
     
     <!-- =====  Labels for CONTENT Specific === -->
@@ -9460,11 +9794,14 @@
     <property key="HtmlMetatagTooltip">
         <value xml:lang="en">Html Meta Tags</value>
     </property>
+    <property key="CategoryContentTooltip">
+        <value xml:lang="en">Content Spot</value>
+    </property>
     <property key="ProductCategoryTooltip">
-        <value xml:lang="en">Products for this Category</value>
+        <value xml:lang="en">Underlying Products [{0}]</value>
     </property>
     <property key="ProductSequenceTooltip">
-        <value xml:lang="en">Product Sequences for this Category</value>
+        <value xml:lang="en">Product Sequences [{0}]</value>
     </property>
     <property key="ProductImagesTooltip">
         <value xml:lang="en">Product Images</value>
@@ -9479,7 +9816,10 @@
         <value xml:lang="en">Product Feature Sequencing</value>
     </property>
     <property key="PreviewContentTooltip">
-        <value xml:lang="en">Click to preview the content in a new window</value>
+        <value xml:lang="en">Preview Content in New Window</value>
+    </property>
+    <property key="EditContentTooltip">
+        <value xml:lang="en">Edit Content</value>
     </property>
     <property key="ManagePLPContentSpotTooltip">
         <value xml:lang="en">PLP Content Spot</value>
@@ -9499,6 +9839,9 @@
     <property key="AddToCartTooltip">
         <value xml:lang="en">Add to Cart</value>
     </property>
+    <property key="ProductContentSpotTooltip">
+        <value xml:lang="en">Content Spot</value>
+    </property>
     <property key="ShowVirtualDetailTooltip">
         <value xml:lang="en">Edit Virtual Product</value>
     </property>
@@ -9510,6 +9853,9 @@
     </property>
     <property key="EditManufacturerTooltip">
         <value xml:lang="en">Edit Manufacturer Details</value>
+    </property>
+    <property key="ViewPaymentDetailsTooltip">
+        <value xml:lang="en">View Payment Details</value>
     </property>
     
     <!-- === Tooltip Ends ===== -->
@@ -9527,8 +9873,8 @@
     <property key="deleteContentConfirmText">
         <value xml:lang="en">Are you sure you want to DELETE this content?</value>
     </property>
-    <property key="deleteFinishedJobsConfirmText">
-        <value xml:lang="en">Are you sure you want to remove all rows from JOB_SANDBOX where the status is </value>
+    <property key="DeleteScheduledJobsConfirmText">
+        <value xml:lang="en">Are you sure you want to remove the {0} rows from JOB_SANDBOX for Job {1} where the status is {2}?</value>
     </property>
     <property key="deleteRowConfirmText">
         <value xml:lang="en">Are you sure you want to remove all rows from</value>

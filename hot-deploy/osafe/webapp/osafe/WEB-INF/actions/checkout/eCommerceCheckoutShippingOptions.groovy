@@ -15,6 +15,7 @@ import org.ofbiz.entity.util.EntityUtil;
 import com.osafe.util.Util;
 import org.ofbiz.common.geo.GeoWorker;
 import javolution.util.FastMap;
+import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
@@ -44,7 +45,7 @@ if (UtilValidate.isNotEmpty(cart))
 	String inventoryMethod = Util.getProductStoreParm(request,"INVENTORY_METHOD");
 	if(UtilValidate.isNotEmpty(inventoryMethod) && inventoryMethod.equalsIgnoreCase("BIGFISH"))
 	{
-        for(GenericValue cartItem : cart.items())
+        for(ShoppingCartItem cartItem : cart.items())
         {
             try {
                 BigDecimal bfWareHouseInventoryBD = BigDecimal.ZERO;

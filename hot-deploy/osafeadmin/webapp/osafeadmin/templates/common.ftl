@@ -65,7 +65,8 @@
                     ${sections.render('navigationBar')}
                 </div>
                 <div id="pageContainer">
-                     ${sections.render('pageHeading')}
+                	${sections.render('navigationBarBreadcrumb')}
+                    ${sections.render('pageHeading')}
                     <#if showLastOrder?has_content && showLastOrder =="Y">
                         ${sections.render('lastOrder')}
                     </#if>

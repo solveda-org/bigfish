@@ -19,6 +19,12 @@ if (UtilValidate.isNotEmpty(searchText))
 	context.pageTitle = SearchResultsPageTitle;
 }
 
+String shoppingListSearchText = com.osafe.util.Util.stripHTML((String)(request.getAttribute("shoppingListSearchText")));
+if (UtilValidate.isNotEmpty(shoppingListSearchText))
+{
+	SearchResultsPageTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsNotFoundTitle", UtilMisc.toMap("searchText", shoppingListSearchText), locale)
+	context.pageTitle = SearchResultsPageTitle;
+}
 
 
 

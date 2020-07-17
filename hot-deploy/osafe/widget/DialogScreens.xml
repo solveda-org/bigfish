@@ -382,6 +382,7 @@
                 <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
                 <set field="uiSequenceScreen" value="LightCart"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/showCartItems.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/cartSalesTaxInfo.groovy" />
                 <set field="formLightBoxName" value="cartLightform" />
                 <set field="showCartBtnAction" value="eCommerceShowcart" />
                 <set field="doneAction" value="checkout" />

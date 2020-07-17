@@ -245,16 +245,40 @@ globalContext.preferredDateFormat = OsafeAdminUtil.isValidDateFormat(preferredDa
 globalContext.preferredDateTimeFormat = OsafeAdminUtil.isValidDateFormat(preferredDateTimeFormat)?preferredDateTimeFormat:"MM/dd/yy h:mma";
 globalContext.preferredTimeFormat = "h:mma";
 
+globalContext.entryDateFormat = preferredDateFormat;
+globalContext.entryDateTimeFormat = preferredDateFormat+" HH:mm:ss";
+globalContext.entryTimeFormat = "HH:mm:ss";
+
 //ADMIN CONTEXT PROCESSING
 adminContext = FastMap.newInstance();
 if (UtilValidate.isNotEmpty(session.getAttribute("ADMIN_CONTEXT")))
 {
     adminContext = UtilGenerics.checkMap(session.getAttribute("ADMIN_CONTEXT"), String.class, String.class);
 }
-partyId = StringUtils.trimToEmpty(parameters.partyId);
-orderId = StringUtils.trimToEmpty(parameters.orderId);
-storePartyId = StringUtils.trimToEmpty(parameters.storePartyId);
-productId = StringUtils.trimToEmpty(parameters.productId);
+
+partyId = parameters.partyId;
+orderId = parameters.orderId;
+storePartyId = parameters.storePartyId;
+productId = parameters.productId;
+
+//Passing null to StringUtils threw an exception therefore checking first before calling Util.
+if (UtilValidate.isNotEmpty(partyId))
+{
+	partyId = StringUtils.trimToEmpty(parameters.partyId);
+}
+if (UtilValidate.isNotEmpty(orderId))
+{
+	orderId = StringUtils.trimToEmpty(parameters.orderId);
+	
+}
+if (UtilValidate.isNotEmpty(storePartyId))
+{
+	storePartyId = StringUtils.trimToEmpty(parameters.storePartyId);
+}
+if (UtilValidate.isNotEmpty(productId))
+{
+	productId = StringUtils.trimToEmpty(parameters.productId);
+}
 if (UtilValidate.isNotEmpty(partyId))
 {
 	//if the partyId is changed, then clear the shopping cart

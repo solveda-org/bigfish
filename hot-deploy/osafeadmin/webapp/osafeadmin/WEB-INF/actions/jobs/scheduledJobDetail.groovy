@@ -35,7 +35,7 @@ if (UtilValidate.isNotEmpty(jobId))
 
     if (UtilValidate.isNotEmpty(schedJob.runTime))
     {
-        runDate = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, preferredDateFormat);
+        runDate = OsafeAdminUtil.convertDateTimeFormat(schedJob.runTime, entryDateTimeFormat);
         runHour = UtilDateTime.getHour(UtilDateTime.toTimestamp(schedJob.runTime), timeZone, locale);
         runMinute = UtilDateTime.getMinute(UtilDateTime.toTimestamp(schedJob.runTime), timeZone, locale);
         runTimeAMPM = ((runHour/12) < 1)?1:2;// 1 for AM and 2 for PM

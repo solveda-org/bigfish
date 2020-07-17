@@ -31,12 +31,12 @@
 	                  </#if>
 	              </#if>
 	          </#list>
-	          <a href="javascript:submitCheckoutForm(document.${formName!}, 'NA', '${fieldPurpose?if_exists}_LOCATION');" class="standardBtn action">${uiLabelMap.AddAddressBtn}</a>
+	          <a href="javascript:submitCheckoutForm(document.${formName!}, 'NA', '${fieldPurpose?if_exists}_LOCATION');" class="standardBtn action"><span>${uiLabelMap.AddAddressBtn}</span></a>
 	        </div>
 	    <#else>
 	        <div class="entry addressSelection">
 	          <label for="${fieldPurpose?if_exists}_ADDRESSES">${uiLabelMap.SelectAddressCaption}</label>
-	          <a href="javascript:submitCheckoutForm(document.${formName!}, 'NA', '${fieldPurpose?if_exists}_LOCATION');" class="standardBtn action">${uiLabelMap.AddAddressBtn}</a>
+	          <a href="javascript:submitCheckoutForm(document.${formName!}, 'NA', '${fieldPurpose?if_exists}_LOCATION');" class="standardBtn action"><span>${uiLabelMap.AddAddressBtn}</span></a>
 	        </div>
 	    </#if>
 	    <@fieldErrors fieldName="${fieldPurpose?if_exists}_SELECT_ADDRESS"/>

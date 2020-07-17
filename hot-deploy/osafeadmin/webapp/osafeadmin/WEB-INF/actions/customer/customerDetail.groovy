@@ -21,11 +21,6 @@ partyId = StringUtils.trimToEmpty(parameters.partyId);
 context.partyId=partyId;
 if (UtilValidate.isNotEmpty(partyId))
 {
-	context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerDetailInfoHeading",["partyId" : partyId], locale )
-	context.customerAttributesInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","CustomerAttributesInfoHeading",["partyId" : partyId], locale )
-}
-if (UtilValidate.isNotEmpty(partyId))
-{
 	party = delegator.findByPrimaryKey("Party", [partyId : partyId]);
 	if (UtilValidate.isNotEmpty(party))
 	{
@@ -178,6 +173,13 @@ if (UtilValidate.isNotEmpty(partyId))
 	    	context.userTextPreference = partyAttr.attrValue;
 	    }
 		
+		//PARTY FACEBOOK_USER
+		partyAttrs = EntityUtil.filterByAnd(partyAttributes, UtilMisc.toMap("attrName", "FACEBOOK_USER"));
+		if (UtilValidate.isNotEmpty(partyAttrs))
+		{
+			partyAttr = EntityUtil.getFirst(partyAttrs);
+			context.userFbUser = partyAttr.attrValue;
+		}
 		
 	}
 	

@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+    <!--
+        To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
+        Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
+    -->
+
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <property key="CustomLabelPlaceHolder">
+        <value xml:lang="en">Place Holder to add custom lables in the admin module</value>
+    </property>
+
+</resource>

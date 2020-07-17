@@ -124,6 +124,7 @@
         <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
         <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
         <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="processedOrderIdList" mode="IN" type="List" optional="true"/>
         <attribute name="messages" type="List" mode="OUT" optional="true"/>
     </service>
     
@@ -132,6 +133,7 @@
         <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
         <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
         <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="processedStoreCodeList" mode="IN" type="List" optional="true"/>
         <attribute name="messages" type="List" mode="OUT" optional="true"/>
     </service>
     
@@ -140,10 +142,11 @@
         <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
         <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
         <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="processedProductIdList" mode="IN" type="List" optional="true"/>
         <attribute name="messages" type="List" mode="OUT" optional="true"/>
     </service>
 
-    <service name="exportClientProductTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="exportProductXls" auth="false" use-transaction="false">
+    <service name="exportClientProductTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="exportProductXls" auth="false" use-transaction="true" transaction-timeout="7200">
         <description>Export xls tabs as client product import template</description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
@@ -151,7 +154,7 @@
         <attribute name="messages" type="List" mode="OUT" optional="false"/>
     </service>
     
-    <service name="exportClientProductTemplateXML" engine="java" location="com.osafe.services.ImportServices" invoke="exportProductXML" auth="false" use-transaction="false">
+    <service name="exportClientProductTemplateXML" engine="java" location="com.osafe.services.ImportServices" invoke="exportProductXML" auth="false" use-transaction="true" transaction-timeout="7200">
         <description>Export xml elements as client product import template</description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" ></attribute>
@@ -230,7 +233,8 @@
         <attribute name="productCatDataList" mode="IN" type="List" optional="true"/>
         <attribute name="productDataList" mode="IN" type="List" optional="true"/>
         <attribute name="productAssocDataList" mode="IN" type="List" optional="true"/>
-        <attribute name="productFeatureSwatchDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="productFacetGroupDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="productFacetValueDataList" mode="IN" type="List" optional="true"/>
         <attribute name="manufacturerDataList" mode="IN" type="List" optional="true"/>
         
         <attribute name="prodCatErrorList" mode="OUT" type="List" optional="true"/>
@@ -239,10 +243,20 @@
         <attribute name="productWarningList" mode="OUT" type="List" optional="true"/>
         <attribute name="productAssocErrorList" mode="OUT" type="List" optional="true"/>
         <attribute name="productAssocWarningList" mode="OUT" type="List" optional="true"/>
-        <attribute name="productFeatureSwatchErrorList" mode="OUT" type="List" optional="true"/>
-        <attribute name="productFeatureSwatchWarningList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFacetGroupErrorList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFacetGroupWarningList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFacetValueErrorList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFacetValueWarningList" mode="OUT" type="List" optional="true"/>
         <attribute name="productManufacturerErrorList" mode="OUT" type="List" optional="true"/>
         <attribute name="productManufacturerWarningList" mode="OUT" type="List" optional="true"/>
+        
+        <attribute name="serviceLogProdCatMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogProductMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogProductAssocMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogProductFacetGroupMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogProductFacetValueMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogProductManufacturerMessageList" mode="OUT" type="List" optional="true"/>
+        
         <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
     </service>
     
@@ -253,7 +267,8 @@
         <attribute name="productCatDataList" mode="OUT" type="List" optional="true"/>
         <attribute name="productDataList" mode="OUT" type="List" optional="true"/>
         <attribute name="productAssocDataList" mode="OUT" type="List" optional="true"/>
-        <attribute name="productFeatureSwatchDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFacetGroupDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productFacetValueDataList" mode="OUT" type="List" optional="true"/>
         <attribute name="manufacturerDataList" mode="OUT" type="List" optional="true"/>
         <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
     </service>
@@ -264,6 +279,7 @@
         <attribute name="orderStatusFileName" mode="IN" type="String" optional="false"/>
         <attribute name="orderStatusDataList" mode="OUT" type="List" optional="true"/>
         <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="orderStatusCount" mode="OUT" type="String" optional="true"/>
     </service>
     
     <service name="validateOrderStatusData" engine="java" location="com.osafe.services.ImportServices" invoke="validateOrderStatusData" auth="false" use-transaction="false">
@@ -271,6 +287,10 @@
         <attribute name="orderStatusDataList" mode="IN" type="List" optional="true"/>
         <attribute name="productStoreId" mode="IN" type="String" optional="true"/>
         <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="processedOrderIdList" mode="OUT" type="List" optional="true"/>
+        <attribute name="validateMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogValidateMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogWarningMessageList" mode="OUT" type="List" optional="true"/>
     </service>
     
     <service name="getProductRatingDataListFromFile" engine="java" location="com.osafe.services.ImportServices" invoke="getProductRatingDataListFromFile" auth="false" use-transaction="false">
@@ -279,11 +299,16 @@
         <attribute name="productRatingFileName" mode="IN" type="String" optional="false"/>
         <attribute name="productRatingDataList" mode="OUT" type="List" optional="true"/>
         <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="productRatingCount" mode="OUT" type="String" optional="true"/>
     </service>
     
     <service name="validateProductRatingData" engine="java" location="com.osafe.services.ImportServices" invoke="validateProductRatingData" auth="false" use-transaction="false">
         <description>Validate the Product Rating Data</description>
         <attribute name="productRatingDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="processedProductIdList" mode="OUT" type="List" optional="true"/>
+        <attribute name="validateMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogValidateMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogWarningMessageList" mode="OUT" type="List" optional="true"/>
         <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
     </service>
     
@@ -298,6 +323,26 @@
     <service name="validateCustomerData" engine="java" location="com.osafe.services.ImportServices" invoke="validateCustomerData" auth="false" use-transaction="false">
         <description>Validate the Product Rating Data</description>
         <attribute name="customerDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+    </service>
+    
+    <service name="getStoreDataListFromFile" engine="java" location="com.osafe.services.ImportServices" invoke="getStoreDataListFromFile" auth="false" use-transaction="false">
+        <description>Get the Store Data List from File</description>
+        <attribute name="storeFilePath" mode="IN" type="String" optional="false"/>
+        <attribute name="storeFileName" mode="IN" type="String" optional="false"/>
+        <attribute name="storeDataList" mode="OUT" type="List" optional="true"/>
+        <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="storeCount" mode="OUT" type="String" optional="true"/>
+    </service>
+    
+    <service name="validateStoreData" engine="java" location="com.osafe.services.ImportServices" invoke="validateStoreData" auth="false" use-transaction="false">
+        <description>Validate the Product Rating Data</description>
+        <attribute name="storeDataList" mode="IN" type="List" optional="true"/>
+        <attribute name="productStoreId" mode="IN" type="String" optional="true"/>
+        <attribute name="processedStoreCodeList" mode="OUT" type="List" optional="true"/>
+        <attribute name="validateMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogValidateMessageList" mode="OUT" type="List" optional="true"/>
+        <attribute name="serviceLogWarningMessageList" mode="OUT" type="List" optional="true"/>
         <attribute name="errorMessageList" mode="OUT" type="List" optional="true"/>
     </service>
 </services>

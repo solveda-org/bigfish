@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ofbiz-component name="osafe"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+    <!-- define resource loaders; most common is to use the component resource loader -->
+    <resource-loader name="main" type="component"/>
+
+    <!-- place the config directory on the classpath to access configuration files -->
+    <classpath type="dir" location="config"/>
+    <classpath type="dir" location="dtd"/>
+
+    <!-- load single or multiple external libraries -->
+    <classpath type="jar" location="build/lib/*"/>
+    <classpath type="jar" location="lib/*"/>
+
+    <!-- entity resources: model(s), eca(s), group, and data definitions -->
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entityImportModel.xml"/>
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel_customer.xml"/>
+    <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
+    <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
+
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSecurityData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/bigFishTypes.xml"/> 
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommercePaymentCustomMethods.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/clientStoreSeedData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/bigFishContentMenu.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentEmailData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentSeedData.xml"/>
+
+    <!--  Shipment Custom Methods -->
+    <entity-resource type="data" reader-name="customshipmentmethods" loader="main" location="data/seed/eCommerceShipmentCustomMethods.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceShipmentCustomMethods.xml"/>
+
+    <!-- Payment Custom Methods -->
+    <entity-resource type="data" reader-name="custompaymentmethods" loader="main" location="data/seed/eCommercePaymentCustomMethods.xml"/>
+
+    <!-- Gift Card Payment Setting -->
+    <entity-resource type="data" reader-name="gifcardpaymentsettings" loader="main" location="data/seed/ecommerceGiftCardPaymentSettings.xml"/>
+
+    <!-- Tender Card Custom Methods -->
+    <entity-resource type="data" reader-name="tendercardpaymentsettings" loader="main" location="data/seed/ecommerceTenderCardPaymentSettings.xml"/>
+
+    <!-- Geo Files -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/01-GeoAssocType.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/02-GeoType.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/100-Geo_Country.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/110-Geo_State.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/120-Geo_Province.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/130-Geo_PostalCode.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/140-Geo_Region.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/150-Geo_Territory.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/160-Geo_Group.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/170-Geo_Zone.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/200-Geo_GB-County.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/201-Geo_Irl-County.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/202-Geo_Nirl-County.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/203-Geo_NY-County.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/204-Geo_Utah-County.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/300-Geo_Assoc_REGIONS.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/310-Geo_Assoc_GroupMember.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/320-Geo_Assoc_UPS_DAS_ZONE.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/330-Geo_Assco_UPS_DAS_EXT_ZONE.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/340-Geo_Assoc_UPS_GRD_ZONE.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/400-Tax_Party.xml"/>
+
+    <!-- Shipping Methods -->
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/ecommerceSeedShippingMethods.xml"/>
+
+    <!-- BigFish Parameters -->
+    <entity-resource type="data" reader-name="parameters" loader="main" location="data/bigFishParameters.xml"/>
+    <entity-resource type="data" reader-name="version" loader="main" location="data/bigFishParameters.xml"/>
+
+    <!-- BigFish Content Menu -->
+    <entity-resource type="data" reader-name="contentmenu" loader="main" location="data/seed/bigFishContentMenu.xml"/>
+    <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishContentMenu.xml"/>
+
+    <!-- BigFish Content Types -->
+    <entity-resource type="data" reader-name="bigfishtypes" loader="main" location="data/seed/bigFishTypes.xml"/> 
+    <entity-resource type="data" reader-name="version" loader="main" location="data/seed/bigFishTypes.xml"/> 
+
+    <!-- BigFish Extended Store Content -->
+    <entity-resource type="data" reader-name="extendedstore" loader="main" location="data/bigFishExtendedStore.xml"/>
+
+    <!-- BigFish Schedulers -->
+    <entity-resource type="data" reader-name="schedulers" loader="main" location="data/eCommerceBigfishScheduledJobs.xml"/>
+
+    <!-- Demo Data -->
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceShippingOptions.xml"/>
+
+    <!-- Product Data -->
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/000-ProductCategory.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/010-ProductCategoryFeature.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/020-Manufacturer.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/030-Product.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/040-ProductVariant.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/043-ProductSelectableFeature.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/045-ProductGoodIdentification.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/050-ProductContent.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/055-ProductVariantContent.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/060-ProductDistinguishingFeature.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/065-ProductFeatureImage.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/070-ProductAssoc.xml"/>
+    <entity-resource type="data" reader-name="proddata" loader="main" location="data/demo/075-ProductAttribute.xml"/>
+
+    <!-- Content Demo Data 
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_HP_SPOT.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_PTS_SPOT.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SI_INFO.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SP_PAGE.xml"/>
+    -->
+
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/XProductStoreParm.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/BigfishContent.xml"/>
+
+    <!-- Ofbiz version 12 migration Data -->
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/PaymentGatewayConfData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/OfbizSetupSecurityData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/HumanResPortletData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/BiSecurityData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/CommonSystemPropertyData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/GeoData_CA.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/GeoData_PL.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/GeoData_MX.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/ServiceSeedData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/HhFacilitySecurityData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/scrumTypeData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/scrumSecurityData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/scrumHelpData.xml"/>
+    <entity-resource type="data" reader-name="ofbizversion12" loader="main" location="data/migration/r12/MiscData.xml"/>
+
+    <!-- service resources: model(s), eca(s) and group definitions -->
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_paymentmethod.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_sagepay.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_ebs.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_scheduledJobs.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_custom.xml"/>
+    <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
+    <!--
+    <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
+    -->
+
+    <!-- web applications; will be mounted when using the embedded container -->
+    <webapp name="osafe"
+        title="BF Ofbiz"
+        server="default-server"
+        location="webapp/osafe"
+        mount-point="/@localDispatcherName@"/>
+
+</ofbiz-component>

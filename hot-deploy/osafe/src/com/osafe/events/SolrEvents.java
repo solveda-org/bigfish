@@ -1,16 +1,19 @@
 package com.osafe.events;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Iterator;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +24,6 @@ import javolution.util.FastSet;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
-import org.apache.lucene.queryParser.QueryParser;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.apache.solr.client.solrj.SolrQuery.ORDER;
 import org.apache.solr.client.solrj.SolrServerException;
@@ -36,6 +38,7 @@ import org.apache.solr.common.params.ModifiableSolrParams;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
@@ -66,20 +69,16 @@ public class SolrEvents
     {
         try 
         {
-
             Delegator delegator = (Delegator) request.getAttribute("delegator");
-            // Select only products that are in the passed category
             String productCategoryId = request.getParameter("productCategoryId");
             if (UtilValidate.isEmpty(productCategoryId))
             {
-                 productCategoryId = (String)request.getAttribute("productCategoryId");
-                
+                productCategoryId = (String)request.getAttribute("productCategoryId");
             }
             String topMostProductCategoryId = request.getParameter("topMostProductCategoryId");
             if (UtilValidate.isEmpty(topMostProductCategoryId))
             {
                 topMostProductCategoryId = (String)request.getAttribute("topMostProductCategoryId");
-                
             }
 
             // Get text to use for a site search query
@@ -88,40 +87,43 @@ public class SolrEvents
             {
                 searchText = Util.stripHTML((String)request.getAttribute("searchText"));
             }
-            
+
+            //replace special characters with their solr encoded value
             if(UtilValidate.isNotEmpty(searchText))
             {
-            	searchText = searchText.replace("\\", "%5C");
-            	searchText = searchText.replace("\"", "%22");
-            	searchText = searchText.replace(":", "%3A");
-            	searchText = searchText.replace("&", "%26");
+            	searchText = URLEncoder.encode(searchText, SolrConstants.DEFAULT_ENCODING);
+                searchText = searchText.replace("\\", "%5C");
+                searchText = searchText.replace("\"", "%22");
+                searchText = searchText.replace(":", "%3A");
+                searchText = searchText.replace("&", "%26");
             }
-            
+
+            //append "" to search text to perform exact search
             String searchType = (String)request.getAttribute("searchType");
             if (UtilValidate.isNotEmpty(searchText) && UtilValidate.isEmpty(searchType))
             {
                 searchText = "\""+searchText+"\"";
             }
 
-            // Get text to use for a site search query
+            // Get text after spell check to use for a site search query
             if(UtilValidate.isNotEmpty(searchType) && searchType.equalsIgnoreCase("SpellCheckSearch"))
             {
-            	String searchTextSpellCheck = Util.stripHTML((String)request.getAttribute("searchTextSpellCheck"));
-                
+                String searchTextSpellCheck = Util.stripHTML((String)request.getAttribute("searchTextSpellCheck"));
+
                 if (UtilValidate.isNotEmpty(searchTextSpellCheck))
                 {
                     searchText = searchTextSpellCheck;
                 }
             }
-            
-            
+
+
             GenericValue productStore = ProductStoreWorker.getProductStore(request);
             String productStoreId = productStore.getString("productStoreId");
 
             String catalogTopCategoryId = CatalogWorker.getCatalogTopCategoryId(request);
-            
+
             String solrServer = OSAFE_PROPS.getString("solrSearchServer");
-			CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
+            CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
             solr.setRequestWriter(new BinaryRequestWriter());
 
             String facetSearchCategoryLabel = OSAFE_UI_LABELS.getString("FacetSearchCategoryCaption");
@@ -148,8 +150,20 @@ public class SolrEvents
             {
                 solrPageSize = 20;
             }
-            
 
+            String facetLimitStr = mProductStoreParms.get("FACET_VALUE_MAX");
+            int facetLimit = 0;
+            if(UtilValidate.isNotEmpty(facetLimitStr))
+            {
+                try
+                {
+                    facetLimit = Integer.parseInt(facetLimitStr);
+                }
+                catch(NumberFormatException nfe)
+                {
+                    Debug.logError(nfe.getMessage(), module);
+                }
+            }
 
             // If Criteria has been passed, this should redirect the user to the
             // "No Results" page
@@ -171,7 +185,6 @@ public class SolrEvents
                 if (UtilValidate.isNotEmpty(resultsProductCategoryFacets)) {
                     for (SolrIndexDocument doc : resultsProductCategoryFacets) 
                     {
-
                         String id = doc.getProductFeatureGroupId();
                         String description = doc.getProductFeatureGroupDescription();
                         String facetSort = doc.getProductFeatureGroupFacetSort();
@@ -180,7 +193,6 @@ public class SolrEvents
                         facetGroupDescriptions.put(key, description);
                         facetGroupIds.put(key, id);
                         facetGroupFacetSorts.put(key, facetSort);
-
                     }
                 }
             } 
@@ -193,7 +205,7 @@ public class SolrEvents
             {
                 filterGroup = (String)request.getAttribute("filterGroup");
             }
-            
+
             CommandContext cc = new CommandContext();
             String requestURI = request.getRequestURI();
             String[] requestURIParts = requestURI.split("/");
@@ -205,15 +217,16 @@ public class SolrEvents
 
             if (UtilValidate.isNotEmpty(searchText)) 
             {
-            	if(UtilValidate.isNotEmpty(searchType) && searchType.equalsIgnoreCase("WildCardSearch"))
-            	{
-            		queryFacet = "searchText: (" + searchText +"*)";
-            	}
-            	else
-            	{
-            		queryFacet = "searchText: (" + searchText +")";
-            	}
-            	searchText = searchText.replace("\"", "");
+                //Add wildcard character (*) to the search text
+                if(UtilValidate.isNotEmpty(searchType) && searchType.equalsIgnoreCase("WildCardSearch"))
+                {
+                    queryFacet = "searchText: (" + searchText +"*)";
+                }
+                else
+                {
+                    queryFacet = "searchText: (" + searchText +")";
+                }
+                searchText = searchText.replace("\"", "");
                 cc.setSearchText(searchText);
 
                 if (UtilValidate.isEmpty(productCategoryId) && UtilValidate.isNotEmpty(topMostProductCategoryId)) 
@@ -242,32 +255,34 @@ public class SolrEvents
                 cc.setProductCategoryId(productCategoryId);
             }
 
-            
+
             //Add all feature groups to query facet, since on site search we don't know which feature group is associated.
             if (UtilValidate.isEmpty(productCategoryId)) 
             {
-            	List<GenericValue> productFeatureGroups = delegator.findList("ProductFeatureGroup", null, null, null, null, true);
-            	if(UtilValidate.isNotEmpty(productFeatureGroups)) 
-            	{
-            		for(GenericValue productFeatureGroup : productFeatureGroups) 
-            		{
-            			String productFeatureGroupId = productFeatureGroup.getString("productFeatureGroupId");
-            			facetGroups.add(productFeatureGroupId);
-            			facetGroupIds.put(productFeatureGroupId, productFeatureGroup.getString("productFeatureGroupId"));
-            		}
-            		cc.setFilterGroupsIds(facetGroupIds);
-            	}
+                List<GenericValue> productFeatureGroups = delegator.findList("ProductFeatureGroup", null, null, null, null, true);
+                if(UtilValidate.isNotEmpty(productFeatureGroups)) 
+                {
+                    for(GenericValue productFeatureGroup : productFeatureGroups) 
+                    {
+                        String productFeatureGroupId = productFeatureGroup.getString("productFeatureGroupId");
+                        facetGroups.add(productFeatureGroupId);
+                        facetGroupIds.put(productFeatureGroupId, productFeatureGroup.getString("productFeatureGroupId"));
+                    }
+                    cc.setFilterGroupsIds(facetGroupIds);
+                }
             }
             boolean facetMultiSelectTrue  = Util.isProductStoreParmTrue(request, "FACET_MULTI_SELECT");
             // Get filter groups that are being passed and exclude them from the
             // list of facets we are want to show
             Float priceLow = null;
             Float priceHigh = null;
+            Map<String, List> filterGroupParamMap = FastMap.newInstance();
             Map<String, String> filterGroupMap = FastMap.newInstance();
+            String multiFacetInitialType = null;
             if (UtilValidate.isNotEmpty(filterGroup)) 
             {
                 String[] filterGroupArr = StringUtils.split(filterGroup, "|");
-                
+
                 for (int i = 0; i < filterGroupArr.length; i++) 
                 {
                     String filterGroupValue = filterGroupArr[i];
@@ -275,14 +290,31 @@ public class SolrEvents
                     {
                         filterGroupValue = StringUtil.replaceString(filterGroupValue,"+", " ");
                     }
-                    
+
                     String[] splitTemp = filterGroupValue.split(":");
+
+                    if(UtilValidate.isEmpty(multiFacetInitialType))
+                    {
+                        multiFacetInitialType = splitTemp[0];
+                    }
+
+                    if(filterGroupParamMap.containsKey(splitTemp[0]))
+                    {
+                        List featureParamList = (List) filterGroupParamMap.get(splitTemp[0]);
+                        featureParamList.add(URLDecoder.decode(splitTemp[1], SolrConstants.DEFAULT_ENCODING));
+                        filterGroupParamMap.put(splitTemp[0], featureParamList);
+                    }
+                    else
+                    {
+                        filterGroupParamMap.put(splitTemp[0], UtilMisc.toList(URLDecoder.decode(splitTemp[1], SolrConstants.DEFAULT_ENCODING)));    
+                    }
+                    
                     String encodedValue = null;
                     splitTemp[1] = splitTemp[1].replace("/", "%2F");
                     splitTemp[1] = splitTemp[1].replace("\"", "%22");
                     splitTemp[1] = splitTemp[1].replace(":", "%3A");
                     splitTemp[1] = splitTemp[1].replace("&", "%26");
-                    
+
                     try 
                     {
                         encodedValue = URLEncoder.encode(splitTemp[1], SolrConstants.DEFAULT_ENCODING);
@@ -297,12 +329,37 @@ public class SolrEvents
                     if (filterGroupValue.toLowerCase().contains("price")) 
                     {
                         filterPriceQuery = filterGroupValue.replaceAll("PRICE", SolrConstants.TYPE_PRICE);
+                        
                         //calculation for price range retrieve on price facet selection click
                         String[] priceRangeArr =  URLDecoder.decode(encodedValue, SolrConstants.DEFAULT_ENCODING).split(" ");
                         try 
                         {
-                            priceLow = Float.parseFloat(priceRangeArr[0].substring(1)) +1;
-                            priceHigh = Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1)) - 1;
+                            if(facetMultiSelectTrue)
+                            {
+                                //if there are multiple price groups then the lower price would be the minimum price and high price would be the maximum price.
+                                //For Ex:- price:[100 150] and price: [90 120], then The LowPrice is 90 and HighPrice is 150.
+                                if(UtilValidate.isEmpty(priceLow) || (UtilValidate.isNotEmpty(priceLow) && Float.parseFloat(priceRangeArr[0].substring(1)) < priceLow))
+                                {
+                                    priceLow = Float.parseFloat(priceRangeArr[0].substring(1));
+                                }
+                                if(UtilValidate.isEmpty(priceHigh) || (UtilValidate.isNotEmpty(priceHigh) && Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1)) > priceHigh))
+                                {
+                                    priceHigh = Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1));
+                                }
+                            }
+                            else
+                            {
+                                //if there are multiple price groups then the lower price would be the maximum price and high price would be the minimum price.
+                                //For Ex:- price:[100 150] and price: [90 120], then The LowPrice is 100 and HighPrice is 120.
+                                if(UtilValidate.isEmpty(priceLow) || (UtilValidate.isNotEmpty(priceLow) && Float.parseFloat(priceRangeArr[0].substring(1)) > priceLow))
+                                {
+                                    priceLow = Float.parseFloat(priceRangeArr[0].substring(1));
+                                }
+                                if(UtilValidate.isEmpty(priceHigh) || (UtilValidate.isNotEmpty(priceHigh) && Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1)) < priceHigh))
+                                {
+                                    priceHigh = Float.parseFloat(priceRangeArr[1].substring(0, priceRangeArr[1].length()-1));
+                                }
+                            }
                         } 
                         catch (NumberFormatException nexc) 
                         {
@@ -322,46 +379,52 @@ public class SolrEvents
                     }
                     if(filterGroupValue.toLowerCase().contains("customer_rating") || filterGroupValue.toLowerCase().contains("price"))
                     {
-                    	queryFacet += " AND " + filterGroupValue;
+                        queryFacet += " AND " + filterGroupValue;
                     }
                     else
                     {
-                    	if(filterGroupMap.containsKey(splitTemp[0]))
-                    	{
-                    		filterGroupMap.put(splitTemp[0], filterGroupMap.get(splitTemp[0])+" "+splitTemp[1]);
-                    	}
-                    	else
-                    	{
-                    		filterGroupMap.put(splitTemp[0], splitTemp[1]);	
-                    	}
-                    	
+                        if(filterGroupMap.containsKey(splitTemp[0]))
+                        {
+                            filterGroupMap.put(splitTemp[0], filterGroupMap.get(splitTemp[0])+" "+splitTemp[1]);
+                        }
+                        else
+                        {
+                            filterGroupMap.put(splitTemp[0], splitTemp[1]);    
+                        }
                     }
-                    
+
                     String[] filterGroupParts = filterGroupArr[i].split(":");
                     if(!facetMultiSelectTrue || filterGroupValue.toLowerCase().contains("productcategoryid"))
                     {
-                    	facetGroups.remove(filterGroupParts[0]);
+                        facetGroups.remove(filterGroupParts[0]);
                     }
                 }
             }
             String queryFacetGroup = "";
             if(UtilValidate.isNotEmpty(filterGroupMap))
             {
-            	for (Map.Entry<String, String> entry : filterGroupMap.entrySet()) 
-            	{
-            		queryFacetGroup += " AND " + entry.getKey()+": ("+entry.getValue()+")";
-            	}
+                for (Map.Entry<String, String> entry : filterGroupMap.entrySet()) 
+                {
+                    queryFacetGroup += " AND " + entry.getKey()+": ("+entry.getValue()+")";
+                }
             }
-            
-            
+            queryFacet += " AND rowType:product";
+
+            String queryFacetWithoutGroup = "";
+            if(facetMultiSelectTrue)
+            {
+                queryFacetWithoutGroup = queryFacet; 
+            }
+            queryFacet+=queryFacetGroup;
+
             // Add filter query (Price)
-            if (UtilValidate.isNotEmpty(filterPriceQuery)) 
+            if (UtilValidate.isNotEmpty(priceLow) && UtilValidate.isNotEmpty(priceHigh)) 
             {
                 try 
                 {
-                    filterPriceQuery = URLDecoder.decode(filterPriceQuery, SolrConstants.DEFAULT_ENCODING);
+                    filterPriceQuery = "price:[" + (priceLow) + " " + priceHigh + "]" ;
                 } 
-                catch (UnsupportedEncodingException e) 
+                catch (Exception e) 
                 {
                     Debug.logError(e, module);
                 }
@@ -382,21 +445,12 @@ public class SolrEvents
                 queryFacet += " AND " + filterCustomerRatingQuery;
             }
 
-            // Check request name to decide how to query index
-            String pathInfo = request.getPathInfo();
-            String requestName = "";
-            if (pathInfo != null) 
-            {
-                requestName = pathInfo.substring(1);
-            }
-            
-            queryFacet += " AND rowType:product";
             try 
             {
                 String productParentCategoryId="";
                 List<GenericValue> productCategoryRollups = null;
                 List<String> parentProductCategoryIds = null;
-                    
+
                 if (UtilValidate.isNotEmpty(productCategoryId)) 
                 {
                     productCategoryRollups = EntityUtil.filterByDate(delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("productCategoryId", productCategoryId), UtilMisc.toList("sequenceNum")));
@@ -410,7 +464,7 @@ public class SolrEvents
                     productParentCategoryId = EntityUtil.getFirst(productCategoryRollups).getString("parentProductCategoryId");
                 }
 
-                    
+
                 List<String> facetCatGroups = FastList.newInstance();
                 Map<String, String> facetCatGroupDescriptions = FastMap.newInstance();
 
@@ -440,7 +494,11 @@ public class SolrEvents
                 solrCatQueryFacet.setFacet(true);
                 solrCatQueryFacet.setFacetSort(FacetParams.FACET_SORT_INDEX);
                 solrCatQueryFacet.setFacetMinCount(1);
-                            
+                if(UtilValidate.isNotEmpty(facetLimit) && facetLimit > 0)
+                {
+                    solrCatQueryFacet.setFacetLimit(facetLimit);
+                }
+
                 // Add the facet groups to the query
                 if (UtilValidate.isNotEmpty(facetCatGroups)) 
                 {
@@ -452,34 +510,33 @@ public class SolrEvents
                 addProductFacilityFilter(request, solrCatQueryFacet);            
                 QueryResponse responseCatFacet = solr.query(solrCatQueryFacet);
                 List<FacetField> resultsFacet = responseCatFacet.getFacetFields();
-                SolrDocumentList sdl = responseCatFacet.getResults();
                 RefinementsHelperSolr rh = new RefinementsHelperSolr(ccCat, delegator);
                 List facetCatList = (List) rh.processRefinements(resultsFacet);
                 request.setAttribute("facetCatList", facetCatList);
-
             }
             catch (Exception e) 
             {
-            	Debug.logError(e, module);    
+                Debug.logError(e, module);    
             }
-            
-            String queryFacetWithoutGroup = "";
-            if(facetMultiSelectTrue)
-            {
-            	queryFacetWithoutGroup = queryFacet; 
-            }
-            queryFacet+=queryFacetGroup;
-            
+
             SolrQuery solrQueryFacet = new SolrQuery(queryFacet);
+
             solrQueryFacet.setFacet(true);
             solrQueryFacet.setFacetSort(FacetParams.FACET_SORT_INDEX);
-            solrQueryFacet.setFacetMinCount(1);	
-            
-                        
+            solrQueryFacet.setFacetMinCount(1);    
+
+            String priceQueryFacet = queryFacet;
+            if(facetMultiSelectTrue)
+            {
+                priceLow = null;
+                priceHigh = null;
+                priceQueryFacet = queryFacetWithoutGroup; 
+            }
+
             // Pricing Facets
             if (UtilValidate.isEmpty(priceLow)) 
             {
-                String queryPriceRangeLow = queryFacet;
+                String queryPriceRangeLow = priceQueryFacet;
                 queryPriceRangeLow += " AND _val_:" + "\"" + "max(price, 99999)" + "\"";
                 SolrQuery solrQueryPriceRangeLow = new SolrQuery(queryPriceRangeLow);
                 solrQueryPriceRangeLow.addSortField("price", ORDER.asc);
@@ -495,7 +552,7 @@ public class SolrEvents
 
             if (UtilValidate.isEmpty(priceHigh)) 
             {
-                String queryPriceRangeHigh = queryFacet;
+                String queryPriceRangeHigh = priceQueryFacet;
                 queryPriceRangeHigh += " AND _val_:" + "\"" + "max(price,0)" + "\"";
                 SolrQuery solrQueryPriceRangeHigh = new SolrQuery(queryPriceRangeHigh);
                 solrQueryPriceRangeHigh.addSortField("price", ORDER.desc);
@@ -508,97 +565,87 @@ public class SolrEvents
                     priceHigh = solrIndexDocumentHigh.getPrice();
                 }    
             }
-            
-            
-			
-            if (priceLow != null && priceHigh != null) 
+
+            if (UtilValidate.isNotEmpty(priceLow) && UtilValidate.isNotEmpty(priceHigh)) 
             {
                 float priceHighVal = priceHigh.floatValue();
                 float priceLowVal = priceLow.floatValue();
-                
+
                 float priceRange = priceHighVal - priceLowVal;
                 float step = priceRange / 5;
-                
+
                 float priceFacetRound=.01f;
                 String sPriceFacetRound =Util.getProductStoreParm(request, "FACET_PRICE_ROUND");
                 if (!UtilValidate.isEmpty(sPriceFacetRound))
                 {
-                	int iPriceFacetRound=2;
-                	try 
-                	{
-                    	iPriceFacetRound = Integer.parseInt(sPriceFacetRound);
-                		
-                	}
-                	  catch (Exception e)
-                	  {
-                		  iPriceFacetRound=2; 
-                	  }
+                    int iPriceFacetRound=2;
+                    try 
+                    {
+                        iPriceFacetRound = Integer.parseInt(sPriceFacetRound);
+                    }
+                    catch (Exception e)
+                    {
+                        iPriceFacetRound=2; 
+                    }
                     if (iPriceFacetRound == 0)
                     {
-                    	priceFacetRound=1.0f;
+                        priceFacetRound=1.0f;
                     }
-                	
                 }
 
-                
                 if (step > 10000)
                 {
-                	step = ((float)Math.ceil((step/1000))*1000);
+                    step = ((float)Math.ceil((step/1000))*1000);
                 }
                 else if (step > 1000)
                 {
-                	step = ((float)Math.ceil((step/100))*100);
+                    step = ((float)Math.ceil((step/100))*100);
                 }
                 else if (step > 100)
                 {
-                	step = ((float)Math.ceil((step/10))*10);
+                    step = ((float)Math.ceil((step/10))*10);
                 }
                 else
                 {
-                	step = ((float)Math.ceil((step/1))*1);
+                    step = ((float)Math.ceil((step/1))*1);
                 }
 
-                
                 //incremental factor calculation as defined in BF Facet Price Calculator.xls
                 //CEIL HIGH PRICE
                 if (priceHighVal > 1000)
                 {
-                	priceHighVal= ((float)Math.ceil((priceHighVal/100))*100);
+                    priceHighVal= ((float)Math.ceil((priceHighVal/100))*100);
                 }
                 else if (priceHighVal > 100)
                 {
-                	priceHighVal= ((float)Math.ceil((priceHighVal/10))*10);
-                	
+                    priceHighVal= ((float)Math.ceil((priceHighVal/10))*10);
                 }
                 else
                 {
-                	priceHighVal= ((float)Math.ceil((priceHighVal/1))*1);
-                	
+                    priceHighVal= ((float)Math.ceil((priceHighVal/1))*1);
                 }
-                
+
                 //FLOOR LOW PRICE
                 if (priceLowVal > 1000)
                 {
-                	priceLowVal= ((float)Math.floor((priceLowVal/100))*100);
+                    priceLowVal= ((float)Math.floor((priceLowVal/100))*100);
                 }
                 else if (priceLowVal > 100)
                 {
-                	priceLowVal= ((float)Math.floor((priceLowVal/10))*10);
-                	
+                    priceLowVal= ((float)Math.floor((priceLowVal/10))*10);
                 }
                 else
                 {
-                	priceLowVal= ((float)Math.floor((priceLowVal/1))*1);
-                	
+                    priceLowVal= ((float)Math.floor((priceLowVal/1))*1);
                 }
-                
+
                 float rangeLowVal = priceLowVal;
                 float rangeHighVal = priceLowVal + step;
-                
+
                 int rangeCount = 0;
                 while (priceRange > 0) 
                 {
-                    String priceRangeQuery = queryFacet;
+                    String priceRangeQuery = priceQueryFacet;
                     priceRangeQuery += " AND price:[" + (rangeLowVal) + " " + rangeHighVal + "]";
                     SolrQuery solrPriceRangeQuery = new SolrQuery(priceRangeQuery);
                     QueryResponse responsePriceRangeQuery = solr.query(solrPriceRangeQuery);
@@ -610,7 +657,7 @@ public class SolrEvents
                         float tempRangeHighVal = rangeHighVal + step;
                         while (tempPriceRange > 0) 
                         {
-                            priceRangeQuery = queryFacet;
+                            priceRangeQuery = priceQueryFacet;
                             priceRangeQuery += " AND price:[" + (tempRangeLowVal) + " " + tempRangeHighVal + "]";
                             solrPriceRangeQuery = new SolrQuery(priceRangeQuery);
                             responsePriceRangeQuery = solr.query(solrPriceRangeQuery);
@@ -624,30 +671,29 @@ public class SolrEvents
                                 tempPriceRange = tempPriceRange - step;
                                 tempRangeHighVal = tempRangeHighVal + step;
                             }
-                        
                         }
                         priceRange = tempPriceRange + step;
                         rangeHighVal = tempRangeHighVal - step;
-                        
+
                         priceRange = priceRange - step;
-                        
+
                         if(priceRange <= 0)
                         {
-                        	solrQueryFacet.addFacetQuery("price:[" + (rangeLowVal) + " " + priceHighVal + "]");
+                            solrQueryFacet.addFacetQuery("price:[" + (rangeLowVal) + " " + priceHighVal + "]");
                         }
                         else
                         {
-                        	if(rangeCount == 0)
-                        	{
-                        		solrQueryFacet.addFacetQuery("price:[" + (priceLowVal) + " " + rangeHighVal + "]");
-                        	}
-                        	else
-                        	{
-                        		solrQueryFacet.addFacetQuery("price:[" + (rangeLowVal) + " " + rangeHighVal + "]");
-                        	}
+                            if(rangeCount == 0)
+                            {
+                                solrQueryFacet.addFacetQuery("price:[" + (priceLowVal) + " " + rangeHighVal + "]");
+                            }
+                            else
+                            {
+                                solrQueryFacet.addFacetQuery("price:[" + (rangeLowVal) + " " + rangeHighVal + "]");
+                            }
                         }
                         rangeLowVal = rangeHighVal + priceFacetRound;
-                        
+
                         rangeHighVal = rangeHighVal + step;
                     }
                     else
@@ -699,7 +745,7 @@ public class SolrEvents
             {
                 sortResults = (String)request.getAttribute("sortResults");
             }
-            
+
             //Reads the system parameter to get all the Available sort options
             SORT_OPTIONS  = Util.getProductStoreParm(request, "PLP_AVAILABLE_SORT");
             List<String> SORT_OPTIONS_LIST = StringUtil.split(SORT_OPTIONS, ",");
@@ -708,8 +754,8 @@ public class SolrEvents
             if (UtilValidate.isNotEmpty(SORT_OPTIONS_LIST)) 
             {
                 defaultSort = Util.getProductStoreParm(request, "PLP_DEFAULT_SORT");
-                
-              //makes a list of Sort Options
+
+                //makes a list of Sort Options
                 for (String sortOption: SORT_OPTIONS_LIST) 
                 {
                     sortOption = sortOption.trim().toUpperCase();
@@ -730,7 +776,7 @@ public class SolrEvents
                         }
                     }
                 }
-               
+
                 //Sets default value for PLP sort. 
                 if(UtilValidate.isEmpty(sortResults))
                 {
@@ -748,56 +794,56 @@ public class SolrEvents
                     }
                     if(UtilValidate.isEmpty(sortResults) && (sortOptions.size() > 0))
                     {
-                	    Map sortOptionMap = sortOptions.get(0);
-                	    sortResults = (String)sortOptionMap.get("SOLR_VALUE");
+                        Map sortOptionMap = sortOptions.get(0);
+                        sortResults = (String)sortOptionMap.get("SOLR_VALUE");
                     }
                 }
-             }
-             if (UtilValidate.isNotEmpty(sortResults)) 
-             {
-                 cc.setSortParameterName("sortResults");
-                 cc.setSortParameterValue(sortResults);
-                 String[] sortResultsParts = StringUtils.split(sortResults, "-");
-                 if (sortResultsParts.length > 1) 
-                 {
-                     sortName = sortResultsParts[0];
-                     sortDir = sortResultsParts[1];
-                     ORDER solrOrder = ORDER.asc;
-                     if ("desc".equalsIgnoreCase(sortDir)) 
-                     {
-                         solrOrder = ORDER.desc;
-                     }
-                     solrQueryFacet.addSortField(sortName, solrOrder);
-                 }
-             }
-             else
-             {
-                 solrQueryFacet.addSortField("customerRating", ORDER.desc);
-             }
-            
-             addProductFacilityFilter(request, solrQueryFacet);
-             
+            }
+            if (UtilValidate.isNotEmpty(sortResults)) 
+            {
+                cc.setSortParameterName("sortResults");
+                cc.setSortParameterValue(sortResults);
+                String[] sortResultsParts = StringUtils.split(sortResults, "-");
+                if (sortResultsParts.length > 1) 
+                {
+                    sortName = sortResultsParts[0];
+                    sortDir = sortResultsParts[1];
+                    ORDER solrOrder = ORDER.asc;
+                    if ("desc".equalsIgnoreCase(sortDir)) 
+                    {
+                        solrOrder = ORDER.desc;
+                    }
+                    solrQueryFacet.addSortField(sortName, solrOrder);
+                }
+            }
+            else
+            {
+                solrQueryFacet.addSortField("customerRating", ORDER.desc);
+            }
+
+            addProductFacilityFilter(request, solrQueryFacet);
+
             // Add Category facets to the facetCatList
-             if(UtilValidate.isNotEmpty(searchText)) 
-             {
-                 if(facetGroups.contains(SolrConstants.TYPE_PRODUCT_CATEGORY))
-                 {
-                     solrQueryFacet.addFacetField(SolrConstants.TYPE_PRODUCT_CATEGORY);
-                 }
-            	 QueryResponse responseCatFacet = solr.query(solrQueryFacet);
-                 List<FacetField> resultsCatFacet = responseCatFacet.getFacetFields();
-                 RefinementsHelperSolr rhCatFacet = new RefinementsHelperSolr(cc, delegator);
-                 List facetCatList = (List) rhCatFacet.processRefinements(resultsCatFacet);
-                 request.setAttribute("facetCatList", facetCatList);
-                 solrQueryFacet.removeFacetField(SolrConstants.TYPE_PRODUCT_CATEGORY);
-                 facetGroups.remove(SolrConstants.TYPE_PRODUCT_CATEGORY);
-             }
-            
+            if(UtilValidate.isNotEmpty(searchText)) 
+            {
+                if(facetGroups.contains(SolrConstants.TYPE_PRODUCT_CATEGORY))
+                {
+                    solrQueryFacet.addFacetField(SolrConstants.TYPE_PRODUCT_CATEGORY);
+                }
+                QueryResponse responseCatFacet = solr.query(solrQueryFacet);
+                List<FacetField> resultsCatFacet = responseCatFacet.getFacetFields();
+                RefinementsHelperSolr rhCatFacet = new RefinementsHelperSolr(cc, delegator);
+                List facetCatList = (List) rhCatFacet.processRefinements(resultsCatFacet);
+                request.setAttribute("facetCatList", facetCatList);
+                solrQueryFacet.removeFacetField(SolrConstants.TYPE_PRODUCT_CATEGORY);
+                facetGroups.remove(SolrConstants.TYPE_PRODUCT_CATEGORY);
+            }
+
             // Remove Category Facets while using site search, as we already added the category facets to the facetCatList.
             /*if(facetGroups.contains(SolrConstants.TYPE_PRODUCT_CATEGORY) && UtilValidate.isNotEmpty(searchText)){
-        		facetGroups.remove(SolrConstants.TYPE_PRODUCT_CATEGORY);
-        	}*/
-            
+                facetGroups.remove(SolrConstants.TYPE_PRODUCT_CATEGORY);
+            }*/
+
             // Add the facet groups to the query
             if (UtilValidate.isNotEmpty(facetGroups)) 
             {
@@ -807,55 +853,71 @@ public class SolrEvents
                 }
             }
             
-            List facetListGroup = null;
-            
             if(facetMultiSelectTrue)
             {
-            	solrQueryFacet.setParam("q", queryFacetWithoutGroup);
-            	QueryResponse responseFacetGroup = solr.query(solrQueryFacet);
-            	List<FacetField> resultsFacetGroup = responseFacetGroup.getFacetFields();
-            	RefinementsHelperSolr rhFacetGroup = new RefinementsHelperSolr(cc, delegator);
-            	facetListGroup = (List) rhFacetGroup.processRefinements(resultsFacetGroup);
-            	request.setAttribute("facetListGroup", facetListGroup);
+                solrQueryFacet.setParam("q", queryFacetWithoutGroup);
+                QueryResponse responseFacetGroup = solr.query(solrQueryFacet);
+                List<FacetField> resultsFacetGroup = responseFacetGroup.getFacetFields();
+                RefinementsHelperSolr rhFacetGroup = new RefinementsHelperSolr(cc, delegator);
+                
+                SolrDocumentList sdlFacetGroup = responseFacetGroup.getResults();
+                
+                // Get the Complete Document List
+                solrQueryFacet.setRows((int)sdlFacetGroup.getNumFound());
+                solrQueryFacet.setStart(0);
+
+                QueryResponse responseFacetCompleteFacetGroup = solr.query(solrQueryFacet);
+
+                List<SolrIndexDocument> resultsCompleteFacetGroup = responseFacetCompleteFacetGroup.getBeans(SolrIndexDocument.class);
+                
+                List multiFacetGroup = (List) rhFacetGroup.processRefinements(resultsFacetGroup, responseFacetCompleteFacetGroup.getResults());
+                List multiFacetPriceRange = (List) rhFacetGroup.processPriceRangeRefinements(responseFacetGroup.getFacetQuery(), resultsCompleteFacetGroup);
+                List multiFacetCustomerRating = (List) rhFacetGroup.processCustomerRatingRefinements(responseFacetGroup.getFacetQuery(), resultsCompleteFacetGroup);
+                request.setAttribute("multiFacetGroup", multiFacetGroup);
+                request.setAttribute("multiFacetCustomerRating", multiFacetCustomerRating);
+                request.setAttribute("multiFacetPriceRange", multiFacetPriceRange);
             }
             solrQueryFacet.setParam("q", queryFacet);
-            
+
             QueryResponse responseFacet = solr.query(solrQueryFacet);
-            
+
             List<FacetField> resultsFacet = responseFacet.getFacetFields();
             RefinementsHelperSolr rh = new RefinementsHelperSolr(cc, delegator);
 
-            List facetList = null;
-            
-            facetList = (List) rh.processRefinements(resultsFacet);	
-            
-            
             List<SolrIndexDocument> results = responseFacet.getBeans(SolrIndexDocument.class);
-            
+
             SolrDocumentList sdl = responseFacet.getResults();
-            
-            
+
             if (UtilValidate.isNotEmpty(searchText) && sdl.getNumFound() < 1) 
             {
                 return "error";
             }
-            
+
             // Get the Complete Document List
+            
             solrQueryFacet.setRows((int)sdl.getNumFound());
             solrQueryFacet.setStart(0);
-            
+
             QueryResponse responseFacetComplete = solr.query(solrQueryFacet);
+
             List<SolrIndexDocument> resultsComplete = responseFacetComplete.getBeans(SolrIndexDocument.class);
-            List newresultComplete = removeDuplicateEntry(resultsComplete);
-            
+
             // resultsFacetQueries holds both price a customer rating facets
             Map<String, Integer> resultsFacetQueries = responseFacet.getFacetQuery();
-            
-            List facetListPriceRange = (List) rh.processPriceRangeRefinements(resultsFacetQueries, results);
-            List facetListCustomerRating = (List) rh.processCustomerRatingRefinements(resultsFacetQueries);
+
+            List facetList = null;
+
+            facetList = (List) rh.processRefinements(resultsFacet, responseFacetComplete.getResults());
+
+            List facetListPriceRange = (List) rh.processPriceRangeRefinements(resultsFacetQueries, resultsComplete);
+            List facetListCustomerRating = (List) rh.processCustomerRatingRefinements(resultsFacetQueries, resultsComplete);
+
+            List newresultComplete = removeDuplicateEntry(resultsComplete);
+
+
             List newresult = removeDuplicateEntry(results);
             int startIndex = Integer.valueOf(NumberUtils.toInt(start, 0));
-            
+
             if (newresultComplete.size() > (startIndex+pageSize)) 
             {
                 newresult = newresultComplete.subList(startIndex, (startIndex+pageSize));
@@ -864,13 +926,12 @@ public class SolrEvents
             {
                 newresult = newresultComplete.subList(startIndex, newresultComplete.size());
             }
-            
-            
+
             //used in resultsNavigation.ftl
             request.setAttribute("sortOptions", sortOptions);
             request.setAttribute("numFound", newresultComplete.size());
-            request.setAttribute("start", sdl.getStart());
-            request.setAttribute("size", sdl.size());
+            request.setAttribute("start", Integer.valueOf(NumberUtils.toInt(start, 0)));
+            request.setAttribute("size", pageSize);
             request.setAttribute("pageSize", pageSize);
             request.setAttribute("solrPageSize", solrPageSize);
             request.setAttribute("facetList", facetList);
@@ -881,6 +942,20 @@ public class SolrEvents
             request.getSession().setAttribute("productDocumentList", newresultComplete);
             request.setAttribute("sortResults",sortResults);
             request.setAttribute("filterGroup", filterGroup);
+            request.setAttribute("filterGroupParamMap", filterGroupParamMap);
+            if(facetMultiSelectTrue)
+            {
+                if (UtilValidate.isNotEmpty(filterPriceQuery) || UtilValidate.isNotEmpty(queryFacetGroup) || UtilValidate.isNotEmpty(filterCustomerRatingQuery)) 
+                {
+                    if (UtilValidate.isNotEmpty(filterGroupParamMap) && filterGroupParamMap.size() == 1) 
+                    {
+                        request.setAttribute("multiFacetInitialType", multiFacetInitialType);
+                    }
+                    request.setAttribute("multiFacetGroupRefined", facetList);
+                    request.setAttribute("multiFacetPriceRangeRefined", facetListPriceRange);
+                    request.setAttribute("multiFacetCustomerRatingRefined", facetListCustomerRating);
+                }
+            }
 
         } 
         catch (MalformedURLException e) 
@@ -897,7 +972,7 @@ public class SolrEvents
         }
         return "success";
     }
-    
+
     public static List<SolrIndexDocument> removeDuplicateEntry (List<SolrIndexDocument> results) 
     {
         Iterator itr = results.iterator();
@@ -925,110 +1000,116 @@ public class SolrEvents
         }
         return newresult;
     }
-    
+
     public static String solrSpellCheck(HttpServletRequest request, HttpServletResponse response) 
     {
-    	String solrServer = OSAFE_PROPS.getString("solrSearchServer");
-        
-    	String searchText = Util.stripHTML(request.getParameter("searchText"));
-        
+        String solrServer = OSAFE_PROPS.getString("solrSearchServer");
+
+        String searchText = Util.stripHTML(request.getParameter("searchText"));
+
         if (UtilValidate.isEmpty(searchText))
         {
             searchText = Util.stripHTML((String)request.getAttribute("searchText"));
         }
-        try 
+        if(UtilValidate.isNotEmpty(searchText))
         {
-			CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
-        	ModifiableSolrParams params = new ModifiableSolrParams();
-            params.set("qt", "/spell");
-            params.set("q", searchText);
-            QueryResponse responseSpellCheck = solr.query(params);
-            if(responseSpellCheck.getSpellCheckResponse().isCorrectlySpelled()) 
+            try 
             {
-            	request.setAttribute("searchText", searchText);
+            	searchText = URLEncoder.encode(searchText, SolrConstants.DEFAULT_ENCODING);
+                CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
+                ModifiableSolrParams params = new ModifiableSolrParams();
+                params.set("qt", "/spell");
+                params.set("q", searchText);
+                QueryResponse responseSpellCheck = solr.query(params);
+                if(responseSpellCheck.getSpellCheckResponse().isCorrectlySpelled()) 
+                {
+                    request.setAttribute("searchText", searchText);
+                } 
+                else 
+                {
+                    request.setAttribute("searchType", "SpellCheckSearch");
+                    request.setAttribute("searchTextSpellCheck", responseSpellCheck.getSpellCheckResponse().getCollatedResult());
+                }
             } 
-            else 
+            catch (Exception e) 
             {
-            	request.setAttribute("searchType", "SpellCheckSearch");
-            	request.setAttribute("searchTextSpellCheck", responseSpellCheck.getSpellCheckResponse().getCollatedResult());
+                Debug.logError(e.getMessage(), module);
             }
-        } 
-        catch (Exception e) 
-        {
-            Debug.logError(e.getMessage(), module);
         }
         return "success";
     }
-    
+
     public static String addWildCardSearch(HttpServletRequest request, HttpServletResponse response) 
     {
-    	request.setAttribute("searchType", "WildCardSearch");
+        request.setAttribute("searchType", "WildCardSearch");
         return "success";
     }
-    
+
     public static String addAllWordSearch(HttpServletRequest request, HttpServletResponse response) 
     {
-    	request.setAttribute("searchType", "AllWordSearch");
+        request.setAttribute("searchType", "AllWordSearch");
         return "success";
     }
-    
+
     public static String autoSuggestionList(HttpServletRequest request, HttpServletResponse response) 
     {
-    	String solrServer = OSAFE_PROPS.getString("solrSearchServer");
-    	
-    	List<String> autoSuggestionList = FastList.newInstance();
-    	List<Long> autoSuggestionFreqList = FastList.newInstance();
-        
-    	String searchText = Util.stripHTML(request.getParameter("searchText"));
-        
+        String solrServer = OSAFE_PROPS.getString("solrSearchServer");
+
+        List<String> autoSuggestionList = FastList.newInstance();
+        List<Long> autoSuggestionFreqList = FastList.newInstance();
+
+        String searchText = Util.stripHTML(request.getParameter("searchText"));
+
         if (UtilValidate.isEmpty(searchText))
         {
             searchText = Util.stripHTML((String)request.getAttribute("searchText"));
         }
-        try 
+        if(UtilValidate.isNotEmpty(searchText))
         {
-        	CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
-        	ModifiableSolrParams params = new ModifiableSolrParams();
-            params.set("qt", "/terms");
-            params.set("terms.fl", "autocomplete_text");
-            params.set("omitHeader", "true");
-            params.set("terms.sort", "index");
-            params.set("terms.prefix", searchText);
-            QueryResponse responseSpell = solr.query(params);
-            String terms = responseSpell.getTermsResponse().getTerms("autocomplete_text").get(0).getTerm();
-            
-            List<Term> termsListParent = responseSpell.getTermsResponse().getTerms("autocomplete_text");
-            
-            for(Term termsListChild : termsListParent)
+            try 
             {
-                autoSuggestionList.add(termsListChild.getTerm());
-            	autoSuggestionFreqList.add(termsListChild.getFrequency());
-            }
-            
-            request.setAttribute("autoSuggestionList", autoSuggestionList);
-            if(autoSuggestionList.size() > 0)
+                CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
+                ModifiableSolrParams params = new ModifiableSolrParams();
+                params.set("qt", "/terms");
+                params.set("terms.fl", "autocomplete_text");
+                params.set("omitHeader", "true");
+                params.set("terms.sort", "index");
+                params.set("terms.prefix", searchText);
+                QueryResponse responseSpell = solr.query(params);
+
+                List<Term> termsListParent = responseSpell.getTermsResponse().getTerms("autocomplete_text");
+
+                for(Term termsListChild : termsListParent)
+                {
+                    autoSuggestionList.add(termsListChild.getTerm());
+                    autoSuggestionFreqList.add(termsListChild.getFrequency());
+                }
+
+                request.setAttribute("autoSuggestionList", autoSuggestionList);
+                if(autoSuggestionList.size() > 0)
+                {
+                    request.setAttribute("response", "success");    
+                }
+                else
+                {
+                    request.setAttribute("response", "error");
+                }
+
+            } 
+            catch (Exception e) 
             {
-            	request.setAttribute("response", "success");	
+                Debug.logError(e.getMessage(), module);
             }
-            else
-            {
-            	request.setAttribute("response", "error");
-            }
-            
-        } 
-        catch (Exception e) 
-        {
-            Debug.logError(e.getMessage(), module);
         }
         return "success";
     }
 
     private static void addProductFacilityFilter(HttpServletRequest request, SolrQuery query)
     {
-    	if (checkUserAddress(request))
-    	{
-    		query.addFilterQuery(getProductFacilityFilterQuery(request));
-    	}
+        if (checkUserAddress(request))
+        {
+            query.addFilterQuery(getProductFacilityFilterQuery(request));
+        }
     }
 
     private static String[] getProductFacilityFilterQuery(HttpServletRequest request)
@@ -1039,12 +1120,12 @@ public class SolrEvents
         int count = 1;
         if (UtilValidate.isNotEmpty(availableFacilities)) 
         {
-	        for (String availableFacility: availableFacilities)
-	        {
-	        	filterQueryStr = filterQueryStr + SolrConstants.EXTRACT_PRODUT_FACILTY + SolrConstants.SEARCH_TERM_EQUALS + availableFacility;
-	            if(count++ < availableFacilities.size())
-	            	filterQueryStr = filterQueryStr + SolrConstants.SEARCH_TERM_OR_OPERATOR;
-	        }
+            for (String availableFacility: availableFacilities)
+            {
+                filterQueryStr = filterQueryStr + SolrConstants.EXTRACT_PRODUT_FACILTY + SolrConstants.SEARCH_TERM_EQUALS + availableFacility;
+                if(count++ < availableFacilities.size())
+                    filterQueryStr = filterQueryStr + SolrConstants.SEARCH_TERM_OR_OPERATOR;
+            }
         }
         filterQuery[0] =  filterQueryStr;
         return filterQuery;
@@ -1071,7 +1152,9 @@ public class SolrEvents
         {
             //Get the all facility which are associated with productStoreId
             facilities = delegator.findByAndCache("Facility", UtilMisc.toMap("productStoreId", productStoreId));
-        } catch (GenericEntityException e) {
+        } 
+        catch (GenericEntityException e) 
+        {
             Debug.logError(e, "Unable to get facilities", module);
             availableFacilities.add("NOFACILITY");
             return availableFacilities;
@@ -1094,17 +1177,17 @@ public class SolrEvents
             {
                 try
                 {
-                	//Get facility address
-	            	GenericValue facilityAddress = getShippingOriginContactMech(delegator, facility.getString("ownerPartyId"));
-	                if (UtilValidate.isEmpty(facilityAddress))
-	                {
+                    //Get facility address
+                    GenericValue facilityAddress = getShippingOriginContactMech(delegator, facility.getString("ownerPartyId"));
+                    if (UtilValidate.isEmpty(facilityAddress))
+                    {
                         // No address found for facility
-                    	returnFacilities.remove(facility);
+                        returnFacilities.remove(facility);
                         //Debug.logInfo("Removed facility due to blank facility address", module);
                         continue;
-	                }
+                    }
                     if (!userGeoRegion.contains(facilityAddress.getString("stateProvinceGeoId")) &&
-                        !userGeoRegion.contains(facilityAddress.getString("postalCodeGeoId")))
+                            !userGeoRegion.contains(facilityAddress.getString("postalCodeGeoId")))
                     {
                         // not in geos
                         returnFacilities.remove(facility);
@@ -1142,36 +1225,36 @@ public class SolrEvents
         Set geoIdSet = FastSet.newInstance();
         try
         {
-	        GenericValue userAddress = getUserAddress(request);
+            GenericValue userAddress = getUserAddress(request);
             request.getSession().setAttribute(SolrConstants.SEARCH_USER_ADDRESS_SESSION_KEY, userAddress);
 
-	        if (UtilValidate.isNotEmpty(userAddress))
-	        {
-	            if (UtilValidate.isNotEmpty(userAddress.getString("countryGeoId")))
-	            {
-	                geoIdSet.add(userAddress.getString("countryGeoId"));
-	            }
-	            if (UtilValidate.isNotEmpty(userAddress.getString("stateProvinceGeoId")))
-	            {
-	                geoIdSet.add(userAddress.getString("stateProvinceGeoId"));
-	            }
-	            if (UtilValidate.isNotEmpty(userAddress.getString("countyGeoId")))
-	            {
-	                geoIdSet.add(userAddress.getString("countyGeoId"));
-	            }
-	            //Get postal Geo id
-	            String postalCodeGeoId = getPostalAddressPostalCodeGeoId(userAddress, delegator);
-	            if (UtilValidate.isNotEmpty(postalCodeGeoId))
-	            {
-	                geoIdSet.add(postalCodeGeoId);
-	            }
-	        } 
-	        else 
-	        {
-	            Debug.logWarning("userAddress is null, adding nothing to geoIdSet", module);
-	        }
-	        // get the most granular, or all available, geoIds and then find parents by GeoAssoc with geoAssocTypeId="REGIONS" and geoIdTo=<granular geoId> and find the GeoAssoc.geoId
-	        geoIdSet = expandGeoRegionDeep(geoIdSet, delegator);
+            if (UtilValidate.isNotEmpty(userAddress))
+            {
+                if (UtilValidate.isNotEmpty(userAddress.getString("countryGeoId")))
+                {
+                    geoIdSet.add(userAddress.getString("countryGeoId"));
+                }
+                if (UtilValidate.isNotEmpty(userAddress.getString("stateProvinceGeoId")))
+                {
+                    geoIdSet.add(userAddress.getString("stateProvinceGeoId"));
+                }
+                if (UtilValidate.isNotEmpty(userAddress.getString("countyGeoId")))
+                {
+                    geoIdSet.add(userAddress.getString("countyGeoId"));
+                }
+                //Get postal Geo id
+                String postalCodeGeoId = getPostalAddressPostalCodeGeoId(userAddress, delegator);
+                if (UtilValidate.isNotEmpty(postalCodeGeoId))
+                {
+                    geoIdSet.add(postalCodeGeoId);
+                }
+            } 
+            else 
+            {
+                Debug.logWarning("userAddress is null, adding nothing to geoIdSet", module);
+            }
+            // get the most granular, or all available, geoIds and then find parents by GeoAssoc with geoAssocTypeId="REGIONS" and geoIdTo=<granular geoId> and find the GeoAssoc.geoId
+            geoIdSet = expandGeoRegionDeep(geoIdSet, delegator);
         }
         catch (Exception e)
         {
@@ -1197,10 +1280,10 @@ public class SolrEvents
         }
         else if (UtilValidate.isNotEmpty(userAddressFromSession.getString("countryGeoId")) && UtilValidate.isNotEmpty(userAddress.getString("countryGeoId")))
         {
-        	if (!userAddressFromSession.getString("countryGeoId").equals(userAddress.getString("countryGeoId")))
-        	{
+            if (!userAddressFromSession.getString("countryGeoId").equals(userAddress.getString("countryGeoId")))
+            {
                 isMatch = false;
-        	}
+            }
         }
 
         //Match stateProvinceGeoId
@@ -1210,10 +1293,10 @@ public class SolrEvents
         }
         else if (UtilValidate.isNotEmpty(userAddressFromSession.getString("stateProvinceGeoId")) && UtilValidate.isNotEmpty(userAddress.getString("stateProvinceGeoId")))
         {
-        	if (!userAddressFromSession.getString("stateProvinceGeoId").equals(userAddress.getString("stateProvinceGeoId")))
-        	{
+            if (!userAddressFromSession.getString("stateProvinceGeoId").equals(userAddress.getString("stateProvinceGeoId")))
+            {
                 isMatch = false;
-        	}
+            }
         }
 
         //Match postalCode
@@ -1242,7 +1325,7 @@ public class SolrEvents
         String defaultCountry = Util.getProductStoreParm(request, "COUNTRY_DEFAULT");
         userAddress.put("countryGeoId", defaultCountry);
         //TODO we can set user's other information
-        
+
         return userAddress;
     }
 
@@ -1280,7 +1363,7 @@ public class SolrEvents
                 EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.IN, UtilMisc.toList("SHIP_ORIG_LOCATION", "GENERAL_LOCATION")),
                 EntityUtil.getFilterByDateExpr("contactFromDate", "contactThruDate"),
                 EntityUtil.getFilterByDateExpr("purposeFromDate", "purposeThruDate")
-       );
+        );
         EntityConditionList<EntityCondition> ecl = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 
         List<GenericValue> addresses = delegator.findList("PartyContactWithPurpose", ecl, null, UtilMisc.toList("contactMechPurposeTypeId DESC"), null, true);
@@ -1296,7 +1379,7 @@ public class SolrEvents
             else if ("SHIP_ORIG_LOCATION".equals(address.get("contactMechPurposeTypeId")))
             {
                 originAddress = delegator.findByPrimaryKeyCache("PostalAddress", UtilMisc.toMap("contactMechId", address.getString("contactMechId")));
-                
+
             }
         }
         return originAddress != null ? originAddress : generalAddress;
@@ -1337,15 +1420,19 @@ public class SolrEvents
         // nothing found, return null
         return null;
     }
-    
-    public static Set<String> expandGeoRegionDeep(Set<String> geoIdSet, Delegator delegator) throws GenericEntityException {
-        if (UtilValidate.isEmpty(geoIdSet)) {
+
+    public static Set<String> expandGeoRegionDeep(Set<String> geoIdSet, Delegator delegator) throws GenericEntityException 
+    {
+        if (UtilValidate.isEmpty(geoIdSet)) 
+        {
             return geoIdSet;
         }
         Set<String> geoIdSetTemp = FastSet.newInstance();
-        for (String curGeoId: geoIdSet) {
+        for (String curGeoId: geoIdSet) 
+        {
             List<GenericValue> geoAssocList = delegator.findByAndCache("GeoAssoc", UtilMisc.toMap("geoIdTo", curGeoId, "geoAssocTypeId", "REGIONS"));
-            for (GenericValue geoAssoc: geoAssocList) {
+            for (GenericValue geoAssoc: geoAssocList) 
+            {
                 geoIdSetTemp.add(geoAssoc.getString("geoId"));
             }
         }
@@ -1354,5 +1441,334 @@ public class SolrEvents
         geoIdSetNew.addAll(geoIdSet);
         geoIdSetNew.addAll(geoIdSetTemp);
         return geoIdSetNew;
+    }
+    
+    
+    public static String searchShoppingList(HttpServletRequest request, HttpServletResponse response) 
+    {
+        try 
+        {
+            Delegator delegator = (Delegator) request.getAttribute("delegator");
+
+            
+            String solrServer = OSAFE_PROPS.getString("solrSearchServer");
+            CommonsHttpSolrServer solr = new CommonsHttpSolrServer(solrServer);
+            
+            
+            GenericValue productStore = ProductStoreWorker.getProductStore(request);
+            String productStoreId = productStore.getString("productStoreId");
+
+            solr.setRequestWriter(new BinaryRequestWriter());
+
+            Map<String, String> mProductStoreParms = FastMap.newInstance();
+            
+            Map<String, Object> params = UtilHttp.getParameterMap(request);
+            
+            Map<String, String> searchTermsMap = new TreeMap<String, String>();
+            
+            List resultShoppingListSearch = FastList.newInstance();
+            //Build product Store Parms
+            List<GenericValue> productStoreParms = delegator.findByAndCache("XProductStoreParm",UtilMisc.toMap("productStoreId",productStoreId));
+            if (UtilValidate.isNotEmpty(productStoreParms))
+            {
+                for (int i=0;i < productStoreParms.size();i++)
+                {
+                    GenericValue prodStoreParm = (GenericValue) productStoreParms.get(i);
+                    mProductStoreParms.put(prodStoreParm.getString("parmKey"),prodStoreParm.getString("parmValue"));
+                }
+            }
+            
+            
+            int solrPageSize = NumberUtils.toInt(mProductStoreParms.get("PLP_NUM_ITEMS_PER_PAGE"), 20);
+            if (solrPageSize == 0) 
+            {
+                solrPageSize = 20;
+            }
+            
+            // Paging and how many rows to display
+            String rows = request.getParameter("rows");
+            if (UtilValidate.isEmpty(rows))
+            {
+                rows = (String)request.getAttribute("rows");
+            }
+            String start = request.getParameter("start");
+            if (UtilValidate.isEmpty(start))
+            {
+                start = (String)request.getAttribute("start");
+            }
+            int pageSize = Integer.valueOf(NumberUtils.toInt(rows, solrPageSize));
+            
+            
+            // Results Sorting
+            String sortName = null;
+            String sortDir = null;
+            String defaultSort= null;
+            String SORT_OPTIONS =null;
+            String sortResults = request.getParameter("sortResults");
+            if (UtilValidate.isEmpty(sortResults))
+            {
+                sortResults = (String)request.getAttribute("sortResults");
+            }
+
+            //Reads the system parameter to get all the Available sort options
+            SORT_OPTIONS  = Util.getProductStoreParm(request, "PLP_AVAILABLE_SORT");
+            List<String> SORT_OPTIONS_LIST = StringUtil.split(SORT_OPTIONS, ",");
+
+            List<Map<String,String>> sortOptions = FastList.newInstance();
+            if (UtilValidate.isNotEmpty(SORT_OPTIONS_LIST)) 
+            {
+                defaultSort = Util.getProductStoreParm(request, "PLP_DEFAULT_SORT");
+
+                //makes a list of Sort Options
+                for (String sortOption: SORT_OPTIONS_LIST) 
+                {
+                    sortOption = sortOption.trim().toUpperCase();
+                    if(OSAFE_PROPS.containsKey(sortOption))
+                    {
+                        String sortOptionTxt = OSAFE_PROPS.getString(sortOption);
+                        if (UtilValidate.isNotEmpty(sortOptionTxt))
+                        {
+                            List<String> sortOptionAttrList = StringUtil.split(sortOptionTxt, "|");
+                            if ((UtilValidate.isNotEmpty(sortOptionAttrList)) && (sortOptionAttrList.size() > 1))
+                            {
+                                Map<String,String> sortOptionMap = FastMap.newInstance();
+                                sortOptionMap.put("SORT_OPTION",sortOption );
+                                sortOptionMap.put("SOLR_VALUE", sortOptionAttrList.get(0));
+                                sortOptionMap.put("SORT_OPTION_LABEL", sortOptionAttrList.get(1));
+                                sortOptions.add(sortOptionMap);
+                            }
+                        }
+                    }
+                }
+
+                //Sets default value for PLP sort. 
+                if(UtilValidate.isEmpty(sortResults))
+                {
+                    for (Map sortOptionMap : sortOptions) 
+                    {
+                        if (UtilValidate.isNotEmpty(defaultSort)) 
+                        {
+                            String sortOption = (String)sortOptionMap.get("SORT_OPTION");
+                            if(defaultSort.equalsIgnoreCase(sortOption))
+                            {
+                                sortResults = (String)sortOptionMap.get("SOLR_VALUE");
+                                break;
+                            }
+                        }
+                    }
+                    if(UtilValidate.isEmpty(sortResults) && (sortOptions.size() > 0))
+                    {
+                        Map sortOptionMap = sortOptions.get(0);
+                        sortResults = (String)sortOptionMap.get("SOLR_VALUE");
+                    }
+                }
+            }
+           
+            
+            for(Entry<String, Object> entry : params.entrySet()) 
+            {
+                String parameterName = entry.getKey();
+            	if (parameterName.toUpperCase().startsWith("SEARCHITEM"))
+            	{
+            		// Get text to use for a site search query
+                    String searchItem = Util.stripHTML(request.getParameter(parameterName));
+                    if (UtilValidate.isEmpty(searchItem))
+                    {
+                    	searchItem = Util.stripHTML((String)request.getAttribute(parameterName));
+                    }
+                    String searchItemCompleteResultText = "";
+                    if (UtilValidate.isNotEmpty(searchItem))
+                    {
+                    	searchItem = URLEncoder.encode(searchItem, SolrConstants.DEFAULT_ENCODING);
+                    	//replace special characters with their solr encoded value
+                        
+                    	searchItem = searchItem.replace("\\", "%5C");
+                    	searchItem = searchItem.replace("\"", "%22");
+                    	searchItem = searchItem.replace(":", "%3A");
+                    	searchItem = searchItem.replace("&", "%26");
+                        
+                    	searchItemCompleteResultText = searchItem;
+                    	
+                        //PERFORM AND SEARCH
+                        
+                        String searchItemUsingAnd = "\""+searchItem+"\"";
+                        
+                        searchItemCompleteResultText = searchItemUsingAnd;
+                        
+                        QueryResponse responseFacet = getQueryResponse(searchItemUsingAnd, solr);
+                        
+                        List<FacetField> resultsFacet = responseFacet.getFacetFields();
+
+                        List<SolrIndexDocument> results = responseFacet.getBeans(SolrIndexDocument.class);
+                        
+                        SolrDocumentList sdl = responseFacet.getResults();
+                        
+                        //PERFORM OR SEARCH
+                        if (sdl.getNumFound() < 1) 
+                        {
+                        	responseFacet = getQueryResponse(searchItem, solr);
+                        	
+                        	resultsFacet = responseFacet.getFacetFields();
+
+                            results = responseFacet.getBeans(SolrIndexDocument.class);
+                            
+                            sdl = responseFacet.getResults();
+                        }
+                        
+                        //PERFORM SPELL CHECK
+                        boolean spellCheck = false;
+                        if (sdl.getNumFound() < 1) 
+                        {
+                        	String searchItemSpellCheck = searchItem;
+                        	ModifiableSolrParams solrParams = new ModifiableSolrParams();
+                        	solrParams.set("qt", "/spell");
+                        	solrParams.set("q", searchItem);
+                            QueryResponse responseSpellCheck = solr.query(solrParams);
+                            if(!responseSpellCheck.getSpellCheckResponse().isCorrectlySpelled()) 
+                            {
+                            	searchItemSpellCheck = responseSpellCheck.getSpellCheckResponse().getCollatedResult();
+                            }
+                            
+                            if(UtilValidate.isNotEmpty(searchItemSpellCheck))
+                            {
+                            	spellCheck = true;
+	                            responseFacet = getQueryResponse(searchItemSpellCheck, solr);
+	                        	
+	                        	resultsFacet = responseFacet.getFacetFields();
+	
+	                            results = responseFacet.getBeans(SolrIndexDocument.class);
+	                            
+	                            sdl = responseFacet.getResults();
+                            }
+                             
+                            searchItemCompleteResultText = searchItemSpellCheck;
+                        }
+                        
+                        
+                        String queryFacet = null;
+                        queryFacet = "searchText: (" + searchItemCompleteResultText +")";
+                        
+                        
+                        queryFacet += " AND rowType:product";
+                        
+                        SolrQuery solrQueryFacet = new SolrQuery(queryFacet);
+                        
+                        // Get the Complete Document List
+                        solrQueryFacet.setRows((int)sdl.getNumFound());
+                        
+                        solrQueryFacet.setStart(0);
+
+                        if (UtilValidate.isNotEmpty(sortResults)) 
+                        {
+                            String[] sortResultsParts = StringUtils.split(sortResults, "-");
+                            if (sortResultsParts.length > 1) 
+                            {
+                                sortName = sortResultsParts[0];
+                                sortDir = sortResultsParts[1];
+                                ORDER solrOrder = ORDER.asc;
+                                if ("desc".equalsIgnoreCase(sortDir)) 
+                                {
+                                    solrOrder = ORDER.desc;
+                                }
+                                solrQueryFacet.addSortField(sortName, solrOrder);
+                            }
+                        }
+                        else
+                        {
+                            solrQueryFacet.addSortField("customerRating", ORDER.desc);
+                        }
+                        
+                        QueryResponse responseFacetComplete = solr.query(solrQueryFacet);
+
+                        List<SolrIndexDocument> resultsComplete = responseFacetComplete.getBeans(SolrIndexDocument.class);
+                        
+                        
+                        List newresultComplete = removeDuplicateEntry(resultsComplete);
+
+                        resultShoppingListSearch.addAll(newresultComplete);
+                        if(spellCheck)
+                        {
+                        	searchTermsMap.put(parameterName, URLDecoder.decode(searchItemCompleteResultText, SolrConstants.DEFAULT_ENCODING));
+                        }
+                        else
+                        {
+                        	searchTermsMap.put(parameterName, URLDecoder.decode(searchItem, SolrConstants.DEFAULT_ENCODING));
+                        }
+                    }
+            	}
+            }
+            
+            if (UtilValidate.isEmpty(resultShoppingListSearch)) 
+            {
+            	StringBuilder  shoppingListSearchText = new StringBuilder();
+            	if(UtilValidate.isNotEmpty(searchTermsMap))
+            	{
+            		int currentItemNo = 0;
+            		for (Map.Entry<String, String> entry : searchTermsMap.entrySet()) 
+                    {
+            			currentItemNo = currentItemNo + 1;
+            			shoppingListSearchText.append(entry.getValue());
+            			if(currentItemNo != searchTermsMap.size())
+            			{
+            				shoppingListSearchText.append(", ");
+            			}
+                    }
+            	}
+            	request.setAttribute("shoppingListSearchText", shoppingListSearchText.toString());
+                return "error";
+            }
+            
+            List resultShoppingListSearchPage = FastList.newInstance();
+            
+            int startIndex = Integer.valueOf(NumberUtils.toInt(start, 0));
+            
+            if (resultShoppingListSearch.size() > (startIndex+pageSize)) 
+            {
+            	resultShoppingListSearchPage = resultShoppingListSearch.subList(startIndex, (startIndex+pageSize));
+            } 
+            else 
+            {
+            	resultShoppingListSearchPage = resultShoppingListSearch.subList(startIndex, resultShoppingListSearch.size());
+            }
+            request.setAttribute("numFound", resultShoppingListSearch.size());
+            request.setAttribute("documentList", resultShoppingListSearchPage);
+            request.setAttribute("searchTermsMap", searchTermsMap);
+            request.setAttribute("start", Integer.valueOf(NumberUtils.toInt(start, 0)));
+            request.setAttribute("size", pageSize);
+            request.setAttribute("pageSize", pageSize);
+            request.setAttribute("solrPageSize", solrPageSize);
+            request.setAttribute("sortOptions", sortOptions);
+            request.setAttribute("sortResults",sortResults);
+            
+        }
+        catch (Exception e) 
+        {
+			// TODO: handle exception
+		}
+        return "success";
+    }
+    
+    
+    public static QueryResponse getQueryResponse(String searchText, CommonsHttpSolrServer solr)
+    {
+    	String queryFacet = null;
+        
+        queryFacet = "searchText: (" + searchText +")";
+        
+        queryFacet += " AND rowType:product";
+        
+        SolrQuery solrQueryFacet = new SolrQuery(queryFacet);
+        
+        QueryResponse responseFacet = null;
+		try 
+		{
+			responseFacet = solr.query(solrQueryFacet);
+		} 
+		catch (SolrServerException e) 
+		{
+			e.printStackTrace();
+		}
+        
+        return responseFacet;
     }
 }

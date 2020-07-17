@@ -1,3 +1,16 @@
+<#-- This FTL will also be displayed either in PersonalInfo or in Billing so we can put hidden inputs that need to be processed here -->
+<#if fieldPurpose=="BILLING" || fieldPurpose=="PERSONAL">
+	<#if parameters.isFBLogin?has_content && parameters.isFBLogin == "Y">
+		<input type="hidden" name="isFBLogin" value="Y"/>
+		<input type="hidden" name="FACEBOOK_USER" value="TRUE"/>
+		<input type="hidden" name="FACEBOOK_ID" value="${parameters.fbId!parameters.FACEBOOK_ID!""}"/>
+		<input type="hidden" name="CUSTOMER_EMAIL" value="${parameters.fbEmail!parameters.CUSTOMER_EMAIL!""}"/>
+		<input type="hidden" name="CUSTOMER_EMAIL_CONFIRM" value="${parameters.fbEmail!parameters.CUSTOMER_EMAIL_CONFIRM!""}"/>
+		<input type="hidden" name="USERNAME" value="${parameters.fbEmail!parameters.USERNAME!""}"/>
+		<input type="hidden" name="UNUSEEMAIL" id="UNUSEEMAIL" value="on" />
+	</#if>
+</#if>
+
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#if fieldPurpose?has_content && context.get(fieldPurpose+"PostalAddress")?has_content>
   <#assign postalAddressData = context.get(fieldPurpose+"PostalAddress") />

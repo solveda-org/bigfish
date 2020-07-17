@@ -7,7 +7,8 @@
     <div class="entry">
       <label>${uiLabelMap.ShippingInstructionsLabel}</label>
         <div class="entryField">
-		      <textarea class="largeArea" name="shipping_instructions">${parameters.shipping_instructions!shippingInstructions!""}</textarea>
+		      <textarea class="largeArea characterLimit" name="shipping_instructions" id="shipping_instructions" maxlength="255">${parameters.shipping_instructions!shippingInstructions!""}</textarea>
+		      <span class="js_textCounter textCounter"></span>
 		      <span class="entryHelper">${uiLabelMap.ShippingInstructionsInfo}</span>
 		      <@fieldErrors fieldName="shipping_instructions"/>
 		</div>

@@ -15,7 +15,7 @@ if (UtilValidate.isNotEmpty(userLoginId))
 	
 	if ((UtilValidate.isNotEmpty(userInfo)) && (UtilValidate.isNotEmpty(userInfo.disabledDateTime)))
 	{
-		disDate = OsafeAdminUtil.convertDateTimeFormat(userInfo.disabledDateTime, preferredDateFormat);
+		disDate = OsafeAdminUtil.convertDateTimeFormat(userInfo.disabledDateTime, entryDateTimeFormat);
 		disHour = UtilDateTime.getHour(UtilDateTime.toTimestamp(userInfo.disabledDateTime), timeZone, locale);
 		disMinute = UtilDateTime.getMinute(UtilDateTime.toTimestamp(userInfo.disabledDateTime), timeZone, locale);
 		disTimeAMPM = ((disHour/12) < 1)?1:2;// 1 for AM and 2 for PM

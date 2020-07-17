@@ -4,12 +4,12 @@
       <div>
         <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", totalTaxPercent)>
         <#assign salesTaxCaption = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeUiLabels","SummarySalesTaxCaption",taxInfoStringMap, locale ) />
-        <label>${salesTaxCaption!}</label>
+        <label><#if shipGroupSalesTaxSame>${salesTaxCaption!}<#else>${uiLabelMap.SummarySalesTaxShortCaption!}</#if></label>
         <span><#if orderTaxTotal?has_content><@ofbizCurrency amount=orderTaxTotal! isoCode=currencyUom  rounding=globalContext.currencyRounding/></#if></span>
       </div>
     </li>
   <#else>
-    <#if appliedTaxList?exists && appliedTaxList?has_content>
+    <#if appliedTaxList?exists && appliedTaxList?has_content && shipGroupSalesTaxSame>
       <#list appliedTaxList as appliedTax >   
         <li class="${request.getAttribute("attributeClass")!}">
           <div>
@@ -25,7 +25,7 @@
         <div>
           <#assign taxInfoStringMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("taxPercent", totalTaxPercent)>
           <#assign salesTaxCaption = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeUiLabels","SummarySalesTaxCaption",taxInfoStringMap, locale ) />
-          <label>${salesTaxCaption!}</label>
+          <label><#if shipGroupSalesTaxSame>${salesTaxCaption!}<#else>${uiLabelMap.SummarySalesTaxShortCaption!}</#if></label>
           <span><#if orderTaxTotal?has_content><@ofbizCurrency amount=orderTaxTotal! isoCode=currencyUom  rounding=globalContext.currencyRounding/></#if></span>
         </div>
       </li>

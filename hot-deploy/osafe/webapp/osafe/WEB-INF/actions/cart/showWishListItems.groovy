@@ -5,7 +5,7 @@ import org.ofbiz.base.util.UtilValidate;
 import com.osafe.util.Util;
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.product.product.ProductWorker;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.entity.GenericValue;
@@ -59,7 +59,7 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
 		 }
 		 if (UtilValidate.isNotEmpty(productCategoryId))
 		 {
-			 prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductList?productCategoryId="+productCategoryId);
+			 prevButtonUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,"eCommerceProductList?productCategoryId="+productCategoryId);
 		 }
 	 } 
 	 else if (continueShoppingLink.equalsIgnoreCase("PDP")) 
@@ -77,7 +77,7 @@ if (UtilValidate.isNotEmpty(continueShoppingLink))
 		 }
 		 if (UtilValidate.isNotEmpty(productId) && UtilValidate.isNotEmpty(productCategoryId))
 		 {
-			 prevButtonUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
+			 prevButtonUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,"eCommerceProductDetail?productId="+productId+"&productCategoryId="+productCategoryId);
 		 }
 	 }
 }

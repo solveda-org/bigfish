@@ -70,6 +70,8 @@
 <DataResource dataResourceId="SI_SEARCH@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="SI_MAILING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
 <DataResource dataResourceId="SI_HEAD_TAG@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+<DataResource dataResourceId="SI_SUPER_MEGA_MENU@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" localeString="en_US"/>
+
 <ElectronicText dataResourceId="SI_HEADER@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="SI_FOOTER@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="SI_LOGO@extendedStore.suffix@"/>
@@ -77,6 +79,8 @@
 <ElectronicText dataResourceId="SI_SEARCH@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="SI_MAILING@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="SI_HEAD_TAG@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="SI_SUPER_MEGA_MENU@extendedStore.suffix@"/>
+
 <Content contentId="SI_HEADER@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="SI_FOOTER@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="SI_LOGO@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO@extendedStore.suffix@" localeString="en_US"/>
@@ -84,6 +88,8 @@
 <Content contentId="SI_SEARCH@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="SI_MAILING@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="SI_HEAD_TAG@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Main Site HEAD TAG Content displayed on every page" contentName="Main Site HEAD TAG Content" dataResourceId="SI_HEAD_TAG@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="SI_SUPER_MEGA_MENU@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"  description="Menu that completely replaces the standard navigation bar" contentName="Super Mega Menu" dataResourceId="SI_SUPER_MEGA_MENU@extendedStore.suffix@" localeString="en_US"/>
+
 <ContentPurpose contentId="SI_HEADER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_FOOTER@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_LOGO@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
@@ -91,6 +97,8 @@
 <ContentPurpose contentId="SI_SEARCH@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_MAILING@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_HEAD_TAG@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="SI_SUPER_MEGA_MENU@extendedStore.suffix@" contentPurposeTypeId="SECTION"/>
+
 <!-- **************END SITE INFO******************* -->
 
 
@@ -207,6 +215,8 @@
 <DataResource dataResourceId="MULTI_ADDR@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="MULTI_SHIPPING@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="MULTI_SHIPPING@extendedStore.suffix@" localeString="en_US"/>
 <DataResource dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PS_OUT_OF_STOCK@extendedStore.suffix@" localeString="en_US"/>
+<DataResource dataResourceId="PS_IN_STORE@extendedStore.suffix@" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PS_IN_STORE@extendedStore.suffix@" localeString="en_US"/>
+
 
 <ElectronicText dataResourceId="PTS_ADDR_BV@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PTS_ADDR_BE@extendedStore.suffix@"/>
@@ -268,6 +278,7 @@
 <ElectronicText dataResourceId="MULTI_ADDR@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="MULTI_SHIPPING@extendedStore.suffix@"/>
 <ElectronicText dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@"/>
+<ElectronicText dataResourceId="PS_IN_STORE@extendedStore.suffix@"/>
 
 <Content contentId="PTS_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BV@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
 <Content contentId="PTS_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BE@extendedStore.suffix@" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin" localeString="en_US"/>
@@ -330,6 +341,7 @@
 <Content contentId="MULTI_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout Multi Address Content" contentName="Checkout Multi Address Content" dataResourceId="MULTI_ADDR@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="MULTI_SHIPPING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Checkout Multi Shipping Option Content" contentName="Checkout Multi Shipping Option Content" dataResourceId="MULTI_SHIPPING@extendedStore.suffix@" localeString="en_US"/>
 <Content contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="Out of Stock Content. Specific Page Content that may be included informing the customer that the Product is not available for purchase." contentName="out of stock" dataResourceId="PS_OUT_OF_STOCK@extendedStore.suffix@" localeString="en_US"/>
+<Content contentId="PS_IN_STORE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"  description="In Store Only Content. Specific Page Content that may be included informing the customer that the Product is only available for in store purchase." contentName="In Store Only Content" dataResourceId="PS_IN_STORE@extendedStore.suffix@" localeString="en_US"/>
 
 <ContentRole contentId="PTS_ADDR_BV@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ADDR_BE@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -391,6 +403,7 @@
 <ContentRole contentId="MULTI_ADDR@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="MULTI_SHIPPINGT@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PS_IN_STORE@extendedStore.suffix@" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 
 <!-- *****************END ESPOTS**************** -->
 
@@ -590,7 +603,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SEARCH" contentId="SI_SEARCH@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_MAILING_LIST" contentId="SI_MAILING@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_HEAD_TAG_CONTENT" contentId="SI_HEAD_TAG@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
-
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="SI_SUPER_MEGA_MENU" contentId="SI_SUPER_MEGA_MENU@extendedStore.suffix@" contentTypeId="BF_SITE_INFO"/>
 
 <!-- HOME PAGE SPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="HPS_01" contentId="HPS_01@extendedStore.suffix@" contentTypeId="BF_HOME_PAGE"/>
@@ -635,6 +648,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_PMT_METHOD_EDIT" contentId="PTS_PMT_ME@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_GIFT_MESSAGE" contentId="PTS_GIFT_MESS@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_EMAIL_A_FRIEND" contentId="PTS_EML_FRND@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PTS_SHOP_LIST_SEARCH" contentId="PTS_SHP_SRCH@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_VIEW" contentId="PES_ADDR_BV@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PES_ADDR_BOOK_EDIT" contentId="PES_ADDR_BE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
@@ -671,6 +685,7 @@
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_ADDR_ESPOT" contentId="MULTI_ADDR@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="MULTI_SHIPPING_ESPOT" contentId="MULTI_SHIPPING@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_OUT_OF_STOCK" contentId="PS_OUT_OF_STOCK@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
+<XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_IN_STORE_ONLY" contentId="PS_IN_STORE@extendedStore.suffix@" contentTypeId="BF_PAGE_TOP_SPOT"/>
 
 <!-- PDP SPOTS -->
 <XContentXref productStoreId="@store.productStoreId@" bfContentId="PS_INTRODUCED" contentId="PS_INTRODUCED@extendedStore.suffix@" contentTypeId="BF_PDP_SPOT"/>

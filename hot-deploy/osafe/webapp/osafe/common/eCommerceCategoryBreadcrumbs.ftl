@@ -21,6 +21,7 @@ under the License.
 <#assign curCategoryId = requestAttributes.curCategoryId?if_exists>
 <#assign curTopMostCategoryId = requestAttributes.curTopMostCategoryId?if_exists>
 <#assign CURRENCY_UOM_DEFAULT = Static["com.osafe.util.Util"].getProductStoreParm(request,"CURRENCY_UOM_DEFAULT")!""/>
+<#assign facetMultiSelect = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"FACET_MULTI_SELECT")/>
 
 <#-- looping macro -->
 <#macro topCategoryList category>
@@ -56,7 +57,7 @@ under the License.
         <#if (curCategoryId?exists && curCategoryId == category.productCategoryId) && !facetGroups?has_content && !product_id?has_content>
            <span>${catName}</span>
         <#else>
-           <#assign catalogFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${categoryUrl}?productCategoryId=${category.productCategoryId!""}')/>
+           <#assign catalogFriendlyUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${categoryUrl}?productCategoryId=${category.productCategoryId!""}')/>
            <a href="${catalogFriendlyUrl}"><span>${catName}</span></a>
         </#if>
       </li>
@@ -141,6 +142,9 @@ under the License.
                 <#assign catOrSearchText = "productCategoryId=" + curCategoryId/>
             </#if>
            <#if index==listSize>
+              <#if facetPart2Desc?has_content>
+                  <#assign facetPart2Desc = Static["org.ofbiz.base.util.StringUtil"].wrapString(facetPart2Desc)!/>
+              </#if>
               <span>${facetPart2Desc}</span>
             <#else>
              <a href="<@ofbizUrl><#if !searchText?has_content>eCommerceProductList<#else>siteSearch</#if>?${catOrSearchText}&filterGroup=${filterGroupValue?if_exists}</@ofbizUrl>">${facetPart2Desc}</a>
@@ -156,10 +160,12 @@ under the License.
     </li>
     <#if searchText?has_content && filterGroupValues?has_content>
       <li>
-        <a href="<@ofbizUrl>siteSearch?searchText=${searchText}</@ofbizUrl>"><span>${searchText}</span></a>
+        <#assign searchText = Static["org.ofbiz.base.util.StringUtil"].wrapString(searchText)!/>
+        <a href="<@ofbizUrl>siteSearch?searchText=${searchText}</@ofbizUrl>">${searchText}</span></a>
       </li>
     <#else>
 	     <#if searchText?has_content>
+	        <#assign searchText = Static["org.ofbiz.base.util.StringUtil"].wrapString(searchText)!/>
 	        <li><span>${searchText}</span></li>
 	     </#if>
     </#if>
@@ -172,7 +178,7 @@ under the License.
     <#if pdpProductName?has_content>
         <@renderProductCrumb pdpProductName=pdpProductName/>
     </#if>
-    <#if facetGroups?has_content>
+    <#if facetGroups?has_content && !facetMultiSelect>
         <#assign facetIdx =0/>
         <#assign facetSize =facetGroups.size()/>
         <#list facetGroups as facet>

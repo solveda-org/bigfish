@@ -13,7 +13,6 @@ import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.base.util.UtilMisc;
-import com.osafe.services.CatalogUrlServlet;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;
@@ -21,7 +20,8 @@ import org.ofbiz.order.shoppingcart.ShoppingCart;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.apache.commons.lang.StringUtils;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.product.catalog.CatalogWorker;
+import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.base.util.UtilDateTime;
 
 
 ShoppingCart shoppingCart = session.getAttribute("shoppingCart");
@@ -84,22 +84,28 @@ if (UtilValidate.isNotEmpty(userLogin))
 {
     partyId = userLogin.partyId;
 }
-
+defaultShipAddr = "";
 if (UtilValidate.isNotEmpty(partyId)) 
 {
     party = delegator.findByPrimaryKeyCache("Party", [partyId : partyId]);
     if (UtilValidate.isNotEmpty(party)) 
     {
-        partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
-        partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
-
-        partyShippingLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
-        partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMech", partyShippingLocations);
-        partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,true);
+		productStoreId = ProductStoreWorker.getProductStoreId(request);
+	    partyProfileDefault = delegator.findOne("PartyProfileDefault", UtilMisc.toMap("partyId", party.partyId, "productStoreId", productStoreId), true);
+		if (UtilValidate.isNotEmpty(partyProfileDefault) && UtilValidate.isNotEmpty(partyProfileDefault.defaultShipAddr))
+		{
+			defaultShipAddr = partyProfileDefault.defaultShipAddr;
+		}
+		partyShippingLocations = party.getRelatedCache("PartyContactMech");
+		partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp()),"fromDate","thruDate",true);
+        partyShippingLocations = EntityUtil.getRelatedCache("PartyContactMechPurpose", partyShippingLocations);
+		partyShippingLocations = EntityUtil.filterByDate(partyShippingLocations,UtilDateTime.getDayEnd(UtilDateTime.nowTimestamp()),"fromDate","thruDate",true);
         partyShippingLocations = EntityUtil.orderBy(partyShippingLocations, UtilMisc.toList("fromDate DESC"));
+
+        partyShippingLocations = EntityUtil.filterByAnd(partyShippingLocations, UtilMisc.toMap("contactMechPurposeTypeId", "SHIPPING_LOCATION"));
         if (UtilValidate.isNotEmpty(partyShippingLocations)) 
         {
-            shippingContactMechList=EntityUtil.getRelated("ContactMech",partyShippingLocations);
+            shippingContactMechList=EntityUtil.getRelatedCache("ContactMech",partyShippingLocations);
         }
         
     }
@@ -114,6 +120,7 @@ context.shippingContactMechList = shippingContactMechList;
 context.itemTotalQuantity = totalQuantity;
 context.numberOfItems = numberOfItems;
 context.shippingApplies=shoppingCart.shippingApplies();
+context.defaultShipAddr = defaultShipAddr;
 
 
 

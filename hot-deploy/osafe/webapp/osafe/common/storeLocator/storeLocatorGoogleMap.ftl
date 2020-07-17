@@ -75,7 +75,7 @@
         <div class="mapCanvas" id="<#if geoChart.id?has_content>${geoChart.id}<#else>map_canvas</#if>" style="width:${geoChart.width}; height:${geoChart.height};">
           <div class="mapLoading">${uiLabelMap.GeoLocationLoadingInfo}</div>
         </div>
-        <div class="mapDirection" style="height:${geoChart.height};">
+        <div class="mapDirection" style="height:${geoChart.height};display:none;">
           <div id="noDirection" class="noDirection">
             <span>${uiLabelMap.NoDirectionRouteFoundError}</span>
           </div>
@@ -84,7 +84,7 @@
             <a href="javascript:void(0);" class="standardBtn action" onclick="hideDirection();">${uiLabelMap.CloseBtn}</a>
           </div>
         </div>
-        <script type="text/javascript"><!--
+        <script type="text/javascript">
         var directionsService;
         var directionsDisplay;
         function loadMap() {
@@ -201,7 +201,7 @@
                       });
                       infoWindow.close();
         }
-      --></script>
+      </script>
       </#if>
     </#if>
   </div>

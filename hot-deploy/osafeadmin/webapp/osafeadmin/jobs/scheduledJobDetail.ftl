@@ -44,6 +44,8 @@
 	      <div class="infoValue">
 	      	<#if parentJob?exists && parentJob?has_content>
 	        	<a href="<@ofbizUrl>scheduledJobDetail?jobId=${schedJob.parentJobId!""}&jobName=${parentJob.jobName!""}</@ofbizUrl>">${schedJob.parentJobId!""}</a>
+	        <#else>
+	            ${schedJob.parentJobId!""}
 	        </#if>
 	      </div>
 	    </div>
@@ -75,6 +77,8 @@
 	      <div class="infoValue">
 	      	<#if prevJob?exists && prevJob?has_content>
 	        	<a href="<@ofbizUrl>scheduledJobDetail?jobId=${schedJob.previousJobId!""}&jobName=${prevJob.jobName!""}</@ofbizUrl>">${schedJob.previousJobId!""}</a>
+            <#else>
+                ${schedJob.previousJobId!""}
 	        </#if>
 	      </div>
 	    </div>

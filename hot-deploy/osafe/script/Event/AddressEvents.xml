@@ -69,19 +69,30 @@
          
         <set field="shippingAddressContext.contactMechId" from-field="parameters.contactMechId" />
         <set field="shippingAddressContext.contactMechTypeId" value="POSTAL_ADDRESS" />
-
+		
+		<session-to-field field="userLogin"/>
         <if-not-empty field="parameters.contactMechId">
+	        <set field="partyProfileDefaultCtx.partyId" from-field="userLogin.partyId"/>
+            <set field="partyProfileDefaultCtx.productStoreId" from-field="parameters.productStoreId"/>
+            <set field="partyProfileDefaultCtx.defaultShipAddr" from-field="parameters.contactMechId"/>
+            <find-by-and entity-name="PartyProfileDefault" list="partyProfileDefaultList" map="partyProfileDefaultCtx"/>
+        	
             <call-service service-name="updatePartyPostalAddress" in-map-name="shippingAddressContext">
                 <result-to-request result-name="contactMechId"  />
                 <result-to-field result-name="contactMechId" />
             </call-service>
+            
+            <if-not-empty field="partyProfileDefaultList">
+            	<set field="parameters.contactMechId" from-field="contactMechId"/>
+        		<call-simple-method method-name="updateDefaultShipAddr" />
+        	</if-not-empty>
             <else>
                 <call-service service-name="createPartyPostalAddress" in-map-name="shippingAddressContext">
                     <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
                     <result-to-request result-name="contactMechId"  />
                     <result-to-field result-name="contactMechId"  />
                 </call-service>
-                <session-to-field field="userLogin"/>
+                
                 <set from-field="userLogin.partyId" field="addressPurposeContext.partyId"/>
                 <!-- create the shipping location -->
                 <set from-field="parameters.contactMechPurposeTypeId" field="addressPurposeContext.contactMechPurposeTypeId"/>

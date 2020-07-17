@@ -1,6 +1,19 @@
 <script type="text/javascript">
     jQuery(document).ready(function () 
     {
+        //Prevents the Page to Hit the Enter Key
+        jQuery(window).keydown(function(event){
+		    if(event.keyCode == 13) {
+		      event.preventDefault();
+		      return false;
+		    }
+		});
+        
+        if(jQuery('#ckeditor').length)
+        {
+            CKEDITOR.disableAutoInline = true;
+            CKEDITOR.replace( 'ckeditor' );
+        }
 		<#if errorMessageList?has_content>
           <#list errorMessageList as errorMsg>           
             try
@@ -40,6 +53,12 @@
         {
             var requiredRadio = jQuery('input:radio[name="mandatory"]:checked');
             setCustomAttributeRequiredMessageField(requiredRadio);
+        }
+        
+        if (jQuery('input:radio[name="dataResourceTypeId"]:checked').length) 
+        {
+            var dataResourceTypeId = jQuery('input:radio[name="dataResourceTypeId"]:checked');
+            setFileEnabledContent(dataResourceTypeId);
         }
         
         <#-- disabled or enabled the Selectable feature based on the Finished/Virtual -->
@@ -117,6 +136,31 @@
 			
 		});
 	
+	    jQuery('.orderItemSeqId.checkBoxEntry').each(function(){
+	        if(jQuery(this+':checked').length)
+	        {
+	            if(jQuery(this+':checked'))
+	            {
+	                if(jQuery('#statusId').val() == 'PRODUCT_RETURN' || jQuery('#statusId').val() == 'ORDER_CANCELLED')
+	                {
+	                    getOrderRefundData();
+	                }
+	            }
+	        }
+        });
+        
+        if (jQuery("#orderItemSeqIdall").length)
+        {
+        	<#assign orderAdjustmentDesc = parameters.orderAdjustmentDescription!""/>
+        	<#assign orderAdjustmentAmount = parameters.orderAdjustmentAmount!""/>
+        	<#if orderAdjustmentDesc?has_content>
+        		jQuery("#orderAdjustmentDescription").val("${orderAdjustmentDesc}");
+        	</#if>
+        	<#if orderAdjustmentAmount?has_content>
+        		jQuery("#orderAdjustmentAmount").val("${orderAdjustmentAmount}");
+        	</#if>
+        }
+        
 	
         jQuery('.displayBox.slidingClose').each(function(){
             slidingInit(this, 'slidePlusIcon');
@@ -255,7 +299,11 @@
        {
            hideActionIcontip(event, this)
        });
-       
+
+        if(jQuery('#shipByDate').length && (jQuery('#shipByDate') != "" || jQuery('#shipByDate') != null))
+        {
+            validateInput('#shipByDate', '+DATE', '${uiLabelMap.OrderShipDateWarning}')
+        }
     });
 
     function setCustomAttributeFields(type)
@@ -304,6 +352,35 @@
 
     function getOrderRefundData()
     {
+        jQuery('.shipQuantity').each(function()
+        {
+        	var shipQuantityId = jQuery(this).attr("id");
+		    if(shipQuantityId != "")
+		    {
+		  	  var shipQuantityIdArray = shipQuantityId.split("_");
+		  	  var shipQauntityIndex = shipQuantityIdArray[1];
+		  	  if(jQuery("#orderItemSeqId-" + shipQauntityIndex).length)
+		  	  {
+		  	  	if(jQuery("#orderItemSeqId-" + shipQauntityIndex).is(':checked'))
+		  	  	{
+		  	  		if(jQuery("#returnQuantity_" + shipQauntityIndex).length)
+		  	  		{
+		  	  			var returnQuantityVal = jQuery("#returnQuantity_" + shipQauntityIndex).val();
+		  	  			if(returnQuantityVal == "")
+		  	  			{
+		  	  				var shipQtyVal = jQuery("#shipQuantity_" + shipQauntityIndex).val();
+		  	  				jQuery("#returnQuantity_" + shipQauntityIndex).val(shipQtyVal)
+		  	  			}
+		  	  		}
+		  	  	}
+		  	  }
+		    }
+        });
+        
+        
+        var orderAdjustmentDesc = jQuery("#orderAdjustmentDescription").val();
+        var orderAdjustmentAmount = jQuery("#orderAdjustmentAmount").val();
+        
         if (jQuery('input:radio[name=actionId]:checked').val() == "cancelOrder" || jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
         {
            var url = "<@ofbizUrl>getOrderStatusRefundDetail</@ofbizUrl>";
@@ -320,6 +397,16 @@
                    jQuery('#orderRefundInfoBox').show();
                }
            });
+        }
+        
+        if(orderAdjustmentDesc != "")
+        {
+        	jQuery("#orderAdjustmentDescription").val(orderAdjustmentDesc);
+        }
+        
+        if(orderAdjustmentAmount != "")
+        {
+        	jQuery("#orderAdjustmentAmount").val(orderAdjustmentAmount);
         }
     }
     <#-- Popup window code -->
@@ -492,9 +579,17 @@
         if (jQuery('input:radio[name=actionId]:checked').val() == "completeOrder") 
         {
             jQuery('.COMPLETED').show();
+            jQuery('.changeOrderStatus').hide();
+            jQuery('.completeMultiShipGroups').show();
+            
+            jQuery('.productReturnCheckboxInfo').hide();
+            jQuery('.itemCancelCheckboxInfo').hide();
+            jQuery('.itemCompleteCheckboxInfo').show();
         }
         else 
         {
+            jQuery('.changeOrderStatus').show();
+            jQuery('.completeMultiShipGroups').hide();
             jQuery('.COMPLETED').hide();
         }
         
@@ -505,6 +600,10 @@
             
             jQuery('th.returnItemHead').show();
             jQuery('td.returnItemData').show();
+            
+            jQuery('.productReturnCheckboxInfo').show();
+            jQuery('.itemCancelCheckboxInfo').hide();
+            jQuery('.itemCompleteCheckboxInfo').hide();
         }
         else 
         {
@@ -544,19 +643,55 @@
         if (jQuery('input:radio[name=actionId]:checked').val() == "cancelOrder") 
         {
             jQuery('#statusId').val("ORDER_CANCELLED");
+            jQuery('.productReturnCheckboxInfo').hide();
+            jQuery('.itemCancelCheckboxInfo').show();
+            jQuery('.itemCompleteCheckboxInfo').hide();
+            jQuery('.action').each(function()
+            {
+                var hrefValue = jQuery(this).attr('href');
+                if(hrefValue!= null && hrefValue.startsWith("javascript:submitDetailForm"))
+                {
+                    jQuery(this).html("${uiLabelMap.CancelOrderBtn}");
+                }
+            });
         }
         else if (jQuery('input:radio[name=actionId]:checked').val() == "changeOrderQty") 
         {
             jQuery('#statusId').val("ORDER_CANCELLED");
+            jQuery('.action').each(function()
+            {
+                var hrefValue = jQuery(this).attr('href');
+                if(hrefValue!= null && hrefValue.startsWith("javascript:submitDetailForm"))
+                {
+                    jQuery(this).html("${uiLabelMap.SaveBtn}");
+                }
+            });
         }
         else if (jQuery('input:radio[name=actionId]:checked').val() == "completeOrder") 
         {
             jQuery('#statusId').val("ORDER_COMPLETED");
             jQuery('#orderRefundInfoBox').hide();
+            jQuery('.action').each(function()
+            {
+                var hrefValue = jQuery(this).attr('href');
+                if(hrefValue!= null && hrefValue.startsWith("javascript:submitDetailForm"))
+                {
+                    jQuery(this).html("${uiLabelMap.SaveBtn}");
+                }
+            });
         }
         else if (jQuery('input:radio[name=actionId]:checked').val() == "productReturn") 
         {
             jQuery('#statusId').val("PRODUCT_RETURN");
+            jQuery('.action').each(function()
+            {
+                var hrefValue = jQuery(this).attr('href');
+                if(hrefValue!= null && hrefValue.startsWith("javascript:submitDetailForm"))
+                {
+                    jQuery(this).html("${uiLabelMap.ProcessReturnsBtn}");
+                }
+            });
+            getOrderRefundData();
         } 
     }
     
@@ -564,8 +699,8 @@
     {
         jQuery("#actionIdComplete").attr('checked', 'checked');
         getOrderStatusChangeDisplay("actionId");
-        jQuery("#orderItemSeqIdall").attr('checked', 'checked');
-        setCheckboxes(formName,'orderItemSeqId');
+        jQuery("#orderItemAndShipGroupSeqIdall").attr('checked', 'checked');
+        setCheckboxes(formName,'orderItemAndShipGroupSeqId');
         
     }
     function quickCancelOrder(formName)
@@ -672,6 +807,28 @@
                     getOrderRefundData();
                 }
             }
+        }
+        
+        if(statusId == "ORDER_COMPLETED")
+        {
+	        jQuery('.toShipQuantity').each(function()
+	        {
+	        	var toShipQuantityId = jQuery(this).attr("id");
+			    if(toShipQuantityId != "")
+			    {
+			  	  var toShipQuantityIdArray = toShipQuantityId.split("_");
+			  	  var toShipQuantityIndex = toShipQuantityIdArray[1];
+			  	  if(jQuery("#orderedQuantity_" + toShipQuantityIndex).length)
+			  	  {
+		  	  			var toShipQuantityVal = jQuery(this).val();
+		  	  			if(toShipQuantityVal == "")
+		  	  			{
+		  	  				var orderQtyVal = jQuery("#orderedQuantity_" + toShipQuantityIndex).val();
+		  	  				jQuery(this).val(orderQtyVal)
+		  	  			}
+			  	  }
+			    }
+	        });
         }
     }
 
@@ -1057,8 +1214,34 @@
             var setStorePickup = "setStorePickup";
             form.action="<@ofbizUrl>" + setStorePickup + "</@ofbizUrl>";
             form.submit();
+        }else if (mode == "EXA") {
+            <#-- execute through AJAX action -->
+            executeAjaxRequest();
         }
 	}
+    
+    function executeAjaxRequest()
+    {
+        var flag = true;
+        jQuery('#pageContainer').append("<div class=loadingAjaxImg></div>");
+        jQuery.post("<@ofbizUrl>${execAjaxAction!""}</@ofbizUrl>", jQuery('input:hidden').serialize(), function(data)
+        {
+            var pageContainer = jQuery(data).find('#pageContainer');
+            jQuery('#pageContainer').replaceWith(pageContainer);
+            flag = false;
+        });
+
+        (function keepBrowserAlive()
+        {
+           setTimeout(function() 
+           {
+               if (flag) 
+               {
+                   keepBrowserAlive();
+               }
+           }, 5000);
+        })();
+    }
 	
 	function refreshFromBottomCart(){
 		<#-- set the values from bottom cart to the top cart -->
@@ -1385,50 +1568,6 @@
         }
       }
 
-    function copyAddress(fromAddr, fromAddrContainer, toAddr, toAddrSection, triggerElt, isBlindup) {
-        jQuery(fromAddrContainer).find('input, select, textarea').change(function(){
-          if(jQuery(triggerElt).is(":checked")){
-            copyFieldvalue(fromAddr, this, toAddr);
-          }
-        });
-        if(jQuery(triggerElt).is(":checked") && jQuery(toAddrSection).length){
-          if (isBlindup) {
-            jQuery(toAddrSection).hide();
-          }
-          copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt);
-        }
-        jQuery(triggerElt).click(function(){
-          if (isBlindup) {
-            //jQuery(toAddrSection).slideToggle(1000);
-            if(jQuery(triggerElt).is(":checked")){
-                jQuery(toAddrSection).hide();
-            } else {
-                jQuery(toAddrSection).show();
-            }
-          }
-          copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt);
-        });
-    }
-    
-    function copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt) {
-        jQuery(fromAddrContainer).find('input, select, textarea').each(function(){
-          if(jQuery(triggerElt).is(":checked")){
-            copyFieldvalue(fromAddr, this, toAddr);
-          }
-        });
-    }
-    
-    function copyFieldvalue(fromAddrPurpose, fromElm, toAddrPurpose) {
-        fromElmId = jQuery(fromElm).attr('id');
-        var toElmId = '#'+toAddrPurpose + fromElmId.sub(fromAddrPurpose, "");
-        if(jQuery(toElmId).length) {
-          if(fromElmId == fromAddrPurpose+'AddressContactMechId') {
-              return;
-          }
-          jQuery(toElmId).val(jQuery(fromElm).val());
-          jQuery(toElmId).change();
-        }
-    }
 
     function getAssociatedStateList(countryId, stateId, divStateId, addressLine3) {
         var optionList = "";
@@ -2247,6 +2386,21 @@ function setRowNo(rowNo) {
             jQuery('.buyableProductAttribute').hide();
         }
     }
+    function setFileEnabledContent(elm)
+    {
+        if (jQuery(elm).attr('name') == undefined)
+        {
+            return;
+        }
+        if(jQuery(elm+':checked').val() == "ELECTRONIC_TEXT"){
+            jQuery('.CONTEXT_FILE').hide();
+            jQuery('.ELECTRONIC_TEXT').show();
+        } else {
+            jQuery('.CONTEXT_FILE').show();
+            jQuery('.ELECTRONIC_TEXT').hide();
+        }
+    }
+    
     function clearCache(cacheName, cacheType)
     {
         document.getElementById('cacheName').value=cacheName;
@@ -2263,39 +2417,6 @@ function setRowNo(rowNo) {
 	    jQuery("#productManufacturer").text(manufacturerId);
 	}
 	
-	
-	var flag = "false";
-	function activateService()
-	{
-	    
-	    jQuery.post("<@ofbizUrl>solrReIndexAjax</@ofbizUrl>", jQuery('input:hidden').serialize(), function(data) {
-	        flag = "true";
-        });
-	                 var img = new Image();
-                     jQuery(img).attr('src','<@ofbizContentUrl>/osafe_theme/images/user_content/images/loading.gif</@ofbizContentUrl>');
-                     jQuery('#loadingImg').html(img);
-	
-	(function keepBrowserAlive()
-	{
-	    setTimeout(function() 
-	         {
-                 if (flag != "true") 
-                 {
-                     var img = new Image();
-                     jQuery(img).attr('src','<@ofbizContentUrl>/osafe_theme/images/user_content/images/loading.gif</@ofbizContentUrl>');
-                     jQuery('#loadingImg').html(img);
-                     keepBrowserAlive();
-                 }
-                 else
-                 {
-                     jQuery('#loadingImg').hide();
-                 }
-             }, 5000);
-	   
-	})();
-	
-	}
-	
 	<#-- when gift message text is empty and a help text is selected, copy the help text to the message -->
     function giftMessageHelpCopy(count)
     {
@@ -2303,6 +2424,7 @@ function setRowNo(rowNo) {
     	if(helpText != "")
     	{
     		jQuery("#giftMessageText_"+count).val(helpText);
+    		restrictTextLength(jQuery("#giftMessageText_"+count));
     	}
     }
     
@@ -2436,6 +2558,29 @@ function setRowNo(rowNo) {
 	    		
 	    	});
     	</#if>
+    	
+    	
+    	
+    	if(jQuery('#isSameAsBilling').length)
+	  	{
+	  	  	if(jQuery('#isSameAsBilling').is(":checked"))
+	  	  	{
+	  	  		jQuery('#shipping_addressSection').hide();
+	  	  	}
+	  	}
+	  	  
+		jQuery('#isSameAsBilling').click(function()
+		{
+		    if(jQuery('#isSameAsBilling').is(":checked"))
+		    {  
+		    	jQuery('#shipping_addressSection').hide();
+		    }
+		    else
+		    {
+		    	jQuery('#shipping_addressSection').show();
+		    }
+		});
+		
     });
     
     function addOrderAdjustment()
@@ -2451,6 +2596,49 @@ function setRowNo(rowNo) {
           var cform = document.${detailFormName!"adminCheckoutFORM"};
           cform.action="<@ofbizUrl>adminRemoveOrderAdjustment?orderAdjustmentId="+orderAdjustmentId+"</@ofbizUrl>";
           cform.submit();
+        }
+    }
+
+    function setScheduledJobDeleteParams(isOld, serviceName, statusId)
+    {
+        document.getElementById('isOld').value = isOld;
+        document.getElementById('serviceName').value= serviceName;
+        document.getElementById('statusId').value = statusId;
+    }
+
+    function validateInput(element, inputType, warningMessage)
+    {
+        // First remove the warning message if exist on page.
+        if(jQuery(element).parent().find('.inputWarning').length)
+        {
+            jQuery(element).parent().find('.inputWarning').remove();
+        }
+
+        var showWarning = false;
+        var today = new Date();
+
+        if (inputType == '+DATE')
+        {
+            //show warning for future Date
+            var inputDate = jQuery(element).datepicker( 'getDate' );
+            if (inputDate > today)
+            {
+                showWarning = true;
+            }
+        }
+        else if (inputType == '-DATE')
+        {
+            //show warning for past Date
+            var inputDate = jQuery(element).datepicker( 'getDate' );
+            if (inputDate < today)
+            {
+                showWarning = true;
+            }
+        }
+
+        if (showWarning)
+        {
+            jQuery(element).parent().append("<div class='inputWarning'>"+warningMessage+"</div>");
         }
     }
     

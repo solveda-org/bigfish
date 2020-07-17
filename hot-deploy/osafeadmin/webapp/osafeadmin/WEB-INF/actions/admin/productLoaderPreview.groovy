@@ -27,7 +27,8 @@ String filePath = tempDir + xlsFileName;
 List productCatDataList = FastList.newInstance();
 List productDataList = FastList.newInstance();
 List productAssocDataList = FastList.newInstance();
-List productFeatureSwatchDataList = FastList.newInstance();
+List productFacetGroupDataList = FastList.newInstance();
+List productFacetValueDataList = FastList.newInstance();
 List manufacturerDataList = FastList.newInstance();
 List errorMessageList = FastList.newInstance();
 
@@ -38,7 +39,8 @@ List productErrorList = FastList.newInstance();
 List productWarningList = FastList.newInstance();
 List productAssocErrorList = FastList.newInstance();
 List productAssocWarningList = FastList.newInstance();
-List productFeatureSwatchErrorList = FastList.newInstance();
+List productFacetGroupErrorList = FastList.newInstance();
+List productFacetValueErrorList = FastList.newInstance();
 List productManufacturerErrorList = FastList.newInstance();
 
 if (UtilValidate.isNotEmpty(filePath) && UtilValidate.isNotEmpty(xlsFileName)) 
@@ -53,7 +55,8 @@ if (UtilValidate.isNotEmpty(filePath) && UtilValidate.isNotEmpty(xlsFileName))
 	productCatDataList = UtilGenerics.checkList(productDataListSvcRes.get("productCatDataList"), Map.class);
 	productDataList = UtilGenerics.checkList(productDataListSvcRes.get("productDataList"), Map.class);
 	productAssocDataList = UtilGenerics.checkList(productDataListSvcRes.get("productAssocDataList"), Map.class);
-	productFeatureSwatchDataList = UtilGenerics.checkList(productDataListSvcRes.get("productFeatureSwatchDataList"), Map.class);
+	productFacetGroupDataList = UtilGenerics.checkList(productDataListSvcRes.get("productFacetGroupDataList"), Map.class);
+	productFacetValueDataList = UtilGenerics.checkList(productDataListSvcRes.get("productFacetValueDataList"), Map.class);
 	manufacturerDataList = UtilGenerics.checkList(productDataListSvcRes.get("manufacturerDataList"), Map.class);
 	
 	errorMessageList = UtilGenerics.checkList(productDataListSvcRes.get("errorMessageList"), String.class);
@@ -63,7 +66,8 @@ Map<String, Object> svcCtx = FastMap.newInstance();
 svcCtx.put("productCatDataList", productCatDataList);
 svcCtx.put("productDataList", productDataList);
 svcCtx.put("productAssocDataList", productAssocDataList);
-svcCtx.put("productFeatureSwatchDataList", productFeatureSwatchDataList);
+svcCtx.put("productFacetGroupDataList", productFacetGroupDataList);
+svcCtx.put("productFacetValueDataList", productFacetValueDataList);
 svcCtx.put("manufacturerDataList", manufacturerDataList);
 
 //Call Service to Validate the Product File Data
@@ -75,8 +79,10 @@ productErrorList = UtilGenerics.checkList(svcRes.get("productErrorList"), String
 productWarningList = UtilGenerics.checkList(svcRes.get("productWarningList"), String.class);
 productAssocErrorList = UtilGenerics.checkList(svcRes.get("productAssocErrorList"), String.class);
 productAssocWarningList = UtilGenerics.checkList(svcRes.get("productAssocWarningList"), String.class);
-productFeatureSwatchErrorList = UtilGenerics.checkList(svcRes.get("productFeatureSwatchErrorList"), String.class);
-productFeatureSwatchWarningList = UtilGenerics.checkList(svcRes.get("productFeatureSwatchWarningList"), String.class);
+productFacetGroupErrorList = UtilGenerics.checkList(svcRes.get("productFacetGroupErrorList"), String.class);
+productFacetGroupWarningList = UtilGenerics.checkList(svcRes.get("productFacetGroupWarningList"), String.class);
+productFacetValueErrorList = UtilGenerics.checkList(svcRes.get("productFacetValueErrorList"), String.class);
+productFacetValueWarningList = UtilGenerics.checkList(svcRes.get("productFacetValueWarningList"), String.class);
 productManufacturerErrorList = UtilGenerics.checkList(svcRes.get("productManufacturerErrorList"), String.class);
 productManufacturerWarningList = UtilGenerics.checkList(svcRes.get("productManufacturerWarningList"), String.class);
 validationErrorMessageList = UtilGenerics.checkList(svcRes.get("errorMessageList"), String.class);
@@ -89,7 +95,8 @@ if(UtilValidate.isNotEmpty(validationErrorMessageList))
 context.productCatDataList = productCatDataList;
 context.productDataList = productDataList;
 context.productAssocDataList = productAssocDataList;
-context.productFeatureSwatchDataList = productFeatureSwatchDataList;
+context.productFacetGroupDataList = productFacetGroupDataList;
+context.productFacetValueDataList = productFacetValueDataList;
 context.manufacturerDataList = manufacturerDataList;
 
 context.xlsFileName = xlsFileName;
@@ -101,6 +108,7 @@ context.productErrorList = productErrorList;
 context.productWarningList = productWarningList;
 context.productAssocErrorList = productAssocErrorList;
 context.productAssocWarningList = productAssocWarningList;
-context.productFeatureSwatchErrorList = productFeatureSwatchErrorList;
+context.productFacetGroupErrorList = productFacetGroupErrorList;
+context.productFacetValueErrorList = productFacetValueErrorList;
 context.productManufacturerErrorList = productManufacturerErrorList;
 context.errorMessageList = errorMessageList;

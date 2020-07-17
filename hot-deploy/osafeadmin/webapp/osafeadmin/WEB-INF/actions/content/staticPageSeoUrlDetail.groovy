@@ -20,10 +20,5 @@ context.contentList = contentList;
 if (UtilValidate.isNotEmpty(context.SITEMAP_STATIC_URL))
 {
     seoFriendlyPrefix = context.SITEMAP_STATIC_URL.substring(0, context.SITEMAP_STATIC_URL.lastIndexOf("/")+1);
-    urlPrefix = FlexibleStringExpander.expandString(osafeProperties.urlCatalogPrefix, context);
-    if (UtilValidate.isNotEmpty(urlPrefix))
-    {
-        seoFriendlyPrefix = seoFriendlyPrefix.replace("/control/", "/"+urlPrefix+"/");
-    }
     context.seoFriendlyPrefix = seoFriendlyPrefix;
 }

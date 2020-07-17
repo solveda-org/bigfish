@@ -25,10 +25,12 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
     <div class="displayListBox generalInfo">
 	    <div class="header"><h2>${uiLabelMap.OrderShippingGroupDetailBoxHeading!}# ${orderItemShipGroup.shipGroupSeqId!}</h2></div>
         ${setRequestAttribute("orderItemShipGroup",orderItemShipGroup)}
-	    ${sections.render('orderShippingGroupsDetailInfoBoxBody')!}
-	    ${sections.render('orderShippingGroupItemsDetailInfoBoxBody')!}
-	    ${sections.render('orderShippingGroupShipmentsDetailInfoBoxBody')!}
+        <div class="boxBody">
+            ${sections.render('orderShippingGroupsDetailInfoBoxBody')!}
+            ${sections.render('orderShippingGroupItemsDetailInfoBoxBody')!}
+        </div>
     </div>
+    ${sections.render('orderShippingGroupShipmentsDetailInfoBoxBody')!}
   </#list>
 </#if>
 

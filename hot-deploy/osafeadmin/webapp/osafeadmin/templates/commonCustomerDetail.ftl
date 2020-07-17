@@ -59,13 +59,19 @@ ${screens.render("component://osafeadmin/widget/CommonScreens.xml#commonFormHidd
         </div>
     </div>
 </#if>
-<#if websiteLoginBoxHeading?exists && websiteLoginBoxHeading?has_content>
+<#assign userLoginExist ="N"/>
+<#if userLogins?exists && userLogins?has_content>
+    <#assign userLoginExist ="Y"/>
+</#if>
+<#if userLoginExist == "N">
+  <#if websiteLoginBoxHeading?exists && websiteLoginBoxHeading?has_content>
     <div class="displayBox loginInfo">
         <div class="header"><h2>${websiteLoginBoxHeading}</h2></div>
         <div class="boxBody">
               ${sections.render('websiteLoginBoxBody')}
         </div>
     </div>
+  </#if>
 </#if>
 <#if customerAttributesInfoBoxHeading?exists && customerAttributesInfoBoxHeading?has_content>
     <div class="displayListBox customerAttributesInfo">

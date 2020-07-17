@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+    <description>BigFish Custom Services</description>
+    <vendor/>
+    <version>1.0</version>
+    <service name="customServicePlaceHolder" engine="" location="" invoke="">
+        <description>Place Holder Service Definition, service file must have at least one service defined</description>
+    </service>
+
+</services>

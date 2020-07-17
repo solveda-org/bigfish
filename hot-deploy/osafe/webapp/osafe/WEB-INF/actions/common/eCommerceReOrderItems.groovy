@@ -28,7 +28,16 @@ if (UtilValidate.isNotEmpty(orderId))
 }
 else
 {
-	paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("orderId"), EntityOperator.IN, customerOrderIdList));
+	//make all orderIds uppercase
+	customerOrderIdListUpper = FastList.newInstance();
+	if(UtilValidate.isNotEmpty(customerOrderIdList))
+	{
+		for(Object customerOrderId : customerOrderIdList)
+		{
+			customerOrderIdListUpper.add(customerOrderId.toUpperCase());
+		}
+	}
+	paramsExpr.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("orderId"), EntityOperator.IN, customerOrderIdListUpper));
 }
 List orderedItemsList = FastList.newInstance();
 if (UtilValidate.isNotEmpty(paramsExpr))

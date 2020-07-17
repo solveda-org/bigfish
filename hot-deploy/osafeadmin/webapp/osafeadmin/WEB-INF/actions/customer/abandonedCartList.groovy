@@ -99,8 +99,7 @@ if(UtilValidate.isNotEmpty(srchRunDateTo))
 		errMsg = "Parse Exception srchRunDateTo: " + srchRunDateTo;
 		Debug.logError(e, errMsg, "abandonedCartList.groovy");
 	}
-	runDateTo=srchRunDateTo;
-	runDateTo=runDateTo.next();//includes the "To" date
+    runDateTo=UtilDateTime.getDayEnd(srchRunDateTo)
 	exprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("lastUpdatedStamp"), EntityOperator.LESS_THAN_EQUAL_TO, runDateTo));
 	context.srchRunDateTo=srchRunDateTo;
 }

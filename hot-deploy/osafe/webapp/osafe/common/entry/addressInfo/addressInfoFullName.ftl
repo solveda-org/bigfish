@@ -5,6 +5,9 @@
 <#assign lastName = ""/>
 <#if postalAddressData?has_content>
     <#assign fullName = postalAddressData.toName!"" />
+<#-- for Facebook login -->
+<#elseif parameters.fbName?has_content>
+  <#assign fullName= parameters.fbName!""/>
 </#if>
 
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>

@@ -13,7 +13,7 @@ import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.base.util.UtilMisc;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;
@@ -330,7 +330,7 @@ productFeatureAndAppls = delegator.findByAndCache("ProductFeatureAndAppl", UtilM
 productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
 productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
 
-productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
+productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 
 //See if the Cart Line Qty has a gift message associated
 //This is used for Shipping to Multiple Address

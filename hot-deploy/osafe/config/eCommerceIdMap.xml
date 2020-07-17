@@ -20,6 +20,9 @@
     <property key="SITE_INFO_HEAD_TAG_CONTENT">
         <value xml:lang="en">SI_HEAD_TAG_CONTENT</value>
     </property>
+    <property key="SITE_INFO_SUPER_MEGA_MENU">
+        <value xml:lang="en">SI_SUPER_MEGA_MENU</value>
+    </property>
 
     <!-- *** ECOMMERCE HOME PAGE SPOT MENU *************************************** -->
     <property key="HOME_PAGE_SPOT_01">
@@ -143,6 +146,9 @@
     </property>
     <property key="PAGE_TOP_SPOT_GIFT_MESSAGE">
         <value xml:lang="en">PTS_GIFT_MESSAGE</value>
+    </property>
+    <property key="PAGE_TOP_SPOT_SHOP_LIST_SEARCH">
+        <value xml:lang="en">PTS_SHOP_LIST_SEARCH</value>
     </property>
 
     <property key="PAGE_END_SPOT_ADDRESS_BOOK_VIEW">
@@ -269,6 +275,9 @@
     </property>
     <property key="PS_OUT_OF_STOCK">
         <value xml:lang="en">PS_OUT_OF_STOCK</value>
+    </property>
+    <property key="PS_IN_STORE_ONLY">
+        <value xml:lang="en">PS_IN_STORE_ONLY</value>
     </property>
 
     <!-- *** ECOMMERCE EMAIL MENU HOT SPOTS *************************************** -->

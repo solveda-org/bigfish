@@ -7,7 +7,7 @@
 
        <set field="periodFrom" value="${groovy: request.getAttribute('periodFrom')}" default-value="${groovy: request.getParameter('periodFrom')}"/>
        <set field="periodTo" value="${groovy: request.getAttribute('periodTo')}"  default-value="${groovy: request.getParameter('periodTo')}"/>
-       <set field="preferredDateFormat" from-field="parameters.preferredDateFormat" />
+       <set field="preferredDateFormat" from-field="parameters.entryDateTimeFormat" />
        <if-empty field="preferredDateFormat">
            <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="preferredDateFormat">
                <field field="request" type="javax.servlet.ServletRequest"/>

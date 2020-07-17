@@ -37,7 +37,7 @@ import org.ofbiz.entity.util.*;
 import java.sql.Date;
 import com.osafe.util.OsafeAdminUtil;
 
-String entryDateFormat = preferredDateFormat;
+String entryDateFormat = entryDateTimeFormat;
 String srchProductId = StringUtils.trimToEmpty(parameters.srchProductId);
 String srchReviewId = StringUtils.trimToEmpty(parameters.srchReviewId);
 String srchReviewer = StringUtils.trimToEmpty(parameters.srchReviewer);
@@ -119,7 +119,7 @@ if(UtilValidate.isNotEmpty(srchReviewStatus))
     context.srchReviewStatus=srchReviewStatus
 }
 
-if(UtilValidate.isNotEmpty(toDateShort) && OsafeAdminUtil.isDateTime(toDateShort, preferredDateFormat))
+if(UtilValidate.isNotEmpty(toDateShort) && OsafeAdminUtil.isDateTime(toDateShort, entryDateTimeFormat))
 {
     nowTs = ObjectType.simpleTypeConvert(toDateShort, "Timestamp", entryDateFormat, locale);
     nowTs = UtilDateTime.getDayEnd(nowTs);
@@ -187,7 +187,7 @@ if(UtilValidate.isNotEmpty(searchFiveStars))
 dateExpr= FastList.newInstance();
 if(UtilValidate.isNotEmpty(fromDateShort))
 {
-    if(OsafeAdminUtil.isDateTime(fromDateShort, preferredDateFormat))
+    if(OsafeAdminUtil.isDateTime(fromDateShort, entryDateTimeFormat))
     {
         fromDate = ObjectType.simpleTypeConvert(fromDateShort, "Timestamp", entryDateFormat, locale);
         fromDate  = UtilDateTime.getDayStart(fromDate);
@@ -200,7 +200,7 @@ if(UtilValidate.isNotEmpty(fromDateShort))
 }
 if(UtilValidate.isNotEmpty(toDateShort))
 {
-    if(OsafeAdminUtil.isDateTime(toDateShort, preferredDateFormat))
+    if(OsafeAdminUtil.isDateTime(toDateShort, entryDateTimeFormat))
     {
         toDate = ObjectType.simpleTypeConvert(toDateShort, "Timestamp", entryDateFormat, locale);
         toDate  = UtilDateTime.getDayEnd(toDate);

@@ -9,11 +9,9 @@
     </#if>
     <div class="entryField">
 	    <!-- characterLimit is linked with the Jquery To display 'nn Characters Left'-->
-	    <textarea rows="10" class="reviewTextField <#if reviewMaxlength &gt; 0>characterLimit</#if>" <#if reviewMaxlength &gt; 0>maxlength = "${reviewMaxlength!}"</#if> cols="35" id="REVIEW_TEXT" name="REVIEW_TEXT">${requestParameters.REVIEW_TEXT?if_exists}</textarea>
+	    <textarea rows="10" class="reviewTextField <#if reviewMaxlength &gt; 0>characterLimit</#if>" <#if reviewMaxlength &gt; 0>maxlength ="${reviewMaxlength!}"</#if> cols="35" id="REVIEW_TEXT" name="REVIEW_TEXT">${requestParameters.REVIEW_TEXT?if_exists}</textarea>
+	    <span class="js_textCounter textCounter"></span>
 	    <input type="hidden" name="REVIEW_TEXT_MANDATORY" value="${mandatory}"/>
 	    <@fieldErrors fieldName="REVIEW_TEXT"/>
-        <div class="counter">
-		    <span class="js_textCounter textCounter"></span>
-		</div>
     </div>
 </div>

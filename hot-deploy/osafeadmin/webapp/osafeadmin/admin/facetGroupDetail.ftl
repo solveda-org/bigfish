@@ -45,7 +45,7 @@
             </td>
             <td class="seqCol">
               <#assign rowSeq = request.getParameter("sequenceNum_${productFeatureCatGrpAppl_index}")!productFeatureCatGrpAppl.sequenceNum!''/>
-              <input type="text" class="infoValue small textAlignCenter" name="sequenceNum_${productFeatureCatGrpAppl_index}" value="${rowSeq!}"/>
+              <input type="text" class="infoValue small textAlignCenter" name="sequenceNum_${productFeatureCatGrpAppl_index}" value="${rowSeq!}" maxlength="10"/>
             </td>
             <td class="valueCol">
               <#assign facetValueMin = request.getParameter("facetValueMin_${productFeatureCatGrpAppl_index}")!productFeatureCatGrpAppl.facetValueMin!''/>

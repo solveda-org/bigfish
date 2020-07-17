@@ -6,7 +6,7 @@
         <label>${uiLabelMap.AmountCaption}</label>
       </div>
       <div class="infoValue">
-          <p>${gatewayResponseInfo.amount!""}</p>
+          <p><@ofbizCurrency amount= gatewayResponseInfo.amount rounding=globalContext.currencyRounding isoCode=gatewayResponseInfo.currencyUomId/></p>
       </div>
     </div>
   </div>

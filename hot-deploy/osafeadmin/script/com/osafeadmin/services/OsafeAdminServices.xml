@@ -167,6 +167,7 @@
            <set field="parameters.value" value=" "/>
        </if-empty> 
        <if-not-empty field="parameters.value">
+       		<set field="flag" value="0" />
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countLessThan">
                    <field field="parameters.value" type="String"/>
                    <string value="&lt;"/>
@@ -179,6 +180,33 @@
                    <field field="parameters.value" type="String"/>
                    <string value="${sys:getProperty('line.separator')}"/>
             </call-class-method>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countBackSlash">
+                   <field field="parameters.value" type="String"/>
+                   <string value="\\"/>
+            </call-class-method>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="checkEvenNumber" ret-field="checkCount">
+                   <field field="countBackSlash" type="int"/>
+            </call-class-method>
+           
+           <if>
+            		<condition>
+            			<or>
+            				<if-compare operator="equals" value="odd" field="checkCount"></if-compare>
+            			</or>
+            		</condition>
+            		<then>
+            			<set field="flag" value="1"/>
+            		</then>
+            		<else>
+			            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countDoubleBackSlash">
+			                   <field field="parameters.value" type="String"/>
+			                   <string value="\\\\"/>
+			            </call-class-method>
+			            <if-compare-field operator="not-equals" field="countDoubleBackSlash" to-field="countBackSlash">
+			            	<set field="flag" value="1"/>
+			            </if-compare-field>
+            		</else>
+            </if>
             <if-compare operator="not-equals" value="${countLessThan}" field="countGreaterThan">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueUnequalTagsError"/>
                 <string-to-list string="${tempErrorMessage}"  message-field="value" list="error_list"/>
@@ -196,6 +224,11 @@
         <set field="editUiLabelKey" from-field="parameters.key"/>
         <property-to-field resource="OSafeAdminUiLabels" property="EditUiLabelKeySuccess" field="editUiLabelKeySuccessMessage"/>
         <string-to-list string="${editUiLabelKeySuccessMessage}" list="successMessageList"/>
+        <if-compare operator="equals" value="1" field="flag">
+        	<property-to-field resource="OSafeAdminUiLabels" property="EditUiLabelKeyContainsBackslashSuccess" field="editUiLabelKeySuccessMessage"/>
+        	<string-to-list string="${editUiLabelKeySuccessMessage}" list="successMessageList"/>
+        </if-compare>
+        
     </simple-method>
     
     <simple-method method-name="createUiLabel" short-description="Create a uilabel">
@@ -252,6 +285,7 @@
             <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
         </if-empty>
         <if-not-empty field="parameters.value">
+        	<set field="flag" value="0"/>
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countLessThan">
                    <field field="parameters.value" type="String"/>
                    <string value="&lt;"/>
@@ -272,6 +306,32 @@
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadValueNewLineError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="value" list="error_list"/>
             </if-compare>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countBackSlash">
+                   <field field="parameters.value" type="String"/>
+                   <string value="\\"/>
+            </call-class-method>
+            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="checkEvenNumber" ret-field="checkCount">
+                   <field field="countBackSlash" type="int"/>
+            </call-class-method>
+            <if>
+            		<condition>
+            			<or>
+            				<if-compare operator="equals" value="odd" field="checkCount"></if-compare>
+            			</or>
+            		</condition>
+            		<then>
+            			<set field="flag" value="1"/>
+            		</then>
+            		<else>
+			            <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="countOccurrences" ret-field="countDoubleBackSlash">
+			                   <field field="parameters.value" type="String"/>
+			                   <string value="\\\\"/>
+			            </call-class-method>
+			            <if-compare-field operator="not-equals" field="countDoubleBackSlash" to-field="countBackSlash">
+			            	<set field="flag" value="1"/>
+			            </if-compare-field>
+            		</else>
+            </if>
         </if-not-empty>
         <check-errors/>
         <set-service-fields service-name="addUiLabelXml" map="parameters" to-map="addUiLabelXmlCtx"/>
@@ -281,6 +341,10 @@
         <set field="editUiLabelKey" from-field="parameters.key"/>
         <property-to-field resource="OSafeAdminUiLabels" property="EditUiLabelKeySuccess" field="editUiLabelKeySuccessMessage"/>
         <string-to-list string="${editUiLabelKeySuccessMessage}" list="successMessageList"/>
+		<if-compare operator="equals" value="1" field="flag">
+        	<property-to-field resource="OSafeAdminUiLabels" property="EditUiLabelKeyContainsBackslashSuccess" field="editUiLabelKeySuccessMessage"/>
+        	<string-to-list string="${editUiLabelKeySuccessMessage}" list="successMessageList"/>
+        </if-compare>
     </simple-method>
    
     <simple-method method-name="deleteDivSeqItem" short-description="Delete Div seq item from xml file">
@@ -2118,35 +2182,21 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelPagePostionError"/>
             <string-to-list string="${tempErrorMessage}" message-field="pixelPagePosition" list="error_list"/>
         </if-empty>
-        <if-not-empty field="parameters.pixelSequenceNum">
-        	<call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumValid">
-	            <string value="${parameters.pixelSequenceNum}"/>
-	        </call-class-method>
-	        <set field="invalidSeqNum" value="false"/>
-	        <if-compare field="sequenceNumValid" type="Boolean" operator="equals" value="false" >
-	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PageTaggingSeqNumInvaildError"/>
-	            <string-to-list string="${tempErrorMessage}" message-field="pixelSequenceNum"  list="error_list"/>
-	            <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater" value="0" field="parameters.pixelSequenceNum" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="parameters.pixelSequenceNum" type="Long"/>
-                            </and>
-                        </condition>
-                        <then></then>
-                        <else>
-                            <set field="invalidSeqNum" value="true"/>
-                        </else>
-                    </if>
-	            	<if-compare field="invalidSeqNum" type="Boolean" operator="equals" value="true" >
-			            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PageTaggingSeqNumInvaildError"/>
-			            <string-to-list string="${tempErrorMessage}" message-field="pixelSequenceNum" list="error_list"/>
-			        </if-compare>
-			    </else>
-	        </if-compare>
-        </if-not-empty>
-        
+        <set field="sequenceNumValue" from-field="parameters.pixelSequenceNum"/>
+        <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
+                <string-to-list string="${tempErrorMessage}" message-field="pixelSequenceNum" list="error_list"/>
+            </then>
+        </if>
+
         <if-empty field="parameters.textData">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelCodeError"/>
             <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
@@ -2202,38 +2252,21 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelPagePostionError"/>
             <string-to-list string="${tempErrorMessage}" message-field="pixelPagePosition" list="error_list"/>
         </if-empty>
-        <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-            <string value="${parameters.pixelSequenceNum}"></string>
-        </call-class-method>
-        
-        <if-not-empty field="parameters.pixelSequenceNum">
-        	<call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumValid">
-	            <string value="${parameters.pixelSequenceNum}"/>
-	        </call-class-method>
-	        <set field="invalidSeqNum" value="false"/>
-	        <if-compare field="sequenceNumValid" type="Boolean" operator="equals" value="false" >
-	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PageTaggingSeqNumInvaildError"/>
-	            <string-to-list string="${tempErrorMessage}" message-field="pixelSequenceNum"  list="error_list"/>
-	            <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater" value="0" field="parameters.pixelSequenceNum" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="parameters.pixelSequenceNum" type="Long"/>
-                            </and>
-                        </condition>
-                        <then></then>
-                        <else>
-                            <set field="invalidSeqNum" value="true"/>
-                        </else>
-                    </if>
-	            	<if-compare field="invalidSeqNum" type="Boolean" operator="equals" value="true" >
-			            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PageTaggingSeqNumInvaildError"/>
-			            <string-to-list string="${tempErrorMessage}" message-field="pixelSequenceNum" list="error_list"/>
-			        </if-compare>
-			    </else>
-	        </if-compare>
-        </if-not-empty>
+        <set field="sequenceNumValue" from-field="parameters.pixelSequenceNum"/>
+        <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
+                <string-to-list string="${tempErrorMessage}" message-field="pixelSequenceNum" list="error_list"/>
+            </then>
+        </if>
+
         
         <if-empty field="parameters.textData">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelCodeError"/>
@@ -2296,41 +2329,6 @@
         <call-service service-name="updateProductStorePaymentSetting" in-map-name="updateProductStorePaymentSettingCtx" />
         <property-to-field resource="OSafeAdminUiLabels" property="PaymentSettingSavedSuccess" field="paymentSettingSavedSuccess"/>
         <string-to-list string="${paymentSettingSavedSuccess}" list="successMessageList"/>
-    </simple-method>
-    
-    <simple-method method-name="deleteFinishedJobs" short-description="Delete Finished jobs">
-        <now-timestamp field="nowStamp"/>
-        <!-- daysGap is the time interval from the current date to the date from which Admin wants to delete the Entity Rows  -->
-        <set field="daysGap" value="-30" type="Integer"/>
-        <call-class-method class-name="org.ofbiz.base.util.UtilDateTime"  method-name="addDaysToTimestamp" ret-field="daysBackTimeStamp">
-              <field field="nowStamp" type="java.sql.Timestamp"/>
-              <field field="daysGap" type="int"/>
-        </call-class-method>
-        <!-- isOld = Y will delete Rows Excluding the last 30 days-->
-        <if-compare operator="equals" value="Y" field="parameters.isOld">
-            <entity-condition list="finishedList" entity-name="JobSandbox">
-                <condition-list>
-                    <condition-expr field-name="statusId" operator="equals" value="SERVICE_FINISHED"/>
-                    <condition-expr field-name="finishDateTime" operator="less" value="${daysBackTimeStamp}"/>
-                </condition-list>
-            </entity-condition>
-        <else>
-        <!-- isOld = N will delete Rows Including the last 30 days-->
-            <entity-condition list="finishedList" entity-name="JobSandbox">
-                <condition-list>
-                    <condition-expr field-name="statusId" operator="equals" value="SERVICE_FINISHED"/>
-                    <condition-expr field-name="finishDateTime" operator="greater" value="${daysBackTimeStamp}"/>
-                </condition-list>
-            </entity-condition>
-        </else>
-        </if-compare>
-            <call-object-method obj-field="finishedList" method-name="size" ret-field="ListSize"/>
-            <remove-list list="finishedList"/>
-            <set field="argListNames[]" from-field="ListSize"/>
-            <property-to-field resource="OSafeAdminUiLabels" property="DeletedJobsSuccessMessage" field="DeletedJobsSuccessMessage" arg-list-name="argListNames"/>
-            <string-to-list string="${DeletedJobsSuccessMessage}" list="successMessageList"/>
-            <set field="showDetail" value="true"/>
-            <field-to-result field="showDetail" result-name="showDetail"/>
     </simple-method>
     
     <simple-method method-name="createUpdateDownloadedArrtibute" short-description="Create or Update the Downloaded Attribute">
@@ -2431,39 +2429,26 @@
         </else>
         </if-empty>
         
-        <set field="sequenceNumValue" from-field="parameters.sequenceNum"/>
         <set field="invalidSeqNum" value="false"/>
+        <set field="invalidSeqNumRange" value="false"/>
+        <set field="sequenceValueGreaterThan" value="0" type="Long"/>
+        <set field="sequenceNumValue" from-field="parameters.sequenceNum"/>
         <if-not-empty field="sequenceNumValue">
-            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                <string value="${sequenceNumValue}"></string>
-            </call-class-method>
-            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                <set field="invalidSeqNum" value="true"/>
-            <else>
-                <if>
-                    <condition>
-                        <and>
-                            <if-compare operator="greater-equals" value="0" field="sequenceNumValue" type="Long"/>
-                            <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                        </and>
-                    </condition>
-                    <then>
-                    </then>
-                    <else>
-                        <set field="invalidSeqNumRange" value="true"/>
-                    </else>
-                </if>
-            </else>
-            </if-compare>
-        <else>
-            <set field="invalidSeqNum" value="true"/>
-        </else>
+            <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
         </if-not-empty>
-        <if-compare field="invalidSeqNum" operator="equals" value="true">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AttributeSequenceNumNotVaildError"/>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AttributeSequenceNumNotValidError"/>
             <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
-        </if-compare>
-        
+            </then>
+        </if>
+
         <if-empty field="parameters.caption">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCaptionError"/>
             <string-to-list string="${tempErrorMessage}" message-field="caption" list="error_list"/>
@@ -2572,38 +2557,24 @@
     </simple-method>
     
     <simple-method method-name="updateCustomPartyAttributeItem" short-description="Update a ui Div Seq item">
-        <set field="sequenceNumValue" from-field="parameters.sequenceNum"/>
         <set field="invalidSeqNum" value="false"/>
-        <if-not-empty field="sequenceNumValue">
-            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                <string value="${sequenceNumValue}"></string>
-            </call-class-method>
-            <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                <set field="invalidSeqNum" value="true"/>
-            <else>
-                <if>
-                    <condition>
-                        <and>
-                            <if-compare operator="greater-equals" value="0" field="sequenceNumValue" type="Long"/>
-                            <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                        </and>
-                    </condition>
-                    <then>
-                    </then>
-                    <else>
-                        <set field="invalidSeqNumRange" value="true"/>
-                    </else>
-                </if>
-            </else>
-            </if-compare>
-        <else>
-            <set field="invalidSeqNum" value="true"/>
-        </else>
-        </if-not-empty>
-        <if-compare field="invalidSeqNum" operator="equals" value="true">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AttributeSequenceNumNotVaildError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
-        </if-compare>
+        <set field="invalidSeqNumRange" value="false"/>
+        <set field="sequenceValueGreaterThan" value="0" type="Long"/>
+        <set field="sequenceNumValue" from-field="parameters.sequenceNum"/>
+        <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AttributeSequenceNumNotValidError"/>
+             <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
+            </then>
+        </if>
+
         
         <if-empty field="parameters.caption">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCaptionError"/>
@@ -2714,35 +2685,26 @@
     
     <simple-method method-name="updateCustomPartyAttributes" short-description="Updates Custom Party Attribute Sequence">
         <set field="invalidSeqNum" value="false"/>
+        <set field="invalidSeqNumRange" value="false"/>
+        <set field="sequenceValueGreaterThan" value="0" type="Long"/>
         <iterate-map key="sequenceNumKey" value="sequenceNumValue" map="parameters.sequenceNum">
             <if-not-empty field="sequenceNumValue">
-                <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="sequenceNumVaild">
-                    <string value="${sequenceNumValue}"></string>
-                </call-class-method>
-                <if-compare operator="equals" value="false" field="sequenceNumVaild" type="Boolean">
-                    <set field="invalidSeqNum" value="true"/>
-                <else>
-                    <if>
-                        <condition>
-                            <and>
-                                <if-compare operator="greater-equals" value="0" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
-                            </and>
-                        </condition>
-                        <then>
-                        </then>
-                        <else>
-                            <set field="invalidSeqNum" value="true"/>
-                        </else>
-                    </if>
-                </else>
-                </if-compare>
+                <call-simple-method method-name="validateSequenceNumber" xml-resource="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminValidationEvents.xml"/>
             </if-not-empty>
         </iterate-map>
-        <if-compare field="invalidSeqNum" type="Boolean" operator="equals" value="true" >
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidSequenceNumber"/>
+        <if>
+            <condition>
+                <or>
+                    <if-compare operator="equals" value="true" field="invalidSeqNum" type="Boolean"/>
+                    <if-compare operator="equals" value="true" field="invalidSeqNumRange" type="Boolean"/>
+                </or>
+            </condition>
+            <then>
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AttributeSequenceNumNotValidError"/>
             <string-to-list string="${tempErrorMessage}" message-field="sequenceNum" list="error_list"/>
-        </if-compare>
+            </then>
+        </if>
+
         <check-errors/>
 
         <if-not-empty field="parameters.sequenceNum">

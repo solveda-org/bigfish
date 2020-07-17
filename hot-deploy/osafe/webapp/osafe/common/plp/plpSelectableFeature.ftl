@@ -1,4 +1,3 @@
-${virtualJavaScript?if_exists}
 <#if plpProduct.isVirtual?if_exists?upper_case == "Y">
   <li class="${request.getAttribute("attributeClass")!}">
    <div class="plpSelectableFeature">
@@ -33,6 +32,7 @@ ${virtualJavaScript?if_exists}
 	            <ul class="js_selectableFeature_${featureIdx}" id="LiFT${productFeatureTypeId}_${uiSequenceScreen}_${plpProduct.productId}" name="LiFT${productFeatureTypeId}_${uiSequenceScreen}_${plpProduct.productId}">
 	              <#list productFeatureAndApplsSelects as productFeatureAndApplsSelect>
 	                <#assign productFeatureDescription = productFeatureAndApplsSelect.description/>
+                    <#assign featureClass=  Static["com.osafe.util.Util"].removeNonAlphaNumeric(productFeatureDescription)!""/> 
 	                <#assign productFeatureSelectableId =productFeatureAndApplsSelect.productFeatureId/>
 	                <#if PLP_FACET_GROUP_VARIANT_SWATCH?has_content && productFeatureTypeId.equalsIgnoreCase(PLP_FACET_GROUP_VARIANT_SWATCH)>
 	                  <#assign productFeatureSelectVariantId= plpProductFeatureFirstVariantIdMap.get(productFeatureSelectableId)!""/>
@@ -74,7 +74,7 @@ ${virtualJavaScript?if_exists}
 	                        </#if>
 	                      </#if>
 	                      <#assign productFeatureType = "${productFeatureTypeId!}:${productFeatureDescription!}"/>
-	                      <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, "eCommerceProductDetail?productId=${productId!}&productCategoryId=${productCategoryId!}&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
+	                      <#assign variantProductUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request, "eCommerceProductDetail?productId=${productId!}&productCategoryId=${productCategoryId!}&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
 	                      <input type="hidden" id="${jqueryIdPrefix!}Url_${productFeatureDescription!}" value="${variantProductUrl!}"/>
 	                      <#assign selectedClass="false"/>
 	                      <#if parameters.productFeatureType?exists>
@@ -89,7 +89,7 @@ ${virtualJavaScript?if_exists}
 	                          <#assign selectedClass="true"/>
 	                        </#if>
 	                      </#if>
-	                      <li class="<#if selectedClass == "true">selected</#if><#if stockClass?exists> ${stockClass}</#if>">
+	                      <li class="${featureClass!} <#if selectedClass == "true">selected</#if><#if stockClass?exists> ${stockClass}</#if>">
 	                        <a href="javascript:void(0);" class="plpFeatureSwatchLink" onclick="javascript:getListPlp('FT${productFeatureTypeId}','${selectedIdx}', 1,'${uiSequenceScreen}_${plpProduct.productId}');">
 	                          <img src="<@ofbizContentUrl>${productFeatureSwatchURL!""}</@ofbizContentUrl>" title="${productFeatureDescription!""}" alt="${productFeatureDescription!""}" name="FT${productFeatureTypeId}_${uiSequenceScreen}_${plpProduct.productId}" <#if plpSwatchImageHeight != '0' && plpSwatchImageHeight != ''>height = "${plpSwatchImageHeight}"</#if> <#if plpSwatchImageWidth != '0' && plpSwatchImageWidth != ''>width = "${plpSwatchImageWidth}"</#if> onerror="onImgError(this, 'PLP-Swatch');"/>
 	                        </a>
@@ -98,7 +98,7 @@ ${virtualJavaScript?if_exists}
 	                    </#if>
 	                  </#if>
 	                <#else>
-	                  <li>
+	                  <li class="${featureClass!}">
 	                    <a href="javascript:void(0);" onclick="javascript:getListPlp('FT${productFeatureTypeId}_${uiSequenceScreen}_${plpProduct.productId}','${selectedIdx}', 1,'${uiSequenceScreen}_${plpProduct.productId}');">
 	                      ${productFeatureDescription!""}
 	                    </a>
@@ -123,21 +123,7 @@ ${virtualJavaScript?if_exists}
 	        <input type="hidden" name="${uiSequenceScreen}_${plpProduct.productId}_add_product_id" id="${uiSequenceScreen}_${plpProduct.productId}_add_product_id" value="NULL"/>
 	        <#assign inStock = false>
 	      </#if>
-	    <#-- Prefill first select box (virtual products only) -->
-	    <#if plpVariantTree?exists && 0 < plpVariantTree.size()>
-	      <#assign rowNo = 0/>
-	      <#list plpFeatureOrder as feature>
-	          <#if rowNo == 0>
-	              <script language="JavaScript" type="text/javascript">eval("list" + "${StringUtil.wrapString(feature)}_${uiSequenceScreen}_${plpProduct.productId}" + "()");</script>
-	          <#else>
-	              <script language="JavaScript" type="text/javascript">eval("listFT" + "${StringUtil.wrapString(feature)}_${uiSequenceScreen}_${plpProduct.productId}" + "()");</script>
-	              <script language="JavaScript" type="text/javascript">eval("listLiFT" + "${StringUtil.wrapString(feature)}_${uiSequenceScreen}_${plpProduct.productId}" + "()");</script>
-	          </#if>
-	      <#assign rowNo = rowNo + 1/>
-	      </#list> 
-	    </#if>
 	  </#if>
    </div>
   </li>
 </#if>
-${virtualDefaultJavaScript?if_exists}

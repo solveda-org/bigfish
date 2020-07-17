@@ -68,13 +68,25 @@ ${sections.render('tooltipBody')?if_exists}
 </div>
 </#if>
 
-<#if productFeatureSwatchErrorList?has_content>
-<div id="productFeatureSwatchError" class="content-messages eCommerceErrorMessage commonDivHide" style="display:none">
+<#if productFacetGroupErrorList?has_content>
+<div id="productFacetGroupError" class="content-messages eCommerceErrorMessage commonDivHide" style="display:none">
   <span class="errorImageIcon errorImage"></span>
   <p class="errorMessage">${uiLabelMap.FollowingErrorsOccurredError}</p>
-  <#if productFeatureSwatchErrorList?exists && productFeatureSwatchErrorList?has_content>
-    <#list productFeatureSwatchErrorList as productFeatureSwatchError>
-      <p class="errorMessage">${productFeatureSwatchError!}</p>
+  <#if productFacetGroupErrorList?exists && productFacetGroupErrorList?has_content>
+    <#list productFacetGroupErrorList as productFacetGroupError>
+      <p class="errorMessage">${productFacetGroupError!}</p>
+    </#list>
+  </#if>
+</div>
+</#if>
+
+<#if productFacetValueErrorList?has_content>
+<div id="productFacetValueError" class="content-messages eCommerceErrorMessage commonDivHide" style="display:none">
+  <span class="errorImageIcon errorImage"></span>
+  <p class="errorMessage">${uiLabelMap.FollowingErrorsOccurredError}</p>
+  <#if productFacetValueErrorList?exists && productFacetValueErrorList?has_content>
+    <#list productFacetValueErrorList as productFacetValueError>
+      <p class="errorMessage">${productFacetValueError!}</p>
     </#list>
   </#if>
 </div>

@@ -1,6 +1,5 @@
 package checkout;
 
-
 import org.ofbiz.entity.util.EntityUtil;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilMisc;
@@ -23,6 +22,8 @@ import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
 import java.math.BigDecimal;
 import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.base.util.UtilNumber;
 
 adminContext = session.getAttribute("ADMIN_CONTEXT");
 
@@ -336,64 +337,7 @@ if (UtilValidate.isNotEmpty(adminContext))
 			context.orderTaxTotal = shopCart.getTotalSalesTax();
 			context.orderGrandTotal = shopCart.getGrandTotal();
 			
-			appliedTaxList = FastList.newInstance();
-			CartShipInfo cartShipInfo = shopCart.getShipInfo(0);
-			List cartShipTaxAdjustments = FastList.newInstance();
-			BigDecimal totalTaxPercent = BigDecimal.ZERO;
-			if(UtilValidate.isNotEmpty(cartShipInfo))
-			{
-				if(UtilValidate.isNotEmpty(cartShipInfo.shipTaxAdj))
-				{
-					cartShipTaxAdjustments.addAll(cartShipInfo.shipTaxAdj);
-				}
-				
-				if(UtilValidate.isNotEmpty(cartShipInfo.shipItemInfo) && UtilValidate.isNotEmpty(cartShipInfo.shipItemInfo.values()))
-				{
-					for (CartShipInfo.CartShipItemInfo info : cartShipInfo.shipItemInfo.values())
-					{
-						List infoItemTaxAdj = info.itemTaxAdj;
-						for (GenericValue gvInfo : infoItemTaxAdj)
-						{
-							cartShipTaxAdjustments.add(gvInfo);
-						}
-					}
-				}
-				for (GenericValue cartTaxAdjustment : cartShipTaxAdjustments)
-				{
-					amount = 0;
-					taxAuthorityRateSeqId = cartTaxAdjustment.taxAuthorityRateSeqId;
-					if(UtilValidate.isNotEmpty(taxAuthorityRateSeqId))
-					{
-						//check if this taxAuthorityRateSeqId is already in the list
-						alreadyInList = "N";
-						for(Map taxInfoMap : appliedTaxList)
-						{
-							taxAuthorityRateSeqIdInMap = taxInfoMap.get("taxAuthorityRateSeqId");
-							if(UtilValidate.isNotEmpty(taxAuthorityRateSeqIdInMap) && taxAuthorityRateSeqIdInMap.equals(taxAuthorityRateSeqId))
-							{
-								amount = taxInfoMap.get("amount") + cartTaxAdjustment.amount;
-								taxInfoMap.put("amount", amount);
-								alreadyInList = "Y";
-								break;
-							}
-						}
-						if(("N").equals(alreadyInList))
-						{
-							taxInfo = FastMap.newInstance();
-							taxInfo.put("taxAuthorityRateSeqId", taxAuthorityRateSeqId);
-							taxInfo.put("amount", cartTaxAdjustment.amount);
-							taxAdjSourceBD = new BigDecimal(cartTaxAdjustment.sourcePercentage);
-							taxAdjSourceStr = taxAdjSourceBD.setScale(2).toString();
-							taxInfo.put("sourcePercentage", taxAdjSourceStr);
-							taxInfo.put("description", cartTaxAdjustment.comments);
-							appliedTaxList.add(taxInfo);
-							totalTaxPercent = totalTaxPercent.add(taxAdjSourceBD);
-						}
-					}
-				}
-			}
-			context.appliedTaxList = appliedTaxList;
-			context.totalTaxPercent = totalTaxPercent.setScale(2).toString();
+			
 			currencyRounding=2;
 			roundCurrency = globalContext.CURRENCY_UOM_ROUNDING;
 			if (UtilValidate.isNotEmpty(roundCurrency) && OsafeAdminUtil.isNumber(roundCurrency))
@@ -438,51 +382,10 @@ if (UtilValidate.isNotEmpty(adminContext))
 			//Adjustments are pulled in the FTL
 			try
 			{
-				ShippingEvents.getShipEstimate(request, response);
-				//check if it is store pickup
-				if (chosenShippingMethod.equals("NO_SHIPPING@_NA_"))
+				shippingAddress = shopCart.getShippingAddress();
+				if (chosenShippingMethod.equals("NO_SHIPPING@_NA_") || (UtilValidate.isNotEmpty(shippingAddress) && (UtilValidate.isNotEmpty(shippingAddress.get("countryGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("stateProvinceGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("postalCodeGeoId")))))
 				{
-					if(UtilValidate.isNotEmpty(shopCart))
-					{
-						taxedStoreId = shopCart.getOrderAttribute("STORE_LOCATION");
-						if(UtilValidate.isNotEmpty(taxedStoreId))
-						{
-							taxedParty = delegator.findOne("Party", [partyId : taxedStoreId], true);
-							if (UtilValidate.isNotEmpty(taxedParty))
-							{
-								taxedPartyContactMechPurpose = taxedParty.getRelatedCache("PartyContactMechPurpose");
-								taxedPartyContactMechPurpose = EntityUtil.filterByDate(taxedPartyContactMechPurpose,true);
-						
-								taxedPartyGeneralLocations = EntityUtil.filterByAnd(taxedPartyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
-								taxedPartyGeneralLocations = EntityUtil.getRelatedCache("PartyContactMech", taxedPartyGeneralLocations);
-								taxedPartyGeneralLocations = EntityUtil.filterByDate(taxedPartyGeneralLocations,true);
-								taxedPartyGeneralLocations = EntityUtil.orderBy(taxedPartyGeneralLocations, UtilMisc.toList("fromDate DESC"));
-								if(UtilValidate.isNotEmpty(taxedPartyGeneralLocations))
-								{
-									taxedPartyGeneralLocation = EntityUtil.getFirst(taxedPartyGeneralLocations);
-									//this DB call cannot use cache
-									storeAddress = taxedPartyGeneralLocation.getRelatedOne("PostalAddress");
-									checkOutHelper = new CheckOutHelper(dispatcher, delegator, shopCart);
-									checkOutHelper.calcAndAddTax(storeAddress);
-									request.setAttribute("isTaxedOnStore", "Y");
-									request.setAttribute("taxedStoreAddress", storeAddress);
-									com.osafe.events.CheckOutEvents.calcLoyaltyTax(request, response);
-								}
-							}
-						}
-					}
-				}
-				else
-				{
-					//get shipping address .. if null .. do not call calcTax
-					shippingAddress = shopCart.getShippingAddress();
-					if (UtilValidate.isNotEmpty(shippingAddress) && (UtilValidate.isNotEmpty(shippingAddress.get("countryGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("stateProvinceGeoId")) || UtilValidate.isNotEmpty(shippingAddress.get("postalCodeGeoId"))))
-					{
-						//request.setAttribute("isTaxedOnStore", "Y");
-						//request.setAttribute("taxedStoreAddress", storeAddress);
-						org.ofbiz.order.shoppingcart.CheckOutEvents.calcTax(request, response);
-						com.osafe.events.CheckOutEvents.calcLoyaltyTax(request, response);
-					}
+					com.osafe.events.CheckOutEvents.calculateTax(request, response);
 				}
 			}
 			catch(Exception e)

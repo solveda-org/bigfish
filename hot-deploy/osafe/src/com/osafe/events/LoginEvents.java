@@ -2,6 +2,7 @@ package com.osafe.events;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import javolution.util.FastMap;
 
 import org.apache.commons.lang.RandomStringUtils;
-
+import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.base.util.Debug;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilHttp;
@@ -20,16 +21,18 @@ import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.common.login.LoginServices;
-import org.ofbiz.base.crypto.HashCrypt;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.order.shoppingcart.ShoppingCart;
+import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ModelService;
 import org.ofbiz.webapp.control.LoginWorker;
+
 import com.osafe.util.Util;
 
 /**
@@ -40,6 +43,8 @@ public class LoginEvents {
     public static final String module = LoginEvents.class.getName();
     public static final String resource = "SecurityextUiLabels";
     public static final String usernameCookieName = "OFBiz.Username";
+    public static final String isUserSessionCookieName = "userSession";
+    public static final String label_resource = "OSafeUiLabels";
 
     
     /**
@@ -295,6 +300,97 @@ public class LoginEvents {
             request.setAttribute("osafeSuccessMessageList", osafeSuccessMessageList);
         }
         return "passwordEmailed";
+    }
+    
+    /**
+     *  Login via facebook
+     *
+     * @param request The HTTPRequest object for the current request
+     * @param response The HTTPResponse object for the current request
+     * @return String specifying the exit status of this event
+     */
+    public static String fbLogin(HttpServletRequest request, HttpServletResponse response) 
+    {
+    	Delegator delegator = (Delegator) request.getAttribute("delegator");
+    	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
+    	Map<String, Object> params = UtilHttp.getParameterMap(request);
+    	HttpSession session = request.getSession();
+    	ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
+        // get the schedule parameters
+        String isFBLogin = (String) params.remove("isFBLogin");
+        String fbEmail = (String) params.remove("fbEmail");
+        String fbNextAction = (String) params.remove("fbNextAction");
+        
+        if(UtilValidate.isNotEmpty(isFBLogin))
+        {
+        	if(UtilValidate.isNotEmpty(fbEmail))
+        	{
+        		GenericValue userLoginFromFbEmail = null;
+        		String passwordToUseForLogin = null;
+        		try 
+        		{
+        			userLoginFromFbEmail = delegator.findOne("UserLogin", false, "userLoginId", fbEmail);
+                    if (UtilValidate.isEmpty(userLoginFromFbEmail))
+                    {
+                        // go to Registration page to register new user
+                        return "registrationPage";
+                    }
+                    else
+                    {
+                    	boolean useEncryption = "true".equals(UtilProperties.getPropertyValue("security.properties", "password.encrypt"));
+                    	if (useEncryption) 
+                    	{
+                            // password encrypted, can't send, generate new password and email to user
+                        	String regPwdMinChar = Util.getProductStoreParm(request, "REG_PWD_MIN_CHAR");  
+                        	if(UtilValidate.isEmpty(regPwdMinChar))
+                        	{
+                        		regPwdMinChar = "6"; //default value
+                        	}
+                        	passwordToUseForLogin = RandomStringUtils.randomAlphanumeric(Integer.parseInt(regPwdMinChar));
+                        	userLoginFromFbEmail.set("currentPassword", HashCrypt.getDigestHash(passwordToUseForLogin, LoginServices.getHashType()));
+                        	userLoginFromFbEmail.set("passwordHint", "Auto-Generated Password From FB Login");
+                        	userLoginFromFbEmail.store();
+                        } 
+                    	else 
+                        {
+                        	passwordToUseForLogin = userLoginFromFbEmail.getString("currentPassword");
+                        }
+                    }
+                    
+                } 
+        		catch (GenericEntityException e) 
+                {
+                    Debug.logWarning(e, "Could not log user in via Facebook Login", module);
+                    return "error";
+                }
+        		
+        		request.setAttribute("USERNAME", fbEmail);
+        		request.setAttribute("PASSWORD", passwordToUseForLogin);
+        		
+        		LoginWorker.login(request, response);
+        		session.setAttribute("userLogin", userLoginFromFbEmail);
+        		session.setAttribute("USER_LOGIN_EMAIL", userLoginFromFbEmail.get("userLoginId"));
+        		try
+        		{
+	        		if(UtilValidate.isNotEmpty(cart) && UtilValidate.isNotEmpty(userLoginFromFbEmail))
+	        		{
+	        			cart.setOrderPartyId((String)userLoginFromFbEmail.get("partyId"));
+	        			cart.setUserLogin(userLoginFromFbEmail, dispatcher);
+	        		}
+        		}
+        		catch (Exception e)
+        		{
+        			Debug.logWarning(e, "Could not update cart with user Login via Facebook Login", module);
+                    return "error";
+        		}
+        		if(UtilValidate.isNotEmpty(fbNextAction) && fbNextAction.equalsIgnoreCase("checkout"))
+        		{
+        			return "checkout";
+        		}
+        		return "myAccount";
+        	}
+        }   
+        return "error";
     }
 
 }

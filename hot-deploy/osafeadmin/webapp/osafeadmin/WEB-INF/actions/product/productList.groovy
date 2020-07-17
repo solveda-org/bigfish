@@ -139,25 +139,37 @@ else
 	}
 	if (UtilValidate.isNotEmpty(description))
 	{
-		prodCtntExprDesc.add(EntityCondition.makeCondition(
-				EntityFunction.UPPER_FIELD("textData"),
-				EntityOperator.LIKE, "%"+description.toUpperCase() + "%"));
-		prodCtntExprDesc.add(EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "LONG_DESCRIPTION"));
-		prodCtntCondDesc = EntityCondition.makeCondition(prodCtntExprDesc, EntityOperator.AND);
-		prodCtntListDesc = delegator.findList("ProductContentAndText",prodCtntCondDesc, null, null, null, false);
-		productIdListDesc = EntityUtil.getFieldListFromEntityList(prodCtntListDesc, "productId", true);
+		prodLongDescList = delegator.findByAnd("ProductContentAndText", [productContentTypeId : "LONG_DESCRIPTION"]);
+		productIdListDesc = FastList.newInstance();
+		if (UtilValidate.isNotEmpty(prodLongDescList))
+		{
+			for (GenericValue prodLongDesc : prodLongDescList)
+			{
+				prodDescTextData = prodLongDesc.textData;
+				if (UtilValidate.isNotEmpty(prodDescTextData) && (prodDescTextData.toUpperCase()).contains(description.toUpperCase()))
+				{
+					productIdListDesc.add(prodLongDesc.productId);
+				}
+			}
+		}
 		paramsExpr.add(EntityCondition.makeCondition("productId", EntityOperator.IN, productIdListDesc));
 		context.description=description;
 	}
 	if (UtilValidate.isNotEmpty(productName))
 	{
-		prodCtntExprName.add(EntityCondition.makeCondition(
-				EntityFunction.UPPER_FIELD("textData"),
-				EntityOperator.LIKE, "%"+productName.toUpperCase() + "%"));
-		prodCtntExprName.add(EntityCondition.makeCondition("productContentTypeId", EntityOperator.EQUALS, "PRODUCT_NAME"));
-		prodCtntCondName = EntityCondition.makeCondition(prodCtntExprName, EntityOperator.AND);
-		prodCtntListName = delegator.findList("ProductContentAndText",prodCtntCondName, null, null, null, false);
-		productIdListName = EntityUtil.getFieldListFromEntityList(prodCtntListName, "productId", true);
+		prodNameList = delegator.findByAnd("ProductContentAndText", [productContentTypeId : "PRODUCT_NAME"]);
+		productIdListName = FastList.newInstance();
+		if (UtilValidate.isNotEmpty(prodNameList))
+		{
+			for (GenericValue prodName : prodNameList)
+			{
+				prodNameTextData = prodName.textData;
+				if (UtilValidate.isNotEmpty(prodNameTextData) && (prodNameTextData.toUpperCase()).contains(productName.toUpperCase()))
+				{
+					productIdListName.add(prodName.productId);
+				}
+			}
+		}
 		paramsExpr.add(EntityCondition.makeCondition("productId", EntityOperator.IN, productIdListName));
 		context.productName=productName;
 	}

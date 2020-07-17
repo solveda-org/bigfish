@@ -1,7 +1,10 @@
 <#assign username = ""/>
 <#if requestParameters.USERNAME?has_content>
   <#assign username = requestParameters.USERNAME/>
-</#if>
+  <#if loginToLowerCase?has_content && loginToLowerCase=="true">
+     <#assign username = username.toLowerCase()/>
+  </#if>
+</#if>	
 
 <div id="changePassword" class="displayBox">
     <h3>${uiLabelMap.CommonPasswordChange?if_exists}</h3>

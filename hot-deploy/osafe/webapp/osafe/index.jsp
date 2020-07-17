@@ -1,1 +1,1 @@
-<%response.sendRedirect("control/main");%>
+<%response.sendRedirect("/main");%>

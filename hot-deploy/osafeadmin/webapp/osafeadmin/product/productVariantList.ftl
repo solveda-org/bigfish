@@ -36,6 +36,7 @@
     <#assign productDefaultPrice = Static["com.osafe.util.OsafeAdminUtil"].getProductPrice(request, product.productId, "DEFAULT_PRICE")!/>
     <#list resultList as variantProduct>
       <#assign variantProdDetail = variantProduct.getRelatedOne("AssocProduct")>
+      <#assign productInStoreOnlyAttribute = delegator.findOne("ProductAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName" , "PDP_IN_STORE_ONLY", "productId" , variantProdDetail.productId!),false)?if_exists/>
       <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
         <td class="actionColSmall firstCol">
             <input type="checkbox" class="checkBoxEntry" name="variantProductId" id="variantProductId" value="${variantProduct.productIdTo?if_exists}"/>
@@ -75,6 +76,9 @@
 	          <@ofbizCurrency amount=defaultPrice isoCode=productListPrice.currencyUomId rounding=globalContext.currencyRounding/>
 	        </#if>
         </td>
+        <#if productInStoreOnlyAttribute?has_content && productInStoreOnlyAttribute.attrValue?upper_case == 'Y'>
+            <#assign variantProductPriceInfo = variantProductPriceInfo + "<p>"+uiLabelMap.StoreOnlyProductInfo>
+        </#if>
         <td class="actionCol">
         	<p onMouseover="showTooltip(event,'${variantProductPriceInfo}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></p>
         </td> 

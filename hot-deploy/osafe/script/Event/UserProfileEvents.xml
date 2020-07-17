@@ -184,10 +184,9 @@
         <call-service service-name="updateUserLoginId" in-map-name="updateUserLoginIdCtx">
             <result-to-session result-name="newUserLogin" session-name="userLogin"/>
         </call-service>
+        <field-to-session field="parameters.CUSTOMER_EMAIL_NEW" session-name="USER_LOGIN_EMAIL"/>
         
-        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserLoginUpdatedSuccess"/>
-        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
-        <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
+        <call-simple-method method-name="UserLoginUpdatedMessage" />
     </simple-method>
     
     <simple-method method-name="updateCustomerPassword" short-description="Update Customer Password Information" login-required="true">
@@ -226,9 +225,7 @@
            <call-service service-name="updatePassword" in-map-name="updatePasswordContext"></call-service>
         </if-not-empty>
         
-        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserLoginUpdatedSuccess"/>
-        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
-        <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
+        <call-simple-method method-name="UserLoginUpdatedMessage" />
     </simple-method>
     
     <simple-method method-name="createUpdatePartyAttributes" short-description="Update Party Attributes" login-required="false" >
@@ -352,36 +349,32 @@
                 <call-service service-name="createUpdatePartyAttribute" in-map-name="createIsDownloadedCtx"/>
             </if-empty>
             
+        <!-- Create/Update USER FACEBOOK_USER  -->
+        <set field="facebookUser" value="FACEBOOK_USER"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasFacebookUserInput">
+	        <field field="facebookUser" type="Object"/>
+	    </call-object-method>
+        <if-compare field="hasFacebookUserInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateFacebookUserCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateFacebookUserCtx.attrName" value="FACEBOOK_USER"/>
+            <set field="createUpdateFacebookUserCtx.attrValue" from-field="parameters.FACEBOOK_USER" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateFacebookUserCtx"/>
+        </if-compare>
+        
+        <!-- Create/Update USER FACEBOOK_ID  -->
+        <set field="facebookId" value="FACEBOOK_ID"/>
+	    <call-object-method method-name="containsKey" obj-field="parameters" ret-field="hasFacebookIdInput">
+	        <field field="facebookId" type="Object"/>
+	    </call-object-method>
+        <if-compare field="hasFacebookIdInput" operator="equals" value="true" type="Boolean">
+            <set field="createUpdateFacebookIdCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateFacebookIdCtx.attrName" value="FACEBOOK_ID"/>
+            <set field="createUpdateFacebookIdCtx.attrValue" from-field="parameters.FACEBOOK_ID" set-if-empty="true" set-if-null="true"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateFacebookIdCtx"/>
+        </if-compare>
+            
             <!-- Create/Update Party Custom Attribute -->
-            <property-to-field resource="OsafeProperties" property="ecommerceUiSequenceXmlFile" field="XmlFileStr"/>
-            <set field="XmlFilePath" value="${groovy: org.ofbiz.base.util.string.FlexibleStringExpander.expandString(XmlFileStr, context)}" type="String"/>
-            
-            <set field="searchRestrictionMap" type="NewMap"/>
-            <set field="searchRestrictionMap.screen" value="Y" />
-            <set field="searchIgnoreCase" value="true" type="Boolean"/>
-            <set field="searchPartial" value="false" type="Boolean"/>
-            <set field="useCache" value="true" type="Boolean"/>
-            <set field="uiSequenceScreen" value="PersonalInfo" type="String"/>
-            
-            <call-class-method class-name="com.osafe.services.OsafeManageXml" method-name="getSearchListFromXmlFile" ret-field="uiSequenceSearchList">
-                <field field="XmlFilePath" type="String"/>
-                <field field="searchRestrictionMap" type="Map"/>
-                <field field="uiSequenceScreen" type="String"/>
-                <field field="searchIgnoreCase"  type="boolean" />
-                <field field="searchPartial"  type="boolean" />
-                <field field="useCache"  type="boolean" />
-            </call-class-method>
-            
-            <set field="partyCustomAttributeActive" value="false"/>
-            <iterate entry="uiSequenceSearchScreen" list="uiSequenceSearchList">
-                <if-compare operator="equals" value="personalInfoCustomAttributes" field="uiSequenceSearchScreen.key">
-                    <if-compare operator="not-equals" value="0" field="uiSequenceSearchScreen.value">
-                        <set field="partyCustomAttributeActive" value="true"/>
-                    </if-compare>
-                </if-compare>
-            </iterate> 
-            
-            <if-compare operator="equals" value="true" field="partyCustomAttributeActive">
+            <if-compare operator="equals" value="Y" field="parameters.USER_CUSTOM_ATTRIBUTE_ACTIVE">
             
                 <set field="getPartyCustomAttributeListCtx" type="NewMap"/>
                 <set field="getPartyCustomAttributeListCtx.useCache" value="true" type="String"/>
@@ -521,4 +514,10 @@
 	            </iterate>
             </if-compare>
      </simple-method>
+     <simple-method method-name="UserLoginUpdatedMessage" short-description="UserLogin Updated Success message">
+        <property-to-field field="tempSuccessMessage" resource="OSafeUiLabels" property="UserLoginUpdatedSuccess"/>
+        <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
+        <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
+    </simple-method>
+     
 </simple-methods>

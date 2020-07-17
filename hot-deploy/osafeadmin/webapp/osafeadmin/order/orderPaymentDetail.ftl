@@ -28,7 +28,7 @@
         <label>${uiLabelMap.MaxAmountCaption}</label>
       </div>
       <div class="infoValue">
-          <p>${paymentPrefInfo.maxAmount!""}</p>
+          <p><@ofbizCurrency amount= paymentPrefInfo.maxAmount rounding=globalContext.currencyRounding isoCode=globalContext.currencyUomId/></p>
       </div>
     </div>
   </div>

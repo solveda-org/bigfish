@@ -205,10 +205,7 @@ under the License.
             <filelist dir="." files="specialpurpose/build.xml"/>
         </subant>
         <subant inheritall="false">
-            <fileset dir="${basedir}/hot-deploy" casesensitive="no">
-                <exclude name="disabled/**"/>
-                <include name="*/build.xml"/>
-            </fileset>
+          <filelist dir="." files="hot-deploy/build.xml"/>
         </subant>
         <antcall target="clean-svninfo"></antcall>
 
@@ -560,6 +557,16 @@ under the License.
             <jvmarg value="${memory.maxpermsize.param}"/>
             <arg value="install"/>
             <arg value="readers=version"/>
+        </java>
+    </target>
+    <target name="run-ofbiz-version-12-seed" depends="run-bigfish-version"
+        description="This loads content data; meant for adding newly added seed data for OFBiz version 12">
+        <java jar="ofbiz.jar" fork="true">
+            <jvmarg value="${memory.initial.param}"/>
+            <jvmarg value="${memory.max.param}"/>
+            <jvmarg value="${memory.maxpermsize.param}"/>
+            <arg value="install"/>
+            <arg value="readers=ofbizversion12"/>
         </java>
     </target>
     <target name="run-install-readers" depends="build"

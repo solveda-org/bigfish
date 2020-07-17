@@ -11,7 +11,6 @@
                 <set field="periodRequest" value="updatePeriodDashboardSummary"/>
                 <set field="showLastOrder" value="Y"/>
                 <set field="showDeliveryOption" value="N"/>
-                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/dashboard/periodRange.groovy"/>
                 <set field="helperFileName" value ="dashboardHelp.htm"/>
             </actions>
             <widgets>
@@ -19,6 +18,7 @@
                     <decorator-section name="body">
                      <section>
                       <actions>
+                            <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/dashboard/periodRange.groovy"/>
                             <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/dashboard/dashboard.groovy"/>
                       </actions>
                       <widgets>
@@ -190,6 +190,7 @@
                 <set field="generalInfoBoxHeading" value="${uiLabelMap.OrderDetailInfoHeading}"/>
                 <set field="customerInfoBoxHeading" value="${uiLabelMap.CustomerInfoHeading}"/>
                 <set field="paymentInfoBoxHeading" value="${uiLabelMap.PaymentInfoHeading}"/>
+                <set field="shippingInfoBoxHeading" value="${uiLabelMap.ShippingInfoHeading}"/>
                 <set field="orderItemInfoBoxHeading" value="${uiLabelMap.OrderItemsHeading}"/>
                 <set field="orderAttributeInfoBoxHeading" value="${uiLabelMap.OrderAttributeHeading}"/>
                 <set field="showProductStoreInfo" value ="Y"/>
@@ -212,6 +213,7 @@
                      <section>
                       <actions>
                           <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderDetail.groovy"/>
+                          <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderSalesTaxInfo.groovy"/>
                           <set field="argListNames[]" from-field="notesCount"/>
                           <property-to-field resource="OSafeAdminUiLabels" property="OrderNotesLabel" field="orderNotesTooltipText" arg-list-name="argListNames"/>
                       </actions>
@@ -231,6 +233,9 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="paymentInfoBoxBody">
                                              <include-screen name="orderDetailPaymentInfo"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="shippingInfoBoxBody">
+                                             <include-screen name="orderDetailShippingInfo"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="listPagingBody">
                                              <include-screen name="ListPaging" location="component://osafeadmin/widget/CommonScreens.xml"/>
@@ -321,6 +326,20 @@
                 <platform-specific>
                     <html>
                       <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailPaymentInfo.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="orderDetailShippingInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/order/orderDetailShippingInfo.ftl"/>
                     </html>
                 </platform-specific>
             </widgets>
@@ -550,6 +569,7 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/setup/AdminSetup.groovy" />
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderStatusRefundDetail.groovy"/>
             </actions>
             <widgets>
@@ -698,7 +718,7 @@
                 <set field="showProductStoreInfo" value ="Y"/>
                 <set field="helperFileName" value ="statusUpdateListHelp.htm"/>
                 <set field="activeTopMenuItem" value="OrderMgmntNav"/>
-                <set field="activeSubMenuItem" value="StatusUpdateViewNav"/>
+                <set field="activeSubMenuItem" value="OrderViewNav"/>
                 <set field="showStatusUpdateLink" value = "true"/>
                 <set field="showOrderNotesLink" value = "true"/>
                 <set field="showOrderDetailLink" value = "true"/>
@@ -913,6 +933,7 @@
                      <section>
                       <actions>
                           <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderItemDetail.groovy"/>
+                          <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderSalesTaxInfo.groovy"/>
                           <set field="argListNames[]" from-field="notesCount"/>
                           <property-to-field resource="OSafeAdminUiLabels" property="OrderNotesLabel" field="orderNotesTooltipText" arg-list-name="argListNames"/>
                       </actions>
@@ -967,6 +988,7 @@
         <section>
             <actions>
             	<script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderItemDetail.groovy"/>
+            	<script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderSalesTaxInfo.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -983,6 +1005,7 @@
         <section>
             <actions>
             	<script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderItemDetail.groovy"/>
+            	<script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderSalesTaxInfo.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -998,6 +1021,7 @@
         <section>
             <actions>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderItemDetail.groovy"/>
+                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderSalesTaxInfo.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -1013,6 +1037,7 @@
         <section>
             <actions>
             	<script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderItemDetail.groovy"/>
+            	<script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderSalesTaxInfo.groovy"/>
             </actions>
             <widgets>
                 <platform-specific>
@@ -1257,9 +1282,16 @@
                 <set field="fieldPurpose" value="user" />
                 <set field="showCustomerEditLink" value ="false"/>
                 <set field="generalInfoBoxHeading" value="${uiLabelMap.CustomerDetailInfoHeading}"/>
+                <entity-one value-field="person" entity-name="Person"/>
+                <set field="paramKeyMap.firstName" from-field="person.firstName"/>
+                <set field="paramKeyMap.lastName" from-field="person.lastName"/>                
+                <set field="paramKeyMap.partyId" from-field="parameters.partyId"/>
+                <set field="generalInfoBoxHeading" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;CustomerDetailInfoWithNameHeading&quot;, paramKeyMap, locale)}"/>
+                <set field="customerAttributesInfoBoxHeading" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;CustomerAttributesInfoHeading&quot;, paramKeyMap, locale)}"/>
                 <set field="personalInfoBoxHeading" value="${uiLabelMap.CustomerDetailPersonalInfoHeading}"/>
                 <set field="customerInfoBoxHeading" value="${uiLabelMap.CustomerInfoHeading}"/>
                 <set field="addressInfoBoxHeading" value="${uiLabelMap.GeneralAddressHeading}"/>
+                <set field="websiteLoginBoxHeading" value="${uiLabelMap.WebsiteLoginHeading}"/>
                 <set field="helperFileName" value ="customerDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="CustomerMgmntNav"/>
                 <set field="activeSubMenuItem" value="CustomerViewNav"/>
@@ -1297,7 +1329,7 @@
                 <set field="websiteLoginBoxHeading" value="${uiLabelMap.WebsiteLoginHeading}"/>
                 <set field="helperFileName" value ="customerDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="CustomerMgmntNav"/>
-                <set field="activeSubMenuItem" value="CustomerViewNav"/>
+                <set field="activeSubMenuItem" value="CustomerAddNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonCustomerDetail" />
@@ -1482,7 +1514,8 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="generalInfoBoxHeading" value="${uiLabelMap.CustomerDetailInfoHeading}"/>
+                <set field="paramKeyMap.partyId" from-field="parameters.partyId"/>
+                <set field="generalInfoBoxHeading" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;CustomerDetailInfoHeading&quot;, paramKeyMap, locale)}"/>
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.CustomerAddressDetailHeading}"/>
                 <set field="updateAction" value="createUpdateCustomerAddress"/>
                 <set field="showProductStoreInfo" value ="Y"/>
@@ -1530,7 +1563,7 @@
                                             <include-screen name="commonCustomerLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="capturePlusJs">
-                                            <include-screen name="capturePlusJs" location="component://osafeadmin/widget/AdminDivScreens.xml" />
+                                            <include-screen name="capturePlusJs" location="component://osafeadmin/widget/CommonScreens.xml" />
                                         </html-template-decorator-section>
                                     </html-template-decorator>
                                 </html>
@@ -1548,7 +1581,8 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="detailInfoBoxHeading" value="${uiLabelMap.CustomerDetailInfoHeading}"/>
+                <set field="paramKeyMap.partyId" from-field="parameters.partyId"/>
+                <set field="detailInfoBoxHeading" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;CustomerDetailInfoHeading&quot;, paramKeyMap, locale)}"/>
                 <set field="detailListBoxHeading" value="${uiLabelMap.CustomerNoteHeading}"/>
                 <set field="addAction" value="addCustomerNote"/>
                 <set field="detailParamKey" value="partyId"/>
@@ -1614,7 +1648,8 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="generalInfoBoxHeading" value="${uiLabelMap.CustomerDetailInfoHeading}"/>
+                <set field="paramKeyMap.partyId" from-field="parameters.partyId"/>
+                <set field="generalInfoBoxHeading" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;CustomerDetailInfoHeading&quot;, paramKeyMap, locale)}"/>
                 <set field="customerInfoBoxHeading" value="${uiLabelMap.CustomerInfoHeading}"/>
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.NoteHeading}"/>
                 <set field="updateAction" value="updateCustomerNoteData"/>
@@ -1679,7 +1714,8 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="generalInfoBoxHeading" value="${uiLabelMap.CustomerDetailInfoHeading}"/>
+                <set field="paramKeyMap.partyId" from-field="parameters.partyId"/>
+                <set field="generalInfoBoxHeading" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;CustomerDetailInfoHeading&quot;, paramKeyMap, locale)}"/>
                 <set field="customerInfoBoxHeading" value="${uiLabelMap.CustomerInfoHeading}"/>
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.NoteHeading}"/>
                 <set field="createAction" value="createCustomerNoteData"/>
@@ -1751,7 +1787,8 @@
                 <set field="detailId" value="${parameters.partyId}"/>
                 <set field="detailParamKey" value="partyId"/>
                 <set field="showProductStoreInfo" value ="Y"/>
-                <set field="detailInfoBoxHeading" value="${uiLabelMap.CustomerDetailInfoHeading}"/>
+                <set field="paramKeyMap.partyId" from-field="parameters.partyId"/>
+                <set field="detailInfoBoxHeading" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;CustomerDetailInfoHeading&quot;, paramKeyMap, locale)}"/>
                 <set field="detailListBoxHeading" value="${uiLabelMap.CustomerWebsiteActivityHeading}"/>
                 <set field="helperFileName" value ="customerActivityDetailHelp.htm"/>
                 <set field="showCustomerActivityLink" value="false"/>
@@ -1823,7 +1860,7 @@
                 <set field="showProductStoreInfo" value ="Y"/>
                 <set field="helperFileName" value ="visitDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="CustomerMgmntNav"/>
-                <set field="activeSubMenuItem" value="VisitViewNav"/>
+                <set field="activeSubMenuItem" value="CustomerViewNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -1993,6 +2030,7 @@
                 <set field="promotionRuleActionBoxHeading" value="${uiLabelMap.PromotionRuleActionHeading}"/>
                 <set field="promotionCodesBoxHeading" value="${uiLabelMap.PromotionCodesHeading}"/>
                 <set field="helperFileName" value ="promotionDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="PromotionNav"/>
                 <set field="activeSubMenuItem" value="PromotionViewNav"/>
             </actions>
             <widgets>
@@ -2014,6 +2052,7 @@
                 <set field="promotionRuleConditionBoxHeading" value="${uiLabelMap.PromotionRuleConditionHeading}"/>
                 <set field="promotionRuleActionBoxHeading" value="${uiLabelMap.PromotionRuleActionHeading}"/>
                 <set field="helperFileName" value ="promotionDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="PromotionNav"/>
                 <set field="activeSubMenuItem" value="PromotionAddNav"/>
             </actions>
             <widgets>
@@ -2034,6 +2073,7 @@
                 <set field="promotionDefinitionBoxHeading" value="${uiLabelMap.PromotionDefinitionHeading}"/>
                 <set field="promotionCodeDefinitionBoxHeading" value="${uiLabelMap.PromotionCodeDefinitionHeading}"/>
                 <set field="helperFileName" value ="promotionCodeDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="PromotionNav"/>
                 <set field="activeSubMenuItem" value="PromotionViewNav"/>
             </actions>
             <widgets>
@@ -2053,7 +2093,8 @@
                 <set field="promotionDefinitionBoxHeading" value="${uiLabelMap.PromotionDefinitionHeading}"/>
                 <set field="promotionCodeDefinitionBoxHeading" value="${uiLabelMap.PromotionCodeDefinitionHeading}"/>
                 <set field="helperFileName" value ="promotionCodeDetailHelp.htm"/>
-                <set field="activeSubMenuItem" value="PromotionAddNav"/>
+                <set field="activeTopMenuItem" value="PromotionNav"/>
+                <set field="activeSubMenuItem" value="PromotionViewNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonPromotionDetail" />
@@ -3044,7 +3085,7 @@
                 <set field="addAction" value="addContactUsReason"/>
                 <set field="helperFileName" value ="contactUsReasonListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageContactUsReasonNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationList" />
@@ -3074,7 +3115,7 @@
                 <set field="enumDescCaption" value="${uiLabelMap.ContactUsReasonDescCaption}"/>
                 <set field="helperFileName" value ="contactUsReasonDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageContactUsReasonNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationDetail" />
@@ -3099,7 +3140,7 @@
                 <set field="enumDescCaption" value="${uiLabelMap.ContactUsReasonDescCaption}"/>
                 <set field="helperFileName" value ="contactUsReasonDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageContactUsReasonNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationDetail" />
@@ -3121,7 +3162,7 @@
                 <set field="addAction" value="addCreditCardType"/>
                 <set field="helperFileName" value ="creditCardTypeListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageCreditCardTypeNav"/>
+                <set field="activeSubMenuItem" value="PaymentSettingsNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationList" />
@@ -3149,7 +3190,7 @@
                 <set field="enumDescCaption" value="${uiLabelMap.CreditCardTypeDescCaption}"/>
                 <set field="helperFileName" value ="creditCardTypeDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageCreditCardTypeNav"/>
+                <set field="activeSubMenuItem" value="PaymentSettingsNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationDetail" />
@@ -3196,7 +3237,7 @@
                 <set field="addAction" value="addPersonTitle"/>
                 <set field="helperFileName" value ="personTitleListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManagePersonTitleNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationList" />
@@ -3224,7 +3265,7 @@
                 <set field="enumDescCaption" value="${uiLabelMap.PersonTitleDescCaption}"/>
                 <set field="helperFileName" value ="personTitleDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManagePersonTitleNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationDetail" />
@@ -3249,7 +3290,7 @@
                 <set field="enumDescCaption" value="${uiLabelMap.PersonTitleDescCaption}"/>
                 <set field="helperFileName" value ="personTitleDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManagePersonTitleNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationDetail" />
@@ -3271,7 +3312,7 @@
                 <set field="addAction" value="addReviewAges"/>
                 <set field="helperFileName" value ="reviewAgesListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageReviewAgesNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationList" />
@@ -3299,7 +3340,7 @@
                 <set field="enumDescCaption" value="${uiLabelMap.ReviewAgesDescCaption}"/>
                 <set field="helperFileName" value ="reviewAgesDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageReviewAgesNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationDetail" />
@@ -3324,7 +3365,7 @@
                 <set field="enumDescCaption" value="${uiLabelMap.ReviewAgesDescCaption}"/>
                 <set field="helperFileName" value ="reviewAgesDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageReviewAgesNav"/>
+                <set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <include-screen name="enumerationDetail" />
@@ -3929,7 +3970,8 @@
                 <set field="mode" value="edit"/>
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.ShipmentMethodDetailHeading}"/>
                 <set field="helperFileName" value ="shipmentMethodDetailHelp.htm"/>
-                <set field="activeSubMenuItem" value="ShippingNav"/>
+                <set field="activeTopMenuItem" value="ShippingNav"/>
+                <set field="activeSubMenuItem" value="ShipmentMethodNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonShipmentMethodDetail" />
@@ -3950,6 +3992,7 @@
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.ShipmentMethodDetailHeading}"/>
                 <set field="helperFileName" value ="shipmentMethodDetailHelp.htm"/>
                 <set field="activeSubMenuItem" value="ShippingNav"/>
+                <set field="activeSubMenuItem" value="ShipmentMethodNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonShipmentMethodDetail" />
@@ -4169,9 +4212,8 @@
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_ORDER"/>
                 <set field="addAction" value="addScheduledJob"/>
                 <set field="addActionBtn" value="${uiLabelMap.AddScheduledJobBtn}"/>
-                <set field="ActiveTopMenuItem" value ="AdminNav"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="scheduledJobNav"/>
+                <set field="activeSubMenuItem" value="JobNav"/>
                 <set field="helperFileName" value ="scheduledJobHelp.htm"/>
                 <set field="hideMainPageMessages" value="Y"/>
             </actions>
@@ -4295,7 +4337,8 @@
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.ScheduledJobDetailHeading}"/>
                 <set field="scheduledJobRuleBoxHeading" value="${uiLabelMap.ScheduledJobRuleHeading}"/>
                 <set field="helperFileName" value ="scheduledJobDetailHelp.htm"/>
-                <set field="activeSubMenuItem" value="ScheduledJobViewNav"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="JobNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -4419,6 +4462,7 @@
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_USER"/>
                 <set field="helperFileName" value ="userManagementHelp.htm"/>
                 <set field="activeTopMenuItem" value="UserNav"/>
+                <set field="activeSubMenuItem" value="UserManagementNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -4535,7 +4579,8 @@
                 <set field="detailFormName" value="userFORM"/>
                 
                 <set field="helperFileName" value ="userDetailHelp.htm"/>
-                <set field="activeSubMenuItem" value="UserViewNav"/>
+                <set field="activeTopMenuItem" value="UserNav"/>
+                <set field="activeSubMenuItem" value="UserManagementNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -4601,6 +4646,7 @@
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_USER"/>
                 <set field="helperFileName" value ="securityGroupManagementHelp.htm"/>
                 <set field="activeTopMenuItem" value="UserNav"/>
+                <set field="activeSubMenuItem" value="SecurityGroupNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -4715,7 +4761,8 @@
                 <set field="title" from-field="pageTitle"/>
                 <set field="detailFormName" value="securityGroupFORM"/>
                 <set field="helperFileName" value ="securityGroupDetailHelp.htm"/>
-                <set field="activeSubMenuItem" value="UserViewNav"/>
+                <set field="activeTopMenuItem" value="UserNav"/>
+                <set field="activeSubMenuItem" value="SecurityGroupNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -4775,6 +4822,7 @@
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_USER"/>
                 <set field="helperFileName" value ="permissionListHelp.htm"/>
                 <set field="activeTopMenuItem" value="UserNav"/>
+                <set field="activeSubMenuItem" value="PermissionListNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -5223,7 +5271,8 @@
                 <set field="contentTypeId" value="BF_SITE_INFO"/>
                 <set field="addAction" value="addSiteInfoContent"/>
                 <set field="helperFileName" value ="siteInfoListHelp.htm"/>
-                <set field="previewAction" value="previewContent"/>
+                <set field="previewAction" value="previewSiteInfoContent"/>
+                <set field="editAction" value="siteInfoDetail"/>
                 <set field="activeTopMenuItem" value="ContentNav"/>
                 <set field="activeSubMenuItem" value="SiteInfoNav"/>
                 <set field="contentSpotListId" value="siteInfoList"/>
@@ -5242,7 +5291,7 @@
                 <set field="title" from-field="pageTitle"/>
                 <set field="updateAction" value="updateContentSiteInfo"/>
                 <set field="helperFileName" value ="siteInfoDetailHelp.htm"/>
-                <set field="previewAction" value="previewContent"/>
+                <set field="previewAction" value="previewSiteInfoContent"/>
                 <set field="activeTopMenuItem" value="ContentNav"/>
                 <set field="activeSubMenuItem" value="SiteInfoNav"/>
                 <set field="contentSpotDetailId" value="siteInfoContentDetail"/>
@@ -5287,7 +5336,7 @@
                 <set field="contentTypeId" value="BF_EMAIL_TEMPLATE"/>
                 <set field="helperFileName" value ="emailSpotListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminEmailNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
                 <set field="adminToolDetailScreen" value="emailTestDetail"/>
                 <set field="adminToolDetailToolTip" value="${uiLabelMap.EmailTestTooltip}"/>
                 <set field="contentSpotListId" value="emailSpotList"/>
@@ -5309,7 +5358,7 @@
                 <set field="updateAction" value="updateContentEmailSpot"/>
                 <set field="helperFileName" value ="emailSpotDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminEmailNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
                 <set field="contentSpotDetailId" value="emailSpotContentDetail"/>
                 <set field="mode" value="edit"/>
             </actions>
@@ -5328,7 +5377,7 @@
                 <set field="updateAction" value="createContentEmailSpot"/>
                 <set field="helperFileName" value ="emailSpotDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminEmailNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
                 <set field="contentSpotDetailId" value="emailSpotContentDetail"/>
                 <set field="backAction" value="emailSpotList"/>
                 <set field="mode" value="add"/>
@@ -5351,7 +5400,7 @@
                 <set field="contentTypeId" value="BF_TXT_TEMPLATE"/>
                 <set field="helperFileName" value ="txtMsgSpotListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminEmailNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
                 <set field="adminToolDetailScreen" value="txtMsgTestDetail"/>
                 <set field="adminToolDetailToolTip" value="${uiLabelMap.TxtMsgTestTooltip}"/>
                 <set field="contentSpotListId" value="txtMsgSpotList"/>
@@ -5373,7 +5422,7 @@
                 <set field="updateAction" value="updateContentTxtMsgSpot"/>
                 <set field="helperFileName" value ="txtMsgSpotDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminEmailNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
                 <set field="maxLengthContent" value="160"/>
                 <set field="contentSpotDetailId" value="txtMsgSpotContentDetail"/>
                 <set field="mode" value="edit"/>
@@ -5465,6 +5514,7 @@
                 <set field="addAction" value="addPtsContent"/>
                 <set field="helperFileName" value ="ptsListHelp.htm"/>
                 <set field="previewAction" value="previewContent"/>
+                <set field="editAction" value="ptsDetail"/>
                 <set field="activeTopMenuItem" value="ContentNav"/>
                 <set field="activeSubMenuItem" value="PageContentSpotsNav"/>
             </actions>
@@ -5907,7 +5957,6 @@
                 <set field="showLastOrder" value="N"/>
                 <set field="showDeliveryOption" value="Y"/>
                 <set field="listBoxHeading" value="${uiLabelMap.TopProductsAnalysisHeading}"/>
-                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/dashboard/periodRange.groovy"/>
                 <set field="helperFileName" value ="topProductsDetailHelp.htm"/>
             </actions>
             <widgets>
@@ -5915,6 +5964,7 @@
                     <decorator-section name="body">
                      <section>
                       <actions>
+                            <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/dashboard/periodRange.groovy"/>
                             <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/product/topProductsDetail.groovy"/>
                       </actions>
                       <widgets>
@@ -5955,7 +6005,7 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.SystemParameterListTitle}"/>
-                <set field="title" from-field="Parameters"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="searchBoxHeading" value="${uiLabelMap.SearchHeading}"/>
                 <set field="listBoxHeading" value="${uiLabelMap.SystemParameterHeading}"/>
                 <set field="addAction" value="addParameter"/>
@@ -6149,9 +6199,9 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ManageProductListTitle}"/>
-                <set field="title" from-field="Product"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="searchBoxHeading" value="${uiLabelMap.SearchHeading}"/>
-                <set field="listBoxHeading" value="${uiLabelMap.ProductHeading}"/>
+                <set field="listBoxHeading" value="${uiLabelMap.MatchingProductHeading}"/>
                 <set field="searchRequest" value="productSearch"/>
                 <set field="searchFormName" value="productSearch"/>
                 <set field="addAction" value="addProduct"/>
@@ -6162,6 +6212,7 @@
                 <set field="activeTopMenuItem" value="CatalogNav"/>
                 <set field="activeSubMenuItem" value="CatalogProductNav"/>
                 <set field="addToCartAction" value="addToCart"/>
+                <set field="productContentSpotListAction" value="productContentSpotList"/>
                 <set field="addToCartFrom" value="productManagement"/>
             </actions>
             <widgets>
@@ -6351,6 +6402,7 @@
                 <set field="productCategoryMembershipBoxHeading" default-value="${uiLabelMap.ProductCatMemberHeading}"/>
                 <set field="productAttributeBoxHeading" from-field="productAttributeBoxHeading" default-value="${uiLabelMap.ProcessingAttributeHeading}"/>
                 <set field="productIdentificationBoxHeading" from-field="productIdentificationBoxHeading" default-value="${uiLabelMap.ProductIdentificationHeading}"/>
+                <set field="productContentSpotListAction" value="productContentSpotList"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -6664,6 +6716,132 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="productContentSpotList">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ProductContentListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="detailPage" value="productContentSpotDetail"/>
+                <set field="helperFileName" value ="generalPdpSpotListHelp.htm"/>
+                <set field="previewAction" value="previewContent"/>
+                <set field="editAction" value="productContentSpotDetail"/>
+                <set field="activeTopMenuItem" value="ContentNav"/>
+                <set field="activeSubMenuItem" value="GeneralPDPContentSpotsNav"/>
+                <set field="contentSpotListId" value="generalPDPSpotList"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                         <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/content/productContentSpotList.groovy"/>
+                         <set field="listBoxHeading" value="${uiLabelMap.ProductContentListHeading} ${productId}: ${productDetailHeading}"/>
+                      </actions>
+                      <widgets>
+                        <container id="${contentSpotListId}" style="commonSearchList">
+                            <platform-specific>
+                                <html>                                   
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonList.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listBoxBody">
+                                            <platform-specific>
+                                                <html>
+                                                  <html-template location="component://osafeadmin/webapp/osafeadmin/content/productContentSpotList.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonListButton">
+                                             <include-screen name="commonListButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="productContentSpotDetail">
+       <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ProductContentDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="fieldLevelErrors" value="Y"/>
+                <set field="updateAction" value="updateProductSpecificContent"/>
+                <set field="detailFormName" value="updateContentForm"/>
+                <set field="detailFormId" value="updateContent"/>
+                <set field="helperFileName" value ="generalPdpDetailHelp.htm"/>
+                <set field="previewAction" value="previewContent"/>
+                <set field="activeTopMenuItem" value="ContentNav"/>
+                <set field="activeSubMenuItem" value="GeneralPDPContentSpotsNav"/>
+                <set field="contentSpotDetailId" value="productContentSpotDetail"/>
+                <set field="maxLengthDescription" from-field="maxLengthDescription" default-value="255"/>
+                <set field="maxLengthContent" from-field="maxLengthContent"/>
+                <set field="showBFContentId" value="N"/>
+                <set field="mode" value="edit"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                        <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/content/contentSpotDetail.groovy"/>
+                        <set field="detailInfoBoxHeading" value="${parameters.productContentTypeId}. ${uiLabelMap.ProductHeading} ${parameters.productId}: ${productDetailHeading}"/>
+                      </actions>
+                      <widgets>
+                        <container id="${contentSpotDetailId}" style="commonDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDetail.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="detailInfoBoxBody">
+                                            <platform-specific>
+                                                <html>
+                                                 <html-template location="component://osafeadmin/webapp/osafeadmin/content/contentSpotDetail.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailActionButton">
+                                            <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailLinkButton">
+                                            <include-screen name="commonContentLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailWarningIcon">
+                                            <include-screen name="commonDetailWarningIcon" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailHelperIcon">
+                                            <include-screen name="commonDetailHelperIcon" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="generalPDPDetail">
        <section>
             <actions>
@@ -6684,7 +6862,7 @@
             </widgets>
         </section>
     </screen>
-
+    
     <screen name="manageUiLabel">
         <section>
             <actions>
@@ -7346,7 +7524,8 @@
                 <set field="pageTitle" value="${uiLabelMap.SolrConfigTitle}"/>
                 <set field="listBoxHeading" value="${uiLabelMap.SolrConfigHeading}"/>
                 <set field="helperFileName" value ="solrConfigListHelp.htm"/>
-                <set field="activeTopMenuItem" value="SolrConfigNav"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7387,9 +7566,11 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.LookupDataTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="listBoxHeading" value="${uiLabelMap.LookupDataHeading}"/>
                 <set field="helperFileName" value ="lookupDataListHelp.htm"/>
-                <set field="activeTopMenuItem" value="lookupDataNav"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+            	<set field="activeSubMenuItem" value="LookupDataNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7435,7 +7616,7 @@
                 <set field="facetValueDetail" value="facetValueDetail"/>
                 <set field="helperFileName" value ="facetValueListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageFacetValuesNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7484,7 +7665,7 @@
                 <set field="detailFormName" value="facetValueForm"/>
                 <set field="helperFileName" value ="facetValueDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageFacetValuesNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7547,7 +7728,7 @@
                 <set field="detailFormName" value="facetGroupDetailForm"/>
                 <set field="helperFileName" value ="facetGroupDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageFacetGroupsNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
                 <set field="usePreviousParams" value="Y"/>
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_FACET_GROUP"/>
             </actions>
@@ -7607,7 +7788,7 @@
                 <set field="detailFormName" value="facetGroupDetailForm"/>
                 <set field="helperFileName" value ="facetGroupDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageFacetGroupsNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
                 <set field="usePreviousParams" value="Y"/>
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_FACET_GROUP"/>
             </actions>
@@ -7668,7 +7849,7 @@
                 <set field="detailFormName" value="createFacetValue"/>
                 <set field="helperFileName" value ="facetGroupDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageFacetGroupsNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
                 <set field="usePreviousParams" value="Y"/>
             </actions>
             <widgets>
@@ -7784,7 +7965,7 @@
                 <set field="facetGroupDetail" value="facetGroupDetail"/>
                 <set field="helperFileName" value ="facetGroupListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageFacetGroupsNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7837,7 +8018,7 @@
                 <set field="detailFormName" value="facetGroupForm"/>
                 <set field="helperFileName" value ="facetGroupDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ManageFacetGroupsNav"/>
+                <set field="activeSubMenuItem" value="SolrConfigNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7887,10 +8068,11 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.EmailConfigListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="listBoxHeading" value="${uiLabelMap.EmailConfigurationHeading}"/>
                 <set field="helperFileName" value ="emailConfigListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminEmailConfigNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -7955,7 +8137,7 @@
                 <set field="detailFormName" value="emailConfigForm"/>
                 <set field="helperFileName" value ="emailConfigDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminEmailConfigNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -8005,6 +8187,7 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.AdminToolTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="toolsBoxHeading" value="${uiLabelMap.ToolsHeading}"/>
                 <set field="compareToolsBoxHeading" value="${uiLabelMap.CompareToolsHeading}"/>
                 <set field="seoToolsBoxHeading" value="${uiLabelMap.SeoToolsHeading}"/>
@@ -8105,10 +8288,11 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.PaymentSettingsListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="listBoxHeading" value="${uiLabelMap.PaymentSettingsListHeading}"/>
                 <set field="helperFileName" value ="paymentSettingsListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminToolsNav"/>
+                <set field="activeSubMenuItem" value="PaymentSettingsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -8149,10 +8333,11 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ManageEmailListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="listBoxHeading" value="${uiLabelMap.ManageEmailListHeading}"/>
                 <set field="helperFileName" value ="manageEmailListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminToolsNav"/>
+                <set field="activeSubMenuItem" value="ManageEmailNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -8346,8 +8531,8 @@
                 <set field="pageTitle" value="${uiLabelMap.SolrReIndexDetailTitle}"/>
                 <set field="title" from-field="pageTitle"/>
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.SolrReIndexDetailHeading}"/>
-                <set field="execAction" value="solrReIndex"/>
-                <set field="execActionBtn" value="${uiLabelMap.SolrReIndxBtn}"/>
+                <set field="execAjaxAction" value="solrReIndex"/>
+                <set field="execAjaxActionBtn" value="${uiLabelMap.SolrReIndxBtn}"/>
                 <set field="detailFormName" value="SolrReIndexForm"/>
                 <set field="helperFileName" value ="solrReIndexDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
@@ -9242,7 +9427,7 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ReqCatalogEventsTitle}"/>
-                <set field="title" from-field="Product"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="searchBoxHeading" value="${uiLabelMap.SearchHeading}"/>
                 <set field="listBoxHeading" value="${uiLabelMap.MatchingReqCatalogEventsHeading}"/>
                 <set field="searchRequest" value="custRequestCatalogSearch"/>
@@ -9268,7 +9453,7 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ContactUsEventsListTitle}"/>
-                <set field="title" from-field="Product"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="searchBoxHeading" value="${uiLabelMap.SearchHeading}"/>
                 <set field="listBoxHeading" value="${uiLabelMap.MatchingContactUsEventsHeading}"/>
                 <set field="searchRequest" value="custRequestContactUsSearch"/>
@@ -10053,6 +10238,7 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.BigfishFeedsTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="productLoaderListBoxHeading" value="${uiLabelMap.ProductLoaderListHeading}"/>
                 <set field="feedsImportListBoxHeading" value="${uiLabelMap.BigFishFeedImportsListHeading}"/>
                 <set field="feedsExportListBoxHeading" value="${uiLabelMap.BigFishFeedExportsListHeading}"/>
@@ -10060,7 +10246,7 @@
                 <set field="feedConverterListBoxHeading" value="${uiLabelMap.BigFishConvertersListHeading}"/>
                 <set field="helperFileName" value ="feedsListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10194,6 +10380,8 @@
                 <set field="detailFormName" value="productRatingConvertForm"/>
                 <set field="helperFileName" value ="orderStatusChangesImportDetailHelp.htm"/>
                 <set field="commonFeedConverterDetailId" value="productRatingsFeedConverter"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonFeedConverterDetail"/>
@@ -10213,6 +10401,8 @@
                 <set field="detailFormName" value="storesConvertForm"/>
                 <set field="helperFileName" value ="orderStatusChangesImportDetailHelp.htm"/>
                 <set field="commonFeedConverterDetailId" value="storesFeedConverter"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonFeedConverterDetail"/>
@@ -10232,6 +10422,8 @@
                 <set field="detailFormName" value="storesConvertForm"/>
                 <set field="helperFileName" value ="orderStatusChangesImportDetailHelp.htm"/>
                 <set field="commonFeedConverterDetailId" value="orderStstusChangeFeedConverter"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonFeedConverterDetail"/>
@@ -10251,6 +10443,8 @@
                 <set field="detailFormName" value="storesConvertForm"/>
                 <set field="helperFileName" value ="orderStatusChangesImportDetailHelp.htm"/>
                 <set field="commonFeedConverterDetailId" value="productLoadFeedConverter"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <include-screen name="commonFeedConverterDetail"/>
@@ -10311,6 +10505,8 @@
                 <set field="execActionBtn" value="${uiLabelMap.ImportBtn}"/>
                 <set field="detailFormName" value="bluedartPrepaidPincodesForm"/>
                 <set field="helperFileName" value ="orderStatusChangesImportDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10359,6 +10555,8 @@
                 <set field="execActionBtn" value="${uiLabelMap.ImportBtn}"/>
                 <set field="detailFormName" value="bluedartCoDForm"/>
                 <set field="helperFileName" value ="orderStatusChangesImportDetailHelp.htm"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10409,7 +10607,7 @@
                 <set field="detailFormName" value="customerImportForm"/>
                 <set field="helperFileName" value ="customerImportDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10459,7 +10657,7 @@
                 <set field="detailFormName" value="orderStatusChangesImportForm"/>
                 <set field="helperFileName" value ="orderStatusChangesImportDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10509,7 +10707,7 @@
                 <set field="detailFormName" value="productRatingsImportForm"/>
                 <set field="helperFileName" value ="productRatingsImportDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10559,7 +10757,7 @@
                 <set field="detailFormName" value="storesImportForm"/>
                 <set field="helperFileName" value ="storesImportDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10636,7 +10834,7 @@
                 <set field="helperFileName" value ="customersExportHelp.htm"/>
                 <set field="feedsOutDirParm" value="customer"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10690,7 +10888,7 @@
                 <set field="helperFileName" value ="ordersExportHelp.htm"/>
                 <set field="feedsOutDirParm" value="order"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10744,7 +10942,7 @@
                 <set field="helperFileName" value ="contactUsExportHelp.htm"/>
                 <set field="feedsOutDirParm" value="contactUs"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -10798,7 +10996,7 @@
                 <set field="helperFileName" value ="requestCatalogExportHelp.htm"/>
                 <set field="feedsOutDirParm" value="requestCatalog"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -11089,7 +11287,7 @@
                 <set field="detailFormName" value="productLoaderForm"/>
                 <set field="helperFileName" value ="productLoaderDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -11139,7 +11337,7 @@
                 <set field="detailFormName" value="productDataPreviewForm"/>
                 <set field="helperFileName" value ="productLoaderDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -11186,7 +11384,12 @@
                                             </platform-specific>
                                             <platform-specific>
                                                 <html>
-                                                    <html-template location="component://osafeadmin/webapp/osafeadmin/admin/productFeatureSwatchDataList.ftl"/>
+                                                    <html-template location="component://osafeadmin/webapp/osafeadmin/admin/productFacetGroupDataList.ftl"/>
+                                                </html>
+                                            </platform-specific>
+                                            <platform-specific>
+                                                <html>
+                                                    <html-template location="component://osafeadmin/webapp/osafeadmin/admin/productFacetValueDataList.ftl"/>
                                                 </html>
                                             </platform-specific>
                                             <platform-specific>
@@ -11227,7 +11430,7 @@
                 <set field="detailFormName" value="bigFishSampleFileForm"/>
                 <set field="helperFileName" value ="bigFishXlsSampleDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -11281,7 +11484,7 @@
                 <set field="detailFormName" value="bigFishProductFileForm"/>
                 <set field="helperFileName" value ="bigFishProductFileFromDBDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -11333,7 +11536,7 @@
                 <set field="detailFormName" value="bigFishProductFromEbayFileForm"/>
                 <set field="helperFileName" value ="bigFishProductFileFromEbayDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -11382,7 +11585,7 @@
                 <set field="detailFormName" value="imageLocationPreferencesForm"/>
                 <set field="helperFileName" value ="imageLocationPreferencesDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="ProductLoaderNav"/>
+                <set field="activeSubMenuItem" value="FeedsNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -11685,11 +11888,33 @@
             </widgets>
         </section>
     </screen>
+    <screen name="previewSiteInfoContent">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="title" value="${uiLabelMap.eCommerceApplication}" />
+                <set field="mainPanelStyle" value="homePage" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+                      </actions>
+                       <widgets>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
     <screen name="sysConfigFileList">
       <section>
            <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.SysConfigFileTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="listBoxHeading" value="${uiLabelMap.SysConfigHeading}"/>
                 <set field="helperFileName" value ="sysConfigFileListHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
@@ -12187,6 +12412,8 @@
                 <set field="detailPage" value="paymentGatewayConfigDetail"/>
                 <set field="listBoxHeading" value="${uiLabelMap.PaymentGateWayListHeading}"/>
                 <set field="helperFileName" value ="paymentGatewaySettingsListHelp.htm"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="PaymentSettingsNav"/>
              </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -12227,6 +12454,8 @@
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="helperFileName" value ="paymentGatewaySettingsDetailHelp.htm"/>
                 <set field="detailScreenName" from-field="parameters.configId"/>
+                <set field="activeTopMenuItem" value="AdminNav"/>
+                <set field="activeSubMenuItem" value="PaymentSettingsNav"/>
             </actions>
             <widgets>
                 <section>
@@ -12681,7 +12910,7 @@
                 <set field="detailPage" value="paymentSettingDetail"/>
                 <set field="listBoxHeading" value="${uiLabelMap.PaymentSettingHeading}"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminPaymentSettingNav"/>
+                <set field="activeSubMenuItem" value="PaymentSettingsNav"/>
                 <set field="helperFileName" value ="PaymentSettingManagementHelp.htm"/>
              </actions>
             <widgets>
@@ -12749,7 +12978,7 @@
                 <set field="argListNames[]" from-field="paymentMethodType.description" default-value="parameters.paymentMethodTypeId"/>
                 <property-to-field resource="OSafeAdminUiLabels" property="DeletePaymentSettingConfirmText" field="confirmDialogText" arg-list-name="argListNames"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
-                <set field="activeSubMenuItem" value="AdminPaymentSettingNav"/>
+                <set field="activeSubMenuItem" value="PaymentSettingsNav"/>
                 <set field="helperFileName" value ="paymentSettingDetailHelp.htm"/>
             </actions>
             <widgets>
@@ -13463,6 +13692,7 @@
            <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.SysHealthCheckTitle}"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="listBoxHeading" value="${uiLabelMap.SysHealthCheckHeading}"/>
                 <set field="backAction" value="adminNavigation"/>
                 <set field="helperFileName" value ="sysHealthCheckListHelp.htm"/>
@@ -13605,8 +13835,7 @@
                 <set field="searchBtn" value="${uiLabelMap.ScheduledJobsAnalysisBtn}"/>
                 <set field="helperFileName" value ="scheduledJobsHealthCheckDetailHelp.htm"/>
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.AnalysisResultBoxHeading}"/>
-                <set field="confirmAction" value="deleteFinishedJobs"/>
-                <set field="confirmDialogText" value="${uiLabelMap.deleteFinishedJobsConfirmText}"/>
+                <set field="confirmAction" value="deleteScheduledJobs"/>
                 <set field="detailFormName" value="scheduledJobsAnalysisForm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminToolsNav"/>
@@ -13784,7 +14013,7 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.AssetCheckResultListTitle}"/>
-                <set field="title" from-field="Parameters"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="helperFileName" value ="assetCheckResultListHelp.htm"/>
                 <set field="listBoxHeading" value="${uiLabelMap.AssetCheckResultListHeading}"/>
              </actions>
@@ -13967,7 +14196,7 @@
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.ViewTaxesTitle}"/>
-                <set field="title" from-field="Product"/>
+                <set field="title" from-field="pageTitle"/>
                 <set field="searchBoxHeading" value="${uiLabelMap.SearchHeading}"/>
                 <set field="listBoxHeading" value="${uiLabelMap.MatchingTaxItemsHeading}"/>
                 <set field="searchRequest" value="taxSearch"/>
@@ -14186,6 +14415,8 @@
                 <set field="shipmentGatewayConfigId" from-field="parameters.shipmentGatewayConfigId"/>
                 <set field="detailInfoBoxHeading" from-field="shipmentGatewayConfigId" />
 				<set field="mode" value="edit" />
+				<set field="activeTopMenuItem" value="ShippingNav"/>
+                <set field="activeSubMenuItem" value="ShipmentGatewaysNav"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/shipping/shipmentGatewayConfigDetail.groovy" />
             </actions>
 			<widgets>				                
@@ -14264,6 +14495,8 @@
                 <set field="preRetrieved" value ="${parameters.preRetrieved}" default-value="N"/>
                 <set field="helperFileName" value ="abandonedCartAnalysisHelp.htm"/>
                 <set field="hideMainPageMessages" value="Y"/>
+                <set field="activeTopMenuItem" value="CustomerMgmntNav" />
+				<set field="activeSubMenuItem" value="AbandonedCartAnalysisNav" />
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -14352,6 +14585,8 @@
                 <set field="searchFormName" value="abandonedCartListSearch"/>
                 <set field="preRetrieved" value ="${parameters.preRetrieved}" default-value="Y"/>
                 <set field="helperFileName" value ="abandonedCartAnalysisHelp.htm"/>
+                <set field="activeTopMenuItem" value="CustomerMgmntNav" />
+				<set field="activeSubMenuItem" value="AbandonedCartAnalysisNav" />
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -14429,8 +14664,8 @@
                 <set field="detailParamKey" value="partyId"/>
                 <set field="detailListBoxHeading" value="${uiLabelMap.AbandonedCartDetailInfoHeading}"/>
                 <set field="helperFileName" value ="customerActivityDetailHelp.htm"/>
-                <set field="activeTopMenuItem" value="CustomerMgmntNav"/>
-                <set field="activeSubMenuItem" value="CustomerViewNav"/>
+                <set field="activeTopMenuItem" value="CustomerMgmntNav" />
+				<set field="activeSubMenuItem" value="AbandonedCartAnalysisNav" />
                 <set field="showCustomerActivityLink" value="false"/>
             </actions>
             <widgets>
@@ -14635,6 +14870,7 @@
             </widgets>
         </section>
     </screen>
+    
     <screen name="ratingReviewAnalysis">
         <section>
             <actions>
@@ -14649,6 +14885,8 @@
                 <set field="initializedCB" value ="N"/>
                 <set field="helperFileName" value ="ratingReviewAnalysisHelp.htm"/>
                 <set field="hideMainPageMessages" value="Y"/>
+                <set field="activeTopMenuItem" value="RatingsReviewNav"/>
+                <set field="activeSubMenuItem" value="RatingReviewAnalysisNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -14698,6 +14936,7 @@
             </widgets>
         </section>
     </screen>
+    
     <screen name="ratingReviewSummary">
         <section>
             <actions>
@@ -14713,6 +14952,8 @@
                 <set field="detailFormName" value="ratingReviewSummaryDetailForm"/>
                 <set field="helperFileName" value ="ratingReviewSummaryHelp.htm"/>
                 <set field="hideMainPageMessages" value="Y"/>
+                <set field="activeTopMenuItem" value="RatingsReviewNav"/>
+                <set field="activeSubMenuItem" value="RatingReviewSummaryNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -15035,8 +15276,8 @@
                 <set field="addAction" value="addManufacturer"/>
                 <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_MANUFACTURER"/>
                 <set field="helperFileName" value ="manufacturerManagementHelp.htm"/>
-                <set field="activeTopMenuItem" value="ManufacturerMgmntNav"/>
-                <set field="activeSubMenuItem" value="ManufacturerViewNav"/>
+                <set field="activeTopMenuItem" value="CatalogNav"/>
+                <set field="activeSubMenuItem" value="ManufacturerMgmntNav"/>
             </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
@@ -15134,8 +15375,8 @@
                 <set field="profileImageInfoBoxHeading" value="${uiLabelMap.ManufacturerDetailProfileImageInfoHeading}"/>
                 <set field="addressInfoBoxHeading" value="${uiLabelMap.ManufacturerAddressHeading}"/>
                 <set field="helperFileName" value ="manufacturerDetailHelp.htm"/>
-                <set field="activeTopMenuItem" value="MAnufacturerMgmntNav"/>
-                <set field="activeSubMenuItem" value="ManufacturerViewNav"/>
+                <set field="activeTopMenuItem" value="CatalogNav"/>
+                <set field="activeSubMenuItem" value="ManufacturerMgmntNav"/>
                 <entity-one value-field="postalAddress" entity-name="PostalAddress"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/adminCountry.groovy" />
             </actions>
@@ -15164,7 +15405,7 @@
                 <set field="profileImageInfoBoxHeading" value="${uiLabelMap.ManufacturerDetailProfileImageInfoHeading}"/>
                 <set field="addressInfoBoxHeading" value="${uiLabelMap.ManufacturerAddressHeading}"/>
                 <set field="helperFileName" value ="manufacturerDetailHelp.htm"/>
-                <set field="activeTopMenuItem" value="MAnufacturerMgmntNav"/>
+                <set field="activeTopMenuItem" value="ManufacturerMgmntNav"/>
                 <set field="activeSubMenuItem" value="ManufacturerViewNav"/>
                 <entity-one value-field="postalAddress" entity-name="PostalAddress"/>
                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/common/adminCountry.groovy" />
@@ -15268,22 +15509,24 @@
         <section>
             <actions>
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.PaymentMethodInfoHeading}"/>
                 <set field="orderStatusChangeBtnVisible" value="Y"/>
                 <set field="orderStatusChangeAction" value="orderStatusDetail"/>
-                <set field="updateAction" value="applyPaymentMethod"/>
+                <set field="updateAction" value="validateAddPaymentMethod"/>
                 <set field="detailId" value="${parameters.orderId}"/>
                 <set field="detailFormName" value="addPaymentMethod"/>
                 <set field="mode" value="edit"/>
                 <set field="showProductStoreInfo" value ="Y"/>
                 <set field="helperFileName" value ="orderNoteDetailHelp.htm"/>
-                <set field="pageTitle" value="${uiLabelMap.OrderAddPaymentTitle} &lt;span class='pageTitleAdditionalText'&gt;(${parameters.orderId})&lt;/span&gt;"/>
+                <set field="pageTitle" value="${uiLabelMap.OrderAddPaymentDetailTitle} &lt;span class='pageTitleAdditionalText'&gt;(${parameters.orderId})&lt;/span&gt;"/>
                 <set field="title" from-field="pageTitle"/>
                 <set field="activeTopMenuItem" value="OrderMgmntNav"/>
                 <set field="activeSubMenuItem" value="OrderViewNav"/>
                 <set field="showStatusUpdateLink" value = "true"/>
                 <set field="showOrderNotesLink" value = "true"/>
                 <set field="showOrderDetailLink" value = "true"/>
+                <set field="updateActionBtn" value="${uiLabelMap.ApplyPaymentBtn}"/>
                 
                 <set field="showOfflinePaymentOptions" value = "Y"/>
             </actions>
@@ -15293,7 +15536,7 @@
                      <section>
                       <actions>
                         
-                        <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderAddPaymentDetail.groovy"/>
+                        <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/order/orderApplyPaymentDetail.groovy"/>
                         <set field="argListNames[]" from-field="notesCount"/>
                         <property-to-field resource="OSafeAdminUiLabels" property="OrderNotesLabel" field="orderNotesTooltipText" arg-list-name="argListNames"/>
                       </actions>
@@ -15313,9 +15556,6 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonDetailActionButton">
                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
-                                        </html-template-decorator-section>
-                                        <html-template-decorator-section name="commonDetailLinkButton">
-                                            <include-screen name="commonOrderLinkButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                     </html-template-decorator>
                                 </html>
@@ -15432,7 +15672,7 @@
             <set field="detailFormName" value="createBigfishParameterForm"/>
             <set field="helperFileName" value ="manageBigfishParameterDetailHelp.htm"/>
             <set field="activeTopMenuItem" value="AdminNav"/>
-            <set field="activeSubMenuItem" value="AdminLabelCaptionNav"/>
+            <set field="activeSubMenuItem" value="ManageEmailNav"/>
             <set field="helperText" value="${uiLabelMap.CacheResetHelperInfo}"/>
             </actions>
             <widgets>
@@ -15458,7 +15698,7 @@
             <set field="confirmDialogText" value="${groovy:org.ofbiz.base.util.UtilProperties.getMessage(&quot;OSafeAdminUiLabels&quot;, &quot;DeleteBigfishParameterConfirmText&quot;, keyMap, locale)}"/>
             <set field="helperFileName" value ="manageBigfishParameterDetailHelp.htm"/>
             <set field="activeTopMenuItem" value="AdminNav"/>
-            <set field="activeSubMenuItem" value="AdminLabelCaptionNav"/>
+            <set field="activeSubMenuItem" value="ManageEmailNav"/>
             <set field="warningText" value="${uiLabelMap.CacheResetHelperInfo}"/>
             </actions>
             <widgets>

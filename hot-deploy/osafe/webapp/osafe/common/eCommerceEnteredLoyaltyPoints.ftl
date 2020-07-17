@@ -58,7 +58,7 @@
 		       <li class="input loyalty">
 		        <div>
 		         <label>${uiLabelMap.PointsRedeemedCaption}</label>
-		         <input type="text" id="js_loyaltyPointsAmount" name="update_loyaltyPointsAmount" value="${loyaltyPoints!""}" maxlength="20"/>
+		         <input type="text" id="js_loyaltyPointsAmount" name="update_loyaltyPointsAmount" value="${loyaltyPoints!""}" maxlength="20" onkeypress="javascript:setCheckoutFormAction(document.${formName!}, 'ULP', '');"/>
 		         <a class="standardBtn update" id="js_updateLoyaltyPointsAmount" href="javascript:updateLoyaltyPoints();" title="${uiLabelMap.UpdateLoyaltyPointsBtn}">
 		           <span>${uiLabelMap.UpdateLoyaltyPointsBtn}</span>
 		         </a>

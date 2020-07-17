@@ -114,12 +114,6 @@
 	        	<field-to-request field="setFieldLevelErrors" />
 	        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="UnableToSendEmailLabel"/>
 	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-	            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmailTechnicalDetailsLabel"/>
-	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-	            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="SendEmailErrorLabel"/>
-	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
-	            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="RenderOfbizErrorLabel"/>
-	            <string-to-list string="${tempErrorMessage}" list="error_list"/>
 	        </if-not-empty>
         </if-not-empty>
         
@@ -239,7 +233,6 @@
             <set field="emailParams.emailType" from-field="emailType"/>
             <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
             <set field="emailParams.userLogin" from-field="systemUserLogin"/>
-            <set field="emailParams.sendFrom" from-field="parameters.fromEmailAddress"/>
             <set field="emailParams.sendTo" from-field="parameters.toEmailAddress"/>
             <set field="emailParams.subject" from-field="parameters.subject"/>
             <call-service service-name="sendMailFromScreen" in-map-name="emailParams" break-on-error="false">
@@ -272,7 +265,7 @@
         <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
     </simple-method>
 
-    <simple-method method-name="clearSendEmailError" short-description="clear email send error" login-required="false">
+    <simple-method method-name="clearError" short-description="clear email send error" login-required="false">
         <!--   set _ERROR_MESSAGE_  _ERROR_MESSAGE_LIST_ errorMessage errorMessageList as null   -->
         <call-bsh><![CDATA[
            if(request.getAttribute("_ERROR_MESSAGE_") != null){

@@ -1,4 +1,12 @@
 <#if mode?has_content>
+    <#assign dataResourceTypeId = parameters.dataResourceTypeId! />
+    <#if dataResource?has_content>
+        <#if !dataResourceTypeId?has_content>
+            <#assign dataResourceTypeId = dataResource.dataResourceTypeId!""/>
+        </#if>
+        <#assign objectInfo = dataResource.objectInfo!""/>
+    </#if>
+    
     <#if content?has_content>
         <#assign contentId = content.contentId?if_exists />
         <#assign contentName = content.contentName!"" />
@@ -12,7 +20,10 @@
         <#assign statusDesc = statusItem.description!statusItem.get("description",locale)!statusItem.statusId>
         <#assign createdDate = content.createdDate!"" />
         <#assign lastModifiedDate = content.lastModifiedDate!"" />
+        <#assign contentTypeId = content.contentTypeId!"" />
     </#if> 
+    <input type="hidden" name="productId" value="${parameters.productId!""}" />
+    <input type="hidden" name="productContentTypeId" value="${parameters.productContentTypeId!""}" />
     <#if mode == "add">
     	<input type="hidden" name="productCategoryId" value="${parameters.productCategoryId!""}" />
     	<input type="hidden" name="prodCatContentTypeId" value="${parameters.prodCatContentTypeId!""}" />
@@ -69,18 +80,48 @@
       		     </div>
      		</div>
      	</div>
+     	
+     	<#-- ====== Spot Content Type ==== -->
+     	
+     	<div class="infoRow">
+	   		<div class="infoEntry long">
+	      		<div class="infoCaption"><label>${uiLabelMap.TypeCaption}</label></div>
+     		    <div class="infoValue">
+        		     <div class="entry checkbox medium">
+                         <input class="checkBoxEntry" type="radio" name="dataResourceTypeId" value="ELECTRONIC_TEXT" <#if dataResourceTypeId?exists && (dataResourceTypeId=="ELECTRONIC_TEXT" || dataResourceTypeId=="") >checked="checked"<#elseif !(dataResourceTypeId?exists)>checked="checked"</#if> onChange="javascript:setFileEnabledContent(this)"/>${uiLabelMap.EmbeddedLabel}
+                         <input class="checkBoxEntry" type="radio" name="dataResourceTypeId" value="CONTEXT_FILE" <#if dataResourceTypeId=="CONTEXT_FILE">checked="checked"</#if> onChange="javascript:setFileEnabledContent(this)"/>${uiLabelMap.FileReferenceLabel}
+                     </div>
+     		    </div>
+	 		</div>
+	    </div>
+     	
    		<#-- ====== Spot Content ==== -->
-		<div class="infoRow">
+		<div class="infoRow ELECTRONIC_TEXT">
 	   		<div class="infoEntry long">
 	      		<div class="infoCaption"><label>${uiLabelMap.ContentCaption}</label></div>
 	     		    <div class="infoValue">
-	        		     <textarea class="largeArea <#if maxLengthContent?has_content>characterLimit</#if>" name="textData" cols="50" rows="5" <#if maxLengthContent?has_content> maxlength="${maxLengthContent}"</#if>>${parameters.textData!eText!""}</textarea>
+	        		     <textarea class="largeArea <#if maxLengthContent?has_content>characterLimit</#if>" <#if contentTypeId?exists && contentTypeId == "BF_STATIC_PAGE">id="ckeditor"</#if> name="textData" cols="50" rows="5" <#if maxLengthContent?has_content> maxlength="${maxLengthContent}"</#if>>${StringUtil.wrapString(parameters.textData!eText!"")}</textarea>
                          <#if maxLengthContent?has_content>
             		       <span class="textCounter"></span>
             		     </#if>
 	     		    </div>
 	 		</div>
 	    </div>
+	    
+	    <div class="infoRow CONTEXT_FILE">
+	   		<div class="infoEntry long">
+	      		<div class="infoCaption"><label>${uiLabelMap.FileCaption}</label></div>
+     		    <div class="infoValue">
+        		     <input name="objectInfo" class="large" type="text" id="objectInfo" value="${parameters.objectInfo!objectInfo!""}"/>
+     		    </div>
+     		    <div class="infoIcon">
+     		        <#assign ofbizHome = Static["java.lang.System"].getProperty("ofbiz.home")!>
+     		        <#assign tooltipData = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "FileReferenceContentHelpInfo", Static["org.ofbiz.base.util.UtilMisc"].toList("${ofbizHome}/hot-deploy/osafe/webapp/osafe"), locale)/>
+                    <a href="javascript:void(0);" onMouseover="showTooltip(event,'${tooltipData!""}');" onMouseout="hideTooltip()"><span class="helperIcon"></span></a>
+                </div>
+	 		</div>
+	    </div>
+	    
 	    <#-- ====== Created Date ==== -->
 		<div class="infoRow">
 	   		<div class="infoEntry">

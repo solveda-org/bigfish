@@ -27,15 +27,6 @@
         <value xml:lang="en">${sys:getProperty('ofbiz.home')}/hot-deploy/solr/conf/schema-ConstantField.xml</value>
     </property>
 <!-- *************************************** -->
-<!-- App Path -->
-<!-- *************************************** -->
-    <property key="osafeAppPath">
-        <value xml:lang="en">/@localDispatcherName@/control</value>
-    </property>
-    <property key="urlCatalogPrefix">
-        <value xml:lang="en">@url.catalog.prefix@</value>
-    </property>
-<!-- *************************************** -->
 <!-- Store Settings -->
 <!-- *************************************** -->
     <property key="storeStorePrefix">

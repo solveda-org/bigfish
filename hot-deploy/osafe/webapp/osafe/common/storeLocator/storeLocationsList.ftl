@@ -109,6 +109,9 @@
 	  <#assign rowNum= rowNum + 1>
 	 </#if>
 	 </#list>
+     <div class="storeDetailBackBtn" style="display: none;">
+        <a class="standardBtn negative" href="<@ofbizUrl>searchStoreLocator?address=${searchedAddress!}</@ofbizUrl>">${uiLabelMap.CommonBack}</a>
+     </div>
   </div>
  </div>
 </#if>

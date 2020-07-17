@@ -8,7 +8,7 @@ import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.base.util.UtilMisc;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;
@@ -58,7 +58,7 @@ if (UtilValidate.isNotEmpty(rowOrderItem))
 	urlProductId = productId;
 	if (UtilValidate.isEmpty(orderHeader))
 	{
-		orderHeader= delegator.findOne("OrderHeader", [orderId : rowOrderItem.orderId], false);
+		orderHeader= delegator.findOne("OrderHeader", [orderId : rowOrderItem.orderId], true);
 		localOrderReadHelper = new OrderReadHelper(orderHeader);
 		currencyUom = localOrderReadHelper.getCurrency();
 	}
@@ -66,7 +66,7 @@ if (UtilValidate.isNotEmpty(rowOrderItem))
 	orderStatus = orderHeader.getRelatedOneCache("StatusItem");
 	if (UtilValidate.isNotEmpty(rowOrderItem.statusId))
 	{
-		orderItemStatus = delegator.findOne("StatusItem",[statusId : rowOrderItem.statusId],false);
+		orderItemStatus = delegator.findOne("StatusItem",[statusId : rowOrderItem.statusId],true);
 		
 	}
 	
@@ -198,7 +198,7 @@ if (UtilValidate.isNotEmpty(rowOrderItem))
 	productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
 	productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
 
-	productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
+	productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 	
 	//Check Product Availability
 	virtualProductId = ProductWorker.getVariantVirtualId(product);
@@ -271,37 +271,40 @@ if (UtilValidate.isNotEmpty(rowOrderItem))
 	      trackingNumber = shipGroup.trackingNumber;
 	      findCarrierShipmentMethodMap = UtilMisc.toMap("shipmentMethodTypeId", shipGroup.shipmentMethodTypeId, "partyId", shipGroup.carrierPartyId,"roleTypeId" ,"CARRIER");
 	      carrierShipmentMethod = delegator.findByPrimaryKeyCache("CarrierShipmentMethod", findCarrierShipmentMethodMap);
-	      shipmentMethodType = carrierShipmentMethod.getRelatedOneCache("ShipmentMethodType");
-	      shipMethodDescription = shipmentMethodType.description;
-	      carrierPartyGroupName = "";
-	      if (shipGroup.carrierPartyId != "_NA_")
-	      {
-	          carrierParty = carrierShipmentMethod.getRelatedOneCache("Party");
-	          carrierPartyGroup = carrierParty.getRelatedOneCache("PartyGroup");
-	          carrierPartyGroupName = carrierPartyGroup.groupName;
-	          trackingURLPartyContents = delegator.findByAndCache("PartyContent",UtilMisc.toMap("partyId", shipGroup.carrierPartyId, "partyContentTypeId", "TRACKING_URL"));
-	          if (UtilValidate.isNotEmpty(trackingURLPartyContents))
-	          {
-	              trackingURLPartyContent = EntityUtil.getFirst(trackingURLPartyContents);
-	              if (UtilValidate.isNotEmpty(trackingURLPartyContent))
-	              {
-	                  content = trackingURLPartyContent.getRelatedOneCache("Content");
-	                  if (UtilValidate.isNotEmpty(content))
-	                  {
-	                      dataResource = content.getRelatedOneCache("DataResource");
-	                      if (UtilValidate.isNotEmpty(dataResource))
-	                      {
-	                          electronicText = dataResource.getRelatedOneCache("ElectronicText");
-	                          trackingURL = electronicText.textData;
-	                          if (UtilValidate.isNotEmpty(trackingURL))
-	                          {
-	                              trackingURL = FlexibleStringExpander.expandString(trackingURL,UtilMisc.toMap("TRACKING_NUMBER", trackingNumber));
-	                          }
-	                      }
-	                  }
-	              }
-	          }
-	      }
+		  if (UtilValidate.isNotEmpty(carrierShipmentMethod))
+		  {
+			  shipmentMethodType = carrierShipmentMethod.getRelatedOneCache("ShipmentMethodType");
+		      shipMethodDescription = shipmentMethodType.description;
+		      carrierPartyGroupName = "";
+		      if (shipGroup.carrierPartyId != "_NA_")
+		      {
+		          carrierParty = carrierShipmentMethod.getRelatedOneCache("Party");
+		          carrierPartyGroup = carrierParty.getRelatedOneCache("PartyGroup");
+		          carrierPartyGroupName = carrierPartyGroup.groupName;
+		          trackingURLPartyContents = delegator.findByAndCache("PartyContent",UtilMisc.toMap("partyId", shipGroup.carrierPartyId, "partyContentTypeId", "TRACKING_URL"));
+		          if (UtilValidate.isNotEmpty(trackingURLPartyContents))
+		          {
+		              trackingURLPartyContent = EntityUtil.getFirst(trackingURLPartyContents);
+		              if (UtilValidate.isNotEmpty(trackingURLPartyContent))
+		              {
+		                  content = trackingURLPartyContent.getRelatedOneCache("Content");
+		                  if (UtilValidate.isNotEmpty(content))
+		                  {
+		                      dataResource = content.getRelatedOneCache("DataResource");
+		                      if (UtilValidate.isNotEmpty(dataResource))
+		                      {
+		                          electronicText = dataResource.getRelatedOneCache("ElectronicText");
+		                          trackingURL = electronicText.textData;
+		                          if (UtilValidate.isNotEmpty(trackingURL))
+		                          {
+		                              trackingURL = FlexibleStringExpander.expandString(trackingURL,UtilMisc.toMap("TRACKING_NUMBER", trackingNumber));
+		                          }
+		                      }
+		                  }
+		              }
+		          }
+		      }
+		  }
 	  }
 	  
     pdpQtyMinAttributeValue = "";
@@ -310,7 +313,6 @@ if (UtilValidate.isNotEmpty(rowOrderItem))
     {
 	    productAttrPdpQtyMin = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","PDP_QTY_MIN"), true);
 	    productAttrPdpQtyMax = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productId,"attrName","PDP_QTY_MAX"), true);
-	    println("+++++++++++++++++++"+productAttrPdpQtyMin);
 	    if(UtilValidate.isNotEmpty(productAttrPdpQtyMin) && UtilValidate.isNotEmpty(productAttrPdpQtyMax))
 	    {
 		    pdpQtyMinAttributeValue = productAttrPdpQtyMin.attrValue;

@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
-    <screen name="eCommerceNavBar">
-        <section>
-            <actions>
-                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceNavBar.groovy" />
-            </actions>
-            <widgets>
-                <container id="eCommerceNavBar">
-                    <platform-specific>
-                        <html>
-                            <html-template location="component://osafe/webapp/osafe/common/eCommerceNavBar.ftl" />
-                        </html>
-                    </platform-specific>
-                </container>
-            </widgets>
-        </section>
-    </screen>
+    
     <screen name="eCommerceHeader">
         <section>
             <actions>
@@ -67,6 +52,7 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="eCommerceLeftPanel" value="eCommerceRefineByCategory" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCategoryList.groovy" />
+                <set field="formName" value="categoryListForm"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -185,7 +171,7 @@
                 <set field="dialogBoxStyle" value="viewLargerImage" global="true" />
                 <set field="isQuickLook" value="false"/>
                 <set field="addToCartRecurrenceAction" value="addRecurrenceItemToCart"/>
-                <set field="addToCartAction" value="addItemToCart"/>
+                <set field="addToCartAction" value="${groovy:if(addToCartRedirect.equals('CHECKOUT'))return 'addItemToCartCheckout' else return 'addItemToCart';}" />
                 <set field="addToWishListAction" value="addItemToWishList"/>
                 <set field="addMultiItemsToCartAction" value="addMultiItemsToCart"/>
                 <set field="addMultiItemsToWishlistAction" value="addMultiItemsToWishlist"/>
@@ -303,7 +289,6 @@
         </section>
     </screen>
 
-	
 	<screen name="eCommerceSubmitRatingsThankyou">
         <section>
             <actions>
@@ -677,6 +662,108 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="eCommerceShoppingListSearch">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShoppingListSearchTitle}" />
+                <set field="title" from-field="pageTitle" />
+                <!-- For Page Tagging to be generated -->
+                <set field="createAccountPageTagging" value="Y" />
+                <set field="formAction" value="searchShoppingList" />
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="title">
+                        <include-screen name="pageTitle" />
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <container id="eCommerceShoppingListSearchContainer">
+                                <include-screen name="PTS_SHOP_LIST_SEARCH" location="component://osafe/widget/EcommerceContentScreens.xml" />
+                                <platform-specific>
+                                    <html>
+                                        <html-template location="component://osafe/webapp/osafe/common/eCommerceShoppingListSearch.ftl" />
+                                    </html>
+                                </platform-specific>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceProductListShoppingSearch">
+        <section>
+            <actions>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="eCommerceLeftPanel" value="eCommerceShoppingListSearchFacet" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductList.groovy" />
+                <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
+                <set field="dialogActionRequest" value="eCommercePlpQuickLook" global="true"/>
+                <set field="dialogBoxStyle" value="plpQuicklook" global="true"/>
+                <set field="addToCartPlpAction" value="addPlpItemToCart"/>
+                <set field="addToWishListPlpAction" value="addPlpItemToWishlist"/>
+                <set field="addMultiItemsToCartAction" value="addMultiItemsToCart"/>
+                <set field="addMultiItemsToWishlistAction" value="addMultiItemsToWishlist"/>
+                <set field="formName" value="productListForm"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
+                    <decorator-section name="body">
+                        <section>
+                            <actions> 
+                                <set field="thumbImageHeight" from-field="IMG_SIZE_PLP_H"/>
+                                <set field="thumbImageWidth" from-field="IMG_SIZE_PLP_W"/>
+                            </actions>
+                            <widgets>
+                                <container id="eCommerceProductListContainer">
+                                    <include-screen name="categoryBreadcrumbs" />
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductListJS.ftl" />
+                                        </html>
+                                    </platform-specific>
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceProductList.ftl" />
+                                            <html-template location="component://osafe/webapp/osafe/templates/commonTooltip.ftl"/>
+                                        </html>
+                                    </platform-specific>
+                                    <!--  <include-screen name="eCommerceTooltip" /> -->
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+                <include-screen name="plpQuicklookDialog" location="component://osafe/widget/DialogScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="eCommerceShoppingListSearchFacet">
+        <section>
+            <actions>
+                <property-map resource="OsafeProperties" map-name="OSafeConfig" global="true" />
+                <set field="CategoryFacetTitle" value="${uiLabelMap.FacetFilterResultsCaption}"/>
+                <set field="facetShowValueCnt" value="${OSafeConfig['facetProductListShowValueCount']}" type="Integer" default-value="0" />
+            </actions>
+            <widgets>
+                <container id="eCommerceShoppingListFacetContainer">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/eCommerceShoppingListSearchFacet.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="eCommerceEditCustomerInfo">
         <section>
             <actions>
@@ -1137,6 +1224,7 @@
                 <set field="showChangeStoreOption" value="N" />
                 <set field="cartShippingLabel" value="${uiLabelMap.CartFinalShippingAndHandlingCaption}" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceOrderDetail.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/orderSalesTaxInfo.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -1432,7 +1520,7 @@
             <actions>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="contentId" value="${idMap.STATIC_PAGE_ERROR_PAGE}" />
-                <set field="containerId" value="eCommerceAboutUsContainer" />
+                <set field="containerId" value="eCommerceErroPageContainer" />
                 <set field="containerStyle" value="staticContent" />
             </actions>
             <widgets>
@@ -1804,6 +1892,7 @@
                 <set field="orderPDFName" value="Order${parameters.orderId}_"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/eCommerceOrderConfirm.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/cart/orderSalesTaxInfo.groovy" />
             </actions>
             <widgets>
                 <platform-specific>

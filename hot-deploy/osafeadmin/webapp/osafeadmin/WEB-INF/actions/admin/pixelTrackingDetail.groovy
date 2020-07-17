@@ -18,7 +18,14 @@ if (UtilValidate.isNotEmpty(pixelId) && UtilValidate.isNotEmpty(productStoreId))
         if (UtilValidate.isNotEmpty(dataResource))
          {
             electronicText = dataResource.getRelatedOne("ElectronicText");
-            context.eText = electronicText.textData;
+            if (UtilValidate.isNotEmpty(electronicText))
+            {
+                context.eText = electronicText.textData;
+            }
+            else
+            {
+            	context.eText="";
+            }
          }
         context.pixelContent = pixelContent;
     }

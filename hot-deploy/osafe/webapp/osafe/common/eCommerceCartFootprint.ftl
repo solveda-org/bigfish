@@ -11,7 +11,7 @@
             <li id="confirmation" class="last"><span>${uiLabelMap.OrderConfirmationFPLabel}</span></li>
         </#if>
         <#if selectedStep?has_content && selectedStep =="shipping">
-            <li id="cart" class="first"><span>${uiLabelMap.ShoppingCartFPLabel}</span></li>
+            <a href="javascript:submitCheckoutForm(document.${formName!}, 'SCBK', '');"><li id="cart" class="first"><span>${uiLabelMap.ShoppingCartFPLabel}</span></li></a>
             <li id="shippingAddress" class="current"><span>${uiLabelMap.ShippingAddressFPLabel}</span></li>
             <#if shippingApplies?exists && shippingApplies>
               <li id="shippingMethod" class="next"><span>${uiLabelMap.ShippingMethodFPLabel}</span></li>
@@ -21,18 +21,18 @@
         </#if>
         
         <#if selectedStep?has_content && selectedStep =="shippingMethod">
-            <li id="cart" class="first"><span>${uiLabelMap.ShoppingCartFPLabel}</span></li>
-            <li id="shippingAddress" class="on"><span>${uiLabelMap.ShippingAddressFPLabel}</span></li>
+            <a href="javascript:submitCheckoutForm(document.${formName!}, 'SCBK', '');"><li id="cart" class="first"><span>${uiLabelMap.ShoppingCartFPLabel}</span></li></a>
+            <a href="javascript:submitCheckoutForm(document.${formName!}, 'CABK', '');"><li id="shippingAddress" class="on"><span>${uiLabelMap.ShippingAddressFPLabel}</span></li></a>
             <li id="shippingMethod" class="current"><span>${uiLabelMap.ShippingMethodFPLabel}</span></li>
             <li id="payment" class="next"><span>${uiLabelMap.PaymentFPLabel}</span></li>
             <li id="confirmation" class="last"><span>${uiLabelMap.OrderConfirmationFPLabel}</span></li>
         </#if>
         
         <#if selectedStep?has_content && selectedStep =="payment">
-            <li id="cart" class="first"><span>${uiLabelMap.ShoppingCartFPLabel}</span></li>
-            <li id="shippingAddress" class="on"><span>${uiLabelMap.ShippingAddressFPLabel}</span></li>
+            <a href="javascript:submitCheckoutForm(document.${formName!}, 'SCBK', '');"><li id="cart" class="first"><span>${uiLabelMap.ShoppingCartFPLabel}</span></li></a>
+            <a href="javascript:submitCheckoutForm(document.${formName!}, 'CABK', '');"><li id="shippingAddress" class="on"><span>${uiLabelMap.ShippingAddressFPLabel}</span></li></a>
             <#if shippingApplies?exists && shippingApplies>
-              <li id="shippingMethod" class="on"><span>${uiLabelMap.ShippingMethodFPLabel}</span></li>
+              <a href="javascript:submitCheckoutForm(document.${formName!}, 'SOBK', '');"><li id="shippingMethod" class="on"><span>${uiLabelMap.ShippingMethodFPLabel}</span></li></a>
             </#if>
             <li id="payment" class="current"><span>${uiLabelMap.PaymentFPLabel}</span></li>
             <li id="confirmation" class="next last"><span>${uiLabelMap.OrderConfirmationFPLabel}</span></li>

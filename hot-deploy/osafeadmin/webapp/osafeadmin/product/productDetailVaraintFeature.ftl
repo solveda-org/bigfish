@@ -70,11 +70,15 @@
                   <#assign variantProductDescFeatureAndApplsByType = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(variantProductDescFeatureAndAppls,Static["org.ofbiz.base.util.UtilMisc"].toMap('productFeatureTypeId', descFeatureType))/>
               </#if>
               <#if (variantProductDescFeatureAndApplsByType?has_content) && (variantProductDescFeatureAndApplsByType?size > 1)>
+                  <#assign alreadyAddedDistinguishProductFeatureId = Static["javolution.util.FastList"].newInstance()/>
 	              <#list variantProductDescFeatureAndApplsByType as variantProductDescFeatureAndApplByType>
-		              <#assign distinguishProductFeatureMultiValue = distinguishProductFeatureMultiValue + "${variantProductDescFeatureAndApplByType.productFeatureId}@DISTINGUISHING_FEAT"/>
-		              <#if variantProductDescFeatureAndApplByType_has_next>
-		                  <#assign distinguishProductFeatureMultiValue = distinguishProductFeatureMultiValue + ","/>
-		              </#if>
+	                  <#if !alreadyAddedDistinguishProductFeatureId.contains(variantProductDescFeatureAndApplByType.productFeatureId)>
+	                      <#assign distinguishProductFeatureMultiValue = distinguishProductFeatureMultiValue + "${variantProductDescFeatureAndApplByType.productFeatureId}@DISTINGUISHING_FEAT"/>
+	                      <#assign changedProductFeatureId = alreadyAddedDistinguishProductFeatureId.add(variantProductDescFeatureAndApplByType.productFeatureId)/>
+			              <#if variantProductDescFeatureAndApplByType_has_next>
+			                  <#assign distinguishProductFeatureMultiValue = distinguishProductFeatureMultiValue + ","/>
+			              </#if>
+	                  </#if>
 		          </#list>
 		      </#if>
               <#assign distinguishProductFeatureMultiValue = parameters.get("distinguishProductFeatureMulti_${descFeatureType}")!distinguishProductFeatureMultiValue!"">

@@ -573,7 +573,7 @@ access. For a detailed description see the core/docs/entityconfig.html file.
         <read-data reader-name="ext"/>
         <inline-jdbc
                 jdbc-driver="@jdbc.driver@"
-                jdbc-uri="jdbc:jtds:sqlserver://@database.server@:@database.serverPort@;databaseName=@database.name@;SelectMethod=cursor;"
+                jdbc-uri="jdbc:sqlserver://@database.server@:@database.serverPort@;databaseName=@database.name@;SelectMethod=cursor;"
                 jdbc-username="@jdbc.username@"
                 jdbc-password="@jdbc.password@"
                 isolation-level="ReadCommitted"

@@ -24,6 +24,15 @@ if (UtilValidate.isNotEmpty(parameters.review) && "review".equals(parameters.rev
     context.infoMessage = UtilProperties.getMessage("OSafeUiLabels","ReviewLoginInfo", locale );
 }
 
+loginToLowerCase="false";
+securityProperties = UtilProperties.getResourceBundleMap("security.properties", locale);
+userNameLowerCase= UtilProperties.getPropertyValue("security", "username.lowercase");
+if (UtilValidate.isNotEmpty(loginToLowerCase)) 
+{
+    loginToLowerCase=userNameLowerCase;
+}
+context.loginToLowerCase=loginToLowerCase;
+
 checkoutAsGuest = Util.isProductStoreParmTrue(request,"CHECKOUT_AS_GUEST");
 guestUser = parameters.guest;
 showGuestLogin = "N";

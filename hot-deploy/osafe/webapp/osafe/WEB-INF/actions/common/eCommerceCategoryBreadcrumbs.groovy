@@ -8,6 +8,8 @@ import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.category.CategoryWorker;
 import javolution.util.FastMap;
 import javolution.util.FastList;
+import com.osafe.solr.SolrConstants;
+import java.net.URLDecoder;
 
 // Get the Cart and Prepare Size
 shoppingCart = ShoppingCartEvents.getCartObject(request);
@@ -44,11 +46,29 @@ if (UtilValidate.isNotEmpty(filterGroup))
   
   for (int i = 0; i < filterGroupArr.size(); i++)
   {
+		  
         facetGroupName = filterGroupArr[i];
+        if(UtilValidate.isNotEmpty(facetGroupName))
+        {
+        	String[] facetGroupNameArr = StringUtils.split(facetGroupName, ":");
+    	    if(facetGroupNameArr.length > 1)
+    	    {
+    	        try
+    	        {
+    	      	    facetGroupName = facetGroupNameArr[0]+":"+URLDecoder.decode(facetGroupNameArr[1], SolrConstants.DEFAULT_ENCODING);
+    	        }
+    	        catch (UnsupportedEncodingException e)
+    	        {
+    	            facetGroupName = facetGroupNameArr[0]+":"+facetGroupNameArr[1];
+    	        }
+    	    }
+        }
+	    
         if(facetGroupName.indexOf("productCategoryId") > -1)
         {
             context.productCategoryIdFacet = "Y";
-        } else if (facetGroupName.indexOf("topMostProductCategoryId") > -1 )
+        } 
+        else if (facetGroupName.indexOf("topMostProductCategoryId") > -1 )
         {
             context.topMostProductCategoryIdFacet = "Y";
         }

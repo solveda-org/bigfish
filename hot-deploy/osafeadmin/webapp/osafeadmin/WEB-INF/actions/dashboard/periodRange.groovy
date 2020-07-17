@@ -29,9 +29,6 @@ import com.osafe.util.OsafeAdminUtil;
 
 nowTs = UtilDateTime.nowTimestamp();
 
-preferredDateFormat = OsafeAdminUtil.getProductStoreParm(request, "FORMAT_DATE");
-preferredDateFormat = OsafeAdminUtil.isValidDateFormat(preferredDateFormat)?preferredDateFormat:"MM/dd/yy";
-String entryDateFormat = preferredDateFormat;
 context.periodFrom ="";
 context.periodTo ="";
 String periodFrom = request.getParameter("periodFrom");
@@ -46,7 +43,7 @@ if(UtilValidate.isEmpty(periodFrom))
     if(UtilValidate.isEmpty(periodFrom))
     {
         periodFromTs = UtilDateTime.getDayStart(nowTs);
-        periodFrom = UtilDateTime.timeStampToString(periodFromTs, entryDateFormat, timeZone, locale);
+        periodFrom = UtilDateTime.timeStampToString(periodFromTs, entryDateTimeFormat, timeZone, locale);
     }
 }
 
@@ -57,16 +54,15 @@ if(UtilValidate.isEmpty(periodTo))
     if(UtilValidate.isEmpty(periodTo))
     {
         periodToTs = UtilDateTime.getDayEnd(nowTs);
-        periodTo = UtilDateTime.timeStampToString(periodToTs, entryDateFormat, timeZone, locale);
+        periodTo = UtilDateTime.timeStampToString(periodToTs, entryDateTimeFormat, timeZone, locale);
     }
 }
 
 if(UtilValidate.isNotEmpty(periodFrom))
 {
-    if(OsafeAdminUtil.isDateTime(periodFrom, preferredDateFormat))
+    if(OsafeAdminUtil.isDateTime(periodFrom, entryDateTimeFormat))
     {
-        periodFromTs =ObjectType.simpleTypeConvert(periodFrom, "Timestamp", entryDateFormat, locale);
-        periodFromTs = UtilDateTime.getDayStart(periodFromTs);
+        periodFromTs =ObjectType.simpleTypeConvert(periodFrom, "Timestamp", entryDateTimeFormat, locale);
         context.periodFrom = periodFrom;
         context.periodFromTs = periodFromTs;
         session.setAttribute("periodFrom", periodFrom);
@@ -79,10 +75,9 @@ if(UtilValidate.isNotEmpty(periodFrom))
 
 if(UtilValidate.isNotEmpty(periodTo)) 
 {
-    if(OsafeAdminUtil.isDateTime(periodTo, preferredDateFormat))
+    if(OsafeAdminUtil.isDateTime(periodTo, entryDateTimeFormat))
     {
-        periodToTs =ObjectType.simpleTypeConvert(periodTo, "Timestamp", entryDateFormat, locale);
-        periodToTs = UtilDateTime.getDayEnd(periodToTs);
+        periodToTs =ObjectType.simpleTypeConvert(periodTo, "Timestamp", entryDateTimeFormat, locale);
         context.periodTo = periodTo;
         context.periodToTs = periodToTs;
         session.setAttribute("periodTo", periodTo);

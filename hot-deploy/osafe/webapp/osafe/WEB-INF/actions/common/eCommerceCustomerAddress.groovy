@@ -80,6 +80,10 @@ if (UtilValidate.isNotEmpty(partyId))
 			if (UtilValidate.isNotEmpty(partyProfileDefault) && UtilValidate.isNotEmpty(partyProfileDefault.defaultShipAddr))
 			{
 				tempPartyShippingLocations = EntityUtil.filterByAnd(partyShippingLocations, UtilMisc.toMap("contactMechId", partyProfileDefault.defaultShipAddr));
+				if (UtilValidate.isEmpty(tempPartyShippingLocations))
+				{
+					tempPartyShippingLocations = partyShippingLocations;
+				}
 			}
             partyShippingLocation = EntityUtil.getFirst(tempPartyShippingLocations);
             shippingPostalAddress = partyShippingLocation.getRelatedOneCache("PostalAddress");

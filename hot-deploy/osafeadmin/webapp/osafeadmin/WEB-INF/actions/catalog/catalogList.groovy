@@ -23,12 +23,12 @@ initializedCB = StringUtils.trimToEmpty(parameters.initializedCB);
 preRetrieved = StringUtils.trimToEmpty(parameters.preRetrieved);
 catalogActiveDate = StringUtils.trimToEmpty(parameters.catalogActiveDate);
 showAll = StringUtils.trimToEmpty(parameters.showAll);
-String entryDateFormat = preferredDateFormat;
-Timestamp catalogActiveDateTs = null;
 List errMsgList = FastList.newInstance();
 List infoMsgList = FastList.newInstance();
 Boolean isValidDate = true;
 categoryRollupList =  FastList.newInstance();
+Timestamp catalogActiveDateTs = null;
+
 if (UtilValidate.isNotEmpty(preRetrieved))
 {
    context.preRetrieved=preRetrieved;
@@ -70,17 +70,18 @@ if (UtilValidate.isNotEmpty(productStore))
         {
             if(UtilValidate.isNotEmpty(catalogActiveDate)) 
             {
-                if(OsafeAdminUtil.isDateTime(catalogActiveDate, preferredDateFormat))
+                if(OsafeAdminUtil.isDateTime(catalogActiveDate, entryDateTimeFormat))
                 {
+                	
                     catalogActiveDateTs =UtilDateTime.nowTimestamp(); 
                     try 
                     {
-                        catalogActiveDateTs =ObjectType.simpleTypeConvert(catalogActiveDate, "Timestamp", entryDateFormat, locale);
+                        catalogActiveDateTs =ObjectType.simpleTypeConvert(catalogActiveDate, "Timestamp", entryDateTimeFormat, locale);
                     }
                     catch (Exception e) 
                     {
                         catalogActiveDateTs =UtilDateTime.nowTimestamp();
-                        context.catalogActiveDate=UtilDateTime.nowDateString(entryDateFormat);
+                        context.catalogActiveDate=UtilDateTime.nowDateString(entryDateTimeFormat);
                         errMsgList.add(UtilProperties.getMessage("OSafeAdminUiLabels","AsOfDateError",locale));
                     }
                 }
@@ -94,7 +95,7 @@ if (UtilValidate.isNotEmpty(productStore))
             } else 
             {
                 catalogActiveDateTs =UtilDateTime.nowTimestamp();
-                context.catalogActiveDate=UtilDateTime.nowDateString(entryDateFormat);
+                context.catalogActiveDate=UtilDateTime.nowDateString(entryDateTimeFormat);
             }
             dateExpr.add(EntityCondition.makeCondition("fromDate", EntityOperator.LESS_THAN_EQUAL_TO, catalogActiveDateTs));
             activeThruDateExpr.add(EntityCondition.makeCondition("thruDate", EntityOperator.GREATER_THAN_EQUAL_TO, catalogActiveDateTs));

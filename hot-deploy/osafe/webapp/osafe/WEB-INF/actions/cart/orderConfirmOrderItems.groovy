@@ -8,7 +8,7 @@ import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.base.util.UtilMisc;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.order.order.OrderReadHelper;
@@ -37,7 +37,7 @@ stockInfo = "";
 if (UtilValidate.isNotEmpty(orderItem))
 {
 
-	orderHeader = delegator.findOne("OrderHeader", [orderId : orderItem.orderId], false);
+	orderHeader = delegator.findOne("OrderHeader", [orderId : orderItem.orderId], true);
 	orderReadHelper = new OrderReadHelper(orderHeader);
 
 	currencyUom = orderReadHelper.getCurrency();
@@ -209,7 +209,7 @@ if (UtilValidate.isNotEmpty(orderItem))
 	productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
 	productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
 
-	productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
+	productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 	
 
 	context.roleTypeId = roleTypeId;

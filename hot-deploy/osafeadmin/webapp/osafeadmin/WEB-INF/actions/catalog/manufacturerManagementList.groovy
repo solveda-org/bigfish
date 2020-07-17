@@ -104,6 +104,10 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
 		 {
 			 completePartyList = EntityUtil.orderBy(matchNamePartyList,UtilMisc.toList('partyId'));
 		 }
+		 else
+		 {
+		   	 completePartyList = null;
+		 }	
 	 }
 	 
      context.pagingList = completePartyList;

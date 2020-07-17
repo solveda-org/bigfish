@@ -1,4 +1,4 @@
-  <#assign paramMap = Static["org.ofbiz.base.util.UtilHttp"].getParameterMap(request, Static["org.ofbiz.base.util.UtilMisc"].toSet("productStoreId","browseRootProductCategoryId","preferredDateFormat", "preferredDateTimeFormat"), false)!""/>
+  <#assign paramMap = Static["org.ofbiz.base.util.UtilHttp"].getParameterMap(request, Static["org.ofbiz.base.util.UtilMisc"].toSet("productStoreId","browseRootProductCategoryId","preferredDateFormat", "preferredDateTimeFormat", "entryDateTimeFormat"), false)!""/>
   <#if paramMap?has_content>
        <#assign previousParams = Static["org.ofbiz.base.util.UtilHttp"].urlEncodeArgs(paramMap)/>
   </#if>
@@ -21,6 +21,9 @@
     </#if>
     <#if execAction?exists && execAction?has_content>
         <a href="<#if !execInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'EX');<#else><@ofbizUrl>${execAction}</@ofbizUrl></#if>" class="buttontext standardBtn action" <#if execInNewTab?has_content>target="_${execInNewTab!}"</#if>>${execActionBtn!"${uiLabelMap.execActionBtn}"}</a>
+    </#if>
+    <#if execAjaxAction?exists && execAjaxAction?has_content>
+        <a href="<#if !execInNewTab?has_content>javascript:submitDetailForm(document.${detailFormName!""}, 'EXA');<#else><@ofbizUrl>${execAjaxAction}</@ofbizUrl></#if>" class="buttontext standardBtn action">${execAjaxActionBtn!"${uiLabelMap.execActionBtn}"}</a>
     </#if>
     <#-- displays Action button only if certain conditions are satisfied -->
     <#assign showButton = false>

@@ -1,7 +1,7 @@
 package common;
 
 import org.ofbiz.base.util.UtilValidate;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import com.osafe.util.Util;
 
 clpItem = request.getAttribute("clpItem");
@@ -30,7 +30,7 @@ if(UtilValidate.isNotEmpty(clpItem))
     {
         productCategoryId = clpItem.name;
     }
-    productCategoryUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductList?productCategoryId='+productCategoryId);
+    productCategoryUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductList?productCategoryId='+productCategoryId);
     
     context.categoryImageUrl = categoryImageUrl;
     context.categoryName = categoryName;

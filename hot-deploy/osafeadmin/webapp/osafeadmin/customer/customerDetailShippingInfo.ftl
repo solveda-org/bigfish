@@ -7,7 +7,12 @@
         <div class="infoEntry">
             <div class="infoCaption"><label>&nbsp;</label></div>
             <div class="entry checkbox small">
-                <input type="checkbox" class="checkbox" name="isSameAsBilling" id="isSameAsBilling" value="Y"  <#if parameters.isSameAsBilling?has_content && parameters.isSameAsBilling == "Y">checked</#if>/>${uiLabelMap.ShippingSameAsBillingLabel}
+            	<#if (errorMessage?has_content || errorMessageList?has_content) && parameters.isSameAsBilling?has_content && parameters.isSameAsBilling == "Y">
+			        <#assign isSameAsBilling = "Y" />
+			    <#elseif !errorMessage?has_content && !errorMessageList?has_content>
+			    	<#assign isSameAsBilling = "Y" />
+			    </#if>
+                <input type="checkbox" class="checkbox" name="isSameAsBilling" id="isSameAsBilling" value="Y"  <#if isSameAsBilling?has_content && isSameAsBilling == "Y">checked</#if>/>${uiLabelMap.ShippingSameAsBillingLabel}
             </div>
         </div>
     </div>

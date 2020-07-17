@@ -5,13 +5,20 @@
 
     <simple-method method-name="createCategoryTextContent" short-description="Create DataResource, ElectronicText, Content and ProductCategoryContent record.">
     
-        <set field="createDataResourceCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createDataResourceCtx.dataResourceTypeId" from-field="parameters.dataResourceTypeId"/>
         <set field="createDataResourceCtx.dataTemplateTypeId" value="FTL"/>
+        <if-compare operator="equals" value="CONTEXT_FILE" field="parameters.dataResourceTypeId">
+            <set field="createDataResourceCtx.objectInfo" from-field="parameters.objectInfo"/>
+        </if-compare>
         <call-service service-name="createDataResource" in-map-name="createDataResourceCtx">
             <result-to-field result-name="dataResourceId"/>
         </call-service>
+        
         <set field="createContentCtx.dataResourceId" from-field="dataResourceId"/>
-        <call-service service-name="createElectronicText" in-map-name="createContentCtx"/>
+        <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+            <call-service service-name="createElectronicText" in-map-name="createContentCtx"/>
+        </if-compare>
+        
         <set field="createContentCtx.statusId" value="CTNT_PUBLISHED"/>
         <entity-one entity-name="ProductCategory" value-field="productCategory"/>
         <entity-one entity-name="ProductCategoryContentType" value-field="productCategoryContentType">
@@ -72,23 +79,65 @@
                 </if-empty>
             </else>
             </if-empty>
-            <if-empty field="electronicText.textData">
-                <if-empty field="parameters.textData">
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
-                </if-empty>
-            <else>
-                <if-empty field="parameters.textData">
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotContentError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
-                </if-empty>
-            </else>
-            </if-empty>
+            
+            <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+	            <if-empty field="electronicText.textData">
+	                <if-empty field="parameters.textData">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
+	                </if-empty>
+	            <else>
+	                <if-empty field="parameters.textData">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotContentError"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
+	                </if-empty>
+	            </else>
+	            </if-empty>
+	        </if-compare>
+	        
+	        <if-compare operator="equals" value="CONTEXT_FILE" field="parameters.dataResourceTypeId">
+	            <if-empty field="parameters.objectInfo">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FileReferenceBlankError"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+		        <else>
+		            <call-class-method class-name="java.lang.System" method-name="getProperty" ret-field="ofbizHome">
+	                    <string value="ofbiz.home"/>
+	                </call-class-method>
+	                <set field="baseDir" from-field="ofbizHome" type="String"/>
+	                <string-append field="baseDir" string="/hot-deploy"/>
+	                <string-append field="baseDir" string="/osafe/webapp/osafe"/>
+	                <create-object class-name="java.io.File" field="contentFile">
+	                    <field field="baseDir" type="String"/>
+	                    <field field="parameters.objectInfo" type="String"/>
+	                </create-object>
+	                
+	                <call-object-method method-name="exists" obj-field="contentFile" ret-field="isContentFileExists"/>
+	                <if-compare operator="equals" value="false" field="isContentFileExists" type="Boolean">
+	                    <clear-field field="argListNames"/>
+	                    <set field="argListNames[]" from-field="parameters.objectInfo"/>
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ContentFileNotExistError" arg-list-name="argListNames"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+	                </if-compare>
+		        </else>
+		        </if-empty>
+	        </if-compare>
+            
             <check-errors/>
-            <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextCtx"/>
-            <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextCtx"/>
+            <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+                <set field="findElectronicTextCtx.dataResourceId" from-field="parameters.dataResourceId"/>
+		        <find-by-primary-key value-field="electronicText" map="findElectronicTextCtx" entity-name="ElectronicText"/>
+                <if-not-empty field="electronicText">
+	                <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextCtx"/>
+	                <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextCtx"/>
+	            <else>
+	                <set-service-fields service-name="createElectronicText" map="parameters" to-map="createElectronicTextCtx"/>
+	                <call-service service-name="createElectronicText" in-map-name="createElectronicTextCtx"/>
+	            </else>
+                </if-not-empty>
+            </if-compare>
             <set-service-fields service-name="updateDataResource" map="parameters" to-map="updateDataResourceCtx"/>
             <call-service service-name="updateDataResource" in-map-name="updateDataResourceCtx"/>
+            
             <now-timestamp field="lastModifiedDate"/>
             <if-compare field="parameters.statusId" operator="not-equals" value="CTNT_PUBLISHED">
                 <set field="parameters.lastModifiedDate" from-field="lastModifiedDate"/>
@@ -106,6 +155,7 @@
         </if-not-empty>
         <field-to-result field="parameters.contentId" result-name="contentId"/>
     </simple-method>
+
 
     <simple-method method-name="createNewContentSpot" short-description="create a new content">
         <if-empty field="parameters.contentId">
@@ -154,22 +204,71 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionContentError"/>
             <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
         </if-empty>
-        <if-empty field="parameters.textData">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
-        </if-empty>
+        <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+            <if-empty field="parameters.textData">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
+	        </if-empty>
+        </if-compare>
+        
+        <if-compare operator="equals" value="CONTEXT_FILE" field="parameters.dataResourceTypeId">
+            <if-empty field="parameters.objectInfo">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FileReferenceBlankError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+            <else>
+	            <call-class-method class-name="java.lang.System" method-name="getProperty" ret-field="ofbizHome">
+                    <string value="ofbiz.home"/>
+                </call-class-method>
+                <set field="baseDir" from-field="ofbizHome" type="String"/>
+                <string-append field="baseDir" string="/hot-deploy"/>
+                <string-append field="baseDir" string="/osafe/webapp/osafe"/>
+                <create-object class-name="java.io.File" field="contentFile">
+                    <field field="baseDir" type="String"/>
+                    <field field="parameters.objectInfo" type="String"/>
+                </create-object>
+                
+                <call-object-method method-name="exists" obj-field="contentFile" ret-field="isContentFileExists"/>
+                <if-compare operator="equals" value="false" field="isContentFileExists" type="Boolean">
+                    <clear-field field="argListNames"/>
+                    <set field="argListNames[]" from-field="parameters.objectInfo"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ContentFileNotExistError" arg-list-name="argListNames"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+                </if-compare>
+	        </else>
+	        </if-empty>
+        </if-compare>
+        
         <check-errors/>
-        <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
-        <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
-        <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
-        <set field="createTextContentCtx.contentTypeId" from-field="parameters.contentTypeId"/>
-        <if-not-empty field="parameters.locale">
-            <set field="createTextContentCtx.localeString" from-field="parameters.locale" type="PlainString"/>
-        </if-not-empty>
-        <set field="createTextContentCtx.mapKey" value="link"/>
-        <set field="createTextContentCtx.contentPurposeTypeId"  value="SECTION"/>
-        <set field="createTextContentCtx.mimeTypeId"  value="text/html"/>
-        <call-service service-name="createTextContent" in-map-name="createTextContentCtx"/>
+        <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+            <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
+	        <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+	        <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
+	        <set field="createTextContentCtx.contentTypeId" from-field="parameters.contentTypeId"/>
+	        <if-not-empty field="parameters.locale">
+	            <set field="createTextContentCtx.localeString" from-field="parameters.locale" type="PlainString"/>
+	        </if-not-empty>
+	        <set field="createTextContentCtx.mapKey" value="link"/>
+	        <set field="createTextContentCtx.contentPurposeTypeId"  value="SECTION"/>
+	        <set field="createTextContentCtx.mimeTypeId"  value="text/html"/>
+	        <call-service service-name="createTextContent" in-map-name="createTextContentCtx"/>
+        </if-compare>
+        <if-compare operator="equals" value="CONTEXT_FILE" field="parameters.dataResourceTypeId">
+            <set-service-fields service-name="createDataResource" map="parameters" to-map="createDataResourceCtx"/>
+	        <set field="createDataResourceCtx.dataTemplateTypeId" value="FTL"/>
+	        <call-service service-name="createDataResource" in-map-name="createDataResourceCtx">
+	            <result-to-field result-name="dataResourceId" field="parameters.generatedDataResourceId"/>
+	        </call-service>
+	        
+	        <set-service-fields service-name="createContentFromDataResource" map="parameters" to-map="createContentFromDataResourceCtx"/>
+	        <set field="createContentFromDataResourceCtx.dataResourceId" from-field="parameters.generatedDataResourceId"/>
+	        <set field="createContentFromDataResourceCtx.contentTypeId" from-field="parameters.contentTypeId"/>
+	        <if-not-empty field="parameters.locale">
+	            <set field="createContentFromDataResourceCtx.localeString" from-field="parameters.locale" type="PlainString"/>
+	        </if-not-empty>
+	        <set field="createContentFromDataResourceCtx.contentPurposeTypeId" value="SECTION"/>
+	        <call-service service-name="createContentFromDataResource" in-map-name="createContentFromDataResourceCtx"/>
+        </if-compare> 
+        
 
         <set-service-fields service-name="createXContentXref" map="parameters" to-map="createXContentXrefCtx"/>
         <set field="createXContentXrefCtx.bfContentId" from-field="parameters.contentId"/>
@@ -205,6 +304,7 @@
                 <string-to-list string="${defaultSuccessMessage}" list="parameters.successMessageList"/>
             </if-empty>
              <field-to-result field="parameters.successMessageList" result-name="osafeSuccessMessageList"/>
+             <field-to-result field="parameters.warningMessageList" result-name="warningMessageList"/>
          </if-compare>
     </simple-method>
     
@@ -307,4 +407,147 @@
             </iterate-map>
         </iterate-map>
     </simple-method>
+
+    <simple-method method-name="updateProductTextContent" short-description="Update Product Text Content">
+        <entity-one entity-name="Content" value-field="content"/>
+        <if-not-empty field="content">
+            <set field="parameters.dataResourceId" from-field="content.dataResourceId"/>
+            <entity-one entity-name="ElectronicText" value-field="electronicText" />
+             <if-empty field="content.contentName">
+                <if-empty field="parameters.contentName">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotNameError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="contentName" list="error_list"/>
+                </if-empty>
+             <else>
+                <if-empty field="parameters.contentName">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotNameError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="contentName" list="error_list"/>
+                </if-empty>
+             </else>
+            </if-empty>
+            <if-empty field="content.description">
+                <if-empty field="parameters.description">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="DescriptionContentError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+                </if-empty>
+            <else>
+                <if-empty field="parameters.description">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionContentError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
+                </if-empty>
+            </else>
+            </if-empty>
+            <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+	            <if-empty field="electronicText.textData">
+	                <if-empty field="parameters.textData">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
+	                </if-empty>
+	            <else>
+	                <if-empty field="parameters.textData">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotContentError"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
+	                </if-empty>
+	            </else>
+	            </if-empty>
+	        </if-compare>
+	        
+	        <if-compare operator="equals" value="CONTEXT_FILE" field="parameters.dataResourceTypeId">
+	            <if-empty field="parameters.objectInfo">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FileReferenceBlankError"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+		        <else>
+		            <call-class-method class-name="java.lang.System" method-name="getProperty" ret-field="ofbizHome">
+	                    <string value="ofbiz.home"/>
+	                </call-class-method>
+	                <set field="baseDir" from-field="ofbizHome" type="String"/>
+	                <string-append field="baseDir" string="/hot-deploy"/>
+	                <string-append field="baseDir" string="/osafe/webapp/osafe"/>
+	                <create-object class-name="java.io.File" field="contentFile">
+	                    <field field="baseDir" type="String"/>
+	                    <field field="parameters.objectInfo" type="String"/>
+	                </create-object>
+	                
+	                <call-object-method method-name="exists" obj-field="contentFile" ret-field="isContentFileExists"/>
+	                <if-compare operator="equals" value="false" field="isContentFileExists" type="Boolean">
+	                    <clear-field field="argListNames"/>
+	                    <set field="argListNames[]" from-field="parameters.objectInfo"/>
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ContentFileNotExistError" arg-list-name="argListNames"/>
+	                    <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+	                </if-compare>
+		        </else>
+		        </if-empty>
+	        </if-compare>
+	        
+            <check-errors/>
+            
+            <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+                <set field="findElectronicTextCtx.dataResourceId" from-field="parameters.dataResourceId"/>
+		        <find-by-primary-key value-field="electronicText" map="findElectronicTextCtx" entity-name="ElectronicText"/>
+                <if-not-empty field="electronicText">
+	                <set-service-fields service-name="updateElectronicText" map="parameters" to-map="updateElectronicTextCtx"/>
+	                <call-service service-name="updateElectronicText" in-map-name="updateElectronicTextCtx"/>
+	            <else>
+	                <set-service-fields service-name="createElectronicText" map="parameters" to-map="createElectronicTextCtx"/>
+	                <call-service service-name="createElectronicText" in-map-name="createElectronicTextCtx"/>
+	            </else>
+                </if-not-empty>
+            </if-compare>
+            
+            <set-service-fields service-name="updateDataResource" map="parameters" to-map="updateDataResourceCtx"/>
+            <call-service service-name="updateDataResource" in-map-name="updateDataResourceCtx"/>
+            
+            <now-timestamp field="lastModifiedDate"/>
+            <if-compare field="parameters.statusId" operator="not-equals" value="CTNT_PUBLISHED">
+                <set field="parameters.lastModifiedDate" from-field="lastModifiedDate"/>
+            <else>
+                <if-empty field="content.lastModifiedDate">
+                    <set field="parameters.lastModifiedDate" from-field="lastModifiedDate"/>
+                </if-empty>
+            </else>
+            </if-compare>
+            <set-nonpk-fields value-field="content" map="parameters"/>
+            <if-not-empty field="parameters.locale">
+                <set field="content.localeString" from-field="parameters.locale" type="PlainString"/>
+            </if-not-empty>
+            <store-value value-field="content"/>
+        </if-not-empty>
+        <field-to-result field="parameters.contentId" result-name="contentId"/>
+        <field-to-result field="parameters.productId" result-name="productId"/>
+    </simple-method>
+	
+	<simple-method method-name="createProductTextContent" short-description="Create DataResource, ElectronicText, Content and ProductContent record.">
+    
+        <set field="createDataResourceCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
+        <set field="createDataResourceCtx.dataTemplateTypeId" value="FTL"/>
+        <call-service service-name="createDataResource" in-map-name="createDataResourceCtx">
+            <result-to-field result-name="dataResourceId"/>
+        </call-service>
+        
+        <set field="createContentCtx.dataResourceId" from-field="dataResourceId"/>
+        <call-service service-name="createElectronicText" in-map-name="createContentCtx"/>
+        
+        <set field="createContentCtx.statusId" value="CTNT_DEACTIVATED"/>
+        <entity-one entity-name="Product" value-field="product"/>
+        
+        <entity-one entity-name="ProductContentType" value-field="productContentType">
+            <field-map field-name="productContentTypeId" from-field="parameters.productContentTypeId"/>
+        </entity-one>
+        <property-to-field field="contentDescription" resource="OSafeAdminUiLabels" property="ProductContentDescriptionLabel"/>
+        <property-to-field field="contentName" resource="OSafeAdminUiLabels" property="ProductContentNameLabel"/>
+        
+        <set field="createContentCtx.contentName" from-field="contentName" default-value="${product.productId} ${productContentType.description}"/>
+        <set field="createContentCtx.description" from-field="contentDescription" default-value=""/>
+        <call-service service-name="createContent" in-map-name="createContentCtx">
+            <result-to-field result-name="contentId"/>
+            <result-to-result result-name="contentId"/>
+        </call-service>
+        <set field="createProductContentCtx.contentId" from-field="contentId"/>
+        <set field="createProductContentCtx.productContentTypeId" from-field="parameters.productContentTypeId"/>
+        <set field="createProductContentCtx.productId" from-field="parameters.productId"/>
+        <call-service service-name="createProductContent" in-map-name="createProductContentCtx">
+            <result-to-result result-name="productId"/>
+        </call-service>
+    </simple-method>
+
 </simple-methods>

@@ -1,5 +1,4 @@
-<div class="boxBody">
-    <div class="heading">${orderShippingGroupDetailsInfoHeading!}</div>
+
     <div class="infoRow column">
         <div class="infoEntry">
             <div class="infoCaption">
@@ -35,7 +34,9 @@
 		                <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", orderItemShipGroup.carrierPartyId))?if_exists />
 		                <#if carrier?has_content>${carrier.groupName?default(carrier.partyId)!}&nbsp;</#if>
 		            </#if>
-		            ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
+		            <#if shipmentMethodType?has_content>
+		               ${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}
+		            </#if>
             </div>
         </div>
     </div>
@@ -49,7 +50,7 @@
                     ${orderItemShipGroup.trackingNumber!""}
             </div>
             <div class="infoIcon">
-                <#if orderItemShipGroup?has_content && orderItemShipGroup.carrierPartyId != "_NA_" && orderItemShipGroup.trackingNumber?has_content>
+                <#if orderItemShipGroup?has_content && (orderItemShipGroup.carrierPartyId?has_content && orderItemShipGroup.carrierPartyId != "_NA_") && orderItemShipGroup.trackingNumber?has_content>
                     <#assign trackingURLPartyContents = delegator.findByAnd("PartyContent", {"partyId": orderItemShipGroup.carrierPartyId, "partyContentTypeId": "TRACKING_URL"})/>
                     <#if trackingURLPartyContents?has_content>
                         <#assign trackingURLPartyContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(trackingURLPartyContents)/>
@@ -102,5 +103,4 @@
             </div>
         </div>
     </div>
-</div>
 

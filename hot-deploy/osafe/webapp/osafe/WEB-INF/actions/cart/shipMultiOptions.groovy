@@ -13,7 +13,7 @@ import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.base.util.UtilMisc;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;

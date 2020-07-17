@@ -7,6 +7,14 @@
     <#if partyAttribute?has_content>
       <#assign USER_GENDER = partyAttribute.attrValue!"">
     </#if>
+<#-- for Facebook login -->
+<#elseif parameters.fbGender?has_content>
+	<#if parameters.fbGender == "male">
+		<#assign USER_GENDER = "M"/>
+	</#if>
+	<#if parameters.fbGender == "female">
+		<#assign USER_GENDER = "F"/>
+	</#if>
 </#if>
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <div class="${request.getAttribute("attributeClass")!}">

@@ -28,7 +28,7 @@ if(OsafeAdminUtil.isProductStoreParmTrue(request,"COUNTRY_MULTI"))
     else
     {
 	  countryGeoCodeList = StringUtil.split(countryDropDown,",")
-	  for (List geoId: countryGeoCodeList) 
+	  for (String geoId: countryGeoCodeList) 
 	   {
           countryGeoId = geoId;
           countryGeoMap = OsafeAdminUtil.getCountryGeoInfo(delegator, countryGeoId.trim());

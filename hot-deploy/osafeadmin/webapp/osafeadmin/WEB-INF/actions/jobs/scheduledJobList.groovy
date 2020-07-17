@@ -131,10 +131,10 @@ if(UtilValidate.isNotEmpty(srchServiceName))
 //handle all the dates 
 if (UtilValidate.isNotEmpty(srchRunDateFrom))
 {
-    if (OsafeAdminUtil.isDateTime(srchRunDateFrom, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(srchRunDateFrom, entryDateTimeFormat))
     {
         try {
-              srchRunDateFrom = ObjectType.simpleTypeConvert(srchRunDateFrom, "Timestamp", preferredDateFormat, locale);
+              srchRunDateFrom = ObjectType.simpleTypeConvert(srchRunDateFrom, "Timestamp", entryDateTimeFormat, locale);
         } catch (Exception e) {
             errMsg = "Parse Exception srchRunDateFrom: " + srchRunDateFrom;
             Debug.logError(e, errMsg, "scheduledJobList.groovy");
@@ -150,10 +150,10 @@ if (UtilValidate.isNotEmpty(srchRunDateFrom))
 }
 if (UtilValidate.isNotEmpty(srchRunDateTo))
 {
-    if (OsafeAdminUtil.isDateTime(srchRunDateTo, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(srchRunDateTo, entryDateTimeFormat))
     {
         try {
-              srchRunDateTo = ObjectType.simpleTypeConvert(srchRunDateTo, "Timestamp", preferredDateFormat, locale);
+              srchRunDateTo = ObjectType.simpleTypeConvert(srchRunDateTo, "Timestamp", entryDateTimeFormat, locale);
         } catch (Exception e) {
             errMsg = "Parse Exception srchRunDateTo: " + srchRunDateTo;
             Debug.logError(e, errMsg, "scheduledJobList.groovy");
@@ -170,10 +170,10 @@ if (UtilValidate.isNotEmpty(srchRunDateTo))
 }
 if (UtilValidate.isNotEmpty(srchStartDateFrom))
 {
-    if (OsafeAdminUtil.isDateTime(srchStartDateFrom, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(srchStartDateFrom, entryDateTimeFormat))
     {
         try {
-              srchStartDateFrom = ObjectType.simpleTypeConvert(srchStartDateFrom, "Timestamp", preferredDateFormat, locale);
+              srchStartDateFrom = ObjectType.simpleTypeConvert(srchStartDateFrom, "Timestamp", entryDateTimeFormat, locale);
         } catch (Exception e) {
             errMsg = "Parse Exception srchStartDateFrom: " + srchStartDateFrom;
             Debug.logError(e, errMsg, "scheduledJobList.groovy");
@@ -189,10 +189,10 @@ if (UtilValidate.isNotEmpty(srchStartDateFrom))
 }
 if (UtilValidate.isNotEmpty(srchStartDateTo))
 {
-    if (OsafeAdminUtil.isDateTime(srchStartDateTo, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(srchStartDateTo, entryDateTimeFormat))
     {
         try {
-              srchStartDateTo = ObjectType.simpleTypeConvert(srchStartDateTo, "Timestamp", preferredDateFormat, locale);
+              srchStartDateTo = ObjectType.simpleTypeConvert(srchStartDateTo, "Timestamp", entryDateTimeFormat, locale);
         } catch (Exception e) {
             errMsg = "Parse Exception srchStartDateTo: " + srchStartDateTo;
             Debug.logError(e, errMsg, "scheduledJobList.groovy");
@@ -211,10 +211,10 @@ if (UtilValidate.isNotEmpty(srchStartDateTo))
 
 if (UtilValidate.isNotEmpty(srchEndDateFrom))
 {
-    if (OsafeAdminUtil.isDateTime(srchEndDateFrom, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(srchEndDateFrom, entryDateTimeFormat))
     {
         try {
-              srchEndDateFrom = ObjectType.simpleTypeConvert(srchEndDateFrom, "Timestamp", preferredDateFormat, locale);
+              srchEndDateFrom = ObjectType.simpleTypeConvert(srchEndDateFrom, "Timestamp", entryDateTimeFormat, locale);
         } catch (Exception e) {
             errMsg = "Parse Exception srchEndDateFrom: " + srchEndDateFrom;
             Debug.logError(e, errMsg, "scheduledJobList.groovy");
@@ -230,10 +230,10 @@ if (UtilValidate.isNotEmpty(srchEndDateFrom))
 }
 if (UtilValidate.isNotEmpty(srchEndDateTo))
 {
-    if (OsafeAdminUtil.isDateTime(srchEndDateTo, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(srchEndDateTo, entryDateTimeFormat))
     {
         try {
-              srchEndDateTo = ObjectType.simpleTypeConvert(srchEndDateTo, "Timestamp", preferredDateFormat, locale);
+              srchEndDateTo = ObjectType.simpleTypeConvert(srchEndDateTo, "Timestamp", entryDateTimeFormat, locale);
         } catch (Exception e) {
             errMsg = "Parse Exception srchEndDateTo: " + srchEndDateTo;
             Debug.logError(e, errMsg, "scheduledJobList.groovy");

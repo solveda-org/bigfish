@@ -97,6 +97,9 @@
 <ProductContentType productContentTypeId="PDP_SWATCH_IMAGE_URL" description="PDP Swatch Image" hasTable="N" parentTypeId=""/>
 <ProductContentType productContentTypeId="PDP_VIDEO_URL" description="PDP Product Video" hasTable="N" parentTypeId=""/>
 <ProductContentType productContentTypeId="PDP_VIDEO_360_URL" description="PDP 360 Product Video" hasTable="N" parentTypeId=""/>
+<ProductContentType productContentTypeId="PDP_SPC_CONTENT_01" description="PDP Specific Content 01" hasTable="N" parentTypeId=""/>
+<ProductContentType productContentTypeId="PDP_SPC_CONTENT_02" description="PDP Specific Content 01" hasTable="N" parentTypeId=""/>
+<ProductContentType productContentTypeId="PDP_SPC_CONTENT_03" description="PDP Specific Content 01" hasTable="N" parentTypeId=""/>
 
 <!-- Party CONTENT TYPE -->
 <PartyContentType partyContentTypeId="DESCRIPTION" description="Short Description" hasTable="N" parentTypeId=""/>

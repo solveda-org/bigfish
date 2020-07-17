@@ -1,4 +1,4 @@
-<#if shippingApplies?exists && shippingApplies>
+<#if shippingApplies?exists && shippingApplies && chosenShippingMethodDescription?has_content>
  <#if (!deliveryOption?has_content || deliveryOption != "SHIP_TO_MULTI")>
   <li class="${request.getAttribute("attributeClass")!}">
 	<div>

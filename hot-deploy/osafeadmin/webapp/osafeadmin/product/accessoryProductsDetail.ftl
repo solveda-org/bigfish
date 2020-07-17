@@ -52,7 +52,7 @@
              <a href="javascript:void(0);" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'','${productLargeImageUrl}?${nowTimestamp!}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
            </td>
            <td class="seqCol">
-             <input type="text" class="infoValue small textAlignCenter" name="accessSequenceNum_${rowNo}" id="accessSequenceNum" value="${relatedProduct.sequenceNum!}"/>
+             <input type="text" class="infoValue small textAlignCenter" name="accessSequenceNum_${rowNo}" id="accessSequenceNum" value="${relatedProduct.sequenceNum!}" maxlength="10"/>
            </td>
            <#assign productName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productContentWrapper.get("PRODUCT_NAME")!""}')/>
            <td class="actionCol">
@@ -101,7 +101,7 @@
            </td>
            <td class="seqCol">
              <#assign sequenceNum = request.getParameter("accessSequenceNum_${x}")!/>
-             <input type="text" class="infoValue small textAlignCenter" name="accessSequenceNum_${x}" id="accessSequenceNum" value="${sequenceNum!}"/>
+             <input type="text" class="infoValue small textAlignCenter" name="accessSequenceNum_${x}" id="accessSequenceNum" value="${sequenceNum!}" maxlength="10"/>
            </td>
            <#assign productName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productContentWrapper.get("PRODUCT_NAME")!""}')/>
            <td class="actionCol">

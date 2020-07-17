@@ -60,13 +60,11 @@
               <#if periodRecTrendRange?exists>
                 <#assign rangeListperiodRec = Static["org.ofbiz.base.util.StringUtil"].split(periodRecTrendRange,"to")/>
               </#if>
-                <#if rangeListperiodRec?has_content && rangeListperiodRec?size gt 1>
-                  <#assign periodFrom = rangeListperiodRec.get(0)?trim/>
-                  <#assign periodTo = rangeListperiodRec.get(1)?trim/>
+                <#if periodFromRecTrendTs?has_content>
+                  <#assign periodFrom = periodFromRecTrendTs?string(entryDateTimeFormat)/>
                 </#if>
-                <#if rangeListperiodRec?has_content && rangeListperiodRec?size == 1>
-                  <#assign periodFrom = rangeListperiodRec.get(0)?trim/>
-                  <#assign periodTo = rangeListperiodRec.get(0)?trim/>
+                <#if periodToRecTrendTs?has_content>
+                  <#assign periodTo = periodToRecTrendTs?string(entryDateTimeFormat)/>
                 </#if>
                 <td class="boxCaption firstCol">${uiLabelMap.RecentTrendCaption}<span class="trendRange">
                    <#if periodRecTrendRange?exists>
@@ -94,13 +92,11 @@
               <#if periodPriorTrendRange?exists>
                 <#assign rangeListperiodPrior = Static["org.ofbiz.base.util.StringUtil"].split(periodPriorTrendRange,"to")/>
               </#if>
-                <#if rangeListperiodPrior?has_content && rangeListperiodPrior?size gt 1>
-                  <#assign periodFrom = rangeListperiodPrior.get(0)?trim/>
-                  <#assign periodTo = rangeListperiodPrior.get(1)?trim/>
+                <#if periodFromPriorTrendTs?has_content>
+                  <#assign periodFrom = periodFromPriorTrendTs?string(entryDateTimeFormat)/>
                 </#if>
-                <#if rangeListperiodPrior?has_content && rangeListperiodPrior?size == 1>
-                  <#assign periodFrom = rangeListperiodPrior.get(0)?trim/>
-                  <#assign periodTo = rangeListperiodPrior.get(0)?trim/>
+                <#if periodToPriorTrendTs?has_content>
+                  <#assign periodTo = periodToPriorTrendTs?string(entryDateTimeFormat)/>
                 </#if>
                 <td class="boxCaption firstCol">${uiLabelMap.PriorTrendCaption}<span class="trendRange">
                    <#if periodPriorTrendRange?exists>

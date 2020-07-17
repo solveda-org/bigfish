@@ -8,7 +8,7 @@
     <#if currentStatus?has_content && currentStatus.statusId == "ORDER_COMPLETED">
         <#assign shipDate = shipGroup.estimatedShipDate!""/>
         <#if shipDate?has_content>
-            <#assign estimatedShipDate = shipDate?string(preferredDateFormat)!""/>
+            <#assign estimatedShipDate = shipDate?string(entryDateTimeFormat)!""/>
         </#if>
     </#if>
 </#if>
@@ -33,7 +33,7 @@
 </#list>
 
 <input type="hidden" id="changeStatusAll" name="changeStatusAll" value="N"/>
-<input type="hidden" id="statusId" name="statusId" value=""/>
+<input type="hidden" id="statusId" name="statusId" value="${parameters.statusId!}"/>
 <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">
@@ -63,12 +63,11 @@
     </div>
 </div>
 
-
 <input type="hidden" name="orderId" value="${parameters.orderId!orderHeader.orderId!}" />
 <input type="hidden" name="internalNote" value="Y"/>
 <input type="hidden" name="shipGroupSeqId" value="${shipGroupSeqId!}"/>
 
-<div class="infoRow column COMPLETED">
+<div class="infoRow row COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>${uiLabelMap.OrderCarrierCaption}</label>
@@ -105,7 +104,65 @@
     </div>
 </div>
 
-<div class="infoRow column COMPLETED">
+
+<div class="infoRow row COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.OrderTrackingCaption}</label>
+        </div>
+        <div class="infoValue">
+        	<#if (isStorePickup?has_content && isStorePickup == "Y") || (!shippingApplies)>
+        		<input disabled="disabled" type="text"  maxlength="20" value="${parameters.trackingNumber!""}"/>
+        		<input name="trackingNumber" type="hidden" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
+        	<#else>
+        		<input name="trackingNumber" type="text" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
+        	</#if>
+        </div>
+    </div>
+</div>
+
+<div class="infoRow row COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+        	<#if isStorePickup?has_content && isStorePickup == "Y">
+        		<label>${uiLabelMap.OrderPickUpDateCaption}</label>
+        	<#else>
+        		<label>${uiLabelMap.OrderShipDateCaption}</label>
+        	</#if>
+            
+        </div>
+        <div class="infoValue">
+            <input class="dateEntry" type="text" id="shipByDate" name="estimatedShipDate" maxlength="40" value="${parameters.estimatedShipDate!""}" onChange="validateInput(this, '+DATE', '${uiLabelMap.OrderShipDateWarning}')"/>
+        </div>
+    </div>
+</div>
+
+<div class="infoRow row COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.PackageWidthCaption}</label>
+        </div>
+        <div class="infoValue">
+        	<input type="text" class="small" name="packageWidth" value="${parameters.packageWidth!packageWidth!""}" />
+        	<#if lengthUom?has_content>${lengthUom.abbreviation!}</#if>
+        </div>
+    </div>
+</div>
+
+<div class="infoRow row COMPLETED">
+    <div class="infoEntry long">
+        <div class="infoCaption">
+            <label>${uiLabelMap.GenerateShipLabelCaption}</label>
+        </div>
+        <div class="entry checkbox short">
+        	<input class="checkBoxEntry" type="radio" name="generateShippingLabel" value="Y" <#if parameters.generateShippingLabel?exists && (parameters.generateShippingLabel=="Y") >checked="checked"<#elseif !(parameters.generateShippingLabel?exists)>checked="checked"</#if>/>${uiLabelMap.YesLabel}
+            <input class="checkBoxEntry" type="radio" name="generateShippingLabel" value="N" <#if parameters.generateShippingLabel?exists && (parameters.generateShippingLabel=="N") >checked="checked"</#if>/>${uiLabelMap.NoLabel}
+        </div>
+    </div>
+</div>
+
+
+<div class="infoRow row COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>${uiLabelMap.PackageWeightCaption}</label>
@@ -125,22 +182,6 @@
     </div>
 </div>
 
-<div class="infoRow column COMPLETED">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>${uiLabelMap.OrderTrackingCaption}</label>
-        </div>
-        <div class="infoValue">
-        	<#if (isStorePickup?has_content && isStorePickup == "Y") || (!shippingApplies)>
-        		<input disabled="disabled" type="text"  maxlength="20" value="${parameters.trackingNumber!""}"/>
-        		<input name="trackingNumber" type="hidden" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
-        	<#else>
-        		<input name="trackingNumber" type="text" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
-        	</#if>
-        </div>
-    </div>
-</div>
-
 <#assign lengthUomId = Static["com.osafe.util.OsafeAdminUtil"].getProductStoreParm(request, "LENGTH_UOM_DEFAULT")!"" />
 <#if lengthUomId?has_content>
   <#assign lengthUomId = "LEN_"+lengthUomId?lower_case />
@@ -148,7 +189,7 @@
 </#if>
 <input type="hidden" name="lengthUomId" value="${parameters.lengthUomId!lengthUomId!""}" />
         	
-<div class="infoRow column COMPLETED">
+<div class="infoRow row COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>${uiLabelMap.PackageHeightCaption}</label>
@@ -160,47 +201,7 @@
     </div>
 </div>
 
-<div class="infoRow column COMPLETED">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-        	<#if isStorePickup?has_content && isStorePickup == "Y">
-        		<label>${uiLabelMap.OrderPickUpDateCaption}</label>
-        	<#else>
-        		<label>${uiLabelMap.OrderShipDateCaption}</label>
-        	</#if>
-            
-        </div>
-        <div class="infoValue">
-            <input class="dateEntry" type="text" id="shipByDate" name="estimatedShipDate" maxlength="40" value="${parameters.estimatedShipDate!""}"/>
-        </div>
-    </div>
-</div>
-
-<div class="infoRow column COMPLETED">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>${uiLabelMap.PackageWidthCaption}</label>
-        </div>
-        <div class="infoValue">
-        	<input type="text" class="small" name="packageWidth" value="${parameters.packageWidth!packageWidth!""}" />
-        	<#if lengthUom?has_content>${lengthUom.abbreviation!}</#if>
-        </div>
-    </div>
-</div>
-
-<div class="infoRow column COMPLETED">
-    <div class="infoEntry long">
-        <div class="infoCaption">
-            <label>${uiLabelMap.GenerateShipLabelCaption}</label>
-        </div>
-        <div class="entry checkbox short">
-        	<input class="checkBoxEntry" type="radio" name="generateShippingLabel" value="Y" <#if parameters.generateShippingLabel?exists && (parameters.generateShippingLabel=="Y") >checked="checked"<#elseif !(parameters.generateShippingLabel?exists)>checked="checked"</#if>/>${uiLabelMap.YesLabel}
-            <input class="checkBoxEntry" type="radio" name="generateShippingLabel" value="N" <#if parameters.generateShippingLabel?exists && (parameters.generateShippingLabel=="N") >checked="checked"</#if>/>${uiLabelMap.NoLabel}
-        </div>
-    </div>
-</div>
-
-<div class="infoRow column COMPLETED">
+<div class="infoRow row COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
             <label>${uiLabelMap.PackageDepthCaption}</label>
@@ -211,6 +212,7 @@
         </div>
     </div>
 </div>
+
 <div class="infoRow row">
     <div class="infoEntry long">
         <div class="infoCaption">

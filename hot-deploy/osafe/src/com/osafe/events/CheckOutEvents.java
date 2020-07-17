@@ -43,6 +43,7 @@ import org.ofbiz.base.util.GeneralException;
 import org.ofbiz.base.util.MessageString;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilGenerics;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -65,6 +66,7 @@ import org.ofbiz.order.shoppingcart.ShoppingCartEvents;
 import org.ofbiz.order.shoppingcart.ShoppingCartItem;
 import org.ofbiz.order.shoppingcart.ShoppingCart.CartShipInfo;
 import org.ofbiz.order.shoppingcart.shipping.ShippingEstimateWrapper;
+import org.ofbiz.order.shoppingcart.shipping.ShippingEvents;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.service.GenericServiceException;
@@ -383,24 +385,19 @@ public class CheckOutEvents {
     	    	{
     	    		Map orderAdjustmentAttributeInfoMap = (Map)orderAdjustmentAttributeInfo;
     	    		String loyaltyPointsIndex = (String) orderAdjustmentAttributeInfoMap.get("INDEX");
-    	    		String loyaltyPointsAmount = (String) orderAdjustmentAttributeInfoMap.get("ADJUST_POINTS");
+    	    		BigDecimal loyaltyPointsAmountBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("ADJUST_POINTS");
     	    		String adjustMethod = (String) orderAdjustmentAttributeInfoMap.get("ADJUST_METHOD");
     	            String loyaltyPointsId = (String) orderAdjustmentAttributeInfoMap.get("MEMBER_ID");
     	            String checkoutLoyaltyConversion = (String) orderAdjustmentAttributeInfoMap.get("CONVERSION_FACTOR");
     	            String expDate = (String) orderAdjustmentAttributeInfoMap.get("EXP_DATE");
-    	            String currencyAmount = (String) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
-    	            BigDecimal currencyAmountBD = BigDecimal.ZERO;
-    	            if (UtilValidate.isNotEmpty(currencyAmount)) 
+    	            BigDecimal currencyAmountBD = (BigDecimal) orderAdjustmentAttributeInfoMap.get("CURRENCY_AMOUNT");
+    	            if (UtilValidate.isEmpty(loyaltyPointsAmountBD)) 
     	            {
-    	        		try 
-    	                {
-    	        			currencyAmountBD = new BigDecimal(currencyAmount);
-    	                } 
-    	                catch (NumberFormatException nfe) 
-    	                {
-    	                	Debug.logError(nfe, "Problems converting currencyAmount to BigDecimal", module);
-    	                	currencyAmountBD = BigDecimal.ZERO;
-    	                }
+    	            	loyaltyPointsAmountBD = BigDecimal.ZERO;
+    	            }
+    	            if (UtilValidate.isEmpty(currencyAmountBD)) 
+    	            {
+    	            	currencyAmountBD = BigDecimal.ZERO;
     	            }
     	            int loyaltyPointsIndexInt = -1;
     	            try {
@@ -418,7 +415,7 @@ public class CheckOutEvents {
     	        		orderAdjustmentAttributeInfoMap.put("ORDER_ADJUSTMENT_ID", orderAdjustmentId);
     	        		try
     	                {
-    		        		if (UtilValidate.isNotEmpty(loyaltyPointsAmount))
+    		        		if (UtilValidate.isNotEmpty(loyaltyPointsAmountBD))
     		            	{
     		            		GenericValue orderAdjustmentAttr = delegator.makeValue("OrderAdjustmentAttribute");
     		            		orderAdjustmentAttr.set("orderAdjustmentId", orderAdjustmentId);
@@ -436,12 +433,12 @@ public class CheckOutEvents {
     		            		orderAdjustmentAttr.create();
     		            	}
     		        		
-    		        		if (UtilValidate.isNotEmpty(currencyAmount))
+    		        		if (UtilValidate.isNotEmpty(currencyAmountBD))
     		            	{
     		            		GenericValue orderAdjustmentAttr = delegator.makeValue("OrderAdjustmentAttribute");
     		            		orderAdjustmentAttr.set("orderAdjustmentId", orderAdjustmentId);
     		            		orderAdjustmentAttr.set("attrName", "ADJUST_POINTS");
-    		            		orderAdjustmentAttr.set("attrValue", currencyAmount);
+    		            		orderAdjustmentAttr.set("attrValue", currencyAmountBD.toPlainString());
     		            		orderAdjustmentAttr.create();
     		            	}
     		        		
@@ -507,195 +504,251 @@ public class CheckOutEvents {
         return "success";
     }
     
-    
-    
-    public static String calcTaxOnStore(HttpServletRequest request, HttpServletResponse response) 
-    {
-    	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
-        Delegator delegator = (Delegator) request.getAttribute("delegator");
-        ShoppingCart shoppingCart = ShoppingCartEvents.getCartObject(request);
-        CheckOutHelper checkOutHelper = new CheckOutHelper(dispatcher, delegator, shoppingCart);
-        GenericValue storeAddress = null;
-        
-        if(UtilValidate.isNotEmpty(shoppingCart))
-		{
-        	String taxedStoreId = shoppingCart.getOrderAttribute("STORE_LOCATION");
-			if(UtilValidate.isNotEmpty(taxedStoreId))
-			{
-				try 
-				{
-					GenericValue taxedParty = delegator.findOne("Party", UtilMisc.toMap("partyId", taxedStoreId), true);
-					if (UtilValidate.isNotEmpty(taxedParty))
-					{
-						List taxedPartyContactMechPurpose = taxedParty.getRelatedCache("PartyContactMechPurpose");
-						taxedPartyContactMechPurpose = EntityUtil.filterByDate(taxedPartyContactMechPurpose,true);
-				
-						List taxedPartyGeneralLocations = EntityUtil.filterByAnd(taxedPartyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
-						taxedPartyGeneralLocations = EntityUtil.getRelatedCache("PartyContactMech", taxedPartyGeneralLocations);
-						taxedPartyGeneralLocations = EntityUtil.filterByDate(taxedPartyGeneralLocations,true);
-						taxedPartyGeneralLocations = EntityUtil.orderBy(taxedPartyGeneralLocations, UtilMisc.toList("fromDate DESC"));
-						if(UtilValidate.isNotEmpty(taxedPartyGeneralLocations))
-						{
-							GenericValue taxedPartyGeneralLocation = EntityUtil.getFirst(taxedPartyGeneralLocations);
-							//this DB call cannot use cache
-							storeAddress = taxedPartyGeneralLocation.getRelatedOne("PostalAddress");
-							try 
-							{
-								checkOutHelper.calcAndAddTax(storeAddress);
-							} 
-							catch (GeneralException e) 
-							{
-								String errMsg = "Error when trying to calculate tax on store Address : " + e.toString();
-						        Debug.logError(e, errMsg, module);
-				                return "error";
-				            }
-						}
-					}
-	            } 
-				catch (GenericEntityException e) 
-				{
-					String errMsg = "Error when trying to get store Address to calculate tax : " + e.toString();
-			        Debug.logError(e, errMsg, module);
-	                return "error";
-	            }
-			}
-		}
-        
-        request.setAttribute("isTaxedOnStore", "Y");
-        request.setAttribute("taxedStoreAddress", storeAddress);
-    	
-        return "success";
-    }
-    
-    
-    
-    
-    
-    
-    
-    public static String calcLoyaltyTax(HttpServletRequest request, HttpServletResponse response) 
+    //This method was derived from ofbiz calcAndAddTax
+    //Use this method in order to consider:
+    //      - tax applied based on store address vs tax applied based on shipping
+    //      - loyalty points in tax calculations
+    public static String calculateTax(HttpServletRequest request, HttpServletResponse response) 
     {
     	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
         Delegator delegator = (Delegator) request.getAttribute("delegator");
         ShoppingCart cart = ShoppingCartEvents.getCartObject(request);
-        
-        String isTaxedOnStore = (String) request.getAttribute("isTaxedOnStore");
-        GenericValue shipAddress = null;
-        if(UtilValidate.isNotEmpty(isTaxedOnStore) && "Y".equalsIgnoreCase(isTaxedOnStore))
-        {
-        	shipAddress = (GenericValue) request.getAttribute("taxedStoreAddress");
-        }       
-        
-        
-        if (UtilValidate.isEmpty(cart.getShippingContactMechId()) && cart.getBillingAddress() == null && shipAddress == null) 
-        {
-            return "success";
-        }
-
         CheckOutHelper checkOutHelper = new CheckOutHelper(dispatcher, delegator, cart);
-        BigDecimal orderAdjustmentOtherAmount = BigDecimal.ZERO;
-        List<GenericValue> loyaltyAdjustments = EntityUtil.filterByAnd(cart.getAdjustments(), UtilMisc.toMap("orderAdjustmentTypeId", "LOYALTY_POINTS"));
-        if (UtilValidate.isEmpty(loyaltyAdjustments))
+        
+        if(UtilValidate.isNotEmpty(cart))
         {
-            return "success";
-        	
-        }
-        
-        BigDecimal loyaltyAdjTotal=BigDecimal.ZERO;
-        
-        Iterator<GenericValue> loyaltyAdjIter = loyaltyAdjustments.iterator();
-        while (loyaltyAdjIter.hasNext()) 
-        {
-            GenericValue loyaltyAdjustment = loyaltyAdjIter.next();
+	    	try {
+	    		//Before calculating taxes, determine if we are taxing shipping address or store address
+	    		GenericValue shipAddress = null;
+	    		GenericValue shipStoreAddress = null;
+	    		boolean bShipToStore=false;
+	            String shipmentMethodTypeId = cart.getShipmentMethodTypeId();
+	            String carrierPartyId = cart.getCarrierPartyId();
+	            String chosenShippingMethod = "";
+	            if(UtilValidate.isNotEmpty(shipmentMethodTypeId) && UtilValidate.isNotEmpty(carrierPartyId))
+	            {
+	            	chosenShippingMethod = shipmentMethodTypeId + "@" + carrierPartyId;
+	            }
+	            if(chosenShippingMethod.equalsIgnoreCase("NO_SHIPPING@_NA_"))
+	            {
+	            	//If we are using pickup in Store then we need to use the Store PostalAddress to calculate taxes
+	            	String taxedStoreId = cart.getOrderAttribute("STORE_LOCATION");
+					if(UtilValidate.isNotEmpty(taxedStoreId))
+					{
+						GenericValue taxedParty = delegator.findOne("Party", UtilMisc.toMap("partyId", taxedStoreId), true);
+						if (UtilValidate.isNotEmpty(taxedParty))
+						{
+							List<GenericValue> taxedPartyContactMechPurpose = taxedParty.getRelatedCache("PartyContactMechPurpose");
+							taxedPartyContactMechPurpose = EntityUtil.filterByDate(taxedPartyContactMechPurpose,true);
 
-            if (UtilValidate.isNotEmpty(loyaltyAdjustment)) 
-            {
-                BigDecimal amount = loyaltyAdjustment.getBigDecimal("amount").setScale(taxCalcScale, taxRounding);
-                loyaltyAdjTotal = loyaltyAdjTotal.add(amount);
-            }
-        }
-        
-        if (loyaltyAdjTotal.compareTo(BigDecimal.ZERO) == 0)
-        {
-            return "success";
-        	
-        }
-
-        
-        
-        int shipGroups = cart.getShipGroupSize();
-        for (int i = 0; i < shipGroups; i++) 
-        {
-            Map shoppingCartItemIndexMap = new HashMap();
-            Map serviceContext = null;
-            ShoppingCart.CartShipInfo csi = cart.getShipInfo(i);
-            if (shipAddress == null) 
-            {
-                shipAddress = cart.getShippingAddress(i);
-                // Debug.logInfo("====== makeTaxContext set shipAddress to cart.getShippingAddress(shipGroup): " + shipAddress, module);
-            }
-            
-            try 
-            {
-            	
-                int totalItems = csi.shipItemInfo.size();
-
-                List product = new ArrayList(totalItems);
-                List amount = new ArrayList(totalItems);
-                List price = new ArrayList(totalItems);
-                List shipAmt = new ArrayList(totalItems);
-                
-                Iterator<ShoppingCartItem> it = csi.shipItemInfo.keySet().iterator();
-                for (int itemIdx = 0; itemIdx < totalItems; itemIdx++) 
-                {
-                    ShoppingCartItem cartItem = it.next();
-                    ShoppingCart.CartShipInfo.CartShipItemInfo itemInfo = csi.getShipItemInfo(cartItem);
-                    product.add(i, cartItem.getProduct());
-                    amount.add(i, cartItem.getItemSubTotal(itemInfo.quantity));
-                    price.add(i, cartItem.getBasePrice());
-                    shipAmt.add(i, BigDecimal.ZERO); // no per item shipping yet
-                    shoppingCartItemIndexMap.put(Integer.valueOf(itemIdx), cartItem);
-                }
-                
-           	
-                serviceContext = UtilMisc.toMap("productStoreId", cart.getProductStoreId());
-                serviceContext.put("payToPartyId", cart.getBillFromVendorPartyId());
-                serviceContext.put("billToPartyId", cart.getBillToCustomerPartyId());
-                serviceContext.put("itemProductList", product);
-                serviceContext.put("itemAmountList", amount);
-                serviceContext.put("itemPriceList", price);
-                serviceContext.put("shippingAddress", shipAddress);
-                serviceContext.put("orderLoyaltyAmount", loyaltyAdjTotal);
-                Map serviceResult = null;
-
-                try 
-                {
-                    serviceResult = dispatcher.runSync("calcAdjustmentTax", serviceContext);
-                } 
-                catch (GenericServiceException e) 
-                {
-                    Debug.logError(e, module);
-                }
-
-                if (ServiceUtil.isError(serviceResult)) 
-                {
-                    Debug.logError(ServiceUtil.getErrorMessage(serviceResult), module);
-                    return "success";
-                }
-
-                // the adjustments (returned in order) from taxware.
-                List orderAdj = (List) serviceResult.get("orderAdjustments");
-                csi.shipTaxAdj.addAll(orderAdj);
-                
-            } catch (Exception e) 
-            {
-                Debug.logError(e, module);
-            }
-            
-            
+							List<GenericValue> taxedPartyGeneralLocations = EntityUtil.filterByAnd(taxedPartyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
+							taxedPartyGeneralLocations = EntityUtil.getRelatedCache("PartyContactMech", taxedPartyGeneralLocations);
+							taxedPartyGeneralLocations = EntityUtil.filterByDate(taxedPartyGeneralLocations,true);
+							taxedPartyGeneralLocations = EntityUtil.orderBy(taxedPartyGeneralLocations, UtilMisc.toList("fromDate DESC"));
+							if(UtilValidate.isNotEmpty(taxedPartyGeneralLocations))
+							{
+								GenericValue taxedPartyGeneralLocation = EntityUtil.getFirst(taxedPartyGeneralLocations);
+								//this DB call cannot use cache
+								shipStoreAddress = taxedPartyGeneralLocation.getRelatedOne("PostalAddress");
+								bShipToStore=true;
+							}
+						}
+					}
+	            }
+	            
+	            //Calculate and add the tax adjustments
+	            if (UtilValidate.isEmpty(cart.getShippingContactMechId()) && cart.getBillingAddress() == null && shipAddress == null) 
+	            {
+	                return "success";
+	            }
+	
+	            int shipGroups = cart.getShipGroupSize();
+	            for (int shipGroupIdx = 0; shipGroupIdx < shipGroups; shipGroupIdx++) 
+	            {
+	                Map shoppingCartItemIndexMap = new HashMap();
+	                ShoppingCart.CartShipInfo csi = cart.getShipInfo(shipGroupIdx);
+	                int totalItems = csi.shipItemInfo.size();
+	
+	                List product = new ArrayList(totalItems);
+	                List amount = new ArrayList(totalItems);
+	                List price = new ArrayList(totalItems);
+	                List shipAmt = new ArrayList(totalItems);
+	
+	                Iterator<ShoppingCartItem> it = csi.shipItemInfo.keySet().iterator();
+	                for (int i = 0; i < totalItems; i++) {
+	                    ShoppingCartItem cartItem = it.next();
+	                    ShoppingCart.CartShipInfo.CartShipItemInfo itemInfo = csi.getShipItemInfo(cartItem);
+	                    product.add(i, cartItem.getProduct());
+	                    amount.add(i, cartItem.getItemSubTotal(itemInfo.quantity));
+	                    price.add(i, cartItem.getBasePrice());
+	                    shipAmt.add(i, BigDecimal.ZERO); // no per item shipping yet
+	                    shoppingCartItemIndexMap.put(Integer.valueOf(i), cartItem);
+	                }
+	
+	                //add promotion and loyalty adjustments
+	                List allAdjustments = cart.getAdjustments();
+	                BigDecimal orderPromoAmt = BigDecimal.ZERO;
+	                
+	                BigDecimal promoLoyaltyAdjTotal = BigDecimal.ZERO;
+	                BigDecimal loyaltyAdjTotal = BigDecimal.ZERO;
+	                
+	                List promoLoyaltyAdjExps = FastList.newInstance();
+	                promoLoyaltyAdjExps.add(EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.EQUALS, "PROMOTION_ADJUSTMENT"));
+	                promoLoyaltyAdjExps.add(EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.EQUALS, "LOYALTY_POINTS"));
+	                
+	                List<GenericValue> promoAdjustments = EntityUtil.filterByAnd(allAdjustments, UtilMisc.toList(EntityCondition.makeCondition(promoLoyaltyAdjExps, EntityOperator.OR)));
+	                if (!promoAdjustments.isEmpty()) 
+	                {
+	                    Iterator<GenericValue> promoAdjIter = promoAdjustments.iterator();
+	                    while (promoAdjIter.hasNext()) {
+	                        GenericValue promoAdjustment = promoAdjIter.next();
+	
+	                        if (promoAdjustment != null) {
+	                            BigDecimal adjAmount = promoAdjustment.getBigDecimal("amount").setScale(taxCalcScale, taxRounding);
+	                            promoLoyaltyAdjTotal = promoLoyaltyAdjTotal.add(adjAmount);
+	                            if(promoAdjustment.getString("orderAdjustmentTypeId").equalsIgnoreCase("LOYALTY_POINTS"))
+	                            {
+	                            	loyaltyAdjTotal = loyaltyAdjTotal.add(adjAmount);
+	                            }
+	                        }
+	                    }
+	                }
+	                
+	                BigDecimal shipAmount = csi.shipEstimate;
+                    shipAddress = cart.getShippingAddress(shipGroupIdx);
+                    if (bShipToStore)
+                    {
+                    	shipAddress=shipStoreAddress;
+                    }
+	
+	                // no shipping address; try the billing address
+	                if(UtilValidate.isEmpty(shipAddress)) 
+	                {
+	                    for (int i = 0; i < cart.selectedPayments(); i++) {
+	                        ShoppingCart.CartPaymentInfo cpi = cart.getPaymentInfo(i);
+	                        GenericValue billAddr = cpi.getBillingAddress(delegator);
+	                        if(UtilValidate.isNotEmpty(billAddr))
+	                        {
+	                            shipAddress = billAddr;
+	                            Debug.logInfo("In calculateTax no shipping address, but found address with ID [" + shipAddress.get("contactMechId") + "] from payment method.", module);
+	                            break;
+	                        }
+	                    }
+	                }
+	                
+	                //the call to calcTax above automatically created an adjustment for taxes based on loyalty points
+	                //We need to check if there are taxes applied to shipping. If not then we need to remove the tax adjustment on shipping based on loyalty points amount
+	                Map serviceContext = UtilMisc.toMap("productStoreId", cart.getProductStoreId());
+	                serviceContext.put("payToPartyId", cart.getBillFromVendorPartyId());
+	                serviceContext.put("billToPartyId", cart.getBillToCustomerPartyId());
+	                serviceContext.put("itemProductList", FastList.newInstance());
+	                serviceContext.put("itemAmountList", FastList.newInstance());
+	                serviceContext.put("itemPriceList", FastList.newInstance());
+	                serviceContext.put("itemShippingList", FastList.newInstance());
+	                serviceContext.put("orderShippingAmount", shipAmount);
+	                serviceContext.put("shippingAddress", shipAddress);
+	                serviceContext.put("orderPromotionsAmount", BigDecimal.ZERO);
+	                
+	                Map serviceShipResult = null;
+	
+	                try 
+	                {
+	                	serviceShipResult = dispatcher.runSync("calcTax", serviceContext);
+	                } 
+	                catch (GenericServiceException e) 
+	                {
+	                    Debug.logError(e, module);
+	                    throw new GeneralException("Problem occurred in tax service (" + e.getMessage() + ")", e);
+	                }
+	
+	                if (ServiceUtil.isError(serviceShipResult)) 
+	                {
+	                    throw new GeneralException(ServiceUtil.getErrorMessage(serviceShipResult));
+	                }
+	                
+	                //If shipping tax order adjustments are empty then update taxes generated by loyalty points
+	                List shippingTaxOrderAdj = (List) serviceShipResult.get("orderAdjustments");
+	                
+	                if(UtilValidate.isEmpty(shippingTaxOrderAdj))
+	                {
+	                	BigDecimal cartSubTotal = cart.getGrandTotal();
+		        		BigDecimal cartTotalTaxes = cart.getTotalSalesTax();
+		        		BigDecimal cartTotalShipping =  cart.getTotalShipping();
+		        		cartSubTotal  = cartSubTotal.subtract(cartTotalTaxes).subtract(cartTotalShipping).subtract(loyaltyAdjTotal);
+		        		BigDecimal cartSubTotalNegate = cartSubTotal.negate();
+		        		
+	                	if(loyaltyAdjTotal.compareTo(BigDecimal.ZERO) !=  0 && loyaltyAdjTotal.compareTo(cartSubTotalNegate) <  0)
+	                	{
+		                	promoLoyaltyAdjTotal = cartSubTotalNegate;
+	                	}
+	                }
+	                orderPromoAmt = promoLoyaltyAdjTotal.setScale(scale, rounding);
+	                
+	                serviceContext.clear();
+	                serviceContext = UtilMisc.toMap("productStoreId", cart.getProductStoreId());
+	                serviceContext.put("payToPartyId", cart.getBillFromVendorPartyId());
+	                serviceContext.put("billToPartyId", cart.getBillToCustomerPartyId());
+	                serviceContext.put("itemProductList", product);
+	                serviceContext.put("itemAmountList", amount);
+	                serviceContext.put("itemPriceList", price);
+	                serviceContext.put("itemShippingList", shipAmt);
+	                serviceContext.put("orderShippingAmount", shipAmount);
+	                serviceContext.put("shippingAddress", shipAddress);
+	                serviceContext.put("orderPromotionsAmount", orderPromoAmt);
+	                
+	                Map serviceResult = null;
+	
+	                try 
+	                {
+	                    serviceResult = dispatcher.runSync("calcTax", serviceContext);
+	                } 
+	                catch (GenericServiceException e) 
+	                {
+	                    Debug.logError(e, module);
+	                    throw new GeneralException("Problem occurred in tax service (" + e.getMessage() + ")", e);
+	                }
+	
+	                if (ServiceUtil.isError(serviceResult)) 
+	                {
+	                    throw new GeneralException(ServiceUtil.getErrorMessage(serviceResult));
+	                }
+	                
+	                // the adjustments (returned in order) from taxware.
+	                List orderAdj = (List) serviceResult.get("orderAdjustments");
+	                List itemAdj = (List) serviceResult.get("itemAdjustments");
+	
+	                List taxReturn = UtilMisc.toList(orderAdj, itemAdj);
+	                if (Debug.verboseOn()) Debug.logVerbose("ReturnList: " + taxReturn, module);
+	                // set the item adjustments
+	                if(UtilValidate.isNotEmpty(itemAdj))
+	                {
+	                    for (int x = 0; x < itemAdj.size(); x++) 
+	                    {
+	                        List adjs = (List) itemAdj.get(x);
+	                        ShoppingCartItem item = (ShoppingCartItem) shoppingCartItemIndexMap.get(Integer.valueOf(x));
+	                        if (adjs == null) 
+	                        {
+	                            adjs = new LinkedList();
+	                        }
+	                        csi.setItemInfo(item, adjs);
+	                        if (Debug.verboseOn()) Debug.logVerbose("Added item adjustments to ship group [" + shipGroupIdx + " / " + x + "] - " + adjs, module);
+	                    }
+	                }
+	
+	                // need to manually clear the order adjustments
+	                csi.shipTaxAdj.clear();
+	                csi.shipTaxAdj.addAll(orderAdj);
+	            }
+	        } 
+	    	catch (GeneralException e) 
+	    	{
+	            request.setAttribute("_ERROR_MESSAGE_", e.getMessage());
+	            return "error";
+	        }
         }
         return "success";
     }
+    
     
     public static String setShipGroups(HttpServletRequest request, HttpServletResponse response) 
     {
@@ -833,12 +886,12 @@ public class CheckOutEvents {
         	try {
         	
                 String pdpQtyMin = Util.getProductStoreParm(request,"PDP_QTY_MIN");
-                if (UtilValidate.isEmpty(pdpQtyMin))
+                if (UtilValidate.isEmpty(pdpQtyMin) || !Util.isNumber(pdpQtyMin))
                 {
                 	pdpQtyMin="1";
                 }
                 String pdpQtyMax = Util.getProductStoreParm(request,"PDP_QTY_MAX");
-                if (UtilValidate.isEmpty(pdpQtyMax))
+                if (UtilValidate.isEmpty(pdpQtyMax) || !Util.isNumber(pdpQtyMax))
                 {
                 	pdpQtyMax="99";
                 }
@@ -860,8 +913,14 @@ public class CheckOutEvents {
                 	GenericValue prodPdpQtyMax = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",productInfoMap.get("productId"),"attrName","PDP_QTY_MAX"), true);
                 	if(UtilValidate.isNotEmpty(prodPdpQtyMin) && UtilValidate.isNotEmpty(prodPdpQtyMax))
                 	{
-                		bPdpQtyMin = BigDecimal.valueOf(Double.valueOf(prodPdpQtyMin.getString("attrValue")).doubleValue());
-                		bPdpQtyMax = BigDecimal.valueOf(Double.valueOf(prodPdpQtyMax.getString("attrValue")).doubleValue());
+                		if(UtilValidate.isNotEmpty(prodPdpQtyMin.getString("attrValue")))
+                    	{
+                			bPdpQtyMin = BigDecimal.valueOf(Double.valueOf(prodPdpQtyMin.getString("attrValue")).doubleValue());
+                    	}
+                		if(UtilValidate.isNotEmpty(prodPdpQtyMax.getString("attrValue")))
+                    	{
+                			bPdpQtyMax = BigDecimal.valueOf(Double.valueOf(prodPdpQtyMax.getString("attrValue")).doubleValue());
+                    	}
                 	}            		
                 	if (bChangeQty.compareTo(bPdpQtyMin) < 0)
             		{
@@ -1277,7 +1336,8 @@ public class CheckOutEvents {
                         	if (mShipGroupTempIndexShipMethods.containsKey(sProductStoreShipMethIdKey))
                         	{
                         		String sTempShipGroupIndex = mShipGroupTempIndexShipMethods.get(sProductStoreShipMethIdKey);
-                                cart.positionItemToGroup(cartItem, cartItemQty, iTempShipGroupIndex, Integer.valueOf(sTempShipGroupIndex).intValue(), false);
+                        		int iTempGroupIdx=Integer.valueOf(sTempShipGroupIndex).intValue();
+                                cart.positionItemToGroup(cartItem, cartItemQty, iTempShipGroupIndex,iTempGroupIdx, false);
                         		
                         	}
                         	else
@@ -1315,7 +1375,7 @@ public class CheckOutEvents {
         return "success";
     	
     }
-    
+
     public static String setShipOptions(HttpServletRequest request, HttpServletResponse response) 
     {
     	LocalDispatcher dispatcher = (LocalDispatcher) request.getAttribute("dispatcher");
@@ -1345,6 +1405,12 @@ public class CheckOutEvents {
             	cart.setOrderAttribute("DELIVERY_OPTION", "SHIP_TO");
         		
         	}
+        	
+        	cart.setDoPromotions(false);
+        	ShippingEvents.getShipEstimate(request, response);
+        	cart.setDoPromotions(true);
+        	
+        	
         	
         }
          catch (Exception e)

@@ -7,6 +7,9 @@
     <#if postalCode?has_content && postalCode == '_NA_'>
       <#assign postalCode = "">
     </#if>
+<#-- for Facebook login -->
+<#elseif parameters.fbLocationZip?has_content>
+  <#assign postalCode= parameters.fbLocationZip!""/>
 </#if>
 <!-- address zip entry -->
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>

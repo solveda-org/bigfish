@@ -19,6 +19,8 @@ import javolution.util.FastList;
 import javolution.util.FastMap;
 import org.ofbiz.entity.condition.EntityFunction;
 import java.math.BigDecimal;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.base.util.UtilNumber;
 
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
@@ -29,203 +31,165 @@ orderItems = null;
 orderNotes = null;
 partyId = null;
 shipGroup = null;
+messageMap=[:];
+orderHeaderAdjustments = null;
+notesCount = 0;
+
+appliedPromoList = FastList.newInstance();
+appliedLoyaltyPointsList = FastList.newInstance();
 
 orderSubTotal = 0;
 if (UtilValidate.isNotEmpty(orderId))
 {
 	orderHeader = delegator.findByPrimaryKey("OrderHeader", [orderId : orderId]);
 	
-	orderProductStore = orderHeader.getRelatedOne("ProductStore");
-	if (UtilValidate.isNotEmpty(orderProductStore.storeName))
+	if (UtilValidate.isNotEmpty(orderHeader))
 	{
-		productStoreName = orderProductStore.storeName;
-	}
-	else
-	{
-		productStoreName = orderHeader.productStoreId;
-	}
-	context.productStoreName = productStoreName;
-	
-	messageMap=[:];
-	messageMap.put("orderId", orderId);
-
-	context.orderId=orderId;
-	context.pageTitle = UtilProperties.getMessage("OSafeAdminUiLabels","OrderManagementOrderDetailTitle",messageMap, locale )
-	context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderDetailInfoHeading",messageMap, locale )
-	
-}
-
-orderHeaderAdjustments = null;
-if (UtilValidate.isNotEmpty(orderHeader))
-{
-	productStore = orderHeader.getRelatedOne("ProductStore");
-	orderReadHelper = new OrderReadHelper(orderHeader);
-	orderItems = orderReadHelper.getOrderItems();
-	canceledPromoOrderItem = [:];
-	orderItems.each { orderItem ->
-		if("Y".equals(orderItem.get("isPromo")) && "ITEM_CANCELLED".equals(orderItem.get("statusId")))
+		orderProductStore = orderHeader.getRelatedOne("ProductStore");
+		if (UtilValidate.isNotEmpty(orderProductStore.storeName))
 		{
-			canceledPromoOrderItem = orderItem;
+			productStoreName = orderProductStore.storeName;
 		}
-		orderItems.remove(canceledPromoOrderItem);
+		else
+		{
+			productStoreName = orderHeader.productStoreId;
+		}
+		context.productStoreName = productStoreName;
+		
+		
+		messageMap.put("orderId", orderId);
+		
+		productStore = orderHeader.getRelatedOne("ProductStore");
+		orderReadHelper = new OrderReadHelper(orderHeader);
+		orderItems = orderReadHelper.getOrderItems();
+		canceledPromoOrderItem = [:];
+		orderItems.each { orderItem ->
+			if("Y".equals(orderItem.get("isPromo")) && "ITEM_CANCELLED".equals(orderItem.get("statusId")))
+			{
+				canceledPromoOrderItem = orderItem;
+			}
+			orderItems.remove(canceledPromoOrderItem);
+		}
+		orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
+		orderAdjustments = orderReadHelper.getAdjustments();
+		orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
+		headerAdjustmentsToShow = orderReadHelper.filterOrderAdjustments(orderHeaderAdjustments, true, false, false, false, false);
+		otherAdjustmentsList = FastList.newInstance();
+
+		if (UtilValidate.isNotEmpty(headerAdjustmentsToShow) && headerAdjustmentsToShow.size() > 0)
+		{
+			for (GenericValue orderHeaderAdjustment : headerAdjustmentsToShow)
+			{
+				if (!"LOYALTY_POINTS".equals(orderHeaderAdjustment.orderAdjustmentTypeId) && UtilValidate.isEmpty(orderHeaderAdjustment.productPromoId))
+				{
+					otherAdjustmentsList.add(orderHeaderAdjustment);
+				}
+			}
+		}
+		otherAdjustmentsAmount = OrderReadHelper.calcOrderAdjustments(otherAdjustmentsList, orderSubTotal, true, false, false);
+		otherAdjustmentsList = FastList.newInstance();
+		otherAdjustmentsList = EntityUtil.filterByAnd(orderAdjustments, [EntityCondition.makeCondition("productPromoId", EntityOperator.EQUALS, null)]);
+		otherAdjustmentsList = EntityUtil.filterByAnd(otherAdjustmentsList, [EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.NOT_EQUAL, "LOYALTY_POINTS")]);
+		otherAdjustmentsAmount = OrderReadHelper.calcOrderAdjustments(otherAdjustmentsList, orderSubTotal, true, false, false);
+
+		
+		shippingAmount = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, false, true);
+		shippingAmount = shippingAmount.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
+		orderItemShipGroups = orderReadHelper.getOrderItemShipGroups();
+		shipGroupsSize = orderItemShipGroups.size();
+		//headerAdjustmentsToShow = orderReadHelper.getOrderHeaderAdjustmentsToShow();
+		taxAmount = OrderReadHelper.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal;
+		
+		grandTotal = orderReadHelper.getOrderGrandTotal();
+		currencyUomId = orderReadHelper.getCurrency();
+		notes = orderHeader.getRelatedOrderBy("OrderHeaderNoteView", ["-noteDateTime"]);
+		notesCount = notes.size();
+		
+		//get Adjustment Info
+		if(UtilValidate.isNotEmpty(orderHeaderAdjustments) && orderHeaderAdjustments.size() > 0)
+		{
+			adjustments = orderHeaderAdjustments;
+			//iterate through adjustments
+			for (GenericValue cartAdjustment : adjustments)
+			{
+				adjustmentType = cartAdjustment.getRelatedOneCache("OrderAdjustmentType");
+				adjustmentTypeDesc = adjustmentType.get("description",locale);
+				//if loyalty points adjustment then store info
+				if(adjustmentType.orderAdjustmentTypeId.equals("LOYALTY_POINTS"))
+				{
+					loyaltyPointsInfo = FastMap.newInstance();
+					loyaltyPointsInfo.put("cartAdjustment", cartAdjustment);
+					loyaltyPointsInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+					appliedLoyaltyPointsList.add(loyaltyPointsInfo);
+				}
+				//if promo adjustment then store info
+				promoInfo = FastMap.newInstance();
+				promoInfo.put("cartAdjustment", cartAdjustment);
+				promoCodeText = "";
+				productPromo = cartAdjustment.getRelatedOneCache("ProductPromo");
+				if(UtilValidate.isNotEmpty(productPromo))
+				{
+					promoInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+					promoText = productPromo.promoText;
+					promoInfo.put("promoText", promoText);
+					productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
+					if(UtilValidate.isNotEmpty(productPromoCode))
+					{
+						promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
+						if(UtilValidate.isNotEmpty(promoCodesEntered))
+						{
+							for (GenericValue promoCodeEntered : promoCodesEntered)
+							{
+								if(UtilValidate.isNotEmpty(promoCodeEntered))
+								{
+									for (GenericValue promoCode : productPromoCode)
+									{
+										promoCodeEnteredId = promoCodeEntered;
+										promoCodeId = promoCode.productPromoCodeId;
+										if(UtilValidate.isNotEmpty(promoCodeEnteredId))
+										{
+											if(promoCodeId == promoCodeEnteredId)
+											{
+												promoCodeText = promoCode.productPromoCodeId;
+												promoInfo.put("promoCodeText", promoCodeText);
+											}
+										}
+									}
+								}
+							}
+							
+						}
+					}
+					appliedPromoList.add(promoInfo);
+				}
+			}
+		}
 	}
-	orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
-	orderAdjustments = orderReadHelper.getAdjustments();
-	otherAdjustmentsList = FastList.newInstance();
-	otherAdjustmentsList = EntityUtil.filterByAnd(orderAdjustments, [EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.NOT_EQUAL, "PROMOTION_ADJUSTMENT")]);
-	otherAdjustmentsList = EntityUtil.filterByAnd(otherAdjustmentsList, [EntityCondition.makeCondition("orderAdjustmentTypeId", EntityOperator.NOT_EQUAL, "LOYALTY_POINTS")]);
-	otherAdjustmentsAmount = OrderReadHelper.calcOrderAdjustments(otherAdjustmentsList, orderSubTotal, true, false, false);
-	orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
-	headerAdjustmentsToShow = orderReadHelper.filterOrderAdjustments(orderHeaderAdjustments, true, false, false, false, false);
-	shippingAmount = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, false, true);
-	shippingAmount = shippingAmount.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
-	orderItemShipGroups = orderReadHelper.getOrderItemShipGroups();
-	//headerAdjustmentsToShow = orderReadHelper.getOrderHeaderAdjustmentsToShow();
-	taxAmount = OrderReadHelper.getOrderTaxByTaxAuthGeoAndParty(orderAdjustments).taxGrandTotal;
-	
-	grandTotal = orderReadHelper.getOrderGrandTotal();
-	currencyUomId = orderReadHelper.getCurrency();
-	notes = orderHeader.getRelatedOrderBy("OrderHeaderNoteView", ["-noteDateTime"]);
-	context.notesCount = notes.size();
 }
 
+context.orderId=orderId;
+context.pageTitle = UtilProperties.getMessage("OSafeAdminUiLabels","OrderManagementOrderDetailTitle",messageMap, locale );
+context.generalInfoBoxHeading = UtilProperties.getMessage("OSafeAdminUiLabels","OrderDetailInfoHeading",messageMap, locale );
+context.notesCount = notesCount;
 context.shippingAmount = shippingAmount;
 context.taxAmount = taxAmount;
 context.otherAdjustmentsAmount = otherAdjustmentsAmount;
 context.grandTotal = grandTotal;
 context.currencyUomId = currencyUomId;
 context.headerAdjustmentsToShow = headerAdjustmentsToShow;
-
-appliedTaxList = FastList.newInstance();
-List orderShipTaxAdjustments = FastList.newInstance();
-BigDecimal totalTaxPercent = BigDecimal.ZERO;
-if(UtilValidate.isNotEmpty(orderAdjustments) && orderAdjustments.size() > 0)
-{
-	orderShipTaxAdjustments = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SALES_TAX"));
-	
-	for (GenericValue orderTaxAdjustment : orderShipTaxAdjustments)
-	{
-		amount = 0;
-		taxAuthorityRateSeqId = orderTaxAdjustment.taxAuthorityRateSeqId;
-		if(UtilValidate.isNotEmpty(taxAuthorityRateSeqId))
-		{
-			//check if this taxAuthorityRateSeqId is already in the list
-			alreadyInList = "N";
-			for(Map taxInfoMap : appliedTaxList)
-			{
-				taxAuthorityRateSeqIdInMap = taxInfoMap.get("taxAuthorityRateSeqId");
-				if(UtilValidate.isNotEmpty(taxAuthorityRateSeqIdInMap) && taxAuthorityRateSeqIdInMap.equals(taxAuthorityRateSeqId))
-				{
-					amount = taxInfoMap.get("amount") + orderTaxAdjustment.amount;
-					taxInfoMap.put("amount", amount);
-					alreadyInList = "Y";
-					break;
-				}
-			}
-			if(("N").equals(alreadyInList))
-			{
-				taxInfo = FastMap.newInstance();
-				taxInfo.put("taxAuthorityRateSeqId", taxAuthorityRateSeqId);
-				taxInfo.put("amount", orderTaxAdjustment.amount);
-				taxAdjSourceBD = new BigDecimal(orderTaxAdjustment.sourcePercentage);
-				taxAdjSourceStr = taxAdjSourceBD.setScale(2).toString();
-				taxInfo.put("sourcePercentage", taxAdjSourceStr);
-				taxInfo.put("description", orderTaxAdjustment.comments);
-				appliedTaxList.add(taxInfo);
-				totalTaxPercent = totalTaxPercent.add(taxAdjSourceBD);
-			}
-		}
-	}
-}
-context.appliedTaxList = appliedTaxList;
-context.totalTaxPercent = totalTaxPercent.setScale(2).toString();
-
-//get Adjustment Info
-appliedPromoList = FastList.newInstance();
-appliedLoyaltyPointsList = FastList.newInstance();
-if(UtilValidate.isNotEmpty(orderHeaderAdjustments) && orderHeaderAdjustments.size() > 0)
-{
-	adjustments = orderHeaderAdjustments;
-	//iterate through adjustments
-	for (GenericValue cartAdjustment : adjustments)
-	{
-		adjustmentType = cartAdjustment.getRelatedOneCache("OrderAdjustmentType");
-		adjustmentTypeDesc = adjustmentType.get("description",locale);
-		//if loyalty points adjustment then store info
-		if(adjustmentType.orderAdjustmentTypeId.equals("LOYALTY_POINTS"))
-		{
-			loyaltyPointsInfo = FastMap.newInstance();
-			loyaltyPointsInfo.put("cartAdjustment", cartAdjustment);
-			loyaltyPointsInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
-			appliedLoyaltyPointsList.add(loyaltyPointsInfo);
-		}
-		//if promo adjustment then store info
-		promoInfo = FastMap.newInstance();
-		promoInfo.put("cartAdjustment", cartAdjustment);
-		promoCodeText = "";
-		productPromo = cartAdjustment.getRelatedOneCache("ProductPromo");
-		if(UtilValidate.isNotEmpty(productPromo))
-		{
-			promoInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
-			promoText = productPromo.promoText;
-			promoInfo.put("promoText", promoText);
-			productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
-			if(UtilValidate.isNotEmpty(productPromoCode))
-			{
-				promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
-				if(UtilValidate.isNotEmpty(promoCodesEntered))
-				{
-					for (GenericValue promoCodeEntered : promoCodesEntered)
-					{
-						if(UtilValidate.isNotEmpty(promoCodeEntered))
-						{
-							for (GenericValue promoCode : productPromoCode)
-							{
-								promoCodeEnteredId = promoCodeEntered;
-								promoCodeId = promoCode.productPromoCodeId;
-								if(UtilValidate.isNotEmpty(promoCodeEnteredId))
-								{
-									if(promoCodeId == promoCodeEnteredId)
-									{
-										promoCodeText = promoCode.productPromoCodeId;
-										promoInfo.put("promoCodeText", promoCodeText);
-									}
-								}
-							}
-						}
-					}
-					
-				}
-			}
-			appliedPromoList.add(promoInfo);
-		}
-	}
-}
-
 context.appliedPromoList = appliedPromoList;
 context.appliedLoyaltyPointsList = appliedLoyaltyPointsList;
-
-//Sub Total
 context.orderSubTotal = orderSubTotal;
 
+// note these are overridden in the OrderViewWebSecure.groovy script if run
+context.hasPermission = true;
+context.canViewInternalDetails = true;
 
-if (UtilValidate.isNotEmpty(orderHeader)) 
-{
-	// note these are overridden in the OrderViewWebSecure.groovy script if run
-	context.hasPermission = true;
-	context.canViewInternalDetails = true;
+context.orderHeader = orderHeader;
+context.orderReadHelper = orderReadHelper;
+context.orderItems = orderItems;
+context.orderNotes = notes;
 
-	orderReadHelper = new OrderReadHelper(orderHeader);
-	orderItems = orderReadHelper.getOrderItems();
-
-	context.orderHeader = orderHeader;
-	context.orderReadHelper = orderReadHelper;
-	context.orderItems = orderItems;
-	
-	notes = orderHeader.getRelatedOrderBy("OrderHeaderNoteView", ["-noteDateTime"]);
-	context.orderNotes = notes;
-
-}	
 	
 //FOR EACH INDIVIDUAL ORDER ITEM SCREEN	
 itemCancelledAmmount = 0;

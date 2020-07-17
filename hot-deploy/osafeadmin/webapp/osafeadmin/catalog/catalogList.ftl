@@ -54,10 +54,13 @@
 	            <ul>
                   <li><a href="<@ofbizUrl>categoryImageDetail?productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>"><span class="imageIcon"></span>${uiLabelMap.CategoryImageTooltip}</a></li>
         	      <#if categoryMembers?has_content> 
-		            <li><a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="productIcon"></span>${uiLabelMap.ProductCategoryTooltip}[${prodCatMembershipCount!}]</a></li>
-		            <li><a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="sequenceIcon"></span>${uiLabelMap.ProductSequenceTooltip}[${prodCatMembershipCount!}]</a></li>
+                    <#assign productCategoryTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "ProductCategoryTooltip", [prodCatMembershipCount!0], locale )>
+                    <#assign productSequenceTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "ProductSequenceTooltip", [prodCatMembershipCount!0], locale )>
+		            <li><a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="productIcon"></span>${productCategoryTooltip!}</a></li>
+		            <li><a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="sequenceIcon"></span>${productSequenceTooltip!}</a></li>
                   </#if>
                   <li><a href="<@ofbizUrl>categoryMetatag?productCategoryId=${category.productCategoryId!}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
+                  <li><a href="<@ofbizUrl>plpContentList</@ofbizUrl>"><span class="contentSpotIcon"></span>${uiLabelMap.CategoryContentTooltip}</a></li>
 		        </ul>
 		       </div>
 		       </div>
@@ -84,10 +87,13 @@
 	            <ul>
                   <li><a href="<@ofbizUrl>categoryImageDetail?productCategoryId=${category.productCategoryId?if_exists}</@ofbizUrl>"><span class="imageIcon"></span>${uiLabelMap.CategoryImageTooltip}</a></li>
   			      <#if (prodCatMembershipCount?has_content && prodCatMembershipCount > 0)> 
-		            <li><a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="productIcon"></span>${uiLabelMap.ProductCategoryTooltip} [${prodCatMembershipCount!}]</a></li>
-		            <li><a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="sequenceIcon"></span>${uiLabelMap.ProductSequenceTooltip} [${prodCatMembershipCount!}]</a></li>
+                    <#assign productCategoryTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "ProductCategoryTooltip", [prodCatMembershipCount!0], locale )>
+                    <#assign productSequenceTooltip = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", "ProductSequenceTooltip", [prodCatMembershipCount!0], locale )>
+		            <li><a href="<@ofbizUrl>productManagement?categoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="productIcon"></span>${productCategoryTooltip!}</a></li>
+		            <li><a href="<@ofbizUrl>plpSequence?productCategoryId=${category.productCategoryId!}&preRetrieved='Y'</@ofbizUrl>"><span class="sequenceIcon"></span>${productSequenceTooltip!}</a></li>
                   </#if>
                   <li><a href="<@ofbizUrl>categoryMetatag?productCategoryId=${category.productCategoryId!}</@ofbizUrl>"><span class="metatagIcon"></span>${uiLabelMap.HtmlMetatagTooltip}</a></li>
+                  <li><a href="<@ofbizUrl>plpContentList</@ofbizUrl>"><span class="contentSpotIcon"></span>${uiLabelMap.CategoryContentTooltip}</a></li>
 		        </ul>
 		       </div>
 		       </div>

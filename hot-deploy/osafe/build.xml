@@ -45,7 +45,7 @@
     <!-- Minifies all JS and CSS files                            -->
     <!-- ================================================================== -->
 	
-    <target name="run-bigfish-compression">
+    <target name="run-bigfish-compression" description="this command compress the JS/CSS file">
         <yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishClientSkin.css" outFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishClientSkin.css"/>
     	<yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishSmallDevice.css" outFile="../../themes/osafe_theme/webapp/osafe_theme/css/bigFishSmallDevice.css"/>
     	<yuicompressor inFile="../../themes/osafe_theme/webapp/osafe_theme/css/print.css" outFile="../../themes/osafe_theme/webapp/osafe_theme/css/print.css"/>
@@ -73,14 +73,14 @@
         <fileset dir="${build.dir}/lib" includes="*.jar"/>
     </path>
 
-    <macrodef name="mergeFile" description="add/remove the nodes from second file with comare of first file">
+    <macrodef name="mergeFile" description="add/remove the nodes from second file with compare of first file">
       <attribute name="fromFilePath"/>
       <attribute name="toFilePath"/>
       <attribute name="keyValues"/>
       <attribute name="fileType"/>
       <attribute name="preserveExtra"/>
       <sequential>
-            <echo message="mergeFiles @{fromFilePath}  @{toFilePath}"/>
+          <echo message="mergeFiles @{fromFilePath}  @{toFilePath}"/>
           <java classname="com.osafe.services.OsafeManageMerge" fork="true">
             <arg value="@{fromFilePath}"/>
             <arg value="@{toFilePath}"/>
@@ -95,7 +95,25 @@
        </sequential>
      </macrodef>
 
-    <target name="run-bigfish-merge">
+    <macrodef name="customizeMergeFile" description="add the nodes from first file with compare of second file, Currently this is only support the reader attribute see ofbiz-component.xml entity-resource">
+      <attribute name="fromFilePath"/>
+      <attribute name="toFilePath"/>
+      <attribute name="readerNames"/>
+      <sequential>
+          <echo message="customizeMergeFile @{fromFilePath}  @{toFilePath}"/>
+          <java classname="com.osafe.services.OsafeManageMerge" fork="true">
+            <arg value="@{fromFilePath}"/>
+            <arg value="@{toFilePath}"/>
+            <arg value="@{readerNames}"/>
+            <classpath>
+                <path refid="runtime.class.path"/>
+                <path refid="local.class.path"/>
+            </classpath> 
+          </java>
+       </sequential>
+     </macrodef>
+
+    <target name="run-bigfish-merge" description="merge the XML/PROPERTIE file  base on passed key values">
         <property name="osafe.deployemt.home" value="../../osafe_deployment"></property>
         <property name="osafe.home" value="../../hot-deploy/osafe"></property>
 
@@ -108,10 +126,12 @@
         <mergeFile fromFilePath="${osafe.home}/data/version/version_OsafeProperties.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template" keyValues="key" fileType="XML" preserveExtra="false"/>
         <mergeFile fromFilePath="${osafe.home}/data/version/version_clientDeployment.properties" toFilePath="${osafe.deployemt.home}/client-deployment.properties" keyValues="key" fileType="PROPERTIES" preserveExtra="false"/>
 
+        <customizeMergeFile fromFilePath="${osafe.home}/data/version/version_ofbiz-component.xml" toFilePath="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template" readerNames="ofbizversion12"/>
+
         <antcall target="osafe-deployment" inheritall="true"/>
     </target>
 
-    <macrodef name="createToFile">
+    <macrodef name="createToFile"  description="copy the file to toFile path if toFile not exist ">
         <attribute name="file"/>
         <attribute name="toFile"/>
         <sequential>
@@ -154,9 +174,9 @@
         <antcall target="jar"></antcall>
 
         <!-- Create osafe ui label if not exist -->
-        <createToFile file="${osafe.home}/data/version/version_OsafeUiLabels.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeUiLabels.xml"/>
+        <createToFile file="${osafe.home}/data/version/version_OsafeUiLabels.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiLabels.xml"/>
         <!-- Create osafe ui sequence if not exist -->
-        <createToFile file="${osafe.home}/data/version/version_OsafeUiSequence.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeUiSequence.xml"/>
+        <createToFile file="${osafe.home}/data/version/version_OsafeUiSequence.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OSafeUiSequence.xml"/>
         <!-- Create Parameters Recurrence if not exist -->
         <createToFile file="${osafe.home}/data/version/version_parameters_recurrence.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/parameters_recurrence.xml"/>
         <!-- Create Parameters Clickatell if not exist -->
@@ -169,6 +189,8 @@
         <createToFile file="${osafe.home}/data/version/version_OsafeProperties.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/config/OsafeProperties.xml.template"/>
         <!-- Create client Deployment properties if not exist -->
         <createToFile file="${osafe.home}/data/version/version_clientDeployment.properties" tofile="${osafe.deployemt.home}/client-deployment.properties"/>
+        <!-- Create osafe ofbiz component xml if not exist -->
+        <createToFile file="${osafe.home}/data/version/version_ofbiz-component.xml" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template"/>
 
         <!-- Load client specific property values -->
         <property file="${osafe.deployemt.home}/client-deployment.properties"></property>
@@ -205,6 +227,12 @@
         <copy file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml.template" tofile="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml">
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/applications/product/entitydef/eecas.xml" todir="../../applications/product/entitydef" overwrite="true" failonerror="false"/>
+    	
+    	<!-- secas_olap.xml template-->
+        <copy file="../../hot-deploy/osafe/data/version/version_secas_olap.xml" tofile="${osafe.deployemt.home}/ofbiz/applications/product/servicedef/secas_olap.template"></copy>
+        <copy file="${osafe.deployemt.home}/ofbiz/applications/product/servicedef/secas_olap.template" tofile="${osafe.deployemt.home}/ofbiz/applications/product/servicedef/secas_olap.xml">
+        </copy>
+        <move file="${osafe.deployemt.home}/ofbiz/applications/product/servicedef/secas_olap.xml" todir="../../applications/product/servicedef" overwrite="true" failonerror="false"/>
 
         <!-- Startup sh -->
         <copy file="../../hot-deploy/osafe/data/version/version_startofbiz.sh" tofile="${osafe.deployemt.home}/ofbiz/startofbizsh.template"></copy>
@@ -356,12 +384,10 @@
               <filter token="solr.search.port" value="${solr.search.port}"/>
               <filter token="solr.index.server" value="${solr.index.server}"/>
               <filter token="solr.index.port" value="${solr.index.port}"/>
-              <filter token="localDispatcherName" value="${localDispatcherName}"/>
               <filter token="product.images.path" value="${product.images.path}"/>
               <filter token="productCategory.images.path" value="${productCategory.images.path}"/>
               <filter token="productFeature.images.path" value="${productFeature.images.path}"/>
               <filter token="manufacturer.images.path" value="${manufacturer.images.path}"/>
-              <filter token="url.catalog.prefix" value="${url.catalog.prefix}"/>
               <filter token="goodIdentificationTypes" value="${goodIdentificationTypes}"/>
               <filter token="store.storePrefix" value="${store.storePrefix}"/>
               <filter token="store.webSiteId" value="${store.webSiteId}"/>
@@ -376,9 +402,7 @@
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml">
             <filterset >
               <filter token="store.webSiteId" value="${store.webSiteId}"/>
-              <filter token="localDispatcherName" value="${localDispatcherName}"/>
               <filter token="eCommerceDecoratorName" value="${eCommerceDecoratorName}"/>
-              <filter token="url.catalog.prefix" value="${url.catalog.prefix}"/>
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/webapp/osafe/WEB-INF/web.xml" todir="../../hot-deploy/osafe/webapp/osafe/WEB-INF" overwrite="true" failonerror="false"/>
@@ -386,7 +410,7 @@
         <!-- Osafe ofbiz-component.xml -->
         <copy file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml.template" tofile="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml">
             <filterset >
-              <filter token="localDispatcherName" value="${localDispatcherName}"/>
+                <filter token="localDispatcherName" value=""/>
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/ofbiz-component.xml" todir="../../hot-deploy/osafe" overwrite="true" failonerror="false"/>

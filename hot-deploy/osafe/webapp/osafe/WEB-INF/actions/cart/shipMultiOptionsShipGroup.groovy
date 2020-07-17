@@ -34,13 +34,14 @@ lineIndex = request.getAttribute("lineIndex");
 shippingEstWpr = new ShippingEstimateWrapper(dispatcher, shoppingCart,iShipGroupIndex);
 context.shippingEstWpr = shippingEstWpr;
 carrierShipmentMethodList = shippingEstWpr.getShippingMethods();
+defaultShipMethodId = Util.getProductStoreParm(request, "CHECKOUT_CART_DEFAULT_SHIP_METHOD");
 
 
 boolean removeShippingCostEst = false;
 String inventoryMethod = Util.getProductStoreParm(request,"INVENTORY_METHOD");
 if(UtilValidate.isNotEmpty(inventoryMethod) && inventoryMethod.equalsIgnoreCase("BIGFISH"))
 {
-    for(GenericValue cartItem : shoppingCart.items())
+    for(ShoppingCartItem  cartItem : shoppingCart.items())
     {
         try {
             BigDecimal bfWareHouseInventoryBD = BigDecimal.ZERO;
@@ -158,3 +159,4 @@ context.shipGroupIndex=shipGroupIndex;
 context.shipGroupLastIndex=shipGroupLastIndex;
 context.carrierShipmentMethodList=carrierShipmentMethodList;
 context.lineIndex = lineIndex;
+context.defaultShipMethodId=defaultShipMethodId;

@@ -226,7 +226,7 @@
                     <#assign price = orderItem.unitPrice>
                 </#if>
              </#if>
-             <#assign productFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${urlProductId}&productCategoryId=${productCategoryId!""}')/>
+             <#assign productFriendlyUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId=${urlProductId}&productCategoryId=${productCategoryId!""}')/>
              <#assign IMG_SIZE_CART_H = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_CART_H")!""/>
              <#assign IMG_SIZE_CART_W = Static["com.osafe.util.Util"].getProductStoreParm(request,"IMG_SIZE_CART_W")!""/>
     

@@ -175,6 +175,7 @@
     <th class="descCol">${uiLabelMap.PdpQtyMinLabel}</th>
     <th class="descCol">${uiLabelMap.PdpQtyMaxLabel}</th>
     <th class="descCol">${uiLabelMap.PdpQtyDefaultLabel}</th>
+    <th class="descCol">${uiLabelMap.PdpInStoreOnlyLabel}</th>
   </tr>
   <#if productDataList?exists && productDataList?has_content>
     <#assign rowClass = "1">
@@ -265,6 +266,7 @@
         <td class="nameCol">${product.pdpQtyMin!""}</td>
         <td class="nameCol">${product.pdpQtyMax!""}</td>
         <td class="nameCol">${product.pdpQtyDefault!""}</td>
+        <td class="nameCol">${product.pdpInStoreOnly!""}</td>
       </tr>
       <#-- toggle the row color -->
       <#if rowClass == "2">

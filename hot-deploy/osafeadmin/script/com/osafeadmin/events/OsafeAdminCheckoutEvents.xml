@@ -4,7 +4,7 @@
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
 
     <simple-method method-name="validateCheckout" short-description="Validate Admin Order and setup shopping cart" login-required="false">
-        
+
         <session-to-field field="shoppingCart"/>
 
         <call-simple-method method-name="validateAppliedGiftCardPayment" />
@@ -24,12 +24,10 @@
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BillingAddressMissingError"/>
                         <string-to-list string="${tempErrorMessage}" message-field="BILLING_SELECT_ADDRESS" list="error_list"/>
         </if-empty>
-        <if-compare operator="equals" value="true" field="shippingApplies">
-        	<if-empty field="parameters.SHIPPING_SELECT_ADDRESS">
-                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingAddressMissingError"/>
-                        <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_SELECT_ADDRESS" list="error_list"/>
-        	</if-empty>
-        </if-compare>
+       	<if-empty field="parameters.SHIPPING_SELECT_ADDRESS">
+                       <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingAddressMissingError"/>
+                       <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_SELECT_ADDRESS" list="error_list"/>
+       	</if-empty>
         <if-compare operator="equals" value="true" field="shippingApplies">
         	<if-empty field="parameters.shipping_method">
                         <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShippingMethodMissingError"/>
@@ -185,23 +183,17 @@
 	                    </if-empty>
 	                </else>
 	                </if-compare>
-	             <set field="cardSecurityCode" from-field="parameters.verificationNo" set-if-null="true" set-if-empty="true"/>
+	              <set field="cardSecurityCode" from-field="parameters.verificationNo" set-if-null="true" set-if-empty="true"/>
+	              <set field="creditCardContext.contactMechId" from-field="parameters.BILLING_SELECT_ADDRESS"/>
 	            </if-not-empty>
 	        </if-compare>
 	        <if-compare operator="equals" value="OffLine" field="parameters.paymentOption">
-	        	<if-empty field="parameters.referenceNo">
-	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="EmptyRefNumberError"/>
-	                <string-to-list string="${tempErrorMessage}" message-field="paymentOption" list="error_list"/>
-	        		<else>
-		               <call-bsh>
-		               <![CDATA[
-		               	   refNum = parameters.get("referenceNo");
-		                   shoppingCart.addPaymentAmount("EXT_COD", shoppingCart.getGrandTotal(), false);
-		                   shoppingCart.addPaymentRef("EXT_COD", refNum, "");
-		               ]]>
-		               </call-bsh>
-	               </else>
-	            </if-empty>
+	        	<session-to-field field="shoppingCart"/>
+		       <call-bsh>
+		        <![CDATA[
+		            shoppingCart.addPaymentAmount("EXT_COD", shoppingCart.getGrandTotal().subtract(shoppingCart.getPaymentTotal()), false);
+		        ]]>
+		       </call-bsh>
 	        </if-compare>
         </if-compare>
         
@@ -212,12 +204,22 @@
         
         <check-errors/>
         
-        <if-compare operator="equals" value="CCNew" field="parameters.paymentOption">
-	        <call-service service-name="createCreditCard" in-map-name="creditCardContext">
-	            <default-message>Credit Card successfully created.</default-message>
-	            <result-to-request result-name="paymentMethodId"/>
-	            <result-to-field result-name="paymentMethodId" field="paymentMethodId"/>
-	        </call-service>
+        <if-compare operator="greater" value="0.0" field="remainingAmount">
+	        <if>
+	          <condition>
+	              <or>
+	                  <if-compare operator="equals" value="CCNew" field="parameters.paymentOption"/>
+	                  <if-compare operator="equals" value="CCExist" field="parameters.paymentOption"/>
+	              </or>
+	          </condition>
+	          <then>
+		            <call-service service-name="createCreditCard" in-map-name="creditCardContext">
+			            <default-message>Credit Card successfully created.</default-message>
+			            <result-to-request result-name="paymentMethodId"/>
+			            <result-to-field result-name="paymentMethodId" field="paymentMethodId"/>
+			        </call-service>
+	          </then>
+	        </if>
         </if-compare>
        
         <create-object class-name="org.ofbiz.order.shoppingcart.CheckOutHelper" field="checkOutHelper">
@@ -229,11 +231,9 @@
             <string value="BILLING_LOCATION"/>
             <field field="parameters.BILLING_SELECT_ADDRESS"/>
         </call-object-method>
-        <if-compare operator="equals" value="true" field="shippingApplies">
-        	<call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
-            	<field field="parameters.SHIPPING_SELECT_ADDRESS"/>
-        	</call-object-method>
-        </if-compare>
+       	<call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
+           	<field field="parameters.SHIPPING_SELECT_ADDRESS"/>
+       	</call-object-method>
         <call-object-method obj-field="shoppingCart" method-name="setChannelType">
             <field field="parameters.salesChannel"/>
         </call-object-method>
@@ -312,7 +312,6 @@
              <set field="cartPaymentInfo" value="${groovy: org.ofbiz.order.shoppingcart.ShoppingCart.CartPaymentInfo cpi = shoppingCart.getPaymentInfo(paymentMethodId, null, null, null, true); cpi.securityCode = cardSecurityCode; return cpi;}"/>
          </if-not-empty>
          
-         <call-simple-method method-name="processCartAttribute"/>
 
         <if-not-empty field="parameters.shipping_instructions">
             <call-object-method method-name="setAllShippingInstructions" obj-field="shoppingCart">
@@ -321,12 +320,6 @@
         </if-not-empty>
 
         <check-errors/>
-        <call-object-method method-name="removeOrderAttribute" obj-field="shoppingCart">
-            <string value="GIFT_CARD_NUMBER"/>
-        </call-object-method>
-        <call-object-method method-name="removeOrderAttribute" obj-field="shoppingCart">
-            <string value="GIFT_CARD_REMAINING_BAL"/>
-        </call-object-method>
 
     </simple-method>
 
@@ -364,7 +357,21 @@
                 <string value="IS_DOWNLOADED"/>
                 <string value="N"/>
             </call-object-method>
+            
+            <call-object-method method-name="removeOrderAttribute" obj-field="shoppingCart">
+            	<string value="GIFT_CARD_NUMBER"/>
+	        </call-object-method>
+	        <call-object-method method-name="removeOrderAttribute" obj-field="shoppingCart">
+	            <string value="GIFT_CARD_REMAINING_BAL"/>
+	        </call-object-method>
+	
+	        <call-class-method class-name="com.osafe.events.ShoppingCartEvents" method-name="formatGiftMessageOrderItemAttribute" ret-field="result">
+	             <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+	             <field field="response" type="javax.servlet.http.HttpServletResponse"/>
+	         </call-class-method>
+	         
         </if-not-empty>
+
     </simple-method>
     
     <simple-method method-name="setShippingOption" short-description="Set shipping method" login-required="false">
@@ -664,6 +671,9 @@
     	<!-- Ofbiz does not clear the store pickup info from cart in ShoppingCartEvents (clearCart method)-->
     	<call-simple-method method-name="removeStorePickup"/>
     	
+    	<set field="showThankYouStatus" value="Y"/>
+    	<field-to-request field="showThankYouStatus"/>
+    	
         <property-to-field resource="OSafeAdminUiLabels" property="OrderCheckoutSuccess" field="orderCheckoutSuccessMessage"/>
         <string-to-list string="${orderCheckoutSuccessMessage}" list="successMessageList"/>
     </simple-method>
@@ -671,6 +681,7 @@
     <simple-method method-name="addToCart" short-description="add to cart and render success message" login-required="false">
 		<set field="productName" value=""/>
 		<if-not-empty field="parameters.add_product_id">
+            <set field="productId" from-field="parameters.add_product_id"/>
 			<if-not-empty field="parameters.prod_type">
 				<call-class-method class-name="org.ofbiz.product.product.ProductWorker" method-name="isSellable" ret-field="prodIsSellable">
 					<field field="delegator" type="org.ofbiz.entity.Delegator"/>
@@ -698,12 +709,20 @@
 			        </if-not-empty>
 		        </if-compare>
 			</if-not-empty>
+			
+	        <call-class-method method-name="addToCart" class-name="org.ofbiz.order.shoppingcart.ShoppingCartEvents">
+	            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+	            <field field="response" type="javax.servlet.http.HttpServletResponse"/>
+	        </call-class-method>
+	        <session-to-field field="shoppingCart"/>
+	        <call-class-method method-name="setProductFeaturesOnCart" class-name="com.osafe.events.ShoppingCartEvents">
+	            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+	            <field field="parameters.add_product_id"/>
+	        </call-class-method>
+			
 		</if-not-empty>
 	
-        <call-class-method method-name="addToCart" class-name="org.ofbiz.order.shoppingcart.ShoppingCartEvents">
-            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
-            <field field="response" type="javax.servlet.http.HttpServletResponse"/>
-        </call-class-method>
+
        <property-to-field resource="OSafeAdminUiLabels" property="CheckoutAddProductSuccess" field="checkoutAddProductSuccess"/>
        <string-to-list string="${checkoutAddProductSuccess}" list="osafeSuccessMessageList"/>
        <field-to-request field="osafeSuccessMessageList"/>
@@ -1169,35 +1188,47 @@
     	<clear-field field="parameters.gcNumber"/>
     	
     	<session-to-field field="shoppingCart"/>
-    	<session-to-field field="DO_CART_PROMO" default="Y"/>
-    	<session-to-field field="DO_CART_LOYALTY" default="Y"/>
-    	<session-to-field field="DO_CART_GIFTCARD" default="Y"/>
+    	<call-object-method obj-field="shoppingCart" method-name="items" ret-field="cartItemsList"/>
+    	<if-not-empty field="cartItemsList">
     	
-    	<!-- Update Promotions -->    	
-    	<if-compare operator="not-equals" field="DO_CART_PROMO" value="N">
-	    	<call-class-method method-name="doPromotions" class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker">
-	            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
-	            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+	    	<session-to-field field="DO_CART_PROMO" default="Y"/>
+	    	<session-to-field field="DO_CART_LOYALTY" default="Y"/>
+	    	
+	    	<!-- UPDATE PROMOTIONS -->    
+	    	<!-- If multi ship groups no need to update promotions -->	
+	        <call-object-method method-name="getOrderAttribute" obj-field="shoppingCart" ret-field="deliveryOption">
+	            <string value="DELIVERY_OPTION"/>
+	        </call-object-method>
+	        <if-compare operator="not-equals" value="SHIP_TO_MULTI" field="deliveryOption">
+		    	<if-compare operator="not-equals" field="DO_CART_PROMO" value="N">
+			    	<call-class-method method-name="doPromotions" class-name="org.ofbiz.order.shoppingcart.product.ProductPromoWorker">
+			            <field field="shoppingCart" type="org.ofbiz.order.shoppingcart.ShoppingCart"/>
+			            <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+			        </call-class-method>
+		        </if-compare>
+		    </if-compare>
+	        
+	        <!-- UPDATE LOYALTY POINTS -->
+	        <if-compare operator="not-equals" field="DO_CART_LOYALTY" value="N">
+		        <session-to-field field="orderAdjustmentAttributeList"/>
+		        <if-not-empty field="orderAdjustmentAttributeList">
+			        <call-class-method class-name="com.osafe.events.ShoppingCartEvents" method-name="modifyLoyaltyPoints" ret-field="modifyLoyaltyPointsResult">
+			            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+			            <field field="response" type="javax.servlet.http.HttpServletResponse"/>
+			        </call-class-method>
+		        </if-not-empty>
+	        </if-compare>
+	        
+	        <!-- UPDATE TAXES: (Tax the new Total before applying any Payments) -->
+	        <call-class-method method-name="calculateTax" class-name="com.osafe.events.CheckOutEvents">
+	            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
+	            <field field="response" type="javax.servlet.http.HttpServletResponse"/>
 	        </call-class-method>
-        </if-compare>
-        
-        <!-- Update Loyalty -->
-        <if-compare operator="not-equals" field="DO_CART_LOYALTY" value="N">
-	        <session-to-field field="orderAdjustmentAttributeList"/>
-	        <if-not-empty field="orderAdjustmentAttributeList">
-		        <call-class-method class-name="com.osafe.events.ShoppingCartEvents" method-name="modifyLoyaltyPoints" ret-field="modifyLoyaltyPointsResult">
-		            <field field="request" type="javax.servlet.http.HttpServletRequest"/>
-		            <field field="response" type="javax.servlet.http.HttpServletResponse"/>
-		        </call-class-method>
-	        </if-not-empty>
-        </if-compare>
-        
-        <!-- Update Gift Card -->
-        <if-compare operator="not-equals" field="DO_CART_GIFTCARD" value="N">
+	        
+	        <!-- UPDATE GIFT CARD -->
 	        <session-to-field field="shoppingCart"/>
 			<call-object-method obj-field="shoppingCart" method-name="getGiftCards" ret-field="giftCardNumberPayments"/>
 			<call-object-method obj-field="shoppingCart" method-name="getGiftCardPaymentPreferenceTotal" ret-field="gcPaymentPreferenceTotal"/>
-			
 			<set field="giftCardPaymentsSize" value="${groovy:if(giftCardNumberPayments != null)return(giftCardNumberPayments.size());}"  type="Integer" default-value="0"/>	        
 			
 			<if-empty field="parameters.gcPaymentMethodId">
@@ -1224,27 +1255,260 @@
 			        </call-object-method>
 		    	</else>
 		    </if-compare-field>
-		    
 	    	<clear-field field="parameters.gcNumber"/>
 	    	<clear-field field="parameters.gcPaymentMethodId"/>
-    	</if-compare>
+	    </if-not-empty>
     	
-    	<call-bsh><![CDATA[
-           if(session.getAttribute("DO_CART_PROMO") != null)
-           {
-              session.removeAttribute("DO_CART_PROMO");
-           }
-           if(session.getAttribute("DO_CART_LOYALTY") != null)
-           {
-              session.removeAttribute("DO_CART_LOYALTY");
-           }
-           if(session.getAttribute("DO_CART_GIFTCARD") != null)
-           {
-              session.removeAttribute("DO_CART_GIFTCARD");
-           }
-        ]]></call-bsh>
+    	<!-- ClEAN UP -->
+        <if-compare field="DO_CART_PROMO" operator="equals" value="N">
+	        <call-object-method obj-field="session" method-name="removeAttribute">
+	            <string value="DO_CART_PROMO"/>
+	        </call-object-method>
+        </if-compare>
+        <if-compare field="DO_CART_LOYALTY" operator="equals" value="N">
+	        <call-object-method obj-field="session" method-name="removeAttribute">
+	            <string value="DO_CART_LOYALTY"/>
+	        </call-object-method>
+        </if-compare>
 	    
     </simple-method>
     
+    
+    <simple-method method-name="validateAddPaymentMethod" short-description="validate add payment" login-required="false">
+
+        <if-empty field="parameters.paymentOption">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="PaymentMethodMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="paymentOption" list="error_list"/>
+            <else>
+            	<if-compare operator="equals" value="CCExist" field="parameters.paymentOption">
+		            <if-compare-field field="parameters.savedVerificationNo" operator="not-equals" to-field="nullValue">
+		                <if-empty field="parameters.savedVerificationNo">
+		                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
+		                    <string-to-list string="${tempErrorMessage}" message-field="savedVerificationNo" list="error_list"/>
+		                    <else>
+		                        <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+		                             <field field="parameters.savedVerificationNo" type="String"/>
+		                        </call-class-method>
+		                        <if-compare operator="equals" value="false" field="isInteger">
+		                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
+		                            <string-to-list string="${tempErrorMessage}" message-field="savedVerificationNo" list="error_list"/>
+		                        </if-compare>
+		                    </else>
+		                </if-empty>
+		            </if-compare-field>
+		            <if-empty field="parameters.savedCard">
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SavedCardMissingError"/>
+		                <string-to-list string="${tempErrorMessage}" message-field="savedCard" list="error_list"/>
+		                <else>
+		                    <entity-one value-field="savedCreditCard" entity-name="CreditCard">
+		                        <field-map field-name="paymentMethodId" from-field="parameters.savedCard"/>
+		                    </entity-one>
+		                    <set field="creditCardContext.cardType" from-field="savedCreditCard.cardType"/>
+		                    <set field="creditCardContext.cardNumber" from-field="savedCreditCard.cardNumber"/>
+		                    <set field="creditCardContext.expireDate" from-field="savedCreditCard.expireDate"/>
+		                    <set field="creditCardContext.companyNameOnCard" from-field="savedCreditCard.companyNameOnCard"/>
+		                    <set field="creditCardContext.titleOnCard" from-field="savedCreditCard.titleOnCard"/>
+		                    <set field="creditCardContext.firstNameOnCard" from-field="savedCreditCard.firstNameOnCard"/>
+		                    <set field="creditCardContext.middleNameOnCard" from-field="savedCreditCard.middleNameOnCard"/>
+		                    <set field="creditCardContext.lastNameOnCard" from-field="savedCreditCard.lastNameOnCard"/>
+		                    <set field="creditCardContext.suffixOnCard" from-field="savedCreditCard.suffixOnCard"/>
+		                    <set field="creditCardContext.cardNumber" from-field="savedCreditCard.cardNumber"/>
+		                    <set field="creditCardContext.contactMechId" from-field="savedCreditCard.contactMechId"/>
+		                    
+		                    <!-- <set field="paymentMethodId" from-field="parameters.savedCard"/> -->
+		                </else>
+		            </if-empty>
+		             <set field="cardSecurityCode" from-field="parameters.savedVerificationNo" set-if-null="true" set-if-empty="true"/>
+		             <set field="parameters.maxAmount" from-field="parameters.remainingPayment"/>
+		        </if-compare>
+		        <if-compare operator="equals" value="CCNew" field="parameters.paymentOption">
+		            <if-compare-field field="parameters.verificationNo" operator="not-equals" to-field="nullValue">
+		                <if-empty field="parameters.verificationNo">
+		                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
+		                    <string-to-list string="${tempErrorMessage}" message-field="verificationNo" list="error_list"/>
+		                    <else>
+		                        <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+		                             <field field="parameters.verificationNo" type="String"/>
+		                        </call-class-method>
+		                        <if-compare operator="equals" value="false" field="isInteger">
+		                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="VerificationNumberMissingError"/>
+		                            <string-to-list string="${tempErrorMessage}" message-field="verificationNo" list="error_list"/>
+		                        </if-compare>
+		                    </else>
+		                </if-empty>
+		            </if-compare-field>
+		             <call-map-processor in-map-name="parameters" out-map-name="creditCardContext">
+		                  <simple-map-processor name="createCreditCard">
+		                    <make-in-string field="expireDate">
+		                      <in-field field="expMonth"/>
+		                      <constant>/</constant>
+		                      <in-field field="expYear"/>
+		                    </make-in-string>
+		                    <process field="partyId"><copy/></process>
+		                    <process field="companyNameOnCard"><copy/></process>
+		                    <process field="titleOnCard"><copy/></process>
+		                    <process field="firstNameOnCard"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="FirstNameOnCardMissingError"/></not-empty></process>
+		                    <process field="middleNameOnCard"><copy/></process>
+		                    <process field="lastNameOnCard"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="LastNameOnCardMissingError"/></not-empty></process>
+		                    <process field="suffixOnCard"><copy/></process>
+		                    <process field="cardType"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="CardTypeMissingError"/></not-empty></process>
+		                    <process field="cardNumber"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="CardNumberMissingError"/></not-empty></process>
+		                    <process field="contactMechId"><copy/></process>
+		                    <process field="description"><copy/></process>
+		                    <process field="expMonth"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="ExpirationMonthMissingError"/></not-empty></process>
+		                    <process field="expYear"><copy/><not-empty><fail-property resource="OSafeAdminUiLabels" property="ExpirationYearMissingError"/></not-empty></process>
+		                    <process field="expireDate"><copy/></process>
+		                  </simple-map-processor>
+		             </call-map-processor>
+		             <if-not-empty field="parameters.expMonth">
+		               <if-validate-method field="creditCardContext.expireDate" method="isDateBeforeToday" >
+		                   <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ExpirationDateIsBeforeTodayError"/>
+		                   <string-to-list string="${tempErrorMessage}" message-field="expMonth" list="error_list"/>
+		               </if-validate-method>
+		            </if-not-empty>
+		            <if-not-empty field="creditCardContext.cardNumber">
+		                <call-class-method method-name="isInteger" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isInteger">
+		                     <field field="creditCardContext.cardNumber" type="String"/>
+		                </call-class-method>
+		                <if-compare operator="equals" value="false" field="isInteger">
+		                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidError"/>
+		                    <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+		                <else>
+		                    <if-empty field="creditCardContext.cardType">
+		                        <call-class-method method-name="isCreditCard" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isCreditCard">
+		                             <field field="creditCardContext.cardNumber" type="String"/>
+		                        </call-class-method>
+		                        <if-compare field="isCreditCard" operator="equals" value="false">
+		                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidError"/>
+		                            <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+		                        </if-compare>
+		                    <else>
+		                        <call-class-method method-name="isCardMatch" class-name="org.ofbiz.base.util.UtilValidate" ret-field="isCardMatch">
+		                            <field field="creditCardContext.cardType" type="String"/>
+		                             <field field="creditCardContext.cardNumber" type="String"/>
+		                        </call-class-method>
+		                        <if-compare field="isCardMatch" operator="equals" value="false">
+		                            <call-class-method method-name="getCardType" class-name="org.ofbiz.base.util.UtilValidate" ret-field="suggestCardType">
+		                                 <field field="creditCardContext.cardNumber" type="String"/>
+		                            </call-class-method>
+		                            <if-compare field="suggestCardType" operator="equals" value="Unknown">
+		                                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidError"/>
+		                                <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+		                            <else>
+		                                <set field="argListNames[]" from-field="creditCardContext.cardNumber"/>
+		                                <set field="argListNames[]" from-field="creditCardContext.cardType"/>
+		                                <set field="argListNames[]" from-field="suggestCardType"/>
+		                                <property-to-field resource="OSafeAdminUiLabels" property="CreditCardNumberInvalidSuggestError" field="tempErrorMessage" arg-list-name="argListNames"/>
+		                                <string-to-list string="${tempErrorMessage}" message-field="cardNumber" list="error_list"/>
+		                            </else>
+		                            </if-compare>
+		                        </if-compare>
+		                    </else>
+		                    </if-empty>
+		                </else>
+		                </if-compare>
+		              <set field="cardSecurityCode" from-field="parameters.verificationNo" set-if-null="true" set-if-empty="true"/>
+		              <!-- <set field="creditCardContext.contactMechId" from-field="parameters.BILLING_SELECT_ADDRESS"/> -->
+		              <set field="creditCardContext.contactMechId" from-field="parameters.billingContactMechId"/>
+		            </if-not-empty>
+		            <set field="parameters.maxAmount" from-field="parameters.remainingPayment"/>
+		        </if-compare>
+		        
+		        
+		        <if-compare operator="equals" value="OffLine" field="parameters.paymentOption">
+	            	<if-empty field="parameters.referenceNo">
+			            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddPaymentReferenceError"/>
+			            <string-to-list string="${tempErrorMessage}" message-field="referenceNo" list="error_list"/>
+		            </if-empty>
+		            <if-empty field="parameters.paymentMethodId">
+			            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddPaymentMethodTypeError"/>
+			            <string-to-list string="${tempErrorMessage}" message-field="paymentMethodId" list="error_list"/>
+		            </if-empty>
+	            </if-compare>
+		        
+		        <if-empty field="parameters.maxAmount">
+		            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddPaymentAmountError"/>
+		            <string-to-list string="${tempErrorMessage}" message-field="maxAmount" list="error_list"/>
+		            <else>
+			            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isSignedDouble" ret-field="isSignedDouble">
+			                <field field="parameters.maxAmount"/>
+			            </call-class-method>
+			            <if-compare field="isSignedDouble" operator="equals" value="false">
+			                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddPaymentAmountError"/>
+			                <string-to-list string="${tempErrorMessage}" message-field="maxAmount"  list="error_list"/>
+			                <else>
+			                	<if-compare operator="less-equals" value="0.0" field="parameters.maxAmount" type="BigDecimal">
+			                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddPaymentAmountError"/>
+			                        <string-to-list string="${tempErrorMessage}" message-field="maxAmount" list="error_list"/>
+			                        <else>
+			                        	<if-compare-field field="parameters.maxAmount" operator="greater" to-field="parameters.remainingPayment" type="Double">
+			                        		<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="AddPaymentAmountError"/>
+			                        		<string-to-list string="${tempErrorMessage}" message-field="maxAmount" list="error_list"/>
+			                        	</if-compare-field>
+			                        </else>
+			                    </if-compare>
+			                </else>
+			            </if-compare>
+		            </else>
+	            </if-empty>
+            </else>
+        </if-empty>
+        
+        
+        <check-errors/>
+        
+        <if>
+          <condition>
+              <or>
+                  <if-compare operator="equals" value="CCNew" field="parameters.paymentOption"/>
+                  <if-compare operator="equals" value="CCExist" field="parameters.paymentOption"/>
+              </or>
+          </condition>
+          <then>
+	            <call-service service-name="createCreditCard" in-map-name="creditCardContext">
+		            <default-message>Credit Card successfully created.</default-message>
+		            <result-to-request result-name="paymentMethodId"/>
+		            <result-to-field result-name="paymentMethodId" field="paymentMethodId"/>
+		        </call-service>
+		        
+		        <set field="parameters.paymentMethodId" from-field="paymentMethodId"/>
+		        <field-to-request field="parameters.maxAmount" request-name="maxAmount"/>
+          </then>
+        </if>
+        
+        <if-compare operator="equals" value="OffLine" field="parameters.paymentOption">
+        	<if-empty field="parameters.productStoreId">
+	            <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="parameters.productStoreId">
+	                <field field="request" type="javax.servlet.ServletRequest"/>
+	            </call-class-method>
+	        </if-empty>
+           <session-to-field field="userLogin"/>
+           <set field="paymentsMadeOnOwedTotal" value="0" type="BigDecimal"/>
+           <entity-and entity-name="OrderPaymentPreference" list="orderPaymentPreferenceList">
+                <field-map field-name="orderId" from-field="parameters.orderId"/>
+                <field-map field-name="statusId" value="PAYMENT_NOT_RECEIVED"/>
+           </entity-and>
+           <if-not-empty field="orderPaymentPreferenceList">
+	            <first-from-list list="orderPaymentPreferenceList" entry="orderPaymentPreference"/>
+	            
+	           <make-value entity-name="Payment" value-field="payment"/>
+               <sequenced-id sequence-name="Payment" field="payment.paymentId"/>
+	           <set field="payment.paymentPreferenceId" from-field="orderPaymentPreference.orderPaymentPreferenceId"/>
+	           <set field="payment.partyIdFrom" from-field="userLogin.partyId"/>
+	           <set field="payment.partyIdTo" from-field="productStore.payToPartyId"/>
+	           <set field="payment.paymentRefNum" from-field="parameters.referenceNo"/>
+	           <set field="payment.amount" from-field="parameters.maxAmount" type="BigDecimal"/>
+	           <set field="payment.currencyUomId" from-field="parameters.currencyUomId"/>
+	           <set field="payment.paymentTypeId" value="CUSTOMER_PAYMENT"/>
+	           <set field="payment.paymentMethodTypeId" from-field="parameters.paymentMethodId"/>
+	           <set field="payment.statusId" value="PMNT_RECEIVED"/>
+	           <now-timestamp field="payment.effectiveDate"/>
+	           <create-value value-field="payment"/>
+           </if-not-empty>
+           
+           <return response-code="cod"/>
+        </if-compare>
+	    
+    </simple-method>
 
 </simple-methods>

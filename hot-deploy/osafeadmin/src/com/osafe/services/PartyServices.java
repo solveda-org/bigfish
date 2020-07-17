@@ -592,9 +592,12 @@ public class PartyServices {
                 // ----
                 if ("O".equals(extInfo)) {
                     // add info to dynamic view
-                    dynamicView.addMemberEntity("PC", "PartyContactMech");
+                    dynamicView.addMemberEntity("PC", "PartyContactMechPurpose");
                     dynamicView.addMemberEntity("CM", "ContactMech");
                     dynamicView.addAlias("PC", "contactMechId");
+                    dynamicView.addAlias("PC", "contactMechPurposeTypeId");
+                    dynamicView.addAlias("PC", "fromDate");
+                    dynamicView.addAlias("PC", "thruDate");
                     dynamicView.addAlias("CM", "infoString");
                     dynamicView.addViewLink("PT", "PC", Boolean.FALSE, ModelKeyMap.makeKeyMapList("partyId"));
                     dynamicView.addViewLink("PC", "CM", Boolean.FALSE, ModelKeyMap.makeKeyMapList("contactMechId"));
@@ -604,6 +607,9 @@ public class PartyServices {
                     if (UtilValidate.isNotEmpty(infoString)) {
                         paramList = paramList + "&infoString=" + infoString;
                         andExprs.add(EntityCondition.makeCondition(EntityFunction.UPPER_FIELD("infoString"), EntityOperator.LIKE, EntityFunction.UPPER("%"+infoString+"%")));
+                        andExprs.add(EntityCondition.makeCondition(EntityCondition.makeCondition("fromDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("fromDate", EntityOperator.LESS_THAN_EQUAL_TO, UtilDateTime.nowTimestamp())));
+                        andExprs.add(EntityCondition.makeCondition(EntityCondition.makeCondition("thruDate", EntityOperator.EQUALS, null), EntityOperator.OR, EntityCondition.makeCondition("thruDate", EntityOperator.GREATER_THAN_EQUAL_TO, UtilDateTime.nowTimestamp())));
+                        andExprs.add(EntityCondition.makeCondition("contactMechPurposeTypeId", EntityOperator.EQUALS, "PRIMARY_EMAIL"));
                         fieldsToSelect.add("infoString");
                     }
 

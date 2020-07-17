@@ -260,10 +260,39 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidDescriptionContentError"/>
             <string-to-list string="${tempErrorMessage}" message-field="description" list="error_list"/>
         </if-empty>
-        <if-empty field="parameters.textData">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSpotContentError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
-        </if-empty>
+        <if-compare operator="equals" value="ELECTRONIC_TEXT" field="parameters.dataResourceTypeId">
+            <if-empty field="parameters.textData">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
+	        </if-empty>
+        </if-compare>
+        
+        <if-compare operator="equals" value="CONTEXT_FILE" field="parameters.dataResourceTypeId">
+            <if-empty field="parameters.objectInfo">
+	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FileReferenceBlankError"/>
+	            <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+            <else>
+	            <call-class-method class-name="java.lang.System" method-name="getProperty" ret-field="ofbizHome">
+                    <string value="ofbiz.home"/>
+                </call-class-method>
+                <set field="baseDir" from-field="ofbizHome" type="String"/>
+                <string-append field="baseDir" string="/hot-deploy"/>
+                <string-append field="baseDir" string="/osafe/webapp/osafe"/>
+                <create-object class-name="java.io.File" field="contentFile">
+                    <field field="baseDir" type="String"/>
+                    <field field="parameters.objectInfo" type="String"/>
+                </create-object>
+                
+                <call-object-method method-name="exists" obj-field="contentFile" ret-field="isContentFileExists"/>
+                <if-compare operator="equals" value="false" field="isContentFileExists" type="Boolean">
+                    <clear-field field="argListNames"/>
+                    <set field="argListNames[]" from-field="parameters.objectInfo"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ContentFileNotExistError" arg-list-name="argListNames"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="objectInfo" list="error_list"/>
+                </if-compare>
+	        </else>
+	        </if-empty>
+        </if-compare>
     	
     	<check-errors/>
     	

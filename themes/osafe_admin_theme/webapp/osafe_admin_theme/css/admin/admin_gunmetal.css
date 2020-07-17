@@ -229,7 +229,7 @@ input[type="text"].textEntry {
 }
 
 input[type="text"].dateEntry {
-    width: 110px;
+    width: 150px;
     float: left;
 }
 
@@ -259,7 +259,7 @@ body.all {
 #mainContainer {
     border: 2px solid #363636;
     margin: 0 auto;
-    width: 1100px;
+    width: 100%;
     background: #DCDCDC;
 }
 #mainContainer:after {
@@ -283,7 +283,6 @@ body.all {
 #pageContainer {
     clear: both;
     padding: 0 15px 10px 15px;
-/*    width: 1068px;  */
 
 }
 #pageContainer:after {
@@ -839,7 +838,7 @@ border-top-right-radius: 8px;
     float: left;
     margin: 0.5em 0 1em;
     padding: 0 0 10px 0;
-    width: 1066px;
+    width: 100%;
 }
 
 .content-messages .errorImage,
@@ -1016,19 +1015,6 @@ border-top-right-radius: 8px;
     width: 100%;
 }
 
-.displayBox .boxBody,
-.displaySearchBox .boxBody {
-    padding: 10px 0;
-}
-
-.displayListBox .boxBody {
-   padding: 0 0 10px 0;
-}
-
-.displayBox.detailInfo .boxBody table,
-.displaySearchBox.detailInfo .boxBody table {
-     margin: -10px 0 0 0; /* To compensate for the boxBody padding */
-}
 
 #dashboard .displayBox .boxBody,
 #dashboard .displaySearchBox .boxBody {
@@ -1138,7 +1124,7 @@ tr.odd{
 .categoryDetail {
     clear: left;
     margin: 0 auto;
-    width: 1068px;
+    width: 100%;
 }
 .commonSearchList:after,
 categoryDetail:after {
@@ -1148,13 +1134,16 @@ categoryDetail:after {
     clear: both;
     visibility: hidden;
     }
+
 .commonSearchList .displaySearchBox {
-     width: 1066px;
+    width: 100%;
 }
+*/
 
 .commonSearchList .displayListBox {
-     width: 1066px;
+  width: 100%;
 }
+
 .commonSearchList .displayBox{
 
 }
@@ -1220,7 +1209,7 @@ categoryDetail:after {
 
 }
 .entryRow .entry{
-    width: 300px;
+    width: 320px;
 }
 
 .entryRow .entry.short{
@@ -1236,7 +1225,7 @@ categoryDetail:after {
 }
 
 .entryRow .entry.daterange {
-    width: 445px;
+    width: 45%;
     /*width: 380px;*/
 }
 
@@ -1286,14 +1275,14 @@ categoryDetail:after {
 .entryRow div.entryInput.from {
     position: relative;
     top: -2px;
-    width: 140px;
+    width: 180px;
 }
 
 .entryRow div.entryInput.to {
     margin: 0 0 0 5px;
     position: relative;
     top: -2px;
-    width: 140px;
+    width: 180px;
 }
 
 .entryButtonRow{
@@ -1309,18 +1298,25 @@ div.searchButton {
 * Information Display Box
 ****************************************************************/
 
+
 .displayBox.detailInfo {
-    width: 1066px;
+  width: 100%;
 }
+
+
 
 .infoRow {
     background: none repeat scroll 0 0 #F5F5F5;
     float: left;
-    margin: 4px 0;
+    margin: 2px 0;
     min-height: 20px; /* To accommodate button and input fields */
     width: 100%;
     /* *float: none; IE7 Only */
 
+}
+
+.displayBox.detailInfo .infoRow {
+  //clear: left;
 }
 
 .infoRow.column {
@@ -1377,7 +1373,7 @@ div.searchButton {
 }
 
 .infoRow.column div.infoValue {
-    max-width : 300px;
+    max-width : 260px;
 }
 div.infoValue div.dataRow {
     float: left;
@@ -1513,16 +1509,16 @@ div.infoValue div.geoCode {
 }
 
 .infoRow select.short {
-    /* width: 110px; */
+   width: 110px;
 }
 .infoRow select.small {
-    /* width: 220px; */
+    width: 220px; 
 }
 .infoRow select.extraSmall {
-    /* width: 330px; */
+     width: 330px; 
 }
 .infoRow select.medium {
-    /* width: 440px; */
+    width: 440px;
 }
 .infoRow div.entry.checkbox.short {
     /* width: 250px; */
@@ -1782,7 +1778,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 
 }
 .periodBox .entryButtons input {
-    margin: -3px 0 0 0;
+    margin: -3px 0 0 -125px;
 }
 
 .periodBox .entryButtons {
@@ -1910,37 +1906,37 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 
 #dashboard #bottomHalf .displayBox.pendingReviews {
     float: right;
-    width: 510px;
+    width: 100%;
+
 }
 #dashboard #topHalf .displayBox.bestReviewedProducts {
     float: right;
-    width: 510px;
+    width: 100%;
 }
 
 #dashboard #topHalf .displayBox.topPromotions {
     clear: left;
-    width: 510px;
+    width: 100%;
 }
 #dashboard #bottomHalf .displayBox.ordersRequiringWork {
     clear: left;
-
-    width: 510px;
+    width: 100%;
 }
 
 #dashboard #topHalf .displayBox.topProducts {
     float: right;
-    width: 510px;
+    width: 49%;
 }
 #dashboard #topHalf .displayBox.dashboardSummary {
     clear: left;
-    width: 510px;
+    width: 49%;
 }
 
 #dashboard #bottomHalf .displayBox.bestReviewedProducts td.boxCaption{
-    width: 423px;
+    width: 100%;
 }
 #dashboard #bottomHalf .displayBox.topPromotions td.boxCaption{
-    width: 423px;
+    width:100%;
 }
 
 /****************************************************************
@@ -1966,13 +1962,6 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     text-align: center;
 }
 
-#customerManagementDetail .displayBox.generalInfo {
-    width: 1068px;
-}
-#customerManagementDetail .displayBox.generalInfo .infoRow {
-
-}
-
 
 #customerManagementDetail .displayBox.shippingInfo td.boxCaption{
     width: 100%;
@@ -1982,7 +1971,6 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 #customerManagementDetail .displayListBox.noteInfo {
     clear: left;
     margin: 0 0 1em 0;
-    width: 1068px;
 }
 
 /****************************************************************
@@ -2004,19 +1992,14 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 
 #orderManagementOrderDetail .displayBox.customerInfo,
 #orderManagementOrderDetail .displayBox.paymentInfo {
-    width: 523px;
+    width: 100%;
 }
 
 #orderManagementOrderDetail .displayBox.customerInfo {
-    margin: 0 20px 10px 0;
+    margin: 0 2% 2% 0;
 }
 
 #orderManagementOrderDetail .displayBox.paymentInfo {
-
-}
-
-#orderManagementOrderDetail .displayBox.paymentInfo div.infoValue {
-/*    float: none;  */
 
 }
 
@@ -2027,20 +2010,16 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 
 #orderManagementOrderDetail .displayBox.paymentInfo .infoRow div.infoCaption {
     clear: left;
-    float: none;
 }
 
 /****************************************************************
 * Order Detail : General Information
 ****************************************************************/
-#orderManagementOrderDetail .displayBox.generalInfo {
-    width: 1068px;
-}
 #orderManagementOrderDetail .displayBox.generalInfo .infoRow {
-    padding: .25em 0 .25em 0;
+    /*padding: .25em 0 .25em 0;*/
 }
 #orderManagementOrderDetail .displayBox.generalInfo .infoRow.firstRow {
-    padding: 0.5em 0 0 0; 
+    padding: 0.5em 0 0 0;
 }
 
 #orderManagementOrderDetail .displayBox.generalInfo .infoRow div.infoValue p {
@@ -2066,7 +2045,6 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 
 #orderManagementOrderDetail .displayListBox.orderItemInfo {
     clear: left;
-    width: 1068px;
     margin: 0 0 1em 0;
 }
 
@@ -2530,7 +2508,6 @@ table.tablesorter thead tr .headerSortDown {
 	float: left;
    text-align:center;
    padding: 3px 0;
-   width: 510px;
    border-bottom: 1px solid #000;
    z-index: 1;
 }
@@ -2546,6 +2523,9 @@ table.tablesorter thead tr .headerSortDown {
 
 .lookupList {
 
+}
+.lookupList .idCol.spacer {
+    width: auto!important;
 }
 
 #customerList {
@@ -2847,8 +2827,21 @@ td div.infoEntry input[type="text"] {
     display: inline-block;
 }
 
+.siteLogoImage.fhdev{
+    background-image: url("/osafe_theme/images/user_content/admin-logo/dev_siteLogo-gunmetal.png");
+    height: 99px;
+}
+
 .metatagIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/htmlMetatag.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.contentSpotIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/contentSpot.gif);
     background-repeat:no-repeat;
     width: 16px;
     height:16px;
@@ -3016,6 +3009,14 @@ td div.infoEntry input[type="text"] {
 
 .paymentDetailIcon {
     background-image: url(/osafe_admin_theme/images/gunmetal/icon/productpricing.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
+
+.paymentIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/paymentIcon.gif);
     background-repeat:no-repeat;
     width: 16px;
     height:16px;
@@ -3317,7 +3318,7 @@ table#sortTable tfoot tr {
 
 .displayBox.detailInfo.productLoaderData {
     background: #f5f5f5;
-    width: 1068px;
+    width: 100%;
 }
 .productLoaderDataOverflow {
     overflow: auto;
@@ -4075,7 +4076,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-slider .ui-slider-handle { position: absolute; z-index: 2; width: 1.2em; height: 1.2em; cursor: default; }
 .ui-slider .ui-slider-range { position: absolute; z-index: 1; font-size: .7em; display: block; border: 0; background-position: 0 0; }
 
-.ui-slider-horizontal { height: .8em; }
+.ui-slider-horizontal { height: 1em; }
 .ui-slider-horizontal .ui-slider-handle { top: -.3em; margin-left: -.6em; }
 .ui-slider-horizontal .ui-slider-range { top: 0; height: 100%; }
 .ui-slider-horizontal .ui-slider-range-min { left: 0; }
@@ -4319,6 +4320,18 @@ background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg")
     width: 200px; /*must have*/
     height: 200px; /*must have*/
 }
+
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; }
+.ui-timepicker-div dl { text-align: left; }
+.ui-timepicker-div dl dt { float: left; clear:left; padding: 0 0 0 5px; }
+.ui-timepicker-div dl dd { margin: 0 10px 10px 40%; }
+.ui-timepicker-div td { font-size: 90%; }
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; }
+
+.ui-timepicker-rtl{ direction: rtl; }
+.ui-timepicker-rtl dl { text-align: right; padding: 0 5px 0 0; }
+.ui-timepicker-rtl dl dt{ float: right; clear: right; }
+.ui-timepicker-rtl dl dd { margin: 0 40% 10px 10px; }
 
 /* align times on scheduled jobs detail page */
 
@@ -4763,8 +4776,70 @@ h2 span.addIcon {
     width: 300px;
 }
 
+.orderItemShippingAddress span {
+    color: #000000;
+    font-weight: 700;
+}
+
+.inputWarning {
+    color: #FF0000;
+    float: right;
+    font-weight: 700;
+    margin-top: -17px;
+    padding-left: 20px;
+    text-align: right;
+    width: 100%;
+}
 
 
+.facebookIcon {
+    background-image: url(/osafe_admin_theme/images/gunmetal/icon/facebookIcon.gif);
+    background-repeat:no-repeat;
+    width: 16px;
+    height:16px;
+    display: inline-block;
+}
 
+.loadingAjaxImg {
+    background: none repeat scroll 0 0 #000000;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    opacity: 0.5;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 101;
+    text-align:center;
+    padding-top:250px;
+    background-image: url(/osafe_admin_theme/images/gunmetal/admin/ajax-loader.gif);
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
 
+#navigationMenuBreadcrumb {
+    display: inline-block;
+    margin: 5px 0 0;
+    width: 100%;
+}
+
+#navigationBreadcrumb {
+    float: left;
+    height: 15px;
+}
+
+#navigationBreadcrumb li {
+    background: url("/osafe_admin_theme/images/gunmetal/admin/breadcrumbBullet.png") no-repeat scroll 5px 50% rgba(0, 0, 0, 0);
+    display: inline;
+    float: left;
+    padding: 0 0 0 16px;
+}
+
+#navigationBreadcrumb li.first {
+    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    padding: 0;
+}
 

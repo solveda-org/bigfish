@@ -55,10 +55,16 @@
                 <process field="CUSTOMER_EMAIL_CONFIRM">
                     <copy to-field="customerEmailConfirm"/>
                     <not-empty><fail-property resource="OSafeUiLabels" property="ConfirmEmailAddressMissingError"/></not-empty>
-                    <compare-field operator="equals" field="CUSTOMER_EMAIL_NEW"><fail-property resource="OSafeUiLabels" property="EmailMatchError"/></compare-field>
                 </process>
             </simple-map-processor>
         </call-map-processor>
+        
+        <if-not-empty field="parameters.CUSTOMER_EMAIL_CONFIRM">
+	        <if-compare-field field="parameters.CUSTOMER_EMAIL_NEW" operator="not-equals" to-field="parameters.CUSTOMER_EMAIL_CONFIRM">
+	        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmailMatchError"/>
+	        	<string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_CONFIRM" list="error_list"/>
+	      	</if-compare-field>  
+      	</if-not-empty>
         
         <if-not-empty field="parameters.CUSTOMER_EMAIL_NEW">
             <entity-one value-field="customerUserLogin" entity-name="UserLogin">
@@ -84,7 +90,6 @@
                 </simple-map-processor>
             </call-map-processor>
         </if-not-empty>
-        
         <if-not-empty field="passwordContext.oldPassword">
 	            <set-service-fields service-name="checkUserPassword" map="passwordContext" to-map="currentUserCtx"/>
 	            <set field="currentUserCtx.username" from-field="passwordContext.userLoginId"/>
@@ -97,7 +102,6 @@
 	                <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
 	            </if-compare>
         </if-not-empty>
-        
         <check-errors/>
     </simple-method>
     
@@ -116,15 +120,6 @@
             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="CurrentPasswordMissingError"/>
             <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
         </if-empty>
-        <if-empty field="parameters.PASSWORD">
-            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="NewPasswordMissingError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="PASSWORD" list="error_list"></string-to-list>
-        </if-empty>
-        <if-empty field="parameters.CONFIRM_PASSWORD">
-            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ConfirmPasswordMissingError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="CONFIRM_PASSWORD" list="error_list"></string-to-list>
-        </if-empty>
-        
         <if-not-empty field="parameters.OLD_PASSWORD">
             <call-map-processor in-map-name="parameters" out-map-name="passwordContext">
                 <simple-map-processor name="newPassword">
@@ -135,6 +130,7 @@
                 </simple-map-processor>
             </call-map-processor>
         </if-not-empty>
+        
         <if-not-empty field="passwordContext.oldPassword">
 	            <set-service-fields service-name="checkUserPassword" map="passwordContext" to-map="currentUserCtx"/>
 	            <set field="currentUserCtx.username" from-field="passwordContext.userLoginId"/>
@@ -147,6 +143,16 @@
 	                <string-to-list string="${tempErrorMessage}" message-field="OLD_PASSWORD" list="error_list"></string-to-list>
 	            </if-compare>
         </if-not-empty>
+        
+        <if-empty field="parameters.PASSWORD">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="NewPasswordMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PASSWORD" list="error_list"></string-to-list>
+        </if-empty>
+        
+        <if-empty field="parameters.CONFIRM_PASSWORD">
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ConfirmPasswordMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="CONFIRM_PASSWORD" list="error_list"></string-to-list>
+        </if-empty>
         
         <!-- Do password validation only if a password is entered otherwise it can be skipped -->
         <if-not-empty field="parameters.PASSWORD">

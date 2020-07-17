@@ -16,7 +16,32 @@
 <#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI!"")>
 	<#assign selectedCountry = defaultCountryGeoMap.geoId/>
 </#if>
+
+<#if parameters.fbLocationCountry?has_content> 
+	<#assign fbUserCountryList = delegator.findByAndCache("Geo", Static["org.ofbiz.base.util.UtilMisc"].toMap("geoName" , parameters.fbLocationCountry, "geoTypeId", "COUNTRY"))/>
+	<#if fbUserCountryList?has_content>
+		<#assign fbUserCountry = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(fbUserCountryList)/>  
+		<#assign selectedCountry = fbUserCountry.geoId/>
+	</#if>
+</#if>
+
 <#assign  selectedState = parameters.get(fieldPurpose+"_STATE")!stateProvinceGeoId?if_exists/>
+
+<#if parameters.fbLocationState?has_content> 
+	<#assign fbUserStateList = delegator.findByAndCache("Geo", Static["org.ofbiz.base.util.UtilMisc"].toMap("geoName" , parameters.fbLocationState))/>
+	<#if fbUserStateList?has_content>
+		<#assign fbUserState = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(fbUserStateList)/>  
+		<#assign selectedState = fbUserState.geoId/>
+	</#if>
+</#if>
+
+<#if parameters.fbLocationCountry?has_content> 
+	<#assign fbUserCountryList = delegator.findByAndCache("Geo", Static["org.ofbiz.base.util.UtilMisc"].toMap("geoName" , parameters.fbLocationCountry, "geoTypeId", "COUNTRY"))/>
+	<#if fbUserCountryList?has_content>
+		<#assign fbUserCountry = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(fbUserCountryList)/>  
+		<#assign selectedCountry = fbUserCountry.geoId/>
+	</#if>
+</#if>
 
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <div class="${request.getAttribute("attributeClass")!}">

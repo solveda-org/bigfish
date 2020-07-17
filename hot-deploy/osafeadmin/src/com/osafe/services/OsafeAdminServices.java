@@ -2,11 +2,8 @@ package com.osafe.services;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.net.URL;
 import java.nio.ByteBuffer;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -15,35 +12,38 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import javax.transaction.Transaction;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
-import org.apache.commons.fileupload.util.Streams;
 import org.apache.commons.io.FileUtils;
 import org.jdom.JDOMException;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.MessageString;
 import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
-import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericDataSourceException;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
 import org.ofbiz.entity.config.DatasourceInfo;
 import org.ofbiz.entity.config.EntityConfigUtil;
 import org.ofbiz.entity.datasource.GenericHelperInfo;
 import org.ofbiz.entity.jdbc.SQLProcessor;
+import org.ofbiz.entity.transaction.GenericTransactionException;
+import org.ofbiz.entity.transaction.TransactionUtil;
+import org.ofbiz.entity.util.EntityFindOptions;
+import org.ofbiz.entity.util.EntityListIterator;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
-
-import com.osafe.constants.Constants;
-import com.osafe.util.OsafeAdminUtil;
-import org.ofbiz.base.util.MessageString;
 
 public class OsafeAdminServices {
     public static final String module = OsafeAdminServices.class.getName();
@@ -61,10 +61,10 @@ public class OsafeAdminServices {
         String productStoreId = (String)context.get("productStoreId");
         
         List<MessageString> error_list = new ArrayList<MessageString>();
-		MessageString tmp = null;
+        MessageString tmp = null;
         if(errorExists.equals("yes")) 
         {
-			tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "ProductLoaderError", locale),productStoreId,true);
+            tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "ProductLoaderError", locale),productStoreId,true);
             error_list.add(tmp);
         }
         if(error_list.size() > 0) 
@@ -99,8 +99,8 @@ public class OsafeAdminServices {
                 }
                 if(UtilValidate.isNotEmpty(result.get("responseMessage")) && result.get("responseMessage").equals("error"))
                 {
-                	error_list.add(new MessageString(result.get("errorMessage").toString(), productStoreId ,true));
-                	return ServiceUtil.returnError(error_list);
+                    error_list.add(new MessageString(result.get("errorMessage").toString(), productStoreId ,true));
+                    return ServiceUtil.returnError(error_list);
                 }
                 List<String> serviceMsg = (List)result.get("messages");
                 if(serviceMsg.size() > 0 && serviceMsg.contains("SUCCESS")) 
@@ -130,7 +130,7 @@ public class OsafeAdminServices {
         ByteBuffer uploadBytes = (ByteBuffer) context.get("uploadedFile");
         String xlsFileName = (String)context.get("_uploadedFile_fileName");
         List<MessageString> error_list = new ArrayList<MessageString>();
-		MessageString tmp = null;
+        MessageString tmp = null;
         Map result = ServiceUtil.returnSuccess();
         if (UtilValidate.isNotEmpty(xlsFileName))
         {
@@ -170,7 +170,7 @@ public class OsafeAdminServices {
         else 
         {
             //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankUploadFileError", locale));
-			tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankUploadFileError", locale),"_uploadedFile_fileName",true);
+            tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankUploadFileError", locale),"_uploadedFile_fileName",true);
             error_list.add(tmp);
             return ServiceUtil.returnError(error_list);
         }
@@ -185,7 +185,7 @@ public class OsafeAdminServices {
         LocalDispatcher dispatcher = dctx.getDispatcher();
         Locale locale = (Locale) context.get("locale");
         List<MessageString> error_list = new ArrayList<MessageString>();
-		MessageString tmp = null;
+        MessageString tmp = null;
         Delegator delegator = dctx.getDelegator();
         String entityName = (String)context.get("entityDBName");
         SQLProcessor sqlP = null;
@@ -241,7 +241,7 @@ public class OsafeAdminServices {
                     //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale));
                     tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", e.getMessage(), locale),"",true);
                     error_list.add(tmp);
-					
+                    
                     return ServiceUtil.returnError(error_list);
                 } finally {
                     try {
@@ -263,7 +263,7 @@ public class OsafeAdminServices {
         }
         else {
             //error_list.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankEntityName", locale));
-			tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankEntityName", locale),"entityDBName",true);
+            tmp = new MessageString(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankEntityName", locale),"entityDBName",true);
             error_list.add(tmp);
             return ServiceUtil.returnError(error_list);
         }
@@ -271,5 +271,161 @@ public class OsafeAdminServices {
         List<String> successMessageList = UtilMisc.toList(deleteRowCount+" rows were successfully deleted from the "+entityName+" entity");
         return ServiceUtil.returnSuccess(successMessageList);
     }
-    
+
+    public static Map<String, Object> deleteScheduledJobs(DispatchContext dctx, Map<String, ? extends Object> context) 
+    {
+        Delegator delegator = dctx.getDelegator();
+        String statusId = (String)context.get("statusId");
+        String serviceName = (String)context.get("serviceName");
+        String isOld = (String)context.get("isOld");
+        Locale locale = (Locale) context.get("locale");
+        int daysToKeep = 30;
+        int deleteRowCount =0;
+
+        Timestamp now = UtilDateTime.nowTimestamp();
+        Timestamp deleteTime = UtilDateTime.addDaysToTimestamp(now, daysToKeep * -1);
+
+        // list of conditions
+        List conditions = FastList.newInstance();
+        conditions.add(EntityCondition.makeCondition("statusId", statusId));
+        conditions.add(EntityCondition.makeCondition("serviceName", serviceName));
+
+        if (UtilValidate.isNotEmpty(statusId) && statusId.equalsIgnoreCase("SERVICE_FINISHED"))
+        {
+            if (UtilValidate.isNotEmpty(isOld) && isOld.equalsIgnoreCase("Y"))
+            {
+                conditions.add(EntityCondition.makeCondition("finishDateTime", EntityOperator.LESS_THAN, deleteTime));
+            }
+            else
+            {
+                conditions.add(EntityCondition.makeCondition("finishDateTime", EntityOperator.GREATER_THAN, deleteTime));
+            }
+        }
+
+        EntityCondition mainCond = EntityCondition.makeCondition(conditions, EntityOperator.AND);
+
+        // configure the find options
+        EntityFindOptions findOptions = new EntityFindOptions();
+        findOptions.setResultSetType(EntityFindOptions.TYPE_SCROLL_INSENSITIVE);
+        findOptions.setMaxRows(1000);
+
+        // always suspend the current transaction; use the one internally
+        Transaction parent = null;
+        try {
+            if (TransactionUtil.getStatus() != TransactionUtil.STATUS_NO_TRANSACTION)
+            {
+                parent = TransactionUtil.suspend();
+            }
+
+            // lookup the jobs - looping 1000 at a time to avoid problems with cursors
+            // also, using unique transaction to delete as many as possible even with errors
+            boolean noMoreResults = false;
+            boolean beganTx1 = false;
+            while (!noMoreResults) 
+            {
+                // current list of records
+                List<GenericValue> curList = null;
+                try
+                {
+                    // begin this transaction
+                    beganTx1 = TransactionUtil.begin();
+
+                    EntityListIterator foundJobs = delegator.find("JobSandbox", mainCond, null, UtilMisc.toSet("jobId"), null, findOptions);
+                    try 
+                    {
+                        curList = foundJobs.getPartialList(1, 1000);
+                    }
+                    finally
+                    {
+                        foundJobs.close();
+                    }
+                }
+                catch (GenericEntityException e)
+                {
+                    Debug.logError(e, "Cannot obtain job data from datasource", module);
+                    try
+                    {
+                        TransactionUtil.rollback(beganTx1, e.getMessage(), e);
+                    }
+                    catch (GenericTransactionException e1)
+                    {
+                        Debug.logWarning(e1, module);
+                    }
+                    return ServiceUtil.returnError(e.getMessage());
+                }
+                finally
+                {
+                    try
+                    {
+                        TransactionUtil.commit(beganTx1);
+                    }
+                    catch (GenericTransactionException e)
+                    {
+                        Debug.logWarning(e, module);
+                    }
+                }
+                // remove list in its own transaction
+                if (UtilValidate.isNotEmpty(curList))
+                {
+                    boolean beganTx2 = false;
+                    try 
+                    {
+                        beganTx2 = TransactionUtil.begin();
+                        delegator.removeAll(curList);
+                    }
+                    catch (GenericEntityException e)
+                    {
+                        Debug.logInfo("Cannot remove job", module);
+                        try
+                        {
+                            TransactionUtil.rollback(beganTx2, e.getMessage(), e);
+                        }
+                        catch (GenericTransactionException e1)
+                        {
+                            Debug.logWarning(e1, module);
+                        }
+                    }
+                    finally
+                    {
+                        try
+                        {
+                            TransactionUtil.commit(beganTx2);
+                            deleteRowCount += curList.size();
+                        }
+                        catch (GenericTransactionException e)
+                        {
+                            Debug.logWarning(e, module);
+                        }
+                    }
+                }
+                else
+                {
+                    noMoreResults = true;
+                }
+            }
+        }
+        catch (GenericTransactionException e)
+        {
+            Debug.logError(e, "Unable to suspend transaction; cannot delete jobs!", module);
+            return ServiceUtil.returnError(e.getMessage());
+        }
+        finally
+        {
+            if (parent != null)
+            {
+                try
+                {
+                    TransactionUtil.resume(parent);
+                }
+                catch (GenericTransactionException e)
+                {
+                    Debug.logWarning(e, module);
+                }
+            }
+        }
+        
+        // send the notification
+        String successMessage = UtilProperties.getMessage("OSafeAdminUiLabels", "DeletedJobsSuccessMessage", UtilMisc.toList(deleteRowCount), locale);
+        return ServiceUtil.returnSuccess(UtilMisc.toList(successMessage));
+    }
 }

@@ -15,6 +15,15 @@
 	<#assign selectedCountry = defaultCountryGeoMap.geoId/>
 </#if>
 
+<#if parameters.fbLocationCountry?has_content> 
+	<#assign fbUserCountryList = delegator.findByAndCache("Geo", Static["org.ofbiz.base.util.UtilMisc"].toMap("geoName" , parameters.fbLocationCountry, "geoTypeId", "COUNTRY"))/>
+	<#if fbUserCountryList?has_content>
+		<#assign fbUserCountry = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(fbUserCountryList)/>  
+		<#assign selectedCountry = fbUserCountry.geoId/>
+	</#if>
+</#if>
+
+
 <!-- address country entry -->
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <div class="${request.getAttribute("attributeClass")!}">

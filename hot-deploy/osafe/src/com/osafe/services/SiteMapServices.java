@@ -19,40 +19,37 @@
 
 package com.osafe.services;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
-
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.ResourceBundle;
 
 import org.apache.commons.io.FileUtils;
-import org.ofbiz.product.category.CategoryContentWrapper;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.base.util.UtilXml;
+import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
+import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericValue;
-import org.ofbiz.service.DispatchContext;
-import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.base.util.UtilMisc; 
-import org.ofbiz.base.util.UtilXml;
+import org.ofbiz.product.category.CategoryContentWrapper;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
+import org.ofbiz.service.DispatchContext;
+import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import javolution.util.FastList;
+
 import com.osafe.util.Util;
-import org.ofbiz.base.util.StringUtil;
-import org.ofbiz.base.util.collections.ResourceBundleMapWrapper;
-import org.ofbiz.base.util.string.FlexibleStringExpander;
-import com.osafe.services.CategoryServices;
 
 public class SiteMapServices {
 
@@ -63,7 +60,6 @@ public class SiteMapServices {
     public static String PRODUCT_LIST_URL = null;
     public static String PRODUCT_CATEGORY_LIST_URL = null;
     public static String STATIC_PAGE_URL = null;
-    public static String CATALOG_URL_MOUNT_POINT = "shop";
     public static String SITEMAP_VARIANT_FEATURES = null;
     private static ResourceBundleMapWrapper OSAFE_FRIENDLY_URL = null;
     private static final ResourceBundle OSAFE_PROP = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
@@ -77,7 +73,6 @@ public class SiteMapServices {
         String productStoreId = (String) context.get("productStoreId");
         String browseRootProductCategoryId = (String) context.get("browseRootProductCategoryId");
         String siteMapOutputDir = (String) context.get("siteMapOutputDir");
-        CATALOG_URL_MOUNT_POINT=OSAFE_PROP.getString("urlCatalogPrefix");
         OSAFE_FRIENDLY_URL = (ResourceBundleMapWrapper) UtilProperties.getResourceBundleMap("OSafeSeoUrlMap", Locale.getDefault());        	
         
         PRODUCT_DETAIL_URL = (String) context.get("productDetailUrl");
@@ -415,8 +410,7 @@ public class SiteMapServices {
         StringBuilder urlBuilder = new StringBuilder();
     	
     	try {
-            List<String> pathElements = StringUtil.split(URL, "/");
-            String sUrlTarget=pathElements.get(pathElements.size() - 1);
+            String sUrlTarget=URL.substring(URL.lastIndexOf("/")+1);
         	String friendlyKey=StringUtil.replaceString(sUrlTarget,"&","~");
         	friendlyKey=StringUtil.replaceString(friendlyKey,"=","^^");
         	String friendlyUrl =null;
@@ -428,18 +422,12 @@ public class SiteMapServices {
         	}
         	if (UtilValidate.isNotEmpty(friendlyUrl))
         	{
-            	int idxControl = URL.indexOf("control/");
-            	if (idxControl > -1)
-            	{
-                    urlBuilder.append(URL.substring(0,idxControl));
-                    urlBuilder.append(CATALOG_URL_MOUNT_POINT + "/");
-            	}
+                urlBuilder.append(URL.substring(0, URL.lastIndexOf("/")+1));
                 urlBuilder.append(friendlyUrl.toLowerCase());
         	}
         	else
         	{
                 urlBuilder.append(URL);
-        		
         	}
         	
             Element newElement = document.createElement("url");

@@ -92,10 +92,45 @@
        displayDialogId = '#' + dialogPurpose + 'displayDialog';
        dialogTitleId = '#' + dialogPurpose + 'dialogBoxTitle';
        titleText = jQuery(dialogTitleId).val();
-       jQuery(displayContainerId).html('<div id=loadingImg></div>');
+       jQuery(displayContainerId).html('<div id=loadingDiv class=loadingImg></div>');
        getActionDialog(displayContainerId,params);
        showDialog(dialogId, displayDialogId, titleText);
         
+    }
+   
+    function displayActionDialogBoxQuicklook(dialogPurpose,elm) 
+    {
+       var params = jQuery(elm).siblings('input.param').serialize();
+       var oldhtml = jQuery(elm).html();
+       jQuery(elm).find('img').remove();
+       jQuery(elm).append('<div id=loadingDiv class=loadingImg></div>');
+       //jQuery(elm).html('<div id=loadingDiv class=loadingImg></div>');
+       var dialogId = '#' + dialogPurpose + 'dialog';
+       var displayContainerId = '#js_' + dialogPurpose + 'Container';
+       displayDialogId = '#' + dialogPurpose + 'displayDialog';
+       dialogTitleId = '#' + dialogPurpose + 'dialogBoxTitle';
+       titleText = jQuery(dialogTitleId).val();
+       
+       var url = "";
+       if (params)
+       {
+          url = '<@ofbizUrl>${dialogActionRequest!"dialogActionRequest"}</@ofbizUrl>?'+params;
+       } 
+       else 
+       {
+          url = '<@ofbizUrl>${dialogActionRequest!"dialogActionRequest"}</@ofbizUrl>';
+       }
+      
+       jQuery.get(url, function(data)
+       {
+           jQuery(elm).find('#loadingDiv').remove();
+           jQuery(elm).append(oldhtml);
+           <#if QUICKLOOK_DELAY_MS?has_content && Static["com.osafe.util.Util"].isNumber(QUICKLOOK_DELAY_MS) && QUICKLOOK_DELAY_MS != "0">
+    	       jQuery(elm).parent("div.js_plpQuicklook").find('img').hide();
+    	   </#if>
+           jQuery(displayContainerId).replaceWith(data);
+           showDialog(dialogId, displayDialogId, titleText);
+       });
     }
    
     function displayProductScrollActionDialogBox(dialogPurpose,elm) 
@@ -108,7 +143,6 @@
        titleText = jQuery(dialogTitleId).val();
        jQuery(displayContainerId).html('<div id=loadingImg></div>');
        getActionDialog(displayContainerId,params);
-        
     }
    
   function getActionDialog (displayContainerId,params) 
@@ -126,6 +160,7 @@
           //jQuery(myDialog).dialog( "option", "position", 'center' );
       });
   }
+  
 
     var isWhole_re = /^\s*\d+\s*$/;
     function isWhole (s) {
@@ -815,14 +850,14 @@
     
     function isItemSelectedPlp(selectFeatureDiv) <#-- throws alert -->
     {
-    	if (jQuery('#'+selectFeatureDiv+'_add_product_id').val() == 'NULL' || jQuery('#'+selectFeatureDiv+'_add_product_id').val() == '') 
+        if (!jQuery('#'+selectFeatureDiv+'_add_product_id').length || jQuery('#'+selectFeatureDiv+'_add_product_id').val() == 'NULL' || jQuery('#'+selectFeatureDiv+'_add_product_id').val() == '') 
         {
            OPT = eval("getFormOption" + selectFeatureDiv + "()");
            for (i = 0; i < OPT.length; i++) 
            {
             var optionName = OPT[i];
             var indexSelected = jQuery('div#'+selectFeatureDiv+' select.'+optionName).prop("selectedIndex");
-            if(indexSelected <= 0)
+            if(indexSelected <= 0 || !jQuery('#'+selectFeatureDiv+'_add_product_id').length)
             {
                 <#-- Trim the FT prefix and convert to title case -->
                 var properName = OPT[i].substr(2);
@@ -904,6 +939,25 @@
         return cartIsValid;
     }
 
-       
+    function submitMultiSearchForm(form) 
+    {
+        var isValid = false;
+        jQuery('form[name=${formName!"entryForm"}] input[type="text"]').each(function() 
+        {
+            if (jQuery.trim(jQuery(this).val()) != '') 
+            {
+                isValid = true;
+            }
+        });
+        if (isValid == false)
+        {
+            displayDialogBox('search_');
+            return false;
+        }
+        else
+        {
+            form.submit();
+        }
+    }   
    
 </script>

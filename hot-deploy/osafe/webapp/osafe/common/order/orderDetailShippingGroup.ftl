@@ -4,7 +4,7 @@
          <div class="displayBox">
            <#list orderItemShipGroups as cartShipInfo>
               <#if (orderItemShipGroups?size > 1) >
-                <h4>${uiLabelMap.ShippingGroupHeading} ${groupIndex} of ${orderItemShipGroups.size()}</h3>
+                <h4>${uiLabelMap.ShippingGroupHeading} ${groupIndex} of ${orderItemShipGroups.size()}</h4>
               <#else>
                 <h4>${uiLabelMap.OrderDetailsHeading}</h3>
               </#if>

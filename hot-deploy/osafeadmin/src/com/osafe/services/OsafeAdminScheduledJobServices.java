@@ -120,7 +120,7 @@ public class OsafeAdminScheduledJobServices {
         String serviceCnt = (String) params.remove("SERVICE_COUNT");
         String retryCnt = (String) params.remove("SERVICE_MAXRETRY");
         
-        String prefDateFormat = (String) params.remove("preferredDateFormat");
+        String prefDateFormat = (String) params.remove("entryDateTimeFormat");
         //default to -1
         retryCnt = "-1";
       //set default to DAILY

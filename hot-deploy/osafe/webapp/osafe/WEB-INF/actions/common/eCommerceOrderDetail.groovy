@@ -20,6 +20,8 @@ import org.ofbiz.order.order.*;
 import org.ofbiz.product.catalog.*;
 import javolution.util.FastMap;
 import com.osafe.util.Util;
+import org.ofbiz.entity.GenericEntityException;
+import org.ofbiz.base.util.UtilNumber;
 
 chosenShippingMethodDescription="";
 shippingInstructions = "";
@@ -47,7 +49,7 @@ shippingContactMechPhoneMap = [:];
 for (GenericValue contactMech : shippingContactMechList)
 {
     phoneNumberMap = [:];
-    if(contactMech)
+    if(UtilValidate.isNotEmpty(contactMech))
     {
         contactMechIdFrom = contactMech.contactMechId;
         contactMechLinkList = delegator.findByAndCache("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechIdFrom))
@@ -86,14 +88,14 @@ context.creditCardTypesMap = creditCardTypesMap;
 orderId = parameters.orderId;
 orderHeader = null;
 // we have a special case here where for an anonymous order the user will already be logged out, but the userLogin will be in the request so we can still do a security check here
-if (!userLogin) 
+if (UtilValidate.isEmpty(userLogin)) 
 {
     userLogin = parameters.temporaryAnonymousUserLogin;
     // This is another special case, when Order is placed by anonymous user from ecommerce and then Order is completed by admin(or any user) from Order Manager
     // then userLogin is not found when Order Complete Mail is send to user.
-    if (!userLogin) 
+    if (UtilValidate.isEmpty(userLogin)) 
     {
-        if (orderId) 
+        if (UtilValidate.isNotEmpty(orderId)) 
         {
             orderHeader = delegator.findOne("OrderHeader", [orderId : orderId], true);
             orderStatuses = orderHeader.getRelatedCache("OrderStatus");
@@ -103,7 +105,7 @@ if (!userLogin)
             // Handled the case of OFFLINE payment method.
             orderPaymentPreferences = orderHeader.getRelatedCache("OrderPaymentPreference", UtilMisc.toList("orderPaymentPreferenceId"));
             filteredOrderPaymentPreferences = EntityUtil.filterByCondition(orderPaymentPreferences, EntityCondition.makeCondition("paymentMethodTypeId", EntityOperator.IN, ["EXT_OFFLINE"]));
-            if (filteredOrderPaymentPreferences)
+            if (UtilValidate.isNotEmpty(filteredOrderPaymentPreferences))
             {
                 extOfflineModeExists = true;
             }
@@ -142,9 +144,9 @@ if (!userLogin)
 if (userLogin) partyId = userLogin.partyId; */
 
 partyId = context.partyId;
-if (userLogin) 
+if (UtilValidate.isNotEmpty(orderId)) 
 {
-    if (!partyId) 
+    if (UtilValidate.isEmpty(partyId)) 
     {
         partyId = userLogin.partyId;
     }
@@ -155,379 +157,329 @@ if (userLogin)
 allowAnonymousView = context.allowAnonymousView;
 
 isDemoStore = true;
-if (orderId) 
+shippingApplies = true;
+if (UtilValidate.isNotEmpty(orderId)) 
 {
     orderHeader = delegator.findByPrimaryKeyCache("OrderHeader", [orderId : orderId]);
-    if ("PURCHASE_ORDER".equals(orderHeader?.orderTypeId)) 
-    {
-        //drop shipper or supplier
-        roleTypeId = "SUPPLIER_AGENT";
-    } else 
-    {
-        //customer
-        roleTypeId = "PLACING_CUSTOMER";
-    }
-    context.roleTypeId = roleTypeId;
-    // check OrderRole to make sure the user can view this order.  This check must be done for any order which is not anonymously placed and
-    // any anonymous order when the allowAnonymousView security flag (see above) is not set to Y, to prevent peeking
-    if (orderHeader && (!"anonymous".equals(orderHeader.createdBy) || ("anonymous".equals(orderHeader.createdBy) && !"Y".equals(allowAnonymousView)))) 
-    {
-        orderRole = EntityUtil.getFirst(delegator.findByAndCache("OrderRole", [orderId : orderId, partyId : partyId, roleTypeId : roleTypeId]));
-        if (!userLogin || !orderRole) 
-        {
-            context.remove("orderHeader");
-            orderHeader = null;
-            Debug.logWarning("Warning: in OrderStatus.groovy before getting order detail info: role not found or user not logged in; partyId=[" + partyId + "], userLoginId=[" + (userLogin == null ? "null" : userLogin.get("userLoginId")) + "]", "orderstatus");
-        }
-    }
-}
-
-shippingApplies = true;
-if (orderHeader) 
-{
-	customerPoNumberSet="";
-    productStore = orderHeader.getRelatedOneCache("ProductStore");
-    orderReadHelper = new OrderReadHelper(orderHeader);
-    currencyUom = orderReadHelper.getCurrency();
-    orderItems = orderReadHelper.getOrderItems();
-    orderAdjustments = orderReadHelper.getAdjustments();
-    orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
-    orderAdjustmentsPromotion = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"));
-    orderAdjustmentsShippingCharge = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SHIPPING_CHARGES"));
-    orderAdjustmentsSalesTax = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SALES_TAX"));
-    orderAdjustmentsLoyalty = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "LOYALTY_POINTS"));
-    orderAdjustmentsDiscount = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "DISCOUNT_ADJUSTMENT"));
-    orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
-    orderItemShipGroups = orderReadHelper.getOrderItemShipGroups();
-    headerAdjustmentsToShow = orderReadHelper.getOrderHeaderAdjustmentsToShow();
-	shippingApplies = orderReadHelper.shippingApplies();
-	orderItemsTotalQty = orderReadHelper.getTotalOrderItemsQuantity();
-
-    orderShippingTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, false, true);
-    orderShippingTotal = orderShippingTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
-
-    orderTaxTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
-    orderTaxTotal = orderTaxTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
-    
-    orderGrandTotal = OrderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments);
-
-
-    placingCustomerOrderRoles = delegator.findByAndCache("OrderRole", [orderId : orderId, roleTypeId : roleTypeId]);
-    placingCustomerOrderRole = EntityUtil.getFirst(placingCustomerOrderRoles);
-    placingCustomerPerson = placingCustomerOrderRole == null ? null : delegator.findByPrimaryKeyCache("Person", [partyId : placingCustomerOrderRole.partyId]);
-
-    billingAccount = orderHeader.getRelatedOneCache("BillingAccount");
-
-    orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelatedCache("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
-    paymentMethods = [];
-    orderPaymentPreferences.each { opp ->
-        paymentMethod = opp.getRelatedOneCache("PaymentMethod");
-        if (paymentMethod) 
-        {
-            paymentMethods.add(paymentMethod);
-        } else 
-        {
-            paymentMethodType = opp.getRelatedOneCache("PaymentMethodType");
-            if (paymentMethodType) 
-            {
-                context.paymentMethodType = paymentMethodType;
-            }
-        }
-    }
-
-    webSiteId = orderHeader.webSiteId ?: CatalogWorker.getWebSiteId(request);
-
-    payToPartyId = productStore.payToPartyId;
-    paymentAddress =  PaymentWorker.getPaymentAddress(delegator, payToPartyId);
-    if (paymentAddress)
-    {
-    	context.paymentAddress = paymentAddress;
-    }
-
-    // get Shipment tracking info
-    osisCond = EntityCondition.makeCondition([orderId : orderId], EntityOperator.AND);
-    osisOrder = ["shipmentId", "shipmentRouteSegmentId", "shipmentPackageSeqId"];
-    osisFields = ["shipmentId", "shipmentRouteSegmentId", "carrierPartyId", "shipmentMethodTypeId"] as Set;
-    osisFields.add("shipmentPackageSeqId");
-    osisFields.add("trackingCode");
-    osisFields.add("boxNumber");
-    osisFindOptions = new EntityFindOptions();
-    osisFindOptions.setDistinct(true);
-    orderShipmentInfoSummaryList = delegator.findList("OrderShipmentInfoSummary", osisCond, osisFields, osisOrder, osisFindOptions, true);
-
-    // check if there are returnable items
-    returned = 0.00;
-    totalItems = 0.00;
-    orderItems.each { oitem ->
-        totalItems += oitem.quantity;
-        ritems = oitem.getRelatedCache("ReturnItem");
-        ritems.each { ritem ->
-            rh = ritem.getRelatedOneCache("ReturnHeader");
-            if (!rh.statusId.equals("RETURN_CANCELLED")) 
-            {
-                returned += ritem.returnQuantity;
-            }
-        }
-    }
-
-    if (totalItems > returned) 
-    {
-        context.returnLink = "Y";
-    }
-    
-	//get Delivery Option
-	deliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], true);
-	if (UtilValidate.isNotEmpty(deliveryOptionAttr))
+	if (UtilValidate.isNotEmpty(orderHeader))
 	{
-		deliveryOption =deliveryOptionAttr.attrValue; 
-	}
-    
-	//get shipping method
-	selectedStoreId = "";
-	isStorePickUp = "N";
-	if(UtilValidate.isNotEmpty(orderItemShipGroups))
-	{
-		for(GenericValue shipGroup : orderItemShipGroups)
-		{
-			shippingInstructions = shipGroup.shippingInstructions;
-			if(UtilValidate.isNotEmpty(orderHeader))
+	    if ("PURCHASE_ORDER".equals(orderHeader?.orderTypeId)) 
+	    {
+	        //drop shipper or supplier
+	        roleTypeId = "SUPPLIER_AGENT";
+	    } else 
+	    {
+	        //customer
+	        roleTypeId = "PLACING_CUSTOMER";
+	    }
+	    context.roleTypeId = roleTypeId;
+	    // check OrderRole to make sure the user can view this order.  This check must be done for any order which is not anonymously placed and
+	    // any anonymous order when the allowAnonymousView security flag (see above) is not set to Y, to prevent peeking
+	    if (UtilValidate.isNotEmpty(orderHeader) && (!"anonymous".equals(orderHeader.createdBy) || ("anonymous".equals(orderHeader.createdBy) && !"Y".equals(allowAnonymousView)))) 
+	    {
+	        orderRole = EntityUtil.getFirst(delegator.findByAndCache("OrderRole", [orderId : orderId, partyId : partyId, roleTypeId : roleTypeId]));
+	        if (UtilValidate.isEmpty(userLogin) || UtilValidate.isEmpty(orderRole)) 
+	        {
+	            context.remove("orderHeader");
+	            orderHeader = null;
+	            Debug.logWarning("Warning: in OrderStatus.groovy before getting order detail info: role not found or user not logged in; partyId=[" + partyId + "], userLoginId=[" + (userLogin == null ? "null" : userLogin.get("userLoginId")) + "]", "orderstatus");
+	        }
+	    }
+		
+		customerPoNumberSet="";
+		productStore = orderHeader.getRelatedOneCache("ProductStore");
+		orderReadHelper = new OrderReadHelper(orderHeader);
+		currencyUom = orderReadHelper.getCurrency();
+		orderItems = orderReadHelper.getOrderItems();
+		orderAdjustments = orderReadHelper.getAdjustments();
+		orderHeaderAdjustments = orderReadHelper.getOrderHeaderAdjustments();
+		orderAdjustmentsPromotion = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "PROMOTION_ADJUSTMENT"));
+		orderAdjustmentsShippingCharge = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SHIPPING_CHARGES"));
+		orderAdjustmentsSalesTax = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SALES_TAX"));
+		orderAdjustmentsLoyalty = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "LOYALTY_POINTS"));
+		orderAdjustmentsDiscount = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "DISCOUNT_ADJUSTMENT"));
+		orderSubTotal = orderReadHelper.getOrderItemsSubTotal();
+		orderItemShipGroups = orderReadHelper.getOrderItemShipGroups();
+		shipGroupsSize = orderItemShipGroups.size();
+		headerAdjustmentsToShow = orderReadHelper.getOrderHeaderAdjustmentsToShow();
+		shippingApplies = orderReadHelper.shippingApplies();
+		orderItemsTotalQty = orderReadHelper.getTotalOrderItemsQuantity();
+	
+		orderShippingTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, false, true);
+		orderShippingTotal = orderShippingTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, false, true));
+	
+		orderTaxTotal = OrderReadHelper.getAllOrderItemsAdjustmentsTotal(orderItems, orderAdjustments, false, true, false);
+		orderTaxTotal = orderTaxTotal.add(OrderReadHelper.calcOrderAdjustments(orderHeaderAdjustments, orderSubTotal, false, true, false));
+		
+		orderGrandTotal = OrderReadHelper.getOrderGrandTotal(orderItems, orderAdjustments);
+	
+	
+		placingCustomerOrderRoles = delegator.findByAndCache("OrderRole", [orderId : orderId, roleTypeId : roleTypeId]);
+		placingCustomerOrderRole = EntityUtil.getFirst(placingCustomerOrderRoles);
+		placingCustomerPerson = placingCustomerOrderRole == null ? null : delegator.findByPrimaryKeyCache("Person", [partyId : placingCustomerOrderRole.partyId]);
+	
+		billingAccount = orderHeader.getRelatedOneCache("BillingAccount");
+	
+		orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelatedCache("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
+		paymentMethods = [];
+		orderPaymentPreferences.each { opp ->
+			paymentMethod = opp.getRelatedOneCache("PaymentMethod");
+			if (UtilValidate.isNotEmpty(paymentMethod))
 			{
-				orderAttrPickupStoreList = orderHeader.getRelatedByAndCache("OrderAttribute", UtilMisc.toMap("attrName", "STORE_LOCATION"));
-				if(UtilValidate.isNotEmpty(orderAttrPickupStoreList))
+				paymentMethods.add(paymentMethod);
+			} else
+			{
+				paymentMethodType = opp.getRelatedOneCache("PaymentMethodType");
+				if (UtilValidate.isNotEmpty(paymentMethodType))
 				{
-					orderAttrPickupStore = EntityUtil.getFirst(orderAttrPickupStoreList);
-					selectedStoreId = orderAttrPickupStore.attrValue;
-					chosenShippingMethodDescription = uiLabelMap.StorePickupLabel;
-	                isStorePickUp = "Y";
+					context.paymentMethodType = paymentMethodType;
 				}
-				if(UtilValidate.isEmpty(selectedStoreId))
+			}
+		}
+	
+		webSiteId = orderHeader.webSiteId ?: CatalogWorker.getWebSiteId(request);
+	
+		payToPartyId = productStore.payToPartyId;
+		paymentAddress =  PaymentWorker.getPaymentAddress(delegator, payToPartyId);
+		if (UtilValidate.isNotEmpty(paymentAddress))
+		{
+			context.paymentAddress = paymentAddress;
+		}
+	
+		// get Shipment tracking info
+		osisCond = EntityCondition.makeCondition([orderId : orderId], EntityOperator.AND);
+		osisOrder = ["shipmentId", "shipmentRouteSegmentId", "shipmentPackageSeqId"];
+		osisFields = ["shipmentId", "shipmentRouteSegmentId", "carrierPartyId", "shipmentMethodTypeId"] as Set;
+		osisFields.add("shipmentPackageSeqId");
+		osisFields.add("trackingCode");
+		osisFields.add("boxNumber");
+		osisFindOptions = new EntityFindOptions();
+		osisFindOptions.setDistinct(true);
+		orderShipmentInfoSummaryList = delegator.findList("OrderShipmentInfoSummary", osisCond, osisFields, osisOrder, osisFindOptions, true);
+	
+		// check if there are returnable items
+		returned = 0.00;
+		totalItems = 0.00;
+		orderItems.each { oitem ->
+			totalItems += oitem.quantity;
+			ritems = oitem.getRelatedCache("ReturnItem");
+			ritems.each { ritem ->
+				rh = ritem.getRelatedOneCache("ReturnHeader");
+				if (!rh.statusId.equals("RETURN_CANCELLED"))
 				{
-					context.storePickupId=selectedStoreId;
-				    party = delegator.findOne("Party", [partyId : selectedStoreId], true);
-				    if (UtilValidate.isNotEmpty(party))
-				    {
-				        partyGroup = party.getRelatedOneCache("PartyGroup");
-				        if (UtilValidate.isNotEmpty(partyGroup)) 
-				        {
-				            context.storePickupName = partyGroup.groupName;
-				        }
-
-				        partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
-				        partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
-
-				        partyGeneralLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
-				        partyGeneralLocations = EntityUtil.getRelatedCache("PartyContactMech", partyGeneralLocations);
-				        partyGeneralLocations = EntityUtil.filterByDate(partyGeneralLocations,true);
-				        partyGeneralLocations = EntityUtil.orderBy(partyGeneralLocations, UtilMisc.toList("fromDate DESC"));
-				        if (UtilValidate.isNotEmpty(partyGeneralLocations)) 
-				        {
-				        	partyGeneralLocation = EntityUtil.getFirst(partyGeneralLocations);
-				        	context.storePickupAddress = partyGeneralLocation.getRelatedOneCache("PostalAddress");
-				        }
-
-				        partyPrimaryPhones = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_PHONE"));
-				        partyPrimaryPhones = EntityUtil.getRelatedCache("PartyContactMech", partyPrimaryPhones);
-				        partyPrimaryPhones = EntityUtil.filterByDate(partyPrimaryPhones,true);
-				        partyPrimaryPhones = EntityUtil.orderBy(partyPrimaryPhones, UtilMisc.toList("fromDate DESC"));
-				        if (UtilValidate.isNotEmpty(partyPrimaryPhones)) 
-				        {
-				        	partyPrimaryPhone = EntityUtil.getFirst(partyPrimaryPhones);
-				        	context.storePickupPhone = partyPrimaryPhone.getRelatedOneCache("TelecomNumber");
-				        }
-				    }
-					shipmentMethodType = shipGroup.getRelatedOneCache("ShipmentMethodType");
-					carrierPartyId = shipGroup.carrierPartyId;
-					if(UtilValidate.isNotEmpty(shipmentMethodType))
+					returned += ritem.returnQuantity;
+				}
+			}
+		}
+	
+		if (totalItems > returned)
+		{
+			context.returnLink = "Y";
+		}
+		
+		//get Delivery Option
+		deliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], true);
+		if (UtilValidate.isNotEmpty(deliveryOptionAttr))
+		{
+			deliveryOption =deliveryOptionAttr.attrValue;
+		}
+		
+		//get shipping method
+		selectedStoreId = "";
+		isStorePickUp = "N";
+		if(UtilValidate.isNotEmpty(orderItemShipGroups))
+		{
+			for(GenericValue shipGroup : orderItemShipGroups)
+			{
+				shippingInstructions = shipGroup.shippingInstructions;
+				if(UtilValidate.isNotEmpty(orderHeader))
+				{
+					orderAttrPickupStoreList = orderHeader.getRelatedByAndCache("OrderAttribute", UtilMisc.toMap("attrName", "STORE_LOCATION"));
+					if(UtilValidate.isNotEmpty(orderAttrPickupStoreList))
 					{
-						carrier =  delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", shipGroup.carrierPartyId));
-						if(UtilValidate.isNotEmpty(carrier))
+						orderAttrPickupStore = EntityUtil.getFirst(orderAttrPickupStoreList);
+						selectedStoreId = orderAttrPickupStore.attrValue;
+						chosenShippingMethodDescription = uiLabelMap.StorePickupLabel;
+						isStorePickUp = "Y";
+					}
+					if(UtilValidate.isEmpty(selectedStoreId))
+					{
+						context.storePickupId=selectedStoreId;
+						party = delegator.findOne("Party", [partyId : selectedStoreId], true);
+						if (UtilValidate.isNotEmpty(party))
 						{
-							if(UtilValidate.isNotEmpty(carrier.groupName))
+							partyGroup = party.getRelatedOneCache("PartyGroup");
+							if (UtilValidate.isNotEmpty(partyGroup))
 							{
-								chosenShippingMethodDescription = carrier.groupName + " " + shipmentMethodType.description;
+								context.storePickupName = partyGroup.groupName;
 							}
-							else
+	
+							partyContactMechPurpose = party.getRelatedCache("PartyContactMechPurpose");
+							partyContactMechPurpose = EntityUtil.filterByDate(partyContactMechPurpose,true);
+	
+							partyGeneralLocations = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "GENERAL_LOCATION"));
+							partyGeneralLocations = EntityUtil.getRelatedCache("PartyContactMech", partyGeneralLocations);
+							partyGeneralLocations = EntityUtil.filterByDate(partyGeneralLocations,true);
+							partyGeneralLocations = EntityUtil.orderBy(partyGeneralLocations, UtilMisc.toList("fromDate DESC"));
+							if (UtilValidate.isNotEmpty(partyGeneralLocations))
 							{
-								chosenShippingMethodDescription = carrier.partyId + " " + shipmentMethodType.description;
+								partyGeneralLocation = EntityUtil.getFirst(partyGeneralLocations);
+								context.storePickupAddress = partyGeneralLocation.getRelatedOneCache("PostalAddress");
 							}
-							
+	
+							partyPrimaryPhones = EntityUtil.filterByAnd(partyContactMechPurpose, UtilMisc.toMap("contactMechPurposeTypeId", "PRIMARY_PHONE"));
+							partyPrimaryPhones = EntityUtil.getRelatedCache("PartyContactMech", partyPrimaryPhones);
+							partyPrimaryPhones = EntityUtil.filterByDate(partyPrimaryPhones,true);
+							partyPrimaryPhones = EntityUtil.orderBy(partyPrimaryPhones, UtilMisc.toList("fromDate DESC"));
+							if (UtilValidate.isNotEmpty(partyPrimaryPhones))
+							{
+								partyPrimaryPhone = EntityUtil.getFirst(partyPrimaryPhones);
+								context.storePickupPhone = partyPrimaryPhone.getRelatedOneCache("TelecomNumber");
+							}
+						}
+						shipmentMethodType = shipGroup.getRelatedOneCache("ShipmentMethodType");
+						carrierPartyId = shipGroup.carrierPartyId;
+						if(UtilValidate.isNotEmpty(shipmentMethodType))
+						{
+							carrier =  delegator.findByPrimaryKeyCache("PartyGroup", UtilMisc.toMap("partyId", shipGroup.carrierPartyId));
+							if(UtilValidate.isNotEmpty(carrier))
+							{
+								if(UtilValidate.isNotEmpty(carrier.groupName))
+								{
+									chosenShippingMethodDescription = carrier.groupName + " " + shipmentMethodType.description;
+								}
+								else
+								{
+									chosenShippingMethodDescription = carrier.partyId + " " + shipmentMethodType.description;
+								}
+								
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-    
-
-	appliedTaxList = FastList.newInstance();
-	List orderShipTaxAdjustments = FastList.newInstance();
-	BigDecimal totalTaxPercent = BigDecimal.ZERO;
-	if(UtilValidate.isNotEmpty(orderAdjustments) && orderAdjustments.size() > 0)
-	{
-		orderShipTaxAdjustments = EntityUtil.filterByAnd(orderAdjustments, UtilMisc.toMap("orderAdjustmentTypeId", "SALES_TAX"));
 		
-		for (GenericValue orderTaxAdjustment : orderShipTaxAdjustments)
+		//get Adjustment Info
+		appliedPromoList = FastList.newInstance();
+		appliedLoyaltyPointsList = FastList.newInstance();
+		if(UtilValidate.isNotEmpty(orderHeaderAdjustments) && orderHeaderAdjustments.size() > 0)
 		{
-			amount = 0;
-			taxAuthorityRateSeqId = orderTaxAdjustment.taxAuthorityRateSeqId;
-			if(UtilValidate.isNotEmpty(taxAuthorityRateSeqId))
+			adjustments = orderHeaderAdjustments;
+			for (GenericValue cartAdjustment : adjustments)
 			{
-				//check if this taxAuthorityRateSeqId is already in the list
-				alreadyInList = "N";
-				for(Map taxInfoMap : appliedTaxList)
+				promoInfo = FastMap.newInstance();
+				promoInfo.put("cartAdjustment", cartAdjustment);
+				promoCodeText = "";
+				adjustmentType = cartAdjustment.getRelatedOneCache("OrderAdjustmentType");
+				adjustmentTypeDesc = adjustmentType.get("description",locale);
+				//loyalty points
+				if(adjustmentType.orderAdjustmentTypeId.equals("LOYALTY_POINTS"))
 				{
-					taxAuthorityRateSeqIdInMap = taxInfoMap.get("taxAuthorityRateSeqId");
-					if(UtilValidate.isNotEmpty(taxAuthorityRateSeqIdInMap) && taxAuthorityRateSeqIdInMap.equals(taxAuthorityRateSeqId))
-					{
-						amount = taxInfoMap.get("amount") + orderTaxAdjustment.amount;
-						taxInfoMap.put("amount", amount);
-						alreadyInList = "Y";
-						break;
-					}
+					loyaltyPointsInfo = FastMap.newInstance();
+					loyaltyPointsInfo.put("cartAdjustment", cartAdjustment);
+					loyaltyPointsInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+					appliedLoyaltyPointsList.add(loyaltyPointsInfo);
 				}
-				if(("N").equals(alreadyInList))
+				productPromo = cartAdjustment.getRelatedOneCache("ProductPromo");
+				if(UtilValidate.isNotEmpty(productPromo))
 				{
-					taxInfo = FastMap.newInstance();
-					taxInfo.put("taxAuthorityRateSeqId", taxAuthorityRateSeqId);
-					taxInfo.put("amount", orderTaxAdjustment.amount);
-					taxAdjSourceBD = new BigDecimal(orderTaxAdjustment.sourcePercentage);
-					taxAdjSourceStr = taxAdjSourceBD.setScale(2).toString();
-					taxInfo.put("sourcePercentage", taxAdjSourceStr);
-					taxInfo.put("description", orderTaxAdjustment.comments);
-					appliedTaxList.add(taxInfo);
-					totalTaxPercent = totalTaxPercent.add(taxAdjSourceBD);
-				}
-			}
-		}
-	}
-    
-	//get Adjustment Info
-	appliedPromoList = FastList.newInstance();
-	appliedLoyaltyPointsList = FastList.newInstance();
-	if(UtilValidate.isNotEmpty(orderHeaderAdjustments) && orderHeaderAdjustments.size() > 0)
-	{
-		adjustments = orderHeaderAdjustments;
-		for (GenericValue cartAdjustment : adjustments)
-		{
-			promoInfo = FastMap.newInstance();
-			promoInfo.put("cartAdjustment", cartAdjustment);
-			promoCodeText = "";
-			adjustmentType = cartAdjustment.getRelatedOneCache("OrderAdjustmentType");
-			adjustmentTypeDesc = adjustmentType.get("description",locale);
-			//loyalty points
-			if(adjustmentType.orderAdjustmentTypeId.equals("LOYALTY_POINTS"))
-			{
-				loyaltyPointsInfo = FastMap.newInstance();
-				loyaltyPointsInfo.put("cartAdjustment", cartAdjustment);
-				loyaltyPointsInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
-				appliedLoyaltyPointsList.add(loyaltyPointsInfo);
-			}
-			productPromo = cartAdjustment.getRelatedOneCache("ProductPromo");
-			if(UtilValidate.isNotEmpty(productPromo))
-			{
-				promoInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
-				promoText = productPromo.promoText;
-				promoInfo.put("promoText", promoText);
-				productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
-				if(UtilValidate.isNotEmpty(productPromoCode))
-				{
-					promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
-					if(UtilValidate.isNotEmpty(promoCodesEntered))
+					promoInfo.put("adjustmentTypeDesc", adjustmentTypeDesc);
+					promoText = productPromo.promoText;
+					promoInfo.put("promoText", promoText);
+					productPromoCode = productPromo.getRelatedCache("ProductPromoCode");
+					if(UtilValidate.isNotEmpty(productPromoCode))
 					{
-						for (GenericValue promoCodeEntered : promoCodesEntered)
+						promoCodesEntered = orderReadHelper.getProductPromoCodesEntered();
+						if(UtilValidate.isNotEmpty(promoCodesEntered))
 						{
-							if(UtilValidate.isNotEmpty(promoCodeEntered))
+							for (GenericValue promoCodeEntered : promoCodesEntered)
 							{
-								for (GenericValue promoCode : productPromoCode)
+								if(UtilValidate.isNotEmpty(promoCodeEntered))
 								{
-									promoCodeEnteredId = promoCodeEntered;
-									promoCodeId = promoCode.productPromoCodeId;
-									if(UtilValidate.isNotEmpty(promoCodeEnteredId))
+									for (GenericValue promoCode : productPromoCode)
 									{
-										if(promoCodeId == promoCodeEnteredId)
+										promoCodeEnteredId = promoCodeEntered;
+										promoCodeId = promoCode.productPromoCodeId;
+										if(UtilValidate.isNotEmpty(promoCodeEnteredId))
 										{
-											promoCodeText = promoCode.productPromoCodeId;
-											promoInfo.put("promoCodeText", promoCodeText);
+											if(promoCodeId == promoCodeEnteredId)
+											{
+												promoCodeText = promoCode.productPromoCodeId;
+												promoInfo.put("promoCodeText", promoCodeText);
+											}
 										}
 									}
 								}
 							}
+							
 						}
-						
 					}
+					appliedPromoList.add(promoInfo);
 				}
-				appliedPromoList.add(promoInfo);
 			}
 		}
-	}    
-    //Address Locations
-    billingLocations = orderReadHelper.getBillingLocations();
-    if (UtilValidate.isNotEmpty(billingLocations))
-    {
-       context.billingAddress = EntityUtil.getFirst(billingLocations);
-    }
-    shippingLocations = orderReadHelper.getShippingLocations();
-    if (UtilValidate.isNotEmpty(shippingLocations))
-    {
-       context.shippingAddress = EntityUtil.getFirst(shippingLocations);
-    }
-    
-
-    context.orderId = orderId;
-    context.isStorePickUp = isStorePickUp;
-    context.orderHeader = orderHeader;
-    context.localOrderReadHelper = orderReadHelper;
-    context.orderItems = orderItems;
-    context.orderAdjustments = orderAdjustments;
-    context.orderHeaderAdjustments = orderHeaderAdjustments;
-	context.appliedPromoList = appliedPromoList;
-	context.appliedLoyaltyPointsList = appliedLoyaltyPointsList;
-	context.appliedTaxList = appliedTaxList;
-	context.totalTaxPercent = totalTaxPercent;
-    context.orderAdjustmentsPromotion = orderAdjustmentsPromotion;
-    context.orderAdjustmentsShippingCharge = orderAdjustmentsShippingCharge;
-    context.orderAdjustmentsSalesTax = orderAdjustmentsSalesTax;
-    context.orderAdjustmentsLoyalty = orderAdjustmentsLoyalty;
-    context.orderAdjustmentsDiscount = orderAdjustmentsDiscount;
-	context.cartSubTotal = orderSubTotal;
-    context.orderItemShipGroups = orderItemShipGroups;
-    context.headerAdjustmentsToShow = headerAdjustmentsToShow;
-    context.currencyUomId = orderReadHelper.getCurrency();
-	context.shoppingCartTotalQuantity = orderItemsTotalQty;
-
-    context.orderShippingTotal = orderShippingTotal;
-    context.orderTaxTotal = orderTaxTotal;
-    context.orderGrandTotal = orderGrandTotal;
-    context.placingCustomerPerson = placingCustomerPerson;
-
-    context.billingAccount = billingAccount;
-    context.paymentMethods = paymentMethods;
-
-    context.productStore = productStore;
-    context.isDemoStore = isDemoStore;
-
-    context.orderShipmentInfoSummaryList = orderShipmentInfoSummaryList;
-    context.customerPoNumberSet = customerPoNumberSet;
-
-    orderItemChangeReasons = delegator.findByAndCache("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
-    context.orderItemChangeReasons = orderItemChangeReasons;
+		//Address Locations
+		billingLocations = orderReadHelper.getBillingLocations();
+		if (UtilValidate.isNotEmpty(billingLocations))
+		{
+		   context.billingAddress = EntityUtil.getFirst(billingLocations);
+		}
+		shippingLocations = orderReadHelper.getShippingLocations();
+		if (UtilValidate.isNotEmpty(shippingLocations))
+		{
+		   context.shippingAddress = EntityUtil.getFirst(shippingLocations);
+		}
+		
 	
-	context.shippingApplies = shippingApplies;
-	if(UtilValidate.isNotEmpty(chosenShippingMethodDescription))
-	{
-		context.chosenShippingMethodDescription = chosenShippingMethodDescription;
-	}
-	if(UtilValidate.isNotEmpty(shippingInstructions))
-	{
-		context.shippingInstructions = shippingInstructions;
-	}
+		context.orderId = orderId;
+		context.isStorePickUp = isStorePickUp;
+		context.orderHeader = orderHeader;
+		context.localOrderReadHelper = orderReadHelper;
+		context.orderItems = orderItems;
+		context.orderAdjustments = orderAdjustments;
+		context.orderHeaderAdjustments = orderHeaderAdjustments;
+		context.appliedPromoList = appliedPromoList;
+		context.appliedLoyaltyPointsList = appliedLoyaltyPointsList;
+		context.orderAdjustmentsPromotion = orderAdjustmentsPromotion;
+		context.orderAdjustmentsShippingCharge = orderAdjustmentsShippingCharge;
+		context.orderAdjustmentsSalesTax = orderAdjustmentsSalesTax;
+		context.orderAdjustmentsLoyalty = orderAdjustmentsLoyalty;
+		context.orderAdjustmentsDiscount = orderAdjustmentsDiscount;
+		context.cartSubTotal = orderSubTotal;
+		context.orderItemShipGroups = orderItemShipGroups;
+		context.headerAdjustmentsToShow = headerAdjustmentsToShow;
+		context.currencyUomId = orderReadHelper.getCurrency();
+		context.shoppingCartTotalQuantity = orderItemsTotalQty;
 	
-	context.appliedTaxList = appliedTaxList;
-	context.totalTaxPercent = totalTaxPercent.setScale(2).toString();
-
-    context.deliveryOption = deliveryOption;
-	context.currencyUom = currencyUom;
-
+		context.orderShippingTotal = orderShippingTotal;
+		context.orderTaxTotal = orderTaxTotal;
+		context.orderGrandTotal = orderGrandTotal;
+		context.placingCustomerPerson = placingCustomerPerson;
+	
+		context.billingAccount = billingAccount;
+		context.paymentMethods = paymentMethods;
+	
+		context.productStore = productStore;
+		context.isDemoStore = isDemoStore;
+	
+		context.orderShipmentInfoSummaryList = orderShipmentInfoSummaryList;
+		context.customerPoNumberSet = customerPoNumberSet;
+	
+		orderItemChangeReasons = delegator.findByAndCache("Enumeration", [enumTypeId : "ODR_ITM_CH_REASON"], ["sequenceId"]);
+		context.orderItemChangeReasons = orderItemChangeReasons;
+		
+		context.shippingApplies = shippingApplies;
+		if(UtilValidate.isNotEmpty(chosenShippingMethodDescription))
+		{
+			context.chosenShippingMethodDescription = chosenShippingMethodDescription;
+		}
+		if(UtilValidate.isNotEmpty(shippingInstructions))
+		{
+			context.shippingInstructions = shippingInstructions;
+		}
+		context.deliveryOption = deliveryOption;
+		context.currencyUom = currencyUom;
+	}
 }
-
 

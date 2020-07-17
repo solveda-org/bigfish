@@ -4,7 +4,7 @@
    <#assign shipGroupIndex=0?int/>
   <div class="displayBox">
 	   <#list shoppingCart.getShipGroups() as cartShipInfo>
-	      <h4>${uiLabelMap.ShippingGroupHeading} ${groupIndex} of ${shoppingCart.getShipGroupSize()}</h3>
+	      <h4>${uiLabelMap.ShippingGroupHeading} ${groupIndex} of ${shoppingCart.getShipGroupSize()}</h4>
 	      <#assign contactMech = delegator.findByPrimaryKeyCache("ContactMech", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId", cartShipInfo.contactMechId))?if_exists />
 	      <#if contactMech?has_content>
 	          <#assign postalAddress = contactMech.getRelatedOneCache("PostalAddress")?if_exists />

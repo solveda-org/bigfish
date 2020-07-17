@@ -8,13 +8,25 @@
         <div class="header"><h2>${giftMessageBoxHeading!}${count}</h2></div>
         <div class="boxBody">
           <#if cartAttrMap?exists && cartAttrMap?has_content >
-            <#assign countString = count! />
-            <#if (count < 10)>
-              <#assign countString = count?string("00")! />
-            </#if>
-            <#assign from = cartAttrMap.get("GIFT_MSG_FROM_" + countString)! />
-            <#assign to = cartAttrMap.get("GIFT_MSG_TO_" + countString)! />
-            <#assign giftMessageText = cartAttrMap.get("GIFT_MSG_TEXT_" + countString)! />
+             <#assign countString = "" + count />
+            <#assign from = ""/>
+            <#assign to = "" />
+            <#assign giftMessageText = ""/>
+             <#list cartAttrMap.keySet() as attrName>
+	            <#if attrName.startsWith("GIFT_MSG_FROM_" + countString)>
+	                 <#assign from = cartAttrMap.get(attrName)! />
+	            </#if>
+	         </#list>
+             <#list cartAttrMap.keySet() as attrName>
+	            <#if attrName.startsWith("GIFT_MSG_TO_" + countString)>
+	                 <#assign to = cartAttrMap.get(attrName)! />
+	            </#if>
+	         </#list>
+             <#list cartAttrMap.keySet() as attrName>
+	            <#if attrName.startsWith("GIFT_MSG_TEXT_" + countString)>
+	                 <#assign giftMessageText = cartAttrMap.get(attrName)! />
+	            </#if>
+	         </#list>
           </#if>
           <div class="infoRow row">
             <div class="infoEntry long">
@@ -22,7 +34,8 @@
                 <label>${uiLabelMap.FromCaption}</label>
               </div>
             <div class="infoValue">
-              <input class="large" type="text" name="from_${count}" id="from" value="${parameters.from!from!""}"/>
+              <input class="large characterLimit" maxlength="${GIFT_MESSAGE_FROM_MAX_CHAR!"50"}" onblur="restrictTextLength(this);" type="text" name="from_${count}" id="from" value="${parameters.from!from!""}"/>
+              <span class="js_textCounter textCounter"></span>
             </div>
           </div>
         </div>
@@ -32,7 +45,8 @@
               <label>${uiLabelMap.ToCaption}</label>
             </div>
             <div class="infoValue">
-              <input class="large" type="text" name="to_${count}" id="to" value="${parameters.to!to!""}"/>
+              <input class="large characterLimit" maxlength="${GIFT_MESSAGE_TO_MAX_CHAR!"50"}" onblur="restrictTextLength(this);" type="text" name="to_${count}" id="to" value="${parameters.to!to!""}"/>
+              <span class="js_textCounter textCounter"></span>
             </div>
           </div>
         </div>
@@ -55,7 +69,8 @@
               <label>${uiLabelMap.GiftMessageTextCaption}</label>
             </div>
             <div class="infoValue">
-              <textarea class="shortArea" name="giftMessageText_${count}" id="giftMessageText_${count}">${parameters.giftMessageText!giftMessageText!""}</textarea>
+              <textarea class="shortArea characterLimit" name="giftMessageText_${count}" id="giftMessageText_${count}" maxlength="${GIFT_MESSAGE_TEXT_MAX_CHAR!"255"}">${parameters.giftMessageText!giftMessageText!""}</textarea>
+              <span class="js_textCounter textCounter"></span>
             </div>
           </div>
         </div>

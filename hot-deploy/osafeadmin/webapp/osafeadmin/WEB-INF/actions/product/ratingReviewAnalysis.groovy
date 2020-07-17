@@ -37,7 +37,7 @@ if (UtilValidate.isNotEmpty(initializedCB))
 {
    context.initializedCB=initializedCB;
 }
-String entryDateFormat = preferredDateFormat;
+String entryDateFormat = entryDateTimeFormat;
 fromDate = null;
 toDate = UtilDateTime.nowTimestamp();
 dateExpr= FastList.newInstance();
@@ -59,7 +59,7 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
     //DATE CONDITION.
     if(UtilValidate.isNotEmpty(fromDateShort))
     {
-        if(OsafeAdminUtil.isDateTime(fromDateShort, preferredDateFormat))
+        if(OsafeAdminUtil.isDateTime(fromDateShort, entryDateTimeFormat))
         {
             fromDate = ObjectType.simpleTypeConvert(fromDateShort, "Timestamp", entryDateFormat, locale);
             fromDate = UtilDateTime.getDayStart(fromDate);
@@ -72,7 +72,7 @@ if(UtilValidate.isNotEmpty(preRetrieved) && preRetrieved != "N")
     }
     if(UtilValidate.isNotEmpty(toDateShort))
     {
-        if(OsafeAdminUtil.isDateTime(toDateShort, preferredDateFormat))
+        if(OsafeAdminUtil.isDateTime(toDateShort, entryDateTimeFormat))
         {
             toDate = ObjectType.simpleTypeConvert(toDateShort, "Timestamp", entryDateFormat, locale);
             toDate  = UtilDateTime.getDayEnd(toDate);

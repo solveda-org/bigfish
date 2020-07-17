@@ -77,7 +77,8 @@
 			                        <p><input type="checkbox" name="includeReturnAdjustment_${rowNo}" value="Y"/>${uiLabelMap.IncludeLabel}</p>
 			                    </div>
 			                    <div class="infoValue">
-			                        <input type="text" class="small" name="adjustmentAmount_${rowNo}" <#if orderAdjustment.amount?has_content>value="${orderAdjustment.amount?string("##0.00")}"</#if>/>
+         			                <@ofbizCurrency amount= (0?number - orderAdjustment.amount) rounding=globalContext.currencyRounding isoCode=currencyUomId/>
+   	                                <input type="hidden" name="adjustmentAmount_${rowNo}" value="${orderAdjustment.amount}"/>
 			                    </div>
 			                </div>
 		                </div>
@@ -85,5 +86,34 @@
 		            </#if>    
 	            </#list>
 	        </div>
-	    </div>
+	      </div>
+	        
+         <div class="displayListBox detailInfo">
+	        <div class="boxBody">
+		        <div class="heading">
+	                <h2>${uiLabelMap.MiscFinancialAdjustmentsHeading!}</h2>
+	            </div>
+	            
+	            <div class="infoRow row">
+		            <div class="infoEntry">
+		                <div class="infoCaption">
+		                    <label>${uiLabelMap.DescriptionCaption!}</label>
+		                </div>
+		                <div class="infoValue">
+		                    <input type="text" name="orderAdjustmentDescription" id="orderAdjustmentDescription" maxlength="255" value="${parameters.orderAdjustmentDescription!""}"/>
+		                </div>
+		            </div>
+		            <div class="infoEntry">
+		                <div class="infoCaption">
+		                    <label>${uiLabelMap.AmountCaption!}</label>
+		                </div>
+		                <div class="infoValue">
+		                    <input type="hidden" name="orderAdjustmentTypeId" id="orderAdjustmentTypeId" value="RTN_REFUND"/>
+		                    <input type="text" name="orderAdjustmentAmount" id="orderAdjustmentAmount" maxlength="20" value="${parameters.orderAdjustmentAmount!""}"/>
+		                </div>
+		            </div>
+		        </div>
+	        </div>
+	        
+	     </div>
     </#if>

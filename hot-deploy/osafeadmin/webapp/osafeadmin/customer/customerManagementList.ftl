@@ -57,6 +57,7 @@
 	                        </#list>
 	                    </#list>
                     </#if>
+                    <#assign postalAddress = ""/>
                     <#assign contactMechs = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false)!""/>                    
                     <#assign contactMech = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(contactMechs)!""/>
                     <#if contactMech?has_content>

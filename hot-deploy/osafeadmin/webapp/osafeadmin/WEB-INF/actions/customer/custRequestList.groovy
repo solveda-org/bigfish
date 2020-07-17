@@ -25,7 +25,7 @@ String lastName = StringUtils.trimToEmpty(parameters.lastName);
 contactUsDateFrom = StringUtils.trimToEmpty(parameters.contactUsDateFrom);
 contactUsDateTo = StringUtils.trimToEmpty(parameters.contactUsDateTo);
 productStoreall = StringUtils.trimToEmpty(parameters.productStoreall);
-String entryDateFormat = preferredDateFormat;
+String entryDateFormat = entryDateTimeFormat;
 List infoMsgList = FastList.newInstance();
 Boolean isValidDate = true;
 String isDownloaded = "";
@@ -69,7 +69,7 @@ if(UtilValidate.isNotEmpty(partyId))
 }
 if(UtilValidate.isNotEmpty(contactUsDateFrom))
 {
-    if(OsafeAdminUtil.isDateTime(contactUsDateFrom, preferredDateFormat))
+    if(OsafeAdminUtil.isDateTime(contactUsDateFrom, entryDateTimeFormat))
     {
         contactUsDateFromTs = ObjectType.simpleTypeConvert(contactUsDateFrom, "Timestamp", entryDateFormat, locale);
         dateExpr.add(EntityCondition.makeCondition("createdDate", EntityOperator.GREATER_THAN_EQUAL_TO, contactUsDateFromTs));
@@ -81,7 +81,7 @@ if(UtilValidate.isNotEmpty(contactUsDateFrom))
 }
 if(UtilValidate.isNotEmpty(contactUsDateTo))
 {
-    if(OsafeAdminUtil.isDateTime(contactUsDateTo, preferredDateFormat))
+    if(OsafeAdminUtil.isDateTime(contactUsDateTo, entryDateTimeFormat))
     {
         contactUsDateToTs = ObjectType.simpleTypeConvert(contactUsDateTo, "Timestamp", entryDateFormat, locale);
         contactUsDateToTs = UtilDateTime.getDayEnd(contactUsDateToTs);

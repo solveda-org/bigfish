@@ -6,7 +6,11 @@
             <#-- done action; checkout -->
             form.action="<@ofbizUrl>${doneAction!""}</@ofbizUrl>";
             form.submit();
-        } else if (mode == "VDN") {
+        }else if (mode == "MAU") {
+            <#-- multi ship address Url: validate and then done action -->
+            form.action="<@ofbizUrl>${multiAddressAction!""}</@ofbizUrl>";
+            form.submit();
+        }else if (mode == "VDN") {
             <#-- validate and then done action -->
             if (validateCart()) {
                 form.action="<@ofbizUrl>${doneAction!""}</@ofbizUrl>";
@@ -19,6 +23,18 @@
         } else if (mode == "BK") {
             <#-- Previous Page -->
             form.action="<@ofbizUrl>${backAction!""}?action=previous</@ofbizUrl>";
+            form.submit();
+        }  else if (mode == "SCBK") {
+            <#-- show cart back action -->
+            form.action="${showCartBackAction!""}";
+            form.submit();
+        }  else if (mode == "CABK") {
+            <#-- customer address back action -->
+            form.action="<@ofbizUrl>${customerAddressBackAction!""}?action=previous</@ofbizUrl>";
+            form.submit();
+        }  else if (mode == "SOBK") {
+            <#-- shipping options back action -->
+            form.action="<@ofbizUrl>${shippingOptionsBackAction!""}?action=previous</@ofbizUrl>";
             form.submit();
         } else if (mode == "UC") {
             <#-- update cart action -->
@@ -77,6 +93,44 @@
             <#-- Browser Back Action -->
             window.history.back();
         } 
+    }
+    function setCheckoutFormAction(form, mode, value) 
+    {
+        if (mode == "DN")
+        {
+            <#-- done action; checkout -->
+            form.action="<@ofbizUrl>${doneAction!""}</@ofbizUrl>";
+        } 
+        else if (mode == "UC")
+        {
+            <#-- update cart action -->
+            form.action="<@ofbizUrl>${updateCartAction!""}</@ofbizUrl>";
+        }
+        else if (mode == "UWL")
+        {
+            <#-- update wish list action -->
+            form.action="<@ofbizUrl>${updateWishListAction!""}</@ofbizUrl>";
+        }
+        else if (mode == "APC")
+        {
+            <#-- apply promo code -->
+            if (jQuery('#js_manualOfferCode').length && jQuery('#js_manualOfferCode').val() != null)
+            {
+              promo = jQuery('#js_manualOfferCode').val().toUpperCase();
+              promoCodeWithoutSpace = promo.replace(/^\s+|\s+$/g, "");
+            }
+            form.action="<@ofbizUrl>${addPromoCodeRequest!}?productPromoCodeId="+promoCodeWithoutSpace+"</@ofbizUrl>";
+        }
+        else if (mode == "ALP")
+        {
+            <#-- apply loyalty point -->
+            form.action="<@ofbizUrl>${addLoyaltyPointsRequest!}</@ofbizUrl>";
+        }
+        else if (mode == "ULP")
+        {
+            <#-- update loyalty point -->
+            form.action="<@ofbizUrl>${updateLoyaltyPointsRequest!}</@ofbizUrl>";
+        }
     }
     
     function updateCart() 
@@ -610,7 +664,10 @@
             jQuery.ajaxSetup({async:false});
             jQuery.get('<@ofbizUrl>${setShippingOptionRequest?if_exists}?shipMethod='+selectedShippingOption+'&storeId='+selectedStoreId+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data)
             {
-	             jQuery('.js_onePageCheckoutOrderItemsSummary').replaceWith(data);
+            	if (jQuery('.js_onePageCheckoutOrderItemsSummary').length) 
+        		{
+	            	jQuery('.js_onePageCheckoutOrderItemsSummary').replaceWith(data);
+	            }
 	             
 	            <#-- if error is displayed and then shipping option gets selected when new shipping option is selected -->
 	            var selected = jQuery(".js_shipping_method:checked");
@@ -646,20 +703,22 @@
              		jQuery('.js_onePageCheckoutLoyaltyPoints').replaceWith(lpData);	
 	            });
              }
-            jQuery.get('<@ofbizUrl>${reloadPromoCodeRequest?if_exists}?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(promoData)
-         	{
-         		jQuery('.js_onePageCheckoutPromoCode').replaceWith(promoData);	
-            });
+            if (jQuery('.js_onePageCheckoutPromoCode').length) 
+            {
+	            jQuery.get('<@ofbizUrl>${reloadPromoCodeRequest?if_exists}?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(promoData)
+	         	{
+	         		jQuery('.js_onePageCheckoutPromoCode').replaceWith(promoData);	
+	            });
+            }
         }
-        <#-- capture warning message since it will dissapear when gift card section is reloaded -->
-        var gcWarningMessTest;
-        if((isOnLoad == null) || (isOnLoad !='N')) 
-        {
-        	gcWarningMessTest = jQuery("#js_gcWarningMessTest");
-        }
-        
         if (jQuery('.js_onePageCheckoutGiftCard').length) 
 	    {
+	        <#-- capture warning message since it will dissapear when gift card section is reloaded -->
+	        var gcWarningMessTest;
+	        if((isOnLoad == null) || (isOnLoad !='N')) 
+	        {
+	        	gcWarningMessTest = jQuery("#js_gcWarningMessTest");
+	        }
 	     	jQuery.get('<@ofbizUrl>${refreshGiftCardRequest?if_exists}?rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(gcData)
 	     	{
 	     		jQuery('.js_onePageCheckoutGiftCard').find('.js_eCommerceEnteredGiftCardPayment').replaceWith(jQuery(gcData).find('.js_eCommerceEnteredGiftCardPayment'));	

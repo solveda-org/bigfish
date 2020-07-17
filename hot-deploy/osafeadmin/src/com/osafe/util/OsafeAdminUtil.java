@@ -743,20 +743,20 @@ public class OsafeAdminUtil {
         return true;
     }
     
-    public static boolean isValidFeature(String desc) 
+    public static boolean isValidFeatureFormat(String desc) 
     {
         if (UtilValidate.isEmpty(desc)) 
         {
             return false;
         }
-        char[] chars = desc.toCharArray();
-        for (char c: chars) 
+        desc = desc.trim();
+        int colonIdx = desc.indexOf(":");
+        //must contain colon; cannot be first char or last char
+        if (colonIdx == -1 || colonIdx == 0 || colonIdx == (desc.length() - 1))
         {
-        	if ((!Character.isLetterOrDigit(c)) && ((c =='<') || (c=='>') || (c==','))) 
-            {
-                return false;
-            }
+        	return false;
         }
+        
         return true;
     }
     
@@ -1581,4 +1581,38 @@ public class OsafeAdminUtil {
         }
         return seqId;
     }
+    
+    //convert Captions to Labels
+    public static String stripTrailingColon(String caption)
+    {
+    	String label = caption;
+    	if(UtilValidate.isEmpty(caption))
+    	{
+    		return "";
+    	}
+    	else
+    	{
+    		int colonIndex = caption.indexOf(":");
+    		int captionLength = caption.length();
+    		if(colonIndex == (captionLength - 1))
+    		{
+    			label = caption.substring(0, captionLength - 1);
+    			return label;
+    		}
+    	}
+    	return label;
+    }
+     
+    public static String checkEvenNumber(int number) 
+    {
+    	if(number % 2 == 0)
+    	{
+    		return "even";
+    	}
+    	else
+    	{
+    		return "odd";
+    	}
+    }
+    
 }

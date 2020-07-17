@@ -412,12 +412,39 @@
             </widgets>
         </section>
     </screen>
+    
+    <screen name="PTS_SHOP_LIST_SEARCH">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_SHOP_LIST_SEARCH}"/>
+                <set field="contentContainerId" value="ptsShopListSearch"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    
     <screen name="PS_OUT_OF_STOCK">
         <section>
             <actions>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="id" value="${idMap.PS_OUT_OF_STOCK}"/>
                 <set field="contentContainerId" value="pdpOutOfStockContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PS_IN_STORE_ONLY">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PS_IN_STORE_ONLY}"/>
+                <set field="contentContainerId" value="pdpInStoreOnlyContent"/>
             </actions>
             <widgets>
                 <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
@@ -617,6 +644,18 @@
                             <content content-id="${content.contentId}"/>
                     </widgets>
                 </section>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="SI_SUPER_MEGA_MENU">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.SITE_INFO_SUPER_MEGA_MENU}"/>
+                <set field="contentContainerId" value="siteSuperMegaMenu"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
             </widgets>
         </section>
     </screen>

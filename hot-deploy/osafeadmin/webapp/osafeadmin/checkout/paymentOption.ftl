@@ -3,6 +3,15 @@
   <input type="hidden" name="middleNameOnCard" id="middleNameOnCard" value="" />
   <input type="hidden" name="lastNameOnCard" id="lastNameOnCard" value="${billingLastName!}" />
   <input type="hidden" name="suffixOnCard" id="suffixOnCard" value="" />
+  <#if !screen?has_content || screen !="checkout">
+  	<input type="hidden" name="orderId" id="orderId" value="${parameters.orderId!}" />
+  	<#if orderReadHelper?has_content>
+	  	<#assign currencyUomId = orderReadHelper.getCurrency()>
+	  	<#if currencyUomId?has_content>
+	  	  <input type="hidden" name="currencyUomId" id="currencyUomId" value="${currencyUomId!}" />
+	    </#if>
+    </#if>
+  </#if>
 
 <div class="infoRow row balanceDue">
     <div class="infoEntry long" id="balanceDue">
@@ -10,13 +19,21 @@
             <label>${uiLabelMap.BalanceDueCaption}</label>
         </div>
         <div class="infoValue">
+          <#assign currencyUom = CURRENCY_UOM_DEFAULT! />
+          <#if !currencyUom?has_content && shoppingCart?has_content>
+          	<#assign currencyUom = shoppingCart.getCurrency() />
+          </#if>
+          <#if screen?has_content && screen =="checkout">
         	<#if !shoppingCart?has_content>
         	  <#assign shoppingCart = Static["org.ofbiz.order.shoppingcart.ShoppingCartEvents"].getCartObject(request) />
         	</#if>
-        	<#assign currencyUom = CURRENCY_UOM_DEFAULT!shoppingCart.getCurrency() />
             <#assign remainingPayment = shoppingCart.getGrandTotal().subtract(shoppingCart.getPaymentTotal())! />
             <@ofbizCurrency amount=remainingPayment! isoCode=currencyUom  rounding=globalContext.currencyRounding/>
-            <input type="hidden" name="remainingPayment" id="remainingPayment" value="${remainingPayment}" />
+            <input type="hidden" name="remainingPayment" id="remainingPayment" value="${remainingPayment!}" />
+          <#else>
+            <@ofbizCurrency amount=orderOpenAmount?default(0.00) isoCode=currencyUom rounding=globalContext.currencyRounding/>
+            <input type="hidden" name="remainingPayment" id="remainingPayment" value="${orderOpenAmount!}" />
+          </#if>
         </div>
     </div>
 </div>
@@ -117,6 +134,11 @@
 		      </select>
 	        </div>
 	    </div>
+	    
+	    <#if !screen?has_content || screen !="checkout">
+		  <input type="hidden" name="billingContactMechId" value="${billingContactMechId!""}"/>
+		</#if>
+	
 	</div>
 	
 	<div class="infoRow row CCNew">
@@ -178,13 +200,21 @@
 	</div>
 	
 	<#if showOfflinePaymentOptions?exists && showOfflinePaymentOptions?has_content && showOfflinePaymentOptions =="Y">
-	   <div class="infoRow">
+	   <div class="infoRow row OffLine">
 	      <div class="infoEntry">
 	        <div class="infoCaption">
-	            <label>${uiLabelMap.OfflinePaymentCaption}</label>
+	            <label><span class="required">*</span>${uiLabelMap.OfflinePaymentCaption}</label>
 	        </div>
 	        <div class="infoValue">
 	          <select name="paymentMethodId" id="paymentMethodId">
+	              <#assign offlinePaymentMethodId = requestParameters.paymentMethodId?if_exists>
+		          <#if offlinePaymentMethodId?has_content>
+		            <#assign offlinePaymentMethods = delegator.findByAnd("PaymentMethodType", {"paymentMethodTypeId" : offlinePaymentMethodId})?if_exists/>
+		            <#if offlinePaymentMethods?has_content>
+		              <#assign offlinePaymentMethod = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(offlinePaymentMethods) />
+		              <option value="${offlinePaymentMethod.paymentMethodTypeId!}">${offlinePaymentMethod.description!}</option>
+		            </#if>
+		          </#if>
 	              <option value="">${uiLabelMap.SelectOneLabel}</option>
 	              ${screens.render("component://osafeadmin/widget/CommonScreens.xml#offlinePaymentMethodType")}
 	          </select>
@@ -192,27 +222,31 @@
 	      </div>
 	    </div>
 	    
-	    <div class="infoRow">
+	    <div class="infoRow row OffLine">
 	      <div class="infoEntry">
 	        <div class="infoCaption">
-	            <label>${uiLabelMap.AmountPaidCaption}</label>
+	            <label><span class="required">*</span>${uiLabelMap.AmountPaidCaption}</label>
 	        </div>
 	        <div class="infoValue">
-	          <input class="medium" type="text" maxlength="30" id="amount"  name="amount" value="${parameters.amount!""}"/>
+	          <input class="medium" type="text" maxlength="30" id="maxAmount"  name="maxAmount" value="${parameters.maxAmount!""}"/>
 	        </div>
 	      </div>
 	    </div>
+	    
+	    <div class="infoRow row OffLine">
+		    <div class="infoEntry long">
+		        <div class="infoCaption">
+		            <label><span class="required">*</span>${uiLabelMap.ReferenceCaption}</label>
+		        </div>
+		        <div class="infoValue">
+		        		<input class="medium" type="text" maxlength="30" id="referenceNo"  name="referenceNo" value="${parameters.referenceNo!""}"/>
+		        </div>
+		    </div>
+		</div>
 	</#if>
 	
-	<div class="infoRow row OffLine">
-	    <div class="infoEntry long">
-	        <div class="infoCaption">
-	            <label><span class="required">*</span>${uiLabelMap.ReferenceCaption}</label>
-	        </div>
-	        <div class="infoValue">
-	        		<input class="medium" type="text" maxlength="30" id="referenceNo"  name="referenceNo" value="${parameters.referenceNo!""}"/>
-	        </div>
-	    </div>
-	</div>
+	
+	
+	
 </div>
 

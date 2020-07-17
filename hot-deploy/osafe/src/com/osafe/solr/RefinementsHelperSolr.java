@@ -11,19 +11,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
-
 import com.osafe.util.Util;
-
 import javax.servlet.http.HttpServletRequest;
-
 import javolution.util.FastList;
-
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.apache.solr.client.solrj.response.FacetField;
 import org.ofbiz.base.util.Debug;
-import org.ofbiz.base.util.StringUtil;
-import org.ofbiz.base.util.StringUtil.StringWrapper;
 import org.ofbiz.base.util.UtilFormatOut;
 import org.ofbiz.base.util.UtilHttp;
 import org.ofbiz.base.util.UtilMisc;
@@ -33,10 +27,9 @@ import org.ofbiz.entity.Delegator;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
-import org.ofbiz.product.category.CategoryContentWrapper;
 import org.ofbiz.product.store.ProductStoreWorker;
-
 import com.osafe.services.SolrIndexDocument;
+import org.apache.solr.common.SolrDocument;
 
 public class RefinementsHelperSolr {
 
@@ -45,7 +38,8 @@ public class RefinementsHelperSolr {
     private Delegator delegator = null;
     private static final ResourceBundle OSAFE_PROPS = UtilProperties.getResourceBundle("OsafeProperties.xml", Locale.getDefault());
 
-    public RefinementsHelperSolr(CommandContext commandContext, Delegator delegator) {
+    public RefinementsHelperSolr(CommandContext commandContext, Delegator delegator) 
+    {
         this.commandContext = commandContext;
         this.delegator = delegator;
     }
@@ -57,38 +51,40 @@ public class RefinementsHelperSolr {
      * @param facetResults
      * @return Collection of GenericRefinements
      */
-    public Collection processRefinements(List<FacetField> facetResults) {
+    
+    public Collection processRefinements(List<FacetField> facetResults) 
+    {
 
-        // Create a new collection for the generic Refinements in the generic
-        // wrapper
+        // Create a new collection for the generic Refinements in the generic wrapper
         Collection refinementCollection = new ArrayList();
-        if (facetResults != null) {
+        if (UtilValidate.isNotEmpty(facetResults)) 
+        {
             // Get the standard refinement options set
             Iterator<FacetField> facets = facetResults.iterator();
 
             // Loop through the facets
-            while (facets.hasNext()) {
-
+            while (facets.hasNext()) 
+            {
                 // Get the Solr facet
                 FacetField facet = (FacetField) facets.next();
 
-                if (facet != null && facet.getValues() != null) {
-
+                if (UtilValidate.isNotEmpty(facet) && UtilValidate.isNotEmpty(facet.getValues())) 
+                {
                     // Create a generic refinement
                     GenericRefinement genericRefinement = new GenericRefinement();
 
-                    // Populate the generic refinement with the details from the
-                    // Solr facet
+                    // Populate the generic refinement with the details from the Solr facet
                     String facetType = facet.getName();
 
                     boolean isOnCategoryList = commandContext.isOnCategoryList();
 
-                    if (isOnCategoryList) {
-                        if (!SolrConstants.TYPE_PRODUCT_CATEGORY.equals(facetType)) {
+                    if (isOnCategoryList) 
+                    {
+                        if (!SolrConstants.TYPE_PRODUCT_CATEGORY.equals(facetType)) 
+                        {
                             // skip
                             //continue;
                         }
-
                     }
                     String productFeatureGroupId = null;
                     String productFeatureGroupFacetSort = null;
@@ -96,16 +92,19 @@ public class RefinementsHelperSolr {
                     Map<String, String> filterGroupsFacetSorts = commandContext.getFilterGroupsFacetSorts();
 
                     // Product Feature Group Id
-                    if (filterGroupsIds.containsKey(facetType)) {
+                    if (filterGroupsIds.containsKey(facetType)) 
+                    {
                         productFeatureGroupId = filterGroupsIds.get(facetType);
                     }
                     genericRefinement.setProductFeatureGroupId(productFeatureGroupId);
 
                     // Product Feature Group Facet Sorting rule
-                    if (filterGroupsFacetSorts.containsKey(facetType)) {
+                    if (filterGroupsFacetSorts.containsKey(facetType)) 
+                    {
                         productFeatureGroupFacetSort = filterGroupsFacetSorts.get(facetType);
                     }
-                    if (UtilValidate.isEmpty(productFeatureGroupFacetSort)) {
+                    if (UtilValidate.isEmpty(productFeatureGroupFacetSort)) 
+                    {
                         productFeatureGroupFacetSort = SolrConstants.FACET_SORT_DB_SEQ;
                     }
                     genericRefinement.setProductFeatureGroupFacetSort(productFeatureGroupFacetSort);
@@ -116,9 +115,12 @@ public class RefinementsHelperSolr {
                     genericRefinement.setProductFeatureTypeId(facetType);
 
                     Map<String, String> filterGroupsDescriptions = commandContext.getFilterGroupsDescriptions();
-                    if (filterGroupsDescriptions.containsKey(facetType)) {
+                    if (filterGroupsDescriptions.containsKey(facetType)) 
+                    {
                         facetName = filterGroupsDescriptions.get(facetType);
-                    } else {
+                    } 
+                    else 
+                    {
                         facetName = WordUtils.capitalizeFully(facetType);
                     }
 
@@ -133,7 +135,8 @@ public class RefinementsHelperSolr {
 
                     // Add the new generic refinement to the collection - check
                     // errors elsewhere have not created a null refinement first
-                    if (genericRefinement != null) {
+                    if (UtilValidate.isNotEmpty(genericRefinement)) 
+                    {
                         refinementCollection.add(genericRefinement);
                     }
                 }
@@ -148,13 +151,116 @@ public class RefinementsHelperSolr {
      * results.
      *
      * @param facetResults
+     * @param results
      * @return Collection of GenericRefinements
      */
-    public Collection processPriceRangeRefinements(Map facetResults) {
+    public Collection processRefinements(List<FacetField> facetResults, List<SolrDocument> results) 
+    {
+        // Create a new collection for the generic Refinements in the generic wrapper
+        Collection refinementCollection = new ArrayList();
+        if (UtilValidate.isNotEmpty(facetResults)) 
+        {
+            // Get the standard refinement options set
+            Iterator<FacetField> facets = facetResults.iterator();
+
+            // Loop through the facets
+            while (facets.hasNext()) 
+            {
+                // Get the Solr facet
+                FacetField facet = (FacetField) facets.next();
+
+                if (UtilValidate.isNotEmpty(facet) && UtilValidate.isNotEmpty(facet.getValues())) 
+                {
+                    // Create a generic refinement
+                    GenericRefinement genericRefinement = new GenericRefinement();
+
+                    // Populate the generic refinement with the details from the Solr facet
+                    String facetType = facet.getName();
+
+                    boolean isOnCategoryList = commandContext.isOnCategoryList();
+
+                    if (isOnCategoryList) 
+                    {
+                        if (!SolrConstants.TYPE_PRODUCT_CATEGORY.equals(facetType)) 
+                        {
+                            // skip
+                            //continue;
+                        }
+                    }
+                    String productFeatureGroupId = null;
+                    String productFeatureGroupFacetSort = null;
+                    Map<String, String> filterGroupsIds = commandContext.getFilterGroupsIds();
+                    Map<String, String> filterGroupsFacetSorts = commandContext.getFilterGroupsFacetSorts();
+
+                    // Product Feature Group Id
+                    if (filterGroupsIds.containsKey(facetType)) 
+                    {
+                        productFeatureGroupId = filterGroupsIds.get(facetType);
+                    }
+                    genericRefinement.setProductFeatureGroupId(productFeatureGroupId);
+
+                    // Product Feature Group Facet Sorting rule
+                    if (filterGroupsFacetSorts.containsKey(facetType)) 
+                    {
+                        productFeatureGroupFacetSort = filterGroupsFacetSorts.get(facetType);
+                    }
+                    if (UtilValidate.isEmpty(productFeatureGroupFacetSort)) 
+                    {
+                        productFeatureGroupFacetSort = SolrConstants.FACET_SORT_DB_SEQ;
+                    }
+                    genericRefinement.setProductFeatureGroupFacetSort(productFeatureGroupFacetSort);
+
+                    String facetName = facetType;
+                    genericRefinement.setType(facetType);
+
+                    genericRefinement.setProductFeatureTypeId(facetType);
+
+                    Map<String, String> filterGroupsDescriptions = commandContext.getFilterGroupsDescriptions();
+                    if (filterGroupsDescriptions.containsKey(facetType)) 
+                    {
+                        facetName = filterGroupsDescriptions.get(facetType);
+                    } 
+                    else 
+                    {
+                        facetName = WordUtils.capitalizeFully(facetType);
+                    }
+
+                    genericRefinement.setName(facetName);
+
+                    // Get a collection of the refinement values for this refinement
+                    // may include merged common refinement values
+                    Collection refinementValues = processRefinementValues(facet, genericRefinement, results);
+
+                    // Add the refinement values to the refinement
+                    genericRefinement.setRefinementValues(refinementValues);
+
+                    // Add the new generic refinement to the collection - check
+                    // errors elsewhere have not created a null refinement first
+                    if (UtilValidate.isNotEmpty(genericRefinement)) 
+                    {
+                        refinementCollection.add(genericRefinement);
+                    }
+                }
+            }
+            refinementCollection = sortRefinementValues(refinementCollection);
+        }
+        return refinementCollection;
+    }
+    
+    /**
+     * Creates a collection of GenericRefinements with embedded GenericRefinementValues from the facets in the solr search
+     * results.
+     *
+     * @param facetResults
+     * @return Collection of GenericRefinements
+     */
+    public Collection processPriceRangeRefinements(Map facetResults) 
+    {
         // Create a new collection for the generic Refinements in the generic
         // wrapper
         Collection refinementCollection = new ArrayList();
-        if (facetResults != null) {
+        if (UtilValidate.isNotEmpty(facetResults)) 
+        {
             // Get the standard refinement options set
             Iterator facets = facetResults.keySet().iterator();
 
@@ -168,14 +274,16 @@ public class RefinementsHelperSolr {
             List refinementValues = new ArrayList();
 
             // Loop through the facets
-            while (facets.hasNext()) {
-
+            while (facets.hasNext()) 
+            {
                 // Get the Solr refinement value
                 String value = (String) facets.next();
                 Integer count = (Integer) facetResults.get(value);
 
-                if (value.indexOf(SolrConstants.TYPE_PRICE) > -1) {
-                    if (count != null && count.longValue() > 0) {
+                if (value.indexOf(SolrConstants.TYPE_PRICE) > -1) 
+                {
+                    if (UtilValidate.isNotEmpty(count) && count.longValue() > 0) 
+                    {
                         // Create a generic refinement value
                         GenericRefinementValue genericRefinementValue = convertRefinementValueToGeneric(value, count.longValue(), genericRefinement);
 
@@ -185,7 +293,8 @@ public class RefinementsHelperSolr {
                 }
             }
 
-            if (!UtilValidate.isEmpty(refinementValues)) {
+            if (!UtilValidate.isEmpty(refinementValues)) 
+            {
                 // sort the price order
                 Collections.sort(refinementValues);
 
@@ -204,11 +313,12 @@ public class RefinementsHelperSolr {
      * @param list of the SolrIndexDocument
      * @return Collection of GenericRefinements
      */
-    public Collection processPriceRangeRefinements(Map facetResults, List<SolrIndexDocument> results) {
-        // Create a new collection for the generic Refinements in the generic
-        // wrapper
+    public Collection processPriceRangeRefinements(Map facetResults, List<SolrIndexDocument> results) 
+    {
+        // Create a new collection for the generic Refinements in the generic wrapper
         Collection refinementCollection = new ArrayList();
-        if (facetResults != null) {
+        if (UtilValidate.isNotEmpty(facetResults)) 
+        {
             // Get the standard refinement options set
             Iterator facets = facetResults.keySet().iterator();
 
@@ -222,23 +332,29 @@ public class RefinementsHelperSolr {
             List refinementValues = new ArrayList();
 
             // Loop through the facets
-            while (facets.hasNext()) {
-
+            while (facets.hasNext()) 
+            {
                 // Get the Solr refinement value
                 String value = (String) facets.next();
                 Integer count = (Integer) facetResults.get(value);
-                if (value.indexOf(SolrConstants.TYPE_PRICE) > -1) {
-                    if (count != null && count.longValue() > 0) {
-                    	if(UtilValidate.isNotEmpty(results)) {
+                if (value.indexOf(SolrConstants.TYPE_PRICE) > -1) 
+                {
+                    if (UtilValidate.isNotEmpty(count) && count.longValue() > 0) 
+                    {
+                    	if(UtilValidate.isNotEmpty(results)) 
+                    	{
                     		List<SolrIndexDocument> duplicateProducts = getDuplicateProducts(results);
-                    		if(UtilValidate.isNotEmpty(duplicateProducts)) {
+                    		if(UtilValidate.isNotEmpty(duplicateProducts)) 
+                    		{
 	                            Iterator duplicateProductItr = duplicateProducts.iterator();
-	                            while (duplicateProductItr.hasNext()) {
+	                            while (duplicateProductItr.hasNext()) 
+	                            {
 	                                SolrIndexDocument solrIndexDocument = (SolrIndexDocument)duplicateProductItr.next();
 	                                double start = getPriceRangeArr(value)[0].doubleValue();
 	                                double end = getPriceRangeArr(value)[1].doubleValue();
 	                                double productPrice = solrIndexDocument.getPrice().doubleValue();
-	                                if (Double.compare(start, productPrice) <= 0 && Double.compare(end, productPrice) > 0) {
+	                                if (Double.compare(start, productPrice) <= 0 && Double.compare(end, productPrice) >= 0) 
+	                                {
 	                            	    count = count - 1;
 	                                }
 	                            }
@@ -249,12 +365,15 @@ public class RefinementsHelperSolr {
                         // Add the refinementValue to the collection
                         
                         if (!refinementValues.contains(genericRefinementValue))
-                        refinementValues.add(genericRefinementValue);
+                        {
+                        	refinementValues.add(genericRefinementValue);
+                        }
                     }
                 }
             }
 
-            if (!UtilValidate.isEmpty(refinementValues)) {
+            if (!UtilValidate.isEmpty(refinementValues)) 
+            {
                 // sort the price order
                 Collections.sort(refinementValues);
 
@@ -265,12 +384,12 @@ public class RefinementsHelperSolr {
         return refinementCollection;
     }
 
-    public Collection processCustomerRatingRefinements(Map facetResults) {
-
-        // Create a new collection for the generic Refinements in the generic
-        // wrapper
+    public Collection processCustomerRatingRefinements(Map facetResults, List<SolrIndexDocument> results) 
+    {
+        // Create a new collection for the generic Refinements in the generic wrapper
         Collection refinementCollection = new ArrayList();
-        if (facetResults != null) {
+        if (UtilValidate.isNotEmpty(facetResults)) 
+        {
             // Get the standard refinement options set
             Iterator facets = facetResults.keySet().iterator();
 
@@ -284,14 +403,34 @@ public class RefinementsHelperSolr {
             List refinementValues = new ArrayList();
 
             // Loop through the facets
-            while (facets.hasNext()) {
-
+            while (facets.hasNext()) 
+            {
                 // Get the Solr refinement value
                 String value = (String) facets.next();
                 Integer count = (Integer) facetResults.get(value);
 
-                if (value.indexOf(SolrConstants.TYPE_CUSTOMER_RATING) > -1) {
-                    if (count != null && count.longValue() > 0) {
+                if (value.indexOf(SolrConstants.TYPE_CUSTOMER_RATING) > -1) 
+                {
+                    if (UtilValidate.isNotEmpty(count) && count.longValue() > 0) 
+                    {
+                    	if(UtilValidate.isNotEmpty(results)) 
+                    	{
+                    		List<SolrIndexDocument> duplicateProducts = getDuplicateProducts(results);
+                    		if(UtilValidate.isNotEmpty(duplicateProducts)) 
+                    		{
+	                            Iterator duplicateProductItr = duplicateProducts.iterator();
+	                            while (duplicateProductItr.hasNext()) 
+	                            {
+	                                SolrIndexDocument solrIndexDocument = (SolrIndexDocument)duplicateProductItr.next();
+	                                double customerRatingLowRange = Double.valueOf(getCustomerRatingLowRangeStr(value));
+	                                double productCustomerRating = solrIndexDocument.getCustomerRating().doubleValue();
+	                                if (Double.compare(productCustomerRating, customerRatingLowRange) >= 0) 
+	                                {
+	                            	    count = count - 1;
+	                                }
+	                            }
+                    		}
+                        }
                         // Create a generic refinement value
                         GenericRefinementValue genericRefinementValue = convertRefinementValueToGeneric(value, count.longValue(), genericRefinement);
 
@@ -301,7 +440,8 @@ public class RefinementsHelperSolr {
                 }
             }
 
-            if (!UtilValidate.isEmpty(refinementValues)) {
+            if (!UtilValidate.isEmpty(refinementValues)) 
+            {
                 Collections.sort(refinementValues);
 
                 genericRefinement.setRefinementValues(refinementValues);
@@ -318,29 +458,37 @@ public class RefinementsHelperSolr {
      * @param refinementCollection
      * @return
      */
-    private Collection sortRefinementValues(Collection refinementCollection) {
+    private Collection sortRefinementValues(Collection refinementCollection) 
+    {
         Object[] arrayFacets = null;
-        if (refinementCollection != null) {
+        if (UtilValidate.isNotEmpty(refinementCollection)) 
+        {
             arrayFacets = refinementCollection.toArray();
             Collection sortedCollection = new ArrayList();
             String productFeatureGroupFacetSort = null;
-            for (int i = 0; i < arrayFacets.length; i++) {
+            for (int i = 0; i < arrayFacets.length; i++) 
+            {
                 GenericRefinement refinement = (GenericRefinement) arrayFacets[i];
                 FacetValueSequenceComparator comparator = null;
                 comparator = new FacetValueSequenceComparator(this.delegator, refinement.getProductFeatureGroupId());
 
-                if (SolrConstants.TYPE_PRODUCT_CATEGORY.equals(refinement.getType()) || SolrConstants.TYPE_TOP_MOST_PRODUCT_CATEGORY.equals(refinement.getType())) {
+                if (SolrConstants.TYPE_PRODUCT_CATEGORY.equals(refinement.getType()) || SolrConstants.TYPE_TOP_MOST_PRODUCT_CATEGORY.equals(refinement.getType())) 
+                {
                     comparator.setUseSequenceNum(true);
-                } else {
+                } 
+                else 
+                {
                     productFeatureGroupFacetSort = refinement.getProductFeatureGroupFacetSort();
                     comparator.setProductFeatureGroupSorting(productFeatureGroupFacetSort);
-                    if (SolrConstants.FACET_SORT_DB_SEQ.equals(productFeatureGroupFacetSort)) {
+                    if (SolrConstants.FACET_SORT_DB_SEQ.equals(productFeatureGroupFacetSort)) 
+                    {
                         comparator.populateSortOrder();
                     }
                 }
 
                 Collection facetValues = (Collection) refinement.getRefinementValues();
-                if (facetValues != null) {
+                if (UtilValidate.isNotEmpty(facetValues)) 
+                {
                     Collections.sort((List) facetValues, comparator);
                 }
             }
@@ -355,8 +503,9 @@ public class RefinementsHelperSolr {
      * @param genericRefinement
      * @return
      */
-    private Collection processRefinementValues(FacetField facet, GenericRefinement genericRefinement) {
-
+    
+    private Collection processRefinementValues(FacetField facet, GenericRefinement genericRefinement) 
+    {
         Collection refinementValues = new ArrayList();
 
         // Get the associated values from the facet
@@ -364,15 +513,20 @@ public class RefinementsHelperSolr {
         Iterator it = values.iterator();
 
         // Loop through the values
-        while (it.hasNext()) {
+        while (it.hasNext()) 
+        {
             // Get the Solr refinement value
 
             FacetField.Count value = (FacetField.Count) it.next();
+            
             GenericRefinementValue genericRefinementValue = null;
             // Create a generic refinement value
-            try {
+            try 
+            {
                 genericRefinementValue = convertRefinementValueToGeneric(URLDecoder.decode(value.getName(), SolrConstants.DEFAULT_ENCODING), value.getCount(), genericRefinement);
-            } catch (UnsupportedEncodingException e) {
+            } 
+            catch (UnsupportedEncodingException e) 
+            {
                 // Oops UTF-8?????
                 genericRefinementValue = convertRefinementValueToGeneric(value.getName(), value.getCount(), genericRefinement);
             }
@@ -384,6 +538,63 @@ public class RefinementsHelperSolr {
         return refinementValues;
     }
 
+    
+    private Collection processRefinementValues(FacetField facet, GenericRefinement genericRefinement, List<SolrDocument> results) 
+    {
+        Collection refinementValues = new ArrayList();
+
+        // Get the associated values from the facet
+        List values = facet.getValues();
+        Iterator it = values.iterator();
+
+        // Loop through the values
+        while (it.hasNext()) 
+        {
+            // Get the Solr refinement value
+
+            FacetField.Count value = (FacetField.Count) it.next();
+            Integer count = (int)(long)value.getCount();
+            if (UtilValidate.isNotEmpty(count) && count.longValue() > 0) 
+            {
+            	if(UtilValidate.isNotEmpty(results)) 
+            	{
+            		List<SolrDocument> duplicateProducts = getDuplicateProductsSolrDoc(results);
+            		if(UtilValidate.isNotEmpty(duplicateProducts)) 
+            		{
+                        Iterator duplicateProductItr = duplicateProducts.iterator();
+                        while (duplicateProductItr.hasNext()) 
+                        {
+                        	SolrDocument solrDocument = (SolrDocument)duplicateProductItr.next();
+                        	String facetFieldName = value.getFacetField().getName();
+                        	List<String> facetValueList = (List)solrDocument.getFieldValue(facetFieldName);
+                            if(UtilValidate.isNotEmpty(facetValueList) && facetValueList.contains(value.getName()))
+                            {
+                            	count = count - 1;
+                            }
+                        }
+            		}
+                }
+            }
+            
+            GenericRefinementValue genericRefinementValue = null;
+            // Create a generic refinement value
+            try 
+            {
+                genericRefinementValue = convertRefinementValueToGeneric(URLDecoder.decode(value.getName(), SolrConstants.DEFAULT_ENCODING), count.longValue(), genericRefinement);
+            } 
+            catch (UnsupportedEncodingException e) 
+            {
+                // Oops UTF-8?????
+                genericRefinementValue = convertRefinementValueToGeneric(value.getName(), count.longValue(), genericRefinement);
+            }
+
+            // Add the refinementValue to the collection
+            refinementValues.add(genericRefinementValue);
+        }
+
+        return refinementValues;
+    }
+    
     /**
      * Creates a generic refinement value from the solr facet value
      *
@@ -392,7 +603,8 @@ public class RefinementsHelperSolr {
      * @param genericRefinement
      * @return
      */
-    private GenericRefinementValue convertRefinementValueToGeneric(String key, long count, GenericRefinement genericRefinement) {
+    private GenericRefinementValue convertRefinementValueToGeneric(String key, long count, GenericRefinement genericRefinement) 
+    {
 
         GenericRefinementValue genericRefinementValue = new GenericRefinementValue();
         genericRefinementValue.setName(key);
@@ -410,7 +622,8 @@ public class RefinementsHelperSolr {
         String ccSearchText = commandContext.getSearchText();
         String ccProductCategoryId = commandContext.getProductCategoryId();
         String ccTopMostProductCategoryId = commandContext.getTopMostProductCategoryId();
-        if (UtilValidate.isNotEmpty(ccSearchText)) {
+        if (UtilValidate.isNotEmpty(ccSearchText)) 
+        {
             url += "searchText" + "=" + ccSearchText;
             firstParamAdded = true;
 
@@ -435,29 +648,38 @@ public class RefinementsHelperSolr {
             }
         }
 
-        if (UtilValidate.isNotEmpty(ccProductCategoryId)) {
-            if (firstParamAdded) {
+        if (UtilValidate.isNotEmpty(ccProductCategoryId)) 
+        {
+            if (firstParamAdded) 
+            {
                 url += "&";
             }
             url += "productCategoryId" + "=" + ccProductCategoryId;
         }
 
-        if (isProductCategory && UtilValidate.isEmpty(ccSearchText)) {
-            if (!isOnCategoryList) {
+        if (isProductCategory && UtilValidate.isEmpty(ccSearchText)) 
+        {
+            if (!isOnCategoryList) 
+            {
                 url += "&";
             }
             url += "productCategoryId" + "=" + key;
         }
 
-        if (!isOnCategoryList) {
+        if (!isOnCategoryList) 
+        {
             url += "&" + "filterGroup" + "=";
             List<String> prevFilterGroups = commandContext.getFilterGroups();
             List<String> filterGroupList = FastList.newInstance();
-            if (!isPrice && !isCustomerRating) {
+            if (!isPrice && !isCustomerRating) 
+            {
                 String encodedKey = null;
-                try {
+                try 
+                {
                     encodedKey = URLEncoder.encode(key, SolrConstants.DEFAULT_ENCODING);
-                } catch (UnsupportedEncodingException e) {
+                } 
+                catch (UnsupportedEncodingException e) 
+                {
                     encodedKey = key;
                 }
                 filterGroupList.add(genericRefinement.getType() + ":" + encodedKey);
@@ -467,21 +689,25 @@ public class RefinementsHelperSolr {
             url += filterGroups;
 
             String priceFilterGroupValue = null;
-            if (isPrice) {
+            if(isPrice) 
+            {
                 priceFilterGroupValue = key;
                 priceFilterGroupValue = priceFilterGroupValue.replaceAll("price", "PRICE");
 
-                if (filterGroupList.size() > 0) {
+                if (filterGroupList.size() > 0) 
+                {
                     url += "|";
                 }
                 url += priceFilterGroupValue;
             }
             String customerRatingFilterGroupValue = null;
-            if (isCustomerRating) {
+            if (isCustomerRating) 
+            {
                 customerRatingFilterGroupValue = key;
                 customerRatingFilterGroupValue = customerRatingFilterGroupValue.replaceAll("customerRating", "CUSTOMER_RATING");
 
-                if (filterGroupList.size() > 0) {
+                if (filterGroupList.size() > 0) 
+                {
                     url += "|";
                 }
                 url += customerRatingFilterGroupValue;
@@ -489,26 +715,30 @@ public class RefinementsHelperSolr {
 
             // Sorting parameter
             String sortParameterName = commandContext.getSortParameterName();
-            if (UtilValidate.isNotEmpty(sortParameterName)) {
+            if (UtilValidate.isNotEmpty(sortParameterName)) 
+            {
                 String sortParameterValue = StringUtils.trimToEmpty(commandContext.getSortParameterValue());
                 url += "&" + sortParameterName + "=" + sortParameterValue;
             }
 
             // Rows Shown parameter
             String numberOfRowsShown = commandContext.getNumberOfRowsShown();
-            if (UtilValidate.isNotEmpty(numberOfRowsShown)) {
+            if (UtilValidate.isNotEmpty(numberOfRowsShown)) 
+            {
                 url += "&rows=" + numberOfRowsShown;
             }
         }
         genericRefinementValue.setRefinementURL(url);
 
         // Set the value to display in the jsp. Different for price ranges
-        if (isPrice) {
+        if (isPrice) 
+        {
             String displayName = getPriceRangeStr(key);
             genericRefinementValue.setDisplayName(displayName);
             genericRefinementValue.setStart(getPriceRangeArr(key)[0].doubleValue());
-        } else if (isCustomerRating) {
-
+        } 
+        else if (isCustomerRating) 
+        {
             // Check lower limit of each facet value that should give us the directory we should pull the image from
             String ratingNumber = getCustomerRatingLowRangeStr(key);
 
@@ -524,11 +754,15 @@ public class RefinementsHelperSolr {
 
             String displayName = getCustomerRatingRangeStr(key);
             genericRefinementValue.setDisplayName(displayName);
-        } else if (isTopMostProductCategory) {
+        } 
+        else if (isTopMostProductCategory) 
+        {
             String displayName = getProductCategoryName(key);
             genericRefinementValue.setDisplayName(displayName);
             genericRefinementValue.setSequenceNum(getProductCategorySequenceNum(key));
-        } else if (isProductCategory) {
+        } 
+        else if (isProductCategory) 
+        {
             String displayName = getProductCategoryName(key);
             genericRefinementValue.setDisplayName(displayName);
             String supportingText = getProductCategorySupportingText(key);
@@ -536,15 +770,17 @@ public class RefinementsHelperSolr {
             String displayImage = getProductCategoryImage(key);
             genericRefinementValue.setDisplayImage(displayImage);
             genericRefinementValue.setSequenceNum(getProductCategorySequenceNum(key));
-        } else {
+        } 
+        else 
+        {
             genericRefinementValue.setDisplayName(ProductFeatureEncoder.decodePlus(key));
         }
 
         return genericRefinementValue;
     }
 
-    private Double[] getPriceRangeArr(String key) {
-
+    private Double[] getPriceRangeArr(String key) 
+    {
         Double[] ret = new Double[2];
         key = StringUtils.substring(key, key.indexOf(":") + 1);
         key = StringUtils.strip(key, "[]");
@@ -559,8 +795,8 @@ public class RefinementsHelperSolr {
         return ret;
     }
 
-    private String getPriceRangeStr(String key) {
-
+    private String getPriceRangeStr(String key) 
+    {
         key = StringUtils.substring(key, key.indexOf(":") + 1);
         key = StringUtils.strip(key, "[]");
         String[] split = StringUtils.split(key, " ");
@@ -581,9 +817,12 @@ public class RefinementsHelperSolr {
         
         if (UtilValidate.isNotEmpty(parmValue))
         {
-            try {
+            try 
+            {
                 rounding = Integer.parseInt(parmValue);
-            } catch(NumberFormatException nfe) {
+            } 
+            catch(NumberFormatException nfe) 
+            {
                 Debug.logError(nfe.getMessage(), module);
             }
         }
@@ -593,7 +832,8 @@ public class RefinementsHelperSolr {
         return start + " to " + end;
     }
 
-    private String getCustomerRatingLowRangeStr(String key) {
+    private String getCustomerRatingLowRangeStr(String key) 
+    {
 
         String ratingNumber = "5";
         key = StringUtils.substring(key, key.indexOf(":") + 1);
@@ -606,90 +846,142 @@ public class RefinementsHelperSolr {
         return ratingNumber;
     }
 
-    private String getCustomerRatingRangeStr(String key) {
+    private String getCustomerRatingRangeStr(String key) 
+    {
         String ratingNumber = getCustomerRatingLowRangeStr(key);
         return ratingNumber + ".0 &amp; up";
     }
 
-    private String getProductCategoryName(String key) {
-
+    private String getProductCategoryName(String key) 
+    {
         GenericValue productCategory = null;
         String productCategoryName = key;
-        try {
+        try 
+        {
             productCategory = delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId", key), true);
             productCategoryName = productCategory.getString("categoryName");
-        } catch (GenericEntityException e) {
+        } 
+        catch (GenericEntityException e) 
+        {
             Debug.logError(e.getMessage(), module);
         }
         return productCategoryName;
     }
 
-    private String getProductCategorySupportingText(String key) {
-
+    private String getProductCategorySupportingText(String key) 
+    {
         GenericValue productCategory = null;
         String supportingText = "";
-        try {
+        try 
+        {
             productCategory = delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId", key), true);
             String supportingTextWrapper = productCategory.getString("longDescription");
-            if (supportingTextWrapper != null) {
+            if (supportingTextWrapper != null) 
+            {
                 supportingText = supportingTextWrapper.toString();
             }
-
-        } catch (GenericEntityException e) {
+        } 
+        catch (GenericEntityException e) 
+        {
             Debug.logError(e.getMessage(), module);
         }
         return supportingText;
     }
 
-    private String getProductCategoryImage(String key) {
-
+    private String getProductCategoryImage(String key) 
+    {
         GenericValue productCategory = null;
         String productCategoryImage = null;
-        try {
+        try 
+        {
             productCategory = delegator.findOne("ProductCategory", UtilMisc.toMap("productCategoryId", key), true);
             String categoryImageUrl = productCategory.getString("categoryImageUrl");
-            if (UtilValidate.isNotEmpty(categoryImageUrl)) {
+            if (UtilValidate.isNotEmpty(categoryImageUrl)) 
+            {
                 productCategoryImage = categoryImageUrl.toString();
             }
-        } catch (GenericEntityException e) {
+        } 
+        catch (GenericEntityException e) 
+        {
             Debug.logError(e.getMessage(), module);
         }
         return productCategoryImage;
     }
 
-    private Long getProductCategorySequenceNum(String key) {
-
+    private Long getProductCategorySequenceNum(String key) 
+    {
         Long sequenceNum = Long.valueOf(0);
-        try {
+        try 
+        {
             List<GenericValue> productCategoryRollups = delegator.findByAndCache("ProductCategoryRollup", UtilMisc.toMap("productCategoryId", key));
             productCategoryRollups = EntityUtil.filterByDate(productCategoryRollups);
-            if (UtilValidate.isNotEmpty(productCategoryRollups)) {
+            if (UtilValidate.isNotEmpty(productCategoryRollups)) 
+            {
                 GenericValue productCategoryRollup = EntityUtil.getFirst(productCategoryRollups);
                 sequenceNum = productCategoryRollup.getLong("sequenceNum");
             }
-        } catch (GenericEntityException e) {
+        } 
+        catch (GenericEntityException e) 
+        {
             Debug.logError(e.getMessage(), module);
         }
         return sequenceNum;
     }
 
-    public static List<SolrIndexDocument> getDuplicateProducts(List<SolrIndexDocument> results) {
+    public static List<SolrIndexDocument> getDuplicateProducts(List<SolrIndexDocument> results) 
+    {
         Iterator itr = results.iterator();
         List subresult = FastList.newInstance();
         List dupresult = FastList.newInstance();
-        try {
-            while(itr.hasNext()) {
+        try 
+        {
+            while(itr.hasNext()) 
+            {
                 SolrIndexDocument solrIndexDocument = (SolrIndexDocument)itr.next();
-                if (subresult.contains(solrIndexDocument.getProductId())) {
+                if (subresult.contains(solrIndexDocument.getProductId())) 
+                {
                     //results.remove(itr.next());
                 	dupresult.add(solrIndexDocument);
-                } else {
+                } 
+                else 
+                {
                     subresult.add(solrIndexDocument.getProductId());
                 }
             }
-        } catch (Exception e) {
+        } 
+        catch (Exception e) 
+        {
             Debug.log(e.getMessage());
         }
         return dupresult;
     }
+    
+    public static List<SolrDocument> getDuplicateProductsSolrDoc(List<SolrDocument> results) 
+    {
+        Iterator itr = results.iterator();
+        List subresult = FastList.newInstance();
+        List dupresult = FastList.newInstance();
+        try 
+        {
+            while(itr.hasNext()) 
+            {
+            	SolrDocument solrDocument = (SolrDocument)itr.next();
+                if (subresult.contains(solrDocument.getFieldValue("productId"))) 
+                {
+                    //results.remove(itr.next());
+                	dupresult.add(solrDocument);
+                } 
+                else 
+                {
+                    subresult.add(solrDocument.getFieldValue("productId"));
+                }
+            }
+        } 
+        catch (Exception e) 
+        {
+            Debug.log(e.getMessage());
+        }
+        return dupresult;
+    }
+    
 }

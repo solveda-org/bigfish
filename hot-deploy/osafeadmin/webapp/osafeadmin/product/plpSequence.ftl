@@ -37,7 +37,7 @@
               <a href="javascript:void(0);" onMouseover="<#if productLargeImageUrl?has_content>showTooltipImage(event,'${uiLabelMap.ProductImagesTooltip}','${productLargeImageUrl}');<#else>showTooltip(event,'${uiLabelMap.ProductImagesTooltip}');</#if>" onMouseout="hideTooltip()"><span class="imageIcon"></span></a>
             </td>
             <#assign rowSeq = request.getParameter("sequenceNum_${productCategoryMember_index}")!productCategoryMember.sequenceNum!''/>
-            <td class="seqCol lastCol <#if !hasNext>lastRow</#if>"><input type="text" class="infoValue small" name="sequenceNum_${productCategoryMember_index}" value="${rowSeq!}"/>
+            <td class="seqCol lastCol <#if !hasNext>lastRow</#if>"><input type="text" class="infoValue small" name="sequenceNum_${productCategoryMember_index}" value="${rowSeq!}" maxlength="10"/>
             </td>
           </tr>
           <#if rowClass == "2">

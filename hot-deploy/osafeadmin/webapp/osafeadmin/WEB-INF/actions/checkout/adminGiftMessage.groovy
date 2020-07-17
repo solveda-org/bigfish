@@ -13,7 +13,6 @@ import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.base.util.UtilMisc;
-import com.osafe.services.CatalogUrlServlet;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;
@@ -178,7 +177,6 @@ productFeatureAndAppls = delegator.findByAndCache("ProductFeatureAndAppl", UtilM
 productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
 productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
 
-productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 
 IMG_SIZE_CART_H = OsafeAdminUtil.getProductStoreParm(request,"IMG_SIZE_CART_H");
 IMG_SIZE_CART_W = OsafeAdminUtil.getProductStoreParm(request,"IMG_SIZE_CART_W");
@@ -256,8 +254,6 @@ context.productImageUrl = productImageUrl;
 context.productImageAltUrl = productImageAltUrl;
 context.IMG_SIZE_CART_H = IMG_SIZE_CART_H;
 context.IMG_SIZE_CART_W = IMG_SIZE_CART_W;
-//friendlyURL
-context.productFriendlyUrl = productFriendlyUrl;
 context.urlProductId = urlProductId;
 context.productId = productId;
 //product Name

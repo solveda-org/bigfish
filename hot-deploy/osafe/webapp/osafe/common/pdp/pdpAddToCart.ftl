@@ -11,9 +11,9 @@
       </#if>
     </#if>
     <input type="hidden" name= "add_category_id" id="add_category_id" value="${parameters.add_category_id!productCategoryId!}" /> 
-    <div>
+    <div id="js_addToCart_div">
       <#if inStock>
-        <a href="javascript:void(0);" onClick="javascript:addItemToCart();" class="standardBtn addToCart <#if featureOrder?exists && featureOrder?size gt 0>inactiveAddToCart</#if>" id="js_addToCart"><span>${uiLabelMap.OrderAddToCartBtn}</span></a>
+        <a href="javascript:void(0);" onClick="javascript:addItemToCart();" <#if (featureOrder?exists && featureOrder?size gt 0) || (isPdpInStoreOnly?exists && isPdpInStoreOnly == "Y")>class="standardBtn addToCart inactiveAddToCart"<#else>class="standardBtn addToCart"</#if> id="js_addToCart"><span>${uiLabelMap.OrderAddToCartBtn}</span></a>
       <#elseif !isSellable>
         <a href="javascript:void(0);" class="standardBtn addToCart inactiveAddToCart" id="js_addToCart"><span>${uiLabelMap.OrderAddToCartBtn}</span></a>
       <#else>

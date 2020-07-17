@@ -95,7 +95,7 @@
         <if-not-empty field="parameters.fromDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.fromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
@@ -103,7 +103,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.fromDate">
                         <field field="parameters.fromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -111,7 +111,7 @@
         <if-not-empty field="parameters.thruDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.thruDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
@@ -119,7 +119,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.thruDate">
                         <field field="parameters.thruDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -513,6 +513,8 @@
         <create-value value-field="newEntity"/>
 
         <set-service-fields service-name="createProductStorePromoAppl" map="parameters" to-map="createProductStorePromoApplCtx"/>
+        <set field="createProductStorePromoApplCtx.fromDate" from-field="parameters.fromDate" type="Timestamp"/>
+        <set field="createProductStorePromoApplCtx.thruDate" from-field="parameters.thruDate" type="Timestamp"/>
         <call-service service-name="createProductStorePromoAppl" in-map-name="createProductStorePromoApplCtx"/>
 
         <set-service-fields service-name="createProductPromoRule" map="parameters" to-map="createProductPromoRuleCtx"/>
@@ -685,7 +687,7 @@
         <if-not-empty field="parameters.fromDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.fromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
@@ -693,7 +695,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.fromDate">
                         <field field="parameters.fromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -701,7 +703,7 @@
         <if-not-empty field="parameters.thruDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.thruDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
@@ -709,7 +711,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.thruDate">
                         <field field="parameters.thruDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -1092,7 +1094,10 @@
             <set-service-fields service-name="deleteProductStorePromoAppl" map="oldProductStorePromoAppl" to-map="deleteProductStorePromoApplCtx"/>
             <call-service service-name="deleteProductStorePromoAppl" in-map-name="deleteProductStorePromoApplCtx"/>
         </iterate>
+
         <set-service-fields service-name="createProductStorePromoAppl" map="parameters" to-map="createProductStorePromoApplCtx"/>
+        <set field="createProductStorePromoApplCtx.fromDate" from-field="parameters.fromDate" type="Timestamp"/>
+        <set field="createProductStorePromoApplCtx.thruDate" from-field="parameters.thruDate" type="Timestamp"/>
         <call-service service-name="createProductStorePromoAppl" in-map-name="createProductStorePromoApplCtx"/>
 
         <set-service-fields service-name="updateProductPromoCond" map="parameters" to-map="updateProductPromoCondCtx"/>
@@ -1308,7 +1313,7 @@
         <if-not-empty field="parameters.promoCodeFromDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.promoCodeFromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
@@ -1316,7 +1321,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeFromDate">
                         <field field="parameters.promoCodeFromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -1324,7 +1329,7 @@
         <if-not-empty field="parameters.promoCodeThruDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.promoCodeThruDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
@@ -1332,7 +1337,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeThruDate">
                         <field field="parameters.promoCodeThruDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -1344,8 +1349,8 @@
         <set field="createProductPromoCode.useLimitPerCode" from-field="parameters.promoCodeUseLimitPerCode"/>
         <set field="createProductPromoCode.useLimitPerCustomer" from-field="parameters.promoCodeUseLimitPerCustomer"/>
         <set field="createProductPromoCode.userEntered" from-field="parameters.promoCodeUserEntered"/>
-        <set field="createProductPromoCode.fromDate" from-field="parameters.promoCodeFromDate"/>
-        <set field="createProductPromoCode.thruDate" from-field="parameters.promoCodeThruDate"/>
+        <set field="createProductPromoCode.fromDate" from-field="parameters.promoCodeFromDate" type="Timestamp"/>
+        <set field="createProductPromoCode.thruDate" from-field="parameters.promoCodeThruDate" type="Timestamp"/>
         <set-service-fields service-name="createProductPromoCode" map="createProductPromoCode" to-map="createProductPromoCodeCtx"/>
         <call-service service-name="createProductPromoCode" in-map-name="createProductPromoCodeCtx"/>
     </simple-method>
@@ -1390,7 +1395,7 @@
         <if-not-empty field="parameters.promoCodeFromDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.promoCodeFromDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveFromDateError"/>
@@ -1399,7 +1404,7 @@
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeFromDate">
                     
                         <field field="parameters.promoCodeFromDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -1407,7 +1412,7 @@
         <if-not-empty field="parameters.promoCodeThruDate">
             <call-class-method class-name="com.osafe.util.Util"  method-name="isDateTime" ret-field="checkDateValidResult">
                 <field field="parameters.promoCodeThruDate"/>
-                <field field="parameters.preferredDateFormat"/>
+                <field field="parameters.entryDateTimeFormat"/>
             </call-class-method>
             <if-compare field="checkDateValidResult" operator="equals" value="false" type="Boolean">
                 <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidActiveThruDateError"/>
@@ -1415,7 +1420,7 @@
                 <else>
                     <call-class-method class-name="com.osafe.util.Util"  method-name="toTimestamp" ret-field="parameters.promoCodeThruDate">
                         <field field="parameters.promoCodeThruDate"/>
-                        <field field="parameters.preferredDateFormat"/>
+                        <field field="parameters.entryDateTimeFormat"/>
                     </call-class-method>
                 </else>
             </if-compare>
@@ -1427,8 +1432,8 @@
         <set field="updateProductPromoCode.useLimitPerCode" from-field="parameters.promoCodeUseLimitPerCode" set-if-null="true"/>
         <set field="updateProductPromoCode.useLimitPerCustomer" from-field="parameters.promoCodeUseLimitPerCustomer" set-if-null="true"/>
         <set field="updateProductPromoCode.userEntered" from-field="parameters.promoCodeUserEntered"/>
-        <set field="updateProductPromoCode.fromDate" from-field="parameters.promoCodeFromDate" set-if-null="true"/>
-        <set field="updateProductPromoCode.thruDate" from-field="parameters.promoCodeThruDate" set-if-null="true"/>
+        <set field="updateProductPromoCode.fromDate" from-field="parameters.promoCodeFromDate" set-if-null="true" type="Timestamp"/>
+        <set field="updateProductPromoCode.thruDate" from-field="parameters.promoCodeThruDate" set-if-null="true" type="Timestamp"/>
         <set-service-fields service-name="updateProductPromoCode" map="updateProductPromoCode" to-map="updateProductPromoCodeCtx"/>
         <call-service service-name="updateProductPromoCode" in-map-name="updateProductPromoCodeCtx"/>
     </simple-method>

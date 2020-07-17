@@ -20,6 +20,7 @@
       <#assign hasNext = result_has_next/>
       <#assign product = delegator.findOne("Product", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId",result.productId), false)/>
       <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product, request)!""/>
+      <#assign productInStoreOnlyAttribute = delegator.findOne("ProductAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("attrName" , "PDP_IN_STORE_ONLY", "productId" , result.productId!),false)?if_exists/>
       <#assign productLargeImageUrl = productContentWrapper.get("LARGE_IMAGE_URL")!"">
       <tr class="dataRow <#if rowClass?if_exists == "2">even<#else>odd</#if>">
         <td class="idCol <#if !hasNext?if_exists>lastRow</#if> firstCol" >
@@ -27,6 +28,10 @@
             <a href="<@ofbizUrl>virtualProductDetail?productId=${product.productId?if_exists}</@ofbizUrl>">${product.productId?if_exists}</a>
           <#elseif product.isVirtual == 'N' && product.isVariant == 'N'>
             <a href="<@ofbizUrl>finishedProductDetail?productId=${product.productId?if_exists}</@ofbizUrl>">${product.productId?if_exists}</a>
+          </#if>
+          <#if productInStoreOnlyAttribute?has_content && productInStoreOnlyAttribute.attrValue?upper_case == 'Y'>
+              <#assign toolTipData = uiLabelMap.StoreOnlyProductInfo>
+              <a onMouseover="showTooltip(event,'${toolTipData!}');" onMouseout="hideTooltip()"><span class="informationIcon"></span></a>
           </#if>
         </td>
         <td class="nameCol <#if !hasNext?if_exists>lastRow</#if>">${product.internalName?if_exists}</td>
@@ -148,6 +153,7 @@
                   <#else>
                     <li><a href="javascript:void(0);javascript:alert('${uiLabelMap.VirtualProductAddToCartError}');" ><span class="adminAddCartIcon"></span>${uiLabelMap.AddToCartTooltip}</a></li>
                   </#if>
+                  <li><a href="<@ofbizUrl>${productContentSpotListAction}?productId=${product.productId?if_exists}</@ofbizUrl>"><span class="contentSpotIcon"></span>${uiLabelMap.ProductContentSpotTooltip}</a></li>
                 </ul>
               </div>
             </div>

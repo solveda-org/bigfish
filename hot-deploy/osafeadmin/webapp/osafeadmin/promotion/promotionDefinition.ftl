@@ -14,10 +14,10 @@
     <#if productStorePromoAppl?has_content>
       <#if productStorePromoAppl.fromDate?has_content>
         <#assign productStorePromoApplFromDate = productStorePromoAppl.fromDate>
-        <#assign fromDate = (productStorePromoAppl.fromDate)?string(preferredDateFormat)>
+        <#assign fromDate = (productStorePromoAppl.fromDate)?string(entryDateTimeFormat)>
       </#if>
       <#if productStorePromoAppl.thruDate?has_content>
-        <#assign thruDate = (productStorePromoAppl.thruDate)?string(preferredDateFormat)>
+        <#assign thruDate = (productStorePromoAppl.thruDate)?string(entryDateTimeFormat)>
       </#if>
     </#if>
 
@@ -189,7 +189,7 @@
 	      <div class="infoValue small">
 	        <div class="entryInput from">
 	          <#if isPromotionDetail>
-	            <input class="dateEntry" type="text" id="fromDate" name="fromDate" maxlength="40" value="${parameters.fromDate!fromDate!nowTimestamp?string(preferredDateFormat)!""}"/>
+	            <input class="dateEntry" type="text" id="fromDate" name="fromDate" maxlength="40" value="${parameters.fromDate!fromDate!nowTimestamp?string(entryDateTimeFormat)!""}"/>
 	            <#else>
 	              ${fromDate!""}
 	          </#if>

@@ -2,6 +2,7 @@
 <site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/site-conf.xsd">
         <include location="component://osafe/webapp/osafe/WEB-INF/controller_ecommerce.xml"/>
+        <include location="component://osafe/webapp/osafe/WEB-INF/controller_ecommerce_custom.xml"/>
 
     <description>General Site Configuration File</description>
 

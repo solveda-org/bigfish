@@ -3,6 +3,100 @@
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
+    <simple-method method-name="validateCustomerInfo" short-description="validateCustomerInfo" login-required="false">
+        <!-- timestamp to be used -->
+        <now-timestamp field="nowStamp"/>
+
+        <!-- setup the party/person -->
+        <if-not-empty field="parameters.birthDateYear">
+            <set field="parameters.birthDate" value="${parameters.birthDateYear}-${parameters.birthDateMonth}-${parameters.birthDateDay}" type="Long"/>
+        </if-not-empty>
+        <call-map-processor in-map-name="parameters" out-map-name="personMap">
+            <simple-map-processor name="newPerson">
+                <process field="personalTitle"><copy/></process>
+                <process field="firstName">
+                    <copy/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="FirstNameMissingError"/></not-empty>
+                </process>
+                <process field="middleName"><copy/></process>
+                <process field="lastName">
+                    <copy/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="LastNameMissingError"/></not-empty>
+                </process>
+                <process field="suffix"><copy/></process>
+                <process field="birthDate">
+                    <convert type="Date" to-field="birthDate"><fail-property resource="OSafeUiLabels" property="BirthDateMissingError"/></convert>
+                </process>
+                <process field="gender"><copy/></process>
+
+                <process field="residenceStatusEnumId"><copy/></process>
+                <process field="maritalStatus"><copy/></process>
+                <process field="employmentStatusEnumId"><copy/></process>
+                <process field="occupation"><copy/></process>
+                <process field="yearsWithEmployer"><convert type="Long"><fail-message message="Years with Employer was not a valid number: ${parameters.yearsWithEmployer}"/></convert></process>
+                <process field="monthsWithEmployer"><convert type="Long"><fail-message message="Months with Employer was not a valid number: ${parameters.monthsWithEmployer}"/></convert></process>
+                <process field="existingCustomer"><copy/></process>
+            </simple-map-processor>
+        </call-map-processor>
+
+        <!-- setup the email -->
+        <call-map-processor in-map-name="parameters" out-map-name="emailMap">
+            <simple-map-processor name="newEmail">
+                <process field="emailAddress">
+                    <copy/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
+                    <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
+                </process>
+                <process field="emailSol"><copy to-field="allowSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+
+        <!-- Create the Home Phone -->
+        <call-map-processor in-map-name="parameters" out-map-name="homePhoneMap">
+            <simple-map-processor name="newTelecomNumber">
+                <process field="homeCountryCode">
+                    <copy to-field="countryCode"/>
+                </process>
+                <process field="homeAreaCode">
+                    <copy to-field="areaCode"/>
+                </process>
+                <process field="homeContactNumber">
+                    <copy to-field="contactNumber"/>
+                    <not-empty><fail-message message="Home Phone Contact Number is missing."/></not-empty>
+                </process>
+                <process field="homeExt"><copy to-field="extension"/></process>
+                <process field="homeSol"><copy to-field="allowSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+
+        <!-- Create the Work Phone -->
+        <call-map-processor in-map-name="parameters" out-map-name="workPhoneMap">
+            <simple-map-processor name="newTelecomNumber">
+                <process field="workCountryCode">
+                    <copy to-field="countryCode"/>
+                </process>
+                <process field="workAreaCode">
+                    <copy to-field="areaCode"/>
+                </process>
+                <process field="workContactNumber">
+                    <copy to-field="contactNumber"/>
+                </process>
+                <process field="workSol"><copy to-field="allowSolicitation"/></process>
+                <process field="workExt"><copy to-field="extension"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+
+        <!-- Create the Quick Calls Phone -->
+        <call-map-processor in-map-name="parameters" out-map-name="quickCallsPhoneMap">
+            <simple-map-processor name="newTelecomNumber">
+                <process field="quickCallsContactNumber">
+                    <copy to-field="contactNumber"/>
+                </process>
+                <process field="quickCallsSol"><copy to-field="allowSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+    </simple-method>
+    
     <simple-method method-name="UserLoginValidation" short-description="Basic Account Validation" login-required="false">
         <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStore" ret-field="productStore">
             <field field="request" type="javax.servlet.ServletRequest"/>
@@ -19,21 +113,31 @@
         <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
         <property-to-field resource="security" property="password.lowercase" default="false" field="password_lowercase"/>
 
-        <if-compare field="productStore.usePrimaryEmailUsername" operator="equals" value="Y">
-            <call-map-processor in-map-name="parameters" out-map-name="emailContext">
-                <simple-map-processor name="newEmail">
-                    <process field="CUSTOMER_EMAIL">
-                        <copy to-field="emailAddress"/>
-                        <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
-                        <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
-                    </process>
-                    <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
-                </simple-map-processor>
-            </call-map-processor>
-            <check-errors/>
-            <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
-        </if-compare>
-
+        <call-map-processor in-map-name="parameters" out-map-name="emailContext">
+            <simple-map-processor name="newEmail">
+                <process field="roleTypeId"><copy/></process>
+                <process field="CUSTOMER_EMAIL">
+                    <copy to-field="emailAddress"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
+                    <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
+                </process>
+            <process field="CUSTOMER_EMAIL_CONFIRM">
+                <copy to-field="customerEmailConfirm"/>
+                <not-empty><fail-property resource="OSafeUiLabels" property="ConfirmEmailAddressMissingError"/></not-empty>
+            </process>
+                <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+        
+        <if-not-empty field="parameters.CUSTOMER_EMAIL_CONFIRM">
+	        <if-compare-field field="parameters.CUSTOMER_EMAIL" operator="not-equals" to-field="parameters.CUSTOMER_EMAIL_CONFIRM">
+	        	<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="EmailMatchError"/>
+	        	<string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_CONFIRM" list="error_list"/>
+	      	</if-compare-field>  
+      	</if-not-empty>
+				        
+        <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
+        
         <!-- if username and/or password should be lowercased, do that now -->
         <if-compare field="username_lowercase" operator="equals" value="true">
             <call-object-method obj-field="parameters.USERNAME" method-name="toLowerCase" ret-field="parameters.USERNAME"/>
@@ -1299,14 +1403,14 @@
         <if-not-empty field="parameters.PERSONAL_FULL_NAME">
     		<set field="parameters.billingFullName" from-field="parameters.PERSONAL_FULL_NAME"/>
     	 <else>
-	         <if-not-empty field="parameters.PERSONAL_FIRST_NAME">
-	    	     <set field="parameters.billingFullName" value="${parameters.PERSONAL_FIRST_NAME}"/>
+	         <if-not-empty field="parameters.USER_FIRST_NAME">
+	    	     <set field="parameters.billingFullName" value="${parameters.USER_FIRST_NAME}"/>
 	    	 </if-not-empty>
-	         <if-not-empty field="parameters.PERSONAL_LAST_NAME">
-		         <if-not-empty field="parameters.PERSONAL_FIRST_NAME">
-	    		     <set field="parameters.billingFullName" value="${parameters.billingFullName} ${parameters.PERSONAL_LAST_NAME}"/>
+	         <if-not-empty field="parameters.USER_LAST_NAME">
+		         <if-not-empty field="parameters.USER_FIRST_NAME">
+	    		     <set field="parameters.billingFullName" value="${parameters.billingFullName} ${parameters.USER_LAST_NAME}"/>
 	    		 <else>
-	    		     <set field="parameters.billingFullName" value="${parameters.PERSONAL_LAST_NAME}"/>
+	    		     <set field="parameters.billingFullName" value="${parameters.USER_LAST_NAME}"/>
 	    		 </else>
 		         </if-not-empty>
 	    	 </if-not-empty>
@@ -1816,29 +1920,37 @@
         <if-not-empty field="parameters.CUSTOMER_ATTN_NAME">
         	<session-to-field field="userLogin"/>
             <set from-field="userLogin.partyId" field="customerPostalAddressMap.partyId"/>
-            <set from-field="parameters.CUSTOMER_ATTN_NAME" field="customerPostalAddressMap.attnName"/>
+            <!-- <set from-field="parameters.CUSTOMER_ATTN_NAME" field="customerPostalAddressMap.attnName"/> -->
             <find-by-and list="customerPostalAddressList" map="customerPostalAddressMap" entity-name="PartyAndPostalAddress"/>
             <call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="filterByDate" ret-field="customerPostalAddressList">
                 <field field="customerPostalAddressList" type="List"/>
             </call-class-method>
             <!-- Check if ATTN_NAME already exists for this party -->
             <if-not-empty field="customerPostalAddressList">
-            	<!-- if we are updating, then we will already have a contactMechId, else if we are adding we will not have a contactMechId -->
-            	<if-not-empty field="parameters.contactMechId">
-            		<first-from-list entry="customerPostalAddress" list="customerPostalAddressList"/>
-	            	<!-- If another Postal Address (not the one being updated) has this ATTTN_NAME then error -->
-	            	<if-compare-field operator="not-equals" field="customerPostalAddress.contactMechId" to-field="parameters.contactMechId">
-	            		<set from-field="parameters.CUSTOMER_ATTN_NAME" field="nickName"/>
-	            		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressNickNameUniqueError"/>
-	            		<string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ATTN_NAME" list="error_list"/>
-	            	</if-compare-field>
-	            	<else>
-	            		<!-- We are adding a new Address, error if ATTN_NAME exists -->
-	            		<set from-field="parameters.CUSTOMER_ATTN_NAME" field="nickName"/>
-	            		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressNickNameUniqueError"/>
-	            		<string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ATTN_NAME" list="error_list"/>
-	            	</else>
-            	</if-not-empty>
+           		<!-- Iterate all customers addresses, if we find a match, check if it is the same address we are updating before throwing error -->
+           		<iterate entry="customerPostalAddress" list="customerPostalAddressList">
+           			<if-not-empty field="customerPostalAddress.attnName">
+           				<set field="customerPostalAddressAttnName" from-field="customerPostalAddress.attnName"/>
+	           			<call-object-method method-name="toUpperCase" obj-field="customerPostalAddressAttnName" ret-field="customerPostalAddressAttnName"/>
+	           			<call-object-method method-name="toUpperCase" obj-field="parameters.CUSTOMER_ATTN_NAME" ret-field="parameterCustomerAttnName"/>
+	           			<if-compare-field operator="equals" field="customerPostalAddressAttnName" to-field="parameterCustomerAttnName">
+	           				<!-- if we are updating, then we will already have a contactMechId, else if we are adding we will not have a contactMechId -->
+	           				<if-not-empty field="parameters.contactMechId">
+	            				<if-compare-field operator="not-equals" field="customerPostalAddress.contactMechId" to-field="parameters.contactMechId">
+	            					<set from-field="parameters.CUSTOMER_ATTN_NAME" field="nickName"/>
+				            		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressNickNameUniqueError"/>
+				            		<string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ATTN_NAME" list="error_list"/>
+	            				</if-compare-field>
+	            				<else>
+	            					<!-- We are adding a new Address, error if ATTN_NAME exists -->
+				            		<set from-field="parameters.CUSTOMER_ATTN_NAME" field="nickName"/>
+				            		<property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressNickNameUniqueError"/>
+				            		<string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_ATTN_NAME" list="error_list"/>
+	            				</else>
+	           				</if-not-empty>
+	           			</if-compare-field>
+           			</if-not-empty>
+           		</iterate>
             </if-not-empty>
         </if-not-empty>
         
@@ -2294,25 +2406,50 @@
     </simple-method>
     
     <simple-method method-name="PersonalBillingAttributeInfoValidation" short-description="validate Intelligent Attribute Sharing" login-required="false">
+         
+		<!-- If Personal First/Last Name is empty, then first try to pull from the DB -->
+		<if-empty field="parameters.PERSONAL_USE_SCREEN">
+ 			<if-not-empty field="parameters.partyId">
+				<entity-one entity-name="Person" value-field="person" auto-field-map="false">
+      				<field-map field-name="partyId" from-field="parameters.partyId"/>
+  				</entity-one>
+				<if-not-empty field="person">
+					<set field="parameters.USER_FIRST_NAME" from-field="person.firstName"/>
+					<set field="parameters.USER_LAST_NAME" from-field="person.lastName"/>
+				</if-not-empty>
+			</if-not-empty>
+		</if-empty>
+         
+         
          <!-- DETERMINE FIRST NAME -->
          <!-- try personal -->
          <if-not-empty field="parameters.USER_FIRST_NAME">
-            <set field="parameters.firstNameOnCard" from-field="parameters.USER_FIRST_NAME"/>
             <if-empty field="parameters.BILLING_FIRST_NAME">
             	<if-empty field="parameters.BILLING_FULL_NAME">
-            		<set field="parameters.BILLING_FIRST_NAME" from-field="parameters.USER_FIRST_NAME"/>
+            		<if-compare field="parameters.BILLING_FIRST_NAME_MANDATORY" operator="not-equals" value="Y">
+            			<if-compare field="parameters.BILLING_FULL_NAME_MANDATORY" operator="not-equals" value="Y">
+            				<set field="parameters.BILLING_FIRST_NAME" from-field="parameters.USER_FIRST_NAME"/>
+            			</if-compare>
+            		</if-compare>
             	</if-empty>
             </if-empty>
          <else>
          	<!-- try billing -->
            <if-not-empty field="parameters.BILLING_FIRST_NAME">
-           		<set field="parameters.firstNameOnCard" from-field="parameters.BILLING_FIRST_NAME"/>
-           		<set field="parameters.USER_FIRST_NAME" from-field="parameters.BILLING_FIRST_NAME"/>
+           		<if-compare field="parameters.USER_FIRST_NAME_MANDATORY" operator="not-equals" value="Y">
+           			<set field="parameters.USER_FIRST_NAME" from-field="parameters.BILLING_FIRST_NAME"/>
+           		</if-compare>
            		<else>
            			<!-- try shipping -->
            			<if-not-empty field="parameters.SHIPPING_FIRST_NAME">
-           				<set field="parameters.firstNameOnCard" from-field="parameters.SHIPPING_FIRST_NAME"/>
-           				<set field="parameters.USER_FIRST_NAME" from-field="parameters.SHIPPING_FIRST_NAME"/>
+           				<if-compare field="parameters.USER_FIRST_NAME_MANDATORY" operator="not-equals" value="Y">
+           					<set field="parameters.USER_FIRST_NAME" from-field="parameters.SHIPPING_FIRST_NAME"/>
+           				</if-compare>
+           				<if-compare field="parameters.BILLING_FIRST_NAME_MANDATORY" operator="not-equals" value="Y">
+           					<if-compare field="parameters.BILLING_FULL_NAME_MANDATORY" operator="not-equals" value="Y">
+           						<set field="parameters.BILLING_FIRST_NAME" from-field="parameters.SHIPPING_FIRST_NAME"/>
+           					</if-compare>
+           				</if-compare>
            			</if-not-empty>
            		</else>
            </if-not-empty>
@@ -2322,25 +2459,35 @@
          <!-- DETERMINE LAST NAME -->
          <!-- try personal -->
           <if-not-empty field="parameters.USER_LAST_NAME">
-            <set field="parameters.lastNameOnCard" from-field="parameters.USER_LAST_NAME"/>
             <if-empty field="parameters.BILLING_LAST_NAME">
             	<if-empty field="parameters.BILLING_FULL_NAME">
-            		<set field="parameters.BILLING_LAST_NAME" from-field="parameters.USER_LAST_NAME"/>
+            		<if-compare field="parameters.BILLING_LAST_NAME_MANDATORY" operator="not-equals" value="Y">
+            			<if-compare field="parameters.BILLING_FULL_NAME_MANDATORY" operator="not-equals" value="Y">
+            				<set field="parameters.BILLING_LAST_NAME" from-field="parameters.USER_LAST_NAME"/>
+            			</if-compare>
+            		</if-compare>
             	</if-empty>
             </if-empty>
          <else>
          	<!-- try billing -->
-           <if-not-empty field="parameters.BILLING_LAST_NAME">
-           		<set field="parameters.lastNameOnCard" from-field="parameters.BILLING_LAST_NAME"/>
-           		<set field="parameters.USER_LAST_NAME" from-field="parameters.BILLING_LAST_NAME"/>
+            <if-not-empty field="parameters.BILLING_LAST_NAME">
+           		<if-compare field="parameters.USER_LAST_NAME_MANDATORY" operator="not-equals" value="Y">
+           			<set field="parameters.USER_LAST_NAME" from-field="parameters.BILLING_LAST_NAME"/>
+           		</if-compare>
            		<else>
            			<!-- try shipping -->
            			<if-not-empty field="parameters.SHIPPING_LAST_NAME">
-           				<set field="parameters.lastNameOnCard" from-field="parameters.SHIPPING_LAST_NAME"/>
-           				<set field="parameters.USER_LAST_NAME" from-field="parameters.SHIPPING_LAST_NAME"/>
+           				<if-compare field="parameters.USER_LAST_NAME_MANDATORY" operator="not-equals" value="Y">
+           					<set field="parameters.USER_LAST_NAME" from-field="parameters.SHIPPING_LAST_NAME"/>
+           				</if-compare>
+           				<if-compare field="parameters.BILLING_LAST_NAME_MANDATORY" operator="not-equals" value="Y">
+           					<if-compare field="parameters.BILLING_FULL_NAME_MANDATORY" operator="not-equals" value="Y">
+           						<set field="parameters.BILLING_LAST_NAME" from-field="parameters.SHIPPING_LAST_NAME"/>
+           					</if-compare>
+           				</if-compare>
            			</if-not-empty>
            		</else>
-           </if-not-empty>
+            </if-not-empty>
          </else>
          </if-not-empty>
          
@@ -2356,12 +2503,14 @@
          			<set field="nameCount" value="1" type="Integer"/>
          			<iterate list="billingNamesList" entry="billingName">
          				<if-compare field="nameCount" operator="equals" value="1" type="Integer">
-         					<set field="parameters.USER_FIRST_NAME" from-field="billingName"/>
-         					<set field="parameters.firstNameOnCard" from-field="billingName"/>
+         					<if-compare field="parameters.USER_FIRST_NAME_MANDATORY" operator="not-equals" value="Y">
+         						<set field="parameters.USER_FIRST_NAME" from-field="billingName"/>
+         					</if-compare>
          				</if-compare>
          				<if-compare-field field="nameCount" operator="equals" to-field="billingNamesListSize" type="Integer">
-         					<set field="parameters.USER_LAST_NAME" from-field="billingName"/>
-         					<set field="parameters.lastNameOnCard" from-field="billingName"/>
+         					<if-compare field="parameters.USER_LAST_NAME_MANDATORY" operator="not-equals" value="Y">
+         						<set field="parameters.USER_LAST_NAME" from-field="billingName"/>
+         					</if-compare>
          				</if-compare-field>
          				<calculate field="nameCount">
 	                        <calcop operator="add" >
@@ -2370,54 +2519,56 @@
 	                        </calcop>
 	                    </calculate>
          			</iterate>
-         			<if-not-empty field="parameters.SHIPPING_FULL_NAME">
-         				<call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="shippingNamesList">
-	         				<field field="parameters.SHIPPING_FULL_NAME" type="String"/>
-	                		<string value=" "/>
-	         			</call-class-method>
-	         			<call-object-method method-name="size" obj-field="shippingNamesList" ret-field="shippingNamesListSize"/>
-	         			<set field="nameCount" value="1" type="Integer"/>
-	         			<iterate list="shippingNamesList" entry="shippingName">
-	         				<if-compare field="nameCount" operator="equals" value="1" type="Integer">
-	         					<set field="parameters.USER_FIRST_NAME" from-field="shippingName"/>
-	         					<set field="parameters.firstNameOnCard" from-field="shippingName"/>
-	         				</if-compare>
-	         				<if-compare-field field="nameCount" operator="equals" to-field="shippingNamesListSize" type="Integer">
-	         					<set field="parameters.USER_LAST_NAME" from-field="shippingName"/>
-	         					<set field="parameters.lastNameOnCard" from-field="shippingName"/>
-	         				</if-compare-field>
-	         				<calculate field="nameCount">
-		                        <calcop operator="add" >
-		                            <calcop operator="get" field="nameCount"/>
-		                            <number value="1"/>
-		                        </calcop>
-		                    </calculate>
-	         			</iterate>	
-         			</if-not-empty>
+         			<else>
+	         			<if-not-empty field="parameters.SHIPPING_FULL_NAME">
+	         				<call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="shippingNamesList">
+		         				<field field="parameters.SHIPPING_FULL_NAME" type="String"/>
+		                		<string value=" "/>
+		         			</call-class-method>
+		         			<call-object-method method-name="size" obj-field="shippingNamesList" ret-field="shippingNamesListSize"/>
+		         			<set field="nameCount" value="1" type="Integer"/>
+		         			<iterate list="shippingNamesList" entry="shippingName">
+		         				<if-compare field="nameCount" operator="equals" value="1" type="Integer">
+		         					<if-compare field="parameters.USER_FIRST_NAME_MANDATORY" operator="not-equals" value="Y">
+		         						<set field="parameters.USER_FIRST_NAME" from-field="shippingName"/>
+		         					</if-compare>
+		         					<if-compare field="parameters.BILLING_FIRST_NAME_MANDATORY" operator="not-equals" value="Y">
+		         						<if-compare field="parameters.BILLING_FULL_NAME_MANDATORY" operator="not-equals" value="Y">
+		         							<set field="parameters.BILLING_FIRST_NAME" from-field="shippingName"/>
+		         						</if-compare>
+		         					</if-compare>
+		         				</if-compare>
+		         				<if-compare-field field="nameCount" operator="equals" to-field="shippingNamesListSize" type="Integer">
+		         					<if-compare field="parameters.USER_LAST_NAME_MANDATORY" operator="not-equals" value="Y">
+		         						<set field="parameters.USER_LAST_NAME" from-field="shippingName"/>
+		         					</if-compare>
+		         					<if-compare field="parameters.BILLING_LAST_NAME_MANDATORY" operator="not-equals" value="Y">
+		         						<if-compare field="parameters.BILLING_FULL_NAME_MANDATORY" operator="not-equals" value="Y">
+		         							<set field="parameters.BILLING_LAST_NAME" from-field="shippingName"/>
+		         						</if-compare>
+		         					</if-compare>
+		         				</if-compare-field>
+		         				<calculate field="nameCount">
+			                        <calcop operator="add" >
+			                            <calcop operator="get" field="nameCount"/>
+			                            <number value="1"/>
+			                        </calcop>
+			                    </calculate>
+		         			</iterate>	
+	         			</if-not-empty>
+         			</else>
          		</if-not-empty>
          	</if-empty>
          </if-empty>
          
-         <!-- If First/Last Name is still empty, then try to pull from the DB -->
-         <if-empty field="parameters.PERSONAL_USE_SCREEN">
-	         <if-empty field="parameters.firstNameOnCard">
-	         	<if-empty field="parameters.lastNameOnCard">
-	         		<if-not-empty field="parameters.partyId">
-	         			<entity-one entity-name="Person" value-field="person" auto-field-map="false">
-				            <field-map field-name="partyId" from-field="parameters.partyId"/>
-				        </entity-one>
-				        <if-not-empty field="person">
-				        	<set field="parameters.firstNameOnCard" from-field="person.firstName"/>
-				        	<set field="parameters.lastNameOnCard" from-field="person.lastName"/>
-				        	<set field="parameters.BILLING_FIRST_NAME" from-field="person.firstName"/>
-				        	<set field="parameters.BILLING_LAST_NAME" from-field="person.lastName"/>
-				        	<set field="parameters.USER_FIRST_NAME" from-field="person.firstName"/>
-				        	<set field="parameters.USER_LAST_NAME" from-field="person.lastName"/>
-				        </if-not-empty>
-	         		</if-not-empty>
-	         	</if-empty>
-	         </if-empty>
-         </if-empty>
+         <!-- Set CC Names using Billing Names -->
+         <if-not-empty field="parameters.BILLING_FIRST_NAME">
+         	<set field="parameters.firstNameOnCard" from-field="parameters.BILLING_FIRST_NAME"/>
+         </if-not-empty>
+         
+         <if-not-empty field="parameters.BILLING_LAST_NAME">
+         	<set field="parameters.lastNameOnCard" from-field="parameters.BILLING_LAST_NAME"/>
+         </if-not-empty>
         
         
     </simple-method>

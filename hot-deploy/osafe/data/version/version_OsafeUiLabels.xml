@@ -28,6 +28,11 @@
         <category>PDP</category>
         <description>SeeMainImageLabel</description>
     </property>
+    <property key="GiftMessageLabel">
+        <value xml:lang="en">Gift Message</value>
+        <category>CHECK_OUT</category>
+        <description>GiftMessageLabel</description>
+    </property>
     <property key="SelectSavedCardCaption">
         <value xml:lang="en">Select One:</value>
         <category>CHECK_OUT</category>
@@ -594,6 +599,11 @@
         <category>SITE_HEADER</category>
         <description>SearchCaption</description>
     </property>
+    <property key="FindItemCaption">
+        <value xml:lang="en">Find Item:</value>
+        <category>SHOPPING_LIST_SEARCH</category>
+        <description>FindItemCaption</description>
+    </property>
     <property key="PayPalCaption">
         <value xml:lang="en">Pay with PayPal:</value>
         <category>CHECK_OUT</category>
@@ -930,10 +940,20 @@
         <category>PDP</category>
         <description>OutOfStockLabel</description>
     </property>
+    <property key="InStoreOnlyLabel">
+        <value xml:lang="en">Available In Store Only</value>
+        <category>PLP</category>
+        <description>InStoreOnlyLabel</description>
+    </property>
     <property key="PlpPriceLabel">
         <value xml:lang="en">Only</value>
         <category>PLP</category>
         <description>PlpPriceLabel</description>
+    </property>
+    <property key="PlpSelectVariantLabel">
+        <value xml:lang="en">Select Variants</value>
+        <category>PLP</category>
+        <description>PlpSelectVariantLabel</description>
     </property>
 
     <property key="PlpListPriceLabel">
@@ -1648,6 +1668,11 @@
         <category>PAGE_HEADING_H1</category>
         <description>SinglePageCheckoutTitle</description>
     </property>
+    <property key="ItemsTitle">
+        <value xml:lang="en">Items:</value>
+        <category>PLP</category>
+        <description>ItemsTitle</description>
+    </property>
     <property key="MyPaymentInfoTitle">
         <value xml:lang="en">My Payment Information</value>
         <category>MY_ACCOUNT</category>
@@ -1752,6 +1777,16 @@
         <value xml:lang="en">Your search for '${searchText}' produced the following results.</value>
         <category>PAGE_HEADING_H1</category>
         <description>SearchResultsFoundTitle</description>
+    </property>
+    <property key="ShoppingListSearchResultsTitle">
+        <value xml:lang="en">Shopping List Results</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>ShoppingListSearchResultsTitle</description>
+    </property>
+    <property key="ShoppingListSearchTitle">
+        <value xml:lang="en">Shopping List Search</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>ShoppingListSearchTitle</description>
     </property>
     <property key="SearchResultsNotFoundTitle">
         <value xml:lang="en">You searched for '${searchText}'.</value>
@@ -1958,6 +1993,11 @@
         <value xml:lang="en">New customers</value>
         <category>PAGE_SUB_HEADING</category>
         <description>NotRegisteredHeading</description>
+    </property>
+    <property key="FacebookLoginHeading">
+        <value xml:lang="en">Sign In With Facebook</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>FacebookLoginHeading</description>
     </property>
     <property key="AboutYouHeading">
         <value xml:lang="en">About You</value>
@@ -2714,6 +2754,11 @@
         <category>CHECK_OUT</category>
         <description>YourShoppingCartIsEmptyInfo</description>
     </property>
+    <property key="SessionExpireInfo">
+        <value xml:lang="en">We apologize but your session has expired. We do this to protect your account. Please login again.</value>
+        <category>CHECK_OUT</category>
+        <description>SessionExpireInfo</description>
+    </property>
     <property key="YourWishListIsEmptyInfo">
         <value xml:lang="en">Your Wish List is empty</value>
         <category>CHECK_OUT</category>
@@ -3092,6 +3137,11 @@
         <category>MESSAGE_ERROR</category>
         <description>DisabledForgotPasswordUsernameError</description>
     </property>
+    <property key="FbForgotPasswordUsernameError">
+        <value xml:lang="en">You previously registered via a Facebook Login. In order to login again simply click on the Facebook Login logo.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>FbForgotPasswordUsernameError</description>
+    </property>
     <property key="LoginPasswordMissingError">
         <value xml:lang="en">Please enter your Password to login</value>
         <category>MESSAGE_ERROR</category>
@@ -3463,6 +3513,11 @@
         <category>MESSAGE_ERROR</category>
         <description>PDPMaxQtyError</description>
     </property>
+    <property key="PLPVariantSelectError">
+        <value xml:lang="en">Please Select a Variant.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PLPVariantSelectError</description>
+    </property>
     <property key="PDPQtyDecimalNumberError">
         <value xml:lang="en">The Quantity entered for Product _PRODUCT_NAME_ must be a whole number, decimals are not allowed, please retry.</value>
         <category>MESSAGE_ERROR</category>
@@ -3487,6 +3542,11 @@
         <value xml:lang="en">This Loyalty Points ID has a zero balance and cannot be redeemed</value>
         <category>CHECK_OUT</category>
         <description>LoyaltyZeroBalanceError</description>
+    </property>
+    <property key="ShowCartMergedWarning">
+        <value xml:lang="en">Note that your cart has been merged with items stored from a previous shopping experience. If you need to modify the cart items click on the Show Cart</value>
+        <category>MESSAGE_WARNING</category>
+        <description>ShowCartMergedWarning</description>
     </property>
     
     <!-- **** Button Text *************************************** -->
@@ -4251,20 +4311,10 @@
         <category>EMAIL</category>
         <description>UnableToSendEmailLabel</description>
     </property>
-    <property key="EmailTechnicalDetailsLabel">
-        <value xml:lang="en">Technical Details:</value>
-        <category>EMAIL</category>
-        <description>EmailTechnicalDetailsLabel</description>
-    </property>
     <property key="SendEmailErrorLabel">
         <value xml:lang="en">Error when sending message to ${toEmail} from ${fromEmail} cc ${ccEmail} bcc ${bccEmail} subject ${emailSubject}</value>
         <category>EMAIL</category>
         <description>SendEmailErrorLabel</description>
-    </property>
-    <property key="RenderOfbizErrorLabel">
-        <value xml:lang="en">${emailErrorMessage}</value>
-        <category>EMAIL</category>
-        <description>RenderOfbizErrorLabel</description>
     </property>
     <property key="AddressFullNameCaption">
         <value xml:lang="en">Full Name:</value>
@@ -4416,6 +4466,11 @@
         <value xml:lang="en">Sales Tax(${taxPercent}%):</value>
         <category>MULTI_USE</category>
         <description>SummarySalesTaxCaption</description>
+    </property>
+    <property key="SummarySalesTaxShortCaption">
+        <value xml:lang="en">Sales Tax:</value>
+        <category>MULTI_USE</category>
+        <description>SummarySalesTaxShortCaption</description>
     </property>
     <property key="SummarySalesTaxMultiCaption">
         <value xml:lang="en">Sales Tax(${description} ${taxPercent}%):</value>

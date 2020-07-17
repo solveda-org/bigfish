@@ -1,5 +1,5 @@
 <#if orderItemShipGroupAssoc?has_content>
-<div class="boxBody">
+<div class="infoRow row">
     <table class="osafe">
         <tr class="heading">
             <th class="idCol firstCol">${uiLabelMap.ItemNoLabel}</th>

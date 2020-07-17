@@ -40,7 +40,9 @@
                         </div>
                         <div class="infoValue">
                             ${primaryProdCategory.categoryName!""}
-                            <input type="hidden" name="primaryParentCategoryId" id="primaryParentCategoryId" value="${primaryProdCategory.productCategoryId!""}"/>
+                            <#if productCategoryAndMember_index == 0>
+                                <input type="hidden" name="primaryParentCategoryId" id="primaryParentCategoryId" value="${primaryProdCategory.productCategoryId!""}"/>
+                            </#if>
                         </div>
                     </div>
                 </div>
@@ -53,7 +55,9 @@
                     </div>
                     <div class="infoValue">
                       ${productCategoryAndMember.categoryName!""}
-                      <input type="hidden" name="productCategoryId" id="productCategoryId" value="${productCategoryAndMember.productCategoryId!""}"/>
+                      <#if productCategoryAndMember_index == 0>
+                          <input type="hidden" name="productCategoryId" id="productCategoryId" value="${productCategoryAndMember.productCategoryId!""}"/>
+                      </#if>
                     </div>
                     <#if !hasNext>
 	                    <div class="infoIcon">

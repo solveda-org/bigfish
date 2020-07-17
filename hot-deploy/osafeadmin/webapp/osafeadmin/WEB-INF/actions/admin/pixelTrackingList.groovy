@@ -16,8 +16,11 @@ contentList.each{content ->
     if (UtilValidate.isNotEmpty(dataResource))
      {
         electronicText = dataResource.getRelatedOne("ElectronicText");
-        contentText = electronicText.textData;
-        contentTextMap.put(content.contentId, contentText);
+        if (UtilValidate.isNotEmpty(electronicText))
+        {
+            contentText = electronicText.textData;
+            contentTextMap.put(content.contentId, contentText);
+        }
      }
     contentMap.put(content.contentId, content);
 }

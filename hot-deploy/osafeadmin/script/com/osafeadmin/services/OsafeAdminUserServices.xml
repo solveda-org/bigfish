@@ -89,7 +89,7 @@
 	            <field field="parameters.DISABLED_HOUR"/>
 	            <field field="parameters.DISABLED_MINUTE"/>
 	            <field field="parameters.DISABLED_AMPM"/>
-	            <field field="parameters.preferredDateFormat"/>
+	            <field field="parameters.entryDateTimeFormat"/>
 	        </call-class-method>
 	        <if-empty field="ValidDisabledDateTime">
 	            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidDisabledDateError"/>
@@ -261,7 +261,7 @@
 			            <field field="parameters.DISABLED_HOUR"/>
 			            <field field="parameters.DISABLED_MINUTE"/>
 			            <field field="parameters.DISABLED_AMPM"/>
-			            <field field="parameters.preferredDateFormat"/>
+			            <field field="parameters.entryDateTimeFormat"/>
 			        </call-class-method>
 			        <if-empty field="ValidDisabledDateTime">
 			            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidDisabledDateError"/>

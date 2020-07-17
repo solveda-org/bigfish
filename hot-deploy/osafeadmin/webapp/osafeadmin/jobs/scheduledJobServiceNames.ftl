@@ -14,4 +14,5 @@
 <option value='reevooGetProductRatingScore'<#if selectedService == 'reevooGetProductRatingScore'>selected=selected</#if>>reevooGetProductRatingScore</option>
 <option value='reevooProductRatingUpdate'<#if selectedService == 'reevooProductRatingUpdate'>selected=selected</#if>>reevooProductRatingUpdate</option>
 <option value='shipReviewEmail'<#if selectedService == 'shipReviewEmail'>selected=selected</#if>>shipReviewEmail</option>
+<option value='purgeOldJobs'<#if selectedService == 'purgeOldJobs'>selected=selected</#if>>purgeOldJobs</option>
 <!--<option value='testJob'<#if selectedService == 'testJob'>selected=selected</#if>>testJob</option>-->

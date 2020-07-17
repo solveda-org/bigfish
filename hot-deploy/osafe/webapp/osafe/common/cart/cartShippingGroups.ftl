@@ -1,3 +1,10 @@
+<#assign hideShipGroups = "N"/>
+<#if checkDeliveryOptionMulti =="Y">
+  <#if (!deliveryOption?has_content || deliveryOption != "SHIP_TO_MULTI")>
+     <#assign hideShipGroups = "Y"/>
+  </#if>
+</#if>
+<#if hideShipGroups =="N">
 	<div class="${request.getAttribute("attributeClass")!}">
 		<#if shoppingCart?exists && shoppingCart?has_content>
 		   <#assign groupIndex=1?number/>
@@ -7,7 +14,7 @@
 	      <h3>${uiLabelMap.ShippingOptionHeading} <#if multiAddressUrl?exists><span class="link"><a href="<@ofbizUrl>${multiAddressUrl?if_exists}</@ofbizUrl>"><span>${uiLabelMap.ShipToMultiAddressChangeLabel}</span></a></#if></h3>
         
 		   <#list shoppingCart.getShipGroups() as cartShipInfo>
-		      <h4>${uiLabelMap.ShippingGroupHeading} ${groupIndex} of ${shoppingCart.getShipGroupSize()}</h3>
+		      <h4>${uiLabelMap.ShippingGroupHeading} ${groupIndex} of ${shoppingCart.getShipGroupSize()}</h4>
 		
 			   <div class="boxList cartList">
 			  	 <#assign lineIndex=0?number/>
@@ -47,3 +54,4 @@
 		 </div>
 		</#if>
 	</div>
+</#if>	

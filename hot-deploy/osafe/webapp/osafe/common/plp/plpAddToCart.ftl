@@ -4,13 +4,16 @@
     </#if>
     <input type="hidden" name="${uiSequenceScreen}_${plpProduct.productId}_add_category_id" id="${uiSequenceScreen}_${plpProduct.productId}_add_category_id" value="${parameters.plp_add_category_id!plpCategoryId!}" /> 
     <input type="hidden" name="${uiSequenceScreen}_${plpProduct.productId}_add_product_name" id="${uiSequenceScreen}_${plpProduct.productId}_add_product_name" value="${plpProductName!}" /> 
-    <div>
+    <div id="js_plpAddtoCart_div_${uiSequenceScreen}_${plpProduct.productId}">
       <#if inStock>
           <label>${uiLabelMap.CartItemAddToCartButtonCaption}</label>
-          <a href="javascript:void(0);" onClick="javascript:addItemPlpToCart('${uiSequenceScreen}_${plpProduct.productId}');" class="standardBtn addToCart <#if plpFeatureOrder?has_content && plpFeatureOrder?size gt 0>inactiveAddToCart</#if>" id="plpAddtoCart_${uiSequenceScreen}_${plpProduct.productId}"><span>${uiLabelMap.OrderAddToCartBtn}</span></a>
+          <a href="javascript:void(0);" onClick="javascript:addItemPlpToCart('${uiSequenceScreen}_${plpProduct.productId}');" class="standardBtn addToCart <#if plpFeatureOrder?has_content && plpFeatureOrder?size gt 0 || (isPlpPdpInStoreOnly?exists && isPlpPdpInStoreOnly == "Y")>inactiveAddToCart</#if>" id="js_plpAddtoCart_${uiSequenceScreen}_${plpProduct.productId}"><span>${uiLabelMap.OrderAddToCartBtn}</span></a>
       <#else>
           <span>${uiLabelMap.OutOfStockLabel}</span>
       </#if>
+    </div>
+    <div class="js_plpPdpInStoreOnlyContent" id="js_plpPdpInStoreOnlyLabel_${uiSequenceScreen}_${plpProduct.productId}" <#if !(isPdpInStoreOnly?exists && isPdpInStoreOnly == "Y")>style="display:none;"</#if>>
+        <span>${uiLabelMap.InStoreOnlyLabel}</span>
     </div>
 </li>
 

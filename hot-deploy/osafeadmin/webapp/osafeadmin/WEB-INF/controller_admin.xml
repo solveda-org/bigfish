@@ -136,23 +136,25 @@
         <response name="success" type="view" value="addPaymentDetail"/>
     </request-map>
     <!-- Add Payment Processing -->
-    <request-map uri="applyPaymentMethod">
-        <security https="true" auth="true"/>
-        <event type="service" path="" invoke="addPaymentMethodToOrder"/>
-        <response name="success" type="request" value="authOrderPayment"/>
+    <request-map uri="validateAddPaymentMethod">
+      <security https="true" auth="false"/>
+      <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="validateAddPaymentMethod"/>
+      <response name="success" type="request" value="addPaymentMethod"/>
+      <response name="cod" type="request-redirect" value="orderDetail"><redirect-parameter name="orderId"/></response>
+      <response name="error" type="request" value="addPaymentDetail"/>
     </request-map>
     <request-map uri="addPaymentMethod">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="addPaymentMethodToOrder"/>
-        <response name="success" type="request" value="authOrderPayment"/>
+        <response name="success" type="request" value="adminProcessAppliedPayment"/>
+        <response name="error" type="request" value="addPaymentDetail"/>
     </request-map>
-    <request-map uri="authOrderPayment">
+    <request-map uri="adminProcessAppliedPayment">
         <security https="true" auth="true"/>
-        <event type="service" path="" invoke="authOrderPaymentPreference"/>
-        <response name="success" type="request-redirect" value="orderview"><redirect-parameter name="orderId"/></response>
-    </request-map>
-    <!-- ##########  -->
-    
+        <event type="java" path="com.osafe.events.OsafeAdminCheckoutEvents" invoke="processPayment"/>
+        <response name="success" type="request-redirect" value="orderDetail"><redirect-parameter name="orderId"/></response>
+        <response name="error" type="request" value="addPaymentDetail"/>
+    </request-map>    
 
     <request-map uri="promotionManagement">
         <security https="true" auth="true"/>
@@ -1045,7 +1047,7 @@
         <response name="success" type="request-redirect" value="generalPDPSpotList"/>
         <response name="error" type="view" value="generalPDPDetail"/>
     </request-map>
-
+  
     <!-- PDFs -->
     <request-map uri="AdminOrder.pdf">
      <security https="true" auth="true"/>
@@ -1070,6 +1072,22 @@
     <request-map uri="plpContentList">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="plpContentList"/>
+    </request-map>
+    <request-map uri="productContentSpotList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="productContentSpotList"/>
+    </request-map>
+    <request-map uri="productContentSpotDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="productContentSpotDetail"/>
+    </request-map>
+    <request-map uri="updateProductSpecificContent">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateProductTextContentGroup"/> 
+        <response name="success" type="request-redirect" value="productContentSpotList">
+            <redirect-parameter name="productId"/>
+        </response>
+        <response name="error" type="view" value="productContentSpotDetail"/>
     </request-map>
      <request-map uri="plpContentDetail">
         <security https="true" auth="true"/>
@@ -2330,6 +2348,11 @@
         <response name="success" type="view" value="previewHomeSpotContent"/>
         <response name="error" type="request-redirect" value="homeSpotList"/>
     </request-map>
+
+    <request-map uri="previewSiteInfoContent">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="previewSiteInfoContent"/>
+    </request-map>
     
     <request-map uri="deleteProductImage">
         <security https="true" auth="true"/>
@@ -2602,9 +2625,9 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="scheduledJobsHealthCheckDetail"/>
     </request-map>
-    <request-map uri="deleteFinishedJobs">
+    <request-map uri="deleteScheduledJobs">
         <security https="true" auth="true"/>
-        <event type="service" invoke="deleteFinishedJobsGroup"/>
+        <event type="service" invoke="deleteScheduledJobsGroup"/>
         <response name="success" type="view" value="scheduledJobsHealthCheckDetail"/>
     </request-map>
     <request-map uri="deleteEntityRows">
@@ -2701,6 +2724,7 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="orderPaymentDetail"/>
     </request-map>
+    
     <!-- Rating Review analysis -->
     <request-map uri="ratingReviewAnalysis">
         <security https="true" auth="true"/>
@@ -2862,11 +2886,6 @@
         <response name="error" type="view" value="adminCheckout"/>
     </request-map>
     
-    
-    
-    
-    
-    
     <request-map uri="adminValidateLoyaltyPoints">
         <security https="true" auth="true"/>
         <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="validateLoyaltyPoints"/>
@@ -2900,14 +2919,8 @@
         <event type="java" path="com.osafe.events.OsafeAdminCheckoutEvents" invoke="updateLoyaltyPoints"/>
         <response name="success" type="request" value="adminCheckout"/>
         <response name="error" type="view" value="adminCheckout"/>
-    </request-map>
-    
-    
-    
-    
-    
-    
-    
+    </request-map>    
+
     <request-map uri="setStorePickup">
         <security https="true" auth="true"/>
         <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="setStorePickup"/>
@@ -2932,36 +2945,20 @@
     <request-map uri="adminCalcShipping">
         <security direct-request="false"/>
         <event type="java" path="org.ofbiz.order.shoppingcart.shipping.ShippingEvents" invoke="getShipEstimate"/>
-        <response name="success" type="request" value="adminCalcTaxOptions"/>
+        <response name="success" type="request" value="adminCalculateTax"/>
         <response name="error" type="request" value="adminCheckout"/>
     </request-map>
     
-    <request-map uri="adminCalcTaxOptions">
-      <security https="true" auth="false"/>
-      <event type="simple" path="component://osafe/script/Event/CheckoutEvents.xml" invoke="calcTaxOptions"/>
-      <response name="success" type="request" value="adminCalcTax"/>
-      <response name="shippingAddress" type="request" value="adminCalcTax"/>
-      <response name="storeAddress" type="request" value="adminCalcTaxOnStore"/>
-      <response name="error" type="view" value="adminCheckout"/>
-    </request-map>
-    
-    <request-map uri="adminCalcTaxOnStore">
+    <request-map uri="adminCalculateTax">
         <security direct-request="false"/>
-        <event type="java" path="com.osafe.events.CheckOutEvents" invoke="calcTaxOnStore"/>
-        <response name="success" type="request" value="adminCalcLoyaltyPointsTax"/>
+        <event type="java" path="com.osafe.events.CheckOutEvents" invoke="calculateTax"/>
+        <response name="success" type="request" value="processCartAttribute"/>
         <response name="error" type="request" value="adminCheckout"/>
     </request-map>
-
-    <request-map uri="adminCalcTax">
+	
+	<request-map uri="processCartAttribute">
         <security direct-request="false"/>
-        <event type="java" path="org.ofbiz.order.shoppingcart.CheckOutEvents" invoke="calcTax"/>
-        <response name="success" type="request" value="adminCalcLoyaltyPointsTax"/>
-        <response name="error" type="request" value="adminCheckout"/>
-    </request-map>
-    
-    <request-map uri="adminCalcLoyaltyPointsTax">
-        <security direct-request="false"/>
-        <event type="java" path="com.osafe.events.CheckOutEvents" invoke="calcLoyaltyTax"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="processCartAttribute"/>
         <response name="success" type="request" value="processCheckout"/>
         <response name="error" type="request" value="adminCheckout"/>
     </request-map>
@@ -3046,14 +3043,16 @@
     <request-map uri="adminEmailorder">
         <security https="true" direct-request="false"/>
         <event type="service" path="async" invoke="sendOrderConfirmation"/>
-        <response name="success" type="request-redirect" value="checkoutConfirm"/>
+        <response name="success" type="request" value="checkoutConfirm"/>
         <response name="error" type="view" value="adminCheckout"/>
     </request-map>
     
     <request-map uri="checkoutConfirm">
         <security https="true" auth="true"/>
         <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminCheckoutEvents.xml" invoke="confirmCheckout"/>
-        <response name="success" type="view" value="adminOrderConfirm"/>
+        <response name="success" type="request-redirect" value="orderDetail">
+	        <redirect-parameter name="orderId"/>
+        </response>
         <response name="error" type="view" value="adminCheckout"/>
     </request-map>
     
@@ -3063,7 +3062,7 @@
     </request-map> 
     <request-map uri="adminSetGiftMessage">
         <security https="true" auth="true"/>
-        <event type="java" path="com.osafe.events.OsafeAdminCheckoutEvents" invoke="setGiftMessage"/>
+        <event type="java" path="com.osafe.events.ShoppingCartEvents" invoke="setGiftMessage"/>
         <response name="success" type="request-redirect" value="adminCheckout"/>
         <response name="error" type="view" value="adminGiftMessageDetail"/>
     </request-map>   
@@ -3108,7 +3107,6 @@
     <request-map uri="createManufacturer">
         <security https="true" auth="true"/>
         <event type="service" invoke="createManufacturerGroup"/>
-        <!-- <event type="simple" path="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCustomerServices.xml" invoke="createCustomer"/> -->
         <response name="success" type="request" value="manufacturerManagement"/>
         <response name="error" type="view" value="addManufacturer"/>
     </request-map>
@@ -3257,6 +3255,8 @@
 	<view-map name="headerLinksDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#headerLinksDetail"/>
 	<view-map name="footerContentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#footerContentDetail"/>
     <view-map name="plpContentList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#plpContentList"/>
+    <view-map name="productContentSpotList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productContentSpotList"/>
+    <view-map name="productContentSpotDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#productContentSpotDetail"/>
     <view-map name="plpContentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#plpContentDetail"/>
     <view-map name="addPlpContentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addPlpContentDetail"/>
     <view-map name="plpCategoryContentDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#plpCategoryContentDetail"/>
@@ -3426,6 +3426,7 @@
     
     <view-map name="previewContent" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#previewContent"/>
     <view-map name="previewHomeSpotContent" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#previewHomeSpotContent"/>
+    <view-map name="previewSiteInfoContent" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#previewSiteInfoContent"/>
     
     <view-map name="xmlBFdsdump" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#xmlBFdsdump"/>
     <view-map name="manageBigfishParameter" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageBigfishParameter"/>
@@ -3460,8 +3461,7 @@
     <view-map name="reloadLoyaltyPoints" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#loyaltyPointsOption"/>
     <view-map name="reloadGiftCard" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#giftCardOption"/>
     <view-map name="reloadPromoCode" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#promotionOption"/>
-    <view-map name="reloadBalance" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#paymentOption"/>
-    <view-map name="adminOrderConfirm" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#adminOrderConfirm"/>
+    <view-map name="reloadBalance" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#paymentOptionCheckout"/>
     <view-map name="adminGiftMessageDetail" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#adminGiftMessageDetail"/>
     <view-map name="shippingOption" type="screen" page="component://osafeadmin/widget/AdminCheckoutScreens.xml#shippingOption"/>
     

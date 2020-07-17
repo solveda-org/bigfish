@@ -65,7 +65,7 @@
 	            <string value="11"/>
 	            <string value="59"/>
 	            <string value="2"/>
-	            <field field="parameters.preferredDateFormat"/>
+	            <field field="parameters.entryDateTimeFormat"/>
 	        </call-class-method>
 	        <if-not-empty field="ValidServDateEOD">
 	        	<call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedServEOD">
@@ -83,7 +83,7 @@
 							            <field field="parameters.SERVICE_HOUR"/>
 							               <field field="parameters.SERVICE_MINUTE"/>
 							            <field field="parameters.SERVICE_AMPM"/>
-							            <field field="parameters.preferredDateFormat"/>
+							            <field field="parameters.entryDateTimeFormat"/>
 							        </call-class-method>
 							        <if-empty field="ValidServDateTime">
 							            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStartDateError"/>

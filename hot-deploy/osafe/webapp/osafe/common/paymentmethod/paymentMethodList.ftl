@@ -1,4 +1,5 @@
 <div class="${request.getAttribute("attributeClass")!}">
+	<form method="post" id="paymentMethodForm" name="paymentMethodForm" >
         <input type="hidden" name="paymentMethodId" value="" id="js_paymentMethodId"/>
         <#if savedPaymentMethodValueMaps?has_content>
             <div class="boxList paymentMethodList">
@@ -22,5 +23,6 @@
               <h3>${uiLabelMap.NoSavedPaymentMethodFound}</h3>
             </div>
         </#if>
+    </form>
 </div>
 

@@ -1,3 +1,98 @@
+
+<#macro facetLine facet facetType refinementValueName refinementValue multiFacetRefinedExist multiFacetRefined multiFacetInitialType facetGroupParamList>
+
+    <#assign facetShowItemCount = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"FACET_SHOW_ITEM_CNT")/>
+    <#assign facetMultiSelect = Static["com.osafe.util.Util"].isProductStoreParmTrue(request,"FACET_MULTI_SELECT")/>
+    <#assign filterGroupParamMap = parameters.filterGroupParamMap!requestAttributes.filterGroupParamMap! />
+    <#assign categoryId = ""/>
+    <#if currentProductCategory?exists>
+        <#assign categoryId = currentProductCategory.productCategoryId!"">
+    </#if>
+    <#if !categoryId?has_content>
+        <#assign categoryId = parameters.productCategoryId?if_exists />
+    </#if>
+    <#assign catOrSearchText = ""/>
+    <#if parameters.searchText?has_content>
+        <#assign catOrSearchText = "eCommerceProductList?searchText=" + parameters.searchText/>
+    <#else>
+        <#assign catOrSearchText = "siteSearch?productCategoryId=" + categoryId/>
+    </#if>
+    <#assign refinementValueDisplayName = refinementValue.displayName>
+    <#assign refinementURL = refinementValue.refinementURL>
+    <#assign productCategoryUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${refinementURL}')/>
+    <span class="facetValue">
+        <#if facetMultiSelect>
+            <#assign removeUrl = catOrSearchText/>
+            <#assign removeFilterGroupValue = ""/>
+            <#if filterGroupParamMap?has_content>
+                  <#list filterGroupParamMap.entrySet() as entry>
+                      <#list entry.value as value>
+                          <#if !(refinementValueName.equals(value))>
+                              <#assign removeFilterGroupValue = removeFilterGroupValue+entry.key+":"+StringUtil.wrapString(value)+"|"/>
+                          </#if>
+                      </#list>
+                  </#list>
+                  <#if removeFilterGroupValue?has_content>
+                      <#assign removeUrl = removeUrl+"&filterGroup=${removeFilterGroupValue}"/>
+                  </#if>
+            </#if>
+            <#assign removeUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${removeUrl}')/>
+    
+            <#assign scalarCount = refinementValue.scalarCount/>
+            <#assign useDisable = true/>
+            <#if multiFacetInitialType?has_content && multiFacetInitialType.equalsIgnoreCase(facetType)>
+                <#assign useDisable = false/>
+            </#if>
+            <#if useDisable>
+                <#assign disabled = true/>
+            <#else>
+                <#assign disabled = false/>
+            </#if>
+            <#if multiFacetRefinedExist>
+                <#if multiFacetRefined?has_content>
+                    <#list multiFacetRefined as facetResultRefined>
+                        <#if facetResultRefined.refinementValues?has_content>
+                            <#list facetResultRefined.refinementValues as refinementValueRefined>
+                                <#if refinementValueRefined.name == refinementValue.name && facet.type == facetResultRefined.type>
+                                    <#assign disabled = false/>
+                                    <#assign scalarCount = refinementValueRefined.scalarCount/>
+                                </#if>
+                            </#list>
+                        </#if>
+                    </#list>
+                </#if>
+            <#else>
+                <#assign disabled = false/>
+            </#if>
+            <#if disabled>
+                <#assign scalarCount = 0/>
+            </#if>
+    
+            <input type="checkbox" name="facetValue_${refinementValueName}" id="facetValue_${refinementValueName}" value="Y" onclick="solrSearch(this, '${productCategoryUrl!}', '${removeUrl!}')" <#if facetGroupParamList.contains(refinementValueName)>checked</#if> <#if disabled>disabled='true'</#if>/>
+            <span class="facetValueName <#if disabled>disabled</#if>">
+                <#if facetType?exists && facetType == "CUSTOMER_RATING">
+                    <img alt="${refinementValueDisplayName}" src="/osafe_theme/images/user_content/images/rating_facet_bar_${refinementValue.start}.gif" class="ratingFacetBar">
+                </#if>
+                ${refinementValueDisplayName} <#if facetShowItemCount>(${scalarCount!})</#if>
+            </span>
+        <#else>
+            <#if facet.refinementValues?size == 1>
+                <#if facetType?exists && facetType == "CUSTOMER_RATING">
+                    <img alt="${refinementValueDisplayName}" src="/osafe_theme/images/user_content/images/rating_facet_bar_${refinementValue.start}.gif" class="ratingFacetBar">
+                </#if>
+                ${refinementValueDisplayName} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if>
+            <#else>
+                <a class="facetValueLink" title="${refinementValueName}" href="${productCategoryUrl}">
+                    <#if facetType?exists && facetType == "CUSTOMER_RATING">
+                        <img alt="${refinementValueDisplayName}" src="/osafe_theme/images/user_content/images/rating_facet_bar_${refinementValue.start}.gif" class="ratingFacetBar">
+                    </#if>
+                    ${refinementValueDisplayName} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if>
+                </a>
+            </#if>
+        </#if>
+    </span>
+</#macro>
+
 <#assign categoryId = ""/>
 <#if currentProductCategory?exists>
     <#assign categoryId = currentProductCategory.productCategoryId!"">
@@ -6,7 +101,13 @@
     <#assign categoryId = parameters.productCategoryId?if_exists />
 </#if>
 <#if (requestAttributes.facetList)?exists><#assign facetList = requestAttributes.facetList></#if>
-<#if (requestAttributes.facetListGroup)?exists><#assign facetListGroup = requestAttributes.facetListGroup></#if>
+<#if (requestAttributes.multiFacetInitialType)?exists><#assign multiFacetInitialType = requestAttributes.multiFacetInitialType></#if>
+<#if (requestAttributes.multiFacetGroup)?exists><#assign multiFacetGroup = requestAttributes.multiFacetGroup></#if>
+<#if (requestAttributes.multiFacetGroupRefined)?exists><#assign multiFacetGroupRefined = requestAttributes.multiFacetGroupRefined></#if>
+<#if (requestAttributes.multiFacetPriceRange)?exists><#assign multiFacetPriceRange = requestAttributes.multiFacetPriceRange></#if>
+<#if (requestAttributes.multiFacetPriceRangeRefined)?exists><#assign multiFacetPriceRangeRefined = requestAttributes.multiFacetPriceRangeRefined></#if>
+<#if (requestAttributes.multiFacetCustomerRating)?exists><#assign multiFacetCustomerRating = requestAttributes.multiFacetCustomerRating></#if>
+<#if (requestAttributes.multiFacetCustomerRatingRefined)?exists><#assign multiFacetCustomerRatingRefined = requestAttributes.multiFacetCustomerRatingRefined></#if>
 <#if (requestAttributes.facetListPriceRange)?exists><#assign facetListPriceRange = requestAttributes.facetListPriceRange></#if>
 <#if (requestAttributes.facetListCustomerRating)?exists><#assign facetListCustomerRating = requestAttributes.facetListCustomerRating></#if>
 <#if (requestAttributes.facetCatList)?exists><#assign facetCatList = requestAttributes.facetCatList></#if>
@@ -80,8 +181,8 @@
                                         <#assign refinementValueName = refinementValue.displayName>
                                         <#assign code = refinementValue.name>
                                         <#assign refinementURL = refinementValue.refinementURL>
-                                        <#assign productCategoryUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${refinementURL}')/>
-                                        <a class="facetValueLink" title="${refinementValueName}" href="${productCategoryUrl}">${refinementValueName} <#if facetShowItemCount && !facetMultiSelect>(${refinementValue.scalarCount})</#if></a>
+                                        <#assign productCategoryUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${refinementURL}')/>
+                                        <a class="facetValueLink<#if code?has_content && parameters.productCategoryId?has_content && code == parameters.productCategoryId> selected</#if>" title="${refinementValueName}" href="${productCategoryUrl}">${refinementValueName} <#if facetShowItemCount>(${refinementValue.scalarCount})</#if></a>
                                     </li>
                                     <#if valueSize! lt facetMaxValue>
                                         <#assign facetMaxValue = valueSize>
@@ -91,11 +192,11 @@
                                             <#assign remaining = (facetMaxValue?number - facetMinValue?number) + showAllCount />
                                             <input type="hidden" id="less_${facet.name}" value="${facetMinValue!}" />
                                             <input type="hidden" id="remaining_${facet.name!}" value="${remaining!}" />
-	                                        <a class="js_seeMoreLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if> >${uiLabelMap.FacetSeeMoreLinkCaption}<#if facetShowItemCount && !facetMultiSelect> (${remaining!})</#if></a>
-	                                        <a class="js_seeLessLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if> >${uiLabelMap.FacetSeeLessLinkCaption}</a>
-	                                        <#if showAllCount &gt; 0>
-	                                            <a class="js_showAllLink" href="javascript:void(0);">${uiLabelMap.FacetShowAllCaption} (${showAllCount})</a>
-	                                        </#if>
+                                            <a class="js_seeMoreLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if> >${uiLabelMap.FacetSeeMoreLinkCaption}<#if facetShowItemCount> (${remaining!})</#if></a>
+                                            <a class="js_seeLessLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if> >${uiLabelMap.FacetSeeLessLinkCaption}</a>
+                                            <#if showAllCount &gt; 0>
+                                                <a class="js_showAllLink" href="javascript:void(0);">${uiLabelMap.FacetShowAllCaption} (${showAllCount})</a>
+                                            </#if>
                                         </li>
                                     </#if>
                                 </#list>
@@ -105,111 +206,121 @@
                 </#list>
             </#if>
         </#if>
-
-        <#if facetListPriceRange?has_content>
-            <#list facetListPriceRange as facet>
-                <li>
-                    <h3 class="facetGroup">${facet.name}</h3>
-                    <#if facet.refinementValues?has_content>
-                        <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
-                            <#list facet.refinementValues as refinementValue>
-                                <li class="js_facetValue">
-                                    <#assign refinementValueName = refinementValue.displayName>
-                                    <#assign code = refinementValue.name>
-                                    <#assign refinementURL = refinementValue.refinementURL>
-                                    <#if facet.refinementValues?size == 1>
-                                        ${refinementValueName} <#if facetShowItemCount && !facetMultiSelect>(${refinementValue.scalarCount})</#if>
-                                    <#else>
-                                        <#assign productCategoryUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${refinementURL}')/>
-                                        <a class="facetValueLink" title="${refinementValueName}" href="${productCategoryUrl}">${refinementValueName} <#if facetShowItemCount && !facetMultiSelect>(${refinementValue.scalarCount})</#if></a>
-                                    </#if>
-                                </li>
-                            </#list>
-                        </ul>
-                    </#if>
-                </li>
-            </#list>
-        </#if>
-  
-        <#if facetListCustomerRating?has_content>
-            <#list facetListCustomerRating as facet>
-                <li>
-                    <h3 class="facetGroup">${facet.name}</h3>
-                    <#if facet.refinementValues?has_content>
-                        <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
-                            <#list facet.refinementValues as refinementValue>
-                                <li class="js_facetValue">
-                                    <#assign refinementValueImage = refinementValue.displayImage>
-					                <#assign refinementValueName = refinementValue.displayName>
-					                <#assign code = refinementValue.name>
-					                <#assign refinementURL = refinementValue.refinementURL>
-					                <#assign productCategoryUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${refinementURL}')/>
-                                    <a class="facetValueLink" title="${refinementValueName}" href="${productCategoryUrl}">
-                                        <img alt="${refinementValueName}" src="/osafe_theme/images/user_content/images/rating_facet_bar_${refinementValue.start}.gif" class="ratingFacetBar">
-                                        ${refinementValueName}<#if facetShowItemCount && !facetMultiSelect>(${refinementValue.scalarCount})</#if>
-                                    </a>
-                                </li>
-                            </#list>
-                        </ul>
-                    </#if>
-                </li>
-            </#list>
-        </#if>
   
         <#assign includedSearchFacetGroup = Static["javolution.util.FastList"].newInstance()!""/>
         <#assign SEARCH_FACET_GROUP_INCLUDE = Static["com.osafe.util.Util"].getProductStoreParm(request,"SEARCH_FACET_GROUP_INCLUDE")!"">
         <#if SEARCH_FACET_GROUP_INCLUDE?has_content>
             <#assign includedSearchFacetGroupList = SEARCH_FACET_GROUP_INCLUDE?split(",") />
         </#if>
-		<#if includedSearchFacetGroupList?has_content>
-		    <#list includedSearchFacetGroupList as searchFacetGroup>
-			    <#assign newSearchFacetGroup = includedSearchFacetGroup.add(searchFacetGroup?trim?upper_case)/>
-			</#list>
-		</#if>
-  
-        <#assign filterGroupParms = StringUtil.wrapString(parameters.filterGroup!requestAttributes.filterGroup!) />
-        <#if filterGroupParms?has_content>
-            <#assign filterGroupParmSplit = filterGroupParms?split("|") />
-        </#if>
-        <#assign filterGroupParmValueList = Static["javolution.util.FastList"].newInstance()/>
-        <#assign filterGroupsParmTypeSet = Static["javolution.util.FastList"].newInstance()/>
-        <#list filterGroupParmSplit as filterGroupParm>
-            <#assign changed = filterGroupParmValueList.add(filterGroupParm)/>
-            <#assign filterGroupParmType = filterGroupParm?split(":")/>
-            <#assign changedFilterGroupParmType = filterGroupsParmTypeSet.add(filterGroupParmType[0])/>
-        </#list>
-        <#assign filterGroupParmTypeList = Static["com.osafe.util.Util"].removeDuplicates(filterGroupsParmTypeSet)?if_exists />
-        <#if facetListGroup?has_content>
-            <#list facetListGroup as facetListGrp>
-                <#if filterGroupsParmTypeSet?size == 1 && facetListGrp.type == filterGroupsParmTypeSet?first>
-                    <#assign facetResultMulti = facetListGrp />
-                    <#break>
-                </#if>
+        <#if includedSearchFacetGroupList?has_content>
+            <#list includedSearchFacetGroupList as searchFacetGroup>
+                <#assign newSearchFacetGroup = includedSearchFacetGroup.add(searchFacetGroup?trim?upper_case)/>
             </#list>
         </#if>
-        <#if facetList?has_content>
-            <#list facetList as facetResult>
-                <#if filterGroupsParmTypeSet?size == 1 && facetResult.type == filterGroupsParmTypeSet?first>
-                    <#assign facet = facetResultMulti />
-                <#else>
-                    <#assign facet = facetResult /> 
+
+        <#assign filterGroupParms = StringUtil.wrapString(parameters.filterGroup!requestAttributes.filterGroup!) />
+        <#assign filterGroupParamMap = parameters.filterGroupParamMap!requestAttributes.filterGroupParamMap! />
+
+        <#if facetMultiSelect>
+            <#assign loopFacetListPriceRange = multiFacetPriceRange!/>
+        <#else>
+            <#assign loopFacetListPriceRange = facetListPriceRange!/>
+        </#if>
+
+        <#if loopFacetListPriceRange?has_content>
+            <#list loopFacetListPriceRange as facet>
+
+                <#assign facetGroupParamList = Static["javolution.util.FastList"].newInstance()/>
+                <#if filterGroupParamMap?has_content && filterGroupParamMap.get("PRICE")?has_content>
+                    <#assign facetGroupParamList = Static["org.ofbiz.base.util.UtilGenerics"].checkList(filterGroupParamMap.get("PRICE"))/>
                 </#if>
+
+                <li>
+                    <h3 class="facetGroup">${facet.name}</h3>
+                    <#if facet.refinementValues?has_content>
+                        <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
+                            <#list facet.refinementValues as refinementValue>
+                                <li class="js_facetValue">
+                                    <#assign multiFacetRefinedExist = false/>
+                                    <#if multiFacetPriceRangeRefined?exists>
+                                        <#assign multiFacetRefinedExist = true/>
+                                    </#if>
+                                    <#assign refinementValueName = refinementValue.name>
+                                    <#assign refinementValueName = refinementValueName.replaceAll("price:", "")>
+                                    <@facetLine facet=facet facetType="PRICE" refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetPriceRangeRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList/>
+                                </li>
+                            </#list>
+                        </ul>
+                    </#if>
+                </li>
+            </#list>
+        </#if>
+
+        <#if facetMultiSelect>
+            <#assign loopFacetListCustomerRating = multiFacetCustomerRating!/>
+        <#else>
+            <#assign loopFacetListCustomerRating = facetListCustomerRating!/>
+        </#if>
+  
+        <#if loopFacetListCustomerRating?has_content>
+            <#list loopFacetListCustomerRating as facet>
+
+                <#assign facetGroupParamList = Static["javolution.util.FastList"].newInstance()/>
+                <#if filterGroupParamMap?has_content && filterGroupParamMap.get("CUSTOMER_RATING")?has_content>
+                    <#assign facetGroupParamList = Static["org.ofbiz.base.util.UtilGenerics"].checkList(filterGroupParamMap.get("CUSTOMER_RATING"))/>
+                </#if>
+
+                <li>
+                    <h3 class="facetGroup">${facet.name}</h3>
+                    <#if facet.refinementValues?has_content>
+                        <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
+                            <#list facet.refinementValues as refinementValue>
+                                <li class="js_facetValue">
+                                    <#assign multiFacetRefinedExist = false/>
+                                    <#if multiFacetCustomerRatingRefined?exists>
+                                        <#assign multiFacetRefinedExist = true/>
+                                    </#if>
+                                    <#assign refinementValueName = refinementValue.name>
+                                    <#assign refinementValueName = refinementValueName.replaceAll("customerRating:", "")>
+                                    <@facetLine facet=facet facetType="CUSTOMER_RATING" refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetCustomerRatingRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList/>
+                                </li>
+                            </#list>
+                        </ul>
+                    </#if>
+                </li>
+            </#list>
+        </#if>
+
+        <#if facetMultiSelect>
+            <#assign loopFacetList = multiFacetGroup!/>
+        <#else>
+            <#assign loopFacetList = facetList!/>
+        </#if>
+
+        <#if loopFacetList?has_content>
+            <#list loopFacetList as facetResult>
+                <#assign facet = facetResult /> 
+
+                <#assign facetGroupParamList = Static["javolution.util.FastList"].newInstance()/>
+                <#if filterGroupParamMap?has_content && filterGroupParamMap.get(facet.type)?has_content>
+                    <#assign facetGroupParamList = Static["org.ofbiz.base.util.UtilGenerics"].checkList(filterGroupParamMap.get(facet.type))/>
+                </#if>
+
+                <#assign facetMinValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MIN")?if_exists/>
+                <#assign facetMaxValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MAX")?if_exists/>
+                <#if facetMinValue?has_content>
+                    <#assign facetMinValue = facetMinValue?number />
+                </#if>
+                <#if facetMaxValue?has_content>
+                    <#assign facetMaxValue = facetMaxValue?number />
+                </#if>
+                
                 <#if parameters.searchText?has_content && !parameters.productCategoryId?has_content>
-                    <#assign facetMinValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MIN")?if_exists/>
-                    <#assign facetMaxValue = Static["com.osafe.util.Util"].getProductStoreParm(request,"FACET_VALUE_MAX")?if_exists/>
-                    <#if facetMinValue?has_content>
-                        <#assign facetMinValue = facetMinValue?number />
+                    <#if facetMultiSelect>
+                        <#assign valueSize = facet.refinementValues.size()/>
+                    <#else>
+                        <#assign valueSize = facet.refinementValues.size() - facetGroupParamList.size()/>
                     </#if>
-                    <#if facetMaxValue?has_content>
-                        <#assign facetMaxValue = facetMaxValue?number />
-                    </#if>
-                    <#assign filterGroupParmValueSize = 0/>
-                    <#list filterGroupParmValueList as filterGroupParmValue>
-                        <#if filterGroupParmValue.contains(facet.type)>
-                            <#assign filterGroupParmValueSize = filterGroupParmValueSize + 1/>
-                        </#if>
-                    </#list>
-                    <#assign valueSize = facet.refinementValues.size() - filterGroupParmValueSize/>
                     <#-- This is the amount of items that will be displayed next to More Link -->
                     <#assign showAllCount=0/>
                     <#if (valueSize > facetMaxValue)>
@@ -218,21 +329,21 @@
               
                     <#if includedSearchFacetGroup?has_content && includedSearchFacetGroup.contains(facet.productFeatureGroupId?upper_case!) && valueSize &gt; 0>
                         <li>
-                            <h3 class="facetGroup <#if facetMinValue == 0>js_showHideFacetGroupLink<#if !filterGroupsParmTypeSet?contains(facet.type)> js_seeMoreFacetGroupLink<#else> js_seeLessFacetGroupLink</#if></#if>">${facet.name}</h3>
+                            <h3 class="facetGroup <#if facetMinValue == 0>js_showHideFacetGroupLink<#if !facetGroupParamList?has_content> js_seeMoreFacetGroupLink<#else> js_seeLessFacetGroupLink</#if></#if>">${facet.name}</h3>
                             <#if facet.refinementValues?has_content>
                                 <#assign indx=0/>
                                 <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
-              
+
                                     <#list facet.refinementValues as refinementValue>
                                         <#assign refinementGroupValue = facet.type+":"+refinementValue.name />
-                                        <#if !filterGroupParmValueList.contains(refinementGroupValue)>
+                                        <#if !facetGroupParamList.contains(refinementValue.name) || facetMultiSelect>
                                             <#assign indx = indx + 1/>
                                             <#assign hideClass="showThem"/>
                                             <#-- items exposed when Show More Link is clicked -->
                                             <#if (indx > facetMinValue)>
                                                 <#assign hideClass="js_hideThem"/>
                                             </#if>
-                                            <#if facetMinValue == 0 && filterGroupsParmTypeSet?contains(facet.type)>
+                                            <#if facetMinValue == 0 && facetGroupParamList?has_content>
                                                 <#assign hideClass="showThem"/>
                                             </#if>
                                             <#-- items exposed when Show All Link is clicked -->
@@ -240,10 +351,12 @@
                                                 <#assign hideClass="js_showAllOfThem"/>
                                             </#if>
                                             <li class="js_facetValue ${hideClass}">
-                                                <#assign refinementValueName = refinementValue.displayName>
-                                                <#assign refinementURL = refinementValue.refinementURL>
-                                                <#assign productCategoryUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${refinementURL}')/>
-                                                <a class="facetValueLink" title="${refinementValueName}" href="${productCategoryUrl}">${refinementValueName} <#if facetShowItemCount && !facetMultiSelect>(${refinementValue.scalarCount})</#if></a>
+                                                <#assign multiFacetRefinedExist = false/>
+                                                <#if multiFacetGroupRefined?exists>
+                                                    <#assign multiFacetRefinedExist = true/>
+                                                </#if>
+                                                <#assign refinementValueName = refinementValue.name>
+                                                <@facetLine facet=facet facetType=facet.type refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetGroupRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList/>
                                             </li>
                                             <#if valueSize! lt facetMaxValue>
                                                 <#assign facetMaxValue = valueSize>
@@ -251,7 +364,7 @@
                                             <#if (indx > facetMinValue) && indx == valueSize>
                                                 <li class="js_facetValue" id="facet_${facet.productFeatureGroupId!}">
                                                     <#assign remaining = (facetMaxValue?number - facetMinValue?number) + showAllCount />
-                                                    <a class="js_seeMoreLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if>>${uiLabelMap.FacetSeeMoreLinkCaption}<#if facetShowItemCount && !facetMultiSelect> (${remaining!})</#if></a>
+                                                    <a class="js_seeMoreLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if>>${uiLabelMap.FacetSeeMoreLinkCaption}<#if facetShowItemCount> (${remaining!})</#if></a>
                                                     <a class="js_seeLessLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if>>${uiLabelMap.FacetSeeLessLinkCaption}</a>
                                                     <#if showAllCount &gt; 0>
                                                         <a class="js_showAllLink" href="javascript:void(0);">${uiLabelMap.FacetShowAllCaption} (${showAllCount})</a>
@@ -289,13 +402,11 @@
                     <#if facetMaxValue?has_content>
                         <#assign facetMaxValue = facetMaxValue?number/>
                     </#if>
-                    <#assign filterGroupParmValueSize = 0/>
-                    <#list filterGroupParmValueList as filterGroupParmValue>
-                        <#if filterGroupParmValue.contains(facet.type)>
-                            <#assign filterGroupParmValueSize = filterGroupParmValueSize + 1/>
-                        </#if>
-                    </#list>
-                    <#assign valueSize = facet.refinementValues.size()- filterGroupParmValueSize?number/>
+                    <#if facetMultiSelect>
+                        <#assign valueSize = facet.refinementValues.size()/>
+                    <#else>
+                        <#assign valueSize = facet.refinementValues.size() - facetGroupParamList.size()/>
+                    </#if>
         
                     <#-- This is the amount of items that will be displayed next to More Link -->
                     <#assign showAllCount=0/>
@@ -305,41 +416,43 @@
                
                     <#if ((productFeatureCatGrpAppl.getTimestamp("fromDate"))?exists && (!nowTimestamp.before(productFeatureCatGrpAppl.getTimestamp("fromDate")))) && (!productFeatureCatGrpAppl.getTimestamp("thruDate")?has_content || (!nowTimestamp.after(productFeatureCatGrpAppl.getTimestamp("thruDate")!))) && valueSize &gt; 0>
                         <li>
-                            <h3 class="facetGroup <#if facetMinValue == 0>js_showHideFacetGroupLink<#if !filterGroupsParmTypeSet?contains(facet.type)> js_seeMoreFacetGroupLink<#else> js_seeLessFacetGroupLink</#if></#if>">${facet.name}
+                            <h3 class="facetGroup <#if facetMinValue == 0>js_showHideFacetGroupLink<#if !facetGroupParamList?has_content> js_seeMoreFacetGroupLink<#else> js_seeLessFacetGroupLink</#if></#if>">${facet.name}
                                 <#if productFeatureCatGrpAppl.facetTooltip?has_content>
-            	                    <#assign facetTooltipTxt = Static["com.osafe.util.Util"].formatToolTipText("${productFeatureCatGrpAppl.facetTooltip}", "${productFeatureCatGrpAppl.facetTooltip?length}")/>
-				                    <#if facetTooltipTxt?has_content >
-				                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this);" onMouseout="hideTooltip()" class="toolTipLink">
-				                        <span class="tooltipIcon"></span>
-				                      </a>
-				                    </#if>
-				                </#if>
-			                </h3>
+                                    <#assign facetTooltipTxt = Static["com.osafe.util.Util"].formatToolTipText("${productFeatureCatGrpAppl.facetTooltip}", "${productFeatureCatGrpAppl.facetTooltip?length}")/>
+                                    <#if facetTooltipTxt?has_content >
+                                      <a href="javascript:void(0);" onMouseover="javascript:showTooltip('${StringUtil.wrapString(facetTooltipTxt)!""}', this);" onMouseout="hideTooltip()" class="toolTipLink">
+                                        <span class="tooltipIcon"></span>
+                                      </a>
+                                    </#if>
+                                </#if>
+                            </h3>
                             <#if facet.refinementValues?has_content>
                                 <#assign indx=0/>
                                 <ul id="${facet.name?lower_case?replace(" ","_")}" class="facetGroup">
                 
                                     <#list facet.refinementValues as refinementValue>
                                         <#assign refinementGroupValue = facet.type+":"+refinementValue.name />
-                                        <#if !filterGroupParmValueList.contains(refinementGroupValue)>
+                                        <#if !facetGroupParamList.contains(refinementValue.name) || facetMultiSelect>
                                             <#assign indx = indx + 1/>
                                             <#assign hideClass="showThem"/>
                                             <#-- items exposed when Show More Link is clicked -->
                                             <#if (indx > facetMinValue)>
                                                 <#assign hideClass="js_hideThem"/>
                                             </#if>
-                                            <#if facetMinValue == 0 && filterGroupsParmTypeSet?contains(facet.type)>
+                                            <#if facetMinValue == 0 && facetGroupParamList?has_content>
                                                 <#assign hideClass="showThem"/>
                                             </#if>
                                             <#-- items exposed when Show All Link is clicked -->
                                             <#if (indx > (facetMaxValue))>
-	                                            <#assign hideClass="js_showAllOfThem"/>
-	                                        </#if>
+                                                <#assign hideClass="js_showAllOfThem"/>
+                                            </#if>
                                             <li class="js_facetValue ${hideClass}">
-                                                <#assign refinementValueName = refinementValue.displayName>
-                                                <#assign refinementURL = refinementValue.refinementURL>
-                                                <#assign productCategoryUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${refinementURL}')/>
-                                                <a class="facetValueLink" title="${refinementValueName}" href="${productCategoryUrl}">${refinementValueName} <#if facetShowItemCount && !facetMultiSelect>(${refinementValue.scalarCount})</#if></a>
+                                                <#assign multiFacetRefinedExist = false/>
+                                                <#if multiFacetGroupRefined?exists>
+                                                    <#assign multiFacetRefinedExist = true/>
+                                                </#if>
+                                                <#assign refinementValueName = refinementValue.name>
+                                                <@facetLine facet=facet facetType=facet.type refinementValueName=refinementValueName refinementValue=refinementValue multiFacetRefinedExist=multiFacetRefinedExist multiFacetRefined=multiFacetGroupRefined?if_exists multiFacetInitialType=multiFacetInitialType?if_exists facetGroupParamList=facetGroupParamList/>
                                             </li>
                                             <#if valueSize! lt facetMaxValue>
                                                 <#assign facetMaxValue = valueSize>
@@ -347,11 +460,11 @@
                                             <#if (indx > facetMinValue) && indx == valueSize>
                                                 <li class="js_facetValue" id="facet_${facet.productFeatureGroupId}">
                                                     <#assign remaining = (facetMaxValue?number - facetMinValue?number) + showAllCount />
-                                                    <a class="js_seeMoreLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if>>${uiLabelMap.FacetSeeMoreLinkCaption}<#if facetShowItemCount && !facetMultiSelect> (${remaining!})</#if></a>
+                                                    <a class="js_seeMoreLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if>>${uiLabelMap.FacetSeeMoreLinkCaption}<#if facetShowItemCount> (${remaining!})</#if></a>
                                                     <a class="js_seeLessLink" href="javascript:void(0);" <#if facetMinValue == 0>style="display:none;"</#if>>${uiLabelMap.FacetSeeLessLinkCaption}</a>
                                                     <#if showAllCount &gt; 0>
-	                                                    <a class="js_showAllLink" href="javascript:void(0);">${uiLabelMap.FacetShowAllCaption} (${showAllCount})</a>
-	                                                </#if>
+                                                        <a class="js_showAllLink" href="javascript:void(0);">${uiLabelMap.FacetShowAllCaption} (${showAllCount})</a>
+                                                    </#if>
                                                 </li>
                                             </#if>
                                         </#if>

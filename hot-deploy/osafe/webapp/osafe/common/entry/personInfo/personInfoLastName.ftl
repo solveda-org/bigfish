@@ -1,6 +1,9 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#if person?has_content>
   <#assign lastName= person.lastName!""/>
+<#-- for Facebook login -->
+<#elseif parameters.fbLast_name?has_content>
+  <#assign lastName= parameters.fbLast_name!""/>
 </#if>
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <div class="${request.getAttribute("attributeClass")!}">

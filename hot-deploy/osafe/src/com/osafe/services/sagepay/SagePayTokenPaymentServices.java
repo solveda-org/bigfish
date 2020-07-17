@@ -45,6 +45,7 @@ import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.GenericServiceException;
 import org.ofbiz.service.LocalDispatcher;
 import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.base.util.UtilNumber;
 
 public class SagePayTokenPaymentServices {
 
@@ -232,15 +233,15 @@ public class SagePayTokenPaymentServices {
                     String itemDescription=orderItem.getString("itemDescription");
                     BigDecimal qty = orderItem.getBigDecimal("quantity");
                     BigDecimal unitPrice = orderItem.getBigDecimal("unitPrice");
-                    BigDecimal itemTotal = unitPrice.multiply(qty).setScale(2);
+                    BigDecimal itemTotal = unitPrice.multiply(qty).setScale(2, UtilNumber.getBigDecimalRoundingMode("order.rounding"));
                     orderItemTotal = orderItemTotal.add(itemTotal);
                     qtyItemTotal = qtyItemTotal.add(qty);
                     orderSubTotal = orderSubTotal.add(unitPrice);
                     sb.append(orderItem.getString("itemDescription")+ ":");
                 	/*Quantity of item 1:*/ 
-                    sb.append(orderItem.getBigDecimal("quantity").setScale(0)+ ":");
+                    sb.append(orderItem.getBigDecimal("quantity").setScale(0, UtilNumber.getBigDecimalRoundingMode("order.rounding"))+ ":");
                 	/*Unit cost item 1 without tax:*/ 
-                    sb.append(orderItem.getBigDecimal("unitPrice").setScale(2).toPlainString()+ ":");
+                    sb.append(orderItem.getBigDecimal("unitPrice").setScale(2, UtilNumber.getBigDecimalRoundingMode("order.rounding")).toPlainString()+ ":");
                 	/*Tax applied to item 1:*/ 
                     sb.append(":");
                 	/*Cost of Item 1 including tax:*/ 
@@ -249,8 +250,8 @@ public class SagePayTokenPaymentServices {
                     sb.append(itemTotal.toPlainString() + ":");
                 }
                 BigDecimal orderAdjustment = totalOrderAmount.subtract(orderItemTotal); 
-                sb.append("Delivery:---:---:---:---:" + orderAdjustment.setScale(2).toPlainString() + ":");
-                sb.append("Total:" + qtyItemTotal.setScale(0).toPlainString() +":" + orderSubTotal.setScale(2).toPlainString() + ":---:---:" + totalOrderAmount.setScale(2).toPlainString());
+                sb.append("Delivery:---:---:---:---:" + orderAdjustment.setScale(2, UtilNumber.getBigDecimalRoundingMode("order.rounding")).toPlainString() + ":");
+                sb.append("Total:" + qtyItemTotal.setScale(0, UtilNumber.getBigDecimalRoundingMode("order.rounding")).toPlainString() +":" + orderSubTotal.setScale(2, UtilNumber.getBigDecimalRoundingMode("order.rounding")).toPlainString() + ":---:---:" + totalOrderAmount.setScale(2, UtilNumber.getBigDecimalRoundingMode("order.rounding")).toPlainString());
                 basketInfo.put("basket",sb.toString());
 
 /*                

@@ -6,6 +6,9 @@ import org.ofbiz.entity.condition.*
 import org.ofbiz.entity.util.*
 import org.ofbiz.order.order.*
 import org.ofbiz.webapp.control.*
+import org.ofbiz.product.product.ProductWorker;
+import org.ofbiz.product.product.ProductContentWrapper;
+import com.osafe.control.SeoUrlHelper;
 
 emailParameters = UtilProperties.getResourceBundleMap("parameters_email_styles.xml", locale);
 if (UtilValidate.isNotEmpty(emailParameters))
@@ -131,7 +134,7 @@ if (UtilValidate.isNotEmpty(orderId))
        billingLocations = orderReadHelper.getBillingLocations();
        billingAddress = EntityUtil.getFirst(billingLocations);
        
-       orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelated("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
+       orderPaymentPreferences = EntityUtil.filterByAnd(orderHeader.getRelatedCache("OrderPaymentPreference"), [EntityCondition.makeCondition("statusId", EntityOperator.NOT_EQUAL, "PAYMENT_CANCELLED")]);
        paymentMethods = [];
        paymentMethodType = "";
        orderPaymentPreferences.each { opp ->
@@ -215,15 +218,33 @@ if (UtilValidate.isNotEmpty(partyId))
         }
     }
 }
+productId = parameters.productId;
+if (UtilValidate.isNotEmpty(productId)) 
+{
+	product =  delegator.findOne("Product", UtilMisc.toMap("productId",productId), false);
+	if (UtilValidate.isNotEmpty(product))
+	{
+		urlProductId = product.productId;
+		productCategoryId=null;
+        productCategoryMemberList = product.getRelated("ProductCategoryMember");
+        productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList,true);
+        productCategoryMemberList = EntityUtil.orderBy(productCategoryMemberList,UtilMisc.toList("sequenceNum"));
+        if(UtilValidate.isNotEmpty(productCategoryMemberList))
+        {
+            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+            productCategoryId = productCategoryMember.productCategoryId; 
+        }    
+		
+         globalContext.put("PRODUCT",product);
+         globalContext.put("PRODUCT_URL_ID",urlProductId);
+         globalContext.put("PRODUCT_ID",productId);
+         globalContext.put("PRODUCT_CATEGORY_ID",productCategoryId);
+	}
+}
+
 shoppingListId = context.shoppingListId;
 if (UtilValidate.isNotEmpty(shoppingListId)) 
 {
 	shoppingCartInfoList = delegator.findByAndCache("ShoppingListItem", [shoppingListId : shoppingListId]);
 	globalContext.put("CART_ITEMS",shoppingCartInfoList);
-}
-
-localDispatcherName = UtilProperties.getPropertyValue("client-deployment.properties", "localDispatcherName");
-if (UtilValidate.isNotEmpty(localDispatcherName))
-{
-  globalContext.put("DISPATCHER_NAME",localDispatcherName);
 }

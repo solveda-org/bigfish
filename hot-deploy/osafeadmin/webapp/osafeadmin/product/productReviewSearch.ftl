@@ -5,13 +5,13 @@
       <div class="entry">
         <label>${uiLabelMap.FromDateCaption}</label>
         <div class="entryInput from">
-          <input class="dateEntry" type="text" name="from" maxlength="40" value="${parameters.from!from!defaultFromDate?string(preferredDateFormat)!""}"/>
+          <input class="dateEntry" type="text" name="from" maxlength="40" value="${parameters.from!from!defaultFromDate?string(entryDateTimeFormat)!""}"/>
         </div>
       </div> 
       <div class="entry medium">
         <label>${uiLabelMap.ToCaption}</label>
         <div class="entryInput to">
-          <input class="dateEntry" type="text" name="to" maxlength="40" value="${parameters.to!to!nowTimestamp?string(preferredDateFormat)!""}"/>
+          <input class="dateEntry" type="text" name="to" maxlength="40" value="${parameters.to!to!nowTimestamp?string(entryDateTimeFormat)!""}"/>
         </div>
       </div> 
     </div>
@@ -25,14 +25,15 @@
       <div class="entry medium">
           <label>${uiLabelMap.StatusCaption}</label>
           <#assign intiCb = "${parameters.initializedCB!initializedCB}"/>
-          <#if parameters.status?has_content>
+          <#assign status = parameters.status!/>
+          <#if status?has_content>
               <#assign intiCb = "Y"/>
           </#if>
           <div class="entryInput checkbox medium">
              <input type="checkbox" class="checkBoxEntry" name="srchall" id="srchall" value="Y" onclick="javascript:setCheckboxes('${searchFormName!""}','srch')" <#if parameters.srchall?has_content || ((intiCb?exists) && (intiCb == "N"))>checked</#if> />${uiLabelMap.CommonAll}
-             <input class="srchReviewPend" type="checkbox" id="srchReviewPend" name="srchReviewPend" value="Y" <#if parameters.srchReviewPend?has_content || ((intiCb?exists) && (intiCb == "N")) || (parameters.status == "PRR_PENDING" )>checked</#if>/>${uiLabelMap.PendingLabel}
-             <input class="srchReviewApprove" type="checkbox" id="srchReviewApprove" name="srchReviewApprove" value="Y" <#if parameters.srchReviewApprove?has_content || ((intiCb?exists) && (intiCb == "N")) || (parameters.status == "PRR_APPROVED" )>checked</#if>/>${uiLabelMap.ApprovedLabel}
-             <input class="srchReviewReject" type="checkbox" id="srchReviewReject" name="srchReviewReject" value="Y" <#if parameters.srchReviewReject?has_content || ((intiCb?exists) && (intiCb == "N")) || (parameters.status == "PRR_DELETED" )>checked</#if>/>${uiLabelMap.DeletedLabel}
+             <input class="srchReviewPend" type="checkbox" id="srchReviewPend" name="srchReviewPend" value="Y" <#if parameters.srchReviewPend?has_content || ((intiCb?exists) && (intiCb == "N")) || (status == "PRR_PENDING" )>checked</#if>/>${uiLabelMap.PendingLabel}
+             <input class="srchReviewApprove" type="checkbox" id="srchReviewApprove" name="srchReviewApprove" value="Y" <#if parameters.srchReviewApprove?has_content || ((intiCb?exists) && (intiCb == "N")) || (status == "PRR_APPROVED" )>checked</#if>/>${uiLabelMap.ApprovedLabel}
+             <input class="srchReviewReject" type="checkbox" id="srchReviewReject" name="srchReviewReject" value="Y" <#if parameters.srchReviewReject?has_content || ((intiCb?exists) && (intiCb == "N")) || (status == "PRR_DELETED" )>checked</#if>/>${uiLabelMap.DeletedLabel}
           </div>
      </div>
     </div>

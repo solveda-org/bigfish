@@ -100,10 +100,6 @@ input[type="radio"]:focus {
     border: none;
 }
 
-textarea {
-    float: left;
-}
-
 textarea.largeArea {
     width: 100%;
 }
@@ -233,39 +229,37 @@ table {
 }
 
 .boxListItemTabular {
-    border: 1px solid #aaaaaa;
+    border: 1px solid #AAAAAA;
+    display: table-row;
     float: left;
     margin: 5px 0;
     width: 100%;
 }
 
-.boxListItemTabular .group {
-    float: left; /* default alignment; override as needed */
+.boxListItemTabular .group,
+.boxListItemTabular .grouping {
+    display: table-cell;
+    vertical-align: top;
 }
 
-
 .boxListItemTabular .displayList li {  /* default styles */
-    float: left;
-    max-width: 150px;
-    min-height: 40px; /* provides smooth wrapping for spans without content */
+    display: inline-block;
+    vertical-align: top;
 }
 
 .boxListItemTabular .displayList li li {  /* default styles */
-    max-width: none;
+    padding: 0;
 }
 
-.boxListItemTabular label,
-.boxListItemTabular span,
-.boxListItemTabular .displayList li div a {
+.boxListItemTabular label {
     display: block;
     text-align: left; /* Default Alignment */
 }
 
-.boxListItemTabular .displayList li.action div a {
-    display: inline-block;
-    width: auto; /* for buttons */
+.boxListItemTabular span {
+    display: block;
+    text-align: left; /* Default Alignment */
 }
-
 
 /* --- Display Boxes  --- */
 
@@ -283,6 +277,10 @@ table {
     width: 100%;
 }
 
+.displayList li {
+   padding: 4px; /* Default padding for all elements */
+}
+
 .displayList li:after {
    content: " "; /* Older browser do not support empty content */
    visibility: hidden;
@@ -293,16 +291,6 @@ table {
 
 .displayList li.even {
      background: none repeat scroll 0 0 #eeeeee;
-}
-
-.displayList li div {
-    display: table;
-    padding: 4px;
-    width: 100%;
-}
-
-.displayList li div>div {
-    padding: 0; /* cancels out padding in nested divs */
 }
 
 .displayList li ul li, 
@@ -339,10 +327,6 @@ table {
    display: block;
    height: 0;
    clear: both;
-}
-
-.displayList.summary div {
-  padding: 2px 0;
 }
 
 /* --- Display Action List --- */
@@ -456,12 +440,11 @@ table {
 }
 
 .entryField {
-    display: inline-block;
+    margin: 0 0 0 250px; /* Margin equals label width; prevents wrapping under label */
 }
 
 .counter {
     clear: left;
-    float: left;
 }
 
 .instructions {
@@ -470,8 +453,8 @@ table {
 }
 
 .textCounter {
-    display: block;
     font-size: 12px;
+    padding-left: 10px;
 }
 
 .entryHelper {
@@ -521,12 +504,33 @@ table {
     float: left;
 }
 
+.multiAddressShipItem .entry.radioOption .radioOptionText {
+    width: 235px!important;
+}
+
 .shippingMethod .entry.radioOption {
     border-bottom: 2px dotted #666666;
 }
 
 .entry.radioOption .radioOptionTextAdditional {
     float: right;
+}
+
+
+label.radioOptionLabel,
+label.checkboxOptionLabel {
+    display: inline;
+    float: none!important;
+    padding: 0!important;
+    width: auto !important;
+}
+
+label.radioOptionLabel span,
+label.checkboxOptionLabel span {
+    color: #2b2b2b;
+    display: inline;
+    font-size: 14px;
+    font-weight: normal !important;
 }
 
 .addressSection {
@@ -540,9 +544,10 @@ table {
 }
 
 .displayList.address li {
-    display: block;
-    float: none;
-    width: auto;
+    display: block!important;
+    float: none!important;
+    padding:0 !important;
+    width: auto!important;
 }
 
 .displayList.address li div {
@@ -553,6 +558,40 @@ table {
     display: inline;
     margin: 0 2px 0 0;
 }
+
+.multiAddressItems.grouping.grouping1,
+.multiAddressItems.group.group2,
+.shippingGroupCartItem.grouping.grouping1,
+.shippingGroupCartItem.group.group2 {
+    width: 100%;
+}
+
+.multiAddressItemAddress  {
+    width: 275px;
+}
+
+.shippingGroupSummaryShipAddress   {
+    width: 275px;
+}
+
+.shippingGroupSummaryShipOption {
+    width: 275px;
+}
+
+.multiAddressItems.group.group1,
+.shippingGroupCartItem.group.group1 {
+    clear: left;
+    float: left;
+}
+
+.shippingGroupShipGroupItem ul {
+
+}
+
+.groupRow {
+   display: table-row;
+}
+
 
 /* --- input lengths and styles  ---  */
 
@@ -602,10 +641,6 @@ table {
 
 .userPasswordConfirm input {
      width: 200px;
-}
-
-.entry .telephone {
-    display: inline-block;
 }
 
 .phone3 {
@@ -658,6 +693,7 @@ a.standardBtn { /* Styles defined here will apply to other buttons unless overri
     font-size: 14px;
     padding: 5px 10px;
     white-space: nowrap;
+    -webkit-appearance: none;
 }
 
 input.standardBtn[type="submit"] span,
@@ -1519,6 +1555,11 @@ a.submitOrder:active {
     margin: 0 0 5px 0;
 }
 
+.shipOption span {
+   display: inline;
+   margin: 0 2px 0 0;
+}
+
 /* === Home Page  === */
 
 .eCommerceHotSpot {
@@ -1662,9 +1703,6 @@ a.seeLessLink:hover {
     margin: 0 0 5px 0;
 }
 
-.productItemList li.action { /* centers add to cart and wishlist buttons */
-    text-align: center;
-}
 
 /* === PLP Results Navigation  === */
 
@@ -1799,7 +1837,6 @@ a.seeLessLink:hover {
 .plpQuicklook_displayDialog {
     left: auto !important;
     margin: 0 16%;
-    top: 10% !important;
 }
 
 .Quicklook.group1 {
@@ -1877,7 +1914,7 @@ a.seeLessLink:hover {
 .PDP.group3 label {
     float: left;
     text-align: right;
-    width: 100px;
+    width: 110px;
 }
 
 .selectableFeature {  /* takes padding off container; each feature determines padding; see below */
@@ -1889,7 +1926,9 @@ a.seeLessLink:hover {
 }
 
 .selectableFeatures {  /* applies padding to each feature; see above */
+    float: left;
     padding: 4px 0 !important;
+    width: 100%;
 }
 
 .selectableFeatures select {  
@@ -1909,7 +1948,7 @@ a.seeLessLink:hover {
    margin: 0 0 0 150px;
 }
 
-.pdpAddToCart {
+.action.pdpAddToCart {
     display: inline-block;
     padding: 0 0 0 105px;
 }
@@ -1918,7 +1957,7 @@ a.seeLessLink:hover {
      text-align: center;
 }
 
-.pdpAddToWishlist {
+.action.pdpAddToWishlist {
     display: inline-block;
 }
 
@@ -1942,6 +1981,8 @@ li.pdpLongDescription {
 
 .pdpDistinguishingFeatureList div {
     border-bottom: 2px dotted #CECECE;
+    display: inline-block;
+    width: 100%;
 }
 
 .pdpDistinguishingFeatureList label {
@@ -1969,15 +2010,15 @@ li.pdpLongDescription {
     width: 200px!important;
 }
 
-.pdpReviewRead {
+.action.pdpReviewRead {
     display: inline-block;
 }
 
-.pdpReviewWrite {
+.action.pdpReviewWrite {
     display: inline-block;
 }
 
-.pdpReviewWrite.noReviews {
+.action.pdpReviewWrite.noReviews {
     display: block;
     text-align: center;
 }
@@ -2287,12 +2328,6 @@ table#rateObj2Filled {
 
 /*--- Payment Information ---*/
 
-.PaymentMethodItems li {
-     width: 14.285714285714285714285714285714%;
-     max-width: none!important;
-     min-width: 120px;
-}
-
 .paymentMethodItemList li div {
     height: 45px;
 }
@@ -2306,11 +2341,10 @@ table#rateObj2Filled {
 .addressBookItem {
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid;
-    min-height: 220px;
-    min-width: 200px;
+    min-height: 250px;
+    width: 250px!important;
     padding: 10px 10px 40px 10px; /* Bottom padding covers absolute position buttons below */
     position: relative;
-    width: auto !important;
 }
 
 .addressBookItem .button {
@@ -2319,26 +2353,20 @@ table#rateObj2Filled {
     position: absolute;
 }
 
+.addressBookItem .standardBtn  {
+    margin: 0 0 5px;
+}
+
 /* --- Order Status --- */
 
-.OrderHistoryOrderDetails li {
-     width: 16.66666666666666666666666666%;
-     max-width: none!important;
-     min-width: 120px;
+.string.orderNumber {
+    width: 90px;
 }
 
-.OrderHistoryOrderDetails li div {
-    height: 45px;
+.OrderHistoryOrderDetails.group.group2 li {
+    width: 32%;
 }
 
-.orderHistoryOrderDetailsReorderButton {
-    float: right!important; 
-}
-
-.orderHistoryOrderDetailsReorderButton div {
-    float: right !important;
-    text-align: right;
-}
 
 /* --- Order Detail --- */
 
@@ -2359,7 +2387,7 @@ table#rateObj2Filled {
 }
 
 .itemName.reorderItemsItemName {
-    width: 200px !important;
+
 }
 
 .itemDescription.reorderItemsItemDescription {
@@ -2381,28 +2409,40 @@ table#rateObj2Filled {
 /* === Shopping Cart Page Defaults === */
 
 .displayList.cartItemList > li {
-    padding: 10px 0 0;
+    margin: 10px 0 0;
 }
 
-.itemPrice,
-.itemTotal,
-.itemOfferPrice {
-    min-width: 100px;
-    padding: 10px 0 0 10px !important;
+.itemQty,
+.itemUpdateButton,
+.itemRemoveButton {
+    display: inline-block !important;
+}
+
+.itemUpdateButton,
+.itemRemoveButton {
+    padding: 0!important;
 }
 
 /* --- Show Cart Groups --- */
 
 .boxListItemTabular.cartItem .group1 {
-    float: left;
-}
-
-.boxListItemTabular.cartItem .group2 {
 
 }
 
-.boxListItemTabular.cartItem .group3 {
+.boxListItemTabular.cartItem .group2,
+.boxListItemTabular.order .group2,
+.boxListItemTabular.orderItem .group2 {
+   width: 100%;
+}
 
+.boxListItemTabular.cartItem .group3,
+.boxListItemTabular.order .group3,
+.boxListItemTabular.orderItem .group3 {
+    background: none repeat scroll 0 0 #EAEAEA;
+    border-left: 1px solid #AAAAAA;
+}
+
+.boxListItemTabular.ReorderItems .group3 {
 
 }
 
@@ -2415,7 +2455,6 @@ table#rateObj2Filled {
 }
 
 .displayList.cartItemList label {
-    visibility: hidden; /* exposed using .firstRow */
     float: none;
     padding: 0;
 }
@@ -2425,13 +2464,17 @@ table#rateObj2Filled {
 }
 
 .itemName {
-    max-width: none !important;
-    width: 250px !important;
+width: 40%;
 }
 
 .itemDescription {
-    max-width: none !important;
-    width: 200px !important;
+width: 26%;
+}
+
+.itemTotal,
+.reorderItemsItemPrice,
+.orderTotalAmount   {
+width: 90px;
 }
 
 .itemDescription div label {
@@ -2448,7 +2491,7 @@ table#rateObj2Filled {
 }
 
 .itemQty {
-    max-width: 90px!important;
+
 }
 
 .itemQty div label {
@@ -2463,11 +2506,11 @@ table#rateObj2Filled {
 }
 
 .itemOfferPrice {
-    min-width: 90px;
+
 }
 
 .itemUpdateButton {
-    width: 26px!important;
+
 }
 
 .itemUpdateButton div {
@@ -2482,7 +2525,7 @@ table#rateObj2Filled {
     margin: 25px 0 0;
     padding: 0;
     position: relative;
-    width: 18px;
+    width: 18px!important;
 }
 
 .itemUpdateButton .update:hover {
@@ -2495,23 +2538,27 @@ table#rateObj2Filled {
 }
 
 .itemRemoveButton {
-    clear: left;
     width: 26px!important;
 }
 
 .itemRemoveButton .delete {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: url("/osafe_theme/images/user_content/images/cartRemove.png") no-repeat scroll 0 0 transparent;
     border: medium none;
+    display: block!important;
+    height: 18px;
+    margin: 24px 0 0;
     padding: 0;
+    position: relative;
+    width: 18px!important;
 }
 
 .itemRemoveButton .delete:hover {
-    background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: url("/osafe_theme/images/user_content/images/cartRemove.png") no-repeat scroll 0 0 transparent;
     border: none!important;
 }
 
 .itemRemoveButton .delete span {
-    font-size: x-small;
+    display: none!important;
 }
 
 .itemCheckbox {
@@ -2596,26 +2643,11 @@ table#rateObj2Filled {
     text-decoration: none;
 }
 
-.multiAddressItems.group2,
-.multiShipOptionsOptions.group2,
-.shippingGroupShipGroupItem.group2 {
-    width: 350px; /* sized to accommodate length of shipping options */
-}
-
-.radioOptionText .displayList.address {
-    max-width: 315px;  /* maximum address width; wraps address under radio button */
-}
-
 .multiAddressItemAddress,
 .multiShipOptionsShipOptions  {
-    max-width: none !important;
+    width: 275px!important;
 }
 
-.multiShipOptions,
-.shippingGroupSummary {
-    float: none;
-    overflow: auto;
-}
 
 .multiShipOptions .radioOptionText {
      max-width: 60%;
@@ -2633,11 +2665,6 @@ table#rateObj2Filled {
     padding: 0;
 }
 
-.shippingGroupShipGroupItem.group2 .shippingGroupSummary,
-.shippingGroupCartItem.group2 .shippingGroupSummary {
-    float: left!important;
-    width: 50%;
-}
 
 /* === Store Locator ===*/
 
@@ -2845,8 +2872,10 @@ table#rateObj2Filled {
     width: 150px !important;
 }
 
-.showWishlistOrderItemsItemRemoveButton .delete {
-     margin: 10px 0 0;
+.itemAddToCartButton,
+.reorderButton  {
+    display: list-item!important;
+    text-align: center!important;
 }
 
 
@@ -2943,9 +2972,8 @@ table#rateObj2Filled {
 }
 
 .content-messages p {
-    float: left;
     font-size: 14px;
-    margin: 3px 0 0 5px;
+    margin: 4px 0 0 35px;
 }
 
 .content-messages ul {
@@ -4090,7 +4118,7 @@ display: none;
    text-decoration: none;
    border: 1px solid #CCC;
    background-color: white;
-   padding: 8px;
+   padding: 18px;
    text-align:center;
    background-image: url(/osafe_theme/images/user_content/images/loading.gif);
    background-repeat: no-repeat;
@@ -4187,3 +4215,44 @@ display: none;
 	position:absolute;
 	display:block;
 }
+
+.facetFilterAjaxImg {
+    background: none repeat scroll 0 0 #000000;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    margin: 0;
+    opacity: 0.5;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 101;
+    text-align:center;
+    padding-top:250px;
+    background-image: url(/osafe_theme/images/user_content/images/loading.gif);
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+.facetValueName.disabled {
+    opacity: 0.5;
+}
+
+.loadingImg {
+    background-image: url(/osafe_theme/images/user_content/images/loading.gif);
+    background-repeat: no-repeat;
+    width:90px!important;
+    height:43px!important;
+}
+
+li a.removeMultiSearchItem {
+    background: url("/osafe_theme/images/user_content/images/removeFacetIcon.png") no-repeat scroll 0 0 transparent;
+    border: medium none;
+    display: inline-block;
+    height: 8px;
+    position: relative;
+    width: 8px;
+}
+

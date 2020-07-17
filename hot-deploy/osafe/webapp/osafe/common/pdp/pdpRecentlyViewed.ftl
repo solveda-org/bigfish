@@ -53,6 +53,24 @@
            ${setRequestAttribute("plpItemId",productId)}
            <!-- DIV for Displaying Recommended productss STARTS here -->
            ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPRecentDivSequence")}
+           <#if isPlpPdpInStoreOnly?exists>
+               <script language="JavaScript" type="text/javascript">eval(checkProductInStorePlp('${isPlpPdpInStoreOnly}', '${uiSequenceScreen}_${productId}'));</script>
+           </#if>
+            ${virtualJavaScript?if_exists}
+            ${virtualDefaultJavaScript?if_exists}
+            <#-- Prefill first select box (virtual products only) -->
+            <#if plpVariantTree?exists && 0 < plpVariantTree.size()>
+              <#assign rowNo = 0/>
+              <#list plpFeatureOrder as feature>
+                  <#if rowNo == 0>
+                      <script language="JavaScript" type="text/javascript">eval("list" + "${StringUtil.wrapString(feature)}_${uiSequenceScreen}_${plpProduct.productId}" + "()");</script>
+                  <#else>
+                      <script language="JavaScript" type="text/javascript">eval("listFT" + "${StringUtil.wrapString(feature)}_${uiSequenceScreen}_${plpProduct.productId}" + "()");</script>
+                      <script language="JavaScript" type="text/javascript">eval("listLiFT" + "${StringUtil.wrapString(feature)}_${uiSequenceScreen}_${plpProduct.productId}" + "()");</script>
+                  </#if>
+              <#assign rowNo = rowNo + 1/>
+              </#list> 
+            </#if>
           <#if count == maxRecentlyViewedProducts?number>
             <#break>
           </#if>

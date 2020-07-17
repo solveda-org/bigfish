@@ -11,12 +11,15 @@
 	        <#if paramChosenShippingMethod?has_content>
                 <#assign chosenShippingMethod= paramChosenShippingMethod/>
             <#else>
+  	            <#if defaultShipMethodId?has_content && defaultShipMethodId == carrierMethod.productStoreShipMethId>
+                     <#assign chosenShippingMethod = shippingMethod/>
+  	            </#if>
   	           <#if !chosenShippingMethod?has_content>
-                <#assign chosenShippingMethod = shippingMethod/>
+                 <#assign chosenShippingMethod = shippingMethod/>
                </#if>
 	        </#if>
               <div class="entry radioOption">
-               <label class="radioOptionLabel">
+                <label class="radioOptionLabel">
                 <input type="radio" name="shipping_method_${shipGroupIndex}" value="${shippingMethod}" <#if (StringUtil.wrapString(shippingMethod) == StringUtil.wrapString(chosenShippingMethod!""))>checked="checked" </#if>/>
                 <span class="radioOptionText">
                   <#if carrierMethod.partyId != "_NA_" && carrierShipmentMethod?has_content>

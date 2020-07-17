@@ -13,7 +13,7 @@ import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.product.product.ProductWorker;
 import com.osafe.util.Util;
 import org.ofbiz.base.util.UtilMisc;
-import com.osafe.services.CatalogUrlServlet;
+import com.osafe.control.SeoUrlHelper;
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.entity.Delegator;
 import com.osafe.services.InventoryServices;
@@ -23,16 +23,37 @@ import org.apache.commons.lang.StringUtils;
 import org.ofbiz.product.catalog.CatalogWorker;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.base.util.Debug;
+import org.ofbiz.order.order.*;
 
 // Get the Product Store
 productStore = ProductStoreWorker.getProductStore(request);
-context.productStore = productStore;
 productStoreId=productStore.getString("productStoreId");
 currentCatalogId = CatalogWorker.getCurrentCatalogId(request);
+
+//Get currency
+CURRENCY_UOM_DEFAULT = Util.getProductStoreParm(request,"CURRENCY_UOM_DEFAULT");
+currencyUom = CURRENCY_UOM_DEFAULT;
+
+product = null;
+cartLine = null;
+urlProductId = "";
+productId = "";
+productCategoryId = "";
+quantity = 0;
+price = "";
+displayPrice = "";
+offerPrice = "";
+cartItemAdjustment = null;
+Map cartAttrMap = FastMap.newInstance();
+recurrencePrice = "";
+
+recurrencePrice = "";
+recurrenceItem = "N";
+recurrenceSavePercent = null;
+
 int cartLineIndex = 0;
 cartLineIndexStr = StringUtils.trimToEmpty(parameters.cartLineIndex);
 ShoppingCart shoppingCart = session.getAttribute("shoppingCart");
-context.shoppingCart=shoppingCart;
 if(UtilValidate.isNotEmpty(cartLineIndexStr) && UtilValidate.isNotEmpty(shoppingCart))
 {
 	try
@@ -45,21 +66,130 @@ if(UtilValidate.isNotEmpty(cartLineIndexStr) && UtilValidate.isNotEmpty(shopping
 	}
 	cartLine = shoppingCart.findCartItem(cartLineIndex);
 }
+cartLineIndex = shoppingCart.getItemIndex(cartLine);
 
-//Get currency
-CURRENCY_UOM_DEFAULT = Util.getProductStoreParm(request,"CURRENCY_UOM_DEFAULT");
-currencyUom = CURRENCY_UOM_DEFAULT;
-if(UtilValidate.isEmpty(currencyUom))
+//Get Order Information
+orderId = parameters.orderId;
+orderItemSeqId = parameters.orderItemSeqId;
+shipGroupSeqId = parameters.shipGroupSeqId;
+orderHeader = null;
+orderReadHelper = null;
+orderItem = null;
+orderItemShipGroupAssoc = null;
+
+if(UtilValidate.isNotEmpty(orderId))
 {
-	currencyUom = shoppingCart.getCurrency();
+	orderHeader = delegator.findOne("OrderHeader", [orderId : orderId], true);
+	orderReadHelper = new OrderReadHelper(orderHeader);
+	orderItems = orderReadHelper.getOrderItems();
+	if(UtilValidate.isNotEmpty(orderItemSeqId))
+	{
+		orderItem = delegator.findOne("OrderItem", [orderId : orderId, orderItemSeqId : orderItemSeqId], true);
+		if(UtilValidate.isNotEmpty(shipGroupSeqId))
+		{
+			orderItemShipGroupAssoc = delegator.findOne("OrderItemShipGroupAssoc", [orderId : orderId, orderItemSeqId : orderItemSeqId, shipGroupSeqId : shipGroupSeqId], true);
+		}
+	}
+	
 }
 
-cartLineIndex = shoppingCart.getItemIndex(cartLine);
-product = cartLine.getProduct();
+if(UtilValidate.isEmpty(currencyUom))
+{
+	if(UtilValidate.isNotEmpty(shoppingCart))
+	{
+		currencyUom = shoppingCart.getCurrency();
+	}
+	if(UtilValidate.isNotEmpty(orderReadHelper))
+	{
+		currencyUom = orderReadHelper.getCurrency();
+	}
+}
 
-urlProductId = cartLine.getProductId();
-productId = cartLine.getProductId();
-productCategoryId = cartLine.getProductCategoryId();
+if(UtilValidate.isNotEmpty(orderItem))
+{
+	product = orderItem.getRelatedOneCache("Product");
+	urlProductId = product.getString("productId");
+	productId = product.getString("productId");
+	productCategoryId = orderItem.getString("productCategoryId");
+	if(UtilValidate.isNotEmpty(orderItemShipGroupAssoc))
+	{
+		quantity = orderItemShipGroupAssoc.getBigDecimal("quantity");
+	}
+	price = orderItem.getBigDecimal("unitPrice");
+	displayPrice = orderItem.getBigDecimal("unitListPrice");
+	recurrencePrice =  orderItem.unitPrice;
+	
+	cartItemAdjustment = (orderReadHelper.getOrderItemAdjustmentsTotal(orderItem, true, false, false)).divide(quantity);
+	offerPrice = (orderItem.unitPrice).add(cartItemAdjustment);
+	
+	itemSubTotal = offerPrice.multiply(quantity);
+	//orderReadHelper.getOrderItemSubTotal(orderItem);
+	
+	orderItemAttributes = orderItem.getRelatedCache("OrderItemAttribute");
+	if(UtilValidate.isNotEmpty(orderItemAttributes))
+    {
+        for(GenericValue orderItemAttribute : orderItemAttributes)
+    	{
+        	cartAttrMap.put(orderItemAttribute.getString("attrName"), orderItemAttribute.getString("attrValue"))
+    	}
+    }
+	
+	if (UtilValidate.isNotEmpty(orderItem.shoppingListId))
+	{
+        priceContext = [product : product, prodCatalogId : currentCatalogId,
+                    currencyUomId : currencyUom, autoUserLogin : autoUserLogin];
+        priceContext.webSiteId = webSiteId;
+        priceContext.productStoreId = productStoreId;
+        priceContext.checkIncludeVat = "Y";
+        priceContext.productPricePurposeId = "PURCHASE";
+        priceContext.partyId = orderReadHelper.getPlacingParty().partyId;  
+        productPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+		productPrice = productPriceMap.price;
+		recurrenceSavePercent = (productPrice - recurrencePrice) / productPrice;
+    	recurrenceItem = "Y";
+	}
+	
+}
+if(UtilValidate.isNotEmpty(cartLine))
+{
+	product = cartLine.getProduct();
+	urlProductId = cartLine.getProductId();
+	productId = cartLine.getProductId();
+	productCategoryId = cartLine.getProductCategoryId();
+	quantity = cartLine.getQuantity();
+	price = cartLine.getBasePrice();
+	displayPrice = cartLine.getDisplayPrice();
+	recurrencePrice = cartLine.getRecurringDisplayPrice();
+	itemSubTotal = cartLine.getDisplayItemSubTotal();
+	
+	cartItemAdjustment = cartLine.getOtherAdjustments();
+	if (UtilValidate.isNotEmpty(cartItemAdjustment) && cartItemAdjustment < 0)
+	{
+		offerPrice = cartLine.getDisplayPrice() + (cartItemAdjustment/cartLine.getQuantity());
+	}
+	cartAttrMap = cartLine.getOrderItemAttributes();
+	
+	//If the item was added to the Shopping Cart as a Recurrence Item
+	//The Base and Display Price in the cart is changed to match the Recurrence Price.
+	//To display the Recurrence Savings the system is calling calculate product price here to get back the original Default price.
+	if (UtilValidate.isNotEmpty(cartLine.getShoppingListId()) && "SLT_AUTO_REODR".equals(cartLine.getShoppingListId()))
+	{
+		priceContext = [product : product, prodCatalogId : currentCatalogId,
+					currencyUomId : currencyUom, autoUserLogin : autoUserLogin];
+		priceContext.webSiteId = webSiteId;
+		priceContext.productStoreId = productStoreId;
+		priceContext.checkIncludeVat = "Y";
+		priceContext.agreementId = shoppingCart.getAgreementId();
+		priceContext.productPricePurposeId = "PURCHASE";
+		priceContext.partyId = shoppingCart.getPartyId();
+		productPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+		productPrice = productPriceMap.price;
+		recurrenceSavePercent = (productPrice - recurrencePrice) / productPrice;
+		recurrenceItem = "Y";
+		
+	}
+}
+
 virtualProduct="";
 if(UtilValidate.isEmpty(productCategoryId))
 {
@@ -78,7 +208,7 @@ if(UtilValidate.isEmpty(productCategoryId))
 }
 if(UtilValidate.isNotEmpty(product.isVariant) && "Y".equals(product.isVariant))
 {
-	virtualProduct = ProductWorker.getParentProduct(cartLine.getProductId(), delegator);
+	virtualProduct = ProductWorker.getParentProduct(productId, delegator);
 	urlProductId = virtualProduct.productId;
 	if(UtilValidate.isEmpty(productCategoryId))
 	{
@@ -94,7 +224,7 @@ if(UtilValidate.isNotEmpty(product.isVariant) && "Y".equals(product.isVariant))
 }
 
 //Product Image URL
-productImageUrl = ProductContentWrapper.getProductContentAsText(cartLine.getProduct(), "SMALL_IMAGE_URL", locale, dispatcher);
+productImageUrl = ProductContentWrapper.getProductContentAsText(product, "SMALL_IMAGE_URL", locale, dispatcher);
 if(UtilValidate.isEmpty(productImageUrl) && UtilValidate.isNotEmpty(virtualProduct))
 {
 	productImageUrl = ProductContentWrapper.getProductContentAsText(virtualProduct, "SMALL_IMAGE_URL", locale, dispatcher);
@@ -105,7 +235,7 @@ if(UtilValidate.isNotEmpty(productImageUrl) && "null".equals(productImageUrl))
 	productImageUrl = "";
 }
 //Product Alt Image URL
-productImageAltUrl = ProductContentWrapper.getProductContentAsText(cartLine.getProduct(), "SMALL_IMAGE_ALT_URL", locale, dispatcher);
+productImageAltUrl = ProductContentWrapper.getProductContentAsText(product, "SMALL_IMAGE_ALT_URL", locale, dispatcher);
 if(UtilValidate.isEmpty(productImageAltUrl) && UtilValidate.isNotEmpty(virtualProduct))
 {
 	productImageAltUrl = ProductContentWrapper.getProductContentAsText(virtualProduct, "SMALL_IMAGE_ALT_URL", locale, dispatcher);
@@ -117,34 +247,10 @@ if(UtilValidate.isNotEmpty(productImageAltUrl) && "null".equals(productImageAltU
 }
 
 //Product Name
-productName = ProductContentWrapper.getProductContentAsText(cartLine.getProduct(), "PRODUCT_NAME", locale, dispatcher);
+productName = ProductContentWrapper.getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher);
 if(UtilValidate.isEmpty(productName) && UtilValidate.isNotEmpty(virtualProduct))
 {
 	productName = ProductContentWrapper.getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher);
-}
-
-price = cartLine.getBasePrice();
-displayPrice = cartLine.getDisplayPrice();
-offerPrice = "";
-cartItemAdjustment = cartLine.getOtherAdjustments();
-if (UtilValidate.isNotEmpty(cartItemAdjustment) && cartItemAdjustment < 0)
-{
-	offerPrice = cartLine.getDisplayPrice() + (cartItemAdjustment/cartLine.getQuantity());
-}
-if (cartLine.getIsPromo() || (shoppingCart.getOrderType() == "SALES_ORDER" && !security.hasEntityPermission("ORDERMGR", "_SALES_PRICEMOD", session)))
-{
-	price= cartLine.getDisplayPrice();
-}
-else 
-{ 
-	if (cartLine.getSelectedAmount() > 0)
-	{
-		price = cartLine.getBasePrice() / cartLine.getSelectedAmount();
-	}
-	else
-	{
-		price = cartLine.getBasePrice();
-	}
 }
 
 //BUILD CONTEXT MAP FOR PRODUCT_FEATURE_TYPE_ID and DESCRIPTION(EITHER FROM PRODUCT_FEATURE_GROUP OR PRODUCT_FEATURE_TYPE)
@@ -184,7 +290,7 @@ productFeatureAndAppls = delegator.findByAndCache("ProductFeatureAndAppl", UtilM
 productFeatureAndAppls = EntityUtil.filterByDate(productFeatureAndAppls,true);
 productFeatureAndAppls = EntityUtil.orderBy(productFeatureAndAppls,UtilMisc.toList('sequenceNum'));
 
-productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
+productFriendlyUrl = SeoUrlHelper.makeSeoFriendlyUrl(request,'eCommerceProductDetail?productId='+urlProductId+'&productCategoryId='+productCategoryId+'');
 
 IMG_SIZE_CART_H = Util.getProductStoreParm(request,"IMG_SIZE_CART_H");
 IMG_SIZE_CART_W = Util.getProductStoreParm(request,"IMG_SIZE_CART_W");
@@ -213,39 +319,6 @@ else
 	}
 }
 
-recurrenceItem = "N";
-recurrenceSavePercent = null;
-//quantity
-quantity = 0;
-if(UtilValidate.isNotEmpty(cartLine))
-{
-	quantity = cartLine.getQuantity();
-	
-	//If the item was added to the Shopping Cart as a Recurrence Item
-	//The Base and Display Price in the cart is changed to match the Recurrence Price.
-	//To display the Recurrence Savings the system is calling calculate product price here to get back the original Default price.
-	recurrencePrice = cartLine.getRecurringDisplayPrice();
-	if (UtilValidate.isNotEmpty(cartLine.getShoppingListId()) && "SLT_AUTO_REODR".equals(cartLine.getShoppingListId()))
-	{
-			priceContext = [product : cartLine.getProduct(), prodCatalogId : currentCatalogId,
-						currencyUomId : shoppingCart.getCurrency(), autoUserLogin : autoUserLogin];
-			priceContext.webSiteId = webSiteId;
-			priceContext.productStoreId = productStoreId;
-			priceContext.checkIncludeVat = "Y";
-			priceContext.agreementId = shoppingCart.getAgreementId();
-			priceContext.productPricePurposeId = "PURCHASE";
-			priceContext.partyId = shoppingCart.getPartyId();
-			productPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
-			productPrice = productPriceMap.price;
-			recurrenceSavePercent = (productPrice - recurrencePrice) / productPrice;
-			recurrenceItem = "Y";
-		
-	}
-}
-
-
-//cart item attributes
-Map cartAttrMap = cartLine.getOrderItemAttributes();
 context.cartAttrMap = cartAttrMap;
 
 context.recurrencePrice = recurrencePrice;
@@ -278,11 +351,13 @@ context.currencyUom = currencyUom;
 //quantity
 context.quantity = quantity;
 //item subtotal
-context.itemSubTotal = cartLine.getDisplayItemSubTotal();
+context.itemSubTotal = itemSubTotal;
 context.cartItemAdjustment = cartItemAdjustment;
 //inventory
 context.stockInfo = stockInfo;
 context.inStock = inStock;
-
+context.productStore = productStore;
+context.shoppingCart=shoppingCart;
+context.shipGroupSeqId = shipGroupSeqId;
 
 

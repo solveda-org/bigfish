@@ -43,7 +43,7 @@
             <#local macroLevelUrl = "eCommerceProductList">
         </#if>
     </#if>
-  <#local macroLevelUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'${macroLevelUrl}?productCategoryId=${category.productCategoryId}')>
+  <#local macroLevelUrl = Static["com.osafe.control.SeoUrlHelper"].makeSeoFriendlyUrl(request,'${macroLevelUrl}?productCategoryId=${category.productCategoryId}')>
     <li class="${levelClass} ${itemIndexClass}"><a class="${levelClass}" href="${macroLevelUrl}"><#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if></a>
         <#assign megaMenuActiveContentId = "" />
         <#if megaMenuContentId?has_content>

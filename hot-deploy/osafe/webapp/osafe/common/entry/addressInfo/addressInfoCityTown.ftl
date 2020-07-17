@@ -5,6 +5,11 @@
 <#if postalAddressData?has_content>
     <#assign city = postalAddressData.city!"">
 </#if>
+
+<#if parameters.fbLocationCity?has_content>
+	<#assign city = parameters.fbLocationCity/>
+</#if>
+
 <!-- address city entry -->
 <#assign mandatory= request.getAttribute("attributeMandatory")!"N"/>
 <div class="${request.getAttribute("attributeClass")!}">

@@ -158,11 +158,11 @@ if(UtilValidate.isNotEmpty(orderId))
 
 if(UtilValidate.isNotEmpty(orderDateFrom))
 {
-    if (OsafeAdminUtil.isDateTime(orderDateFrom, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(orderDateFrom, entryDateTimeFormat))
     {
         try 
         {
-              orderDateFrom = ObjectType.simpleTypeConvert(orderDateFrom, "Timestamp", preferredDateFormat, locale);
+              orderDateFrom = ObjectType.simpleTypeConvert(orderDateFrom, "Timestamp", entryDateTimeFormat, locale);
         } catch (Exception e) 
         {
             errMsg = "Parse Exception orderDateFrom: " + orderDateFrom;
@@ -188,11 +188,11 @@ if(UtilValidate.isNotEmpty(productId))
 
 if(UtilValidate.isNotEmpty(orderDateTo))
 {
-    if (OsafeAdminUtil.isDateTime(orderDateTo, preferredDateFormat))
+    if (OsafeAdminUtil.isDateTime(orderDateTo, entryDateTimeFormat))
     {
         try
         {
-             orderDateTo = ObjectType.simpleTypeConvert(orderDateTo, "Timestamp", preferredDateFormat, locale);
+             orderDateTo = ObjectType.simpleTypeConvert(orderDateTo, "Timestamp", entryDateTimeFormat, locale);
         } 
         catch (Exception e) 
         {

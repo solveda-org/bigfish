@@ -20,8 +20,8 @@
     	<#assign regTotal = regTotal + visitorCountInfo.regVisitorCount>
     	<#assign regItemsTotal = regItemsTotal + visitorCountInfo.regItemsVisitorCount>
         <#assign hasNext = visitorCountInfo_has_next>
-        <#assign dateFrom = Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(visitorCountInfo.tempFromDate, preferredDateFormat)!>
-        <#assign dateTo = Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(visitorCountInfo.tempToDate, preferredDateFormat)!>
+        <#assign dateFrom = Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(visitorCountInfo.tempFromDate, entryDateTimeFormat)!>
+        <#assign dateTo = Static["com.osafe.util.OsafeAdminUtil"].convertDateTimeFormat(visitorCountInfo.tempToDate, entryDateTimeFormat)!>
         <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
              <td class="qtyCol firstCol" >${visitorCountInfo.month!""}</a></td>
              <td class="qtyCol">
