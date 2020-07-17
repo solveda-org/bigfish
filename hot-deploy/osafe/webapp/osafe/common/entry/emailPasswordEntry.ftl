@@ -2,13 +2,11 @@
 <#assign partyDBAllowSolicit=allowSolicitation!""/>
 <#assign partyDBEmailPref=partyEmailPreference!""/>
 <div id="emailPasswordEntry" class="displayBox">
-<div class="displayBoxHeader">
-      <span class="displayBoxHeaderCaption">${uiLabelMap.EmailAddressHeading}</span>
-</div>      
+<h3>${uiLabelMap.EmailAddressHeading}</h3>
   <fieldset class="col">
     <div class="entry">
       <label for= "CUSTOMER_EMAIL"><@required/>${uiLabelMap.EmailAddressCaption}</label>
-      <input type="text"  maxlength="100" class="emailAddress" name="CUSTOMER_EMAIL" id="CUSTOMER_EMAIL" value="${requestParameters.CUSTOMER_EMAIL!requestParameters.USERNAME?if_exists}" onchange="changeEmail();" maxlength="255"/>
+      <input type="text"  maxlength="100" class="emailAddress" name="CUSTOMER_EMAIL" id="CUSTOMER_EMAIL" value="${requestParameters.CUSTOMER_EMAIL!requestParameters.USERNAME!requestParameters.USERNAME_NEW!}" onchange="changeEmail();" maxlength="255"/>
       <span class="instructions">${uiLabelMap.EmailAddressInstructionsInfo}</span>
       <input type="hidden" name="UNUSEEMAIL" id="UNUSEEMAIL" value="on" />
       <input type="hidden" name="USERNAME" id="USERNAME" value="${requestParameters.USERNAME?if_exists}" maxlength="255"/>

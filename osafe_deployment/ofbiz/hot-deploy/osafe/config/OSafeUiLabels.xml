@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><!--
+﻿<?xml version="1.0" encoding="UTF-8"?><!--
         To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
         Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
     --><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
@@ -12,7 +12,7 @@
         <description>ListPriceCaption</description>
     </property>
     <property key="OnlinePriceCaption">
-        <value xml:lang="en">Sale Price:</value>
+        <value xml:lang="en">Price:</value>
         <category>PDP</category>
         <description>OnlinePriceCaption</description>
     </property>
@@ -35,6 +35,21 @@
         <value xml:lang="en">Choose from a previously saved card:</value>
         <category>CHECK_OUT</category>
         <description>UseSavedCardlabel</description>
+    </property>
+   <property key="PaymentOptionsHeading">
+        <value xml:lang="en">Pay Now or Pay in the Store?</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentMethodCaption</description>
+    </property>
+    <property key="PayNowlabel">
+        <value xml:lang="en">Pay Now</value>
+        <category>CHECKOUT</category>
+        <description>Pay Now</description>
+    </property>
+    <property key="PayInStorelabel">
+        <value xml:lang="en">Pay in the Store</value>
+        <category>CHECKOUT</category>
+        <description>Pay in Store</description>
     </property>
     <property key="PayWithAnotherCardlabel">
         <value xml:lang="en">Pay with another card, my details are below:</value>
@@ -367,6 +382,16 @@
         <category>RATING_REVIEW</category>
         <description>YourNicknameCaption</description>
     </property>
+    <property key="ReadLabel">
+        <value xml:lang="en">Read</value>
+        <category>RATING_REVIEW</category>
+        <description>ReadReviewLabel</description>
+    </property>
+    <property key="ReviewsLabel">
+        <value xml:lang="en">Review(s)</value>
+        <category>RATING_REVIEW</category>
+        <description>ReadReviewLabel</description>
+    </property>
     <property key="ReviewTitleCaption">
         <value xml:lang="en">Review Title:</value>
         <category>RATING_REVIEW</category>
@@ -649,6 +674,11 @@
         <category>ORDER_STATUS</category>
         <description>TaxLabel</description>
     </property>
+    <property key="OrderStatusChangeMessage">
+        <value xml:lang="en">The status of the below order is now </value>
+        <category>ORDER_STATUS</category>
+        <description>OrderStatusChangeMessage</description>
+    </property>
     <property key="OverallRatingLabel">
         <value xml:lang="en">Overall Rating</value>
         <category>RATING_REVIEW</category>
@@ -750,7 +780,7 @@
         <description>WriteReviewLabel</description>
     </property>
     <property key="CustomerRatingLabel">
-        <value xml:lang="en">Customer Rating:</value>
+        <value xml:lang="en">Customer Rating</value>
         <category>RATING_REVIEW</category>
         <description>CustomerRatingLabel</description>
     </property>
@@ -806,7 +836,7 @@
         <description>Text Preference</description>
     </property>
     <property key="RegistrationSolicitCheckboxLabel">
-        <value xml:lang="en">Sign me up for Up and Runway emails</value>
+        <value xml:lang="en">Please send me exclusive discounts and special promotions</value>
         <category>CHECKOUT</category>
         <description>Solicitation checkbox</description>
     </property>
@@ -885,6 +915,181 @@
         <category>PDP</category>
         <description>PDP TAB Label</description>
     </property>
+    <property key="PdpTabLabel6">
+        <value xml:lang="en">TAB 6</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel7">
+        <value xml:lang="en">TAB 7</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel8">
+        <value xml:lang="en">TAB 8</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel9">
+        <value xml:lang="en">TAB 9</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel10">
+        <value xml:lang="en">TAB 10</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel11">
+        <value xml:lang="en">TAB 11</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel12">
+        <value xml:lang="en">TAB 12</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel13">
+        <value xml:lang="en">TAB 13</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel14">
+        <value xml:lang="en">TAB 14</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel15">
+        <value xml:lang="en">TAB 15</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel16">
+        <value xml:lang="en">TAB 16</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel17">
+        <value xml:lang="en">TAB 17</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel18">
+        <value xml:lang="en">TAB 18</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel19">
+        <value xml:lang="en">TAB 19</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel20">
+        <value xml:lang="en">TAB 20</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel21">
+        <value xml:lang="en">TAB 21</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel22">
+        <value xml:lang="en">TAB 22</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel23">
+        <value xml:lang="en">TAB 23</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel24">
+        <value xml:lang="en">TAB 24</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel25">
+        <value xml:lang="en">TAB 25</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel26">
+        <value xml:lang="en">TAB 26</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel27">
+        <value xml:lang="en">TAB 27</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel28">
+        <value xml:lang="en">TAB 28</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel29">
+        <value xml:lang="en">TAB 29</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel30">
+        <value xml:lang="en">TAB 30</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel31">
+        <value xml:lang="en">TAB 31</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel32">
+        <value xml:lang="en">TAB 32</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel33">
+        <value xml:lang="en">TAB 33</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel34">
+        <value xml:lang="en">TAB 34</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel35">
+        <value xml:lang="en">TAB 35</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel36">
+        <value xml:lang="en">TAB 36</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel37">
+        <value xml:lang="en">TAB 37</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel38">
+        <value xml:lang="en">TAB 38</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel39">
+        <value xml:lang="en">TAB 39</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel40">
+        <value xml:lang="en">TAB 40</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
     <!-- **** Page Title *************************************** -->
     <property key="LoginTitle">
         <value xml:lang="en">Sign In</value>
@@ -896,10 +1101,10 @@
         <category>PAGE_HEADING_H1</category>
         <description>ForgotPasswordTitle</description>
     </property>
-    <property key="GuestCheckoutTitle">
-        <value xml:lang="en">Guest Checkout</value>
+    <property key="SinglePageCheckoutTitle">
+        <value xml:lang="en">Single Page Checkout</value>
         <category>PAGE_HEADING_H1</category>
-        <description>GuestCheckoutTitle</description>
+        <description>SinglePageCheckoutTitle</description>
     </property>
     <property key="ChangePasswordTitle">
         <value xml:lang="en">Change Password</value>
@@ -920,6 +1125,16 @@
         <value xml:lang="en">Shipping Address</value>
         <category>PAGE_HEADING_H1</category>
         <description>ShippingAddressTitle</description>
+    </property>
+    <property key="CustomerAddressTitle">
+        <value xml:lang="en">Billing and Shipping Information</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>CustomerAddressTitle</description>
+    </property>
+    <property key="AnonCustomerInformationTitle">
+        <value xml:lang="en">Personal, Billing and Shipping Information</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>AnonCustomerInformationTitle</description>
     </property>
     <property key="EditShippingAddressTitle">
         <value xml:lang="en">Edit Shipping Address</value>
@@ -1519,6 +1734,11 @@
         <category>MESSAGE_INFO</category>
         <description>RequestCatalogTitle</description>
     </property>
+    <property key="SelectAddressCaption">
+        <value xml:lang="en">Select from Address Book:</value>
+        <category>MESSAGE_INFO</category>
+        <description>SelectAddressCaption</description>
+    </property>
     <property key="AddressLine1Caption">
         <value xml:lang="en">Address 1:</value>
         <category>MESSAGE_INFO</category>
@@ -1664,7 +1884,7 @@
     </property>
     <!-- **** Shopping Cart Text *************************************** -->
     <property key="CartPostageInfo">
-        <value xml:lang="en"> You will be able to enter your promo card at checkout</value>
+        <value xml:lang="en">You will be able to enter your promo card at checkout</value>
         <category>CHECK_OUT</category>
         <description>CartPostageInfo</description>
     </property>
@@ -2143,12 +2363,12 @@
         <description>ReviewTextShortError</description>
     </property>
     <property key="PDPMinQtyError">
-        <value xml:lang="en">"The Quantity entered "is less than the" minimum allowed (zero), please retry. </value>
+        <value xml:lang="en">The Quantity entered is less than the minimum allowed, please retry.</value>
         <category>MESSAGE_ERROR</category>
         <description>PDPMinQtyError</description>
     </property>
     <property key="PDPMaxQtyError">
-        <value xml:lang="en">"The Quantity entered is greater than the maximum allowed (1000)", please retry.</value>
+        <value xml:lang="en">The Quantity entered is greater than the maximum allowed, please retry.</value>
         <category>MESSAGE_ERROR</category>
         <description>PDPMaxQtyError</description>
     </property>

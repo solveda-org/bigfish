@@ -83,7 +83,8 @@
     <th class="nameCol">${uiLabelMap.ProductVideoLabel}</th>
     <th class="nameCol">${uiLabelMap.Product360VideoLabel}</th>
     <th class="nameCol">${uiLabelMap.SequenceNumberLabel}</th>
-    <th class="nameCol">${uiLabelMap.BFInventoryLabel}</th>
+    <th class="nameCol">${uiLabelMap.BFInventoryTotalLabel}</th>
+    <th class="nameCol">${uiLabelMap.BFInventoryWarehouseLabel}</th>
   </tr>
   <#if productDataList?exists && productDataList?has_content>
     <#assign rowClass = "1">
@@ -178,7 +179,8 @@
         <td class="nameCol">${product.pdpVideoUrl!""}</td>
         <td class="nameCol">${product.pdpVideo360Url!""}</td>
         <td class="nameCol">${product.sequenceNum!""}</td>
-        <td class="nameCol">${product.bfInventory!""}</td>
+        <td class="nameCol">${product.bfInventoryTot!""}</td>
+        <td class="nameCol">${product.bfInventoryWhs!""}</td>
       </tr>
       <#-- toggle the row color -->
       <#if rowClass == "2">

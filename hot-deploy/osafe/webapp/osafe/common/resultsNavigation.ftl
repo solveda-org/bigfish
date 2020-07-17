@@ -21,16 +21,16 @@
         <#if filterGroup?exists && filterGroup?has_content>
          <input type="hidden" name="filterGroup"  value="${filterGroup}">
        </#if>
+       <#if PLP_AVAILABLE_SORT?has_content && request.getAttribute("sortOptions")?has_content>
         <label for="sortResults">${uiLabelMap.SortByLabel}:</label>
         <select id="sortResults" name="sortResults" class="sortOptions" onchange="this.form.submit();">
-        <#if request.getAttribute("sortOptions")?exists && request.getAttribute("sortOptions")?has_content>
           <#assign sortOptions = request.getAttribute("sortOptions")>
             <#list sortOptions as sortOption>
                 <#assign sortOptionLabel = uiLabelMap.get(sortOption.SORT_OPTION_LABEL)/>
                 <option value="${sortOption.SOLR_VALUE}" <#if (parameters.sortResults!requestAttributes.sortResults!"") == sortOption.SOLR_VALUE?replace("|","&#124;")>selected</#if>>${sortOptionLabel!""}</option>
              </#list>
-         </#if>
         </select>
+        </#if>
         <#--  If you add a sort button you will have to change the width of the sortingOptions style -->
         <#--  Sort Button
         <input type="submit" class="standardBtn action" name="sortBtn" value="Sort" />

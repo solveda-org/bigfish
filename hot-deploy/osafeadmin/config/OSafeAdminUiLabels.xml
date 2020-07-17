@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 
     <!--
         To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
@@ -205,11 +205,20 @@
 	<property key="CarrierNav">
 		<value xml:lang="en">Carriers &#38; Shipping Methods</value>
 	</property>
+	<property key="JobNav">
+		<value xml:lang="en">Scheduled Jobs</value>
+	</property>
     <!-- *** Navigation Ends *************************************** -->
 
     <!-- *** Heading Starts*************************************** -->
     <property key="AddLabelCaptionDetailHeading">
         <value xml:lang="en">Add Caption</value>
+    </property>
+    <property key="AddDivCaptionDetailHeading">
+        <value xml:lang="en">DIV sequence detail</value>
+    </property>
+    <property key="DivSequenceDetailTitle">
+        <value xml:lang="en">DIV Sequence</value>
     </property>
     <property key="AddTopNavCatalogEntryDetailHeading">
         <value xml:lang="en">Add Top-Nav Catalog Entry</value>
@@ -237,9 +246,6 @@
     </property>
     <property key="AdminSystemParamHeading">
         <value xml:lang="en">System Parameters</value>
-    </property>
-     <property key="AdminSysConfigHeading">
-        <value xml:lang="en">System Configuration Files</value>
     </property>
     <property key="AdminToolsHeading">
         <value xml:lang="en">Admin Tools</value>
@@ -676,6 +682,9 @@
     <property key="SearchHeading">
         <value xml:lang="en">Enter Search Criteria:</value>
     </property>
+    <property key="StaticPageSeoUrlDetailHeading">
+        <value xml:lang="en">static page: SEO friendly URLs</value>
+    </property>
     <property key="SystemParameterDetailHeading">
         <value xml:lang="en">Change System Parameter</value>
     </property>
@@ -697,14 +706,26 @@
     <property key="SolrReIndexDetailHeading">
         <value xml:lang="en">SOLR Indexing</value>
     </property>
+    <property key="EmailTestDetailHeading">
+        <value xml:lang="en">Email Test</value>
+    </property>
     <property key="SysConfigHeading">
         <value xml:lang="en">System Configuration</value>
     </property>
     <property key="CompareLabelFileDetailHeading">
         <value xml:lang="en">Compare Tool</value>
     </property>
+    <property key="CompareDivSequenceFileDetailHeading">
+        <value xml:lang="en">Compare Tool : DIV-Sequence</value>
+    </property>
     <property key="CompareLabelFileResultSearchHeading">
         <value xml:lang="en">Comparison to</value>
+    </property>
+    <property key="CompareDivSequenceFileResultSearchHeading">
+        <value xml:lang="en">Comparison to</value>
+    </property>
+    <property key="CompareDivSequenceFileResultHeading">
+        <value xml:lang="en">Results</value>
     </property>
     <property key="CompareParametersDetailHeading">
         <value xml:lang="en">Compare Tool: System Parameters</value>
@@ -786,6 +807,24 @@
 	</property>
 	<property key="CarrierShipDetailHeading">
 		<value xml:lang="en">Carrier and Shipping Method Detail</value>
+	</property>
+	<property key="CustomerDetailPersonalInfoHeading">
+		<value xml:lang="en">Personal Information</value>
+	</property>
+	<property key="JobHeading">
+		<value xml:lang="en">Matching Scheduled Jobs</value>
+	</property>
+	<property key="ScheduledJobDetailHeading">
+		<value xml:lang="en">Scheduled Job Detail: ${parameters.jobName}</value>
+	</property>
+	<property key="ScheduledJobHeading">
+		<value xml:lang="en">Scheduled Jobs</value>
+	</property>
+	<property key="ScheduledJobRuleHeading">
+		<value xml:lang="en">Recurrence Rules</value>
+	</property>
+	<property key="ShipmentMethodTypeDetailHeading">
+		<value xml:lang="en">Shipping Method Detail</value>
 	</property>
    <!-- *** Heading Ends*************************************** -->
 
@@ -937,8 +976,11 @@
     <property key="ImageDirectoryCaption">
         <value xml:lang="en">Image Directory:</value>
     </property>
-    <property key="BFInventoryCaption">
-        <value xml:lang="en">BF Inventory:</value>
+    <property key="BFTotalInventoryCaption">
+        <value xml:lang="en">BF Total Inventory:</value>
+    </property>
+    <property key="BFWareHouseInventoryCaption">
+        <value xml:lang="en">BF Warehouse Inventory:</value>
     </property>
     <property key="IngredientsCaption">
         <value xml:lang="en">Ingredients:</value>
@@ -975,6 +1017,15 @@
     </property>
     <property key="KeyCaption">
         <value xml:lang="en">Key:</value>
+    </property>
+    <property key="ScreenCaption">
+        <value xml:lang="en">Screen:</value>
+    </property>
+     <property key="SeqIdCaption">
+        <value xml:lang="en">Seq#:</value>
+    </property>
+     <property key="DivCaption">
+        <value xml:lang="en">DIV Tag:</value>
     </property>
     <property key="NameCaption">
         <value xml:lang="en">Name:</value>
@@ -1056,6 +1107,9 @@
     </property>
     <property key="OrderShipDateCaption">
         <value xml:lang="en">Ship Date:</value>
+    </property>
+    <property key="OrderPickUpDateCaption">
+        <value xml:lang="en">Pick Up Date:</value>
     </property>
     <property key="PackedCaption">
         <value xml:lang="en">Packed:</value>
@@ -1407,7 +1461,13 @@
     <property key="CompareYourLabelFileCaption">
         <value xml:lang="en">Your Label File [A]:</value>
     </property>
+    <property key="CompareYourDivSequenceFileCaption">
+        <value xml:lang="en">Your DIV File [A]:</value>
+    </property>
     <property key="CompareToLabelFileCaption">
+        <value xml:lang="en">Compare To File [B]:</value>
+    </property>
+    <property key="CompareToDivSequenceFileCaption">
         <value xml:lang="en">Compare To File [B]:</value>
     </property>
     <property key="CompareToParametersFileCaption">
@@ -1460,6 +1520,9 @@
     </property>
     <property key="CellPhoneCaption">
         <value xml:lang="en">Cell Phone:</value>
+    </property>
+    <property key="MerchantIdCaption">
+        <value xml:lang="en">Merchant Id</value>
     </property>
     <property key="MetaDescBFDefaultCaption">
         <value xml:lang="en">&lt;META DESC&gt; BF Default:</value>
@@ -1773,6 +1836,9 @@
     <property key="ReturnUrlCaption">
         <value xml:lang="en">Return Url</value>
     </property>
+    <property key="SecretKeyCaption">
+        <value xml:lang="en">Secret Key</value>
+    </property>
     <property key="CancelReturnUrlCaption">
         <value xml:lang="en">Cancel Return Url</value>
     </property>
@@ -1784,6 +1850,12 @@
     </property>
     <property key="RedirectUrlCaption">
         <value xml:lang="en">Redirect Url</value>
+    </property>
+    <property key="ReferenceNoCaption">
+        <value xml:lang="en">Reference No</value>
+    </property>
+    <property key="EBSModeCaption">
+        <value xml:lang="en">Mode</value>
     </property>
     <property key="ConfirmUrlCaption">
         <value xml:lang="en">Confirm Url</value>
@@ -1821,7 +1893,7 @@
 	<property key="CarrierCaption">
 		<value xml:lang="en">Carrier:</value>
 	</property>
-	<property key="ShippingMethCaption">
+	<property key="ShippingMethodCaption">
 		<value xml:lang="en">Shipping Method:</value>
 	</property>
 	<property key="MinTotalCaption">
@@ -1842,13 +1914,64 @@
 	<property key="MessageCaption">
 		<value xml:lang="en">Message:</value>
 	</property>
+	<property key="DOBCaption">
+		<value xml:lang="en">Date of Birth:</value>
+	</property>
+	<property key="JobNameCaption">
+		<value xml:lang="en">Job Name:</value>
+	</property>
+	<property key="JobIdCaption">
+		<value xml:lang="en">Job ID:</value>
+	</property>
+	<property key="JobStatusCaption">
+		<value xml:lang="en">Job Status:</value>
+	</property>
+	<property key="ScopeCaption">
+		<value xml:lang="en">Scope:</value>
+	</property>
+	<property key="RunDateFromCaption">
+		<value xml:lang="en">Run Date From:</value>
+	</property>
+	<property key="StartDateFromCaption">
+		<value xml:lang="en">Start Date From:</value>
+	</property>
+	<property key="FinishDateFromCaption">
+		<value xml:lang="en">Finish Date From:</value>
+	</property>
+	<property key="StatusIdCaption">
+		<value xml:lang="en">Job Status:</value>
+	</property>
+	<property key="RunDateTimeCaption">
+		<value xml:lang="en">Run Date:</value>
+	</property>
+	<property key="StartDateTimeCaption">
+		<value xml:lang="en">Start Date:</value>
+	</property>
+	<property key="FinishDateTimeCaption">
+		<value xml:lang="en">Finish Date:</value>
+	</property>
+	<property key="CancelDateTimeCaption">
+		<value xml:lang="en">Cancel Date:</value>
+	</property>
+	<property key="RepeatCaption">
+		<value xml:lang="en">Repeat:</value>
+	</property>
+	<property key="RunEveryCaption">
+		<value xml:lang="en">Run Every:</value>
+	</property>
+	<property key="FreqCountCaption">
+		<value xml:lang="en">Freq Count:</value>
+	</property>
 	
     <!-- *** Caption Ends*************************************** -->
 
     <!-- *** Label Starts *************************************** -->
     <property key="IdLabel">
         <value xml:lang="en">ID</value>
-    </property>    
+    </property>
+    <property key="BigFishConetentIdLabel">
+        <value xml:lang="en">BigFish Content ID</value>
+    </property>
     <property key="ClrLblCacheLabel">
         <value xml:lang="en">Clear Bigfish Cache</value>
     </property>
@@ -1923,6 +2046,12 @@
     <property key="SeoUrlMapLabel">
         <value xml:lang="en">SEO Friendly URL</value>
     </property>
+    <property key="SeoFriendlyPrefixLabel">
+        <value xml:lang="en">SEO Friendly Prefix</value>
+    </property>
+    <property key="SeoFriendlyNameLabel">
+        <value xml:lang="en">SEO Friendly Name</value>
+    </property>
     <property key="SolrReIndxLabel">
         <value xml:lang="en">SOLR Indexing</value>
     </property>
@@ -1934,6 +2063,9 @@
     </property>
     <property key="CompareLabelFileLabel">
         <value xml:lang="en">Label Compare Tool</value>
+    </property>
+    <property key="CompareDivSequenceFileLabel">
+        <value xml:lang="en">DIV-Sequence Compare Tool</value>
     </property>
     <property key="CompareLabelResultLabel">
         <value xml:lang="en">Compare Results</value>
@@ -1976,6 +2108,9 @@
     </property>
     <property key="FacetTopLabel">
         <value xml:lang="en">Facet Top</value>
+    </property>
+    <property key="CashOnDelivery">
+        <value xml:lang="en">Cash On Delivery</value>
     </property>
     <property key="FacetEndLabel">
         <value xml:lang="en">Facet End</value>
@@ -2267,6 +2402,9 @@
     <property key="KeyLabel">
         <value xml:lang="en">Key</value>
     </property>
+    <property key="ScreenLabel">
+        <value xml:lang="en">Screen</value>
+    </property>
     <property key="LabelLabel">
         <value xml:lang="en">Label</value>
     </property>
@@ -2347,6 +2485,9 @@
     </property>
     <property key="pdpAdditionalLabel">
         <value xml:lang="en">pdp additional content</value>
+    </property>
+    <property key="PDPAddlLabel">
+        <value xml:lang="en">Addl PDP</value>
     </property>
     <property key="PendingLabel">
         <value xml:lang="en">Pending</value>
@@ -2458,6 +2599,9 @@
     </property>
     <property key="SeqNumberLabel">
         <value xml:lang="en">Seq#</value>
+    </property>
+    <property key="GroupNumberLabel">
+        <value xml:lang="en">Group</value>
     </property>
     <property key="SequenceNumberLabel">
         <value xml:lang="en">Sequence#</value>
@@ -2849,8 +2993,11 @@
     <property key="SequenceNumberLabel">
         <value xml:lang="en">Sequence Number</value>
     </property>
-    <property key="BFInventoryLabel">
-        <value xml:lang="en">BF Inventory</value>
+    <property key="BFInventoryTotalLabel">
+        <value xml:lang="en">BF Inventory Total</value>
+    </property>
+    <property key="BFInventoryWarehouseLabel">
+        <value xml:lang="en">BF Inventory Warehouse</value>
     </property>
     <property key="ParentCategoryIdLabel">
         <value xml:lang="en">Parent Category Id</value>
@@ -2984,6 +3131,51 @@
 	<property key="CarrierShipMessageLabel">
 		<value xml:lang="en">Message</value>
 	</property>
+	<property key="CanceledLabel">
+		<value xml:lang="en">Cancelled</value>
+	</property>
+	<property key="CrashedLabel">
+		<value xml:lang="en">Crashed</value>
+	</property>
+	<property key="FailedLabel">
+		<value xml:lang="en">Failed</value>
+	</property>
+	<property key="FinishedLabel">
+		<value xml:lang="en">Finished</value>
+	</property>
+	<property key="QueuedLabel">
+		<value xml:lang="en">Queued</value>
+	</property>
+	<property key="RunningLabel">
+		<value xml:lang="en">Running</value>
+	</property>
+	<property key="BigFishOnlyLabel">
+		<value xml:lang="en">BigFish Only</value>
+	</property>
+	<property key="JobNameLabel">
+		<value xml:lang="en">Job Name</value>
+	</property>
+	<property key="JobIdLabel">
+		<value xml:lang="en">Job ID</value>
+	</property>
+	<property key="RunDateLabel">
+		<value xml:lang="en">Run Date</value>
+	</property>
+	<property key="StartDateLabel">
+		<value xml:lang="en">Start Date</value>
+	</property>
+	<property key="FinishDateLabel">
+		<value xml:lang="en">Finish Date</value>
+	</property>
+	<property key="CancelDateLabel">
+		<value xml:lang="en">Cancel Date</value>
+	</property>
+	<property key="AdminSysConfigLabel">
+        <value xml:lang="en">System Configuration Files</value>
+    </property>
+    <property key="EmailTestLabel">
+        <value xml:lang="en">Email Test</value>
+    </property>
     <!-- **** Label Ends *************************************** -->
     
     <!-- **** Page Title  Starts*************************************** -->
@@ -3020,6 +3212,9 @@
     <property key="ContentLibraryDetailTitle">
         <value xml:lang="en">content library detail</value>
     </property>
+    <property key="CompareDivSequenceFileResultTitle">
+        <value xml:lang="en">Compare tool: DIV-Sequence </value>
+    </property>
     <property key="ContentHPDetailTitle">
         <value xml:lang="en">manage home page spot</value>
     </property>
@@ -3034,6 +3229,9 @@
     </property>
     <property key="DashboardSummaryTitle">
         <value xml:lang="en">dashboard</value>
+    </property>
+    <property key="EBSConfigDetailTitle">
+        <value xml:lang="en">Configuration EBS</value>
     </property>
     <property key="eCommerceAdminApplicationTitle">
         <value xml:lang="en">Big Fish Commerce Administration</value>
@@ -3242,14 +3440,23 @@
     <property key="SeoUrlMapDetailTitle">
         <value xml:lang="en">SEO friendly URL Refresh</value>
     </property>
+    <property key="StaticPageSeoUrlDetailTitle">
+        <value xml:lang="en">static page: SEO friendly URLs</value>
+    </property>
     <property key="SolrReIndexDetailTitle">
         <value xml:lang="en">SOLR indexing</value>
+    </property>
+    <property key="EmailTestDetailTitle">
+        <value xml:lang="en">Email Test</value>
     </property>
     <property key="SysConfigFileTitle">
         <value xml:lang="en">system configuration files</value>
     </property>
     <property key="CompareLabelFileDetailTitle">
         <value xml:lang="en">compare tool: labels and captions</value>
+    </property>
+    <property key="CompareDivSequenceFileDetailTitle">
+        <value xml:lang="en">compare tool: DIV-Sequence</value>
     </property>
     <property key="CompareLabelFileResultTitle">
         <value xml:lang="en">compare tool: labels and captions</value>
@@ -3368,6 +3575,15 @@
 	<property key="CarrierShipDetailTitle">
 		<value xml:lang="en">manage carrier and shipping method</value>
 	</property>
+	<property key="ViewJobsTitle">
+		<value xml:lang="en">view scheduled jobs</value>
+	</property>
+	<property key="ScheduledJobDetailTitle">
+		<value xml:lang="en">scheduled job detail</value>
+	</property>
+	<property key="ShipmentMethodTypeDetailTitle">
+		<value xml:lang="en">manage shipping method</value>
+	</property>
     <!-- ******* Page Title Ends *************************************** -->
     
     <!-- ******* Info Messages Starts*************************************** -->
@@ -3407,8 +3623,14 @@
     <property key="AdminPaymentSettingInfo">
         <value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways.</value>
     </property>
+    <property key="ClrCacheInfo">
+        <value xml:lang="en">This function will clear various memory cache that are used within the BigFish solution. These resources are loaded into memory once and if changes are made in these areas then cache needs to be cleared for the changes to take affect.</value>
+    </property>
     <property key="ClrLblCacheInfo">
-        <value xml:lang="en">This function will clear the cache for the Labels-and-Captions, DIV-sequencing and SEO-Friendly-URLs. These resources are loaded into memory once and if changes are made in these areas then cache needs to be cleared for the changes to take affect.</value>
+        <value xml:lang="en">GENERAL CACHE: This function will clear the cache for the Labels-and-Captions, DIV-sequencing and SEO-Friendly-URLs. These resources are loaded into memory once and if changes are made in these areas then cache needs to be cleared for the changes to take affect.</value>
+    </property>
+    <property key="ClrPixelCacheInfo">
+        <value xml:lang="en">PIXEL TRACKING CACHE: This function will clear the specific cache used for the Pixel Tracking Code that may be setup for the implementation. These resources are loaded into memory once and if changes are made in these areas then cache needs to be cleared for the changes to take affect.</value>
     </property>
     <property key="AdminUserInfo">
         <value xml:lang="en">Manage Users.</value>
@@ -3454,6 +3676,9 @@
     </property>
     <property key="ExportStatusInfo">
         <value xml:lang="en">Exported</value>
+    </property>
+    <property key="EmailTestInfo">
+        <value xml:lang="en">This function will use your OFBiz and BigFish properties and send out a test email.</value>
     </property>
     <property key="CustomerEnabledInfo">
         <value xml:lang="en">Enabled</value>
@@ -3632,6 +3857,9 @@
     <property key="CompareLabelFileInfo">
         <value xml:lang="en">This tool will compare the Label / Captions file installed on this server (the “A” version) with another instance (the “B” version). Access to the “B” version is required.</value>
     </property>
+    <property key="CompareDivSequenceFileInfo">
+        <value xml:lang="en">This tool will compare the DIV-Sequence file installed on this server (the “A” version) with another instance (the “B” version). Access to the “B” version is required.</value>
+    </property>
     <property key="CompareParametersInfo">
         <value xml:lang="en">This tool will compare the SYSTEM_PARAMETERS database entity on this server (the “A” version) with another instance (the “B” version). Access to the “B” database is required.</value>
     </property>
@@ -3747,7 +3975,7 @@
         <value xml:lang="en">This will allow for the modification of the Product Loader Image Mapping file that controls the sub-directory that images should be available.</value>
     </property>
     <property key="setToZeroMessage">
-        <value xml:lang="en"> *Set to 0(zero) if not required or hidden</value>
+        <value xml:lang="en">* Set to 0(zero) if not required or hidden</value>
     </property>
     <property key="ShipChargeInfo">
 		<value xml:lang="en">This function provides the ability to maintain all 
@@ -3756,11 +3984,14 @@
 	<property key="CarrierInfo">
 		<value xml:lang="en">View and maintain all available Carriers (Fedex, DHL, UPS) and the associated Shipping Methods (Air, Next Day).</value>
 	</property>
+	<property key="ScheduledJobInfo">
+		<value xml:lang="en">Manage execution, frequency and logging for the various Scheduled Jobs.</value>
+	</property>
      <!-- ******* Info Messages Ends*************************************** -->
    
     <!-- ******* Success Messages  starts*************************************** -->
-    <property key="ClearLabelCacheSuccess">
-        <value xml:lang="en">The Clear Label Cache successfully completed</value>
+    <property key="ClearCacheSuccess">
+        <value xml:lang="en">Clear BigFish Cache successfully completed</value>
     </property>
     <property key="DeletedSuccess">
         <value xml:lang="en">You have Successfully Deleted Your Information</value>
@@ -3793,7 +4024,7 @@
         <value xml:lang="en">You have successfully saved the ORDER STATUS change.</value>
     </property>
     <property key="UpdateOrderStatusReviewMsgSuccess">
-        <value xml:lang="en">You have successfully saved the ORDER STATUS change. A review email will be sent to {0} in {1} days.</value>
+        <value xml:lang="en">You have successfully saved the ORDER STATUS change. A review email may be sent to {0} in {1} days.</value>
     </property>
     <property key="ImageLocationPreferencesSuccess">
         <value xml:lang="en">Image Location Preferences has been updated</value>
@@ -3820,6 +4051,12 @@
     <property key="BlankDescriptionError">
         <value xml:lang="en">ERROR Row ${rowNo}: The Description cannot be blank</value>
     </property>
+    <property key="BlankDivError">
+        <value xml:lang="en">The DIV Tag field cannot be blank.</value>
+    </property>
+    <property key="BlankValueError">
+        <value xml:lang="en">The SEQ# field cannot be blank</value>
+    </property>
     <property key="BlankKeyError">
         <value xml:lang="en">The Key field cannot be blank.</value>
     </property>
@@ -3831,6 +4068,9 @@
     </property>
     <property key="BlankFromAddressError">
         <value xml:lang="en">The From field cannot be blank</value>
+    </property>
+    <property key="BlankEmailAddressError">
+        <value xml:lang="en">The Email Address field cannot be blank</value>
     </property>
     <property key="BlankFromQtyError">
         <value xml:lang="en">The From Qty cannot be blank</value>
@@ -4000,7 +4240,7 @@
     <property key="UploadedFileNotCssError">
         <value xml:lang="en">The uploaded file "{0}" is not a css file name, please check the file name and try again</value>
     </property>
-    <property key="ClearLabelCacheError">
+    <property key="ClearCacheError">
         <value xml:lang="en">ERROR: An error occurred while trying to clear the Label Cache</value>
     </property>
     <property key="DateFormatInvalidError">
@@ -4008,6 +4248,9 @@
     </property>
     <property key="DateRangeInvalidError">
         <value xml:lang="en">Please enter a valid date range</value>
+    </property>
+    <property key="divSeqItemExistError">
+        <value xml:lang="en">Div Sequence item already exist.</value>
     </property>
     <property key="DescriptionContentError">
         <value xml:lang="en">The Description cannot be blank.</value>
@@ -4072,6 +4315,12 @@
     <property key="InvalidSequenceNumber">
         <value xml:lang="en">The Seq# must be numeric and between 1 and 1000.</value>
     </property>
+    <property key="ValidGroupNumberError">
+        <value xml:lang="en">Group is not valid for {0}. Group must be a valid number between 1 and 10.</value>
+    </property>
+    <property key="FacetValueSequenceNumNotVaildNumError">
+        <value xml:lang="en">The Seq# must be numeric and between 1 and 2000.</value>
+    </property>
     <property key="ShowAllError">
         <value xml:lang="en">“WARNING: List will exceed ${ADM_WARN_LIST_ROWS}. Are you sure you want to continue?”</value>
     </property>
@@ -4117,6 +4366,9 @@
     <property key="BlankShipDateError">
         <value xml:lang="en">A Ship Date is required when changing the status to Completed.</value>
     </property>
+    <property key="BlankPickUpDateError">
+        <value xml:lang="en">A Pick up Date is required when changing the status to Completed.</value>
+    </property>
     <property key="ParamKeyExistError">
         <value xml:lang="en">Parameter Name already exist.</value>
     </property>
@@ -4129,8 +4381,14 @@
     <property key="ValidCategorySeqNumError">
         <value xml:lang="en">Seq# Must be entered, and a valid number between 0 and 9999</value>
     </property>
-    <property key="ValidInventoryLevelError">
-        <value xml:lang="en">BF Inventory must be numeric and between 0 and 9999</value>
+    <property key="ValidBFTotalInventoryError">
+        <value xml:lang="en">BF Total Inventory must be a whole number and between -9999 and 99999</value>
+    </property>
+    <property key="ValidBFWHInventoryError">
+        <value xml:lang="en">BF Warehouse Inventory must be a whole number and between -9999 and 99999</value>
+    </property>
+    <property key="ValidBFTotalInventoryCompareError">
+        <value xml:lang="en">BF Total Inventory must be equal or greater than BF Warehouse Inventory</value>
     </property>
     <property key="ValidDescriptionContentError">
         <value xml:lang="en">The Description field cannot be blank.</value>
@@ -4143,6 +4401,9 @@
     </property>
     <property key="ValidFromAddressError">
         <value xml:lang="en">The FROM field must contain a valid email address.</value>
+    </property>
+    <property key="ValidEmailAddressError">
+        <value xml:lang="en">The Email Address field must contain a valid email address.</value>
     </property>
     <property key="ValidFromQtyError">
         <value xml:lang="en">Please enter a Valid From Qty. It should be a number.</value>
@@ -4200,6 +4461,15 @@
     </property>
     <property key="ValidSalesPriceError">
         <value xml:lang="en">ERROR Row ${rowNo}: Sales-Price must be a valid number</value>
+    </property>
+    <property key="ValidListPriceError">
+        <value xml:lang="en">ERROR Row ${rowNo}: List-Price must be a valid number</value>
+    </property>
+    <property key="ValidBFTotalInventoryRowError">
+        <value xml:lang="en">ERROR Row ${rowNo}: BF Total Inventory must be a whole number and between -9999 and 99999</value>
+    </property>
+    <property key="ValidBFWHInventoryRowError">
+        <value xml:lang="en">ERROR Row ${rowNo}: BF Warehouse Inventory must be a whole number and between -9999 and 99999</value>
     </property>
     <property key="ValidTopNavBarError">
         <value xml:lang="en">When adding a new Top Navigation Item it must be unique</value>
@@ -4352,6 +4622,12 @@
 	<property key="BlankShipmentMethodTypeIdError">
 		<value xml:lang="en">One Shipping Type must be selected from the drop-down.</value>
 	</property>
+	<property key="ShipmentMethodTypeIdLengthError">
+		<value xml:lang="en">The Shipping Method cannot be more than 20 characters.</value>
+	</property>
+	<property key="ShipmentMethodTypeIdExistError">
+		<value xml:lang="en">The Shipping Method must be unique.</value>
+	</property>
 	<property key="ValidMinTotalError">
 		<value xml:lang="en">Min Total must contain a numeric value.</value>
 	</property>
@@ -4394,7 +4670,49 @@
 		<value xml:lang="en">The Carrier ID and Shipping Method combination must be unique.</value>
 	</property>
 	<property key="BlankShipMethodTypeIdError">
-		<value xml:lang="en">Shipping Type cannot be blank.</value>
+		<value xml:lang="en">Shipping Method cannot be blank.</value>
+	</property>
+	<property key="BlankShipMethodTypeDescriptionError">
+		<value xml:lang="en">Description cannot be blank.</value>
+	</property>
+	<property key="ValidIdError">
+		<value xml:lang="en">Your entry [${errorKey}] is not valid. BigFish ID attributes must contain alpha, number digits, hyphens or underscores. Spaces and other special characters are not allowed.</value>
+	</property>
+	<property key="MissingServiceNameError">
+		<value xml:lang="en">Service Name is a required field and must exist</value>
+	</property>
+	<property key="InvalidServiceNameError">
+		<value xml:lang="en">This Service Name does not exist</value>
+	</property>
+	<property key="MissingJobNameError">
+		<value xml:lang="en">Job Name is a required field</value>
+	</property>
+	<property key="InvalidStartDateError">
+		<value xml:lang="en">Invalid Start Date and Time format. [ex. 07/08/2012 02:00]</value>
+	</property>
+	<property key="StartTimePassedError">
+		<value xml:lang="en">The Start Date and Time you have selected has already passed.</value>
+	</property>
+	<property key="InvalidEndDateError">
+		<value xml:lang="en">Invalid End Date and Time format. [ex. 07/08/2012 02:00]</value>
+	</property>
+	<property key="EndTimePassedError">
+		<value xml:lang="en">The End Date and Time you have selected has already passed.</value>
+	</property>
+	<property key="InvalidIntervalError">
+		<value xml:lang="en">Run Every Must be numeric</value>
+	</property>
+	<property key="OutRangeIntervalError">
+		<value xml:lang="en">When repeating the Run-Every attribute must be between 1 and 999</value>
+	</property>
+	<property key="InvalidFrequencyCountError">
+		<value xml:lang="en">Freq Count Must be numeric</value>
+	</property>
+	<property key="OutRangeFreqError">
+		<value xml:lang="en">When repeating the Freq Count must be either -1 or a number between 1 and 999</value>
+	</property>
+	<property key="SuccessSchedulJob">
+		<value xml:lang="en">The job has successfully been scheduled</value>
 	</property>
  <!-- ******* Error Messages  Ends*************************************** -->
  
@@ -4416,13 +4734,19 @@
         <value xml:lang="en">Add Sub Nav</value>
     </property>
     <property key="ClrLblCacheBtn">
-        <value xml:lang="en">Clear Cache</value>
+        <value xml:lang="en">Clear General Cache</value>
     </property>
-    <property key="SolrReIndxBtn">
-        <value xml:lang="en">Re-Index SOLR</value>
+    <property key="EmailTestBtn">
+        <value xml:lang="en">Send Test Email</value>
+    </property>
+    <property key="StaticPageSeoUrlBtn">
+        <value xml:lang="en">SEO Friendly URLs</value>
     </property>
     <property key="CompareLabelFileBtn">
         <value xml:lang="en">Compare Labels</value>
+    </property>
+    <property key="CompareDivSequenceFileBtn">
+        <value xml:lang="en">Compare DIV-Sequence</value>
     </property>
     <property key="CompareParametersBtn">
         <value xml:lang="en">Compare System Parameters</value>
@@ -4625,6 +4949,18 @@
 	<property key="AddShipMethodBtn">
 		<value xml:lang="en">Add Shipping Method</value>
 	</property>
+	<property key="AddCarrierShippingMethodBtn">
+		<value xml:lang="en">Add Carrier Shipping Method</value>
+	</property>
+	<property key="AddScheduledJobBtn">
+		<value xml:lang="en">New Job</value>
+	</property>
+	<property key="ClrPixelCacheBtn">
+		<value xml:lang="en">Clear Pixel Cache</value>
+	</property>
+	<property key="AddShipmentMethodTypeBtn">
+		<value xml:lang="en">Add Shipping Method</value>
+	</property>
     
     <!-- **** Button Ends*************************************** -->
     
@@ -4764,11 +5100,17 @@
     <property key="deleteUiLabelConfirmText">
         <value xml:lang="en">Deleting a Label/Caption may cause serious harm to your eCommerce implementation. Are you sure you want to delete the Label/Caption ${key}?</value>
     </property>
+    <property key="deleteDivSeqItemConfirmText">
+        <value xml:lang="en">Deleting a DIV-Sequence may cause serious harm to your eCommerce implementation. Are you sure you want to delete the DIV-Sequence ${key}?</value>
+    </property>
     <property key="DeletePaymentSettingConfirmText">
         <value xml:lang="en">Deleting a Payment Setting may cause serious harm to your eCommerce implementation. Are you sure you want to delete the Payment Setting [{0}]?</value>
     </property>
     <property key="DeleteShipChargeConfirmText">
 		<value xml:lang="en">Are you sure you want to delete this Shipping Charge?</value>
+	</property>
+	<property key="CancelScheduledJobConfirmText">
+		<value xml:lang="en">Are you sure you want to cancel this Scheduled Job?</value>
 	</property>
     <!-- === confirm Ends ===== -->
     
@@ -4847,6 +5189,21 @@
     <!-- === Helper info Starts ===== -->
     <property key="CacheResetHelperInfo">
 		<value xml:lang="en">* You will need to reset cache in Admin/Tools for your changes to take effect</value>
+	</property>
+    <property key="PdpTabsGroupHelperInfo">
+        <value xml:lang="en">* Group: use to group attributes to specific tabs for page PDPTabs</value>
+    </property>
+	<property key="DivTagPurposeHelperInfo">
+        <value xml:lang="en">* The actual DIV referenced in the CSS</value>
+    </property>
+	<property key="CustomerDetailPersonalInfoHeadingHelperInfo">
+		<value xml:lang="en">(collected as part of the registration process)</value>
+	</property>
+	<property key="SolrReIndexHelperInfo">
+		<value xml:lang="en">* You may need to re-index SOLR in Admin/Tools for PLP Prices and other changes to take effect</value>
+	</property>
+	<property key="CountNumberHelperInfo">
+		<value xml:lang="en">Use -1 to indicate forever</value>
 	</property>
     
     <!-- === End of Helper info ===== -->

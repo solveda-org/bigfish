@@ -6,8 +6,8 @@
   <fieldset class="col">
     <div class="entry">
       <label for= "CUSTOMER_EMAIL"><@required/>${uiLabelMap.EmailAddressCaption}</label>
-      <input type="hidden" name="emailAddressContactMechId" value="${emailAddressContactMech.contactMechId}"/>
-      <input type="text" maxlength="100" class="emailAddress" name="CUSTOMER_EMAIL" id="CUSTOMER_EMAIL" value="${requestParameters.CUSTOMER_EMAIL!emailAddress!""}"/>
+      <input type="hidden" name="emailAddressContactMechId" value="${userEmailContactMech.contactMechId!}"/>
+      <input type="text" maxlength="100" class="emailAddress" name="CUSTOMER_EMAIL" id="CUSTOMER_EMAIL" value="${requestParameters.CUSTOMER_EMAIL!userEmailAddress!""}"/>
       <span class="instructions">${uiLabelMap.EditEmailAddressInstructionsInfo}</span>
       <@fieldErrors fieldName="CUSTOMER_EMAIL"/>
     </div>

@@ -105,6 +105,9 @@
     <property key="PAGE_TOP_SPOT_LOGIN">
         <value xml:lang="en">PTS_LOGIN</value>
     </property>
+    <property key="PAGE_TOP_SPOT_LOGIN_INFO">
+        <value xml:lang="en">PTS_LOGIN_INFO</value>
+    </property>
     <property key="PAGE_TOP_SPOT_MAILING_LIST">
         <value xml:lang="en">PTS_MAILING_LIST</value>
     </property>
@@ -166,6 +169,9 @@
     <property key="PAGE_END_SPOT_LOGIN">
         <value xml:lang="en">PES_LOGIN</value>
     </property>
+    <property key="PAGE_END_SPOT_LOGIN_INFO">
+        <value xml:lang="en">PES_LOGIN_INFO</value>
+    </property>
     <property key="PAGE_END_SPOT_MAILING_LIST">
         <value xml:lang="en">PES_MAILING_LIST</value>
     </property>
@@ -189,6 +195,21 @@
     </property>
     <property key="PAGE_END_SPOT_SEARCH_NO_RESULT">
         <value xml:lang="en">PES_SEARCH_NO_RESULT</value>
+    </property>
+    <property key="PDP_CONTENT_01">
+        <value xml:lang="en">PDP_CONTENT_01</value>
+    </property>
+    <property key="PDP_CONTENT_02">
+        <value xml:lang="en">PDP_CONTENT_02</value>
+    </property>
+    <property key="PDP_CONTENT_03">
+        <value xml:lang="en">PDP_CONTENT_03</value>
+    </property>
+    <property key="PDP_CONTENT_04">
+        <value xml:lang="en">PDP_CONTENT_04</value>
+    </property>
+    <property key="PDP_CONTENT_05">
+        <value xml:lang="en">PDP_CONTENT_05</value>
     </property>
 
     <!-- *** ECOMMERCE PDP SPOT MENU HOT SPOTS *************************************** -->
@@ -236,6 +257,9 @@
     <property key="EMAIL_ORDER_CHANGE">
         <value xml:lang="en">E_ORDER_CHANGE</value>
     </property>
+    <property key="EMAIL_TEST_EMAIL">
+        <value xml:lang="en">E_TEST_EMAIL</value>
+    </property>
 
     <property key="STATIC_PAGE_ABOUT_US">
         <value xml:lang="en">SP_ABOUT_US</value>
@@ -263,7 +287,7 @@
         <value xml:lang="en">SI_MAILING_LIST</value>
     </property>
     <property key="HOME_PAGE_HOTSPOTS">
-        <value xml:lang="en">HOME_PAGE_SPOT_MENU</value>
+        <value xml:lang="en">BF_HOME_PAGE</value>
     </property>
 
     <property key="SOCIAL_MEDIA_LINKS">

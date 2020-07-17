@@ -58,25 +58,31 @@
             <label>${uiLabelMap.OrderCarrierCaption}</label>
         </div>
         <div class="infoValue">
-            <#assign productStoreId = Static["org.ofbiz.product.store.ProductStoreWorker"].getProductStoreId(request) />
-            <#assign carrierShipmentMethodList = delegator.findByAnd('ProductStoreShipmentMethView', {"productStoreId" : productStoreId})!"" />
-            <#assign selectedShippingMethod = parameters.shippingMethod!orderShippingMethod!""/>
-            <select name="shipmentMethod" id="shipmentMethod" class="small">
-                <#if carrierShipmentMethodList?has_content>
-                    <#list carrierShipmentMethodList as carrierMethod>
-                        <#assign shippingMethod = carrierMethod.shipmentMethodTypeId + "@" + carrierMethod.partyId>
-                        <#assign findCarrierShipmentMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", carrierMethod.shipmentMethodTypeId, "partyId", carrierMethod.partyId,"roleTypeId" ,"CARRIER")>
-                        <#assign carrierShipmentMethod = delegator.findByPrimaryKeyCache("CarrierShipmentMethod", findCarrierShipmentMethodMap)>
-                        <#assign carrierPartyGroupName = ""/>
-                        <#if carrierMethod.partyId != "_NA_">
-                            <#assign carrierParty = carrierShipmentMethod.getRelatedOne("Party")/>
-                            <#assign carrierPartyGroup = carrierParty.getRelatedOne("PartyGroup")/>
-                            <#assign carrierPartyGroupName = carrierPartyGroup.groupName/>
-                        </#if>
-                        <option value='${shippingMethod}' <#if selectedShippingMethod == shippingMethod>selected=selected</#if>><#if carrierPartyGroupName?has_content>${carrierPartyGroupName!}, </#if>${carrierMethod.description!}</option>
-                    </#list>
-                </#if>
-            </select>
+        	<#if isStorePickup?has_content && isStorePickup == "Y">
+        		<input class="medium" disabled="disabled" type="text"  maxlength="20" value=""/>
+        		<input name="shipmentMethod" type="hidden" id="shipmentMethod" maxlength="20" value="NO_SHIPPING@_NA_"/>
+        	<#else>
+        		<#assign productStoreId = Static["org.ofbiz.product.store.ProductStoreWorker"].getProductStoreId(request) />
+	            <#assign carrierShipmentMethodList = delegator.findByAnd('ProductStoreShipmentMethView', {"productStoreId" : productStoreId})!"" />
+	            <#assign selectedShippingMethod = parameters.shippingMethod!orderShippingMethod!""/>
+	            <select name="shipmentMethod" id="shipmentMethod" class="small">
+	                <#if carrierShipmentMethodList?has_content>
+	                    <#list carrierShipmentMethodList as carrierMethod>
+	                        <#assign shippingMethod = carrierMethod.shipmentMethodTypeId + "@" + carrierMethod.partyId>
+	                        <#assign findCarrierShipmentMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", carrierMethod.shipmentMethodTypeId, "partyId", carrierMethod.partyId,"roleTypeId" ,"CARRIER")>
+	                        <#assign carrierShipmentMethod = delegator.findByPrimaryKeyCache("CarrierShipmentMethod", findCarrierShipmentMethodMap)>
+	                        <#assign carrierPartyGroupName = ""/>
+	                        <#if carrierMethod.partyId != "_NA_">
+	                            <#assign carrierParty = carrierShipmentMethod.getRelatedOne("Party")/>
+	                            <#assign carrierPartyGroup = carrierParty.getRelatedOne("PartyGroup")/>
+	                            <#assign carrierPartyGroupName = carrierPartyGroup.groupName/>
+	                        </#if>
+	                        <option value='${shippingMethod}' <#if selectedShippingMethod == shippingMethod>selected=selected</#if>><#if carrierPartyGroupName?has_content>${carrierPartyGroupName!}, </#if>${carrierMethod.description!}</option>
+	                    </#list>
+	                </#if>
+	            </select>
+        	</#if>
+            
         </div>
     </div>
 </div>
@@ -87,7 +93,13 @@
             <label>${uiLabelMap.OrderTrackingCaption}</label>
         </div>
         <div class="infoValue">
-            <input class="medium" name="trackingNumber" type="text" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
+        	<#if isStorePickup?has_content && isStorePickup == "Y">
+        		<input class="medium" disabled="disabled" type="text"  maxlength="20" value="${parameters.trackingNumber!""}"/>
+        		<input name="trackingNumber" type="hidden" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
+        	<#else>
+        		<input class="medium" name="trackingNumber" type="text" id="trackingNumber" maxlength="20" value="${parameters.trackingNumber!""}"/>
+        	</#if>
+            
         </div>
     </div>
 </div>
@@ -95,7 +107,12 @@
 <div class="infoRow row COMPLETED">
     <div class="infoEntry long">
         <div class="infoCaption">
-            <label>${uiLabelMap.OrderShipDateCaption}</label>
+        	<#if isStorePickup?has_content && isStorePickup == "Y">
+        		<label>${uiLabelMap.OrderPickUpDateCaption}</label>
+        	<#else>
+        		<label>${uiLabelMap.OrderShipDateCaption}</label>
+        	</#if>
+            
         </div>
         <div class="infoValue">
             <input class="dateEntry" type="text" id="shipByDate" name="estimatedShipDate" maxlength="40" value="${parameters.estimatedShipDate!""}"/>

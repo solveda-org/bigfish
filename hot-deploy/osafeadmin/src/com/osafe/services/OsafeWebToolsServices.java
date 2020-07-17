@@ -20,6 +20,8 @@ package com.osafe.services;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import javolution.util.FastList;
@@ -69,12 +71,20 @@ public class OsafeWebToolsServices {
             if (baseDir.isDirectory() && baseDir.canRead()) {
                 File[] fileArray = baseDir.listFiles();
                 FastList<File> files = FastList.newInstance();
+                
                 for (File file: fileArray) {
                     if (file.getName().toUpperCase().endsWith("XML")) {
                         files.add(file);
                     }
                 }
-
+                
+                Collections.sort(files, new Comparator<File>() {
+                    public int compare(File f1, File f2)
+                    {
+                        return f1.getName().compareTo(f2.getName());
+                    } 
+                });
+                
                 int passes=0;
                 int initialListSize = files.size();
                 int lastUnprocessedFilesCount = 0;

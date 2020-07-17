@@ -2,7 +2,7 @@
 <#assign productName = productContentWrapper.get("PRODUCT_NAME")!currentProduct.productName!"">
 
 <#if recommendProducts?has_content>
-  <div id="pdpComplement">
+  <div class="pdpComplement">
        <#assign PRODUCT_STORE_PARM_FACET = PLP_FACET_GROUP_VARIANT_SWATCH_IMG!""/>
         ${setRequestAttribute("PRODUCT_STORE_PARM_FACET",PRODUCT_STORE_PARM_FACET)}
        <#if PRODUCT_STORE_PARM_FACET?has_content>
@@ -31,8 +31,8 @@
             <#list recommendProducts as complementProduct>
              ${setRequestAttribute("plpItemId",complementProduct.productId)}
                  <!-- DIV for Displaying Recommended productss STARTS here -->
-                      <div class="eCommerceComplementProduct eCommerceListItem">
-                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#plpDivSequence")}
+                      <div class="eCommerceListItem eCommerceComplementProduct">
+                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPComplementDivSequence")}
                       </div>
                  <!-- DIV for Displaying PLP item ENDS here -->     
             </#list>

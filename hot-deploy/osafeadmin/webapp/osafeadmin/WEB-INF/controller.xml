@@ -207,7 +207,7 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="addShipCarrier"/>
     </request-map>
-    <request-map uri="createShipCarrier">
+    <request-map uri="createShipCarrierDetail">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="createShipChargeCarrierGroup"/> 
         <response name="success" type="request-redirect" value="addCarrierShip"/>
@@ -223,6 +223,63 @@
         <response name="success" type="request-redirect" value="carrierShipList"/>
         <response name="error" type="view" value="addAnotherShipCarrier"/>
     </request-map>
+    <request-map uri="addShipmentMethodTypeDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addShipmentMethodTypeDetail"/>
+    </request-map>
+    <request-map uri="createShipMethodTypeDetail">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentMethodTypeGroup"/> 
+        <response name="success" type="request-redirect" value="addCarrierShip"/>
+        <response name="error" type="view" value="addShipmentMethodTypeDetail"/>
+    </request-map>
+    <request-map uri="addShipmentMethodTypeList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addShipmentMethodTypeList"/>
+    </request-map>
+    <request-map uri="createShipMethodTypeList">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipmentMethodTypeGroup"/> 
+        <response name="success" type="request-redirect" value="carrierShipList"/>
+        <response name="error" type="view" value="addShipmentMethodTypeList"/>
+    </request-map>
+    
+    <request-map uri="scheduledJob">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="scheduledJob"/>
+    </request-map>
+    <request-map uri="searchScheduledJob">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="scheduledJob"/>
+        <response name="error" type="view" value="scheduledJob"/>
+    </request-map>
+    <request-map uri="scheduledJobDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="scheduledJobDetail"/>
+    </request-map>
+    <request-map uri="addScheduledJob">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addScheduledJob"/>
+    </request-map>
+    <request-map uri="createScheduledJob">
+        <security https="true" auth="true"/>
+        <event type="java" path="com.osafe.services.OsafeAdminScheduledJobServices" invoke="scheduleService"/> 
+        <response name="success" type="request-redirect" value="searchScheduledJob"/>
+        <response name="error" type="view" value="addScheduledJob"/>
+    </request-map>
+    <request-map uri="cancelScheduledJob">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="cancelScheduledJobGroup"/> 
+        <response name="success" type="request-redirect" value="searchScheduledJob"/>
+        <response name="error" type="view" value="scheduledJobDetail"/>
+    </request-map>
+    <request-map uri="updateScheduledJob">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateScheduledJobGroup"/> 
+        <response name="success" type="request-redirect" value="searchScheduledJob"/>
+        <response name="error" type="view" value="scheduledJobDetail"/>
+    </request-map>
+    
     
     <request-map uri="reviewDetail">
         <security https="true" auth="true"/>
@@ -377,6 +434,16 @@
     <request-map uri="addStaticPageContent">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="addStaticPageContent"/>
+    </request-map>
+    <request-map uri="staticPageSeoUrlDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="staticPageSeoUrlDetail"/>
+    </request-map>
+    <request-map uri="updateStaticPageSeoUrl">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateStaticPageSeoUrlGroup"/> 
+        <response name="success" type="request-redirect" value="staticPageList"/>
+        <response name="error" type="view" value="staticPageSeoUrlDetail"/>
     </request-map>
     <request-map uri="contentLibraryList">
         <security https="true" auth="true"/>
@@ -564,8 +631,8 @@
         <response name="success" type="view" value="plpContentDetail"/>
     </request-map>
      <request-map uri="addPLPContentForCategory">
-        <security https="false" auth="true"/>
-        <event type="service" invoke="createCategoryTextContent"/>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminEvents.xml" invoke="createCategoryTextContent"/>
         <response name="success" type="request-redirect" value="plpContentDetail">
             <redirect-parameter name="parameters.contentId"/>
         </response>
@@ -587,8 +654,8 @@
         <response name="error" type="view" value="plpCategoryContentDetail"/>
     </request-map>
     <request-map uri="addPLPCategoryContent">
-        <security https="false" auth="true"/>
-        <event type="service" invoke="createCategoryTextContent"/>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminEvents.xml" invoke="createCategoryTextContent"/>
         <response name="success" type="request-redirect" value="plpCategoryContentDetail">
             <redirect-parameter name="parameters.contentId"/>
         </response>
@@ -603,8 +670,8 @@
         <response name="success" type="view" value="pdpContentDetail"/>
     </request-map>
      <request-map uri="addPDPContentForCategory">
-        <security https="false" auth="true"/>
-        <event type="service" invoke="createCategoryTextContent"/>
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminEvents.xml" invoke="createCategoryTextContent"/>
         <response name="success" type="request-redirect" value="pdpContentDetail">
             <redirect-parameter name="parameters.contentId"/>
         </response>
@@ -691,6 +758,7 @@
         <response name="success" type="request-redirect" value="compareLabelFileResultSearch"/>
         <response name="error" type="view" value="addMissingUiLabel"/>
     </request-map>
+    
     <request-map uri="deleteUiLabel">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteUiLabelGroup"/>
@@ -837,9 +905,21 @@
         <response name="success" type="request-redirect" value="adminToolList"/>
         <response name="error" type="view" value="adminToolDetail"/>
     </request-map>
+    <request-map uri="clearPixelCache">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="clearPixelCacheGroup"/>
+        <response name="success" type="request-redirect" value="adminToolList"/>
+        <response name="error" type="view" value="adminToolDetail"/>
+    </request-map>
     <request-map uri="solrReIndex">
         <security https="true" auth="true"/>
         <event type="service" invoke="solrReIndexGroup"/>
+        <response name="success" type="request-redirect" value="adminToolList"/>
+        <response name="error" type="view" value="adminToolDetail"/>
+    </request-map>   
+    <request-map uri="sendEmailTest">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="validateTestEmailGroup"/>
         <response name="success" type="request-redirect" value="adminToolList"/>
         <response name="error" type="view" value="adminToolDetail"/>
     </request-map>
@@ -863,6 +943,58 @@
         <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminEvents.xml" invoke="compareLabelFile"/>
         <response name="success" type="view" value="compareLabelFileResult"/>
         <response name="error" type="view" value="compareLabelFileDetail"/>
+    </request-map>
+<!-- =============================Manage DIV SEQUENCE files================================================= -->
+    <request-map uri="compareDivSequenceFileDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="compareDivSequenceFileDetail"/>
+    </request-map>
+    <request-map uri="compareDivSequenceFileResultSearch">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="compareDivSequenceFileResult"/>
+        <response name="error" type="view" value="compareDivSequenceFileResult"/>
+    </request-map>
+    <request-map uri="compareDivSequenceFile">
+        <security https="true" auth="true"/>
+        <event type="simple" path="component://osafeadmin/script/com/osafeadmin/events/OsafeAdminEvents.xml" invoke="compareLabelFile"/>
+        <response name="success" type="view" value="compareDivSequenceFileResult"/>
+        <response name="error" type="view" value="compareDivSequenceFileDetail"/>
+    </request-map>
+    <request-map uri="manageDivSeqItemDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="manageDivSeqItemDetail"/>
+    </request-map>
+    <request-map uri="addDivSeqItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addDivSeqItem"/>
+    </request-map>
+    <request-map uri="addMissingDivSeqItem">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addMissingDivSeqItem"/>
+    </request-map>
+    <request-map uri="createDivSeqItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createMissingDivGroup"/>
+        <response name="success" type="request-redirect" value="manageDivSequenceDetail"/>
+        <response name="error" type="view" value="addDivSeqItem"/>
+    </request-map>
+    <request-map uri="createMissingDiv">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="createMissingDivGroup"/>
+        <response name="success" type="request-redirect" value="compareDivSequenceFileResultSearch"/>
+        <response name="error" type="view" value="addMissingDivSeqItem"/>
+    </request-map>
+    <request-map uri="updateDivSequenceItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateDivSequenceItemGroup"/>
+        <response name="success" type="request-redirect" value="manageDivSequenceDetail"/>
+        <response name="error" type="view" value="manageDivSeqItemDetail"/>
+    </request-map>
+    <request-map uri="deleteDivSeqItem">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteDivSeqItemGroup"/>
+        <response name="success" type="request-redirect" value="manageDivSequenceDetail"/>
+        <response name="error" type="view" value="manageDivSeqItemDetail"/>
     </request-map>
     <!--  edit and manage e-commerce style css file  -->
     <request-map uri="manageEcommerceStyleDetail">
@@ -1068,6 +1200,7 @@
         <response name="error" type="view" value="mediaContentSearch"/>
     </request-map>
     <request-map uri="genSiteMap">
+        <security https="true" auth="true"/>
         <event type="groovy" path="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/" invoke="siteMapDetail.groovy"/>
         <response name="success" type="none"/>
     </request-map>
@@ -1408,6 +1541,11 @@
         <event type="service"  invoke="updateSagePayTokenConfigGroup"/>
         <response name="success" type="view" value="paymentGatewayConfigList"/>
     </request-map>
+    <request-map uri="updateEBSConfigDetail">
+        <security https="true" auth="true"/>
+        <event type="service"  invoke="updateEBSConfigGroup"/>
+        <response name="success" type="view" value="paymentGatewayConfigList"/>
+    </request-map>
 
     <!-- Payment Setting -->
     <request-map uri="paymentSettingManagement">
@@ -1505,6 +1643,11 @@
         <response name="error" type="view" value="editPixelTracking"/>
     </request-map>
 
+    <request-map uri="xmlBFdsdump">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="xmlBFdsdump"/>
+    </request-map>
+    
     <view-map name="login" type="screen" page="component://osafeadmin/widget/CommonScreens.xml#login"/>
     <view-map name="main" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#adminHome"/>
     <view-map name="customerManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerManagement"/>
@@ -1563,13 +1706,20 @@
 	<view-map name="carrierShipDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#carrierShipDetail"/>
 	<view-map name="addCarrierShip" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addCarrierShip"/>
 	<view-map name="addShipCarrier" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addShipCarrier"/>
+	<view-map name="addShipmentMethodTypeDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addShipmentMethodTypeDetail"/>
+	<view-map name="addShipmentMethodTypeList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addShipmentMethodTypeList"/>
 	<view-map name="addAnotherShipCarrier" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addAnotherShipCarrier"/>
+	
+	<view-map name="scheduledJob" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#scheduledJob"/>
+	<view-map name="scheduledJobDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#scheduledJobDetail"/>
+	<view-map name="addScheduledJob" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addScheduledJob"/>
 
 	<view-map name="ptsList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#ptsList"/>
 	<view-map name="ptsDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#ptsDetail"/>
 	<view-map name="staticPageList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#staticPageList"/>
 	<view-map name="staticPageDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#staticPageContentDetail"/>
     <view-map name="addStaticPageContent" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addStaticPageContent"/>
+    <view-map name="staticPageSeoUrlDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#staticPageSeoUrlDetail"/>
     <view-map name="contentLibraryList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#contentLibraryList"/>
     <view-map name="contentLibraryDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#contentLibraryDetail"/>
     <view-map name="addContentLibraryContent" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addContentLibraryContent"/>
@@ -1611,7 +1761,9 @@
     <view-map name="manageUiLabel" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageUiLabel"/>
     <view-map name="manageUiLabelDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageUiLabelDetail"/>
     <view-map name="addUiLabel" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addUiLabel"/>
+    <view-map name="addDivSeqItem" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addDivSeqItem"/>
     <view-map name="addMissingUiLabel" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addMissingUiLabel"/>
+    <view-map name="addMissingDivSeqItem" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addMissingDivSeqItem"/>
     <!-- End of Manage UI Labels view -->
     <!-- Manage DIV sequencing screens -->
     <view-map name="manageDivSequenceDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageDivSequenceDetail"/>
@@ -1640,6 +1792,9 @@
     <view-map name="adminToolDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#adminToolDetail"/>
     <view-map name="compareLabelFileDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#compareLabelFileDetail"/>
     <view-map name="compareLabelFileResult" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#compareLabelFileResult"/>
+    <view-map name="compareDivSequenceFileDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#compareDivSequenceFileDetail"/>
+    <view-map name="compareDivSequenceFileResult" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#compareDivSequenceFileResult"/>
+    <view-map name="manageDivSeqItemDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageDivSeqItemDetail"/>
     <view-map name="manageEcommerceStyleDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageEcommerceStyleDetail"/>
     <view-map name="editEcommerceStyleDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#editEcommerceStyleDetail"/>
     <view-map name="manageAdminStyleDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#manageAdminStyleDetail"/>
@@ -1695,5 +1850,8 @@
     
     <view-map name="pdpVariantCaptionList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#pdpVariantCaptionList"/>
     <view-map name="pdpVariantCaptionDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#pdpVariantCaptionDetail"/>
+    
+    <view-map name="xmlBFdsdump" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#xmlBFdsdump"/>
+    
 </site-conf>
 

@@ -76,7 +76,7 @@
                 <session-to-field field="userLogin"/>
                 <set from-field="userLogin.partyId" field="addressPurposeContext.partyId"/>
                 <!-- create the shipping location -->
-                <set value="SHIPPING_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
+                <set from-field="parameters.contactMechPurposeTypeId" field="addressPurposeContext.contactMechPurposeTypeId"/>
                 <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
             </else>
         </if-not-empty>

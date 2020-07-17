@@ -1,7 +1,5 @@
 <div class="displayBox">
- <div class="displayBoxHeader">
-  <span class="displayBoxHeaderCaption">${uiLabelMap.SearchResultNotFoundHeading}</span>
- </div>
+  <h3>${uiLabelMap.SearchResultNotFoundHeading}</h3>
 <#if requestAttributes.emptySearch?has_content>
     <p class="instructions">${uiLabelMap.EmptySiteSearchInfo}</p>
 <#else>

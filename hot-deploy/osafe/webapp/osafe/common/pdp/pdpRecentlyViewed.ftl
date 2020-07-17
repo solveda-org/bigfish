@@ -1,7 +1,7 @@
 <#-- variable setup and worker calls -->
 <#assign maxRecentlyViewedProducts = pdpRecentViewedMax/>
 <#if sessionAttributes.lastViewedProducts?exists && sessionAttributes.lastViewedProducts?has_content>
- <div id="pdpRecentlyViewed">
+ <div class="pdpRecentlyViewed">
   <#assign PRODUCT_STORE_PARM_FACET = PLP_FACET_GROUP_VARIANT_SWATCH_IMG!""/>
   ${setRequestAttribute("PRODUCT_STORE_PARM_FACET",PRODUCT_STORE_PARM_FACET)}
   <#if PRODUCT_STORE_PARM_FACET?has_content>
@@ -31,8 +31,8 @@
   <#list sessionAttributes.lastViewedProducts as productId>
     ${setRequestAttribute("plpItemId",productId)}
     <!-- DIV for Displaying Recommended productss STARTS here -->
-    <div class="eCommerceRecentlyViewedProduct eCommerceListItem">
-      ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#plpDivSequence")}
+    <div class="eCommerceListItem eCommerceRecentlyViewedProduct">
+      ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#PDPRecentDivSequence")}
     </div>
     <#if count == maxRecentlyViewedProducts?number>
        <#break>

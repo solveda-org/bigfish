@@ -6,7 +6,7 @@
             	<th class="nameCol">${uiLabelMap.NameLabel}</th>
                 <th class="statusCol">${uiLabelMap.StatusLabel}</th>
                 <th class="descCol">${uiLabelMap.DescriptionLabel}</th>
-                <#if spotListMenuId?exists && spotListMenuId == 'STATIC_PAGE_MENU'>
+                <#if contentTypeId?exists && contentTypeId == 'BF_STATIC_PAGE'>
                   <th class="actionCol"></th>
                 </#if>
                 <th class="dateCol">${uiLabelMap.ActiveDateLabel}</th>
@@ -26,9 +26,10 @@
         	<#assign defaultStatusLabel = defaultStatus.description!"" />
             
             <#assign rowClass = "1">          
-            <#list resultList as thisContent>
+            <#list resultList as content>
             	<#-- ==== Get the various content labels -->		
-            	<#assign hasNext = thisContent_has_next>
+                <#assign thisContent  = delegator.findByPrimaryKey("Content",Static["org.ofbiz.base.util.UtilMisc"].toMap("contentId",content.contentId))/>
+                <#assign hasNext = content_has_next>
     	        <#assign statusId = thisContent.statusId!"CTNT_DEACTIVATED" /> 			
            
             	<tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
@@ -56,11 +57,10 @@
                        ${thisContent.description?if_exists}
                      </td>
                      
-                    <#if spotListMenuId?exists && spotListMenuId == 'STATIC_PAGE_MENU'>
+                    <#if contentTypeId?exists && contentTypeId == 'BF_STATIC_PAGE'>
                     <#assign eText = ""/>
-                    <#assign content = delegator.findOne("Content", {"contentId", thisContent.contentId?if_exists}, false)/>
-                    <#if content?exists>
-                      <#assign dataResource = content.getRelatedOne("DataResource")>
+                    <#if thisContent?exists>
+                      <#assign dataResource = thisContent.getRelatedOne("DataResource")>
                       <#if dataResource?exists>
                         <#assign electronicText = dataResource.getRelatedOne("ElectronicText")>
                         <#assign eText = electronicText.textData!/>
@@ -87,7 +87,7 @@
                         ${(thisContent.createdDate?string(preferredDateFormat))!""}
                     </td>
                     <td class="actionColSmall <#if !hasNext>lastRow</#if> lastCol">
-                      <#if spotListMenuId?exists && spotListMenuId == 'STATIC_PAGE_MENU'>
+                      <#if contentTypeId?exists && contentTypeId == 'BF_STATIC_PAGE'>
                         <a href="<@ofbizUrl>staticPageMetatag?contentId=${thisContent.contentId!}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.HtmlMetatagTooltip}');" onMouseout="hideTooltip()"><span class="metatagIcon"></span></a>
                       </#if>
                       <#if previewAction?exists && previewAction?has_content>

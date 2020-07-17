@@ -32,7 +32,10 @@ under the License.
           <tr>
             <td>
               Code: ${orderShipmentInfoSummary.trackingCode?default("[Not Yet Known]")}
-              <#if orderShipmentInfoSummary.carrierPartyId?has_content>(${uiLabelMap.ProductCarrier}: ${orderShipmentInfoSummary.carrierPartyId})</#if>
+              <#if orderShipmentInfoSummary.carrierPartyId?has_content>
+	              <#assign carrier =  delegator.findByPrimaryKey("PartyGroup", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", orderShipmentInfoSummary.carrierPartyId))?if_exists />
+	              <#if carrier?has_content>(${uiLabelMap.ProductCarrier}: ${carrier.groupName?default(carrier.carrierPartyId)})</#if>
+              </#if>
             </td>
           </tr>
         </#list>

@@ -63,7 +63,7 @@
     <#if partyHomePhone?has_content || partyMobilePhone?has_content>
       <div class="infoRow">
         <#if partyHomePhone?has_content>
-          <#assign formattedPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhone.areaCode?if_exists, partyHomePhone.contactNumber?if_exists)/>
+          <#assign formattedPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhone.areaCode?if_exists, partyHomePhone.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
           <#if formattedPhone?has_content>
             <div class="infoEntry">
               <div class="infoCaption">
@@ -74,7 +74,7 @@
           </#if>
         </#if>
         <#if partyMobilePhone?has_content>
-          <#assign formattedMobilePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyMobilePhone.areaCode?if_exists, partyMobilePhone.contactNumber?if_exists)/>
+          <#assign formattedMobilePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyMobilePhone.areaCode?if_exists, partyMobilePhone.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
           <#if formattedMobilePhone?has_content>
             <div class="infoEntry">
               <div class="infoCaption">

@@ -1,33 +1,477 @@
 //********************************************************************************************
 //SQL UPDATES
 //********************************************************************************************
-  
+update product_attribute set attr_name = 'BF_INVENTORY_TOT' where attr_name='BIGFISH_INVENTORY';
+
+07/18/2012 issue#25383
+--@PRODUCT_STORE_ID@ replace this variable with product store id
+INSERT X_CONTENT_XREF (BF_CONTENT_ID,CONTENT_ID,PRODUCT_STORE_ID,CONTENT_TYPE_ID,LAST_UPDATED_STAMP,LAST_UPDATED_TX_STAMP,CREATED_STAMP,CREATED_TX_STAMP)
+SELECT CO.CONTENT_ID,CO.CONTENT_ID,"@PRODUCT_STORE_ID@","BF_STATIC_PAGE","2012-07-01 01:01:01.000","2012-07-01 01:01:01.000","2012-07-01 01:01:01.000","2012-07-01 01:01:01.000"
+FROM CONTENT CO WHERE CO.CONTENT_ID IN (SELECT CA.CONTENT_ID_TO FROM CONTENT_ASSOC CA WHERE CA.CONTENT_ID = "STATIC_PAGE_MENU")
+AND CO.CONTENT_ID NOT IN (SELECT XCR.CONTENT_ID FROM X_CONTENT_XREF XCR WHERE XCR.CONTENT_TYPE_ID="BF_STATIC_PAGE");
+
+--@PRODUCT_STORE_ID@ replace this variable with product store id
+INSERT X_CONTENT_XREF (BF_CONTENT_ID,CONTENT_ID,PRODUCT_STORE_ID,CONTENT_TYPE_ID,LAST_UPDATED_STAMP,LAST_UPDATED_TX_STAMP,CREATED_STAMP,CREATED_TX_STAMP)
+SELECT CO.CONTENT_ID,CO.CONTENT_ID,"@PRODUCT_STORE_ID@","BF_CONTENT_LIBRARY","2012-07-01 01:01:01.000","2012-07-01 01:01:01.000","2012-07-01 01:01:01.000","2012-07-01 01:01:01.000"
+FROM CONTENT CO WHERE CO.CONTENT_ID IN (SELECT CA.CONTENT_ID_TO FROM CONTENT_ASSOC CA WHERE CA.CONTENT_ID = "CONTENT_LIBRARY_MENU")
+AND CO.CONTENT_ID NOT IN (SELECT XCR.CONTENT_ID FROM X_CONTENT_XREF XCR WHERE XCR.CONTENT_TYPE_ID="BF_CONTENT_LIBRARY");
+
+--these delete statement should be execute after above insert statements
+DELETE FROM CONTENT_ASSOC WHERE CONTENT_ID IN ("SITE_INFO_MENU", "HOME_PAGE_SPOT_MENU", "PAGE_TOP_SPOT_MENU", "PDP_SPOT_MENU", "STATIC_PAGE_MENU", "CONTENT_LIBRARY_MENU", "EMAIL_MENU") 
+OR CONTENT_ID_TO IN ("SITE_INFO_MENU", "HOME_PAGE_SPOT_MENU", "PAGE_TOP_SPOT_MENU", "PDP_SPOT_MENU", "STATIC_PAGE_MENU", "CONTENT_LIBRARY_MENU", "EMAIL_MENU");
+
+DELETE FROM CONTENT WHERE CONTENT_ID IN ("SITE_INFO_MENU", "HOME_PAGE_SPOT_MENU", "PAGE_TOP_SPOT_MENU", "PDP_SPOT_MENU", "STATIC_PAGE_MENU", "CONTENT_LIBRARY_MENU", "EMAIL_MENU");
+
+   07/18/2012 Issue #26220
+	   DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_SHARE_SOC_MEDIA';
+	   DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_SHARE_FACEBOOK';
+	   DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_SHARE_TWITTER';
+	   DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_SHARE_DIG';
+	   DELETE FROM X_PRODUCT_STORE_PARM WHERE PARM_KEY ='PDP_SHARE_DELICIOUS';
 //********************************************************************************************
 //BIGFISH PARAMETERS UPDATES
 //FILE: bigFishParameters.xml
 //********************************************************************************************
 
 //Add
+06/27/2012 issue#26018
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE" description="General name of the Store to be used in all <TITLE> tags except the Home Page. This will supplement other information that is used to derive the <TITLE> tag." parmCategory="SEO"/>
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_STORE_TITLE_POSITION" description="Parameter to define whether the SEO_GENERAL_TITLE is used as PREFIX or SUFFIX when building <TITLE> tags" parmCategory="SEO"/>
+06/29/2012 issue#26036
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_REMOVE_SHIP_COST_EST" description="For implementation using BIGFISH as the Inventory Method. A comma separated list of Shipping Cost Estimate IDs used to suppress certain shipping options if BF-INVENTORY-WHS is equal or less than zero for any cart items" parmCategory="CHECKOUT"/>
+07/07/2012 issue#
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SITEMAP_VARIANT_FEATURES" description="TBD" parmCategory="SITEMAP"/>
+07/09/2012 issue#25884
+    <PartyContentType partyContentTypeId="STORE_CONTENT_SPOT" description="Store Content Spot" hasTable="N" parentTypeId=""/>
+07/19/2012 issue#25967
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_BF_SERVICES_AVAIL_FOR_SCHED" description="The maximum number of characters to display in a Tooltip within the Admin Module" parmCategory="ADM"/>
+07/20/2012 issue#26214
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_CC_VERIFICATION_REQ" description="If set to TRUE then prompt for the Verification information. If not true then this information is not required for credit card authentication" parmCategory="CHECKOUT"/>
 
 //Remove
-
+   07/18/2012 Issue #26220
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_SOC_MEDIA" description="Include the Share display box on PDP, true or false" parmCategory="PDP"/>
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_FACEBOOK" description="Include Facebook share in the share-box, leave blank to not display" parmCategory="PDP"/>
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_TWITTER" description="Include Twitter share in the share-box, leave blank to not display" parmCategory="PDP"/>
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_DIG" description="Include DigThis share in the share-box, leave blank to not display" parmCategory="PDP"/>
+	<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_DELICIOUS" description="Include Delicious share in the share-box, leave blank to not display" parmCategory="PDP"/>
+   07/20/2012 Issue #26224
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_CC" description="Defines whether a “Pickup-In-Store” offers a credit card payment" parmCategory="CHECKOUT"/>
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_CC_REQ" description="Defines whether a “Pickup-In-Store” REQUIRES payment by credit card before the order is accepted" parmCategory="CHECKOUT"/>
+    
 //********************************************************************************************
 //LABEL UPDATES
 //FILE: OSafeUiLabels.xml
 //********************************************************************************************
 
 //Add
-
+ 06/15/2012 issue#25938
+    <property key="ValidDobDateError">
+        <value xml:lang="en">Please Enter a Valid Date.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ValidDobDateError</description>
+    </property>
+    <property key="DOB_Caption">
+        <value xml:lang="en">Date Of Birth:</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBCaption</description>
+    </property>
+    <property key="DOB_Month">
+        <value xml:lang="en">Month</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBMOnthCaption</description>
+    </property>
+    <property key="DOB_Day">
+        <value xml:lang="en">Day</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBDayCaption</description>
+    </property>
+    <property key="DOB_Year">
+        <value xml:lang="en">Year</value>
+        <category>MY_ACCOUNT</category>
+        <description>DOBYearCaption</description>
+    </property>
+	06/27/2012 issue#25891
+    <property key="CustomerAddressTitle">
+        <value xml:lang="en">Billing and Shipping Information</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>CustomerAddressTitle</description>
+    </property>
+    <property key="AnonCustomerInformationTitle">
+        <value xml:lang="en">Personal, Billing and Shipping Information</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>AnonCustomerInformationTitle</description>
+    </property>
+    <property key="SelectAddressCaption">
+        <value xml:lang="en">Select from Address Book:</value>
+        <category>MESSAGE_INFO</category>
+        <description>SelectAddressCaption</description>
+    </property>
+	06/29/2012 issue#25891
+    <property key="SinglePageCheckoutTitle">
+        <value xml:lang="en">Single Page Checkout</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>SinglePageCheckoutTitle</description>
+    </property>
+    07/04/2012 issue #26116
+    <property key="ShippingAddressDefaultNickNameLabel">
+        <value xml:lang="en">Home</value>
+        <category>MY_ACCOUNT</category>
+        <description>ShippingAddressDefaultNickNameLabel</description>
+    </property>
+    07/06/2012 issue#25891
+	<property key="RegistrationSolicitCheckboxLabel">
+        <value xml:lang="en">Please send me exclusive discounts and special promotions</value>
+        <category>CHECKOUT</category>
+        <description>Solicitation checkbox</description>
+    </property>
+	07/06/2012 issue #26083
+    <property key="PdpTabLabel6">
+        <value xml:lang="en">TAB 6</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel7">
+        <value xml:lang="en">TAB 7</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel8">
+        <value xml:lang="en">TAB 8</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel9">
+        <value xml:lang="en">TAB 9</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel10">
+        <value xml:lang="en">TAB 10</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel11">
+        <value xml:lang="en">TAB 11</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel12">
+        <value xml:lang="en">TAB 12</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel13">
+        <value xml:lang="en">TAB 13</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel14">
+        <value xml:lang="en">TAB 14</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel15">
+        <value xml:lang="en">TAB 15</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel16">
+        <value xml:lang="en">TAB 16</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel17">
+        <value xml:lang="en">TAB 17</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel18">
+        <value xml:lang="en">TAB 18</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel19">
+        <value xml:lang="en">TAB 19</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel20">
+        <value xml:lang="en">TAB 20</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel21">
+        <value xml:lang="en">TAB 21</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel22">
+        <value xml:lang="en">TAB 22</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel23">
+        <value xml:lang="en">TAB 23</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel24">
+        <value xml:lang="en">TAB 24</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel25">
+        <value xml:lang="en">TAB 25</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel26">
+        <value xml:lang="en">TAB 26</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel27">
+        <value xml:lang="en">TAB 27</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel28">
+        <value xml:lang="en">TAB 28</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel29">
+        <value xml:lang="en">TAB 29</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel30">
+        <value xml:lang="en">TAB 30</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel31">
+        <value xml:lang="en">TAB 31</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel32">
+        <value xml:lang="en">TAB 32</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel33">
+        <value xml:lang="en">TAB 33</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel34">
+        <value xml:lang="en">TAB 34</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel35">
+        <value xml:lang="en">TAB 35</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel36">
+        <value xml:lang="en">TAB 36</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel37">
+        <value xml:lang="en">TAB 37</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel38">
+        <value xml:lang="en">TAB 38</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel39">
+        <value xml:lang="en">TAB 39</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel40">
+        <value xml:lang="en">TAB 40</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="ReadLabel">
+        <value xml:lang="en">Read</value>
+        <category>RATING_REVIEW</category>
+        <description>ReadReviewLabel</description>
+    </property>
+    <property key="ReviewsLabel">
+        <value xml:lang="en">Review(s)</value>
+        <category>RATING_REVIEW</category>
+        <description>ReadReviewLabel</description>
+    </property>
+ 07/11/2012 issue#26142
+    <property key="OrderStatusChangeMessage">
+        <value xml:lang="en">The status of the below order is now </value>
+        <category>ORDER_STATUS</category>
+        <description>OrderStatusChangeMessage</description>
+    </property>
 //Remove
-
+	06/29/2012 issue#25891
+    <property key="GuestCheckoutTitle">
+        <value xml:lang="en">Guest Checkout</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>GuestCheckoutTitle</description>
+    </property>
+    07/06/2012 issue#25891
+	<property key="RegistrationSolicitCheckboxLabel">
+        <value xml:lang="en">Sign me up for Up and Runway emails</value>
+        <category>CHECKOUT</category>
+        <description>Solicitation checkbox</description>
+    </property>
 //********************************************************************************************
 //DIV SEQUENCE UPDATES
 //FILE: OSafeUiSequence.xml
 //********************************************************************************************
 
 //Add
+   07/18/2012 Issue #26220
+    <property key="content01">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpContent01</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content02">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpContent02</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content03">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpContent03</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content04">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpContent04</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content05">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpContent05</div>
+        <description>General additional PDP content</description>
+    </property>
+
+    <property key="content01">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent01</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content02">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent02</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content03">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent03</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content04">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent04</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content05">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent05</div>
+        <description>General additional PDP content</description>
+    </property>
+
+    <property key="content01">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookContent01</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content02">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookContent02</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content03">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookContent03</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content04">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookContent04</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content05">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookContent05</div>
+        <description>General additional PDP content</description>
+    </property>
+
+   07/24/2012
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpTertiaryInfo</div>
+        <description>Tertiary Information</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsTertiaryInfo</div>
+        <description>Tertiary Information</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookTertiaryInfo</div>
+        <description>Tertiary Information</description>
+    </property>
 
 //Remove
+   07/18/2012 Issue #26220
+    <property key="socialMedia">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <div>pdpSocialMedia</div>
+        <description>Social Media Share. Includes Facebook, Digg and other social media links. </description>
+    </property>
+
+    <property key="socialMedia">
+        <value xml:lang="en">0</value>
+        <screen>PDPTABS</screen>
+        <div>pdpSocialMedia</div>
+        <description>Social Media Share. Includes Facebook, Digg and other social media links. </description>
+    </property>
+
+    <property key="socialMedia">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>pdpSocialMedia</div>
+        <description>Social Media Share. Includes Facebook, Digg and other social media links. </description>
+    </property>
 
 
 
@@ -37,8 +481,24 @@
 //********************************************************************************************
 
 //Add
+  07/22/2012 Issue#26269
+   #######################################
+   # URL Properties
+   #######################################
+    url.port.http=
+    url.port.https=
+    url.http.host=
+    url.https.host=
+
 
 //Remove
+  07/22/2012 Issue#26269
+
+   #######################################
+   # web site
+   #######################################
+   http.host=
+   https.host=
 
 //********************************************************************************************
 //ECOMMERCE SEED UPDATES
@@ -54,10 +514,12 @@
 //FILE: bigFishClientSkin.css
 //********************************************************************************************
 
-//Add
+//7.23.2012 Replace From Check Phases Section to Review Rating Bar
+
+/* === 11. Checkout Phases  === */  /* === 11.1 Login  === */  #eCommerceLoginContainer{  }  #returningCustomer.withGuestCheckoutOption, #newCustomer.withGuestCheckoutOption, #guestCheckoutBox.withGuestCheckoutOption {  }  #eCommerceLoginContainer .withGuestCheckoutOption label {  } #eCommerceLoginContainer .withGuestCheckoutOption input[type="text"], #eCommerceLoginContainer .withGuestCheckoutOption input[type="password"] {  }  #returningCustomer {  }  #returningCustomer .displayBoxHeader .displayBoxHeaderCaption, #newCustomer .displayBoxHeader .displayBoxHeaderCaption {  }  #returningCustomer .infoAndEntrysec .entry label, #newCustomer .infoAndEntrysec .entry label {  }  #returningCustomer .infoAndEntrysec p {  }  #returningCustomer #forgottenPassword {  }  #returningCustomer #forgottenPassword:hover {  }  #returningCustomer p.loginTip {  }  #newCustomer {  }  /* === 11.1.1 Forgot Password  === */  #forgotPassword {  }  #forgotPassword .entryButtons {  }  /* === 11.1.2 Change Password  === */  #changePassword {  }  /* === 11.1.3 Guest Checkout  === */  #guestCheckout #createAccountEntry {  }  #guestCheckout #createAccountEntry input[type="text"], #guestCheckout #createAccountEntry input[type="password"] {   }  #guestCheckout .shippingOptions {  }  #guestCheckout #paymentMethods {  }  form div.entryButtons.submitOrder {  }  .boxTopMessage {  }  #createAccountEntry .entry .radioOptionText {  }  #guestCheckout .entry label {  }  #createAccountEntry .entry {  }  .withGuestCheckoutOption div.infoAndEntrysec {  }  /* === 11.2 Show Cart  === */  	/* ----- Container Styles -----*/  #eCommerceShowcart { 	 }  #eCommerceShowcart:after {     visibility: hidden; 	display: block; 	font-size: 0; 	content: " "; 	clear: both; 	height: 0; }  	/* ----- Order Items Div -----*/  .showCartItems { 	 }  .showCartItems #cart_wrap { 	/* #cart_wrap contains styles in the shopping cart section */ }  	/* ----- Promo Code Div -----*/  #eCommerceEnterPromoCode { 	 }  #eCommerceEnterPromoCode .displayBox { 	 }  #eCommerceEnterPromoCode .displayBox .displayBoxHeader { 	 }  #eCommerceEnterPromoCode .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry { 	 }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry label { 	 }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input { 	 }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a.standardBtn {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry a.standardBtn:hover {  }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode { 	 }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode { 	 }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode { 	 }  .previousButton { 	 }  .continueButton {  	 }  /* === 11.3 Shipping Address  === */  /* Post Code Anywhere Style Overrides (Applied to All PCA Instances) */  .pcaAutoComplete .inputArea {  }  #multiPageCustomerAddress {  }  #multiPageCustomerAddress:after {     visibility: hidden; 	display: block; 	font-size: 0; 	content: " "; 	clear: both; 	height: 0; }  #multiPageCustomerAddress .entry label { /* Longer Width for Longer Label */  }  .billingAddress .displayBox {  }  .billingAddress .displayBox .displayBoxHeader {  }  .billingAddress .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  .shippingAddress .displayBox {  }  .shippingAddress .displayBox .displayBoxHeader {  }  .shippingAddress .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  .previousButton {  }  .continueButton {  }  /* === 12.3.1 Edit Shipping Address (UseR clicks on Update)  === */  #CUSTOMER_ADDRESS_ENTRY.displayBox { 	 }  #CUSTOMER_ADDRESS_ENTRY.displayBox .displayBoxHeader { 	 }  #CUSTOMER_ADDRESS_ENTRY.displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  #CUSTOMER_ADDRESS_ENTRY p.instructions {  }  #CUSTOMER_ADDRESS_ENTRY .entry {  }  #CUSTOMER_ADDRESS_ENTRY .entry label {  }  #CUSTOMER_ADDRESS_ENTRY .entry input {  }  .editShippingAddress .entry ul li {     /* Used to push field level errors under associated edit js2 */ }  /* === 11.4 Shipping Options and Delivery Times  === */  #multiPageShippingOptions {  }  #multiPageShippingOptions:after {     visibility: hidden; 	display: block; 	font-size: 0; 	content: " "; 	clear: both; 	height: 0; }   #deliveryOptionBox .displayBox { 	 }  #deliveryOptionBox .displayBox .displayBoxHeader { 	 }  #deliveryOptionBox .displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  #deliveryOptionBox .displayBox .shippingMethodsContainer { 	 }  #deliveryOptionBox .displayBox .shippingMethodsContainer .col {  }   .shippingOptionsStorePickup {  }  .shippingOptionsStorePickup span {  }  .previousButton {  }  .continueButton {  }  /* === 11.5 Order Summary / Payment  === */  #checkoutInfoForm {  }  #checkoutInfoForm:after {     visibility: hidden; 	display: block; 	font-size: 0; 	content: " "; 	clear: both; 	height: 0; }  	/* ----- .checkoutOrderBillingAddressSeq ----- */  .checkoutOrderBillingAddress {  }  .checkoutOrderBillingAddress .displayBox {  }  .checkoutOrderBillingAddress .displayBox p {  }  .checkoutOrderBillingAddress .displayBox .displayBoxHeader {  }  .checkoutOrderBillingAddress .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  .checkoutOrderBillingAddress .displayBox .address {  }  	/* ----- .checkoutOrderItemsSeq ----- */  .orderSummaryOrderItems {  }  .orderSummaryOrderItems .orderDetails {  }  .orderSummaryOrderItems .orderDetails #orderItemsWrap {  }  .orderSummaryOrderItems .orderDetails #orderItemsWrap #cart_display { 	/* Contents of this container are the Cart Table and Styled in the Shopping Cart section */ }  	/* ----- .checkoutOrderPaymentsSeq ----- */   .checkoutOrderPayments {  }  .checkoutOrderPayments #orderPayment {  }  .checkoutOrderPayments #orderPayment .displayBox {  }  .checkoutOrderPayments #orderPayment .displayBox .displayBoxHeader {  }  .checkoutOrderPayments #orderPayment .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  .checkoutOrderPayments #orderPayment .displayBox h3 {  }  .checkoutOrderPayments #orderPayment .displayBox label {  }  .checkoutOrderPayments #orderPayment .displayBox input {  } 	/* ----- .checkoutOrderPromoCodeSeq ----- */  #eCommerceEnterPromoCode {  }  #eCommerceEnterPromoCode .displayBox {  }  #eCommerceEnterPromoCode .displayBox .displayBoxHeader {  }  #eCommerceEnterPromoCode .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry label {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input#manualOfferCode {  }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode {  }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode {  }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input#manualOfferCode {  }  	/* ----- .checkoutOrderShippingAddressSeq ----- */   .checkoutOrderShippingAddress {  }  .checkoutOrderShippingAddress .displayBox {  }  .checkoutOrderShippingAddress .displayBox p {  }  .checkoutOrderShippingAddress .displayBox .displayBoxHeader {  }  .checkoutOrderShippingAddress .displayBox .displayBoxHeaderCaption {  }  .checkoutOrderShippingAddress .displayBox .address {  }  	/* ----- .storePickup ----- */  .orderSummaryStorePickup {  }  	/* ----- .createAccount ----- */  .orderSummaryCreateAccount {  }  	/* ----- .previous / .continue buttons ----- */  .previousButton {  }  #submitOrderBtn {  }  /* === 11.6 Order Confirmation  === */  	/* ----- .orderConfirmFootPrint ----- */  	/* ----- .orderConfirmOrderItems ----- */ 	 .orderConfirmOrderItemsSeq { 	 }  .checkoutOrderItems .orderDetails { 	 }  .checkoutOrderItems .orderDetails #orderItemsWrap { 	/* Contents of this container are the Cart Table and Styled in the Shopping Cart section */ }  	/* ----- .orderConfirmBillingAddress ----- */  .checkoutOrderBillingAddress .displayBox {  }  .checkoutOrderBillingAddress .displayBox .displayBoxHeader { 	 }  .checkoutOrderBillingAddress .displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  .checkoutOrderBillingAddress .displayBox .address { 	 }  .checkoutOrderBillingAddress .displayBox .address p { 	 }  	/* ----- .orderConfirmShippingAddress ----- */  .checkoutOrderShippingAddress .displayBox {  }  .checkoutOrderShippingAddress .displayBox .displayBoxHeader { 	 }  .checkoutOrderShippingAddress .displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  .checkoutOrderShippingAddress .displayBox .address { 	 }  .checkoutOrderShippingAddress .displayBox .address p { 	 }  	/* ----- .orderConfirmPaymentOptions ----- */  #paymentInformation .displayBox {  }  #paymentInformation .displayBox .displayBoxHeader { 	 }  #paymentInformation .displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  #paymentInformation .displayBox .creditCardInfo { 	 }  #paymentInformation .displayBox .address label { 	 }  	/* ----- .orderConfirmStorePickup ----- */  .orderConfirmStorePickup { 	 }  	/* ----- .previous / .continue buttons ----- */  .continueButton {  }  /* === 11.7 One Page Checkout  === */  	/* ----- BillingAddress ----- */  .billingAddress {  }  .billingAddress .displayBox {  }  .billingAddress .displayBox .displayBoxHeader {  }  .billingAddress .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  .billingAddress .displayBox .address {  }  	/* ----- OrderItems ----- */   .checkoutOrderItems {  }  .checkoutOrderItems .orderDetails {  }  .checkoutOrderItems .orderDetails #orderItemsWrap {  }  .checkoutOrderItems .orderDetails #orderItemsWrap #cart_display {  }  	/* ----- PaymentOptions ----- */  .checkoutOrderPayments {  }  .checkoutOrderPayments #orderPayment {  }  .checkoutOrderPayments #orderPayment .displayBox {  }  .checkoutOrderPayments #orderPayment .displayBox .displayBoxHeader {  }  .checkoutOrderPayments #orderPayment .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  .checkoutOrderPayments #orderPayment .displayBox h3 { 	 }  .checkoutOrderPayments #orderPayment .displayBox label {  }  .checkoutOrderPayments #orderPayment .displayBox input {  } 	/* ----- PromoCode ----- */  #eCommerceEnterPromoCode {  }  #eCommerceEnterPromoCode .displayBox {  }  #eCommerceEnterPromoCode .displayBox .displayBoxHeader {  }  #eCommerceEnterPromoCode .displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry label {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input#manualOfferCode {  }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode {  }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode {  }  #eCommerceEnterPromoCode .displayBox #eCommerceEnteredPromoCode .checkoutOrderPromoCode .ecommercePromocode {  }  #eCommerceEnterPromoCode .displayBox #ecommercePromocodeEntry input#manualOfferCode {  }  	/* ----- ShippingAddress ----- */  .deliveryOptionBox .displayBox {  }  .deliveryOptionBox .displayBox .displayBoxHeader {  }  .deliveryOptionBox .displayBox .displayBoxHeaderCaption {  }  .deliveryOptionBox #SHIPPING_AddressSection {  }  	/* ----- createAccount ----- */  #createAccountEntry.displayBox { 	 }  #createAccountEntry.displayBox .displayBoxHeader { 	 }  #createAccountEntry.displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  #createAccountEntry.displayBox .boxTopMessage { 	 }  	/* ----- .previous / .continue buttons ----- */  .submitOrderBtn { 	 }  /* === 11.8 Personal Info  === */  .personalInfoFirstName {  }  .personalInfoLastName { 	 }  .personalInfoGender {  }  .personalInfoDateOfBirthMMDDYYYY {  }  .personalInfoDateOfBirthMMDD {  }  .personalInfoPhoneHome {  }  .personalInfoPhoneCell { 	 }  .personalInfoPhoneWork {  }  /* === 11.9 Order History  === */  #orderSalesHistory {  }  #orderSalesHistory .orderNumber {  }  #orderSalesHistory .orderDate {  }  #orderSalesHistory .orderStatus {  }  #orderSalesHistory .totalPrice {  }  /* === 12. Static Pages   === */  /* === 12.1 Contact Us  === */  .contactUsPhone {  } .contactUsPhone .contactRow {    }  .contactUsPhone .contactRow label {  }  .contactUsPhone .contactRow p {    }  .contactUsFax {  }  .contactUsFax .contactRow {    }  .contactUsFax .contactRow label {  }  .contactUsFax .contactRow p {     }  .contactUsEmail {  }  .contactUsEmail .contactRow {    }  .contactUsEmail .contactRow label {  }  .contactUsEmail .contactRow p {   }  .contactUsEmail .contactRow a {    }  .contactUsEmail .contactRow a:hover {    }  .contactUsMail {  }  .contactUsMail .contactRow {    }  .contactUsMail .contactRow label {  }  .contactUsMail .contactRow ul {   }  .contactUsMail .contactRow ul li {    }  /* === 12.2 Store Locater   === */  .mapCanvas {  }  .mapCanvasWithDirection {  }  .mapLoading {  }  .mapClosure {  }  .mapDirection {  }  .closeDirection {  }  .noDirection {  }  .noDirection span {  }  .routeDirection {  }  .drivingDirectionIcon {  }  .walkingDirectionIcon {  }  .bicyclingDirectionIcon {  }  #eCommerceStoreLocatorContainer .displayBox {  }  .displayBox div.storeLocator {  }  .storeLocator div.storeSearch { }  .storeSearch div.entry {  }  .storeSearch div.entry label {  }  .storeSearch div.entry input.standardBtn {  }  .storeSearch div.entry input[type="text"]{  }  .storeLocator div.storeMap {  }  .storeLocator div.storeList {  }  .storeList div.store {  }  .store div.storeDist {  }  .store div.storeDetail {  }  .storeDetail .storeName {  }  .storeDetail .storeAddress { 	 }  .store div.storeDirectionIcon {  }  .store div.storeDirectionIcon a {  }  .storeDetailsBubble {  }  .storeDetailsBubble li {  }  .storeDetailsBubble .label {  }  .storeDetailsBubble .value {  }  .storeDetailsBubble .storeName {  }  .storeDetailsBubble .addressLine2 {  }  /* === 12.3 Request Catalog  === */  .requestCatalog {  }  .requestCatalog .entry ul li {  }  .textCounter {  }  /* === 12.3 My Account  === */  #Customerpersonalinfo a, #Customerlogininfo a, #CustomerAddressBook a, #CustomerOrderStatus a, #CustomerOrderStatus a {  }  #Customerpersonalinfo a:hover, #Customerlogininfo a:hover, #CustomerAddressBook a:hover, #CustomerOrderStatus a:hover, #CustomerOrderStatus a:hover {  }  #eCommerceEditAddressBookContainer {  }  #eCommerceEditAddressBookContainer .shippingAddress {  }  #eCommerceEditAddressBookContainer .shippingAddress .addressContainer {  }  #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle {  }  #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle p {  }  #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle .buttons {  }  #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .displayBox.addressTitle .buttons a {  }  #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .newAddressButtons {  }  #eCommerceEditAddressBookContainer .shippingAddress .addressContainer .newAddressButtons a {  }  /* === 12.4 Site Map === */  .siteMap {  }  .siteMap a {  }  .siteMap a:hover {  }  .siteMap li.topLevel.head {  }  .siteMap li.topLevel { 	 }  .siteMap ul.subLevel {  }  .siteMap ul.subLevel li {  }  .siteMap li.subLevel {  }  /* === 13. Styles for Product Review === */  /* === 13.1 Review List === */  .pdpReviewList {  }  #productReviewDisplay.displayBox {  }  #productReviewDisplay.displayBox .displayBoxHeader {  }  #productReviewDisplay .displayBoxHeaderCaption {   }  #reviewSortOptions {  }  #reviewSortOptions label {  }  #productReviewDisplay .reviewBody {   }  .reviewHeaderRow {   }  .reviewHeader {  }  .reviewRow {  }  .reviewRow .reviewRatingSection {  }  .reviewRatingSection .ratingSummary {  }  .reviewRow .reviewDataSection {  }  .reviewDataSection .ratingNickname {  }  .reviewDataSection .ratingTitle {  }  .reviewPostDateSection .reviewDate {  }  .reviewRow .reviewTextSection {  }  .reviewTextSection .reviewText {  }  .reviewRow .reviewPostDateSection {  }  /* === 13.2 Write a Review  === */  #eCommerceProductReviewSubmit { 	 }  #productReviewDetails.displayBox { 	 }  #productReviewDetails.displayBox .displayBoxHeader { 	 }  #productReviewDetails.displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  #productReviewDetails.displayBox #productReviewHeaderRow { 	 }  #productReviewDetails.displayBox #productReviewHeaderRow .productReviewHeader { 	 }  #productReviewDetails.displayBox #productReviewHeaderRow .productReviewHeader img { 	 }  #productReviewDetails.displayBox #productReviewHeaderRow .productReviewHeader span { 	 }  #productRatingEntry.displayBox {  }  #productRatingEntry.displayBox .displayBoxHeader {  }  #productRatingEntry.displayBox .displayBoxHeader .displayBoxHeaderCaption {  }  #productRatingEntry.displayBox #qualityRatingEntry {  }  #productRatingEntry.displayBox #effectivenessRatingEntry {  }  #productRatingEntry.displayBox #satisfactionRatingEntry {  }  #productRatingEntry.displayBox #productRatingTellOtherEntry {  }  #productRatingShareEntry.displayBox { 	 }  #productRatingShareEntry.displayBox .displayBoxHeader { 	 }  #productRatingShareEntry.displayBox .displayBoxHeader .displayBoxHeaderCaption { 	 }  #productRatingShareEntry.displayBox textarea#REVIEW_TEXT { 	 }  #productRatingShareEntry.displayBox #reviewTextHelper { 	 }  #productRatingShareEntry.displayBox #reviewTextHelper #reviewTipsHeaderDiv { 	 }  #productRatingShareEntry.displayBox #reviewTextHelper #reviewTipsContentDiv { 	 }  /* === 13.3 Review Rating Bar / Review Facet Rating Bar === */  table#overallRatingBar {  }  table#overallHover {  }  table#overallFilled {  }  table#rateObj0RatingBar {  }  table#rateObj0Hover {  }  table#rateObj0Filled {  }  table#rateObj1RatingBar {  }  table#rateObj1Hover {  }  table#rateObj1Filled {  }  table#rateObj2RatingBar {  }  table#rateObj2Hover {  }  table#rateObj2Filled {  }  .ratingFacetBar {  }  .rating_bar_submit_ {  }  .rating_bar_submit_1 {   }  .rating_bar_submit_2 {   }  .rating_bar_submit_3 {   }  .rating_bar_submit_4 {   }  .rating_bar_submit_5 {    } 
 
 
-//Remove
+
 
 
 
@@ -67,5 +529,17 @@
 //********************************************************************************************
 
 //Add
-
+ 6/28/2012 Issue #26025
+    #######################################
+    # PLP SORT OPTIONS
+    #Format (SORT_OPTION=SORT_VALUE-ORDER(asc,desc),SORT_LABEL)
+    #######################################
+    HIGHEST_RATING =customerRating-desc|HighestRatingLabel
+    MOST_POPULAR =sequenceNum|MostPopularLabel
+    NAME_ASCENDING =name-asc|NameAscendingLabel
+    NAME_DESCENDING =name-desc|NameDescendingLabel
+    HIGHEST_PRICE =price-desc|HighestPriceLabel
+    LOWEST_PRICE =price-asc|LowestPriceLabel
+    MOST_VIEWED =totalTimesViewed-desc|MostViewedLabel
+    BEST_SELLING =totalQuantityOrdered-desc|BestSellingLabel
 //Remove

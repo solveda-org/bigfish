@@ -1,21 +1,24 @@
-<#if uiPdpTabSequenceSearchList?has_content>
+<#if uiPdpTabSequenceGroupMaps?has_content>
  <div class="pdpTabs">
    <ul>
    <#assign idx=1/>
-   <#list uiPdpTabSequenceSearchList as pdpTabDiv>
-      <#assign sequenceNum = pdpTabDiv.value!/>
-      <#if sequenceNum?has_content && sequenceNum?number !=0>
+   <#list uiPdpTabSequenceGroupMaps.entrySet() as entry>
         <#assign tabLabel = uiLabelMap.get("PdpTabLabel" + idx)/>
-        <li><a href="#${pdpTabDiv.key}">${tabLabel}</a></li>
+        <li><a href="#pdpTabsGroup_${entry.key}">${tabLabel}</a></li>
         <#assign idx= idx + 1/>
-      </#if>
    </#list>
    </ul>
-   <#list uiPdpTabSequenceSearchList as pdpTabDiv>
-      <#assign sequenceNum = pdpTabDiv.value!/>
-      <#if sequenceNum?has_content && sequenceNum?number !=0>
-        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#${pdpTabDiv.key}")}
-      </#if>
+
+   <#list uiPdpTabSequenceGroupMaps.entrySet() as entry>
+      <div id = "pdpTabsGroup_${entry.key}">
+          <#assign uiPdpTabSequenceScreenList = (entry.value)?default("")>
+          <#list uiPdpTabSequenceScreenList as pdpTabDiv>
+              <#assign sequenceNum = pdpTabDiv.value!/>
+              <#if sequenceNum?has_content && sequenceNum?number !=0>
+                ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#${pdpTabDiv.div}")}
+              </#if>
+          </#list>
+      </div>
    </#list>
  </div>
 </#if>

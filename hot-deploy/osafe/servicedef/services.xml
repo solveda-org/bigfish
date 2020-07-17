@@ -72,6 +72,7 @@
         <attribute name="productListUrl" mode="IN" type="String" optional="true" ></attribute>
         <attribute name="productCategoryListUrl" mode="IN" type="String" optional="true" ></attribute>
         <attribute name="staticPageUrl" mode="IN" type="String" optional="true" ></attribute>
+        <attribute name="siteMapVariantFeatures" mode="IN" type="String" optional="true" ></attribute>
         <attribute name="siteMapFile" type="java.io.File" mode="OUT" optional="true"/>
     </service>
 
@@ -193,5 +194,19 @@
         <attribute name="partyId" mode="IN" type="String" optional="false" />
         <attribute name="attrName" mode="IN" type="String" optional="true" />
         <attribute name="attrValue" mode="IN" type="String" optional="true" />
+    </service>
+    <service name="getPostalAddress" engine="simple"
+        location="component://osafe/script/services/OsafeServices.xml" invoke="getPostalAddress" auth="false">
+        <description>Get party postal address</description>
+        <attribute name="contactMechId" type="String" mode="INOUT" optional="false"/>
+        <attribute name="address1" type="String" mode="OUT" optional="true"/>
+        <attribute name="address2" type="String" mode="OUT" optional="true"/>
+        <attribute name="address3" type="String" mode="OUT" optional="true"/>
+        <attribute name="directions" type="String" mode="OUT" optional="true"/>
+        <attribute name="city" type="String" mode="OUT" optional="true"/>
+        <attribute name="postalCode" type="String" mode="OUT" optional="true"/>
+        <attribute name="stateProvinceGeoId" type="String" mode="OUT" optional="true"/>
+        <attribute name="countyGeoId" type="String" mode="OUT" optional="true"/>
+        <attribute name="countryGeoId" type="String" mode="OUT" optional="true"/>
     </service>
 </services>

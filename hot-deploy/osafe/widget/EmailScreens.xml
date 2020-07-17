@@ -93,14 +93,22 @@ under the License.
                     <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}" />
                     <set field="clientLogoPath" value="${OSafeConfig['client-logo-path']}" />
                     <set field="emailFontFamily" value="${OSafeConfig['email-font-family']}" />
+                    <set field="contentId" from-field="contentId" />
                     <script location="component://osafe/webapp/osafe/WEB-INF/actions/email/getGlobalEmailVariables.groovy"/>
+                    <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
                 </actions>
             <widgets>
                 <decorator-screen name="email-decorator">
                     <decorator-section name="body">
                         <section>
+                            <condition>
+                               <and>
+                                <not><if-empty field="content"/></not>
+                                <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                               </and>
+                            </condition>
                             <widgets>
-                                <content content-id="${contentId}" />
+                                <content content-id="${content.contentId}"/>
                             </widgets>
                         </section>
                     </decorator-section>
@@ -230,7 +238,8 @@ under the License.
             <actions>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
-
+                <set field="baseEcommerceUrl" value="${baseUrl}${OSafeConfig['osafe-app-path']}"/>
+                <set field="baseEcommerceSecureUrl" value="${baseSecureUrl}${OSafeConfig['osafe-app-path']}"/>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
 
                 <set field="title" value="${uiLabelMap.AbandonCartEmailTitle}"/>
@@ -573,6 +582,45 @@ under the License.
                         <platform-specific><html><html-template location="component://osafe/webapp/osafe/emails/shipmentNotificationEmail.ftl"/></html></platform-specific>
                     </decorator-section>
                 </decorator-screen>
+            </widgets>
+
+        </section>
+    </screen>
+    
+    <screen name="emailTest">
+        <section>
+            <actions>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true"/>
+
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="title" value="${uiLabelMap.EmailTestTitle}"/>
+
+                <set field="contentEmailBodyHeaderId" value="${idMap.EMAIL_COMMON_HEADER}"/>
+                <set field="contentEmailBodyStylesId" value="${idMap.EMAIL_COMMON_STYLES}"/>
+                <set field="contentEmailBodyId" value="${idMap.EMAIL_TEST_EMAIL}"/>
+                <set field="contentEmailBodyFooterId" value="${idMap.EMAIL_COMMON_FOOTER}"/>
+
+            </actions>
+            <widgets>
+               <platform-specific>
+               <html>
+                   <html-template-decorator location="component://osafe/webapp/osafe/templates/commonSendEmail.ftl">
+                       <html-template-decorator-section name="emailBodyHeader">
+                              <include-screen name="emailBodyHeaderContent"/>
+                       </html-template-decorator-section>
+                       <html-template-decorator-section name="emailBodyStyles">
+                              <include-screen name="emailBodyStylesContent"/>
+                       </html-template-decorator-section>
+                       <html-template-decorator-section name="emailBody">
+                                <include-screen name="emailBodyContent"/>
+                       </html-template-decorator-section>
+                       <html-template-decorator-section name="emailBodyFooter">
+                              <include-screen name="emailBodyFooterContent"/>
+                       </html-template-decorator-section>
+                   </html-template-decorator>
+               </html>
+              </platform-specific>
             </widgets>
 
         </section>

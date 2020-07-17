@@ -1,9 +1,7 @@
 <#if billingContactMechAddress?has_content>
  <div class="checkoutOrderBillingAddress">
 	<div class="displayBox">
-		  <div class="displayBoxHeader">
-		        <span class="displayBoxHeaderCaption">${uiLabelMap.BillingAddressTitle}</span>
-		  </div>
+        <h3>${uiLabelMap.BillingAddressTitle}</h3>
 	    <#-- Billing addresses -->
 	       <#assign billingAddress = billingContactMechAddress.getRelatedOne("PostalAddress")>
 	       <div class="address">

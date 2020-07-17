@@ -1,8 +1,6 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <div id="contactUsEntry" class="displayBox">
-<div class="displayBoxHeader">
-<span class="displayBoxHeaderCaption">${uiLabelMap.ContactUsHeading}</span>
-</div>
+<h3>${uiLabelMap.ContactUsHeading}</h3>
 <p class="instructions">${uiLabelMap.ContactUsInstructionsInfo}</p>
 <p class="instructions">${uiLabelMap.ContactUsEnterMessageInfo}</p>
   <fieldset class="col">

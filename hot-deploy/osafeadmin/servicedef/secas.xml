@@ -10,6 +10,12 @@
     <eca service="deleteUiLabelXml" event="commit">
         <action service="copyLabelXml" mode="sync"/>
     </eca>
+    <eca service="addDivSeqItemXml" event="commit">
+        <action service="copyDivSequenceXml" mode="sync"/>
+    </eca>
+    <eca service="deleteDivSeqItemXml" event="commit">
+        <action service="copyDivSequenceXml" mode="sync"/>
+    </eca>
     <eca service="updateDivSequenceXml" event="commit">
         <action service="copyDivSequenceXml" mode="sync"/>
     </eca>

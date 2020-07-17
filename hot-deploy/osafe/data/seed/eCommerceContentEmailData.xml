@@ -177,6 +177,7 @@
 <ElectronicText dataResourceId="E_ABANDON_CART">
   <textData>
      <![CDATA[
+     
 <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
 <#assign discountPercent = "10%"/>
 <#assign promoCode = "TENOFF"/>
@@ -186,7 +187,71 @@
 <p>To purchase the items in your cart now, just <a href="${EMAIL_CLNT_URL_LINK}">login to your account</a>. You can also review your selections, add more items, change what you've already picked, and place your order by proceeding to checkout.
 </p>
 <p>We will even sweeten the deal by offering you an additional ${discountPercent?if_exists} discount if you purchase these items today! Just enter the discount code ${promoCode?if_exists} during checkout.
-</p>
+</p> <table cellpadding="0" cellspacing="0" style="width: 100%; border: #000000 solid 1px; border-collapse: collapse; font-family:${EMAIL_FONT_FAMILY};">
+            <tr>
+                <td style="text-align: center; padding-left: 10px; font-size: ${EMAIL_TBL_FONT_SIZE}; background-color: ${EMAIL_TBL_HEAD_COLOR}">Items In Your Cart</td>
+            </tr>
+            <tr>
+                <td style="border-top: #000000 solid 1px; border-collapse: collapse;">
+                <table cellpadding="0" cellspacing="0" style="width: 100%; margin: 10px; font-family:${EMAIL_FONT_FAMILY};">
+                <#-- Heading Row -->
+                <tr>
+                    <td style="font-weight: bold;">${uiLabelMap.ProductLabel}</td>
+                    <td style="font-weight: bold;">${uiLabelMap.DescriptionLabel}</td>
+                    <td style="font-weight: bold;">&nbsp;</td>
+                </tr>
+                <#list CART_ITEMS as cartItem>
+                   <#assign product = cartItem.getRelatedOneCache("Product")?if_exists/> <#-- should always exist because of FK constraint, but just in case -->
+                    <#assign urlProductId = product.productId>
+                    <#if product.isVariant?if_exists?upper_case == "Y">
+                        <#assign virtualProduct = Static["org.ofbiz.product.product.ProductWorker"].getParentProduct(product.productId, delegator)?if_exists>
+                        <#assign urlProductId=virtualProduct.productId>
+                   </#if>
+                   <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
+                   <#if (!productImageUrl?has_content && !(productImageUrl == "null")) && virtualProduct?has_content>
+                       <#assign productImageUrl = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "SMALL_IMAGE_URL", locale, dispatcher)?if_exists>
+                   </#if>
+                   <#-- If the string is a literal "null" make it an "" empty string then all normal logic can stay the same -->
+                   <#if (productImageUrl?string?has_content && (productImageUrl == "null"))>
+                       <#assign productImageUrl = "">
+                   </#if>
+                   <#if !productImageUrl?has_content>
+                       <#assign productImageUrl = "/osafe_theme/images/user_content/image/place_holder_small.jpg">
+                   </#if>
+                   <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "LONG_DESCRIPTION", locale, dispatcher)?if_exists>
+                   <#if !prodDescription?has_content && virtualProduct?has_content>
+                       <#assign prodDescription = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "LONG_DESCRIPTION", locale, dispatcher)?if_exists>
+                   </#if>
+                   <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(product, "PRODUCT_NAME", locale, dispatcher)?if_exists>
+                   <#if !productName?has_content && virtualProduct?has_content>
+                       <#assign productName = Static["org.ofbiz.product.product.ProductContentWrapper"].getProductContentAsText(virtualProduct, "PRODUCT_NAME", locale, dispatcher)?if_exists>
+                   </#if>
+                   <tr>
+                       <td <#if !cartItem_has_next><#-- Last Row Logic--></#if>><a href="${baseEcommerceUrl!""}/eCommerceProductDetail?productId=${urlProductId}" id="image_${urlProductId}">
+                           <img border="0" style="width: 75px; height: 75px;" alt="${StringUtil.wrapString(productName)}" src="${baseUrl}/${productImageUrl}">
+                           </a>
+                       </td>
+                       <td <#if !cartItem_has_next><#-- Last Row Logic--></#if>>
+                     <dl>
+                     
+                        <dd class="description">
+                          <a href="${baseEcommerceUrl!""}/eCommerceProductDetail?productId=${urlProductId}">${StringUtil.wrapString(productName)}</a>
+                        </dd>
+                        <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" , product.productId)) />
+                        <#if productFeatureAndAppls?has_content>
+                          <#list productFeatureAndAppls as productFeatureAndAppl>
+                            <#assign productFeature = productFeatureAndAppl.getRelatedOne("ProductFeatureCategory")?if_exists />
+                            <dd>${productFeature.description!}:${productFeatureAndAppl.description!}</dd>
+                          </#list>
+                        </#if>
+                     </dl>
+                    </td>
+                   </tr>
+               </#list>
+           </table>
+           </td>
+       </tr>
+    </table>
 <p>If you have any questions about our products, or need help with your purchase, please call our Customer Care Center at ${EMAIL_CLNT_TEL_NO!""}
 </p>
 <p>Happy Shopping!</p>
@@ -340,7 +405,19 @@
                            ${parameters.email?if_exists}</p>
                     </td>
                 </tr>
-                
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.ContactPhoneCaption}</td>
+                    <td class="infoValue">
+                         <#assign areaCode = parameters.contactPhoneArea!"">
+                         <#assign contactPhoneContact = parameters.contactPhoneContact!"">
+                         <#assign fullPhone = areaCode + contactPhoneContact>
+                         <#if fullPhone?has_content && fullPhone?length == 10>
+                            <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(4)>
+                            <#assign fullPhone = areaCode + "-" + contactPhoneContact>
+                         </#if>
+                           ${fullPhone!""}
+                    </td>
+                </tr>
                 <tr>
                     <td class="infoCaption">${uiLabelMap.CommentCaption}</td>
                     <td class="infoValue">
@@ -361,6 +438,7 @@
                     margin-top: 15px;
                 }
             </style>
+            <p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
 <p class="info" style="font-family:${EMAIL_FONT_FAMILY};">${uiLabelMap.ThankYouForShoppingEmailInfo}</p>
 
 <@renderContentAsText contentId="E_ORDER_DETAIL" ignoreTemplate="true"/>
@@ -373,13 +451,18 @@
  <ElectronicText dataResourceId="E_ORDER_CHANGE">
    <textData>
             <![CDATA[
-            <style type="text/css">
+             <style type="text/css">
                 p.info{
                     margin-top: 15px;
                 }
             </style>
-
-                <p class="info" style="font-family:${EMAIL_FONT_FAMILY!""};">${uiLabelMap.ThankYouForShoppingEmailInfo}</p>
+            <#if ORDER?has_content>
+                <#assign orderStatusItem = ORDER.getRelatedOneCache("StatusItem")>
+                <#assign orderStatusItemDesc = orderStatusItem.get("description",locale)?default(orderStatusItem.statusId?default("N/A"))>
+            </#if>
+                <p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
+                <p class="info" style="font-family:${EMAIL_FONT_FAMILY!""};">${uiLabelMap.OrderStatusChangeMessage} ${orderStatusItemDesc!""}</p>
+                <@renderContentAsText contentId="E_ORDER_DETAIL" ignoreTemplate="true"/>
             ]]>
    </textData>
 </ElectronicText>
@@ -678,7 +761,7 @@
                 <td colspan="3" style="text-align: right; margin-top:0px; margin-bottom:0px; padding-top:0px; padding-right: 10px; padding-bottom:0px; padding-left:0px;"><span style="font-weight: bold;">${uiLabelMap.CommonSubtotal}</span></td>
                 <td><@ofbizCurrency amount=ORDER_SUB_TOTAL isoCode=currencyUomId/></td>
                 <td>&nbsp;</td>
-            </tr>
+            </tr=
             <#list ORDER_ADJUSTMENTS as orderHeaderAdjustment>
             <tr>
                 <#assign adjustmentType = orderHeaderAdjustment.getRelatedOneCache("OrderAdjustmentType")>
@@ -738,7 +821,7 @@
   <textData>
      <![CDATA[
         <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
-            <p>${uiLabelMap.SalutationEmailInfo} ${FIRST_NAME!""} ${LAST_NAME!""},</p>
+        <p>${uiLabelMap.SalutationEmailInfo} ${FIRST_NAME!""} ${LAST_NAME!""},</p>
             <p>We recently shipped items to you - we certainly hope you are enjoying our products.</p>
             <p>We'd love to get your feedback!! Simply click on the Review link below and you will have an opportunity to post a review on our site.</p>
         </div>
@@ -806,7 +889,7 @@
   <textData>
      <![CDATA[
 <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
-<p>Dear ${FIRST_NAME!""} ${MIDDLE_NAME!""} ${LAST_NAME!""} ${SUFFIX!""},</p>
+<p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
 <p>Just a quick notification to inform you of a recent change to your personal information.
 <br> 
 <br>

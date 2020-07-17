@@ -522,6 +522,15 @@ public class OsafeAdminUtil {
         return StringUtil.wrapString(toolTiptext).toString();
     }
 
+    public static String formatSimpleText(String text) {
+        if (text == null) {
+            return "";
+        }
+        text = text.replaceAll("(\r\n|\r|\n|\n\r)", " ");
+        text = (text.replace("\"","\\\"")).replace("\'", "\\'");
+        return StringUtil.wrapString(text).toString();
+    }
+    
     public static boolean isNumber(String number) {
         if (UtilValidate.isEmpty(number)) {
             return false;
@@ -552,6 +561,23 @@ public class OsafeAdminUtil {
             isValid = false;
         }
         return isValid;
+    }
+    
+    public static boolean isValidId(String id) 
+    {
+        if (UtilValidate.isEmpty(id)) 
+        {
+            return false;
+        }
+        char[] chars = id.toCharArray();
+        for (char c: chars) 
+        {
+            if ((!Character.isLetterOrDigit(c)) && (c!='-') && (c!='_')) 
+            {
+            	return false;
+            }
+        }
+        return true;
     }
     
     public static java.sql.Timestamp toTimestamp(String date) {
@@ -623,28 +649,67 @@ public class OsafeAdminUtil {
     	    e.printStackTrace();
         }
     }
-    
-    
-    //In future this method will need to update then also need to update Util.formatTelephone.
     public static String formatTelephone(String areaCode, String contactNumber) {
-    	if (contactNumber == null) {
-            return "";
+        return formatTelephone(areaCode, contactNumber,null);
+    	
+    }
+    
+    
+    //If you update this method also update Util.formatTelephone.
+    public static String formatTelephone(String areaCode, String contactNumber, String numberFormat) {
+    	String sAreaCode="";
+    	String sContactNumber="";
+    	String sFullPhone="";
+    	if (UtilValidate.isNotEmpty(areaCode)) 
+    	{
+    		sAreaCode=areaCode;
         }
-        if (areaCode == null) {
-            areaCode = "";
+    	if (UtilValidate.isNotEmpty(contactNumber)) 
+    	{
+            sContactNumber=contactNumber;
         }
-        String fullPhone = areaCode + contactNumber;
-        //fullPhone = UtilValidate.stripCharsInBag(fullPhone, UtilValidate.phoneNumberDelimiters);
-
-        if (UtilValidate.isEmpty(areaCode)) {
-            return fullPhone;
-        }
-
-        if (fullPhone.length() == 10) {
-            fullPhone = "(" + fullPhone.substring(0, 3) + ") " + fullPhone.substring(3, 6) + "-" + fullPhone.substring(6);
-        }
-
-        return fullPhone;
+        sFullPhone = sAreaCode + sContactNumber;
+    	if(UtilValidate.isNotEmpty(numberFormat) && UtilValidate.isNotEmpty(sFullPhone))
+    	{
+            String sFullPhoneNum = sFullPhone.replaceAll("[^0-9]", "");
+            //get count of how many digits in phone number
+            int digitsCount =sFullPhoneNum.length();
+            //get count of how many pounds in format
+            String pounds = numberFormat.replaceAll("[^#]", "");
+            int poundsCount = pounds.length();
+            
+            //if number of digits equal the number of pounds 
+            if(digitsCount == poundsCount)
+            {
+            	for(int i=0; i<digitsCount; i++)
+            	{
+            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+            	}
+            	sFullPhone=numberFormat;
+            }
+            else if(digitsCount < poundsCount)
+            {
+            	for(int i=0; i<digitsCount; i++)
+            	{
+            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+            	}
+            	//remove all extra #'s
+            	numberFormat=numberFormat.replaceAll("[#]", "");
+            	sFullPhone=numberFormat;
+            }
+            else if(digitsCount > poundsCount)
+            {
+            	int i = 0;
+            	for(i=0; i<poundsCount; i++)
+            	{
+            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+            	}
+            	//add extra numbers to the end
+            	numberFormat=numberFormat + sFullPhoneNum.substring(i);
+            	sFullPhone=numberFormat;
+            }
+    	}
+        return sFullPhone;
     }
     
     public static List findDuplicates(List<String> values)

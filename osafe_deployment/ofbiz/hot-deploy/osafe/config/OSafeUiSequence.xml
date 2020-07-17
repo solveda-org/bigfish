@@ -3,664 +3,1571 @@
         Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
     --><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <!-- *** Caption *************************************** -->
-    <!-- PDP -->
-    <property key="pdpMainImage">
+<!-- *************************************** -->
+<!-- PDP -->
+<!-- *************************************** -->
+    <property key="productName">
         <value xml:lang="en">10</value>
         <screen>PDP</screen>
-        <description>Main Image Div</description>
+        <div>pdpProductName</div>
+        <description>Product Name. The primary Product Name.</description>
     </property>
-    <property key="pdpSeeLargerImage">
-        <value xml:lang="en">130</value>
+    <property key="mainImage">
+        <value xml:lang="en">20</value>
         <screen>PDP</screen>
-        <description>See larger Image link Div</description>
+        <div>pdpMainImage</div>
+        <description>The primary PDP image displayed upon initial display of the PDP. </description>
     </property>
-    <property key="pdpAlternateImage">
-        <value xml:lang="en">120</value>
+    <property key="seeLargerImage">
+        <value xml:lang="en">30</value>
         <screen>PDP</screen>
-        <description>Alternate Image Div</description>
+        <div>pdpSeeLargerImage</div>
+        <description>A link asset that allows for a popup view of a larger image, as required. </description>
     </property>
-    <property key="pdpVideo360">
-        <value xml:lang="en">0</value>
+    <property key="alternateImage">
+        <value xml:lang="en">40</value>
         <screen>PDP</screen>
-        <description>PDP Product 360 Video</description>
+        <div>pdpAlternateImage</div>
+        <description>Alternate Image, typically used to display another view of the Product upon mouse hover. </description>
     </property>
-    <property key="pdpVideo">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>PDP Product Video</description>
-    </property>
-    <property key="pdpIntroDiscontinueContent">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Introduction or Discontinuation Content Div</description>
-    </property>
-    <property key="pdpPriceList">
-        <value xml:lang="en">60</value>
-        <screen>PDP</screen>
-        <description>List Price Div</description>
-    </property>
-    <property key="pdpPriceOnLine">
+    <property key="video360">
         <value xml:lang="en">50</value>
         <screen>PDP</screen>
-        <description>Online Price Div</description>
+        <div>pdpVideo360</div>
+        <description>PDP Product 360 Video. Only used if there is a 360 degree Video, or similar asset available. </description>
     </property>
-    <property key="pdpPriceSavingPercent">
-        <value xml:lang="en">0</value>
+    <property key="video">
+        <value xml:lang="en">60</value>
         <screen>PDP</screen>
-        <description>Price Saving Percent Div</description>
+        <div>pdpVideo</div>
+        <description>PDP Product Video. Only used if there is a product Video asset available. </description>
     </property>
-    <property key="pdpPriceSavingMoney">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Price Saving Money Div</description>
-    </property>
-    <property key="pdpCustomerRating">
+    <property key="introDiscoContent">
         <value xml:lang="en">70</value>
         <screen>PDP</screen>
-        <description>Customer Rating Div</description>
+        <div>pdpIntroDiscoContent</div>
+        <description>Introduction or Discontinuation Content. Specific Page Content that may be included informing the customer that the Product is not available, either waiting to be Introduced or Discontinued. </description>
     </property>
-    <property key="pdpSelectableFeature">
+    <property key="priceList">
         <value xml:lang="en">80</value>
         <screen>PDP</screen>
-        <description>Selectable Features Div</description>
+        <div>pdpPriceList</div>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
     </property>
-    <property key="pdpAddToCart">
+    <property key="priceOnLine">
         <value xml:lang="en">90</value>
         <screen>PDP</screen>
-        <description>Add To Cart Div</description>
+        <div>pdpPriceOnLine</div>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration. </description>
     </property>
-    <property key="pdpVolumePricing">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Volume Pricing Div</description>
-    </property>
-    <property key="pdpLongDescription">
+    <property key="priceSavingPercent">
         <value xml:lang="en">100</value>
         <screen>PDP</screen>
-        <description>Long Description Div</description>
+        <div>pdpPriceSavingPercent</div>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
     </property>
-    <property key="pdpDistinguishingFeature">
+    <property key="priceSavingMoney">
         <value xml:lang="en">110</value>
         <screen>PDP</screen>
-        <description>Distinguishing Feature Div</description>
+        <div>pdpPriceSavingMoney</div>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter. </description>
     </property>
-    <property key="pdpSalesPitch">
-        <value xml:lang="en">0</value>
+    <property key="reviewStars">
+        <value xml:lang="en">120</value>
         <screen>PDP</screen>
-        <description>Sales Pitch Div</description>
+        <div>pdpReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
     </property>
-    <property key="pdpSpecialInstructions">
-        <value xml:lang="en">0</value>
+    <property key="reviewRead">
+        <value xml:lang="en">130</value>
         <screen>PDP</screen>
-        <description>Special Instructions Div</description>
+        <div>pdpReviewRead</div>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
     </property>
-    <property key="pdpDeliveryInfo">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Delivery Div</description>
-    </property>
-    <property key="pdpDirections">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Directions Div</description>
-    </property>
-    <property key="pdpIngredients">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Ingredients Div</description>
-    </property>
-    <property key="pdpWarnings">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Warnings Div</description>
-    </property>
-    <property key="pdpTabs">
-        <value xml:lang="en">0</value>
-        <screen>PDP</screen>
-        <description>Tab Div</description>
-    </property>
-    <property key="pdpComplement">
-        <value xml:lang="en">20</value>
-        <screen>PDP</screen>
-        <description>Complement Products Div</description>
-    </property>
-    <property key="pdpSocialMedia">
-        <value xml:lang="en">30</value>
-        <screen>PDP</screen>
-        <description>Social Media Share Div</description>
-    </property>
-    <property key="pdpRecentlyViewed">
+    <property key="reviewWrite">
         <value xml:lang="en">140</value>
         <screen>PDP</screen>
-        <description>Recently Viewed Products Div</description>
+        <div>pdpReviewWrite</div>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
     </property>
-    <property key="pdpProductName">
-        <value xml:lang="en">40</value>
+    <property key="reviewList">
+        <value xml:lang="en">150</value>
         <screen>PDP</screen>
-        <description>Product Name Div</description>
+        <div>pdpReviewList</div>
+        <description>The actual reviews posted by customers. </description>
     </property>
-    <property key="pdpStockLegend">
-        <value xml:lang="en">0</value>
+    <property key="selectableFeature">
+        <value xml:lang="en">160</value>
         <screen>PDP</screen>
-        <description>Stock Legend Div</description>
+        <div>pdpSelectableFeature</div>
+        <description>Selectable Features. This element contains all the features that define the specific Variant for purchase. Typical examples are Color and Size. </description>
     </property>
-    <property key="pdpSeeMainImage">
-        <value xml:lang="en">0</value>
+    <property key="addToCart">
+        <value xml:lang="en">170</value>
         <screen>PDP</screen>
-        <description>Back To Main Image Div</description>
+        <div>pdpAddToCart</div>
+        <description>Add To Cart. The actual action button that adds the Product to the cart.</description>
     </property>
-   <property key="pdpAdditional">
-        <value xml:lang="en">0</value>
+    <property key="volumePricing">
+        <value xml:lang="en">180</value>
         <screen>PDP</screen>
-        <description>Additional Content By Category Div</description>
+        <div>pdpVolumePricing</div>
+        <description>Volume Pricing. Products may be configured to have Volume Pricing. </description>
     </property>
-    <property key="pdpManufacturerDescription">
-        <value xml:lang="en">0</value>
+    <property key="longDescription">
+        <value xml:lang="en">190</value>
         <screen>PDP</screen>
+        <div>pdpLongDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">200</value>
+        <screen>PDP</screen>
+        <div>pdpDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">210</value>
+        <screen>PDP</screen>
+        <div>pdpSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">220</value>
+        <screen>PDP</screen>
+        <div>pdpSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">230</value>
+        <screen>PDP</screen>
+        <div>pdpDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">240</value>
+        <screen>PDP</screen>
+        <div>pdpDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">250</value>
+        <screen>PDP</screen>
+        <div>pdpIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">260</value>
+        <screen>PDP</screen>
+        <div>pdpWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">270</value>
+        <screen>PDP</screen>
+        <div>pdpTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    <property key="tabs">
+        <value xml:lang="en">280</value>
+        <screen>PDP</screen>
+        <div>pdpTabs</div>
+        <description>A container Tab component. Can be used as a general tab area for various content, including Product features and Descriptions. </description>
+    </property>
+    <property key="complement">
+        <value xml:lang="en">290</value>
+        <screen>PDP</screen>
+        <div>pdpComplement</div>
+        <description>Complement Products. A container that is further defined in pdpComplement. </description>
+    </property>
+    <property key="recentlyViewed">
+        <value xml:lang="en">310</value>
+        <screen>PDP</screen>
+        <div>pdpRecentlyViewed</div>
+        <description>Recently Viewed Products. A container that is further defined in pdpRecent.</description>
+    </property>
+    <property key="stockLegend">
+        <value xml:lang="en">320</value>
+        <screen>PDP</screen>
+        <div>pdpStockLegend</div>
+        <description>Stock Legend. If applicable, a legend to indicate stock levels. </description>
+    </property>
+    <property key="seeMainImage">
+        <value xml:lang="en">330</value>
+        <screen>PDP</screen>
+        <div>pdpSeeMainImage</div>
+        <description>Back To Main Image. A simple link used with Video and Video360 as a way to return to the Image view. </description>
+    </property>
+   <property key="additional">
+        <value xml:lang="en">340</value>
+        <screen>PDP</screen>
+        <div>pdpAdditional</div>
+        <description>Additional Content By Category. Display of Product level content maintained at the Category level. </description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">350</value>
+        <screen>PDP</screen>
+        <div>pdpManufacturerDescription</div>
         <description>Manufacturer Text, could be a description, bio, etc</description>
     </property>
-    <property key="pdpManufacturerHeading">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">360</value>
         <screen>PDP</screen>
+        <div>pdpManufacturerHeading</div>
         <description>Manufacturer Heading (could be Designer for example)</description>
     </property>
-    <property key="pdpManufacturerImage">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerImage">
+        <value xml:lang="en">370</value>
         <screen>PDP</screen>
+        <div>pdpManufacturerImage</div>
         <description>Manufacturer Image or Logo</description>
     </property>
-    <property key="pdpManufacturerName">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerName">
+        <value xml:lang="en">380</value>
         <screen>PDP</screen>
+        <div>pdpManufacturerName</div>
         <description>Manufacturer Name</description>
     </property>
-    <!-- PDP-Tabs-->
-    <property key="pdpVolumePricing">
+    <property key="content01">
         <value xml:lang="en">0</value>
-        <screen>PDP-Tabs</screen>
-        <description>Volume Pricing Div</description>
+        <screen>PDP</screen>
+        <div>pdpContent01</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="pdpLongDescription">
+    <property key="content02">
         <value xml:lang="en">0</value>
-        <screen>PDP-Tabs</screen>
-        <description>Long Description Div</description>
+        <screen>PDP</screen>
+        <div>pdpContent02</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="pdpDistinguishingFeature">
+    <property key="content03">
         <value xml:lang="en">0</value>
-        <screen>PDP-Tabs</screen>
-        <description>Distinguishing Feature Div</description>
+        <screen>PDP</screen>
+        <div>pdpContent03</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="pdpSalesPitch">
+    <property key="content04">
         <value xml:lang="en">0</value>
-        <screen>PDP-Tabs</screen>
-        <description>Sales Pitch Div</description>
+        <screen>PDP</screen>
+        <div>pdpContent04</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="pdpSpecialInstructions">
+    <property key="content05">
         <value xml:lang="en">0</value>
-        <screen>PDP-Tabs</screen>
-        <description>Special Instructions Div</description>
+        <screen>PDP</screen>
+        <div>pdpContent05</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="pdpDeliveryInfo">
+    <property key="tertiaryInfo">
         <value xml:lang="en">0</value>
-        <screen>PDP-Tabs</screen>
-        <description>Delivery Div</description>
+        <screen>PDP</screen>
+        <div>pdpTertiaryInfo</div>
+        <description>Tertiary Information</description>
     </property>
-    <property key="pdpDirections">
-        <value xml:lang="en">3</value>
-        <screen>PDP-Tabs</screen>
-        <description>Directions Div</description>
+
+<!-- *************************************** -->
+<!-- PDPTabs-->
+<!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsProductName</div>
+        <group>0</group>
+        <description>Product Name. The primary Product Name.</description>
     </property>
-    <property key="pdpIngredients">
-        <value xml:lang="en">2</value>
-        <screen>PDP-Tabs</screen>
-        <description>Ingredients Div</description>
+    <property key="mainImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsMainImage</div>
+        <group>0</group>
+        <description>The primary PDP image displayed upon initial display of the PDP. </description>
     </property>
-    <property key="pdpWarnings">
-        <value xml:lang="en">1</value>
-        <screen>PDP-Tabs</screen>
-        <description>Warnings Div</description>
+    <property key="seeLargerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsSeeLargerImage</div>
+        <group>0</group>
+        <description>A link asset that allows for a popup view of a larger image, as required. </description>
     </property>
-    <!-- Quicklook -->
-    <property key="pdpMainImage">
+    <property key="alternateImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsAlternateImage</div>
+        <group>0</group>
+        <description>Alternate Image, typically used to display another view of the Product upon mouse hover. </description>
+    </property>
+    <property key="video360">
+        <value xml:lang="en">40</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsVideo360</div>
+        <group>0</group>
+        <description>PDP Product 360 Video. Only used if there is a 360 degree Video, or similar asset available. </description>
+    </property>
+    <property key="video">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsVideo</div>
+        <group>0</group>
+        <description>PDP Product Video. Only used if there is a product Video asset available. </description>
+    </property>
+    <property key="introDiscoContent">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsIntroDiscoContent</div>
+        <group>0</group>
+        <description>Introduction or Discontinuation Content. Specific Page Content that may be included informing the customer that the Product is not available, either waiting to be Introduced or Discontinued. </description>
+    </property>
+    <property key="priceList">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsPriceList</div>
+        <group>0</group>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
+    </property>
+    <property key="priceOnLine">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsPriceOnLine</div>
+        <group>0</group>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration. </description>
+    </property>
+    <property key="priceSavingPercent">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsPriceSavingPercent</div>
+        <group>0</group>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="priceSavingMoney">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsPriceSavingMoney</div>
+        <group>0</group>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter. </description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsReviewStars</div>
+        <group>0</group>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="reviewRead">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsReviewRead</div>
+        <group>0</group>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="reviewWrite">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsReviewWrite</div>
+        <group>0</group>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="reviewList">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsReviewList</div>
+        <group>0</group>
+        <description>The actual reviews posted by customers. </description>
+    </property>
+    <property key="selectableFeature">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsSelectableFeature</div>
+        <group>0</group>
+        <description>Selectable Features. This element contains all the features that define the specific Variant for purchase. Typical examples are Color and Size. </description>
+    </property>
+    <property key="addToCart">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsAddToCart</div>
+        <group>0</group>
+        <description>Add To Cart. The actual action button that adds the Product to the cart.</description>
+    </property>
+    <property key="volumePricing">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsVolumePricing</div>
+        <group>0</group>
+        <description>Volume Pricing. Products may be configured to have Volume Pricing. </description>
+    </property>
+    <property key="longDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsLongDescription</div>
+        <group>0</group>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsDistinguishingFeature</div>
+        <group>0</group>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsSalesPitch</div>
+        <group>0</group>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsSpecialInstructions</div>
+        <group>0</group>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsDeliveryInfo</div>
+        <group>0</group>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsDirections</div>
+        <group>0</group>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsIngredients</div>
+        <group>0</group>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsWarnings</div>
+        <group>0</group>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsTermsAndConditions</div>
+        <group>0</group>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    <property key="complement">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsComplement</div>
+        <group>0</group>
+        <description>Complement Products. A container that is further defined in pdpComplement. </description>
+    </property>
+    <property key="recentlyViewed">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsRecentlyViewed</div>
+        <group>0</group>
+        <description>Recently Viewed Products. A container that is further defined in pdpRecent.</description>
+    </property>
+    <property key="stockLegend">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsStockLegend</div>
+        <group>0</group>
+        <description>Stock Legend. If applicable, a legend to indicate stock levels. </description>
+    </property>
+    <property key="seeMainImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsSeeMainImage</div>
+        <group>0</group>
+        <description>Back To Main Image. A simple link used with Video and Video360 as a way to return to the Image view. </description>
+    </property>
+   <property key="additional">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsAdditional</div>
+        <group>0</group>
+        <description>Additional Content By Category. Display of Product level content maintained at the Category level. </description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsManufacturerDescription</div>
+        <group>0</group>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsManufacturerHeading</div>
+        <group>0</group>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="manufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsManufacturerImage</div>
+        <group>0</group>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="manufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsManufacturerName</div>
+        <group>0</group>
+        <description>Manufacturer Name</description>
+    </property>
+    <property key="content01">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent01</div>
+        <group>0</group>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content02">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent02</div>
+        <group>0</group>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content03">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent03</div>
+        <group>0</group>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content04">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent04</div>
+        <group>0</group>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="content05">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsContent05</div>
+        <group>0</group>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>PDPTabs</screen>
+        <div>pdpTabsTertiaryInfo</div>
+        <group>0</group>
+        <description>Tertiary Information</description>
+    </property>
+<!-- *************************************** -->
+<!-- Quicklook -->
+<!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">10</value>
+        <screen>Quicklook</screen>
+        <div>quicklookProductName</div>
+        <description>Product Name. The primary Product Name.</description>
+    </property>
+    <property key="mainImage">
+        <value xml:lang="en">20</value>
+        <screen>Quicklook</screen>
+        <div>quicklookMainImage</div>
+        <description>The primary PDP image displayed upon initial display of the PDP. </description>
+    </property>
+    <property key="seeLargerImage">
+        <value xml:lang="en">30</value>
+        <screen>Quicklook</screen>
+        <div>quicklookSeeLargerImage</div>
+        <description>A link asset that allows for a popup view of a larger image, as required. </description>
+    </property>
+    <property key="alternateImage">
+        <value xml:lang="en">40</value>
+        <screen>Quicklook</screen>
+        <div>quicklookAlternateImage</div>
+        <description>Alternate Image, typically used to display another view of the Product upon mouse hover. </description>
+    </property>
+    <property key="video360">
         <value xml:lang="en">50</value>
         <screen>Quicklook</screen>
-        <description>Main Image Div</description>
+        <div>quicklookVideo360</div>
+        <description>PDP Product 360 Video. Only used if there is a 360 degree Video, or similar asset available. </description>
     </property>
-    <property key="pdpSeeLargerImage">
-        <value xml:lang="en">0</value>
+    <property key="video">
+        <value xml:lang="en">60</value>
         <screen>Quicklook</screen>
-        <description>See larger Image link Div</description>
+        <div>quicklookVideo</div>
+        <description>PDP Product Video. Only used if there is a product Video asset available. </description>
     </property>
-    <property key="pdpAlternateImage">
-        <value xml:lang="en">130</value>
-        <screen>Quicklook</screen>
-        <description>Alternate Image Div</description>
-    </property>
-    <property key="pdpVideo360">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>PDP Product 360 Video</description>
-    </property>
-    <property key="pdpVideo">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>PDP Product Video</description>
-    </property>
-    <property key="pdpIntroDiscontinueContent">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Introduction or Discontinuation Content Div</description>
-    </property>
-    <property key="pdpPriceList">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>List Price Div</description>
-    </property>
-    <property key="pdpPriceOnLine">
+    <property key="introDiscoContent">
         <value xml:lang="en">70</value>
         <screen>Quicklook</screen>
-        <description>Online Price Div</description>
+        <div>quicklookIntroDiscoContent</div>
+        <description>Introduction or Discontinuation Content. Specific Page Content that may be included informing the customer that the Product is not available, either waiting to be Introduced or Discontinued. </description>
     </property>
-    <property key="pdpPriceSavingPercent">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Price Saving Percent Div</description>
-    </property>
-    <property key="pdpPriceSavingMoney">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Price Saving Money Div</description>
-    </property>
-    <property key="pdpCustomerRating">
+    <property key="priceList">
         <value xml:lang="en">80</value>
         <screen>Quicklook</screen>
-        <description>Customer Rating Div</description>
+        <div>quicklookPriceList</div>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
     </property>
-    <property key="pdpSelectableFeature">
+    <property key="priceOnLine">
         <value xml:lang="en">90</value>
         <screen>Quicklook</screen>
-        <description>Selectable Features Div</description>
+        <div>quicklookPriceOnLine</div>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration. </description>
     </property>
-    <property key="pdpAddToCart">
+    <property key="priceSavingPercent">
         <value xml:lang="en">100</value>
         <screen>Quicklook</screen>
-        <description>Add To Cart Div</description>
+        <div>quicklookPriceSavingPercent</div>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
     </property>
-    <property key="pdpLongDescription">
+    <property key="priceSavingMoney">
         <value xml:lang="en">110</value>
         <screen>Quicklook</screen>
-        <description>Long Description Div</description>
+        <div>quicklookPriceSavingMoney</div>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter. </description>
     </property>
-    <property key="pdpDistinguishingFeature">
+    <property key="reviewStars">
         <value xml:lang="en">120</value>
         <screen>Quicklook</screen>
-        <description>Distinguishing Feature Div</description>
+        <div>quicklookReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
     </property>
-    <property key="pdpSalesPitch">
-        <value xml:lang="en">0</value>
+    <property key="reviewRead">
+        <value xml:lang="en">130</value>
         <screen>Quicklook</screen>
-        <description>Sales Pitch Div</description>
+        <div>quicklookReviewRead</div>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
     </property>
-    <property key="pdpSpecialInstructions">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Special Instructions Div</description>
-    </property>
-    <property key="pdpDeliveryInfo">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Delivery Div</description>
-    </property>
-    <property key="pdpDirections">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Directions Div</description>
-    </property>
-    <property key="pdpIngredients">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Ingredients Div</description>
-    </property>
-    <property key="pdpWarnings">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>Warnings Div</description>
-    </property>
-    <property key="pdpProductName">
-        <value xml:lang="en">60</value>
-        <screen>Quicklook</screen>
-        <description>Product Name Div</description>
-    </property>
-    <property key="pdpSeeMainImage">
-        <value xml:lang="en">0</value>
-        <screen>Quicklook</screen>
-        <description>See Main Image Div</description>
-    </property>
-    <property key="plpSeeItemDetails">
+    <property key="reviewWrite">
         <value xml:lang="en">140</value>
         <screen>Quicklook</screen>
-        <description>See Item Details Div</description>
+        <div>quicklookReviewWrite</div>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
     </property>
-    <property key="pdpManufacturerDescription">
-        <value xml:lang="en">0</value>
+    <property key="reviewList">
+        <value xml:lang="en">150</value>
         <screen>Quicklook</screen>
+        <div>quicklookReviewList</div>
+        <description>The actual reviews posted by customers. </description>
+    </property>
+    <property key="selectableFeature">
+        <value xml:lang="en">160</value>
+        <screen>Quicklook</screen>
+        <div>quicklookSelectableFeature</div>
+        <description>Selectable Features. This element contains all the features that define the specific Variant for purchase. Typical examples are Color and Size. </description>
+    </property>
+    <property key="addToCart">
+        <value xml:lang="en">170</value>
+        <screen>Quicklook</screen>
+        <div>quicklookAddToCart</div>
+        <description>Add To Cart. The actual action button that adds the Product to the cart.</description>
+    </property>
+    <property key="volumePricing">
+        <value xml:lang="en">180</value>
+        <screen>Quicklook</screen>
+        <div>quicklookVolumePricing</div>
+        <description>Volume Pricing. Products may be configured to have Volume Pricing.</description>
+    </property>
+    <property key="longDescription">
+        <value xml:lang="en">190</value>
+        <screen>Quicklook</screen>
+        <div>quicklookLongDescription</div>
+        <description>Long Description. The primary description for the Product. </description>
+    </property>
+    <property key="distinguishingFeature">
+        <value xml:lang="en">200</value>
+        <screen>Quicklook</screen>
+        <div>quicklookDistinguishingFeature</div>
+        <description>Distinguishing Feature. Secondary description for the Product.</description>
+    </property>
+    <property key="salesPitch">
+        <value xml:lang="en">210</value>
+        <screen>Quicklook</screen>
+        <div>quicklookSalesPitch</div>
+        <description>Sales Pitch. Secondary description for the Product. </description>
+    </property>
+    <property key="specialInstructions">
+        <value xml:lang="en">220</value>
+        <screen>Quicklook</screen>
+        <div>quicklookSpecialInstructions</div>
+        <description>Special Instructions. Secondary description for the Product.</description>
+    </property>
+    <property key="deliveryInfo">
+        <value xml:lang="en">230</value>
+        <screen>Quicklook</screen>
+        <div>quicklookDeliveryInfo</div>
+        <description>Delivery. Secondary description for the Product.</description>
+    </property>
+    <property key="directions">
+        <value xml:lang="en">240</value>
+        <screen>Quicklook</screen>
+        <div>quicklookDirections</div>
+        <description>Directions. Secondary description for the Product.</description>
+    </property>
+    <property key="ingredients">
+        <value xml:lang="en">250</value>
+        <screen>Quicklook</screen>
+        <div>quicklookIngredients</div>
+        <description>Ingredients. Secondary description for the Product.</description>
+    </property>
+    <property key="warnings">
+        <value xml:lang="en">260</value>
+        <screen>Quicklook</screen>
+        <div>quicklookWarnings</div>
+        <description>Warnings. Secondary description for the Product.</description>
+    </property>
+    <property key="termsAndConditions">
+        <value xml:lang="en">270</value>
+        <screen>Quicklook</screen>
+        <div>quicklookTermsAndConditions</div>
+        <description>Terms and Conditions. Secondary description for the Product.</description>
+    </property>
+    <property key="tabs">
+        <value xml:lang="en">280</value>
+        <screen>Quicklook</screen>
+        <div>quicklookTabs</div>
+        <description>A container Tab component. Can be used as a general tab area for vairous content, including Product features and descriptions</description>
+    </property>
+    <property key="complement">
+        <value xml:lang="en">290</value>
+        <screen>Quicklook</screen>
+        <div>quicklookComplement</div>
+        <description>A container Tab component. </description>
+    </property>
+    <property key="recentlyViewed">
+        <value xml:lang="en">310</value>
+        <screen>Quicklook</screen>
+        <div>quicklookRecentlyViewed</div>
+        <description>Recently Viewed Products. A container that is further defined in pdpRecent.</description>
+    </property>
+    <property key="stockLegend">
+        <value xml:lang="en">320</value>
+        <screen>Quicklook</screen>
+        <div>quicklookStockLegend</div>
+        <description>Stock Legend. If applicable, a legend to indicate stock levels. </description>
+    </property>
+    <property key="seeMainImage">
+        <value xml:lang="en">330</value>
+        <screen>Quicklook</screen>
+        <div>quicklookSeeMainImage</div>
+        <description>Back To Main Image. A simple link used with Video and Video360 as a way to return to the Image view. </description>
+    </property>
+   <property key="additional">
+        <value xml:lang="en">340</value>
+        <screen>Quicklook</screen>
+        <div>quicklookAdditional</div>
+        <description>Additional Content By Category. Display of Product level content maintained at the Category level. </description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">350</value>
+        <screen>Quicklook</screen>
+        <div>quicklookManufacturerDescription</div>
         <description>Manufacturer Text, could be a description, bio, etc</description>
     </property>
-    <property key="pdpManufacturerHeading">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">360</value>
         <screen>Quicklook</screen>
+        <div>quicklookManufacturerHeading</div>
         <description>Manufacturer Heading (could be Designer for example)</description>
     </property>
-    <property key="pdpManufacturerImage">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerImage">
+        <value xml:lang="en">370</value>
         <screen>Quicklook</screen>
+        <div>quicklookManufacturerImage</div>
         <description>Manufacturer Image or Logo</description>
     </property>
-    <property key="pdpManufacturerName">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerName">
+        <value xml:lang="en">380</value>
         <screen>Quicklook</screen>
+        <div>quicklookManufacturerName</div>
         <description>Manufacturer Name</description>
     </property>
-    <!-- PLP -->
-    <property key="plpDetailLink">
-        <value xml:lang="en">30</value>
-        <screen>PLP</screen>
-        <description>Product Info Link div</description>
+    <property key="seeItemDetails">
+        <value xml:lang="en">390</value>
+        <screen>Quicklook</screen>
+        <div>quicklookSeeItemDetails</div>
+        <description>See Item Details</description>
     </property>
-    <property key="plpPriceList">
+    <property key="content01">
         <value xml:lang="en">0</value>
-        <screen>PLP</screen>
-        <description>Product price div</description>
+        <screen>Quicklook</screen>
+        <div>quicklookContent01</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="plpPriceOnline">
-        <value xml:lang="en">40</value>
-        <screen>PLP</screen>
-        <description>Product Online price div</description>
-    </property>
-    <property key="plpPriceSavingPercent">
+    <property key="content02">
         <value xml:lang="en">0</value>
-        <screen>PLP</screen>
-        <description>PLP Price Saving Percent div</description>
+        <screen>Quicklook</screen>
+        <div>quicklookContent02</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="plpPriceSavingMoney">
+    <property key="content03">
         <value xml:lang="en">0</value>
-        <screen>PLP</screen>
-        <description>PLP Price Saving Money div</description>
+        <screen>Quicklook</screen>
+        <div>quicklookContent03</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="plpSwatchImage">
-        <value xml:lang="en">50</value>
-        <screen>PLP</screen>
-        <description>Swatch Image Div</description>
+    <property key="content04">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookContent04</div>
+        <description>General additional PDP content</description>
     </property>
-    <property key="plpTertiaryInfo">
+    <property key="content05">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookContent05</div>
+        <description>General additional PDP content</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <div>quicklookTertiaryInfo</div>
+        <description>Tertiary Information</description>
+    </property>
+<!-- *************************************** -->
+<!-- PLP -->
+<!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">10</value>
+        <screen>PLP</screen>
+        <div>plpProductName</div>
+        <description>Product Name</description>
+    </property>
+    <property key="detailLink">
         <value xml:lang="en">20</value>
         <screen>PLP</screen>
-        <description>Product Tetiary Info Div</description>
+        <div>plpDetailLink</div>
+        <description>Product Info Link </description>
     </property>
-    <property key="plpProdReview">
+    <property key="priceList">
+        <value xml:lang="en">30</value>
+        <screen>PLP</screen>
+        <div>plpPriceList</div>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
+    </property>
+    <property key="priceOnline">
+        <value xml:lang="en">40</value>
+        <screen>PLP</screen>
+        <div>plpPriceOnline</div>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration. </description>
+    </property>
+    <property key="priceSavingPercent">
+        <value xml:lang="en">50</value>
+        <screen>PLP</screen>
+        <div>plpPriceSavingPercent</div>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="priceSavingMoney">
         <value xml:lang="en">60</value>
         <screen>PLP</screen>
-        <description>Customer Rating Div</description>
+        <div>plpPriceSavingMoney</div>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter. </description>
     </property>
-    <property key="plpThumbImage">
-        <value xml:lang="en">10</value>
+    <property key="swatchImage">
+        <value xml:lang="en">70</value>
         <screen>PLP</screen>
-        <description>Main Image Div</description>
+        <div>plpSwatchImage</div>
+        <description>Swatch Image</description>
     </property>
-    <property key="plpManufacturerDescription">
-        <value xml:lang="en">0</value>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">80</value>
         <screen>PLP</screen>
+        <div>plpTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">90</value>
+        <screen>PLP</screen>
+        <div>plpReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution</description>
+    </property>
+    <property key="reviewRead">
+        <value xml:lang="en">100</value>
+        <screen>PLP</screen>
+        <div>plpReviewRead</div>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="reviewWrite">
+        <value xml:lang="en">110</value>
+        <screen>PLP</screen>
+        <div>plpReviewWrite</div>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="thumbImage">
+        <value xml:lang="en">120</value>
+        <screen>PLP</screen>
+        <div>plpThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">130</value>
+        <screen>PLP</screen>
+        <div>plpManufacturerDescription</div>
         <description>Manufacturer Text, could be a description, bio, etc</description>
     </property>
-    <property key="plpManufacturerHeading">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">140</value>
         <screen>PLP</screen>
+        <div>plpManufacturerHeading</div>
         <description>Manufacturer Heading (could be Designer for example)</description>
     </property>
-    <property key="plpManufacturerImage">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerImage">
+        <value xml:lang="en">150</value>
         <screen>PLP</screen>
+        <div>plpManufacturerImage</div>
         <description>Manufacturer Image or Logo</description>
     </property>
-    <property key="plpManufacturerName">
-        <value xml:lang="en">0</value>
+    <property key="manufacturerName">
+        <value xml:lang="en">160</value>
         <screen>PLP</screen>
+        <div>plpManufacturerName</div>
         <description>Manufacturer Name</description>
     </property>
-    <!-- PDP-Complement -->
-    <property key="plpDetailLink">
+    <property key="seeItemDetails">
+        <value xml:lang="en">170</value>
+        <screen>PLP</screen>
+        <div>plpSeeItemDetails</div>
+        <description>See Item Details </description>
+    </property>
+<!-- *************************************** -->
+<!-- PDPComplement -->
+<!-- *************************************** -->
+    <property key="productName">
+        <value xml:lang="en">10</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementProductName</div>
+        <description>Product Name</description>
+    </property>
+    <property key="detailLink">
+        <value xml:lang="en">20</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementDetailLink</div>
+        <description>Product Info Link </description>
+    </property>
+    <property key="priceList">
         <value xml:lang="en">30</value>
-        <screen>PDP-Complement</screen>
-        <description>Product Info Link div</description>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementPriceList</div>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
     </property>
-    <property key="plpPriceList">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Complement</screen>
-        <description>Product price div</description>
-    </property>
-    <property key="plpPriceOnline">
+    <property key="priceOnline">
         <value xml:lang="en">40</value>
-        <screen>PDP-Complement</screen>
-        <description>Product Online price div</description>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementPriceOnline</div>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration. </description>
     </property>
-    <property key="plpSwatchImage">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Complement</screen>
-        <description>Swatch Image Div</description>
-    </property>
-    <property key="plpTertiaryInfo">
-        <value xml:lang="en">20</value>
-        <screen>PDP-Complement</screen>
-        <description>Product Tetiary Info Div</description>
-    </property>
-    <property key="plpProdReview">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Complement</screen>
-        <description>Customer Rating Div</description>
-    </property>
-    <property key="plpThumbImage">
-        <value xml:lang="en">10</value>
-        <screen>PDP-Complement</screen>
-        <description>Main Image Div</description>
-    </property>
-    <property key="plpManufacturerDescription">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Complement</screen>
-        <description>Manufacturer Text, could be a description, bio, etc</description>
-    </property>
-    <property key="plpManufacturerHeading">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Complement</screen>
-        <description>Manufacturer Heading (could be Designer for example)</description>
-    </property>
-    <property key="plpManufacturerImage">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Complement</screen>
-        <description>Manufacturer Image or Logo</description>
-    </property>
-    <property key="plpManufacturerName">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Complement</screen>
-        <description>Manufacturer Name</description>
-    </property>
-    <!-- PDP-Recent -->
-    <property key="plpDetailLink">
-        <value xml:lang="en">20</value>
-        <screen>PDP-Recent</screen>
-        <description>Product Info Link div</description>
-    </property>
-    <property key="plpPriceList">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Recent</screen>
-        <description>Product price div</description>
-    </property>
-    <property key="plpPriceOnline">
-        <value xml:lang="en">30</value>
-        <screen>PDP-Recent</screen>
-        <description>Product Online price div</description>
-    </property>
-    <property key="plpSwatchImage">
-        <value xml:lang="en">40</value>
-        <screen>PDP-Recent</screen>
-        <description>Swatch Image Div</description>
-    </property>
-    <property key="plpTertiaryInfo">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Recent</screen>
-        <description>Product Tetiary Info Div</description>
-    </property>
-    <property key="plpProdReview">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Recent</screen>
-        <description>Customer Rating Div</description>
-    </property>
-    <property key="plpThumbImage">
-        <value xml:lang="en">10</value>
-        <screen>PDP-Recent</screen>
-        <description>Main Image Div</description>
-    </property>
-    <property key="plpManufacturerDescription">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Recent</screen>
-        <description>Manufacturer Text, could be a description, bio, etc</description>
-    </property>
-    <property key="plpManufacturerHeading">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Recent</screen>
-        <description>Manufacturer Heading (could be Designer for example)</description>
-    </property>
-    <property key="plpManufacturerImage">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Recent</screen>
-        <description>Manufacturer Image or Logo</description>
-    </property>
-    <property key="plpManufacturerName">
-        <value xml:lang="en">0</value>
-        <screen>PDP-Recent</screen>
-        <description>Manufacturer Name</description>
-    </property>
-    <!-- CLP -->
-    <property key="clpThumbImage">
-        <value xml:lang="en">10</value>
-        <screen>CLP</screen>
-        <description>Main Image Div</description>
-    </property>
-    <property key="clpProductListLink">
-        <value xml:lang="en">20</value>
-        <screen>CLP</screen>
-        <description>Product List Link Div</description>
-    </property>
-    <property key="clpLongDescription">
-        <value xml:lang="en">0</value>
-        <screen>CLP</screen>
-        <description>Long Description Div</description>
-    </property>
-    <!-- CheckoutOrderSummary --><property key="checkoutOrderPromoCode">
-        <value xml:lang="en">10</value>
-        <screen>CheckoutOrderSummary</screen>
-        <description>Promo Code Div</description>
-    </property>
-    <property key="checkoutOrderItems">
-        <value xml:lang="en">20</value>
-        <screen>CheckoutOrderSummary</screen>
-        <description>Summary Div</description>
-    </property>
-    <property key="checkoutOrderStorePickup">
-        <value xml:lang="en">30</value>
-        <screen>CheckoutOrderSummary</screen>
-        <description>Store Pickup Div</description>
-    </property>
-    <property key="checkoutOrderPayments">
-        <value xml:lang="en">35</value>
-        <screen>CheckoutOrderSummary</screen>
-        <description>Payments Div</description>
-    </property>
-    <property key="checkoutOrderBillingAddress">
-        <value xml:lang="en">40</value>
-        <screen>CheckoutOrderSummary</screen>
-        <description>Billing Address Div</description>
-    </property>
-    <property key="checkoutOrderShippingAddress">
+    <property key="priceSavingPercent">
         <value xml:lang="en">50</value>
-        <screen>CheckoutOrderSummary</screen>
-        <description>Shipping Address Div</description>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementPriceSavingPercent</div>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
     </property>
-<!-- CheckoutOrderSummaryPayPal -->
-    <property key="checkoutOrderItems">
-        <value xml:lang="en">0</value>
-        <screen>CheckoutOrderSummaryPayPal</screen>
-        <description>Summary Div</description>
+    <property key="priceSavingMoney">
+        <value xml:lang="en">60</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementPriceSavingMoney</div>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter. </description>
     </property>
-    <property key="checkoutOrderStorePickup">
+    <property key="swatchImage">
+        <value xml:lang="en">70</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementSwatchImage</div>
+        <description>Swatch Image</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">80</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">90</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="reviewRead">
+        <value xml:lang="en">100</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementReviewRead</div>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="reviewWrite">
+        <value xml:lang="en">110</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementReviewWrite</div>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="thumbImage">
+        <value xml:lang="en">120</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">130</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementManufacturerDescription</div>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">140</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementManufacturerHeading</div>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="manufacturerImage">
+        <value xml:lang="en">150</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementManufacturerImage</div>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="manufacturerName">
+        <value xml:lang="en">160</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementManufacturerName</div>
+        <description>Manufacturer Name</description>
+    </property>
+    <property key="seeItemDetails">
+        <value xml:lang="en">170</value>
+        <screen>PDPComplement</screen>
+        <div>pdpComplementSeeItemDetails</div>
+        <description>See Item Details</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- PDPRecent -->
+<!-- *************************************** -->
+    <property key="productName">
         <value xml:lang="en">10</value>
-        <screen>CheckoutOrderSummaryPayPal</screen>
-        <description>Store Pickup Div</description>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentProductName</div>
+        <description>Product Name</description>
     </property>
-    <property key="checkoutOrderBillingAddress">
-        <value xml:lang="en">0</value>
-        <screen>CheckoutOrderSummaryPayPal</screen>
-        <description>Billing Address Div</description>
-    </property>
-    <property key="checkoutOrderShippingAddress">
-        <value xml:lang="en">0</value>
-        <screen>CheckoutOrderSummaryPayPal</screen>
-        <description>Shipping Address Div</description>
-    </property>
-    <property key="checkoutOrderPayPalValidated">
+    <property key="detailLink">
         <value xml:lang="en">20</value>
-        <screen>CheckoutOrderSummaryPayPal</screen>
-        <description>PayPal Validated Div</description>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentDetailLink</div>
+        <description>Product Info Link </description>
     </property>
+    <property key="priceList">
+        <value xml:lang="en">30</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentPriceList</div>
+        <description>List Price. May be used as a display or in calculations for Savings fields.</description>
+    </property>
+    <property key="priceOnline">
+        <value xml:lang="en">40</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentPriceOnline</div>
+        <description>Online Price. The actual price the customer will pay for this item. Could be overridden with Volume Pricing depending on the configuration. </description>
+    </property>
+    <property key="priceSavingPercent">
+        <value xml:lang="en">50</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentPriceSavingPercent</div>
+        <description>Price Saving Percent. Compares LIST and ONLINE prices. This shows the percentage saved if the percent saved exceeds the THRESHOLD parameter.</description>
+    </property>
+    <property key="priceSavingMoney">
+        <value xml:lang="en">60</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentPriceSavingMoney</div>
+        <description>Price Saving Money. Compares LIST and ONLINE prices. This shows the amount saved if the amount saved exceeds the THRESHOLD parameter. </description>
+    </property>
+    <property key="swatchImage">
+        <value xml:lang="en">70</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentSwatchImage</div>
+        <description>Swatch Image</description>
+    </property>
+    <property key="tertiaryInfo">
+        <value xml:lang="en">80</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentTertiaryInfo</div>
+        <description>Product Tertiary Info</description>
+    </property>
+    <property key="reviewStars">
+        <value xml:lang="en">90</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentReviewStars</div>
+        <description>Customer Rating and Review Stars. This could apply for BigFish, Reevoo or another integrated Rating and Review solution.</description>
+    </property>
+    <property key="reviewRead">
+        <value xml:lang="en">100</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentReviewRead</div>
+        <description>Offers the Read-Reviews link . Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="reviewWrite">
+        <value xml:lang="en">110</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentReviewWrite</div>
+        <description>Offers the Write-A-Review link. Only applicable if using BigFish Reviews.</description>
+    </property>
+    <property key="thumbImage">
+        <value xml:lang="en">120</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="manufacturerDescription">
+        <value xml:lang="en">130</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentManufacturerDescription</div>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="manufacturerHeading">
+        <value xml:lang="en">140</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentManufacturerHeading</div>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="manufacturerImage">
+        <value xml:lang="en">150</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentManufacturerImage</div>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="manufacturerName">
+        <value xml:lang="en">160</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentManufacturerName</div>
+        <description>Manufacturer Name</description>
+    </property>
+    <property key="seeItemDetails">
+        <value xml:lang="en">170</value>
+        <screen>PDPRecent</screen>
+        <div>pdpRecentSeeItemDetails</div>
+        <description>See Item Details</description>
+    </property>
+<!-- *************************************** -->
+<!-- CLP -->
+<!-- *************************************** -->
+    <property key="thumbImage">
+        <value xml:lang="en">10</value>
+        <screen>CLP</screen>
+        <div>clpThumbImage</div>
+        <description>Main Image</description>
+    </property>
+    <property key="productListLink">
+        <value xml:lang="en">20</value>
+        <screen>CLP</screen>
+        <div>clpProductListLink</div>
+        <description>Product List Link</description>
+    </property>
+    <property key="longDescription">
+        <value xml:lang="en">30</value>
+        <screen>CLP</screen>
+        <div>clpLongDescription</div>
+        <description>Long Description</description>
+    </property>
+
+<!-- *************************************** -->
 <!-- ShowCart -->
-    <property key="showCartItems">
-        <value xml:lang="en">20</value>
-        <screen>ShowCart</screen>
-        <description>Cart Items Div</description>
-    </property>
-    <property key="showCartPromoCode">
+<!-- *************************************** -->
+    <property key="footprint">
         <value xml:lang="en">10</value>
         <screen>ShowCart</screen>
-        <description>Promo Code Div</description>
+        <div>showCartFootprint</div>
+        <description>The footprint, or temperature bar, that informs the customer which step of a multi-page check-out they are currently on</description>
     </property>
-<!-- Person-Info -->
-    <property key="personInfoFirstName">
+    <property key="orderItems">
+        <value xml:lang="en">20</value>
+        <screen>ShowCart</screen>
+        <div>showCartOrderItems</div>
+        <description>All the items that have been added to the Shopping Cart</description>
+    </property>
+    <property key="promoCode">
         <value xml:lang="en">30</value>
-        <screen>Person-Info</screen>
-        <description>First Name Div</description>
+        <screen>ShowCart</screen>
+        <div>showCartPromoCode</div>
+        <description>Promo or Coupon Code entry element. This is where the customer enters a coupon code and may view the savings or benefits.</description>
     </property>
-    <property key="personInfoLastName">
-        <value xml:lang="en">10</value>
-        <screen>Person-Info</screen>
-        <description>Last Name Div</description>
-    </property>
-    <property key="personInfoGender">
-        <value xml:lang="en">20</value>
-        <screen>Person-Info</screen>
-        <description>Gender Div</description>
-    </property>
-    <property key="personInfoDobMMDDYYYY">
-        <value xml:lang="en">0</value>
-        <screen>Person-Info</screen>
-        <description>DOB-MMDDYYYY format Div</description>
-    </property>
-    <property key="personInfoDobMMDD">
-        <value xml:lang="en">0</value>
-        <screen>Person-Info</screen>
-        <description>DOB-MMDD format Div</description>
-    </property>
-    <property key="personInfoPhoneHome">
+    <property key="previousButton">
         <value xml:lang="en">40</value>
-        <screen>Person-Info</screen>
-        <description>Phone Home Div</description>
+        <screen>ShowCart</screen>
+        <div>showCartPreviousButton</div>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
     </property>
-    <property key="personInfoPhoneCell">
+    <property key="continueButton">
         <value xml:lang="en">50</value>
-        <screen>Person-Info</screen>
-        <description>Phone Cell Div</description>
+        <screen>ShowCart</screen>
+        <div>showCartContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the previous step.</description>
     </property>
-    <property key="personInfoPhoneWork">
-        <value xml:lang="en">51</value>
-        <screen>Person-Info</screen>
-        <description>Phone Work Div</description>
+
+<!-- *************************************** -->
+<!-- ShippingAddress -->
+<!-- *************************************** -->
+    <property key="footprint">
+        <value xml:lang="en">10</value>
+        <screen>ShippingAddress</screen>
+        <div>shippingAddressFootprint</div>
+        <description>The footprint, or temperature bar, that informs the customer which step of a multi-page check-out they are currently on. </description>
+    </property>
+    <property key="billingAddress">
+        <value xml:lang="en">20</value>
+        <screen>ShippingAddress</screen>
+        <div>shippingAddressBillingAddress</div>
+        <description>Prompt to enter or confirm the Billing Address</description>
+    </property>
+    <property key="shippingAddress">
+        <value xml:lang="en">30</value>
+        <screen>ShippingAddress</screen>
+        <div>shippingAddressShippingAddress</div>
+        <description>Prompt to enter or confirm the Shipping Address</description>
+    </property>
+    <property key="previousButton">
+        <value xml:lang="en">40</value>
+        <screen>ShippingAddress</screen>
+        <div>shippingAddressPreviousButton</div>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">50</value>
+        <screen>ShippingAddress</screen>
+        <div>shippingAddressContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the previous step.</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- ShippingOptions -->
+<!-- *************************************** -->
+    <property key="footprint">
+        <value xml:lang="en">10</value>
+        <screen>ShippingOptions</screen>
+        <div>shippingOptionsFootprint</div>
+        <description>The footprint, or temperature bar, that informs the customer which step of a multi-page check-out they are currently on. </description>
+    </property>
+    <property key="shippingMethod">
+        <value xml:lang="en">20</value>
+        <screen>ShippingOptions</screen>
+        <div>shippingOptionsShippingMethod</div>
+        <description>Prompt to select one of the available Shipping Methods.</description>
+    </property>
+    <property key="storePickup">
+        <value xml:lang="en">30</value>
+        <screen>ShippingOptions</screen>
+        <div>shippingOptionsStorePickup</div>
+        <description>If allowable, this will allow for the selection of a specific Store to pickup the merchandise.</description>
+    </property>
+    <property key="previousButton">
+        <value xml:lang="en">40</value>
+        <screen>ShippingOptions</screen>
+        <div>shippingOptionsPreviousButton</div>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">50</value>
+        <screen>ShippingOptions</screen>
+        <div>shippingOptionsContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the previous step.</description>
+    </property>
+
+
+<!-- *************************************** -->
+<!-- OrderSummary -->
+<!-- *************************************** -->
+    <property key="footprint">
+        <value xml:lang="en">10</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryFootprint</div>
+        <description>The footprint, or so called temperature bar, that informs the customer which step of a multi-page check-out they are currently on. </description>
+    </property>
+    <property key="orderItems">
+        <value xml:lang="en">20</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryOrderItems</div>
+        <description>All the items that have been added to the Shopping Cart</description>
+    </property>
+    <property key="promoCode">
+        <value xml:lang="en">30</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryPromoCode</div>
+        <description>Promo or Coupon Code entry element. This is where the customer enters a coupon code and may view the savings or benefits.</description>
+    </property>
+    <property key="billingAddress">
+        <value xml:lang="en">40</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryBillingAddress</div>
+        <description>Display confirmation of Billing Address.</description>
+    </property>
+    <property key="shippingAddress">
+        <value xml:lang="en">50</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryShippingAddress</div>
+        <description>Display confirmation of Shipping Address</description>
+    </property>
+    <property key="storePickup">
+        <value xml:lang="en">60</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryStorePickup</div>
+        <description>Display confirmation of Store Pickup</description>
+    </property>
+    <property key="paymentOptions">
+        <value xml:lang="en">70</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryPaymentOptions</div>
+        <description>The various payment options as configured for this implementation</description>
+    </property>
+    <property key="createAccount">
+        <value xml:lang="en">80</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryCreateAccount</div>
+        <description>In the event that a multi-step checkout was accessed via a Guest workflow, prompts to allow customer to create an account.</description>
+    </property>
+    <property key="previousButton">
+        <value xml:lang="en">90</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryPreviousButton</div>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">100</value>
+        <screen>OrderSummary</screen>
+        <div>orderSummaryContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the previous step.</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- OrderConfirm -->
+<!-- *************************************** -->
+    <property key="footprint">
+        <value xml:lang="en">10</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmFootprint</div>
+        <description>The footprint, or so called temperature bar, that informs the customer which step of a multi-page check-out they are currently on. </description>
+    </property>
+    <property key="thankyou">
+        <value xml:lang="en">20</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmThankyou</div>
+        <description>Thankyou</description>
+    </property>
+    <property key="orderItems">
+        <value xml:lang="en">30</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmOrderItems</div>
+        <description>All the order items that have been added to the Shopping Cart</description>
+    </property>
+    <property key="billingAddress">
+        <value xml:lang="en">40</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmBillingAddress</div>
+        <description>Display confirmation of Billing Address</description>
+    </property>
+    <property key="shippingAddress">
+        <value xml:lang="en">50</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmShippingAddress</div>
+        <description>Display confirmation of Shipping Address</description>
+    </property>
+    <property key="storePickup">
+        <value xml:lang="en">60</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmStorePickup</div>
+        <description>Display confirmation of Store Pickup</description>
+    </property>
+    <property key="paymentOptions">
+        <value xml:lang="en">70</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmPaymentOptions</div>
+        <description>The various payment options as configured for this implementation</description>
+    </property>
+    <property key="previousButton">
+        <value xml:lang="en">80</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmPreviousButton</div>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">90</value>
+        <screen>OrderConfirm</screen>
+        <div>orderConfirmContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the previous step.</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- OnePageCheckout -->
+<!-- *************************************** -->
+    <property key="personalInfo">
+        <value xml:lang="en">10</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutPersonalInfo</div>
+        <description>About You</description>
+    </property>
+    <property key="orderItems">
+        <value xml:lang="en">20</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutOrderItems</div>
+        <description>All the order items that have been added to the Shopping Cart.</description>
+    </property>
+    <property key="promoCode">
+        <value xml:lang="en">30</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutPromoCode</div>
+        <description>Promo or Coupon Code.This is where the customer enters a coupon code and may view the savings or benefits.</description>
+    </property>
+    <property key="billingAddress">
+        <value xml:lang="en">40</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutBillingAddress</div>
+        <description>Display confirmation of Billing Address</description>
+    </property>
+    <property key="shippingAddress">
+        <value xml:lang="en">50</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutShippingAddress</div>
+        <description>Display confirmation of Shipping Address</description>
+    </property>
+    <property key="shippingMethod">
+        <value xml:lang="en">50</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutShippingMethod</div>
+        <description>Prompt to select one of the available Shipping Methods.</description>
+    </property>
+    <property key="storePickup">
+        <value xml:lang="en">60</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutStorePickup</div>
+        <description>If allowable, this will allow for the selection of a specific Store to pickup the merchandise.</description>
+    </property>
+    <property key="paymentOptions">
+        <value xml:lang="en">70</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutPaymentOptions</div>
+        <description>The various payment options as configured for this implementation. </description>
+    </property>
+    <property key="createAccount">
+        <value xml:lang="en">80</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutCreateAccount</div>
+        <description>In the event that a multi-step checkout was accessed via a Guest workflow, prompts to allow customer to create an account. </description>
+    </property>
+    <property key="previousButton">
+        <value xml:lang="en">90</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutPreviousButton</div>
+        <description>The PREVIOUS button that will return the customer to the previous step.</description>
+    </property>
+    <property key="continueButton">
+        <value xml:lang="en">100</value>
+        <screen>OnePageCheckout</screen>
+        <div>onePageCheckoutContinueButton</div>
+        <description>The CONTINUE button that will return the customer to the previous step.</description>
+    </property>
+
+<!-- *************************************** -->
+<!-- Person-Info -->
+<!-- *************************************** -->
+    <property key="firstName">
+        <value xml:lang="en">10</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoFirstName</div>
+        <description>First Name</description>
+    </property>
+    <property key="lastName">
+        <value xml:lang="en">20</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoLastName</div>
+        <description>Last Name</description>
+    </property>
+    <property key="gender">
+        <value xml:lang="en">30</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoGender</div>
+        <description>Gender</description>
+    </property>
+    <property key="dateOfBirthMMDDYYYY">
+        <value xml:lang="en">40</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoDateOfBirthMMDDYYYY</div>
+        <description>Date of Birth in MMDDYYYY format</description>
+    </property>
+    <property key="dateOfBirthMMDD">
+        <value xml:lang="en">50</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoDateOfBirthMMDD</div>
+        <description>Date of Birth in MMDD format</description>
+    </property>
+    <property key="phoneHome">
+        <value xml:lang="en">60</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoPhoneHome</div>
+        <description>Phone Home</description>
+    </property>
+    <property key="phoneCell">
+        <value xml:lang="en">70</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoPhoneCell</div>
+        <description>Phone Cell</description>
+    </property>
+    <property key="phoneWork">
+        <value xml:lang="en">80</value>
+        <screen>PersonalInfo</screen>
+        <div>personalInfoPhoneWork</div>
+        <description>Phone Work</description>
+    </property>
+<!-- *************************************** -->
+<!-- Address-Info -->
+<!-- *************************************** -->
+    <property key="customObject">
+        <value xml:lang="en">10</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoCustomObject</div>
+        <description>Could be a PostCodeAnywhere or any other custom address verification object</description>
+    </property>
+    <property key="country">
+        <value xml:lang="en">20</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoCountry</div>
+        <description>Country selector</description>
+    </property>
+    <property key="nickname">
+        <value xml:lang="en">30</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoNickname</div>
+        <description>Address Nickname</description>
+    </property>
+    <property key="address1">
+        <value xml:lang="en">40</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoAddress1</div>
+        <description>Address Line 1</description>
+    </property>
+    <property key="address2">
+        <value xml:lang="en">50</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoAddress2</div>
+        <description>Address Line 2</description>
+    </property>
+    <property key="address3">
+        <value xml:lang="en">60</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoAddress3</div>
+        <description>Address Line 3</description>
+    </property>
+    <property key="cityTown">
+        <value xml:lang="en">70</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoCityTown</div>
+        <description>City or Town</description>
+    </property>
+    <property key="stateProvince">
+        <value xml:lang="en">80</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoStateProvince</div>
+        <description>State or Province</description>
+    </property>
+    <property key="zipPostcode">
+        <value xml:lang="en">90</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoZipPostcode</div>
+        <description>Zip or Postcode</description>
     </property>
 </resource>

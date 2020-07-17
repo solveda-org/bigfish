@@ -1,5 +1,5 @@
 <#if volumePricingRule?has_content>
-  <div id="pdpVolumePricing">
+  <div class="pdpVolumePricing">
     <div id="volumePricing">
           <span class="pricingCaption">${uiLabelMap.VolumePricingLabel}</span>
             <#list volumePricingRule as priceRule>

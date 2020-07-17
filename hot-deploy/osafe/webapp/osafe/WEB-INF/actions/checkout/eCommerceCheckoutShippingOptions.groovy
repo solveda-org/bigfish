@@ -5,6 +5,12 @@ import org.ofbiz.base.util.UtilValidate
 import org.ofbiz.party.contact.ContactHelper;
 import org.ofbiz.product.store.ProductStoreWorker;
 import org.ofbiz.order.shoppingcart.shipping.ShippingEstimateWrapper;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.StringUtil;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.entity.util.EntityUtil;
 
 cart = session.getAttribute("shoppingCart");
 party = null;
@@ -28,7 +34,57 @@ productStore = ProductStoreWorker.getProductStore(request);
 if (cart) {
     shippingEstWpr = new ShippingEstimateWrapper(dispatcher, cart, 0);
     context.shippingEstWpr = shippingEstWpr;
-    context.carrierShipmentMethodList = shippingEstWpr.getShippingMethods();
+    carrierShipmentMethodList = shippingEstWpr.getShippingMethods();
+}
+
+boolean removeShippingCostEst = false;
+String inventoryMethod = globalContext.get("INVENTORY_METHOD");
+if(UtilValidate.isNotEmpty(inventoryMethod) && inventoryMethod.equalsIgnoreCase("BIGFISH"))
+{
+    if (cart) 
+    {
+        for(GenericValue cartItem : cart.items())
+        {
+            try {
+                BigDecimal bfWareHouseInventoryBD = BigDecimal.ZERO;
+                GenericValue bfWarehouseProductAttribute = delegator.findOne("ProductAttribute", UtilMisc.toMap("productId",cartItem.productId,"attrName","BF_INVENTORY_WHS"), true);
+                
+                if(UtilValidate.isNotEmpty(bfWarehouseProductAttribute))
+                {
+                    bfWareHouseInventory = bfWarehouseProductAttribute.attrValue;
+                    bfWareHouseInventoryBD = new BigDecimal(bfWareHouseInventory);
+                }
+                if(bfWareHouseInventoryBD.compareTo(BigDecimal.ZERO) <= 0)
+                {
+                    removeShippingCostEst = true;
+                    break;
+                }
+            } catch(Exception e) {
+            }
+        }
+    }
+}
+String removeShippingCostEstIdParm = globalContext.get("CHECKOUT_REMOVE_SHIP_COST_EST");
+
+if(UtilValidate.isNotEmpty(carrierShipmentMethodList))
+{
+    productStoreShipMethIdList = EntityUtil.getFieldListFromEntityList(carrierShipmentMethodList, "productStoreShipMethId", true);
+    
+    if(removeShippingCostEst && UtilValidate.isNotEmpty(removeShippingCostEstIdParm))
+    {
+        removeShippingCostEstIdList = StringUtil.split(removeShippingCostEstIdParm, ",");
+        
+        if(UtilValidate.isNotEmpty(productStoreShipMethIdList))
+        {
+            productStoreShipMethIdList.removeAll(removeShippingCostEstIdList);
+        }
+        carrierShipmentMethodList = EntityUtil.filterByAnd(carrierShipmentMethodList, [EntityCondition.makeCondition("productStoreShipMethId", EntityOperator.IN, productStoreShipMethIdList)]);
+    }
+}
+
+if(carrierShipmentMethodList)
+{
+    context.carrierShipmentMethodList = carrierShipmentMethodList;
 }
 
 context.shoppingCart = cart;

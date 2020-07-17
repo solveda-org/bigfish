@@ -16,6 +16,34 @@ import javolution.util.FastMap;
 import org.ofbiz.base.util.UtilDateTime;
 import com.osafe.util.OsafeAdminUtil;
 
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionBuilder;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.entity.condition.EntityFieldValue;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.product.category.CategoryWorker;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import com.ibm.icu.util.Calendar;
+
+import org.ofbiz.base.util.ObjectType;
+
 partyId = parameters.partyId;
 userLogin = session.getAttribute("userLogin");
 
@@ -40,7 +68,6 @@ if (UtilValidate.isNotEmpty(svcCtx))
 	svcCtx.put("extInfo", "N");
 	svcCtx.put("partyTypeId", "PERSON");
 
-    
     Map<String, Object> svcRes;
     svcRes = dispatcher.runSync("findParty", svcCtx);
     List<GenericValue> customerPDFList =  UtilGenerics.checkList(svcRes.get("completePartyList"), GenericValue.class);
@@ -100,4 +127,8 @@ if (UtilValidate.isNotEmpty(svcCtx))
         
     }
 }
+
+
+
+
 

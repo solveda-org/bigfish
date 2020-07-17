@@ -216,31 +216,84 @@
                 </else>
             </if-compare>
         </if-not-empty>
-        <if-not-empty field="parameters.inventoryLevel"> 
-            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="inventoryLevelVaild">
-               <string value="${parameters.inventoryLevel}"></string>
+        
+        <set field="bfTotalInventory" from-field="parameters.bfTotalInventory" default-value="0"/>
+        <set field="bfWHInventory" from-field="parameters.bfWHInventory" default-value="0"/>
+        
+        <if-not-empty field="bfTotalInventory"> 
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isSignedInteger" ret-field="bfTotalInventoryVaild">
+               <string value="${bfTotalInventory}"></string>
             </call-class-method>
-            <if-compare operator="equals" value="false" field="inventoryLevelVaild" type="Boolean">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+            <if-compare operator="equals" value="false" field="bfTotalInventoryVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
             <else>
                 <if>
                     <condition>
                     <and>
-                        <if-compare operator="greater-equals" value="0" field="parameters.inventoryLevel" type="Long"/>
-                        <if-compare operator="less-equals" value="9999" field="parameters.inventoryLevel" type="Long"/>
+                        <if-compare operator="greater-equals" value="-9999" field="bfTotalInventory" type="Long"/>
+                        <if-compare operator="less-equals" value="99999" field="bfTotalInventory" type="Long"/>
                     </and>
                     </condition>
                 <then>
                 </then>
                 <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="ValidBFTotalInventoryError" list="error_list"/>
                 </else>
                 </if>
             </else>
             </if-compare>
         </if-not-empty>
+        
+        <if-not-empty field="bfWHInventory"> 
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isSignedInteger" ret-field="bfWHInventoryVaild">
+               <string value="${bfWHInventory}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="bfWHInventoryVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFWHInventoryError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="bfWHInventory" list="error_list"/>
+            <else>
+                <if>
+                    <condition>
+                    <and>
+                        <if-compare operator="greater-equals" value="-9999" field="bfWHInventory" type="Long"/>
+                        <if-compare operator="less-equals" value="99999" field="bfWHInventory" type="Long"/>
+                    </and>
+                    </condition>
+                <then>
+                </then>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFWHInventoryError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="bfWHInventory" list="error_list"/>
+                </else>
+                </if>
+            </else>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-compare-field field="bfWHInventory" operator="greater" to-field="bfTotalInventory" type="Long">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryCompareError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
+        </if-compare-field>
+        
+        <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+            <set field="idValuesMap" from-field="parameters.idValue"/>
+            <iterate-map key="goodIdentificationTypeIdKey" value="goodIdentificationTypeIdValue" map="parameters.goodIdentificationTypeId">
+                <set field="idValue1" from-field="idValuesMap.${goodIdentificationTypeIdKey}"/>
+                <if-not-empty field="idValue1">
+	                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+		                <field field="idValue1"/>
+		            </call-class-method>
+		            <if-compare field="isValidId" operator="equals" value="false">
+		            	<set field="errorKey" from-field="idValuesMap.${goodIdentificationTypeIdKey}"/>
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            </if-compare>
+	            </if-not-empty>
+            </iterate-map>
+        </if-compare>
+        
         <check-errors/>
         
         <set-service-fields service-name="updateProduct" map="parameters" to-map="updateProductCtx"/>
@@ -272,6 +325,18 @@
                 <call-service service-name="updateProductPrice" in-map-name="productListPriceCtx"/>
             </if-not-empty>
         </if-not-empty>
+        
+        <set-service-fields service-name="manageBigfishInventory" to-map="manageBigfishInventoryCtx" map="parameters"/>
+        <set field="manageBigfishInventoryCtx.attrName" value="BF_INVENTORY_TOT"/>
+        <set field="manageBigfishInventoryCtx.attrValue" from-field="bfTotalInventory"/>
+        <call-service service-name="manageBigfishInventory" in-map-name="manageBigfishInventoryCtx"/>
+        <clear-field field="manageBigfishInventoryCtx"/>
+        
+        <set-service-fields service-name="manageBigfishInventory" to-map="manageBigfishInventoryCtx" map="parameters"/>
+        <set field="manageBigfishInventoryCtx.attrName" value="BF_INVENTORY_WHS"/>
+        <set field="manageBigfishInventoryCtx.attrValue" from-field="bfWHInventory"/>
+        <call-service service-name="manageBigfishInventory" in-map-name="manageBigfishInventoryCtx"/>
+        <clear-field field="manageBigfishInventoryCtx"/>
     </simple-method>
     
     <simple-method method-name="updateProdReview" short-description="Updates a product review record">
@@ -303,16 +368,16 @@
     </simple-method>
     
     <simple-method method-name="manageBigfishInventory" short-description="Create Update, Delete Product Attribute for Bigfish Inventory">
-        <set field="attrName" value="BIGFISH_INVENTORY"/>
+        <set field="attrName" from-field="parameters.attrName"/>
         <entity-one entity-name="ProductAttribute" value-field="productAttribute">
             <field-map field-name="productId" from-field="parameters.productId"/>
             <field-map field-name="attrName" from-field="attrName"/>
         </entity-one>
         <if-not-empty field="productAttribute">
-            <if-not-empty field="parameters.inventoryLevel">
+            <if-not-empty field="parameters.attrValue">
                 <set field="updateProductAttributeCtx.productId" from-field="parameters.productId"/>
                 <set field="updateProductAttributeCtx.attrName" from-field="attrName"/>
-                <set field="updateProductAttributeCtx.attrValue" from-field="parameters.inventoryLevel"/>
+                <set field="updateProductAttributeCtx.attrValue" from-field="parameters.attrValue"/>
                 <call-service service-name="updateProductAttribute" in-map-name="updateProductAttributeCtx"/>
             <else>
                 <set field="deleteProductAttributeCtx.productId" from-field="parameters.productId"/>
@@ -323,7 +388,7 @@
         <else>
             <set field="createProductAttributeCtx.productId" from-field="parameters.productId"/>
             <set field="createProductAttributeCtx.attrName" from-field="attrName"/>
-            <set field="createProductAttributeCtx.attrValue" from-field="parameters.inventoryLevel"/>
+            <set field="createProductAttributeCtx.attrValue" from-field="parameters.attrValue"/>
             <call-service service-name="createProductAttribute" in-map-name="createProductAttributeCtx"/>
         </else>
         </if-not-empty>
@@ -1136,31 +1201,84 @@
                 </else>
             </if-compare>
         </if-not-empty>
-        <if-not-empty field="parameters.inventoryLevel"> 
-            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isInteger" ret-field="inventoryLevelVaild">
-               <string value="${parameters.inventoryLevel}"></string>
+        
+        <set field="bfTotalInventory" from-field="parameters.bfTotalInventory" default-value="0"/>
+        <set field="bfWHInventory" from-field="parameters.bfWHInventory" default-value="0"/>
+        
+        <if-not-empty field="bfTotalInventory"> 
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isSignedInteger" ret-field="bfTotalInventoryVaild">
+               <string value="${bfTotalInventory}"></string>
             </call-class-method>
-            <if-compare operator="equals" value="false" field="inventoryLevelVaild" type="Boolean">
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
-                <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+            <if-compare operator="equals" value="false" field="bfTotalInventoryVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
             <else>
                 <if>
                     <condition>
                     <and>
-                        <if-compare operator="greater-equals" value="0" field="parameters.inventoryLevel" type="Long"/>
-                        <if-compare operator="less-equals" value="9999" field="parameters.inventoryLevel" type="Long"/>
+                        <if-compare operator="greater-equals" value="-9999" field="bfTotalInventory" type="Long"/>
+                        <if-compare operator="less-equals" value="99999" field="bfTotalInventory" type="Long"/>
                     </and>
                     </condition>
                 <then>
                 </then>
                 <else>
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidInventoryLevelError"/>
-                    <string-to-list string="${tempErrorMessage}" message-field="inventoryLevel" list="error_list"/>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
                 </else>
                 </if>
             </else>
             </if-compare>
         </if-not-empty>
+        
+        <if-not-empty field="bfWHInventory"> 
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate" method-name="isSignedInteger" ret-field="bfWHInventoryVaild">
+               <string value="${bfWHInventory}"></string>
+            </call-class-method>
+            <if-compare operator="equals" value="false" field="bfWHInventoryVaild" type="Boolean">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFWHInventoryError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="bfWHInventory" list="error_list"/>
+            <else>
+                <if>
+                    <condition>
+                    <and>
+                        <if-compare operator="greater-equals" value="-9999" field="bfWHInventory" type="Long"/>
+                        <if-compare operator="less-equals" value="99999" field="bfWHInventory" type="Long"/>
+                    </and>
+                    </condition>
+                <then>
+                </then>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFWHInventoryError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="bfWHInventory" list="error_list"/>
+                </else>
+                </if>
+            </else>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-compare-field field="bfWHInventory" operator="greater" to-field="bfTotalInventory" type="Long">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidBFTotalInventoryCompareError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="bfTotalInventory" list="error_list"/>
+        </if-compare-field>
+        
+        <if-compare field="parameters.isVariant" operator="not-equals" value="Y">
+            <set field="idValuesMap" from-field="parameters.idValue"/>
+            <iterate-map key="goodIdentificationTypeIdKey" value="goodIdentificationTypeIdValue" map="parameters.goodIdentificationTypeId">
+                <set field="idValue1" from-field="idValuesMap.${goodIdentificationTypeIdKey}"/>
+                <if-not-empty field="idValue1">
+	                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+		                <field field="idValue1"/>
+		            </call-class-method>
+		            <if-compare field="isValidId" operator="equals" value="false">
+		            	<set field="errorKey" from-field="idValuesMap.${goodIdentificationTypeIdKey}"/>
+		                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+		                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+		            </if-compare>
+	            </if-not-empty>
+            </iterate-map>
+        </if-compare>
+        
         <check-errors/>
         
         <!-- create Product -->
@@ -1198,6 +1316,19 @@
             <set field="callCreateProductCategoryMemberMap.productCategoryId" from-field="parameters.productCategoryId"/>
             <call-service service-name="addProductToCategory" in-map-name="callCreateProductCategoryMemberMap"/>
         </if-not-empty>
+        
+        <!-- Manage Bigfish Inventory Product Attribute -->
+        <set-service-fields service-name="manageBigfishInventory" to-map="manageBigfishInventoryCtx" map="parameters"/>
+        <set field="manageBigfishInventoryCtx.attrName" value="BF_INVENTORY_TOT"/>
+        <set field="manageBigfishInventoryCtx.attrValue" from-field="bfTotalInventory"/>
+        <call-service service-name="manageBigfishInventory" in-map-name="manageBigfishInventoryCtx"/>
+        <clear-field field="manageBigfishInventoryCtx"/>
+        
+        <set-service-fields service-name="manageBigfishInventory" to-map="manageBigfishInventoryCtx" map="parameters"/>
+        <set field="manageBigfishInventoryCtx.attrName" value="BF_INVENTORY_WHS"/>
+        <set field="manageBigfishInventoryCtx.attrValue" from-field="bfWHInventory"/>
+        <call-service service-name="manageBigfishInventory" in-map-name="manageBigfishInventoryCtx"/>
+        <clear-field field="manageBigfishInventoryCtx"/>
     </simple-method>
     
     <simple-method method-name="createTopProductCategory" short-description="Method to create top category and rollup">
@@ -1462,7 +1593,7 @@
                         <condition>
                             <and>
                                 <if-compare operator="greater-equals" value="1" field="sequenceNumValue" type="Long"/>
-                                <if-compare operator="less-equals" value="1000" field="sequenceNumValue" type="Long"/>
+                                <if-compare operator="less-equals" value="2000" field="sequenceNumValue" type="Long"/>
                             </and>
                         </condition>
                         <then>
@@ -1487,7 +1618,7 @@
                 </or>
             </condition>
             <then>
-                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SequenceNumNotVaildNumError"/>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="FacetValueSequenceNumNotVaildNumError"/>
                 <string-to-list string="${tempErrorMessage}" message-field="SEQUENCENUM" list="error_list"/>
             </then>
         </if>
@@ -1532,17 +1663,11 @@
             </if-compare>
             <call-service service-name="updateProductFeatureGroupAppl" in-map-name="updateProductFeatureGroupApplCtx"/>   
             
-            <entity-and entity-name="ProductFeatureAppl" list="productFeatureAppls">
-                <field-map field-name="productFeatureId" from-field="productFeatureId"/>
-            </entity-and>
-            <iterate entry="productFeatureAppl" list="productFeatureAppls">
-                <make-value value-field="lookupKeyValue" entity-name="ProductFeatureAppl"/>
-                <set-pk-fields map="productFeatureAppl" value-field="lookupKeyValue"/>
-                <find-by-primary-key entity-name="ProductFeatureAppl" map="lookupKeyValue" value-field="lookedUpValue"/>
-                <set field="lookedUpValue.sequenceNum" from-field="sequenceNum"/>
-                <store-value value-field="lookedUpValue"/>
-            </iterate>
-            
+            <set-service-fields service-name="updateProductFeatureAppl" to-map="updateProductFeatureApplCtx"/>
+            <set field="updateProductFeatureApplCtx.productFeatureId" from-field="productFeatureId"/>
+            <set field="updateProductFeatureApplCtx.sequenceNum" from-field="sequenceNum"/>
+            <call-service service-name="updateProductFeatureAppl" in-map-name="updateProductFeatureApplCtx"/>
+                            
             <set-service-fields service-name="updateProductFeature" map="parameters" to-map="updateProductFeatureCtx"/>
             <set field="updateProductFeatureCtx.productFeatureId" from-field="productFeatureId"/>
             <set field="updateProductFeatureCtx.productFeatureTypeId" from-field="productFeatureTypeId"/>

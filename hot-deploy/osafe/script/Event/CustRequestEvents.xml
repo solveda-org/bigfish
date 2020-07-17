@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="submitRequestCatalog" short-description="submit request catalog" login-required="false">
+        <call-simple-method method-name="validateRequestCatalog" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <call-simple-method method-name="submitCustRequest"/>
+    </simple-method>
+
+    <simple-method method-name="submitContactUs" short-description="submit Contact Us" login-required="false">
+        <call-simple-method method-name="validateContactUs" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <call-simple-method method-name="submitCustRequest"/>
+    </simple-method>
+
+    <simple-method method-name="submitCustRequest" short-description="create Customer Request Attribute and send mail" login-required="false">
+        <entity-one entity-name="UserLogin" value-field="systemUserLogin" auto-field-map="false">
+            <field-map field-name="userLoginId" value="system"/>
+        </entity-one>
+        <set-current-user-login value-field="systemUserLogin"/>
+
+        <!-- Get party email address -->
+        <set field="getPartyEmailMap.partyId" from-field="parameters.partyIdTo"/>
+        <set field="getPartyEmailMap.userLogin" from-field="systemUserLogin"/>
+        <call-service service-name="getPartyEmail" in-map-name="getPartyEmailMap">
+            <result-to-field result-name="emailAddress"/>
+        </call-service>
+
+        <log level="info" message="Email Type: ${parameters.emailType}"/>
+
+        <!-- Create Customer Request -->
+        <if-not-empty field="parameters.custRequestTypeId">
+            <set field="custRequest.userLogin" from-field="systemUserLogin"/>
+            <set field="custRequest.custRequestTypeId" from-field="parameters.custRequestTypeId"/>
+            <if-not-empty field="parameters.custRequestName">
+                <set field="custRequest.custRequestName" from-field="parameters.custRequestName"/>
+            </if-not-empty>
+            <set field="custRequest.productStoreId" from-field="parameters.productStoreId"/>
+            <set field="custRequest.statusId" value="CRQ_DRAFT"/>
+            <call-service service-name="createCustRequest" in-map-name="custRequest">
+                <result-to-field result-name="custRequestId"/>
+            </call-service>
+        </if-not-empty>
+
+        <!-- Create Customer Request Attributes-->
+        <if-not-empty field="custRequestId">
+            <set field="custRequestAttr.custRequestId" from-field="custRequestId"/>
+            <set field="custRequestAttr.userLogin" from-field="systemUserLogin"/>
+            <set field="custRequestAttr.attrName" value="IS_DOWNLOADED"/>
+            <set field="custRequestAttr.attrValue" value="N"/>
+            <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+           <if-not-empty field="custRequestContext.content">
+                <set field="custRequestAttr.attrName" value="COMMENT"/>
+                <set field="contentValue" from-field="custRequestContext.content"/>
+                <call-object-method method-name="length" obj-field="custRequestContext.content" ret-field="contentLen"/>
+                <call-bsh><![CDATA[
+                    if(contentLen > 255) {
+                      content = contentValue.replaceAll("\\n","");
+                      custRequestContext.put("content", content);
+                    }
+                  ]]>
+                </call-bsh>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.content"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.emailAddress">
+                <set field="custRequestAttr.attrName" value="EMAIL_ADDRESS"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.emailAddress"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.firstName">
+                <set field="custRequestAttr.attrName" value="FIRST_NAME"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.firstName"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.lastName">
+                <set field="custRequestAttr.attrName" value="LAST_NAME"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.lastName"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.address1">
+                <set field="custRequestAttr.attrName" value="ADDRESS1"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.address1"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.address2">
+                <set field="custRequestAttr.attrName" value="ADDRESS2"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.address2"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.address3">
+                <set field="custRequestAttr.attrName" value="ADDRESS3"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.address3"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.city">
+                <set field="custRequestAttr.attrName" value="CITY"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.city"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.stateCode">
+                <set field="custRequestAttr.attrName" value="STATE_PROVINCE"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.stateCode"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.postalCode">
+                <set field="custRequestAttr.attrName" value="ZIP_POSTAL_CODE"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.postalCode"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.countryCode">
+                <set field="custRequestAttr.attrName" value="COUNTRY"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.countryCode"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.contactReason">
+                <set field="custRequestAttr.attrName" value="REASON_FOR_CONTACT"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.contactReason"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.orderIdNumber">
+                <set field="custRequestAttr.attrName" value="ORDER_NUMBER"/>
+                <set field="custRequestAttr.attrValue" from-field="custRequestContext.orderIdNumber"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            </if-not-empty>
+           <if-not-empty field="custRequestContext.contactPhoneArea">
+                <call-map-processor in-map-name="custRequestContext" out-map-name="contactFullPhoneMap">
+                    <simple-map-processor name="newFullTelecomNumber">
+                            <make-in-string field="fullContactNumber">
+                                <in-field field="contactPhoneArea"/>
+                                <in-field field="contactPhoneContact3"/>
+                                <in-field field="contactPhoneContact4"/>
+                            </make-in-string>
+                            
+                            <make-in-string field="contactPhoneContact">
+                                <in-field field="contactPhoneContact3"/>
+                                <in-field field="contactPhoneContact4"/>
+                            </make-in-string>
+                            <process field="contactPhoneContact"><copy/></process>
+                            <process field="fullContactNumber"><copy to-field="contactFullPhoneContact"/></process>
+                    </simple-map-processor>
+                </call-map-processor>
+                <set field="custRequestContext.contactPhoneContact" from-field="contactFullPhoneMap.contactPhoneContact"/>
+                <set field="custRequestAttr.attrName" value="CONTACT_PHONE"/>
+                <set field="custRequestAttr.attrValue" from-field="contactFullPhoneMap.contactFullPhoneContact"/>
+                <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+            <else>
+                <if-not-empty field="custRequestContext.phoneNumber">
+                    <set field="custRequestContext.contactPhoneContact" from-field="custRequestContext.phoneNumber"/>
+                    <set field="custRequestAttr.attrName" value="CONTACT_PHONE"/>
+                    <set field="custRequestAttr.attrValue" from-field="custRequestContext.phoneNumber"/>
+                    <call-service service-name="createCustRequestAttribute" in-map-name="custRequestAttr"/>
+                </if-not-empty>
+            </else>
+            </if-not-empty>
+        </if-not-empty>
+
+        <!-- Create Communication Event-->
+        <map-to-map map="custRequestContext" to-map="parameters"/>
+        <set-service-fields service-name="createCommunicationEventWithoutPermission" map="parameters" to-map="createComEventMap"/>
+        <set field="createComEventMap.userLogin" from-field="systemUserLogin"/>
+        <set field="createComEventMap.reasonEnumId" from-field="parameters.emailType"/>
+        <set field="createComEventMap.note" from-field="parameters.content"/>
+        <set field="createComEventMap.fromString" from-field="parameters.emailAddress"/>
+        <if-not-empty field="parameters.custRequestName">
+              <set field="createComEventMap.subject" from-field="parameters.custRequestName"/>
+        </if-not-empty>
+         <if-not-empty field="custRequestId">
+        <set field="createComEventMap.custRequestId" from-field="custRequestId"/>
+        </if-not-empty>
+        <if-not-empty field="productStoreEmailSetting">
+           <set field="createComEventMap.toString" from-field="productStoreEmailSetting.fromAddress"/>
+        </if-not-empty>
+        <call-service service-name="createCommunicationEventWithoutPermission" in-map-name="createComEventMap"/>
+
+        <call-simple-method method-name="sendCustRequestEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
+    </simple-method>
+    
+</simple-methods>

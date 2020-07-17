@@ -11,7 +11,7 @@ checkoutOrderCompleteShippingAddress
 checkoutOrderCompletePaymentInfo
 
     <#if showThankYouStatus?exists && showThankYouStatus == "Y">
-        <p  id="orderSucessThankYou" class="instructions">${OrderCompleteInfoMapped!""}</p>
+        <p class="instructions">${OrderCompleteInfoMapped!""}</p>
     </#if>
    ${screens.render("component://osafe/widget/EcommerceContentScreens.xml#PTS_ORDER_DETAIL")}
 

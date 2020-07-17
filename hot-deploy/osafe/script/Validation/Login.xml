@@ -118,15 +118,15 @@
         <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
         <!-- if username and/or password should be lowercased, do that now -->
         <if-compare field="username_lowercase" operator="equals" value="true">
-            <call-object-method obj-field="parameters.USERNAME" method-name="toLowerCase" ret-field="parameters.USERNAME"/>
+            <call-object-method obj-field="parameters.USERNAME_NEW" method-name="toLowerCase" ret-field="parameters.USERNAME_NEW"/>
         </if-compare>
 
         <!-- Check username email is in correct form -->
-        <if-not-empty field="parameters.USERNAME">
+        <if-not-empty field="parameters.USERNAME_NEW">
             <call-map-processor in-map-name="parameters" out-map-name="personMap">
                 <simple-map-processor name="newPerson">
                     <process field="personalTitle"><copy/></process>
-                    <process field="USERNAME">
+                    <process field="USERNAME_NEW">
                         <copy/>
                         <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
                     </process>
@@ -138,7 +138,7 @@
             <!-- Create that UserLogin does not already exist -->
             <call-map-processor in-map-name="parameters" out-map-name="userLoginContext">
                 <simple-map-processor name="newUserLogin">
-                    <process field="USERNAME"><copy to-field="userLoginId"/></process>
+                    <process field="USERNAME_NEW"><copy to-field="userLoginId"/></process>
                 </simple-map-processor>
             </call-map-processor>
             <if-not-empty field="userLoginContext.userLoginId">
@@ -147,6 +147,7 @@
                 <if-not-empty field="existingUserLogin">
                     <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="UserNameInUseError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_CONFIRM" list="error_list"/>
+                    <field-to-request field="userLoginContext.userLoginId" request-name="loginUserName"/>
                 </if-not-empty>
             </if-not-empty>
         <else>
@@ -160,4 +161,49 @@
 
     </simple-method>
 
+    <simple-method method-name="validateAnonCustomerEmail" short-description="validateNewCustomerEmail" login-required="false">
+        <property-to-field resource="security" property="username.lowercase" default="false" field="username_lowercase"/>
+        <!-- if username and/or password should be lowercased, do that now -->
+        <if-compare field="username_lowercase" operator="equals" value="true">
+            <call-object-method obj-field="parameters.USERNAME_GUEST" method-name="toLowerCase" ret-field="parameters.USERNAME_GUEST"/>
+        </if-compare>
+
+        <!-- Check username email is in correct form -->
+        <if-not-empty field="parameters.USERNAME_GUEST">
+            <call-map-processor in-map-name="parameters" out-map-name="personMap">
+                <simple-map-processor name="newPerson">
+                    <process field="personalTitle"><copy/></process>
+                    <process field="USERNAME_GUEST">
+                        <copy/>
+                        <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
+                    </process>
+                </simple-map-processor>
+            </call-map-processor>
+
+            <check-errors/>
+
+            <!-- Create that UserLogin does not already exist -->
+            <call-map-processor in-map-name="parameters" out-map-name="userLoginContext">
+                <simple-map-processor name="newUserLogin">
+                    <process field="USERNAME_GUEST"><copy to-field="userLoginId"/></process>
+                </simple-map-processor>
+            </call-map-processor>
+            <if-not-empty field="userLoginContext.userLoginId">
+                <set from-field="userLoginContext.userLoginId" field="userLoginExistsMap.userLoginId"/>
+                <find-by-primary-key entity-name="UserLogin" map="userLoginExistsMap" value-field="existingUserLogin" />
+                <if-not-empty field="existingUserLogin">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="UserNameInUseError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_CONFIRM" list="error_list"/>
+                    <field-to-request field="userLoginContext.userLoginId" request-name="loginUserName"/>
+                </if-not-empty>
+            </if-not-empty>
+        <else>
+            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="LoginEmailAddressMissingError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="CUSTOMER_EMAIL_CONFIRM" list="error_list"/>
+        </else>
+
+        </if-not-empty>
+        <check-errors/>
+
+    </simple-method>
 </simple-methods>

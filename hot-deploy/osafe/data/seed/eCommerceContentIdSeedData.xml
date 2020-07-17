@@ -26,20 +26,12 @@
 <ElectronicText dataResourceId="SI_SHOPPING_CART"/>
 <ElectronicText dataResourceId="SI_SEARCH"/>
 <ElectronicText dataResourceId="SI_MAILING_LIST"/>
-<Content contentId="SITE_INFO_MENU" contentTypeId="MENU_CONTAINER" dataResourceId="" statusId="CTNT_IN_PROGRESS" contentName="Site Information" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<ContentAssoc contentId="OTS_PPOINT" contentIdTo="SITE_INFO_MENU" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<Content contentId="SI_HEADER_CONTENT" contentTypeId="DOCUMENT"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER_CONTENT"/>
-<Content contentId="SI_FOOTER_CONTENT" contentTypeId="DOCUMENT"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER_CONTENT"/>
-<Content contentId="SI_LOGO" contentTypeId="DOCUMENT"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO"/>
-<Content contentId="SI_SHOPPING_CART" contentTypeId="DOCUMENT"  description="Main Site View Cart displayed on every page" contentName="Site Shopping Cart" dataResourceId="SI_SHOPPING_CART"/>
-<Content contentId="SI_SEARCH" contentTypeId="DOCUMENT"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH"/>
-<Content contentId="SI_MAILING_LIST" contentTypeId="DOCUMENT"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING_LIST"/>
-<ContentAssoc contentId="SITE_INFO_MENU" contentIdTo="SI_HEADER_CONTENT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="siteLogo"/>
-<ContentAssoc contentId="SITE_INFO_MENU" contentIdTo="SI_FOOTER_CONTENT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="siteLogo"/>
-<ContentAssoc contentId="SITE_INFO_MENU" contentIdTo="SI_LOGO" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="siteLogo"/>
-<ContentAssoc contentId="SITE_INFO_MENU" contentIdTo="SI_SHOPPING_CART" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="siteLogo"/>
-<ContentAssoc contentId="SITE_INFO_MENU" contentIdTo="SI_SEARCH" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="siteLogo"/>
-<ContentAssoc contentId="SITE_INFO_MENU" contentIdTo="SI_MAILING_LIST" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="siteLogo"/>
+<Content contentId="SI_HEADER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site HEADER Content displayed on every page" contentName="Main Site HEADER Content" dataResourceId="SI_HEADER_CONTENT"/>
+<Content contentId="SI_FOOTER_CONTENT" contentTypeId="BF_SITE_INFO"  description="Main Site FOOTER Content displayed on every page" contentName="Main Site FOOTER Content" dataResourceId="SI_FOOTER_CONTENT"/>
+<Content contentId="SI_LOGO" contentTypeId="BF_SITE_INFO"  description="Main client logo displayed on every page" contentName="Site Logo" dataResourceId="SI_LOGO"/>
+<Content contentId="SI_SHOPPING_CART" contentTypeId="BF_SITE_INFO"  description="Main Site View Cart displayed on every page" contentName="Site Shopping Cart" dataResourceId="SI_SHOPPING_CART"/>
+<Content contentId="SI_SEARCH" contentTypeId="BF_SITE_INFO"  description="Main Site SEARCH displayed on every page" contentName="Site Search" dataResourceId="SI_SEARCH"/>
+<Content contentId="SI_MAILING_LIST" contentTypeId="BF_SITE_INFO"  description="Join Mailing List Option logo displayed on every page" contentName="Join Mailing List" dataResourceId="SI_MAILING_LIST"/>
 <ContentPurpose contentId="SI_HEADER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_FOOTER_CONTENT" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SI_LOGO" contentPurposeTypeId="SECTION"/>
@@ -82,40 +74,22 @@
 <ElectronicText dataResourceId="HPS_14"/>
 <ElectronicText dataResourceId="HPS_15"/>
 <ElectronicText dataResourceId="HPS_16"/>
-<Content contentId="HOME_PAGE_SPOT_MENU" contentTypeId="MENU_CONTAINER" contentName="Home Page Spots"/>	
-<ContentAssoc contentId="OTS_PPOINT" contentIdTo="HOME_PAGE_SPOT_MENU" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<Content contentId="HPS_01" contentTypeId="DOCUMENT" dataResourceId="HPS_01"  description="Home Page Spot 1" contentName="Home Page Spot 1" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_02" contentTypeId="DOCUMENT" dataResourceId="HPS_02"  description="Home Page Spot 2" contentName="Home Page Spot 2" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_03" contentTypeId="DOCUMENT" dataResourceId="HPS_03"  description="Home Page Spot 3" contentName="Home Page Spot 3" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_04" contentTypeId="DOCUMENT" dataResourceId="HPS_04"  description="Home Page Spot 4" contentName="Home Page Spot 4" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_05" contentTypeId="DOCUMENT" dataResourceId="HPS_05"  description="Home Page Spot 5" contentName="Home Page Spot 5" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_06" contentTypeId="DOCUMENT" dataResourceId="HPS_06"  description="Home Page Spot 6" contentName="Home Page Spot 6" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_07" contentTypeId="DOCUMENT" dataResourceId="HPS_07"  description="Home Page Spot 7" contentName="Home Page Spot 7" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_08" contentTypeId="DOCUMENT" dataResourceId="HPS_08"  description="Home Page Spot 8" contentName="Home Page Spot 8" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_09" contentTypeId="DOCUMENT" dataResourceId="HPS_09"  description="Home Page Spot 9" contentName="Home Page Spot 9" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_10" contentTypeId="DOCUMENT" dataResourceId="HPS_10"  description="Home Page Spot 10" contentName="Home Page Spot 10" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_11" contentTypeId="DOCUMENT" dataResourceId="HPS_11"  description="Home Page Spot 11" contentName="Home Page Spot 11" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_12" contentTypeId="DOCUMENT" dataResourceId="HPS_12"  description="Home Page Spot 12" contentName="Home Page Spot 12" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_13" contentTypeId="DOCUMENT" dataResourceId="HPS_13"  description="Home Page Spot 13" contentName="Home Page Spot 13" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_14" contentTypeId="DOCUMENT" dataResourceId="HPS_14"  description="Home Page Spot 14" contentName="Home Page Spot 14" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_15" contentTypeId="DOCUMENT" dataResourceId="HPS_15"  description="Home Page Spot 15" contentName="Home Page Spot 15" statusId="CTNT_IN_PROGRESS"/>
-<Content contentId="HPS_16" contentTypeId="DOCUMENT" dataResourceId="HPS_16"  description="Home Page Spot 16" contentName="Home Page Spot 16" statusId="CTNT_IN_PROGRESS"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_01" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="1" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_02" contentAssocTypeId="SUB_CONTENT"	fromDate="2011-01-01 00:00:00.0" sequenceNum="2" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_03" contentAssocTypeId="SUB_CONTENT"	fromDate="2011-01-01 00:00:00.0" sequenceNum="3" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_04" contentAssocTypeId="SUB_CONTENT"	fromDate="2011-01-01 00:00:00.0" sequenceNum="4" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_05" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="5" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_06" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="6" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_07" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="7" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_08"	contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="8" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_09" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="9" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_10"	contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="10" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_11" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="11" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_12"	contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="12" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_13"	contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="13" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_14"	contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="14" mapKey="hotSpot"/>
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_15"	contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="15" mapKey="hotSpot"/>		
-<ContentAssoc contentId="HOME_PAGE_SPOT_MENU" contentIdTo="HPS_16" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" sequenceNum="16" mapKey="hotSpot"/>
+<Content contentId="HPS_01" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_01"  description="Home Page Spot 1" contentName="Home Page Spot 1" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_02" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_02"  description="Home Page Spot 2" contentName="Home Page Spot 2" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_03" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_03"  description="Home Page Spot 3" contentName="Home Page Spot 3" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_04" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_04"  description="Home Page Spot 4" contentName="Home Page Spot 4" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_05" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_05"  description="Home Page Spot 5" contentName="Home Page Spot 5" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_06" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_06"  description="Home Page Spot 6" contentName="Home Page Spot 6" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_07" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_07"  description="Home Page Spot 7" contentName="Home Page Spot 7" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_08" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_08"  description="Home Page Spot 8" contentName="Home Page Spot 8" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_09" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_09"  description="Home Page Spot 9" contentName="Home Page Spot 9" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_10" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_10"  description="Home Page Spot 10" contentName="Home Page Spot 10" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_11" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_11"  description="Home Page Spot 11" contentName="Home Page Spot 11" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_12" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_12"  description="Home Page Spot 12" contentName="Home Page Spot 12" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_13" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_13"  description="Home Page Spot 13" contentName="Home Page Spot 13" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_14" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_14"  description="Home Page Spot 14" contentName="Home Page Spot 14" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_15" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_15"  description="Home Page Spot 15" contentName="Home Page Spot 15" statusId="CTNT_IN_PROGRESS"/>
+<Content contentId="HPS_16" contentTypeId="BF_HOME_PAGE" dataResourceId="HPS_16"  description="Home Page Spot 16" contentName="Home Page Spot 16" statusId="CTNT_IN_PROGRESS"/>
 <!-- ********************************* -->
 
 
@@ -133,6 +107,7 @@
 <DataResource dataResourceId="PTS_STORE_LOCATOR" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_LOGIN" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="PTS_LOGIN_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_PERSONAL_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PTS_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
@@ -150,10 +125,16 @@
 <DataResource dataResourceId="PES_STORE_LOCATOR" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_MAILING_LIST" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_LOGIN" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="PES_LOGIN_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_PERSONAL_INFO" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_CONFIRM" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_SEARCH_NO_RESULT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="PES_ONE_STEP_CHKOUT" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="PDP_CONTENT_01" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_01"/>
+<DataResource dataResourceId="PDP_CONTENT_02" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_02"/>
+<DataResource dataResourceId="PDP_CONTENT_03" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_03"/>
+<DataResource dataResourceId="PDP_CONTENT_04" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_04"/>
+<DataResource dataResourceId="PDP_CONTENT_05" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="PDP_CONTENT_05"/>
 <ElectronicText dataResourceId="PTS_ADDR_BOOK_VIEW"/>
 <ElectronicText dataResourceId="PTS_ADDR_BOOK_EDIT"/>
 <ElectronicText dataResourceId="PTS_MY_ACCOUNT"/>
@@ -167,6 +148,7 @@
 <ElectronicText dataResourceId="PTS_STORE_LOCATOR"/>
 <ElectronicText dataResourceId="PTS_MAILING_LIST"/>
 <ElectronicText dataResourceId="PTS_LOGIN"/>
+<ElectronicText dataResourceId="PTS_LOGIN_INFO"/>
 <ElectronicText dataResourceId="PTS_PERSONAL_INFO"/>
 <ElectronicText dataResourceId="PTS_CONFIRM"/>
 <ElectronicText dataResourceId="PTS_SEARCH_NO_RESULT"/>
@@ -184,80 +166,57 @@
 <ElectronicText dataResourceId="PES_STORE_LOCATOR"/>
 <ElectronicText dataResourceId="PES_MAILING_LIST"/>
 <ElectronicText dataResourceId="PES_LOGIN"/>
+<ElectronicText dataResourceId="PES_LOGIN_INFO"/>
 <ElectronicText dataResourceId="PES_PERSONAL_INFO"/>
 <ElectronicText dataResourceId="PES_CONFIRM"/>
 <ElectronicText dataResourceId="PES_SEARCH_NO_RESULT"/>
 <ElectronicText dataResourceId="PES_ONE_STEP_CHKOUT"/>
-<Content contentId="PAGE_TOP_SPOT_MENU" contentTypeId="MENU_CONTAINER" dataResourceId="" statusId="CTNT_IN_PROGRESS" contentName="eSpots" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<ContentAssoc contentId="OTS_PPOINT" contentIdTo="PAGE_TOP_SPOT_MENU" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<Content contentId="PTS_ADDR_BOOK_VIEW" contentTypeId="DOCUMENT" dataResourceId="PTS_ADDR_BOOK_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ADDR_BOOK_EDIT" contentTypeId="DOCUMENT" dataResourceId="PTS_ADDR_BOOK_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_MY_ACCOUNT" contentTypeId="DOCUMENT" dataResourceId="PTS_MY_ACCOUNT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ORDER_CONFIRM" contentTypeId="DOCUMENT" dataResourceId="PTS_ORDER_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ORDER_STATUS" contentTypeId="DOCUMENT" dataResourceId="PTS_ORDER_STATUS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ORDER_SUMMARY" contentTypeId="DOCUMENT" dataResourceId="PTS_ORDER_SUMMARY" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SHIPPING_ADDRESS" contentTypeId="DOCUMENT" dataResourceId="PTS_SHIPPING_ADDRESS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SHIPPING_METHOD" contentTypeId="DOCUMENT" dataResourceId="PTS_SHIPPING_METHOD" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SHOPPING_CART" contentTypeId="DOCUMENT" dataResourceId="PTS_SHOPPING_CART" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_CONTACT_US" contentTypeId="DOCUMENT" dataResourceId="PTS_CONTACT_US" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_STORE_LOCATOR" contentTypeId="DOCUMENT" dataResourceId="PTS_STORE_LOCATOR" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_MAILING_LIST" contentTypeId="DOCUMENT" dataResourceId="PTS_MAILING_LIST" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_LOGIN" contentTypeId="DOCUMENT" dataResourceId="PTS_LOGIN" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_PERSONAL_INFO" contentTypeId="DOCUMENT" dataResourceId="PTS_PERSONAL_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_CONFIRM" contentTypeId="DOCUMENT" dataResourceId="PTS_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_SEARCH_NO_RESULT" contentTypeId="DOCUMENT" dataResourceId="PTS_SEARCH_NO_RESULT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on TOP of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PTS_ONE_STEP_CHKOUT" contentTypeId="DOCUMENT" dataResourceId="PTS_ONE_STEP_CHKOUT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the top of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ADDR_BOOK_VIEW" contentTypeId="DOCUMENT" dataResourceId="PES_ADDR_BOOK_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ADDR_BOOK_EDIT" contentTypeId="DOCUMENT" dataResourceId="PES_ADDR_BOOK_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_MY_ACCOUNT" contentTypeId="DOCUMENT" dataResourceId="PES_MY_ACCOUNT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ORDER_CONFIRM" contentTypeId="DOCUMENT" dataResourceId="PES_ORDER_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ORDER_STATUS" contentTypeId="DOCUMENT" dataResourceId="PES_ORDER_STATUS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ORDER_SUMMARY" contentTypeId="DOCUMENT" dataResourceId="PES_ORDER_SUMMARY" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SHIPPING_ADDRESS" contentTypeId="DOCUMENT" dataResourceId="PES_SHIPPING_ADDRESS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SHIPPING_METHOD" contentTypeId="DOCUMENT" dataResourceId="PES_SHIPPING_METHOD" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SHOPPING_CART" contentTypeId="DOCUMENT" dataResourceId="PES_SHOPPING_CART" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_CONTACT_US" contentTypeId="DOCUMENT" dataResourceId="PES_CONTACT_US" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_STORE_LOCATOR" contentTypeId="DOCUMENT" dataResourceId="PES_STORE_LOCATOR" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_MAILING_LIST" contentTypeId="DOCUMENT" dataResourceId="PES_MAILING_LIST" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_LOGIN" contentTypeId="DOCUMENT" dataResourceId="PES_LOGIN" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_PERSONAL_INFO" contentTypeId="DOCUMENT" dataResourceId="PES_PERSONAL_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_CONFIRM" contentTypeId="DOCUMENT" dataResourceId="PES_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_SEARCH_NO_RESULT" contentTypeId="DOCUMENT" dataResourceId="PES_SEARCH_NO_RESULT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on END of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<Content contentId="PES_ONE_STEP_CHKOUT" contentTypeId="DOCUMENT" dataResourceId="PES_ONE_STEP_CHKOUT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the END of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_ADDR_BOOK_VIEW" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_ADDR_BOOK_EDIT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_MY_ACCOUNT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_ORDER_CONFIRM" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_ORDER_STATUS" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_ORDER_SUMMARY" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_SHIPPING_ADDRESS" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_SHIPPING_METHOD" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_SHOPPING_CART" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_CONTACT_US" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_STORE_LOCATOR" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_MAILING_LIST" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_LOGIN" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_PERSONAL_INFO" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_CONFIRM" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_SEARCH_NO_RESULT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PTS_ONE_STEP_CHKOUT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_ADDR_BOOK_VIEW" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_ADDR_BOOK_EDIT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_MY_ACCOUNT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_ORDER_CONFIRM" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_ORDER_STATUS" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_ORDER_SUMMARY" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_SHIPPING_ADDRESS" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_SHIPPING_METHOD" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_SHOPPING_CART" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_CONTACT_US" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_STORE_LOCATOR" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_MAILING_LIST" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_LOGIN" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_PERSONAL_INFO" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_CONFIRM" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_SEARCH_NO_RESULT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PAGE_TOP_SPOT_MENU" contentIdTo="PES_ONE_STEP_CHKOUT" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
+<ElectronicText dataResourceId="PDP_CONTENT_01"/>
+<ElectronicText dataResourceId="PDP_CONTENT_02"/>
+<ElectronicText dataResourceId="PDP_CONTENT_03"/>
+<ElectronicText dataResourceId="PDP_CONTENT_04"/>
+<ElectronicText dataResourceId="PDP_CONTENT_05"/>
+<Content contentId="PTS_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BOOK_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ADDR_BOOK_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_MY_ACCOUNT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_ORDER_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORDER_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_ORDER_STATUS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORDER_STATUS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_ORDER_SUMMARY" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ORDER_SUMMARY" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_SHIPPING_ADDRESS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHIPPING_ADDRESS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_SHIPPING_METHOD" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHIPPING_METHOD" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_SHOPPING_CART" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SHOPPING_CART" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_CONTACT_US" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONTACT_US" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_STORE_LOCATOR" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_STORE_LOCATOR" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_MAILING_LIST" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_MAILING_LIST" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_LOGIN" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_LOGIN" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_LOGIN_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_LOGIN_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Change-Login-Info Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_PERSONAL_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_PERSONAL_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the TOP of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_SEARCH_NO_RESULT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on TOP of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PTS_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PTS_ONE_STEP_CHKOUT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the top of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_ADDR_BOOK_VIEW" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_VIEW" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the My-ADDRESS_BOOK page view" contentName="Address Book View" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_ADDR_BOOK_EDIT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ADDR_BOOK_EDIT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Address Book Edit page" contentName="Address Book Edit" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_MY_ACCOUNT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MY_ACCOUNT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the MY-ACCOUNT page" contentName="My Account" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_ORDER_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORDER_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-CONFIRMATION page (part of the check-out flow)" contentName="Order Confirmation" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_ORDER_STATUS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORDER_STATUS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-STATUS page" contentName="Order Status" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_ORDER_SUMMARY" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ORDER_SUMMARY" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the ORDER-SUMMARY page (part of the check-out flow)" contentName="Order Summary" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_SHIPPING_ADDRESS" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHIPPING_ADDRESS" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the SELECT-SHIPPING-ADDRESS page (part of the check-out flow)" contentName="Shipping Address" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_SHIPPING_METHOD" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHIPPING_METHOD" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the SELECT-SHIPPING-METHOD page (part of the check-out flow)" contentName="Shipping Method" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_SHOPPING_CART" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SHOPPING_CART" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the VIEW-SHOPPING-CART page" contentName="Shopping Cart" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_CONTACT_US" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONTACT_US" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the CONTACT-US page" contentName="Contact Us" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_STORE_LOCATOR" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_STORE_LOCATOR" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the STORE-LOCATOR page (to be integrated when Store-Locator page is implemented)" contentName="Store Locator" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_MAILING_LIST" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_MAILING_LIST" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Join Mailing List page" contentName="Join Mailing List" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_LOGIN" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_LOGIN" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Login Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_LOGIN_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_LOGIN_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Change-Login-Info Page" contentName="Login" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_PERSONAL_INFO" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_PERSONAL_INFO" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the Personal Information page" contentName="Personal Information" createdByUserLogin="admin" lastModifiedDate="2011-01-01 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_CONFIRM" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_CONFIRM" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on the END of the generic Confirm-Page page" contentName="Confirm Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_SEARCH_NO_RESULT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_SEARCH_NO_RESULT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed on END of the No Search Result page" contentName="No Search Result Page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PES_ONE_STEP_CHKOUT" contentTypeId="BF_PAGE_TOP_SPOT" dataResourceId="PES_ONE_STEP_CHKOUT" statusId="CTNT_IN_PROGRESS"  description="Content Spot displayed at the END of one step checkout." contentName="One step checkout page" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
+<Content contentId="PDP_CONTENT_01" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_01"/>
+<Content contentId="PDP_CONTENT_02" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_02"/>
+<Content contentId="PDP_CONTENT_03" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_03"/>
+<Content contentId="PDP_CONTENT_04" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_04"/>
+<Content contentId="PDP_CONTENT_05" contentTypeId="BF_PAGE_TOP_SPOT"  description="General additional PDP content" contentName="PDP CONTENT" dataResourceId="PDP_CONTENT_05"/>
 <ContentRole contentId="PTS_ADDR_BOOK_VIEW" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_ADDR_BOOK_EDIT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_MY_ACCOUNT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -271,6 +230,7 @@
 <ContentRole contentId="PTS_STORE_LOCATOR" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_MAILING_LIST" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_LOGIN" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PTS_LOGIN_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PTS_PERSONAL_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PTS_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PTS_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
@@ -288,10 +248,16 @@
 <ContentRole contentId="PES_STORE_LOCATOR" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_MAILING_LIST" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_LOGIN" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PES_LOGIN_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_PERSONAL_INFO" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PES_CONFIRM" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-01 19:00:30.0"/>
 <ContentRole contentId="PES_SEARCH_NO_RESULT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PES_ONE_STEP_CHKOUT" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_01" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_02" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_03" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_04" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
+<ContentRole contentId="PDP_CONTENT_05" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <!-- ********************************* -->
 
 <!-- PDP SPOTS -->
@@ -299,12 +265,8 @@
 <DataResource dataResourceId="PS_DISCONTINUED" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL" dataResourceName="espot1"/>
 <ElectronicText dataResourceId="PS_INTRODUCED"/>
 <ElectronicText dataResourceId="PS_DISCONTINUED"/>
-<Content contentId="PDP_SPOT_MENU" contentTypeId="MENU_CONTAINER" dataResourceId="" statusId="CTNT_IN_PROGRESS" contentName="pdpSpots" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<ContentAssoc contentId="OTS_PPOINT" contentIdTo="PDP_SPOT_MENU" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<Content contentId="PS_INTRODUCED" contentTypeId="DOCUMENT"  description="A content-spot displayed on the PDP if the product is not yet available. Product Introduced Date is greater than [today]." contentName="PDP Product Available eSpot" dataResourceId="PS_INTRODUCED"/>
-<Content contentId="PS_DISCONTINUED" contentTypeId="DOCUMENT"  description="A content-spot displayed on the PDP if [today] is after the Product Discontinued Date" contentName="PDP Product Sale Discontinuatiuon eSpot" dataResourceId="PS_DISCONTINUED"/>
-<ContentAssoc contentId="PDP_SPOT_MENU" contentIdTo="PS_INTRODUCED" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<ContentAssoc contentId="PDP_SPOT_MENU" contentIdTo="PS_DISCONTINUED" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
+<Content contentId="PS_INTRODUCED" contentTypeId="BF_PDP_SPOT"  description="A content-spot displayed on the PDP if the product is not yet available. Product Introduced Date is greater than [today]." contentName="PDP Product Available eSpot" dataResourceId="PS_INTRODUCED"/>
+<Content contentId="PS_DISCONTINUED" contentTypeId="BF_PDP_SPOT"  description="A content-spot displayed on the PDP if [today] is after the Product Discontinued Date" contentName="PDP Product Sale Discontinuatiuon eSpot" dataResourceId="PS_DISCONTINUED"/>
 <ContentRole contentId="PS_INTRODUCED" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 <ContentRole contentId="PS_DISCONTINUED" partyId="admin" roleTypeId="OWNER" fromDate="2011-01-26 19:00:30.0"/>
 
@@ -324,22 +286,13 @@
 <ElectronicText dataResourceId="SP_ERROR_PAGE"/>
 <ElectronicText dataResourceId="SP_RETURN_POLICY"/>
 <ElectronicText dataResourceId="SP_CONTACT_US"/>
-<Content contentId="STATIC_PAGE_MENU" contentTypeId="MENU_CONTAINER" dataResourceId="" statusId="CTNT_IN_PROGRESS" contentName="Static Pages" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<ContentAssoc contentId="OTS_PPOINT" contentIdTo="STATIC_PAGE_MENU" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey=""/>
-<Content contentId="SP_ABOUT_US" contentTypeId="DOCUMENT"  description="About Us (Seeded SAMPLE)" contentName="About Us" dataResourceId="SP_ABOUT_US"/>
-<Content contentId="SP_PRIVACY_POLICY" contentTypeId="DOCUMENT"  description="Privacy Policy (Seeded SAMPLE)" contentName="Privacy Policy" dataResourceId="SP_PRIVACY_POLICY"/>
-<Content contentId="SP_TERMS_CONDITIONS" contentTypeId="DOCUMENT"  description="Terms and Conditions (Seeded SAMPLE)" contentName="Terms and Conditions" dataResourceId="SP_TERMS_CONDITIONS"/>
-<Content contentId="SP_SITE_MAP" contentTypeId="DOCUMENT"  description="Site Map (Seeded SAMPLE)" contentName="Site Map" dataResourceId="SP_SITE_MAP"/>
-<Content contentId="SP_ERROR_PAGE" contentTypeId="DOCUMENT"  description="System error page used for Page-Not-Found conditions. You should not edit the ID." contentName="Error Page" dataResourceId="SP_ERROR_PAGE"/>
-<Content contentId="SP_RETURN_POLICY" contentTypeId="DOCUMENT"  description="Return Policy (Seeded SAMPLE)" contentName="Return Policy" dataResourceId="SP_RETURN_POLICY"/>
-<Content contentId="SP_CONTACT_US" contentTypeId="DOCUMENT"  description="Contact Us (Seeded SAMPLE)" contentName="Contact Us" dataResourceId="SP_CONTACT_US"/>
-<ContentAssoc contentId="STATIC_PAGE_MENU" contentIdTo="SP_ABOUT_US" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="link"/>
-<ContentAssoc contentId="STATIC_PAGE_MENU" contentIdTo="SP_PRIVACY_POLICY" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="link"/>
-<ContentAssoc contentId="STATIC_PAGE_MENU" contentIdTo="SP_TERMS_CONDITIONS" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="link"/>
-<ContentAssoc contentId="STATIC_PAGE_MENU" contentIdTo="SP_SITE_MAP" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="link"/>
-<ContentAssoc contentId="STATIC_PAGE_MENU" contentIdTo="SP_ERROR_PAGE" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="ErrorPageSection"/>
-<ContentAssoc contentId="STATIC_PAGE_MENU" contentIdTo="SP_RETURN_POLICY" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="link"/>
-<ContentAssoc contentId="STATIC_PAGE_MENU" contentIdTo="SP_CONTACT_US" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="link"/>
+<Content contentId="SP_ABOUT_US" contentTypeId="BF_STATIC_PAGE"  description="About Us (Seeded SAMPLE)" contentName="About Us" dataResourceId="SP_ABOUT_US"/>
+<Content contentId="SP_PRIVACY_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Privacy Policy (Seeded SAMPLE)" contentName="Privacy Policy" dataResourceId="SP_PRIVACY_POLICY"/>
+<Content contentId="SP_TERMS_CONDITIONS" contentTypeId="BF_STATIC_PAGE"  description="Terms and Conditions (Seeded SAMPLE)" contentName="Terms and Conditions" dataResourceId="SP_TERMS_CONDITIONS"/>
+<Content contentId="SP_SITE_MAP" contentTypeId="BF_STATIC_PAGE"  description="Site Map (Seeded SAMPLE)" contentName="Site Map" dataResourceId="SP_SITE_MAP"/>
+<Content contentId="SP_ERROR_PAGE" contentTypeId="BF_STATIC_PAGE"  description="System error page used for Page-Not-Found conditions. You should not edit the ID." contentName="Error Page" dataResourceId="SP_ERROR_PAGE"/>
+<Content contentId="SP_RETURN_POLICY" contentTypeId="BF_STATIC_PAGE"  description="Return Policy (Seeded SAMPLE)" contentName="Return Policy" dataResourceId="SP_RETURN_POLICY"/>
+<Content contentId="SP_CONTACT_US" contentTypeId="BF_STATIC_PAGE"  description="Contact Us (Seeded SAMPLE)" contentName="Contact Us" dataResourceId="SP_CONTACT_US"/>
 <ContentPurpose contentId="SP_ABOUT_US" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_PRIVACY_POLICY" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="SP_TERMS_CONDITIONS" contentPurposeTypeId="SECTION"/>
@@ -350,7 +303,6 @@
 <!-- ********************************* -->
 
 <!-- CONTENT LIBRARY-->
-<Content contentId="CONTENT_LIBRARY_MENU" contentTypeId="MENU_CONTAINER" dataResourceId="" statusId="CTNT_IN_PROGRESS" contentName="Content Library" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
 <!-- ********************************* -->
 
 <!-- EMAIL CONTENT-->
@@ -368,6 +320,7 @@
 <DataResource dataResourceId="E_ORDER_CHANGE" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_SHIP_REVIEW" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <DataResource dataResourceId="E_ORDER_DETAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
+<DataResource dataResourceId="E_TEST_EMAIL" dataResourceTypeId="ELECTRONIC_TEXT" dataTemplateTypeId="FTL"/>
 <ElectronicText dataResourceId="E_COMMON_STYLES"/>
 <ElectronicText dataResourceId="E_COMMON_HEADER"/>
 <ElectronicText dataResourceId="E_COMMON_FOOTER"/>
@@ -382,34 +335,21 @@
 <ElectronicText dataResourceId="E_ORDER_CHANGE"/>
 <ElectronicText dataResourceId="E_SHIP_REVIEW"/>
 <ElectronicText dataResourceId="E_ORDER_DETAIL"/>
-<Content contentId="EMAIL_MENU" contentTypeId="MENU_CONTAINER" dataResourceId="" statusId="CTNT_IN_PROGRESS" contentName="Email Content" createdByUserLogin="admin" lastModifiedDate="2011-01-26 19:00:30.0" lastModifiedByUserLogin="admin"/>
-<ContentAssoc contentId="OTS_PPOINT" contentIdTo="EMAIL_MENU" contentAssocTypeId="SUB_CONTENT" fromDate="2011-01-01 00:00:00.0" mapKey="" sequenceNum=""/>
-<Content contentId="E_COMMON_STYLES" contentTypeId="DOCUMENT"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
-<Content contentId="E_COMMON_HEADER" contentTypeId="DOCUMENT"  description="Content that is included in the beginning of all BigFish generated emails. Use this to define standard heading information such as your logo and company information." contentName="Common Client Header" dataResourceId="E_COMMON_HEADER"/>
-<Content contentId="E_COMMON_FOOTER" contentTypeId="DOCUMENT"  description="Content that is included at the end of all BigFish generated emails. Use this to define standard closing information such as Yours-Sincerely and your company contact information. " contentName="Common Client Footer " dataResourceId="E_COMMON_FOOTER"/>
-<Content contentId="E_NEW_CUSTOMER" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the New-Customer email (when the customer completes the registration form)." contentName="Create Party Email" dataResourceId="E_NEW_CUSTOMER"/>
-<Content contentId="E_CHANGE_CUSTOMER" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the Change-Customer email (when the customer updates their profile)." contentName="Change Party Email" dataResourceId="E_CHANGE_CUSTOMER"/>
-<Content contentId="E_FORGOT_PASSWORD" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the Forgot-Password email." contentName="Forgot Password Email" dataResourceId="E_FORGOT_PASSWORD"/>
-<Content contentId="E_ABANDON_CART" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the Abandoned Cart email. Other PARAMETERS control the timing of this email." contentName="Abandon Cart Email" dataResourceId="E_ABANDON_CART"/>
-<Content contentId="E_CONTACT_US" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the Contact-Us email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form." contentName="Contact Us Email" dataResourceId="E_CONTACT_US"/>
-<Content contentId="E_REQUEST_CATALOG" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form. " contentName="Request Catalog Email" dataResourceId="E_REQUEST_CATALOG"/>
-<Content contentId="E_ORDER_CONFIRM" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Confirm Email" dataResourceId="E_ORDER_CONFIRM"/>
-<Content contentId="E_ORDER_CHANGE" contentTypeId="DOCUMENT"  description="The actual email content that will be included in the Order-Change email (when the Status on the Order gets modified from one state to another)." contentName="Order Notice Email" dataResourceId="E_ORDER_CHANGE"/>
-<Content contentId="E_SHIP_REVIEW" contentTypeId="DOCUMENT" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW"/>
-<Content contentId="E_ORDER_DETAIL" contentTypeId="DOCUMENT"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_COMMON_STYLES" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="10" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_COMMON_HEADER" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="20" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_COMMON_FOOTER" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="30" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_NEW_CUSTOMER" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="50" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_CHANGE_CUSTOMER" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="60" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_FORGOT_PASSWORD" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="70" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_ABANDON_CART" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="80" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_CONTACT_US" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="90" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_REQUEST_CATALOG" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="100" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_ORDER_CONFIRM" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="110" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_ORDER_CHANGE" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="120" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_SHIP_REVIEW" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="130" mapKey="emailTemplates"/>
-<ContentAssoc contentId="EMAIL_MENU" contentIdTo="E_ORDER_DETAIL" contentAssocTypeId="SUB_CONTENT" fromDate="2001-01-01 00:00:00.0" sequenceNum="125" mapKey="emailTemplates"/>
+<ElectronicText dataResourceId="E_TEST_EMAIL"/>
+<Content contentId="E_COMMON_STYLES" contentTypeId="BF_EMAIL_TEMPLATE"  description="Common Email Styles" contentName="Email Styles" dataResourceId="E_COMMON_STYLES"/>
+<Content contentId="E_COMMON_HEADER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included in the beginning of all BigFish generated emails. Use this to define standard heading information such as your logo and company information." contentName="Common Client Header" dataResourceId="E_COMMON_HEADER"/>
+<Content contentId="E_COMMON_FOOTER" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content that is included at the end of all BigFish generated emails. Use this to define standard closing information such as Yours-Sincerely and your company contact information. " contentName="Common Client Footer " dataResourceId="E_COMMON_FOOTER"/>
+<Content contentId="E_NEW_CUSTOMER" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the New-Customer email (when the customer completes the registration form)." contentName="Create Party Email" dataResourceId="E_NEW_CUSTOMER"/>
+<Content contentId="E_CHANGE_CUSTOMER" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Change-Customer email (when the customer updates their profile)." contentName="Change Party Email" dataResourceId="E_CHANGE_CUSTOMER"/>
+<Content contentId="E_FORGOT_PASSWORD" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Forgot-Password email." contentName="Forgot Password Email" dataResourceId="E_FORGOT_PASSWORD"/>
+<Content contentId="E_ABANDON_CART" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Abandoned Cart email. Other PARAMETERS control the timing of this email." contentName="Abandon Cart Email" dataResourceId="E_ABANDON_CART"/>
+<Content contentId="E_CONTACT_US" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Contact-Us email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form." contentName="Contact Us Email" dataResourceId="E_CONTACT_US"/>
+<Content contentId="E_REQUEST_CATALOG" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Request-Catalog email. This email is sent to both the customer and the client. Len: not sure how this works since we probably grab content from the form. " contentName="Request Catalog Email" dataResourceId="E_REQUEST_CATALOG"/>
+<Content contentId="E_ORDER_CONFIRM" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Confirm Email" dataResourceId="E_ORDER_CONFIRM"/>
+<Content contentId="E_ORDER_CHANGE" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be included in the Order-Change email (when the Status on the Order gets modified from one state to another)." contentName="Order Notice Email" dataResourceId="E_ORDER_CHANGE"/>
+<Content contentId="E_SHIP_REVIEW" contentTypeId="BF_EMAIL_TEMPLATE" description="The actual email content that will be included in the Ship Review email. Other PARAMETERS control the timing of this email." contentName="Ship Review Email" dataResourceId="E_SHIP_REVIEW"/>
+<Content contentId="E_ORDER_DETAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="Content 'order detail' that will be included in the Order-Confirm email (when the customer places an Order)." contentName="Order Detail Email" dataResourceId="E_ORDER_DETAIL"/>
+<Content contentId="E_TEST_EMAIL" contentTypeId="BF_EMAIL_TEMPLATE"  description="The actual email content that will be used to send out a test email." contentName="Test Email" dataResourceId="E_TEST_EMAIL"/>
 <ContentPurpose contentId="E_COMMON_HEADER" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_STYLES" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_COMMON_FOOTER" contentPurposeTypeId="SECTION"/>
@@ -423,6 +363,7 @@
 <ContentPurpose contentId="E_ORDER_CHANGE" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_SHIP_REVIEW" contentPurposeTypeId="SECTION"/>
 <ContentPurpose contentId="E_ORDER_DETAIL" contentPurposeTypeId="SECTION"/>
+<ContentPurpose contentId="E_TEST_EMAIL" contentPurposeTypeId="SECTION"/>
 <Content contentId="E_COMMON_HEADER" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_COMMON_STYLES" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_COMMON_FOOTER" statusId="CTNT_PUBLISHED"/>
@@ -435,6 +376,8 @@
 <Content contentId="E_ORDER_CONFIRM" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_ORDER_CHANGE" statusId="CTNT_PUBLISHED"/>
 <Content contentId="E_SHIP_REVIEW" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_ORDER_DETAIL" statusId="CTNT_PUBLISHED"/>
+<Content contentId="E_TEST_EMAIL" statusId="CTNT_PUBLISHED"/>
 
 <!-- ********************************* -->
 

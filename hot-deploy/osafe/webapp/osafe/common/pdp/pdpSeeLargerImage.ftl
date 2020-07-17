@@ -1,4 +1,4 @@
-<div id="pdpSeeLargerImage">
+<div class="pdpSeeLargerImage">
 <div id="seeLargerImage" class="seeLargerImage">
   <#if productLargeImageUrl?has_content && productLargeImageUrl!=''>
     <a name="mainImageLink" id="mainImageLink" href="javascript:displayDialogBox('largeImage_');"><span>${uiLabelMap.ViewLargerImageLabel}</span></a>

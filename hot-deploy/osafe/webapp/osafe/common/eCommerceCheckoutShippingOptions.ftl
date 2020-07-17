@@ -8,14 +8,12 @@
   </div>
 <#else>
 <div id="shippingOptionDisplay" class="displayBox">
-    <div class="displayBoxHeader">
-      <span class="displayBoxHeaderCaption">${uiLabelMap.ShippingMethodsHeading}</span>
-    </div>
-    <input type="hidden" name="checkoutpage" value="shippingoptions"/>
+      <h3>${uiLabelMap.ShippingMethodsHeading}</h3>
     <div class="shippingMethodsContainer">
       <#if chosenShippingMethod?has_content && chosenShippingMethod.equals("NO_SHIPPING@_NA_")>
         <#assign chosenShippingMethod = "">
       </#if>
+      <#if carrierShipmentMethodList?exists && carrierShipmentMethodList?has_content>
       <#list carrierShipmentMethodList as carrierMethod>
         <#assign shippingMethod = carrierMethod.shipmentMethodTypeId + "@" + carrierMethod.partyId />
         <#assign findCarrierShipmentMethodMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("shipmentMethodTypeId", carrierMethod.shipmentMethodTypeId, "partyId", carrierMethod.partyId,"roleTypeId" ,"CARRIER") />
@@ -42,14 +40,9 @@
           </fieldset>
         </div>
       </#list>
+      </#if>
     </div>
 </div>
-    <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_PICKUP)>
-      <div class="deliveryOption">
-        <span>${uiLabelMap.SelectStoreInfo}</span>
-        <a href="javaScript:void(0);" onClick="displayDialogBox('${dialogPurpose!}');" class="standardBtn positive">${uiLabelMap.SelectStoreBtn!}</a>
-      </div>
-    </#if>
 </#if>
 <input type="hidden" id="isGoogleApi" name="isGoogleApi" value=""/>
 </div>

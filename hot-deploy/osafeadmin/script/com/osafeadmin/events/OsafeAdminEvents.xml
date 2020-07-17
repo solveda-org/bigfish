@@ -89,20 +89,23 @@
     <simple-method method-name="compareLabelFile" short-description="upload the compare to label file and validate" login-required="true">
         <set field="tempDir" value="${sys:getProperty('ofbiz.home')}/runtime/tmp/"/>
         <set field="tempFileName" value="tempComapreToFile"/>
+        
         <set field="xmlFileExtension" value="XML"/>
 
         <create-object class-name="org.ofbiz.base.util.HttpRequestFileUpload" field="uploadObject"/>
         <call-object-method method-name="setOverrideFilename" obj-field="uploadObject">
             <field field="tempFileName" type="String"/>
         </call-object-method>
+        
         <call-object-method method-name="setSavePath" obj-field="uploadObject">
             <field field="tempDir" type="String"/>
         </call-object-method>
+        
         <call-object-method method-name="doUpload" obj-field="uploadObject">
             <field field="request" type="javax.servlet.http.HttpServletRequest"/>
         </call-object-method>
         <call-object-method method-name="getFilename" obj-field="uploadObject" ret-field="uploadedFileName"/>
-
+        
        <if-not-empty field="uploadedFileName">
            <call-object-method method-name="toUpperCase" obj-field="uploadedFileName" ret-field="uploadedFileNameUpperCase"/>
            <call-object-method method-name="endsWith" obj-field="uploadedFileNameUpperCase" ret-field="isXmlFile">
@@ -248,4 +251,10 @@
        <field-to-session field="uploadedParamFileName"/>
     </simple-method>
 
+    <simple-method method-name="createCategoryTextContent" short-description="create category text content" login-required="true">
+         <set-service-fields service-name="createCategoryTextContent" to-map="createCategoryTextContentCtx" map="parameters"/>
+         <call-service service-name="createCategoryTextContent" in-map-name="createCategoryTextContentCtx">
+             <result-to-request result-name="contentId" />
+         </call-service>
+    </simple-method>
 </simple-methods>

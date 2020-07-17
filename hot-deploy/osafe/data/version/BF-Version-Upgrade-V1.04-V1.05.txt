@@ -1,0 +1,163 @@
+//********************************************************************************************
+//SQL UPDATES
+//********************************************************************************************
+
+//********************************************************************************************
+//BIGFISH PARAMETERS UPDATES
+//FILE: bigFishParameters.xml
+//********************************************************************************************
+
+//Add
+07/27/2012 issue#26298
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_IMG_ZOOM_ACTIVE_FLAG" description="TRUE or FALSE. Indicates if the Quicklook implementation is using the inline image zoom feature." parmCategory="QUICKLOOK"/> 
+07/30/12 issue#26302
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_RECENT_H" description="Height of PDP Related Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_RECENT_W" description="Width of PDP Related Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_COMPLEMENT_H" description="Height of PDP Complement Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_COMPLEMENT_W" description="Width of PDP ComplementImage" parmCategory="IMAGE"/>
+07/31/2012 issue#26348
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_PAYPAL" description="Determines if PayPal is an acceptable form of payment during the Check Out process. " parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_ALLOW_EBS" description="Determines if EBS is an acceptable form of payment during the Check Out process. " parmCategory="CHECKOUT"/>
+08/01/2012 issue#26358
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_SUPPRESS_TAX_IF_ZERO" description="This will suppress the Sales-Tax line during the checkout if the tax is zero. Used for UK clients where the VAT is included in the purchase price." parmCategory="CHECKOUT"/>
+
+	
+//Remove
+    07/30/12 issue#26302
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_XREF_H" description="Height of PDP Related Image" parmCategory="IMAGE"/>
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_XREF_W" description="Width of PDP Related Image" parmCategory="IMAGE"/>
+    
+//********************************************************************************************
+//LABEL UPDATES
+//FILE: OSafeUiLabels.xml
+//********************************************************************************************
+
+//Add
+  Issue# 26224  07/27/29012
+     <property key="PaymentOptionsHeading">
+        <value xml:lang="en">Pay Now or Pay in the Store?</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentMethodCaption</description>
+    </property>
+    <property key="PayNowlabel">
+        <value xml:lang="en">Pay Now</value>
+        <category>CHECKOUT</category>
+        <description>Pay Now</description>
+    </property>
+    <property key="PayInStorelabel">
+        <value xml:lang="en">Pay in the Store</value>
+        <category>CHECKOUT</category>
+        <description>Pay in Store</description>
+    </property>
+//Remove
+//********************************************************************************************
+//DIV SEQUENCE UPDATES
+//FILE: OSafeUiSequence.xml
+//********************************************************************************************
+
+//Add
+  Issue# 26261  07/31/2012
+
+    <property key="customObject">
+        <value xml:lang="en">10</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoCustomObject</div>
+        <description>Could be a PostCodeAnywhere or any other custom address verification object</description>
+    </property>
+    <property key="country">
+        <value xml:lang="en">20</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoCountry</div>
+        <description>Country selector</description>
+    </property>
+    <property key="nickname">
+        <value xml:lang="en">30</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoNickname</div>
+        <description>Address Nickname</description>
+    </property>
+    <property key="address1">
+        <value xml:lang="en">40</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoAddress1</div>
+        <description>Address Line 1</description>
+    </property>
+    <property key="address2">
+        <value xml:lang="en">50</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoAddress2</div>
+        <description>Address Line 2</description>
+    </property>
+    <property key="address3">
+        <value xml:lang="en">60</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoAddress3</div>
+        <description>Address Line 3</description>
+    </property>
+    <property key="cityTown">
+        <value xml:lang="en">70</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoCityTown</div>
+        <description>City or Town</description>
+    </property>
+    <property key="stateProvince">
+        <value xml:lang="en">80</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoStateProvince</div>
+        <description>State or Province</description>
+    </property>
+    <property key="zipPostcode">
+        <value xml:lang="en">90</value>
+        <screen>AddressInfo</screen>
+        <div>addressInfoZipPostcode</div>
+        <description>Zip or Postcode</description>
+    </property>
+//Remove
+
+
+//********************************************************************************************
+//CLIENT DEPLOYMENT UPDATES
+//FILE: client-deployment.properties
+//********************************************************************************************
+
+//Add
+
+
+//Remove
+
+//********************************************************************************************
+//ECOMMERCE SEED UPDATES
+//FILE: eCommerceSeedData.xml
+//********************************************************************************************
+
+//Add
+
+7.31.2012:
+
+.pdpVideo #productVideoLink a, .pdpVideo #productVideoLink a:hover, 
+.pdpVideo #productVideoLink a span, .pdpVideo360 #productVideo360Link a, .pdpVideo360 #productVideo360Link a:hover, 
+.pdpVideo360 #productVideo360Link a span, .displayBox h3, 
+
+//Remove
+
+7.31.2012:
+
+.displayBoxHeader, .displayBoxHeaderCaption
+
+//********************************************************************************************
+//ECOMMERCE CSS UPDATES
+//FILE: bigFishClientSkin.css
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//********************************************************************************************
+//OSAFE PROPERTIES UPDATE
+//FILE: osafe.properties.template
+//********************************************************************************************
+
+//Add
+
+//Remove

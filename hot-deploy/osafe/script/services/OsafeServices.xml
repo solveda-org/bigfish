@@ -38,4 +38,36 @@
         </else>
         </if-empty>
     </simple-method>
+    
+    <simple-method method-name="getPostalAddress" short-description="Get the postal address">
+        <entity-one value-field="address" entity-name="PostalAddress"/>
+        <field-to-result field="address.contactMechId" result-name="contactMechId"/>
+        <if-not-empty field="address.address1">
+            <field-to-result field="address.address1" result-name="address1"/>
+        </if-not-empty>
+        <if-not-empty field="address.address2">
+            <field-to-result field="address.address2" result-name="address2"/>
+        </if-not-empty>
+        <if-not-empty field="address.address3">
+            <field-to-result field="address.address3" result-name="address3"/>
+        </if-not-empty>
+        <if-not-empty field="address.directions">
+            <field-to-result field="address.directions" result-name="directions"/>
+        </if-not-empty>
+        <if-not-empty field="address.city">
+            <field-to-result field="address.city" result-name="city"/>
+        </if-not-empty>
+        <if-not-empty field="address.postalCode">
+            <field-to-result field="address.postalCode" result-name="postalCode"/>
+        </if-not-empty>
+        <if-not-empty field="address.stateProvinceGeoId">
+            <field-to-result field="address.stateProvinceGeoId" result-name="stateProvinceGeoId"/>
+        </if-not-empty>
+        <if-not-empty field="address.countyGeoId">
+            <field-to-result field="address.countyGeoId" result-name="countyGeoId"/>
+        </if-not-empty>
+        <if-not-empty field="address.countryGeoId">
+            <field-to-result field="address.countryGeoId" result-name="countryGeoId"/>
+        </if-not-empty>
+    </simple-method>
 </simple-methods>

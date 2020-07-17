@@ -1,28 +1,37 @@
 <script language="JavaScript" type="text/javascript">
 
-
   jQuery(document).ready(function(){
-
     jQuery('.pdpFeatureSwatchImage').click(function() {
         if (jQuery('.seeItemDetail').length) {
-            jQuery('.seeItemDetail').attr('href', jQuery('#pdpUrl').val()+this.title);
+            jQuery('#plpQuicklook_Container .seeItemDetail').attr('href', jQuery('#quicklook_Url_'+this.title).val());
         }
-    });
+    }); 
 
-    jQuery('.plpFeatureSwatchImage').click(function() {
+    jQuery('.eCommerceRecentlyViewedProduct .plpFeatureSwatchImage').click(function() {
         var swatchVariant = jQuery(this).next('.swatchVariant').clone();
         jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
         jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
         jQuery(this).siblings('.plpFeatureSwatchImage').removeClass('selected');
         jQuery(this).addClass('selected');
-        makePDPUrl(this);
+        makeProductUrl(this);
+    });
+    
+    jQuery('.eCommerceComplementProduct .plpFeatureSwatchImage').click(function() {
+        var swatchVariant = jQuery(this).next('.swatchVariant').clone();
+        jQuery(this).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').replaceWith(swatchVariant);
+        jQuery('.eCommerceThumbNailHolder').find('.swatchVariant').show().attr("class", "swatchProduct");
+        jQuery(this).siblings('.plpFeatureSwatchImage').removeClass('selected');
+        jQuery(this).addClass('selected');
+        makeProductUrl(this);
     });
     activateInitialZoom();
 
     var selectedSwatch = '${StringUtil.wrapString(parameters.productFeatureType)!""}';
     if(selectedSwatch != '') {
         var featureArray = selectedSwatch.split(":");
-        jQuery('.'+featureArray[1]).click();
+        jQuery('.pdpRecentlyViewed .'+featureArray[1]).click();
+        jQuery('.pdpComplement .'+featureArray[1]).click();
+        
     }
   });
 
@@ -130,7 +139,8 @@
             jQuery('#productDetailsImageContainer').html(mainImages.html());
             jQuery('#seeMainImage a').attr("href", "javascript:replaceDetailImage('"+largeImageUrl+"', '"+detailImageUrl+"');");
         }
-        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(PDP_IMG_ZOOM_ACTIVE_FLAG!"")>
+        <#assign activeZoom = Static["com.osafe.util.Util"].isProductStoreParmTrue(context.get(activeZoomParam!"")!"") />
+        <#if activeZoom>
             var mainImages = jQuery('#mainImageDiv').clone();
             jQuery(mainImages).find('img.productLargeImage').attr('id', 'mainImage');
             jQuery(mainImages).find('img.productLargeImage').attr('src', largeImageUrl+ "?" + new Date().getTime());
@@ -209,7 +219,8 @@
             // eval the next list if there are more
             var selectedValue = document.forms["addform"].elements[name].options[(index*1)+1].value;
             var selectedText = document.forms["addform"].elements[name].options[(index*1)+1].text;
-            jQuery('.'+selectedText).click();
+            jQuery('.pdpRecentlyViewed .'+selectedText).click();
+            jQuery('.pdpComplement .'+selectedText).click();
             var mapKey = name+'_'+selectedText;
             var detailImgUrl = '';
             if(VARMAP[mapKey]) {
@@ -230,6 +241,18 @@
 
                     var variantSeeMainImages = jQuery('#seeMainImage_'+VARMAP[mapKey]).clone();
                     jQuery('#seeMainImage').html(variantSeeMainImages.html());
+                    
+                    var variantProductVideo = jQuery('#productVideo_'+VARMAP[mapKey]).html();
+                    jQuery('#productVideo').html(variantProductVideo);
+                    
+                    var variantProductVideoLink = jQuery('#productVideoLink_'+VARMAP[mapKey]).html();
+                    jQuery('#productVideoLink').html(variantProductVideoLink);
+                    
+                    var variantProductVideo360 = jQuery('#productVideo360_'+VARMAP[mapKey]).html();
+                    jQuery('#productVideo360').html(variantProductVideo360);
+                    
+                    var variantProductVideo360Link = jQuery('#productVideo360Link_'+VARMAP[mapKey]).html();
+                    jQuery('#productVideo360Link').html(variantProductVideo360Link);
                 }
             }
             if (index == -1) {
@@ -240,13 +263,19 @@
                 var Variable1 = eval("list" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
                 var Variable2 = eval("listLi" + OPT[(currentFeatureIndex+1)] + selectedValue + "()");
                 jQuery('#Li'+OPT[(currentFeatureIndex)]+' li').click(function() {
-                  var nextFeatureLength = document.forms["addform"].elements[OPT[(currentFeatureIndex+1)]].length;
-                  if (currentFeatureIndex+1 <= (OPT.length-1) && nextFeatureLength == 2) {
-                    getList(OPT[(currentFeatureIndex+1)],'0',1);
+                  
+                  if (currentFeatureIndex+1 <= (OPT.length-1) ) {
+                    var nextFeatureLength = document.forms["addform"].elements[OPT[(currentFeatureIndex+1)]].length;
+                    if(nextFeatureLength == 2) {
+                      getList(OPT[(currentFeatureIndex+1)],'0',1);
+                      jQuery('#addToCart').removeClass("inactiveAddToCart");
+                    } else {
+                      jQuery('#addToCart').addClass("inactiveAddToCart");
+                    }
                   }
                   var elm = document.getElementById("addToCart");
                   elm.setAttribute("onClick","javascript:addItem()");
-                  jQuery('#addToCart').addClass("inactiveAddToCart");
+                  
                     //jQuery('#Li'+OPT[(currentFeatureIndex+1)]+' li').removeClass("selected");
                 });
             }
@@ -285,6 +314,18 @@
             var variantLargeImages = jQuery('#largeImageUrl_'+varProductId).clone();
             jQuery(variantLargeImages).find('.mainImageLink').attr('id', 'mainImageLink');
             jQuery('#seeLargerImage').html(variantLargeImages.html());
+            
+            var variantProductVideo = jQuery('#productVideo_'+varProductId).html();
+            jQuery('#productVideo').html(variantProductVideo);
+            
+            var variantProductVideoLink = jQuery('#productVideoLink_'+varProductId).html();
+            jQuery('#productVideoLink').html(variantProductVideoLink);
+            
+            var variantProductVideo360 = jQuery('#productVideo360_'+varProductId).html();
+            jQuery('#productVideo360').html(variantProductVideo360);
+            
+            var variantProductVideo360Link = jQuery('#productVideo360Link_'+varProductId).html();
+            jQuery('#productVideo360Link').html(variantProductVideo360Link);
         }
         }
         activateZoom(detailImgUrl);
@@ -346,7 +387,6 @@
         document.addToShoppingList.submit();
         </#if>
     }
-
     <#if product.virtualVariantMethodEnum?if_exists == "VV_FEATURETREE" && featureLists?has_content>
         function checkRadioButton() {
             var block1 = document.getElementById("addCart1");
@@ -431,21 +471,41 @@ var zoomOptions = {
 };
 
 
-    function makePDPUrl(elm) {
+    function makeProductUrl(elm) {
         var plpFeatureSwatchImageId = jQuery(elm).attr("id");
         var plpFeatureSwatchImageIdArr = plpFeatureSwatchImageId.split("|");
-        var pdpUrl = jQuery('#pdpUrl_'+plpFeatureSwatchImageIdArr[1]).val();
-        var productFeatureType = plpFeatureSwatchImageIdArr[0];
-        if(pdpUrl.indexOf("?") == -1) {
-            pdpUrl = pdpUrl+'?productFeatureType='+productFeatureType;
-        } else {
-            pdpUrl = pdpUrl+'&productFeatureType='+productFeatureType;
-        }
+        var pdpUrlId = plpFeatureSwatchImageIdArr[1]+plpFeatureSwatchImageIdArr[0]; 
+        var pdpUrl = document.getElementById(pdpUrlId).value;
         
         jQuery(elm).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').find('a').attr("href",pdpUrl);
-        jQuery('#detailLink_'+plpFeatureSwatchImageIdArr[1]).attr("href",pdpUrl);
+        jQuery(elm).parents('.eCommerceListItem').find('a.pdpUrl').attr("href",pdpUrl);
+        jQuery(elm).parents('.eCommerceListItem').find('a.pdpUrl.review').attr("href",pdpUrl+"#productReviews");
     }
     
+
+// hidden div functions
+
+function getStyleObject(objectId) {
+    if (document.getElementById && document.getElementById(objectId)) {
+        return document.getElementById(objectId).style;
+    } else if (document.all && document.all(objectId)) {
+        return document.all(objectId).style;
+    } else if (document.layers && document.layers[objectId]) {
+        return document.layers[objectId];
+    } else {
+        return false;
+    }
+}
+function changeObjectVisibility(objectId, newVisibility) {
+    var styleObject = getStyleObject(objectId);
+    if (styleObject) {
+        styleObject.visibility = newVisibility;
+        return true;
+    } else {
+        return false;
+    }
+}
+
 
 
  </script>

@@ -225,6 +225,10 @@
             // execute action
             form.action="<@ofbizUrl>${execAction!""}</@ofbizUrl>";
             form.submit();
+        }else if (mode == "EXC") {
+            // execute cache action
+            form.action="<@ofbizUrl>${execCacheAction!""}</@ofbizUrl>";
+            form.submit();
         }else if (mode == "CO") {
             // common action
             form.action="<@ofbizUrl>${commonAction!""}</@ofbizUrl>";
@@ -249,6 +253,10 @@
             form.setAttribute("target", "_new");
             form.submit();
             form.setAttribute("target", "");
+	    }else if (mode == "MT") {
+	    	//go to meta tag page
+            form.action="<@ofbizUrl>${metaAction!""}</@ofbizUrl>";
+            form.submit();
 	    }
 	}
 	

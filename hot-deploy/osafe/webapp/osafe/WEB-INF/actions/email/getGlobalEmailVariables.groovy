@@ -130,3 +130,9 @@ if (UtilValidate.isNotEmpty(orderId))
     }
 
 }
+shoppingListId = context.shoppingListId;
+if (UtilValidate.isNotEmpty(shoppingListId)) 
+{
+	shoppingCartInfoList = delegator.findByAnd("ShoppingListItem", [shoppingListId : shoppingListId]);
+	context.put("CART_ITEMS",shoppingCartInfoList);
+}

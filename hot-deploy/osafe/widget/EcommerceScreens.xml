@@ -65,11 +65,15 @@
                 <set field="uiSequenceScreen" value="CLP"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCategoryList.groovy" />
-                <set field="prodCatContentTypeId" value="PLP_ESPOT_CONTENT" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
                     <decorator-section name="body">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://osafe/webapp/osafe/common/entry/js/ecommercePlpJS.ftl"/>
+                            </html>
+                        </platform-specific>
                         <section>
                             <widgets>
                                 <container id="eCommerceCategoryListContainer">
@@ -94,10 +98,9 @@
                 <set field="eCommerceLeftPanel" value="eCommerceRefineByCategoryFacet" />
                 <set field="uiSequenceScreen" value="PLP"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductList.groovy" />
-                <set field="prodCatContentTypeId" value="PLP_ESPOT_CONTENT" />
-                <set field="dialogPurpose" value="plpQuickLook_" global="true"/>
+                <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
                 <set field="dialogActionRequest" value="eCommercePlpQuickLook" global="true"/>
-                <set field="dialogBoxStyle" value="plpQuickLook" global="true"/>
+                <set field="dialogBoxStyle" value="plpQuicklook" global="true"/>
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -125,7 +128,7 @@
                         </section>
                     </decorator-section>
                 </decorator-screen>
-                <include-screen name="plpQuickLookDialog" location="component://osafe/widget/DialogScreens.xml"/>
+                <include-screen name="plpQuicklookDialog" location="component://osafe/widget/DialogScreens.xml"/>
             </widgets>
         </section>
     </screen>
@@ -165,6 +168,7 @@
             <actions>
                 <property-map resource="osafe" map-name="OSafeConfig" global="true" />
                 <set field="uiSequenceScreen" value="PDP"/>
+                <set field="activeZoomParam" value="PDP_IMG_ZOOM_ACTIVE_FLAG" />
                 <set field="showHeadingTertiaryInformation" value="Y" />
                 <set field="prodCatContentTypeId" value="PDP_ADDITIONAL" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductDetail.groovy" />
@@ -191,7 +195,6 @@
                                             <html-template location="component://osafe/webapp/osafe/common/eCommerceProductDetail.ftl" />
                                         </html>
                                     </platform-specific>
-                                    <include-screen name="eCommerceProductReview" location="component://osafe/widget/EcommerceScreens.xml" />
                                 </container>
                             </widgets>
                         </section>
@@ -238,13 +241,14 @@
         <section>
             <actions>
                 <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                <set field="CategoryFacetTitle" value="${uiLabelMap.FacetNarrowResultsCaption}"/>
                 <set field="facetShowValueCnt" value="${OSafeConfig['facet.category-list.show-value-count']}" type="Integer" default-value="5" />
             </actions>
             <widgets>
                 <container id="eCommerceRefineByCategoryContainer">
                     <platform-specific>
                         <html>
-                            <html-template location="component://osafe/webapp/osafe/common/eCommerceRefineByCategory.ftl" />
+                            <html-template location="component://osafe/webapp/osafe/common/eCommerceRefineByCategoryFacet.ftl" />
                         </html>
                     </platform-specific>
                 </container>
@@ -255,6 +259,7 @@
         <section>
             <actions>
                 <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                <set field="CategoryFacetTitle" value="${uiLabelMap.FacetFilterResultsCaption}"/>
                 <set field="facetShowValueCnt" value="${OSafeConfig['facet.product-list.show-value-count']}" type="Integer" default-value="5" />
             </actions>
             <widgets>
@@ -520,7 +525,10 @@
                 <set field="pageTitle" value="${uiLabelMap.NewCustomerTitle}" />
                 <set field="title" from-field="pageTitle" />
                 <set field="fieldLevelErrors" value="Y" />
+                <set field="shippingAttnName" value="${uiLabelMap.ShippingAddressDefaultNickNameLabel}" />
+                <set field="isSameAsBilling" value="Y" />
                 <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/customer/NewCustomer.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCustomerAddress.groovy" />
                 <set field="formAction" value="eCommerceCreateNewCustomer" />
                 <set field="formName" value="newuserform" />
                 <set field="loadPca" value="Y" />
@@ -700,6 +708,7 @@
                         <section>
                             <widgets>
                                 <container id="eCommerceEditCustomerInfoContainer">
+                                    <include-screen name="PTS_LOGIN_INFO" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                     <platform-specific>
                                         <html>
                                             <html-template-decorator location="component://osafe/webapp/osafe/templates/commonEntryForm.ftl">
@@ -719,6 +728,7 @@
                                             </html-template-decorator>
                                         </html>
                                     </platform-specific>
+                                    <include-screen name="PES_LOGIN_INFO" location="component://osafe/widget/EcommerceContentScreens.xml" />
                                 </container>
                             </widgets>
                         </section>
@@ -852,50 +862,6 @@
         </section>
     </screen>
 
-    <!-- CART SCREENS -->
-    <screen name="eCommerceShowcart">
-        <section>
-            <actions>
-                <set field="selectedStep" value="cart" />
-                <set field="screenMessages" value="Y" />
-                <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
-                <set field="pageTitle" value="${uiLabelMap.ShoppingCartTitle}" />
-                <set field="title" from-field="pageTitle" />
-                <set field="formName" value="showCartForm" />
-                <set field="addPromoCodeRequest" value="validateShowCartPromoCode"/>
-                <set field="removePromoCodeRequest" value="removeShowCartPromoCode"/>
-<!--                 <set field="checkoutRequest" value="checkoutoptions"/> -->
-
-                <script location="component://ecommerce/webapp/ecommerce/WEB-INF/actions/cart/ShowCart.groovy" />
-            </actions>
-            <widgets>
-                <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
-                    <decorator-section name="title">
-                        <include-screen name="pageTitle" />
-                    </decorator-section>
-                    <decorator-section name="body">
-                        <section>
-                            <widgets>
-                                <container id="eCommerceCartContainer">
-                                    <include-screen name="eCommerceCartFootprint" location="component://osafe/widget/EcommerceCheckoutScreens.xml"/>
-                                    <include-screen name="PageMessages" location="${parameters.mainDecoratorLocation}" />
-                                    <include-screen name="PTS_SHOPPING_CART" location="component://osafe/widget/EcommerceContentScreens.xml" />
-                                    <platform-specific>
-                                        <html>
-                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceShowcart.ftl" />
-                                        </html>
-                                    </platform-specific>
-                                    <include-screen name="PES_SHOPPING_CART" location="component://osafe/widget/EcommerceContentScreens.xml" />
-                                </container>
-                            </widgets>
-                        </section>
-                    </decorator-section>
-                </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
-
     <screen name="editContactMech">
         <section>
             <actions>
@@ -998,47 +964,6 @@
                         </section>
                     </decorator-section>
                 </decorator-screen>
-            </widgets>
-        </section>
-    </screen>
-
-    <!-- CHECKOUT INCLUDES -->
-    <screen name="eCommerceEnterPromoCode">
-        <section>
-            <widgets>
-                <container id="eCommerceEnterPromoCode">
-                <platform-specific>
-                    <html>
-                        <html-template location="component://osafe/webapp/osafe/common/eCommerceEnterPromoCode.ftl" />
-                    </html>
-                </platform-specific>
-                </container>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="eCommerceEnteredPromoCode">
-        <section>
-            <widgets>
-                <container id="eCommerceEnteredPromoCode">
-                <platform-specific>
-                    <html>
-                        <html-template location="component://osafe/webapp/osafe/common/eCommerceEnteredPromoCode.ftl" />
-                    </html>
-                </platform-specific>
-                </container>
-            </widgets>
-        </section>
-    </screen>
-
-    <screen name="entryFormJS">
-        <section>
-            <widgets>
-                <platform-specific>
-                    <html>
-                      <html-template location="component://osafe/webapp/osafe/common/entry/js/formEntryJS.ftl"/>
-                    </html>
-                </platform-specific>
             </widgets>
         </section>
     </screen>
@@ -1273,21 +1198,14 @@
         <section>
             <actions>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
-                <set field="id" value="${idMap.HOME_PAGE_HOTSPOTS}" />
-
-                <entity-condition list="spotsList" entity-name="ContentAssoc">
-                    <condition-expr field-name="contentId" operator="equals" from-field="id" />
-                    <order-by field-name="sequenceNum" />
-                </entity-condition>
+                <set field="contentTypeId" value="${idMap.HOME_PAGE_HOTSPOTS}" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceHomeSpot.groovy" />
             </actions>
             <widgets>
                 <section>
                     <widgets>
-                            <iterate-section entry="spot" list="spotsList" view-size="999">
+                            <iterate-section entry="content" list="spotsList" view-size="999">
                                 <section>
-                                    <actions>
-                                        <get-related-one value-field="spot" relation-name="ToContent" to-value-field="content" use-cache="true" />
-                                    </actions>
                                     <widgets>
                                         <container style="eCommerceHomeSpots">
                                             <section>
@@ -1295,8 +1213,8 @@
                                                     <if-compare field="content.statusId" operator="equals" value="CTNT_PUBLISHED" />
                                                 </condition>
                                                 <widgets>
-                                                    <container id="eCommerceHomeSpot_${spot.sequenceNum}" style="eCommerceHotSpot">
-                                                        <content content-id="${spot.contentIdTo}" />
+                                                    <container id="eCommerceHomeSpot_${itemIndex+1}" style="eCommerceHotSpot">
+                                                        <content content-id="${content.contentId}" />
                                                     </container>
                                                 </widgets>
                                             </section>
@@ -1324,7 +1242,7 @@
                     <condition-expr field-name="enumTypeId" operator="equals" value="CONTACT_US_REASON" />
                     <order-by field-name="sequenceId"/>
                 </entity-condition>
-                <set field="formAction" value="submitAnonContact" />
+                <set field="formAction" value="submitContactUs" />
                 <set field="formName" value="entryForm" />
             </actions>
             <widgets>

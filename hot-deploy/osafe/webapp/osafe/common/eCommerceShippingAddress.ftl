@@ -79,16 +79,16 @@ function toggleBillingAccount(box) {
                    <#assign checkThisAddress = (shippingContactMech_index == 0 && !cart.getShippingContactMechId()?has_content) || (cart.getShippingContactMechId()?default("") == shippingAddress.contactMechId)/>
 
                    <div class="displayBox addressTitle">
-                     <div class="displayBoxHeader">
-                           <span class="displayBoxHeaderCaption">
                                 <#if showSelect?has_content && showSelect=="Y">
+                                  <div class="addressSelection">
                                     <input type="radio" id="shipping_contact_mech_id${shippingContactMech_index}"  name="shipping_contact_mech_id" value="${shippingAddress.contactMechId}"<#if checkThisAddress> checked="checked"</#if> />
+                                  </div>
                                 <#else>
                                     <input type="hidden" id="shipping_contact_mech_id${shippingContactMech_index}"  name="shipping_contact_mech_id" value="${shippingAddress.contactMechId}"/>
                                 </#if>
+                           <h3>
                                 ${shippingAddress.attnName!shippingAddress.address1!""}
-                            </span>
-                     </div>
+                            </h3>
                            <div class="address addressOverflow">
 
                              <#if shippingAddress.toName?has_content><p>${shippingAddress.toName}</p></#if>

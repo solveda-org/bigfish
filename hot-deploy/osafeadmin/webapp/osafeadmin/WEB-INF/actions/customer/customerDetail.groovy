@@ -16,6 +16,34 @@ import org.ofbiz.base.util.UtilDateTime;
 import org.ofbiz.base.util.UtilMisc;
 import org.ofbiz.base.util.UtilValidate;
 
+import javolution.util.FastList;
+import javolution.util.FastMap;
+
+import org.apache.commons.lang.StringUtils;
+import org.ofbiz.base.util.Debug;
+import org.ofbiz.base.util.UtilGenerics;
+import org.ofbiz.base.util.UtilProperties;
+import org.ofbiz.base.util.UtilValidate;
+import org.ofbiz.entity.GenericValue;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityConditionBuilder;
+import org.ofbiz.entity.condition.EntityConditionList;
+import org.ofbiz.entity.condition.EntityExpr;
+import org.ofbiz.entity.condition.EntityOperator;
+import org.ofbiz.service.GenericServiceException;
+import org.ofbiz.entity.condition.EntityFunction;
+import org.ofbiz.entity.condition.EntityFieldValue;
+import org.ofbiz.service.LocalDispatcher;
+import org.ofbiz.service.ServiceUtil;
+import org.ofbiz.product.store.ProductStoreWorker;
+import org.ofbiz.product.category.CategoryWorker;
+import org.ofbiz.entity.util.EntityUtil;
+import org.ofbiz.base.util.UtilDateTime;
+import org.ofbiz.base.util.UtilMisc;
+import com.ibm.icu.util.Calendar;
+
+import org.ofbiz.base.util.ObjectType;
+
 userLogin = session.getAttribute("userLogin");
 partyId = StringUtils.trimToEmpty(parameters.partyId);
 userLoginId = StringUtils.trimToEmpty(parameters.userLoginId);
@@ -113,6 +141,25 @@ if (partyContactMechValueMaps) {
             }
         }
     }
+}
+
+//GENDER
+if(UtilValidate.isNotEmpty(partyId))
+{
+	gender = delegator.findByPrimaryKey("PartyAttribute",UtilMisc.toMap("partyId", partyId,"attrName","GENDER"));
+	context.gender = gender;
+}
+//DOB_MMDD
+if(UtilValidate.isNotEmpty(partyId))
+{
+	dob_MMDD = delegator.findByPrimaryKey("PartyAttribute",UtilMisc.toMap("partyId", partyId,"attrName","DOB_MMDD"));
+	context.dob_MMDD = dob_MMDD;
+}
+//DOB_MMDDYYYY
+if(UtilValidate.isNotEmpty(partyId))
+{
+	dob_MMDDYYYY = delegator.findByPrimaryKey("PartyAttribute",UtilMisc.toMap("partyId", partyId,"attrName","DOB_MMDDYYYY"));
+	context.dob_MMDDYYYY = dob_MMDDYYYY;
 }
 
 

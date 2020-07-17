@@ -14,9 +14,7 @@ else
 }
 if(parameters.activeFromDate)
 {
-    String format ="yyyy-MM-dd hh:mm:ss";
-    activeFromDate = (Timestamp) ObjectType.simpleTypeConvert(parameters.activeFromDate, "Timestamp", format, null);
-   
+    activeFromDate = (Timestamp) ObjectType.simpleTypeConvert(parameters.activeFromDate, "Timestamp", null, null);
 }
 if (parameters.productCategoryId) {
 

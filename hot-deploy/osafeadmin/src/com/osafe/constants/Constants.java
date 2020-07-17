@@ -9,7 +9,7 @@ public class Constants {
                                                            "GoodIdentification", "InventoryItemTempRes", "MrpEvent",
                                                            "OrderSummaryEntry","ShoppingListItem","ShoppingList",
                                                            "OrderItemShipGroupAssoc","OrderItem","OrderItemShipGroup",
-                                                           "OrderAdjustment","OrderContactMech",
+                                                           "OrderAdjustment","OrderContactMech","OrderAttribute",
                                                            "Payment","PaymentGatewayResponse",
                                                            "OrderPaymentPreference","OrderRole","OrderStatus","OrderHeader",
                                                            "ProductAttribute", "ProductCalculatedInfo",

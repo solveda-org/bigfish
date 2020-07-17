@@ -75,29 +75,29 @@ for(Map productCategory : productCatDataList) {
     {
         if(UtilValidate.isEmpty(productCategoryId))
         {
-            prodCatErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "ParentCategoryIdAssociationError", UtilMisc.toMap("rowNo", rowNo), locale));
+            prodCatErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ParentCategoryIdAssociationError", UtilMisc.toMap("rowNo", rowNo), locale));
         } else {
             newProdCatIdList.add(productCategoryId);
         }
     }
     if(UtilValidate.isEmpty(categoryName))
     {
-        prodCatErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "BlankCategoryNameError", UtilMisc.toMap("rowNo", rowNo), locale));
+        prodCatErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankCategoryNameError", UtilMisc.toMap("rowNo", rowNo), locale));
     }
     if(UtilValidate.isEmpty(description))
     {
-        prodCatErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "BlankDescriptionError", UtilMisc.toMap("rowNo", rowNo), locale));
+        prodCatErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankDescriptionError", UtilMisc.toMap("rowNo", rowNo), locale));
     }
     if(UtilValidate.isEmpty(longDescription))
     {
-        prodCatWarningList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "BlankLongDescWarning", UtilMisc.toMap("rowNo", rowNo), locale));
+        prodCatWarningList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescWarning", UtilMisc.toMap("rowNo", rowNo), locale));
     }
     if(UtilValidate.isNotEmpty(plpImageName))
     {
         boolean isFileExist = OsafeAdminUtil.isFileExist(osafeThemeImagePath, plpImageName);
         if(!isFileExist)
         {
-            prodCatWarningList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "PLPImageNotFoundWarning", UtilMisc.toMap("rowNo", rowNo), locale));
+            prodCatWarningList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "PLPImageNotFoundWarning", UtilMisc.toMap("rowNo", rowNo), locale));
         }
     }
         
@@ -150,11 +150,14 @@ for(Map product : productDataList) {
     String productCategoryId = (String)product.get("productCategoryId");
     String longDescription = (String)product.get("longDescription");
     String defaultPrice = (String)product.get("defaultPrice");
+    String listPrice = (String)product.get("listPrice");
     String internalName = (String)product.get("internalName");
     String plpImage = (String)product.get("smallImage");
     String pdpRegularImage = (String)product.get("largeImage");
     String masterProductId = (String)product.get("masterProductId");
     String manufacturerId = (String)product.get("manufacturerId");
+    String bfTotalInventory = (String)product.get("bfInventoryTot");
+    String bfWHInventory = (String)product.get("bfInventoryWhs");
     
     if(UtilValidate.isNotEmpty(masterProductId))
     {
@@ -184,13 +187,13 @@ for(Map product : productDataList) {
        }
        if(!categoryIdMatch)
        {
-           productErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "CategoryIdMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
+           productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "CategoryIdMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
        }
     }
     String longDescErrorAdded = longDescErrorMap.get(masterProductId);
     if(!longDescMap.containsKey(masterProductId) && longDescErrorAdded != 'Y')
     {
-        productErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo), locale));
+        productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "BlankLongDescError", UtilMisc.toMap("rowNo", rowNo), locale));
         longDescErrorMap.put(masterProductId,"Y");
     }
     if(UtilValidate.isNotEmpty(defaultPrice))
@@ -198,15 +201,15 @@ for(Map product : productDataList) {
         boolean checkFloatResult = OsafeAdminUtil.isFloat(defaultPrice);
         if(!checkFloatResult)
         {
-            productErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "ValidSalesPriceError", UtilMisc.toMap("rowNo", rowNo), locale));
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidSalesPriceError", UtilMisc.toMap("rowNo", rowNo), locale));
         }
     }
-    if(UtilValidate.isNotEmpty(defaultPrice))
+    if(UtilValidate.isNotEmpty(listPrice))
     {
-        boolean checkFloatResult = OsafeAdminUtil.isFloat(defaultPrice);
+        boolean checkFloatResult = OsafeAdminUtil.isFloat(listPrice);
         if(!checkFloatResult)
         {
-            productErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "ValidSalesPriceError", UtilMisc.toMap("rowNo", rowNo), locale));
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidListPriceError", UtilMisc.toMap("rowNo", rowNo), locale));
         }
     }
     if(UtilValidate.isNotEmpty(manufacturerId))
@@ -219,7 +222,7 @@ for(Map product : productDataList) {
         }
         if(!manufacturerIdMatch)
         {
-            productErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "ManufacturerIdMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ManufacturerIdMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
         }
     }
     
@@ -228,7 +231,7 @@ for(Map product : productDataList) {
         boolean isPlpImageExist = OsafeAdminUtil.isFileExist(osafeThemeImagePath, plpImage);
         if(!isPlpImageExist)
         {
-            productWarningList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "PLPImageNotFoundWarning", UtilMisc.toMap("rowNo", rowNo), locale));
+            productWarningList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "PLPImageNotFoundWarning", UtilMisc.toMap("rowNo", rowNo), locale));
         }
     }
     if(UtilValidate.isNotEmpty(pdpRegularImage))
@@ -236,9 +239,40 @@ for(Map product : productDataList) {
         boolean isPdpRegularImageExist = OsafeAdminUtil.isFileExist(osafeThemeImagePath, pdpRegularImage);
         if(!isPdpRegularImageExist)
         {
-            productWarningList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "PDPRegularImageNotFoundWarning", UtilMisc.toMap("rowNo", rowNo), locale));
+            productWarningList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "PDPRegularImageNotFoundWarning", UtilMisc.toMap("rowNo", rowNo), locale));
         }
     }
+       
+    if(UtilValidate.isNotEmpty(bfTotalInventory))
+    {
+        boolean bfTotalInventoryVaild = UtilValidate.isSignedInteger(bfTotalInventory);
+        if(!bfTotalInventoryVaild)
+        {
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidBFTotalInventoryRowError", UtilMisc.toMap("rowNo", rowNo), locale));
+        }
+        else
+        {
+            if(Integer.parseInt(bfTotalInventory) < -9999 || Integer.parseInt(bfTotalInventory) > 99999)
+            {
+                productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidBFTotalInventoryRowError", UtilMisc.toMap("rowNo", rowNo), locale));
+            } 
+        }
+    }
+    if(UtilValidate.isNotEmpty(bfWHInventory))
+    {
+        boolean bfWHInventoryVaild = UtilValidate.isSignedInteger(bfWHInventory);
+        if(!bfWHInventoryVaild)
+        {
+            productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidBFWHInventoryRowError", UtilMisc.toMap("rowNo", rowNo), locale));
+        }
+        else
+        {
+            if(Integer.parseInt(bfWHInventory) < -9999 || Integer.parseInt(bfWHInventory) > 99999)
+            {
+                productErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ValidBFWHInventoryRowError", UtilMisc.toMap("rowNo", rowNo), locale));
+            } 
+        }
+    }   
         
     if(UtilValidate.isNotEmpty(internalName))
     {
@@ -258,7 +292,7 @@ for (Map.Entry entry : itenNoMap.entrySet()) {
     if(itenNoRowList.size() > 1)
     {
         for(Integer itemRowNo : itenNoRowList){
-            productWarningList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "UniqueItemNoWarning", UtilMisc.toMap("rowNo", itemRowNo), locale));
+            productWarningList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "UniqueItemNoWarning", UtilMisc.toMap("rowNo", itemRowNo), locale));
         }
     }
 }
@@ -282,7 +316,7 @@ for(Map productAssoc : productAssocDataList) {
     }
     if(!productIdMatch)
     {
-        productAssocErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "ProductIdMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
+        productAssocErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ProductIdMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
     }
     
     if(newProductIdList.contains(productIdTo) || existingProductIdList.contains(productIdTo))
@@ -291,7 +325,7 @@ for(Map productAssoc : productAssocDataList) {
     }
     if(!productIdToMatch)
     {
-        productAssocErrorList.add(UtilProperties.getMessage("OsafeAdminUiLabels", "ProductIdToMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
+        productAssocErrorList.add(UtilProperties.getMessage("OSafeAdminUiLabels", "ProductIdToMatchingError", UtilMisc.toMap("rowNo", rowNo), locale));
     }
     rowNo++;
 }

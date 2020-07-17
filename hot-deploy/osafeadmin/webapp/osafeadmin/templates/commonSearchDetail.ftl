@@ -22,7 +22,7 @@ ${sections.render('commonFormDialog')?if_exists}
 </div>
 </#if>
 <#if parameters.showDetail?has_content && parameters.showDetail == "true" >
-<div class="displayBox detailInfo">
+<div class="displayListBox detailInfo">
     <div class="header"><h2>${detailInfoBoxHeading!}</h2></div>
     <div class="boxBody">
       <form method="post" name="${detailFormName!""}" <#if detailFormId?exists>id="${detailFormId!}"</#if>>

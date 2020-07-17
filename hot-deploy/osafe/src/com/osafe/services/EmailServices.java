@@ -190,7 +190,8 @@ public class EmailServices {
                                         abandonEmailDebugInfo += "<p>" + "productStoreId:" + productStoreId + "</p>";
                                         bodyParameters.put("abandonEmailDebugInfo", abandonEmailDebugInfo);
                                     }
-    
+                                    bodyParameters.put("shoppingListId", shoppingList.get("shoppingListId"));
+                                    bodyParameters.put("productStoreId", productStoreId);
                                     sendMap.put("bodyParameters", bodyParameters);
                                     sendMap.put("userLogin", userLogin);
     
@@ -465,6 +466,17 @@ public class EmailServices {
         }
         String orderId = (String) bodyParameters.get("orderId");
         String productStoreId = (String) bodyParameters.get("productStoreId");
+        if (UtilValidate.isEmpty(productStoreId))
+        {
+            if (UtilValidate.isNotEmpty(webSiteId)) {
+                try {
+                    GenericValue webSite = delegator.findByPrimaryKeyCache("WebSite", UtilMisc.toMap("webSiteId", webSiteId));
+                    productStoreId=webSite.getString("productStoreId");
+                } catch (GenericEntityException e) {
+                    Debug.logError(e, "Problem getting WebSite And Store For Email Services", module);
+                }
+            }
+        }
         if (UtilValidate.isEmpty(productStoreId) && UtilValidate.isEmpty(webSiteId))
         {
         	if (UtilValidate.isNotEmpty(orderId))
@@ -492,7 +504,8 @@ public class EmailServices {
             }
         	
         }
-        
+
+        bodyParameters.put("productStoreId", productStoreId);
         bodyParameters.put("communicationEventId", serviceContext.get("communicationEventId"));
         NotificationServices.setBaseUrl(dctx.getDelegator(), webSiteId, bodyParameters);
         String contentType = (String) serviceContext.remove("contentType");

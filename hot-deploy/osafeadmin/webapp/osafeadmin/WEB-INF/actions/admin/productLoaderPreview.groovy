@@ -20,7 +20,7 @@ import jxl.WorkbookSettings;
 import jxl.read.biff.BiffException;
 import com.osafe.util.OsafeProductLoaderHelper;
 
-uiLabelMap = UtilProperties.getResourceBundleMap("OsafeAdminUiLabels", locale);
+uiLabelMap = UtilProperties.getResourceBundleMap("OSafeAdminUiLabels", locale);
 
 String xlsFileName = parameters.uploadedXLSFile;
 String xlsFilePath = parameters.uploadedXLSPath;

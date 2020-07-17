@@ -1,6 +1,6 @@
-<#if priceMap.listPrice gt priceMap.price>
-  <div id="pdpPriceList">
+<#if pdpPriceMap.listPrice gt pdpPriceMap.price>
+  <div class="pdpPriceList">
        <label>${uiLabelMap.ListPriceCaption}</label>
-       <span class="price"><@ofbizCurrency amount=priceMap.listPrice isoCode=CURRENCY_UOM_DEFAULT!priceMap.currencyUsed /></span>
+       <span class="price"><@ofbizCurrency amount=pdpPriceMap.listPrice isoCode=CURRENCY_UOM_DEFAULT!pdpPriceMap.currencyUsed /></span>
   </div>
 </#if>

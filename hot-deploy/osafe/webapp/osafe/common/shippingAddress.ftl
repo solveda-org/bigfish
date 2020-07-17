@@ -12,9 +12,7 @@
       </#if>
         <#if shippingAddress?has_content>
                    <div class="displayBox">
-                   <div class="displayBoxHeader">
-                       <span class="displayBoxHeaderCaption">${uiLabelMap.ShippingAddressHeading}</span>
-                    </div>
+                       <h3>${uiLabelMap.ShippingAddressHeading}</h3>
                            <div class="address">
 
                              <#if shippingAddress.toName?has_content><p>${shippingAddress.toName}</p></#if>

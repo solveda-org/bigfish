@@ -66,10 +66,13 @@ if (gvProductCategory) {
  
  } else {
     searchResultsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsTitle", locale);
-    searchResultCount = request.getAttribute("completeDocumentList").size();
-    String SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsCountsTitle", UtilMisc.toMap("searchText", searchText,"searchResultCount",searchResultCount), locale)
+    if(request.getAttribute("completeDocumentList"))
+    {
+        searchResultCount = request.getAttribute("completeDocumentList").size();
+        String SearchResultsCountsTitle = UtilProperties.getMessage("OSafeUiLabels", "SearchResultsCountsTitle", UtilMisc.toMap("searchText", searchText,"searchResultCount",searchResultCount), locale)
+        context.pageTitle = SearchResultsCountsTitle;
+    }
     context.title = searchResultsTitle + " - " + searchText;
-    context.pageTitle = SearchResultsCountsTitle;
  }
 
 previousParamsMap = {};
@@ -103,9 +106,12 @@ if (UtilValidate.isNotEmpty(filterGroup))
 	    facet = facetGroupSplit[0];
 		facetValue = facetGroupSplit[1];
 
-        facetSplit =facet.split(" ");
+        facetSplit = facet.split(" ");
 	    facetConstant = facetSplit[0];
-		facet = facetSplit[1];
+	    if(facetSplit.size() > 1)
+	    {
+		    facet = facetSplit[1];
+		}
 
         facetAndValue.put("facet",facet.toUpperCase());
         facetAndValue.put("facetValue",facetValue);

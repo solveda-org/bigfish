@@ -267,7 +267,7 @@ public class SagePayTokenServices
         if (billingCity != null) { parameters.put("BillingCity", billingCity); }
         if (billingPostCode != null) { parameters.put("BillingPostCode", billingPostCode); }
         if (billingCountry != null) { parameters.put("BillingCountry", billingCountry); }
-//        if (billingState != null) { parameters.put("BillingState", billingState); }
+//        if (UtilValidate.isNotEmpty(billingState)) {parameters.put("BillingState", billingState);}
         if (billingPhone != null) { parameters.put("BillingPhone", billingPhone); }
         //end - billing details
 
@@ -290,7 +290,7 @@ public class SagePayTokenServices
             if (deliveryCity != null) { parameters.put("DeliveryCity", deliveryCity); }
             if (deliveryPostCode != null) { parameters.put("DeliveryPostCode", deliveryPostCode); }
             if (deliveryCountry != null) { parameters.put("DeliveryCountry", deliveryCountry); }
-//            if (deliveryState != null) { parameters.put("DeliveryState", deliveryState); }
+//            if (UtilValidate.isNotEmpty(deliveryState)) { parameters.put("DeliveryState", deliveryState); }
             if (deliveryPhone != null) {parameters.put("DeliveryPhone", deliveryPhone); }
         }
         //end - delivery details

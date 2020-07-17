@@ -21,9 +21,9 @@
 
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSecurityData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedData.xml"/>
+	<entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentIdSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/clientStoreSeedData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentIdSeedData.xml"/>
+	<entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
 
     <!-- Geo Files -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/01-GeoAssocType.xml"/>
@@ -52,6 +52,29 @@
     <!-- BigFish Parameters -->
     <entity-resource type="data" reader-name="parameters" loader="main" location="data/bigFishParameters.xml"/>
 
+    <!-- Demo Data -->
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceShippingOptions.xml"/>
+
+    <!-- Product Fashion Demo Data -->
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/000-ProductCategory.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/010-ProductCategoryFeature.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/020-Manufacturer.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/030-Product.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/040-ProductVariant.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/050-ProductContent.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/055-ProductVariantContent.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/060-ProductDistinguishingFeature.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/065-ProductFeatureImage.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/070-ProductAssoc.xml"/>
+
+    <!-- Content Fashion Demo Data -->
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_HP_SPOT.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_PTS_SPOT.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SI_INFO.xml"/>
+    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SP_PAGE.xml"/>
+
 
     <!-- service resources: model(s), eca(s) and group definitions -->
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
@@ -64,7 +87,7 @@
 
     <!-- web applications; will be mounted when using the embedded container -->
     <webapp name="osafe"
-        title="Gold Medal Hair"
+        title="BF Fashion"
         server="default-server"
         location="webapp/osafe"
         mount-point="/@localDispatcherName@"/>

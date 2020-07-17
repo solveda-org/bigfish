@@ -3,9 +3,12 @@
     <table class="osafe" cellspacing="0">
        <thead>
          <tr class="heading">
-           <th class="idCol firstCol">${uiLabelMap.DivTagLabel}</th>
+           <th class="nameCol firstCol">${uiLabelMap.DivTagLabel}</th>
            <th class="descCol">${uiLabelMap.DescLabel}</th>
-           <th class="idCol">${uiLabelMap.SeqNumberLabel}</th>
+           <th class="seqCol">${uiLabelMap.SeqNumberLabel}</th> 
+           <#if parameters.screenType?exists && parameters.screenType == 'PDPTabs'>
+               <th class="numberCol">${uiLabelMap.GroupNumberLabel}</th>
+           </#if>
          </tr>
        </thead>
        <tbody>
@@ -16,8 +19,8 @@
             <#list resultScreenList  as screenList>
                 <#assign hasNext = screenList_has_next>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
-                     <td class="descCol <#if !hasNext>lastRow</#if>" >
-                       ${screenList.key!}
+                     <td class="nameCol <#if !hasNext>lastRow</#if>" >
+                       <a href="<@ofbizUrl>manageDivSeqItemDetail?key=${screenList.key?if_exists}&amp;screen=${screenList.screen?if_exists}</@ofbizUrl>">${screenList.key!}</a>
                        <input type="hidden" name="key_${rowNo}" value="${screenList.key!}"></input>
                      </td>
                      <td class="descCol <#if !hasNext>lastRow</#if>">
@@ -28,11 +31,16 @@
                      <#if screenList.value?has_content && screenList.value != 0?int>
                      <#assign rowSeq = seqNo * 10>
                      <#assign seqNo = seqNo+1/>
-                       <input type="textarea" name="value_${rowNo}" class="small" id="seqNo" style="width:50px; margin-left:90px;" value="${parameters.get("value_${rowNo}")!rowSeq}" ></input>
+                       <input type="text" name="value_${rowNo}" class="small" id="seqNo" value="${parameters.get("value_${rowNo}")!rowSeq}" ></input>
                      <#else>
-                       <input type="textarea" name="value_${rowNo}" class="small" id="seqNo" style="width:50px; margin-left:90px;" value="${parameters.get("value_${rowNo}")!"0"}" ></input>
+                       <input type="text" name="value_${rowNo}" class="small" id="seqNo" value="${parameters.get("value_${rowNo}")!"0"}" ></input>
                      </#if>
                      </td>
+                     <#if parameters.screenType?exists && parameters.screenType == 'PDPTabs'>
+                         <td class="numberCol <#if !hasNext>lastRow</#if>">
+                             <input type="text" name="group_${rowNo}" class="small" id="group_${rowNo}" value="${parameters.get("group_${rowNo}")!screenList.group!}" ></input>
+                         </td>
+                     </#if>
                      <input type="hidden" name="screen_${rowNo}" value="${screenList.screen!}"></input>
                 </tr>
                 <#assign rowNo = rowNo+1/>
@@ -45,7 +53,6 @@
             </#list>
         </tbody>
         </table>
-        <div id="setToZeroMessage">${uiLabelMap.setToZeroMessage}</div>
         <input type="hidden" name="showDetail" value="false"/>
     <#else>
         ${uiLabelMap.NoDataAvailableInfo}

@@ -14,7 +14,8 @@
           <#if subCatList?exists && subCatList?has_content>
           <#list subCatList as subCategory>
             <tr class="dataRow">
-              <td class="idCol spacer"><a href="javascript:set_values('${subCategory.productCategoryId!?if_exists}','${catContentWrappers[subCategory.productCategoryId!].get("CATEGORY_NAME")?if_exists}')">${catContentWrappers[subCategory.productCategoryId!].get("CATEGORY_NAME")?if_exists}</a></td>
+              <#assign categoryName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${catContentWrappers[subCategory.productCategoryId!].get("CATEGORY_NAME")?if_exists}') />
+              <td class="idCol spacer"><a href="javascript:set_values('${subCategory.productCategoryId!?if_exists}','${categoryName!}')">${catContentWrappers[subCategory.productCategoryId!].get("CATEGORY_NAME")?if_exists}</a></td>
             </tr>
           </#list>
         </#if>

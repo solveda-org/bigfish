@@ -2,21 +2,27 @@
 
     var displayDialogId;
     var myDialog;
+    var titleText;
     function displayDialogBox(dialogPurpose) {
        var dialogId = '#' + dialogPurpose + 'dialog';
        displayDialogId = '#' + dialogPurpose + 'displayDialog';
-       showDialog(dialogId, displayDialogId);
+       dialogTitleId = '#' + dialogPurpose + 'dialogBoxTitle';
+       titleText = jQuery(dialogTitleId).val();
+       showDialog(dialogId, displayDialogId, titleText);
     }
    
-    function showDialog(dialog, displayDialog) {
+    function showDialog(dialog, displayDialog, titleText) {
         myDialog = jQuery(displayDialog).dialog({
             modal: true,
             draggable: true,
             resizable: true,
             width: 'auto',
             autoResize:true,
-            position: 'Top'
+            position: 'center',
+            title: titleText
         });
+        // adjust titlebar width mannualy - Workaround for IE7 titlebar width bug
+        jQuery(myDialog).siblings('.ui-dialog-titlebar').width(jQuery(myDialog).width());
     }
     function confirmDialogResult(result, dialogPurpose) {
         dialogId = '#'+ dialogPurpose +'dialog';
@@ -48,9 +54,11 @@
        var dialogId = '#' + dialogPurpose + 'dialog';
        var displayDialogId = '#' + dialogPurpose + 'displayDialog';
        var displayContainerId = '#' + dialogPurpose + 'Container';
+       dialogTitleId = '#' + dialogPurpose + 'dialogBoxTitle';
+       titleText = jQuery(dialogTitleId).val();
        jQuery(displayContainerId).html('<div id=loadingImg></div>');
        getActionDialog(displayContainerId,params);
-       showDialog(dialogId, displayDialogId);
+       showDialog(dialogId, displayDialogId, titleText);
         
     }
    
@@ -66,37 +74,10 @@
       jQuery.getScript(url, function(data, textStatus, jqxhr)
       {
           jQuery(displayContainerId).replaceWith(data);
+          jQuery(myDialog).dialog( "option", "position", 'top' );
       });
   }
 
-   function updateCart() {
-      var cartItemsNo = ${shoppingCart.items()?size!"0"};
-      var lowerLimit = ${PDP_QTY_MIN!"1"};
-      var upperLimit = ${PDP_QTY_MAX!"99"};
-      
-      for (var i=0;i<cartItemsNo;i++)
-      {
-          var quantity = jQuery('#update_'+i).val();
-      
-	      if(quantity < lowerLimit)
-	      {
-	          alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMinQtyError,'\"','\\"'))}");
-	          return false;
-	      }
-	      if(upperLimit!= 0 && quantity > upperLimit)
-	      {
-	          alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPMaxQtyError,'\"','\\"'))}");
-	          return false;
-	      }
-	      if(!isWhole(quantity))
-	      {
-	          alert("${StringUtil.wrapString(StringUtil.replaceString(uiLabelMap.PDPQtyDecimalNumberError,'\"','\\"'))}");
-	          return false;
-	      }
-      }
-      
-      document.cartform.submit();
-   }
     var isWhole_re = /^\s*\d+\s*$/;
     function isWhole (s) {
         return String(s).search (isWhole_re) != -1

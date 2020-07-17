@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="cancelScheduledJob" short-description="Create a Scheduled Job">
+ 		<!-- check for bad or missing values --> 
+ 		<if-empty field="parameters.jobId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankJobIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+
+        <check-errors/>
+   
+        <!-- update record in entities: JobSandbox  -->     
+        <make-value entity-name="JobSandbox" value-field="lookupPKMap"/>
+        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.cancelDateTime"/>
+        <set field="statusId" value="SERVICE_CANCELLED" type="String"/>
+        <set from-field="statusId" field="lookedUpValue.statusId"/>
+        <store-value value-field="lookedUpValue"/>
+    </simple-method>
+    
+    <simple-method method-name="updateScheduledJob" short-description="Update a scheduled job">
+    	<!-- check for bad or missing values -->     
+        <if-empty field="parameters.JOB_NAME">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingJobNameError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+
+        <if-empty field="parameters.SERVICE_NAME">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MissingServiceNameError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/> 
+            <else>
+            <set field="dispatcher" from-field="parameters.dispatcher" type="Object"/>
+            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkValidServiceName" ret-field="isValid">
+                <field field="parameters.SERVICE_NAME"/>
+                <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+            </call-class-method>
+            <if-compare field="isValid" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidServiceNameError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            </else>    
+        </if-empty>
+ 
+        <if-empty field="parameters.SERVICE_TIME">
+        	<!-- if no date is entered, then take now datetime -->
+            <now-timestamp field="nowTimestamp"/>
+        	<set from-field="nowTimestamp" field="parameters.SERVICE_TIME"/>
+            <else>
+	            <!-- check if this is a valid date -->
+	            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkValidJobDate" ret-field="isValidServTime">
+	                <field field="parameters.SERVICE_TIME"/>
+	            </call-class-method>
+	            <if-compare field="isValidServTime" operator="equals" value="false">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidStartDateError"/>
+	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                <else>
+	                <!-- check if datetime passed already -->
+	                <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkPassedJobDate" ret-field="PassedServTime">
+	                	<field field="parameters.SERVICE_TIME"/>
+	            	</call-class-method>
+	            	<if-compare field="PassedServTime" operator="equals" value="false">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StartTimePassedError"/>
+	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            	</if-compare>
+	                </else>
+	            </if-compare>
+            </else>
+        </if-empty>
+        
+        <if-empty field="parameters.SERVICE_FREQUENCY">
+        	<!-- if NONE is selected, then make it DAILY -->
+            <set field="daily" value="DAILY" type="String"/>
+        	<set from-field="daily" field="parameters.SERVICE_FREQUENCY"/>            
+        </if-empty>
+        
+        <if-not-empty field="parameters.SERVICE_INTERVAL">
+            <!-- check if this is a valid interval -->
+            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkValidInterval" ret-field="isValidInterval">
+                <field field="parameters.SERVICE_INTERVAL"/>
+            </call-class-method>
+            <if-compare field="isValidInterval" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidIntervalError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                <!-- check if interval is out of range -->
+                <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkValidIntervalRange" ret-field="OutofRangeInterval">
+                	<field field="parameters.SERVICE_INTERVAL"/>
+                	<field field="parameters.SERVICE_FREQUENCY"/>
+            	</call-class-method>
+            	<if-compare field="OutofRangeInterval" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OutRangeIntervalError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            	</if-compare>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.SERVICE_COUNT">
+            <!-- check if this is a valid interval -->
+            <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkValidInterval" ret-field="isValidCount">
+                <field field="parameters.SERVICE_COUNT"/>
+            </call-class-method>
+            <if-compare field="isValidCount" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="InvalidFrequencyCountError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                <else>
+                <!-- check if count is out of range -->
+                <call-class-method class-name="com.osafe.services.OsafeAdminScheduledJobServices"  method-name="checkValidCountRange" ret-field="OutofRangeCount">
+                	<field field="parameters.SERVICE_COUNT"/>
+                	<field field="parameters.SERVICE_FREQUENCY"/>
+            	</call-class-method>
+            	<if-compare field="OutofRangeCount" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OutRangeFreqError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            	</if-compare>
+                </else>
+            </if-compare>
+        </if-not-empty>
+        
+        <check-errors/>
+        
+        <!-- update record in entities: JobSandbox, RecurrenceInfo  -->     
+        <make-value entity-name="JobSandbox" value-field="lookupPKMap"/>
+        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <set from-field="parameters.JOB_NAME" field="lookedUpValue.jobName"/>
+        <set from-field="parameters.SERVICE_NAME" field="lookedUpValue.serviceName"/>
+        <set from-field="parameters.SERVICE_TIME" field="lookedUpValue.runTime"/>
+        <store-value value-field="lookedUpValue"/>
+        
+        <!-- get reccurenceInfoId from JobSandbox -->
+        <make-value entity-name="JobSandbox" value-field="JobSandBoxValues"/>
+        <set from-field="parameters.jobId" field="JobSandBoxValues.jobId"/>
+        <find-by-primary-key map="JobSandBoxValues" value-field="JobSandBoxValuesMap"/>
+        <set from-field="JobSandBoxValuesMap.recurrenceInfoId" field="parameters.recurrenceInfoId"/>
+        
+        <!-- get the recurrenceInfo table using the recurrenceInfoId and then get the RecurrenceRuleId  -->
+        <make-value entity-name="RecurrenceInfo" value-field="RecurrenceInfoValues"/>
+        <set from-field="parameters.recurrenceInfoId" field="RecurrenceInfoValues.recurrenceInfoId"/>
+        <find-by-primary-key map="RecurrenceInfoValues" value-field="RecurrenceInfoValuesMap"/>
+        <set from-field="RecurrenceInfoValuesMap.recurrenceRuleId" field="parameters.recurrenceRuleId"/>
+        
+        <!-- get the recurrenceRule table and store the updated values using the recurrenceRuleId -->
+        <make-value entity-name="RecurrenceRule" value-field="RecurrenceRuleLookupPKMap"/>
+        <set-pk-fields map="parameters" value-field="RecurrenceRuleLookupPKMap"/>
+        <find-by-primary-key map="RecurrenceRuleLookupPKMap" value-field="RecurrenceRuleLookedUpValue"/>
+        <!-- <set from-field="parameters.SERVICE_END_TIME" field="RecurrenceRuleLookedUpValue.lastUpdatedTxStamp"/>-->
+        <set from-field="parameters.SERVICE_FREQUENCY" field="RecurrenceRuleLookedUpValue.frequency"/>
+        <set from-field="parameters.SERVICE_INTERVAL" field="RecurrenceRuleLookedUpValue.intervalNumber"/>
+        <set from-field="parameters.SERVICE_COUNT" field="RecurrenceRuleLookedUpValue.countNumber"/>
+        <store-value value-field="RecurrenceRuleLookedUpValue"/>
+        
+    </simple-method>
+   
+</simple-methods>

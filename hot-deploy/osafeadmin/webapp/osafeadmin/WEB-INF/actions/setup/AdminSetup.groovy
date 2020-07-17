@@ -24,7 +24,7 @@ import javolution.util.FastList;
 
 
 
-globalContext.stores = delegator.findList("ProductStore",null, null, null, null, true);
+globalContext.stores = delegator.findList("ProductStore",EntityCondition.makeCondition([isDemoStore : "N"]), null, null, null, true);
 
 selectedProductStoreId = parameters.selectedProductStoreId;
 if (UtilValidate.isNotEmpty(selectedProductStoreId))

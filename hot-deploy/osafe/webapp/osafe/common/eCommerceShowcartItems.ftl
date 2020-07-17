@@ -1,4 +1,5 @@
  <#if (shoppingCartSize > 0)>
+  <div class="showCartItems">
   <#assign offerPriceVisible= "N"/>
   <#list shoppingCart.items() as cartLine>
     <#assign cartItemAdjustment = cartLine.getOtherAdjustments()/>
@@ -86,12 +87,12 @@
             </#if>
          </#if>
 
-         <#assign productUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${urlProductId}&productCategoryId=${productCategoryId!""}')/>
+         <#assign productFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${urlProductId}&productCategoryId=${productCategoryId!""}')/>
 
             <tr class="cart_contents">
                 <td class="image firstCol <#if !cartLine_has_next>lastRow</#if>" scope="row">
 
-                    <a href="${productUrl}" id="image_${urlProductId}">
+                    <a href="${productFriendlyUrl}" id="image_${urlProductId}">
                         <img alt="${StringUtil.wrapString(productName)}" src="${productImageUrl}" class="productCartListImage" height="${IMG_SIZE_CART_H!""}" width="${IMG_SIZE_CART_W!""}">
                     </a>
                 </td>
@@ -99,7 +100,7 @@
                     <dl>
                         <dt>${uiLabelMap.ProductDescriptionAttributesInfo}</dt>
                         <dd class="description">
-                          <a href="${productUrl}">${StringUtil.wrapString(productName!)}</a>
+                          <a href="${productFriendlyUrl}">${StringUtil.wrapString(productName!)}</a>
                         </dd>
                         <#assign productFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" , cartLine.getProductId())) />
                         <#if productFeatureAndAppls?has_content>
@@ -250,12 +251,15 @@
         <a href="<@ofbizUrl>${checkoutRequest!"checkout"}<#if !userLogin?has_content || userLogin.userLoginId == "anonymous">?guest=guest</#if></@ofbizUrl>" class="standardBtn positive">${uiLabelMap.CheckoutBtn}</a>
     </div>
 </div>
+</div>
  <#else>
+  <div class="showCartItems">
  <div class="displayBox">
     <p class="instructions">${uiLabelMap.YourShoppingCartIsEmptyInfo}</p>
     <div id="eCommerceCartButtons">
       <a href="<@ofbizUrl>main</@ofbizUrl>" class="standardBtn positive">${uiLabelMap.ContinueShoppingBtn}</a>
     </div>
  </div>
+</div>
  </#if>
 

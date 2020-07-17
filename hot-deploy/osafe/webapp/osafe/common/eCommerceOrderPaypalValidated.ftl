@@ -1,9 +1,7 @@
 <div class="checkoutOrderPayPalValidated">
     <#-- Enter Credit Card Box -->
     <div class="displayBox">
-     <div class="displayBoxHeader">
-        <span class="displayBoxHeaderCaption">${uiLabelMap.PaymentInformationHeading}</span>
-     </div>
+        <h3>${uiLabelMap.PaymentInformationHeading}</h3>
         <div class="paymentMethodImg paypal"></div>
         <p class="instructions">${uiLabelMap.PayPalValidatedInfo}</p>
     </div>

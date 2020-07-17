@@ -1,4 +1,4 @@
-<#if (requestAttributes.facetList)?exists><#assign facetList = requestAttributes.facetList></#if>
+<#if (requestAttributes.facetCatList)?exists><#assign facetCatList = requestAttributes.facetCatList></#if>
 <#if (currentProductCategoryContentWrapper)?exists>
   <#assign categoryName = currentProductCategoryContentWrapper.get("CATEGORY_NAME")!currentProductCategory.categoryName!"">
   <#assign longDescription = currentProductCategoryContentWrapper.get("LONG_DESCRIPTION")!currentProductCategory.longDescription!"">
@@ -29,9 +29,9 @@
   </#if>
 
  <div class="resultCategoryListContainer">
-    <#if facetList?has_content>
+    <#if facetCatList?has_content>
         <div id="eCommerceCategoryList">
-        <#assign facet = facetList[0] >
+        <#assign facet = facetCatList[0] >
         <#if facet.refinementValues?has_content>
             <#list facet.refinementValues as category>
                ${setRequestAttribute("clpItem",category)}

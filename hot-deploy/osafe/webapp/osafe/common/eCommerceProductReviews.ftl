@@ -18,8 +18,7 @@
 </form>
 
 <div id="productReviewDisplay" class="displayBox">
-    <div class="displayBoxHeader">
-	   <span class="displayBoxHeaderCaption">${uiLabelMap.ProductReviewsHeading}</span>
+	   <h3>${uiLabelMap.ProductReviewsHeading}</h3>
 		 <div id="reviewSortOptions">
 		     <label>${uiLabelMap.SortByCaption}</label>
 		     <select onchange="sortReviews();return false;" name="reviewSort" class="sortDropdown" id="reviewSort">
@@ -37,7 +36,6 @@
 		          </option>
 		     </select>
 		 </div>
-	</div>
 	<div class="reviewBody">
 	 <#list productReviews as productReview>
 	   <#assign overallRate=productReview.getBigDecimal("productRating").setScale(decimals,rounding)/>

@@ -1,4 +1,4 @@
-<div id="pdpSeeMainImage">
+<div class="pdpSeeMainImage">
 <div id="seeMainImage">
     <a href="javascript:void(0);" onclick="javascript:replaceDetailImage('${productLargeImageUrl?if_exists}','${productDetailImageUrl!""}');"><span>${uiLabelMap.SeeMainImageLabel}</span></a>
 </div>

@@ -15,17 +15,6 @@
       copyAddress('BILLING', jQuery('#BILLING_ADDRESS_ENTRY'), 'SHIPPING', jQuery('#SHIPPING_AddressSection'), jQuery('#isSameAsBilling'), true);
     }
 
-    if (jQuery('#SHIPPING_POSTAL_CODE').length) {
-      updateShippingOption();
-      jQuery('#SHIPPING_POSTAL_CODE').change(function () {
-        updateShippingOption()
-      });
-    }
-
-    if (jQuery('input.shipping_method:checked').val() == undefined) {
-      jQuery('input.shipping_method:first').attr("checked", true);
-    }
-
     if(jQuery('#content').length) {
         var curLen = jQuery('#content').val().length;
         jQuery('#textCounter').html(255 - curLen+" ${uiLabelMap.CharactersLeftLabel}");
@@ -42,7 +31,6 @@
         });
       }
 
-    pickupStoreEventListener();
   });
 
   function copyAddress(fromAddr, fromAddrContainer, toAddr, toAddrSection, triggerElt, isBlindup) {
@@ -55,17 +43,11 @@
       if (isBlindup) {
         jQuery(toAddrSection).hide();
       }
-      jQuery(toAddrSection).find('input, select, textarea').attr('disabled','disabled');
       copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt);
     }
     jQuery(triggerElt).click(function(){
       if (isBlindup) {
         jQuery(toAddrSection).slideToggle(1000);
-      }
-      if(jQuery(triggerElt).is(":checked")){
-        jQuery(toAddrSection).find('input, select, textarea').attr('disabled','disabled');
-      } else {
-        jQuery(toAddrSection).find('input, select, textarea').removeAttr('disabled');
       }
       copyFieldsInitially(fromAddr, fromAddrContainer, toAddr, triggerElt);
     });
@@ -83,44 +65,14 @@
     fromElmId = jQuery(fromElm).attr('id');
     var toElmId = '#'+toAddrPurpose + fromElmId.sub(fromAddrPurpose, "");
     if(jQuery(toElmId).length) {
+      if(fromElmId == fromAddrPurpose+'AddressContactMechId') {
+          return;
+      }
       jQuery(toElmId).val(jQuery(fromElm).val());
-      if(fromElmId == fromAddrPurpose+'_COUNTRY') {
-        getAssociatedStateList(toAddrPurpose+'_COUNTRY', toAddrPurpose+'_STATE', 'advice-required-'+toAddrPurpose+'_STATE', toAddrPurpose+'_STATES', toAddrPurpose+'_STATE_TEXT');
-        getAddressFormat(toAddrPurpose);
-      }
-      if (fromElmId == fromAddrPurpose+"_POSTAL_CODE") {
-        updateShippingOption();
-      }
+      jQuery(toElmId).change();
     }
   }
 
-  function pickupStoreEventListener() {
-    jQuery('.pickupStore').submit(function(event) {
-        event.preventDefault();
-        jQuery.post(jQuery(this).attr('action'), jQuery(this).serialize(), function(data) {
-            updateShippingOption();
-            jQuery(displayDialogId).dialog('close');
-        });
-    });
-
-    jQuery('.cancelPickupStore').click(function(event) {
-        event.preventDefault();
-        jQuery(displayDialogId).dialog('close');
-    });
-
-    jQuery('.storePickup_Form').submit(function(event) {
-        event.preventDefault();
-        jQuery.getScript(jQuery(this).attr('action')+'?'+jQuery(this).serialize(), function(data, textStatus, jqxhr) {
-            jQuery('#eCommerceStoreLocatorContainer').replaceWith(data);
-            pickupStoreEventListener();
-            if (jQuery('#isGoogleApi').val() != "Y") {
-                loadScript();
-            } else{
-                loadMap();
-            }
-        });
-    });
-  }
 
   function getAddressFormat(idPrefix) {
     var countryId = '#'+idPrefix+'_COUNTRY'
@@ -138,66 +90,6 @@
       jQuery('.'+idPrefix+'_OTHER').show();
     }
   }
-
-    function updateShippingOption() {
-        if (jQuery('#deliveryOptionBox').length) {
-            if (jQuery('#SHIPPING_POSTAL_CODE').length) {
-                if (jQuery('#SHIPPING_POSTAL_CODE').val() == '') {
-                    postalcode = "dummy";
-                }else {
-                    postalcode = jQuery('#SHIPPING_POSTAL_CODE').val();
-                }
-                jQuery.get('<@ofbizUrl>${updateShippingOptionRequest?if_exists}?postalCode='+postalcode+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
-                    jQuery('#deliveryOptionBox').replaceWith(data);
-                    if(jQuery('input.shipping_method:checked').val() != null) {
-                        setShippingMethod(jQuery('input.shipping_method:checked').val());
-                    } else {
-                        setShippingMethod(jQuery('input.shipping_method').val());
-                    }
-                });
-            } else {
-                location.reload();
-                jQuery('#isGoogleApi').val("");
-            }
-        }
-    }
-
-    function setShippingMethod(selectedShippingOption) {
-        if (jQuery('#checkoutOrderDetailAndPromoCodeSec').length) {
-            jQuery('#checkoutOrderDetailAndPromoCodeSec').load('<@ofbizUrl>${setShippingOptionRequest?if_exists}?shipMethod='+selectedShippingOption+'&rnd=' + String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>');
-        }
-    }
-
-    function setExternalCheckout(paymentMethodType) {
-        jQuery('#paymentMethodTypeId').val(paymentMethodType);
-        jQuery('#guestCheckout').submit();
-    }
-
-    function removeStorePickup(paymentMethodType) {
-        jQuery('#paymentMethodTypeId').val(paymentMethodType);
-        jQuery.post('<@ofbizUrl>${removeStorePickupRequest?if_exists}</@ofbizUrl>', {isGuestCheckout: "Y"}, function(data) {
-            updateShippingOption();
-        });
-    }
-<#if formName?has_content>
-  function addManualPromoCode() {
-    if (jQuery('#manualOfferCode').length && jQuery('#manualOfferCode').val() != null) {
-      promo = jQuery('#manualOfferCode').val().toUpperCase();
-      promoCodeWithoutSpace = promo.replace(/^\s+|\s+$/g, "");
-    }
-    var cform = document.${formName!};
-    cform.action="<@ofbizUrl>${addPromoCodeRequest!}?productPromoCodeId="+promoCodeWithoutSpace+"</@ofbizUrl>";
-    cform.submit();
-  }
-
-  function removePromoCode(promoCode) {
-    if (promoCode != null) {
-      var cform = document.${formName!};
-      cform.action="<@ofbizUrl>${removePromoCodeRequest!}?productPromoCodeId="+promoCode+"</@ofbizUrl>";
-      cform.submit();
-    }
-  }
-</#if>
 
   //This method exists in geoAutoCompleter.js named 'getAssociatedStateList'. we have reused and customized.
   function getAssociatedStateList(countryId, stateId, errorId, divId, addressLine3) {
@@ -220,6 +112,34 @@
         jQuery("#"+addressLine3).hide();
         jQuery("#"+divId).show();
       }
+    });
+  }
+
+  function getPostalAddress(contactMechId, purpose) {
+    jQuery.ajaxSetup({async:false});
+    jQuery.post("<@ofbizUrl>getPostalAddress</@ofbizUrl>", {contactMechId: contactMechId}, function(data) {
+    <#if COUNTRY_MULTI?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(COUNTRY_MULTI)>
+        jQuery("#"+purpose+"_COUNTRY > option").each(function() {
+            if (this.value == data.countryGeoId) {
+               jQuery(this).attr('selected', 'selected');
+               jQuery(this).change();
+            }
+        });
+    <#else>
+        jQuery("#"+purpose+"_COUNTRY").val(data.countryGeoId);
+    </#if>
+       jQuery("#"+purpose+"_STATE > option").each(function() {
+        if (this.value ==data.stateProvinceGeoId) {
+           jQuery(this).attr('selected', 'selected');
+        }
+    });
+    jQuery("#"+purpose+"AddressContactMechId").val(data.contactMechId);
+    jQuery("#"+purpose+"_ADDRESS1").val(data.address1);
+    jQuery("#"+purpose+"_ADDRESS2").val(data.address2);
+    jQuery("#"+purpose+"_ADDRESS3").val(data.address3);
+    jQuery("#"+purpose+"_CITY").val(data.city);
+    jQuery("#"+purpose+"_POSTAL_CODE").val(data.postalCode);
+    getAddressFormat(purpose);
     });
   }
 

@@ -77,7 +77,7 @@ if(orderId){
 if(orderDateFrom){
     try {
           orderDateFrom = ObjectType.simpleTypeConvert(orderDateFrom, "Timestamp", preferredDateFormat, locale);
-    } catch (ParseException e) {
+    } catch (Exception e) {
         errMsg = "Parse Exception orderDateFrom: " + orderDateFrom;
         Debug.logError(e, errMsg, "orderManagementOrderList.groovy");
     }
@@ -91,7 +91,7 @@ if(productPromoCodeId){
 if(orderDateTo){
     try{
          orderDateTo = ObjectType.simpleTypeConvert(orderDateTo, "Timestamp", preferredDateFormat, locale);
-	} catch (ParseException e) {
+	} catch (Exception e) {
         errMsg = "Parse Exception orderDateTo: " + orderDateTo;
         Debug.logError(e, errMsg, "orderManagementOrderList.groovy");
     }

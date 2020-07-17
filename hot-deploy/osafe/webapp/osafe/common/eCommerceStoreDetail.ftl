@@ -1,13 +1,10 @@
-<#assign cart = shoppingCart?if_exists />
-<#if cart.getOrderAttribute("STORE_LOCATION")?has_content>
+<#if storeInfo?has_content>
 <div class="checkoutOrderStorePickup">
 	<div id="customerStorePickup">
 	<div class="displayBox">
-	    <div class="displayBoxHeader">
-	        <span class="displayBoxHeaderCaption">${uiLabelMap.StorePickupHeading} </span>
-	    </div>
-	    <input type="hidden" name="checkoutpage" value="shippingoptions"/>
-	    <input type="hidden" name="shipping_method" value="${parameters.shipMethod!"NO_SHIPPING@_NA_"}">
+        <h3>${uiLabelMap.StorePickupHeading} </h3>
+        <input type="hidden" name="shipping_method" class="shipping_method" value="${parameters.shipMethod!"NO_SHIPPING@_NA_"}">
+	    <input type="hidden" name="shipMethod" value="${parameters.shipMethod!"NO_SHIPPING@_NA_"}">
 	    <div class="entryRow">
 	      <div class="entry">
 	         <div class="entryLabel">

@@ -49,7 +49,7 @@
   <div class="infoRow">
     <div class="infoEntry">
       <div class="infoCaption">
-        <label>${uiLabelMap.ShippingMethCaption}</label>
+        <label>${uiLabelMap.ShippingMethodCaption}</label>
       </div>
       <div class="infoValue">
       	<#if mode="add">
@@ -65,6 +65,9 @@
          	<input name="shipmentMethodTypeId" type="hidden" id="shipmentMethodTypeId" maxlength="20" value="${parameters.shipmentMethodTypeId!shipmentMethodTypeId!""}"/>
 	   </#if>  
       </div>
+     <#if mode="add">
+    	<a href="addShipmentMethodTypeDetail" style="text-decoration:none;"><input type="button" class="standardBtn dateSelect" name="addShipmentMethodTypeButton" id="addShipmentMethodTypeButton" value="${uiLabelMap.AddShipmentMethodTypeBtn}" /></a>
+     </#if>
     </div>
   </div>
   

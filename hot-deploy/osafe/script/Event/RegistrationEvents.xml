@@ -5,6 +5,7 @@
 
     <simple-method method-name="createCustomer" short-description="Create Customer" login-required="false">
 
+        <set field="parameters.USERNAME" from-field="parameters.CUSTOMER_EMAIL"/>
         <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
         
@@ -16,10 +17,13 @@
 
         <call-simple-method method-name="validateBillingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
 
-    <if-empty field="parameters.isSameAsBilling">
-        <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-    </if-empty>
-
+        <if-empty field="parameters.isSameAsBilling">
+            <call-simple-method method-name="validateShippingAddress" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <else>
+            <map-to-map map="addressContext" to-map="shippingAddressContext"/>
+            <property-to-field field="shippingAddressContext.attnName" resource="OSafeUiLabels" property="ShippingAddressDefaultNickNameLabel"/>
+        </else>
+        </if-empty>
         <!-- Create the email address -->
 
         <!-- Check for required E-Mail -->
@@ -96,14 +100,9 @@
             <result-to-field result-name="contactMechId" field="addressPurposeContext.contactMechId"/>
         </call-service>
 
-        <if-empty field="parameters.isSameAsBilling">
             <call-service service-name="createPartyPostalAddress" in-map-name="shippingAddressContext">
                 <result-to-field result-name="contactMechId" field="shippingAddressPurposeContext.contactMechId"/>
             </call-service>
-        <else>
-            <set field="shippingAddressPurposeContext.contactMechId" from-field="addressPurposeContext.contactMechId"/>
-        </else>
-        </if-empty>
 
          <set field="shippingAddressPurposeContext.partyId" from-field="tempMap.partyId"/>
          <!-- create the shipping location -->
@@ -121,7 +120,61 @@
         <!-- Create Billing address -->
         <set value="BILLING_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
         <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
+        <!-- home phone -->
+        <if>
+           <condition>
+              <or>
+                <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
+                <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
+              </or>
+           </condition>
+                <then>
+                    <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
+                        <result-to-field result-name="contactMechId" field="homePhonePurposeContext.contactMechId"/>
+                    </call-service>
+                    <set from-field="tempMap.partyId" field="homePhonePurposeContext.partyId"/>
+                    <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                    <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+                    <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                    <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+               </then>
+            </if>  
+            
+        <!-- work phone -->
+        <if>
+            <condition>
+                <or>
+                    <not><if-empty field="contactWorkPhoneMap.contactWorkPhoneContact"></if-empty></not>
+                    <not><if-empty field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact"></if-empty></not>
+                </or>
+            </condition>
+            <then>
+                <call-service service-name="createPartyTelecomNumber" in-map-name="workPhoneContext">
+                    <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
+                </call-service>
+                <set from-field="tempMap.partyId" field="workPhonePurposeContext.partyId"/>
+                <set value="PHONE_WORK" field="workPhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="workPhonePurposeContext"/>
+            </then>
+        </if>
 
+        <!-- mobile phone -->
+        <if>
+            <condition>
+                <or>
+                    <not><if-empty field="contactMobilePhoneMap.contactMobilePhoneContact"></if-empty></not>
+                    <not><if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"></if-empty></not>
+                </or>
+            </condition>
+            <then>
+                <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
+                    <result-to-field result-name="contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
+                </call-service>
+                <set from-field="tempMap.partyId" field="mobilePhonePurposeContext.partyId"/>
+                <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
+            </then>
+        </if>
         <!-- email address -->
         <if-not-empty field="emailContext.emailAddress">
             <call-service service-name="createPartyEmailAddress" in-map-name="emailContext">
@@ -170,29 +223,7 @@
         <call-service service-name="createProductStoreRole" in-map-name="createProductStoreRoleMap"/>
 
         <!-- send off the registration email -->
-        <if-not-empty field="emailContext.emailAddress">
-            <set from-field="parameters.emailProductStoreId" field="storeEmailLookup.productStoreId"/>
-            <set value="PRDS_CUST_REGISTER" field="storeEmailLookup.emailType"/>
-            <find-by-primary-key map="storeEmailLookup" entity-name="ProductStoreEmailSetting"  value-field="storeEmail"/>
-            <if-not-empty field="storeEmail.bodyScreenLocation">
-                <get-related-one value-field="createdUserLogin" relation-name="Person" to-value-field="person"/>
-                <set field="bodyParameters.person" from-field="person"/>
-                <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
-                <set field="emailParams.sendTo" from-field="emailContext.emailAddress"/>
-                <set field="emailParams.subject" from-field="storeEmail.subject"/>
-                <set field="emailParams.sendFrom" from-field="storeEmail.fromAddress"/>
-                <set field="emailParams.sendCc" from-field="storeEmail.ccAddress"/>
-                <set field="emailParams.sendBcc" from-field="storeEmail.bccAddress"/>
-                <set field="emailParams.contentType" from-field="storeEmail.contentType"/>
-                <set field="emailParams.bodyScreenUri" from-field="storeEmail.bodyScreenLocation"/>
-                <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
-
-
-                <!-- Put additional information into context for email generation-->
-
-                <call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
-            </if-not-empty>
-        </if-not-empty>
+        <call-simple-method method-name="sendRegistrationEmail" xml-resource="component://osafe/script/Event/EmailEvents.xml"/>
 
         <!-- tell the control servlet that we just logged in the user... -->
         <set value="TRUE" field="_LOGIN_PASSED_"/>

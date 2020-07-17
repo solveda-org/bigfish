@@ -6,8 +6,8 @@
     <simple-method method-name="updateCustomerPersonalInfo" short-description="Update Customer Personal Information" login-required="true">
         <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-        <call-simple-method method-name="createUpdatePartyAttributes"/>
          <check-errors/>
+         <call-simple-method method-name="createUpdatePartyAttributes"/>
         <!-- Create person map -->
         <call-map-processor in-map-name="parameters" out-map-name="personMap">
             <simple-map-processor name="newPerson">
@@ -19,7 +19,7 @@
                 <process field="USER_LAST_NAME">
                     <copy to-field="lastName"/>
                 </process>
-                <process field="USER_GENDER"><copy to-field="gender"/></process>
+                <!--  process field="USER_GENDER"><copy to-field="gender"/></process>-->
             </simple-map-processor>
         </call-map-processor>
         <!-- update person service -->
@@ -27,92 +27,85 @@
         <call-service service-name="updatePerson" in-map-name="personMap"></call-service>
 
         <!-- update phone contact -->
-        <if-compare field="parameters.USER_USE_PHONE_CONTACT" operator="equals" value="true">
-            <!-- home phone -->
-            <if>
-               <condition>
-                  <or>
-                    <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
-                    <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
-                  </or>
-               </condition>
-                    <then>
-                        <if-not-empty field="parameters.homePhoneContactMechId">
-                            <set field="homePhoneContext.contactMechId" from-field="parameters.homePhoneContactMechId"/>
-                            <call-service service-name="updatePartyTelecomNumber" in-map-name="homePhoneContext">
-                                <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
-                            </call-service>
-                            <else>
-                                <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
-                                    <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
-                                </call-service>
-                                <set from-field="userLogin.partyId" field="homePhonePurposeContext.partyId"/>
-                                <set from-field="homePhoneContext.contactMechId" field="homePhonePurposeContext.contactMechId"/>
-                
-                                <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
-                                <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
-                                <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
-                                <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
-                            </else>
-                        </if-not-empty>
-                   </then>
-                </if>  
-                
-            <!-- work phone -->
-            <if>
-                <condition>
-                    <or>
-                        <not><if-empty field="contactWorkPhoneMap.contactWorkPhoneContact"></if-empty></not>
-                        <not><if-empty field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact"></if-empty></not>
-                    </or>
-                </condition>
+        <!-- home phone -->
+        <if>
+           <condition>
+              <or>
+                <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
+                <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
+              </or>
+           </condition>
                 <then>
-                    <if-not-empty field="parameters.workPhoneContactMechId">
-                        <set field="workPhoneContext.contactMechId" from-field="parameters.workPhoneContactMechId"/>
-                        <call-service service-name="updatePartyTelecomNumber" in-map-name="workPhoneContext">
-                            <result-to-field result-name="contactMechId" field="workPhoneContext.contactMechId"/>
+                    <if-not-empty field="parameters.homePhoneContactMechId">
+                        <set field="homePhoneContext.contactMechId" from-field="parameters.homePhoneContactMechId"/>
+                        <call-service service-name="updatePartyTelecomNumber" in-map-name="homePhoneContext">
+                            <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
                         </call-service>
                         <else>
-                            <call-service service-name="createPartyTelecomNumber" in-map-name="workPhoneContext">
-                                <result-to-field result-name="contactMechId" field="workPhoneContext.contactMechId"/>
+                            <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
+                                <result-to-field result-name="contactMechId" field="homePhoneContext.contactMechId"/>
                             </call-service>
                             <set from-field="userLogin.partyId" field="homePhonePurposeContext.partyId"/>
-                            <set from-field="workPhoneContext.contactMechId" field="workPhonePurposeContext.contactMechId"/>
-
-                            <set value="PHONE_WORK" field="workPhonePurposeContext.contactMechPurposeTypeId"/>
-                            <call-service service-name="createPartyContactMechPurpose" in-map-name="workPhonePurposeContext"/>
+                            <set from-field="homePhoneContext.contactMechId" field="homePhonePurposeContext.contactMechId"/>
+            
+                            <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                            <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+                            <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                            <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
                         </else>
                     </if-not-empty>
-                </then>
-            </if>
-    
-            <!-- mobile phone -->
-            <if>
-                <condition>
-                    <or>
-                        <not><if-empty field="contactMobilePhoneMap.contactMobilePhoneContact"></if-empty></not>
-                        <not><if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"></if-empty></not>
-                    </or>
-                </condition>
-                <then>
-                    <if-not-empty field="parameters.mobilePhoneContactMechId">
-                        <set field="mobilePhoneContext.contactMechId" from-field="parameters.mobilePhoneContactMechId"/>
-                        <call-service service-name="updatePartyTelecomNumber" in-map-name="mobilePhoneContext">
-                            <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
-                        </call-service>
-                    <else>
-                        <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
-                            <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
-                        </call-service>
-                        <set from-field="userLogin.partyId" field="mobilePhonePurposeContext.partyId"/>
-                        <set from-field="mobilePhoneContext.contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
-                        <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
-                        <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
-                    </else>
-                    </if-not-empty>
-                </then>
-            </if>
-        </if-compare>
+               </then>
+            </if>  
+            
+        <!-- work phone -->
+        <if-not-empty field="parameters.workPhoneContactMechId">
+            <set field="workPhoneContext.contactMechId" from-field="parameters.workPhoneContactMechId"/>
+            <if-not-empty field="workPhoneContext.contactNumber">
+                <call-service service-name="updatePartyTelecomNumber" in-map-name="workPhoneContext">
+                    <result-to-field result-name="contactMechId" field="workPhoneContext.contactMechId"/>
+                </call-service>
+            <else>
+                <call-service service-name="deletePartyContactMech" in-map-name="workPhoneContext"/>
+            </else>
+            </if-not-empty>
+            <else>
+                <if-not-empty field="workPhoneContext.contactNumber">
+                    <call-service service-name="createPartyTelecomNumber" in-map-name="workPhoneContext">
+                        <result-to-field result-name="contactMechId" field="workPhoneContext.contactMechId"/>
+                    </call-service>
+                    <set from-field="userLogin.partyId" field="homePhonePurposeContext.partyId"/>
+                    <set from-field="workPhoneContext.contactMechId" field="workPhonePurposeContext.contactMechId"/>
+
+                    <set value="PHONE_WORK" field="workPhonePurposeContext.contactMechPurposeTypeId"/>
+                    <call-service service-name="createPartyContactMechPurpose" in-map-name="workPhonePurposeContext"/>
+                </if-not-empty>
+            </else>
+        </if-not-empty>
+
+        <!-- mobile phone -->
+        <if-not-empty field="parameters.mobilePhoneContactMechId">
+            <set field="mobilePhoneContext.contactMechId" from-field="parameters.mobilePhoneContactMechId"/>
+            <if-not-empty field="mobilePhoneContext.contactNumber">
+                <call-service service-name="updatePartyTelecomNumber" in-map-name="mobilePhoneContext">
+                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
+                </call-service>
+            <else>
+                <call-service service-name="deletePartyContactMech" in-map-name="mobilePhoneContext"/>
+            </else>
+            </if-not-empty>
+        <else>
+            <if-not-empty field="mobilePhoneContext.contactNumber">
+                <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
+                    <result-to-field result-name="contactMechId" field="mobilePhoneContext.contactMechId"/>
+                </call-service>
+                <set from-field="userLogin.partyId" field="mobilePhonePurposeContext.partyId"/>
+                <set from-field="mobilePhoneContext.contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
+                <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
+            </if-not-empty>
+        </else>
+        </if-not-empty>
+
         <!-- send email -->
         <set-service-fields service-name="sendUpdatePersonalInfoEmailNotification" map="parameters" to-map="sendUpdatePersonalInfoEmailNotificationCtx"/>
         <call-service service-name="sendUpdatePersonalInfoEmailNotification" in-map-name="sendUpdatePersonalInfoEmailNotificationCtx"/>
@@ -191,27 +184,28 @@
      <simple-method method-name="createUpdatePartyAttributes" short-description="Update Party Attributes" login-required="false" >
 
             <!-- Create/Update USER Gender -->
-            <set field="createUpdateGenderCtx.partyId" from-field="parameters.partyId"/>
-            <set field="createUpdateGenderCtx.attrName" value="GENDER"/>
-            <set field="createUpdateGenderCtx.attrValue" from-field="parameters.USER_GENDER"/>
-            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateGenderCtx"/>
-
+            <if-compare-field field="parameters.USER_GENDER" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateGenderCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateGenderCtx.attrName" value="GENDER"/>
+                <set field="createUpdateGenderCtx.attrValue" from-field="parameters.USER_GENDER"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateGenderCtx"/>
+            </if-compare-field>
             
             <!-- Create/Update USER DOB (DDMM) -->
-            <if-compare-field field="parameters.USER_DOB_MMDD" operator="not-equals" to-field="nullValue">
-	            <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
-	            <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
-	            <set field="createUpdateDOBShortCtx.attrValue" from-field="parameters.USER_DOB_MMDD"/>
-	            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
+            <if-compare-field field="DOB_MMDD" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
+                <set field="createUpdateDOBShortCtx.attrValue" from-field="DOB_MMDD"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
             </if-compare-field>
 
             
             <!-- Create/Update USER DOB (DDMMYYYY) -->
-            <if-compare-field field="parameters.USER_DOB_MMDDYYYY" operator="not-equals" to-field="nullValue">
-	            <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
-	            <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>
-	            <set field="createUpdateDOBLongCtx.attrValue" from-field="parameters.USER_DOB_MMDDYYYY"/>
-	            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
+            <if-compare-field field="DOB_MMDDYYYY" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>
+                <set field="createUpdateDOBLongCtx.attrValue" from-field="DOB_MMDDYYYY"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
             </if-compare-field>
 
             <!-- Create/Update email preference -->

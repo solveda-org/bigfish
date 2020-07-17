@@ -132,8 +132,14 @@
             </if-compare>
             <else>
                 <if-compare field="parameters.statusId" operator="equals" value="ORDER_COMPLETED" >
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipDateError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                	<if-compare field="parameters.shipmentMethod" operator="equals" value="NO_SHIPPING@_NA_" type="String">
+	                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPickUpDateError"/>
+	                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                    <else>
+	                    	<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipDateError"/>
+	                    	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+	                    </else>
+                    </if-compare>
                 </if-compare>
             </else>
         </if-not-empty>
@@ -168,23 +174,26 @@
                parameters.put("carrierPartyId", shipmentMethod.substring(shipmentMethod.indexOf("@")+1));
             }
         ]]></call-bsh>
-        <set field="carrierShipmentMethodMap.shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
-        <set field="carrierShipmentMethodMap.partyId" from-field="parameters.carrierPartyId"/>
-        <set field="carrierShipmentMethodMap.roleTypeId" value="CARRIER"/>
-        <find-by-primary-key entity-name="CarrierShipmentMethod" map="carrierShipmentMethodMap" value-field="carrierShipmentMethod"/>
-        <set field="carrierName" value=""/>
-        <if-compare field="carrierShipmentMethod.partyId" operator="not-equals" value="_NA_" >
-            <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="carrierParty">
-                <string value="Party"/>
-            </call-object-method>
-            <call-class-method class-name="org.ofbiz.party.party.PartyHelper" method-name="getPartyName" ret-field="changeCarrierName">
-                <field field="carrierParty" type="org.ofbiz.entity.GenericValue"/>
-            </call-class-method>
-        </if-compare>
-        <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="shipmentMethodType">
-            <string value="ShipmentMethodType"/>
-        </call-object-method>
-        <set field="changeCarrierDesc" from-field="shipmentMethodType.description"/>
+        
+        <if-not-empty field="parameters.shipmentMethodTypeId">
+	        <set field="carrierShipmentMethodMap.shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
+	        <set field="carrierShipmentMethodMap.partyId" from-field="parameters.carrierPartyId"/>
+	        <set field="carrierShipmentMethodMap.roleTypeId" value="CARRIER"/>
+	        <find-by-primary-key entity-name="CarrierShipmentMethod" map="carrierShipmentMethodMap" value-field="carrierShipmentMethod"/>
+	        <set field="carrierName" value=""/>
+	        <if-compare field="carrierShipmentMethod.partyId" operator="not-equals" value="_NA_" >
+	            <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="carrierParty">
+	                <string value="Party"/>
+	            </call-object-method>
+	            <call-class-method class-name="org.ofbiz.party.party.PartyHelper" method-name="getPartyName" ret-field="changeCarrierName">
+	                <field field="carrierParty" type="org.ofbiz.entity.GenericValue"/>
+	            </call-class-method>
+	        </if-compare>
+	        <call-object-method obj-field="carrierShipmentMethod" method-name="getRelatedOne" ret-field="shipmentMethodType">
+	            <string value="ShipmentMethodType"/>
+	        </call-object-method>
+	        <set field="changeCarrierDesc" from-field="shipmentMethodType.description"/>
+        </if-not-empty>
 
         <!--  update the order status -->
         <if-compare field="parameters.changeStatusAll" operator="equals" value="Y" type="String">
@@ -270,6 +279,49 @@
                           </if-compare>
                        </then>
                    </if>
+                   <if-compare field="orderStatusNoteCount" operator="less" value="1" type="Integer">
+	                   <if-compare field="parameters.shipmentMethod" operator="equals" value="NO_SHIPPING@_NA_" type="String">
+	                   		<if-not-empty field="parameters.estimatedShipDate">
+	                   				<string-append field="insertNote" string="Carrier: STORE PICKUP"/>
+	                               <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="newShipDate">
+	                                      <field field="parameters.estimatedShipDate" type="Timestamp"/>
+	                                      <field field="parameters.preferredDateFormat" type="String"/>
+	                               </call-class-method>
+	                               <string-append field="insertNote" string=" Pick Up Date: Set To:  ${newShipDate}${eol}"/>
+	                               <calculate field="orderStatusNoteCount">
+	                                  <calcop operator="add" >
+	                                      <calcop operator="get" field="orderStatusNoteCount"/>
+	                                      <number value="1"/>
+	                                  </calcop>
+	                              </calculate>
+	                        </if-not-empty>
+	                   </if-compare>
+                   </if-compare>
+                </iterate>
+            </if-compare>
+            
+            <!-- Update bigfish inventory attributes if order is cancelled -->
+            <if-compare field="parameters.statusId" operator="equals" value="ORDER_CANCELLED" type="String">
+                <entity-and entity-name="OrderItem" list="orderItemList">
+                    <field-map field-name="orderId" from-field="parameters.orderId"/>
+                    <order-by field-name="+orderItemSeqId"/>
+                </entity-and>
+                <set field="orderAttributeMap.orderId" from-field="parameters.orderId" />
+                <set field="orderAttributeMap.attrName" value="DELIVERY_OPTION" />
+                <find-by-primary-key entity-name="OrderAttribute" map="orderAttributeMap" value-field="orderAttribute"/>
+                <iterate entry="orderItem" list="orderItemList">
+                    <set field="quantity" from-field="orderItem.quantity" type="BigDecimal"/>
+                    <call-bsh><![CDATA[
+                        String quantity = "-"+quantity.toString();
+                        java.math.BigDecimal quantityBD = new java.math.BigDecimal(quantity);
+                        parameters.put("quantityBD", quantityBD);
+                    ]]></call-bsh>
+                    <call-class-method class-name="com.osafe.services.InventoryServices" method-name="setProductInventoryLevel" >
+                        <field field="orderItem.productId"/>
+                        <field field="parameters.productStoreId"/>
+                        <field field="parameters.quantityBD" type="BigDecimal"/>
+                        <field field="orderAttribute.attrValue"/>
+                    </call-class-method>
                 </iterate>
             </if-compare>
             <!--  update the order item status -->
@@ -347,6 +399,7 @@
                                 <set from-field="parameters.shipGroupSeqId" field="newOrderItemShipGroupAssoc.shipGroupSeqId"/>
                                 <create-value value-field="newOrderItemShipGroupAssoc"/>
                                 <remove-value value-field="orderItemShipGroupAssoc"/>
+                                
                             </iterate>
                        </if-compare>
     
@@ -369,7 +422,7 @@
                                    </and>
                                </condition>
                                <then>
-                                   <set-service-fields map="parameters" to-map="updateOrderItemShipGroupContext" service-name="updateOrderItemShipGroup"/>
+                               		<set-service-fields map="parameters" to-map="updateOrderItemShipGroupContext" service-name="updateOrderItemShipGroup"/>
                                    <set field="updateOrderItemShipGroupContext.shipGroupSeqId" from-field="orderItemShipGroupAssoc.shipGroupSeqId" />
                                    <call-service service-name="updateOrderItemShipGroup" in-map-name="updateOrderItemShipGroupContext"/>
 
@@ -390,10 +443,11 @@
                                        <string value="ShipmentMethodType"/>
                                    </call-object-method>
                                    <set field="carrierDesc" from-field="shipmentMethodType.description"/>
-    
                                    <set field="compareShipment" value="${orderItemShipGroup.shipmentMethodTypeId}@${orderItemShipGroup.carrierPartyId}"/>
                                    <if-compare field="compareShipment" operator="not-equals" value="${parameters.shipmentMethod}" type="String">
-                                       <string-append field="insertNote" string="Carrier:  Product: ${orderItem.productId} From:  ${carrierName} ${carrierDesc} To:  ${changeCarrierName} ${changeCarrierDesc}${eol}"/>
+                                   		<if-compare field="parameters.shipmentMethod" operator="not-equals" value="NO_SHIPPING@_NA_" type="String">
+                                      		<string-append field="insertNote" string="Carrier:  Product: ${orderItem.productId} From:  ${carrierName} ${carrierDesc} To:  ${changeCarrierName} ${changeCarrierDesc}${eol}"/>
+                                       	</if-compare>
                                    </if-compare>
                                    <if-compare field="orderItemShipGroup.trackingNumber" operator="not-equals" value="${parameters.trackingNumber}" type="String">
                                        <string-append field="insertNote" string="Tracking#:  Product: ${orderItem.productId} From:  ${orderItemShipGroup.trackingNumber}  To:  ${parameters.trackingNumber}${eol}"/>
@@ -407,11 +461,41 @@
                                            <field field="parameters.estimatedShipDate" type="Timestamp"/>
                                            <field field="parameters.preferredDateFormat" type="String"/>
                                        </call-class-method>
-                                       <string-append field="insertNote" string="Ship Date:   Product: ${orderItem.productId} From:  ${fromShipDate}  To:  ${newShipDate}${eol}"/>
+                                       <if-compare field="parameters.shipmentMethod" operator="not-equals" value="NO_SHIPPING@_NA_" type="String">
+                                      		<string-append field="insertNote" string="Ship Date:   Product: ${orderItem.productId} From:  ${fromShipDate}  To:  ${newShipDate}${eol}"/>
+                                       	</if-compare>
                                    </if-not-empty>
                                </then>
                            </if>
+                           	<if-compare field="parameters.shipmentMethod" operator="equals" value="NO_SHIPPING@_NA_" type="String">
+                   			<if-not-empty field="parameters.estimatedShipDate">
+                   				<string-append field="insertNote" string="Carrier: STORE PICKUP"/>
+                               <call-class-method class-name="com.osafe.util.OsafeAdminUtil" method-name="convertDateTimeFormat" ret-field="newShipDate">
+                                      <field field="parameters.estimatedShipDate" type="Timestamp"/>
+                                      <field field="parameters.preferredDateFormat" type="String"/>
+                               </call-class-method>
+                               <string-append field="insertNote" string=" Pick Up Date:   Product: ${orderItem.productId} Set To:  ${newShipDate}${eol}"/>
+                        	</if-not-empty>
+                   			</if-compare>
                         </iterate>
+                    </if-compare>
+                    <!-- Update bigfish inventory attributes if order items are cancelled -->
+                    <if-compare field="newItemStatusId" operator="equals" value="ITEM_CANCELLED" type="String">
+                        <set field="orderAttributeMap.orderId" from-field="orderItem.orderId" />
+                        <set field="orderAttributeMap.attrName" value="DELIVERY_OPTION" />
+                        <find-by-primary-key entity-name="OrderAttribute" map="orderAttributeMap" value-field="orderAttribute"/>
+                        <set field="quantity" from-field="orderItem.quantity" type="BigDecimal"/>
+                        <call-bsh><![CDATA[
+                                String quantity = "-"+quantity.toString();
+                                java.math.BigDecimal quantityBD = new java.math.BigDecimal(quantity);
+                                parameters.put("quantityBD", quantityBD);
+                        ]]></call-bsh>
+                        <call-class-method class-name="com.osafe.services.InventoryServices" method-name="setProductInventoryLevel" >
+                            <field field="orderItem.productId"/>
+                            <field field="parameters.productStoreId"/>
+                            <field field="parameters.quantityBD" type="BigDecimal"/>
+                            <field field="orderAttribute.attrValue"/>
+                        </call-class-method>
                     </if-compare>
                     <!-- update order item status-->
                     <if-not-empty field="newItemStatusId">

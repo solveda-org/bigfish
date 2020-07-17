@@ -6,8 +6,8 @@
 <#assign fieldsMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_MOBILE")/>
 <#assign mobilePhonePartyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", fieldsMap, orderByList)?if_exists/>
 <#if mobilePhonePartyContactDetails?has_content>
-    <#assign mobilePhonePartyContactDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(mobilePhonePartyContactDetails?if_exists)/>
-    <#assign mobilePhonePartyContactDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(mobilePhonePartyContactDetails?if_exists)/>
+    <#assign mobilePhonePartyContactDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(mobilePhonePartyContactDetails?if_exists)?if_exists/>
+    <#assign mobilePhonePartyContactDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(mobilePhonePartyContactDetails?if_exists)?if_exists/>
 </#if>
 <#-- Splits the contactNumber -->
 <#if mobilePhonePartyContactDetail?exists && mobilePhonePartyContactDetail?has_content>
@@ -21,7 +21,7 @@
 </#if>
 
 <#-- Displays the mobile phone entry -->
-<div class = "personInfoPhoneCell">
+<div class = "personalInfoPhoneCell">
     <input type="hidden" name="mobilePhoneContactMechId" value="${telecomMobileNoContactMechId!}" />
     <div class="entry">
         <label for="PHONE_MOBILE_CONTACT">${mobilePhoneCaption!}</label>

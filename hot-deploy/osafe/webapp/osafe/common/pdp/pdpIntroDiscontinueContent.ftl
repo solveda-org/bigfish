@@ -1,6 +1,6 @@
   <#-- check to see if introductionDate hasnt passed yet -->
   <#if product.introductionDate?exists && nowTimestamp.before(product.introductionDate)>
-  <div id="pdpIntroDiscontinueContent">
+  <div class="pdpIntroDiscontinueContent">
     ${screens.render("component://osafe/widget/EcommerceContentScreens.xml#PS_INTRODUCED")}
   </div>
   <#-- check to see if salesDiscontinuationDate has passed -->

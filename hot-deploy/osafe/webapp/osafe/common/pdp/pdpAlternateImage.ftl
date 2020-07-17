@@ -1,4 +1,4 @@
-<div id="pdpAlternateImage">
+<div class="pdpAlternateImage">
 <div id="eCommerceProductAddImage">
   <#if !maxAltImages?exists>
    <#assign maxAltImages=10/>

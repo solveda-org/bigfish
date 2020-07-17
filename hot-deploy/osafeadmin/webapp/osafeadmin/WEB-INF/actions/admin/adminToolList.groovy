@@ -8,7 +8,7 @@ import org.ofbiz.base.util.UtilMisc;
 adminToolsList = FastList.newInstance();
 adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.ClrLblCacheLabel);
-adminTool.put("toolDesc", uiLabelMap.ClrLblCacheInfo);
+adminTool.put("toolDesc", uiLabelMap.ClrCacheInfo);
 adminTool.put("toolDetail", "clearLabelCacheDetail");
 adminToolsList.add(adminTool);
 
@@ -38,6 +38,13 @@ adminTool = FastMap.newInstance();
 adminTool.put("toolType", uiLabelMap.CompareLabelFileLabel);
 adminTool.put("toolDesc", uiLabelMap.CompareLabelFileInfo);
 adminTool.put("toolDetail", "compareLabelFileDetail");
+adminToolsList.add(adminTool);
+
+//compare tool: Div Sequence
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.CompareDivSequenceFileLabel);
+adminTool.put("toolDesc", uiLabelMap.CompareDivSequenceFileInfo);
+adminTool.put("toolDetail", "compareDivSequenceFileDetail");
 adminToolsList.add(adminTool);
 
 //edit ecommerce css style file
@@ -82,5 +89,20 @@ adminTool.put("toolType", uiLabelMap.manageDivSequenceLabel);
 adminTool.put("toolDesc", uiLabelMap.manageDivSequenceInfo);
 adminTool.put("toolDetail", "manageDivSequenceDetail");
 adminToolsList.add(adminTool);
+
+//system configuration files
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.AdminSysConfigLabel);
+adminTool.put("toolDesc", uiLabelMap.AdminSysConfigInfo);
+adminTool.put("toolDetail", "sysConfigFileList");
+adminToolsList.add(adminTool);
+
+//email test
+adminTool = FastMap.newInstance();
+adminTool.put("toolType", uiLabelMap.EmailTestLabel);
+adminTool.put("toolDesc", uiLabelMap.EmailTestInfo);
+adminTool.put("toolDetail", "emailTestDetail");
+adminToolsList.add(adminTool);
+
 
 context.resultList = UtilMisc.sortMaps(adminToolsList, UtilMisc.toList("toolType"));

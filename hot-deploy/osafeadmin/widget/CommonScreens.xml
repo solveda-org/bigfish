@@ -18,14 +18,8 @@
                 <property-map resource="PartyUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
 
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/prototypejs/resize.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/validation.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.domReady.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
+                <set field="layoutSettings.javaScripts[+0]" value="/osafe_admin_theme/js/lib/prototype.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/bigfishFieldLookup.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/calendarDateSelect/calendar_date_select.js" global="true"/>
                 <set field="initialLocale" type="String" value="${groovy:parameters?.userLogin?.lastLocale?.substring(0,2)}" default-value="${groovy:locale?.toString()?.substring(0,2)?:'en'}"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_admin_theme/js/lib/calendarDateSelect/locale/${initialLocale}.js" global="true"/>

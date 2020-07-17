@@ -134,6 +134,7 @@ public class OsafeManageXml {
         if (screen == null) screen ="";
         String description = (String)context.get("description");
         String value = (String)context.get("value");
+        String group = (String)context.get("group");
 
         boolean isCatUpdate = Boolean.TRUE;
         if (UtilValidate.isNotEmpty(context.get("isCatUpdate")) ) 
@@ -170,11 +171,14 @@ public class OsafeManageXml {
                                  if (childNode.getNodeName().equalsIgnoreCase("description")) {
                                      childNode.setTextContent(description);
                                  } else if (childNode.getNodeName().equalsIgnoreCase("value")) {
+                                	 
                                      childNode.setTextContent(value);
                                  } else if (childNode.getNodeName().equalsIgnoreCase("screen")) {
                                      childNode.setTextContent(screen);
                                  } else if (childNode.getNodeName().equalsIgnoreCase("category")) {
                                      childNode.setTextContent(category);
+                                 } else if (childNode.getNodeName().equalsIgnoreCase("group")) {
+                                     childNode.setTextContent(group);
                                  }
                              }
                              updated = true;
@@ -426,6 +430,23 @@ public class OsafeManageXml {
         }
         return rowMap;
     }
+    // To search node in xml using Key and Screen
+    public static Map<Object, Object> findByKeyAndScreenFromListMaps(List<Map<Object, Object>> listOfMaps, String key, String keyValue,String screen, String screenValue) {
+    	Map<Object, Object> rowMap = FastMap.newInstance();
+        try {
+            Iterator<Map<Object, Object>> listOfMapsIter = listOfMaps.iterator();
+            while (listOfMapsIter.hasNext()) {
+                Map<Object, Object> mapEntry = listOfMapsIter.next();
+                if (UtilValidate.areEqual(mapEntry.get(key), keyValue) && UtilValidate.areEqual(mapEntry.get(screen), screenValue) ) {
+                    rowMap = mapEntry;
+                    break;
+                }
+            }
+        } catch (Exception exc) {
+            Debug.logError(exc, "Error in searching", module);
+        }
+        return rowMap;
+    }
 
     /**
      * filter the List of Maps of element based on search string.
@@ -605,7 +626,6 @@ public class OsafeManageXml {
         return childMapList;
     }
 
-    
     public static Map<String, ?>  deleteUiLabelXml(DispatchContext dctx, Map context) {
         Map<String, Object> resp = null;
         Document xmlDocument = null;
@@ -634,6 +654,52 @@ public class OsafeManageXml {
                 }
                 context.put("xmlDocument", xmlDocument);
                 if (!writeUiLabelDocument(context)) {
+                    resp = ServiceUtil.returnError(errorMsg);
+                }
+            }
+        } catch (Exception exc) {
+            Debug.logError(exc, "Error ", module);
+            resp = ServiceUtil.returnError(errorMsg);
+        }
+        if (resp == null) resp = ServiceUtil.returnSuccess();
+        return resp;
+    }
+
+    public static Map<String, ?>  deleteDivSeqItemXml(DispatchContext dctx, Map context) {
+        Map<String, Object> resp = null;
+        Document xmlDocument = null;
+        String errorMsg = "Error While deleting";
+        boolean nodeFound = false;
+        String key = (String)context.get("key");
+        String screen = (String)context.get("screen");
+        try {
+            xmlDocument = readDivSequenceDocument(context);
+            if (xmlDocument != null) {
+                List<? extends Node> nodeList = UtilXml.childNodeList(xmlDocument.getDocumentElement().getFirstChild());
+                for (Node node: nodeList) {
+                    if (node.getNodeType() == Node.ELEMENT_NODE) {
+                        NamedNodeMap attrNodeList = node.getAttributes();
+                        for (int a = 0; a < attrNodeList.getLength(); a++) {
+                            Node attrNode = attrNodeList.item(a);
+                            if (attrNode.getNodeName().equalsIgnoreCase("key") && attrNode.getNodeValue().equals(key)) {
+                            	List<? extends Node> childNodeList = UtilXml.childNodeList(node.getFirstChild());
+                                 // check the screen match
+                                 for(Node childNode: childNodeList) {
+                                     if (childNode.getNodeName().equalsIgnoreCase("screen")) {
+                                         if (UtilXml.elementValue((Element)childNode).equals(screen)) nodeFound = true;
+                                     }
+                                 }
+               
+                            }
+                         }
+                         if(nodeFound) {
+                             node.getParentNode().removeChild(node);
+                             break;
+                         }
+                    }
+                }
+                context.put("xmlDocument", xmlDocument);
+                if (!writeDivSequenceDocument(context)) {
                     resp = ServiceUtil.returnError(errorMsg);
                 }
             }
@@ -807,4 +873,52 @@ public class OsafeManageXml {
         return transformerFactory.newTransformer(new StreamSource(bis));
     }
 
+    public static Document readDivSeqDocument(Map<String, ?> context) {
+        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "osafe-uiSequence-xml-file"), context);
+        String deploymentXmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "osafe-deployment-uiSequence-xml-file"), context);
+        if (UtilURL.fromFilename(deploymentXmlFilePath) == null || !StringUtils.equalsIgnoreCase(FilenameUtils.getExtension(deploymentXmlFilePath), "xml")) return null;
+        return readXmlDocument(XmlFilePath);
+    }
+    
+    public static boolean writeDivSeqDocument(Map context) {
+        String XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafeAdmin.properties", "osafe-uiSequence-xml-file"), context);
+        return writeXmlDocument((Document)context.get("xmlDocument"), XmlFilePath);
+    }
+    
+    public static Map<String, ?> addDivSeqItemXml(DispatchContext dctx, Map context) {
+        Map<String, Object> resp = null;
+        Document xmlDocument = null;
+        String errorMsg = "Error While adding";
+
+        String key = (String)context.get("key");
+        String screen = (String)context.get("screen");
+        String description = (String)context.get("description");
+        String div = (String)context.get("uiDiv");
+        String value = (String)context.get("value");
+
+        try {
+            xmlDocument = readDivSeqDocument(context);
+            if (xmlDocument != null) {
+                Element newPropertyElement = UtilXml.addChildElement(xmlDocument.getDocumentElement(), "property", xmlDocument);
+                newPropertyElement.setAttribute("key", key);
+                UtilXml.addChildElementValue(newPropertyElement, "value", value, xmlDocument).setAttribute("xml:lang", "en");
+                UtilXml.addChildElementValue(newPropertyElement, "screen", screen, xmlDocument);
+                UtilXml.addChildElementValue(newPropertyElement, "div", div, xmlDocument);
+                UtilXml.addChildElementValue(newPropertyElement, "description", description, xmlDocument);
+                context.put("xmlDocument", xmlDocument);
+                if (!writeDivSeqDocument(context)) {
+                    resp = ServiceUtil.returnError(errorMsg);
+                }
+            } else {
+                return ServiceUtil.returnError(errorMsg);
+            }
+        } catch (Exception exc) {
+            Debug.logError(exc, "Error ", module);
+            resp = ServiceUtil.returnError(errorMsg);
+        }
+        if (resp == null) resp = ServiceUtil.returnSuccess();
+        return resp;
+    }
+    
+    
 }

@@ -1,17 +1,21 @@
 <#assign shoppingCart = sessionAttributes.shoppingCart?if_exists>
-<div class="checkoutOrderPayments">
-	<div id="orderPayment">
+<#if userLogin?has_content>
+    <#assign partyId = userLogin.partyId!"">
+</#if>
+
+<#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content && CHECKOUT_STORE_CC?has_content && !Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC)>
+  <#assign ccRequired = "false" />
+<#else>
+  <#assign ccRequired = "true" />
+</#if>
+
+<div class="checkoutOrderPayments" >
 	<#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 	    <#-- Enter Credit Card Box -->
-	          <form method="post" action="<@ofbizUrl>setPayPalCheckout</@ofbizUrl>" name="paypalForm">
-	          </form>
 	    <div class="displayBox">
-	     <div class="displayBoxHeader">
-	        <span class="displayBoxHeaderCaption">${uiLabelMap.PaymentInformationHeading}</span>
-	     </div>
+	        <h3>${uiLabelMap.PaymentInformationHeading}</h3>
 	        <#assign donePage = "donePage">
 	        <#if !creditCard?exists>
-	          <form method="post" action="<@ofbizUrl>${validateCreditCardRequest!}?DONE_PAGE=${donePage}</@ofbizUrl>" name="editcreditcardform">
 	           <div>
 	            <#--
 	                Sending to validation routine, we want to only show field level messages when adding a "Credit Card"
@@ -20,14 +24,12 @@
 	            -->
 	            <input type="hidden" name="fieldLevelErrors" value="Y" />
 	        <#else>
-	          <form method="post" action="<@ofbizUrl>${validateCreditCardRequest!}?DONE_PAGE=${donePage}</@ofbizUrl>" name="editcreditcardform">
 	           <div>
 	            <input type="hidden" name="paymentMethodId" value="${paymentMethodId}" />
 	            <input type="hidden" name="fieldLevelErrors" value="Y" />
 	        </#if>
 	
 	        <#-- Added to deal with payment being declined -->
-	        <input type="hidden" id="checkoutpage" name="checkoutpage" value="payment" />
 	        <input type="hidden" id="BACK_PAGE" name="BACK_PAGE" value="checkoutoptions" />
 	
 	        <#-- Added so on successful redirect to "Order Complete" page we know to show the "Thank You" message  -->
@@ -45,28 +47,61 @@
 	          <input type="hidden" name="titleOnCard" id="titleOnCard" value="" />
 	
 	          <#-- Place holder for fields that are ootb but not currently on our screen -->
-	          <input type="hidden" name="firstNameOnCard" id="firstNameOnCard" value="${billingPersonFirstName}" />
+	          <input type="hidden" name="firstNameOnCard" id="firstNameOnCard" value="${billingPersonFirstName!}" />
 	          <input type="hidden" name="middleNameOnCard" id="middleNameOnCard" value="" />
-	          <input type="hidden" name="lastNameOnCard" id="lastNameOnCard" value="${billingPersonLastName}" />
+	          <input type="hidden" name="lastNameOnCard" id="lastNameOnCard" value="${billingPersonLastName!}" />
 	          <input type="hidden" name="suffixOnCard" id="suffixOnCard" value="" />
 	
 	          <input type="hidden" name="cardSecurityCode" id="cardSecurityCode" value="" />
 	          <input type="hidden" name="description" id="cardSecurityCode" value="" />
 	          <input type="hidden" name="contactMechId" id="contactMechId" value="${billingContactMechId!""}" />
-	
+                <input type="hidden" name="paymentMethodTypeId" id="paymentMethodTypeId" value="CREDIT_CARD" />
+                <input type="hidden" name="storeCCRequired" id="storeCCRequired" value="${CHECKOUT_STORE_CC!"true"}" />
+                <input type="hidden" name="storeCCValidate" id="storeCCValidate" value="${CHECKOUT_STORE_CC_REQ!"false"}" />
+               <#if shoppingCart?has_content && shoppingCart.getOrderAttribute("STORE_LOCATION")?has_content>
+                <#if !Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC_REQ) && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_STORE_CC)>
+                   <#assign showPaymentOption = "true"/>
+                <#else>
+                   <#assign showPaymentOption = "false" />
+                </#if>
+              <#else>
+                <#assign showPaymentOption = "false"/>
+              </#if>
+                <div class ="paymentOptions" <#if showPaymentOption == "false">style="display:none"</#if>>
+                 <h3>${uiLabelMap.PaymentOptionsHeading}</h3>
+                  <div class="entry">
+                    <input type="radio" id="payInStore" name="payInStore" value="N" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "N"))>checked="checked"</#if>/><span>${uiLabelMap.PayNowlabel}</span>
+                    <input type="radio" id="payInStore" name="payInStore" value="Y" <#if ((parameters.payInStore?exists && parameters.payInStore?string == "Y"))>checked="checked"</#if>/><span>${uiLabelMap.PayInStorelabel}</span>
+                  </div>
+                </div>
+                
+                <#if CHECKOUT_ALLOW_EBS?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_ALLOW_EBS)>
+                  <!-- EBS section Starts-->
+                  <div class="entry ebs">
+	                <h3>${uiLabelMap.EBSHeading}</h3>
+	                <label>${uiLabelMap.EBSCaption}</label>
+	                <a href="javascript:submitCheckoutForm(document.${formName!}, 'EB', 'EXT_EBS');">
+	                    <img class="paymentMethodImg" alt="EBS Checkout" src="http://www.ebs.in/images/logo_ebs.png">
+	                </a>
+	              </div>
+                  <!-- EBS section Ends-->
+	            </#if>
+                <#if CHECKOUT_ALLOW_PAYPAL?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_ALLOW_PAYPAL)>
 	            <div class="entry paypal">
 	            <h3>${uiLabelMap.PayPalHeading}</h3>
 	              <label>${uiLabelMap.PayPalCaption}</label>
-	              <a href="<@ofbizUrl>setPayPalCheckout</@ofbizUrl>">
+	              <a href="javascript:submitCheckoutForm(document.${formName!}, 'PA', 'EXT_PAYPAL');">
 	                    <img class="paymentMethodImg" alt="PayPal Checkout" src="https://www.paypal.com/en_US/i/btn/btn_xpressCheckout.gif">
 	              </a>
 	            </div>
-
+	            </#if>
+	            <!-- Credit card section Starts-->
+                 <div class = "creditCardEntry" <#if ccRequired == "false">style="display:none"</#if>>
                  <div class="entry">
                     <h3>${uiLabelMap.CreditCardHeading}</h3>
                 </div>
-                <#if CHECKOUT_KEEP_PAYMENT_METHODS?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_KEEP_PAYMENT_METHODS)>
-                    <#assign savedPaymentMethodValueMaps = Static["org.ofbiz.accounting.payment.PaymentWorker"].getPartyPaymentMethodValueMaps(delegator, shoppingCart.getOrderPartyId()) />
+                <#if CHECKOUT_KEEP_PAYMENT_METHODS?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_KEEP_PAYMENT_METHODS) && (userLogin?has_content) && !(userLogin.userLoginId == "anonymous")>
+                    <#assign savedPaymentMethodValueMaps = Static["org.ofbiz.accounting.payment.PaymentWorker"].getPartyPaymentMethodValueMaps(delegator, partyId!"") />
                     <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
                         <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
                         <#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
@@ -76,7 +111,7 @@
                     </#list>
                     <#if hasSavedCard?has_content>
                         <div class="entry">
-                            <input type="radio" id="useSavedCard" name="useSavedCard" value="Y" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "Y") || (savedPaymentMethodValueMaps?has_content))>checked="checked"</#if>/>${uiLabelMap.UseSavedCardlabel}
+                            <input type="radio" id="useSavedCard" name="useSavedCard" value="Y" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "Y") || (savedPaymentMethodValueMaps?has_content))>checked="checked"</#if>/><span>${uiLabelMap.UseSavedCardlabel}</span>
                         </div>
                         <div class="entry">
                             <label for="savedCard">${uiLabelMap.SelectSavedcardCaption}</label>
@@ -115,27 +150,36 @@
                             </select>
                             <@fieldErrors fieldName="savedCard"/>
                         </div>
+                        <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_CC_VERIFICATION_REQ)>
+                            <div class="entry">
+                              <label for="savedVerificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
+                               <input type="text" class="cardNumber" maxlength="30" id="savedVerificationNo"  name="savedVerificationNo" value="${requestParameters.savedVerificationNo!""}"/>
+                              <@fieldErrors fieldName="savedVerificationNo"/>
+                            </div>
+                        </#if>
                         <div class="entry">
-                          <label for="savedVerificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
-                           <input type="text" class="cardNumber" maxlength="30" id="savedVerificationNo"  name="savedVerificationNo" value="${requestParameters.savedVerificationNo!""}"/>
-                          <@fieldErrors fieldName="savedVerificationNo"/>
+                            <input type="radio" id="useSavedCard" name="useSavedCard" value="N" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "N"))>checked="checked"</#if>/><span>${uiLabelMap.PayWithAnotherCardlabel}</span>
                         </div>
-                        <div class="entry">
-                            <input type="radio" id="useSavedCard" name="useSavedCard" value="N" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "N"))>checked="checked"</#if>/>${uiLabelMap.PayWithAnotherCardlabel}
-                        </div>
+                    <#else>
+                        <input type="hidden" name="useSavedCard" value="N"/>
                     </#if>
+                <#else>
+                        <input type="hidden" name="useSavedCard" value="N"/>
                 </#if>
 
 	            <div class="entry">
 	              <label for="cardType"><@required/>${uiLabelMap.CardTypeCaption}</label>
 	                <select id="cardType" name="cardType" class="cardType">
-	                    <#if creditCard.cardType?exists>
-	                        <option>${creditCard.cardType}</option>
-	
-	                        <option value="${creditCard.cardType}">---</option>
-	                    </#if>
+                        <#if creditCard?has_content && creditCard.cardType?has_content>
+                          <#assign cardType = creditCard.cardType>
+                        <#else>
+                          <#assign cardType = requestParameters.cardType?if_exists>
+                        </#if>
+                        <#if cardType?has_content>
+                          <option value="${cardType?if_exists}">${cardType?if_exists}</option>
+                        </#if>
 	                    <option value="">${uiLabelMap.CommonSelectOne}</option>
-	                    ${screens.render("component://common/widget/CommonScreens.xml#cctypes")}
+	                    ${screens.render("component://osafe/widget/CommonScreens.xml#ccTypes")}
 	              </select>
 	              <@fieldErrors fieldName="cardType"/>
 	            </div>
@@ -165,7 +209,7 @@
 	                  <option value="${ccExprMonth?if_exists}">${ccExprMonth?if_exists}</option>
 	                </#if>
 	                <option value="">${uiLabelMap.CommonSelectOne}</option>
-	                ${screens.render("component://common/widget/CommonScreens.xml#ccmonths")}
+	                ${screens.render("component://osafe/widget/CommonScreens.xml#ccMonths")}
 	              </select>
 	               <@fieldErrors fieldName="expMonth"/>
 	            </div>
@@ -181,22 +225,23 @@
 	                  <option value="${ccExprYear?if_exists}">${ccExprYear?if_exists}</option>
 	                </#if>
 	                <option value="">${uiLabelMap.CommonSelectOne}</option>
-	                ${screens.render("component://common/widget/CommonScreens.xml#ccyears")}
+	                ${screens.render("component://osafe/widget/CommonScreens.xml#ccYears")}
 	              </select>
 	              <@fieldErrors fieldName="expYear"/>
 	            </div>
-                <div class="entry">
-                  <label for="verificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
-                   <input type="text" class="cardNumber" maxlength="30" id="verificationNo"  name="verificationNo" value="${requestParameters.verificationNo!""}"/>
-                  <@fieldErrors fieldName="verificationNo"/>
-                </div>
-	
+	            <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_CC_VERIFICATION_REQ)>
+                    <div class="entry">
+                      <label for="verificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
+                       <input type="text" class="cardNumber" maxlength="30" id="verificationNo"  name="verificationNo" value="${requestParameters.verificationNo!""}"/>
+                      <@fieldErrors fieldName="verificationNo"/>
+                    </div>
+                </#if>
+              </div>
+              <!-- Credit card section Ends-->
 	        </fieldset>
 	
 	           </div>
-	          </form>
 	        <a name="paymentMethod"></a>
 	
 	    </div>
-	</div>
  </div>

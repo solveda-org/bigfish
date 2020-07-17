@@ -91,10 +91,12 @@
                           <td class="totalCaption"><label>${uiLabelMap.ShipHandleCaption}</label></td>
                           <td class="totalValue"><@ofbizCurrency amount=shippingAmount isoCode=currencyUomId/></td>
                         </tr>
-                        <tr>
-                          <td class="totalCaption"><label><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></label></td>
-                          <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></td>
-                        </tr>
+                        <#if (!Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_SUPPRESS_TAX_IF_ZERO!"")) || (taxAmount?has_content && (taxAmount &gt; 0))>
+                            <tr>
+                              <td class="totalCaption"><label><#if (taxAmount?default(0)> 0)>${uiLabelMap.TaxTotalCaption}<#else>${uiLabelMap.SalesTaxCaption}</#if></label></td>
+                              <td class="totalValue"><@ofbizCurrency amount=taxAmount isoCode=currencyUomId/></td>
+                            </tr>
+                        </#if>
                         <tr>
                           <td class="totalCaption total"><label>${uiLabelMap.OrderTotalCaption}</label></td>
                           <td class="totalValue total">

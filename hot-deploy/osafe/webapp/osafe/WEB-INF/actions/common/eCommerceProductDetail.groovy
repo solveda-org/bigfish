@@ -25,6 +25,7 @@ import com.osafe.services.InventoryServices;
 import org.ofbiz.party.content.PartyContentWrapper;
 import org.ofbiz.entity.condition.EntityCondition;
 import org.ofbiz.entity.condition.EntityOperator;
+import com.osafe.services.CatalogUrlServlet;
 
 productStore = ProductStoreWorker.getProductStore(request);
 productStoreId = productStore.get("productStoreId");
@@ -177,10 +178,20 @@ String buildNextLi(Map map, List order, String current, String prefix, Map featu
     return buf.toString();
 }
 
-
+productCategoryId = "";
 
 if (UtilValidate.isNotEmpty(productId)) 
 {
+    if(UtilValidate.isEmpty(productCategoryId))
+    {
+        productCategoryMemberList = delegator.findByAnd("ProductCategoryMember", UtilMisc.toMap("productId", productId));
+        if(UtilValidate.isNotEmpty(productCategoryMemberList))
+        {
+            productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList);
+            productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+            productCategoryId = productCategoryMember.productCategoryId; 
+        }    
+    }
     if (UtilValidate.isNotEmpty(productCategoryId)) 
     {
         productCategoryId = StringUtil.replaceString(productCategoryId,"/","");
@@ -191,27 +202,27 @@ if (UtilValidate.isNotEmpty(productId))
 	        CategoryContentWrapper currentProductCategoryContentWrapper = new CategoryContentWrapper(gvProductCategory, request);
 	        context.currentProductCategory = gvProductCategory;
 	        context.currentProductCategoryContentWrapper = currentProductCategoryContentWrapper;
-        }
-        if(context.currentProductCategoryContentWrapper) {
-            currentProductCategoryContentWrapper = context.currentProductCategoryContentWrapper;
-            categoryId = currentProductCategoryContentWrapper.get("PRODUCT_CATEGORY_ID");
-            if(prodCatContentTypeId) {
-                productCategoryContentList = delegator.findByAnd("ProductCategoryContent", UtilMisc.toMap("productCategoryId" , productCategoryId, "prodCatContentTypeId" , prodCatContentTypeId));
-                if(productCategoryContentList) {
-                    prodCategoryContentList = EntityUtil.filterByDate(productCategoryContentList);
-                    prodCategoryContent = EntityUtil.getFirst(prodCategoryContentList);
-                    contentId = prodCategoryContent.contentId;
-                    if(contentId) {
-                        pdpEspotContent = delegator.findOne("Content", UtilMisc.toMap("contentId", contentId), true);
-                        if(pdpEspotContent) {
-                            context.pdpEspotContent = pdpEspotContent;
-                        }
-                    }
-                }
+
+
+            productCategoryContentList = delegator.findByAnd("ProductCategoryContent", UtilMisc.toMap("productCategoryId" , productCategoryId, "prodCatContentTypeId" , "PDP_ADDITIONAL"));
+            if (productCategoryContentList) 
+            {
+              prodCategoryContentList = EntityUtil.filterByDate(productCategoryContentList);
+              prodCategoryContent = EntityUtil.getFirst(prodCategoryContentList);
+              contentId = prodCategoryContent.contentId;
+              if (contentId) 
+              {
+                 pdpEspotContent = delegator.findOne("Content", UtilMisc.toMap("contentId", contentId), true);
+                 if (pdpEspotContent) 
+                 {
+                     context.pdpEspotContent = pdpEspotContent;
+                 }
+              }
             }
         }
     }
-
+    
+    
 
     GenericValue gvProduct =  delegator.findOne("Product", UtilMisc.toMap("productId",productId), true);
  // Setting variables required in the Manufacturer Info section 
@@ -241,7 +252,8 @@ if (UtilValidate.isNotEmpty(productId))
 
 
 
-    if (UtilValidate.isNotEmpty(gvProduct)) {
+    if (UtilValidate.isNotEmpty(gvProduct)) 
+    {
         context.product = gvProduct;
         context.currentProduct = gvProduct;
         
@@ -282,6 +294,7 @@ if (UtilValidate.isNotEmpty(productId))
         if (UtilValidate.isNotEmpty(productName))
         {
      	    context.pdpProductName = productName;
+	        context.productName = productName;
         }
         
 	    imageUrl = productContentWrapper.get("ADDTOCART_IMAGE");
@@ -481,14 +494,14 @@ if (UtilValidate.isNotEmpty(productId))
             priceContext.checkIncludeVat = "Y";
             priceContext.agreementId = cart.getAgreementId();
             priceContext.partyId = cart.getPartyId();  // IMPORTANT: must put this in, or price will be calculated for the CSR instead of the customer
-            priceMap = dispatcher.runSync("calculateProductPrice", priceContext);
-            context.priceMap = priceMap;
+            pdpPriceMap = dispatcher.runSync("calculateProductPrice", priceContext);
+            context.pdpPriceMap = pdpPriceMap;
         } else {
             // purchase order: run the "calculatePurchasePrice" service
             priceContext = [product : gvProduct, currencyUomId : cart.getCurrency(),
                         partyId : cart.getPartyId(), userLogin : userLogin];
-            priceMap = dispatcher.runSync("calculatePurchasePrice", priceContext);
-            context.priceMap = priceMap;
+            pdpPriceMap = dispatcher.runSync("calculatePurchasePrice", priceContext);
+            context.pdpPriceMap = pdpPriceMap;
         }
 
 
@@ -522,22 +535,6 @@ if (UtilValidate.isNotEmpty(productId))
         context.disFeatureTypesList = disFeatureMap.productFeatureTypes;
         context.disFeatureByTypeMap = disFeatureMap.productFeaturesByType;
 
-        // an example of getting features of a certain type to show
-        sizeProductFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", [productId : productId, productFeatureTypeId : "SIZE"], [
-            "sequenceNum",
-            "defaultSequenceNum"
-        ]);
-        context.sizeProductFeatureAndAppls = sizeProductFeatureAndAppls;
-
-        // an example of getting features of a certain type to show
-        colorProductFeatureAndAppls = delegator.findByAnd("ProductFeatureAndAppl", [productId : productId, productFeatureTypeId : "COLOR"], [
-            "sequenceNum",
-            "defaultSequenceNum"
-        ]);
-        context.colorProductFeatureAndAppls = colorProductFeatureAndAppls;
-
-
-
         //PRODUCT RATINGS
 	    decimals=Integer.parseInt("1");
 	    rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
@@ -548,7 +545,7 @@ if (UtilValidate.isNotEmpty(productId))
          if (UtilValidate.isNotEmpty(averageRating) && averageRating > 0)
          {
 	       averageCustomerRating= averageRating.setScale(1,rounding);
-	       context.put("customerRating", averageCustomerRating);
+	       context.put("averageStarRating", averageCustomerRating);
          }
 	    
        reviewByAnd = UtilMisc.toMap("statusId", "PRR_APPROVED", "productStoreId", productStoreId,"productId", gvProduct.productId);
@@ -573,16 +570,7 @@ if (UtilValidate.isNotEmpty(productId))
                 featureSet = featureMap.featureSet;
                 productFeatureCatGroupApplCond = null;
                 orderBy = ["sequenceNum"];
-                if(UtilValidate.isEmpty(productCategoryId))
-                {
-                    productCategoryMemberList = delegator.findByAnd("ProductCategoryMember", UtilMisc.toMap("productId", productId));
-                    if(UtilValidate.isNotEmpty(productCategoryMemberList))
-                    {
-                        productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList);
-                        productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
-                        productCategoryId = productCategoryMember.productCategoryId; 
-                    }    
-                }
+                
                 if(UtilValidate.isNotEmpty(productCategoryId))
                 {
                     productFeatureCatGroupApplCond = EntityCondition.makeCondition([EntityCondition.makeCondition("productCategoryId", EntityOperator.EQUALS, productCategoryId),
@@ -851,7 +839,7 @@ if (UtilValidate.isNotEmpty(productId))
    uiSequenceSearchList = UtilMisc.sortMaps(uiSequenceSearchList, UtilMisc.toList("value"));
    context.uiSequenceSearchList = uiSequenceSearchList;
 
-   uiPdpTabSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, "PDP-Tabs",true, false,true);
+   uiPdpTabSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, "PDPTabs",true, false,true);
    for(Map uiPdpTabSequenceScreenMap : uiPdpTabSequenceSearchList) {
         if ((uiPdpTabSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiPdpTabSequenceScreenMap.value))) {
             if (UtilValidate.isNotEmpty(uiPdpTabSequenceScreenMap.value)) {
@@ -861,8 +849,25 @@ if (UtilValidate.isNotEmpty(productId))
             }
         }
     }
-   uiPdpTabSequenceSearchList = UtilMisc.sortMaps(uiPdpTabSequenceSearchList, UtilMisc.toList("value"));
-   context.uiPdpTabSequenceSearchList = uiPdpTabSequenceSearchList;
 
-    
+    uiPdpTabSequenceGroupMaps = [:] as TreeMap;;
+    for(Map uiPdpTabSequenceScreenMap : uiPdpTabSequenceSearchList) {
+        if ((UtilValidate.isNotEmpty(uiPdpTabSequenceScreenMap.group)) && (UtilValidate.isInteger(uiPdpTabSequenceScreenMap.group)) && (uiPdpTabSequenceScreenMap.group != "0")) {
+            groupNum = Integer.parseInt(uiPdpTabSequenceScreenMap.group)
+            if (!uiPdpTabSequenceGroupMaps.containsKey(groupNum)) {
+                searchGroupMapList =  OsafeManageXml.getSearchListFromListMaps(uiPdpTabSequenceSearchList, UtilMisc.toMap("group", "Y"), uiPdpTabSequenceScreenMap.group, true, false);
+                if (UtilValidate.isNotEmpty(searchGroupMapList)) {
+                    uiPdpTabSequenceGroupMaps.put(groupNum, UtilMisc.sortMaps(searchGroupMapList, UtilMisc.toList("value")))
+                }
+            }
+        }
+    }
+    context.uiPdpTabSequenceGroupMaps = uiPdpTabSequenceGroupMaps;
+
+   //USER PDP VARIABLES
+   context.PRODUCT_ID=context.productId;
+   context.PRODUCT_NAME=context.productName;
+   context.PRODUCT_IMAGE_URL=context.productLargeImageUrl;   
+   context.CATEGORY_ID=context.productCategoryId;
+   context.REQUEST_URL=CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+productCategoryId);
 }

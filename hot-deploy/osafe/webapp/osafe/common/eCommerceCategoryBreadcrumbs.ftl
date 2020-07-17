@@ -155,9 +155,9 @@ under the License.
         <a href="<@ofbizUrl>siteSearch?searchText=${searchText}</@ofbizUrl>">${searchText}</a>
       </li>
     <#else>
-      <li>
-        ${searchText}
-      </li>
+	     <#if searchText?has_content>
+	        <li>${searchText}</li>
+	     </#if>
     </#if>
     <#-- Show the category branch -->
     <#if productCategoryIdFacet?has_content && productCategoryIdFacet=="N">

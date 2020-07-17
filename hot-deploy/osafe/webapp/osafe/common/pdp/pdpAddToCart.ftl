@@ -5,9 +5,9 @@
 <#assign inventoryLevel = productInventoryLevel.get("inventoryLevel")/>
 <#assign inventoryInStockFrom = productInventoryLevel.get("inventoryLevelInStockFrom")/>
 <#assign inventoryOutOfStockTo = productInventoryLevel.get("inventoryLevelOutOfStockTo")/>
-<div id="pdpAddToCart">
+<div class="pdpAddToCart">
 <#if !(currentProduct.isVirtual?if_exists?upper_case == "Y") || !(featureOrder?exists && featureOrder?size gt 0)>
-  <#if (inventoryLevel <= inventoryOutOfStockTo)>
+  <#if (inventoryLevel?number <= inventoryOutOfStockTo?number)>
     <#assign isSellable = false/>
   </#if>
 </#if>

@@ -90,6 +90,14 @@ under the License.
        </#list>
     </#if>
     <#assign shippingContactMechList = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false)/>
+    <#assign billingContactMechList = Static["org.ofbiz.party.contact.ContactHelper"].getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false)/>
+    <#if billingContactMechList?has_content>
+        <#assign billingContactMech = billingContactMechList.get(0)?if_exists>
+        <#if shippingContactMechList?has_content>
+            <#assign removed = shippingContactMechList.remove(billingContactMech)/>
+        </#if>
+        <#assign added =shippingContactMechList.add(0, billingContactMech)/>
+    </#if>
     <#assign typeId = partyrow.get("partyTypeId")>
     <#if typeId?has_content && typeId=="PERSON">
       <#assign currentStatus=partyrow.get("statusId")>
@@ -149,7 +157,7 @@ under the License.
       <#if partyHomePhoneDetails?has_content>
         <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyHomePhoneDetails?if_exists) />
         <#assign partyHomePhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyHomePhoneDetails?if_exists) />
-        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists)/>
+        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
       </#if>
       
         <#-- Work Phone -->
@@ -159,7 +167,7 @@ under the License.
       <#if partyWorkPhoneDetails?has_content>
         <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyWorkPhoneDetails?if_exists) />
         <#assign partyWorkPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyWorkPhoneDetails?if_exists) />
-        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists)/>
+        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
         <#if partyWorkPhoneDetail?has_content>
           <#assign partyWorkPhoneExt = partyWorkPhoneDetail.extension!/> 
         </#if>
@@ -172,8 +180,24 @@ under the License.
       <#if partyCellPhoneDetails?has_content>
         <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyCellPhoneDetails?if_exists) />
         <#assign partyCellPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyCellPhoneDetails?if_exists) />
-        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists)/>
+        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
       </#if>
+      
+      <#-- Personal info --> 
+      <#assign gender = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","GENDER"))/>
+      <#if gender?has_content>
+			  <#assign gender = gender.attrValue!"" >
+	  </#if>
+	  
+	  <#assign dob_MMDD = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_MMDD"))/>
+	  <#if dob_MMDD?has_content>
+			  <#assign dob_MMDD = dob_MMDD.attrValue!"" >
+	  </#if>
+	  
+	  <#assign dob_MMDDYYYY = delegator.findByPrimaryKey("PartyAttribute", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"attrName","DOB_MMDDYYYY"))/>
+	  <#if dob_MMDDYYYY?has_content>
+			  <#assign dob_MMDDYYYY = dob_MMDDYYYY.attrValue!"" >
+	  </#if>
         
     <fo:page-sequence master-reference="${pageLayoutName?default("main-page")}">
 
@@ -450,6 +474,99 @@ under the License.
              </fo:table-body>
            </fo:table>
         <fo:block space-after="0.2in"/>
+        
+    
+    <#if gender?has_content || dob_MMDD?has_content || dob_MMDDYYYY?has_content>   
+        
+        <fo:table table-layout="fixed" width="100%">
+          <fo:table-body>
+            <fo:table-row>
+              <fo:table-cell>
+	                <fo:table table-layout="fixed" border-end-style="solid" border-bottom-style="solid" border-start-style="solid" border-top-style="solid">
+		                <fo:table-body>
+			                 <fo:table-row height="20px">
+				                  <fo:table-cell number-columns-spanned="4">
+				                    <fo:block font-weight="bold" font-size="10pt" text-align="center" background-color="#EEEEEE">${uiLabelMap.CustomerDetailPersonalInfoHeading} ${uiLabelMap.CustomerDetailPersonalInfoHeadingHelperInfo}</fo:block>
+				                  </fo:table-cell>
+			                 </fo:table-row>
+			                 
+			                 <#if gender?has_content>
+			                 <fo:table-row height="20px">
+			                 
+			                 
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.GenderCaption}</fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                        <fo:block font-size="8pt" start-indent="10pt">${gender!""}</fo:block>
+				                  </fo:table-cell>
+				                  
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                        <fo:block font-size="8pt" start-indent="10pt">
+				                        </fo:block>
+				                  </fo:table-cell>
+				                  
+				                  
+			                 </fo:table-row>
+			                 </#if>
+			                 
+			                 <#if dob_MMDD?has_content>
+			                 <fo:table-row height="20px">
+			                 
+			                 
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.DOBCaption}</fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                        <fo:block font-size="8pt" start-indent="10pt">${dob_MMDD!""}</fo:block>
+				                  </fo:table-cell>
+				                 
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                        <fo:block font-size="8pt" start-indent="10pt"></fo:block>
+				                  </fo:table-cell>
+				                  
+				                  
+			                 </fo:table-row>
+			                 </#if>
+			                 
+			                 <#if dob_MMDDYYYY?has_content>
+			                 <fo:table-row height="20px">
+			                 
+			                 
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.DOBCaption}</fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                        <fo:block font-size="8pt" start-indent="10pt">${dob_MMDDYYYY!""}</fo:block>
+				                  </fo:table-cell>
+				                 
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                        <fo:block font-size="8pt" start-indent="10pt"></fo:block>
+				                  </fo:table-cell>
+				                  
+				                  
+			                 </fo:table-row>
+			                 </#if>               
+			                     
+		                </fo:table-body>
+	                 </fo:table>
+              </fo:table-cell>
+             </fo:table-row>
+             </fo:table-body>
+           </fo:table>
+        <fo:block space-after="0.2in"/>
+     
+</#if>    
+   
         <#if shippingContactMechList?has_content>
           <#assign idx=0>
           <#assign rowIdx=0>

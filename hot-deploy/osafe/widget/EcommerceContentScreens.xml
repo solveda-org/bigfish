@@ -4,12 +4,11 @@
         <section>
             <actions>
                 <property-map resource="osafe" map-name="OSafeConfig" global="true"/>
-                <set field="mainContentId" from-field="id"/>
+                <set field="contentId" from-field="id"/>
                 <set field="containerId" from-field="contentContainerId"/>
                 <set field="containerStyle" from-field="contentContainerStyle"/>
-                <entity-one entity-name="Content" value-field="content">
-                    <field-map field-name="contentId" from-field="mainContentId"/>
-                </entity-one>
+                <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
             </actions>
             <widgets>
                 <section>
@@ -33,13 +32,52 @@
         </section>
     </screen>
 
+    <screen name="eCommerceStaticContent">
+        <section>
+            <actions>
+                <set field="contentId" value="${parameters.contentId}" default-value="${contentId}"/>
+                <set field="containerId" value="${containerId}" default-value="${contentId}"/>
+                <set field="containerStyle" value="${containerStyle}" default-value="staticContent"/>
+                <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContentAttribute.groovy" />
+            </actions>
+            <widgets>
+                        <section>
+                            <condition>
+                                <and>
+                                    <not><if-empty field="content"/></not>
+                                    <if-compare operator="equals" field="content.statusId" value="CTNT_PUBLISHED"/>
+                                </and>
+                            </condition>
+                            <widgets>
+                                <container id="${containerId}" style="${containerStyle}">
+                                     <content content-id="${content.contentId}"/>
+                                </container>
+                            </widgets>
+                            <fail-widgets>
+                                <container id="eCommerceContentNotFound">
+                                    <platform-specific>
+                                        <html>
+                                            <html-template location="component://osafe/webapp/osafe/common/eCommerceContentNotFound.ftl"/>
+                                        </html>
+                                    </platform-specific>
+                                </container>
+                            </fail-widgets>
+                        </section>
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="eCommerceContent">
         <section>
             <actions>
-                <set field="mainContentId" value="${parameters.contentId}" default-value="${contentId}"/>
-                <set field="containerId" value="${containerId}" default-value="${mainContentId}"/>
+                <set field="contentId" value="${parameters.contentId}" default-value="${contentId}"/>
+                <set field="containerId" value="${containerId}" default-value="${contentId}"/>
                 <set field="containerStyle" value="${containerStyle}" default-value="staticContent"/>
-				<script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
+                <set field="productStoreId" from-field="productStoreId" default-value="${groovy:org.ofbiz.product.store.ProductStoreWorker.getProductStoreId(request);}"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContent.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceContentAttribute.groovy" />
             </actions>
             <widgets>
                 <decorator-screen name="${parameters.eCommerceDecoratorName}" location="${parameters.eCommerceDecoratorLocation}">
@@ -53,7 +91,7 @@
                             </condition>
                             <widgets>
                                 <container id="${containerId}" style="${containerStyle}">
-                                     <content content-id="${mainContentId}"/>
+                                     <content content-id="${content.contentId}"/>
                                 </container>
                             </widgets>
                             <fail-widgets>
@@ -145,6 +183,19 @@
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="id" value="${idMap.PAGE_TOP_SPOT_LOGIN}"/>
                 <set field="contentContainerId" value="ptsLogin"/>
+                <set field="contentContainerStyle" value="ptsSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PTS_LOGIN_INFO">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_TOP_SPOT_LOGIN_INFO}"/>
+                <set field="contentContainerId" value="ptsLoginInfo"/>
                 <set field="contentContainerStyle" value="ptsSpot"/>
             </actions>
             <widgets>
@@ -313,6 +364,71 @@
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="id" value="${idMap.PDP_SPOT_DISCONTINUED}"/>
                 <set field="contentContainerId" value="pdpDiscontinued"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PDP_CONTENT_01">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PDP_CONTENT_01}"/>
+                <set field="contentContainerId" value="pdpContent01"/>
+                <set field="contentContainerStyle" value="pdpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PDP_CONTENT_02">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PDP_CONTENT_02}"/>
+                <set field="contentContainerId" value="pdpContent02"/>
+                <set field="contentContainerStyle" value="pdpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PDP_CONTENT_03">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PDP_CONTENT_03}"/>
+                <set field="contentContainerId" value="pdpContent03"/>
+                <set field="contentContainerStyle" value="pdpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PDP_CONTENT_04">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PDP_CONTENT_04}"/>
+                <set field="contentContainerId" value="pdpContent04"/>
+                <set field="contentContainerStyle" value="pdpContent"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PDP_CONTENT_05">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PDP_CONTENT_05}"/>
+                <set field="contentContainerId" value="pdpContent05"/>
+                <set field="contentContainerStyle" value="pdpContent"/>
             </actions>
             <widgets>
                 <include-screen name="eCommerceRenderContent" location="component://osafe/widget/EcommerceContentScreens.xml"/>
@@ -570,7 +686,20 @@
             <actions>
                 <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
                 <set field="id" value="${idMap.PAGE_END_SPOT_LOGIN}"/>
-                <set field="contentContainerId" value="ptsLogin"/>
+                <set field="contentContainerId" value="pesLogin"/>
+                <set field="contentContainerStyle" value="pesSpot"/>
+            </actions>
+            <widgets>
+                <include-screen name="eCommerceRenderContent"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="PES_LOGIN_INFO">
+        <section>
+            <actions>
+                <property-map resource="eCommerceIdMap" map-name="idMap" global="true" />
+                <set field="id" value="${idMap.PAGE_END_SPOT_LOGIN_INFO}"/>
+                <set field="contentContainerId" value="pesLoginInfo"/>
                 <set field="contentContainerStyle" value="pesSpot"/>
             </actions>
             <widgets>

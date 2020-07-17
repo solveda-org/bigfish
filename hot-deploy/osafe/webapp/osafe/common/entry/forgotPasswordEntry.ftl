@@ -1,8 +1,6 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <div id="forgotPasswordEntry" class="displayBox">
-<div class="displayBoxHeader">
- <span class="displayBoxHeaderCaption">${uiLabelMap.CommonForgotYourPassword?if_exists}?</span>
-</div>
+<h3>${uiLabelMap.CommonForgotYourPassword?if_exists}?</h3>
         <fieldset>
             <p>
                 ${uiLabelMap.ForgotPasswordInfo!""}

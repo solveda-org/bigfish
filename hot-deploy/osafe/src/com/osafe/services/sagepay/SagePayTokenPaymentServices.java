@@ -141,17 +141,25 @@ public class SagePayTokenPaymentServices {
 
                     //getting billing address
                     GenericValue billingAddress = (GenericValue) context.get("billingAddress");
-                    billingInfo.put("contactMechId", billingAddress.getString("contactMechId"));
-                    billingInfo.put("billingFirstnames", firstName);
-                    billingInfo.put("billingSurname", lastName);
-                    billingInfo.put("billingAddress", billingAddress.getString("address1"));
-                    billingInfo.put("billingAddress2", billingAddress.getString("address2"));
-                    billingInfo.put("billingCity", billingAddress.getString("city"));
-                    billingInfo.put("billingState", billingAddress.getString("stateProvinceGeoId"));
-                    billingInfo.put("billingPostCode", billingAddress.getString("postalCode"));
-                    GenericValue GeoCountry = (GenericValue) billingAddress.getRelatedOne("CountryGeo");
-                    billingInfo.put("billingCountry", GeoCountry.getString("geoCode"));
-                    billingInfo.put("billingPhone", null);
+                    if (UtilValidate.isNotEmpty(billingAddress))
+                    {
+                    	
+                        billingInfo.put("contactMechId", billingAddress.getString("contactMechId"));
+                        billingInfo.put("billingFirstnames", firstName);
+                        billingInfo.put("billingSurname", lastName);
+                        billingInfo.put("billingAddress", billingAddress.getString("address1"));
+                        billingInfo.put("billingAddress2", billingAddress.getString("address2"));
+                        billingInfo.put("billingCity", billingAddress.getString("city"));
+                        billingInfo.put("billingState", billingAddress.getString("stateProvinceGeoId"));
+                        billingInfo.put("billingPostCode", billingAddress.getString("postalCode"));
+                        GenericValue GeoCountry = (GenericValue) billingAddress.getRelatedOne("CountryGeo");
+                        if (UtilValidate.isNotEmpty(GeoCountry))
+                        {
+                            billingInfo.put("billingCountry", GeoCountry.getString("geoCode"));
+                        	
+                        }
+                        billingInfo.put("billingPhone", null);
+                    }
                     
                     //getting shipping address
                     GenericValue deliveryAddress = (GenericValue) context.get("shippingAddress");

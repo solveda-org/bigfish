@@ -25,7 +25,7 @@
           <a href="<@ofbizUrl>${CommunicationAction}?${detailParamKey}=${detailId}&preRetrieved=Y</@ofbizUrl>" class="buttontext standardBtn action">${uiLabelMap.CommunicationBtn}</a>
         </#if>
         <#if addAction?exists && addAction?has_content>
-          <a href="<@ofbizUrl>${addAction}?${detailParamKey}=${detailId}</@ofbizUrl>" class="buttontext standardBtn action">${addBtnText!uiLabelMap.AddBtn}</a>
+          <a href="<@ofbizUrl>${addAction}?${detailParamKey!}=${detailId!}</@ofbizUrl>" class="buttontext standardBtn action">${addBtnText!uiLabelMap.AddBtn}</a>
         </#if>
       </div>
     </th>

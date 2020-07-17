@@ -23,7 +23,7 @@
             <string-to-list string="${tempErrorMessage}" message-field="SUBJECT" list="error_list"/>
         </if-empty>
         
-        <property-to-field field="delim" resource="OSafeAdmin" property="email-address-seperator"/>
+        <property-to-field field="delim" resource="osafeAdmin" property="email-address-seperator"/>
         <set field="del" from-field="delim" default-value=";"/>
         <if-not-empty field="parameters.ccAddress">
             <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="checkMultiEmailAddress" ret-field="emailValid">
@@ -55,4 +55,44 @@
         <set field="updateEnumCtx.enumId" from-field="parameters.emailType"/>
         <call-service service-name="updateEnum" in-map-name="updateEnumCtx" />
     </simple-method>
+    
+    <simple-method method-name="validateTestEmail" short-description="This Service Validates the email id and email body">
+        <if-empty field="parameters.testEmailAddress">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankEmailAddressError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+        <else>
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isEmail" ret-field="emailValid">
+                <field field="parameters.testEmailAddress"/>
+            </call-class-method>
+            <if-compare field="emailValid" operator="equals"  value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidEmailAddressError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="FROMADDRESS" list="error_list"/>
+            </if-compare>
+        </else>
+        </if-empty>
+        <check-errors/>
+        
+        <set field="bodyParameters.productStoreId" from-field="parameters.productStoreId"/>
+        <set field="bodyParameters.message" from-field="parameters.testEmailText"/>
+        <entity-one entity-name="ProductStoreEmailSetting" value-field="productStoreEmailSetting"/>
+        <!-- Send email-->
+        <if-not-empty field="productStoreEmailSetting.bodyScreenLocation">
+            <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+            <set field="emailParams.userLogin" from-field="systemUserLogin"/>
+            <if-not-empty field="parameters.testEmailAddress">
+                <set field="emailParams.sendTo" from-field="parameters.testEmailAddress"/>
+            <else>
+                <set field="emailParams.sendTo" from-field="productStoreEmailSetting.fromAddress"/>
+            </else>
+            </if-not-empty>
+            <set field="emailParams.subject" from-field="productStoreEmailSetting.subject"/>
+            <set field="emailParams.sendFrom" from-field="productStoreEmailSetting.fromAddress"/>
+            <set field="emailParams.contentType" from-field="productStoreEmailSetting.contentType"/>
+            <set field="emailParams.bodyScreenUri" from-field="productStoreEmailSetting.bodyScreenLocation"/>
+            <call-service service-name="sendMailFromScreen" in-map-name="emailParams"/>
+            
+            
+        </if-not-empty>
+    </simple-method>
+    
 </simple-methods>

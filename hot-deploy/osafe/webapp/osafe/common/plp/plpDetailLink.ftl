@@ -1,7 +1,6 @@
-<#assign productUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${productId!""}&productCategoryId=${categoryId!""}')/>
+<#assign productFriendlyUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId=${productId!""}&productCategoryId=${categoryId!""}')/>
 <div class="plpDetailLink">
-<a class="eCommerceProductLink" title="${productName!""}" href="${productUrl!""}" id="detailLink_${productId!}">
-    ${productName!""}
-</a>
+<!-- using class pdpUrl for preparing PDP URL according to the selected swatch. -->
+<a class="eCommerceProductLink pdpUrl" title="${productName!""}" href="${productFriendlyUrl!""}" id="detailLink_${productId!}"><span>${productName!""}</span></a>
 </div>
            

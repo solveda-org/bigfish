@@ -55,6 +55,7 @@
     <#if custReqAttribute.attrName == 'CONTACT_PHONE'>
       <#assign attrNamePhone = custReqAttribute.attrName+caption!""/>
       <#assign phone = custReqAttribute.attrValue!""/>
+      <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(null, phone?if_exists, globalContext.FORMAT_TELEPHONE_NO!)/>
     </#if>
     <#if custReqAttribute.attrName == 'ORDER_NUMBER'>
       <#assign attrNameOrderNo = custReqAttribute.attrName+caption!""/>
@@ -89,7 +90,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameLname, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameLname, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">${lname!""}</div>
@@ -100,7 +101,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameFname, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameFname, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">${fname!""}</div>
@@ -112,7 +113,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameAdd1, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameAdd1, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">${address1!""}</div>
@@ -125,7 +126,7 @@
       <div class="infoEntry long">
         <div class="infoCaption">
           <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameAdd2, locale)/>${labelName!}
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameAdd2, locale)/>${labelName!}
           </label>
         </div>
         <div class="infoValue">${address2!""}</div>
@@ -138,7 +139,7 @@
       <div class="infoEntry long">
         <div class="infoCaption">
           <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameAdd3, locale)/>${labelName!}
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameAdd3, locale)/>${labelName!}
           </label>
         </div>
         <div class="infoValue">${address3!""}</div>
@@ -151,7 +152,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameCity, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameCity, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">${city!""}</div>
@@ -164,7 +165,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameState, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameState, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">${state!""}</div>
@@ -177,7 +178,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameZip, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameZip, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">${zip!""}</div>
@@ -190,7 +191,7 @@
       <div class="infoEntry long">
         <div class="infoCaption">
           <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameCountry, locale)/>${labelName!}
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameCountry, locale)/>${labelName!}
           </label>
         </div>
         <div class="infoValue">${country!""}</div>
@@ -203,7 +204,7 @@
       <div class="infoEntry long">
         <div class="infoCaption">
           <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameReason, locale)/>${labelName!}
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameReason, locale)/>${labelName!}
           </label>
         </div>
         <div class="infoValue">${contactUsReason!""}</div>
@@ -216,7 +217,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameEmail, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameEmail, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">${email!""}</div>
@@ -229,7 +230,7 @@
       <div class="infoEntry long">
         <div class="infoCaption">
           <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameOrderNo, locale)/>${labelName!}
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameOrderNo, locale)/>${labelName!}
           </label>
         </div>
         <div class="infoValue">${orderNo!}</div>
@@ -242,15 +243,11 @@
       <div class="infoEntry long">
         <div class="infoCaption">
           <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNamePhone, locale)/>${labelName!}
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNamePhone, locale)/>${labelName!}
           </label>
         </div>
         <div class="infoValue">
-         <#if (phone?length gt 6)>
-           ${phone?substring(0,3)}-${phone?substring(3,6)}-${phone?substring(6)}
-         <#else>
-           ${phone}
-         </#if>
+           ${formattedHomePhone!}
         </div>
       </div>
     </div>
@@ -261,7 +258,7 @@
       <div class="infoEntry long">
         <div class="infoCaption">
           <label>
-            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameComment, locale)/>${labelName!}
+            <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameComment, locale)/>${labelName!}
           </label>
         </div>
         <div class="infoValue">${comment!""}</div>
@@ -273,7 +270,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameExported, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameExported, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">
@@ -291,7 +288,7 @@
     <div class="infoEntry long">
       <div class="infoCaption">
         <label>
-          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OsafeAdminUiLabels", attrNameExportedDate, locale)/>${labelName!}
+          <#assign labelName = Static["org.ofbiz.base.util.UtilProperties"].getMessage("OSafeAdminUiLabels", attrNameExportedDate, locale)/>${labelName!}
         </label>
       </div>
       <div class="infoValue">

@@ -4,9 +4,7 @@
 </#if>
 
 <div id="changePassword" class="displayBox">
-  <div class="displayBoxHeader">
-    <span class="displayBoxHeaderCaption">${uiLabelMap.CommonPasswordChange?if_exists}</span>
-  </div>
+    <h3>${uiLabelMap.CommonPasswordChange?if_exists}</h3>
       <form method="post" action="<@ofbizUrl>eCommerceLogin${previousParams}</@ofbizUrl>" name="loginform">
           <input type="hidden" name="requirePasswordChange" value="Y"/>
           <input type="hidden" name="USERNAME" value="${username}" maxlength="200"/>

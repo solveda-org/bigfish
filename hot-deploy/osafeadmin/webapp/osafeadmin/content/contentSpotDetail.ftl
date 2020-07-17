@@ -13,7 +13,7 @@
         <#assign createdDate = content.createdDate!"" />
         <#assign lastModifiedDate = content.lastModifiedDate!"" />
     </#if> 
-    <input type="hidden" name="spotListMenuId" value="${spotListMenuId!""}" />
+    <input type="hidden" name="contentTypeId" value="${contentTypeId!content.contentTypeId!""}" />
        <#assign statusId = statusId!"CTNT_PUBLISHED">
        <#assign statusDesc = statusDesc!"Active">
        <input type="hidden" name="statusId" id="statusId" value="${statusId!""}" />

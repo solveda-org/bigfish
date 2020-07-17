@@ -39,13 +39,15 @@ Map<String, Object> svcCtx = FastMap.newInstance();
 userLogin = session.getAttribute("userLogin");
 svcCtx.put("userLogin", userLogin);
 
-spotListMenuId=context.spotListMenuId;
-List contentList = FastList.newInstance();
 context.userLoginId = userLogin.userLoginId;
- if(UtilValidate.isNotEmpty(spotListMenuId))
- {
-	List conds = FastList.newInstance();
-	conds.add(EntityCondition.makeCondition("contentIdStart", spotListMenuId));
-	contentList = delegator.findList("ContentAssocViewTo",EntityCondition.makeCondition(conds), null, orderBy, null, false);
- }
+contentList = FastList.newInstance();
+contentTypeId=context.contentTypeId;
+if(UtilValidate.isNotEmpty(contentTypeId))
+{
+    List conds = FastList.newInstance();
+    conds.add(EntityCondition.makeCondition([contentTypeId : contentTypeId]));
+    conds.add(EntityCondition.makeCondition([productStoreId : productStoreId]));
+    contentList = delegator.findList("XContentXref",EntityCondition.makeCondition(conds, EntityOperator.AND), null, orderBy, null, false);
+    context.resultList = contentList;
+}
 context.resultList = contentList;

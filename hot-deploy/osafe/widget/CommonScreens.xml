@@ -10,12 +10,8 @@
                 <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
 
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.jcarousel.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/validation.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
@@ -83,14 +79,10 @@
                 <!-- The default (main) java scripts -->
                 <!-- NOTE: this should be included on each screen that uses it to avoid including it in all screens: -->
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.jcarousel.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/validation.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.domReady.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
@@ -204,14 +196,10 @@
                 <!-- The default (main) java scripts -->
                 <!-- NOTE: this should be included on each screen that uses it to avoid including it in all screens: -->
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.jcarousel.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/global.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/validation.js" global="true"/>
-                <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.domReady.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
@@ -402,5 +390,55 @@
             </widgets>
         </section>
     </screen>
-
+    <screen name="ddMonths">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/ddMonths.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ddDays">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/ddDays.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ddYears">
+        <section>
+            <actions>
+                <set field="thisDate" from-field="nowTimestamp"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/ddYears.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ccMonths">
+        <section>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/ccMonths.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ccYears">
+        <section>
+            <actions>
+                <set field="thisDate" from-field="nowTimestamp"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/ccYears.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="ccTypes">
+        <section>
+            <actions>
+                <set field="thisDate" from-field="nowTimestamp"/>
+            </actions>
+            <widgets>
+                <platform-specific><html><html-template location="component://osafe/webapp/osafe/common/ccTypes.ftl"/></html></platform-specific>
+            </widgets>
+        </section>
+    </screen>
 </screens>

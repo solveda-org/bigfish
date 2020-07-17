@@ -31,11 +31,9 @@ if (UtilValidate.isNotEmpty(parameters.productId)) {
     product = delegator.findOne("Product",["productId":parameters.productId], true);
     context.product = product;
     if (product) 
-     {
-    	
-            productContentWrapper = new ProductContentWrapper(product, request);
-        
-     }
+    {
+        productContentWrapper = new ProductContentWrapper(product, request);
+    }
     String productDetailHeading = "";
     if(productContentWrapper)
     {

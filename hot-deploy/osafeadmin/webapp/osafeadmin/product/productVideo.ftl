@@ -1,4 +1,5 @@
 <#if product?has_content>
+  <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product, request)!""/>
   <#if productContentWrapper?exists>
     <#assign productVideoUrl = productContentWrapper.get("PDP_VIDEO_URL")!""/>
     <#assign productVideo360Url = productContentWrapper.get("PDP_VIDEO_360_URL")!""/>

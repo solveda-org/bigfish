@@ -1,7 +1,7 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <input type="hidden" name="formRequestName" value="${formRequestName!requestParameters.formRequestName!}"/>
-<input type="hidden" name="contactMechTypeId" value='POSTAL_ADDRESS' />
-<input type="hidden" name="contactMechPurposeTypeId" value="SHIPPING_LOCATION"/>
+<input type="hidden" name="contactMechTypeId" value="${requestParameters.contactMechTypeId!"POSTAL_ADDRESS"}" />
+<input type="hidden" name="contactMechPurposeTypeId" value="${requestParameters.contactMechPurposeTypeId!"SHIPPING_LOCATION"}"/>
 <input type="hidden" name="DONE_PAGE" value="${requestParameters.DONE_PAGE!}"/>
 <input type="hidden" name="checkoutpage" value="${requestParameters.checkoutpage!}"/>
 <#if contactMech?exists>

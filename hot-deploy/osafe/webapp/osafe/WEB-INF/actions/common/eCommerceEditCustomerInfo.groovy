@@ -27,6 +27,14 @@ if (userLogin) {
       context.partyEmailPreference=partyAttribute.attrValue;
     }
 
+    // get the Phone Numbers
+    context.homePhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
+            [partyId : partyId, contactMechPurposeTypeId : "PHONE_HOME"], UtilMisc.toList("-fromDate"))));
+    context.workPhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
+            [partyId : partyId, contactMechPurposeTypeId : "PHONE_WORK"], UtilMisc.toList("-fromDate"))));
+    context.mobilePhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
+                    [partyId : partyId, contactMechPurposeTypeId : "PHONE_MOBILE"], UtilMisc.toList("-fromDate"))));
+
     contactMech = EntityUtil.getFirst(ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false));
     context.contactMech = contactMech;
     postalAddressData = contactMech.getRelatedOne("PostalAddress");
@@ -35,10 +43,11 @@ if (userLogin) {
         if (postalAddressData.toName != null){
             String toName = postalAddressData.toName;
             toNameParts  = StringUtil.split(toName, " ");
-
-            if (toNameParts.size() > 0){
-                context.toNameFirst = toNameParts[0];
-                context.toNameLast = StringUtil.join(toNameParts.subList(1,toNameParts.size()), " ");
+            if (toNameParts){
+                if (toNameParts.size() > 0){
+                    context.toNameFirst = toNameParts[0];
+                    context.toNameLast = StringUtil.join(toNameParts.subList(1,toNameParts.size()), " ");
+                }
             }
         }
     }
@@ -80,18 +89,18 @@ if (userLogin) {
     }
     context.phoneNumberMap = phoneNumberMap;
 
-    billToEmailList = ContactHelper.getContactMech(party, "PRIMARY_EMAIL", "EMAIL_ADDRESS", false)
-    if (billToEmailList) {
-        emailAddressContactMech = EntityUtil.getFirst(billToEmailList);
-        context.emailAddressContactMech = emailAddressContactMech;
-        context.emailAddress = emailAddressContactMech.infoString;
-        partyContactMech = delegator.findByAnd("PartyContactMech", UtilMisc.toMap("partyId",partyId,"contactMechId", emailAddressContactMech.contactMechId));
+
+    userEmailContactMechList = ContactHelper.getContactMech(party, "PRIMARY_EMAIL", "EMAIL_ADDRESS", false)
+    userEmailContactMech = EntityUtil.getFirst(userEmailContactMechList);
+    if (UtilValidate.isNotEmpty(userEmailContactMech)) {
+        context.userEmailContactMech = userEmailContactMech;
+        context.userEmailAddress = userEmailContactMech.infoString;
+        partyContactMech = delegator.findByAnd("PartyContactMech", UtilMisc.toMap("partyId",partyId,"contactMechId", userEmailContactMech.contactMechId));
         partyContactMech = EntityUtil.filterByDate(partyContactMech);
         if (UtilValidate.isNotEmpty(partyContactMech))
         {
           partyContactMech = EntityUtil.getFirst(partyContactMech);
-          context.allowSolicitation= partyContactMech.allowSolicitation;
+          context.userEmailAllowSolicitation= partyContactMech.allowSolicitation;
         }
-
     }
 }

@@ -1,5 +1,4 @@
-<div id="pdpSelectableFeature">
-<fieldset>
+<div class="pdpSelectableFeature">
 <#assign inStock = true />
 <#assign isSellable = Static["org.ofbiz.product.product.ProductWorker"].isSellable(currentProduct?if_exists) />
 <#if !isSellable>
@@ -37,6 +36,7 @@
                      <#assign productFeatureSelectVariantId=""/>
 	                 <#list productVariantMapKeys as pAssoc>
 		                 <#assign productFeatureAndAppl = delegator.findByAnd("ProductFeatureAppl", Static["org.ofbiz.base.util.UtilMisc"].toMap("productId" ,pAssoc,'productFeatureApplTypeId','STANDARD_FEATURE')) />
+		                 <#assign productFeatureAndAppl = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productFeatureAndAppl?if_exists)/>
                          <#list productFeatureAndAppl as pFeatureAndAppl>
        	                    <#assign productFeatureStandardId =pFeatureAndAppl.productFeatureId/>
        	                    <#if productFeatureStandardId ==productFeatureSelectableId && !productFeatureSelectVariantId?has_content>
@@ -69,10 +69,10 @@
 		 					     <#assign inventoryInStockFrom = variantProductInventoryLevel.get("inventoryLevelInStockFrom")/>
 		 					     <#assign inventoryOutOfStockTo = variantProductInventoryLevel.get("inventoryLevelOutOfStockTo")/>
 		 					     
-		 					     <#if (inventoryLevel <= inventoryOutOfStockTo)>
+		 					     <#if (inventoryLevel?number <= inventoryOutOfStockTo?number)>
 		 					       <#assign stockClass = "outOfStock"/>
 		 					     <#else>
-		 					       <#if (inventoryLevel >= inventoryInStockFrom)>
+		 					       <#if (inventoryLevel?number >= inventoryInStockFrom?number)>
 		 					         <#assign stockClass = "inStock"/>
 		 					       <#else>
 		 					         <#assign stockClass = "lowStock"/>
@@ -80,7 +80,8 @@
                                  </#if>
 		 					   </#if>
 		 					   <#assign productFeatureType = "${productFeatureTypeId!}:${productFeatureDescription!}"/>
-
+                               <#assign variantProductUrl = Static["com.osafe.services.CatalogUrlServlet"].makeCatalogFriendlyUrl(request, "eCommerceProductDetail?productId=${productId!}&productCategoryId=${productCategoryId!}&productFeatureType=${productFeatureTypeId!}:${productFeatureDescription!}") />
+                               <input type="hidden" id="${jqueryIdPrefix!}Url_${productFeatureDescription!}" value="${variantProductUrl!}"/>
 		 					   <#assign selectedClass="false"/>
 		 					   <#if parameters.productFeatureType?exists>
 		 					     <#assign productFeatureTypeIdParm = parameters.productFeatureType.split(":")/>
@@ -114,8 +115,8 @@
     <input type="hidden" name="product_id" value="${currentProduct.productId}"/>
     <input type="hidden" name="add_product_id" id="add_product_id" value="NULL"/>
     <div>
-      <b><span id="product_id_display"> </span></b>
-      <b><div id="variant_price_display"> </div></b>
+      <span id="product_id_display"> </span>
+      <div id="variant_price_display"> </div>
     </div>
   <#else>
     <input type="hidden" name="product_id" value="${currentProduct.productId}"/>
@@ -126,7 +127,6 @@
 <#else>
   <input type="hidden" name="add_product_id" value="${currentProduct.productId}" />
 </#if>
-</fieldset>
 </div>
 <#-- Prefill first select box (virtual products only) -->
 <#if variantTree?exists && 0 < variantTree.size()>

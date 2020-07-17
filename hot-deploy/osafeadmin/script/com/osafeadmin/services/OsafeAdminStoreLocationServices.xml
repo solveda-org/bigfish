@@ -9,22 +9,32 @@
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankStoreCodeError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
             <else>
-                <set field="maxLength" value="100" type="Integer"/>
-                <set field="spaceReplacement" value=" " type="String"/>
-                <set field="makeUpCase" value="false" type="Boolean"/>
-                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="groupNameLocal">
-                    <field field="parameters.groupNameLocal" type="String"/>
-                    <field field="maxLength" type="Integer"/>
-                    <field field="spaceReplacement" type="String"/>
-                    <field field="makeUpCase" type="boolean"/>
-                </call-class-method>
-                <if-empty field="groupNameLocal">
-                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StoreCodeLengthError"/>
-                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
-                    <else>
-                        <set field="parameters.groupNameLocal" from-field="groupNameLocal"/>
-                    </else>
-                </if-empty>
+            	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					<field field="parameters.groupNameLocal"/>
+				</call-class-method>
+				<if-compare field="isValidId" operator="equals" value="false">
+						<set field="errorKey" from-field="parameters.groupNameLocal"/>
+						<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+						<string-to-list string="${tempErrorMessage}" list="error_list"/>
+						<else>
+							<set field="maxLength" value="100" type="Integer"/>
+			                <set field="spaceReplacement" value=" " type="String"/>
+			                <set field="makeUpCase" value="false" type="Boolean"/>
+			                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="groupNameLocal">
+			                    <field field="parameters.groupNameLocal" type="String"/>
+			                    <field field="maxLength" type="Integer"/>
+			                    <field field="spaceReplacement" type="String"/>
+			                    <field field="makeUpCase" type="boolean"/>
+			                </call-class-method>
+			                <if-empty field="groupNameLocal">
+			                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="StoreCodeLengthError"/>
+			                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+			                    <else>
+			                        <set field="parameters.groupNameLocal" from-field="groupNameLocal"/>
+			                    </else>
+			                </if-empty>
+						</else>
+				</if-compare>    
             </else>
         </if-empty>
         <if-empty field="parameters.groupName">

@@ -1,5 +1,6 @@
 <div id="${dialogPurpose!}dialog" class="dialogOverlay"></div>
 <div id="${dialogPurpose!}displayDialog" style="display:none" class="${dialogBoxStyle!""}">
+  <input type="hidden" name="${dialogPurpose!}dialogBoxTitle" id="${dialogPurpose!}dialogBoxTitle" value="${dialogBoxTitle!}"/>
   <#if dialogPurpose?has_content>
     <#assign dialogBoxSection = "${dialogPurpose!}DialogBox" />
     ${sections.render(dialogBoxSection!)}

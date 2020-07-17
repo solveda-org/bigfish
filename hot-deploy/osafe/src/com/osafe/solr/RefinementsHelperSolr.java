@@ -80,7 +80,7 @@ public class RefinementsHelperSolr {
                     if (isOnCategoryList) {
                         if (!SolrConstants.TYPE_PRODUCT_CATEGORY.equals(facetType)) {
                             // skip
-                            continue;
+                            //continue;
                         }
 
                     }

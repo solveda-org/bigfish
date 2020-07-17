@@ -11,7 +11,7 @@
             <else>
                 <set field="maxLength" value="20" type="Integer"/>
                 <set field="spaceReplacement" value=" " type="String"/>
-                <set field="makeUpCase" value="false" type="Boolean"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="productStoreShipMethId">
                     <field field="parameters.productStoreShipMethId" type="String"/>
                     <field field="maxLength" type="Integer"/>
@@ -29,11 +29,21 @@
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="productStoreShipMethIdExistError"/>
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
                             <else>
-                                <set field="parameters.productStoreShipMethId" from-field="productStoreShipMethId"/>
+                                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					                <field field="parameters.productStoreShipMethId"/>
+					            </call-class-method>
+					            <if-compare field="isValidId" operator="equals" value="false">
+					            	<set field="errorKey" from-field="parameters.productStoreShipMethId"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+					                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+					            </if-compare>
+					            <set field="parameters.productStoreShipMethId" from-field="productStoreShipMethId"/>
                             </else>
                         </if-not-empty>
                     </else>
                 </if-empty>
+                
+                
             </else>
         </if-empty>
            
@@ -172,7 +182,7 @@
             <else>
                 <set field="maxLength" value="20" type="Integer"/>
                 <set field="spaceReplacement" value=" " type="String"/>
-                <set field="makeUpCase" value="false" type="Boolean"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="productStoreShipMethId">
                     <field field="parameters.productStoreShipMethId" type="String"/>
                     <field field="maxLength" type="Integer"/>
@@ -350,7 +360,7 @@
             <else>
                 <set field="maxLength" value="20" type="Integer"/>
                 <set field="spaceReplacement" value=" " type="String"/>
-                <set field="makeUpCase" value="false" type="Boolean"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="partyId">
                     <field field="parameters.partyId" type="String"/>
                     <field field="maxLength" type="Integer"/>
@@ -368,7 +378,15 @@
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="partyIdExistError"/>
                             <string-to-list string="${tempErrorMessage}" list="error_list"/>
                             <else>
-                                <set field="parameters.partyId" from-field="partyId"/>
+                            	<call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					                <field field="parameters.partyId"/>
+					            </call-class-method>
+					            <if-compare field="isValidId" operator="equals" value="false">
+					            	<set field="errorKey" from-field="parameters.partyId"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+					                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+					            </if-compare>
+					            <set field="parameters.partyId" from-field="partyId"/>
                             </else>
                         </if-not-empty>
                     </else>
@@ -434,6 +452,21 @@
         <set from-field="carrier" field="parameters.roleTypeId"/>
         
         <!-- check if it is already existing --> 
+        <if-empty field="parameters.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					<field field="parameters.partyId"/>
+				</call-class-method>
+				<if-compare field="isValidId" operator="equals" value="false">
+					<set field="errorKey" from-field="parameters.partyId"/>
+					<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+					<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				</if-compare>
+            </else>
+        </if-empty>
+        
         <if-not-empty field="parameters.partyId">
         	<if-not-empty field="parameters.shipmentMethodTypeId">
         		<if-not-empty field="parameters.roleTypeId">
@@ -504,6 +537,16 @@
         <if-empty field="parameters.partyId">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+	            <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					<field field="parameters.partyId"/>
+				</call-class-method>
+				<if-compare field="isValidId" operator="equals" value="false">
+					<set field="errorKey" from-field="parameters.partyId"/>
+					<property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+					<string-to-list string="${tempErrorMessage}" list="error_list"/>
+				</if-compare>
+            </else>
         </if-empty>
           
         <if-empty field="parameters.shipmentMethodTypeId">
@@ -543,6 +586,73 @@
         <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
         <store-value value-field="lookedUpValue"/>
 
+    </simple-method>
+    
+    <simple-method method-name="createShipmentMethodType" short-description="Create shipment method type">
+    
+        <if-empty field="parameters.shipmentMethodTypeId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipMethodTypeIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="maxLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value=" " type="String"/>
+                <set field="makeUpCase" value="true" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="shipmentMethodTypeId">
+                    <field field="parameters.shipmentMethodTypeId" type="String"/>
+                    <field field="maxLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="shipmentMethodTypeId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShipmentMethodTypeIdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+                        <entity-one entity-name="ShipmentMethodType" value-field="existingShipmentMethodType">
+                            <field-map field-name="shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
+                        </entity-one>
+                        <if-not-empty field="existingShipmentMethodType">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ShipmentMethodTypeIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <else>
+                                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+					                <field field="parameters.shipmentMethodTypeId"/>
+					            </call-class-method>
+					            <if-compare field="isValidId" operator="equals" value="false">
+					            	<set field="errorKey" from-field="parameters.shipmentMethodTypeId"/>
+					                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+					                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+					            </if-compare>
+					            <set field="parameters.shipmentMethodTypeId" from-field="shipmentMethodTypeId"/>
+                            </else>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+            
+        </if-empty>
+        <if-empty field="parameters.description">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipMethodTypeDescriptionError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.sequenceNum">
+        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<else>
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.sequenceNum"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            </else>
+        </if-empty> 
+    
+        <check-errors/>
+ 
+        <set-service-fields service-name="createShipmentMethodType" map="parameters" to-map="createShipmentMethodTypeCtx"/>
+        <call-service service-name="createShipmentMethodType" in-map-name="createShipmentMethodTypeCtx">
+            <result-to-field result-name="shipmentMethodTypeId"/>
+        </call-service>
     </simple-method>
     
 </simple-methods>

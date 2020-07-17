@@ -68,6 +68,7 @@ public class SiteMapServices {
     public static String PRODUCT_CATEGORY_LIST_URL = null;
     public static String STATIC_PAGE_URL = null;
     public static String CATALOG_URL_MOUNT_POINT = "shop";
+    public static String SITEMAP_VARIANT_FEATURES = null;
     private static ResourceBundleMapWrapper OSAFE_FRIENDLY_URL = null;
     private static final ResourceBundle OSAFE_PROP = UtilProperties.getResourceBundle("osafe.properties", Locale.getDefault());
     
@@ -102,6 +103,10 @@ public class SiteMapServices {
             STATIC_PAGE_URL = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_STATIC_URL");
         }
         
+        SITEMAP_VARIANT_FEATURES = (String) context.get("siteMapVariantFeatures");
+        if (UtilValidate.isEmpty(SITEMAP_VARIANT_FEATURES)) {
+        	SITEMAP_VARIANT_FEATURES = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_VARIANT_FEATURES");
+        }
         document = UtilXml.makeEmptyXmlDocument();
         rootElement = document.createElement("urlset");
         document.appendChild(rootElement);
@@ -135,11 +140,11 @@ public class SiteMapServices {
                         List<Map<String, Object>> relatedCategories = CategoryServices.getRelatedCategories(delegator, productCategoryId, null, true, false, true);
                         if (UtilValidate.isNotEmpty(relatedCategories))
                         {
-                            url = makeCatalogUrl(null,null,null,productCategoryId, null);
+                            url = makeCatalogUrl(null,null,null,productCategoryId, null,null);
                         }
                         else
                         {
-                            url = makeCatalogUrl(null,null,productCategoryId,null, null);
+                            url = makeCatalogUrl(null,null,productCategoryId,null, null,null);
                         	
                         }
                         createSiteMapNode(url);
@@ -147,7 +152,7 @@ public class SiteMapServices {
                     }
                     else
                     {
-                        url = makeCatalogUrl(null,null,productCategoryId,null, null);
+                        url = makeCatalogUrl(null,null,productCategoryId,null, null,null);
                         createSiteMapNode(url);
                     	
                     }
@@ -174,9 +179,22 @@ public class SiteMapServices {
 
                                 if (ProductWorker.isSellable(product)) 
                                 {
-                                    url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null);
+                                    url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,null);
                                     createSiteMapNode(url);
-                                	
+                                    if (UtilValidate.isNotEmpty(SITEMAP_VARIANT_FEATURES))
+                                    {
+                                       List<GenericValue> lProductFeatureAndAppl = delegator.findByAnd("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
+                                        lProductFeatureAndAppl = EntityUtil.filterByDate(lProductFeatureAndAppl);
+                                        if (UtilValidate.isNotEmpty(lProductFeatureAndAppl))
+                                        {
+                                            for (GenericValue productFeatureAndAppl : lProductFeatureAndAppl)
+                                            {
+                                                String featureDescription = productFeatureAndAppl.getString("description"); 
+                                                url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,SITEMAP_VARIANT_FEATURES.toUpperCase() + ":" + featureDescription);
+                                                createSiteMapNode(url);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -186,16 +204,16 @@ public class SiteMapServices {
             }
             
             //Added static page url in sitemap
-            List<GenericValue> contentAssocs = null;
-            contentAssocs = delegator.findByAndCache("ContentAssoc", UtilMisc.toMap("contentId", "STATIC_PAGE_MENU"), null);
-            if (UtilValidate.isNotEmpty(contentAssocs))
+            List<GenericValue> xContentXrefs = null;
+            xContentXrefs = delegator.findByAndCache("XContentXref", UtilMisc.toMap("contentTypeId", "BF_STATIC_PAGE","productStoreId", productStoreId), null);
+            if (UtilValidate.isNotEmpty(xContentXrefs))
             {
-                for (GenericValue contentAssoc : contentAssocs)
+                for (GenericValue xContentXref : xContentXrefs)
                 {
-                    GenericValue content = contentAssoc.getRelatedOne("ToContent");
+                    GenericValue content = xContentXref.getRelatedOne("Content");
                     if (UtilValidate.isNotEmpty(content) && "CTNT_PUBLISHED".equals(content.getString("statusId")))
                     {
-                        url = makeCatalogUrl(null, null, null, null, content.getString("contentId"));
+                        url = makeCatalogUrl(null, null, null, null, xContentXref.getString("bfContentId"),null);
                         createSiteMapNode(url);
                     }
                 }
@@ -246,6 +264,7 @@ public class SiteMapServices {
         PRODUCT_LIST_URL = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_PLP_URL");
         PRODUCT_CATEGORY_LIST_URL = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_CLP_URL");
         STATIC_PAGE_URL = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_STATIC_URL");
+      	SITEMAP_VARIANT_FEATURES = Util.getProductStoreParm(delegator, productStoreId, "SITEMAP_VARIANT_FEATURES");
         
         document = UtilXml.makeEmptyXmlDocument();
         rootElement = document.createElement("resource");
@@ -280,14 +299,14 @@ public class SiteMapServices {
                         List<Map<String, Object>> relatedCategories = CategoryServices.getRelatedCategories(delegator, productCategoryId, null, true, false, true);
                         if (UtilValidate.isNotEmpty(relatedCategories))
                         {
-                            url = makeCatalogUrl(null,null,null,productCategoryId, null);
+                            url = makeCatalogUrl(null,null,null,productCategoryId, null,null);
                         }
                         else
                         {
-                            url = makeCatalogUrl(null,null,productCategoryId,null, null);
+                            url = makeCatalogUrl(null,null,productCategoryId,null, null,null);
                         	
                         }
-                        createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,parentCategoryContentWrapper);
+                        createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,parentCategoryContentWrapper,null, null);
                     	
                     }
                     else
@@ -298,8 +317,8 @@ public class SiteMapServices {
                     		parentCategoryContentWrapper = new CategoryContentWrapper(dispatcher, parentCategory, locale, "text/html");
                     		
                     	}
-                        url = makeCatalogUrl(null,null,productCategoryId,null, null);
-                        createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,parentCategoryContentWrapper);
+                        url = makeCatalogUrl(null,null,productCategoryId,null, null,null);
+                        createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,parentCategoryContentWrapper,null, null);
                     	
                     }
                     
@@ -325,10 +344,23 @@ public class SiteMapServices {
 
                                 if (ProductWorker.isSellable(product)) 
                                 {
-                                    url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null);
+                                    url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,null);
                                     productContentWrapper = new ProductContentWrapper(dispatcher, product, locale, "text/html");
-                                    createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,null);
-                                	
+                                    createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,null,null, null);
+                                    if (UtilValidate.isNotEmpty(SITEMAP_VARIANT_FEATURES))
+                                    {
+                                       List<GenericValue> lProductFeatureAndAppl = delegator.findByAnd("ProductFeatureAndAppl",UtilMisc.toMap("productId", product.getString("productId"),"productFeatureTypeId",SITEMAP_VARIANT_FEATURES.toUpperCase(),"productFeatureApplTypeId","SELECTABLE_FEATURE"));
+                                        lProductFeatureAndAppl = EntityUtil.filterByDate(lProductFeatureAndAppl);
+                                        if (UtilValidate.isNotEmpty(lProductFeatureAndAppl))
+                                        {
+                                            for (GenericValue productFeatureAndAppl : lProductFeatureAndAppl)
+                                            {
+                                                String featureDescription = productFeatureAndAppl.getString("description"); 
+                                                url = makeCatalogUrl(product.getString("productId"),productCategoryId, null, null, null,SITEMAP_VARIANT_FEATURES.toUpperCase() + ":" + featureDescription);
+                                                createFriendlyMapNode(url, productContentWrapper, categoryContentWrapper,null,featureDescription, null);
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -336,7 +368,28 @@ public class SiteMapServices {
                 	
                 }
             }
-            
+
+            //Added static page url in sitemap
+            List<GenericValue> xContentXrefs = null;
+            xContentXrefs = delegator.findByAndCache("XContentXref", UtilMisc.toMap("contentTypeId", "BF_STATIC_PAGE","productStoreId", productStoreId), null);
+            if (UtilValidate.isNotEmpty(xContentXrefs))
+            {
+                for (GenericValue xContentXref : xContentXrefs)
+                {
+                    GenericValue content = xContentXref.getRelatedOne("Content");
+                    if (UtilValidate.isNotEmpty(content) && "CTNT_PUBLISHED".equals(content.getString("statusId")))
+                    {
+                        String seoUrlValue = content.getString("contentName");
+                        GenericValue contentAttribute = delegator.findOne("ContentAttribute", UtilMisc.toMap("contentId",content.getString("contentId"),"attrName","SEO_FRIENDLY_URL"), false);
+                        if (UtilValidate.isNotEmpty(contentAttribute))
+                        {
+                            seoUrlValue = contentAttribute.getString("attrValue");
+                        }
+                        url = makeCatalogUrl(null, null, null, null, xContentXref.getString("bfContentId"),null);
+                        createFriendlyMapNode(url, null, null, null, null, seoUrlValue);
+                    }
+                }
+            }
            File friendlyMapFile = null;
            friendlyMapFile = createDocument(deploymentConfigPath,"OSafeSeoUrlMap.xml");
            FileUtils.copyFile(new File(deploymentConfigPath + "/" + "OSafeSeoUrlMap.xml"), new File(configPath + "/" + "OSafeSeoUrlMap.xml"));
@@ -396,7 +449,7 @@ public class SiteMapServices {
     	
     }
     
-    private static void createFriendlyMapNode (String URL,ProductContentWrapper productContentWrapper,CategoryContentWrapper categoryContentWrapper,CategoryContentWrapper parentCategoryContentWrapper) {
+    private static void createFriendlyMapNode (String URL,ProductContentWrapper productContentWrapper,CategoryContentWrapper categoryContentWrapper,CategoryContentWrapper parentCategoryContentWrapper,String featureDescription, String contentSeoFriendlyName) {
     	
         StringBuilder urlBuilder = new StringBuilder();
         String productName=null;
@@ -440,7 +493,15 @@ public class SiteMapServices {
 
         	if (UtilValidate.isNotEmpty(productName))
         	{
+            	if (UtilValidate.isNotEmpty(featureDescription))
+            	{
+            		productName = productName + " " + featureDescription;
+            	}
         		friendlyKeyValue.append("/" + productName);
+        	}
+        	if (UtilValidate.isNotEmpty(contentSeoFriendlyName))
+        	{
+        		friendlyKeyValue.append(contentSeoFriendlyName);
         	}
         	friendlyValue=friendlyKeyValue.toString();
         	friendlyValue=StringUtil.replaceString(friendlyValue,"&apos;","");
@@ -498,7 +559,7 @@ public class SiteMapServices {
         return null;
     }
     
-    public static String makeCatalogUrl(String productId, String productCategoryId, String currentCategoryId, String topCategoryId, String contentId) {
+    public static String makeCatalogUrl(String productId, String productCategoryId, String currentCategoryId, String topCategoryId, String contentId,String productFeatureType) {
         StringBuilder urlBuilder = new StringBuilder();
 
         if (UtilValidate.isNotEmpty(topCategoryId)) 
@@ -520,6 +581,11 @@ public class SiteMapServices {
             {
                 urlBuilder.append("&productCategoryId=");
                 urlBuilder.append(productCategoryId);
+            }
+            if (UtilValidate.isNotEmpty(productFeatureType)) 
+            {
+                urlBuilder.append("&productFeatureType=");
+                urlBuilder.append(productFeatureType);
             }
         }
         

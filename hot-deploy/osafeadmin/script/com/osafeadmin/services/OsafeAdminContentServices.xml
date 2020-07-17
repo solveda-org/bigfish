@@ -108,7 +108,7 @@
             <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
             <else>
                 <set field="contentIdLength" value="20" type="Integer"/>
-                <set field="spaceReplacement" value="_" type="String"/>
+                <set field="spaceReplacement" value=" " type="String"/>
                 <set field="makeUpCase" value="true" type="Boolean"/>
                 <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="contentId">
                     <field field="parameters.contentId" type="String"/>
@@ -120,11 +120,22 @@
                     <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdLengthError"/>
                     <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
                     <else>
-                        <set field="parameters.contentId" from-field="contentId"/>
+                        
                         <entity-one entity-name="Content" value-field="existingContent"/>
                         <if-not-empty field="existingContent">
                             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="SpotContentIdExistError"/>
                             <string-to-list string="${tempErrorMessage}" message-field="CONTENTID" list="error_list"/>
+                            <else>
+                                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="isValidId" ret-field="isValidId">
+                                    <field field="parameters.contentId"/>
+                                </call-class-method>
+                                <if-compare field="isValidId" operator="equals" value="false">
+                                    <set field="errorKey" from-field="parameters.contentId"/>
+                                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidIdError"/>
+                                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                                </if-compare>
+                                <set field="parameters.contentId" from-field="contentId"/>
+                            </else>
                         </if-not-empty>
                     </else>
                 </if-empty>
@@ -146,21 +157,23 @@
         <set-service-fields service-name="createTextContent" map="parameters" to-map="createTextContentCtx"/>
         <set field="createTextContentCtx.dataResourceTypeId" value="ELECTRONIC_TEXT"/>
         <set field="createTextContentCtx.dataTemplateTypeId" value="FTL"/>
-        <set field="createTextContentCtx.contentTypeId" value="DOCUMENT"/>
+        <set field="createTextContentCtx.contentTypeId" from-field="parameters.contentTypeId"/>
         <set field="createTextContentCtx.mapKey" value="link"/>
-        <set field="createTextContentCtx.contentAssocTypeId"  value="SUB_CONTENT"/>
-        <set field="createTextContentCtx.contentIdFrom" from-field="parameters.spotListMenuId"/>
-        <set field="createTextContentCtx.contentIdTo" from-field="parameters.contentId"/>
         <set field="createTextContentCtx.contentPurposeTypeId"  value="SECTION"/>
         <call-service service-name="createTextContent" in-map-name="createTextContentCtx"/>
+
+        <set-service-fields service-name="createXContentXref" map="parameters" to-map="createXContentXrefCtx"/>
+        <set field="createXContentXrefCtx.bfContentId" from-field="parameters.contentId"/>
+        <call-service service-name="createXContentXref" in-map-name="createXContentXrefCtx"/>
         <field-to-result field="parameters.contentId" result-name="contentId"/>
     </simple-method>
 
     <simple-method method-name="deleteTextContent" short-description="delete content">
         <entity-one entity-name="Content" value-field="content"/>
         <if-not-empty field="content">
-            <set field="removeContentAssocCtx.contentIdTo" from-field="content.contentId"/>
-            <remove-by-and entity-name="ContentAssoc" map="removeContentAssocCtx"/>
+            <set field="removeXContentXrefCtx.contentId" from-field="content.contentId"/>
+            <set field="removeXContentXrefCtx.productStoreId" from-field="parameters.productStoreId"/>
+            <remove-by-and entity-name="XContentXref" map="removeXContentXrefCtx"/>
             <set field="removeContentCtx.contentId" from-field="content.contentId"/>
             <remove-by-and entity-name="ContentRole" map="removeContentCtx"/>
             <remove-by-and entity-name="ContentPurpose" map="removeContentCtx"/>
@@ -226,5 +239,37 @@
             </if-not-empty>
         </else>
         </if-not-empty>
+    </simple-method>
+    <simple-method method-name="createXContentXref" short-description="Create a XContentXref Record">
+        <make-value value-field="xContentXref" entity-name="XContentXref"/>
+        <set-nonpk-fields value-field="xContentXref" map="parameters"/>
+        <set-pk-fields value-field="xContentXref" map="parameters"/>
+
+        <if-empty field="parameters.bfContentId">
+            <sequenced-id sequence-name="XContentXref" field="xContentXref.bfContentId"/>
+        </if-empty>
+        <if-empty field="parameters.contentTypeId">
+            <entity-one entity-name="Content" value-field="content" >
+                <field-map field-name="contentId" from-field="parameters.contentId"/>
+            </entity-one>
+            <set field="xContentXref.contentTypeId" from-field="content.contentTypeId"/>
+        </if-empty>
+
+        <create-value value-field="xContentXref"/>
+
+        <field-to-result field="xContentXref.bfContentId" result-name="bfContentId"/>
+    </simple-method>
+
+    <simple-method method-name="updateStaticPageSeoUrl" short-description="Update static pages seo url">
+        <iterate-map key="contentIdKey" value="contentId" map="parameters.contentIds">
+            <iterate-map key="attrValueKey" value="attrValue" map="parameters.attrValues">
+                <if-compare-field field="contentIdKey" to-field="attrValueKey" operator="equals">
+                    <set field="createUpdateContAttrCtx.contentId" from-field="contentId"/>
+                    <set field="createUpdateContAttrCtx.attrName" value="SEO_FRIENDLY_URL"/>
+                    <set field="createUpdateContAttrCtx.attrValue" from-field="attrValue"/>
+                    <call-service service-name="createUpdateContentAttribute" in-map-name="createUpdateContAttrCtx"/>
+                </if-compare-field>
+            </iterate-map>
+        </iterate-map>
     </simple-method>
 </simple-methods>

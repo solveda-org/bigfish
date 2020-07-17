@@ -18,8 +18,6 @@ under the License.
 -->
 
 <div class="displayBox">
-<div class="displayBoxHeader">
-<span class="displayBoxHeaderCaption">${uiLabelMap.ThankYouTitle}</span>
-</div>
+<h3>${uiLabelMap.ThankYouTitle}</h3>
 <p class="instructions">${uiLabelMap.ContactUsRecievedInfo}</p>
 </div>

@@ -25,7 +25,7 @@ productStore = ProductStoreWorker.getProductStore(request);
 if (UtilValidate.isNotEmpty(productStore))
 {
   String productStoreId=productStore.getString("productStoreId");
-  pixelTrackingList = delegator.findByAnd("XPixelTracking",UtilMisc.toMap("productStoreId",productStoreId));
+  pixelTrackingList = delegator.findByAndCache("XPixelTracking",UtilMisc.toMap("productStoreId",productStoreId));
   
   if (UtilValidate.isNotEmpty(context.orderHeader)) 
   {

@@ -129,8 +129,9 @@ function setRowNo(rowNo) {
            <td class="seqCol">
              <input type="text" class="infoValue small textAlignCenter" name="sequenceNum_${rowNo}" id="sequenceNum" value="${rowSeq!}"/>
            </td>
+           <#assign productName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productContentWrapper.get("PRODUCT_NAME")!""}')/>
            <td class="actionCol">
-             <a href="javascript:setRowNo('${rowNo}');javascript:deletTableRow('${relatedProduct.productId?if_exists}','${productContentWrapper.get("PRODUCT_NAME")?html!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
+             <a href="javascript:setRowNo('${rowNo}');javascript:deletTableRow('${relatedProduct.productId?if_exists}','${productName!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
              <a href="javascript:setRowNo('${rowNo}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
              <a href="javascript:setRowNo('${rowNo+1}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
            </td>
@@ -170,8 +171,9 @@ function setRowNo(rowNo) {
              <#assign sequenceNum = request.getParameter("sequenceNum_${x}")!/>
              <input type="text" class="infoValue small textAlignCenter" name="sequenceNum_${x}" id="sequenceNum" value="${sequenceNum!}"/>
            </td>
+           <#assign productName = Static["com.osafe.util.OsafeAdminUtil"].formatSimpleText('${productContentWrapper.get("PRODUCT_NAME")!""}')/>
            <td class="actionCol">
-             <a href="javascript:setRowNo('${x}');javascript:deletTableRow('${relatedProdDetail.productId?if_exists}','${productContentWrapper.get("PRODUCT_NAME")?html!""}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
+             <a href="javascript:setRowNo('${x}');javascript:deletTableRow('${relatedProdDetail.productId?if_exists}','${productName!}');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.DeleteRelatedProductTooltip}');" onMouseout="hideTooltip()"><span class="crossIcon"></span></a>
              <a href="javascript:setRowNo('${x}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
              <a href="javascript:setRowNo('${x+1}');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertAfterNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertAfterIcon"></span></a>
            </td>
@@ -188,7 +190,7 @@ function setRowNo(rowNo) {
       <td colspan="5">&nbsp;</td>
       <td class="actionCol">
         <span class="noAction"></span>
-        <a href="javascript:setRowNo(jQuery('tr').length-1);javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
+        <a href="javascript:setRowNo('1');javascript:openLookup(document.${detailFormName!}.addProductId,document.${detailFormName!}.addProductName,'lookupProduct','500','700','center','true');" onMouseover="javascript:showTooltip(event,'${uiLabelMap.InsertBeforeNewRowTooltip}');" onMouseout="hideTooltip()"><span class="insertBeforeIcon"></span></a>
         <span class="noAction"></span>
       </td>
     </tr>

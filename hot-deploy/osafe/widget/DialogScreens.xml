@@ -13,6 +13,7 @@
                 <set field="commonConfirmDialogNoBtn" from-field="confirmDialogNoBtnText" default-value="${uiLabelMap.NoBtn}"/>
                 <set field="commonConfirmDialogForm" from-field="confirmDialogForm" default-value="detailForm"/>
                 <set field="commonConfirmDialogAction" from-field="confirmDialogAction" default-value="confirmAction"/>
+                <set field="dialogBoxTitle" value=""/>
             </actions>
             <widgets>
                 <container id="commonConfirmDialog">
@@ -47,6 +48,7 @@
                 <set field="searchDialogText" from-field="SEARCH_NO_ENTRY_ERROR"/>
                 <set field="searchDialogOkBtn" value="${uiLabelMap.OkBtn}"/>
                 <set field="dialogPurpose" value="search_"/>
+                <set field="dialogBoxTitle" value=""/>
             </actions>
             <widgets>
                 <container id="commonSearchDialog">
@@ -73,18 +75,19 @@
         </section>
     </screen>
 
-    <screen name="plpQuickLookDialog">
+    <screen name="plpQuicklookDialog">
         <section>
             <actions>
                 <set field="dialogPurpose" from-field="dialogPurpose" default-value="dialogPurpose_"/>
                 <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
+                <set field="dialogBoxTitle" value=""/>
             </actions>
             <widgets>
                <platform-specific>
                  <html>
                         <html-template-decorator location="component://osafe/webapp/osafe/templates/commonDialog.ftl">
-                            <html-template-decorator-section name="plpQuickLook_DialogBox">
-                              <container id="plpQuickLook_Container">
+                            <html-template-decorator-section name="plpQuicklook_DialogBox">
+                              <container id="plpQuicklook_Container">
                               </container>
                             </html-template-decorator-section>
                         </html-template-decorator>
@@ -101,13 +104,15 @@
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
                 <property-map resource="osafe" map-name="OSafeConfig" global="true" />
                 <set field="uiSequenceScreen" value="Quicklook"/>
+                <set field="activeZoomParam" value="QUICKLOOK_IMG_ZOOM_ACTIVE_FLAG" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy" />
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductDetail.groovy" />
-                <set field="dialogPurpose" value="plpQuickLook_" global="true"/>
+                <set field="dialogPurpose" value="plpQuicklook_" global="true"/>
+                <set field="jqueryIdPrefix" value="quicklook_"/>
                 <set field="showHeadingTertiaryInformation" value="Y" />
             </actions>
             <widgets>
-                 <container id="plpQuickLook_Container">
+                 <container id="plpQuicklook_Container">
                    <platform-specific>
                        <html>
                            <html-template location="component://osafe/webapp/osafe/common/entry/js/commonProductDetailJS.ftl" />
@@ -130,6 +135,7 @@
                 <set field="dialogBoxStyle" from-field="dialogBoxStyle"/>
                 <set field="largeImageUrl" value="${groovy:request.getAttribute(&quot;largeImageUrl&quot;)}"/>
                 <set field="dialogPurpose" value="largeImage_" />
+                <set field="dialogBoxTitle" value=""/>
             </actions>
             <widgets>
                <platform-specific>
@@ -169,6 +175,7 @@
                 <set field="cancelButtonDescription" value="${uiLabelMap.CancelStoreSelectBtn}"/>
                 <set field="CancelStoreSelectInfo" value="${uiLabelMap.CancelStoreSelectInfo}"/>
                 <set field="dialogPurpose" value="storePickup_"/>
+                <set field="dialogBoxTitle" value=""/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceStoreLocator.groovy"/>
             </actions>
             <widgets>

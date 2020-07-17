@@ -3,13 +3,16 @@ package common;
 import javolution.util.FastMap;
 import javolution.util.FastList;
 
+import org.ofbiz.product.store.*;
 import org.ofbiz.product.product.ProductContentWrapper;
 import org.ofbiz.base.util.UtilMisc;
+import org.ofbiz.base.util.UtilNumber;
 import org.ofbiz.base.util.UtilValidate;
 import com.osafe.services.CatalogUrlServlet;
 import com.osafe.util.Util;
 import org.ofbiz.product.product.ProductWorker;
 import org.ofbiz.party.content.PartyContentWrapper;
+import org.ofbiz.entity.util.EntityUtil;
 
 plpItem = request.getAttribute("plpItem");
 plpItemId = request.getAttribute("plpItemId");
@@ -17,12 +20,14 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
     productName = "";
     categoryId = "";
     productInternalName = "";
-    productURL = "";
+    productFriendlyUrl = "";
+    pdpUrl = "";
     productImageUrl = "";
     productImageAlt = "";
     productImageAltUrl= "";
     price = "";
     productId="";
+    averageCustomerRating = "";
 
     // gets productId
     if(UtilValidate.isNotEmpty(plpItemId)) {
@@ -96,7 +101,23 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
             productImageAltUrl = plpItem.productImageSmallAltUrl;
          }
     }
-
+    //PRODUCT RATINGS
+    decimals=Integer.parseInt("1");
+    rounding = UtilNumber.getBigDecimalRoundingMode("order.rounding");
+    context.put("decimals",decimals);
+    context.put("rounding",rounding);
+    // get the average rating
+     averageRating= ProductWorker.getAverageProductRating(delegator,productId);
+     if (UtilValidate.isNotEmpty(averageRating) && averageRating > 0)
+     {
+       averageCustomerRating= averageRating.setScale(1,rounding);
+     }
+    productStore = ProductStoreWorker.getProductStore(request);
+    productStoreId = productStore.get("productStoreId");
+    reviewByAnd = UtilMisc.toMap("statusId", "PRR_APPROVED", "productStoreId", productStoreId,"productId", productId);
+    reviews = delegator.findByAnd("ProductReview", reviewByAnd);
+    context.put("reviewSize",reviews.size());
+    
     context.productName = productName;
     context.productId = productId;
     context.categoryId = categoryId;
@@ -111,13 +132,14 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
         context.plpLabel = ProductContentWrapper.getProductContentAsText(context.product, 'PLP_LABEL', request);
     }
    
-    context.productUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
+    context.productFriendlyUrl = CatalogUrlServlet.makeCatalogFriendlyUrl(request,'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId);
+    context.pdpUrl = 'eCommerceProductDetail?productId='+productId+'&productCategoryId='+categoryId;
     
     if(UtilValidate.isNotEmpty((context.product).isVirtual) && ((context.product).isVirtual).toUpperCase()== "Y"){
         productAssoc = delegator.findByAnd("ProductAssoc",UtilMisc.toMap("productId" ,context.productId,'productAssocTypeId','PRODUCT_VARIANT'));
         productVariantFeatureList = FastList.newInstance();
         productAssoc.each { pAssoc ->
-          productFeatureAndAppl = delegator.findByAnd("ProductFeatureAppl",UtilMisc.toMap("productId" ,pAssoc.productIdTo,'productFeatureApplTypeId','STANDARD_FEATURE')) ;
+          productFeatureAndAppl = EntityUtil.filterByDate(delegator.findByAnd("ProductFeatureAppl",UtilMisc.toMap("productId" ,pAssoc.productIdTo,'productFeatureApplTypeId','STANDARD_FEATURE')), true);
           productIdTo = pAssoc.productIdTo;
           productTo = pAssoc.getRelatedOne("AssocProduct");
          
@@ -131,7 +153,7 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
              productVariantFeatureList.add(productVariantFeatureMap);
           }
       }
-       context.productFeatureAndAppl = delegator.findByAndCache("ProductFeatureAndAppl",UtilMisc.toMap("productId" ,context.productId,'productFeatureTypeId',request.getAttribute("PRODUCT_STORE_PARM_FACET"),'productFeatureApplTypeId','SELECTABLE_FEATURE'));
+       context.productFeatureAndAppl = EntityUtil.filterByDate(delegator.findByAndCache("ProductFeatureAndAppl",UtilMisc.toMap("productId" ,context.productId,'productFeatureTypeId',request.getAttribute("PRODUCT_STORE_PARM_FACET"),'productFeatureApplTypeId','SELECTABLE_FEATURE')),true);
        context.productVariantFeatureList = productVariantFeatureList;
     }
     featureValueSelected = request.getAttribute("featureValueSelected");

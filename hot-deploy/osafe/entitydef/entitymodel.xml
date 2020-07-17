@@ -127,5 +127,59 @@
       </relation>
     </entity>
 
+    <entity entity-name="XContentXref"
+            package-name="org.ofbiz.osafe.admin"
+            title="content product store reference" >
+      <field name="bfContentId" type="id-ne"></field>
+      <field name="productStoreId" type="id"></field>
+      <field name="contentId" type="id"></field>
+      <field name="contentTypeId" type="id"></field>
+      <prim-key field="bfContentId"/>
+      <prim-key field="productStoreId"/>
+      <relation type="one" fk-name="XCTNTXREF_TO_PROD_STORE" rel-entity-name="ProductStore">
+          <key-map field-name="productStoreId"/>
+      </relation>
+       <relation type="one" fk-name="XCTNTXREF_TO_CTNT" rel-entity-name="Content">
+        <key-map field-name="contentId"/>
+      </relation>
+      <relation type="one" fk-name="XCTNTXREF_TO_CTNT_TYPE" rel-entity-name="ContentType">
+        <key-map field-name="contentTypeId"/>
+      </relation>
+    </entity>
 
+	<entity entity-name="PaymentGatewayEbs"
+            package-name="org.ofbiz.accounting.payment"
+            title="EBS Payment Gateway Config">
+        <field name="paymentGatewayConfigId" type="id-ne"></field>
+        <field name="merchantId" type="short-varchar"><description>EBS API UserName</description></field>
+        <field name="returnUrl" type="value"><description>Return URL</description></field>
+        <field name="secretKey" type="value"><description>Secret key provided by EBS</description></field>
+        <field name="redirectUrl" type="value"><description>EBS Redirect URL (Sandbox/Production)</description></field>
+        <field name="referenceNo" type="value"><description>Reference number</description></field>
+        <field name="mode" type="value"><description>Mode type LIVE or TEST</description></field>
+        <prim-key field="paymentGatewayConfigId"/>
+        <relation type="one" fk-name="PGPP_PGC" rel-entity-name="PaymentGatewayConfig">
+            <key-map field-name="paymentGatewayConfigId"/>
+        </relation>
+    </entity>
+
+    <entity entity-name="EbsPaymentMethod" 
+            package-name="org.ofbiz.accounting.payment">
+        <description>EBS Payment Method Details</description>
+        <field name="paymentMethodId" type="id-ne"></field>
+        <field name="transactionId" type="short-varchar"></field>
+        <field name="responseCode" type="short-varchar"></field>
+        <field name="responseMessage" type="short-varchar"></field>
+        <field name="dateCreated" type="date-time"></field>
+        <field name="paymentId" type="short-varchar"></field>
+        <field name="merchantRefNo" type="short-varchar"></field>
+        <field name="isFlagged" type="short-varchar"></field>
+        <field name="amount" type="short-varchar"></field>
+        <field name="paymentMethod" type="short-varchar"></field>
+        <prim-key field="paymentMethodId"/>
+        <relation type="one" fk-name="EBS_PMNTMETH" rel-entity-name="PaymentMethod">
+            <key-map field-name="paymentMethodId"/>
+        </relation>
+    </entity>
+	
 </entitymodel>

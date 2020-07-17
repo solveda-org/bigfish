@@ -5,11 +5,11 @@
 
     <context-param>
         <param-name>webSiteId</param-name>
-        <param-value>BigFishWebsite</param-value>
+        <param-value>MODA_WEBSITE</param-value>
         <description>A unique ID used to look up the WebSite entity</description>
     </context-param>
     <context-param>
-        <param-name>localDispatcherName</param-name><param-value>osafe</param-value>
+        <param-name>localDispatcherName</param-name><param-value>online</param-value>
         <description>A unique name used to identify/recognize the local dispatcher for the Service Engine</description>
     </context-param>
     <context-param>
@@ -54,7 +54,7 @@
         <init-param><param-name>disableContextSecurity</param-name><param-value>N</param-value></init-param>
         <init-param>
             <param-name>allowedPaths</param-name>
-            <param-value>/error:/control:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images:/includes/maincss.css</param-value>
+            <param-value>/error:/control:/shop:/select:/index.html:/index.jsp:/default.html:/default.jsp:/images:/includes/maincss.css</param-value>
         </init-param>
         <init-param><param-name>errorCode</param-name><param-value>403</param-value></init-param>
         <init-param><param-name>redirectPath</param-name><param-value>/control/main</param-value></init-param>
@@ -77,7 +77,21 @@
         <servlet-class>org.ofbiz.webapp.control.ControlServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+
+    <servlet>
+        <servlet-name>CatalogUrlServlet</servlet-name>
+        <display-name>CatalogUrlServlet</display-name>
+        <description>Catalog (Category/Product) URL Servlet</description>
+        <servlet-class>com.osafe.services.CatalogUrlServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
     <servlet-mapping><servlet-name>ControlServlet</servlet-name><url-pattern>/control/*</url-pattern></servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>CatalogUrlServlet</servlet-name>
+        <url-pattern>/shop/*</url-pattern>
+    </servlet-mapping>
 
     <session-config><session-timeout>60</session-timeout><!-- in minutes --></session-config>
 

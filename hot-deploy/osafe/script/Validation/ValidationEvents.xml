@@ -122,15 +122,27 @@
                 <process field="USER_BIRTHDATE">
                     <convert type="Date" to-field="birthDate"><fail-property resource="OSafeUiLabels" property="BirthDateMissingError"/></convert>
                 </process>
-                <process field="USER_GENDER">
+                <!--process field="USER_GENDER">
                     <copy to-field="gender"/>
                     <not-empty><fail-property resource="OSafeUiLabels" property="GenderMissingError"/></not-empty>
+                </process-->
+                <process field="USER_EMAIL">
+                    <copy to-field="emailAddress"/>
+                    <not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty>
+                    <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailAddressNotFormattedCorrectlyError"/></validate-method>
                 </process>
-                <process field="CUSTOMER_EMAIL"><copy to-field="emailAddress"/></process>
-                <process field="CUSTOMER_EMAIL_ALLOW_SOL"><copy to-field="allowEmailSolicitation"/></process>
+                <process field="USER_EMAIL_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
             </simple-map-processor>
         </call-map-processor>
-
+            <!-- validating Gender -->
+            <if-compare-field field="parameters.USER_GENDER" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.USER_GENDER">
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="GenderMissingError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="USER_GENDER" list="error_list"/>
+                    </else>
+                </if-not-empty>
+            </if-compare-field>
             <!-- Check the Home Phone -->
             <if-compare field="parameters.PHONE_HOME_REQUIRED" operator="equals" value="true">
                 <if>
@@ -421,6 +433,85 @@
                         </if-not-empty>
                    </else>
             </if>
+            <!-- DOB Short(DDMM) validation -->
+            <if-compare-field field="parameters.dobShortMonth" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.dobShortMonth">
+                    <if-not-empty field="parameters.dobShortDay">
+                        <set field="dobShortMonth" from-field="parameters.dobShortMonth"/>
+                        <set field="dobShortDay" from-field="parameters.dobShortDay"/>
+                        <set field="tempDobYear" value="1972"/>
+                        <string-append string="${dobShortMonth}" field="dobDateString"/>
+                        <string-append string="/" field="dobDateString"/>
+                        <string-append string="${dobShortDay}" field="dobDateString"/>
+                        <string-append string="/" field="dobDateString"/>
+                        <string-append string="${tempDobYear}" field="dobDateString"/>
+                        <!-- validates date -->
+                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidDate">
+                            <field field="dobDateString" type = "String" />
+                        </call-class-method>
+                        <if-compare operator="equals" value="true" field="isValidDate" type="Boolean">
+                            <string-append string="${dobShortMonth}" field="dobShortDateString"/>
+                            <string-append string="/" field="dobShortDateString"/>
+                            <string-append string="${dobShortDay}" field="dobShortDateString"/>
+                            <set field="DOB_MMDD" from-field="dobShortDateString"/>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDD" list="error_list"/>
+                        </else>
+                        </if-compare>
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDD" list="error_list"/>
+                    </else>
+                    </if-not-empty>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDD" list="error_list"/>
+                </else>
+                </if-not-empty>
+            </if-compare-field>
+            
+             <!-- DOB Long(DDMMYYYY) validation -->
+            <if-compare-field field="parameters.dobLongMonth" operator="not-equals" to-field="nullValue">
+                <if-not-empty field="parameters.dobLongMonth">
+                    <if-not-empty field="parameters.dobLongDay">
+                      <if-not-empty field="parameters.dobLongYear">
+                        <set field="dobMonth" from-field="parameters.dobLongMonth"/>
+                        <set field="dobDay" from-field="parameters.dobLongDay"/>
+                        <set field="dobYear" from-field="parameters.dobLongYear"/>
+                        <string-append string="${dobMonth}" field="dobLongDateString"/>
+                        <string-append string="/" field="dobLongDateString"/>
+                        <string-append string="${dobDay}" field="dobLongDateString"/>
+                        <string-append string="/" field="dobLongDateString"/>
+                        <string-append string="${dobYear}" field="dobLongDateString"/>
+                        <!-- validates date -->
+                        <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isDate" ret-field="isValidLongDate">
+                            <field field="dobLongDateString" type = "String" />
+                        </call-class-method>
+                        <if-compare operator="equals" value="true" field="isValidLongDate" type="Boolean">
+                            <set field="DOB_MMDDYYYY" from-field="dobLongDateString"/>
+                        <else>
+                            <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                            <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDDYYYY" list="error_list"/>
+                        </else>
+                        </if-compare>
+                       <else>
+                           <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                           <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDDYYYY" list="error_list"/>
+                       </else>
+                    </if-not-empty>
+                    <else>
+                        <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                        <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDDYYYY" list="error_list"/>
+                    </else>
+                    </if-not-empty>
+                <else>
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ValidDobDateError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="DOB_MMDDYYYY" list="error_list"/>
+                </else>
+                </if-not-empty>
+            </if-compare-field>
+                    
     </simple-method>
 
     <simple-method method-name="validateBillingAddress" short-description="validate Customer/Billing Address" login-required="false">
@@ -534,9 +625,9 @@
         </if-not-empty>
 
         <!-- Check for a address3 -->
-        <if-empty field="parameters.BILLING_STATE">
+        <if-compare field="parameters.BILLING_STATE" operator="equals" value="_NA_">
             <set field="addressContext.address3" from-field="parameters.BILLING_ADDRESS3"/>
-        </if-empty>
+        </if-compare>
 
             <return response-code="success"/>
     </simple-method>
@@ -553,7 +644,6 @@
                 <process field="roleTypeId"><copy/></process>
                 <process field="SHIPPING_ATTN_NAME">
                     <copy to-field="attnName"/>
-                    <not-empty><fail-property resource="OSafeUiLabels" property="AddressNickNameMissingError"/></not-empty>
                 </process>
                 <process field="SHIPPING_ADDRESS1">
                     <copy to-field="address1"/>
@@ -570,6 +660,13 @@
                 <process field="SHIPPING_ADDRESS_ALLOW_SOL"><copy to-field="allowSolicitation"/></process>
             </simple-map-processor>
         </call-map-processor>
+
+        <if-compare-field field="parameters.SHIPPING_ATTN_NAME" operator="not-equals" to-field="nullValue">
+            <if-empty field="parameters.SHIPPING_ATTN_NAME ">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="AddressNickNameMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="SHIPPING_ATTN_NAME" list="error_list"/>
+            </if-empty>
+        </if-compare-field>
 
         <if-empty field="parameters.SHIPPING_POSTAL_CODE ">
             <if-compare value="USA" operator="equals" field="parameters.SHIPPING_COUNTRY">
@@ -605,6 +702,10 @@
                     <if-not-empty field="parameters.SHIPPING_ADDRESS2">
                         <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
                     </if-not-empty>
+                    <if-empty field="parameters.SHIPPING_STATE">
+                        <set field="addressContext.stateProvinceGeoId" value="_NA_" type="String"/>
+                        <set field="parameters.SHIPPING_STATE" value="_NA_" type="String"/>
+                    </if-empty>
                     <if-compare field="parameters.SHIPPING_STATE" operator="equals" value="_NA_">
                         <if-not-empty field="parameters.SHIPPING_ADDRESS3">
                             <set field="fieldCounter" value="${fieldCounter+1}" type="Integer"/>
@@ -648,9 +749,9 @@
         </if-not-empty>
 
         <!-- Check for a address3 -->
-        <if-empty field="parameters.SHIPPING_STATE">
-            <set field="addressContext.address3" from-field="parameters.SHIPPING_ADDRESS3"/>
-        </if-empty>
+        <if-compare field="parameters.SHIPPING_STATE" operator="equals" value="_NA_">
+            <set field="shippingAddressContext.address3" from-field="parameters.SHIPPING_ADDRESS3"/>
+        </if-compare>
 
                 <return response-code="success"/>
     </simple-method>
@@ -658,6 +759,25 @@
     <simple-method method-name="validateRequestCatalog" short-description="validate Request catalog" login-required="false">
         <clear-field field="tempErrorMessage"/>
         <!-- Check Contact Us form -->
+
+        <call-map-processor in-map-name="parameters" out-map-name="custRequestContext">
+            <simple-map-processor name="custRequest">
+                <process field="REQ_CATALOG_FIRST_NAME"><copy to-field="firstName"/></process>
+                <process field="REQ_CATALOG_LAST_NAME"><copy to-field="lastName"/></process>
+                <process field="REQ_CATALOG_ADDRESS1"><copy to-field="address1"/></process>
+                <process field="REQ_CATALOG_ADDRESS2"><copy to-field="address2"/></process>
+                <process field="REQ_CATALOG_CITY"><copy to-field="city"/></process>
+                <process field="REQ_CATALOG_STATE"><copy to-field="stateCode"/></process>
+                <process field="REQ_CATALOG_POSTAL_CODE"><copy to-field="postalCode"/></process>
+                <process field="REQ_CATALOG_COUNTRY"><copy to-field="countryCode"/></process>
+                <process field="REQ_CATALOG_HOME_AREA"><copy to-field="contactPhoneArea"/></process>
+                <process field="REQ_CATALOG_HOME_CONTACT3"><copy to-field="contactPhoneContact3"/></process>
+                <process field="REQ_CATALOG_HOME_CONTACT4"><copy to-field="contactPhoneContact4"/></process>
+                <process field="REQ_CATALOG_HOME_CONTACT_OTHER"><copy to-field="phoneNumber"/></process>
+                <process field="REQ_CATALOG_EMAIL_ADDR"><copy to-field="emailAddress"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+
         <if-empty field="parameters.REQ_CATALOG_FIRST_NAME">
             <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="FirstNameMissingError"/>
             <string-to-list string="${tempErrorMessage}" message-field="REQ_CATALOG_FIRST_NAME" list="error_list"/>
@@ -962,4 +1082,133 @@
         <check-errors/>
 
     </simple-method>
+
+    <simple-method method-name="validateCreditCard" short-description="Validate Credit Card fields" login-required="false">
+        <log level="info" message="${parameters.fieldLevelErrors}"></log>
+        <if-compare field="parameters.fieldLevelErrors" operator="equals" value="Y">
+            <set field="fieldLevelErrors" value="${parameters.fieldLevelErrors}"/>
+            <field-to-request field="fieldLevelErrors" />
+        </if-compare>
+
+        <if-compare field="parameters.useSavedCard" operator="equals" value="Y" type="String">
+            <if-compare-field field="parameters.savedVerificationNo" operator="not-equals" to-field="nullValue">
+                <if-empty field="parameters.savedVerificationNo">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="savedVerificationNo" list="error_list"/>
+                </if-empty>
+            </if-compare-field>
+            <if-empty field="parameters.savedCard">
+                <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="SavedCardMissingError"/>
+                <string-to-list string="${tempErrorMessage}" message-field="savedCard" list="error_list"/>
+                <else>
+                    <entity-one value-field="savedCreditCard" entity-name="CreditCard">
+                        <field-map field-name="paymentMethodId" from-field="parameters.savedCard"/>
+                    </entity-one>
+                    <set field="creditCardContext.cardType" from-field="savedCreditCard.cardType"/>
+                    <set field="creditCardContext.cardNumber" from-field="savedCreditCard.cardNumber"/>
+                    <set field="creditCardContext.expireDate" from-field="savedCreditCard.expireDate"/>
+                    <set field="creditCardContext.companyNameOnCard" from-field="savedCreditCard.companyNameOnCard"/>
+                    <set field="creditCardContext.titleOnCard" from-field="savedCreditCard.titleOnCard"/>
+                    <set field="creditCardContext.firstNameOnCard" from-field="savedCreditCard.firstNameOnCard"/>
+                    <set field="creditCardContext.middleNameOnCard" from-field="savedCreditCard.middleNameOnCard"/>
+                    <set field="creditCardContext.lastNameOnCard" from-field="savedCreditCard.lastNameOnCard"/>
+                    <set field="creditCardContext.suffixOnCard" from-field="savedCreditCard.suffixOnCard"/>
+                    <set field="creditCardContext.cardNumber" from-field="savedCreditCard.cardNumber"/>
+                    <set field="creditCardContext.contactMechId" from-field="parameters.contactMechId"/>
+                </else>
+            </if-empty>
+        <else>
+            <!-- Check credit card fields -->
+            <if-compare-field field="parameters.verificationNo" operator="not-equals" to-field="nullValue">
+                <if-empty field="parameters.verificationNo">
+                    <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="VerificationNumberMissingError"/>
+                    <string-to-list string="${tempErrorMessage}" message-field="verificationNo" list="error_list"/>
+                </if-empty>
+            </if-compare-field>
+             <call-map-processor in-map-name="parameters" out-map-name="creditCardContext">
+                  <simple-map-processor name="createCreditCard">
+                    <make-in-string field="expireDate">
+                      <in-field field="expMonth"/>
+                      <constant>/</constant>
+                      <in-field field="expYear"/>
+                    </make-in-string>
+                    <process field="partyId"><copy/></process>
+                    <process field="companyNameOnCard"><copy/></process>
+                    <process field="titleOnCard"><copy/></process>
+                    <process field="firstNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="FirstNameOnCardMissingError"/></not-empty></process>
+                    <process field="middleNameOnCard"><copy/></process>
+                    <process field="lastNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="LastNameOnCardMissingError"/></not-empty></process>
+                    <process field="suffixOnCard"><copy/></process>
+                    <process field="cardType"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardTypeMissingError"/></not-empty></process>
+                    <process field="cardNumber"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardNumberMissingError"/></not-empty></process>
+                    <process field="contactMechId"><copy/></process>
+                    <process field="description"><copy/></process>
+                    <process field="expMonth"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationMonthMissingError"/></not-empty></process>
+                    <process field="expYear"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationYearMissingError"/></not-empty></process>
+                    <process field="expireDate"><copy/></process>
+                  </simple-map-processor>
+    
+             </call-map-processor>
+             <if-not-empty field="expMonth">
+               <if-validate-method field="creditCardContext.expireDate" method="isDateBeforeToday">
+                   <property-to-field field="tempErrorMessage" resource="OSafeUiLabels" property="ExpirationDateIsBeforeTodayError"/>
+                   <string-to-list string="${tempErrorMessage}" message-field="expMonth" list="error_list"/>
+               </if-validate-method>
+            </if-not-empty>
+            <!-- Check that the card type matches -->
+            <call-bsh><![CDATA[
+                List errorMessageList = javolution.util.FastList.newInstance();
+                parameters.put("errorMessageList", errorMessageList );
+                if (!org.ofbiz.base.util.UtilValidate.isCardMatch((String) creditCardContext.get("cardType"), (String) creditCardContext.get("cardNumber"))) {
+                          errorMessageList.add(
+                                              org.ofbiz.base.util.UtilProperties.getMessage("OSafeUiLabels", "CreditCardNumberInvalidError",
+                                                  org.ofbiz.base.util.UtilMisc.toMap(
+                                                      "cardNumber", (String) creditCardContext.get("cardNumber"),
+                                                      "cardType", (String) creditCardContext.get("cardType"),
+                                                      "validCardType", org.ofbiz.base.util.UtilValidate.getCardType((String) creditCardContext.get("cardNumber"))
+                                                  ),locale));
+                  }
+            ]]></call-bsh>
+    
+            <set field="errorMessageList" from-field="parameters.errorMessageList" />
+    
+            <!-- Get errors from method call and associate to field -->
+            <if-not-empty  field="errorMessageList">
+                <log level="info" message="isCardMatch found errors"/>
+                <iterate list="errorMessageList" entry="error">
+                    <string-to-list string="${error}" message-field="cardNumber" list="error_list"/>
+                </iterate>
+            </if-not-empty>
+        </else>
+        </if-compare>
+    </simple-method>
+
+    <simple-method method-name="validateContactUs" short-description="validate Conatact Us" login-required="false">
+        <!-- Check Contact Us form -->
+        <call-map-processor in-map-name="parameters" out-map-name="custRequestContext">
+            <simple-map-processor name="custRequest">
+                <process field="contactReason"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ContactReasonMissingError"/></not-empty></process>
+                <process field="emailAddress"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="EmailAddressMissingError"/></not-empty></process>
+                <process field="firstName"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="FirstNameMissingError"/></not-empty></process>
+                <process field="lastName"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="LastNameMissingError"/></not-empty></process>
+                <process field="content"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CommentMissingError"/></not-empty></process>
+                <process field="contactPhoneArea"><copy/></process>
+                <process field="contactPhoneContact3"><copy/></process>
+                <process field="contactPhoneContact4"><copy/></process>
+                <process field="orderIdNumber"><copy/></process>
+            </simple-map-processor>
+        </call-map-processor>
+        <if-not-empty field="parameters.emailAddress">
+            <call-map-processor in-map-name="parameters" out-map-name="emailContext">
+                <simple-map-processor name="newEmail">
+                    <process field="emailAddress">
+                        <copy to-field="emailAddress"/>
+                        <validate-method method="isEmail"><fail-property resource="OSafeUiLabels" property="EmailInvalidError"/></validate-method>
+                    </process>
+                </simple-map-processor>
+            </call-map-processor>
+        </if-not-empty>
+        <check-errors/>
+    </simple-method>
+
 </simple-methods>

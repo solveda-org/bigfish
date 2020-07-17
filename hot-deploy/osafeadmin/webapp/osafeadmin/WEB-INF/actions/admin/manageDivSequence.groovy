@@ -20,7 +20,7 @@ if (UtilValidate.isNotEmpty(searchString))
     allScreenSearchLis = FastList.newInstance();
     searchRestrictionMap = FastMap.newInstance();
     searchRestrictionMap.put("screen", "Y");
-    screenSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, searchString, true, false);\
+    screenSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, searchString, true, false);
     for(Map screenListMap : screenSearchList) {
         if (UtilValidate.isInteger(screenListMap.value)) {
             if (UtilValidate.isNotEmpty(screenListMap.value)) {
@@ -34,6 +34,7 @@ if (UtilValidate.isNotEmpty(searchString))
     context.resultScreenList = screenSearchList;
     pagingListSize=screenSearchList.size();
     context.pagingListSize=pagingListSize;
+    context.selectedScreen = searchString; 
 } 
 if (UtilValidate.isNotEmpty(context.retriveAll) && context.retriveAll == "Y")
 {

@@ -70,9 +70,7 @@ under the License.
         </#if>
 
 <div id="productReviewDetails" class="displayBox">
-<div class="displayBoxHeader">
-    <span class="displayBoxHeaderCaption">${StringUtil.wrapString(productName)}</span>
-</div>    
+    <h3>${StringUtil.wrapString(productName)}</h3>
     <div class="productReviewHeaderRow" id="productReviewHeaderRow">
             <div class="productReviewHeader">
               <img border="0" alt="${StringUtil.wrapString(productName)}" class="productReviewImage" src="${productSmallImageUrl?if_exists}" height="${IMG_SIZE_REVIEW_H!""}" width="${IMG_SIZE_REVIEW_W!""}">
@@ -87,9 +85,7 @@ under the License.
 </div>
 
 <div id="productRatingEntry" class="displayBox">
-<div class="displayBoxHeader">
-   <span class="displayBoxHeaderCaption">${uiLabelMap.ProductRatingsHeading}</span>
-</div>   
+<h3>${uiLabelMap.ProductRatingsHeading}</h3>
    <p class="instructions">${StringUtil.wrapString(uiLabelMap.RequiredInstructionsInfo)}</p>            
   <fieldset class="col">
     <div class="entry">
@@ -320,9 +316,7 @@ under the License.
 </div>
 
 <div id="productRatingShareEntry" class="displayBox">
-<div class="displayBoxHeader">
-   <span class="displayBoxHeaderCaption">${uiLabelMap.ShareOpinionHeading}</span>
-</div>   
+   <h3>${uiLabelMap.ShareOpinionHeading}</h3>
   <fieldset class="col">
     <div class="entry">
       <label for="reviewTitle"><@required/>${uiLabelMap.ReviewTitleCaption}</label>
@@ -343,9 +337,7 @@ under the License.
 </div>
 
 <div id="productRatingTellOtherEntry" class="displayBox">
-<div class="displayBoxHeader">
-   <span class="displayBoxHeaderCaption">${uiLabelMap.TellOthersHeading}</span>
-</div>   
+ <h3>${uiLabelMap.TellOthersHeading}</h3>
   <fieldset class="col">
     <div class="entry">
       <label for="reviewLocation">${uiLabelMap.LocationCaption}</label>

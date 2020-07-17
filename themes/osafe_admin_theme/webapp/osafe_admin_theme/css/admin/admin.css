@@ -87,7 +87,7 @@ body {
 /****************************************************************
 * Standard HTML Tags
 ****************************************************************/
-input, select, textarea {
+input[type=text], select, textarea {
     font-family: 'Verdana', 'Helvetica Neue', 'Lucida Sans Unicode', sans-serif;
     color: #A50000;
     border: 1px solid #000000;
@@ -96,6 +96,13 @@ input[type=text]:focus, select:focus, textarea:focus {
    background: #f5f2ec;
    border: 1px solid #BF7400;
 }
+
+input[type="checkbox"],
+input[type="radio"]{
+	background: transparent;
+	border: 0;
+	}
+
 
 /* remember to define focus styles! */
 :focus {
@@ -107,7 +114,7 @@ ol, ul {
 }
 
 table {
-    border-collapse: separate;
+    border-collapse: collapse;
     border-spacing: 0;
 }
 caption, th, td {
@@ -179,6 +186,7 @@ input[type="text"].textEntry {
 
 input[type="text"].dateEntry {
     width: 110px;
+    float: left;
 }
 
 input[type="text"].emailEntry{
@@ -294,7 +302,6 @@ a.standardBtn.secondary {
     text-transform: inherit;
     text-decoration: none;
     padding: 1px 5px 1px 5px;
-    *padding:0px;
 }
 
 a.standardBtn.saveAsBtn {
@@ -317,6 +324,7 @@ a.standardBtn.help {
     padding: 10px 0 2px 25px;
     font-weight: normal;
     font-size: 10px;
+    display: inline-block;
 }
 a.standardBtn.logout {
     background: #0C0C0C;
@@ -326,6 +334,7 @@ a.standardBtn.logout {
     padding: 10px 0 2px 25px;
     font-weight: normal;
     font-size: 10px;
+    display: inline-block;
 }
 a.standardBtn.help:hover {
  	text-decoration: underline;
@@ -558,6 +567,8 @@ border-bottom: none;
     border-bottom: 2px solid #0C0C0C;
     float: left;
     width: 100%;
+	position: relative;  /* needed to clear drop downs over content */
+	z-index: 2;  /* needed to clear drop downs over content */
 }
 
 #navigationMenu ul {
@@ -585,8 +596,9 @@ border-bottom: none;
 #navigationMenu li.sfHover ul {
     left:            0;
     top:            23px; /* match top ul list item height */
-   *top             27px; 
+   *top: 22px; 
     z-index:        99;
+    border-top: 1px solid #000;
 }
 ul#navigationMenu li:hover li ul,
 ul#navigationMenu li.sfHover li ul {
@@ -667,7 +679,7 @@ ul#navigationMenu li li li.sfHover ul {
 ****************************************************************/
 .PageTitle{
     clear: left;
-	float: left;
+    float: left;
     margin: 0 0 10px 0;
 }
 
@@ -697,6 +709,7 @@ ul#navigationMenu li li li.sfHover ul {
     float:right; 
     padding: 5px 40px 0 0; 
     color:#333333;
+    font-size: .85em;
 }
 
 .eCommerceErrorMessage {
@@ -742,7 +755,7 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
 .displayBox {
-    margin: 0 0 1em 0;
+    margin: 1em 0;
 
 }
 
@@ -791,7 +804,8 @@ ul#navigationMenu li li li.sfHover ul {
 }
 
 .displayBox .boxBody, .displaySearchBox .boxBody, .displayListBox .boxBody {
-    background: #feeaca;
+    background: none repeat scroll 0 0 #FEEACA;
+    clear: left;
     font-size: 1.3em;
 }
 .displayBox .boxText {
@@ -846,9 +860,9 @@ tr.odd{
 .boxBody td.boxNumber {
     font-size: 1em;
     font-weight: bold;
-    width: 100%;
     padding: 0 2px 0 0;
     text-align: center;
+    width: 100%!important; /* js2 */
 }
 .boxBody td.boxDollar, .boxBody th.boxDollar {
     font-size: 1em;
@@ -919,9 +933,10 @@ categoryDetail:after {
 }
 
 .entryRow {
-    float: left;
-    padding: .5em 0 .5em 0;
-    width: 100%;
+    clear: left;
+    padding: 0.5em 0;
+	float: left; 
+	width: 100%;
 }
 
 .entryRow label, .entryRow div.entry, .entryRow div.entryInput {
@@ -955,6 +970,7 @@ categoryDetail:after {
 }
 .entryRow div.entryInput.checkbox.small {
     width: 200px;
+
 }
 .entryRow div.entryInput.checkbox.short {
     width: 115px;
@@ -1061,7 +1077,9 @@ categoryDetail:after {
 }
 
 .infoRow div.infoCaption {
-    width: 150px;
+ /*   float: left;  */
+    clear: left;
+
 }
 
 .infoRow div.infoCaption label {
@@ -1098,13 +1116,16 @@ div.infoValue div.dataRow div.dataColumn {
     display: inline-block;
 }
 div.infoValue div.dataRow div.operDataColumn {
-    width: 130px;
+	float: left;
+/*    width: 130px;  */
 }
 div.infoValue div.dataRow div.nameDataColumn {
-    width: 300px;
+	float: left;
+/*   width: 300px;  */
 }
 div.infoValue div.dataRow div.actionDataColumn {
-    width: 200px;
+	float: left;
+/*    width: 200px;  */
 }
 div.infoRow span.textCounter{
     color: #333333;
@@ -1655,7 +1676,19 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
 }
 
 #orderManagementOrderDetail .displayBox.customerInfo {
-    margin: 0 20px 0 0;
+    margin: 10px 20px 0 0;
+}
+
+#orderManagementOrderDetail .displayBox.paymentInfo {
+
+}
+
+#orderManagementOrderDetail .displayBox.paymentInfo div.infoValue {
+
+}
+
+#orderManagementOrderDetail .displayBox.paymentInfo div.infoValue p {
+    float: none;
 }
 
 /****************************************************************
@@ -1687,7 +1720,7 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     text-align: right;
 }
 
-#orderManagementOrderDetail .displayListBox.orderItemInfo {
+.displayListBox.orderItemInfo {
     clear: left;
     width: 1068px;
     margin: 1em 0;
@@ -1888,6 +1921,8 @@ table.osafe {
 table.osafe thead {
     }
 table.osafe tbody {
+    width:100%!important;
+
     }
 table.osafe tfoot {
 /*    background-color: #fff;  */
@@ -1927,7 +1962,10 @@ table.osafe tr.footers th {
     background-color:  #fff;
     padding: 1em;
 }
+table.osafe tfoot > tr:hover {
+    background: none;
 
+}
 
 table.orderSummary {
     width: 400px;
@@ -2065,10 +2103,12 @@ tr.noResult td {
     text-align: center!important;
 }
 .adminMore {
-    float: right;
+	position: absolute;
     color: white;
     font-size: 14px;
-   *margin: -20px 0 0 0;
+	width: 100px;
+	float: right;
+
 }
 
 /****************************************************************
@@ -2117,8 +2157,7 @@ table.tablesorter thead tr .headerSortDown {
 .dialogBox {
     display: none;
     position: fixed;
-    min-width: 450px;
-    max-width: 620px;
+	width: auto!important; 
     height: auto;
     padding: 0px;
     z-index: 102;
@@ -2141,8 +2180,20 @@ table.tablesorter thead tr .headerSortDown {
 }
 #dashboard .displayBox .header 
 {
+   float: left;
    text-align:center;
    padding: 3px 0;
+   width: 510px;
+   border-bottom: 1px solid #000;
+   z-index: 1;
+}
+#displayLookUpDialog {
+	width: 500px;
+	height: auto!important;
+}
+
+#displayLookUpDialog .selectorHeader, #displayLookUpDialog .selectorSearchBox, #displayLookUpDialog .selectorListBox {
+    width: 500px;
 }
 
 /****************************************************************
@@ -2556,6 +2607,17 @@ input[type="button"].standardBtn.productLoaderTab {
 
 .bottomRow {
     border-bottom: 1px solid black;
+}
+
+.boxBody .helperText {
+    clear: both;
+}
+
+.boxBody .helperText span {
+    display: block;
+    padding: 10px 0;
+    font-size: .85em;
+    margin: 0 0 0 10px;
 }
 
 /****************************************************************
@@ -3444,15 +3506,34 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  *
  * http://docs.jquery.com/UI/Progressbar#theming
  */
-.ui-progressbar { height:2em; text-align: left; }
-.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
-button.ui-datepicker-trigger{
-     background:none;
-     border:0px;
-     width:25px; 
-     top:1px;
-     position:relative;
-     cursor: pointer;
+.ui-progressbar {
+     height:2em;
+     text-align: left;
+}
+
+.ui-progressbar .ui-progressbar-value {
+     margin: -1px;
+     height:100%;
+}
+
+button.ui-datepicker-trigger {
+     background: url("/osafe_admin_theme/images/classic/icon/datePickerCalendar.jpg") 50% no-repeat;
+    border: 0 none;
+    cursor: pointer;
+    height: 15px;
+    margin: 0 0 0 5px;
+    position: relative;
+    top: 3px;
+    width: 16px;
+}
+
+
+button.ui-datepicker-trigger img {
+	display: none;
+}
+
+button.ui-datepicker-trigger:active {
+
 }
 
 /*

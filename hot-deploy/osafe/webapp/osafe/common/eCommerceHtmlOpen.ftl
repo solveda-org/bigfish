@@ -9,9 +9,15 @@
 <#assign initialLocale = locale.toString()>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta content="all,index,follow" name="robots">
+    <meta content="all,index,follow" name="robots"/>
 	<#assign titleWithOutHtml = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(metaTitle!title!productStore.title!"")!"") />
-    <title>${(productStore.storeName)?if_exists} <#if titleWithOutHtml?has_content> - ${titleWithOutHtml!""}</#if> </title>
+	<#assign seoTitle = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(globalContext.SEO_STORE_TITLE!productStore.storeName!"")!"") />
+	<#assign seoTitlePosition = StringUtil.wrapString(Static["com.osafe.util.Util"].stripHTMLInLength(globalContext.SEO_STORE_TITLE_POSITION!"")!"") />
+	<#if seoTitlePosition == "SUFFIX">
+		<title><#if titleWithOutHtml?has_content>${titleWithOutHtml!""}</#if> ${(seoTitle)?if_exists}  </title>
+	<#else>
+		<title>${(seoTitle)?if_exists} <#if titleWithOutHtml?has_content> ${titleWithOutHtml!""}</#if> </title>
+	</#if>
   <#if layoutSettings.VT_SHORTCUT_ICON?has_content>
     <#assign shortcutIcon = layoutSettings.VT_SHORTCUT_ICON.get(0)/>
   <#elseif layoutSettings.shortcutIcon?has_content>

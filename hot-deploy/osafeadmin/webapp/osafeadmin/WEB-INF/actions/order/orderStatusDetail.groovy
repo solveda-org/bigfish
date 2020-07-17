@@ -14,6 +14,8 @@ import org.ofbiz.entity.util.EntityUtil;
 import javolution.util.FastList;
 import javolution.util.FastMap;
 
+import org.ofbiz.base.util.*;
+
 userLogin = session.getAttribute("userLogin");
 orderId = StringUtils.trimToEmpty(parameters.orderId);
 if(orderId && security.hasEntityPermission('SPER_ORDER_MGMT', '_VIEW', session)){
@@ -30,3 +32,15 @@ conditions.add(EntityCondition.makeCondition("statusId", EntityOperator.IN, ["OR
 mainCond = EntityCondition.makeCondition(conditions, EntityOperator.AND);
 statusItems = delegator.findList("StatusItem", mainCond, null, ["sequenceId"], null, false);
 context.statusItems = statusItems;
+
+
+//is it a store pickup?
+storeId = "";
+orderDeliveryOptionAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "DELIVERY_OPTION"], true);
+if (UtilValidate.isNotEmpty(orderDeliveryOptionAttr) && orderDeliveryOptionAttr.attrValue == "STORE_PICKUP") {
+	context.isStorePickup = "Y";
+	orderStoreLocationAttr = delegator.findOne("OrderAttribute", [orderId : orderHeader.orderId, attrName : "STORE_LOCATION"], true);
+	if (UtilValidate.isNotEmpty(orderStoreLocationAttr)) {
+		storeId = orderStoreLocationAttr.attrValue;
+	}
+}

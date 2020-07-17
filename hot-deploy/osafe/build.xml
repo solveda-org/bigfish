@@ -113,10 +113,10 @@
 
         <copy file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties.template" tofile="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties">
             <filterset >
-              <filter token="port.https" value="${port.https}"/>
-              <filter token="port.http" value="${port.http}"/>
-              <filter token="https.host" value="${https.host}"/>
-              <filter token="http.host" value="${http.host}"/>
+              <filter token="url.port.https" value="${url.port.https}"/>
+              <filter token="url.port.http" value="${url.port.http}"/>
+              <filter token="url.https.host" value="${url.https.host}"/>
+              <filter token="url.http.host" value="${url.http.host}"/>
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/framework/webapp/config/url.properties" todir="../../framework/webapp/config" overwrite="true" failonerror="false"/>
@@ -129,10 +129,10 @@
               <filter token="store.productStoreId" value="${store.productStoreId}"/>
               <filter token="store.productCategoryRootId" value="${store.productCategoryRootId}"/>
               <filter token="currency.uom.id.default" value="${currency.uom.id.default}"/>
-              <filter token="port.https" value="${port.https}"/>
-              <filter token="port.http" value="${port.http}"/>
-              <filter token="https.host" value="${https.host}"/>
-              <filter token="http.host" value="${http.host}"/>
+              <filter token="url.port.https" value="${url.port.https}"/>
+              <filter token="url.port.http" value="${url.port.http}"/>
+              <filter token="url.https.host" value="${url.https.host}"/>
+              <filter token="url.http.host" value="${url.http.host}"/>
             </filterset>
         </copy>
         <move file="${osafe.deployemt.home}/ofbiz/hot-deploy/osafe/data/seed/clientStoreSeedData.xml" todir="../../hot-deploy/osafe/data/seed" overwrite="true" failonerror="false"/>

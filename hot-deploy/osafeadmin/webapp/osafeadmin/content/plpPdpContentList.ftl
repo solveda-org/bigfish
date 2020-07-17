@@ -47,7 +47,6 @@
   </#if>
     
   <#if levelValue?has_content && levelValue="1">
-  <#if contentListName?exists && contentListName == 'PLPContentList'>
     <#assign megaMenuProdCatContentTypeId = "PLP_ESPOT_MEGA_MENU"/>
     <#assign megaMenuMode = "Add"/>
     <#assign productCategoryContentList = delegator.findByAnd("ProductCategoryContent", {"productCategoryId" : category.getString("productCategoryId"), "prodCatContentTypeId" : megaMenuProdCatContentTypeId?if_exists})>
@@ -101,35 +100,13 @@
       <#assign prodCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(prodCategoryContentList) />
       <#assign facetEndContentId = prodCategoryContent.contentId?if_exists />
     </#if>
-  </#if>
-    <#if contentListName?exists && contentListName == 'PDPContentList'>
-      <#if prodCatContentTypeId?exists && prodCatContentTypeId?has_content>
-      <#assign mode = "Add"/>
-      <#assign productCategoryContentList = delegator.findByAnd("ProductCategoryContent", {"productCategoryId" : category.getString("productCategoryId"), "prodCatContentTypeId" : prodCatContentTypeId?if_exists})>
-      <#assign prodCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryContentList?if_exists) />
-     
-      <#if prodCategoryContentList?has_content>
-        <#assign mode = "Edit"/>
-        <#assign prodCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(prodCategoryContentList) />
-        <#assign contentId = prodCategoryContent.contentId?if_exists />
-      <#else>
-        <#assign contentId = "" />
-      </#if>
-      </#if>
-    </#if>
     <tr class="dataRow ${levelClass} ${itemIndexClass} <#if rowClass == "2">even<#else>odd</#if>">
       <td class="seqCol firstCol">${category.sequenceNum?if_exists}</td>
       <td class="descCol">
-        <#if contentListName?exists && contentListName == 'PLPContentList'>
           <#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if>
-        </#if>
-        <#if contentListName?exists && contentListName == 'PDPContentList'>
-          <#if prodCatContentTypeId?exists && prodCatContentTypeId?has_content><a class="${levelClass}" href="<@ofbizUrl><#if mode != "Add">${contentDetailTarget?if_exists}?contentId=${contentId?if_exists}<#else>${addProdCatContentTarget?if_exists}?productCategoryId=${category.productCategoryId}&amp;prodCatContentTypeId=${prodCatContentTypeId?if_exists}</#if></@ofbizUrl>"><#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if></a></#if>
-        </#if>
       </td>
       <td class="seqCol">&nbsp;</td>
       <td class="descCol" colspan="0">&nbsp;</td>
-      <#if contentListName?exists && contentListName == 'PLPContentList'>
       <td class="actionPromoCol">
         <#if megaMenuContentId?has_content && (megaMenuMode != "Add")>
           <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${megaMenuContentId?if_exists}</@ofbizUrl>">
@@ -141,6 +118,7 @@
           </a>
         </#if>
       </td>
+      <td>&nbsp;</td>
       <td class="actionPromoCol">
         <#if pageTopContentId?has_content && (pageTopMode != "Add")>
           <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageTopContentId?if_exists}</@ofbizUrl>">
@@ -185,37 +163,21 @@
           </a>
         </#if>
       </td>
-       </#if>
-    <#if contentListName?exists && contentListName == 'PDPContentList'>
-      <#if contentId?has_content && (mode != "Add")>
-        <#assign contentDetail = delegator.findOne("Content", {"contentId" : contentId}, true) />
-        <#assign statusItem = delegator.findOne("StatusItem", {"statusId" : contentDetail.statusId}, false)>
-        <td class="statusCol"><#if (statusItem.statusId)?has_content && (statusItem.statusId != "CTNT_IN_PROGRESS")>${statusItem.description!statusItem.get("description",locale)!statusItem.statusId}</#if></td>
-        <td class="dateCol">
-          <#assign lastModifiedDate = "" />
-          <#if (statusItem.statusId)?has_content && (statusItem.statusId == "CTNT_PUBLISHED")>
-            <#if contentDetail.lastModifiedDate?has_content>
-              ${contentDetail.lastModifiedDate?string(preferredDateFormat)}
-            </#if>
-          </#if>
-        </td>
-        <td class="dateCol">${(contentDetail.createdDate?string(preferredDateFormat))!""}</td>
-      <#else>
-        <td colspan="3"></td>
-      </#if>
-      <td class="actionColSmall lastCol">
-        <#if previewAction?exists && previewAction?has_content && (contentId?has_content || subContentId?has_content)>
-          <a href="<@ofbizUrl>${previewAction}?contentId=${contentId?if_exists}</@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.PreviewContentTooltip}');" onMouseout="hideTooltip()" class="previewIcon" target="_new"></a>
-          <#assign contentId = "" />
-          <#assign subContentId = "" />
-        </#if>
-      </td>
-    </#if>
     </tr>
-  </#if>
-  
+ </#if> 
   <#if levelValue?has_content && levelValue="2">
-  <#if contentListName?exists && contentListName == 'PLPContentList'>
+    <#assign PDPAddlContentTypeId = "PDP_ADDITIONAL"/>
+    <#assign PDPAddlMode = "Add"/>
+    <#assign productCategoryContentList = delegator.findByAnd("ProductCategoryContent", {"productCategoryId" : category.getString("productCategoryId"), "prodCatContentTypeId" : PDPAddlContentTypeId?if_exists})>
+    <#assign prodCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryContentList?if_exists) />
+    <#if prodCategoryContentList?has_content>
+      <#assign PDPAddlMode = "Edit"/>
+      <#assign prodCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(prodCategoryContentList) />
+      <#assign PDPAddlSubContentId = prodCategoryContent.contentId?if_exists />
+    <#else>
+      <#assign PDPAddlSubContentId = "" />
+    </#if>
+    
     <#assign pageTopProdCatContentTypeId = "PLP_ESPOT_PAGE_TOP"/>
     <#assign pageTopMode = "Add"/>
     <#assign productCategoryContentList = delegator.findByAnd("ProductCategoryContent", {"productCategoryId" : category.getString("productCategoryId"), "prodCatContentTypeId" : pageTopProdCatContentTypeId?if_exists})>
@@ -267,36 +229,25 @@
     <#else>
       <#assign facetEndSubContentId = "" />
     </#if>
-  </#if>
-  <#if contentListName?exists && contentListName == 'PDPContentList'>
-    <#if prodCatContentTypeId?exists && prodCatContentTypeId?has_content>
-      <#assign mode = "Add"/>
-        <#assign productCategoryContentList = delegator.findByAnd("ProductCategoryContent", {"productCategoryId" : category.getString("productCategoryId"), "prodCatContentTypeId" : prodCatContentTypeId?if_exists})>
-        <#assign prodCategoryContentList = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(productCategoryContentList?if_exists) />
-    
-        <#if prodCategoryContentList?has_content>
-          <#assign mode = "Edit"/>
-          <#assign prodCategoryContent = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(prodCategoryContentList) />
-          <#assign subContentId = prodCategoryContent.contentId?if_exists />
-        <#else>
-          <#assign subContentId = "" />
-        </#if>
-    </#if>
-  </#if>
-    <tr class="dataRow ${levelClass} ${itemIndexClass} <#if rowClass == "2">even<#else>odd</#if>">
+ <tr class="dataRow ${levelClass} ${itemIndexClass} <#if rowClass == "2">even<#else>odd</#if>">
       <td class="seqCol firstCol">&nbsp;</td>
       <td class="descCol">&nbsp;</td>
       <td class="seqCol">${category.sequenceNum?if_exists}</td>
       <td class="descCol" colspan="0">
-        <#if contentListName?exists && contentListName == 'PLPContentList'>
           <#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if>
-        </#if>
-        <#if contentListName?exists && contentListName == 'PDPContentList'>
-          <#if prodCatContentTypeId?exists && prodCatContentTypeId?has_content><a class="${levelClass}" href="<@ofbizUrl><#if mode != "Add">${contentDetailTarget?if_exists}?contentId=${subContentId?if_exists}<#else>${addProdCatContentTarget?if_exists}?productCategoryId=${category.productCategoryId?if_exists}&amp;prodCatContentTypeId=${(prodCatContentTypeId)?if_exists}</#if></@ofbizUrl>"><#if categoryName?has_content>${categoryName}<#else>${categoryDescription?default("")}</#if></a></#if>
-        </#if>
       </td>
-      <#if contentListName?exists && contentListName == 'PLPContentList'>
-      <td class="actionPromoCol">&nbsp;</td>     
+      <td class="actionPromoCol">&nbsp;</td>  
+      <td class="actionPromoCol">
+        <#if PDPAddlSubContentId?has_content && (PDPAddlMode != "Add")>
+          <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${PDPAddlSubContentId?if_exists}</@ofbizUrl>">
+            <span class="previewIcon"></span>
+          </a>
+        <#else>
+          <a class="${levelClass}" href="<@ofbizUrl>${addProdCatContentTarget?if_exists}?productCategoryId=${category.productCategoryId?if_exists}&amp;prodCatContentTypeId=${(PDPAddlContentTypeId)?if_exists}</@ofbizUrl>">
+            <span class="plusIcon"></span>
+          </a>
+        </#if>
+      </td>   
       <td class="actionPromoCol">
         <#if pageTopSubContentId?has_content && (pageTopMode != "Add")>
           <a class="${levelClass}" href="<@ofbizUrl>${contentDetailTarget?if_exists}?contentId=${pageTopSubContentId?if_exists}</@ofbizUrl>">
@@ -341,35 +292,8 @@
           </a>
         </#if>
       </td>
-      </#if>
-      <#if contentListName?exists && contentListName == 'PDPContentList'>
-      <#if subContentId?has_content && (mode != "Add")>
-        <#assign contentDetailSub = delegator.findOne("Content", {"contentId" : subContentId}, true) />
-        <#assign statusItemSub = delegator.findOne("StatusItem", {"statusId" : contentDetailSub.statusId}, false)>
-        <td class="statusCol"><#if (statusItemSub.statusId)?has_content && (statusItemSub.statusId != "CTNT_IN_PROGRESS")>${statusItemSub.description!statusItemSub.get("description",locale)!statusItemSub.statusId}</#if></td>
-        <td class="dateCol">
-          <#assign lastModifiedDate = "" />
-          <#if (statusItemSub.statusId)?has_content && (statusItemSub.statusId == "CTNT_PUBLISHED") >
-            <#if contentDetailSub.lastModifiedDate?has_content>
-              ${contentDetailSub.lastModifiedDate?string(preferredDateFormat)}
-            </#if>
-          </#if>
-        </td>
-        <td class="dateCol">${(contentDetailSub.createdDate?string(preferredDateFormat))!""}</td>
-      <#else>
-        <td colspan="3"></td>
-      </#if>
-      <td class="actionColSmall lastCol">
-        <#if previewAction?exists && previewAction?has_content && (contentId?has_content || subContentId?has_content)>
-          <a href="<@ofbizUrl>${previewAction}?contentId=<#if contentId?has_content>${contentId?if_exists}<#elseif subContentId?has_content>${subContentId?if_exists}</#if></@ofbizUrl>" onMouseover="showTooltip(event,'${uiLabelMap.PreviewContentTooltip}');" onMouseout="hideTooltip()" class="previewIcon" target="_new"></a>
-          <#assign contentId = "" />
-          <#assign subContentId = "" />
-        </#if>
-      </td>
-    </#if>
-    </tr>
-    
-  </#if>
+ </tr>
+ </#if>
   <#if subCatList?has_content>
     <#assign idx=1/>
     <#assign subListSize=subCatList.size()/>
@@ -387,16 +311,11 @@
     <th class="descCol">${uiLabelMap.SubItemLabel}</th>
     <#if contentListName?exists && contentListName == 'PLPContentList'>
       <th class="actionPromoCol">${uiLabelMap.MegaMenuLabel}</th>
+      <th class="actionPromoCol">${uiLabelMap.PDPAddlLabel}</th>
       <th class="actionPromoCol">${uiLabelMap.PageTopLabel}</th>
       <th class="actionPromoCol">${uiLabelMap.PageEndLabel}</th>
       <th class="actionPromoCol">${uiLabelMap.FacetTopLabel}</th>
       <th class="actionPromoCol">${uiLabelMap.FacetEndLabel}</th>
-    </#if>
-    <#if contentListName?exists && contentListName == 'PDPContentList'>
-      <th class="statusCol">${uiLabelMap.StatusLabel}</th>
-      <th class="dateCol">${uiLabelMap.ActiveDateLabel}</th>
-      <th class="dateCol">${uiLabelMap.CreatedDateLabel}</th>
-      <th class="actionColSmall"></th>
     </#if>
   </tr>
   <#if topLevelList?has_content>

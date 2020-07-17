@@ -25,8 +25,8 @@
         <section>
             <actions>
                 <set field="addressEntryBoxHeading" value="${uiLabelMap.ShippingAddressHeading}"/>
-                <set field="isShipping" value="Y"/>
-                <set field="showAttnName" value="Y"/>
+                <set field="isShipping" from-field="isShipping" default-value="Y"/>
+                <set field="showAttnName" from-field="showAttnName" default-value="Y"/>
                 <set field="showHomePhone" value="Y"/>
                 <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
                 <set field="homePhoneRequired" value="Y"/>
@@ -35,11 +35,13 @@
                 <set field="fieldPurpose" value="SHIPPING" />
             </actions>
             <widgets>
+                <container style="checkoutOrderShippingAddress">
                 <platform-specific>
                     <html>
                       <html-template location="component://osafe/webapp/osafe/common/entry/addressShippingEntry.ftl"/>
                     </html>
                 </platform-specific>
+                </container>
             </widgets>
         </section>
     </screen>
@@ -56,11 +58,36 @@
                 <set field="fieldPurpose" value="BILLING" />
             </actions>
             <widgets>
+                <container style="checkoutOrderBillingAddress">
                 <platform-specific>
                     <html>
                       <html-template location="component://osafe/webapp/osafe/common/entry/addressBillingEntry.ftl"/>
                     </html>
                 </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="anonAddressBillingEntryForm">
+        <section>
+            <actions>
+                <set field="addressEntryBoxHeading" value="${uiLabelMap.BillingAddressHeading}" />
+                <set field="showHomePhone" value="Y"/>
+                <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
+                <set field="homePhoneRequired" value="Y"/>
+                <set field="showMobilePhone" value="Y"/>
+                <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
+                <set field="fieldPurpose" value="BILLING" />
+            </actions>
+            <widgets>
+                <container style="checkoutOrderBillingAddress">
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafe/webapp/osafe/common/entry/anonAddressBillingEntry.ftl"/>
+                    </html>
+                </platform-specific>
+                </container>
             </widgets>
         </section>
     </screen>

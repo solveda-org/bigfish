@@ -13,7 +13,7 @@ shoppingCart = ShoppingCartEvents.getCartObject(request);
 context.shoppingCart = shoppingCart;
 
 CategoryWorker.getRelatedCategories(request, "topLevelList", CatalogWorker.getCatalogTopCategoryId(request, CatalogWorker.getCurrentCatalogId(request)), true);
-curCategoryId = parameters.productCategoryId ?: parameters.CATEGORY_ID ?: "";
+curCategoryId = parameters.productCategoryId ?: parameters.CATEGORY_ID ?: context.productCategoryId ?: "";
 curTopMostCategoryId = parameters.topMostProductCategoryId ?: parameters.TOP_MOST_CATEGORY_ID ?: "";
 
 request.setAttribute("curCategoryId", curCategoryId);

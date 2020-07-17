@@ -9,7 +9,7 @@
     </#if>
 </#if>
 
-<div class ="personInfoGender">
+<div class ="personalInfoGender">
      <div class="entry">
       <label for="USER_GENDER"><@required/>${uiLabelMap.GenderCaption}</label>
       <select name="USER_GENDER" id="USER_GENDER">

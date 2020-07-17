@@ -1,7 +1,5 @@
 <div class="displayBox confirmDialog">
-    <div class="displayBoxHeader">
-       <span class="displayBoxHeaderCaption">${searchDialogTitle!""}</span>
-     </div>
+     <h3>${searchDialogTitle!""}</h3>
      <div class="confirmTxt">${searchDialogText!""}</div>
      <div class="confirmBtn">
        <#if searchDialogOkBtn?exists>

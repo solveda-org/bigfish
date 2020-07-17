@@ -87,9 +87,17 @@
               <#if ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "CREDIT_CARD") && (orderPaymentPreference.getString("paymentMethodId")?has_content))>
                     <#assign creditCard = orderPaymentPreference.getRelatedOne("PaymentMethod").getRelatedOne("CreditCard")>
                     <p>${creditCard.get("cardType")?if_exists}</p>
-              <#else>
-                  <#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")>
+              <#elseif ((orderPaymentPreference?has_content) && (orderPaymentPreference.getString("paymentMethodTypeId") == "EXT_COD"))>
+                  <#assign PaymentMethodType = orderPaymentPreference.getRelatedOne("PaymentMethodType")>
                   <p>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</p>
+              <#else>
+                  <#assign paymentMethod = orderPaymentPreference.getRelatedOne("PaymentMethod")?if_exists>
+                  <#if paymentMethod?has_content>
+		              <#assign paymentMethodType = paymentMethod.getRelatedOne("PaymentMethodType")?if_exists>
+		              <#if paymentMethodType?has_content>
+		               <p>${paymentMethodType.description?default(paymentMethodType.paymentMethodTypeId)}</p>
+		              </#if>
+                  </#if>
               </#if>
            </#list>
          </div>

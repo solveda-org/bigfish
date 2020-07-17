@@ -460,19 +460,35 @@
              </div>
         </div>
         <#if product?exists>
-          <#assign productAttribute = delegator.findOne("ProductAttribute", {"productId" : product.productId, "attrName" : "BIGFISH_INVENTORY"}, true)?if_exists/> 
-          <#if productAttribute?exists>
-            <#assign inventoryLevel = productAttribute.attrValue!>
+          <#assign bfTotalInventoryProductAttribute = delegator.findOne("ProductAttribute", {"productId" : product.productId, "attrName" : "BF_INVENTORY_TOT"}, true)?if_exists/> 
+          <#if bfTotalInventoryProductAttribute?exists>
+            <#assign bfTotalInventory = bfTotalInventoryProductAttribute.attrValue!>
+          </#if>
+          
+          <#assign bfWHInventoryProductAttribute = delegator.findOne("ProductAttribute", {"productId" : product.productId, "attrName" : "BF_INVENTORY_WHS"}, true)?if_exists/> 
+          <#if bfWHInventoryProductAttribute?exists>
+            <#assign bfWHInventory = bfWHInventoryProductAttribute.attrValue!>
           </#if>
         </#if>
-        <div class="infoRow row">
+        <div class="infoRow column">
           <div class="infoEntry long">
             <div class="infoCaption">
-              <label>${uiLabelMap.BFInventoryCaption}</label>
+              <label>${uiLabelMap.BFTotalInventoryCaption}</label>
             </div>
             <div class="infoValue">
-              <input type="text" class="textEntry" name="inventoryLevel" id="inventoryLevel" value="${parameters.inventoryLevel!inventoryLevel!""}" />
+              <input type="text" class="textEntry" name="bfTotalInventory" id="bfTotalInventory" value="${parameters.bfTotalInventory!bfTotalInventory!""}" />
             </div>
           </div>
         </div>
+        
+        <div class="infoRow column">
+           <div class="infoEntry">
+               <div class="infoCaption">
+                   <label>${uiLabelMap.BFWareHouseInventoryCaption}</label>
+               </div>
+               <div class="infoValue">
+                 <input type="text" class="textEntry" name="bfWHInventory" id="bfWHInventory" value="${parameters.bfWHInventory!bfWHInventory!""}" />
+               </div>
+           </div>
+       </div>
 <#include "component://osafeadmin/webapp/osafeadmin/product/productIdentificationDetail.ftl"/>

@@ -1,7 +1,7 @@
 <#if (LONG_DESCRIPTION?exists && LONG_DESCRIPTION?has_content) || categoryPdpDescription?has_content>
- <div id="pdpLongDescription">
+ <div class="pdpLongDescription">
        <div class="displayBox">
-         <h3 class="displayBoxHeaderCaption">${uiLabelMap.PDPLongDescriptionHeading}</h3>
+         <h3>${uiLabelMap.PDPLongDescriptionHeading}</h3>
         <#-- Distinguishing Features -->
         <#if categoryPdpDescription?has_content>
           <p class="categoryDescription">${categoryPdpDescription!""}</p>

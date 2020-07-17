@@ -2,9 +2,9 @@
 jQuery(document).ready(function () {
   <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(QUICKLOOK_ACTIVE)>
     <#if QUICKLOOK_DELAY_MS?has_content && Static["com.osafe.util.Util"].isNumber(QUICKLOOK_DELAY_MS) && QUICKLOOK_DELAY_MS != "0">
-      jQuery("div.eCommerceThumbNailHolder").hover(function(){jQuery(this).find("div.plpQuickLook").fadeIn(${QUICKLOOK_DELAY_MS});},function () {jQuery(this).find("div.plpQuickLook").fadeOut(${QUICKLOOK_DELAY_MS});});
+      jQuery("div.eCommerceThumbNailHolder").hover(function(){jQuery(this).find("div.plpQuicklook").fadeIn(${QUICKLOOK_DELAY_MS});},function () {jQuery(this).find("div.plpQuicklook").fadeOut(${QUICKLOOK_DELAY_MS});});
     <#else>
-      jQuery("div.eCommerceThumbNailHolder div.plpQuickLook").show();
+      jQuery("div.eCommerceThumbNailHolder div.plpQuicklook").show();
     </#if>
   </#if>
 
@@ -33,16 +33,14 @@ jQuery(document).ready(function () {
     function makePDPUrl(elm) {
         var plpFeatureSwatchImageId = jQuery(elm).attr("id");
         var plpFeatureSwatchImageIdArr = plpFeatureSwatchImageId.split("|");
-        var pdpUrl = jQuery('#pdpUrl_'+plpFeatureSwatchImageIdArr[1]).val();
+        var pdpUrlId = plpFeatureSwatchImageIdArr[1]+plpFeatureSwatchImageIdArr[0]; 
+        var pdpUrl = document.getElementById(pdpUrlId).value;
+        
         var productFeatureType = plpFeatureSwatchImageIdArr[0];
-        if(pdpUrl.indexOf("?") == -1) {
-            pdpUrl = pdpUrl+'?productFeatureType='+productFeatureType;
-        } else {
-            pdpUrl = pdpUrl+'&productFeatureType='+productFeatureType;
-        }
-        jQuery('#'+plpFeatureSwatchImageIdArr[1]+'_productFeatureType').val(productFeatureType);
-        jQuery(elm).parents('.eCommerceListItem').find('.eCommerceThumbNailHolder').find('.swatchProduct').find('a').attr("href",pdpUrl);
-        jQuery('#detailLink_'+plpFeatureSwatchImageIdArr[1]).attr("href",pdpUrl);
+        
+        jQuery('#'+plpFeatureSwatchImageIdArr[1]+'_productFeatureType').val(productFeatureType); 
+        jQuery(elm).parents('.eCommerceListItem').find('a.pdpUrl').attr("href",pdpUrl);
+        jQuery(elm).parents('.eCommerceListItem').find('a.pdpUrl.review').attr("href",pdpUrl+"#productReviews");
     }
 });
 

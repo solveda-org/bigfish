@@ -1,4 +1,4 @@
-<div id="pdpStockLegend">
+<div class="pdpStockLegend">
 <ul class="stockKey">
     <li><span class="inStock"></span>In Stock</li>
     <li><span class="lowStock"></span>Low Stock</li>

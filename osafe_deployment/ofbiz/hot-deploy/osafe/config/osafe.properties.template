@@ -157,6 +157,13 @@ pdp-alternate-images = 10
 goodIdentificationTypes = @goodIdentificationTypes@
 #######################################
 # PLP SORT OPTIONS
-#Format (SORT_OPTION:SORT_VALUE-ORDER(asc,desc):SORT_LABEL)
+#Format (SORT_OPTION=SORT_VALUE-ORDER(asc,desc),SORT_LABEL)
 #######################################
-SORT.OPTIONS=HIGHEST_RATING:customerRating-desc:HighestRatingLabel||MOST_POPULAR:sequenceNum:MostPopularLabel||NAME_ASCENDING:name-asc:NameAscendingLabel||NAME_DESCENDING:name-desc:NameDescendingLabel||HIGHEST_PRICE:price-desc:HighestPriceLabel||LOWEST_PRICE:price-asc:LowestPriceLabel||MOST_VIEWED:totalTimesViewed-desc:MostViewedLabel||BEST_SELLING:totalQuantityOrdered-desc:BestSellingLabel
+HIGHEST_RATING =customerRating-desc|HighestRatingLabel
+MOST_POPULAR =sequenceNum|MostPopularLabel
+NAME_ASCENDING =name-asc|NameAscendingLabel
+NAME_DESCENDING =name-desc|NameDescendingLabel
+HIGHEST_PRICE =price-desc|HighestPriceLabel
+LOWEST_PRICE =price-asc|LowestPriceLabel
+MOST_VIEWED =totalTimesViewed-desc|MostViewedLabel
+BEST_SELLING =totalQuantityOrdered-desc|BestSellingLabel

@@ -1,7 +1,5 @@
 <div class="displayBox confirmDialog">
-    <div class="displayBoxHeader">
-       <span class="displayBoxHeaderCaption">${commonConfirmDialogTitle!""}</span>
-     </div>
+     <h3>${commonConfirmDialogTitle!""}</h3>
      <div class="confirmTxt">${commonConfirmDialogText!""}</div>
      <div class="confirmBtn">
        <#if commonConfirmDialogYesBtn?exists>

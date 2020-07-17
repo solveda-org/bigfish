@@ -115,11 +115,12 @@
             DataResource
             Content
             ElectronicText
-            ContentAssoc
+            XContentXref
             ContentPurpose
         </description>
         <implements service="createTextContent"/>
-        <attribute name="spotListMenuId" type="String" mode="IN" optional="false"/>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="contentTypeId" type="String" mode="IN" optional="false"/>
         <override name="description" allow-html="any"/>
     </service>
 
@@ -216,6 +217,92 @@
         <attribute name="value" mode="IN" type="String" optional="true"/>
     </service>
 
+    <service name="createMissingDivGroup" engine="group" auth="false">
+        <description>
+         create Div Seq Item and render success message
+        </description>
+        <group>
+            <invoke name="createMissingDiv" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createMissingDiv" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="createMissingDiv">
+        <description>
+         create Ui Label.
+        </description>
+        <attribute name="key" mode="INOUT" type="String" optional="true"/>
+        <attribute name="screen" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="uiDiv" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+    <service name="updateDivSequenceItemGroup" engine="group" auth="false">
+        <description>
+         updates a div sequence Item and render success message
+        </description>
+        <group>
+            <invoke name="updateDivSequenceItem" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateDivSequenceItem" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updateDivSequenceItem">
+        <description>
+         update div sequence item.
+        </description>
+        <attribute name="key" mode="INOUT" type="String" optional="true"/>
+        <attribute name="screen" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="uiDiv" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+    <service name="updateDivSeqXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="modifyDivSequenceXml">
+        <description>Uses Update Label xml config file</description>
+        <attribute name="key" mode="INOUT" type="String" optional="true"/>
+        <attribute name="screen" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="uiDiv" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+    <service name="addDivSeqItemXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="addDivSeqItemXml">
+        <description>add Ui Label in xml config file</description>
+        <attribute name="key" mode="IN" type="String"/>
+        <attribute name="screen" mode="IN" type="String" optional="true"/>
+        <attribute name="description" mode="IN" type="String" optional="true"/>
+        <attribute name="uiDiv" mode="IN" type="String" optional="true"/>
+        <attribute name="value" mode="IN" type="String" optional="true"/>
+    </service>
+    <service name="deleteDivSeqItemGroup" engine="group" auth="false">
+        <description>
+         deletes Div Seq Item and render success message
+        </description>
+        <group>
+            <invoke name="deleteDivSeqItem" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+        <service name="deleteDivSeqItem" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="deleteDivSeqItem">
+        <description>
+         Delete UiLabel.
+        </description>
+        <attribute name="key" mode="IN" type="String"/>
+        <attribute name="screen" mode="IN" type="String"/>
+    </service>
+
+    <service name="deleteDivSeqItemXml" engine="java" transaction-timeout="300" auth="true"
+            location="com.osafe.services.OsafeManageXml" invoke="deleteDivSeqItemXml">
+        <description>Delete Ui Label from xml config file</description>
+        <attribute name="key" mode="IN" type="String"/>
+        <attribute name="screen" mode="IN" type="String"/>
+    </service>
+    
     <service name="addUiLabelXml" engine="java" transaction-timeout="300" auth="true"
             location="com.osafe.services.OsafeManageXml" invoke="addUiLabelXml">
         <description>add Ui Label in xml config file</description>
@@ -407,6 +494,7 @@
         <attribute name="screens" type="Map" string-map-prefix="screen_" mode="IN" optional="true"/>
         <attribute name="descriptions" type="Map" string-map-prefix="description_" mode="IN" optional="true"/>
         <attribute name="values" type="Map" string-map-prefix="value_" mode="IN" optional="true"/>
+        <attribute name="groups" type="Map" string-map-prefix="group_" mode="IN" optional="true"/>
         <attribute name="screenType" mode="INOUT" type="String" optional="true"/>
         <attribute name="showDetail" mode="INOUT" type="String" optional="true"/>
     </service>
@@ -417,6 +505,7 @@
         <attribute name="screen" mode="IN" type="String" optional="true"/>
         <attribute name="description" mode="IN" type="String" optional="true"/>
         <attribute name="value" mode="IN" type="String" optional="true"/>
+        <attribute name="group" mode="IN" type="String" optional="true"/>
     </service>
 
     <service name="copyDivSequenceXml" engine="java" transaction-timeout="300" auth="true"
@@ -449,7 +538,11 @@
         <attribute name="listPrice" mode="IN" type="String" optional="true"/>
         <attribute name="defaultPrice" mode="IN" type="String" optional="true"/>
         <attribute name="isVariant" mode="IN" type="String" optional="true"/>
-        <attribute name="inventoryLevel" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="bfTotalInventory" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="bfWHInventory" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="isVariant" mode="IN" type="String" optional="true"/>
+        <attribute name="idValue" type="Map" string-map-prefix="idValue_" mode="IN" optional="true"/>
+        <attribute name="goodIdentificationTypeId" type="Map" string-map-prefix="goodIdentificationTypeId_" mode="IN" optional="true"/>
     </service>
     <service name="updateProductContent" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
             invoke="updateProductContent">
@@ -478,7 +571,6 @@
             <invoke name="createNewProduct" result-to-context="true"/>
             <invoke name="updateProductContent" result-to-context="true"/>
             <invoke name="updateProductIdentification" result-to-context="true"/>
-            <invoke name="manageBigfishInventory" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
@@ -501,7 +593,11 @@
         <attribute name="productTypeId" mode="IN" type="String" optional="true"/>
         <attribute name="productCategoryId" mode="IN" type="String" optional="true"/>
         <attribute name="currencyUomId" mode="IN" type="String" optional="true"/>
-        <attribute name="inventoryLevel" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="bfTotalInventory" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="bfWHInventory" type="String" mode="IN" optional="true" allow-html="any"/>
+        <attribute name="isVariant" mode="IN" type="String" optional="true"/>
+        <attribute name="idValue" type="Map" string-map-prefix="idValue_" mode="IN" optional="true"/>
+        <attribute name="goodIdentificationTypeId" type="Map" string-map-prefix="goodIdentificationTypeId_" mode="IN" optional="true"/>
     </service>
     
     <service name="updateProductIdentification" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminCatalogServices.xml"
@@ -531,7 +627,8 @@
          Create Update, Delete Product Attribute for Bigfish Inventory.
         </description>
         <attribute name="productId" mode="IN" type="String" optional="false"/>
-        <attribute name="inventoryLevel" type="String" mode="IN" optional="true"/>
+        <attribute name="attrName" type="String" mode="IN" optional="true"/>
+        <attribute name="attrValue" type="String" mode="IN" optional="true"/>
     </service>
     
     <service name="updateProductPriceGroup" engine="group" auth="false">
@@ -542,7 +639,6 @@
             <invoke name="updateProductAndPrice" result-to-context="true"/>
             <invoke name="updateProductContent" result-to-context="true"/>
             <invoke name="updateProductIdentification" result-to-context="true"/>
-            <invoke name="manageBigfishInventory" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
@@ -716,6 +812,7 @@
             DataResourceRole
             DataResource
         </description>
+		<implements service="commonFormHiddenFields"/>
         <implements service="removeContent"/>
     </service>
     <service name="findParty" engine="java"
@@ -770,7 +867,7 @@
         <attribute name="lowIndex" type="Integer" mode="OUT" optional="false"/>
     </service>
 
-    <service name="clearLabelCacheGroup" engine="group" auth="false">
+   <service name="clearLabelCacheGroup" engine="group" auth="false">
         <description>
          clear label cache and render success message
         </description>
@@ -787,6 +884,24 @@
         </description>
         <attribute name="cacheName" mode="IN" type="String" optional="true"/>
     </service>
+    
+    <service name="clearPixelCacheGroup" engine="group" auth="false">
+        <description>
+         clear pixel cache and render success message
+        </description>
+        <group>
+            <invoke name="clearPixelCache" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="clearPixelCache" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="clearPixelCache">
+        <description>
+        clear pixel cache
+        </description>
+        <attribute name="UTIL_CACHE_NAME" mode="IN" type="String" optional="true"/>
+    </service>    
 
     <service name="solrReIndexGroup" engine="group" auth="false" transaction-timeout="7200">
         <description>
@@ -1589,6 +1704,65 @@
         <attribute name="optionalMessage" type="String" mode="IN" optional="true"/>
         <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
     </service> 
+    
+    <service name="createShipmentMethodTypeGroup" engine="group" auth="false">
+        <description>
+         Create Shipment Method Type
+        </description>
+        <group>
+            <invoke name="createShippingMethodType" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createShippingMethodType" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="createShipmentMethodType">
+        <description>Create Shipment Method Type</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="description" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceNum" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="cancelScheduledJobGroup" engine="group" auth="false">
+        <description>
+         Cancel a Scheduled Job
+        </description>
+        <group>
+            <invoke name="cancelScheduledJob" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="cancelScheduledJob" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminScheduledJobServices.xml"
+            invoke="cancelScheduledJob">
+        <description>Create a Scheduled Job</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="jobId" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateScheduledJobGroup" engine="group" auth="false">
+        <description>
+         Update a Scheduled Job
+        </description>
+        <group>
+            <invoke name="updateScheduledJob" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateScheduledJob" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminScheduledJobServices.xml"
+            invoke="updateScheduledJob">
+        <description>Create a Scheduled Job</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="jobId" type="String" mode="IN" optional="true"/>
+        <attribute name="JOB_NAME" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_NAME" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_TIME" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_END_TIME" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_FREQUENCY" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_INTERVAL" type="String" mode="IN" optional="true"/>
+        <attribute name="SERVICE_COUNT" type="String" mode="IN" optional="true"/>
+    </service>
 
     <service name="updateCategoryMetatagGroup" engine="group" auth="false">
         <description>
@@ -2026,6 +2200,15 @@
             <invoke name="successMessage" result-to-context="true"/>
         </group>
     </service>
+    <service name="updateEBSConfigGroup" engine="group" auth="true">
+        <description>
+         Update EBS Payment Config Group Settings
+        </description>
+        <group>
+            <invoke name="updatePaymentGatewayConfigEBS" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
 
     <service name="exportOrderXML" engine="java" transaction-timeout="7200" auth="true"
             location="com.osafe.services.ImportServices" invoke="exportOrderXML">
@@ -2092,4 +2275,73 @@
         </group>
     </service>
 
+
+    <service name="updateProductFeatureAppl" engine="java" transaction-timeout="7200" auth="true"
+            location="com.osafe.services.OsafeAdminCatalogServices" invoke="updateProductFeatureAppl">
+        <description>Update ProductFeatureAppl Sequence Number</description>
+        <attribute name="productFeatureId" type="String" mode="IN" optional="false"/>
+        <attribute name="sequenceNum" type="Long" mode="IN" optional="true"/>
+    </service>
+
+    <!-- XContentXref services -->
+    <service name="createXContentXref" engine="simple" auth="true"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml" invoke="createXContentXref">
+        <description>Create a XContentXref Record</description>
+        <permission-service service-name="commonGenericPermission" main-action="CREATE"/>
+        <attribute name="bfContentId" type="String" mode="INOUT" optional="true"/>
+        <attribute name="contentId" type="String" mode="IN" optional="false"/>
+        <attribute name="productStoreId" type="String" mode="IN" optional="false"/>
+        <attribute name="contentTypeId" type="String" mode="IN" optional="true"/>
+    </service>
+    <service name="updateXContentXref" default-entity-name="XContentXref" engine="entity-auto" invoke="update" auth="true">
+        <description>Update a XContentXref</description>
+        <permission-service service-name="commonGenericPermission" main-action="UPDATE"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" mode="IN" optional="true"/>
+    </service>
+    <service name="deleteXContentXref" default-entity-name="XContentXref" engine="entity-auto" invoke="delete" auth="true">
+        <description>Delete a XContentXref</description>
+        <permission-service service-name="commonGenericPermission" main-action="DELETE"/>
+        <auto-attributes include="pk" mode="IN" optional="false"/>
+    </service>
+
+    <service name="updateStaticPageSeoUrlGroup" engine="group" auth="false">
+        <description>
+         Update Static Pages seo url as well as render success message.
+        </description>
+        <group>
+            <invoke name="updateStaticPageSeoUrl" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="updateStaticPageSeoUrl" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminContentServices.xml"
+            invoke="updateStaticPageSeoUrl">
+        <description>
+         Update static pages seo url.
+        </description>
+        <attribute name="contentIds" type="Map" string-map-prefix="contentId_" mode="IN" optional="true"/>
+        <attribute name="attrValues" type="Map" string-map-prefix="attrValue_" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="validateTestEmailGroup" engine="group" auth="false">
+        <description>
+         Send Test Email Group.
+        </description>
+        <group>
+            <invoke name="validateTestEmail" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    
+    <service name="validateTestEmail" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminEmailServices.xml"
+            invoke="validateTestEmail">
+        <description>
+         Test Email validation.
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="emailType" type="String" mode="IN" optional="false"/>
+        <attribute name="testEmailAddress" type="String" mode="IN" optional="true"/>
+        <attribute name="testEmailText" type="String" mode="IN" optional="true"/>
+    </service>
 </services>

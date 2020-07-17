@@ -73,7 +73,7 @@
   <div class="infoRow row">
     <div class="infoEntry long">
       <div class="infoCaption">
-        <label>${uiLabelMap.ShippingMethCaption}</label>
+        <label>${uiLabelMap.ShippingMethodCaption}</label>
       </div>
       <div class="infoValue">
         <select name="shipmentMethodTypeId" id="shipmentMethodTypeId" class="small">

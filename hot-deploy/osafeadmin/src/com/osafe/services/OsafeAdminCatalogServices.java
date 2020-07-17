@@ -17,6 +17,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.entity.Delegator;
+import org.ofbiz.entity.DelegatorFactory;
 import org.ofbiz.entity.GenericEntityException;
 import org.ofbiz.entity.GenericValue;
 import org.ofbiz.entity.util.EntityUtil;
@@ -490,5 +491,24 @@ public class OsafeAdminCatalogServices {
     }
        return ServiceUtil.returnSuccess();
 }
+   
+    public static Map<String, Object> updateProductFeatureAppl(DispatchContext dctx, Map<String, ? extends Object> context)
+    {
+        Delegator delegator = DelegatorFactory.getDelegator("default-no-eca");
+        String productFeatureId = (String) context.get("productFeatureId");
+        Long sequenceNum = (Long) context.get("sequenceNum");
+        try {
+        	List<GenericValue> productFeatureAppls = delegator.findByAnd("ProductFeatureAppl", UtilMisc.toMap("productFeatureId", productFeatureId));
+        	if(UtilValidate.isNotEmpty(productFeatureAppls)) {
+        	    for(GenericValue productFeatureAppl : productFeatureAppls) {
+			        productFeatureAppl.set("sequenceNum", sequenceNum);
+			        delegator.store(productFeatureAppl);
+        	    }
+        	}
+		} catch (GenericEntityException e) {
+			Debug.logError(e, module);
+		}
+        return ServiceUtil.returnSuccess();
+    }   
     
 }

@@ -28,62 +28,38 @@ if(person) {
     context.billingPersonFirstName = person.firstName?person.firstName:"";
     context.billingPersonLastName = person.lastName?person.lastName:"";
 }
-billingContactMechAddressList = ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false);
-context.billingContactMechAddress = EntityUtil.getFirst(billingContactMechAddressList);
 
-contactMech = context.billingContactMechAddress;
-billingPhoneNumberMap = [:];
-if(contactMech){
-    context.billingContactMechId = contactMech.contactMechId;
-    contactMechIdFrom = contactMech.contactMechId;
-    contactMechLinkList = delegator.findByAnd("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechIdFrom))
-
-    for (GenericValue link: contactMechLinkList){
-        contactMechIdTo = link.contactMechIdTo
-        contactMech = delegator.findByPrimaryKey("ContactMech", [contactMechId : contactMechIdTo]);
-        phonePurposeList  = EntityUtil.filterByDate(contactMech.getRelated("PartyContactMechPurpose"), true);
-        partyContactMechPurpose = EntityUtil.getFirst(phonePurposeList)
-
-        telecomNumber = null;
-        if(partyContactMechPurpose) {
-            telecomNumber = partyContactMechPurpose.getRelatedOne("TelecomNumber");
-        }
-
-        if(telecomNumber) {
-            billingPhoneNumberMap[partyContactMechPurpose.contactMechPurposeTypeId]=telecomNumber;
-        }
+billingAddress = shoppingCart.getBillingAddress();
+if (UtilValidate.isNotEmpty(billingAddress))
+{
+    context.billingAddress = billingAddress;
+    context.billingContactMechId = billingAddress.contactMechId;
+}
+else
+{
+    billingAddressContactMechId =shoppingCart.getContactMech("BILLING_LOCATION");
+    if (UtilValidate.isNotEmpty(billingAddressContactMechId))
+    {
+      billingAddress = delegator.findOne("PostalAddress", [contactMechId :billingAddressContactMechId], true);
+      if (UtilValidate.isNotEmpty(billingAddress))
+      {
+        context.billingAddress = billingAddress;
+        context.billingContactMechId = billingAddress.contactMechId;
+      }
+    
+    }
+    else
+    {
+      billingContactMechAddressList = ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false);
+      billingContactMechAddress = EntityUtil.getFirst(billingContactMechAddressList);
+      billingAddress=billingContactMechAddress.getRelatedOne("PostalAddress");
+      context.billingAddress = billingAddress;
+      context.billingContactMechId = billingAddress.contactMechId;
     }
 }
-context.billingPhoneNumberMap = billingPhoneNumberMap;
 
 // Shipping
-shippingContactMechList = ContactHelper.getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false);
-shippingContactMechPhoneMap = [:];
-for (GenericValue contactMech : shippingContactMechList){
-    shippingPhoneNumberMap = [:];
-    if(contactMech){
-        contactMechIdFrom = contactMech.contactMechId;
-        contactMechLinkList = delegator.findByAnd("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechIdFrom))
-
-        for (GenericValue link: contactMechLinkList){
-            contactMechIdTo = link.contactMechIdTo
-            contactMech = delegator.findByPrimaryKey("ContactMech", [contactMechId : contactMechIdTo]);
-            phonePurposeList  = EntityUtil.filterByDate(contactMech.getRelated("PartyContactMechPurpose"), true);
-            partyContactMechPurpose = EntityUtil.getFirst(phonePurposeList)
-
-            telecomNumber = null;
-            if(partyContactMechPurpose) {
-                telecomNumber = partyContactMechPurpose.getRelatedOne("TelecomNumber");
-            }
-
-            if(telecomNumber) {
-                shippingPhoneNumberMap[partyContactMechPurpose.contactMechPurposeTypeId]=telecomNumber;
-            }
-        }
-    }
-    shippingContactMechPhoneMap[contactMechIdFrom] = shippingPhoneNumberMap;
-}
-context.shippingContactMechPhoneMap = shippingContactMechPhoneMap;
+context.shippingAddress = shoppingCart.getShippingAddress();
 
 // Credit Card Info
 creditCardTypes = delegator.findByAnd("Enumeration", [enumTypeId : "CREDIT_CARD_TYPE"], ["sequenceId"]);

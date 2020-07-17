@@ -14,6 +14,7 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -54,27 +55,69 @@ import com.osafe.geo.OsafeGeo;
 public class Util {
 
     public static final String module = Util.class.getName();
+    private final static DecimalFormat DFFLOAT=new DecimalFormat("#######.00");
     
-    //In future this method will need to update then also need to update OsafeAdminUtil.formatTelephone.
-    public static String formatTelephone(String areaCode, String contactNumber) {
-        if (contactNumber == null) {
-            return "";
+    public static String formatTelephone(String areaCode, String contactNumber) 
+    {
+        return formatTelephone(areaCode, contactNumber,null);
+    }
+    
+    
+    //If you update this method also update OsafeAdminUtil.formatTelephone.
+    public static String formatTelephone(String areaCode, String contactNumber, String numberFormat) {
+    	String sAreaCode="";
+    	String sContactNumber="";
+    	String sFullPhone="";
+    	if (UtilValidate.isNotEmpty(areaCode)) 
+    	{
+    		sAreaCode=areaCode;
         }
-        if (areaCode == null) {
-            areaCode = "";
+    	if (UtilValidate.isNotEmpty(contactNumber)) 
+    	{
+            sContactNumber=contactNumber;
         }
-        String fullPhone = areaCode + contactNumber;
-        fullPhone = UtilValidate.stripCharsInBag(fullPhone, UtilValidate.phoneNumberDelimiters);
-
-        if (UtilValidate.isEmpty(areaCode)) {
-            return fullPhone;
-        }
-
-        if (fullPhone.length() == 10) {
-            fullPhone = "(" + fullPhone.substring(0, 3) + ") " + fullPhone.substring(3, 6) + "-" + fullPhone.substring(6);
-        }
-
-        return fullPhone;
+        sFullPhone = sAreaCode + sContactNumber;
+    	if(UtilValidate.isNotEmpty(numberFormat) && UtilValidate.isNotEmpty(sFullPhone))
+    	{
+            String sFullPhoneNum = sFullPhone.replaceAll("[^0-9]", "");
+            //get count of how many digits in phone number
+            int digitsCount =sFullPhoneNum.length();
+            //get count of how many pounds in format
+            String pounds = numberFormat.replaceAll("[^#]", "");
+            int poundsCount = pounds.length();
+            
+            //if number of digits equal the number of pounds 
+            if(digitsCount == poundsCount)
+            {
+            	for(int i=0; i<digitsCount; i++)
+            	{
+            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+            	}
+            	sFullPhone=numberFormat;
+            }
+            else if(digitsCount < poundsCount)
+            {
+            	for(int i=0; i<digitsCount; i++)
+            	{
+            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+            	}
+            	//remove all extra #'s
+            	numberFormat=numberFormat.replaceAll("[#]", "");
+            	sFullPhone=numberFormat;
+            }
+            else if(digitsCount > poundsCount)
+            {
+            	int i = 0;
+            	for(i=0; i<poundsCount; i++)
+            	{
+            		numberFormat=numberFormat.replaceFirst("[#]", "" + sFullPhoneNum.charAt(i));
+            	}
+            	//add extra numbers to the end
+            	numberFormat=numberFormat + sFullPhoneNum.substring(i);
+            	sFullPhone=numberFormat;
+            }
+    	}
+        return sFullPhone;
     }
 
     public static String filterNonAscii(String inString) {
@@ -493,22 +536,22 @@ public class Util {
         if (passwordLength > 0) {
             String digitMsgStr = "digits";
             String upperCaseMsgStr = "letters";
-        String errormessage = UtilProperties.getMessage("OsafeUiLabels", "PasswordMinLengthError", UtilMisc.toMap("passwordLength", passwordLength), Locale.getDefault());
+        String errormessage = UtilProperties.getMessage("OSafeUiLabels", "PasswordMinLengthError", UtilMisc.toMap("passwordLength", passwordLength), Locale.getDefault());
         if (minDigit > 0) {
             if (minDigit == 1) {
                 digitMsgStr = "digit";
                 
             }
-            errormessage = errormessage+" "+UtilProperties.getMessage("OsafeUiLabels", "PasswordDigitError", UtilMisc.toMap("minDigit", (Integer)minDigit, "digitMsgStr", digitMsgStr), Locale.getDefault());
+            errormessage = errormessage+" "+UtilProperties.getMessage("OSafeUiLabels", "PasswordDigitError", UtilMisc.toMap("minDigit", (Integer)minDigit, "digitMsgStr", digitMsgStr), Locale.getDefault());
         }
         
         if (minUpperCase == 1) {
             upperCaseMsgStr = "letter";
         }
         if (minDigit > 0 && minUpperCase > 0) {
-            errormessage = errormessage+" and "+UtilProperties.getMessage("OsafeUiLabels", "PasswordUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
+            errormessage = errormessage+" and "+UtilProperties.getMessage("OSafeUiLabels", "PasswordUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
         } else if (minDigit == 0 && minUpperCase > 0) {
-            errormessage = errormessage+" "+UtilProperties.getMessage("OsafeUiLabels", "PasswordWithNoDigitUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
+            errormessage = errormessage+" "+UtilProperties.getMessage("OSafeUiLabels", "PasswordWithNoDigitUpperCaseError", UtilMisc.toMap("minUpperCase", (Integer) minUpperCase, "upperCaseMsgStr", upperCaseMsgStr), Locale.getDefault());
         }
         
         if (!(password.length() >= passwordLength)) {
@@ -628,5 +671,40 @@ public class Util {
         String formattedText = textContent.replaceAll("(\r\n|\r|\n|\n\r)", "<br>");
         return StringUtil.wrapString(formattedText);
     }
+    
+    
+    public static double convert(double dOpenAmount,int decimals)  {
+        double dValue=0;
+        try {
+
+            double dPow=0;
+            dPow=Math.pow(10,decimals);
+            dValue=Double.parseDouble(""+Double.parseDouble("" + dOpenAmount)*dPow);
+            long lValue=(long)dValue;
+             double dDiff=dValue-lValue;
+             //Added rounding of the diff to correctly calculate
+             //numbers that were coming out as .49999.
+             //example fValue = 72.615
+             //dValue would = 7261.4999999
+             if (Math.abs(Math.round(dDiff*100)) >=50)  {
+               if (lValue>=0)
+                 lValue+=1;
+               else
+                 lValue-=1;
+             }
+            dValue=lValue/dPow;
+            synchronized(DFFLOAT)
+            {
+              dValue=DFFLOAT.parse(""+dValue).doubleValue();
+            }
+
+}
+          catch (Exception e) {
+
+          }
+        return dValue;
+    }
+
+    
 }
 

@@ -1,8 +1,6 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <div id="emailSubscriberEntry" class="displayBox">
-<div class="displayBoxHeader">
-      <span class="displayBoxHeaderCaption">${uiLabelMap.EmailSubscriberHeading}</span>
-</div>      
+<h3>${uiLabelMap.EmailSubscriberHeading}</h3>
   <fieldset class="col">
     <div class="entry">
       <label for= "CUSTOMER_EMAIL"><@required/>${uiLabelMap.EmailAddressCaption}</label>

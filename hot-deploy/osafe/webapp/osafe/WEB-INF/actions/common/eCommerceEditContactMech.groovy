@@ -11,7 +11,7 @@ if (postalAddressData){
         String toName = postalAddressData.toName;
         toNameParts  = StringUtil.split(toName, " ");
 
-        if (toNameParts.size() > 0){
+        if (toNameParts && toNameParts.size() > 0){
             context.firstName = toNameParts[0];
             context.lastName = StringUtil.join(toNameParts.subList(1,toNameParts.size()), " ");
         }

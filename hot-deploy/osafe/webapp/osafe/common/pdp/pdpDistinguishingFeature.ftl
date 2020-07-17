@@ -1,5 +1,5 @@
 <#if disFeatureTypesList?has_content>
- <div id="pdpDistinguishingFeature">
+ <div class="pdpDistinguishingFeature">
     <div class="displayBox">
         <h3>${uiLabelMap.FeaturesHeading}</h3>
         <ul>
