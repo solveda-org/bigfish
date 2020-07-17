@@ -753,12 +753,16 @@
             </else>
         </if-empty>
         <if-empty field="parameters.description">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDescriptionError"/>
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelDescriptionError"/>
             <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
         </if-empty>
         <if-empty field="parameters.pixelScope">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelScopeError"/>
             <string-to-list string="${tempErrorMessage}" message-field="pixelScope" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.textData">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelCodeError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
         </if-empty>
         <check-errors/>
 
@@ -797,12 +801,16 @@
             </else>
         </if-empty>
         <if-empty field="parameters.description">
-            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankDescriptionError"/>
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelDescriptionError"/>
             <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
         </if-empty>
         <if-empty field="parameters.pixelScope">
             <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelScopeError"/>
-            <string-to-list string="${tempErrorMessage}" message-field="DESCRIPTION" list="error_list"/>
+            <string-to-list string="${tempErrorMessage}" message-field="pixelScope" list="error_list"/>
+        </if-empty>
+        <if-empty field="parameters.textData">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPixelCodeError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="textData" list="error_list"/>
         </if-empty>
         <check-errors/>
 

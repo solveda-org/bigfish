@@ -86,7 +86,7 @@
                 <set field="anonUserLogin.partyId" from-field="parameters.partyId"/>
                 <set-current-user-login value-field="anonUserLogin"/>
                 <else>
-                    <field-to-result field="userLogin"/>
+                    <field-to-result field="userLogin" result-name="existingUserLogin"/>
                 </else>
             </if-empty>
         </else>

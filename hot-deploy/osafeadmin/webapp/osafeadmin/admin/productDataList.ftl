@@ -24,9 +24,13 @@
     <th class="nameCol">${uiLabelMap.PDPSwatchImageLabel}</th>
     <th class="nameCol">${uiLabelMap.SelectFeaturesNo2Label}</th>
     <th class="nameCol">${uiLabelMap.SelectFeaturesNo3Label}</th>
+    <th class="nameCol">${uiLabelMap.SelectFeaturesNo4Label}</th>
+    <th class="nameCol">${uiLabelMap.SelectFeaturesNo5Label}</th>
     <th class="nameCol">${uiLabelMap.DecriptiveFeaturesNo1Label}</th>
     <th class="nameCol">${uiLabelMap.DecriptiveFeaturesNo2Label}</th>
     <th class="nameCol">${uiLabelMap.DecriptiveFeaturesNo3Label}</th>
+    <th class="nameCol">${uiLabelMap.DecriptiveFeaturesNo4Label}</th>
+    <th class="nameCol">${uiLabelMap.DecriptiveFeaturesNo5Label}</th>
     <th class="nameCol">${uiLabelMap.PLPImageLabel}</th>
     <th class="nameCol">${uiLabelMap.PLPAltImageLabel}</th>
     <th class="nameCol">${uiLabelMap.PDPThumbnailImageLabel}</th>
@@ -78,6 +82,8 @@
     <th class="nameCol">${uiLabelMap.ManufacturerIDLabel}</th>
     <th class="nameCol">${uiLabelMap.ProductVideoLabel}</th>
     <th class="nameCol">${uiLabelMap.Product360VideoLabel}</th>
+    <th class="nameCol">${uiLabelMap.SequenceNumberLabel}</th>
+    <th class="nameCol">${uiLabelMap.BFInventoryLabel}</th>
   </tr>
   <#if productDataList?exists && productDataList?has_content>
     <#assign rowClass = "1">
@@ -114,9 +120,13 @@
         <td class="nameCol">${product.pdpSwatchImage!""}</td>
         <td class="nameCol">${product.selectabeFeature_2!""}</td>
         <td class="nameCol">${product.selectabeFeature_3!""}</td>
+        <td class="nameCol">${product.selectabeFeature_4!""}</td>
+        <td class="nameCol">${product.selectabeFeature_5!""}</td>
         <td class="nameCol">${product.descriptiveFeature_1!""}</td>
         <td class="nameCol">${product.descriptiveFeature_2!""}</td>
         <td class="nameCol">${product.descriptiveFeature_3!""}</td>
+        <td class="nameCol">${product.descriptiveFeature_4!""}</td>
+        <td class="nameCol">${product.descriptiveFeature_5!""}</td>
         <td class="nameCol">${product.smallImage!""}</td>
         <td class="nameCol">${product.smallImageAlt!""}</td>
         <td class="nameCol">${product.thumbImage!""}</td>
@@ -167,6 +177,8 @@
         <td class="nameCol">${product.goodIdentificationManufacturerId!""}</td>
         <td class="nameCol">${product.pdpVideoUrl!""}</td>
         <td class="nameCol">${product.pdpVideo360Url!""}</td>
+        <td class="nameCol">${product.sequenceNum!""}</td>
+        <td class="nameCol">${product.bfInventory!""}</td>
       </tr>
       <#-- toggle the row color -->
       <#if rowClass == "2">

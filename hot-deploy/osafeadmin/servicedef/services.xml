@@ -622,7 +622,7 @@
         <attribute name="productFeatureTypeId" type="Map" string-map-prefix="productFeatureTypeId_" mode="IN" optional="true"/>
         
     </service>
-    <service name="updateFacetValueGroup" engine="group" auth="false">
+    <service name="updateFacetValueGroup" engine="group" auth="false" transaction-timeout="720000">
         <description>
          update product and product price as well as render success message
         </description>
@@ -1523,6 +1523,7 @@
         <description>Create the Shipping Charge</description>
         <implements service="commonFormHiddenFields"/>
         <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="groupName" type="String" mode="IN" optional="true"/>
     </service>
     
     <service name="deleteShipChargeGroup" engine="group" auth="false">

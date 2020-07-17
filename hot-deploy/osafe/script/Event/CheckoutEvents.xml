@@ -122,36 +122,76 @@
             </call-object-method>
         </if-compare>
 
-        <if-not-empty field="newUserLogin">
-            <call-object-method obj-field="shoppingCart" method-name="removeAdditionalPartyRole">
-                <field field="partyId"/>
-                <string value="GUEST_CUSTOMER"/>
-            </call-object-method>
-            <entity-one entity-name="UserLogin" value-field="userLogin" auto-field-map="false">
-                <field-map field-name="userLoginId" from-field="newUserLogin.userLoginId"/>
-            </entity-one>
-            <call-bsh>
-                <![CDATA[
-                    org.ofbiz.webapp.control.LoginWorker.doBasicLogin(userLogin, request);
-                    org.ofbiz.webapp.control.LoginWorker.autoLoginSet(request, response);
-                ]]>
-            </call-bsh>
+        <if>
+          <condition>
+            <or>
+                <not><if-empty field="existingUserLogin"/></not>
+                <not><if-empty field="newUserLogin"/></not>
+            </or>
+          </condition>
+          <then>
+            <if-not-empty field="newUserLogin">
+                <if-empty field="parameters.productStoreId">
+                    <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+                        <field field="request" type="javax.servlet.ServletRequest"/>
+                    </call-class-method>
+                <else>
+                    <set field="productStoreId" from-field="parameters.productStoreId"/>
+                </else>
+                </if-empty>
+                <!-- send off the registration email -->
+                <if-not-empty field="newUserLogin.userLoginId">
+                    <set field="storeEmailLookup.productStoreId" from-field="productStoreId"/>
+                    <set field="storeEmailLookup.emailType" value="PRDS_CUST_REGISTER"/>
+                    <find-by-primary-key map="storeEmailLookup" entity-name="ProductStoreEmailSetting"  value-field="storeEmail"/>
+                    <if-not-empty field="storeEmail.bodyScreenLocation">
+                        <get-related-one value-field="newUserLogin" relation-name="Person" to-value-field="person"/>
+                        <set field="bodyParameters.person" from-field="person"/>
+                        <set field="emailParams.bodyParameters" from-field="bodyParameters"/>
+                        <set field="emailParams.sendTo" from-field="newUserLogin.userLoginId"/>
+                        <set field="emailParams.subject" from-field="storeEmail.subject"/>
+                        <set field="emailParams.sendFrom" from-field="storeEmail.fromAddress"/>
+                        <set field="emailParams.sendCc" from-field="storeEmail.ccAddress"/>
+                        <set field="emailParams.sendBcc" from-field="storeEmail.bccAddress"/>
+                        <set field="emailParams.contentType" from-field="storeEmail.contentType"/>
+                        <set field="emailParams.bodyScreenUri" from-field="storeEmail.bodyScreenLocation"/>
+                        <set field="emailParams.emailType" from-field="storeEmailLookup.emailType"/>
+                        <!-- Put additional information into context for email generation -->
+                        <call-service-asynch service-name="sendMailFromScreen" in-map-name="emailParams" include-user-login="true"/>
+                    </if-not-empty>
+                </if-not-empty>
+                <call-object-method obj-field="shoppingCart" method-name="removeAdditionalPartyRole">
+                    <field field="partyId"/>
+                    <string value="GUEST_CUSTOMER"/>
+                </call-object-method>
+                <entity-one entity-name="UserLogin" value-field="userLogin" auto-field-map="false">
+                    <field-map field-name="userLoginId" from-field="newUserLogin.userLoginId"/>
+                </entity-one>
+                <call-bsh>
+                    <![CDATA[
+                        org.ofbiz.webapp.control.LoginWorker.doBasicLogin(userLogin, request);
+                        org.ofbiz.webapp.control.LoginWorker.autoLoginSet(request, response);
+                    ]]>
+                </call-bsh>
+            </if-not-empty>
+          </then>
         <else>
             <call-object-method obj-field="shoppingCart" method-name="addAdditionalPartyRole">
                 <field field="partyId"/>
                 <string value="GUEST_CUSTOMER"/>
             </call-object-method>
-                <entity-one entity-name="UserLogin" value-field="userLogin">
-                    <field-map field-name="userLoginId" value="anonymous"/>
-                </entity-one>
-                <set field="userLogin.partyId" from-field="partyId"/>
-                <set-current-user-login value-field="userLogin"/>
-                <call-object-method obj-field="shoppingCart" method-name="setUserLogin">
-                    <field field="userLogin" type="org.ofbiz.entity.GenericValue"/>
-                    <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
-                </call-object-method>
-          </else>
-        </if-not-empty>
+            <entity-one entity-name="UserLogin" value-field="userLogin">
+                <field-map field-name="userLoginId" value="anonymous"/>
+            </entity-one>
+            <set field="userLogin.partyId" from-field="partyId"/>
+            <set-current-user-login value-field="userLogin"/>
+            <call-object-method obj-field="shoppingCart" method-name="setUserLogin">
+                <field field="userLogin" type="org.ofbiz.entity.GenericValue"/>
+                <field field="dispatcher" type="org.ofbiz.service.LocalDispatcher"/>
+            </call-object-method>
+        </else>
+        </if>
+        
 
         <!-- Set Payment Method-->
         <if-compare field="parameters.paymentMethodTypeId" operator="equals" value="CREDIT_CARD">

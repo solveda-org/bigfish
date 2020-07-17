@@ -20,6 +20,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.min.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
                 <set field="layoutSettings.companyName" from-field="uiLabelMap.eCommerceCompanyName" global="true"/>
                 <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.eCommerceCompanySubtitle" global="true"/>
 
@@ -93,6 +94,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
@@ -213,6 +215,7 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
+                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/Dropdown.js" global="true"/>
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->

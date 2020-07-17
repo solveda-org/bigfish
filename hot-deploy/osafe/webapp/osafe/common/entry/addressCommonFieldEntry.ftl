@@ -52,8 +52,8 @@
 <!-- address state entry -->
 <div id="${fieldPurpose?if_exists}_STATES" class="entry">
     <label for="${fieldPurpose?if_exists}_STATE">
-        <span class="${fieldPurpose?if_exists}_USA">${uiLabelMap.StateCaption}</span>
-        <span class="${fieldPurpose?if_exists}_CAN">${uiLabelMap.ProvinceCaption}</span>
+        <span class="${fieldPurpose?if_exists}_USA"><@required/>${uiLabelMap.StateCaption}</span>
+        <span class="${fieldPurpose?if_exists}_CAN"><@required/>${uiLabelMap.ProvinceCaption}</span>
         <span class="${fieldPurpose?if_exists}_OTHER">${uiLabelMap.StateOrProvinceCaption}</span>
         <span id="advice-required-${fieldPurpose?if_exists}_STATE" style="display:none" class="errorMessage">(${uiLabelMap.CommonRequired})</span>
     </label>

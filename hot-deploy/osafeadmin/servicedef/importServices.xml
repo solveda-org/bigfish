@@ -105,6 +105,17 @@
         <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
         <attribute name="messages" type="List" mode="OUT" optional="false"/>
     </service>
+    
+    <service name="importClientProductXMLTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="importProductXML" auth="false" use-transaction="false">
+        <description>Import XML Elements, generate xml files in given directory using importDefinitionNames</description>
+        <attribute name="xmlDataFile" mode="IN" type="String" optional="false"/>
+        <attribute name="xmlDataDir" mode="IN" type="String" optional="false"/>
+        <attribute name="productLoadImagesDir" mode="IN" type="String" optional="true"/>
+        <attribute name="imageUrl" mode="IN" type="String" optional="true"/>
+        <attribute name="removeAll" mode="IN" type="Boolean" optional="true" />
+        <attribute name="autoLoad" mode="IN" type="Boolean" optional="true"/>
+        <attribute name="messages" type="List" mode="OUT" optional="true"/>
+    </service>
 
     <service name="exportClientProductTemplate" engine="java" location="com.osafe.services.ImportServices" invoke="exportProductXls" auth="false" use-transaction="false">
         <description>Export xls tabs as client product import template</description>

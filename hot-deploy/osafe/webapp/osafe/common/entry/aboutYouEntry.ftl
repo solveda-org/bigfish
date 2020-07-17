@@ -18,7 +18,6 @@
      <input type="hidden" name="partyId" value="${partyId!""}"/>
      <input type="hidden" name="productStoreId" value="${productStore.productStoreId}" />
      <input type="hidden" name="USER_COUNTRY" id="USER_COUNTRY" value="${COUNTRY_DEFAULT!}"/>
-     <input type="hidden" id="USER_USE_PHONE_CONTACT" name="USER_USE_PHONE_CONTACT" value="true"/>
      <input type="hidden" name="USER_MIDDLE_NAME" value=""/>
      <#if contactMech?has_content>
        <#assign contactMechId=contactMech.contactMechId!"">

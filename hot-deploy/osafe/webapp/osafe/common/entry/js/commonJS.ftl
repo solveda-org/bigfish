@@ -15,7 +15,7 @@
             resizable: true,
             width: 'auto',
             autoResize:true,
-            position: ['center','Top']
+            position: 'Top'
         });
     }
     function confirmDialogResult(result, dialogPurpose) {

@@ -10,6 +10,17 @@
       </div>
     </div>
   </div>
+  
+  <div class="infoRow">
+    <div class="infoEntry">
+      <div class="infoCaption">
+        <label>${uiLabelMap.DescriptionCaption}</label>
+      </div>
+      <div class="infoValue">
+          <input name="groupName" type="text" id="groupName" maxlength="20" value="${parameters.groupName!groupName!""}"/>
+      </div>
+    </div>
+  </div>
 
 <#else>
     ${uiLabelMap.NoDataAvailableInfo}

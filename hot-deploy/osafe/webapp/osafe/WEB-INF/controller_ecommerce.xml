@@ -558,6 +558,11 @@
         <response name="error" type="view" value="anonSinglePageCheckout"/>
     </request-map>
 
+    <request-map uri="anonSinglePagePayPalOrderSummary">
+        <security https="true" auth="false"/>
+        <response name="success" type="view" value="anonSinglePagePayPalOrderSummary"/>
+    </request-map>
+
 <!-- END ANONYMOUS SINGLE PAGE CHECK OUT FLOW -->
 
 <!-- START RETURNING SINGLE PAGE CHECK OUT FLOW -->
@@ -662,6 +667,11 @@
         <response name="billact" type="request" value="emailorder"/>
         <response name="cod" type="request" value="emailorder"/>
         <response name="error" type="view" value="singlePageCheckout"/>
+    </request-map>
+
+    <request-map uri="singlePagePayPalOrderSummary">
+        <security https="true" auth="false"/>
+        <response name="success" type="view" value="singlePagePayPalOrderSummary"/>
     </request-map>
 <!-- END RETURNING SINGLE PAGE CHECK OUT FLOW -->
 
@@ -794,6 +804,11 @@
         <response name="billact" type="request" value="emailorder"/>
         <response name="cod" type="request" value="emailorder"/>
         <response name="error" type="view" value="anonMultiPageOrderSummary"/>
+    </request-map>
+
+    <request-map uri="anonMultiPagePayPalOrderSummary">
+        <security https="true" auth="false"/>
+        <response name="success" type="view" value="anonMultiPagePayPalOrderSummary"/>
     </request-map>
 
 <!-- END ANONYMOUS MULTI PAGE CHECK OUT FLOW -->
@@ -1239,18 +1254,21 @@
     <view-map name="anonMultiPageCustomerAddress" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonMultiPageCustomerAddress"/>
     <view-map name="anonMultiPageShippingOptions" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonMultiPageShippingOptions"/>
     <view-map name="anonMultiPageOrderSummary" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonMultiPageOrderSummary"/>
+    <view-map name="anonMultiPagePayPalOrderSummary" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonMultiPagePayPalOrderSummary"/>
     <!-- ANONYMOUS (GUEST) MULTI PAGE CHECKOUT FLOW -->
 
     <!-- ANONYMOUS (GUEST) SINGLE PAGE CHECK OUT FLOW -->
     <view-map name="anonSinglePageCheckout" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePageCheckout"/>
     <view-map name="anonSinglePageShippingOptions" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePageShippingOptions"/>
     <view-map name="anonSinglePageOrderDetail" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePageOrderDetail"/>
+    <view-map name="anonSinglePagePayPalOrderSummary" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#anonSinglePagePayPalOrderSummary"/>
     <!-- ANONYMOUS (GUEST) SINGLE PAGE CHECK OUT FLOW -->
     
     <!-- RETURNING SINGLE PAGE CHECK OUT FLOW -->
     <view-map name="singlePageCheckout" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePageCheckout"/>
     <view-map name="singlePageShippingOptions" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePageShippingOptions"/>
     <view-map name="singlePageOrderDetail" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePageOrderDetail"/>
+    <view-map name="singlePagePayPalOrderSummary" type="screen" page="component://osafe/widget/EcommerceCheckoutScreens.xml#singlePagePayPalOrderSummary"/>
     <!-- RETURNING SINGLE PAGE CHECK OUT FLOW -->
     
 

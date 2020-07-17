@@ -376,6 +376,11 @@
             </else>
         </if-empty>
         
+        <if-empty field="parameters.groupName">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankGroupNameError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        
         <check-errors/>
  
         <set-service-fields service-name="createShipChargeCarrier" map="parameters" to-map="createShipChargeCarrierCtx"/>
@@ -411,6 +416,16 @@
         <set field="roleTypeId" value="CARRIER" type="String"/>
         <set from-field="roleTypeId" field="anotherNewEntity.roleTypeId"/>
         <create-value value-field="anotherNewEntity"/>
+        
+        <make-value value-field="partyGroupEntity" entity-name="PartyGroup"/>
+        <set from-field="parameters.partyId" field="partyGroupEntity.partyId" />
+        <set from-field="parameters.groupName" field="partyGroupEntity.groupName" />
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="partyGroupEntity.createdTxStamp"/>
+        <set from-field="nowTimestamp" field="partyGroupEntity.createdStamp"/>
+        <set from-field="nowTimestamp" field="partyGroupEntity.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="partyGroupEntity.lastUpdatedStamp"/>
+        <create-value value-field="partyGroupEntity"/>
 
     </simple-method>
     

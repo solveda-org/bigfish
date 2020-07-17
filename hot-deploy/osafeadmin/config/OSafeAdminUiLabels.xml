@@ -2669,6 +2669,12 @@
     <property key="SelectFeaturesNo3Label">
         <value xml:lang="en">Selectable Features# 3</value>
     </property>
+    <property key="SelectFeaturesNo4Label">
+        <value xml:lang="en">Selectable Features# 4</value>
+    </property>
+    <property key="SelectFeaturesNo5Label">
+        <value xml:lang="en">Selectable Features# 5</value>
+    </property>
     <property key="DecriptiveFeaturesNo1Label">
         <value xml:lang="en">Decriptive Features# 1</value>
     </property>
@@ -2677,6 +2683,12 @@
     </property>
     <property key="DecriptiveFeaturesNo3Label">
         <value xml:lang="en">Decriptive Features# 3</value>
+    </property>
+    <property key="DecriptiveFeaturesNo4Label">
+        <value xml:lang="en">Decriptive Features# 4</value>
+    </property>
+    <property key="DecriptiveFeaturesNo5Label">
+        <value xml:lang="en">Decriptive Features# 5</value>
     </property>
     <property key="PLPImageLabel">
         <value xml:lang="en">PLP Image</value>
@@ -2833,6 +2845,12 @@
     </property>
     <property key="Product360VideoLabel">
         <value xml:lang="en">Product 360 Video</value>
+    </property>
+    <property key="SequenceNumberLabel">
+        <value xml:lang="en">Sequence Number</value>
+    </property>
+    <property key="BFInventoryLabel">
+        <value xml:lang="en">BF Inventory</value>
     </property>
     <property key="ParentCategoryIdLabel">
         <value xml:lang="en">Parent Category Id</value>
@@ -3341,6 +3359,9 @@
 	<property key="ShipChargeCarrierDetailTitle">
 		<value xml:lang="en">manage carrier</value>
 	</property>
+	<property key="ShipChargeListTitle">
+		<value xml:lang="en">view shipping charges</value>
+	</property>
 	<property key="CarrierShipListTitle">
 		<value xml:lang="en">view carriers and shipping methods</value>
 	</property>
@@ -3387,7 +3408,7 @@
         <value xml:lang="en">Parameters and configuration options for the various supported Payment Gateways.</value>
     </property>
     <property key="ClrLblCacheInfo">
-        <value xml:lang="en">This function will clear the cache for the Labels-and-Captions and DIV-sequencing. These resources are loaded into memory once and if changes are made in these areas then cache needs to be cleared for the changes to take affect.</value>
+        <value xml:lang="en">This function will clear the cache for the Labels-and-Captions, DIV-sequencing and SEO-Friendly-URLs. These resources are loaded into memory once and if changes are made in these areas then cache needs to be cleared for the changes to take affect.</value>
     </property>
     <property key="AdminUserInfo">
         <value xml:lang="en">Manage Users.</value>
@@ -3744,8 +3765,11 @@
     <property key="DeletedSuccess">
         <value xml:lang="en">You have Successfully Deleted Your Information</value>
     </property>
-     <property key="DivSequenceSuccess">
+    <property key="DivSequenceSuccess">
         <value xml:lang="en">DIV Sequencing Successful</value>
+    </property>
+    <property key="FacetValueSavedSuccess">
+        <value xml:lang="en">Facet VALUES have been saved (changes may not take affect until SOLR is re-indexed)</value>
     </property>
     <property key="solrReIndexSuccess">
         <value xml:lang="en">The Solr Re-Index successfully completed</value>
@@ -3879,6 +3903,15 @@
     </property>
     <property key="BlankPixelIdError">
         <value xml:lang="en">Pixel Id cannot be blank</value>
+    </property>
+    <property key="BlankPixelDescriptionError">
+        <value xml:lang="en">The Description cannot be blank.</value>
+    </property>
+    <property key="BlankPixelScopeError">
+        <value xml:lang="en">Pixel Scope must be selected</value>
+    </property>
+    <property key="BlankPixelCodeError">
+        <value xml:lang="en">Pixel Code cannot be blank</value>
     </property>
     <property key="BlankPromotionIdError">
         <value xml:lang="en">Promotion Id cannot be blank</value>
@@ -4353,6 +4386,9 @@
 	</property>
 	<property key="BlankCarrierServiceCodeError">
 		<value xml:lang="en">Carrier Service Code cannot be blank.</value>
+	</property>
+	<property key="BlankGroupNameError">
+		<value xml:lang="en">Description cannot be blank.</value>
 	</property>
 	<property key="CarrierShipmentMethodExistError">
 		<value xml:lang="en">The Carrier ID and Shipping Method combination must be unique.</value>

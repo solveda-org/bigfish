@@ -16,13 +16,13 @@
         <attribute name="passwordMatches" mode="OUT" type="String"  optional="false"></attribute>
         <attribute name="userLogin" mode="OUT" type="org.ofbiz.entity.GenericValue"  optional="true"></attribute>
     </service>
-    <service name="abandonCartEmail" engine="java" location="com.osafe.services.EmailServices" invoke="abandonCartEmail" auth="false">
+    <service name="abandonCartEmail" engine="java" location="com.osafe.services.EmailServices" invoke="abandonCartEmail" auth="false" transaction-timeout="7200">
         <description>Send Abandon Cart Emails </description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
         <attribute name="intervalHours" mode="IN" type="Integer" optional="true"></attribute>
         <attribute name="emailCount" mode="IN" type="Integer" optional="true"></attribute>
     </service>
-    <service name="shipReviewEmail" engine="java" location="com.osafe.services.EmailServices" invoke="shipReviewEmail" auth="false">
+    <service name="shipReviewEmail" engine="java" location="com.osafe.services.EmailServices" invoke="shipReviewEmail" auth="false" transaction-timeout="7200">
         <description>Send Ship Review Emails </description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" ></attribute>
     </service>
@@ -141,6 +141,7 @@
         <attribute name="shippingHomePhoneContactMechId" type="String" mode="OUT" optional="true"/>
         <attribute name="shippingMobilePhoneContactMechId" type="String" mode="OUT" optional="true"/>
         <attribute name="newUserLogin" type="org.ofbiz.entity.GenericValue" mode="OUT" optional="true"/>
+        <attribute name="existingUserLogin" type="org.ofbiz.entity.GenericValue" mode="OUT" optional="true"/>
         <override name="userLoginId" optional="true"/>
         <override name="updatedUserLogin" optional="true"/>
         <override name="currentPassword" optional="true"/>
@@ -185,5 +186,12 @@
         <description>Create A text filr for Reevoo Products feed</description>
         <attribute name="productStoreId" mode="IN" type="String" optional="false" />
         <attribute name="browseRootProductCategoryId" mode="IN" type="String" optional="false" />
+    </service>
+    <service name="createUpdatePartyAttribute" engine="simple"
+        location="component://osafe/script/services/OsafeServices.xml" invoke="createUpdatePartyAttribute" auth="false">
+        <description>Create Update party attribute</description>
+        <attribute name="partyId" mode="IN" type="String" optional="false" />
+        <attribute name="attrName" mode="IN" type="String" optional="true" />
+        <attribute name="attrValue" mode="IN" type="String" optional="true" />
     </service>
 </services>

@@ -20,7 +20,8 @@
 
               <#-- credit card info -->
               <#if "CREDIT_CARD" == paymentMethod.paymentMethodTypeId && creditCard?has_content>
-                <div id="paymentInformation" class="displayBox">
+                <div id="paymentInformation">
+                 <div class="displayBox">
                         <div class="displayBoxHeader">
                            <span class="displayBoxHeaderCaption">${uiLabelMap.PaymentInformationHeading}</span>
                         </div>
@@ -29,6 +30,7 @@
                             <#if cardNumberDisplay?has_content><p><label for="cardNumber">${uiLabelMap.CardNumberCaption}</label>${cardNumberDisplay}</p></#if>
                             <#if creditCard.expireDate?has_content><p><label for="expMonth">${uiLabelMap.ExpirationDateCaption}</label>${creditCard.expireDate}</p></#if>
                         </div>
+                  </div>
                 </div>
               </#if>
           <#elseif "EXT_PAYPAL" == paymentMethod.paymentMethodTypeId>
@@ -40,7 +42,8 @@
                 </#if>
               <#-- paypal info -->
               <#if "EXT_PAYPAL" == paymentMethod.paymentMethodTypeId && orderPaymentPreference?has_content>
-                <div id="paymentInformation"  class="displayBox">
+                <div id="paymentInformation">
+                 <div class="displayBox">
                         <div class="displayBoxHeader">
                            <span class="displayBoxHeaderCaption">${uiLabelMap.PaymentInformationHeading}</span>
                         </div>
@@ -48,6 +51,7 @@
                             <p><label for="paypalImage">${uiLabelMap.PayPalOnlyCaption}</label><img class="payPalImg" alt="PayPal" src="/osafe_theme/images/icon/paypal_wider.gif"></p>
                             <p><label for="amount">${uiLabelMap.AmountCaption}</label>${orderPaymentPreference.maxAmount}</p>
                         </div>
+                 </div>
                 </div>
               </#if>
           </#if>

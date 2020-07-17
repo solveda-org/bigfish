@@ -27,14 +27,6 @@ if (userLogin) {
       context.partyEmailPreference=partyAttribute.attrValue;
     }
 
-    // get the Phone Numbers
-    context.homePhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
-            [partyId : partyId, contactMechPurposeTypeId : "PHONE_HOME"], UtilMisc.toList("-fromDate"))));
-    context.workPhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
-            [partyId : partyId, contactMechPurposeTypeId : "PHONE_WORK"], UtilMisc.toList("-fromDate"))));
-    context.mobilePhonePartyContactDetail = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
-                    [partyId : partyId, contactMechPurposeTypeId : "PHONE_MOBILE"], UtilMisc.toList("-fromDate"))));
-
     contactMech = EntityUtil.getFirst(ContactHelper.getContactMech(party, "BILLING_LOCATION", "POSTAL_ADDRESS", false));
     context.contactMech = contactMech;
     postalAddressData = contactMech.getRelatedOne("PostalAddress");

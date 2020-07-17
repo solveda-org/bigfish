@@ -131,10 +131,12 @@
     <![CDATA[
 <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY!""};">
 <p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
-<p>Thank you for registering your account with ${EMAIL_CLNT_NAME!""}.</p>
+<p>Thank you for registering your account with 
+<a href="${EMAIL_CLNT_URL_LINK!""}">${EMAIL_CLNT_URL_DISP!""}</a>.</p>
 <p>Your login id is the Email address you supplied when you registered:</p>
 <p>${LOGIN_EMAIL!""}</p>
 </div>
+
 ]]>
   </textData>
  </ElectronicText>
@@ -145,7 +147,8 @@
     <![CDATA[
 <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY!""};">
 <p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
-<p>Thank you for registering your account with ${EMAIL_CLNT_NAME!""}.</p>
+<p>Thank you for registering your account with 
+<a href="${EMAIL_CLNT_URL_LINK!""}">${EMAIL_CLNT_URL_DISP!""}</a>.</p>
 <p>Your login id is the Email address you supplied when you registered:</p>
 <p>${LOGIN_EMAIL!""}</p>
 </div>
@@ -160,10 +163,12 @@
 <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
 <p>Dear ${FIRST_NAME!""} ${LAST_NAME!""},</p>
 <p>We have generated a new password for you.</p>
-<p>Your password has been changed to: "${password}".</p>
+<p>Your password has been changed to: ${password}</p>
 <p>Use this password next time you log in.</p>
-<p>You can change the password from the <a href="<@ofbizUrl>MyAccount</@ofbizUrl>">MY ACCOUNT</a> page.</p>
+<p>You can change the password from the MY ACCOUNT page.</p>
 </div>
+     
+
         ]]>
   </textData>
  </ElectronicText>
@@ -195,7 +200,7 @@
   <textData>
      <![CDATA[
      
-            <style type="text/css">
+                        <style type="text/css">
             .emailTable{
                 margin: 15px 0 0 10px;
             }
@@ -215,7 +220,7 @@
             <table class="emailTable" style="font-family:${EMAIL_FONT_FAMILY!""};">
                 <tr>
                     <td class="infoCaption">${uiLabelMap.ReasonForContactCaption}</td>
-                    <td class="infoValue">
+                    <td class="infoValue" style = "margin-top:16px;">
                            ${parameters.contactReason?if_exists}
                     </td>
                 </tr>
@@ -244,7 +249,7 @@
                          <#assign contactPhoneContact = parameters.contactPhoneContact!"">
                          <#assign fullPhone = areaCode + contactPhoneContact>
                          <#if fullPhone?has_content && fullPhone?length == 10>
-                            <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(3)>
+                            <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(4)>
                             <#assign fullPhone = areaCode + "-" + contactPhoneContact>
                          </#if>
                            ${fullPhone!""}
@@ -298,7 +303,7 @@
             <table class="emailTable" style="font-family:${EMAIL_FONT_FAMILY};">
                 <tr>
                     <td class="infoCaption">${uiLabelMap.FirstNameCaption}</td>
-                    <td class="infoValue">
+                    <td class="infoValue" style="margin-top:16px">
                            ${parameters.firstName?if_exists}
                     </td>
                 </tr>
@@ -309,26 +314,33 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="infoCaption">${uiLabelMap.AddressCaption}</td>
-                    <td class="infoValue">
-                                    <p>${parameters.address1?if_exists}</p>
-                                    <p>${parameters.address2?if_exists}</p>
-                                    <p>${parameters.city?if_exists}, ${parameters.stateCode?if_exists}&nbsp;${parameters.postalCode?if_exists}</p>
-                    </td>
+                    <td class="infoCaption">${uiLabelMap.AddressLine1Caption}</td>
+                    <td class="infoValue"><p>${parameters.address1?if_exists}</p></td>
                 </tr>
                 <tr>
-                    <td class="infoCaption">${uiLabelMap.ContactPhoneCaption}</td>
-                    <td class="infoValue">
-                         <#assign areaCode = parameters.contactPhoneArea!"">
-                         <#assign contactPhoneContact = parameters.contactPhoneContact!"">
-                         <#assign fullPhone = areaCode + contactPhoneContact>
-                         <#if fullPhone?has_content && fullPhone?length == 10>
-                            <#assign contactPhoneContact = contactPhoneContact?substring(0, 3) + "-" + contactPhoneContact?substring(3)>
-                            <#assign fullPhone = areaCode + "-" + contactPhoneContact>
-                         </#if>
-                           ${fullPhone!""}
+                    <td class="infoCaption">${uiLabelMap.AddressLine2Caption}</td>
+                    <td class="infoValue"><p>${parameters.address2?if_exists}</p></td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.CityCaption}</td>
+                    <td class="infoValue"><p> <p>${parameters.city?if_exists}</p></td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.StateCaption}</td>
+                    <td class="infoValue"><p> <p>${parameters.stateCode?if_exists}</p></td>
+                </tr>
+                <tr>
+                    <td class="infoCaption">${uiLabelMap.PostalCodeCaption}</td>
+                    <td class="infoValue"><p> <p>${parameters.postalCode?if_exists}</p></td>
+                                    
+                </tr>
+                 <tr>
+                    <td class="infoCaption">${uiLabelMap.EmailAddressCaption}</td>
+                    <td class="infoValue"><p> <p>
+                           ${parameters.email?if_exists}</p>
                     </td>
                 </tr>
+                
                 <tr>
                     <td class="infoCaption">${uiLabelMap.CommentCaption}</td>
                     <td class="infoValue">
@@ -352,6 +364,7 @@
 <p class="info" style="font-family:${EMAIL_FONT_FAMILY};">${uiLabelMap.ThankYouForShoppingEmailInfo}</p>
 
 <@renderContentAsText contentId="E_ORDER_DETAIL" ignoreTemplate="true"/>
+
 ]]>
    </textData>
  </ElectronicText>
@@ -794,8 +807,19 @@
      <![CDATA[
 <div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
 <p>Dear ${FIRST_NAME!""} ${MIDDLE_NAME!""} ${LAST_NAME!""} ${SUFFIX!""},</p>
-<p>Your personal information has been updated successfully.</p>
+<p>Just a quick notification to inform you of a recent change to your personal information.
+<br> 
+<br>
+If you did not make these changes then may we suggest that you return to <a href="${EMAIL_CLNT_URL_LINK!""}">${EMAIL_CLNT_URL_DISP!""}</a>, login and modify your password. This will protect you from further changes.
+<br>
+<br>
+Your logon id is the Email address you supplied when you registered:
+<br>
+<br>
+${userLogin.userLoginId}
+</p>
 </div>
+
 ]]>
    </textData>
 </ElectronicText>

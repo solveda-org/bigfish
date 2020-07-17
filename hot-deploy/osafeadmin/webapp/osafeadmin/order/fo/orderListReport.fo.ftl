@@ -435,7 +435,7 @@ under the License.
                             <#assign shipGroupAddress = shipGroup.getRelatedOne("PostalAddress")?if_exists>
                             <#if orderHeader.orderTypeId == "SALES_ORDER" && shipGroup.shipmentMethodTypeId?has_content>
                               <#if shipGroup.carrierPartyId?has_content || shipmentMethodType?has_content>
-                                <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_COMPLETED" && orderHeader.statusId != "ORDER_REJECTED">
+                                <#if orderHeader?has_content && orderHeader.statusId != "ORDER_CANCELLED" && orderHeader.statusId != "ORDER_REJECTED">
                                   <fo:block font-size="8pt" start-indent="10pt"><#if shipGroup.carrierPartyId != "_NA_">${shipGroup.carrierPartyId?if_exists} </#if>${shipmentMethodType.get("description","OSafeAdminUiLabels",locale)?default("")}</fo:block>
                                 </#if>
                               </#if>

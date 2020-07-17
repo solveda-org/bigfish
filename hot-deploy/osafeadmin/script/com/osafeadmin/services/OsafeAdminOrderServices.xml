@@ -474,6 +474,7 @@
                 <and>
                     <if-compare field="isReviewActive" operator="equals" value="true" type="Boolean"/>
                     <if-compare field="isReviewSendEmailActive" operator="equals" value="true" type="Boolean"/>
+                    <if-compare field="newItemStatusId" operator="equals" value="ITEM_COMPLETED"/>
                 </and>
             </condition>
             <then>

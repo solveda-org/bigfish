@@ -24,4 +24,18 @@
         <field-to-result field="stateList"/>
         
     </simple-method>
+    <simple-method method-name="createUpdatePartyAttribute" short-description="Create Update party attribute" login-required="false">
+        <entity-one entity-name="PartyAttribute" value-field="partyAttribute"/>
+        <if-empty field="partyAttribute">
+	        <make-value value-field="newEntity" entity-name="PartyAttribute"/>
+	        <set-pk-fields map="parameters" value-field="newEntity"/>
+	        <set-nonpk-fields map="parameters" value-field="newEntity"/>
+	        <create-value value-field="newEntity"/>
+        <else>
+	        <entity-one entity-name="PartyAttribute" value-field="lookedUpValue"/>
+	        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+	        <store-value value-field="lookedUpValue"/>
+        </else>
+        </if-empty>
+    </simple-method>
 </simple-methods>

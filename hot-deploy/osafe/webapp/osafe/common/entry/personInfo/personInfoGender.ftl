@@ -1,14 +1,21 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
-<#if person?has_content>
-  <#assign gender= person.gender!""/>
+<#if userLogin?has_content>
+    <#assign partyId = userLogin.partyId!"">
 </#if>
+<#if partyId?exists && partyId?has_content>
+    <#assign partyAttribute = delegator.findOne("PartyAttribute", {"partyId" : partyId, "attrName" : "GENDER"}, true)?if_exists />
+    <#if partyAttribute?has_content>
+      <#assign USER_GENDER = partyAttribute.attrValue!"">
+    </#if>
+</#if>
+
 <div class ="personInfoGender">
      <div class="entry">
       <label for="USER_GENDER"><@required/>${uiLabelMap.GenderCaption}</label>
       <select name="USER_GENDER" id="USER_GENDER">
         <option value="">${uiLabelMap.SelectOneLabel}</option>
-        <option value="M" <#if ((requestParameters.USER_GENDER?exists && requestParameters.USER_GENDER == "M") || gender?if_exists == "M")>selected</#if>>${uiLabelMap.CommonMale}</option>
-        <option value="F" <#if ((requestParameters.USER_GENDER?exists && requestParameters.USER_GENDER == "F") || gender?if_exists == "F")>selected</#if>>${uiLabelMap.CommonFemale}</option>
+        <option value="M" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "M") || (USER_GENDER?exists && USER_GENDER == "M"))>selected</#if>>${uiLabelMap.CommonMale}</option>
+        <option value="F" <#if ((parameters.USER_GENDER?exists && parameters.USER_GENDER?string == "F") || (USER_GENDER?exists && USER_GENDER == "F"))>selected</#if>>${uiLabelMap.CommonFemale}</option>
       </select>
       <@fieldErrors fieldName="USER_GENDER"/>
     </div>

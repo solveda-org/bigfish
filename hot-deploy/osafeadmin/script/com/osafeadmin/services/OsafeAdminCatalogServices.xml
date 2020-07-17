@@ -1532,12 +1532,25 @@
             </if-compare>
             <call-service service-name="updateProductFeatureGroupAppl" in-map-name="updateProductFeatureGroupApplCtx"/>   
             
+            <entity-and entity-name="ProductFeatureAppl" list="productFeatureAppls">
+                <field-map field-name="productFeatureId" from-field="productFeatureId"/>
+            </entity-and>
+            <iterate entry="productFeatureAppl" list="productFeatureAppls">
+                <make-value value-field="lookupKeyValue" entity-name="ProductFeatureAppl"/>
+                <set-pk-fields map="productFeatureAppl" value-field="lookupKeyValue"/>
+                <find-by-primary-key entity-name="ProductFeatureAppl" map="lookupKeyValue" value-field="lookedUpValue"/>
+                <set field="lookedUpValue.sequenceNum" from-field="sequenceNum"/>
+                <store-value value-field="lookedUpValue"/>
+            </iterate>
+            
             <set-service-fields service-name="updateProductFeature" map="parameters" to-map="updateProductFeatureCtx"/>
             <set field="updateProductFeatureCtx.productFeatureId" from-field="productFeatureId"/>
             <set field="updateProductFeatureCtx.productFeatureTypeId" from-field="productFeatureTypeId"/>
             <set field="updateProductFeatureCtx.description" from-field="description"/>
             <call-service service-name="updateProductFeature" in-map-name="updateProductFeatureCtx"/>
         </iterate-map>
+        <property-to-field resource="OSafeAdminUiLabels" property="FacetValueSavedSuccess" field="facetValueSavedSuccess"/>
+        <string-to-list string="${facetValueSavedSuccess}" list="successMessageList"/>
     </simple-method>
     
     <simple-method method-name="updateFeatureSwatchImage" short-description="Method to update PLP and PDP swatch images for feature">

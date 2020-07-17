@@ -1,11 +1,7 @@
 //********************************************************************************************
 //SQL UPDATES
 //********************************************************************************************
-  //06-22-12 - Issue #25938 - move Gneder value from person to party attribute
-  INSERT party_attribute (party_id,attr_name,attr_value)
-  SELECT party_id,'GENDER',gender
-  FROM person
-  WHERE gender is not null;
+  
 //********************************************************************************************
 //BIGFISH PARAMETERS UPDATES
 //FILE: bigFishParameters.xml

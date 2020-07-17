@@ -36,36 +36,16 @@ context.postalAddressData=postalAddressData;
         }
     }
 
-    phoneNumberMap = [:];
-    if(contactMech){
-        contactMechIdFrom = contactMech.contactMechId;
-        contactMechLinkList = delegator.findByAnd("ContactMechLink", UtilMisc.toMap("contactMechIdFrom", contactMechIdFrom))
 
-        for (GenericValue link: contactMechLinkList){
-            contactMechIdTo = link.contactMechIdTo
-            contactMech = delegator.findByPrimaryKey("ContactMech", [contactMechId : contactMechIdTo]);
-            phonePurposeList  = EntityUtil.filterByDate(contactMech.getRelated("PartyContactMechPurpose"), true);
-            partyContactMechPurpose = EntityUtil.getFirst(phonePurposeList)
-
-            telecomNumber = null;
-            if(partyContactMechPurpose) {
-                telecomNumber = partyContactMechPurpose.getRelatedOne("TelecomNumber");
-            }
-
-            if(telecomNumber) {
-                phoneNumberMap[partyContactMechPurpose.contactMechPurposeTypeId]=telecomNumber;
-            }
-        }
-    }
-    context.phoneNumberMap = phoneNumberMap;
-    telecomNumber = phoneNumberMap["PHONE_HOME"];
+    telecomNumber = EntityUtil.getFirst(EntityUtil.filterByDate(delegator.findByAnd("PartyContactDetailByPurpose",
+            [partyId : party.partyId, contactMechPurposeTypeId : "PHONE_HOME"], UtilMisc.toList("-fromDate"))));
 
    if(telecomNumber){
-       context.contactPhoneContact= telecomNumber.contactNumber;
-       context.contactPhoneArea=telecomNumber.areaCode;
+       context.contactNumberHome= telecomNumber.contactNumber;
+       context.areaCodeHome=telecomNumber.areaCode;
        if(telecomNumber.contactNumber.length() == 7){
-           context.contactPhoneContact3=telecomNumber.contactNumber.substring(0,3);
-           context.contactPhoneContact4=telecomNumber.contactNumber.substring(3,7);
+           context.contactNumber3Home=telecomNumber.contactNumber.substring(0,3);
+           context.contactNumber4Home=telecomNumber.contactNumber.substring(3,7);
        }
    }
 }

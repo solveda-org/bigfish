@@ -170,4 +170,225 @@
       <xsd:element name="Comment" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
+  
+  <!-- definition of Product elements -->
+  <xsd:element name="BigFishProductFeed" type="BigFishProductFeedType" />
+  <xsd:complexType name="BigFishProductFeedType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Product" type="ProductType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="MasterProductID" default=""/>
+      <xsd:element type="xsd:string" name="ProductId" default=""/>
+      <xsd:element type="xsd:string" name="ProductStoreId" default=""/>
+      <xsd:element type="xsd:string" name="InternalName" default=""/>
+      <xsd:element type="xsd:string" name="ProductName" default=""/>
+      <xsd:element type="xsd:string" name="SalesPitch" default=""/>
+      <xsd:element type="xsd:string" name="LongDescription" default=""/>
+      <xsd:element type="xsd:string" name="SpecialInstructions" default=""/>
+      <xsd:element type="xsd:string" name="DeliveryInfo" default=""/>
+      <xsd:element type="xsd:string" name="Directions" default=""/>
+      <xsd:element type="xsd:string" name="TermsAndConds" default=""/>
+      <xsd:element type="xsd:string" name="Ingredients" default=""/>
+      <xsd:element type="xsd:string" name="Warnings" default=""/>
+      <xsd:element type="xsd:string" name="PLPLabel" default=""/>
+      <xsd:element type="xsd:string" name="PDPLabel" default=""/>
+      <xsd:element type="xsd:string" name="ProductHeight" default=""/>
+      <xsd:element type="xsd:string" name="ProductWidth" default=""/>
+      <xsd:element type="xsd:string" name="ProductDepth" default=""/>
+      <xsd:element type="xsd:string" name="Returnable" default=""/>
+      <xsd:element type="xsd:string" name="Taxable" default=""/>
+      <xsd:element type="xsd:string" name="ChargeShipping" default=""/>
+      <xsd:element type="xsd:string" name="ManufacturerId" default=""/>
+      <xsd:element type="xsd:string" name="FromDate" default=""/>
+      <xsd:element type="xsd:string" name="ThruDate" default=""/>
+      <xsd:element type="ProductPriceType" name="ProductPrice"/>
+      <xsd:element type="ProductCategoryType" name="ProductCategory"/>
+      <xsd:element type="ProductSelectableFeatureType" name="ProductSelectableFeature"/>
+      <xsd:element type="ProductDescriptiveFeatureType" name="ProductDescriptiveFeature"/>
+      <xsd:element type="ProductImageType" name="ProductImage"/>
+      <xsd:element type="GoodIdentificationType" name="GoodIdentification"/>
+      <xsd:element type="ProductInventoryType" name="ProductInventory"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductPriceType">
+    <xsd:sequence>
+      <xsd:element type="ListPriceType" name="ListPrice"/>
+      <xsd:element type="SalesPriceType" name="SalesPrice"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ListPriceType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Price" default=""/>
+      <xsd:element type="xsd:string" name="Currency" default=""/>
+      <xsd:element type="xsd:string" name="FromDate" default=""/>
+      <xsd:element type="xsd:string" name="ThruDate" default=""/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="SalesPriceType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Price" default=""/>
+      <xsd:element type="xsd:string" name="Currency" default=""/>
+      <xsd:element type="xsd:string" name="FromDate" default=""/>
+      <xsd:element type="xsd:string" name="ThruDate" default=""/>
+    </xsd:sequence>
+  </xsd:complexType>
+                  
+  <xsd:complexType name="ProductCategoryType">
+    <xsd:sequence>
+      <xsd:element type="CategoryType" name="Category" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="CategoryType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="SequenceNum" default=""/>
+      <xsd:element type="xsd:string" name="FromDate" default=""/>
+      <xsd:element type="xsd:string" name="ThruDate" default=""/>
+    </xsd:sequence>
+    <xsd:attribute type="xsd:string" name="key" use="required"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductSelectableFeatureType">
+    <xsd:sequence>
+      <xsd:element type="FeatureType" name="Feature" maxOccurs="5"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductDescriptiveFeatureType">
+    <xsd:sequence>
+      <xsd:element type="FeatureType" name="Feature" maxOccurs="5"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="FeatureType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Value" maxOccurs="unbounded"/>
+      <xsd:element type="xsd:string" name="Description"/>
+    </xsd:sequence>
+    <xsd:attribute type="xsd:string" name="key" use="required"/>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductImageType">
+    <xsd:sequence>
+      <xsd:element type="PLPSwatchType" name="PLPSwatch"/>
+      <xsd:element type="PDPSwatchType" name="PDPSwatch"/>
+      <xsd:element type="PLPSmallImageType" name="PLPSmallImage"/>
+      <xsd:element type="PLPSmallAltImageType" name="PLPSmallAltImage"/>
+      <xsd:element type="PDPThumbnailImageType" name="PDPThumbnailImage"/>
+      <xsd:element type="PDPLargeImageType" name="PDPLargeImage"/>
+      <xsd:element type="PDPDetailImageType" name="PDPDetailImage"/>
+      <xsd:element type="PDPVideoType" name="PDPVideo"/>
+      <xsd:element type="PDPVideo360Type" name="PDPVideo360"/>
+      <xsd:element type="PDPAlternateImageType" name="PDPAlternateImage"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PLPSwatchType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPSwatchType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PLPSmallImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPThumbnailImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPLargeImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPDetailImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPVideoType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPVideo360Type">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PLPSmallAltImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPAlternateImageType">
+    <xsd:sequence>
+      <xsd:element type="PDPAdditionalImageType" name="PDPAdditionalImage" maxOccurs="10"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPAdditionalImageType">
+    <xsd:sequence>
+      <xsd:element type="PDPAdditionalThumbnailImageType" name="PDPAdditionalThumbnailImage"/>
+      <xsd:element type="PDPAdditionalLargeImageType" name="PDPAdditionalLargeImage"/>
+      <xsd:element type="PDPAdditionalDetailImageType" name="PDPAdditionalDetailImage"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPAdditionalThumbnailImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPAdditionalLargeImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="PDPAdditionalDetailImageType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="Url"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="GoodIdentificationType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="SKU"/>
+      <xsd:element type="xsd:string" name="GoogleId"/>
+      <xsd:element type="xsd:string" name="ISBN"/>
+      <xsd:element type="xsd:string" name="ManuId"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="ProductInventoryType">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="BFInventoryLevel"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
 </xsd:schema>

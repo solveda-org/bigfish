@@ -3,13 +3,13 @@
     <screen name="aboutYouEntryForm">
         <section>
             <actions>
-                <set field="usePhoneContact" value="Y"/>
-                <set field="showHomePhone" value="Y"/>
+                <!--  set field="usePhoneContact" value="Y"/>
+                <set field="showHomePhone" value="Y"/>-->
                 <set field="homePhoneCaption" value="${uiLabelMap.HomePhoneCaption}"/>
                 <set field="homePhoneRequired" value="Y"/>
-                <set field="showMobilePhone" value="Y"/>
+                <!-- set field="showMobilePhone" value="Y"/> -->
                 <set field="mobilePhoneCaption" value="${uiLabelMap.MobilePhoneCaption}"/>
-                <set field="showWorkPhone" value="Y"/>
+                <!-- set field="showWorkPhone" value="Y"/> -->
                 <set field="workPhoneCaption" value="${uiLabelMap.WorkPhoneCaption}"/>
             </actions>
             <widgets>
@@ -119,12 +119,6 @@
             <actions>
                 <set field="addressEntryBoxHeading" value="${uiLabelMap.RequestCatalogTitle}"/>
                 <set field="addressInstructionsInfo" value="${uiLabelMap.RequestCatalogInstructionsInfo}"/>
-                <set field="showName" value="Y"/>
-                <set field="usePhoneContact" value="Y"/>
-                <set field="showHomePhone" value="Y"/>
-                <set field="showEmailAddr" value="Y"/>
-                <set field="homePhoneCaption" value="${uiLabelMap.ContactPhoneCaption}"/>
-                <set field="fieldPurpose" value="REQ_CATALOG" />
                 <set field="custRequestTypeId" value="RF_CATALOG" />
                 <set field="custRequestName" value="Catalog Request" />
             </actions>

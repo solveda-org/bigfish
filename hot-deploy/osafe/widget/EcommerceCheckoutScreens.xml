@@ -184,6 +184,18 @@
             </widgets>
         </section>
     </screen>
+
+   <screen name="anonSinglePagePayPalOrderSummary">
+        <section>
+            <actions>
+                <set field="paypalSubmitOrderRequest" value="anonSinglePageProcessCartAttribute"/>
+            </actions>
+            <widgets>
+                <include-screen name="payPalOrderSummary" />
+            </widgets>
+        </section>
+    </screen>
+
  <!-- END ANON SINGLE PAGE CHECKOUT -->
 
 
@@ -348,6 +360,17 @@
                         <html-template location="component://osafe/webapp/osafe/common/eCommerceCheckoutOrderPaymentMethods.ftl" />
                     </html>
                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="singlePagePayPalOrderSummary">
+        <section>
+            <actions>
+                <set field="paypalSubmitOrderRequest" value="singlePageProcessCartAttribute"/>
+            </actions>
+            <widgets>
+                <include-screen name="payPalOrderSummary" />
             </widgets>
         </section>
     </screen>
@@ -569,6 +592,17 @@
     <screen name="multiPagePayPalOrderSummary">
         <section>
             <actions>
+                <set field="paypalSubmitOrderRequest" value="multiPageProcessCartAttribute"/>
+            </actions>
+            <widgets>
+                <include-screen name="payPalOrderSummary" />
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="payPalOrderSummary">
+        <section>
+            <actions>
                 <set field="selectedStep" value="payment" />
                 <set field="screenMessages" value="Y" />
                 <property-map resource="OSafeUiLabels" map-name="uiLabelMap" global="true" />
@@ -775,6 +809,18 @@
             </widgets>
         </section>
     </screen>
+
+    <screen name="anonMultiPagePayPalOrderSummary">
+        <section>
+            <actions>
+                <set field="paypalSubmitOrderRequest" value="anonMultiPageProcessCartAttribute"/>
+            </actions>
+            <widgets>
+                <include-screen name="payPalOrderSummary" />
+            </widgets>
+        </section>
+    </screen>
+    
 
 <!-- END ANON MULTI PAGE CHECK OUT SCREENS -->
 

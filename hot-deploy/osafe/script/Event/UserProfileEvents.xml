@@ -6,6 +6,7 @@
     <simple-method method-name="updateCustomerPersonalInfo" short-description="Update Customer Personal Information" login-required="true">
         <if-empty field="parameters.partyId"><add-error><fail-message message="No partyId passed, cannot Update Customer"/></add-error></if-empty>
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+        <call-simple-method method-name="createUpdatePartyAttributes"/>
          <check-errors/>
         <!-- Create person map -->
         <call-map-processor in-map-name="parameters" out-map-name="personMap">
@@ -187,4 +188,50 @@
         <string-to-list string="${tempSuccessMessage}"  list="success_list"/>
         <field-to-request field="success_list" request-name="osafeSuccessMessageList" />
     </simple-method>
+     <simple-method method-name="createUpdatePartyAttributes" short-description="Update Party Attributes" login-required="false" >
+
+            <!-- Create/Update USER Gender -->
+            <set field="createUpdateGenderCtx.partyId" from-field="parameters.partyId"/>
+            <set field="createUpdateGenderCtx.attrName" value="GENDER"/>
+            <set field="createUpdateGenderCtx.attrValue" from-field="parameters.USER_GENDER"/>
+            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateGenderCtx"/>
+
+            
+            <!-- Create/Update USER DOB (DDMM) -->
+            <if-compare-field field="parameters.USER_DOB_MMDD" operator="not-equals" to-field="nullValue">
+	            <set field="createUpdateDOBShortCtx.partyId" from-field="parameters.partyId"/>
+	            <set field="createUpdateDOBShortCtx.attrName" value="DOB_MMDD"/>
+	            <set field="createUpdateDOBShortCtx.attrValue" from-field="parameters.USER_DOB_MMDD"/>
+	            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBShortCtx"/>
+            </if-compare-field>
+
+            
+            <!-- Create/Update USER DOB (DDMMYYYY) -->
+            <if-compare-field field="parameters.USER_DOB_MMDDYYYY" operator="not-equals" to-field="nullValue">
+	            <set field="createUpdateDOBLongCtx.partyId" from-field="parameters.partyId"/>
+	            <set field="createUpdateDOBLongCtx.attrName" value="DOB_MMDDYYYY"/>
+	            <set field="createUpdateDOBLongCtx.attrValue" from-field="parameters.USER_DOB_MMDDYYYY"/>
+	            <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateDOBLongCtx"/>
+            </if-compare-field>
+
+            <!-- Create/Update email preference -->
+            <if-compare-field field="parameters.PARTY_EMAIL_PREFERENCE" operator="not-equals" to-field="nullValue">
+                <set field="createUpdateEmailPreferenceCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createUpdateEmailPreferenceCtx.attrName" value="PARTY_EMAIL_PREFERENCE"/>
+                <set field="createUpdateEmailPreferenceCtx.attrValue" from-field="parameters.PARTY_EMAIL_PREFERENCE"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createUpdateEmailPreferenceCtx"/>
+            </if-compare-field>
+
+            <!-- Create IS_DOWNLOADED if not exist -->
+            <entity-one entity-name="PartyAttribute" value-field="partyAttribute">
+                <field-map field-name="partyId" from-field="parameters.partyId"/>
+                <field-map field-name="attrName" value="IS_DOWNLOADED"/>
+            </entity-one>
+            <if-empty field="partyAttribute">
+                <set field="createIsDownloadedCtx.partyId" from-field="parameters.partyId"/>
+                <set field="createIsDownloadedCtx.attrName" value="IS_DOWNLOADED"/>
+                <set field="createIsDownloadedCtx.attrValue" value="N"/>
+                <call-service service-name="createUpdatePartyAttribute" in-map-name="createIsDownloadedCtx"/>
+            </if-empty>
+     </simple-method>
 </simple-methods>

@@ -23,6 +23,8 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilMisc;
 import com.osafe.services.InventoryServices;
 import org.ofbiz.party.content.PartyContentWrapper;
+import org.ofbiz.entity.condition.EntityCondition;
+import org.ofbiz.entity.condition.EntityOperator;
 
 productStore = ProductStoreWorker.getProductStore(request);
 productStoreId = productStore.get("productStoreId");
@@ -569,6 +571,29 @@ if (UtilValidate.isNotEmpty(productId))
             } else {
                 featureMap = dispatcher.runSync("getProductFeatureSet", [productId : productId]);
                 featureSet = featureMap.featureSet;
+                productFeatureCatGroupApplCond = null;
+                orderBy = ["sequenceNum"];
+                if(UtilValidate.isEmpty(productCategoryId))
+                {
+                    productCategoryMemberList = delegator.findByAnd("ProductCategoryMember", UtilMisc.toMap("productId", productId));
+                    if(UtilValidate.isNotEmpty(productCategoryMemberList))
+                    {
+                        productCategoryMemberList = EntityUtil.filterByDate(productCategoryMemberList);
+                        productCategoryMember = EntityUtil.getFirst(productCategoryMemberList);
+                        productCategoryId = productCategoryMember.productCategoryId; 
+                    }    
+                }
+                if(UtilValidate.isNotEmpty(productCategoryId))
+                {
+                    productFeatureCatGroupApplCond = EntityCondition.makeCondition([EntityCondition.makeCondition("productCategoryId", EntityOperator.EQUALS, productCategoryId),
+                                               EntityCondition.makeCondition("productFeatureGroupId", EntityOperator.IN, featureSet)], EntityOperator.AND);
+                }
+                                               
+                productFeatureCatGroupAppls = delegator.findList("ProductFeatureCatGrpAppl", productFeatureCatGroupApplCond, null, orderBy, null, false);
+                if(UtilValidate.isNotEmpty(productFeatureCatGroupAppls))
+                {
+                    featureSet = EntityUtil.getFieldListFromEntityList(productFeatureCatGroupAppls, "productFeatureGroupId", true);
+                }
                 if (featureSet) {
                     //if order is purchase then don't calculate available inventory for product.
                     if (cart.isPurchaseOrder()) {
@@ -626,14 +651,16 @@ if (UtilValidate.isNotEmpty(productId))
                     for(GenericValue productFeatureAndAppl : productFeatureAndApplsSelects) 
                     {
                        String productFeatureTypeId = productFeatureAndAppl.productFeatureTypeId;
-                       if (productFeatureTypeId !=lastProductFeatureTypeId)
+                       if (!productFeatureAndApplSelectMap.containsKey(productFeatureTypeId))
                        {
-                         productFeatureAndApplSelectList = FastList.newInstance();
-                         lastProductFeatureTypeId=productFeatureTypeId;
-                       } 
+                           productFeatureAndApplSelectList = FastList.newInstance();
+                       }
+                       else
+                       {
+                           productFeatureAndApplSelectList = productFeatureAndApplSelectMap.get(productFeatureTypeId);
+                       }
                        productFeatureAndApplSelectList.add(productFeatureAndAppl);
                        productFeatureAndApplSelectMap.put(productFeatureTypeId,productFeatureAndApplSelectList);
-                       
                     }
                     context.productFeatureAndApplSelectMap = productFeatureAndApplSelectMap;
 
@@ -748,7 +775,7 @@ if (UtilValidate.isNotEmpty(productId))
                             variantTree.values().eachWithIndex { varTree, topLevelKeysCt ->
                                 cnt = "" + topLevelKeysCt;
                                 if (varTree instanceof Map) {
-                                    varTree = new TreeMap(varTree);
+                                    //varTree = new TreeMap(varTree);
                                     jsBuf.append(buildNext(varTree, featureOrder, featureOrder[1], cnt, featureTypes));
                                     jsBuf.append(buildNextLi(varTree, featureOrder, featureOrder[1], cnt, featureTypes));
                                 }

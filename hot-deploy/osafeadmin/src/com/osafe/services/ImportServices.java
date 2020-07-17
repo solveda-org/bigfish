@@ -23,7 +23,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
+import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
+import javax.xml.bind.Unmarshaller;
 import javax.xml.namespace.QName;
 
 import javolution.util.FastList;
@@ -81,17 +83,24 @@ import com.osafe.feeds.FeedsUtil;
 import com.osafe.feeds.osafefeeds.BigFishContactUsFeedType;
 import com.osafe.feeds.osafefeeds.BigFishCustomerFeedType;
 import com.osafe.feeds.osafefeeds.BigFishOrderFeedType;
+import com.osafe.feeds.osafefeeds.BigFishProductFeedType;
 import com.osafe.feeds.osafefeeds.BigFishRequestCatalogFeedType;
 import com.osafe.feeds.osafefeeds.CartPromotionType;
+import com.osafe.feeds.osafefeeds.CategoryType;
 import com.osafe.feeds.osafefeeds.ContactUsType;
 import com.osafe.feeds.osafefeeds.CustomerType;
+import com.osafe.feeds.osafefeeds.ListPriceType;
 import com.osafe.feeds.osafefeeds.ObjectFactory;
 import com.osafe.feeds.osafefeeds.OrderHeaderType;
 import com.osafe.feeds.osafefeeds.OrderLineItemsType;
 import com.osafe.feeds.osafefeeds.OrderLineType;
 import com.osafe.feeds.osafefeeds.OrderPaymentType;
 import com.osafe.feeds.osafefeeds.OrderType;
+import com.osafe.feeds.osafefeeds.ProductCategoryType;
+import com.osafe.feeds.osafefeeds.ProductPriceType;
+import com.osafe.feeds.osafefeeds.ProductType;
 import com.osafe.feeds.osafefeeds.RequestCatalogType;
+import com.osafe.feeds.osafefeeds.SalesPriceType;
 import com.osafe.util.OsafeAdminUtil;
 
 public class ImportServices {
@@ -3462,7 +3471,8 @@ public class ImportServices {
     
     	}
       	 catch (Exception e) {
-   	         }
+      		e.printStackTrace();
+   	     }
          finally {
              try {
                  if (bwOutFile != null) {
@@ -5178,6 +5188,7 @@ public class ImportServices {
     			value = StringUtil.replaceString(value, "&", "&amp");
     			value = StringUtil.replaceString(value, ";", "&#59;");
     	    	value = StringUtil.replaceString(value, "&amp", "&amp;");
+    	    	value = StringUtil.replaceString(value, "\"", "'");
     		}
     		formattedDataMap.put(entry.getKey(), value);
     	}
@@ -6057,4 +6068,322 @@ public class ImportServices {
         result.put("feedsFileName", customerFileName);
         return result;
     }
+    
+    
+    public static Map<String, Object> importProductXML(DispatchContext ctx, Map<String, ?> context) {
+        LocalDispatcher dispatcher = ctx.getDispatcher();
+        _delegator = ctx.getDelegator();
+        List<String> messages = FastList.newInstance();
+
+        String xmlDataFilePath = (String)context.get("xmlDataFile");
+        String xmlDataDirPath = (String)context.get("xmlDataDir");
+        //String xmlDataDirPath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("import", "import.dir"), context);
+        String loadImagesDirPath=(String)context.get("productLoadImagesDir");
+        String imageUrl = (String)context.get("imageUrl");
+        Boolean removeAll = (Boolean) context.get("removeAll");
+        Boolean autoLoad = (Boolean) context.get("autoLoad");
+
+        if (removeAll == null) removeAll = Boolean.FALSE;
+        if (autoLoad == null) autoLoad = Boolean.FALSE;
+
+        File inputWorkbook = null;
+        File baseDataDir = null;
+        BufferedWriter fOutProduct=null;
+        if (UtilValidate.isNotEmpty(xmlDataFilePath) && UtilValidate.isNotEmpty(xmlDataDirPath)) {
+            try {
+                URL xlsDataFileUrl = UtilURL.fromFilename(xmlDataFilePath);
+                InputStream ins = xlsDataFileUrl.openStream();
+
+                if (ins != null && (xmlDataFilePath.toUpperCase().endsWith("XML"))) {
+                    baseDataDir = new File(xmlDataDirPath);
+                    if (baseDataDir.isDirectory() && baseDataDir.canWrite()) {
+
+                        // ############################################
+                        // move the existing xml files in dump directory
+                        // ############################################
+                        File dumpXmlDir = null;
+                        File[] fileArray = baseDataDir.listFiles();
+                        for (File file: fileArray) {
+                            try {
+                                if (file.getName().toUpperCase().endsWith("XML")) {
+                                    if (dumpXmlDir == null) {
+                                        dumpXmlDir = new File(baseDataDir, "dumpxml_"+UtilDateTime.nowDateString());
+                                    }
+                                    FileUtils.copyFileToDirectory(file, dumpXmlDir);
+                                    file.delete();
+                                }
+                            } catch (IOException ioe) {
+                                Debug.logError(ioe, module);
+                            } catch (Exception exc) {
+                                Debug.logError(exc, module);
+                            }
+                        }
+                        // ######################################
+                        //save the temp xls data file on server 
+                        // ######################################
+                        try {
+                            inputWorkbook = new File(baseDataDir,  UtilDateTime.nowAsString()+"."+FilenameUtils.getExtension(xmlDataFilePath));
+                            if (inputWorkbook.createNewFile()) {
+                                Streams.copy(ins, new FileOutputStream(inputWorkbook), true, new byte[1]); 
+                            }
+                            } catch (IOException ioe) {
+                                Debug.logError(ioe, module);
+                            } catch (Exception exc) {
+                                Debug.logError(exc, module);
+                            }
+                    }
+                    else {
+                        messages.add("xml data dir path not found or can't be write");
+                    }
+                }
+                else {
+                    messages.add(" path specified for Excel sheet file is wrong , doing nothing.");
+                }
+
+            } catch (IOException ioe) {
+                Debug.logError(ioe, module);
+            } catch (Exception exc) {
+                Debug.logError(exc, module);
+            }
+        }
+        else {
+            messages.add("No path specified for Excel sheet file or xml data direcotry, doing nothing.");
+        }
+
+        // ######################################
+        //read the temp xls file and generate csv 
+        // ######################################
+        if (inputWorkbook != null && baseDataDir  != null) {
+        	try {
+        		JAXBContext jaxbContext = JAXBContext.newInstance("com.osafe.feeds.osafefeeds");
+            	Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            	JAXBElement<BigFishProductFeedType> bfProductFeedType = (JAXBElement<BigFishProductFeedType>)unmarshaller.unmarshal(inputWorkbook);
+            	
+            	List dataRows = buildProductXMLDataRows(bfProductFeedType);
+            	buildProduct(dataRows, xmlDataDirPath);
+
+
+            	// ##############################################
+                // move the generated xml files in done directory
+                // ##############################################
+                File doneXmlDir = new File(baseDataDir, Constants.DONE_XML_DIRECTORY_PREFIX+UtilDateTime.nowDateString());
+                File[] fileArray = baseDataDir.listFiles();
+                for (File file: fileArray) {
+                    try {
+                        if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("XML")) {
+                            FileUtils.copyFileToDirectory(file, doneXmlDir);
+                            file.delete();
+                        }
+                    } catch (IOException ioe) {
+                        Debug.logError(ioe, module);
+                    } catch (Exception exc) {
+                        Debug.logError(exc, module);
+                    }
+                }
+        	} catch (Exception e) {
+        		messages.add("Error in UNMARSHLING."+e);
+			}
+        	/*
+            try {
+
+            	
+                WorkbookSettings ws = new WorkbookSettings();
+                ws.setLocale(new Locale("en", "EN"));
+                Workbook wb = Workbook.getWorkbook(inputWorkbook,ws);
+                // Gets the sheets from workbook
+                for (int sheet = 0; sheet < wb.getNumberOfSheets(); sheet++) {
+                    BufferedWriter bw = null; 
+                    try {
+                        Sheet s = wb.getSheet(sheet);
+                        String sTabName=s.getName();
+                        
+                        if (sheet == 1)
+                        {
+                            List dataRows = buildDataRows(buildCategoryHeader(),s);
+                            buildProductCategory(dataRows, xmlDataDirPath,loadImagesDirPath, imageUrl);
+                        }
+                        if (sheet == 2)
+                        {
+                            List dataRows = buildDataRows(buildProductHeader(),s);
+                            buildProduct(dataRows, xmlDataDirPath);
+                            buildProductVariant(dataRows, xmlDataDirPath,loadImagesDirPath,imageUrl);
+                            buildProductGoodIdentification(dataRows, xmlDataDirPath);
+                            buildProductCategoryFeatures(dataRows, xmlDataDirPath);
+                            buildProductDistinguishingFeatures(dataRows, xmlDataDirPath);
+                            buildProductContent(dataRows, xmlDataDirPath,loadImagesDirPath,imageUrl);
+                            buildProductVariantContent(dataRows, xmlDataDirPath,loadImagesDirPath,imageUrl);
+                            buildProductAttribute(dataRows, xmlDataDirPath);
+                        }
+                        if (sheet == 3)
+                        {
+                            List dataRows = buildDataRows(buildProductAssocHeader(),s);
+                            buildProductAssoc(dataRows, xmlDataDirPath);
+                        }
+                        if (sheet == 4)
+                        {
+                            List dataRows = buildDataRows(buildProductFeatureSwatchHeader(),s);
+                            buildProductFeatureImage(dataRows, xmlDataDirPath,loadImagesDirPath,imageUrl);
+                        }
+                        if (sheet == 5)
+                        {
+                            List dataRows = buildDataRows(buildManufacturerHeader(),s);
+                            buildManufacturer(dataRows, xmlDataDirPath,loadImagesDirPath,imageUrl);
+                        }
+
+                        //File to store data in form of CSV
+                    } catch (Exception exc) {
+                        Debug.logError(exc, module);
+                    } 
+                    finally {
+                        try {
+                            if (fOutProduct != null) {
+                            	fOutProduct.close();
+                            }
+                        } catch (IOException ioe) {
+                            Debug.logError(ioe, module);
+                        }
+                    }
+                }
+
+                // ############################################
+                // call the service for remove entity data 
+                // if removeAll and autoLoad parameter are true 
+                // ############################################
+                if (removeAll) {
+                    Map importRemoveEntityDataParams = UtilMisc.toMap();
+                    try {
+                    
+                        Map result = dispatcher.runSync("importRemoveEntityData", importRemoveEntityDataParams);
+                    
+                        List<String> serviceMsg = (List)result.get("messages");
+                        for (String msg: serviceMsg) {
+                            messages.add(msg);
+                        }
+                    } catch (Exception exc) {
+                        Debug.logError(exc, module);
+                        autoLoad = Boolean.FALSE;
+                    }
+                }
+
+                // ##############################################
+                // move the generated xml files in done directory
+                // ##############################################
+                File doneXmlDir = new File(baseDataDir, Constants.DONE_XML_DIRECTORY_PREFIX+UtilDateTime.nowDateString());
+                File[] fileArray = baseDataDir.listFiles();
+                for (File file: fileArray) {
+                    try {
+                        if (FilenameUtils.getExtension(file.getName()).equalsIgnoreCase("XML")) {
+                            FileUtils.copyFileToDirectory(file, doneXmlDir);
+                            file.delete();
+                        }
+                    } catch (IOException ioe) {
+                        Debug.logError(ioe, module);
+                    } catch (Exception exc) {
+                        Debug.logError(exc, module);
+                    }
+                }
+
+                // ######################################################################
+                // call service for insert row in database  from generated xml data files 
+                // by calling service entityImportDir if autoLoad parameter is true
+                // ######################################################################
+                if (autoLoad) {
+                    //Debug.logInfo("=====657========="+doneXmlDir.getPath()+"=========================", module);
+                    Map entityImportDirParams = UtilMisc.toMap("path", doneXmlDir.getPath(), 
+                                                             "userLogin", context.get("userLogin"));
+                     try {
+                         Map result = dispatcher.runSync("entityImportDir", entityImportDirParams);
+                     
+                         List<String> serviceMsg = (List)result.get("messages");
+                         for (String msg: serviceMsg) {
+                             messages.add(msg);
+                         }
+                     } catch (Exception exc) {
+                         Debug.logError(exc, module);
+                     }
+                }
+
+            } catch (BiffException be) {
+                Debug.logError(be, module);
+            } catch (Exception exc) {
+                Debug.logError(exc, module);
+            }
+            finally {
+                inputWorkbook.delete();
+            }
+        */}
+        Map<String, Object> resp = UtilMisc.toMap("messages", (Object) messages);
+        return resp;
+        
+    }
+    
+    public static List buildProductXMLDataRows(JAXBElement<BigFishProductFeedType> bfProductFeedType) {
+		List dataRows = FastList.newInstance();
+
+		try {
+			List products = bfProductFeedType.getValue().getProduct();
+			
+            for (int rowCount = 0 ; rowCount < products.size() ; rowCount++) {
+            	ProductType product = (ProductType) products.get(rowCount);
+            
+            	Map mRows = FastMap.newInstance();
+                
+                mRows.put("masterProductId",product.getMasterProductID());
+                mRows.put("productId",product.getProductId());
+                mRows.put("internalName",product.getInternalName());
+                mRows.put("productName",product.getProductName());
+                mRows.put("salesPitch",product.getSalesPitch());
+                mRows.put("longDescription",product.getLongDescription());
+                mRows.put("specialInstructions",product.getSpecialInstructions());
+                mRows.put("deliveryInfo",product.getDeliveryInfo());
+                mRows.put("directions",product.getDirections());
+                mRows.put("termsConditions",product.getTermsAndConds());
+                mRows.put("ingredients",product.getIngredients());
+                mRows.put("warnings",product.getWarnings());
+                mRows.put("plpLabel",product.getPLPLabel());
+                mRows.put("pdpLabel",product.getPDPLabel());
+                mRows.put("productHeight",product.getProductHeight());
+                mRows.put("productWidth",product.getProductWidth());
+                mRows.put("productDepth",product.getProductDepth());
+                mRows.put("returnable",product.getReturnable());
+                mRows.put("taxable",product.getTaxable());
+                mRows.put("chargeShipping",product.getChargeShipping());
+                mRows.put("fromDate",product.getFromDate());
+                mRows.put("thruDate",product.getThruDate());
+                
+                ProductPriceType productPrice = product.getProductPrice();
+                ListPriceType listPrice = productPrice.getListPrice();
+                mRows.put("listPrice",listPrice.getPrice());
+                
+                SalesPriceType salesPrice = productPrice.getSalesPrice();
+                mRows.put("defaultPrice",salesPrice.getPrice());
+                
+                ProductCategoryType productCategory = product.getProductCategory();
+                List categoryList = productCategory.getCategory();
+                
+                StringBuffer categoryId = new StringBuffer("");
+                if(UtilValidate.isNotEmpty(categoryList)) {
+                	
+                	for(int i = 0; i < categoryList.size(); i++) {
+                		CategoryType category = (CategoryType)categoryList.get(i);
+                		categoryId.append(category.getKey() + ",");
+                	}
+                	categoryId.setLength(categoryId.length()-1);
+                }
+                
+                mRows.put("productCategoryId",categoryId.toString());
+                
+                
+                mRows.put("selectabeFeature_1","");
+                mRows.put("manufacturerId",product.getManufacturerId());
+                
+                mRows = formatProductXLSData(mRows);
+                dataRows.add(mRows);
+             }
+    	}
+      	catch (Exception e) {
+      		e.printStackTrace();
+   	    }
+      	return dataRows;
+       }
 }

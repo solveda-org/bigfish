@@ -1,12 +1,14 @@
 <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
- 
-<#-- Checks the Field Purpose -->
-<#if fieldPurpose?has_content>
-    <#assign phoneContactfieldPurpose = fieldPurpose />
-<#else>
-    <#assign phoneContactfieldPurpose = "USER" />
+ <#if userLogin?has_content>
+    <#assign partyId = userLogin.partyId!"">
 </#if>
-
+<#assign orderByList = Static["org.ofbiz.base.util.UtilMisc"].toList("fromDate")/>
+<#assign fieldsMap = Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId, "contactMechPurposeTypeId", "PHONE_WORK")/>
+<#assign workPhonePartyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", fieldsMap, orderByList)?if_exists/>
+<#if workPhonePartyContactDetails?has_content>
+    <#assign workPhonePartyContactDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(workPhonePartyContactDetails?if_exists)/>
+    <#assign workPhonePartyContactDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(workPhonePartyContactDetails?if_exists)/>
+</#if>
 <#-- Splits the contactNumber -->
 <#if workPhonePartyContactDetail?exists && workPhonePartyContactDetail?has_content>
     <#assign extensionWork = workPhonePartyContactDetail.extension?if_exists />
@@ -23,21 +25,21 @@
 <div class = "personInfoPhoneWork">
     <input type="hidden" name="workPhoneContactMechId" value="${telecomWorkNoContactMechId!}" />
     <div class="entry">
-        <label for="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT">${workPhoneCaption!}</label>
-        <span class="${phoneContactfieldPurpose?if_exists}_USA ${phoneContactfieldPurpose?if_exists}_CAN">
-            <input type="text" class="phone3" id="${phoneContactfieldPurpose?if_exists}_WORK_AREA" name="${phoneContactfieldPurpose?if_exists}_WORK_AREA" maxlength="3" value="${requestParameters.get(phoneContactfieldPurpose+"_WORK_AREA")!areaCodeWork!""}" />
-            <input type="hidden" id="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT" name="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT" value="${requestParameters.get(phoneContactfieldPurpose+"_WORK_CONTACT")!contactNumberWork!""}"/>
-            <input type="text" class="phone3" id="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT3" name="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT3" value="${requestParameters.get(phoneContactfieldPurpose+"_WORK_CONTACT3")!contactNumber3Work!""}" maxlength="3"/>
-            <input type="text" class="phone4" id="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT4" name="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT4" value="${requestParameters.get(phoneContactfieldPurpose+"_WORK_CONTACT4")!contactNumber4Work!""}" maxlength="4"/>
+        <label for="PERSON_WORK_CONTACT">${workPhoneCaption!}</label>
+        <span class="USER_USA USER_CAN">
+            <input type="text" class="phone3" id="PERSON_WORK_AREA" name="PERSON_WORK_AREA" maxlength="3" value="${requestParameters.get("PERSON_WORK_AREA")!areaCodeWork!""}" />
+            <input type="hidden" id="PERSON_WORK_CONTACT" name="PERSON_WORK_CONTACT" value="${requestParameters.get("PERSON_WORK_CONTACT")!contactNumberWork!""}"/>
+            <input type="text" class="phone3" id="PERSON_WORK_CONTACT3" name="PERSON_WORK_CONTACT3" value="${requestParameters.get("PERSON_WORK_CONTACT3")!contactNumber3Work!""}" maxlength="3"/>
+            <input type="text" class="phone4" id="PERSON_WORK_CONTACT4" name="PERSON_WORK_CONTACT4" value="${requestParameters.get("PERSON_WORK_CONTACT4")!contactNumber4Work!""}" maxlength="4"/>
             ${uiLabelMap.PhoneExtCaption}
-            <input type="text" class="phoneExt" id="${phoneContactfieldPurpose?if_exists}_WORK_EXT" name="${phoneContactfieldPurpose?if_exists}_WORK_EXT" value="${requestParameters.get(phoneContactfieldPurpose+"_WORK_EXT")!extensionWork!""}" maxlength="10"/>
+            <input type="text" class="phoneExt" id="PERSON_WORK_EXT" name="PERSON_WORK_EXT" value="${requestParameters.get("PERSON_WORK_EXT")!extensionWork!""}" maxlength="10"/>
         </span>
-        <span style="display:none" class="${phoneContactfieldPurpose?if_exists}_OTHER">
-            <input type="text" class="address" id="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT_OTHER" name="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT_OTHER" value="${requestParameters.get(phoneContactfieldPurpose+"_WORK_CONTACT_OTHER")!contactNumberWork!""}" />
+        <span style="display:none" class="USER_OTHER">
+            <input type="text" class="address" id="PERSON_WORK_CONTACT_OTHER" name="PERSON_WORK_CONTACT_OTHER" value="${requestParameters.get("PERSON_WORK_CONTACT_OTHER")!contactNumberWork!""}" />
             ${uiLabelMap.PhoneExtCaption}
-            <input type="text" class="phoneExt" id="${phoneContactfieldPurpose?if_exists}_WORK_EXT_OTHER" name="${phoneContactfieldPurpose?if_exists}_WORK_EXT_OTHER" value="${requestParameters.get(phoneContactfieldPurpose+"_WORK_EXT_OTHER")!extensionWork!""}" maxlength="10"/>
+            <input type="text" class="phoneExt" id="PERSON_WORK_EXT_OTHER" name="PERSON_WORK_EXT_OTHER" value="${requestParameters.get("PERSON_WORK_EXT_OTHER")!extensionWork!""}" maxlength="10"/>
         </span>
-        <@fieldErrors fieldName="${phoneContactfieldPurpose?if_exists}_WORK_AREA"/>
-        <@fieldErrors fieldName="${phoneContactfieldPurpose?if_exists}_WORK_CONTACT"/>
+        <@fieldErrors fieldName="PERSON_WORK_AREA"/>
+        <@fieldErrors fieldName="PERSON_WORK_CONTACT"/>
     </div>
 </div>

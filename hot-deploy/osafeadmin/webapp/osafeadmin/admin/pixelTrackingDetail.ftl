@@ -43,6 +43,7 @@
                 <#-- ===== Spot Name ==== -->
               <div class="infoValue">
                 <select name="pixelScope" id="pixelScope">
+                  <option value=""<#if !pixelScope?has_content> selected=selected</#if>>${uiLabelMap.SelectOneLabel}</option>
                   <option value="ALL"<#if parameters.pixelScope?default(pixelScope!"") == "ALL"> selected=selected</#if>>${uiLabelMap.AllLabel}</option>
                   <option value="ALL_EXCEPT_ORDER_CONFIRM"<#if parameters.pixelScope?default(pixelScope!"") == "ALL_EXCEPT_ORDER_CONFIRM"> selected=selected</#if>>${uiLabelMap.AllExceptOrderConfirmLabel}</option>
                   <option value="ORDER_CONFIRM"<#if parameters.pixelScope?default(pixelScope!"") == "ORDER_CONFIRM"> selected=selected</#if>>${uiLabelMap.OrderConfirmLabel}</option>

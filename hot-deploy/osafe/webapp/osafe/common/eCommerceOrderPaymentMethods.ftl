@@ -80,7 +80,7 @@
                         </div>
                         <div class="entry">
                             <label for="savedCard">${uiLabelMap.SelectSavedcardCaption}</label>
-                             <select id="savedCard" name="savedCard" class="savedCard">
+                             <select id="savedCard" name="savedCard" class="savedCard" onfocus="window.dropdown_menu_hack(this)">
                                  <option value="">${uiLabelMap.CommonSelectOne}</option>
                                  <#assign alreadyShownSavedCreditCardList = Static["javolution.util.FastList"].newInstance()/>
                                  <#assign selectedSavedCard = parameters.savedCard!""/>
