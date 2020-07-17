@@ -42,7 +42,11 @@
         <sub-menu-item name="DynamicPLPContentSpotsNav" text="DynamicPLPContentSpotsNav" href="plpContentList" sequenceNumber="7" className="subLevel" heading="DynamicPLPContentSpotsHeading" description="DynamicPLPContentSpotsInfo"/>
         <sub-menu-item name="DynamicPDPAdditionalContentNav" text="DynamicPDPAdditionalContentNav" href="pdpContentList" sequenceNumber="8" className="subLevel" heading="DynamicPDPAdditionalContentHeading" description="DynamicPDPAdditionalContentInfo"/>
     </menu-item>
-    <menu-item name="AdminNav" text="AdminNav" href="adminNavigation" entity="SPER_ADMIN" action="_VIEW" sequenceNumber="7" className="topLevel" navigationCategory="ADMIN">
+    <menu-item name="ShippingNav" text="ShippingNav" href="shippingNavigation" entity="SPER_CONTENT" action="_VIEW" sequenceNumber="7" className="topLevel" navigationCategory="SHIPPING">
+    	<sub-menu-item name="CarrierNav" text="CarrierNav" href="carrierShipList" sequenceNumber="0" className="subLevel navfirstitem" heading="CarrierHeading" description="CarrierInfo"/>
+        <sub-menu-item name="ShipChargeNav" text="ShipChargeNav" href="shipChargeManagement" sequenceNumber="1" className="subLevel navfirstitem" heading="ShipChargeHeading" description="ShipChargeInfo"/>
+    </menu-item>
+    <menu-item name="AdminNav" text="AdminNav" href="adminNavigation" entity="SPER_ADMIN" action="_VIEW" sequenceNumber="8" className="topLevel" navigationCategory="ADMIN">
         <!-- sub-menu-item text="AdminConfigNav" href="underConstruction" sequenceNumber="0" className="subLevel" heading="" description=""/>
         <sub-menu-item name="AdminUserNav" text="AdminUserNav" href="underConstruction" sequenceNumber="0" className="subLevel" heading="AdminUserHeading" description="AdminUserInfo"/>-->
         <sub-menu-item name="AdminSystemParamNav" text="AdminSystemParamNav" href="parameterList" sequenceNumber="0" className="subLevel" heading="AdminSystemParamHeading" description="AdminParamInfo"/>
@@ -65,4 +69,5 @@
         <sub-menu-item name="AdminToolsNav" text="AdminToolsNav" href="adminToolList" sequenceNumber="13" className="subLevel" heading="AdminToolsHeading" description="AdminToolsInfo"/>
 -->        
     </menu-item>
+
 </menus>

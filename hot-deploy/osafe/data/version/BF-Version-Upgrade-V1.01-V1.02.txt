@@ -1,0 +1,344 @@
+//********************************************************************************************
+//SQL UPDATES
+//********************************************************************************************
+delete from XProductStoreParm where parmKey='PDP_DOLLAR_THRESHOLD';
+
+
+//********************************************************************************************
+//BIGFISH PARAMETERS UPDATES
+//FILE: bigFishParameters.xml
+//********************************************************************************************
+
+//Add
+  06/13/2012 Issue# : 25880
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_MONEY_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
+  06/14/2012 Issue# 25908
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_KEEP_PAYMENT_METHODS" description="Ability to have customers maintain the various checkout details for use in a future purchase" parmCategory="CHECKOUT"/>
+  6/15/2012 Issue# : 25887
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_H" description="Height of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_W" description="Width of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
+    
+//Remove
+  06/13/2012 Issue# : 25880
+    <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_DOLLAR_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
+
+
+//********************************************************************************************
+//LABEL UPDATES
+//FILE: OSafeUiLabels.xml
+//********************************************************************************************
+
+//Add 
+  06/13/2012 Issue# 25901
+      <property key="HomePhoneCaption">
+        <value xml:lang="en">Home Phone:</value>
+        <category>MY_ACCOUNT</category>
+        <description>HomePhoneCaption</description>
+    </property>
+    <property key="MobilePhoneCaption">
+        <value xml:lang="en">Mobile Phone:</value>
+        <category>MY_ACCOUNT</category>
+        <description>MobilePhoneCaption</description>
+    </property>
+    <property key="WorkPhoneCaption">
+        <value xml:lang="en">Work Phone:</value>
+        <category>MY_ACCOUNT</category>
+        <description>WorkPhoneCaption</description>
+    </property>
+    <property key="PhoneExtCaption">
+        <value xml:lang="en">Ext:</value>
+        <category>MY_ACCOUNT</category>
+        <description>PhoneExtCaption</description>
+    </property>
+  06/14/2012 Issue# 25908
+    <property key="VerificationCaption">
+        <value xml:lang="en">Verification:</value>
+        <category>CHECK_OUT</category>
+        <description>VerificationCaption</description>
+    </property>
+    <property key="VerificationNumberMissingError">
+        <value xml:lang="en">Please enter your Verification Number</value>
+        <category>MESSAGE_ERROR</category>
+        <description>VerificationNumberMissingError</description>
+    </property>
+	<property key="UseSavedCardlabel">
+        <value xml:lang="en">Choose from a previously saved card:</value>
+        <category>CHECK_OUT</category>
+        <description>UseSavedCardlabel</description>
+    </property>
+    <property key="PayWithAnotherCardlabel">
+        <value xml:lang="en">Pay with another card, my details are below:</value>
+        <category>CHECK_OUT</category>
+        <description>PayWithAnotherCardlabel</description>
+    </property>
+    <property key="SavedCardMissingError">
+        <value xml:lang="en">Please select one of saved card</value>
+        <category>MESSAGE_ERROR</category>
+        <description>SavedCardMissingError</description>
+    </property>
+  06/13/2012 issue# 25947
+    <property key="PlpListPriceLabel">
+        <value xml:lang="en">List Price</value>
+        <category>PLP</category>
+        <description>PlpListPriceLabel</description>
+    </property>
+  
+//Remove
+  06/13/2012 Issue# 25901
+    <property key="HomePhoneCaption">
+        <value xml:lang="en">Home Phone:</value>
+        <category>MY_ACCOUNT</category>
+        <description>HomePhoneCaption</description>
+    </property>
+    <property key="MobilePhoneCaption">
+        <value xml:lang="en">Mobile Phone:</value>
+        <category>MY_ACCOUNT</category>
+        <description>MobilePhoneCaption</description>
+    </property>
+//********************************************************************************************
+//DIV SEQUENCE UPDATES
+//FILE: OSafeUiSequence.xml
+//********************************************************************************************
+//Add
+
+  06/13/2012 Issue# :25906
+    <!-- ShowCart -->
+    <property key="showCartItems">
+        <value xml:lang="en">0</value>
+        <screen>ShowCart</screen>
+        <description>Cart Items Div</description>
+    </property>
+    <property key="showCartPromoCode">
+        <value xml:lang="en">0</value>
+        <screen>ShowCart</screen>
+        <description>Promo Code Div</description>
+    </property>
+  06/15/2012 Issue# : 25887 
+    <!--PDP-->
+    <property key="pdpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer desc Div</description>
+    </property>
+    <property key="pdpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer Heading Div</description>
+    </property>
+    <property key="pdpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer Image Div</description>
+    </property>
+    <property key="pdpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer Name Div</description>
+    </property>
+    <!--Quicklook-->
+    <property key="pdpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer desc Div</description>
+    </property>
+    <property key="pdpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer Heading Div</description>
+    </property>
+    <property key="pdpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer Image Div</description>
+    </property>
+    <property key="pdpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer Name Div</description>
+    </property>
+    <!--PLP-->
+    <property key="plpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer desc Div</description>
+    </property>
+    <property key="plpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer Heading Div</description>
+    </property>
+    <property key="plpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer Image Div</description>
+    </property>
+    <property key="plpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer Name Div</description>
+    </property>
+   <!--pdp-complement-->
+   <property key="plpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer desc Div</description>
+    </property>
+    <property key="plpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer Heading Div</description>
+    </property>
+    <property key="plpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer Image Div</description>
+    </property>
+    <property key="plpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer Name Div</description>
+    </property>
+   <!--pdp-recent -->
+    <property key="plpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer desc Div</description>
+    </property>
+    <property key="plpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer Heading Div</description>
+    </property>
+    <property key="plpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer Image Div</description>
+    </property>
+    <property key="plpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer Name Div</description>
+    </property>
+  06/20/2012 Issue# :25938
+    <!-- Person-Info -->
+    <property key="personInfoFirstName">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>First Name Div</description>
+    </property>
+    <property key="personInfoLastName">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>Last Name Div</description>
+    </property>
+    <property key="personInfoGender">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>Gender Div</description>
+    </property>
+    <property key="personInfoDobMMDDYYYY">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>DOB-MMDDYYYY format Div</description>
+    </property>
+    <property key="personInfoDobMMDD">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>DOB-MMDD format Div</description>
+    </property>
+    <property key="personInfoPhoneHome">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>Phone Home Div</description>
+    </property>
+    <property key="personInfoPhoneCell">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>Phone Cell Div</description>
+    </property>
+    <property key="personInfoPhoneWork">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>Phone Work Div</description>
+    </property>
+    
+//Remove
+
+
+
+//********************************************************************************************
+//CLIENT DEPLOYMENT UPDATES
+//FILE: client-deployment.properties
+//********************************************************************************************
+//Add
+
+//Remove
+
+//********************************************************************************************
+//ECOMMERCE SEED UPDATES
+//FILE: eCommerceSeedData.xml
+//********************************************************************************************
+
+//Add
+
+//Remove
+
+//********************************************************************************************
+//ECOMMERCE CSS UPDATES
+//FILE: bigFishClientSkin.css
+//********************************************************************************************
+
+//Add
+
+06/20/2012 Issue# :N/A General Enhancement
+
+Added follwing sequences and their respective children:
+
+eCommerceListItem section:
+
+.clpLongDescriptionSeq, .clpProductListLinkSeq, .clpThumbImageSeq, .plpDetailLinkSeq, .plpPriceListSeq, .plpPriceOnlineSeq, .plpPriceOnlineSeq, .plpPriceSavingMoneySeq, .plpPriceSavingPercentSeq, .plpProdReviewSeq, .plpSwatchImageSeq, .plpTertiaryInfoSeq, .plpThumbImageSeq 
+
+CLP section:
+
+.eCommerceListItem.categoryListItem .clpLongDescriptionSeq, .eCommerceListItem.categoryListItem .clpProductListLinkSeq, .eCommerceListItem.categoryListItem .clpThumbImageSeq
+
+PLP section: 
+
+.eCommerceListItem.productListItem .plpDetailLinkSeq, .eCommerceListItem.productListItem  .plpPriceListSeq, .eCommerceListItem.productListItem  .plpPriceOnlineSeq, .eCommerceListItem.productListItem .plpPriceSavingMoneySeq, .eCommerceListItem.productListItem .plpPriceSavingPercentSeq, .eCommerceListItem.productListItem .plpProdReviewSeq, .eCommerceListItem.productListItem .plpSwatchImageSeq, .eCommerceListItem.productListItem .plpTertiaryInfoSeq, .eCommerceListItem.productListItem .plpThumbImageSeq
+
+Quicklook section: 
+
+#plpQuickLook_Container .pdpAdditionalSeq, #plpQuickLook_Container .pdpAddToCartSeq, #plpQuickLook_Container .pdpAlternateImageSeq, #plpQuickLook_Container .pdpComplementSeq, #plpQuickLook_Container .pdpCustomerRatingSeq, #plpQuickLook_Container .pdpDeliveryInfoSeq, #plpQuickLook_Container .pdpDirectionsSeq, 
+#plpQuickLook_Container .pdpDistinguishingFeatureSeq, #plpQuickLook_Container .pdpIngredientsSeq, #plpQuickLook_Container .pdpIntroDiscontinueContentSeq, #plpQuickLook_Container .pdpLongDescriptionSeq, #plpQuickLook_Container .pdpMainImageSeq, #plpQuickLook_Container .pdpManufacturerSeq, #plpQuickLook_Container .pdpPriceListSeq, #plpQuickLook_Container .pdpPriceOnLineSeq, #plpQuickLook_Container .pdpPriceSavingMoneySeq, #plpQuickLook_Container .pdpPriceSavingPercentSeq, #plpQuickLook_Container .pdpProductNameSeq, #plpQuickLook_Container .pdpRecentlyViewedSeq, #plpQuickLook_Container .pdpSalesPitchSeq, #plpQuickLook_Container .pdpSeeLargerImageSeq,#plpQuickLook_Container .pdpSeeMainImageSeq, #plpQuickLook_Container .pdpSelectableFeatureSeq, #plpQuickLook_Container .pdpSocialMediaSeq, #plpQuickLook_Container .pdpSpecialInstructionsSeq, #plpQuickLook_Container .pdpTabsSeq, #plpQuickLook_Container .pdpStockLegendSeq, #plpQuickLook_Container .pdpVideoSeq, #plpQuickLook_Container .pdpVideo360Seq, #plpQuickLook_Container .pdpVolumePricingSeq, #plpQuickLook_Container .pdpWarningsSeq
+
+PDP Complement section: 
+
+.eCommerceListItem.eCommerceComplementProduct .plpDetailLinkSeq, .eCommerceListItem.eCommerceComplementProduct .plpPriceListSeq, .eCommerceListItem.eCommerceComplementProduct .plpPriceOnlineSeq, .eCommerceListItem.eCommerceComplementProduct .plpProdReviewSeq,
+.eCommerceListItem.eCommerceComplementProduct .plpSwatchImageSeq, 
+.eCommerceListItem.eCommerceComplementProduct .plpTertiaryInfoSeq, 
+.eCommerceListItem.eCommerceComplementProduct .plpThumbImageSeq
+
+
+PDP Recently Viewed section: 
+
+.eCommerceListItem.eCommerceRecentlyViewedProduct .plpDetailLinkSeq, .eCommerceListItem.eCommerceRecentlyViewedProduct .plpPriceListSeq, .eCommerceListItem.eCommerceRecentlyViewedProduct .plpPriceOnlineSeq, .eCommerceListItem.eCommerceRecentlyViewedProduct .plpProdReviewSeq,
+.eCommerceListItem.eCommerceRecentlyViewedProduct .plpSwatchImageSeq, 
+.eCommerceListItem.eCommerceRecentlyViewedProduct .plpTertiaryInfoSeq, 
+.eCommerceListItem.eCommerceRecentlyViewedProduct .plpThumbImageSeq 
+
+Order Summary Section:
+
+.checkoutOrderBillingAddressSeq, .checkoutOrderItemsSeq, .checkoutOrderPaymentsSeq, .checkoutOrderPromoCodeSeq, .checkoutOrderShippingAddressSeq, .checkoutOrderStorePickupSeq
+
+
+//Remove
+
+
+
+//********************************************************************************************
+//OSAFE PROPERTIES UPDATE
+//FILE: osafe.properties.template
+//********************************************************************************************
+//Add
+
+//Remove

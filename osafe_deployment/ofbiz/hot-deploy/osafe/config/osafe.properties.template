@@ -140,3 +140,23 @@ import.xls.CarrierShipmentMethod=Carrier Shipment Method
 import.xls.ProductStoreShipmentMeth=Product Store Shipment Meth
 import.xls.ShipmentCostEstimate=Shipment Cost Estimate
 import.xls.ProductStorePaymentSetting=Product Store Payment Setting
+
+#############################
+# ecommerce UI Sequence File
+#############################
+ecommerce-UiSequence-xml-file=${sys:getProperty('ofbiz.home')}/hot-deploy/osafe/config/OSafeUiSequence.xml
+
+#######################################
+# PDP Alternate Images
+#######################################
+pdp-alternate-images = 10
+
+#######################################
+# Good Indentification Types
+#######################################
+goodIdentificationTypes = @goodIdentificationTypes@
+#######################################
+# PLP SORT OPTIONS
+#Format (SORT_OPTION:SORT_VALUE-ORDER(asc,desc):SORT_LABEL)
+#######################################
+SORT.OPTIONS=HIGHEST_RATING:customerRating-desc:HighestRatingLabel||MOST_POPULAR:sequenceNum:MostPopularLabel||NAME_ASCENDING:name-asc:NameAscendingLabel||NAME_DESCENDING:name-desc:NameDescendingLabel||HIGHEST_PRICE:price-desc:HighestPriceLabel||LOWEST_PRICE:price-asc:LowestPriceLabel||MOST_VIEWED:totalTimesViewed-desc:MostViewedLabel||BEST_SELLING:totalQuantityOrdered-desc:BestSellingLabel

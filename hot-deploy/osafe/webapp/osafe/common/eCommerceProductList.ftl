@@ -78,7 +78,7 @@
                       <#assign productId = document.productId!"">
                  <!-- DIV for Displaying PLP item STARTS here -->
                       <div class="eCommerceListItem productListItem">
-                        ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpDivSequence")}
+                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#plpDivSequence")}
                       </div>
                  <!-- DIV for Displaying PLP item ENDS here -->     
             </#list>

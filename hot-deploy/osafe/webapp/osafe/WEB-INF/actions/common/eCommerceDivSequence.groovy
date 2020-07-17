@@ -12,10 +12,10 @@ import org.ofbiz.base.util.UtilValidate;
 XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe.properties", "ecommerce-UiSequence-xml-file"), context);
 searchRestrictionMap = FastMap.newInstance();
 searchRestrictionMap.put("screen", "Y");
-uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false);
+uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false, true);
 
 for(Map uiSequenceScreenMap : uiSequenceSearchList) {
-     if (UtilValidate.isInteger(uiSequenceScreenMap.value)) {
+     if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) {
          if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) {
              uiSequenceScreenMap.value = Integer.parseInt(uiSequenceScreenMap.value);
          } else {

@@ -4,5 +4,6 @@
     <VisualTheme visualThemeId="OSAFE_DEFAULT" visualThemeSetId="ECOMMERCE" description="OSafe Ecommerce Standard Layout"/>
     <VisualThemeResource visualThemeId="OSAFE_DEFAULT" resourceTypeEnumId="VT_SHORTCUT_ICON" resourceValue="@fav-icon@" sequenceId="01"/>
     <VisualThemeResource visualThemeId="OSAFE_DEFAULT" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/osafe_theme/css/bigFishClientSkin.css" sequenceId="01"/>
+    <VisualThemeResource visualThemeId="OSAFE_DEFAULT" resourceTypeEnumId="VT_STYLESHEET" resourceValue="/osafe_theme/css/jquery-ui-dialog/jquery-ui-dialog.css" sequenceId="02"/>
     <VisualThemeResource visualThemeId="OSAFE_DEFAULT" resourceTypeEnumId="VT_HDR_JAVASCRIPT" resourceValue="/osafe_theme/example.js" sequenceId="01"/>
 </entity-engine-xml>

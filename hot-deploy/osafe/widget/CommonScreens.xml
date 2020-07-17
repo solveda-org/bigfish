@@ -15,7 +15,6 @@
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/scriptaculous.js?load=builder,effects,dragdrop,slider" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/fieldlookup.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
@@ -23,7 +22,6 @@
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.min.js" global="true"/>
                 <set field="layoutSettings.companyName" from-field="uiLabelMap.eCommerceCompanyName" global="true"/>
                 <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.eCommerceCompanySubtitle" global="true"/>
-                <set field="layoutSettings.styleSheets[+0]" value="/osafe_theme/css/jquery.jqzoom.css" global="true"/>
 
                 <set field="activeApp" value="osafe" global="true"/>
                 <set field="applicationMenuName" value="MainAppBar" global="true"/>
@@ -91,12 +89,10 @@
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/fieldlookup.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
-                <set field="layoutSettings.styleSheets[+0]" value="/osafe_theme/css/jquery.jqzoom.css" global="true"/>
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->
                 <set field="visualThemeId" from-field="productStore.visualThemeId" default-value="OSAFE_DEFAULT"/>
@@ -213,12 +209,10 @@
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/prototypejs/prototype.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery.noConflict.js" global="true"/>
                 <set field="layoutSettings.javaScripts[+0]" value="/osafe_theme/js/lib/jquery-1.5.2.min.js" global="true"/>
-                <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/fieldlookup.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/selectall.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery-ui.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.jqzoom-core.js" global="true"/>
                 <set field="layoutSettings.javaScripts[]" value="/osafe_theme/js/lib/jquery.aw-showcase.js" global="true"/>
-                <set field="layoutSettings.styleSheets[+0]" value="/osafe_theme/css/jquery.jqzoom.css" global="true"/>
 
                 <script location="component://osafe/webapp/osafe/WEB-INF/actions/setup/EcommerceSetup.groovy"/>
                 <!-- Get the store VisualTheme -->

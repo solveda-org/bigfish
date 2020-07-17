@@ -22,6 +22,7 @@ import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilMisc;
 import com.osafe.services.InventoryServices;
+import org.ofbiz.party.content.PartyContentWrapper;
 
 productStore = ProductStoreWorker.getProductStore(request);
 productStoreId = productStore.get("productStoreId");
@@ -211,6 +212,21 @@ if (UtilValidate.isNotEmpty(productId))
 
 
     GenericValue gvProduct =  delegator.findOne("Product", UtilMisc.toMap("productId",productId), true);
+ // Setting variables required in the Manufacturer Info section 
+    if (UtilValidate.isNotEmpty(gvProduct)) 
+    {
+        productId = gvProduct.productId;
+        partyManufacturer=gvProduct.getRelatedOne("ManufacturerParty");
+        if (UtilValidate.isNotEmpty(partyManufacturer))
+        {
+          context.manufacturerPartyId = partyManufacturer.partyId;
+          PartyContentWrapper partyContentWrapper = new PartyContentWrapper(partyManufacturer, request);
+          context.partyContentWrapper = partyContentWrapper;
+          context.manufacturerDescription = partyContentWrapper.get("DESCRIPTION");
+          context.manufacturerProfileName = partyContentWrapper.get("PROFILE_NAME");
+          context.manufacturerProfileImageUrl = partyContentWrapper.get("PROFILE_IMAGE_URL");
+        }
+    }
 
     // first make sure this isn't a variant that has an associated virtual product, if it does show that instead of the variant
     virtualProductId = ProductWorker.getVariantVirtualId(gvProduct);
@@ -732,6 +748,7 @@ if (UtilValidate.isNotEmpty(productId))
                             variantTree.values().eachWithIndex { varTree, topLevelKeysCt ->
                                 cnt = "" + topLevelKeysCt;
                                 if (varTree instanceof Map) {
+                                    varTree = new TreeMap(varTree);
                                     jsBuf.append(buildNext(varTree, featureOrder, featureOrder[1], cnt, featureTypes));
                                     jsBuf.append(buildNextLi(varTree, featureOrder, featureOrder[1], cnt, featureTypes));
                                 }
@@ -793,10 +810,10 @@ if (UtilValidate.isNotEmpty(productId))
    XmlFilePath = FlexibleStringExpander.expandString(UtilProperties.getPropertyValue("osafe.properties", "ecommerce-UiSequence-xml-file"), context);
    searchRestrictionMap = FastMap.newInstance();
    searchRestrictionMap.put("screen", "Y");
-   uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false);
+   uiSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, uiSequenceScreen,true, false,true);
    
    for(Map uiSequenceScreenMap : uiSequenceSearchList) {
-        if (UtilValidate.isInteger(uiSequenceScreenMap.value)) {
+        if ((uiSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiSequenceScreenMap.value))) {
             if (UtilValidate.isNotEmpty(uiSequenceScreenMap.value)) {
                 uiSequenceScreenMap.value = Integer.parseInt(uiSequenceScreenMap.value);
             } else {
@@ -807,9 +824,9 @@ if (UtilValidate.isNotEmpty(productId))
    uiSequenceSearchList = UtilMisc.sortMaps(uiSequenceSearchList, UtilMisc.toList("value"));
    context.uiSequenceSearchList = uiSequenceSearchList;
 
-   uiPdpTabSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, "PDP-Tabs",true, false);
+   uiPdpTabSequenceSearchList =  OsafeManageXml.getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, "PDP-Tabs",true, false,true);
    for(Map uiPdpTabSequenceScreenMap : uiPdpTabSequenceSearchList) {
-        if (UtilValidate.isInteger(uiPdpTabSequenceScreenMap.value)) {
+        if ((uiPdpTabSequenceScreenMap.value instanceof String) && (UtilValidate.isInteger(uiPdpTabSequenceScreenMap.value))) {
             if (UtilValidate.isNotEmpty(uiPdpTabSequenceScreenMap.value)) {
                 uiPdpTabSequenceScreenMap.value = Integer.parseInt(uiPdpTabSequenceScreenMap.value);
             } else {

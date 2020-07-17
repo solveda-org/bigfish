@@ -34,7 +34,7 @@
                         <#if postalAddress.attnName?has_content><p>${postalAddress.attnName}</p></#if>
                         <p>${postalAddress.address1}</p>
                         <#if postalAddress.address2?has_content><p>${postalAddress.address2}</p></#if>
-                        <p>${postalAddress.city?if_exists}<#if postalAddress.stateProvinceGeoId?has_content>, ${postalAddress.stateProvinceGeoId} </#if>
+                        <p>${postalAddress.city?if_exists}<#if postalAddress.stateProvinceGeoId?has_content && postalAddress.stateProvinceGeoId != '_NA_'>, ${postalAddress.stateProvinceGeoId} </#if>
                         ${postalAddress.postalCode?if_exists}</p>
                         <p>${postalAddress.countryGeoId?if_exists}</p>
                     </#if>
@@ -68,42 +68,67 @@
     <#-- End Email Address -->
     
     <#-- Start Phone Number -->
-    <#assign homePhones = delegator.findByAnd("PartyContactMechPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"contactMechPurposeTypeId","PHONE_HOME"))/>
-	 <#if homePhones?has_content>
-        <#assign homePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(homePhones, nowTimestamp, "fromDate", "thruDate", true)/>
-	    <#assign partyHomePhone = delegator.findByPrimaryKey("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",homePhones[0].contactMechId))/>
-	 </#if>
-	 <#assign mobilePhones = delegator.findByAnd("PartyContactMechPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",partyId,"contactMechPurposeTypeId","PHONE_MOBILE"))/>
-	 <#if mobilePhones?has_content>
-        <#assign mobilePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(mobilePhones, nowTimestamp, "fromDate", "thruDate", true)/>
-	    <#assign partyMobilePhone = delegator.findByPrimaryKey("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",mobilePhones[0].contactMechId))/>
-	 </#if>
-    <#if partyHomePhone?has_content || partyMobilePhone?has_content>
-	 <div class="infoRow">
-	   <#if partyHomePhone?has_content>
-	     <#assign formattedPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhone.areaCode?if_exists, partyHomePhone.contactNumber?if_exists)/>
-	     <#if formattedPhone?has_content>
-         <div class="infoEntry">
-           <div class="infoCaption">
-             <label>${uiLabelMap.HomePhoneCaption}</label>
-           </div>
-           <div class="infoValue">${formattedPhone}</div>
-         </div>
-         </#if>
-       </#if>
-       <#if partyMobilePhone?has_content>
-         <#assign formattedPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhone.areaCode?if_exists, partyHomePhone.contactNumber?if_exists)/>
-	     <#if formattedMobilePhone?has_content>
-         <div class="infoEntry">
-           <div class="infoCaption">
-             <label>${uiLabelMap.MobilePhoneCaption}</label>
-           </div>
-           <div class="infoValue">${formattedMobilePhone}</div>
-         </div>
-         </#if>
-       </#if>
-     </div>
-     </#if>
+      <#assign partyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId))/>
+        <#-- Home Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_HOME"}) />
+      </#if>
+      <#if partyHomePhoneDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyHomePhoneDetails?if_exists) />
+        <#assign partyHomePhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyHomePhoneDetails?if_exists) />
+        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists)/>
+      </#if>
+      
+        <#-- Work Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_WORK"}) />
+      </#if>
+      <#if partyWorkPhoneDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyWorkPhoneDetails?if_exists) />
+        <#assign partyWorkPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyWorkPhoneDetails?if_exists) />
+        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists)/>
+        <#if partyWorkPhoneDetail?has_content && partyWorkPhoneDetail.extension?has_content>
+          <#assign partyWorkPhoneExt = partyWorkPhoneDetail.extension!/> 
+        </#if>
+      </#if>
+        
+        <#-- Cell Phone --> 
+      <#if partyContactDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_MOBILE"}) />
+      </#if>
+      <#if partyCellPhoneDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyCellPhoneDetails?if_exists) />
+        <#assign partyCellPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyCellPhoneDetails?if_exists) />
+        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists)/>
+      </#if>
+    <#if formattedHomePhone?has_content || formattedCellPhone?has_content || formattedWorkPhone?has_content>
+	  <div class="infoRow">
+	    <#if formattedHomePhone?has_content>
+          <div class="infoEntry">
+            <div class="infoCaption">
+              <label>${uiLabelMap.HomePhoneCaption}</label>
+            </div>
+            <div class="infoValue">${formattedHomePhone!}</div>
+          </div>
+        </#if>
+        <#if formattedCellPhone?has_content>
+          <div class="infoEntry">
+            <div class="infoCaption">
+              <label>${uiLabelMap.CellPhoneCaption}</label>
+            </div>
+            <div class="infoValue">${formattedCellPhone!}</div>
+          </div>
+        </#if>
+        <#if formattedWorkPhone?has_content>
+          <div class="infoEntry">
+            <div class="infoCaption">
+              <label>${uiLabelMap.WorkPhoneCaption}</label>
+            </div>
+            <div class="infoValue">${formattedWorkPhone!}<#if partyWorkPhoneExt?has_content>&nbsp;x${partyWorkPhoneExt}</#if></div>
+          </div>
+        </#if>
+      </div>
+    </#if>
     <#-- End Phone Number -->
     
 </#if>

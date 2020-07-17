@@ -634,7 +634,7 @@ public class OsafeAdminUtil {
             areaCode = "";
         }
         String fullPhone = areaCode + contactNumber;
-        fullPhone = UtilValidate.stripCharsInBag(fullPhone, UtilValidate.phoneNumberDelimiters);
+        //fullPhone = UtilValidate.stripCharsInBag(fullPhone, UtilValidate.phoneNumberDelimiters);
 
         if (UtilValidate.isEmpty(areaCode)) {
             return fullPhone;

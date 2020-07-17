@@ -322,7 +322,7 @@ var FieldLookupPopup = Class.create({
         this.makeDraggable(lookupDiv);
 
         //make the window resiable
-        this.makeResizeable(lookupDiv);
+        //this.makeResizeable(lookupDiv);
         
         identifyLookup(this.globalRef);
     },
@@ -386,10 +386,10 @@ var FieldLookupPopup = Class.create({
         if (this.position == "center") {
             bdy.appendChild(lookupDiv);
             var dimensions = lookupDiv.getDimensions();
-            lookupLeft = (bdy.offsetWidth / 2) - (dimensions.width / 2);
+            lookupLeft = (bdy.offsetWidth / 2) - (180);
             var scrollOffY = document.viewport.getScrollOffsets().top;
             var winHeight = document.viewport.getHeight();
-            lookupTop = (scrollOffY + winHeight / 2) - (dimensions.height / 2);
+            lookupTop = (scrollOffY + winHeight / 2) - (180);
             
             lookupDiv.style.left = lookupLeft + "px";
             lookupDiv.style.top = lookupTop + "px";
@@ -517,9 +517,9 @@ var FieldLookupPopup = Class.create({
 
         // for small pages with total width less then width of the viewport
         if (xScroll < windowWidth){
-            pageWidth = xScroll;
-        } else {
             pageWidth = windowWidth;
+        } else {
+            pageWidth = xScroll;
         }
 
         return [pageWidth,pageHeight];
@@ -920,14 +920,18 @@ function write_value (value, target) {
     
     setSourceColor(target);
     target.value = value;
-    target.fire("lookup:changed");
+    if (!Prototype.Browser.IE) {
+        target.fire("lookup:changed");
+    }
     if (target.onchange != null) {     
         target.onchange();                    
     }
 }
 function set_multivalues(value) {
     obj_caller.target.value = value;
-    obj_caller.target.fire("lookup:changed");
+    if (!Prototype.Browser.IE) {
+        target.fire("lookup:changed");
+    }
     var thisForm = obj_caller.target.form;
     var evalString = "";
     

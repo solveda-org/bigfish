@@ -23,11 +23,11 @@
 # HTTPS Port (Secure port)
 port.https.enabled=Y
 port.https=@port.https@
-force.https.host=
+force.https.host=@https.host@
 
 # HTTP Port (Not Secure port)
 port.http=@port.http@
-force.http.host=
+force.http.host=@http.host@
 
 # Static Content URLs to make it easy to move the serving load for static content to other machines
 # -- thse are for general content such as images, js & css files, or non-dynamic HTML files

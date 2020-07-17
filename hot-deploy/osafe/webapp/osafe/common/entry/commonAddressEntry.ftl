@@ -84,6 +84,9 @@
 </#if>
 <#include "component://osafe/webapp/osafe/common/entry/addressCommonFieldEntry.ftl"/>
 <#include "component://osafe/webapp/osafe/common/entry/addressContactFieldEntry.ftl"/>
+<#-- if usePhoneContact?has_content && usePhoneContact == "Y">
+    <#include "component://osafe/webapp/osafe/common/entry/phoneContactEntry.ftl"/>
+</#if -->
 <#if isShipping?has_content && isShipping == "Y">
     </div>
 </#if>

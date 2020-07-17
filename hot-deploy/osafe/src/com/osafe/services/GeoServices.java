@@ -30,6 +30,7 @@ public class GeoServices {
         Map<String, Object> resp = null;
         OsafeGeo osafeGeo = OsafeGeo.EmptyOsafeGeo;
 
+        String productStoreId = (String) context.get("productStoreId");
         GenericValue userLogin = (GenericValue) context.get("userLogin");
         String partyId = (String) context.get("partyId");
         String roleTypeId = (String) context.get("roleTypeId");
@@ -80,7 +81,7 @@ public class GeoServices {
                             }
                         }
                         Debug.logInfo(address.toString(), module);
-                        osafeGeo = OsafeGeo.fromAddress(address.toString());
+                        osafeGeo = OsafeGeo.fromAddress(address.toString(),productStoreId);
                     }
 
                     List<GenericValue> partyGeoPointList = delegator.findByAnd("PartyGeoPoint", UtilMisc.toMap("partyId", partyId));

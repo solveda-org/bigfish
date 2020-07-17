@@ -49,7 +49,7 @@
         <ul>
       <#if (productThumbImageUrl?string?has_content) && (altThumbImageExist?exists && altThumbImageExist =='true')>
       <#-- image path added in alt attribute, on user action it will set in image src, in this way it will not effect page loading time -->
-        <li><a href="javascript:void(0);" id="mainAddImageLink" onclick="javascript:replaceDetailImage('${productLargeImageUrl?if_exists}','${productDetailImageUrl!""}');"><img title="<@ofbizContentUrl><#if productThumbImageUrl != ''>${productThumbImageUrl}<#else>${productLargeImageUrl!}</#if></@ofbizContentUrl>" id="mainAddImage" name="mainAddImage" id="mainAddImage" vspace="5" hspace="5" src="" class="productAdditionalImage" <#if IMG_SIZE_PDP_THUMB_H?has_content> height="${IMG_SIZE_PDP_THUMB_H!""}"</#if> <#if IMG_SIZE_PDP_THUMB_W?has_content> width="${IMG_SIZE_PDP_THUMB_W!""}"</#if> onerror="onImgError(this, 'PDP-Alt');"/></a></li>
+        <li><a href="javascript:void(0);" id="mainAddImageLink" onclick="javascript:replaceDetailImage('${productLargeImageUrl?if_exists}','${productDetailImageUrl!""}');"><img src="<@ofbizContentUrl><#if productThumbImageUrl != ''>${productThumbImageUrl}<#else>${productLargeImageUrl!}</#if></@ofbizContentUrl>" id="mainAddImage" name="mainAddImage" id="mainAddImage" vspace="5" hspace="5" class="productAdditionalImage" <#if IMG_SIZE_PDP_THUMB_H?has_content> height="${IMG_SIZE_PDP_THUMB_H!""}"</#if> <#if IMG_SIZE_PDP_THUMB_W?has_content> width="${IMG_SIZE_PDP_THUMB_W!""}"</#if> onerror="onImgError(this, 'PDP-Alt');"/></a></li>
       </#if>
       <#list 1..maxAltImages as altImgNum>
         <#assign productAddImageUrl = variantProdCtntWrapper.get("ADDITIONAL_IMAGE_${altImgNum}")!"">
@@ -57,7 +57,7 @@
         <#assign productXtraAddDetailImageUrl = variantProdCtntWrapper.get("XTRA_IMG_${altImgNum}_DETAIL")!"">
         <#if productAddImageUrl?string?has_content>
         <#-- image path added in alt attribute, on user action it will set in image src, in this way it will not effect page loading time -->
-          <li><a href="javascript:void(0);" id='addImage${altImgNum}Link' onclick="javascript:replaceDetailImage('<#if productXtraAddLargeImageUrl!=''>${productXtraAddLargeImageUrl}<#else>${productAddImageUrl}</#if>','${productXtraAddDetailImageUrl!}');"><img title="<@ofbizContentUrl>${productAddImageUrl?if_exists}</@ofbizContentUrl>" name="addImage${altImgNum}" id="addImage${altImgNum}" vspace="5" hspace="5" src="" class="productAdditionalImage" <#if IMG_SIZE_PDP_THUMB_H?has_content> height="${IMG_SIZE_PDP_THUMB_H!""}"</#if> <#if IMG_SIZE_PDP_THUMB_W?has_content> width="${IMG_SIZE_PDP_THUMB_W!""}"</#if> onerror="onImgError(this, 'PDP-Alt');"/></a></li>
+          <li><a href="javascript:void(0);" id='addImage${altImgNum}Link' onclick="javascript:replaceDetailImage('<#if productXtraAddLargeImageUrl!=''>${productXtraAddLargeImageUrl}<#else>${productAddImageUrl}</#if>','${productXtraAddDetailImageUrl!}');"><img src="<@ofbizContentUrl>${productAddImageUrl?if_exists}</@ofbizContentUrl>" name="addImage${altImgNum}" id="addImage${altImgNum}" vspace="5" hspace="5" class="productAdditionalImage" <#if IMG_SIZE_PDP_THUMB_H?has_content> height="${IMG_SIZE_PDP_THUMB_H!""}"</#if> <#if IMG_SIZE_PDP_THUMB_W?has_content> width="${IMG_SIZE_PDP_THUMB_W!""}"</#if> onerror="onImgError(this, 'PDP-Alt');"/></a></li>
         </#if>
       </#list>
       </ul>

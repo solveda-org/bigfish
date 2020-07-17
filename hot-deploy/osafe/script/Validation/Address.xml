@@ -21,14 +21,14 @@
          <call-map-processor in-map-name="parameters" out-map-name="addressContext">
              <simple-map-processor name="address">
                 <make-in-string field="fullName">
-                     <in-field field="USER_FIRST_NAME"/><constant> </constant>
-                     <in-field field="USER_LAST_NAME"/>
+                     <in-field field="CUSTOMER_FIRST_NAME"/><constant> </constant>
+                     <in-field field="CUSTOMER_LAST_NAME"/>
                 </make-in-string>
-                <process field="USER_FIRST_NAME">
+                <process field="CUSTOMER_FIRST_NAME">
                     <copy to-field="firstName"/>
                     <not-empty><fail-property resource="OSafeUiLabels" property="FirstNameMissingError"/></not-empty>
                 </process>
-                <process field="USER_LAST_NAME">
+                <process field="CUSTOMER_LAST_NAME">
                     <copy to-field="lastName"/>
                     <not-empty><fail-property resource="OSafeUiLabels" property="LastNameMissingError"/></not-empty>
                 </process>

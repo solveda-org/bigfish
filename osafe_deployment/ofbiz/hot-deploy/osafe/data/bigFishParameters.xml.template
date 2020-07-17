@@ -8,7 +8,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_SHOW_ITEM_CNT" description="Determines whether the facets show the number of items in parenthesis" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_PRICE_ROUND" description="Control the number of decimal places to be displayed in the listed prices" parmCategory="SOLR"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_DOLLAR_THRESHOLD" description="Only show LIST Price is the dollar saving is greater than or equal to this setting" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_MONEY_THRESHOLD" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_PCT_THRESHOLD" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_SOC_MEDIA" description="Include the Share display box on PDP, true or false" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_FACEBOOK" description="Include Facebook share in the share-box, leave blank to not display" parmCategory="PDP"/>
@@ -84,6 +84,8 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_SWATCH_W" description="Width of PLP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_SWATCH_H" description="Height of PDP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_SWATCH_W" description="Width of PDP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_H" description="Height of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_W" description="Width of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_H" description="Height of PDP Product Video" parmCategory="VIDEO"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_W" description="Width of PDP Product Video" parmCategory="VIDEO"/>
@@ -123,6 +125,7 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_CC" description="Defines whether a 'Pickup-In-Store' offers a credit card payment" parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_CC_REQ" description="Defines whether a 'Pickup-In-Store' REQUIRES payment by credit card before the order is accepted" parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_PROMO_MANUAL_ONE_ONLY" description="TRUE or FALSE flag value to indicate if all manual promo-codes are mutually exclusive. TRUE: only ONE promo-code will be allowed to be applied to the Order. FALSE: multiple promo-codes are allowed to be applied to the Order." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_KEEP_PAYMENT_METHODS" description="Ability to have customers maintain the various checkout details for use in a future purchase" parmCategory="CHECKOUT"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_ACTIVE" description="Display quick view on the PLP page for each product." parmCategory="QUICKLOOK"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_DELAY_MS" description="The time, in milliseconds, that the site will wait before displaying the Quick Look icon" parmCategory="QUICKLOOK"/>

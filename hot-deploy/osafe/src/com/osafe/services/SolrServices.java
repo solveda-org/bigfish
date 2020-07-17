@@ -251,8 +251,13 @@ public class SolrServices {
                                             List<String> featureValues = FastList.newInstance();
                                             try {
                                                 for (GenericValue feature : productFeatures) {
-                                                    String description = feature.getString("description");
-                                                    String productFeatureApplTypeId = feature.getString("productFeatureApplTypeId");
+                                                	String description ="";
+                                                	String productFeatureApplTypeId = feature.getString("productFeatureApplTypeId");
+                                                	List<GenericValue> productFeatureGroupAppls = delegator.findByAnd("ProductFeatureGroupAppl", UtilMisc.toMap("productFeatureId",feature.getString("productFeatureId")));
+                                                	productFeatureGroupAppls = EntityUtil.filterByDate(productFeatureGroupAppls);
+                                                	if(productFeatureGroupAppls.size() > 0) {
+                                                        description = feature.getString("description");
+                                                	}
                                                     //Commented out block
                                                     //issue #25879
                                                     //implemented to meet a specific requirement for GMH Production by srufle.

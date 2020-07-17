@@ -25,9 +25,15 @@ if (UtilValidate.isNotEmpty(partyId)) {
     }
 
     shippingPostalAddress = cart.getShippingAddress();
+    if (UtilValidate.isEmpty(shippingPostalAddress)) {
+        shippingAddressContactMech = EntityUtil.getFirst(ContactHelper.getContactMech(party, "SHIPPING_LOCATION", "POSTAL_ADDRESS", false));
+        if (UtilValidate.isNotEmpty(shippingAddressContactMech)) {
+            shippingPostalAddress = delegator.findOne("PostalAddress", [contactMechId : shippingAddressContactMech.contactMechId], true);
+        }
+    }
     if (UtilValidate.isNotEmpty(shippingPostalAddress)) {
-        context.SHIPPINGPhoneNumberMap = getPhoneNumberMap(shippingPostalAddress);
         context.SHIPPINGPostalAddress = shippingPostalAddress;
+        context.SHIPPINGPhoneNumberMap = getPhoneNumberMap(shippingPostalAddress);
     }
 
     billingAddressContactMechId = cart.getContactMech("BILLING_LOCATION");

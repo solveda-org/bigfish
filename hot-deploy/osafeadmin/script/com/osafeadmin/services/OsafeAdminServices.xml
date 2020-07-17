@@ -165,23 +165,31 @@
 
     <simple-method method-name="clearLabelCache" short-description="clear label cache">
         <if-not-empty field="parameters.cacheName">
-            <set field="cacheName" from-field="parameters.cacheName"/>
-            <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="findCache" ret-field="utilCache" >
-                <field field="cacheName" type="String"/>
+            <call-class-method class-name="org.ofbiz.base.util.StringUtil" method-name="split" ret-field="cacheResourceList">
+                   <field field="parameters.cacheName" type="String"/>
+                   <string value="|" />
             </call-class-method>
-            <if-not-empty field="utilCache">
-                <call-object-method method-name="clear" obj-field="utilCache"></call-object-method>
-                <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheSuccess" field="clearLabelCacheSuccess"/>
-                <string-to-list string="${clearLabelCacheSuccess}" list="successMessageList"/>
+            <iterate entry="cacheName" list="cacheResourceList">
+                <call-class-method class-name="org.ofbiz.base.util.cache.UtilCache"  method-name="findCache" ret-field="utilCache" >
+                    <field field="cacheName" type="String"/>
+                </call-class-method>
+                <if-not-empty field="utilCache">
+                    <call-object-method method-name="clear" obj-field="utilCache"></call-object-method>
+                    <set field="cacheSuccessful" value="Y"/>
                 <else>
                     <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheError" field="clearLabelCacheError"/>
                     <string-to-list string="${clearLabelCacheError}" list="error_list"/>
-                </else>
-            </if-not-empty>
-            <else>
-                <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheError" field="clearLabelCacheError"/>
-                <string-to-list string="${clearLabelCacheError}" list="error_list"/>
-            </else>
+                </else>    
+                </if-not-empty>
+            </iterate>
+            <if-not-empty field="cacheSuccessful">
+                <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheSuccess" field="clearLabelCacheSuccess"/>
+                <string-to-list string="${clearLabelCacheSuccess}" list="successMessageList"/>
+            </if-not-empty>    
+        <else>
+            <property-to-field resource="OSafeAdminUiLabels" property="ClearLabelCacheError" field="clearLabelCacheError"/>
+            <string-to-list string="${clearLabelCacheError}" list="error_list"/>
+        </else>
         </if-not-empty>
         <check-errors/>
     </simple-method>
@@ -833,6 +841,26 @@
             <set field="deleteTextContentCtx.contentId" from-field="contentId"/>
             <call-service service-name="deleteTextContent" in-map-name="deleteTextContentCtx"/>
         </if-not-empty>
+    </simple-method>
+
+    <simple-method method-name="updatePaymentSetting" short-description="update Payment Setting">
+        <if>
+            <condition>
+                <and>
+                    <not><if-empty field="parameters.paymentService"/></not>
+                    <not><if-empty field="parameters.paymentCustomMethodId"/></not>
+                </and>
+            </condition>
+            <then>
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="OnlyOnePayementMethodError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </then>
+        </if>
+        <check-errors/>
+        <set-service-fields service-name="updateProductStorePaymentSetting" map="parameters" to-map="updateProductStorePaymentSettingCtx"/>
+        <call-service service-name="updateProductStorePaymentSetting" in-map-name="updateProductStorePaymentSettingCtx" />
+        <property-to-field resource="OSafeAdminUiLabels" property="PaymentSettingSavedSuccess" field="paymentSettingSavedSuccess"/>
+        <string-to-list string="${paymentSettingSavedSuccess}" list="successMessageList"/>
     </simple-method>
 
 </simple-methods>

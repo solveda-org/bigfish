@@ -62,11 +62,12 @@
 
 <#if Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_AS_GUEST) && parameters.guest?has_content && parameters.guest == "guest">
 <#if (shoppingCartSize > 0)>
+<#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
   <div id="guestCheckoutBox" class="displayBox<#if className?exists && className?has_content> ${className}</#if>">
     <div class="displayBoxHeader">
       <span class="displayBoxHeaderCaption">${uiLabelMap.GuestCheckoutHeading?if_exists}</span>
     </div>
-    <form method="post" action="<@ofbizUrl>validateGuestCustomerEmail${previousParams!""}</@ofbizUrl>" id="guestCustomerForm" name="guestCustomerForm">
+    <form method="post" action="<@ofbizUrl>validateAnonCustomerEmail${previousParams!""}</@ofbizUrl>" id="guestCustomerForm" name="guestCustomerForm">
       <fieldset>
         <div class="infoAndEntrysec">
           <p>${uiLabelMap.GuestCheckoutInfo!""}</p>

@@ -3,7 +3,7 @@
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
 
-    <simple-method method-name="createGuestCheckoutOrder" short-description="guest Checkout" login-required="false">
+    <simple-method method-name="createSinglePageOrder" short-description="create order for single page" login-required="false">
 
         <session-to-field field="shoppingCart" session-name="shoppingCart"/>
         <call-object-method method-name="items" obj-field="shoppingCart" ret-field="shoppingCartItems"/>
@@ -13,11 +13,18 @@
             <string-to-list string="${tempErrorMessage}" list="error_list"/>
             <check-errors/>
         </if-compare>
+
         <!-- Validate UserLogin detail -->
-        <if-not-empty field="parameters.PASSWORD">
-            <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
-            <map-to-map map="userLoginContext" to-map="paramContext"/>
-        </if-not-empty>
+        <session-to-field field="userLogin"/>
+        <if-empty field="userLogin">
+            <if-not-empty field="parameters.PASSWORD">
+                <call-simple-method method-name="UserLoginValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
+                <map-to-map map="userLoginContext" to-map="paramContext"/>
+            </if-not-empty>
+            <else>
+                <set field="paramContext.emailAddress" from-field="userLogin.userLoginId"/>
+            </else>
+        </if-empty>
 
         <!-- validate Personal Information -->
         <call-simple-method method-name="PersonalInfoValidation" xml-resource="component://osafe/script/Validation/ValidationEvents.xml"/>
@@ -57,7 +64,7 @@
             <set field="parameters.firstNameOnCard" from-field="paramContext.firstName"/>
 <!--             <set field="parameters.middleNameOnCard" from-field="paramContext.middleName"/> -->
             <set field="parameters.lastNameOnCard" from-field="paramContext.lastName"/>
-            <call-simple-method method-name="validateCreditCard" xml-resource="component://osafe/script/Validation/Payment.xml"/>
+            <call-simple-method method-name="validateCreditCard" />
             <map-to-map map="creditCardContext" to-map="paramContext"/>
         </if-compare>
         <check-errors/>
@@ -66,6 +73,9 @@
         <set field="paramContext.shippingAddressCtx.contactMechId" from-field="parameters.SHIPPINGAddressContactMechId"/>
 
         <set-service-fields service-name="createCustomer" to-map="createCustomerContext" map="paramContext"/>
+        <if-not-empty field="userLogin">
+            <set field="createCustomerContext.emailAddress" from-field="userLogin.userLoginId"/>
+        </if-not-empty>
         <call-service service-name="createCustomer" in-map-name="createCustomerContext">
             <result-to-field result-name="partyId"/>
             <result-to-field result-name="billingAddressContactMechId"/>
@@ -223,6 +233,309 @@
                 </call-object-method>
             </if-not-empty>
         </if-not-empty>
+    </simple-method>
+
+    <!-- ======== Anonymous Checkout Events ======== -->
+    <!-- =========Code from Ofbiz file specialpurpose/ecommerce/script/org/ofbiz/ecommerce/customer/CustomerEvents.xml==== -->
+    <!-- =========Removed currently unused code================================== -->
+
+    <simple-method method-name="createAnonymousCustomerUserLogin" short-description="Process Customer Settings; to be called as a Request Event" login-required="false">
+        <call-simple-method method-name="validateAddress" xml-resource="component://osafe/script/Validation/Address.xml"/>
+        <call-simple-method method-name="createAnonymousCustomer"/>
+        <!-- see if we should continue now... -->
+        <check-errors/>
+        <log level="info" message="Setting up party ${tempMap.partyId} and shipping address ${addressPurposeContext} in cart"/>
+        <session-to-field field="cart" session-name="shoppingCart"/>
+        <session-to-field field="userLogin"/>
+        <log level="info" message="userLogin in Env ${userLogin} in parameters.userLogin ${parameters.userLogin}"/>
+        <if>
+          <condition>
+              <or>
+                  <if-empty field="userLogin"/>
+                  <if-compare operator="equals" value="anonymous" field="userLogin.userLoginId"></if-compare>
+              </or>
+          </condition>
+          <then>
+            <call-object-method obj-field="session" method-name="removeAttribute">
+                <string value="autoUserLogin"/>
+            </call-object-method>
+            <check-errors/>
+            <call-object-method obj-field="session" method-name="removeAttribute">
+                <string value="autoName"/>
+            </call-object-method>
+            <check-errors/>
+            <if-not-empty field="cart">
+                <call-bsh><![CDATA[
+                    // clear out the login fields from the cart
+                    try {
+                        if (cart!=null) cart.setAutoUserLogin(null, dispatcher);
+                    } catch (CartItemModifyException e) {
+                        Debug.logError(e, module);
+                    }
+                ]]></call-bsh>
+            </if-not-empty>
+            <set from-field="tempMap.partyId" field="partyId"/>
+            <if-not-empty field="partyId">
+                <set field="lookupKeyValue.userLoginId" value="anonymous"/>
+                <find-by-primary-key map="lookupKeyValue" entity-name="UserLogin" value-field="userLogin"/>
+                <if-not-empty field="userLogin">
+                    <set field="userLogin.partyId" from-field="partyId"/>
+                    <field-to-session field="userLogin" session-name="userLogin"/>
+                    <if-not-empty field="cart">
+                        <call-object-method obj-field="cart" method-name="setOrderPartyId">
+                            <field field="partyId"/>
+                        </call-object-method>
+                        <call-bsh><![CDATA[
+                            // clear out the login fields from the cart
+                            try {
+                                if (cart!=null) cart.setUserLogin(userLogin, dispatcher);
+                            } catch (CartItemModifyException e) {
+                                Debug.logError(e, module);
+                            }
+                        ]]></call-bsh>
+                    </if-not-empty>
+                </if-not-empty>
+            </if-not-empty>
+          </then>
+        </if>
+        <check-errors/>
+        <call-simple-method method-name="updateAddress" xml-resource="component://osafe/script/Event/AddressEvents.xml"/>
+        <request-to-field field="shippingAddressContactMechId" request-name="contactMechId"/>
+        <set from-field="userLogin.partyId" field="addressPurposeContext.partyId"/>
+        <!-- create the shipping location -->
+        <set field="addressPurposeContext.contactMechId" from-field="shippingAddressContactMechId"/>
+        <set value="BILLING_LOCATION" field="addressPurposeContext.contactMechPurposeTypeId"/>
+        <call-service service-name="createPartyContactMechPurpose" in-map-name="addressPurposeContext"/>
+        <log level="info" message="If anonymous, user-login has been activated"/>
+        
+        <call-object-method obj-field="cart" method-name="setShippingContactMechId">
+            <field field="shippingAddressContactMechId"/>
+        </call-object-method>
+    </simple-method>
+
+    <simple-method method-name="createAnonymousCustomer" short-description="Create Customer" login-required="false">
+        <call-simple-method method-name="validateCustomerInfo"/>
+        <!-- see if we should continue now... -->
+        <check-errors/>
+
+        <!-- call the create person service -->
+        <call-service service-name="createPerson" in-map-name="personMap">
+            <result-to-field result-name="partyId" field="tempMap.partyId"/>
+            <result-to-request result-name="partyId"/>
+        </call-service>
+
+        <log level="info" message="CreatePerson : ${tempMap.partyId}"/>
+
+        <!-- the rest of the methods require a userLogin object; so if we are anonymous lets fake it -->
+        <if-empty field="userLogin">
+            <set field="ulLookup.userLoginId" value="anonymous"/>
+            <find-by-primary-key entity-name="UserLogin" map="ulLookup" value-field="userLogin"/>
+            <set field="userLogin.partyId" from-field="tempMap.partyId"/>
+            <set-current-user-login value-field="userLogin"/>
+            <else><!-- of an anonymous vistor is coming back, update the party id in the userLogin object -->
+                <if-compare field="userLogin.userLoginId" value="anonymous" operator="equals">
+                    <set field="userLogin.partyId" from-field="tempMap.partyId"/>
+                </if-compare>
+            </else>
+        </if-empty>
+
+        <log level="info" message="UserLogin : ${userLogin}"/>
+
+        <!-- add the party to the customer role -->
+        <set field="roleMap.roleTypeId" value="CUSTOMER"/>
+        <set field="roleMap.partyId" from-field="tempMap.partyId"/>
+        <call-service service-name="createPartyRole" in-map-name="roleMap"/>
+
+        <set from-field="tempMap.partyId" field="partyId"/>
+        <call-simple-method method-name="createUpdateCustomerInfo"/>
+
+        <!-- create userLogin -->
+        <if-not-empty field="parameters.userLoginId">
+            <set field="loginMap.userLoginId" from-field="parameters.userLoginId"/>
+            <!-- call create userLogin -->
+            <!-- call reset password (to email a password) -->
+        </if-not-empty>
+    </simple-method>
+
+
+    <simple-method method-name="validateCustomerInfo" short-description="validateCustomerInfo" login-required="false">
+        <!-- setup the party/person -->
+        <call-map-processor in-map-name="parameters" out-map-name="personMap">
+            <simple-map-processor name="newPerson">
+                <process field="CUSTOMER_FIRST_NAME">
+                    <copy to-field="firstName"/>
+                    <not-empty><fail-property resource="PartyUiLabels" property="PartyFirstNameMissing"/></not-empty>
+                </process>
+                <process field="CUSTOMER_LAST_NAME">
+                    <copy to-field="lastName"/>
+                    <not-empty><fail-property resource="PartyUiLabels" property="PartyLastNameMissingError"/></not-empty>
+                </process>
+            </simple-map-processor>
+        </call-map-processor>
+
+        <!-- setup the email -->
+        <call-map-processor in-map-name="parameters" out-map-name="emailMap">
+            <simple-map-processor name="newEmail">
+                <process field="CUSTOMER_EMAIL_ADDR">
+                    <copy to-field="emailAddress"/>
+                    <not-empty><fail-property resource="PartyUiLabels" property="PartyEmailAddressMissingError"/></not-empty>
+                    <validate-method method="isEmail"><fail-property resource="PartyUiLabels" property="PartyEmailAddressNotFormattedCorrectly"/></validate-method>
+                </process>
+                <process field="emailSol"><copy to-field="allowSolicitation"/></process>
+            </simple-map-processor>
+        </call-map-processor>
+    </simple-method>
+
+    <simple-method method-name="createUpdateCustomerInfo" short-description="Create or Update Customer Info" login-required="false">
+        <!-- update the email address -->
+        <if-not-empty field="parameters.emailContactMechId">
+            <set field="emailMap.partyId" from-field="partyId"/>
+            <set field="emailMap.contactMechId" from-field="parameters.emailContactMechId"/>
+            <!-- call the update email service -->
+            <call-service service-name="updatePartyEmailAddress" in-map-name="emailMap"/>
+        <else>
+            <!-- create the email address -->
+            <set field="emailMap.partyId" from-field="partyId"/>
+            <set field="emailMap.contactMechPurposeTypeId" value="PRIMARY_EMAIL"/>
+            <!-- call the create email service -->
+            <call-service service-name="createPartyEmailAddress" in-map-name="emailMap"/>
+        </else>
+        </if-not-empty>
+    </simple-method>
+
+
+    <simple-method method-name="getCheckoutFlow" short-description="Get Checkout Flow mutli or single step" login-required="false">
+
+        <call-class-method class-name="com.osafe.util.Util" method-name="getProductStoreParm" ret-field="isCheckoutSinglePage">
+            <field field="request" type="javax.servlet.ServletRequest"/>
+            <string value="CHECKOUT_SINGLE_PAGE"/>
+        </call-class-method>
+
+        <session-to-field field="userLogin"/>
+        <if>
+          <condition>
+              <or>
+                  <if-empty field="userLogin"/>
+                  <if-compare operator="equals" value="anonymous" field="userLogin.userLoginId"></if-compare>
+              </or>
+          </condition>
+          <then>
+              <set field="isAnonymous" value="TRUE"/>
+          </then>
+          <else>
+              <set field="isAnonymous" value="FALSE"/>
+          </else>
+        </if>
+
+        <if-validate-method class="com.osafe.util.Util" field="isCheckoutSinglePage" method="isProductStoreParmTrue">
+            <if-compare operator="equals" value="TRUE" field="isAnonymous">
+                <return response-code="anonSinglePage"/>
+                <else>
+                    <return response-code="singlePage"/>
+                </else>
+            </if-compare>
+        <else>
+            <if-compare operator="equals" value="TRUE" field="isAnonymous">
+                <return response-code="anonMultiPage"/>
+                <else>
+                    <return response-code="multiPage"/>
+                </else>
+            </if-compare>
+        </else>
+        </if-validate-method>
+
+    </simple-method>
+
+    <simple-method method-name="validateCreditCard" short-description="Validate Credit Card fields" login-required="false">
+        <log level="info" message="${parameters.fieldLevelErrors}"></log>
+        <if-compare field="parameters.fieldLevelErrors" operator="equals" value="Y">
+            <set field="fieldLevelErrors" value="${parameters.fieldLevelErrors}"/>
+            <field-to-request field="fieldLevelErrors" />
+        </if-compare>
+
+        <!-- Check credit card fields -->
+         <call-map-processor in-map-name="parameters" out-map-name="creditCardContext">
+              <simple-map-processor name="createCreditCard">
+                <make-in-string field="expireDate">
+                  <in-field field="expMonth"/>
+                  <constant>/</constant>
+                  <in-field field="expYear"/>
+                </make-in-string>
+                <process field="partyId"><copy/></process>
+                <process field="companyNameOnCard"><copy/></process>
+                <process field="titleOnCard"><copy/></process>
+                <process field="firstNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="FirstNameOnCardMissingError"/></not-empty></process>
+                <process field="middleNameOnCard"><copy/></process>
+                <process field="lastNameOnCard"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="LastNameOnCardMissingError"/></not-empty></process>
+                <process field="suffixOnCard"><copy/></process>
+                <process field="cardType"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardTypeMissingError"/></not-empty></process>
+                <process field="cardNumber"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="CardNumberMissingError"/></not-empty></process>
+                <process field="contactMechId"><copy/></process>
+                <process field="description"><copy/></process>
+                <process field="expMonth"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationMonthMissingError"/></not-empty></process>
+                <process field="expYear"><copy/><not-empty><fail-property resource="OSafeUiLabels" property="ExpirationYearMissingError"/></not-empty></process>
+                <process field="expireDate">
+                    <copy/>
+                    <validate-method method="isDateAfterToday"><fail-property resource="OSafeUiLabels" property="ExpirationDateIsBeforeTodayError"/></validate-method></process>
+              </simple-map-processor>
+
+         </call-map-processor>
+
+        <!-- Check that the card type matches -->
+        <call-bsh><![CDATA[
+            List errorMessageList = javolution.util.FastList.newInstance();
+            parameters.put("errorMessageList", errorMessageList );
+            if (!org.ofbiz.base.util.UtilValidate.isCardMatch((String) creditCardContext.get("cardType"), (String) creditCardContext.get("cardNumber"))) {
+                      errorMessageList.add(
+                                          org.ofbiz.base.util.UtilProperties.getMessage("OSafeUiLabels", "CreditCardNumberInvalidError",
+                                              org.ofbiz.base.util.UtilMisc.toMap(
+                                                  "cardNumber", (String) creditCardContext.get("cardNumber"),
+                                                  "cardType", (String) creditCardContext.get("cardType"),
+                                                  "validCardType", org.ofbiz.base.util.UtilValidate.getCardType((String) creditCardContext.get("cardNumber"))
+                                              ),locale));
+              }
+        ]]></call-bsh>
+
+        <set field="errorMessageList" from-field="parameters.errorMessageList" />
+
+        <!-- Get errors from method call and associate to field -->
+        <if-not-empty  field="errorMessageList">
+            <log level="info" message="isCardMatch found errors"/>
+            <iterate list="errorMessageList" entry="error">
+                <string-to-list string="${error}" message-field="cardNumber" list="error_list"/>
+            </iterate>
+        </if-not-empty>
+
+        <!-- now that everything is validated & setup, check to see if there are errors, then call the services -->
+        <check-errors/>
+
+    </simple-method>
+
+
+    <simple-method method-name="anonMultiPageSetUserLogin" short-description="Set Anon User Login for mutli Page Checkout" login-required="false">
+
+        <session-to-field field="userLogin"/>
+        <if>
+          <condition>
+              <or>
+                  <if-empty field="userLogin"/>
+                  <if-compare operator="equals" value="anonymous" field="userLogin.userLoginId"></if-compare>
+              </or>
+          </condition>
+          <then>
+              <if-empty field="userLogin">
+                  <set field="ulLookup.userLoginId" value="anonymous"/>
+                  <find-by-primary-key entity-name="UserLogin" map="ulLookup" value-field="userLogin"/>
+                  <call-object-method obj-field="session" method-name="removeAttribute">
+                      <string value="autoUserLogin"/>
+                  </call-object-method>
+                  <call-object-method obj-field="session" method-name="removeAttribute">
+                      <string value="autoName"/>
+                  </call-object-method>
+                  <field-to-session field="userLogin"/>
+              </if-empty>
+          </then>
+        </if>
     </simple-method>
 
 </simple-methods>

@@ -63,6 +63,7 @@
         <log level="info" message="${address}"></log>
         <call-class-method class-name="com.osafe.geo.OsafeGeo"  method-name="fromAddress" ret-field="osafeGeo">
             <field field="address"/>
+            <field field="parameters.productStoreId"/>
         </call-class-method>
         <call-object-method method-name="latitude" obj-field="osafeGeo" ret-field="latitude"/>
         <call-object-method method-name="longitude" obj-field="osafeGeo" ret-field="longitude"/>

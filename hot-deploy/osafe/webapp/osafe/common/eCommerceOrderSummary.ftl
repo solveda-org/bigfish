@@ -4,11 +4,11 @@
 function submitForm(form, mode, value) {
     if (mode == "DN") {
         // done action; checkout
-        form.action="<@ofbizUrl>checkoutoptions</@ofbizUrl>";
+        form.action="<@ofbizUrl>${doneAction!"multiPageCheckoutOptions"}</@ofbizUrl>";
         form.submit();
     } else if (mode == "BK") {
         // Previous Page
-        form.action="<@ofbizUrl>eCommerceShippingOptions?action=previous</@ofbizUrl>";
+        form.action="<@ofbizUrl>${backAction!"multiPageShippingOptions"}?action=previous</@ofbizUrl>";
         form.submit();
     } else if (mode == "CS") {
         // continue shopping
@@ -81,7 +81,7 @@ function submitForm(form, mode, value) {
     ${screens.render("component://osafe/widget/EcommerceScreens.xml#entryFormJS")}
  <!-- DIV for Displaying Order Summary STARTS here -->
     <div class="orderSummary">
-        ${screens.render("component://osafe/widget/EcommerceScreens.xml#orderSummaryDivSequence")}
+        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#orderSummaryDivSequence")}
     </div>
 <!-- DIV for Displaying Order Summary ENDS here -->  
 <#else>

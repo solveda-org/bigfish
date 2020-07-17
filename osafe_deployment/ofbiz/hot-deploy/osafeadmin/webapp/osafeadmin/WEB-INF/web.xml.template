@@ -25,6 +25,21 @@
         <description>A unique name used to identify/recognize the local dispatcher for the Service Engine</description>
     </context-param>
     <context-param>
+        <param-name>eCommerceDecoratorName</param-name>
+        <param-value>@eCommerceDecoratorName@</param-value>
+        <description>The name of the eCommerce-Decorator screen to use for this webapp; referred to as a context variable in screen def XML files.</description>
+    </context-param>
+    <context-param>
+        <param-name>eCommerceDecoratorLocation</param-name>
+        <param-value>component://osafe/widget/CommonScreens.xml</param-value>
+        <description>The location of the eCommerceDecoratorName to use for this webapp; referred to as a context variable in screen def XML files.</description>
+    </context-param>
+    <context-param>
+        <param-name>eCommerceScreensLocation</param-name>
+        <param-value>component://osafe/widget/EcommerceScreens.xml</param-value>
+        <description>The location of the eCommerce screens to use for this webapp; referred to as a context variable in screen def XML files.</description>
+    </context-param>
+    <context-param>
         <param-name>mainDecoratorLocation</param-name>
         <param-value>component://osafeadmin/widget/CommonScreens.xml</param-value>
         <description>The location of the main-decorator screen to use for this webapp; referred to as a context variable in screen def XML files.</description>

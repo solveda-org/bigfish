@@ -14,7 +14,7 @@
       <input type="hidden" name="USERNAME" id="USERNAME" value="${requestParameters.USERNAME?if_exists}" maxlength="255"/>
       <@fieldErrors fieldName="CUSTOMER_EMAIL"/>
     </div>
-    <#if !userLogin?has_content>
+    <#if !userLogin?has_content || userLogin.userLoginId == "anonymous">
       <div class="entry">
         <label for="PASSWORD">${uiLabelMap.EnterPasswordCaption}</label>
         <input type="password"  maxlength="60" class="password" name="PASSWORD"  id="PASSWORD" value="${requestParameters.PASSWORD?if_exists}" maxlength="50"/>

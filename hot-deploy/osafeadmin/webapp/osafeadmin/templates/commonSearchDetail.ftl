@@ -36,6 +36,7 @@ ${sections.render('commonFormDialog')?if_exists}
           ${sections.render('commonDetailActionButton')!}
           ${sections.render('commonDetailLinkButton')!}
       </form>
+      ${sections.render('commonListHelperText')!}
     </div>
 </div>
 ${sections.render('commonConfirm')!}

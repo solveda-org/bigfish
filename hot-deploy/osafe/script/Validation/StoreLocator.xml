@@ -4,9 +4,13 @@
         xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
 
     <simple-method method-name="validateAddress" short-description="get latitude and longitude from address" login-required="false">
+        <call-class-method class-name="org.ofbiz.product.store.ProductStoreWorker" method-name="getProductStoreId" ret-field="productStoreId">
+            <field field="request" type="javax.servlet.ServletRequest"/>
+        </call-class-method>
         <set field="address" from-field="parameters.address"/>
         <call-class-method class-name="com.osafe.geo.OsafeGeo"  method-name="fromAddress" ret-field="osafeGeo">
             <field field="address"/>
+            <field field="productStoreId"/>
         </call-class-method>
         <call-object-method method-name="latitude" obj-field="osafeGeo" ret-field="latitude"/>
         <call-object-method method-name="longitude" obj-field="osafeGeo" ret-field="longitude"/>

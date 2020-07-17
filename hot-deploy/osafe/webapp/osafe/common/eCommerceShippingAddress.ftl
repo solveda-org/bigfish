@@ -25,7 +25,7 @@ function $RF(el, radioGroup) {
 function submitForm(form, mode, value) {
     if (mode == "DN") {
         // done action; checkout
-        form.action="<@ofbizUrl>checkoutoptions</@ofbizUrl>";
+        form.action="<@ofbizUrl>${doneAction!"multiPageCheckoutOptions"}</@ofbizUrl>";
         form.submit();
     } else if (mode == "NA") {
         // new address
@@ -100,32 +100,7 @@ function toggleBillingAccount(box) {
                             <#if shippingAddress.city?has_content && shippingAddress.city != '_NA_'>${shippingAddress.city}</#if><#if shippingAddress.stateProvinceGeoId?has_content && shippingAddress.stateProvinceGeoId != '_NA_'>, ${shippingAddress.stateProvinceGeoId}</#if>
                              <#if shippingAddress.postalCode?has_content && shippingAddress.postalCode != '_NA_' > ${shippingAddress.postalCode}</#if></p>
                              <#if shippingAddress.countryGeoId?has_content><p>${shippingAddress.countryGeoId}</p></#if>
-                             <p>
-                             
-                                <#assign shippingPhone = shippingContactMechPhoneMap[shippingContactMech.contactMechId]["PHONE_HOME"]!"">
-                                <#if shippingPhone?has_content>
-                                  <#if shippingPhone.areaCode?exists>
-                                    <#assign formattedPhone = Static["com.osafe.util.Util"].formatTelephone(shippingPhone.areaCode, shippingPhone.contactNumber?if_exists)/>
-                                    ${formattedPhone!}
-                                  <#else>
-                                    ${shippingPhone.contactNumber!""}
-                                  </#if>
-                                </#if>
-                                <#-- Putting in a non- breaking space do our display boxes are a consistent height -->
-                                &nbsp;
-                            </p>
-                            <p>
-                              <#assign shippingMobile = shippingContactMechPhoneMap[shippingContactMech.contactMechId]["PHONE_MOBILE"]!"" />
-                              <#if shippingMobile?has_content>
-                                <#if shippingMobile.areaCode?exists>
-                                  <#assign formattedMobilePhone = Static["com.osafe.util.Util"].formatTelephone(shippingMobile.areaCode, shippingMobile.contactNumber?if_exists)/>
-                                  ${formattedMobilePhone!}
-                                <#else>
-                                  ${shippingMobile.contactNumber!""}
-                                </#if>
-                              </#if>
-                              &nbsp;
-                            </p>
+
                            </div>
 
                             <div class="buttons">

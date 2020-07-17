@@ -1,0 +1,1156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/widget-screen.xsd">
+   
+   <screen name="ecommerceDivSequence">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
+            </actions>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/eCommerceDivSequence.ftl" />
+                        </html>
+                    </platform-specific>
+            </widgets>
+        </section>
+    </screen>   
+    
+<!-- Sequence Screen :  Category listing Page (CLP) 
+     Sequencer Type  : CLP -->
+     <screen name="clpDivSequence">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceCLPItem.groovy" />
+            </actions>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/eCommerceDivSequence.ftl" />
+                        </html>
+                    </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+     <screen name="clpThumbImage">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="clpThumbImageSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/clp/clpThumbImage.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="clpProductListLink">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="clpProductListLinkSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/clp/clpProductListLink.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="clpLongDescription">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="clpLongDescriptionSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/clp/clpLongDescription.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+
+<!-- Sequence Screen : Product Listing Page (PLP) 
+     Sequencer Type  : PLP -->
+    <screen name="plpDivSequence">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommercePLPItem.groovy" />
+            </actions>
+            <widgets>
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/eCommerceDivSequence.ftl" />
+                        </html>
+                    </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="plpThumbImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="plpThumbImageSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/plp/plpThumbImage.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="plpDetailLink">
+        <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpDetailLinkSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpDetailLink.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="plpTertiaryInfo">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpTertiaryInfoSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpTertiaryInfo.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="plpPriceOnline">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpPriceOnlineSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceOnline.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="plpPriceList">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpPriceListSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceList.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="plpPriceSavingPercent">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpPriceSavingPercentSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceSavingPercent.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="plpPriceSavingMoney">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpPriceSavingMoneySeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpPriceSavingMoney.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+     <screen name="plpSwatchImage">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpSwatchImageSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpSwatchImage.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+      <screen name="plpProdReview">
+         <section>
+             <actions>
+             </actions>
+             <widgets>
+                 <container style="plpProdReviewSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpProdReview.ftl" />
+                         </html>
+                     </platform-specific>
+                 </container>
+             </widgets>
+         </section>
+     </screen>
+
+    <screen name="plpSeeItemDetails">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="plpSeeItemDetailsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/plp/plpSeeItemDetails.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="plpManufacturerDescription">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="plpManufacturerDescriptionSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerDescription.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="plpManufacturerHeading">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="plpManufacturerHeadingSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerHeading.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="plpManufacturerImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="plpManufacturerImageSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerImage.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="plpManufacturerName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="plpManufacturerNameSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/plp/plpManufacturerName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+<!-- Sequence Screen : Product Description Page (PDP) 
+     Sequencer Type  : PDP -->
+    <screen name="pdpMainImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpMainImageSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpMainImage.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpProductName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpProductNameSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpProductName.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpStockLegend">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpStockLegendSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpStockLegend.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAlternateImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAlternateImageSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAlternateImage.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpVideo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpVideoSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpVideo.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpVideo360">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpVideo360Seq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpVideo360.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="pdpSeeLargerImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpSeeLargerImageSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSeeLargerImage.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="pdpSeeMainImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpSeeMainImageSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSeeMainImage.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpIntroDiscontinueContent">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpIntroDiscontinueContentSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpIntroDiscontinueContent.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpPriceList">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpPriceListSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpPriceList.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpPriceOnLine">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpPriceOnLineSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpPriceOnLine.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpPriceSavingPercent">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpPriceSavingPercentSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpPriceSavingPercent.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="pdpPriceSavingMoney">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpPriceSavingMoneySeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpPriceSavingMoney.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpCustomerRating">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpCustomerRatingSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpCustomerRating.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpSelectableFeature">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpSelectableFeatureSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSelectableFeature.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAddToCart">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAddToCartSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAddToCart.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpLongDescription">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpLongDescriptionSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpLongDescription.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="pdpDistinguishingFeature">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpDistinguishingFeatureSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpDistinguishingFeature.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpSalesPitch">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpSalesPitchSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSalesPitch.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpSpecialInstructions">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpSpecialInstructionsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSpecialInstructions.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpDeliveryInfo">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpDeliveryInfoSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpDeliveryInfo.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpDirections">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpDirectionsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpDirections.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpTermsConditions">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpTermsConditionsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpTermsConditions.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="pdpIngredients">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpIngredientsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpIngredients.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpWarnings">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpWarningsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpWarnings.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpVolumePricing">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpVolumePricingSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpVolumePricing.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpTabs">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpTabsSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpTabs.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <!-- <screen name="pdpManufacturer">
+        <section>
+            <actions>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceProductManufacturer.groovy" />
+            </actions>
+            <widgets>
+                <container style="pdpManufacturerSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpManufacturer.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen> -->
+    <screen name="pdpManufacturerDescription">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpManufacturerDescriptionSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpManufacturerDescription.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpManufacturerHeading">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpManufacturerHeadingSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpManufacturerHeading.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpManufacturerImage">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpManufacturerImageSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpManufacturerImage.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpManufacturerName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpManufacturerNameSeq">
+                     <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/pdp/pdpManufacturerName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpComplement">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="PDP-Complement"/>
+                <set field="thumbImageHeight" from-field="IMG_SIZE_PDP_XREF_H"/>
+                <set field="thumbImageWidth" from-field="IMG_SIZE_PDP_XREF_W"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceComplementProduct.groovy" />
+                <set field="showTertiaryInformation" value="Y" />
+            </actions>
+            <widgets>
+                <container style="pdpComplementSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpComplement.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpRecentlyViewed">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="PDP-Recent"/>
+                <set field="thumbImageHeight" from-field="IMG_SIZE_PDP_XREF_H"/>
+                <set field="thumbImageWidth" from-field="IMG_SIZE_PDP_XREF_W"/>
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceDivSequence.groovy" />
+                <set field="showTertiaryInformation" value="Y" />
+            </actions>
+            <widgets>
+                <container style="pdpRecentlyViewedSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpRecentlyViewed.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpSocialMedia">
+        <section>
+            <actions>
+                <property-map resource="osafe" map-name="OSafeConfig" global="true" />
+                <script location="component://osafe/webapp/osafe/WEB-INF/actions/common/eCommerceSocialMediaShareLinks.groovy" />
+            </actions>
+            <widgets>
+                <container style="pdpSocialMediaSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpSocialMedia.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="pdpAdditional">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="pdpAdditionalSeq">
+                    <platform-specific>
+                        <html>
+                            <html-template location="component://osafe/webapp/osafe/common/pdp/pdpAdditional.ftl" />
+                        </html>
+                    </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+
+<!-- Sequence Screen : Order Summary Page  
+     Sequencer Type  : CheckoutOrderSummary -->
+    <screen name="orderSummaryDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="CheckoutOrderSummary"/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    
+     <screen name="checkoutOrderPromoCode">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="checkoutOrderPromoCodeSeq">
+                    <include-screen name="eCommerceEnterPromoCode" location="component://osafe/widget/EcommerceScreens.xml" />
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="checkoutOrderItems">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="checkoutOrderItemsSeq">
+                    <include-screen name="orderItems" location="component://osafe/widget/EcommerceScreens.xml" />
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="checkoutOrderStorePickup">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="checkoutOrderStorePickupSeq">
+                    <include-screen name="storeDetail" location="component://osafe/widget/EcommerceScreens.xml"  /> 
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="checkoutOrderPayments">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="checkoutOrderPaymentsSeq">
+                    <include-screen name="orderPaymentMethods" location="component://osafe/widget/EcommerceScreens.xml" />
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="checkoutOrderBillingAddress">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="checkoutOrderBillingAddressSeq">
+                    <include-screen name="billingAddress" location="component://osafe/widget/EcommerceScreens.xml"  />
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="checkoutOrderShippingAddress">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="checkoutOrderShippingAddressSeq">
+                    <include-screen name="shippingAddress" location="component://osafe/widget/EcommerceScreens.xml" />
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+<!-- Sequence Screen : PayPal Order Summary Page  
+     Sequencer Type  : CheckoutOrderSummaryPayPal -->
+    <screen name="orderSummaryPayPalDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="CheckoutOrderSummaryPayPal"/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence" />
+            </widgets>
+        </section>
+    </screen>
+    <screen name="checkoutOrderPayPalValidated">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="checkoutOrderPayPalValidatedSeq">
+                    <include-screen name="orderPayPalValidated" location="component://osafe/widget/EcommerceScreens.xml" />
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+<!-- Sequence Screen : Show Cart Page  
+     Sequencer Type  : ShowCart -->
+    <screen name="showCartDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="ShowCart"/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="showCartItems">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="showCartItemsSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/cart/showCartItems.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="showCartPromoCode">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="showCartPromoCodeSeq">
+                    <include-screen name="eCommerceEnterPromoCode" location="component://osafe/widget/EcommerceScreens.xml" />
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+<!-- Sequence Screen : My Account Page  
+     Sequencer Type  : Person-Info -->
+    
+    <screen name="personInfoDivSequence">
+        <section>
+            <actions>
+                <set field="uiSequenceScreen" value="Person-Info"/>
+            </actions>
+            <widgets>
+                <include-screen name="ecommerceDivSequence"/>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personInfoFirstName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoFirstNameSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoFirstName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personInfoLastName">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoLastNameSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoLastName.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personInfoGender">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoGenderSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoGender.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+        <screen name="personInfoDobMMDDYYYY">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoDobMMDDYYYYSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoDobMMDDYYYY.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personInfoDobMMDD">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoDobMMDDSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoDobMMDD.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personInfoPhoneHome">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoPhoneHomeSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoPhoneHome.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>    
+    <screen name="personInfoPhoneCell">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoPhoneCellSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoPhoneCell.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="personInfoPhoneWork">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <container style="personInfoPhoneWorkSeq">
+                    <platform-specific>
+                         <html>
+                             <html-template location="component://osafe/webapp/osafe/common/entry/personInfo/personInfoPhoneWork.ftl" />
+                         </html>
+                     </platform-specific>
+                </container>
+            </widgets>
+        </section>
+    </screen>
+    
+</screens>

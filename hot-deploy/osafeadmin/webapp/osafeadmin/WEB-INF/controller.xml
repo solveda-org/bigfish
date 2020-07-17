@@ -122,6 +122,108 @@
         <response name="success" type="view" value="reviewManagement"/>
         <response name="error" type="view" value="reviewManagement"/>
     </request-map>
+
+    <request-map uri="shipChargeManagement">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipChargeManagement"/>
+    </request-map>
+    <request-map uri="shipChargeDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipChargeDetail"/>
+    </request-map>
+    <request-map uri="updateShipCharge">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateShipChargeGroup"/>
+        <response name="success" type="request-redirect" value="shipChargeManagement"/>
+        <response name="error" type="view" value="shipChargeDetail"/>
+    </request-map>
+    <request-map uri="shippingReview">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipChargeManagement"/>
+        <response name="error" type="view" value="shipChargeManagement"/>
+    </request-map>
+    <request-map uri="addShipCharge">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addShipCharge"/>
+    </request-map>
+    <request-map uri="addShipChargeCarrier">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addShipChargeCarrier"/>
+    </request-map>
+    <request-map uri="createShipCharge">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipChargeGroup"/> 
+        <response name="success" type="request-redirect" value="searchShipCharge"/>
+        <response name="error" type="view" value="addShipCharge"/>
+    </request-map>
+    <request-map uri="searchShipCharge">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipChargeManagement"/>
+        <response name="error" type="view" value="shipChargeManagement"/>
+    </request-map>
+    <request-map uri="createShipChargeCarrier">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipChargeCarrierGroup"/> 
+        <response name="success" type="request-redirect" value="searchShipChargeCarrier"/>
+        <response name="error" type="view" value="addShipChargeCarrier"/>
+    </request-map>
+    <request-map uri="searchShipChargeCarrier">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shipChargeManagement"/>
+        <response name="error" type="view" value="shipChargeManagement"/>
+    </request-map>
+    <request-map uri="deleteShipCharge">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="deleteShipChargeGroup"/>
+        <response name="success" type="request-redirect" value="searchShipCharge"/>
+        <response name="error" type="view" value="shipChargeDetail"/>
+    </request-map>
+    
+    <request-map uri="carrierShipList">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="carrierShipList"/>
+    </request-map>
+    <request-map uri="carrierShipDetail">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="carrierShipDetail"/>
+    </request-map>
+    <request-map uri="addCarrierShip">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addCarrierShip"/>
+    </request-map>
+    <request-map uri="createCarrierShip">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createCarrierShipGroup"/> 
+        <response name="success" type="request-redirect" value="carrierShipList"/>
+        <response name="error" type="view" value="addCarrierShip"/>
+    </request-map>
+    <request-map uri="updateCarrierShip">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="updateCarrierShipGroup"/>
+        <response name="success" type="request-redirect" value="carrierShipList"/>
+        <response name="error" type="view" value="carrierShipDetail"/>
+    </request-map>
+    <request-map uri="addShipCarrier">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addShipCarrier"/>
+    </request-map>
+    <request-map uri="createShipCarrier">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipChargeCarrierGroup"/> 
+        <response name="success" type="request-redirect" value="addCarrierShip"/>
+        <response name="error" type="view" value="addShipCarrier"/>
+    </request-map>
+    <request-map uri="addAnotherShipCarrier">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="addAnotherShipCarrier"/>
+    </request-map>
+    <request-map uri="createAnotherShipCarrier">
+        <security https="true" auth="true"/>
+        <event type="service" path="" invoke="createShipChargeCarrierGroup"/> 
+        <response name="success" type="request-redirect" value="carrierShipList"/>
+        <response name="error" type="view" value="addAnotherShipCarrier"/>
+    </request-map>
+    
     <request-map uri="reviewDetail">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="reviewDetail"/>
@@ -181,6 +283,12 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="contentNavigation"/>
     </request-map>
+    
+    <request-map uri="shippingNavigation">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="shippingNavigation"/>
+    </request-map>
+   
     <request-map uri="adminNavigation">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="adminNavigation"/>
@@ -250,7 +358,6 @@
         <security https="true" auth="true"/>
         <response name="success" type="view" value="homeSpotDetail"/>
     </request-map>
-
     <request-map uri="ptsList">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ptsList"/>
@@ -361,7 +468,8 @@
         <event type="service" path="" invoke="updateTextContentGroup"/> 
         <response name="success" type="request-redirect" value="homeSpotList"/>
         <response name="error" type="view" value="homeSpotDetail"/>
-    </request-map>
+    </request-map>    
+    
     <request-map uri="updateContentPTS">
         <security https="true" auth="true"/>
         <event type="service" path="" invoke="updateTextContentGroup"/> 
@@ -1415,6 +1523,9 @@
     <view-map name="AdminOrderPDF" type="screenfop" page="component://osafeadmin/widget/AdminScreens.xml#AdminOrderPDF" content-type="application/pdf" encoding="none"/>
     <view-map name="AdminCustomerPDF" type="screenfop" page="component://osafeadmin/widget/AdminScreens.xml#AdminCustomerPDF" content-type="application/pdf" encoding="none"/>
 	<view-map name="contentNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#contentNavDescriptor"/>
+
+	<view-map name="shippingNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#shippingNavDescriptor"/>
+
 	<view-map name="topProductsDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#topProductsDetail"/>
     <!-- ==== Navigation Descriptor Screens ===== -->
 	<view-map name="customerNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerNavDescriptor"/>
@@ -1424,6 +1535,9 @@
 	<view-map name="reviewNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#reviewNavDescriptor"/>
     <view-map name="storeLocationNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#storeLocationNavDescriptor"/>
 	<view-map name="contentNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#contentNavDescriptor"/>
+
+	<view-map name="shippingNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#shippingNavDescriptor"/>
+
 	<view-map name="adminNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#adminNavDescriptor"/>
 	<view-map name="customerNavigation" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#customerNavDescriptor"/>
     <!-- Catalog -->
@@ -1439,6 +1553,18 @@
     <!-- Content -->
 	<view-map name="homeSpotList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#homeSpotList"/>
 	<view-map name="homeSpotDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#homeSpotContentDetail"/>
+
+	<view-map name="shipChargeManagement" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#shipChargeManagement"/>
+	<view-map name="shipChargeDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#shipChargeDetail"/>
+	<view-map name="addShipCharge" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addShipCharge"/>
+	<view-map name="addShipChargeCarrier" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addShipChargeCarrier"/>
+	
+	<view-map name="carrierShipList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#carrierShipList"/>
+	<view-map name="carrierShipDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#carrierShipDetail"/>
+	<view-map name="addCarrierShip" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addCarrierShip"/>
+	<view-map name="addShipCarrier" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addShipCarrier"/>
+	<view-map name="addAnotherShipCarrier" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#addAnotherShipCarrier"/>
+
 	<view-map name="ptsList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#ptsList"/>
 	<view-map name="ptsDetail" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#ptsDetail"/>
 	<view-map name="staticPageList" type="screen" page="component://osafeadmin/widget/AdminScreens.xml#staticPageList"/>

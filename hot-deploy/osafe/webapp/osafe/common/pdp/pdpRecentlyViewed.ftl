@@ -32,7 +32,7 @@
     ${setRequestAttribute("plpItemId",productId)}
     <!-- DIV for Displaying Recommended productss STARTS here -->
     <div class="eCommerceRecentlyViewedProduct eCommerceListItem">
-      ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpDivSequence")}
+      ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#plpDivSequence")}
     </div>
     <#if count == maxRecentlyViewedProducts?number>
        <#break>

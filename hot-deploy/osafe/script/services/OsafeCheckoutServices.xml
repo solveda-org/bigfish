@@ -3,10 +3,16 @@
         xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">    
     <simple-method method-name="createCustomer" short-description="create Customer" login-required="false">
 
-        <entity-one entity-name="UserLogin" value-field="systemUserLogin">
-            <field-map field-name="userLoginId" value="system"/>
-        </entity-one>
-        <set-current-user-login value-field="systemUserLogin"/>
+        <set field="userLogin" from-field="parameters.userLogin"/>
+        <if-empty field="userLogin">
+            <entity-one entity-name="UserLogin" value-field="systemUserLogin">
+                <field-map field-name="userLoginId" value="system"/>
+            </entity-one>
+            <set-current-user-login value-field="systemUserLogin"/>
+            <else>
+                <set-current-user-login value-field="userLogin"/>
+            </else>
+        </if-empty>
 
         <set-service-fields service-name="createUpdatePerson" to-map="createUpdatePersonCtx" map="parameters"/>
         <call-service service-name="createUpdatePerson" in-map-name="createUpdatePersonCtx">
@@ -34,15 +40,17 @@
 
             <set field="parameters.partyId" from-field="partyId"/>
         <else>
-            <entity-one entity-name="PartyAttribute" value-field="partyEmailAttr" >
-                <field-map field-name="partyId" from-field="parameters.partyId"/>
-                <field-map field-name="attrName" value="PARTY_EMAIL_PREFERENCE"/>
-            </entity-one>
-            <if-not-empty field="partyEmailAttr">
-                <set-service-fields service-name="updatePartyAttribute" to-map="updatePartyAttrCtx" map="partyEmailAttr"/>
-                <set field="updatePartyAttrCtx.attrValue" from-field="parameters.partyEmailPreference"/>
-                <call-service service-name="updatePartyAttribute" in-map-name="updatePartyAttrCtx"/>
-            </if-not-empty>
+            <if-empty field="userLogin">
+                <entity-one entity-name="PartyAttribute" value-field="partyEmailAttr" >
+                    <field-map field-name="partyId" from-field="parameters.partyId"/>
+                    <field-map field-name="attrName" value="PARTY_EMAIL_PREFERENCE"/>
+                </entity-one>
+                <if-not-empty field="partyEmailAttr">
+                    <set-service-fields service-name="updatePartyAttribute" to-map="updatePartyAttrCtx" map="partyEmailAttr"/>
+                    <set field="updatePartyAttrCtx.attrValue" from-field="parameters.partyEmailPreference"/>
+                    <call-service service-name="updatePartyAttribute" in-map-name="updatePartyAttrCtx"/>
+                </if-not-empty>
+            </if-empty>
         </else>
         </if-empty>
 
@@ -72,10 +80,15 @@
             <set-current-user-login value-field="newUserLogin"/>
         <else>
             <!-- the rest of the methods require a userLogin object; so if we are anonymous lets fake it -->
-            <set field="ulLookup.userLoginId" value="anonymous"/>
-            <find-by-primary-key entity-name="UserLogin" map="ulLookup" value-field="anonUserLogin"/>
-            <set field="anonUserLogin.partyId" from-field="parameters.partyId"/>
-            <set-current-user-login value-field="anonUserLogin"/>
+            <if-empty field="userLogin">
+                <set field="ulLookup.userLoginId" value="anonymous"/>
+                <find-by-primary-key entity-name="UserLogin" map="ulLookup" value-field="anonUserLogin"/>
+                <set field="anonUserLogin.partyId" from-field="parameters.partyId"/>
+                <set-current-user-login value-field="anonUserLogin"/>
+                <else>
+                    <field-to-result field="userLogin"/>
+                </else>
+            </if-empty>
         </else>
         </if-not-empty>
 
@@ -96,17 +109,6 @@
             <result-to-result result-name="contactMechId" service-result-name="billingHomePhoneContactMechId"/>
         </call-service>
 
-        <!-- Linked Phone Home with billing Address -->
-        <entity-one entity-name="ContactMechLink" value-field="billingContactLink">
-            <field-map field-name="contactMechIdFrom" from-field="billingAddressContactMechId"/>
-            <field-map field-name="contactMechIdTo" from-field="billingHomePhoneContactMechId"/>
-        </entity-one>
-        <if-empty field="billingContactLink">
-            <set field="linkContext.contactMechIdFrom" from-field="billingAddressContactMechId"/>
-            <set field="linkContext.contactMechIdTo" from-field="billingHomePhoneContactMechId"/>
-            <call-service service-name="createContactMechLink" in-map-name="linkContext"/>
-        </if-empty>
-
         <!-- Create Billing Home and Mobile ContactMech. -->
         <if-not-empty field="parameters.billingMobilePhoneCtx.contactNumber">
             <set-service-fields service-name="createUpdatePartyTelecomNumber" to-map="billingMobilePhoneCtx" map="parameters.billingMobilePhoneCtx"/>
@@ -116,16 +118,6 @@
                 <result-to-field result-name="contactMechId" field="billingMobilePhoneContactMechId"/>
                 <result-to-result result-name="contactMechId" service-result-name="billingMobilePhoneContactMechId"/>
             </call-service>
-
-            <!-- Linked Phone Home with billing Address -->
-            <entity-one entity-name="ContactMechLink" value-field="billingMobileContactLink">
-                <field-map field-name="contactMechIdFrom" from-field="billingAddressContactMechId"/>
-                <field-map field-name="contactMechIdTo" from-field="billingMobilePhoneContactMechId"/>
-            </entity-one>
-            <if-empty field="billingMobileContactLink">
-                <set field="linkContext.contactMechIdTo" from-field="billingMobilePhoneContactMechId"/>
-                <call-service service-name="createContactMechLink" in-map-name="linkContext"/>
-            </if-empty>
         </if-not-empty>
 
         <!-- Create Shipping Address, Shipping Home Phone and Shipping Mobile ContactMech -->
@@ -147,17 +139,6 @@
                 <result-to-result result-name="contactMechId" service-result-name="shippingHomePhoneContactMechId"/>
             </call-service>
 
-            <!-- Linked Phone Home with billing Address -->
-            <entity-one entity-name="ContactMechLink" value-field="shippingContactLink">
-                <field-map field-name="contactMechIdFrom" from-field="shippingAddressContactMechId"/>
-                <field-map field-name="contactMechIdTo" from-field="shippingHomePhoneContactMechId"/>
-            </entity-one>
-            <if-empty field="shippingContactLink">
-                <set field="linkContext.contactMechIdFrom" from-field="shippingAddressContactMechId"/>
-                <set field="linkContext.contactMechIdTo" from-field="shippingHomePhoneContactMechId"/>
-                <call-service service-name="createContactMechLink" in-map-name="linkContext"/>
-            </if-empty>
-
             <!-- Create Billing Home and Mobile ContactMech. -->
             <if-not-empty field="parameters.shippingMobilePhoneCtx">
                 <if-not-empty field="parameters.shippingMobilePhoneCtx.contactNumber">
@@ -168,17 +149,6 @@
                         <result-to-field result-name="contactMechId" field="shippingMobilePhoneContactMechId"/>
                         <result-to-result result-name="contactMechId" service-result-name="shippingMobilePhoneContactMechId"/>
                     </call-service>
-
-                    <!-- Linked Phone Home with billing Address -->
-                    <entity-one entity-name="ContactMechLink" value-field="shippingMobileContactLink">
-                        <field-map field-name="contactMechIdFrom" from-field="shippingAddressContactMechId"/>
-                        <field-map field-name="contactMechIdTo" from-field="shippingMobilePhoneContactMechId"/>
-                    </entity-one>
-                    <if-empty field="shippingMobileContactLink">
-                        <set field="linkContext.contactMechIdFrom" from-field="shippingAddressContactMechId"/>
-                        <set field="linkContext.contactMechIdTo" from-field="shippingMobilePhoneContactMechId"/>
-                        <call-service service-name="createContactMechLink" in-map-name="linkContext"/>
-                    </if-empty>
                 </if-not-empty>
             </if-not-empty>
         <else>

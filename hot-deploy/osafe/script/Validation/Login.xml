@@ -62,7 +62,19 @@
             <check-errors/>
             <return response-code="error"/>
         </if-compare>
+        <call-object-method obj-field="session" method-name="removeAttribute">
+            <string value="userLogin"/>
+        </call-object-method>
 
+        <session-to-field field="shoppingCart" session-name="shoppingCart"/>
+        <if-not-empty field="shoppingCart">
+            <call-object-method obj-field="shoppingCart" method-name="setOrderPartyId">
+                <field field="existingUserLogin.partyId"/>
+            </call-object-method>
+            <call-object-method obj-field="shoppingCart" method-name="setShippingContactMechId">
+                <string value=""/>
+            </call-object-method>
+        </if-not-empty>
     </simple-method>
 
     <simple-method method-name="validateForgotPassword" short-description="Validate Forgot Password" login-required="false">

@@ -1,5 +1,5 @@
 <#if mode?has_content>
-  <#assign statusId = "CTNT_DEACTIVATED" />
+  <#assign statusId = "CTNT_PUBLISHED" />
     <#if pixelTrack?has_content>
         <#assign pixelId = pixelTrack.pixelId!"" />
         <#assign pixelScope = pixelTrack.pixelScope!"" />
@@ -11,12 +11,12 @@
                 <#assign statusId = "CTNT_DEACTIVATED">
             </#if>
             <input type="hidden" name="dataResourceId" value=${pixelContent.dataResourceId!""} />
-            <#assign statusItem = delegator.findOne("StatusItem", {"statusId" : statusId}, false)>
-            <#assign statusDesc = statusItem.description!statusItem.get("description",locale)!statusItem.statusId>
             <#assign createdDate = pixelContent.createdDate!"" />
             <#assign lastModifiedDate = pixelContent.lastModifiedDate!"" />
         </#if>
-    </#if> 
+    </#if>
+    <#assign statusItem = delegator.findOne("StatusItem", {"statusId" : statusId}, false) />
+    <#assign statusDesc = statusItem.description!statusItem.get("description",locale)!statusItem.statusId /> 
        <input type="hidden" name="statusId" id="statusId" value="${statusId!""}" />
        <#if !(createdDate?has_content)>
            <#assign createdDate = Static["org.ofbiz.base.util.UtilDateTime"].nowTimestamp() />

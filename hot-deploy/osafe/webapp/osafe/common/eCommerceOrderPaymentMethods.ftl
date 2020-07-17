@@ -5,13 +5,13 @@
 	    <#-- Enter Credit Card Box -->
 	          <form method="post" action="<@ofbizUrl>setPayPalCheckout</@ofbizUrl>" name="paypalForm">
 	          </form>
-	    <div id="paymentMethods" class="displayBox">
+	    <div class="displayBox">
 	     <div class="displayBoxHeader">
 	        <span class="displayBoxHeaderCaption">${uiLabelMap.PaymentInformationHeading}</span>
 	     </div>
 	        <#assign donePage = "donePage">
 	        <#if !creditCard?exists>
-	          <form method="post" action="<@ofbizUrl>validateCreditCard?DONE_PAGE=${donePage}</@ofbizUrl>" name="editcreditcardform">
+	          <form method="post" action="<@ofbizUrl>${validateCreditCardRequest!}?DONE_PAGE=${donePage}</@ofbizUrl>" name="editcreditcardform">
 	           <div>
 	            <#--
 	                Sending to validation routine, we want to only show field level messages when adding a "Credit Card"
@@ -20,7 +20,7 @@
 	            -->
 	            <input type="hidden" name="fieldLevelErrors" value="Y" />
 	        <#else>
-	          <form method="post" action="<@ofbizUrl>validateCreditCard?DONE_PAGE=${donePage}</@ofbizUrl>" name="editcreditcardform">
+	          <form method="post" action="<@ofbizUrl>${validateCreditCardRequest!}?DONE_PAGE=${donePage}</@ofbizUrl>" name="editcreditcardform">
 	           <div>
 	            <input type="hidden" name="paymentMethodId" value="${paymentMethodId}" />
 	            <input type="hidden" name="fieldLevelErrors" value="Y" />
@@ -62,40 +62,69 @@
 	              </a>
 	            </div>
 
-                <#assign savedPaymentMethodValueMaps = Static["org.ofbiz.accounting.payment.PaymentWorker"].getPartyPaymentMethodValueMaps(delegator, shoppingCart.getOrderPartyId()) />
-                <div class="entry">
+                 <div class="entry">
                     <h3>${uiLabelMap.CreditCardHeading}</h3>
-                    <#if savedPaymentMethodValueMaps?has_content>
-                        <label for="cardType">${uiLabelMap.SelectSavedcardCaption}</label>
-                         <select id="savedCard" name="savedCard" class="savedCard">
-                             <option value="">${uiLabelMap.CommonSelectOne}</option>
-                             <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
-                                 <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
-                                 <#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
-                                     <#assign savedCreditCard = savedPaymentMethodValueMap.creditCard/>
-                                     <option value="${savedPaymentMethod.paymentMethodId}">
-                                     ${savedCreditCard.cardType}
-                                     <#assign cardNumber=savedCreditCard.cardNumber?if_exists/>
-                                     <#assign cardNumberDisplay = "">
-                                     <#if cardNumber?has_content>
-                                         <#assign size = cardNumber?length - 4>
-                                         <#if (size > 0)>
-                                           <#list 0 .. size-1 as charno>
-                                             <#assign cardNumberDisplay = cardNumberDisplay + "*">
-                                           </#list>
-                                           <#assign cardNumberDisplay = cardNumberDisplay + cardNumber[size .. size + 3]>
-                                         <#else>
-                                           <#assign cardNumberDisplay = cardNumber>
+                </div>
+                <#if CHECKOUT_KEEP_PAYMENT_METHODS?has_content && Static["com.osafe.util.Util"].isProductStoreParmTrue(CHECKOUT_KEEP_PAYMENT_METHODS)>
+                    <#assign savedPaymentMethodValueMaps = Static["org.ofbiz.accounting.payment.PaymentWorker"].getPartyPaymentMethodValueMaps(delegator, shoppingCart.getOrderPartyId()) />
+                    <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
+                        <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod/>
+                        <#if "CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId>
+                            <#assign hasSavedCard= "Y"/>
+                            <#break>
+                        </#if>
+                    </#list>
+                    <#if hasSavedCard?has_content>
+                        <div class="entry">
+                            <input type="radio" id="useSavedCard" name="useSavedCard" value="Y" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "Y") || (savedPaymentMethodValueMaps?has_content))>checked="checked"</#if>/>${uiLabelMap.UseSavedCardlabel}
+                        </div>
+                        <div class="entry">
+                            <label for="savedCard">${uiLabelMap.SelectSavedcardCaption}</label>
+                             <select id="savedCard" name="savedCard" class="savedCard">
+                                 <option value="">${uiLabelMap.CommonSelectOne}</option>
+                                 <#assign alreadyShownSavedCreditCardList = Static["javolution.util.FastList"].newInstance()/>
+                                 <#assign selectedSavedCard = parameters.savedCard!""/>
+                                 <#list savedPaymentMethodValueMaps as savedPaymentMethodValueMap>
+                                     <#assign savedPaymentMethod = savedPaymentMethodValueMap.paymentMethod?if_exists/>
+                                     <#assign savedCreditCard = savedPaymentMethodValueMap.creditCard?if_exists/>
+                                     <#if ("CREDIT_CARD" == savedPaymentMethod.paymentMethodTypeId) && (savedCreditCard?has_content)>
+                                         <#assign cardExpireDate=savedCreditCard.expireDate?if_exists/>
+                                         <#assign cardNumber=savedCreditCard.cardNumber?if_exists/>
+                                         <#if (cardExpireDate?has_content) && (Static["org.ofbiz.base.util.UtilValidate"].isDateAfterToday(cardExpireDate)) && (cardNumber?has_content) && (!alreadyShownSavedCreditCardList.contains(cardNumber+cardExpireDate))>
+                                             <option value="${savedPaymentMethod.paymentMethodId}" <#if selectedSavedCard == savedPaymentMethod.paymentMethodId >selected=selected</#if>>
+                                             ${savedCreditCard.cardType}
+                                             <#assign cardNumberDisplay = "">
+                                             <#if cardNumber?has_content>
+                                                 <#assign size = cardNumber?length - 4>
+                                                 <#if (size > 0)>
+                                                   <#list 0 .. size-1 as charno>
+                                                     <#assign cardNumberDisplay = cardNumberDisplay + "*">
+                                                   </#list>
+                                                   <#assign cardNumberDisplay = cardNumberDisplay + cardNumber[size .. size + 3]>
+                                                 <#else>
+                                                   <#assign cardNumberDisplay = cardNumber>
+                                                 </#if>
+                                             </#if>
+                                             ${cardNumberDisplay?if_exists}
+                                             ${uiLabelMap.CardExpirationLabel}${savedCreditCard.expireDate}
+                                             </option>
+                                             <#assign changed = alreadyShownSavedCreditCardList.add(cardNumber+cardExpireDate)/>
                                          </#if>
                                      </#if>
-                                     ${cardNumberDisplay?if_exists}
-                                     ${uiLabelMap.CardExpirationLabel}${savedCreditCard.expireDate}
-                                     </option>
-                                 </#if>
-                             </#list>
-                        </select>
+                                 </#list>
+                            </select>
+                            <@fieldErrors fieldName="savedCard"/>
+                        </div>
+                        <div class="entry">
+                          <label for="savedVerificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
+                           <input type="text" class="cardNumber" maxlength="30" id="savedVerificationNo"  name="savedVerificationNo" value="${requestParameters.savedVerificationNo!""}"/>
+                          <@fieldErrors fieldName="savedVerificationNo"/>
+                        </div>
+                        <div class="entry">
+                            <input type="radio" id="useSavedCard" name="useSavedCard" value="N" <#if ((parameters.useSavedCard?exists && parameters.useSavedCard?string == "N"))>checked="checked"</#if>/>${uiLabelMap.PayWithAnotherCardlabel}
+                        </div>
                     </#if>
-                </div>
+                </#if>
 
 	            <div class="entry">
 	              <label for="cardType"><@required/>${uiLabelMap.CardTypeCaption}</label>
@@ -156,6 +185,11 @@
 	              </select>
 	              <@fieldErrors fieldName="expYear"/>
 	            </div>
+                <div class="entry">
+                  <label for="verificationNo"><@required/>${uiLabelMap.VerificationCaption}</label>
+                   <input type="text" class="cardNumber" maxlength="30" id="verificationNo"  name="verificationNo" value="${requestParameters.verificationNo!""}"/>
+                  <@fieldErrors fieldName="verificationNo"/>
+                </div>
 	
 	        </fieldset>
 	

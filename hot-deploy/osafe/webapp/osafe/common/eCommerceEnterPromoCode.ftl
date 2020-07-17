@@ -1,8 +1,8 @@
  <#include "component://osafe/webapp/osafe/includes/CommonMacros.ftl"/>
 <#assign shoppingCart = sessionAttributes.shoppingCart?if_exists />
 <#if (shoppingCart.size() > 0)>
-<div class="displayBox promotionDisplayBox">
-    <div class="displayBoxHeader promotionDisplayBoxHeader">
+<div class="displayBox">
+    <div class="displayBoxHeader">
         <span class="displayBoxHeaderCaption">${uiLabelMap.PromotionHeading}</span>
     </div>
     <div id="ecommercePromocodeEntry" class="entry">

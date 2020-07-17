@@ -140,123 +140,184 @@
         </if-compare>
 
         <if-empty field="parameters.isSameAsBilling">
-            <!-- shipping home phone -->
-            <call-service service-name="createPartyTelecomNumber" in-map-name="shipHomePhoneContext">
-                <result-to-field result-name="contactMechId" field="shipHomePhonePurposeContext.contactMechId"/>
-            </call-service>
-            <set from-field="tempMap.partyId" field="shipHomePhonePurposeContext.partyId"/>
-            <set value="PHONE_HOME" field="shipHomePhonePurposeContext.contactMechPurposeTypeId"/>
-            <call-service service-name="createPartyContactMechPurpose" in-map-name="shipHomePhonePurposeContext"/>
-            <set field="linkContext.contactMechIdFrom" from-field="shippingAddressPurposeContext.contactMechId"/>
-            <set field="linkContext.contactMechIdTo" from-field="shipHomePhonePurposeContext.contactMechId"/>
-
-            <call-service service-name="createContactMechLink" in-map-name="linkContext">
-                <result-to-field result-name="contactMechId" field="shipHomePhonePurposeContext.contactMechId"/>
-            </call-service>
-            
-            <!-- shipping mobile phone -->
-            <if-not-empty field="shipMobilePhoneContext.contactNumber">
-                <call-service service-name="createPartyTelecomNumber" in-map-name="shipMobilePhoneContext">
-                    <result-to-field result-name="contactMechId" field="shipMobilePhonePurposeContext.contactMechId"/>
+            <if-compare field="parameters.SHIPPING_USE_PHONE_CONTACT" operator="equals" value="true">
+                <!-- shipping home phone -->
+                <call-service service-name="createPartyTelecomNumber" in-map-name="shipHomePhoneContext">
+                    <result-to-field result-name="contactMechId" field="shipHomePhonePurposeContext.contactMechId"/>
                 </call-service>
-                <set from-field="tempMap.partyId" field="shipMobilePhonePurposeContext.partyId"/>
-                <set value="PHONE_MOBILE" field="shipMobilePhonePurposeContext.contactMechPurposeTypeId"/>
-                <call-service service-name="createPartyContactMechPurpose" in-map-name="shipMobilePhonePurposeContext"/>
-
+                <set from-field="tempMap.partyId" field="shipHomePhonePurposeContext.partyId"/>
+                <set value="PHONE_HOME" field="shipHomePhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="shipHomePhonePurposeContext"/>
                 <set field="linkContext.contactMechIdFrom" from-field="shippingAddressPurposeContext.contactMechId"/>
-                <set field="linkContext.contactMechIdTo" from-field="shipMobilePhonePurposeContext.contactMechId"/>
-
+                <set field="linkContext.contactMechIdTo" from-field="shipHomePhonePurposeContext.contactMechId"/>
+    
                 <call-service service-name="createContactMechLink" in-map-name="linkContext">
-                    <result-to-field result-name="contactMechId" field="shipMobilePhonePurposeContext.contactMechId"/>
+                    <result-to-field result-name="contactMechId" field="shipHomePhonePurposeContext.contactMechId"/>
                 </call-service>
-            </if-not-empty>
+                
+                <!-- shipping mobile phone -->
+                <if-not-empty field="shipMobilePhoneContext.contactNumber">
+                    <call-service service-name="createPartyTelecomNumber" in-map-name="shipMobilePhoneContext">
+                        <result-to-field result-name="contactMechId" field="shipMobilePhonePurposeContext.contactMechId"/>
+                    </call-service>
+                    <set from-field="tempMap.partyId" field="shipMobilePhonePurposeContext.partyId"/>
+                    <set value="PHONE_MOBILE" field="shipMobilePhonePurposeContext.contactMechPurposeTypeId"/>
+                    <call-service service-name="createPartyContactMechPurpose" in-map-name="shipMobilePhonePurposeContext"/>
+    
+                    <set field="linkContext.contactMechIdFrom" from-field="shippingAddressPurposeContext.contactMechId"/>
+                    <set field="linkContext.contactMechIdTo" from-field="shipMobilePhonePurposeContext.contactMechId"/>
+    
+                    <call-service service-name="createContactMechLink" in-map-name="linkContext">
+                        <result-to-field result-name="contactMechId" field="shipMobilePhonePurposeContext.contactMechId"/>
+                    </call-service>
+                </if-not-empty>
+            </if-compare>
         </if-empty>
 
-        <!-- home phone -->
-        <if>
-           <condition>
-              <or>
-                <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
-                <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
-              </or>
-           </condition>
-                <then>
-                    <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
-                        <result-to-field result-name="contactMechId" field="homePhonePurposeContext.contactMechId"/>
-                    </call-service>
-                    <set from-field="tempMap.partyId" field="homePhonePurposeContext.partyId"/>
-                    <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
-                    <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
-                    <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
-                    <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
-        
-                    <set field="linkContext.contactMechIdFrom" from-field="addressPurposeContext.contactMechId"/>
-                    <set field="linkContext.contactMechIdTo" from-field="homePhonePurposeContext.contactMechId"/>
-        
-                    <call-service service-name="createContactMechLink" in-map-name="linkContext">
-                        <result-to-field result-name="contactMechId" field="homePhonePurposeContext.contactMechId"/>
-                    </call-service>
-               </then>
-            </if>        
-        <!-- work phone -->
-        <if-not-empty field="parameters.CUSTOMER_WORK_CONTACT">
-            <call-service service-name="createPartyTelecomNumber" in-map-name="workPhoneContext">
-                <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
-            </call-service>
-            <set from-field="tempMap.partyId" field="workPhonePurposeContext.partyId"/>
-            <set value="PHONE_WORK" field="workPhonePurposeContext.contactMechPurposeTypeId"/>
-            <call-service service-name="createPartyContactMechPurpose" in-map-name="workPhonePurposeContext"/>
-
-            <set field="linkContext.contactMechIdFrom" from-field="addressPurposeContext.contactMechId"/>
-            <set field="linkContext.contactMechIdTo" from-field="homePhonePurposeContext.contactMechId"/>
-
-            <call-service service-name="createContactMechLink" in-map-name="linkContext">
-                <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
-            </call-service>
-        </if-not-empty>
-
-        <!-- fax phone -->
-        <if-not-empty field="parameters.CUSTOMER_FAX_CONTACT">
-            <call-service service-name="createPartyTelecomNumber" in-map-name="faxPhoneContext">
-                <result-to-field result-name="contactMechId" field="faxPhonePurposeContext.contactMechId"/>
-            </call-service>
-            <set from-field="tempMap.partyId" field="faxPhonePurposeContext.partyId"/>
-            <set value="FAX_NUMBER" field="faxPhonePurposeContext.contactMechPurposeTypeId"/>
-            <call-service service-name="createPartyContactMechPurpose" in-map-name="faxPhonePurposeContext"/>
-
-            <set field="linkContext.contactMechIdFrom" from-field="addressPurposeContext.contactMechId"/>
-            <set field="linkContext.contactMechIdTo" from-field="faxPhonePurposeContext.contactMechId"/>
-
-            <call-service service-name="createContactMechLink" in-map-name="linkContext">
-                <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
-            </call-service>
-        </if-not-empty>
-
-        <!-- mobile phone -->
-        <if>
-            <condition>
-                <or>
-                    <not><if-empty field="contactMobilePhoneMap.contactMobilePhoneContact"></if-empty></not>
-                    <not><if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"></if-empty></not>
-                </or>
-            </condition>
-            <then>
-                <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
-                    <result-to-field result-name="contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
+        <if-compare field="parameters.BILLING_USE_PHONE_CONTACT" operator="equals" value="true">
+            <!-- home phone -->
+            <if>
+               <condition>
+                  <or>
+                    <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
+                    <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
+                  </or>
+               </condition>
+                    <then>
+                        <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
+                            <result-to-field result-name="contactMechId" field="homePhonePurposeContext.contactMechId"/>
+                        </call-service>
+                        <set from-field="tempMap.partyId" field="homePhonePurposeContext.partyId"/>
+                        <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                        <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+                        <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                        <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+            
+                        <set field="linkContext.contactMechIdFrom" from-field="addressPurposeContext.contactMechId"/>
+                        <set field="linkContext.contactMechIdTo" from-field="homePhonePurposeContext.contactMechId"/>
+            
+                        <call-service service-name="createContactMechLink" in-map-name="linkContext">
+                            <result-to-field result-name="contactMechId" field="homePhonePurposeContext.contactMechId"/>
+                        </call-service>
+                   </then>
+                </if>        
+            <!-- work phone -->
+            <if-not-empty field="parameters.CUSTOMER_WORK_CONTACT">
+                <call-service service-name="createPartyTelecomNumber" in-map-name="workPhoneContext">
+                    <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
                 </call-service>
-                <set from-field="tempMap.partyId" field="mobilePhonePurposeContext.partyId"/>
-                <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
-                <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
-
+                <set from-field="tempMap.partyId" field="workPhonePurposeContext.partyId"/>
+                <set value="PHONE_WORK" field="workPhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="workPhonePurposeContext"/>
+    
                 <set field="linkContext.contactMechIdFrom" from-field="addressPurposeContext.contactMechId"/>
-                <set field="linkContext.contactMechIdTo" from-field="mobilePhonePurposeContext.contactMechId"/>
-
+                <set field="linkContext.contactMechIdTo" from-field="homePhonePurposeContext.contactMechId"/>
+    
                 <call-service service-name="createContactMechLink" in-map-name="linkContext">
                     <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
                 </call-service>
-            </then>
-        </if>
-            
+            </if-not-empty>
+    
+            <!-- fax phone -->
+            <if-not-empty field="parameters.CUSTOMER_FAX_CONTACT">
+                <call-service service-name="createPartyTelecomNumber" in-map-name="faxPhoneContext">
+                    <result-to-field result-name="contactMechId" field="faxPhonePurposeContext.contactMechId"/>
+                </call-service>
+                <set from-field="tempMap.partyId" field="faxPhonePurposeContext.partyId"/>
+                <set value="FAX_NUMBER" field="faxPhonePurposeContext.contactMechPurposeTypeId"/>
+                <call-service service-name="createPartyContactMechPurpose" in-map-name="faxPhonePurposeContext"/>
+    
+                <set field="linkContext.contactMechIdFrom" from-field="addressPurposeContext.contactMechId"/>
+                <set field="linkContext.contactMechIdTo" from-field="faxPhonePurposeContext.contactMechId"/>
+    
+                <call-service service-name="createContactMechLink" in-map-name="linkContext">
+                    <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
+                </call-service>
+            </if-not-empty>
+    
+            <!-- mobile phone -->
+            <if>
+                <condition>
+                    <or>
+                        <not><if-empty field="contactMobilePhoneMap.contactMobilePhoneContact"></if-empty></not>
+                        <not><if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"></if-empty></not>
+                    </or>
+                </condition>
+                <then>
+                    <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
+                        <result-to-field result-name="contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
+                    </call-service>
+                    <set from-field="tempMap.partyId" field="mobilePhonePurposeContext.partyId"/>
+                    <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
+                    <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
+    
+                    <set field="linkContext.contactMechIdFrom" from-field="addressPurposeContext.contactMechId"/>
+                    <set field="linkContext.contactMechIdTo" from-field="mobilePhonePurposeContext.contactMechId"/>
+    
+                    <call-service service-name="createContactMechLink" in-map-name="linkContext">
+                        <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
+                    </call-service>
+                </then>
+            </if>
+        </if-compare>
+
+        <if-compare field="parameters.USER_USE_PHONE_CONTACT" operator="equals" value="true">
+            <!-- home phone -->
+            <if>
+               <condition>
+                  <or>
+                    <not><if-empty field="contactHomePhoneMap.contactHomePhoneContact"></if-empty></not>
+                    <not><if-empty field="contactHomeOtherPhoneMap.contactHomeOtherPhoneContact"></if-empty></not>
+                  </or>
+               </condition>
+                    <then>
+                        <call-service service-name="createPartyTelecomNumber" in-map-name="homePhoneContext">
+                            <result-to-field result-name="contactMechId" field="homePhonePurposeContext.contactMechId"/>
+                        </call-service>
+                        <set from-field="tempMap.partyId" field="homePhonePurposeContext.partyId"/>
+                        <set value="PHONE_HOME" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                        <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+                        <set value="PRIMARY_PHONE" field="homePhonePurposeContext.contactMechPurposeTypeId"/>
+                        <call-service service-name="createPartyContactMechPurpose" in-map-name="homePhonePurposeContext"/>
+                   </then>
+                </if>  
+                
+            <!-- work phone -->
+            <if>
+                <condition>
+                    <or>
+                        <not><if-empty field="contactWorkPhoneMap.contactWorkPhoneContact"></if-empty></not>
+                        <not><if-empty field="contactWorkOtherPhoneMap.contactWorkOtherPhoneContact"></if-empty></not>
+                    </or>
+                </condition>
+                <then>
+                    <call-service service-name="createPartyTelecomNumber" in-map-name="workPhoneContext">
+                        <result-to-field result-name="contactMechId" field="workPhonePurposeContext.contactMechId"/>
+                    </call-service>
+                    <set from-field="tempMap.partyId" field="workPhonePurposeContext.partyId"/>
+                    <set value="PHONE_WORK" field="workPhonePurposeContext.contactMechPurposeTypeId"/>
+                    <call-service service-name="createPartyContactMechPurpose" in-map-name="workPhonePurposeContext"/>
+                </then>
+            </if>
+    
+            <!-- mobile phone -->
+            <if>
+                <condition>
+                    <or>
+                        <not><if-empty field="contactMobilePhoneMap.contactMobilePhoneContact"></if-empty></not>
+                        <not><if-empty field="contactMobileOtherPhoneMap.contactMobileOtherPhoneContact"></if-empty></not>
+                    </or>
+                </condition>
+                <then>
+                    <call-service service-name="createPartyTelecomNumber" in-map-name="mobilePhoneContext">
+                        <result-to-field result-name="contactMechId" field="mobilePhonePurposeContext.contactMechId"/>
+                    </call-service>
+                    <set from-field="tempMap.partyId" field="mobilePhonePurposeContext.partyId"/>
+                    <set value="PHONE_MOBILE" field="mobilePhonePurposeContext.contactMechPurposeTypeId"/>
+                    <call-service service-name="createPartyContactMechPurpose" in-map-name="mobilePhonePurposeContext"/>
+                </then>
+            </if>
+        </if-compare>
 
         <!-- email address -->
         <if-not-empty field="emailContext.emailAddress">

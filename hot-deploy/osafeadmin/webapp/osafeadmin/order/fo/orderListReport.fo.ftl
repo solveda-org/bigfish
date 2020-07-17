@@ -107,6 +107,44 @@ under the License.
          <#assign customerEmailAddress = customerEmail.infoString/>
     </#if>
      
+     <#-- Customer Phone -->
+      <#assign partyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", placingParty.partyId))/>
+      <#assign formattedHomePhone = ''/>
+      <#assign formattedWorkPhone = ''/>
+      <#assign formattedCellPhone = ''/>
+      <#assign partyWorkPhoneExt = ''/>
+        <#-- Home Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_HOME"}) />
+      </#if>
+      <#if partyHomePhoneDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyHomePhoneDetails?if_exists) />
+        <#assign partyHomePhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyHomePhoneDetails?if_exists) />
+        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists)/>
+      </#if>
+      
+        <#-- Work Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_WORK"}) />
+      </#if>
+      <#if partyWorkPhoneDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyWorkPhoneDetails?if_exists) />
+        <#assign partyWorkPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyWorkPhoneDetails?if_exists) />
+        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists)/>
+        <#if partyWorkPhoneDetail?has_content>
+          <#assign partyWorkPhoneExt = partyWorkPhoneDetail.extension!/> 
+        </#if>
+      </#if>
+        
+        <#-- Cell Phone --> 
+      <#if partyContactDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_MOBILE"}) />
+      </#if>
+      <#if partyCellPhoneDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyCellPhoneDetails?if_exists) />
+        <#assign partyCellPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyCellPhoneDetails?if_exists) />
+        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists)/>
+      </#if>
     <fo:page-sequence master-reference="${pageLayoutName?default("main-page")}">
 
         <#-- Header -->
@@ -300,7 +338,7 @@ under the License.
                                     <#if postalAddress.address2?has_content><fo:block>${postalAddress.address2?if_exists}</fo:block></#if>
                                 <fo:block>
                                         <#assign stateGeo = (delegator.findOne("Geo", {"geoId", postalAddress.stateProvinceGeoId?if_exists}, false))?if_exists />
-                                        ${postalAddress.city}<#if stateGeo?has_content>, ${stateGeo.geoName?if_exists}</#if> ${postalAddress.postalCode?if_exists}
+                                        ${postalAddress.city}<#if stateGeo?has_content && stateGeo.geoId != '_NA_'>, ${stateGeo.geoName?if_exists}</#if> ${postalAddress.postalCode?if_exists}
                                 </fo:block>
                                 <fo:block>
                                         <#assign countryGeo = (delegator.findOne("Geo", {"geoId", postalAddress.countryGeoId?if_exists}, false))?if_exists />
@@ -321,66 +359,52 @@ under the License.
                                      <#assign customerEmailAddress = customerEmail.infoString/>
                                 </#if>
                                 <fo:table-row height="20px">
-                                         <fo:table-cell text-align="start" >
-                                            
-                                            <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.EmailAddressCaption}</fo:block>
-                                         </fo:table-cell>
-                                          <fo:table-cell>
-                                             <fo:block font-size="7pt" start-indent="10pt">${customerEmailAddress!""}</fo:block>
-                                          </fo:table-cell>
+                                  <fo:table-cell text-align="start" >
+                                    <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.EmailAddressCaption}</fo:block>
+                                  </fo:table-cell>
+                                  <fo:table-cell>
+                                    <fo:block font-size="7pt" start-indent="10pt">${customerEmailAddress!""}</fo:block>
+                                  </fo:table-cell>
+                                </fo:table-row>
+                                 
+                                 <#if formattedHomePhone?has_content>
+                                 <fo:table-row>
+                                   <fo:table-cell text-align="start" >
+                                     <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.HomePhoneCaption}</fo:block>
+                                   </fo:table-cell>
+                                   <fo:table-cell>
+                                     <fo:block font-size="7pt" start-indent="10pt">
+                                       ${formattedHomePhone!}
+                                     </fo:block>
+                                   </fo:table-cell>
                                  </fo:table-row>
-                            
-                        <#assign homePhones = delegator.findByAnd("PartyContactMechPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",placingParty.partyId,"contactMechPurposeTypeId","PHONE_HOME"))/>
-                            <#if homePhones?has_content>
-                                <#assign homePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(homePhones, nowTimestamp, "fromDate", "thruDate", true)/>
-                                <#assign partyHomePhone = delegator.findByPrimaryKey("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",homePhones[0].contactMechId))/>
-                            </#if>
-                         <#assign mobilePhones = delegator.findByAnd("PartyContactMechPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId",placingParty.partyId,"contactMechPurposeTypeId","PHONE_MOBILE"))/>
-                            <#if mobilePhones?has_content>
-                                <#assign mobilePhones = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(mobilePhones, nowTimestamp, "fromDate", "thruDate", true)/>
-                                <#assign partyMobilePhone = delegator.findByPrimaryKey("TelecomNumber", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",mobilePhones[0].contactMechId))/>
-                            </#if>
-                            
-                                       <#if partyHomePhone?has_content>
-                                       <fo:table-row>
-                                         <fo:table-cell text-align="start" >
-                                            
-                                            <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.HomePhoneCaption}</fo:block>
-                                         </fo:table-cell>
-                                          <fo:table-cell>
-                                           <#assign fullPhone = "${partyHomePhone.areaCode?if_exists}" + "${partyHomePhone.contactNumber?if_exists}"/>
-                                           <#if fullPhone?has_content>
-                                             <#assign fullPhone = Static["org.ofbiz.base.util.UtilValidate"].stripCharsInBag(fullPhone,Static["org.ofbiz.base.util.UtilValidate"].phoneNumberDelimiters)/>
-                                             <#if (fullPhone?length > 9)>
-                                                 <fo:block font-size="7pt" start-indent="10pt">${fullPhone?substring(0,3)}-${fullPhone?substring(3,6)}-${fullPhone?substring(6)}</fo:block>
-                                             <#else>
-                                              <fo:block font-size="7pt" start-indent="10pt">${fullPhone}</fo:block>
-                                             </#if>
-                                           </#if>
-                                          </fo:table-cell>
-                                       </fo:table-row>
-                                            </#if>
-                             
-                            
-                                       <#if partyMobilePhone?has_content>
-                                        <fo:table-row height="20px">
-                                         <fo:table-cell text-align="start" >  
-                                            
-                                            <fo:block font-size="8pt" text-align="right" font-weight="bold"> ${uiLabelMap.MobilePhoneCaption}</fo:block>
-                                        </fo:table-cell>
-                                        <fo:table-cell>
-                                           <#assign fullPhone = "${partyMobilePhone.areaCode?if_exists}" + "${partyMobilePhone.contactNumber?if_exists}"/>
-                                           <#if fullPhone?has_content>
-                                             <#assign fullPhone = Static["org.ofbiz.base.util.UtilValidate"].stripCharsInBag(fullPhone,Static["org.ofbiz.base.util.UtilValidate"].phoneNumberDelimiters)/>
-                                             <#if (fullPhone?length > 9)>
-                                                 <fo:block font-size="7pt" start-indent="10pt">${fullPhone?substring(0,3)}-${fullPhone?substring(3,6)}-${fullPhone?substring(6)}</fo:block>
-                                             <#else>
-                                              <fo:block font-size="7pt" start-indent="10pt">${fullPhone}</fo:block>
-                                             </#if>
-                                           </#if>
-                                        </fo:table-cell>
-                                        </fo:table-row>
-                                        </#if>
+                                 </#if>
+                                 
+                                 <#if formattedCellPhone?has_content>
+                                 <fo:table-row>
+                                   <fo:table-cell text-align="start" >
+                                     <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CellPhoneCaption}</fo:block>
+                                   </fo:table-cell>
+                                   <fo:table-cell>
+                                     <fo:block font-size="7pt" start-indent="10pt">
+                                       ${formattedCellPhone!}
+                                     </fo:block>
+                                   </fo:table-cell>
+                                 </fo:table-row>
+                                 </#if>
+                                 
+                                 <#if formattedWorkPhone?has_content>
+                                 <fo:table-row>
+                                   <fo:table-cell text-align="start" >
+                                     <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.WorkPhoneCaption}</fo:block>
+                                   </fo:table-cell>
+                                   <fo:table-cell>
+                                     <fo:block font-size="7pt" start-indent="10pt">
+                                       ${formattedWorkPhone!}<#if partyWorkPhoneExt?has_content> x${partyWorkPhoneExt}</#if>
+                                     </fo:block>
+                                   </fo:table-cell>
+                                 </fo:table-row>
+                                 </#if>
                               
                </fo:table-body>
                </fo:table>

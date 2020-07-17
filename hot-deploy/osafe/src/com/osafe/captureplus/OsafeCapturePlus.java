@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.ofbiz.base.util.StringUtil;
 import org.ofbiz.base.util.UtilValidate;
-import org.ofbiz.order.shoppingcart.ShoppingCart.ProductPromoUseInfo;
 
 import javolution.util.FastList;
 
@@ -118,23 +117,25 @@ public class OsafeCapturePlus {
         if (this.isEmpty() || UtilValidate.isEmpty(fieldPurpose)) return null;
 
         String componentId = "";
-        int keyIndex = 0;
-        for (String key : this.pcaApiKeyList) {
-            int appNoIndex = 0;
-            key = key.trim();
-            for (String appNo : this.pcaApiAppNoList) {
-               appNo = appNo.trim();
-               if (keyIndex == appNoIndex) {
-                   if (!isUsed(key, appNo)) {
-                       componentId = StringUtil.replaceString(key, "-", "").concat(appNo);
-                       this.osafeCapturePlusUseInfoList.add(new OsafeCapturePlusUseInfo(key, appNo, componentId, fieldPurpose));
+        try {
+            int keyIndex = 0;
+            for (String key : this.pcaApiKeyList) {
+                int appNoIndex = 0;
+                key = key.trim();
+                for (String appNo : this.pcaApiAppNoList) {
+                   appNo = appNo.trim();
+                   if (keyIndex == appNoIndex) {
+                       if (!isUsed(key, appNo)) {
+                           componentId = StringUtil.replaceString(key, "-", "").concat(appNo);
+                           this.osafeCapturePlusUseInfoList.add(new OsafeCapturePlusUseInfo(key, appNo, componentId, fieldPurpose));
+                       }
                    }
-               }
-               appNoIndex++;
+                   appNoIndex++;
+                }
+                if (UtilValidate.isNotEmpty(componentId)) break;;
+                keyIndex++;
             }
-            if (UtilValidate.isNotEmpty(componentId)) break;;
-            keyIndex++;
-        }
+        } catch (Exception ex) {}
         return componentId;
     }
 

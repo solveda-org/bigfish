@@ -9,7 +9,7 @@
 <div id="mainImageDiv" style="display:none">
   <#if activeZoom><a href="<@ofbizContentUrl>${productDetailImageUrl!}</@ofbizContentUrl>"></#if>
   <#-- image path added in alt attribute, on user action it will set in image src, in this way it will not effect page loading time -->
-  <img title="<@ofbizContentUrl>${productLargeImageUrl!}</@ofbizContentUrl>" src="" name="mainImage" class="productLargeImage<#if !IMG_SIZE_PDP_REG_W?has_content> productLargeImageDefaultWidth</#if>" <#if IMG_SIZE_PDP_REG_H?has_content> height="${IMG_SIZE_PDP_REG_H!""}"</#if> <#if IMG_SIZE_PDP_REG_W?has_content> width="${IMG_SIZE_PDP_REG_W!""}"</#if> onerror="onImgError(this, 'PDP-Large');"/>
+  <img src="<@ofbizContentUrl>${productLargeImageUrl!}</@ofbizContentUrl>" name="mainImage" class="productLargeImage<#if !IMG_SIZE_PDP_REG_W?has_content> productLargeImageDefaultWidth</#if>" <#if IMG_SIZE_PDP_REG_H?has_content> height="${IMG_SIZE_PDP_REG_H!""}"</#if> <#if IMG_SIZE_PDP_REG_W?has_content> width="${IMG_SIZE_PDP_REG_W!""}"</#if> onerror="onImgError(this, 'PDP-Large');"/>
   <#if activeZoom></a></#if>
 </div>
 
@@ -23,7 +23,7 @@
     <div id="mainImage_${key}" style="display:none">
       <#if activeZoom && productDetailImageUrl?has_content && productDetailImageUrl !=''><a href="<@ofbizContentUrl>${productDetailImageUrl!}</@ofbizContentUrl>"></#if>
       <#-- image path added in alt attribute, on user action it will set in image src, in this way it will not effect page loading time -->
-      <img title="<@ofbizContentUrl>${productLargeImageUrl!}</@ofbizContentUrl>" src="" name="mainImage" class="productLargeImage<#if !IMG_SIZE_PDP_REG_W?has_content> productLargeImageDefaultWidth</#if>" <#if IMG_SIZE_PDP_REG_H?has_content> height="${IMG_SIZE_PDP_REG_H!""}"</#if> <#if IMG_SIZE_PDP_REG_W?has_content> width="${IMG_SIZE_PDP_REG_W!""}"</#if> onerror="onImgError(this, 'PDP-Large');"/>
+      <img src="<@ofbizContentUrl>${productLargeImageUrl!}</@ofbizContentUrl>" name="mainImage" class="productLargeImage<#if !IMG_SIZE_PDP_REG_W?has_content> productLargeImageDefaultWidth</#if>" <#if IMG_SIZE_PDP_REG_H?has_content> height="${IMG_SIZE_PDP_REG_H!""}"</#if> <#if IMG_SIZE_PDP_REG_W?has_content> width="${IMG_SIZE_PDP_REG_W!""}"</#if> onerror="onImgError(this, 'PDP-Large');"/>
       <#if activeZoom && productDetailImageUrl?has_content && productDetailImageUrl !=''></a></#if>
     </div>
     </#if>  

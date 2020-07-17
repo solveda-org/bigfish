@@ -14,7 +14,7 @@
    <#list uiPdpTabSequenceSearchList as pdpTabDiv>
       <#assign sequenceNum = pdpTabDiv.value!/>
       <#if sequenceNum?has_content && sequenceNum?number !=0>
-        ${screens.render("component://osafe/widget/EcommerceScreens.xml#${pdpTabDiv.key}")}
+        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#${pdpTabDiv.key}")}
       </#if>
    </#list>
  </div>

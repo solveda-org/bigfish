@@ -11,7 +11,7 @@
         <#assign groupNumber = groupIdx + 1>
       </#if>
         <#if shippingAddress?has_content>
-                   <div id="shippingAddressDisplay" class="displayBox">
+                   <div class="displayBox">
                    <div class="displayBoxHeader">
                        <span class="displayBoxHeaderCaption">${uiLabelMap.ShippingAddressHeading}</span>
                     </div>
@@ -22,22 +22,10 @@
                              <#if shippingAddress.address2?has_content><p>${shippingAddress.address2}</p></#if>
                              <p>
                              <#-- city and state have to stay on one line otherwise an extra space is added before the comma -->
-                             <#if shippingAddress.city?has_content>${shippingAddress.city!}</#if><#if shippingAddress.stateProvinceGeoId?has_content>, ${shippingAddress.stateProvinceGeoId}</#if>
-                             <#if shippingAddress.postalCode?has_content> ${shippingAddress.postalCode}</#if></p>
+                             <#if shippingAddress.city?has_content  && shippingAddress.city != '_NA_'>${shippingAddress.city!}</#if><#if shippingAddress.stateProvinceGeoId?has_content && shippingAddress.stateProvinceGeoId != '_NA_'>, ${shippingAddress.stateProvinceGeoId}</#if>
+                             <#if shippingAddress.postalCode?has_content && shippingAddress.postalCode != '_NA_'> ${shippingAddress.postalCode}</#if></p>
                              <#if shippingAddress.countryGeoId?has_content><p>${shippingAddress.countryGeoId}</p></#if>
-                             <#if shippingContactMechPhoneMap?has_content>
 
-                               <#assign shippingPhoneCont = shippingContactMechPhoneMap[(shippingAddress.contactMechId)!]!"" />
-                               <#if shippingPhoneCont?has_content>
-                                 <#assign shippingPhone = shippingPhoneCont["PHONE_HOME"]!""/>
-                               </#if>  
-                             </#if>
-                             <#if shippingPhone?has_content>
-                             <p>
-                                    <#assign formattedPhone = Static["com.osafe.util.Util"].formatTelephone(shippingPhone.areaCode, shippingPhone.contactNumber)/>
-                                    ${formattedPhone}
-                            </p>
-                            </#if>
                            </div>
                        </div>
         </#if>

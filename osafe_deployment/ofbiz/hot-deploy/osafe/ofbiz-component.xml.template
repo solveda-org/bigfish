@@ -19,14 +19,11 @@
     <entity-resource type="group" reader-name="main" loader="main" location="entitydef/entitygroup.xml"/>
     <!-- <entity-resource type="eca" reader-name="main" loader="main" location="entitydef/eecas.xml"/> -->
 
-
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSecurityData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedData.xml"/>
-	<entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
-	<entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentIdSeedData.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/clientStoreSeedData.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentSeedData.xml"/> 
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentEmailData.xml"/> 
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceSeedShippingData.xml"/>
+    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceContentIdSeedData.xml"/>
 
     <!-- Geo Files -->
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/01-GeoAssocType.xml"/>
@@ -50,35 +47,16 @@
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/330-Geo_Assco_UPS_DAS_EXT_ZONE.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/340-Geo_Assoc_UPS_GRD_ZONE.xml"/>
     <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/400-Tax_Party.xml"/>
-    <!--
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/410-TaxAuthority_NY.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/420-TaxAuthorityAssoc_NY.xml"/>
-    <entity-resource type="data" reader-name="seed" loader="main" location="data/seed/eCommerceScheduledJobsSeedData.xml"/> 
-    -->
-    <!-- Demo Data -->
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceShippingOptions.xml"/>
 
-    <!-- Product Fashion Demo Data -->
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/000-ProductCategory.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/010-ProductCategoryFeature.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/020-Manufacturer.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/030-Product.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/040-ProductVariant.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/050-ProductContent.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/060-ProductDistinguishingFeature.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/070-ProductAssoc.xml"/>
 
-    <!-- Content Fashion Demo Data -->
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContentEmailData.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_HP_SPOT.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_PTS_SPOT.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SI_INFO.xml"/>
-    <entity-resource type="data" reader-name="demodata" loader="main" location="data/demo/eCommerceContent_SP_PAGE.xml"/>
+    <!-- BigFish Parameters -->
+    <entity-resource type="data" reader-name="parameters" loader="main" location="data/bigFishParameters.xml"/>
+
 
     <!-- service resources: model(s), eca(s) and group definitions -->
     <service-resource type="model" loader="main" location="servicedef/services.xml"/>
-    <service-resource type="model" loader="main" location="servicedef/importServices.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_paymentmethod.xml"/>
+    <service-resource type="model" loader="main" location="servicedef/services_sagepay.xml"/>
     <!--
     <service-resource type="eca" loader="main" location="servicedef/secas.xml"/>
     <service-resource type="group" loader="main" location="servicedef/groups.xml"/>
@@ -86,7 +64,7 @@
 
     <!-- web applications; will be mounted when using the embedded container -->
     <webapp name="osafe"
-        title="OSafe"
+        title="Gold Medal Hair"
         server="default-server"
         location="webapp/osafe"
         mount-point="/@localDispatcherName@"/>

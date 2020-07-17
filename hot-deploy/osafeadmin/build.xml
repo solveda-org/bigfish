@@ -45,7 +45,7 @@
     <!-- Osafe Admin Deployment                                                  -->
     <!-- ================================================================= -->
 
-    <target name="osafeadmin-deployment" description="Deploy client specific OSafe files">
+    <target name="osafeadmin-deployment" depends="generate-sources" description="Deploy client specific OSafe files">
         <echo message="[osafeadmin-deployment] ========== Start Deploying OSafe Admin Files (Deploy) =========="/>
 
         <property name="osafe.deployemt.home" value="../../osafe_deployment"></property>
@@ -141,4 +141,43 @@
         <antcall target="apply-ofbiz-patches"/>
     </target>
 
+	<target name="generate-sources">
+		<echo message="[generate-sources] ========== Start Deploying XSD File (Deploy) =========="/>
+		<taskdef name="xjc" classname="org.jvnet.jaxb2_commons.xjc.XJC2Task">
+		    <!-- XJC2 Task classpath -->
+		    <classpath>
+				<fileset dir="../../hot-deploy/osafeadmin/lib/jaxb">
+					<include name="jaxb-impl-*.jar"/>
+					<include name="jaxb2-basics-jaxb-xjc-*.jar"/>
+					<include name="jaxb-xjc-*.jar"/>
+					<include name="jaxb2-basics-ant-*.jar"/>
+				</fileset>
+			</classpath>
+		</taskdef>
+		<mkdir dir="../../hot-deploy/osafeadmin/src"/>
+		
+		<xjc destdir="../../hot-deploy/osafeadmin/src" extension="true">
+		   
+			<binding dir="../../hot-deploy/osafeadmin/dtd/feeds">
+				<include name="**/*.xjb"/>
+			</binding>
+			<schema dir="../../hot-deploy/osafeadmin/dtd/feeds">
+				<include name="**/*.xsd"/>
+			</schema>
+			<classpath>
+				<fileset dir="../../hot-deploy/osafeadmin/lib/jaxb">
+				    <!-- JAXB2 Basics library -->
+					<include name="jaxb2-basics-*.jar"/>
+					<!-- JAXB2 Basics library dependencies -->
+					<include name="jaxb2-basics-runtime-*.jar"/>
+					<include name="jaxb2-basics-tools-*.jar"/>
+					<include name="commons-beanutils-*.jar"/>
+					<include name="commons-lang-*.jar"/>
+					<include name="commons-logging-*.jar"/>
+				</fileset>
+			</classpath>
+				<!-- Plugins -->
+		</xjc>
+		<echo message="[generate-sources] ========== End Deploying XSD File (Deploy) =========="/>
+		</target>
 </project>

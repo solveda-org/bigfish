@@ -1,0 +1,533 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:noNamespaceSchemaLocation="http://www.ofbiz.org/dtds/simple-methods.xsd">
+
+    <simple-method method-name="createShipCharge" short-description="Create a shipping charge">
+ 		<!-- check for bad or missing values --> 
+        <if-empty field="parameters.productStoreShipMethId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductStoreShipMethIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="maxLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value=" " type="String"/>
+                <set field="makeUpCase" value="false" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="productStoreShipMethId">
+                    <field field="parameters.productStoreShipMethId" type="String"/>
+                    <field field="maxLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="productStoreShipMethId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="productStoreShipMethIdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+                        <entity-one entity-name="ProductStoreShipmentMeth" value-field="existingPProductStoreShipmentMeth">
+                            <field-map field-name="productStoreShipMethId" from-field="productStoreShipMethId"/>
+                        </entity-one>
+                        <if-not-empty field="existingPProductStoreShipmentMeth">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="productStoreShipMethIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <else>
+                                <set field="parameters.productStoreShipMethId" from-field="productStoreShipMethId"/>
+                            </else>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+           
+        <if-empty field="parameters.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+          
+        <if-empty field="parameters.shipmentMethodTypeId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipmentMethodTypeIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        
+        <!-- check if combination of partyId and shipMethodTypeId exists -->
+        <make-value entity-name="CarrierShipmentMethod" value-field="carrierShipmentMethodMap"/>
+        <set-pk-fields map="parameters" value-field="carrierShipmentMethodMap"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="carrierShipmentMethodMap.roleTypeId"/>
+        <find-by-primary-key map="carrierShipmentMethodMap" value-field="carrierShipmentMethodValue"/>
+        
+        <if-empty field="carrierShipmentMethodValue.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadCarrierShipmentIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+ 
+        <if-not-empty field="parameters.minTotal">
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+                <field field="parameters.minTotal"/>
+            </call-class-method>
+            <if-compare field="isFloat" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMinTotalError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.maxTotal">
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+                <field field="parameters.maxTotal"/>
+            </call-class-method>
+            <if-compare field="isFloat" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMaxTotalError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.minTotal">
+	        <if-not-empty field="parameters.maxTotal">
+	        	<if>
+                    <condition>
+                    	<if-compare  operator="greater-equals" value="${parameters.maxTotal}" field="parameters.minTotal" type="Integer"/>
+                    </condition>
+                    <then>
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MinGreaterError"/>
+		            	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    </then>
+                </if> 
+	        </if-not-empty>
+        </if-not-empty>
+        
+        <if-empty field="parameters.sequenceNumber">
+        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<else>
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.sequenceNumber"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            </else>
+        </if-empty> 
+ 
+        <if-empty field="parameters.orderFlatPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderFlatPriceError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+	            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+	                <field field="parameters.orderFlatPrice"/>
+	            </call-class-method>
+	            <if-compare field="isFloat" operator="equals" value="false">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidFlatRateError"/>
+	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            </if-compare>
+            </else>
+        </if-empty>
+        
+        <set from-field="globalContext.productStoreId" field="parameters.productStoreId"/>
+
+        <check-errors/>
+        
+        <!-- create record in entities: ProductStoreShipmentMeth and ShipmentCostEstimate -->  
+        <set-service-fields service-name="createShipCharge" map="parameters" to-map="createShipChargeCtx"/>
+        <make-value value-field="createShipChargeEntity" entity-name="ProductStoreShipmentMeth"/>
+        <set-nonpk-fields map="createShipChargeCtx" value-field="createShipChargeEntity"/>
+        <if-empty field="parameters.productStoreShipMethId">
+            <sequenced-id sequence-name="ProductStoreShipmentMeth" field="createShipChargeEntity.productStoreShipMethId"/>
+            <set field="parameters.productStoreShipMethId" from-field="createShipChargeEntity.productStoreShipMethId"/>
+            <else>
+                <set field="createShipChargeEntity.productStoreShipMethId" from-field="parameters.productStoreShipMethId"/>
+            </else>
+        </if-empty>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="createShipChargeEntity.createdTxStamp"/>
+        <set from-field="nowTimestamp" field="createShipChargeEntity.createdStamp"/>
+        <set from-field="nowTimestamp" field="createShipChargeEntity.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="createShipChargeEntity.lastUpdatedStamp"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="createShipChargeEntity.roleTypeId"/>
+        <set from-field="parameters.productStoreId" field="createShipChargeEntity.productStoreId"/>
+        <create-value value-field="createShipChargeEntity"/>
+               
+        <make-value value-field="createShipmentCostEstimateEntity" entity-name="ShipmentCostEstimate"/>
+        <!--  need to sequence because the user never enters the shipmentCostEstimateId. -->
+        <sequenced-id sequence-name="ShipmentCostEstimate" field="createShipmentCostEstimateEntity.shipmentCostEstimateId"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="createShipmentCostEstimateEntity.createdTxStamp"/>
+        <set from-field="nowTimestamp" field="createShipmentCostEstimateEntity.createdStamp"/>
+        <set from-field="nowTimestamp" field="createShipmentCostEstimateEntity.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="createShipmentCostEstimateEntity.lastUpdatedStamp"/>
+        <set from-field="parameters.productStoreId" field="createShipmentCostEstimateEntity.productStoreId"/>
+        <set from-field="parameters.shipmentMethodTypeId" field="createShipmentCostEstimateEntity.shipmentMethodTypeId"/>
+        <set from-field="parameters.partyId" field="createShipmentCostEstimateEntity.carrierPartyId"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="createShipmentCostEstimateEntity.carrierRoleTypeId"/>
+        <set from-field="parameters.productStoreShipMethId" field="createShipmentCostEstimateEntity.productStoreShipMethId"/>
+        <set from-field="parameters.orderFlatPrice" field="createShipmentCostEstimateEntity.orderFlatPrice"/>
+        <create-value value-field="createShipmentCostEstimateEntity"/>
+
+    </simple-method>
+  
+    <simple-method method-name="updateShipCharge" short-description="Update a shipping charge">
+    	<!-- check for bad or missing values -->     
+    	<if-empty field="parameters.productStoreShipMethId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductStoreShipMethIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="maxLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value=" " type="String"/>
+                <set field="makeUpCase" value="false" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="productStoreShipMethId">
+                    <field field="parameters.productStoreShipMethId" type="String"/>
+                    <field field="maxLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="productStoreShipMethId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="productStoreShipMethIdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+                    	<set field="parameters.productStoreShipMethId" from-field="productStoreShipMethId"/>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+   
+        <if-empty field="parameters.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+          
+        <if-empty field="parameters.shipmentMethodTypeId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipmentMethodTypeIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        
+        <!-- check if combination of partyId and shipMethodTypeId exists -->
+        <make-value entity-name="CarrierShipmentMethod" value-field="carrierShipmentMethodMap"/>
+        <set-pk-fields map="parameters" value-field="carrierShipmentMethodMap"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="carrierShipmentMethodMap.roleTypeId"/>
+        <find-by-primary-key map="carrierShipmentMethodMap" value-field="carrierShipmentMethodValue"/>
+        
+        <if-empty field="carrierShipmentMethodValue.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BadCarrierShipmentIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+        
+        <if-not-empty field="parameters.minTotal">
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+                <field field="parameters.minTotal"/>
+            </call-class-method>
+            <if-compare field="isFloat" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMinTotalError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.maxTotal">
+            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+                <field field="parameters.maxTotal"/>
+            </call-class-method>
+            <if-compare field="isFloat" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidMaxTotalError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+        </if-not-empty>
+        
+        <if-not-empty field="parameters.minTotal">
+	        <if-not-empty field="parameters.maxTotal">
+	        	<if>
+                    <condition>
+                    	<if-compare  operator="greater-equals" value="${parameters.maxTotal}" field="parameters.minTotal" type="Integer"/>
+                    </condition>
+                    <then>
+                        <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="MinGreaterError"/>
+		            	<string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    </then>
+                </if>
+	        </if-not-empty>
+        </if-not-empty>
+        
+        <if-empty field="parameters.sequenceNumber">
+        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<else>
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.sequenceNumber"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            </else>
+        </if-empty>  
+        
+        <if-empty field="parameters.orderFlatPrice">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankOrderFlatPriceError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+	            <call-class-method class-name="org.ofbiz.base.util.UtilValidate"  method-name="isFloat" ret-field="isFloat">
+	                <field field="parameters.orderFlatPrice"/>
+	            </call-class-method>
+	            <if-compare field="isFloat" operator="equals" value="false">
+	                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidFlatRateError"/>
+	                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+	            </if-compare>
+            </else>
+        </if-empty>
+
+        <check-errors/>
+        
+        <!-- update record in entities: ProductStoreShipmentMeth and ShipmentCostEstimate -->     
+        <make-value entity-name="ProductStoreShipmentMeth" value-field="lookupPKMap"/>
+        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
+        <store-value value-field="lookedUpValue"/>
+
+        <make-value entity-name="ShipmentCostEstimate" value-field="anotherLookupPKMap"/>
+        <set from-field="parameters.shipmentCostEstimateId" field="shipmentCostEstValue.shipmentCostEstimateId"/>
+        <set from-field="parameters.productStoreShipMethId" field="shipmentCostEstValue.productStoreShipMethId"/>
+        <set from-field="parameters.partyId" field="shipmentCostEstValue.carrierPartyId"/>
+        <set from-field="parameters.shipmentMethodTypeId" field="shipmentCostEstValue.shipmentMethodTypeId"/>
+        <set from-field="parameters.minTotal" field="shipmentCostEstValue.minTotal"/>
+        <set from-field="parameters.maxTotal" field="shipmentCostEstValue.maxTotal"/>
+        <set from-field="parameters.sequenceNumber" field="shipmentCostEstValue.sequenceNumber"/>
+        <set from-field="parameters.orderFlatPrice" field="shipmentCostEstValue.orderFlatPrice"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="shipmentCostEstValue.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="shipmentCostEstValue.lastUpdatedStamp"/>
+        <set from-field="globalContext.productStoreId" field="shipmentCostEstValue.productStoreId"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="shipmentCostEstValue.carrierRoleTypeId"/>
+        <set-pk-fields map="shipmentCostEstValue" value-field="anotherLookupPKMap"/>
+        <find-by-primary-key map="anotherLookupPKMap" value-field="anotherLookedUpValuep"/>
+        <set-nonpk-fields map="shipmentCostEstValue" value-field="anotherLookedUpValuep"/>
+        <store-value value-field="anotherLookedUpValuep"/>
+
+    </simple-method>
+    
+    <simple-method method-name="deleteShipCharge" short-description="Delete a shipping charge">
+    	<!-- check for missing productStoreShipMethId --> 
+        <if-empty field="parameters.productStoreShipMethId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankProductStoreShipMethIdError"/>
+            <string-to-list string="${tempErrorMessage}" message-field="PARAMKEY" list="error_list"/>
+        </if-empty>
+       
+        <check-errors/>
+        
+        <!-- delete records from entities: ProductStoreShipmentMeth and ShipmentCostEstimate --> 
+        <set from-field="parameters.productStoreShipMethId" field="shipmentCostEstimateLookedMap.productStoreShipMethId"/>
+        <set from-field="globalContext.productStoreId" field="shipmentCostEstimateLookedMap.productStoreId"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="shipmentCostEstimateLookedMap.carrierRoleTypeId"/>
+       	<find-by-and entity-name="ShipmentCostEstimate" map="shipmentCostEstimateLookedMap" list="shipmentCostEstimateList" use-cache="true"/>
+       	<call-object-method obj-field="shipmentCostEstimateList" method-name="size" ret-field="shipmentCostEstimateListSize"/>
+       	<if-compare field="shipmentCostEstimateListSize" operator="greater" value="0" type="Integer">
+       		<call-class-method class-name="org.ofbiz.entity.util.EntityUtil" method-name="getFirst" ret-field="shipmentCostEstimateValue">
+               <field field="shipmentCostEstimateList" type="List"/>
+           </call-class-method>
+       	</if-compare>
+       	
+        <if-not-empty field="shipmentCostEstimateValue">
+            <remove-value value-field="shipmentCostEstimateValue"/>
+        </if-not-empty>
+
+        <entity-one entity-name="ProductStoreShipmentMeth" value-field="productStoreShipMethLookedUpValue"/>
+        <if-not-empty field="productStoreShipMethLookedUpValue">
+            <remove-value value-field="productStoreShipMethLookedUpValue"/>
+            <property-to-field resource="OSafeAdminUiLabels" property="DeletedSuccess" field="deletedSuccessMessage"/>
+            <string-to-list string="${deletedSuccessMessage}" list="successMessageList"/>
+        </if-not-empty>
+    </simple-method>
+    
+    <simple-method method-name="createShipChargeCarrier" short-description="Create a shipping charge carrier">
+    
+        <if-empty field="parameters.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            <else>
+                <set field="maxLength" value="20" type="Integer"/>
+                <set field="spaceReplacement" value=" " type="String"/>
+                <set field="makeUpCase" value="false" type="Boolean"/>
+                <call-class-method class-name="com.osafe.util.OsafeAdminUtil"  method-name="makeValidId" ret-field="partyId">
+                    <field field="parameters.partyId" type="String"/>
+                    <field field="maxLength" type="Integer"/>
+                    <field field="spaceReplacement" type="String"/>
+                    <field field="makeUpCase" type="boolean"/>
+                </call-class-method>
+                <if-empty field="partyId">
+                    <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="partyIdLengthError"/>
+                    <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    <else>
+                        <entity-one entity-name="Party" value-field="existingParty">
+                            <field-map field-name="partyId" from-field="partyId"/>
+                        </entity-one>
+                        <if-not-empty field="existingParty">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="partyIdExistError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                            <else>
+                                <set field="parameters.partyId" from-field="partyId"/>
+                            </else>
+                        </if-not-empty>
+                    </else>
+                </if-empty>
+            </else>
+        </if-empty>
+        
+        <check-errors/>
+ 
+        <set-service-fields service-name="createShipChargeCarrier" map="parameters" to-map="createShipChargeCarrierCtx"/>
+        <make-value value-field="newEntity" entity-name="Party"/>
+        <set-nonpk-fields map="createShipChargeCarrierCtx" value-field="newEntity"/>
+        <if-empty field="parameters.partyId">
+            <sequenced-id sequence-name="Party" field="newEntity.partyId"/>
+            <set field="parameters.partyId" from-field="newEntity.partyId"/>
+            <else>
+                <set field="newEntity.partyId" from-field="parameters.partyId"/>
+            </else>
+        </if-empty>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="newEntity.createdTxStamp"/>
+        <set from-field="nowTimestamp" field="newEntity.createdStamp"/>
+        <set from-field="nowTimestamp" field="newEntity.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="newEntity.lastUpdatedStamp"/>
+        <set from-field="nowTimestamp" field="newEntity.lastModifiedDate"/>
+        <set from-field="nowTimestamp" field="newEntity.createdDate"/>
+        <set field="partyTypeId" value="PARTY_GROUP" type="String"/>
+        <set from-field="partyTypeId" field="newEntity.partyTypeId"/>
+        <set field="statusId" value="PARTY_ENABLED" type="String"/>
+        <set from-field="statusId" field="newEntity.statusId"/>
+        <create-value value-field="newEntity"/>
+         
+        <make-value value-field="anotherNewEntity" entity-name="PartyRole"/>
+        <set from-field="parameters.partyId" field="anotherNewEntity.partyId" />
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="anotherNewEntity.createdTxStamp"/>
+        <set from-field="nowTimestamp" field="anotherNewEntity.createdStamp"/>
+        <set from-field="nowTimestamp" field="anotherNewEntity.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="anotherNewEntity.lastUpdatedStamp"/>
+        <set field="roleTypeId" value="CARRIER" type="String"/>
+        <set from-field="roleTypeId" field="anotherNewEntity.roleTypeId"/>
+        <create-value value-field="anotherNewEntity"/>
+
+    </simple-method>
+    
+    <simple-method method-name="createCarrierShip" short-description="Create a carrier shipment method">
+    	<set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="parameters.roleTypeId"/>
+        
+        <!-- check if it is already existing --> 
+        <if-not-empty field="parameters.partyId">
+        	<if-not-empty field="parameters.shipmentMethodTypeId">
+        		<if-not-empty field="parameters.roleTypeId">
+        			<entity-one entity-name="CarrierShipmentMethod" value-field="existingCarrierShipmentMethod">
+                            <field-map field-name="partyId" from-field="parameters.partyId"/>
+                            <field-map field-name="shipmentMethodTypeId" from-field="parameters.shipmentMethodTypeId"/>
+                            <field-map field-name="roleTypeId" from-field="parameters.roleTypeId"/>
+                    </entity-one>
+                    <if-not-empty field="existingCarrierShipmentMethod">
+                            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="CarrierShipmentMethodExistError"/>
+                            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+                    </if-not-empty>
+        		</if-not-empty>
+        	</if-not-empty>
+        </if-not-empty>
+        
+ 		<!-- check for bad or missing values -->            
+        <if-empty field="parameters.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+          
+        <if-empty field="parameters.shipmentMethodTypeId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipMethodTypeIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+ 
+        <if-empty field="parameters.carrierServiceCode">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCarrierServiceCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+
+        <if-empty field="parameters.sequenceNumber">
+        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<else>
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.sequenceNumber"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            </else>
+        </if-empty> 
+
+        <check-errors/>
+        
+        <!-- create record in entity: CarrierShipmentMethod -->  
+        <set-service-fields service-name="createCarrierShip" map="parameters" to-map="createCarrierShipCtx"/>
+        <make-value value-field="createCarrierShipEntity" entity-name="CarrierShipmentMethod"/>
+        <set-pk-fields map="createCarrierShipCtx" value-field="createCarrierShipEntity"/>
+        <set-nonpk-fields map="createCarrierShipCtx" value-field="createCarrierShipEntity"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="createCarrierShipEntity.createdTxStamp"/>
+        <set from-field="nowTimestamp" field="createCarrierShipEntity.createdStamp"/>
+        <set from-field="nowTimestamp" field="createCarrierShipEntity.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="createCarrierShipEntity.lastUpdatedStamp"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="createCarrierShipEntity.roleTypeId"/>
+        <create-value value-field="createCarrierShipEntity"/>
+
+    </simple-method>
+  
+    <simple-method method-name="updateCarrierShip" short-description="Update a carrier shipment method">  
+    	<set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="parameters.roleTypeId"/>    
+ 		<!-- check for bad or missing values -->            
+        <if-empty field="parameters.partyId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankPartyIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+          
+        <if-empty field="parameters.shipmentMethodTypeId">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankShipMethodTypeIdError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+ 
+        <if-empty field="parameters.carrierServiceCode">
+            <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="BlankCarrierServiceCodeError"/>
+            <string-to-list string="${tempErrorMessage}" list="error_list"/>
+        </if-empty>
+
+        <if-empty field="parameters.sequenceNumber">
+        	<set field="parameters.sequenceNumber" value="1" type="Integer"/>
+        	<else>
+            <call-class-method class-name="com.osafe.util.Util"  method-name="isNumber" ret-field="isNumber">
+                <field field="parameters.sequenceNumber"/>
+            </call-class-method>
+            <if-compare field="isNumber" operator="equals" value="false">
+                <property-to-field field="tempErrorMessage" resource="OSafeAdminUiLabels" property="ValidSeqNumError"/>
+                <string-to-list string="${tempErrorMessage}" list="error_list"/>
+            </if-compare>
+            </else>
+        </if-empty> 
+
+        <check-errors/>
+        
+        <!-- update record in entity: CarrierShipmentMethod -->     
+        <make-value entity-name="CarrierShipmentMethod" value-field="lookupPKMap"/>
+        <set-pk-fields map="parameters" value-field="lookupPKMap"/>
+        <find-by-primary-key map="lookupPKMap" value-field="lookedUpValue"/>
+        <set-nonpk-fields map="parameters" value-field="lookedUpValue"/>
+        <now-timestamp field="nowTimestamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedTxStamp"/>
+        <set from-field="nowTimestamp" field="lookedUpValue.lastUpdatedStamp"/>
+        <set field="carrier" value="CARRIER" type="String"/>
+        <set from-field="carrier" field="lookedUpValue.roleTypeId"/>
+        <store-value value-field="lookedUpValue"/>
+
+    </simple-method>
+    
+</simple-methods>

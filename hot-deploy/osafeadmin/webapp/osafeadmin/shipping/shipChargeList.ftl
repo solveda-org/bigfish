@@ -1,37 +1,33 @@
-<!-- start promotionsList.ftl -->
+<!-- start shipChargeList.ftl -->
           <thead>
             <tr class="heading">
                 <th class="idCol firstCol">${uiLabelMap.ShipChargeIdLabel}</th>
-                <th class="nameCol">${uiLabelMap.ShipMethodTypeLabel}</th>
                 <th class="nameCol">${uiLabelMap.ShipCarrierLabel}</th>
-                <th class="nameCol">${uiLabelMap.ShipMinTotalLabel}</th>
-                <th class="nameCol">${uiLabelMap.ShipMaxTotalLabel}</th>
-                <th class="numberCol">${uiLabelMap.ShipSeqLabel}</th>
-                <th class="nameCol">${uiLabelMap.ShipFlatRateLabel}</th>
+                <th class="typeCol">${uiLabelMap.ShipMethodTypeLabel}</th>
+                <th class="numberCol">${uiLabelMap.ShipMinTotalLabel}</th>
+                <th class="numberCol">${uiLabelMap.ShipMaxTotalLabel}</th>
+                <th class="seqCol">${uiLabelMap.ShipSeqLabel}</th>
+                <th class="numberCol">${uiLabelMap.ShipFlatRateLabel}</th>
             </tr>
           </thead>
         <#if resultList?exists && resultList?has_content>
             <#assign rowClass = "1">
-            <#list resultList as review>
-              <#assign hasNext = review_has_next>
-              <#assign product = review.getRelatedOne("Product")>
-              <#assign statusItem = review.getRelatedOne("StatusItem")>
-              <#assign productContentWrapper = Static["org.ofbiz.product.product.ProductContentWrapper"].makeProductContentWrapper(product,request)>
-              <#assign productName = productContentWrapper.get("PRODUCT_NAME")!product.productName!"">
-              <#assign rating=review.productRating!"">
-              <#assign ratePercentage= ((rating / 5) * 100)>
+            <#list resultList as shipCharge>
+              <#assign hasNext = shipCharge_has_next>
                 <tr class="dataRow <#if rowClass == "2">even<#else>odd</#if>">
-                    <td class="idCol <#if !hasNext>lastRow</#if> firstCol" ><a href="<@ofbizUrl>reviewDetail?productReviewId=${review.productReviewId}</@ofbizUrl>">${review.productReviewId}</a></td>
-                    <td class="nameCol <#if !hasNext>lastRow</#if>">${productName!}</td>
-                    <td class="nameCol <#if !hasNext>lastRow</#if>">${review.productId!""}</td>
-                    <td class="nameCol <#if !hasNext>lastRow</#if>">${review.postedDateTime?string(preferredDateFormat!)}</td>
-                    <td class="nameCol <#if !hasNext>lastRow</#if>">${review.reviewNickName!}</td>
-                    <td class="numberCol <#if !hasNext>lastRow</#if>"><div class="rating_bar"><div style="width:${ratePercentage}%"></div></div></td>
-                    <td class="nameCol <#if !hasNext>lastRow</#if>">
-                       ${review.reviewTitle!}
-                    </td>
-                    
-                    
+                <#assign shipmentCostEstimateList = delegator.findByAnd("ShipmentCostEstimate", Static["org.ofbiz.base.util.UtilMisc"].toMap("productStoreShipMethId",shipCharge.productStoreShipMethId!))/>
+                <#if shipmentCostEstimateList?has_content>
+	              	<#assign shipmentCostEstimate = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(shipmentCostEstimateList)/>
+	              	<#assign flatPrice = shipmentCostEstimate.orderFlatPrice!""/>
+	            </#if>                 
+
+                    <td class="idCol <#if !hasNext>lastRow</#if> firstCol" ><a href="<@ofbizUrl>shipChargeDetail?productStoreShipMethId=${shipCharge.productStoreShipMethId}</@ofbizUrl>">${shipCharge.productStoreShipMethId}</a></td>
+                    <td class="nameCol <#if !hasNext>lastRow</#if>">${shipCharge.partyId!}</td>
+                    <td class="typeCol <#if !hasNext>lastRow</#if>">${shipCharge.shipmentMethodTypeId!""}</td>
+                    <td class="numberCol <#if !hasNext>lastRow</#if>">${shipCharge.minTotal!""}</td>
+                    <td class="numberCol <#if !hasNext>lastRow</#if>">${shipCharge.maxTotal!""}</td>
+                    <td class="seqCol <#if !hasNext>lastRow</#if>">${shipCharge.sequenceNumber!""}</td>
+                    <td class="numberCol <#if !hasNext>lastRow</#if>">${flatPrice!""}</td>
                 </tr>
 
                 <#-- toggle the row color -->
@@ -42,4 +38,4 @@
                 </#if>
             </#list>
         </#if>
-<!-- end promotionsList.ftl -->
+<!-- end shipChargeList.ftl -->

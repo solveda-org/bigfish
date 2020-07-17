@@ -43,14 +43,14 @@
 <ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_CAPTURE" paymentService="payPalCapture" paymentCustomMethodId="PAYPAL_CAPTURE" paymentGatewayConfigId="PAYPAL_CONFIG" applyToAllProducts="Y"/>
 <ProductStorePaymentSetting productStoreId="@store.productStoreId@" paymentMethodTypeId="EXT_PAYPAL" paymentServiceTypeEnumId="PRDS_PAY_EXTERNAL" paymentGatewayConfigId="PAYPAL_CONFIG" applyToAllProducts="Y"/>
 
-<!-- Product Store Parm count (84)  -->
+<!-- Product Store Parm count (116)  -->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MIN" parmValue="5" description="Number of facet values to show; see less/More" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_VALUE_MAX" parmValue="99" description="Max Number of facet values to show" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_CAT_ON_PLP" parmValue="true" description="Display categories as a facet group on the PLP page true or false" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_SHOW_ITEM_CNT" parmValue="true" description="Determines whether the facets show the number of items in parenthesis" parmCategory="SOLR"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FACET_PRICE_ROUND" parmValue="0" description="Control the number of decimal places to be displayed in the listed prices" parmCategory="SOLR"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_DOLLAR_THRESHOLD" parmValue="15" description="Only show LIST Price is the dollar saving is greater than or equal to this setting" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_MONEY_THRESHOLD" parmValue="15" description="Only show LIST Price if the monetary saving is greater than or equal to this setting" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_PCT_THRESHOLD" parmValue="5" description="Only show PCT savings if the pct savings is greater than or equal to this setting" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_SOC_MEDIA" parmValue="true" description="Include the Share display box on PDP, true or false" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_FACEBOOK" parmValue="http://www.facebook.com/sharer.php?u=" description="Include Facebook share in the share-box, leave blank to not display" parmCategory="PDP"/>
@@ -58,10 +58,27 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_DIG" parmValue="http://www.digthis.com/?status=" description="Include DigThis share in the share-box, leave blank to not display" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHARE_DELICIOUS" parmValue="http://www.delicious.com/?status=" description="Include Delicious share in the share-box, leave blank to not display" parmCategory="PDP"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_SHOW_MFG" parmValue="true" description="Display Manufacturer on the PDP page true or false" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_FACET_GROUP_VARIANT_SWATCH_IMG" description="This is the FACET GROUP that may have variant 'swatch' images on the PLP. For example, if this parameter is set to COLOR, and COLOR=Red is clicked on the Facets, then the PDP processing will look for images from the variant product Color=Red." parmCategory="PLP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_FACET_GROUP_VARIANT_SWATCH_IMG" description="This is the FACET GROUP that may have variant 'swatches' images on the PLP. For example, if this parameter is set to COLOR then the PDP will offer the 'color swatches'as a selector." parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_QTY_MIN" parmValue="1" description="The minimum allowed quantity that can be ordered on the PDP" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_QTY_MAX" parmValue="99" description="The maximum allowed quantity that can be ordered on the PDP" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_RECENT_VIEW_MAX" parmValue="3" description="The number of recently-viewed-products that are to be displayed within the PDP" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_ACTIVE" parmValue="FALSE" description="TRUE or FALSE. This will define if there is a special scroller component implemented for the set of alternate images" parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_VERTICAL" parmValue="FALSE" description="TRUE or FALSE. A value of TRUE will display a Vertical scroller. A value of FALSE will display a Horizontal scroller." parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_ALT_IMG_SCROLLER_IMAGES" parmValue="0" description="The number of images that should be scrolled up or down when the arrow is clicked." parmCategory="PDP"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PLP_DEFAULT_SORT" parmValue="BEST_SELLING" description="Controls the default sequence used on all PLP pages. Valid values are: HIGHEST_RATING, BEST_SELLING, MOST_POPULAR, NAME_ASCENDING, NAME_DESCENDING, HIGHEST_PRICE, LOWEST_PRICE" parmCategory="PLP"/>
 
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_ENABLED" parmValue="true" description="Display Customer Ratings on the PDP page true or false" parmCategory="REVIEW"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_ACTIVE_FLAG" parmValue="true" description="This defines whether the eCommerce site will support the Ratings and Reviews feature of bigfish." parmCategory="REVIEW"/>
-<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AUTO_APPROVE" parmValue="false" description="This defines whether Ratings and Reviews will be automatically approved. Setting this value to FALSE requires your approval of each Review posted." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_ACTIVE_FLAG" parmValue="TRUE" description="This defines whether the ratings-and-reviews feature is active. are part of the implementation. If this flag is set ratings-and-reviews are displayed on the PDP (show reviews, review stars)." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_AUTO_APPROVE" parmValue="FALSE" description="This defines whether Ratings and Reviews will be automatically approved. Setting this value to FALSE requires your approval of each Review posted. Approval is done in the Admin Module." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_SHOW_ON_PLP" parmValue="TRUE" description="Display Customer Ratings on the PLP page true or false." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_SEND_EMAIL" parmValue="TRUE" description="This defines whether BigFish sends out the email notification 'n' days after the Order has Shipped (EMAIL_REVIEW_SHP_DYS). Some clients may have an external service to perform this function - so even if Reviews are active this parameter may be False." parmCategory="REVIEW"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REVIEW_WRITE_REVIEW" parmValue="FALSE" description="This is a specific review parameter to define whether the BigFish PDP page offers the 'Write a Review' link. In some implementations clients will use an external service to collect the review so the BF option is not required." parmCategory="REVIEW"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_ACTIVE_FLAG" parmValue="FALSE" description="This defines whether the eCommerce site will support the Ratings and Reviews feature of REEVOO" parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_SHOW_ON_PLP" parmValue="FALSE" description="Display Reevoo mark on the PLP page true or false" parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_JS_URL" parmValue="http://mark.reevoo.com/reevoomark" description="Request Url for instantiate the REEVOO mark processing" parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_BADGE_URL" parmValue="http://www.reevoo.com/partner" description="Request Url for showing REEVOO mark badge" parmCategory="REEVOO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="REEVOO_TRKREF" parmValue="" description="Track reference for communicate with  REEVOO" parmCategory="REEVOO"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GA_SITE_VERIFICATION" parmValue="GA-Site 555555555" description="Google analytics site verification" parmCategory="GOOGLE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="GA_ACCOUNT_NO" parmValue="GA-55555555" description="Google analytics account number" parmCategory="GOOGLE"/>
@@ -86,6 +103,8 @@
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_H" parmValue="187" description="Height of PLP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_W" parmValue="140" description="Width of PLP Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_ALT_H" parmValue="" description="Height of PLP ALT Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_ALT_W" parmValue="" description="Width of PLP ALT Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_REG_H" parmValue="400" description="Height of PDP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_REG_W" parmValue="300" description="Width of PDP Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_THUMB_H" parmValue="67" description="Height of PLP Additional Image" parmCategory="IMAGE"/>
@@ -104,6 +123,16 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_CAT_W" parmValue="150" description="Width of PLP Category Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_REVIEW_H" parmValue="400" description="Height of Submit Review Image" parmCategory="IMAGE"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_REVIEW_W" parmValue="300" description="Width of Submit review Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_H" parmValue="" description="Height of PDP Product Video" parmCategory="VIDEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_W" parmValue="" description="Width of PDP Product Video" parmCategory="VIDEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_SWATCH_H" parmValue="" description="Height of PLP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_SWATCH_W" parmValue="" description="Width of PLP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_SWATCH_H" parmValue="" description="Height of PDP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_SWATCH_W" parmValue="" description="Width of PDP Swatch, leave blank or zero if no resizing should take place." parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_360_H" parmValue="" description="Height of PDP Video 360" parmCategory="VIDEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PDP_VIDEO_360_W" parmValue="" description="Width of PDP Video 360" parmCategory="VIDEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_H" parmValue="" description="Height of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="IMG_SIZE_PLP_MFG_W" parmValue="" description="Width of PLP Manufacturer logo Image" parmCategory="IMAGE"/>
 
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_ADDRESS" parmValue="" description="This defines how Addresses are formatted within both the eCommerce and Admin modules." parmCategory="FORMAT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="FORMAT_CURRENCY" parmValue="$n.nn" description="This defines how currency is displayed within both the eCommerce and Admin modules." parmCategory="FORMAT"/>
@@ -137,14 +166,43 @@
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_PICKUP" parmValue="false" description="Defines whether the 'Pickup-in-Store' is an option during the check-out work flow" parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_CC" parmValue="false" description="Defines whether a 'Pickup-In-Store' offers a credit card payment" parmCategory="CHECKOUT"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_STORE_CC_REQ" parmValue="false" description="Defines whether a 'Pickup-In-Store' REQUIRES payment by credit card before the order is accepted" parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="RNY_STORE" parmKey="CHECKOUT_PROMO_MANUAL_ONE_ONLY" parmValue="true" description="TRUE or FALSE flag value to indicate if all manual promo-codes are mutually exclusive. TRUE: only ONE promo-code will be allowed to be applied to the Order. FALSE: multiple promo-codes are allowed to be applied to the Order." parmCategory="CHECKOUT"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="CHECKOUT_KEEP_PAYMENT_METHODS" parmValue="FALSE" description="Ability to have customers maintain the various checkout details for use in a future purchase" parmCategory="CHECKOUT"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_ACTIVE" parmValue="false" description="Display quick view on the PLP page for each product." parmCategory="QUICKLOOK"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="QUICKLOOK_DELAY_MS" parmValue="0" description="The time, in milliseconds, that the site will wait before displaying the Quick Look icon" parmCategory="QUICKLOOK"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="LIGHTBOX_ACTIVE" parmValue="false" description="Defines whether the retailer site supports the View-Cart drop-down light box functionality" parmCategory="LIGHTBOX"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="LIGHTBOX_DELAY_MS" parmValue="0" description="The time, in milliseconds, that the site will wait before displaying the Light Box" parmCategory="LIGHTBOX"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_META_DESC_LEN" parmValue="250" description="Length of Meta  DESCRIPTION tag. Will truncate to include a full word." parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_META_KEY_LEN" parmValue="250" description="Length of Meta  KEY tag. Will truncate to include a full word." parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_TITLE" parmValue="SEO_HOME_PAGE_TITLE" description="Value for the <TITLE> tag for the Home Page" parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_META_DESC" parmValue="SEO_HOME_META_DESC" description="Value for the Meta DESCRIPTION tag for the Home Page" parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_META_KEY" parmValue="SEO_HOME_META_KEY" description="Value for the Meta KEYWORDS tag for the Home Page" parmCategory="SEO"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEO_HOME_PAGE_H1" parmValue="SEO_HOME_PAGE_H1" description="Value for the <H1> tag for the Home Page" parmCategory="SEO"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_ACTIVE_FLAG" parmValue="FALSE" description="This defines whether the e-Commerce site will support the post code anywhere feature." parmCategory="PCA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_JS_URL" parmValue="" description="Request url for find address" parmCategory="PCA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_CSS_URL" parmValue="" description="Request url for link PCA CSS" parmCategory="PCA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_KEY" parmValue="" description="Request Url Key for intracting with PCA product" parmCategory="PCA"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PCA_API_APP_NO" parmValue="" description="Request url application number." parmCategory="PCA"/>
 
 <!-- ADMIN-->
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_DEF_LIST_ROWS" parmValue="50" description="Default view size" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_WARN_LIST_ROWS" parmValue="500" description="Default max view size" parmCategory="ADM"/>
 <XProductStoreParm productStoreId="@store.productStoreId@" parmKey="ADM_TOOLTIP_MAX_CHAR" parmValue="400" description="The maximum number of characters to display in a Tooltip within the Admin Module" parmCategory="ADM"/>
 
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_DEFAULT_TEXT" parmValue="Enter keyword, SKU# or Item#" description="Default text for site search entry text box" parmCategory="SEARCH"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="SEARCH_NO_ENTRY_ERROR" parmValue="Please enter one or more terms to search for" description="Site search no entry error message" parmCategory="SEARCH"/>
+
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_METHOD" parmValue="BIGFISH" description="The method used for tracking inventory: NONE: Inventory is not relevant to this implementation OFBIZ: use standard OFBiz inventory. Facility, reservations, ATP, QOH BIGFISH: simple inventory value" parmCategory="INVENTORY"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_OUT_OF_STOCK_TO" parmValue="0" description="If the current inventory is less than or equal to this value then the Product is considered to be Out-of-Stock." parmCategory="INVENTORY"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="INVENTORY_IN_STOCK_FROM" parmValue="10" description="If the current inventory is greater than or equal to this value then the Product is considered to be In-Stock." parmCategory="INVENTORY"/>
+<XProductStoreParm productStoreId="@store.productStoreId@" parmKey="PDP_IMG_ZOOM_ACTIVE_FLAG" parmValue="true" description="TRUE or FALSE flag value to indicate zoom activation on PDP image" parmCategory="PDP"/>
+
 <!-- Website -->
-<WebSite webSiteId="@store.webSiteId@" siteName="Site Name" httpHost="" httpPort="" httpsHost="" httpsPort="" enableHttps="" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />
+<WebSite webSiteId="@store.webSiteId@" siteName="@store.storePrefix@ Site" httpHost="@http.host@" httpPort="@port.http@" httpsHost="@https.host@" httpsPort="@port.https@" enableHttps="Y" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />
+<WebSite webSiteId="@store.storePrefix@_admin_site" siteName="@store.storePrefix@ Admin Site" httpHost="@http.host@" httpPort="@port.http@" httpsHost="@https.host@" httpsPort="@port.https@" enableHttps="Y" standardContentPrefix="" secureContentPrefix="" cookieDomain="" visualThemeSetId="ECOMMERCE" productStoreId="@store.productStoreId@" allowProductStoreChange="N" />
 <Content contentId="OTS_PPOINT" contentTypeId="WEB_SITE_PUB_PT" contentName="Web Site Publish Point" description=""/>
 <WebSiteContent webSiteId="@store.webSiteId@" contentId="OTS_PPOINT" webSiteContentTypeId="PUBLISH_POINT" fromDate="2011-01-01 00:00:00.0"/>
 
@@ -310,4 +368,47 @@
 <RecurrenceRule recurrenceRuleId="STORE_GEOPT_GEN" frequency="DAILY" countNumber="-1" intervalNumber="1" />
 <RecurrenceInfo recurrenceInfoId="STORE_GEOPT_GEN" recurrenceRuleId="STORE_GEOPT_GEN" startDateTime="2011-02-24 00:00:00.0"/>
 <JobSandbox jobId="STORE_GEOPT_GEN" jobName="genPartyGeoPoint" serviceName="genPartyGeoPoint" runtimeDataId="STORE_GEOPT_GEN" recurrenceInfoId="STORE_GEOPT_GEN" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" runTime="2011-02-24 00:00:00.0" />
+
+<RuntimeData runtimeDataId="E_ABANDON_CART">
+        <runtimeInfo><![CDATA[<?xml version="1.0" encoding="UTF-8"?><ofbiz-ser>
+    <map-Map>
+        <map-Entry>
+            <map-Key>
+                <std-String value="productStoreId"/>
+            </map-Key>
+            <map-Value>
+                <std-String value="@store.productStoreId@"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="timeZone"/>
+            </map-Key>
+            <map-Value>
+                <cus-obj><![CDATA[aced00057372001a73756e2e7574696c2e63616c656e6461722e5a6f6e65496e666f24d1d3ce001d719b020008490008636865636b73756d49000a647374536176696e67734900097261774f666673657449000d7261774f6666736574446966665a001377696c6c474d544f66667365744368616e67655b00076f6666736574737400025b495b001473696d706c6554696d655a6f6e65506172616d7371007e00015b000b7472616e736974696f6e737400025b4a787200126a6176612e7574696c2e54696d655a6f6e6531b3e9f57744aca10200014c000249447400124c6a6176612f6c616e672f537472696e673b787074000f416d65726963612f50686f656e6978964be81500000000fe7f7a800000000000757200025b494dba602676eab2a5020000787000000003fe7f7a80feb669000036ee8070757200025b4a782004b512b1759302000078700000000cffdfdae01dc00000ffe83b954c280021ffe87f2954c00000ffe8b0bdf9280021ffe8f45201c00000fff330f591280021fff40f53f8560000fff42ca1927e0021fff46784dfd60000fffec5a894680021ffff00397c000000001ec4c6b2580000]]]]><![CDATA[></cus-obj>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="userLogin"/>
+            </map-Key>
+            <map-Value>
+                <eeval-UserLogin currentPassword="{SHA}47ca69ebb4bdc9ae0adec130880165d2cc05db1a" enabled="Y" hasLoggedOut="N" partyId="admin" requirePasswordChange="N" successiveFailedLogins="0" userLoginId="admin"/>
+            </map-Value>
+        </map-Entry>
+        <map-Entry>
+            <map-Key>
+                <std-String value="locale"/>
+            </map-Key>
+            <map-Value>
+                <std-Locale value="en_US"/>
+            </map-Value>
+        </map-Entry>
+    </map-Map>
+</ofbiz-ser>
+]]></runtimeInfo>
+</RuntimeData>
+<RecurrenceRule recurrenceRuleId="E_ABANDON_CART" frequency="DAILY" countNumber="-1" intervalNumber="1" />
+<RecurrenceInfo recurrenceInfoId="E_ABANDON_CART" recurrenceRuleId="E_ABANDON_CART" startDateTime="2011-01-01 00:00:00.0"/>
+<JobSandbox jobId="E_ABANDON_CART" jobName="abandonCartEmail" serviceName="abandonCartEmail" runtimeDataId="E_ABANDON_CART" recurrenceInfoId="E_ABANDON_CART" statusId="SERVICE_PENDING" loaderName="JobDispatcher" maxRetry="-1" poolId="pool" runTime="2011-01-01 00:00:00.0" />
 </entity-engine-xml>

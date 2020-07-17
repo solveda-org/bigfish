@@ -27,6 +27,7 @@ import org.ofbiz.base.util.UtilProperties;
 import org.ofbiz.base.util.UtilURL;
 import org.ofbiz.base.util.UtilValidate;
 import org.ofbiz.base.util.UtilXml;
+import org.ofbiz.base.util.cache.UtilCache;
 import org.ofbiz.base.util.string.FlexibleStringExpander;
 import org.ofbiz.service.DispatchContext;
 import org.ofbiz.service.ServiceUtil;
@@ -40,8 +41,14 @@ import org.w3c.dom.Node;
  */
 
 public class OsafeManageXml {
+
     public static final String module = OsafeManageXml.class.getName();
-    
+
+    /** An instance of the generic cache for storing the list of map from xml file.
+     *  Each list instance is keyed by the file's URL.
+     */
+    protected static UtilCache<String, List<Map<Object, Object>>> urlCache = UtilCache.createUtilCache("osafe.ManageXmlUrlCache");
+
     public static Map<String, ?>  modifyLabelXml(DispatchContext dctx, Map context) {
         Map<String, Object> resp = null;
         Document xmlDocument = null;
@@ -234,6 +241,7 @@ public class OsafeManageXml {
      */
     public static List<Map<Object, Object>> getListMapsFromXmlFile(String XmlFilePath) {
         return getListMapsFromXmlFile(XmlFilePath, null);
+        
     }
     
     public static List<Map<Object, Object>> getListMapsFromXmlFile(String XmlFilePath, String activChildName) {
@@ -293,6 +301,26 @@ public class OsafeManageXml {
             } catch (Exception exc) {
                 Debug.logError(exc, "Error reading xml file", module);
             }
+        }
+        return listMaps;
+    }
+
+    /**
+     * make List of Maps of element using cache.
+     * @param XmlFilePath String xml file path
+     * @return a new List of  Maps.
+     */
+    public static List<Map<Object, Object>> getListMapsFromXmlFileUseCache(String XmlFilePath) {
+        List<Map<Object, Object>> listMaps = FastList.newInstance();
+        try {
+            URL xmlFileUrl = UtilURL.fromFilename(XmlFilePath);
+            listMaps = urlCache.get(xmlFileUrl.toString());
+            if (listMaps == null) {
+                listMaps = getListMapsFromXmlFile(XmlFilePath);
+                urlCache.put(xmlFileUrl.toString(), listMaps);
+            }
+        } catch (Exception exc) {
+            Debug.logError(exc, "Error reading xml file using cache", module);
         }
         return listMaps;
     }
@@ -446,7 +474,32 @@ public class OsafeManageXml {
     public static List<Map<Object, Object>> getSearchListFromXmlFile(String XmlFilePath, Map<Object, Object> searchRestrictionMap, String searchString, boolean searchIgnoreCase, boolean searchPartial) {
         List<Map<Object, Object>> searchListMaps = FastList.newInstance();
         try {
-            List<Map<Object, Object>> listMaps = getListMapsFromXmlFile(XmlFilePath);
+            searchListMaps = getSearchListFromXmlFile(XmlFilePath, searchRestrictionMap, searchString, searchIgnoreCase, searchPartial, Boolean.FALSE);
+        } catch (Exception exc) {
+            Debug.logError(exc, "Error in searching", module);
+        }
+        return searchListMaps;
+    }
+
+    /**
+     * filter the List of Maps of element based on search string.
+     * @param XmlFilePath String xml file path
+     * @param searchKeyRestriction map of key value restriction for search
+     * @param searchString string for search
+     * @param searchIgnoreCase boolean for follow case in search
+     * @param searchPartial boolean for perform partial or exact search
+     * @param usecache boolean for perform search using cache
+     * @return a new search List of  Maps.
+     */
+    public static List<Map<Object, Object>> getSearchListFromXmlFile(String XmlFilePath, Map<Object, Object> searchRestrictionMap, String searchString, boolean searchIgnoreCase, boolean searchPartial, boolean useCache) {
+        List<Map<Object, Object>> searchListMaps = FastList.newInstance();
+        try {
+            List<Map<Object, Object>> listMaps =  FastList.newInstance();
+            if (useCache) {
+                listMaps = getListMapsFromXmlFileUseCache(XmlFilePath);
+            } else {
+                listMaps = getListMapsFromXmlFile(XmlFilePath);
+            }
             searchListMaps = getSearchListFromListMaps(listMaps, searchRestrictionMap, searchString, searchIgnoreCase, searchPartial);
         } catch (Exception exc) {
             Debug.logError(exc, "Error in searching", module);

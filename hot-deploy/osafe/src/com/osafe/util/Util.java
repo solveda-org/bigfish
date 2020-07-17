@@ -162,6 +162,10 @@ public class Util {
     }
     
     public static String checkTelecomNumber(String areaCode, String contactNumber, String required) {
+        return checkTelecomNumber(areaCode, contactNumber, null, required);
+    }
+
+    public static String checkTelecomNumber(String areaCode, String contactNumber, String extension, String required) {
 
         if (Boolean.parseBoolean(required) || "Y".equalsIgnoreCase(required)) {
             if (UtilValidate.isEmpty(areaCode) || UtilValidate.isEmpty(contactNumber)) {
@@ -183,6 +187,12 @@ public class Util {
             if (!UtilValidate.isInteger(justNumbers)) {
                 return "invalid";
             } else if (justNumbers.length() < 7) {
+                return "invalid";
+            }
+        }
+        if (UtilValidate.isNotEmpty(extension)) {
+            String justNumbers = StringUtil.removeRegex(extension, "[\\s-]");
+            if (!UtilValidate.isInteger(justNumbers)) {
                 return "invalid";
             }
         }

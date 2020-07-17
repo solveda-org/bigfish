@@ -81,8 +81,10 @@
      </div>
      <div class="infoValue">
         <#if party?has_content>
-            <#assign partyAttrIsDownload = delegator.findOne("PartyAttribute", {"partyId" : party.partyId, "attrName" : "IS_DOWNLOADED"}, true)>
-            <#assign downloadStatus = partyAttrIsDownload.attrValue!"">
+            <#assign partyAttrIsDownload = delegator.findOne("PartyAttribute", {"partyId" : party.partyId, "attrName" : "IS_DOWNLOADED"}, true)?if_exists>
+            <#if partyAttrIsDownload?has_content>
+              <#assign downloadStatus = partyAttrIsDownload.attrValue!"">
+            </#if>
             <#if downloadStatus?has_content && downloadStatus == 'Y'>
                ${uiLabelMap.ExportStatusInfo}
             <#else>
@@ -120,6 +122,76 @@
    </div>
 </div>
 
+<#-- Start Phone Number -->
+      <#assign partyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", party.partyId))/>
+        <#-- Home Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_HOME"}) />
+      </#if>
+      <#if partyHomePhoneDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyHomePhoneDetails?if_exists) />
+        <#assign partyHomePhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyHomePhoneDetails?if_exists) />
+        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists)/>
+      </#if>
+      
+        <#-- Work Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_WORK"}) />
+      </#if>
+      <#if partyWorkPhoneDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyWorkPhoneDetails?if_exists) />
+        <#assign partyWorkPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyWorkPhoneDetails?if_exists) />
+        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists)/>
+        <#if partyWorkPhoneDetail?has_content && partyWorkPhoneDetail.extension?has_content>
+          <#assign partyWorkPhoneExt = partyWorkPhoneDetail.extension!/> 
+        </#if>
+      </#if>
+        
+        <#-- Cell Phone --> 
+      <#if partyContactDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_MOBILE"}) />
+      </#if>
+      <#if partyCellPhoneDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyCellPhoneDetails?if_exists) />
+        <#assign partyCellPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyCellPhoneDetails?if_exists) />
+        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists)/>
+      </#if>
+      
+<#if formattedHomePhone?has_content || formattedWorkPhone?has_content>
+<div class="infoRow">
+   <div class="infoEntry">
+   <#if formattedHomePhone?has_content>
+     <div class="infoCaption">
+      <label>${uiLabelMap.HomePhoneCaption}</label>
+     </div>
+     <div class="infoValue medium">
+       ${formattedHomePhone!}
+     </div>
+   </#if>
+   <#if formattedWorkPhone?has_content>
+     <div class="infoValue">
+      <label>${uiLabelMap.WorkPhoneCaption}</label>
+     </div>
+     <div class="infoValue">
+       ${formattedWorkPhone!}<#if partyWorkPhoneExt?has_content>&nbsp;x${partyWorkPhoneDetail.extension!}</#if>
+     </div>
+    </#if> 
+   </div>
+</div>
+</#if>
+
+<#if formattedCellPhone?has_content>
+<div class="infoRow">
+   <div class="infoEntry">
+     <div class="infoCaption">
+      <label>${uiLabelMap.CellPhoneCaption}</label>
+     </div>
+     <div class="infoValue medium">
+       ${formattedCellPhone!}
+     </div>
+   </div>
+</div>
+</#if>
 <!-- end customerDetailGeneralInfo.ftl -->
 
 

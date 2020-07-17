@@ -1,7 +1,7 @@
 <#if requestAttributes.osafeCapturePlus?exists>
     <#assign osafeCapturePlus = requestAttributes.osafeCapturePlus/>
     <#if osafeCapturePlus.isNotEmpty()>
-        <#assign assignedComponentId = osafeCapturePlus.getComponentId(fieldPurpose!)/>
+        <#assign assignedComponentId = osafeCapturePlus.getComponentId(fieldPurpose!)!""/>
         <#if assignedComponentId?has_content>
             <#list osafeCapturePlus.getOsafeCapturePlusUseInfoIter() as osafeCapturePlusUsed>
                 <#if (osafeCapturePlusUsed.getFieldPurpose() == fieldPurpose!)>

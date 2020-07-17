@@ -1,13 +1,13 @@
 <div id="pdpSelectableFeature">
 <fieldset>
 <#assign inStock = true />
-<#assign isSellable = Static["org.ofbiz.product.product.ProductWorker"].isSellable(product?if_exists) />
+<#assign isSellable = Static["org.ofbiz.product.product.ProductWorker"].isSellable(currentProduct?if_exists) />
 <#if !isSellable>
  <#assign inStock=false/>
 </#if>
 
-<#if product.isVirtual?if_exists?upper_case == "Y">
-  <#if !product.virtualVariantMethodEnum?exists || product.virtualVariantMethodEnum == "VV_VARIANTTREE">
+<#if currentProduct.isVirtual?if_exists?upper_case == "Y">
+  <#if !currentProduct.virtualVariantMethodEnum?exists || currentProduct.virtualVariantMethodEnum == "VV_VARIANTTREE">
    <#if variantTree?exists && (variantTree.size() > 0)>
    <#assign featureOrderSize = featureOrder?size>
     <#assign featureIdx=0/>
@@ -111,24 +111,24 @@
             </select>
       </div>
     </#list>
-    <input type="hidden" name="product_id" value="${product.productId}"/>
+    <input type="hidden" name="product_id" value="${currentProduct.productId}"/>
     <input type="hidden" name="add_product_id" id="add_product_id" value="NULL"/>
     <div>
       <b><span id="product_id_display"> </span></b>
       <b><div id="variant_price_display"> </div></b>
     </div>
   <#else>
-    <input type="hidden" name="product_id" value="${product.productId}"/>
+    <input type="hidden" name="product_id" value="${currentProduct.productId}"/>
     <input type="hidden" name="add_product_id" value="NULL"/>
     <#assign inStock = false>
   </#if>
  </#if>
 <#else>
-  <input type="hidden" name="add_product_id" value="${product.productId}" />
+  <input type="hidden" name="add_product_id" value="${currentProduct.productId}" />
 </#if>
 </fieldset>
 </div>
 <#-- Prefill first select box (virtual products only) -->
 <#if variantTree?exists && 0 < variantTree.size()>
-<script language="JavaScript" type="text/javascript">eval("list" + "${featureOrderFirst}" + "()");</script>
-  </#if>
+  <script language="JavaScript" type="text/javascript">eval("list" + "${featureOrderFirst}" + "()");</script>
+</#if>

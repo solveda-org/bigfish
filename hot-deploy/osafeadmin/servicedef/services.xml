@@ -1458,6 +1458,137 @@
         <attribute name="promoCodeThruDate" type="String" mode="IN" optional="true"/>
     </service>
 
+    <service name="createShipChargeGroup" engine="group" auth="false">
+        <description>
+         Create the Shipping Charge
+        </description>
+        <group>
+            <invoke name="createShipCharge" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createShipCharge" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="createShipCharge">
+        <description>Create the Shipping Charge</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productStoreShipMethId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="minTotal" type="String" mode="IN" optional="true"/>
+        <attribute name="maxTotal" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="orderFlatPrice" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    
+    <service name="updateShipChargeGroup" engine="group" auth="false">
+        <description>
+         Update the Shipping Charge
+        </description>
+        <group>
+            <invoke name="updateShipCharge" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateShipCharge" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="updateShipCharge">
+        <description>
+        Update the Shipping Charge
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productStoreShipMethId" type="String" mode="IN" optional="true"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="minTotal" type="String" mode="IN" optional="true"/>
+        <attribute name="maxTotal" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
+        <attribute name="orderFlatPrice" type="String" mode="IN" optional="true"/>
+        <attribute name="shipmentCostEstimateId" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="createShipChargeCarrierGroup" engine="group" auth="false">
+        <description>
+         Create the Shipping Charge Carrier
+        </description>
+        <group>
+            <invoke name="createShipChargeCarrier" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createShipChargeCarrier" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="createShipChargeCarrier">
+        <description>Create the Shipping Charge</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="deleteShipChargeGroup" engine="group" auth="false">
+        <description>
+         Delete the Shipping Charge and render success message
+        </description>
+        <group>
+            <invoke name="deleteShipCharge" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="deleteShipCharge" engine="simple" auth="false" 
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="deleteShipCharge">
+        <description>
+        Delete the Shipping Charge
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="productStoreShipMethId" type="String" mode="IN" optional="false"/>
+        <attribute name="shipmentCostEstimateId" type="String" mode="IN" optional="false"/>
+    </service>
+    
+    <service name="createCarrierShipGroup" engine="group" auth="false">
+        <description>
+         Create the Shipping Charge
+        </description>
+        <group>
+            <invoke name="createCarrierShip" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="createCarrierShip" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="createCarrierShip">
+        <description>Create the Carrier Shipment Method</description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="carrierServiceCode" type="String" mode="IN" optional="true"/>
+        <attribute name="optionalMessage" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
+    </service>
+    
+    <service name="updateCarrierShipGroup" engine="group" auth="false">
+        <description>
+         Update the Carrier Shipment Method
+        </description>
+        <group>
+            <invoke name="updateCarrierShip" result-to-context="true"/>
+            <invoke name="successMessage" result-to-context="true"/>
+        </group>
+    </service>
+    <service name="updateCarrierShip" engine="simple" auth="false"
+            location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminShippingServices.xml"
+            invoke="updateCarrierShip">
+        <description>
+        Update the Carrier Shipment Method
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <attribute name="partyId" type="String" mode="IN" optional="true"/>
+        <attribute name="shipmentMethodTypeId" type="String" mode="IN" optional="true"/>
+        <attribute name="carrierServiceCode" type="String" mode="IN" optional="true"/>
+        <attribute name="optionalMessage" type="String" mode="IN" optional="true"/>
+        <attribute name="sequenceNumber" type="String" mode="IN" optional="true"/>
+    </service> 
+
     <service name="updateCategoryMetatagGroup" engine="group" auth="false">
         <description>
          update Category Metatags as well as render success message
@@ -1938,9 +2069,17 @@
          update Payment etting and render success message
         </description>
         <group>
-            <invoke name="updateProductStorePaymentSetting" result-to-context="true"/>
+            <invoke name="updatePaymentSetting" result-to-context="true"/>
             <invoke name="successMessage" result-to-context="true"/>
         </group>
+    </service>
+    <service name="updatePaymentSetting" engine="simple" auth="true" location="component://osafeadmin/script/com/osafeadmin/services/OsafeAdminServices.xml"
+            invoke="updatePaymentSetting">
+        <description>
+         update Payment etting
+        </description>
+        <implements service="commonFormHiddenFields"/>
+        <implements service="updateProductStorePaymentSetting"/>
     </service>
     <service name="deletePaymentSettingGroup" engine="group" auth="true">
         <description>

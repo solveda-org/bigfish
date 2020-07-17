@@ -553,6 +553,28 @@
             </widgets>
         </section>
     </screen>
+    <screen name="commonDetailHelperText">
+        <section>
+            <widgets>
+                 <platform-specific>
+                     <html>
+                         <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonHelperText.ftl"/>
+                     </html>
+                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="commonListHelperText">
+        <section>
+            <widgets>
+                 <platform-specific>
+                     <html>
+                         <html-template location="component://osafeadmin/webapp/osafeadmin/templates/commonHelperText.ftl"/>
+                     </html>
+                 </platform-specific>
+            </widgets>
+        </section>
+    </screen>
 
     <screen name="previewContentDecorator">
         <section>

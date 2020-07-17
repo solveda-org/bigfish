@@ -2,7 +2,7 @@
 <#if cart.getOrderAttribute("STORE_LOCATION")?has_content>
 <div class="checkoutOrderStorePickup">
 	<div id="customerStorePickup">
-	<div class="displayBox storePickup">
+	<div class="displayBox">
 	    <div class="displayBoxHeader">
 	        <span class="displayBoxHeaderCaption">${uiLabelMap.StorePickupHeading} </span>
 	    </div>

@@ -9,6 +9,7 @@ import org.ofbiz.base.util.UtilValidate;
 import com.osafe.services.CatalogUrlServlet;
 import com.osafe.util.Util;
 import org.ofbiz.product.product.ProductWorker;
+import org.ofbiz.party.content.PartyContentWrapper;
 
 plpItem = request.getAttribute("plpItem");
 plpItemId = request.getAttribute("plpItemId");
@@ -33,7 +34,24 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
     }
 
     product = delegator.findOne("Product",UtilMisc.toMap("productId",productId), true);
-    context.priceMap = (dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "userLogin", userLogin)));
+    priceMap = (dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "userLogin", userLogin)));
+    context.priceMap = priceMap;
+    
+   // Setting variables required in the Manufacturer Info section 
+    if (UtilValidate.isNotEmpty(product)) 
+    {
+        productId = product.productId;
+        partyManufacturer=product.getRelatedOne("ManufacturerParty");
+        if (UtilValidate.isNotEmpty(partyManufacturer))
+        {
+          context.manufacturerPartyId = partyManufacturer.partyId;
+          PartyContentWrapper partyContentWrapper = new PartyContentWrapper(partyManufacturer, request);
+          context.partyContentWrapper = partyContentWrapper;
+          context.manufacturerDescription = partyContentWrapper.get("DESCRIPTION");
+          context.manufacturerProfileName = partyContentWrapper.get("PROFILE_NAME");
+          context.manufacturerProfileImageUrl = partyContentWrapper.get("PROFILE_IMAGE_URL");
+        }
+    }
     
     //retrieves Product related data when Product Id was received.
     if(UtilValidate.isNotEmpty(plpItemId)) {
@@ -43,7 +61,7 @@ if(UtilValidate.isNotEmpty(plpItem) || UtilValidate.isNotEmpty(plpItemId)) {
         productImageUrl = productContentWrapper.get("SMALL_IMAGE_URL");
         productImageAltUrl = productContentWrapper.get("SMALL_IMAGE_ALT_URL");
     	}
-        price = (dispatcher.runSync("calculateProductPrice", UtilMisc.toMap("product", product, "userLogin", userLogin))).defaultPrice ;
+        price = priceMap.defaultPrice ;
         productInternalName = product.internalName;
          if (UtilValidate.isNotEmpty(ProductWorker.getCurrentProductCategories(product))) {
              currentProductCategories =ProductWorker.getCurrentProductCategories(product);

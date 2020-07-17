@@ -5,27 +5,27 @@
     <!-- *** Caption *************************************** -->
     <!-- PDP -->
     <property key="pdpMainImage">
-        <value xml:lang="en">20</value>
+        <value xml:lang="en">10</value>
         <screen>PDP</screen>
         <description>Main Image Div</description>
     </property>
     <property key="pdpSeeLargerImage">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">130</value>
         <screen>PDP</screen>
         <description>See larger Image link Div</description>
     </property>
     <property key="pdpAlternateImage">
-        <value xml:lang="en">10</value>
+        <value xml:lang="en">120</value>
         <screen>PDP</screen>
         <description>Alternate Image Div</description>
     </property>
     <property key="pdpVideo360">
-        <value xml:lang="en">110</value>
+        <value xml:lang="en">0</value>
         <screen>PDP</screen>
         <description>PDP Product 360 Video</description>
     </property>
     <property key="pdpVideo">
-        <value xml:lang="en">120</value>
+        <value xml:lang="en">0</value>
         <screen>PDP</screen>
         <description>PDP Product Video</description>
     </property>
@@ -35,7 +35,7 @@
         <description>Introduction or Discontinuation Content Div</description>
     </property>
     <property key="pdpPriceList">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">60</value>
         <screen>PDP</screen>
         <description>List Price Div</description>
     </property>
@@ -53,19 +53,19 @@
         <value xml:lang="en">0</value>
         <screen>PDP</screen>
         <description>Price Saving Money Div</description>
-    </property> 
+    </property>
     <property key="pdpCustomerRating">
-        <value xml:lang="en">60</value>
+        <value xml:lang="en">70</value>
         <screen>PDP</screen>
         <description>Customer Rating Div</description>
     </property>
     <property key="pdpSelectableFeature">
-        <value xml:lang="en">70</value>
+        <value xml:lang="en">80</value>
         <screen>PDP</screen>
         <description>Selectable Features Div</description>
     </property>
     <property key="pdpAddToCart">
-        <value xml:lang="en">80</value>
+        <value xml:lang="en">90</value>
         <screen>PDP</screen>
         <description>Add To Cart Div</description>
     </property>
@@ -75,12 +75,12 @@
         <description>Volume Pricing Div</description>
     </property>
     <property key="pdpLongDescription">
-        <value xml:lang="en">90</value>
+        <value xml:lang="en">100</value>
         <screen>PDP</screen>
         <description>Long Description Div</description>
     </property>
     <property key="pdpDistinguishingFeature">
-        <value xml:lang="en">100</value>
+        <value xml:lang="en">110</value>
         <screen>PDP</screen>
         <description>Distinguishing Feature Div</description>
     </property>
@@ -119,23 +119,18 @@
         <screen>PDP</screen>
         <description>Tab Div</description>
     </property>
-    <property key="pdpManufacturer">
-        <value xml:lang="en">30</value>
-        <screen>PDP</screen>
-        <description>Manufacturer Div</description>
-    </property>
     <property key="pdpComplement">
-        <value xml:lang="en">140</value>
+        <value xml:lang="en">20</value>
         <screen>PDP</screen>
         <description>Complement Products Div</description>
     </property>
     <property key="pdpSocialMedia">
-        <value xml:lang="en">155</value>
+        <value xml:lang="en">30</value>
         <screen>PDP</screen>
         <description>Social Media Share Div</description>
     </property>
     <property key="pdpRecentlyViewed">
-        <value xml:lang="en">160</value>
+        <value xml:lang="en">140</value>
         <screen>PDP</screen>
         <description>Recently Viewed Products Div</description>
     </property>
@@ -150,16 +145,36 @@
         <description>Stock Legend Div</description>
     </property>
     <property key="pdpSeeMainImage">
-        <value xml:lang="en">130</value>
+        <value xml:lang="en">0</value>
         <screen>PDP</screen>
-        <description>See Main Image Div</description>
+        <description>Back To Main Image Div</description>
     </property>
-    <property key="pdpAdditional">
-        <value xml:lang="en">150</value>
+   <property key="pdpAdditional">
+        <value xml:lang="en">0</value>
         <screen>PDP</screen>
         <description>Additional Content By Category Div</description>
     </property>
-    <!-- PDP-Tabs -->
+    <property key="pdpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="pdpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="pdpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="pdpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDP</screen>
+        <description>Manufacturer Name</description>
+    </property>
+    <!-- PDP-Tabs-->
     <property key="pdpVolumePricing">
         <value xml:lang="en">0</value>
         <screen>PDP-Tabs</screen>
@@ -176,38 +191,38 @@
         <description>Distinguishing Feature Div</description>
     </property>
     <property key="pdpSalesPitch">
-        <value xml:lang="en">2</value>
+        <value xml:lang="en">0</value>
         <screen>PDP-Tabs</screen>
         <description>Sales Pitch Div</description>
     </property>
     <property key="pdpSpecialInstructions">
-        <value xml:lang="en">3</value>
+        <value xml:lang="en">0</value>
         <screen>PDP-Tabs</screen>
         <description>Special Instructions Div</description>
     </property>
     <property key="pdpDeliveryInfo">
-        <value xml:lang="en">1</value>
+        <value xml:lang="en">0</value>
         <screen>PDP-Tabs</screen>
         <description>Delivery Div</description>
     </property>
     <property key="pdpDirections">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">3</value>
         <screen>PDP-Tabs</screen>
         <description>Directions Div</description>
     </property>
     <property key="pdpIngredients">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">2</value>
         <screen>PDP-Tabs</screen>
         <description>Ingredients Div</description>
     </property>
     <property key="pdpWarnings">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">1</value>
         <screen>PDP-Tabs</screen>
         <description>Warnings Div</description>
     </property>
     <!-- Quicklook -->
     <property key="pdpMainImage">
-        <value xml:lang="en">20</value>
+        <value xml:lang="en">50</value>
         <screen>Quicklook</screen>
         <description>Main Image Div</description>
     </property>
@@ -217,17 +232,17 @@
         <description>See larger Image link Div</description>
     </property>
     <property key="pdpAlternateImage">
-        <value xml:lang="en">10</value>
+        <value xml:lang="en">130</value>
         <screen>Quicklook</screen>
         <description>Alternate Image Div</description>
     </property>
     <property key="pdpVideo360">
-        <value xml:lang="en">90</value>
+        <value xml:lang="en">0</value>
         <screen>Quicklook</screen>
         <description>PDP Product 360 Video</description>
     </property>
     <property key="pdpVideo">
-        <value xml:lang="en">100</value>
+        <value xml:lang="en">0</value>
         <screen>Quicklook</screen>
         <description>PDP Product Video</description>
     </property>
@@ -242,7 +257,7 @@
         <description>List Price Div</description>
     </property>
     <property key="pdpPriceOnLine">
-        <value xml:lang="en">30</value>
+        <value xml:lang="en">70</value>
         <screen>Quicklook</screen>
         <description>Online Price Div</description>
     </property>
@@ -257,27 +272,27 @@
         <description>Price Saving Money Div</description>
     </property>
     <property key="pdpCustomerRating">
-        <value xml:lang="en">40</value>
+        <value xml:lang="en">80</value>
         <screen>Quicklook</screen>
         <description>Customer Rating Div</description>
     </property>
     <property key="pdpSelectableFeature">
-        <value xml:lang="en">50</value>
+        <value xml:lang="en">90</value>
         <screen>Quicklook</screen>
         <description>Selectable Features Div</description>
     </property>
     <property key="pdpAddToCart">
-        <value xml:lang="en">60</value>
+        <value xml:lang="en">100</value>
         <screen>Quicklook</screen>
         <description>Add To Cart Div</description>
     </property>
     <property key="pdpLongDescription">
-        <value xml:lang="en">70</value>
+        <value xml:lang="en">110</value>
         <screen>Quicklook</screen>
         <description>Long Description Div</description>
     </property>
     <property key="pdpDistinguishingFeature">
-        <value xml:lang="en">80</value>
+        <value xml:lang="en">120</value>
         <screen>Quicklook</screen>
         <description>Distinguishing Feature Div</description>
     </property>
@@ -312,7 +327,7 @@
         <description>Warnings Div</description>
     </property>
     <property key="pdpProductName">
-        <value xml:lang="en">25</value>
+        <value xml:lang="en">60</value>
         <screen>Quicklook</screen>
         <description>Product Name Div</description>
     </property>
@@ -322,11 +337,31 @@
         <description>See Main Image Div</description>
     </property>
     <property key="plpSeeItemDetails">
-        <value xml:lang="en">110</value>
+        <value xml:lang="en">140</value>
         <screen>Quicklook</screen>
         <description>See Item Details Div</description>
     </property>
-<!-- PLP -->
+    <property key="pdpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="pdpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="pdpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="pdpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>Quicklook</screen>
+        <description>Manufacturer Name</description>
+    </property>
+    <!-- PLP -->
     <property key="plpDetailLink">
         <value xml:lang="en">30</value>
         <screen>PLP</screen>
@@ -335,7 +370,7 @@
     <property key="plpPriceList">
         <value xml:lang="en">0</value>
         <screen>PLP</screen>
-        <description>Product List price div</description>
+        <description>Product price div</description>
     </property>
     <property key="plpPriceOnline">
         <value xml:lang="en">40</value>
@@ -353,17 +388,17 @@
         <description>PLP Price Saving Money div</description>
     </property>
     <property key="plpSwatchImage">
-        <value xml:lang="en">20</value>
+        <value xml:lang="en">50</value>
         <screen>PLP</screen>
         <description>Swatch Image Div</description>
     </property>
     <property key="plpTertiaryInfo">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>PLP</screen>
         <description>Product Tetiary Info Div</description>
     </property>
     <property key="plpProdReview">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">60</value>
         <screen>PLP</screen>
         <description>Customer Rating Div</description>
     </property>
@@ -372,19 +407,39 @@
         <screen>PLP</screen>
         <description>Main Image Div</description>
     </property>
+    <property key="plpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="plpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="plpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="plpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PLP</screen>
+        <description>Manufacturer Name</description>
+    </property>
     <!-- PDP-Complement -->
     <property key="plpDetailLink">
-        <value xml:lang="en">2</value>
+        <value xml:lang="en">30</value>
         <screen>PDP-Complement</screen>
         <description>Product Info Link div</description>
     </property>
     <property key="plpPriceList">
         <value xml:lang="en">0</value>
         <screen>PDP-Complement</screen>
-        <description>Product List price div</description>
+        <description>Product price div</description>
     </property>
     <property key="plpPriceOnline">
-        <value xml:lang="en">3</value>
+        <value xml:lang="en">40</value>
         <screen>PDP-Complement</screen>
         <description>Product Online price div</description>
     </property>
@@ -394,7 +449,7 @@
         <description>Swatch Image Div</description>
     </property>
     <property key="plpTertiaryInfo">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>PDP-Complement</screen>
         <description>Product Tetiary Info Div</description>
     </property>
@@ -404,9 +459,29 @@
         <description>Customer Rating Div</description>
     </property>
     <property key="plpThumbImage">
-        <value xml:lang="en">1</value>
+        <value xml:lang="en">10</value>
         <screen>PDP-Complement</screen>
         <description>Main Image Div</description>
+    </property>
+    <property key="plpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="plpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="plpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="plpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Complement</screen>
+        <description>Manufacturer Name</description>
     </property>
     <!-- PDP-Recent -->
     <property key="plpDetailLink">
@@ -417,7 +492,7 @@
     <property key="plpPriceList">
         <value xml:lang="en">0</value>
         <screen>PDP-Recent</screen>
-        <description>Product List price div</description>
+        <description>Product price div</description>
     </property>
     <property key="plpPriceOnline">
         <value xml:lang="en">30</value>
@@ -425,7 +500,7 @@
         <description>Product Online price div</description>
     </property>
     <property key="plpSwatchImage">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">40</value>
         <screen>PDP-Recent</screen>
         <description>Swatch Image Div</description>
     </property>
@@ -444,14 +519,34 @@
         <screen>PDP-Recent</screen>
         <description>Main Image Div</description>
     </property>
+    <property key="plpManufacturerDescription">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer Text, could be a description, bio, etc</description>
+    </property>
+    <property key="plpManufacturerHeading">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer Heading (could be Designer for example)</description>
+    </property>
+    <property key="plpManufacturerImage">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer Image or Logo</description>
+    </property>
+    <property key="plpManufacturerName">
+        <value xml:lang="en">0</value>
+        <screen>PDP-Recent</screen>
+        <description>Manufacturer Name</description>
+    </property>
     <!-- CLP -->
     <property key="clpThumbImage">
-        <value xml:lang="en">1</value>
+        <value xml:lang="en">10</value>
         <screen>CLP</screen>
         <description>Main Image Div</description>
     </property>
     <property key="clpProductListLink">
-        <value xml:lang="en">2</value>
+        <value xml:lang="en">20</value>
         <screen>CLP</screen>
         <description>Product List Link Div</description>
     </property>
@@ -460,34 +555,33 @@
         <screen>CLP</screen>
         <description>Long Description Div</description>
     </property>
-<!-- CheckoutOrderSummary -->
-    <property key="checkoutOrderPromoCode">
-        <value xml:lang="en">0</value>
+    <!-- CheckoutOrderSummary --><property key="checkoutOrderPromoCode">
+        <value xml:lang="en">10</value>
         <screen>CheckoutOrderSummary</screen>
         <description>Promo Code Div</description>
     </property>
     <property key="checkoutOrderItems">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>CheckoutOrderSummary</screen>
         <description>Summary Div</description>
     </property>
     <property key="checkoutOrderStorePickup">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">30</value>
         <screen>CheckoutOrderSummary</screen>
         <description>Store Pickup Div</description>
     </property>
     <property key="checkoutOrderPayments">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">35</value>
         <screen>CheckoutOrderSummary</screen>
         <description>Payments Div</description>
     </property>
     <property key="checkoutOrderBillingAddress">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">40</value>
         <screen>CheckoutOrderSummary</screen>
         <description>Billing Address Div</description>
     </property>
     <property key="checkoutOrderShippingAddress">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">50</value>
         <screen>CheckoutOrderSummary</screen>
         <description>Shipping Address Div</description>
     </property>
@@ -498,7 +592,7 @@
         <description>Summary Div</description>
     </property>
     <property key="checkoutOrderStorePickup">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">10</value>
         <screen>CheckoutOrderSummaryPayPal</screen>
         <description>Store Pickup Div</description>
     </property>
@@ -513,8 +607,60 @@
         <description>Shipping Address Div</description>
     </property>
     <property key="checkoutOrderPayPalValidated">
-        <value xml:lang="en">0</value>
+        <value xml:lang="en">20</value>
         <screen>CheckoutOrderSummaryPayPal</screen>
         <description>PayPal Validated Div</description>
+    </property>
+<!-- ShowCart -->
+    <property key="showCartItems">
+        <value xml:lang="en">20</value>
+        <screen>ShowCart</screen>
+        <description>Cart Items Div</description>
+    </property>
+    <property key="showCartPromoCode">
+        <value xml:lang="en">10</value>
+        <screen>ShowCart</screen>
+        <description>Promo Code Div</description>
+    </property>
+<!-- Person-Info -->
+    <property key="personInfoFirstName">
+        <value xml:lang="en">30</value>
+        <screen>Person-Info</screen>
+        <description>First Name Div</description>
+    </property>
+    <property key="personInfoLastName">
+        <value xml:lang="en">10</value>
+        <screen>Person-Info</screen>
+        <description>Last Name Div</description>
+    </property>
+    <property key="personInfoGender">
+        <value xml:lang="en">20</value>
+        <screen>Person-Info</screen>
+        <description>Gender Div</description>
+    </property>
+    <property key="personInfoDobMMDDYYYY">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>DOB-MMDDYYYY format Div</description>
+    </property>
+    <property key="personInfoDobMMDD">
+        <value xml:lang="en">0</value>
+        <screen>Person-Info</screen>
+        <description>DOB-MMDD format Div</description>
+    </property>
+    <property key="personInfoPhoneHome">
+        <value xml:lang="en">40</value>
+        <screen>Person-Info</screen>
+        <description>Phone Home Div</description>
+    </property>
+    <property key="personInfoPhoneCell">
+        <value xml:lang="en">50</value>
+        <screen>Person-Info</screen>
+        <description>Phone Cell Div</description>
+    </property>
+    <property key="personInfoPhoneWork">
+        <value xml:lang="en">51</value>
+        <screen>Person-Info</screen>
+        <description>Phone Work Div</description>
     </property>
 </resource>

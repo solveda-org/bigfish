@@ -127,6 +127,9 @@
         case "CLP-Thumb":
           imgName="NotFoundImageCLPThumb.jpg";
           break;
+        case "MANU-Image":
+          imgName="NotFoundImage.jpg";
+          break;
       }
       elem.src = imgUrl + imgName;
       // disable onerror to prevent endless loop

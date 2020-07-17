@@ -1245,7 +1245,7 @@
             </widgets>
         </section>
     </screen>
-
+    
     <screen name="reviewDetail">
         <section>
             <actions>
@@ -1590,7 +1590,29 @@
             </widgets>
         </section>
     </screen>
-
+    
+    <screen name="shippingNavDescriptor">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShippingTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="helperFileName" value ="shippingNavigationHelp.htm"/>
+                <set field="navigationCategory" value="SHIPPING"/>
+                <set field="activeTopMenuItem" value="ShippingNav"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                        <container id="shippingNavDescriptor" style="navigationDescriptor">
+                            <include-screen name="navigationDescriptor" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                        </container>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+  
     <screen name="catalogManagement">
         <section>
             <actions>
@@ -2237,7 +2259,456 @@
             </widgets>
         </section>
     </screen>
-  
+    
+    <screen name="shipChargeManagement">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShipChargeListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="searchBoxHeading" value="${uiLabelMap.SearchHeading}"/>
+                <set field="listBoxHeading" value="${uiLabelMap.ShipChargeListHeading}"/>
+                <set field="searchRequest" value="shippingReview"/>
+                <set field="searchFormName" value="shipChargeSearch"/>
+                <set field="preRetrieved" value ="${parameters.preRetrieved}" default-value="Y"/>
+                <set field="initializedCB" value ="N"/>
+                <set field="addAction" value="addShipCharge"/>
+                <set field="addActionBtn" value="${uiLabelMap.AddShipChargeBtn}"/>
+                <set field="addAnotherAction" value="addShipChargeCarrier"/>
+                <set field="addAnotherActionBtn" value="${uiLabelMap.AddShipChargeCarrierBtn}"/>
+                <set field="searchCriteriaKey" value ="SEARCH_CRITERIA_REVIEW"/>
+                <set field="helperFileName" value ="shipChargeManagementHelp.htm"/>
+                <set field="activeTopMenuItem" value="ShippingNav"/>
+                <set field="activeSubMenuItem" value="ShipChargeNav"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+		                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/shipping/shipChargeList.groovy"/>
+                      </actions>
+                      <widgets>
+                        <!-- <container id="shipChargeList" style="commonSearchList"> -->
+                        <container id="shipChargeList" style="commonSearchList">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonSearchList.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="searchBoxBody">
+                                             <include-screen name="shipChargeSearch"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonSearchButton">
+                                             <include-screen name="commonSearchButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listPagingBody">
+                                             <include-screen name="ListPaging" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listBoxBody">
+                                             <include-screen name="shipChargeList"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonListButton">
+                                             <include-screen name="commonListButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listNoResultBody">
+                                             <include-screen name="ListNoResult" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                        <container>
+                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="shipChargeSearch">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/shipping/shipChargeSearch.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="shipChargeList">
+        <section>
+            <actions>
+            </actions>
+            <widgets>
+                <platform-specific>
+                    <html>
+                      <html-template location="component://osafeadmin/webapp/osafeadmin/shipping/shipChargeList.ftl"/>
+                    </html>
+                </platform-specific>
+            </widgets>
+        </section>
+    </screen>
+    <screen name="shipChargeDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShipChargeDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="backAction" value="shipChargeManagement"/>
+                <set field="detailFormName" value="shipChargeFORM"/>
+                <set field="updateAction" value="updateShipCharge"/>
+                <set field="mode" value="edit"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.ShipChargeDefinitionHeading}"/>
+                <set field="helperFileName" value ="shipChargeDetailHelp.htm"/>
+                <set field="activeSubMenuItem" value="ShipChargeViewNav"/>
+                <set field="confirmAction" value="deleteShipCharge"/>
+			    <set field="confirmActionBtn" value="${uiLabelMap.DeleteBtn}"/>
+			    <set field="confirmDialogText" value="${uiLabelMap.DeleteShipChargeConfirmText}"/>
+			    <set field="confirmDeleteId" value="${productStoreShipMethId}"/>
+            </actions>
+            <widgets>
+                <include-screen name="commonShipChargeDetail" />
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addShipCharge">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShipChargeDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="backAction" value="shipChargeManagement"/>
+                <set field="detailFormName" value="shipChargeFORM"/>
+                <set field="updateAction" value="createShipCharge"/>
+                <set field="mode" value="add"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.ShipChargeDefinitionHeading}"/>
+                <set field="helperFileName" value ="shipChargeDetailHelp.htm"/>
+                <set field="activeSubMenuItem" value="ShipChargeAddNav"/>
+            </actions>
+            <widgets>
+                <include-screen name="commonShipChargeDetail" />
+            </widgets>
+        </section>
+    </screen>
+    <screen name="addShipChargeCarrier">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShipChargeCarrierDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="backAction" value="shipChargeManagement"/>
+                <set field="detailFormName" value="shipChargeCarrierFORM"/>
+                <set field="updateAction" value="createShipChargeCarrier"/>
+                <set field="mode" value="add"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.ShipChargeCarrierDefinitionHeading}"/>
+                <set field="helperFileName" value ="shipChargeCarrierDetailHelp.htm"/>
+                <set field="activeSubMenuItem" value="ShipChargeCarrierAddNav"/>
+            </actions>
+            <widgets>
+                <include-screen name="shipChargeCarrierDetail" />
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="commonShipChargeDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="activeTopMenuItem" value="ShippingNav"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+			                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/shipping/shipChargeDetail.groovy"/>
+                      </actions>
+                      <widgets>
+                        <container id="commonShipChargeDetail" style="commonDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDetail.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="detailInfoBoxBody">
+                                             <platform-specific>
+								                    <html>
+								                      <html-template location="component://osafeadmin/webapp/osafeadmin/shipping/shipChargeDetail.ftl"/>
+								                    </html>
+								             </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailActionButton">
+                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonConfirm">
+                                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+          
+    <screen name="shipChargeCarrierDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="activeTopMenuItem" value="ShippingNav"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+			                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/shipping/shipChargeDetail.groovy"/>
+                      </actions>
+                      <widgets>
+                        <container id="shipChargeCarrierDetail" style="commonDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDetail.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="detailInfoBoxBody">
+                                             <platform-specific>
+								                    <html>
+								                      <html-template location="component://osafeadmin/webapp/osafeadmin/shipping/shipChargeCarrierDetail.ftl"/>
+								                    </html>
+								             </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailActionButton">
+                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonLookup">
+                                            <include-screen name="commonLookup"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+
+    
+    <screen name="carrierShipList">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.CarrierShipListTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="listBoxHeading" value="${uiLabelMap.CarrierShipListHeading}"/>
+                <set field="preRetrieved" value ="${parameters.preRetrieved}" default-value="Y"/>
+                <set field="initializedCB" value ="N"/>
+                <set field="addAction" value="addAnotherShipCarrier"/>
+                <set field="addActionBtn" value="${uiLabelMap.AddShipChargeCarrierBtn}"/>
+                <set field="addAnotherAction" value="addCarrierShip"/>
+                <set field="addAnotherActionBtn" value="${uiLabelMap.AddShipMethodBtn}"/>
+                <set field="helperFileName" value ="shipChargeManagementHelp.htm"/>
+                <set field="activeTopMenuItem" value="ShippingNav"/>
+                <set field="activeSubMenuItem" value="CarrierNav"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+ 		            	<script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/shipping/carrierShipList.groovy"/>
+                      </actions>
+                      <widgets>
+                        <container id="contentSpotList" style="commonSearchList">
+                            <platform-specific>
+                                <html>                           		
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonList.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="listBoxBody">
+							                <platform-specific>
+							                    <html>
+							                      <html-template location="component://osafeadmin/webapp/osafeadmin/shipping/carrierShipList.ftl"/>
+							                    </html>
+							                </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonListButton">
+                                             <include-screen name="commonListButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+     <screen name="carrierShipDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.CarrierShipDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="backAction" value="carrierShipList"/>
+                <set field="detailFormName" value="carrierShipFORM"/>
+                <set field="updateAction" value="updateCarrierShip"/>
+                <set field="mode" value="edit"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.CarrierShipDetailHeading}"/>
+                <set field="helperFileName" value ="carrierShipDetailHelp.htm"/>
+			    <set field="activeTopMenuItem" value="ShippingNav"/>
+			    <set field="activeSubMenuItem" value="CarrierShipViewNav"/>
+            </actions>
+            <widgets>
+                <include-screen name="commonCarrierShipDetail" />
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="addCarrierShip">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.CarrierShipDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="backAction" value="carrierShipList"/>
+                <set field="detailFormName" value="carrierShipFORM"/>
+                <set field="updateAction" value="createCarrierShip"/>
+                <set field="mode" value="add"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.CarrierShipDetailHeading}"/>
+                <set field="helperFileName" value ="carrierShipDetailHelp.htm"/>
+			    <set field="activeTopMenuItem" value="ShippingNav"/>
+			    <set field="activeSubMenuItem" value="CarrierShipViewNav"/>
+            </actions>
+            <widgets>
+                <include-screen name="commonCarrierShipDetail" />
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="commonCarrierShipDetail">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="activeTopMenuItem" value="ShippingNav"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+                     <section>
+                      <actions>
+			                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/shipping/carrierShipDetail.groovy"/>
+                      </actions>
+                      <widgets>
+                        <container id="commonShipChargeDetail" style="commonDetail">
+                            <platform-specific>
+                                <html>
+                                    <html-template-decorator location="component://osafeadmin/webapp/osafeadmin/templates/commonDetail.ftl">
+                                        <html-template-decorator-section name="commonFormJS">
+                                            <include-screen name="commonJS" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="tooltipBody">
+                                             <include-screen name="tooltip" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="detailInfoBoxBody">
+                                             <platform-specific>
+								                    <html>
+								                      <html-template location="component://osafeadmin/webapp/osafeadmin/shipping/carrierShipDetail.ftl"/>
+								                    </html>
+								             </platform-specific>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailActionButton">
+                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonConfirm">
+                                            <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                    </html-template-decorator>
+                                </html>
+                            </platform-specific>
+                        </container>
+                       </widgets>
+                      </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="addShipCarrier">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShipChargeCarrierDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="backAction" value="addCarrierShip"/>
+                <set field="detailFormName" value="shipChargeCarrierFORM"/>
+                <set field="updateAction" value="createShipCarrier"/>
+                <set field="mode" value="add"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.ShipChargeCarrierDefinitionHeading}"/>
+                <set field="helperFileName" value ="shipChargeCarrierDetailHelp.htm"/>
+                <set field="activeSubMenuItem" value="ShipChargeCarrierAddNav"/>
+            </actions>
+            <widgets>
+                <include-screen name="shipChargeCarrierDetail" />
+            </widgets>
+        </section>
+    </screen>
+    
+    <screen name="addAnotherShipCarrier">
+        <section>
+            <actions>
+                <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
+                <set field="pageTitle" value="${uiLabelMap.ShipChargeCarrierDetailTitle}"/>
+                <set field="title" from-field="pageTitle"/>
+                <set field="backAction" value="carrierShipList"/>
+                <set field="detailFormName" value="shipChargeCarrierFORM"/>
+                <set field="updateAction" value="createAnotherShipCarrier"/>
+                <set field="mode" value="add"/>
+                <set field="detailInfoBoxHeading" value="${uiLabelMap.ShipChargeCarrierDefinitionHeading}"/>
+                <set field="helperFileName" value ="shipChargeCarrierDetailHelp.htm"/>
+                <set field="activeSubMenuItem" value="ShipChargeCarrierAddNav"/>
+            </actions>
+            <widgets>
+                <include-screen name="shipChargeCarrierDetail" />
+            </widgets>
+        </section>
+    </screen>
+
     <screen name="siteInfoList">
         <section>
             <actions>
@@ -2257,7 +2728,7 @@
             </widgets>
         </section>
     </screen>
-
+    
     <screen name="siteInfoContentDetail">
         <section>
             <actions>
@@ -2359,7 +2830,6 @@
             </widgets>
         </section>
     </screen>
-    
     
 	 <screen name="ptsList">
         <section>
@@ -3443,6 +3913,7 @@
                 <set field="helperFileName" value ="manageUiLabelDetailHelp.htm"/>
                 <set field="activeTopMenuItem" value="AdminNav"/>
                 <set field="activeSubMenuItem" value="AdminLabelCaptionNav"/>
+                
             </actions>
             <widgets>
                 <include-screen name="uiLabelDetail" />
@@ -3460,6 +3931,7 @@
                      <section>
                           <actions>
                                 <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/uiLabelDetail.groovy"/>
+                                <set field="helperText" value="${uiLabelMap.CacheResetHelperInfo}"/>
                           </actions>
                       <widgets>
                         <container id="manageUiLabelDetail" style="manageUiLabelDetail">
@@ -3481,6 +3953,9 @@
                                         </html-template-decorator-section>
                                         <html-template-decorator-section name="commonConfirm">
                                             <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonDetailHelperText">
+                                            <include-screen name="commonDetailHelperText" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
                                     </html-template-decorator>
                                 </html>
@@ -4805,7 +5280,7 @@
                        </widgets>
                       </section>
                     </decorator-section>
-                </decorator-screen>
+f                </decorator-screen>
             </widgets>
         </section>
     </screen>
@@ -6887,6 +7362,7 @@
                      <section>
                       <actions>
                             <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/manageDivSequence.groovy"/>
+                            <set field="helperText" value="${uiLabelMap.CacheResetHelperInfo}"/>
                       </actions>
                       <widgets>
                         <container id="manageDivSequenceDetail" style="commonSearchList">
@@ -6912,10 +7388,19 @@
                                         <html-template-decorator-section name="commonDetailActionButton">
                                             <include-screen name="commonDetailActionButton" location="component://osafeadmin/widget/CommonScreens.xml"/>
                                         </html-template-decorator-section>
+                                        <html-template-decorator-section name="commonListHelperText">
+                                            <include-screen name="commonListHelperText" location="component://osafeadmin/widget/CommonScreens.xml"/>
+                                        </html-template-decorator-section>
                                     </html-template-decorator>
                                 </html>
                             </platform-specific>
                         </container>
+                        
+                        
+                 
+                        
+                        
+                        
                         <container>
                             <include-screen name="commonConfirm" location="component://osafeadmin/widget/CommonScreens.xml"/>
                         </container>
@@ -7407,6 +7892,7 @@
                 <property-map resource="OSafeAdminUiLabels" map-name="uiLabelMap" global="true" />
                 <set field="pageTitle" value="${uiLabelMap.PaymentSettingDetailTitle}"/>
                 <set field="title" from-field="pageTitle"/>
+                <set field="mode" value="edit"/>
                 <entity-one entity-name="PaymentMethodType" value-field="paymentMethodType" auto-field-map="true"/>
                 <set field="detailInfoBoxHeading" value="${uiLabelMap.paymentSettingDetailHeading}: ${paymentMethodType.description}"/>
                 <set field="backAction" value="paymentSettingManagement"/>
@@ -7426,11 +7912,7 @@
                     <decorator-section name="body">
                         <section>
                            <actions>
-                                <entity-one entity-name="ProductStorePaymentSetting" value-field="productStorePaymentSetting">
-                                    <field-map field-name="productStoreId" from-field="productStoreId"/>
-                                    <field-map field-name="paymentMethodTypeId" from-field="parameters.paymentMethodTypeId"/>
-                                    <field-map field-name="paymentServiceTypeEnumId" from-field="parameters.paymentServiceTypeEnumId"/>
-                                </entity-one>
+                                <script location="component://osafeadmin/webapp/osafeadmin/WEB-INF/actions/admin/paymentSettingDetail.groovy"/>
                             </actions>
                             <widgets>
                                 <container id="paymentSettingDetail" style="commonDetail">

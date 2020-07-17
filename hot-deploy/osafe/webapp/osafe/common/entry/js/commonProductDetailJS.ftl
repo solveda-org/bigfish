@@ -158,14 +158,13 @@
     }
 
     function setDetailImage(detailImageUrl) {
-      if (detailImageUrl == '') {
-        detailImageUrl = "/osafe_theme/images/user_content/images/NotFoundImagePDPDetail.jpg";
-      }
-      document.images['largeImage'].src = detailImageUrl;
-      var image = new Image();
+        var image = new Image();
         image.src = detailImageUrl+ "?" + new Date().getTime();
         image.onerror = function () {
           jQuery('#largeImage').attr('src', '/osafe_theme/images/user_content/images/NotFoundImagePDPDetail.jpg');
+      };
+      image.onload = function () {
+          jQuery('#largeImage').attr('src', detailImageUrl);
       };
     }
     
@@ -216,13 +215,13 @@
             if(VARMAP[mapKey]) {
                 if(jQuery('#mainImage_'+VARMAP[mapKey]).length) { 
                     var variantMainImages = jQuery('#mainImage_'+VARMAP[mapKey]).clone();
-                    jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+                    //jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
                     jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
                     detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
                     jQuery('#productDetailsImageContainer').html(variantMainImages.html());
 
                     var variantAltImages = jQuery('#altImage_'+VARMAP[mapKey]).clone();
-                    jQuery(variantAltImages).find('img').each(function(){ jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+                    //jQuery(variantAltImages).find('img').each(function(){ jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
                     jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
 
                     var variantLargeImages = jQuery('#largeImageUrl_'+VARMAP[mapKey]).clone();
@@ -274,13 +273,13 @@
         var varProductId = jQuery('#add_product_id').val();
         if(jQuery('#mainImage_'+varProductId).length) {
             var variantMainImages = jQuery('#mainImage_'+varProductId).clone();
-            jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+            //jQuery(variantMainImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
             jQuery(variantMainImages).find('a').attr('class', 'innerZoom');
             detailImgUrl = jQuery(variantMainImages).find('a').attr('href');
             jQuery('#productDetailsImageContainer').html(variantMainImages.html());
 
             var variantAltImages = jQuery('#altImage_'+varProductId).clone();
-            jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
+            //jQuery(variantAltImages).find('img').each(function(){jQuery(this).attr('src', jQuery(this).attr('title')+ "?" + new Date().getTime());})
             jQuery('#eCommerceProductAddImage').html(variantAltImages.html());
 
             var variantLargeImages = jQuery('#largeImageUrl_'+varProductId).clone();

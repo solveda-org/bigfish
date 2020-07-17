@@ -23,7 +23,7 @@
         <div>
           <fieldset class="col">
             <div class="entry radioOption">
-              <input type="radio" name="shipping_method" value="${shippingMethod}" <#if (StringUtil.wrapString(shippingMethod) == StringUtil.wrapString(chosenShippingMethod!"")) || (!chosenShippingMethod?has_content && carrierMethod_index == 0)>checked="checked" </#if> onclick="setShippingMethod('${shippingMethod?if_exists}');" />
+              <input type="radio" class="shipping_method" name="<#if !userLogin?has_content || userLogin.userLoginId == "anonymous">shipMethod<#else>shipping_method</#if>" value="${shippingMethod}" <#if (StringUtil.wrapString(shippingMethod) == StringUtil.wrapString(chosenShippingMethod!"")) || (!chosenShippingMethod?has_content && carrierMethod_index == 0)>checked="checked" </#if> onclick="setShippingMethod('${shippingMethod?if_exists}');" />
               <#if shoppingCart.getShippingContactMechId()?exists>
                 <#assign shippingEst = shippingEstWpr.getShippingEstimate(carrierMethod)?default(-1) />
               </#if>

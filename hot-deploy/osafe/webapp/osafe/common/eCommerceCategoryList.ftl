@@ -37,7 +37,7 @@
                ${setRequestAttribute("clpItem",category)}
                 <!-- DIV for Displaying Product Categories STARTS here -->
                 <div class="eCommerceListItem categoryListItem">
-                        ${screens.render("component://osafe/widget/EcommerceScreens.xml#clpDivSequence")}
+                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#clpDivSequence")}
                 </div>
                  <!-- DIV for Displaying Product Categories ENDS here -->
             </#list>

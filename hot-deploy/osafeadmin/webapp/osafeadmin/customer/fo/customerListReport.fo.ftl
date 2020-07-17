@@ -136,7 +136,45 @@ under the License.
          <#assign websiteUrl = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(websiteUrls)/>
          <#assign companyWebsite = delegator.findOne("ContactMech",Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId", websiteUrl.contactMechId), false)/>
       </#if>
-           
+      <#-- Customer Phone -->
+      <#assign partyContactDetails = delegator.findByAnd("PartyContactDetailByPurpose", Static["org.ofbiz.base.util.UtilMisc"].toMap("partyId", partyId))/>
+      <#assign formattedHomePhone = ''/>
+      <#assign formattedWorkPhone = ''/>
+      <#assign formattedCellPhone = ''/>
+      <#assign partyWorkPhoneExt = ''/>
+        <#-- Home Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_HOME"}) />
+      </#if>
+      <#if partyHomePhoneDetails?has_content>
+        <#assign partyHomePhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyHomePhoneDetails?if_exists) />
+        <#assign partyHomePhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyHomePhoneDetails?if_exists) />
+        <#assign formattedHomePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyHomePhoneDetail.areaCode?if_exists, partyHomePhoneDetail.contactNumber?if_exists)/>
+      </#if>
+      
+        <#-- Work Phone -->
+      <#if partyContactDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_WORK"}) />
+      </#if>
+      <#if partyWorkPhoneDetails?has_content>
+        <#assign partyWorkPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyWorkPhoneDetails?if_exists) />
+        <#assign partyWorkPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyWorkPhoneDetails?if_exists) />
+        <#assign formattedWorkPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyWorkPhoneDetail.areaCode?if_exists, partyWorkPhoneDetail.contactNumber?if_exists)/>
+        <#if partyWorkPhoneDetail?has_content>
+          <#assign partyWorkPhoneExt = partyWorkPhoneDetail.extension!/> 
+        </#if>
+      </#if>
+        
+        <#-- Cell Phone --> 
+      <#if partyContactDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByAnd(partyContactDetails,{"contactMechPurposeTypeId" : "PHONE_MOBILE"}) />
+      </#if>
+      <#if partyCellPhoneDetails?has_content>
+        <#assign partyCellPhoneDetails = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(partyCellPhoneDetails?if_exists) />
+        <#assign partyCellPhoneDetail = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(partyCellPhoneDetails?if_exists) />
+        <#assign formattedCellPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(partyCellPhoneDetail.areaCode?if_exists, partyCellPhoneDetail.contactNumber?if_exists)/>
+      </#if>
+        
     <fo:page-sequence master-reference="${pageLayoutName?default("main-page")}">
 
     <fo:title>
@@ -364,6 +402,47 @@ under the License.
 				                        </fo:block>
 				                  </fo:table-cell>
 			                 </fo:table-row>
+			                 
+			                 <#if formattedHomePhone?has_content || formattedWorkPhone?has_content>
+			                 <fo:table-row height="20px">
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"><#if formattedHomePhone?has_content>${uiLabelMap.HomePhoneCaption}</#if></fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                    <fo:block font-size="8pt" start-indent="10pt">
+									  ${formattedHomePhone!}
+				                    </fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold"><#if formattedWorkPhone?has_content>${uiLabelMap.WorkPhoneCaption}</#if></fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                    <fo:block font-size="8pt" start-indent="10pt">
+									  ${formattedWorkPhone!}<#if partyWorkPhoneExt?has_content> x${partyWorkPhoneExt!}</#if>
+				                    </fo:block>
+				                  </fo:table-cell>
+			                 </fo:table-row>
+			                 </#if>
+			                 
+			                 <#if formattedCellPhone?has_content>
+			                 <fo:table-row height="20px">
+				                  <fo:table-cell text-align="start" >
+				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.CellPhoneCaption}</fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                    <fo:block font-size="8pt" start-indent="10pt">
+									  ${formattedCellPhone!}
+				                    </fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start" >
+				                    <fo:block font-size="8pt" text-align="right" font-weight="bold"></fo:block>
+				                  </fo:table-cell>
+				                  <fo:table-cell text-align="start">
+				                    <fo:block font-size="8pt" start-indent="10pt">
+				                    </fo:block>
+				                  </fo:table-cell>
+			                 </fo:table-row>
+			               </#if>
 		                </fo:table-body>
 	                 </fo:table>
               </fo:table-cell>
@@ -460,58 +539,7 @@ under the License.
 				                  </fo:table-cell>
 			                 </fo:table-row>
 			                 </#if>
-
-                            <#assign contactMechLinkList = delegator.findByAnd("ContactMechLink", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechIdFrom", shippingContactMech.contactMechId))/>
-                            <#assign shippingPhone = "">
-                            <#assign shippingMobile = "">
-                            <#if contactMechLinkList?has_content>
-                               <#list contactMechLinkList as contactMechLink>
-                                    <#assign contactMech = delegator.findByPrimaryKey("ContactMech", Static["org.ofbiz.base.util.UtilMisc"].toMap("contactMechId",contactMechLink.contactMechIdTo))/>
-                                    <#assign contactMechPurposes = contactMech.getRelated("PartyContactMechPurpose")>
-                                    <#assign contactMechPurposes = Static["org.ofbiz.entity.util.EntityUtil"].filterByDate(contactMechPurposes,true)/>
-                                    <#assign contactPurpose = Static["org.ofbiz.entity.util.EntityUtil"].getFirst(contactMechPurposes)/>
-                                    <#if contactPurpose?has_content && contactPurpose.contactMechPurposeTypeId == "PHONE_HOME">
-                                      <#assign shippingPhone = contactPurpose.getRelatedOne("TelecomNumber")>
-                                    </#if>
-                                    <#if contactPurpose?has_content && contactPurpose.contactMechPurposeTypeId == "PHONE_MOBILE">
-                                      <#assign shippingMobile = contactPurpose.getRelatedOne("TelecomNumber")>
-                                    </#if>
-                               </#list>
-                            </#if> 
-						    <#if shippingPhone?has_content>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.HomePhoneCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-							              <#if shippingPhone.areaCode?exists>
-							                <#assign formattedPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(shippingPhone.areaCode, shippingPhone.contactNumber?if_exists)/>
-							                ${formattedPhone}
-							              <#else>
-							                ${shippingPhone.contactNumber!""}
-							              </#if>
-				                        </fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-						    </#if>
-						    <#if shippingMobile?has_content>
-			                 <fo:table-row height="10px">
-				                  <fo:table-cell text-align="start" >
-				                        <fo:block font-size="8pt" text-align="right" font-weight="bold">${uiLabelMap.MobilePhoneCaption}</fo:block>
-				                  </fo:table-cell>
-				                  <fo:table-cell text-align="start">
-				                        <fo:block font-size="8pt" start-indent="10pt">
-							              <#if shippingMobile.areaCode?exists>
-							                <#assign formattedPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(shippingMobile.areaCode, shippingMobile.contactNumber?if_exists)/>
-							                ${formattedPhone}
-							              <#else>
-							                ${shippingMobile.contactNumber!""}
-							              </#if>
-				                        </fo:block>
-				                  </fo:table-cell>
-			                 </fo:table-row>
-						    </#if>
+						    
 		                </fo:table-body>
 		               </fo:table>
 		              </fo:table-cell>

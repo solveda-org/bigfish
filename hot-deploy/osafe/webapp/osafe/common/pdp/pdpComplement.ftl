@@ -32,7 +32,7 @@
              ${setRequestAttribute("plpItemId",complementProduct.productId)}
                  <!-- DIV for Displaying Recommended productss STARTS here -->
                       <div class="eCommerceComplementProduct eCommerceListItem">
-                        ${screens.render("component://osafe/widget/EcommerceScreens.xml#plpDivSequence")}
+                        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#plpDivSequence")}
                       </div>
                  <!-- DIV for Displaying PLP item ENDS here -->     
             </#list>

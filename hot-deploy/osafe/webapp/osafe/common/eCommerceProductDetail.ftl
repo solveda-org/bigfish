@@ -5,7 +5,7 @@ ${virtualJavaScript?if_exists}
    <#list uiSequenceSearchList as pdpDiv>
       <#assign sequenceNum = pdpDiv.value!/>
       <#if sequenceNum?has_content && sequenceNum?number !=0>
-        ${screens.render("component://osafe/widget/EcommerceScreens.xml#${pdpDiv.key}")}
+        ${screens.render("component://osafe/widget/EcommerceDivScreens.xml#${pdpDiv.key}")}
       </#if>
    </#list>
 </#if>

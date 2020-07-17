@@ -1,9 +1,11 @@
 <#-- Check Savings Money -->
-<#assign showSavingDollarAbove = PDP_DOLLAR_THRESHOLD!"0"/>
-<#assign youSaveDollar = (priceMap.listPrice - priceMap.price)/>
-<#if youSaveDollar gt showSavingDollarAbove?number>
+<#if priceMap?exists && priceMap?has_content>
+<#assign showSavingMoneyAbove = PDP_MONEY_THRESHOLD!"0"/>
+<#assign youSaveMoney = (priceMap.listPrice - priceMap.price)/>
+<#if youSaveMoney gt showSavingMoneyAbove?number>
  <div id="pdpPriceSavingMoney">
      <label>${uiLabelMap.YouSaveCaption}</label>
-     <span class="savings"><@ofbizCurrency amount=youSaveDollar isoCode=CURRENCY_UOM_DEFAULT!priceMap.currencyUsed /></span>
+     <span class="savings"><@ofbizCurrency amount=youSaveMoney isoCode=CURRENCY_UOM_DEFAULT!priceMap.currencyUsed /></span>
  </div>
+</#if>
 </#if>

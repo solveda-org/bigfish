@@ -1748,6 +1748,10 @@ table.osafe tbody tr td div.infoEntry div.infoValue {
     margin: 0 20px 0 0;
 }
 
+#orderManagementOrderDetail .displayBox.paymentInfo {
+    margin: 0;
+}
+
 /****************************************************************
 * Order Detail : General Information
 ****************************************************************/

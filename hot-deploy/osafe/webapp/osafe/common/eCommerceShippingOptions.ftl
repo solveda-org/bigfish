@@ -4,11 +4,11 @@
 function submitForm(form, mode, value) {
     if (mode == "DN") {
         // done action; checkout
-        form.action="<@ofbizUrl>checkoutoptions</@ofbizUrl>";
+        form.action="<@ofbizUrl>${doneAction!"multiPageCheckoutOptions"}</@ofbizUrl>";
         form.submit();
     } else if (mode == "BK") {
         // Previous Page
-        form.action="<@ofbizUrl>eCommerceShippingAddress?action=previous</@ofbizUrl>";
+        form.action="<@ofbizUrl>${backAction!"multiPageShippingAddress"}?action=previous</@ofbizUrl>";
         form.submit();
     }else if (mode == "CS") {
         // continue shopping

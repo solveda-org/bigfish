@@ -1,0 +1,173 @@
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <!-- definition of Customer elements -->
+  <xsd:element name="BigFishCustomerFeed" type="BigFishCustomerFeedType" />
+  <xsd:complexType name="BigFishCustomerFeedType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="Customer" type="CustomerType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CustomerType">
+    <xsd:sequence>
+      <xsd:element name="ProductStore" type="xsd:string" />
+      <xsd:element name="CustomerID" type="xsd:string" />
+      <xsd:element name="FirstName" type="xsd:string" />
+      <xsd:element name="LastName" type="xsd:string" />
+      <xsd:element name="Gender" type="xsd:string" />
+      <xsd:element name="DateRegistered" type="xsd:string" />
+      <xsd:element name="EmailAddress" type="xsd:string" />
+      <xsd:element name="EmailFormat" type="xsd:string" />
+      <xsd:element name="EmailOptIn" type="xsd:string" />
+      <xsd:element name="HomePhone" type="xsd:string" />
+      <xsd:element name="CellPhone" type="xsd:string" />
+      <xsd:element name="WorkPhone" type="xsd:string" />
+      <xsd:element name="WorkPhoneExt" type="xsd:string" />
+      <xsd:element maxOccurs="unbounded" name="BillingAddress" type="BillingAddressType" />
+      <xsd:element maxOccurs="unbounded" name="ShippingAddress" type="ShippingAddressType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ShippingAddressType">
+    <xsd:sequence>
+      <xsd:element name="Country" type="xsd:string" />
+      <xsd:element name="Address1" type="xsd:string" />
+      <xsd:element name="Address2" type="xsd:string" />
+      <xsd:element name="Address3" type="xsd:string" />
+      <xsd:element name="CityTown" type="xsd:string" />
+      <xsd:element name="StateProvince" type="xsd:string" />
+      <xsd:element name="ZipPostCode" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="BillingAddressType">
+    <xsd:sequence>
+      <xsd:element name="Country" type="xsd:string" />
+      <xsd:element name="Address1" type="xsd:string" />
+      <xsd:element name="Address2" type="xsd:string" />
+      <xsd:element name="Address3" type="xsd:string" />
+      <xsd:element name="CityTown" type="xsd:string" />
+      <xsd:element name="StateProvince" type="xsd:string" />
+      <xsd:element name="ZipPostCode" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <!-- definition of Order elements -->
+  <xsd:element name="BigFishOrderFeed" type="BigFishOrderFeedType" />
+  <xsd:complexType name="BigFishOrderFeedType">
+    <xsd:sequence>
+      <xsd:element name="Order" type="OrderType" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OrderType">
+    <xsd:sequence>
+      <xsd:element name="ProductStore" type="xsd:string" />
+      <xsd:element name="Customer" type="CustomerType" />
+      <xsd:element name="OrderHeader" type="OrderHeaderType" />
+      <xsd:element maxOccurs="unbounded" name="CartPromotion" type="CartPromotionType" />
+      <xsd:element name="OrderLineItems" type="OrderLineItemsType" />
+      <xsd:element name="OrderPayment" type="OrderPaymentType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OrderPaymentType">
+    <xsd:sequence>
+	  <xsd:element name="PaymentMethod" type="xsd:string" />
+      <xsd:element name="CardType" type="xsd:string" />
+      <xsd:element name="Last4Digits" type="xsd:string" />
+	  <xsd:element name="CardNumber" type="xsd:string" />
+	  <xsd:element name="ExpiryDate" type="xsd:string" />
+	  <xsd:element name="AuthAmount" type="xsd:string" />
+	  <xsd:element name="PayerId" type="xsd:string" />
+	  <xsd:element name="TransactionId" type="xsd:string" />
+	  <xsd:element name="PaymentToken" type="xsd:string" />
+	  <xsd:element name="AuthReferenceNumber" type="xsd:string" />
+	  <xsd:element name="AuthDateTime" type="xsd:string" />
+	  <xsd:element name="CaptureAmount" type="xsd:string" />
+	  <xsd:element name="CaptureReferenceNumber" type="xsd:string" />
+	  <xsd:element name="CaptureDateTime" type="xsd:string" />
+	</xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OrderLineItemsType">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" name="OrderLine" type="OrderLineType" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OrderLineType">
+    <xsd:sequence>
+      <xsd:element name="LineNumber" type="xsd:string" />
+      <xsd:element name="OrderLineID" type="xsd:string" />
+      <xsd:element name="ProductID" type="xsd:string" />
+      <xsd:element name="Quantity" type="xsd:int" />
+      <xsd:element name="Price" type="xsd:string" />
+      <xsd:element name="LineTotalGross" type="xsd:string" />
+      <xsd:element name="SalesTax" type="xsd:string" />
+      <xsd:element name="ShippingCharge" type="xsd:string" />
+      <xsd:element name="ShippingTax" type="xsd:string" />
+      <xsd:element name="Carrier" type="xsd:string" />
+      <xsd:element name="CarrierCustomInfo" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="CartPromotionType">
+    <xsd:sequence>
+      <xsd:element name="PromotionCode" type="xsd:string" />
+      <xsd:element name="PromotionAmount" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="OrderHeaderType">
+    <xsd:sequence>
+      <xsd:element name="OrderID" type="xsd:string" />
+      <xsd:element name="OrderDate" type="xsd:string" />
+      <xsd:element name="OrderTotalItem" type="xsd:string" />
+      <xsd:element name="OrderTotalAdjustment" type="xsd:string" />
+      <xsd:element name="OrderShippingChargeGross" type="xsd:string" />
+      <xsd:element name="OrderTotalTax" type="xsd:string" />
+      <xsd:element name="OrderTotalNet" type="xsd:string" />
+      <xsd:element name="Currency" type="xsd:string" />
+      <xsd:element name="ItemsToRemove" type="xsd:string" />
+      <xsd:element name="ValidateWebTotals" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+    
+  <!-- definition of Customer ContactUs elements -->
+  <xsd:element name="BigFishContactUsFeed" type="BigFishContactUsFeedType" />
+  <xsd:complexType name="BigFishContactUsFeedType">
+    <xsd:sequence>
+      <xsd:element name="ContactUs" type="ContactUsType" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="ContactUsType">
+    <xsd:sequence>
+      <xsd:element name="ProductStore" type="xsd:string" />
+      <xsd:element name="ContactUsID" type="xsd:string" />
+      <xsd:element name="FirstName" type="xsd:string" />
+      <xsd:element name="LastName" type="xsd:string" />
+      <xsd:element name="EmailAddress" type="xsd:string" />
+      <xsd:element name="ContactPhone" type="xsd:string" />
+      <xsd:element name="OrderID" type="xsd:string" />
+      <xsd:element name="Comment" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <!-- definition of Customer Request Catalog elements -->
+  <xsd:element name="BigFishRequestCatalogFeed" type="BigFishRequestCatalogFeedType" />
+  <xsd:complexType name="BigFishRequestCatalogFeedType">
+    <xsd:sequence>
+      <xsd:element name="RequestCatalog" type="RequestCatalogType" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="RequestCatalogType">
+    <xsd:sequence>
+      <xsd:element name="ProductStore" type="xsd:string" />
+      <xsd:element name="RequestCatalogID" type="xsd:string" />
+      <xsd:element name="FirstName" type="xsd:string" />
+      <xsd:element name="LastName" type="xsd:string" />
+      <xsd:element name="Country" type="xsd:string" />
+      <xsd:element name="Address1" type="xsd:string" />
+      <xsd:element name="Address2" type="xsd:string" />
+      <xsd:element name="Address3" type="xsd:string" />
+      <xsd:element name="CityTown" type="xsd:string" />
+      <xsd:element name="StateProvince" type="xsd:string" />
+      <xsd:element name="ZipPostCode" type="xsd:string" />
+      <xsd:element name="EmailAddress" type="xsd:string" />
+      <xsd:element name="ContactPhone" type="xsd:string" />
+      <xsd:element name="Comment" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

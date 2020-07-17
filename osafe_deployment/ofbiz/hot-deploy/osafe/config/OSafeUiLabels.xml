@@ -1,26 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-    <!--
+<?xml version="1.0" encoding="UTF-8"?><!--
         To add HTML to a message escape all angle brackets < > in tags with  &lt; = < &gt = >
         Then where you use the message in ftl use the following ${StringUtil.wrapString([message])}
-    -->
-
-<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    --><resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
     <property key="eCommerceApplication">
         <value xml:lang="en">Big Fish Commerce</value>
     </property>
-
-
-
     <!-- *** Caption *************************************** -->
     <property key="ListPriceCaption">
-        <value xml:lang="en">List Price:</value>
+        <value xml:lang="en"> </value>
         <category>PDP</category>
         <description>ListPriceCaption</description>
     </property>
-
     <property key="OnlinePriceCaption">
-        <value xml:lang="en">Online Price:</value>
+        <value xml:lang="en">Sale Price:</value>
         <category>PDP</category>
         <description>OnlinePriceCaption</description>
     </property>
@@ -29,114 +21,126 @@
         <category>PDP</category>
         <description>YouSaveCaption</description>
     </property>
+    <property key="SeeMainImageLabel">
+        <value xml:lang="en">See Main Image</value>
+        <category>PDP</category>
+        <description>SeeMainImageLabel</description>
+    </property>
+    <property key="SelectSavedcardCaption">
+        <value xml:lang="en">Select One:</value>
+        <category>CHECK_OUT</category>
+        <description>SelectSavedcardCaption</description>
+    </property>
+    <property key="UseSavedCardlabel">
+        <value xml:lang="en">Choose from a previously saved card:</value>
+        <category>CHECK_OUT</category>
+        <description>UseSavedCardlabel</description>
+    </property>
+    <property key="PayWithAnotherCardlabel">
+        <value xml:lang="en">Pay with another card, my details are below:</value>
+        <category>CHECK_OUT</category>
+        <description>PayWithAnotherCardlabel</description>
+    </property>
+    <property key="CardExpirationLabel">
+        <value xml:lang="en">Exp:</value>
+        <category>CHECK_OUT</category>
+        <description>CardExpirationLabel</description>
+    </property>
     <property key="CardTypeCaption">
-        <value xml:lang="en">Card Type:</value>
+        <value xml:lang="en">Card Types:</value>
         <category>CHECK_OUT</category>
         <description>CardTypeCaption</description>
     </property>
-
     <property key="NameOnCardCaption">
         <value xml:lang="en">Name On Card:</value>
         <category>CHECK_OUT</category>
         <description>NameOnCardCaption</description>
     </property>
-
     <property key="EnterPasswordCaption">
         <value xml:lang="en">Enter Password:</value>
         <category>CHECK_OUT</category>
         <description>EnterPasswordCaption</description>
     </property>
-
     <property key="ExpirationMonthCaption">
         <value xml:lang="en">Expiration month:</value>
         <category>CHECK_OUT</category>
         <description>ExpirationMonthCaption</description>
     </property>
-
     <property key="ExpirationYearCaption">
         <value xml:lang="en">Expiration year:</value>
         <category>CHECK_OUT</category>
         <description>ExpirationYearCaption</description>
     </property>
-
+    <property key="VerificationCaption">
+        <value xml:lang="en">Verification:</value>
+        <category>CHECK_OUT</category>
+        <description>VerificationCaption</description>
+    </property>
     <property key="ExpirationDateCaption">
         <value xml:lang="en">Exp Date:</value>
         <category>CHECK_OUT</category>
         <description>ExpirationDateCaption</description>
     </property>
-
     <property key="FirstNameCaption">
         <value xml:lang="en">First Name:</value>
         <category>CHECK_OUT</category>
         <description>FirstNameCaption</description>
     </property>
-
     <property key="LastNameCaption">
         <value xml:lang="en">Last Name:</value>
         <category>CHECK_OUT</category>
         <description>LastNameCaption</description>
     </property>
-
     <property key="ReasonForContactCaption">
         <value xml:lang="en">Reason For Contact:</value>
         <category>CONTACT_US</category>
         <description>ReasonForContactCaption</description>
     </property>
-
     <property key="EmailAddressCaption">
         <value xml:lang="en">Email Address:</value>
         <category>CONTACT_US</category>
         <description>EmailAddressCaption</description>
     </property>
-
     <property key="AddressCaption">
         <value xml:lang="en">Address :</value>
         <category>CONTACT_US</category>
         <description>AddressCaption</description>
     </property>
-
     <property key="EmailAddressShortCaption">
         <value xml:lang="en">Email:</value>
         <category>CONTACT_US</category>
         <description>EmailAddressShortCaption</description>
     </property>
-
     <property key="ContactPhoneCaption">
         <value xml:lang="en">Contact Phone:</value>
         <category>CONTACT_US</category>
         <description>ContactPhoneCaption</description>
     </property>
-
     <property key="OrderNumberCaption">
         <value xml:lang="en">Order #:</value>
         <category>CONTACT_US</category>
         <description>OrderNumberCaption</description>
     </property>
-
     <property key="CommentCaption">
         <value xml:lang="en">Comment:</value>
         <category>CONTACT_US</category>
         <description>CommentCaption</description>
     </property>
-
     <property key="UsernameCaption">
         <value xml:lang="en">User Name:</value>
         <category>CHANGE_PASSWORD</category>
         <description>UsernameCaption</description>
     </property>
-
     <property key="PasswordCaption">
         <value xml:lang="en">Password:</value>
         <category>CHANGE_PASSWORD</category>
         <description>PasswordCaption</description>
     </property>
-
     <property key="OldPasswordCaption">
         <value xml:lang="en">Old Password:</value>
         <category>CHANGE_PASSWORD</category>
         <description>OldPasswordCaption</description>
     </property>
-
     <property key="NewPasswordCaption">
         <value xml:lang="en">New Password:</value>
         <category>CHANGE_PASSWORD</category>
@@ -146,6 +150,11 @@
         <value xml:lang="en">Hours:</value>
         <category>STORE_LOCATOR</category>
         <description>StoreLocatorHourCaption</description>
+    </property>
+    <property key="StoreLocatorNoticeCaption">
+        <value xml:lang="en">Store Notice:</value>
+        <category>STORE_LOCATOR</category>
+        <description>StoreLocatorNoticeCaption</description>
     </property>
     <property key="StoreLocatorPhoneCaption">
         <value xml:lang="en">Phone:</value>
@@ -162,57 +171,57 @@
         <category>STORE_LOCATOR</category>
         <description>StoreLocatorDistanceCaption</description>
     </property>
-
-<!-- *** My Account / Registration Caption *************************************** -->
-
+    <!-- *** My Account / Registration Caption *************************************** -->
     <property key="AddressNickNameCaption">
         <value xml:lang="en">Address Nickname:</value>
         <category>MY_ACCOUNT</category>
         <description>AddressNickNameCaption</description>
     </property>
-
     <property key="AddressNickNameCaption">
         <value xml:lang="en">Address Nickname:</value>
         <category>MY_ACCOUNT</category>
         <description>AddressNickNameCaption</description>
     </property>
-
     <property key="GenderCaption">
         <value xml:lang="en">Gender:</value>
         <category>MY_ACCOUNT</category>
         <description>GenderCaption</description>
     </property>
-
     <property key="CountryCaption">
         <value xml:lang="en">Country:</value>
         <category>MY_ACCOUNT</category>
         <description>CountryCaption</description>
     </property>
-
     <property key="AddressLine1Caption">
         <value xml:lang="en">Address 1:</value>
         <category>MY_ACCOUNT</category>
         <description>AddressLine1Caption</description>
     </property>
-
     <property key="AddressLine2Caption">
         <value xml:lang="en">Address 2:</value>
         <category>MY_ACCOUNT</category>
         <description>AddressLine2Caption</description>
     </property>
-
+    <property key="AddressLine3Caption">
+        <value xml:lang="en">Address 3:</value>
+        <category>MY_ACCOUNT</category>
+        <description>AddressLine3Caption</description>
+    </property>
     <property key="CellPhoneCaption">
         <value xml:lang="en">Cell Phone:</value>
         <category>MY_ACCOUNT</category>
         <description>CellPhoneCaption</description>
     </property>
-
     <property key="CityCaption">
         <value xml:lang="en">City:</value>
         <category>MY_ACCOUNT</category>
         <description>CityCaption</description>
     </property>
-
+    <property key="TownOrCityCaption">
+        <value xml:lang="en">Town/City:</value>
+        <category>MY_ACCOUNT</category>
+        <description>TownOrCityCaption</description>
+    </property>
     <property key="SameAsBillingCaption">
         <value xml:lang="en">Same as Billing:</value>
         <category>MY_ACCOUNT</category>
@@ -223,79 +232,71 @@
         <category>MY_ACCOUNT</category>
         <description>StateCaption</description>
     </property>
-
     <property key="StateOrProvinceCaption">
         <value xml:lang="en">State/Province:</value>
         <category>MY_ACCOUNT</category>
         <description>StateOrProvinceCaption</description>
     </property>
-
+    <property key="ProvinceCaption">
+        <value xml:lang="en">Province:</value>
+        <category>MY_ACCOUNT</category>
+        <description>ProvinceCaption</description>
+    </property>
     <property key="HomePhoneCaption">
         <value xml:lang="en">Home Phone:</value>
         <category>MY_ACCOUNT</category>
         <description>HomePhoneCaption</description>
     </property>
-
     <property key="MobilePhoneCaption">
         <value xml:lang="en">Mobile Phone:</value>
         <category>MY_ACCOUNT</category>
         <description>MobilePhoneCaption</description>
     </property>
-
+    <property key="WorkPhoneCaption">
+        <value xml:lang="en">Work Phone:</value>
+        <category>MY_ACCOUNT</category>
+        <description>WorkPhoneCaption</description>
+    </property>
+    <property key="PhoneExtCaption">
+        <value xml:lang="en">Ext:</value>
+        <category>MY_ACCOUNT</category>
+        <description>PhoneExtCaption</description>
+    </property>
     <property key="EmailAddressConfirmCaption">
         <value xml:lang="en">Confirm Email:</value>
         <category>MY_ACCOUNT</category>
         <description>EmailAddressConfirmCaption</description>
     </property>
-
     <property key="ZipCodeCaption">
         <value xml:lang="en">Zip:</value>
         <category>MY_ACCOUNT</category>
         <description>ZipCodeCaption</description>
     </property>
-
+    <property key="PostalCodeCaption">
+        <value xml:lang="en">Postal Code:</value>
+        <category>MY_ACCOUNT</category>
+        <description>PostalCodeCaption</description>
+    </property>
+    <property key="PostalCodeOrZipCaption">
+        <value xml:lang="en">Zip/Postal Code:</value>
+        <category>MY_ACCOUNT</category>
+        <description>PostalCodeCaption</description>
+    </property>
     <property key="RepeatPasswordCaption">
         <value xml:lang="en">Confirm Password:</value>
         <category>MY_ACCOUNT</category>
         <description>RepeatPasswordCaption</description>
     </property>
-	
-	<property key="AddressLine3Caption">
-       <value xml:lang="en">Address 3:</value>
-       <category>MY_ACCOUNT</category>
-       <description>AddressLine3Caption</description>
-    </property>
-	
-	<property key="TownOrCityCaption">
-        <value xml:lang="en">Town/City:</value>
-        <category>MY_ACCOUNT</category>
-        <description>TownOrCityCaption</description>
-    </property>
-
-    <property key="ProvinceCaption">
-       <value xml:lang="en">Province:</value>
-       <category>MY_ACCOUNT</category>
-       <description>ProvinceCaption</description>
-    </property>
-
-    <property key="PostalCodeCaption">
-       <value xml:lang="en">Postal Code:</value>
-       <category>MY_ACCOUNT</category>
-       <description>PostalCodeCaption</description>
-    </property>
-
     <property key="CardNumberCaption">
         <value xml:lang="en">Card Number:</value>
         <category>MULTI_USE</category>
         <description>CardNumberCaption used in both the Checkout and Order-Status functions</description>
     </property>
-
     <property key="ItemNumberCaption">
         <value xml:lang="en">Item Number:</value>
         <category>ORDER_STATUS</category>
         <description>ItemNumberCaption</description>
     </property>
-
     <property key="NameCaption">
         <value xml:lang="en">Name:</value>
         <category>MULTI_USE</category>
@@ -306,109 +307,96 @@
         <category>ORDER_STATUS</category>
         <description>OrderDateCaption</description>
     </property>
-
     <property key="CreditCardCaption">
         <value xml:lang="en">Credit Card:</value>
         <category>ORDER_STATUS</category>
         <description>CreditCardCaption</description>
     </property>
-
     <property key="DestinationCaption">
         <value xml:lang="en">Destination:</value>
         <category>ORDER_STATUS</category>
         <description>DestinationCaption</description>
     </property>
-
     <property key="ShippingMethodCaption">
         <value xml:lang="en">Method:</value>
         <category>ORDER_STATUS</category>
         <description>ShippingMethodCaption</description>
     </property>
-
     <property key="TrackingNumberCaption">
         <value xml:lang="en">Tracking Code:</value>
         <category>ORDER_STATUS</category>
         <description>TrackingNumberCaption</description>
     </property>
-
     <property key="ShoppingCartCaption">
-        <value xml:lang="en">Shopping Cart:</value>
+        <value xml:lang="en">My Cart:</value>
         <category>SITE_HEADER</category>
         <description>ShoppingCartCaption</description>
     </property>
-
     <property key="SearchCaption">
         <value xml:lang="en">Search:</value>
         <category>SITE_HEADER</category>
         <description>SearchCaption</description>
     </property>
-
     <property key="PayPalCaption">
         <value xml:lang="en">Pay with PayPal:</value>
         <category>CHECK_OUT</category>
         <description>PayPalCaption</description>
     </property>
-
     <property key="PayPalOnlyCaption">
         <value xml:lang="en">PayPal:</value>
         <category>CHECK_OUT</category>
         <description>PayPalOnlyCaption</description>
     </property>
-
+    <property key="PaymentMethodCaption">
+        <value xml:lang="en">Payment Method:</value>
+        <category>CHECK_OUT</category>
+        <description>PaymentMethodCaption</description>
+    </property>
     <property key="AmountCaption">
         <value xml:lang="en">Amount:</value>
         <category>CHECK_OUT</category>
         <description>AmountCaption</description>
     </property>
-
     <property key="OverallRatingCaption">
         <value xml:lang="en">Overall Rating:</value>
         <category>RATING_REVIEW</category>
         <description>OverallRatingCaption</description>
     </property>
-
     <property key="YourNicknameCaption">
         <value xml:lang="en">Your Nickname:</value>
         <category>RATING_REVIEW</category>
         <description>YourNicknameCaption</description>
     </property>
-
     <property key="ReviewTitleCaption">
         <value xml:lang="en">Review Title:</value>
         <category>RATING_REVIEW</category>
         <description>ReviewTitleCaption</description>
     </property>
-
     <property key="ReviewCaption">
         <value xml:lang="en">Review:</value>
         <category>RATING_REVIEW</category>
         <description>ReviewCaption</description>
     </property>
-
     <property key="LocationCaption">
         <value xml:lang="en">Location:</value>
         <category>RATING_REVIEW</category>
         <description>LocationCaption</description>
     </property>
-
     <property key="AgeCaption">
         <value xml:lang="en">Age:</value>
         <category>RATING_REVIEW</category>
         <description>AgeCaption</description>
     </property>
-
     <property key="SortByCaption">
         <value xml:lang="en">Sort By:</value>
         <category>RATING_REVIEW</category>
         <description>SortByCaption</description>
     </property>
-
     <property key="FacetNarrowResultsCaption">
-        <value xml:lang="en">Narrow Results:</value>
+        <value xml:lang="en">Categories:</value>
         <category>FACET</category>
         <description>FacetNarrowResultsCaption</description>
     </property>
-
     <property key="FacetFilterResultsCaption">
         <value xml:lang="en">Filter Results:</value>
         <category>FACET</category>
@@ -419,54 +407,87 @@
         <category>FACET</category>
         <description>Facet Search Category Caption</description>
     </property>
-
     <property key="FacetProductCategoryCaption">
         <value xml:lang="en">Shop By Category</value>
         <category>FACET</category>
         <description>Facet Product Category Caption</description>
     </property>
-
     <property key="FacetProductCategoryCaption">
         <value xml:lang="en">Shop By Category</value>
         <category>FACET</category>
         <description>Facet Product Category Caption</description>
     </property>
-
     <property key="FacetSeeMoreLinkCaption">
         <value xml:lang="en">See More...</value>
         <category>FACET</category>
         <description>Facet Group Show More</description>
     </property>
-
     <property key="FacetSeeLessLinkCaption">
         <value xml:lang="en">See Less...</value>
         <category>FACET</category>
         <description>Facet Group Show Less</description>
     </property>
+    <property key="StoreCodeCaption">
+        <value xml:lang="en">Store Code:</value>
+        <category>CHECK_OUT</category>
+        <description>StoreCodeCaption</description>
+    </property>
+    <property key="StoreAddressCaption">
+        <value xml:lang="en">Store Address:</value>
+        <category>CHECK_OUT</category>
+        <description>StoreAddressCaption</description>
+    </property>
+    <property key="StoreTelCaption">
+        <value xml:lang="en">Store Tel:</value>
+        <category>CHECK_OUT</category>
+        <description>StoreTelCaption</description>
+    </property>
+    <property key="StorePickupCaption">
+        <value xml:lang="en">Store Pickup</value>
+        <category>CHECK_OUT</category>
+        <description>StorePickupCaption</description>
+    </property>
+    <property key="PickupStoreInfo">
+        <value xml:lang="en">* We will contact you via email when your merchandise is available. This will typically be within 24 hours. You can pay at the time of pickup.</value>
+        <category>CHECK_OUT</category>
+        <description>PickupStoreInfo</description>
+    </property>
     <!-- *** Label *************************************** -->
+    <property key="CharactersLeftLabel">
+        <value xml:lang="en">characters left</value>
+        <category>MULTI_USE</category>
+        <description>CharactersLeftLabel</description>
+    </property>
+    <property key="CharactersLimitLabel">
+        <value xml:lang="en">* 250 character limit</value>
+        <category>MULTI_USE</category>
+        <description>Character limit</description>
+    </property>
     <property key="DescriptionLabel">
         <value xml:lang="en">Description</value>
         <category>PDP</category>
         <description>DescriptionLabel</description>
     </property>
-
     <property key="VolumePricingLabel">
         <value xml:lang="en">Volume Pricing</value>
         <category>PDP</category>
-        <description>Volume Pricing Label</description>
+        <description>VolumePricingLabelLabel</description>
     </property>
     <property key="QuantityLabel">
         <value xml:lang="en">Quantity</value>
         <category>MULTI_USE</category>
         <description>QuantityLabel used in PDP, Show Cart and Order Status</description>
     </property>
-
     <property key="PriceLabel">
         <value xml:lang="en">Price</value>
         <category>MULTI_USE</category>
         <description>PriceLabel used in Show Cart and Order Status</description>
     </property>
-
+    <property key="OfferPriceLabel">
+        <value xml:lang="en">Offer Price</value>
+        <category>MULTI_USE</category>
+        <description>OfferPriceLabel used in Show Cart and Order Status</description>
+    </property>
     <property key="AdjLabel">
         <value xml:lang="en">Adj</value>
         <category>MULTI_USE</category>
@@ -482,85 +503,132 @@
         <category>MULTI_USE</category>
         <description>TotalLabel used in PDP, Show Cart and Order Status</description>
     </property>
-
     <property key="SubTotalLabel">
         <value xml:lang="en">Sub Total</value>
         <category>MULTI_USE</category>
         <description>SubTotalLabel used in Show Cart and Order Status</description>
     </property>
-
     <property key="InStockLabel">
         <value xml:lang="en">In Stock</value>
         <category>ORDER_STATUS</category>
         <description>InStockLabel</description>
     </property>
-
     <property key="OutOfStockLabel">
         <value xml:lang="en">Out Of Stock</value>
         <category>PDP</category>
         <description>OutOfStockLabel</description>
     </property>
+    <property key="PlpPriceLabel">
+        <value xml:lang="en">Only</value>
+        <category>PLP</category>
+        <description>PlpPriceLabel</description>
+    </property>
 
+    <property key="PlpListPriceLabel">
+        <value xml:lang="en">List Price</value>
+        <category>PLP</category>
+        <description>PlpListPriceLabel</description>
+    </property>
     <property key="ShippingMethodLabel">
         <value xml:lang="en">Shipping Method</value>
         <category>ORDER_STATUS</category>
         <description>ShippingMethodLabel</description>
     </property>
-
     <property key="ViewAllLabel">
         <value xml:lang="en">Show All</value>
         <category>PLP_PAGING</category>
         <description>ViewAllLabel</description>
     </property>
-
+    <property key="ShowLessLabel">
+        <value xml:lang="en">Show Less</value>
+        <category>PLP_PAGING</category>
+        <description>showLessLabel</description>
+    </property>
     <property key="OrderStatusLabel">
         <value xml:lang="en">Order Status</value>
         <category>ORDER_STATUS</category>
         <description>OrderStatusLabel</description>
     </property>
-
     <property key="BillingAddressLabel">
         <value xml:lang="en">Billing Address</value>
         <category>ORDER_STATUS</category>
         <description>BillingAddressLabel</description>
     </property>
-
     <property key="FirstLabel">
         <value xml:lang="en">First</value>
         <category>PLP_PAGING</category>
         <description>FirstLabel</description>
     </property>
-
     <property key="PreviousLabel">
         <value xml:lang="en">Previous</value>
         <category>PLP_PAGING</category>
         <description>PreviousLabel</description>
     </property>
-
     <property key="NextLabel">
         <value xml:lang="en">Next</value>
         <category>PLP_PAGING</category>
         <description>NextLabel</description>
     </property>
-
     <property key="LastLabel">
         <value xml:lang="en">Last</value>
         <category>PLP_PAGING</category>
         <description>LastLabel</description>
     </property>
-
+    <property key="HighestRatingLabel">
+        <value xml:lang="en">Highest Rating</value>
+        <category>PLP</category>
+        <description>Highest Rating</description>
+    </property>
+    <property key="MostPopularLabel">
+        <value xml:lang="en">Most Popular</value>
+        <category>PLP</category>
+        <description>Most Popular</description>
+    </property>
+    <property key="NameAscendingLabel">
+        <value xml:lang="en">Name Ascending</value>
+        <category>PLP</category>
+        <description>Name Ascending</description>
+    </property>
+    <property key="NameDescendingLabel">
+        <value xml:lang="en">Name Descending</value>
+        <category>PLP</category>
+        <description>Name Descending</description>
+    </property>
+    <property key="HighestPriceLabel">
+        <value xml:lang="en">Highest Price</value>
+        <category>PLP</category>
+        <description>Highest Price</description>
+    </property>
+    <property key="LowestPriceLabel">
+        <value xml:lang="en">Lowest Price</value>
+        <category>PLP</category>
+        <description>Lowest Price</description>
+    </property>
+    <property key="MostViewedLabel">
+        <value xml:lang="en">Most Viewed</value>
+        <category>PLP</category>
+        <description>Most Viewed</description>
+    </property>
+    <property key="BestSellingLabel">
+        <value xml:lang="en">Best Selling</value>
+        <category>PLP</category>
+        <description>Best Selling</description>
+    </property>
+    <property key="SeeItemDetailsLabel">
+        <value xml:lang="en">See Item Details</value>
+        <category>PLP</category>
+        <description>See Item Details</description>
+    </property>
     <property key="InternalNameLabel">
         <value xml:lang="en">Item #</value>
         <category>MULTI_USE</category>
         <description>InternalNameLabel used in PDP, Product Review, Recommended Product</description>
     </property>
-
     <property key="ProductLabel">
         <value xml:lang="en">Product</value>
         <category>ORDER_STATUS</category>
         <description>ProductLabel</description>
     </property>
-
     <property key="AvailabilityLabel">
         <value xml:lang="en">Availability</value>
         <category>ORDER_STATUS</category>
@@ -576,194 +644,157 @@
         <category>ORDER_STATUS</category>
         <description>ShippingAndHandlingLabel</description>
     </property>
-
     <property key="TaxLabel">
         <value xml:lang="en">Tax</value>
         <category>ORDER_STATUS</category>
         <description>TaxLabel</description>
     </property>
-
-    <property key="SalesTaxLabel">
-        <value xml:lang="en">Sales Tax</value>
-        <category>ORDER_STATUS</category>
-        <description>SalesTaxLabel</description>
-    </property>
-
     <property key="OverallRatingLabel">
         <value xml:lang="en">Overall Rating</value>
         <category>RATING_REVIEW</category>
         <description>OverallRatingLabel</description>
     </property>
-
     <property key="QualityLabel">
         <value xml:lang="en">Quality</value>
         <category>RATING_REVIEW</category>
         <description>QualityLabel</description>
     </property>
-
     <property key="SatisfactionLabel">
         <value xml:lang="en">Satisfaction</value>
         <category>RATING_REVIEW</category>
         <description>SatisfactionLabel</description>
     </property>
-
     <property key="EffectivenessLabel">
         <value xml:lang="en">Effectiveness</value>
         <category>RATING_REVIEW</category>
         <description>EffectivenessLabel</description>
     </property>
-
     <property key="YourNicknameLabel">
         <value xml:lang="en">Your Nickname</value>
         <category>RATING_REVIEW</category>
         <description>YourNicknameLabel</description>
     </property>
-
     <property key="ReviewTitleLabel">
         <value xml:lang="en">Review Title</value>
         <category>RATING_REVIEW</category>
         <description>ReviewTitleLabel</description>
     </property>
-
     <property key="ReviewLabel">
         <value xml:lang="en">Review</value>
         <category>RATING_REVIEW</category>
         <description>ReviewLabel</description>
     </property>
-
     <property key="LocationLabel">
         <value xml:lang="en">Location</value>
         <category>RATING_REVIEW</category>
         <description>LocationLabel</description>
     </property>
-
     <property key="AgeLabel">
         <value xml:lang="en">Age</value>
         <category>RATING_REVIEW</category>
         <description>AgeLabel</description>
     </property>
-
     <property key="GenderLabel">
         <value xml:lang="en">Gender</value>
         <category>RATING_REVIEW</category>
         <description>GenderLabel</description>
     </property>
-
     <property key="WrittenByLabel">
         <value xml:lang="en">Written By</value>
         <category>RATING_REVIEW</category>
         <description>WrittenByLabel</description>
     </property>
-
     <property key="ClickCloseLabel">
         <value xml:lang="en">Click to close</value>
         <category>RATING_REVIEW</category>
         <description>ClickCloseLabel</description>
     </property>
-
     <property key="TermsConditionsLabel">
         <value xml:lang="en">Terms &amp; Conditions</value>
         <category>RATING_REVIEW</category>
         <description>TermsConditionsLabel</description>
     </property>
-
     <property key="ReviewGuidelinesLabel">
         <value xml:lang="en">Review Guidelines</value>
         <category>RATING_REVIEW</category>
         <description>ReviewGuidelinesLabel</description>
     </property>
-
     <property key="SortReviewByRatingHighLabel">
         <value xml:lang="en">Rating - High to Low</value>
         <category>RATING_REVIEW</category>
         <description>SortReviewByRatingHighLabel</description>
     </property>
-
     <property key="SortReviewByRatingLowLabel">
         <value xml:lang="en">Rating - Low to High</value>
         <category>RATING_REVIEW</category>
         <description>SortReviewByRatingLowLabel</description>
     </property>
-
     <property key="SortReviewByDateHighLabel">
         <value xml:lang="en">Date - Newest First</value>
         <category>RATING_REVIEW</category>
         <description>SortReviewByDateHighLabel</description>
     </property>
-
     <property key="SortReviewByDateLowLabel">
         <value xml:lang="en">Date - Oldest First</value>
         <category>RATING_REVIEW</category>
         <description>SortReviewByDateLowLabel</description>
     </property>
-
     <property key="ReadReviewLabel">
         <value xml:lang="en">Read all Reviews</value>
         <category>RATING_REVIEW</category>
         <description>ReadReviewLabel</description>
     </property>
-
     <property key="WriteReviewLabel">
         <value xml:lang="en">Write a Review</value>
         <category>RATING_REVIEW</category>
         <description>WriteReviewLabel</description>
     </property>
-
     <property key="CustomerRatingLabel">
-        <value xml:lang="en">Customer Rating</value>
+        <value xml:lang="en">Customer Rating:</value>
         <category>RATING_REVIEW</category>
         <description>CustomerRatingLabel</description>
     </property>
-
     <property key="FirstToReviewLabel">
         <value xml:lang="en">Be the first to write a review</value>
         <category>RATING_REVIEW</category>
         <description>FirstToReviewLabel</description>
     </property>
-
     <property key="ReviewProductLabel">
         <value xml:lang="en">Review Product</value>
         <category>RATING_REVIEW</category>
         <description>ReviewProductLabel</description>
     </property>
-
     <property key="SortByLabel">
         <value xml:lang="en">Sort By</value>
         <category>RATING_REVIEW</category>
         <description>SortByLabel</description>
     </property>
-
     <property key="ViewLargerImageLabel">
         <value xml:lang="en">See Larger Image</value>
         <category>PDP</category>
         <description>ViewLargerImageLabel</description>
     </property>
-
     <property key="MoreImageLabel">
         <value xml:lang="en">More Pictures</value>
         <category>PDP</category>
         <description>MoreImageLabel</description>
     </property>
-<!-- *** Social Media *************************************** -->
-
+    <!-- *** Social Media *************************************** -->
     <property key="SocialMediaShareLabel">
         <value xml:lang="en">Share This Product</value>
         <category>SOCIAL_MEDIA</category>
         <description>SocialMediaShareLabel</description>
     </property>
-
     <property key="SocialMediaEmailToAFriendLabel">
         <value xml:lang="en">Email to a Friend</value>
         <category>SOCIAL_MEDIA</category>
         <description>SocialMediaEmailToAFriendLabel</description>
     </property>
-
     <property key="SocialMediaEmailToAFriendSubjectLabel">
         <value xml:lang="en">Hi, I 've seen this great product from www.bigfish.com</value>
         <category>SOCIAL_MEDIA</category>
         <description>SocialMediaEmailToAFriendSubjectLabel</description>
     </property>
-
     <property key="RegistrationEmailPreferenceHtmlLabel">
         <value xml:lang="en">I prefer emails in HTML</value>
         <category>CHECKOUT</category>
@@ -775,13 +806,12 @@
         <description>Text Preference</description>
     </property>
     <property key="RegistrationSolicitCheckboxLabel">
-        <value xml:lang="en">Please send me exclusive discounts and special promotions</value>
+        <value xml:lang="en">Sign me up for Up and Runway emails</value>
         <category>CHECKOUT</category>
         <description>Solicitation checkbox</description>
     </property>
-
     <property key="EnterPromoCodeLabel">
-        <value xml:lang="en">If you have an "Offer" code, please enter it here:</value>
+        <value xml:lang="en">If you have an "Coupon" code, please enter it here:</value>
         <category>CHECKOUT</category>
         <description>Enter offer code</description>
     </property>
@@ -794,13 +824,12 @@
         <value xml:lang="en">Added but does not apply</value>
         <category>CHECKOUT</category>
         <description>promo code added</description>
-   </property>
+    </property>
     <property key="promoCodeAppliedInfo">
         <value xml:lang="en">Applied, see Summary Below</value>
         <category>CHECKOUT</category>
         <description>promo code applied</description>
     </property>
-
     <property key="JoinMailingListLabel">
         <value xml:lang="en">Join Mailing List</value>
         <category>SITE_HEADER</category>
@@ -811,529 +840,554 @@
         <category>CHECKOUT</category>
         <description>Your Shopping Cart Currently Contains</description>
     </property>
+    <property key="PdpVideoLabel">
+        <value xml:lang="en">Video</value>
+        <category>PDP</category>
+        <description>PDP Video Link Label</description>
+    </property>
+    <property key="PdpVideo360Label">
+        <value xml:lang="en">360 Video</value>
+        <category>PDP</category>
+        <description>PDP 360 Video Link Label</description>
+    </property>
+    <property key="FacebookLabel">
+        <value xml:lang="en">Facebook</value>
+        <category>PDP</category>
+        <description>Facebook Link Label</description>
+    </property>
+    <property key="TwitterLabel">
+        <value xml:lang="en">Twitter</value>
+        <category>PDP</category>
+        <description>Twitter Link Label</description>
+    </property>
+    <property key="PdpTabLabel1">
+        <value xml:lang="en">TAB 1</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel2">
+        <value xml:lang="en">TAB 2</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel3">
+        <value xml:lang="en">TAB 3</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel4">
+        <value xml:lang="en">TAB 4</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
+    <property key="PdpTabLabel5">
+        <value xml:lang="en">TAB 5</value>
+        <category>PDP</category>
+        <description>PDP TAB Label</description>
+    </property>
     <!-- **** Page Title *************************************** -->
     <property key="LoginTitle">
         <value xml:lang="en">Sign In</value>
         <category>PAGE_HEADING_H1</category>
         <description>LoginTitle</description>
     </property>
-
     <property key="ForgotPasswordTitle">
         <value xml:lang="en">Forgot Password</value>
         <category>PAGE_HEADING_H1</category>
         <description>ForgotPasswordTitle</description>
     </property>
-
     <property key="GuestCheckoutTitle">
         <value xml:lang="en">Guest Checkout</value>
         <category>PAGE_HEADING_H1</category>
         <description>GuestCheckoutTitle</description>
-    </property>    
-
+    </property>
     <property key="ChangePasswordTitle">
         <value xml:lang="en">Change Password</value>
         <category>PAGE_HEADING_H1</category>
         <description>ChangePasswordTitle</description>
     </property>
-
     <property key="NewCustomerTitle">
         <value xml:lang="en">Account Registration</value>
         <category>PAGE_HEADING_H1</category>
         <description>NewCustomerTitle</description>
     </property>
-
     <property key="ShoppingCartTitle">
-        <value xml:lang="en">My Shopping Cart</value>
+        <value xml:lang="en">My Cart</value>
         <category>PAGE_HEADING_H1</category>
         <description>ShoppingCartTitle</description>
     </property>
-
     <property key="ShippingAddressTitle">
         <value xml:lang="en">Shipping Address</value>
         <category>PAGE_HEADING_H1</category>
         <description>ShippingAddressTitle</description>
     </property>
-
     <property key="EditShippingAddressTitle">
         <value xml:lang="en">Edit Shipping Address</value>
         <category>PAGE_HEADING_H1</category>
         <description>EditShippingAddressTitle</description>
     </property>
-
     <property key="ShippingOptionsTitle">
         <value xml:lang="en">Shipping Options and Delivery Times</value>
         <category>PAGE_HEADING_H1</category>
         <description>ShippingOptionsTitle</description>
     </property>
-
     <property key="OrderSummaryTitle">
         <value xml:lang="en">Order Summary</value>
         <category>PAGE_HEADING_H1</category>
         <description>OrderSummaryTitle</description>
     </property>
-
     <property key="OrderConfirmationTitle">
         <value xml:lang="en">Order Confirmation</value>
         <category>PAGE_HEADING_H1</category>
         <description>OrderConfirmationTitle</description>
     </property>
-
     <property key="ThankYouTitle">
         <value xml:lang="en">Thank You</value>
         <category>PAGE_HEADING_H1</category>
         <description>ThankYouTitle</description>
     </property>
-
     <property key="OrderStatusTitle">
         <value xml:lang="en">Order Status</value>
         <category>PAGE_HEADING_H1</category>
         <description>OrderStatusTitle</description>
     </property>
-
     <property key="OrderHistoryTitle">
         <value xml:lang="en">Order Status</value>
         <category>PAGE_HEADING_H1</category>
         <description>OrderHistoryTitle</description>
     </property>
-
     <property key="ForgotPasswordEmailTitle">
         <value xml:lang="en">Forgot Password Email</value>
         <category>PAGE_HEADING_H1</category>
         <description>ForgotPasswordEmailTitle</description>
     </property>
-
     <property key="MyAccountTitle">
         <value xml:lang="en">My Account</value>
         <category>PAGE_HEADING_H1</category>
         <description>MyAccountTitle</description>
     </property>
-
     <property key="SearchResultsTitle">
         <value xml:lang="en">Search Results</value>
         <category>PAGE_HEADING_H1</category>
         <description>SearchResultsTitle</description>
     </property>
-
-
+    <property key="SearchResultsCountsTitle">
+        <value xml:lang="en">Your Search for &lt;span class="searchText"&gt;'${searchText}'&lt;/span &gt; produced &lt;span class="searchCount"&gt;${searchResultCount}&lt;/span &gt; results:</value>
+        <category>PAGE_HEADING_H1</category>
+        <description>SearchResultsCountsTitle</description>
+    </property>
     <property key="StoreLocatorTitle">
         <value xml:lang="en">Store Locator</value>
         <category>PAGE_HEADING_H1</category>
         <description>StoreLocatorTitle</description>
     </property>
-
     <property key="ContactUsTitle">
         <value xml:lang="en">Contact Us</value>
         <category>PAGE_HEADING_H1</category>
         <description>ContactUsTitle</description>
     </property>
-
     <property key="BillingAddressTitle">
         <value xml:lang="en">Billing Address</value>
         <category>PAGE_HEADING_H1</category>
         <description>BillingAddressTitle</description>
     </property>
-    
-	<property key="ChangeLoginInfoTitle">
+    <property key="ChangeLoginInfoTitle">
         <value xml:lang="en">Change Login Information</value>
         <category>PAGE_HEADING_H1</category>
         <description>ChangeLoginInfoTitle</description>
     </property>
-
     <property key="ChangePersonalInfoTitle">
         <value xml:lang="en">Change Personal Information</value>
         <category>PAGE_HEADING_H1</category>
         <description>ChangePersonalInfoTitle</description>
     </property>
-
     <property key="WriteReviewTitle">
         <value xml:lang="en">Write a Review</value>
         <category>PAGE_HEADING_H1</category>
         <description>WriteReviewTitle</description>
     </property>
-
     <property key="PartyNotificationMailCreateTitle">
         <value xml:lang="en">Thank you for registering!</value>
         <category>PAGE_HEADING_H1</category>
         <description>PartyNotificationMailCreateTitle</description>
     </property>
-
     <property key="PartyNotificationMailChangeTitle">
         <value xml:lang="en">Change Notification</value>
         <category>PAGE_HEADING_H1</category>
         <description>PartyNotificationMailChangeTitle</description>
     </property>
-
     <property key="PartyNotificationMailVerificationTitle">
         <value xml:lang="en">Email Verification</value>
         <category>PAGE_HEADING_H1</category>
         <description>PartyNotificationMailVerificationTitle</description>
     </property>
-
     <property key="AbandonCartEmailTitle">
         <value xml:lang="en">Abandon Cart Notification</value>
         <category>PAGE_HEADING_H1</category>
         <description>AbandonCartEmailTitle</description>
     </property>
-
     <property key="ShipReviewEmailTitle">
         <value xml:lang="en">Product Review Notification</value>
         <category>PAGE_HEADING_H1</category>
         <description>ShipReviewEmailTitle</description>
     </property>
-
     <property key="EmailSubscriberTitle">
         <value xml:lang="en">Mailing List</value>
         <category>PAGE_HEADING_H1</category>
         <description>Email Subscriber Title</description>
     </property>
-
     <property key="ManufacturerTitle">
         <value xml:lang="en">Designer</value>
         <category>PAGE_HEADING_H1</category>
         <description>Manufacturer Title</description>
     </property>
-
-
-
     <!-- **** Heading *************************************** -->
-    <property key="CreateAnAccountHeading">
-        <value xml:lang="en">Create an Account</value>
-        <category>PAGE_SUB_HEADING</category>
-        <description>CreateAnAccountHeading</description>
-    </property>
-
     <property key="ReturningCustomerLoginHeading">
         <value xml:lang="en">Returning customers</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ReturningCustomerLoginHeading</description>
     </property>
-
     <property key="NotRegisteredHeading">
         <value xml:lang="en">New customers</value>
         <category>PAGE_SUB_HEADING</category>
         <description>NotRegisteredHeading</description>
     </property>
-
     <property key="AboutYouHeading">
         <value xml:lang="en">About You</value>
         <category>PAGE_SUB_HEADING</category>
         <description>AboutYouHeading</description>
     </property>
-
+    <property key="CreateAnAccountHeading">
+        <value xml:lang="en">Create an Account</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>CreateAnAccountHeading</description>
+    </property>
     <property key="EmailAddressHeading">
         <value xml:lang="en">Email Address</value>
         <category>PAGE_SUB_HEADING</category>
         <description>EmailAddressHeading</description>
     </property>
-
     <property key="GuestCheckoutHeading">
         <value xml:lang="en">Guest Checkout</value>
         <category>PAGE_SUB_HEADING</category>
         <description>GuestCheckoutHeading</description>
     </property>
-
     <property key="ShippingAddressHeading">
         <value xml:lang="en">Shipping Address</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ShippingAddressHeading</description>
     </property>
-
     <property key="UpdateAddressHeading">
         <value xml:lang="en">Update Address</value>
         <category>PAGE_SUB_HEADING</category>
         <description>UpdateAddressHeading</description>
     </property>
-
     <property key="CreateAddressHeading">
         <value xml:lang="en">Create Address</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CreateAddressHeading</description>
     </property>
-
     <property key="ShippingOptionHeading">
         <value xml:lang="en">Shipping Option</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ShippingOptionHeading</description>
     </property>
-
+    <property key="StorePickupHeading">
+        <value xml:lang="en">Store Pickup</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>StorePickupHeading</description>
+    </property>
     <property key="ShippingMethodsHeading">
-        <value xml:lang="en">Shipping Methods</value>
+        <value xml:lang="en">Shipping Option</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ShippingMethodsHeading</description>
     </property>
-
     <property key="PaymentInformationHeading">
         <value xml:lang="en">Payment Information</value>
         <category>PAGE_SUB_HEADING</category>
         <description>PaymentInformationHeading</description>
     </property>
-
     <property key="CardsOnFileHeading">
         <value xml:lang="en">Your Credit Cards on File</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CardsOnFileHeading</description>
     </property>
-
     <property key="OrderDetailsHeading">
         <value xml:lang="en">Order Details</value>
         <category>PAGE_SUB_HEADING</category>
         <description>OrderDetailsHeading</description>
     </property>
-
-    <property key="RecommendProductHeading">
+    <property key="ComplementProductHeading">
         <value xml:lang="en">You May Also Like:</value>
         <category>PAGE_SUB_HEADING</category>
-        <description>RecommendProductHeading</description>
+        <description>ComplementProductHeading</description>
     </property>
-
+    <property key="RecentlyViewedProductHeading">
+        <value xml:lang="en">Recently Viewed Products:</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>RecentlyViewedProductHeading</description>
+    </property>
     <property key="DetailsHeading">
         <value xml:lang="en">Details</value>
         <category>PAGE_SUB_HEADING</category>
         <description>DetailsHeading</description>
     </property>
-
     <property key="SummaryHeading">
         <value xml:lang="en">Summary:</value>
         <category>PAGE_SUB_HEADING</category>
         <description>SummaryHeading</description>
     </property>
-
     <property key="FeaturesHeading">
         <value xml:lang="en">Features</value>
         <category>PAGE_SUB_HEADING</category>
         <description>FeaturesHeading</description>
     </property>
-
     <property key="DescriptionHeading">
         <value xml:lang="en">Description:</value>
         <category>PAGE_SUB_HEADING</category>
         <description>DescriptionHeading</description>
     </property>
-
     <property key="TechnicalDetailsHeading">
         <value xml:lang="en">Technical Details</value>
         <category>PAGE_SUB_HEADING</category>
         <description>TechnicalDetailsHeading</description>
     </property>
-
     <property key="IngredientsHeading">
         <value xml:lang="en">Ingredients</value>
         <category>PAGE_SUB_HEADING</category>
         <description>IngredientsHeading</description>
     </property>
-
     <property key="CustomerAccountHeading">
         <value xml:lang="en">My Account</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CustomerAccountHeading</description>
     </property>
-
     <property key="CustomerAddressBookHeading">
         <value xml:lang="en">Address Book</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CustomerAddressBookHeading</description>
     </property>
-
     <property key="CustomerLoginHeading">
         <value xml:lang="en">Login Information</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CustomerLoginHeading</description>
     </property>
-
     <property key="CustomerOrderStatusHeading">
         <value xml:lang="en">Order Status</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CustomerOrderStatusHeading</description>
     </property>
-
     <property key="CustomerPersonalHeading">
         <value xml:lang="en">Personal Information</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CustomerPersonalHeading</description>
     </property>
-
     <property key="BillingAddressHeading">
         <value xml:lang="en">Billing Address</value>
         <category>PAGE_SUB_HEADING</category>
         <description>BillingAddressHeading</description>
     </property>
-
     <property key="HomeAddressHeading">
         <value xml:lang="en">Home</value>
         <category>PAGE_SUB_HEADING</category>
         <description>HomeAddressHeading</description>
     </property>
-
     <property key="SummerHomeAddressHeading">
         <value xml:lang="en">Your Summer Home</value>
         <category>PAGE_SUB_HEADING</category>
         <description>SummerHomeAddressHeading</description>
     </property>
-
     <property key="SearchResultNotFoundHeading">
         <value xml:lang="en">We could not find what you are looking for...</value>
         <category>PAGE_SUB_HEADING</category>
         <description>SearchResultNotFoundHeading</description>
     </property>
-
     <property key="ContentNotFoundHeading">
         <value xml:lang="en">Content Not Found</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ContentNotFoundHeading</description>
     </property>
-
     <property key="OrderInformationHeading">
         <value xml:lang="en">Order Information</value>
         <category>PAGE_SUB_HEADING</category>
         <description>OrderInformationHeading</description>
     </property>
-
     <property key="ShippingInformationHeading">
         <value xml:lang="en">Shipping Information</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ShippingInformationHeading</description>
     </property>
-
     <property key="OrderItemsHeading">
         <value xml:lang="en">Order Items</value>
         <category>PAGE_SUB_HEADING</category>
         <description>OrderItemsHeading</description>
     </property>
-
     <property key="ProductRatingsHeading">
         <value xml:lang="en">Product Ratings</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ProductRatingsHeading</description>
     </property>
-
     <property key="ProductReviewsHeading">
         <value xml:lang="en">Product Reviews</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ProductReviewsHeading</description>
     </property>
-
     <property key="ShareOpinionHeading">
         <value xml:lang="en">Share your opinion with others and write a detailed review</value>
         <category>PAGE_SUB_HEADING</category>
         <description>ShareOpinionHeading</description>
     </property>
-
     <property key="TellOthersHeading">
         <value xml:lang="en">Tell other customers about yourself and connect</value>
         <category>PAGE_SUB_HEADING</category>
         <description>TellOthersHeading</description>
     </property>
-
     <property key="PayPalHeading">
         <value xml:lang="en">PayPal</value>
         <category>PAGE_SUB_HEADING</category>
         <description>PayPalHeading</description>
     </property>
-
     <property key="CreditCardHeading">
         <value xml:lang="en">Credit Card</value>
         <category>PAGE_SUB_HEADING</category>
         <description>CreditCardHeading</description>
     </property>
-
     <property key="EmailSubscriberHeading">
         <value xml:lang="en">Please enter the following:</value>
         <category>PAGE_SUB_HEADING</category>
         <description>Email Subscriber Title</description>
     </property>
-
     <property key="ManufacturerPDPProfileHeading">
         <value xml:lang="en">Designer</value>
         <category>PAGE_SUB_HEADING</category>
         <description>PDP Manufacturer Heading</description>
     </property>
-
     <property key="ManufacturerProfileCollectionHeading">
         <value xml:lang="en">Current Collection</value>
         <category>PAGE_SUB_HEADING</category>
         <description>Manufacturer Product Heading</description>
     </property>
-
+    <property key="PromotionHeading">
+        <value xml:lang="en">Promotions and Coupon Codes</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>Promotion apply Heading</description>
+    </property>
+    <property key="PDPLongDescriptionHeading">
+        <value xml:lang="en">Details</value>
+        <category>PDP</category>
+        <description>PDPLongDescriptionHeading</description>
+    </property>
+    <property key="PDPSalesPitchHeading">
+        <value xml:lang="en">Sales Pitch</value>
+        <category>PDP</category>
+        <description> PDPSalesPitchHeading </description>
+    </property>
+    <property key="PDPSpecialInstructionsHeading">
+        <value xml:lang="en">Special Instructions</value>
+        <category>PDP</category>
+        <description>PDPSpecialInstructionsHeading</description>
+    </property>
+    <property key="PDPDeliveryInfoHeading">
+        <value xml:lang="en">Delivery Info</value>
+        <category>PDP</category>
+        <description>PDPDeliveryInfoHeading</description>
+    </property>
+    <property key="PDPDirectionsHeading">
+        <value xml:lang="en">Directions</value>
+        <category>PDP</category>
+        <description>PDPDirectionsHeading</description>
+    </property>
+    <property key="PDPTermsConditionsHeading">
+        <value xml:lang="en">Terms Conditions</value>
+        <category>PDP</category>
+        <description>PDPTermsConditionsHeading</description>
+    </property>
+    <property key="PDPIngredientsHeading">
+        <value xml:lang="en">Ingredients</value>
+        <category>PDP</category>
+        <description>PDPIngredientsHeading</description>
+    </property>
+    <property key="PDPWarningsHeading">
+        <value xml:lang="en">Warnings</value>
+        <category>PDP</category>
+        <description>PDPWarningsHeading</description>
+    </property>
+    <property key="ContactUsHeading">
+        <value xml:lang="en">Contact Us</value>
+        <category>PAGE_SUB_HEADING</category>
+        <description>ContactUsHeading</description>
+    </property>
     <!-- ******* Info Messages *************************************** -->
+    <property key="ReviewLoginInfo">
+        <value xml:lang="en">Login to write a review</value>
+        <category>MESSAGE_INFO</category>
+        <description>ReviewLoginInfo</description>
+    </property>
     <property key="BILLINGAddressHeadingInfo">
         <value xml:lang="en">Where is your credit card statement sent?</value>
         <category>MESSAGE_INFO</category>
         <description>BILLINGAddressHeadingInfo</description>
     </property>
-
     <property key="BILLINGPhoneInfo">
         <value xml:lang="en">We may contact you by phone for delivery updates</value>
         <category>MESSAGE_INFO</category>
         <description>BILLINGPhoneLabelInfo</description>
     </property>
-
     <property key="CreateAccountInfo">
         <value xml:lang="en">Optional: For your convenience, to create an account (and expedite any future orders) please confirm your email and enter a password.:</value>
         <category>MESSAGE_INFO</category>
         <description>CreateAccountInfo</description>
     </property>
-
     <property key="SHIPPINGAddressHeadingInfo">
         <value xml:lang="en">Where would you like your items shipped?</value>
         <category>MESSAGE_INFO</category>
         <description>SHIPPINGAddressHeadingInfo</description>
     </property>
-
     <property key="SHIPPINGPhoneInfo">
         <value xml:lang="en">We may contact you by phone for delivery updates</value>
         <category>MESSAGE_INFO</category>
         <description>SHIPPINGPhoneLabelInfo</description>
     </property>
-
     <property key="ReturningCustomerLoginInfo">
         <value xml:lang="en">If you are returning customer and have registered with us, please login using your username (Email) and password below.</value>
         <category>MESSAGE_INFO</category>
         <description>ReturningCustomerLoginInfo</description>
     </property>
-
     <property key="NotRegisteredInfo">
-        <value xml:lang="en">If you havent bought from us before please enter your email address below and click continue and you will be asked for your personal details.  We will then create an account for you to save you entering this information next time you visit!</value>
+        <value xml:lang="en">If you haven't bought from us before please enter your email address below and click continue. You will be asked for your personal details.  We will then create an account for you to save you entering this information next time you visit!</value>
         <category>MESSAGE_INFO</category>
         <description>NotRegisteredInfo</description>
     </property>
-
     <property key="ForgotPasswordInfo">
-        <value xml:lang="en">If you have forgotten your password, please enter your Username (Email) below and click Continue.  We will then email you a new password to your contact email address.  You can then use the new password to Sign in and for your security you will be prompted to reset your password.</value>
+        <value xml:lang="en">If you have forgotten your password, please enter your Username (email address) below and click Continue.  We will then email you a new password to your contact email address.  You can then use the new password to sign in and for your security you will be prompted to reset your password.</value>
         <category>MESSAGE_INFO</category>
         <description>ForgotPasswordInfo</description>
     </property>
-
     <property key="GuestCheckoutInfo">
-        <value xml:lang="en">You are not required to sign-in. You may complete your order as a guest. Enter your email address below and click on the Guest CheckOut button to continue.</value>
+        <value xml:lang="en">You are not required to sign-in. You may complete your order as a guest. Enter your email address below and click on the "Guest CheckOut" button to continue.</value>
         <category>MESSAGE_INFO</category>
         <description>GuestCheckoutInfo</description>
     </property>
-
     <property key="UserNameIsEmailInfo">
         <value xml:lang="en">Please note: your username is the email address you originally registered with.</value>
         <category>MESSAGE_INFO</category>
         <description>UserNameIsEmailInfo</description>
     </property>
-
     <property key="NewCustomerInstructionsInfo">
         <value xml:lang="en">Please provide your details so that we can fulfill your order.  Any information with an asterisk &lt;span class="required"&gt;*&lt;/span&gt; is required.  </value>
         <category>MESSAGE_INFO</category>
         <description>NewCustomerInstructionsInfo</description>
     </property>
-
-
     <property key="NoGeoLocationAvailableInfo">
         <value xml:lang="en">No Geolocation Available. </value>
         <category>MESSAGE_INFO</category>
         <description>GeoLocationInfo</description>
     </property>
-
     <property key="GeoLocationLoadingInfo">
         <value xml:lang="en">Loading...</value>
         <category>MESSAGE_INFO</category>
         <description>GeoLocationInfo</description>
     </property>
-
     <property key="EmailAddressInstructionsInfo">
         <value xml:lang="en">This will be used as your username.</value>
         <category>MESSAGE_INFO</category>
@@ -1342,65 +1396,74 @@
     <property key="PassMinLengthInstructionsInfo">
         <value xml:lang="en">min ${REG_PWD_MIN_CHAR} characters, </value>
         <category>MESSAGE_INFO</category>
-        <description>PasswordInstructionsInfo</description>
+        <description>PassMinLengthInstructionsInfo</description>
     </property>
     <property key="PassMinNumInstructionsInfo">
         <value xml:lang="en">at least ${REG_PWD_MIN_NUM} ${digitMsgStr}, </value>
         <category>MESSAGE_INFO</category>
-        <description>PasswordInstructionsInfo</description>
+        <description>PassMinNumInstructionsInfo</description>
     </property>
     <property key="PassMinUpperCaseInstructionsInfo">
         <value xml:lang="en">at least ${REG_PWD_MIN_UPPER} uppercase ${upperCaseMsgStr}.</value>
         <category>MESSAGE_INFO</category>
-        <description>PasswordInstructionsInfo</description>
+        <description>PassMinUpperCaseInstructionsInfo</description>
     </property>
     <property key="PassOneNumInstructionsInfo">
         <value xml:lang="en">at least one number, </value>
         <category>MESSAGE_INFO</category>
-        <description>PasswordInstructionsInfo</description>
+        <description>PassOneNumInstructionsInfo</description>
     </property>
     <property key="PassOneUpperCaseInstructionsInfo">
         <value xml:lang="en">at least one uppercase characters.</value>
         <category>MESSAGE_INFO</category>
-        <description>PasswordInstructionsInfo</description>
+        <description>PassOneUpperCaseInstructionsInfo</description>
     </property>
     <property key="PasswordInstructionsInfo">
         <value xml:lang="en">min 6 characters, at least one number.</value>
         <category>MESSAGE_INFO</category>
         <description>PasswordInstructionsInfo</description>
     </property>
-
+    <property key="CancelStoreSelectInfo">
+        <value xml:lang="en">This will return you to the check-out process</value>
+        <category>MESSAGE_INFO</category>
+        <description>CancelStoreSelectInfo</description>
+    </property>
+    <property key="DeliverMyItemsInfo">
+        <value xml:lang="en">Prefer to have your items delivered direct?</value>
+        <category>MESSAGE_INFO</category>
+        <description>DeliverMyItemsInfo</description>
+    </property>
+    <property key="SelectStoreInfo">
+        <value xml:lang="en">Prefer to Pickup in a Store?</value>
+        <category>MESSAGE_INFO</category>
+        <description>SelectStoreInfo</description>
+    </property>
     <property key="ShippingAddressInstructionsInfo">
         <value xml:lang="en">Please select the delivery address for the &lt;em&gt;${shoppingCartSize} item(s)&lt;/em&gt; in your order.</value>
         <category>MESSAGE_INFO</category>
         <description>ShippingAddressInstructionsInfo</description>
     </property>
-
     <property key="UpdateAddressInstructionsInfo">
         <value xml:lang="en">This address can now be used as your shipping or delivery address when checking out.
         &lt;br&gt; Any information with an asterisk &lt;span class="required"&gt;*&lt;/span&gt; is required.</value>
         <category>MESSAGE_INFO</category>
         <description>UpdateAddressInstructionsInfo</description>
     </property>
-
     <property key="PaymentSelectMethodInstructionsInfo">
         <value xml:lang="en">Please select your method of payment.</value>
         <category>MESSAGE_INFO</category>
         <description>PaymentSelectMethodInstructionsInfo</description>
     </property>
-
     <property key="WeAcceptMajorCCInstructionsInfo">
         <value xml:lang="en">We accept all major credit cards.</value>
         <category>MESSAGE_INFO</category>
         <description>WeAcceptMajorCCInstructionsInfo</description>
     </property>
-
     <property key="ContactUsInstructionsInfo">
         <value xml:lang="en">For more immediate attention you may call us at (800) 324-7136 during our normal business hours of operation 9:00 to 5:00 EST. For all online inquiries, we will do everything we can to respond within [2 business days].</value>
         <category>MESSAGE_INFO</category>
         <description>ContactUsInstructionsInfo</description>
     </property>
-
     <property key="ContactUsEnterMessageInfo">
         <value xml:lang="en">Please enter your contact details and comments below:</value>
         <category>MESSAGE_INFO</category>
@@ -1421,428 +1484,323 @@
         <category>MESSAGE_INFO</category>
         <description>StoreLocatorEnterMessageInfo</description>
     </property>
-
     <property key="AddressBookInstructionInfo">
         <value xml:lang="en">These addresses can be used as delivery address during checkout.</value>
         <category>MESSAGE_INFO</category>
         <description>AddressBookInstructionInfo</description>
     </property>
-
     <property key="ContactUsRecievedInfo">
         <value xml:lang="en">Your comments have been received.</value>
         <category>MESSAGE_INFO</category>
         <description>ContactUsRecievedInfo</description>
     </property>
-
     <property key="YouSearchedForInfo">
         <value xml:lang="en">You searched for</value>
         <category>MESSAGE_INFO</category>
         <description>YouSearchedForInfo</description>
     </property>
-
     <property key="AlternateSearchInfo">
         <value xml:lang="en">Please try an alternate search, or browse our products using the menu above.</value>
         <category>MESSAGE_INFO</category>
         <description>AlternateSearchInfo</description>
     </property>
-
     <property key="EmptySiteSearchInfo">
         <value xml:lang="en">Please enter one or more terms to search for, or browse our products using the menu above.</value>
         <category>MESSAGE_INFO</category>
         <description>EmptySiteSearchInfo</description>
     </property>
-
     <property key="OrderCompleteInfo">
         <value xml:lang="en">Thank you for shopping with www.bigfish.com, below is a confirmation of your ${orderNumberCaption} ${orderId}</value>
         <category>MESSAGE_INFO</category>
         <description>OrderCompleteInfo</description>
     </property>
-
     <property key="RequestCatalogTitle">
         <value xml:lang="en">Request Catalog</value>
         <category>MESSAGE_INFO</category>
         <description>RequestCatalogTitle</description>
     </property>
-
     <property key="AddressLine1Caption">
         <value xml:lang="en">Address 1:</value>
         <category>MESSAGE_INFO</category>
         <description>AddressLine1Caption</description>
     </property>
-
-    <property key="StoreCodeCaption">
-        <value xml:lang="en">Store Code:</value>
-        <category>CHECK_OUT</category>
-        <description>StoreCodeCaption</description>
-    </property>
-    <property key="StoreAddressCaption">
-        <value xml:lang="en">Store Address:</value>
-        <category>CHECK_OUT</category>
-        <description>StoreAddressCaption</description>
-    </property>
-    <property key="StoreTelCaption">
-        <value xml:lang="en">Store Tel:</value>
-        <category>CHECK_OUT</category>
-        <description>StoreTelCaption</description>
-    </property>
-    <property key="PickupStoreInfo">
-        <value xml:lang="en">* We will contact you via email when your merchandise is available. This will typically be within 24 hours. You can pay at the time of pickup.</value>
-        <category>CHECK_OUT</category>
-        <description>PickupStoreInfo</description>
-    </property>
-
     <property key="CatalogNameInfo">
         <value xml:lang="en">Catalog Name: </value>
         <category>MESSAGE_INFO</category>
         <description>CatalogNameInfo</description>
     </property>
-
     <property key="RequestCatalogInstructionsInfo">
-        <value xml:lang="en">Fill out the form below to get your FREE [Big Fish] Product Catalog, we will do everything we can to respond within [2 business days]. </value>
+        <value xml:lang="en">Fill out the form below to get your FREE [Big Fish] Product Catalog, we will do everything we can to respond within [2 business days].
+        &lt;br&gt; Please enter your contact details and comments below:</value>
         <category>MESSAGE_INFO</category>
         <description>RequestCatalogInstructionsInfo</description>
     </property>
-
     <property key="RequestCatalogReceivedInfo">
         <value xml:lang="en">Your catalog request will be processed immediately. Thank you for your interest in [company].</value>
         <category>MESSAGE_INFO</category>
         <description>RequestCatalogReceivedInfo</description>
     </property>
-
     <property key="PayPalValidatedInfo">
         <value xml:lang="en">Your order is not complete until you click the 'Submit order' button below. Your PayPal account will be charged for the amount shown above.</value>
         <category>MESSAGE_INFO</category>
         <description>PayPalValidatedInfo</description>
     </property>
-
     <property key="OutOfStockInfo">
         <value xml:lang="en">We're sorry but this item is currently out of stock.</value>
         <category>MESSAGE_INFO</category>
         <description>OutOfStockInfo</description>
     </property>
-
-
-         <!-- ******* Product Review Info Messages *************************************** -->
+    <!-- ******* Product Review Info Messages *************************************** -->
     <property key="ReviewTipInfo">
         <value xml:lang="en">Tips for writing a great review</value>
         <category>RATING_REVIEW</category>
         <description>ReviewTipInfo</description>
     </property>
-
     <property key="SeeReviewInfo">
         <value xml:lang="en">To see your review featured on our website:</value>
         <category>RATING_REVIEW</category>
         <description>SeeReviewInfo</description>
     </property>
-
     <property key="ReviewTextInfo">
         <value xml:lang="en">Review text should be at least 50 characters, otherwise only your ratings will count.</value>
         <category>RATING_REVIEW</category>
         <description>ReviewTextInfo</description>
     </property>
-
     <property key="UseProductReviewInfo">
         <value xml:lang="en">Use the product before reviewing it.</value>
         <category>RATING_REVIEW</category>
         <description>UseProductReviewInfo</description>
     </property>
-
     <property key="FocusFeaturesInfo">
         <value xml:lang="en">Focus on the product's features, and please be specific.</value>
         <category>RATING_REVIEW</category>
         <description>FocusFeaturesInfo</description>
     </property>
-
     <property key="PleaseAvoidInfo">
         <value xml:lang="en">Avoid...</value>
         <category>RATING_REVIEW</category>
         <description>PleaseAvoidInfo</description>
     </property>
-
     <property key="InformationChangesInfo">
         <value xml:lang="en">Information that changes, such as price and promotional details.</value>
         <category>RATING_REVIEW</category>
         <description>InformationChangesInfo</description>
     </property>
-
     <property key="InappropriateLanguageInfo">
         <value xml:lang="en">Inappropriate language and attitude.</value>
         <category>RATING_REVIEW</category>
         <description>InappropriateLanguageInfo</description>
     </property>
-
     <property key="InformationOtherInfo">
         <value xml:lang="en">Information about other companies and websites.</value>
         <category>RATING_REVIEW</category>
         <description>InformationOtherInfo</description>
     </property>
-
     <property key="DetailedPersonalInfo">
         <value xml:lang="en">Detailed personal information -- we want to protect your privacy!</value>
         <category>RATING_REVIEW</category>
         <description>DetailedPersonalInfo</description>
     </property>
-
     <property key="ReviewOurCompanyInfo">
         <value xml:lang="en">A review of our company. A separate review field for our company is below.</value>
         <category>RATING_REVIEW</category>
         <description>ReviewOurCompanyInfo</description>
     </property>
-
     <property key="HaveSomethingToSayInfo">
         <value xml:lang="en">Have something else to say? Contact</value>
         <category>RATING_REVIEW</category>
         <description>HaveSomethingToSayInfo</description>
     </property>
-
     <property key="CustomerServiceInfo">
         <value xml:lang="en">Customer Service</value>
         <category>RATING_REVIEW</category>
         <description>CustomerServiceInfo</description>
     </property>
-
     <property key="YourPrivateCommentInfo">
         <value xml:lang="en">. (Your comment will be sent privately to our staff.)</value>
         <category>RATING_REVIEW</category>
         <description>YourPrivateCommentInfo</description>
     </property>
-
     <property key="GovermentRegulationsInfo">
         <value xml:lang="en">Written reviews must be over 50 characters in length.</value>
         <category>RATING_REVIEW</category>
         <description>GovermentRegulationsInfo</description>
     </property>
-
     <property key="LocationExampleInfo">
         <value xml:lang="en">Example: New York, NY</value>
         <category>RATING_REVIEW</category>
         <description>LocationExampleInfo</description>
     </property>
-
     <property key="NicknameExampleInfo">
         <value xml:lang="en">For your privacy, we suggest using a nickname instead of your real name.</value>
         <category>RATING_REVIEW</category>
         <description>NicknameExampleInfo</description>
     </property>
-
     <property key="TitleExampleInfo">
         <value xml:lang="en">Example: Best Purchase Ever</value>
         <category>RATING_REVIEW</category>
         <description>TitleExampleInfo</description>
     </property>
-
     <property key="SubmitRatingsThankyouInfo">
         <value xml:lang="en">Thank you! You have successfully submitted your review for the product.  Please note that it may take up to 72 hours for your review to appear.</value>
         <category>RATING_REVIEW</category>
         <description>SubmitRatingsThankyouInfo</description>
     </property>
-
-
     <!-- ******* Email Info Messages *************************************** -->
     <property key="SalutationEmailInfo">
         <value xml:lang="en">Dear</value>
         <category>MESSAGE_EMAIL</category>
         <description>SalutationEmailInfo</description>
     </property>
-
     <property key="SystemGeneratedEmailInfo">
         <value xml:lang="en">This is a system generated email, please do not reply as we do not monitor this account.</value>
         <category>MESSAGE_EMAIL</category>
         <description>SystemGeneratedEmailInfo</description>
     </property>
-
     <property key="ThankYouForShoppingEmailInfo">
-        <value xml:lang="en">Thank you for shopping with www.bigfish.com, below is a confirmation of your order.</value>
+        <value xml:lang="en">Thank you for shopping with Up and Runway, below is a confirmation of your order.</value>
         <category>MESSAGE_EMAIL</category>
         <description>ThankYouForShoppingEmailInfo</description>
     </property>
-
-            <!-- **** Shopping Cart Text *************************************** -->
+    <!-- **** Shopping Cart Text *************************************** -->
     <property key="CartPostageInfo">
-        <value xml:lang="en">Postage and Packaging will be displayed at Order Summary</value>
+        <value xml:lang="en"> You will be able to enter your promo card at checkout</value>
         <category>CHECK_OUT</category>
         <description>CartPostageInfo</description>
     </property>
-
     <property key="CartSubTotalInfo">
         <value xml:lang="en">Sub Total before Discounts</value>
         <category>CHECK_OUT</category>
         <description>CartSubTotalInfo</description>
     </property>
-
     <property key="ProductDescriptionAttributesInfo">
         <value xml:lang="en">Product Short Description and Attributes</value>
         <category>CHECK_OUT</category>
         <description>ProductDescriptionAttributesInfo</description>
     </property>
-
     <property key="YourShoppingCartIsEmptyInfo">
         <value xml:lang="en">Your Shopping Cart is empty</value>
         <category>CHECK_OUT</category>
         <description>YourShoppingCartIsEmptyInfo</description>
     </property>
-
     <property key="EnterOfferCodeInfo">
         <value xml:lang="en">Your shopping cart currently contains n item(s), if you have an "Offer" code, please enter it here:</value>
         <category>CHECK_OUT</category>
         <description>EnterOfferCodeInfo</description>
     </property>
-
-            <!-- *****************  My Account ******************************************************** -->
-			
+    <!-- *****************  My Account ******************************************************** -->
     <property key="CustomerLoginInfo">
         <value xml:lang="en">Need to update your e-mail address or password?  Click the link below:</value>
         <category>MY_ACCOUNT</category>
         <description>CustomerLoginInfo</description>
     </property>
-
     <property key="CustomerPersonalInfo">
-        <value xml:lang="en">Need to update your name, e-mail address or password?  Click the link below:</value>
+        <value xml:lang="en">Need to update your name or other personal information? Click the link below:</value>
         <category>MY_ACCOUNT</category>
         <description>CustomerPersonalInfo</description>
     </property>
-    
     <property key="CustomerAddressbookInfo">
         <value xml:lang="en">Need to add or update an address?  Click the link below:</value>
         <category>MY_ACCOUNT</category>
         <description>CustomerAddressbookInfo</description>
     </property>
-
     <property key="CustomerOrderStatusInfo">
         <value xml:lang="en">Need to view current or past orders?  Click the link below:</value>
         <category>MY_ACCOUNT</category>
         <description>CustomerOrderStatusInfo</description>
     </property>
-
     <property key="ClickLoginDetailsInfo">
         <value xml:lang="en">Click here to change login details.</value>
         <category>MY_ACCOUNT</category>
         <description>ClickLoginDetailsInfo</description>
     </property>
-
     <property key="ClickPersonalDetailsInfo">
         <value xml:lang="en">Click here to change personal details.</value>
         <category>MY_ACCOUNT</category>
         <description>ClickPersonalDetailsInfo</description>
     </property>
- 
     <property key="ClickAddressBookInfo">
         <value xml:lang="en">Click here to edit your address book.</value>
         <category>MY_ACCOUNT</category>
         <description>ClickAddressBookInfo</description>
     </property>
-  
     <property key="ClickViewOrdersInfo">
         <value xml:lang="en">Click here to view your orders.</value>
         <category>MY_ACCOUNT</category>
         <description>ClickViewOrdersInfo</description>
     </property>
-
     <property key="EditEmailAddressInstructionsInfo">
         <value xml:lang="en">This will not change your username for sign in.</value>
         <category>MY_ACCOUNT</category>
         <description>EditEmailAddressInstructionsInfo</description>
     </property>
-
     <property key="EditCustomerInstructionsInfo">
         <value xml:lang="en">Any information with an asterisk &lt;span class="required"&gt;*&lt;/span&gt; is required.</value>
         <category>MY_ACCOUNT</category>
         <description>EditCustomerInstructionsInfo</description>
     </property>
-
     <property key="RequiredInstructionsInfo">
         <value xml:lang="en">Any information with an asterisk &lt;span class="required"&gt;*&lt;/span&gt; is required.</value>
         <category>MY_ACCOUNT</category>
         <description>RequiredInstructionsInfo</description>
     </property>
-
-    <property key="CancelStoreSelectInfo">
-        <value xml:lang="en">This will return you to the check-out process</value>
-        <category>MESSAGE_INFO</category>
-        <description>CancelStoreSelectInfo</description>
-    </property>
-
-    <property key="DeliverMyItemsInfo">
-        <value xml:lang="en">Prefer to have your items delivered direct?</value>
-        <category>MESSAGE_INFO</category>
-        <description>DeliverMyItemsInfo</description>
-    </property>
-
-    <property key="SelectStoreInfo">
-        <value xml:lang="en">Prefer to Pickup in a Store?</value>
-        <category>MESSAGE_INFO</category>
-        <description>SelectStoreInfo</description>
-    </property>
-
     <!-- ******* Success Messages *************************************** -->
-
     <property key="UserLoginUpdatedSuccess">
         <value xml:lang="en">Login Information updated</value>
         <category>MESSAGE_SUCCESS</category>
         <description>UserLoginUpdatedSuccess</description>
     </property>
-
     <property key="UserProfileUpdatedSuccess">
         <value xml:lang="en">Personal Information updated</value>
         <category>MESSAGE_SUCCESS</category>
         <description>UserProfileUpdatedSuccess</description>
     </property>
-
     <property key="JoinMailingListSuccess">
         <value xml:lang="en">Thank you for joining the mailing list</value>
         <category>MESSAGE_SUCCESS</category>
         <description>JoinMailingListSuccess</description>
     </property>
-
     <!-- ******* Error Messages *************************************** -->
     <property key="eCommerceViewPermissionError">
         <value xml:lang="en">You are not allowed to view this page.</value>
         <category>MESSAGE_ERROR</category>
         <description>eCommerceViewPermissionError</description>
     </property>
-    
     <property key="ContactReasonMissingError">
         <value xml:lang="en">o	Please select a Reason for Contact. This allows us to better serve you.</value>
         <category>MESSAGE_ERROR</category>
         <description>ContactReasonMissingError</description>
     </property>
-
     <property key="FirstNameMissingError">
         <value xml:lang="en">Please enter your First Name</value>
         <category>MESSAGE_ERROR</category>
         <description>FirstNameMissingError</description>
     </property>
-
     <property key="LastNameMissingError">
         <value xml:lang="en">Please enter your Last Name</value>
         <category>MESSAGE_ERROR</category>
         <description>LastNameMissingError</description>
     </property>
-
     <property key="ContactUsEmailMissingError">
         <value xml:lang="en">Please enter your Email Address. This allows us to respond quickly and ensure that we can contact you to better serve you.</value>
         <category>MESSAGE_ERROR</category>
         <description>ContactUsEmailMissingError</description>
     </property>
-
     <property key="EmailInvalidError">
         <value xml:lang="en">Please enter a valid Email Address</value>
         <category>MESSAGE_ERROR</category>
         <description>EmailInvalidError</description>
     </property>
-
     <property key="CommentMissingError">
         <value xml:lang="en">Please enter a Comment</value>
         <category>MESSAGE_ERROR</category>
         <description>CommentMissingError</description>
     </property>
-
     <property key="AddressNickNameMissingError">
         <value xml:lang="en">Please enter an Address Nick Name</value>
         <category>MESSAGE_ERROR</category>
         <description>AddressNickNameMissingError</description>
     </property>
-
     <property key="GenderMissingError">
         <value xml:lang="en">Please select your Gender</value>
         <category>MESSAGE_ERROR</category>
@@ -1858,134 +1816,133 @@
         <category>MESSAGE_ERROR</category>
         <description>NoStoreFoundError</description>
     </property>
-
+    <property key="NoDirectionRouteFoundError">
+        <value xml:lang="en">Sorry no direction route found.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>NoDirectionRouteFoundError</description>
+    </property>
     <property key="AddressLine1MissingError">
-        <value xml:lang="en">Please enter your Address information</value>
+        <value xml:lang="en">Please enter your Address</value>
         <category>MESSAGE_ERROR</category>
         <description>AddressLine1MissingError</description>
     </property>
-
     <property key="CityMissingError">
         <value xml:lang="en">Please enter your City</value>
         <category>MESSAGE_ERROR</category>
         <description>CityMissingError</description>
     </property>
-
+    <property key="ProvinceMissingError">
+        <value xml:lang="en">Please select your Province</value>
+        <category>MESSAGE_ERROR</category>
+        <description>ProvinceMissingError</description>
+    </property>
+    <property key="CommonPhoneError">
+        <value xml:lang="en">Please enter a Phone Number</value>
+        <category>MESSAGE_ERROR</category>
+        <description>CommonPhoneError</description>
+    </property>
     <property key="StateMissingError">
         <value xml:lang="en">Please select your State</value>
         <category>MESSAGE_ERROR</category>
         <description>StateMissingError</description>
     </property>
-
     <property key="ZipCodeMissingError">
-        <value xml:lang="en">Please enter your Zip Code</value>
+        <value xml:lang="en">Please enter your Zip</value>
         <category>MESSAGE_ERROR</category>
         <description>ZipCodeMissingError</description>
     </property>
-
     <property key="PostalCodeMissingError">
         <value xml:lang="en">Please enter your Postal Code</value>
         <category>MESSAGE_ERROR</category>
         <description>PostalCodeMissingError</description>
     </property>
-
+    <property key="InvalidZipCodeError">
+        <value xml:lang="en">Please Enter a valid Zip Code.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>InvalidZipCodeError</description>
+    </property>
     <property key="LoginEmailAddressMissingError">
         <value xml:lang="en">Please enter a valid Email Address in the box provided and then click CONTINUE</value>
         <category>MESSAGE_ERROR</category>
         <description>LoginEmailAddressMissingError</description>
     </property>
-
     <property key="EmailAddressNotFormattedCorrectlyError">
         <value xml:lang="en">Please enter a valid Email Address in the box provided and then click CONTINUE</value>
         <category>MESSAGE_ERROR</category>
         <description>EmailAddressNotFormattedCorrectlyError</description>
     </property>
-
     <property key="EmailMatchError">
         <value xml:lang="en">Please confirm your Email Address. It must match the Email Address.</value>
         <category>MESSAGE_ERROR</category>
         <description>EmailMatchError</description>
     </property>
-
     <property key="EmailAddressMissingError">
         <value xml:lang="en">Please enter your Email Address</value>
         <category>MESSAGE_ERROR</category>
         <description>EmailAddressMissingError</description>
     </property>
-
     <property key="EmailMailingListExistsError">
         <value xml:lang="en">This Email Address is already subscribed to the Mailing List</value>
         <category>MESSAGE_ERROR</category>
         <description>EmailMailingListExistsError</description>
     </property>
-
     <property key="UserNameMissingError">
         <value xml:lang="en">Please enter your Email to login</value>
         <category>MESSAGE_ERROR</category>
         <description>UserNameMissingError</description>
     </property>
-
     <property key="UserNameInUseError">
         <value xml:lang="en">It appears this email address is already registered with us. It may be you have already registered with one of our sister sites. If you cannot remember your password please use the 'Forgotten your password?' link and we will send you a new password to this address.</value>
         <category>MESSAGE_ERROR</category>
         <description>UserNameInUseError</description>
     </property>
-
     <property key="InvalidUsernameOrPasswordError">
         <value xml:lang="en">Unfortunately either the Username or Password that you entered is incorrect. Please check the details and enter the information again.</value>
         <category>MESSAGE_ERROR</category>
         <description>InvalidUsernameOrPasswordError</description>
     </property>
-
     <property key="ForgotPasswordUserNameMissingError">
         <value xml:lang="en">Please enter the Email</value>
         <category>MESSAGE_ERROR</category>
         <description>ForgotPasswordUserNameMissingError</description>
     </property>
-
     <property key="InvalidForgotPasswordUsernameError">
         <value xml:lang="en">Unfortunately, we do not have a record of a registered customer with that Username. Please enter another Username and try again.</value>
         <category>MESSAGE_ERROR</category>
         <description>InvalidForgotPasswordUsernameError</description>
     </property>
-
     <property key="LoginPasswordMissingError">
         <value xml:lang="en">Please enter your Password to login</value>
         <category>MESSAGE_ERROR</category>
         <description>LoginPasswordMissingError</description>
     </property>
-
     <property key="PasswordMissingError">
         <value xml:lang="en">Please enter your Password</value>
         <category>MESSAGE_ERROR</category>
         <description>PasswordMissingError</description>
     </property>
-
-	<property key="OldPasswordIncorrectError">
+    <property key="OldPasswordIncorrectError">
         <value xml:lang="en">Old Password is Incorrect</value>
         <category>MESSAGE_ERROR</category>
         <description>OldPasswordIncorrectError</description>
     </property>
-	
     <property key="OldPasswordMissingError">
         <value xml:lang="en">Old Password is Missing</value>
         <category>MESSAGE_ERROR</category>
         <description>OldPasswordMissingError</description>
     </property>
-
     <property key="PasswordOldMatchNewError">
         <value xml:lang="en">New Password must NOT match your Old Password</value>
         <category>MESSAGE_ERROR</category>
         <description>PasswordOldMatchNewError</description>
     </property>
-
     <property key="PasswordHasNoNumberError">
         <value xml:lang="en">Password must be contain at least one number.</value>
         <category>MESSAGE_ERROR</category>
         <description>PasswordHasNoNumberError</description>
     </property>
     <property key="PasswordDigitError">
-        <value xml:lang="en">It must also include ${minDigit} numeric ${digitMsgStr}, </value>
+        <value xml:lang="en">It must also include ${minDigit} numeric digits, </value>
         <category>MESSAGE_ERROR</category>
         <description>PasswordDigitError</description>
     </property>
@@ -1995,9 +1952,14 @@
         <description>PasswordMinLengthError</description>
     </property>
     <property key="PasswordUpperCaseError">
-        <value xml:lang="en">${minUpperCase} upper-case ${upperCaseMsgStr}. </value>
+        <value xml:lang="en">It must also include ${minUpperCase} upper-case letters. </value>
         <category>MESSAGE_ERROR</category>
         <description>PasswordUpporCaseError</description>
+    </property>
+    <property key="PasswordWithNoDigitUpperCaseError">
+        <value xml:lang="en">It must also include ${minUpperCase} upper-case ${upperCaseMsgStr}.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PasswordWithNoDigitUpperCaseError</description>
     </property>
     <property key="PasswordValidationError">
         <value xml:lang="en">The password must contain at least ${passwordLength} characters. It must also include ${minDigit} numeric digits and ${minUpporCase} upper-case letters.</value>
@@ -2009,340 +1971,303 @@
         <category>MESSAGE_ERROR</category>
         <description>PasswordLengthError</description>
     </property>
-    <property key="PasswordWithNoDigitUpperCaseError">
-        <value xml:lang="en">It must also include ${minUpperCase} upper-case ${upperCaseMsgStr}.</value>
-        <category>MESSAGE_ERROR</category>
-        <description>PasswordWithNoDigitUpperCaseError</description>
-    </property>
-
     <property key="PasswordMatchError">
         <value xml:lang="en">Please confirm your Password. It must match the Password field.</value>
         <category>MESSAGE_ERROR</category>
         <description>PasswordMatchError</description>
     </property>
-
     <property key="PasswordNewMatchError">
         <value xml:lang="en">Please confirm your Password. It must match the New Password field.</value>
         <category>MESSAGE_ERROR</category>
         <description>PasswordNewMatchError</description>
     </property>
-
     <property key="CommonPhoneInvalidError">
         <value xml:lang="en">Please enter a valid Phone Number</value>
         <category>MESSAGE_ERROR</category>
         <description>CommonPhoneInvalidError</description>
     </property>
-
     <property key="HomePhoneMissingError">
         <value xml:lang="en">Please enter your Home Phone</value>
         <category>MESSAGE_ERROR</category>
         <description>HomePhoneMissingError</description>
     </property>
-
     <property key="MobilePhoneMissingError">
         <value xml:lang="en">Please enter your Mobile Phone</value>
         <category>MESSAGE_ERROR</category>
         <description>MobilePhoneMissingError</description>
     </property>
-
     <property key="AreaCodeLengthError">
         <value xml:lang="en">Area code does not have enough digits</value>
         <category>MESSAGE_ERROR</category>
         <description>AreaCodeLengthError</description>
     </property>
-
     <property key="AreaCodeMissingError">
         <value xml:lang="en">Area code is missing</value>
         <category>MESSAGE_ERROR</category>
         <description>AreaCodeMissingError</description>
     </property>
-
     <property key="PhoneNumberLengthError">
         <value xml:lang="en">Phone number does not have enough digits</value>
         <category>MESSAGE_ERROR</category>
         <description>PhoneNumberLengthError</description>
     </property>
-
     <property key="CardNumberMissingError">
         <value xml:lang="en">Please enter your Card Number</value>
         <category>MESSAGE_ERROR</category>
         <description>CardNumberMissingError</description>
     </property>
-
     <property key="OfferCodeMissingError">
         <value xml:lang="en">Please enter your Offer Code.</value>
         <category>MESSAGE_ERROR</category>
         <description>OfferCodeMissingError</description>
     </property>
-
     <property key="OfferCodeNotFoundError">
         <value xml:lang="en">Unfortunately the Offer Code that you entered is incorrect.  Please check the details and enter the information again.</value>
         <category>MESSAGE_ERROR</category>
         <description>OfferCodeNotFoundError</description>
     </property>
-
     <property key="OfferCodeInUseError">
         <value xml:lang="en">The Offer Code that you entered is hasalready been applied to your shopping cart</value>
         <category>MESSAGE_ERROR</category>
         <description>OfferCodeInUseError</description>
     </property>
-
     <property key="FirstNameOnCardMissingError">
         <value xml:lang="en">Please enter your First Name on Card</value>
         <category>MESSAGE_ERROR</category>
         <description>FirstNameOnCardMissingError</description>
     </property>
-
     <property key="LastNameOnCardMissingError">
         <value xml:lang="en">Please enter your Last Name on Card</value>
         <category>MESSAGE_ERROR</category>
         <description>LastNameOnCardMissingError</description>
     </property>
-
     <property key="CardTypeMissingError">
         <value xml:lang="en">Please enter your Card Type</value>
         <category>MESSAGE_ERROR</category>
         <description>CardTypeMissingError</description>
     </property>
-
     <property key="CardNumberMissingError">
         <value xml:lang="en">Please enter your Card Number</value>
         <category>MESSAGE_ERROR</category>
         <description>CardNumberMissingError</description>
     </property>
-
     <property key="CreditCardNumberInvalidError">
         <value xml:lang="en">${cardNumber} is not a valid ${cardType} credit card number. (It appears to be a ${validCardType}) credit card number)</value>
         <category>MESSAGE_ERROR</category>
         <description>CreditCardNumberInvalidError</description>
     </property>
-
     <property key="ExpirationMonthMissingError">
         <value xml:lang="en">Please enter your Expiration Month</value>
         <category>MESSAGE_ERROR</category>
         <description>ExpirationMonthMissingError</description>
     </property>
-
+    <property key="VerificationNumberMissingError">
+        <value xml:lang="en">Please enter your Verification Number</value>
+        <category>MESSAGE_ERROR</category>
+        <description>VerificationNumberMissingError</description>
+    </property>
+    <property key="SavedCardMissingError">
+        <value xml:lang="en">Please select one of saved card</value>
+        <category>MESSAGE_ERROR</category>
+        <description>SavedCardMissingError</description>
+    </property>
     <property key="ExpirationYearMissingError">
         <value xml:lang="en">Please enter your Expiration Year</value>
         <category>MESSAGE_ERROR</category>
         <description>ExpirationYearMissingError</description>
     </property>
-
     <property key="ExpirationDateIsBeforeTodayError">
         <value xml:lang="en">The expiration date is before today</value>
         <category>MESSAGE_ERROR</category>
         <description>ExpirationDateIsBeforeTodayError</description>
     </property>
-
     <property key="ProductStoreAbandonCartEmailError">
         <value xml:lang="en">There was an issue sending the abandon cart email, please check the logs</value>
         <category>MESSAGE_ERROR</category>
         <description>ProductStoreAbandonCartEmailError</description>
     </property>
-
     <property key="ProductStoreShipReviewEmailError">
         <value xml:lang="en">There was an issue sending the Ship Review email, please check the logs</value>
         <category>MESSAGE_ERROR</category>
         <description>ProductStoreShipReviewEmailError</description>
-    </property>	
-
+    </property>
     <property key="ContentNotFoundError">
         <value xml:lang="en">We could not find what you are looking for...</value>
         <category>MESSAGE_ERROR</category>
         <description>ContentNotFoundError</description>
     </property>
-
     <property key="CommonFollowingErrorsOccurred">
         <value xml:lang="en">We're sorry but it appears as if the information you have provided is incomplete.</value>
         <category>MESSAGE_ERROR</category>
         <description>CommonFollowingErrorsOccurred</description>
     </property>
-
     <property key="CommonFollowingOccurred">
         <value xml:lang="en">The Following Occured</value>
         <category>MESSAGE_ERROR</category>
         <description>CommonFollowingOccurred</description>
     </property>
-    
     <property key="AddressIncompleteError">
         <value xml:lang="en">Two of either Address-2, Address-3, Zip/Postal, City/Town or State/Province are required.</value>
         <category>MESSAGE_ERROR</category>
         <description>AddressIncompleteError</description>
     </property>
-
-    <property key="InvalidZipCodeError">
-        <value xml:lang="en">Please Enter a valid Zip Code.</value>
-        <category>MESSAGE_ERROR</category>
-        <description>InvalidZipCodeError</description>
+    <property key="SalesTaxLabel">
+        <value xml:lang="en">Sales Tax</value>
+        <category>ORDER_STATUS</category>
+        <description>SalesTaxLabel</description>
     </property>
     <!-- Product review Error messages -->
-<!-- Product review Error messages -->
-
     <property key="OverallRatingMissingError">
         <value xml:lang="en">You must enter a value for overall rating.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>OverallRatingMissingError</description>
     </property>
-
     <property key="NicknameMissingError">
         <value xml:lang="en">You must enter a nickname.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>NicknameMissingError</description>
     </property>
-
     <property key="ReviewTitleMissingError">
         <value xml:lang="en">You must enter a review title.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>ReviewTitleMissingError</description>
     </property>
-
     <property key="ReviewTextMissingError">
         <value xml:lang="en">You must enter review text.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>ReviewTextMissingError</description>
     </property>
-
     <property key="ReviewTextShortError">
-        <value xml:lang="en">Your review text is too short.</value>
+        <value xml:lang="en">Written reviews must be over 50 characters in length.</value>
         <category>MESSAGE_REVIEW_ERROR</category>
         <description>ReviewTextShortError</description>
     </property>
-
-
-<!-- **** Button Text *************************************** -->
-
+    <property key="PDPMinQtyError">
+        <value xml:lang="en">"The Quantity entered "is less than the" minimum allowed (zero), please retry. </value>
+        <category>MESSAGE_ERROR</category>
+        <description>PDPMinQtyError</description>
+    </property>
+    <property key="PDPMaxQtyError">
+        <value xml:lang="en">"The Quantity entered is greater than the maximum allowed (1000)", please retry.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PDPMaxQtyError</description>
+    </property>
+    <property key="PDPQtyDecimalNumberError">
+        <value xml:lang="en">The Quantity entered must be a whole number, decimals are not allowed, please retry.</value>
+        <category>MESSAGE_ERROR</category>
+        <description>PDPQtyDecimalNumberError</description>
+    </property>
+    <!-- **** Button Text *************************************** -->
     <property key="OrderAddToCartBtn">
-        <value xml:lang="en">Add To Cart</value>
+        <value xml:lang="en">Buy!</value>
         <category>BUTTON_TEXT</category>
         <description>OrderAddToCartBtn</description>
-    </property>
-
-    <property key="CheckoutBtn">
-        <value xml:lang="en">Go To Checkout</value>
-        <category>BUTTON_TEXT</category>
-        <description>CheckoutBtn</description>
     </property>
     <property key="GuestCheckoutBtn">
         <value xml:lang="en">Guest Checkout</value>
         <category>BUTTON_TEXT</category>
         <description>GuestCheckoutBtn</description>
     </property>
-
+    <property key="CheckoutBtn">
+        <value xml:lang="en">Go To Checkout</value>
+        <category>BUTTON_TEXT</category>
+        <description>CheckoutBtn</description>
+    </property>
     <property key="ContinueShoppingBtn">
         <value xml:lang="en">Continue Shopping</value>
         <category>BUTTON_TEXT</category>
         <description>ContinueShoppingBtn</description>
     </property>
-
     <property key="PreviousBtn">
         <value xml:lang="en">Previous</value>
         <category>BUTTON_TEXT</category>
         <description>PreviousBtn</description>
     </property>
-
     <property key="ContinueBtn">
         <value xml:lang="en">Continue</value>
         <category>BUTTON_TEXT</category>
         <description>ContinueBtn</description>
     </property>
-
     <property key="SignInBtn">
         <value xml:lang="en">Sign In</value>
         <category>BUTTON_TEXT</category>
         <description>SignInBtn</description>
     </property>
-
     <property key="SubmitOrderBtn">
         <value xml:lang="en">Submit Order</value>
         <category>BUTTON_TEXT</category>
         <description>SubmitOrderBtn</description>
     </property>
-
     <property key="ApplyOfferBtn">
-        <value xml:lang="en">Apply Offer Code</value>
+        <value xml:lang="en">Apply Coupon Code</value>
         <category>BUTTON_TEXT</category>
         <description>ApplyOfferBtn</description>
     </property>
-
     <property key="UpdateAddressBtn">
         <value xml:lang="en">Update</value>
         <category>BUTTON_TEXT</category>
         <description>UpdateAddressBtn</description>
     </property>
-
     <property key="AddAddressBtn">
         <value xml:lang="en">Add New Address</value>
         <category>BUTTON_TEXT</category>
         <description>AddAddressBtn</description>
     </property>
-
     <property key="AddNewCardBtn">
         <value xml:lang="en">Add New Card</value>
         <category>BUTTON_TEXT</category>
         <description>AddNewCardBtn</description>
     </property>
-
     <property key="UpdatePersonalAddBtn">
         <value xml:lang="en">Update</value>
         <category>BUTTON_TEXT</category>
         <description>UpdatePersonalAddBtn</description>
     </property>
-
     <property key="PlaceYourOrderBtn">
         <value xml:lang="en">Place Your order</value>
         <category>BUTTON_TEXT</category>
         <description>PlaceYourOrderBtn</description>
     </property>
-
     <property key="ContinueShoppingBtn">
         <value xml:lang="en">Continue Shopping</value>
-          <category>BUTTON_TEXT</category>
+        <category>BUTTON_TEXT</category>
         <description>ContinueShoppingBtn</description>
     </property>
-
     <property key="DeleteBtn">
         <value xml:lang="en">Delete</value>
         <category>BUTTON_TEXT</category>
         <description>DeleteBtn</description>
     </property>
-
     <property key="SubmitBtn">
         <value xml:lang="en">Submit</value>
         <category>BUTTON_TEXT</category>
         <description>SubmitBtn</description>
     </property>
-
     <property key="SubmitOrderBtn">
-        <value xml:lang="en">Submit Order</value>
+        <value xml:lang="en">Submit</value>
         <category>BUTTON_TEXT</category>
         <description>SubmitOrderBtn</description>
     </property>
-
     <property key="SubmittingOrderBtn">
         <value xml:lang="en">Submitting Order</value>
         <category>BUTTON_TEXT</category>
         <description>SubmittingOrderBtn</description>
     </property>
-
     <property key="CancelBtn">
         <value xml:lang="en">Cancel</value>
         <category>BUTTON_TEXT</category>
         <description>CancelBtn</description>
     </property>
-
     <property key="HeaderSearchBtn">
         <value xml:lang="en">Go</value>
         <category>BUTTON_TEXT</category>
         <description>HeaderSearchBtn</description>
     </property>
-
     <property key="ViewCartBtn">
         <value xml:lang="en">View Cart</value>
         <category>BUTTON_TEXT</category>
         <description>ViewCartBtn</description>
     </property>
-
     <property key="SubscribeBtn">
         <value xml:lang="en">Subscribe</value>
         <category>BUTTON_TEXT</category>
@@ -2362,11 +2287,6 @@
         <value xml:lang="en">Ok</value>
         <category>BUTTON_TEXT</category>
         <description>Search Dialog Button</description>
-    </property>
-    <property key="OrderCannotChangeQuantityInPromotion">
-        <value xml:lang="en">Sorry, youu can't change the quantity on the promotion item ${productName} (product ID: ${productId}, not setting quantity.</value>
-        <category>CHECK_OUT</category>
-        <description>OrderConfirmationFPLabel</description>
     </property>
     <property key="PickupInStoreBtn">
         <value xml:lang="en">Pickup In Store</value>
@@ -2405,35 +2325,35 @@
     </property>
     <!-- *** Shopping Cart Foot Print *************************************** -->
     <property key="ShoppingCartFPLabel">
-        <value xml:lang="en">My Shopping Cart</value>
+        <value xml:lang="en">My Cart</value>
         <category>CHECK_OUT</category>
         <description>ShoppingCartFPLabel</description>
     </property>
-
     <property key="ShippingAddressFPLabel">
         <value xml:lang="en">Shipping Address</value>
         <category>CHECK_OUT</category>
         <description>ShippingAddressFPLabel</description>
     </property>
-
     <property key="ShippingMethodFPLabel">
         <value xml:lang="en">Shipping Option</value>
         <category>CHECK_OUT</category>
         <description>ShippingMethodFPLabel</description>
     </property>
-
     <property key="PaymentFPLabel">
         <value xml:lang="en">Payment</value>
         <category>CHECK_OUT</category>
         <description>PaymentFPLabel</description>
     </property>
-
     <property key="OrderConfirmationFPLabel">
         <value xml:lang="en">Order Confirmation</value>
         <category>CHECK_OUT</category>
         <description>OrderConfirmationFPLabel</description>
     </property>
-
+    <property key="OrderCannotChangeQuantityInPromotion">
+        <value xml:lang="en">Sorry, youu can't change the quantity on the promotion item ${productName} (product ID: ${productId}, not setting quantity.</value>
+        <category>CHECK_OUT</category>
+        <description>OrderConfirmationFPLabel</description>
+    </property>
     <!-- *** Generic confirm page *************************************** -->
     <property key="ConfirmH1RequestCatalog">
         <value xml:lang="en">Catalog Request</value>
@@ -2446,7 +2366,7 @@
         <description>Confirm Catalog Request Sub Title</description>
     </property>
     <property key="ConfirmTextRequestCatalog">
-        <value xml:lang="en">Your catalog request will be processed immediately. Thank you for your interest in Gold Medal Hair Products, we appreciate your business!</value>
+        <value xml:lang="en">Your catalog request will be processed immediately. Thank you for your interest in companyName Products, we appreciate your business!</value>
         <category>CONFIRM</category>
         <description>Confirm Catalog Request Text</description>
     </property>
@@ -2461,7 +2381,7 @@
         <description>Confirm Mailing List Sub Title</description>
     </property>
     <property key="ConfirmTextMailingList">
-        <value xml:lang="en">You have signed-up for our mailing list. We will be sending you special offers via email. Thank you for your interest in Gold Medal Hair Products, we appreciate your business!</value>
+        <value xml:lang="en">You have signed-up for our mailing list. We will be sending you special offers via email. Thank you for your interest in companyName Products, we appreciate your business!</value>
         <category>CONFIRM</category>
         <description>Confirm Mailing List Text</description>
     </property>
@@ -2480,8 +2400,7 @@
         <category>CONFIRM</category>
         <description>Confirm Contact Us Text</description>
     </property>
-
-    <!-- === confirm dialog box Starts ===== -->
+    <!-- === Confirm dialog box ===== -->
     <property key="commonConfirmDialogText">
         <value xml:lang="en">Are you sure?</value>
         <category>CONFIRM_DIALOG</category>
@@ -2494,12 +2413,9 @@
     </property>
     <property key="deleteAddressConfirmText">
         <value xml:lang="en">Are you sure you want to DELETE this Address?</value>
-        <category>CONFIRM_DIALOG</category>
+        <category>CHECK_OUT</category>
         <description>Confirm Dialog Box Message</description>
     </property>
-    <!-- === confirm dialog box Ends ===== -->
-
-	<!-- === Search dialog box Starts ===== -->
     <property key="searchDialogText">
         <value xml:lang="en">Please enter one or more terms to search for</value>
         <category>SEARCH_DIALOG</category>
@@ -2510,5 +2426,4 @@
         <category>SEARCH_DIALOG</category>
         <description>Search Dialog Box Title</description>
     </property>
-    <!-- === Search dialog box Ends ===== -->
 </resource>

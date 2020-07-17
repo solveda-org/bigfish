@@ -227,7 +227,8 @@ a{
 	height:	33px; /* match sub ul list item height (see below)*/
 	position: relative;
 	clear:both;
-	width: 100%;
+	width: 925px;
+
 	margin:0;
 	border-top:1px solid #afafaf;
 	border-bottom:1px solid #afafaf;
@@ -237,6 +238,10 @@ a{
 	width: 21em; /* left offset of submenus need to match (see below) */
         position:        absolute;
         top:            -999em;
+        z-index: 999; /* Keeps submenus from disappearing behind content */
+}
+#eCommerceNavBarMenu .ecommerceMegaMenu {
+    background-color: rgb(255,255,255);
 }
 
 #eCommerceNavBarMenu ul li {
@@ -372,14 +377,17 @@ label, .caption{
     text-align: right;
     padding-right: 2px;
     text-transform: capitalize;
-    font-size: 1.2em;
+/*    font-size: 1.2em;  */
 }
 label, .caption {
 	font-weight: normal;
 	color: #666;
 }
 .headerCaption {
-	font-size: 1.5em;
+    display: block;
+    font-size: 1.5em;
+    padding: 5px;
+    text-align: center;
 }
 
 /****************************************************************
@@ -423,7 +431,7 @@ input[type="submit"].negative:hover, input[type="button"].negative:hover, a.nega
 }
 input[type="submit"].addToCart, input[type="button"].addToCart, a.addToCart {
 	float: right;
-	margin-top: 1em;
+	margin: 1em 0 0 14em;
 	line-height: 1em;
 }
 input[type="submit"].addToCart:hover, input[type="button"].addToCart:hover, a.addToCart:hover {
@@ -524,11 +532,10 @@ table.standardTable th.lastCol, table.standardTable td.lastCol {
 }
 #siteShoppingCart {
 	float: left;
-    margin: 0px;
+        margin: 30px 0 0 0;
 	width: 280px;
 	position: absolute\0/;
 	color: #5e5e5e;
-	top: 13px;
         margin-left:450px\0/;
 }
 #siteShoppingCart #shoppingCartCaption {
@@ -545,12 +552,15 @@ table.standardTable th.lastCol, table.standardTable td.lastCol {
 	position: relative;
 	display: inline-block;
 	text-align: center;
-	width: 110px;
 	top: 4px;
 }
-#siteCartStats:hover {
-	text-decoration: underline;
-	color: black;
+#siteCartStats a #siteShoppingCartSize {
+       
+}
+#siteCartStats a:hover {
+        text-decoration: underline;
+        color: #990000;
+
 }
 #siteCartStats #siteShoppingCartSize, #siteCartStats .price {
 	font-weight: normal;
@@ -559,18 +569,18 @@ table.standardTable th.lastCol, table.standardTable td.lastCol {
 	top: -5px;
 }
 /* === make this div larger === */
-DIV#siteCartStats {
-	width: 150px;
+#siteCartStats {
+	/* width: 150px; */
 }
 .highlightGroup #siteShoppingCartSize {
-	font-family: 'Arial Bold', Arial, Helvetica, sans-serif;
+        letter-spacing: 1px;
 	font-weight: bold;
 	color: #900;
-	padding-bottom: 2px;
-	padding-top: 1px;
 	margin-bottom: 0;
 	text-transform: uppercase;
 	margin: 0 1em 0 2px;
+        padding: 20px 0 10px 25px;
+        background: url("/osafe_theme/images/user_content/images/viewCart_small.gif") left 50% no-repeat;
 }
 #siteCartStats .price {
 	visibility: hidden;
@@ -847,6 +857,7 @@ img.customerRatingIcon {
     -moz-opacity: .50;
     z-index: 101;
     display: none;
+
 }
 .dialogBox {
     display: none;
@@ -859,10 +870,12 @@ img.customerRatingIcon {
     margin-top: -100px;
     padding: 0px;
     z-index: 102;
+    border: 4px solid rgb(192,192,192);
+    background: #990000;
 }
 .dialogClose {
     float: right;
-    margin-right: -15px;
+    margin: 3px 1px 0 0;
     width: 25px;
     height: 25px;
     position: relative;
@@ -918,6 +931,11 @@ img.customerRatingIcon {
 .displayBox div.entry li.fieldErrorMessage {
 	padding: 2px 0 0 167px;
 }
+
+.displayBox.confirmDialog {
+	margin: 0;
+}
+
 /****************************************************************
 * Entry Forms
 ****************************************************************/
@@ -936,6 +954,7 @@ fieldset p{
 .instructions {
    font-size: 1.3em;
    margin: 0 0 .5em 0;
+   color: #999999;
 }
 
 .entry {
@@ -959,7 +978,6 @@ fieldset p{
 
     /* width should not be assigned to this style */
 }
-
 
 .entry input[type="text"], .entry input[type="password"] {
     width: 211px;
@@ -1044,10 +1062,21 @@ input[type="text"].phone4{
 }
 .closeDirection {
     float: right;
+    margin: 5px;
+}
+.noDirection {
+    float: left;
+    clear: both;
+    display:none;
+}
+.noDirection span {
+    color: red;
+    font-size: 1.5em;
 }
 .routeDirection {
     clear: both;
     overflow-y: auto;
+    //font-size: 1.3em;
 }
 .drivingDirectionIcon {
     background-image: url(/osafe_theme/images/user_content/images/drivingDirection.png);
@@ -1055,7 +1084,7 @@ input[type="text"].phone4{
     background-repeat:no-repeat;
     width: 29px;
     height:23px;
-     display: block;
+    display: block;
 }
 .walkingDirectionIcon {
     background-image: url(/osafe_theme/images/user_content/images/walkingDirection.png);
@@ -1073,49 +1102,75 @@ input[type="text"].phone4{
     height:23px;
     display: block;
 }
-.displayBox table#storeLocator {
+.displayBox div.storeLocator {
     width: 100%;
 }
 
-.displayBox table#storeLocator .entry {
+.storeLocator div.storeSearch {
+}
+.storeSearch div.entry {
     margin: 0;
 }
-
-.displayBox table#storeLocator .entry label {
-    margin: 0;
+.storeSearch div.entry label {
     padding: 7px;
     width: auto;
 }
-.displayBox table#storeLocator input.standardBtn {
-    margin-bottom: 0;
+.storeSearch div.entry input.standardBtn {
     margin-left: 20px;
     padding-bottom: 0;
 }
-.displayBox table#storeLocator .entry input[type="text"]{
+.storeSearch div.entry input[type="text"]{
     width: 300px;
-    margin-bottom: 0px;
 }
-.displayBox table#storeLocator a {
-    color: #000000;
-    margin: 5px;
+
+.storeLocator div.storeMap {
+    border-top: 1px solid rgb(221, 221, 221);
+    border-bottom: 1px solid rgb(221, 221, 221);
+    width: 100%;
     display: inline-block;
 }
 
-.displayBox table#storeLocator .storeList td.lastCol {
+.storeLocator div.storeList {
+    display: inline-block;
+    width: 100%;
+}
+.storeList div.store {
+    border-bottom: 1px solid rgb(221, 221, 221);
+    display: inline-block;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.store div.storeDist {
+    display: block;
+    float: left;
+    margin: 40px 0 0 0;
+    text-align: center;
+    width: 20%;
+}
+.store div.storeDetail {
+    display: inline-block;
+    float: left;
+    font-size: 1.5em;
+    width: 55%;
+}
+.storeDetail .storeName {
+    font-weight: bold;
+    color: #333333;
+}
+.storeDetail .storeAddress {
+}
+.store div.storeDirectionIcon {
+    display: block;
+    float: left;
+    margin: 25px 0 0 0;
+    right: 0;
     text-align: right;
+    width: 25%;
 }
-
-.displayBox table#storeLocator td {
-    border-bottom: 1px solid #ababab;
-}
-.displayBox table#storeLocator .storeList td {
-    min-width: 100px;
-}
-.adp-directions, .adp-summary, .adp-placemark {
-    font-size: 1.3em;
-}
-.displayBox table#storeLocator .storeList td {
-    min-width: 100px;
+.store div.storeDirectionIcon a {
+    color: #000000;
+    margin: 5px;
+    display: inline-block;
 }
 .storeDetailsBubble {
     float: left;
@@ -1149,6 +1204,20 @@ input[type="text"].phone4{
 .storeDetailsBubble .addressLine2 {
     text-indent: 30px;
 }
+.storeDetail .label {
+     float: left;
+     width: auto;
+     clear: both;
+     font-weight: bold;
+     color: #333333;
+}
+.storeDetail .value{
+    display: block;
+    float: left;
+    width: 80%;
+    word-wrap: break-word;
+    margin-left: 5px;
+}
 
 /****************************************************************
 * Error Messages
@@ -1158,7 +1227,7 @@ input[type="text"].phone4{
 	font-size: 1.6em;
 	color: black;
 }
-.content-messages .errorImage, .content-messages .eventImage, .content-messages .warningImage {
+.content-messages .errorImage, .content-messages .eventImage, .content-messages .warningImage, .content-messages .infoImage {
 	float: left;
 	margin: 10px;
 	padding: 0.1em;
@@ -1196,6 +1265,18 @@ input[type="text"].phone4{
     height: 12px;
     width: 12px;
 }
+.eCommerceInfoMessage {
+	border: 1px solid #F00;
+	background-color: rgb(251,231,232); /* Light Red */
+}
+
+.eCommerceInfoMessage .infoImage {
+	border: 1px solid #F00;
+	background-image: url("/osafe_theme/images/user_content/images/alert.gif");
+	background-repeat:no-repeat;
+    height: 12px;
+    width: 12px;
+}
 
 .errorHeading, .eventHeading, .warningHeading {
 	padding: 0 0 0 1.2em;
@@ -1229,13 +1310,12 @@ input[type="text"].phone4{
 /****************************************************************
 * Home Page
 ****************************************************************/
-#eCommerceHomeSpots {
+#eCommerceHomeSpots, .eCommerceHomeSpots {
     display: inline;
     float: left;
     margin: 0 !important;
     padding: 0;
 }
-
 
 /****************************************************************
 * Thumbnail Holder
@@ -1257,7 +1337,9 @@ input[type="text"].phone4{
 }
 /* 75% of productSmallImage */
 .productCartListImage {
-	padding: 6px 0px;
+    display: block;
+    margin: 0 auto;
+    padding: 6px 0;
 }
 .productSmallImage {
 }
@@ -1312,7 +1394,7 @@ input[type="text"].phone4{
 	height: 20px;
 }
 #eCommerceProductList .rating_bar {
-	margin: 3px 0px;
+
 }
 #eCommerceProductList a.eCommerceProductLink {
 	text-decoration: none;
@@ -1419,6 +1501,14 @@ label.sortBy {
 .pagingLinks li.disabled {
 	color: gray;
 }
+
+.plpFeatureSwatchImage {
+	border: 1px solid white;
+}
+.plpFeatureSwatchImage.selected {
+	border: 1px solid lightBlue;
+}
+
 /****************************************************************
 * PDP Product Detail
 ****************************************************************/
@@ -1428,8 +1518,12 @@ label.sortBy {
 	width: 100%;
 	margin-top: .5em;
 }
+#popUpDetailImageBody {
+	background-color:#ffffff !important; 
+	background-image:none !important;
+}
 #eCommerceProductDetailPopupContainer {
-	margin: 0.5em;
+	//margin: 0.5em;
 }
 #productDetailsContainer {
 	border: 0px solid lightgray;
@@ -1451,12 +1545,18 @@ label.sortBy {
 	margin-bottom: 2em;
 }
 #productDetailsImageContainer .productLargeImage {
-	padding-left: 0;
-	float: right;
+	display: block;
+	margin: 0 auto;
 }
+
+#productDetailsImageContainer .productLargeImageDefaultWidth {
+    width: 200px;
+}
+
 #productDetailsImageContainer #mainImageLink {
-	float: right;
 	font-size: 1.5em;
+        display: block;
+        text-align: center;
 }
 #productDetailsImageContainer .productAdditionalImage {
 	border: 2px solid lightGrey;
@@ -1516,6 +1616,19 @@ label.sortBy {
 	float:right;
 	width: 102px;
 }
+#productDetailsContainer select.selectableFeature_1 {
+    float: right;
+    max-width: 210px;
+}
+#productDetailsContainer select.selectableFeature_2 {
+    float: right;
+    max-width: 210px;
+}
+#productDetailsContainer select.selectableFeature_3 {
+    margin-left: 83px;
+    max-width: 210px;
+}
+
 #productDetailsContainer #volumePricing {
 	border: 1px solid lightgrey;
 	padding: .5em;
@@ -1717,39 +1830,68 @@ div.distinguishingFeatures ul li {
 }
 #socialMediaShareLinks h3 {
 	font-size: 1.5em;
+        margin-bottom: 10px;
 }
 #socialMediaShareLinks a {
 	font-size: 1.5em;
 }
 #socialMediaShareLinks a:hover {
-	text-decoration: none;
+       text-decoration: none;
+
 }
 #socialMediaShareLinks .socialMediaIcon {
-	width: 15px;
-	height: 15px;
+	width: 30px;
+	height: 30px;
+}
+#socialMediaEmailToAFriend {
+       margin: 5px 0 5px 0;
+}
+#socialMediaEmailToAFriend a {
+
+}
+#socialMediaEmailToAFriend a:hover { 
+     text-decoration: underline;      
+
+
 }
 /* eCommerce Cart CSS */
 /****************************************************************
 * Page Specific : Shopping Cart
 ****************************************************************/
+.promotionDisplayBox{
+}
+.promotionDisplayBoxHeader{
+}
+.promotionDisplayBox input {
+    margin: -2px 0 0.5em 10px;
+}
+.promotionDisplayBox div.entry li.fieldErrorMessage {
+    padding: 2px;
+    text-align: center;
+}
 #shoppingCartEspot {
 }
 
 #eCommerceEnterPromoCode {
         clear: left;
 	margin: 1em 0 1em 0;
-	font-size: 1.4em;
 }
 #checkoutOrderDetailAndPromoCodeSec #eCommerceEnterPromoCode {
-    //margin: 20px 0 20px 20px;
-    display: inline-block;
+    //display: inline-block;
 }
 
 #eCommerceEnterPromoCode .standardBtn {
-	font-size: .8em;
+
 }
 #eCommerceEnterPromoCode input[type="text"] {
 	width: 100px;
+}
+#ecommercePromocodeEntry {
+    padding: 0 0 0 10px;
+}
+#ecommercePromocodeEntry label {
+    width: 320px;
+    margin: 0px;
 }
 .ecommercePromocodeEntry {
 
@@ -1767,32 +1909,32 @@ div.distinguishingFeatures ul li {
 }
 .ecommercePromocode{
     font-size: 1.5em;
+    display: inline-block;
+    padding: 0 0 0 10px;
 }
 .ecommercePromocodeClear{
     clear: both;
 }
 .ecommercePromocode div.ecommercePromocodeDetail{
     float:left;
-    width:300px;
     margin-top: 10px;
 }
 .ecommercePromocode div.ecommercePromocodeName{
     float:left; 
-    margin-right:25px; 
-    width:50px;
+    width: 130px;
 }
 .ecommercePromocode div.ecommercePromocodeDesc{
     float:left;
+    width: 340px;
 }
 .ecommercePromocode div.ecommercePromocodeStatus{
     float:left;
-    margin-top: 10px;
+    width: 240px;
 }
 .ecommercePromocode div.ecommercePromocodeAction{
     float:left;
-    margin-left:25px;
-    margin-top: 10px;
 }
+
 
 /****************************************************************
 * Redefines Button inside show cart list
@@ -1869,6 +2011,12 @@ div.distinguishingFeatures ul li {
 	width: 880px;
 	font-size: 1.5em;
 }
+#cart_display .description a {
+       border-bottom: 1px dotted #666666;
+}
+#cart_display .description a:hover {
+       border-bottom: 1px solid #666666;
+}
 #cart_display caption {
 	display: none;
 }
@@ -1912,7 +2060,7 @@ tr.cart_headers {
 	padding: 0 0 0 1em;
 }
 #cart_display tr.cart_headers th.product {
-	text-align: left;
+	text-align: center;
 	padding: 0px 6px;
 }
 /* table description styles */
@@ -1986,45 +2134,89 @@ html>body .quick_order #cart_display tr.cart_headers th.price {
 	display: inline;
 	margin-left:5px;
 }
+
 #cart_information #cart_summary {
-	float: right;
-	display: inline;
-	margin-right: 15px;
+    float: right;
+    display: inline;
+    margin: 0 15px 0 0;
 }
+
 #quick_order_actions {
-	float: right;
-	display: inline;
+    float: right;
+    display: inline;
 }
+
 #cart_display .summary {
-	float: right;
+    float: right;
 }
-#cart_wrap #cart_display .summary {
-	background: #ccc;
-	border-left: 1px solid #666;
-	border-right: 1px solid #666;
-	border-bottom: 1px solid #666;
-	width: 265px;
-	padding-right: 2px;
+#cart_display tfoot {
+    float: none!important;
 }
-#cart_wrap #summaryCell {
-	padding-right: 0;
-	width: 400px;
+
+#cart_wrap #cart_display .summary{
+    border-left: 1px solid #eaeaea;
+    border-right: 1px solid #eaeaea;
+    border-bottom: 1px solid #eaeaea;
+    width: 200px;
+    padding: 0 15px 0 0;
+
 }
+#cart_wrap #cart_display .summary td .footContainer {
+     background:#f7f7f7;
+    border: 1px solid #EAEAEA;
+    display: inline-block;
+    float: right!important;
+    border-top: none;
+    padding: 5px;
+}
+
+#cart_wrap #cart_display .summary td .footContainer li {
+    clear: both;
+    display: inline-block;
+    float: right;
+    padding: 0 0 0 3px;
+}
+
+#cart_wrap #cart_display .summary td .footContainer li div.labelText {
+    float:left;
+}
+
+#cart_wrap #cart_display .summary td .footContainer li div.labelValue {
+    float: left;
+    width: 120px;
+    padding: 0 0 0 15px;
+}
+#cart_wrap #cart_display .summary td .footContainer li div.labelValue span {
+    margin: 0 25px 0 0;
+}
+
+#cart_wrap #cart_display .summary td {
+    padding:0; 
+}
+
+#cart_wrap #summaryCell{
+    padding-right: 0;
+    width: 400px;
+}
+
 #cart_display .summary span.amount {
-	float: right;
-	display: inline;
+    float: right;
+    display: inline;
 }
+
 #cart_display .summary .subtotal span.vat {
-	margin-left: 5px;
-	display: inline;
-	font-weight:normal;
+    margin: 5px;
+    display: inline;
+    font-weight:normal;
 }
+
 #cart_display .summary .caption {
-	text-align: right;
+    text-align: right;
 }
 #cart_display .summary .value {
-	width: 110px;
+    width: 110px;
 }
+
 #cart_display .summary .shippingMethod {
 	text-align: right;
 }
@@ -2302,8 +2494,7 @@ form div.entryButtons.submitOrder {
 	float: left;
 }
 .paymentMethodImg {
-	height: 70px;
-	width: 100px;
+	margin: 0 0 0 10px;
 }
 #orderSummaryEspot {
 	margin-bottom: 24px;
@@ -2337,8 +2528,6 @@ form div.entryButtons.submitOrder {
 Payment methods Display
 ******************************* */
 #paymentMethods .paymentMethodImg {
-	height: 45px;
-	width: 131px;
 }
 #paymentMethods {
 	width: 385px;
@@ -2397,8 +2586,8 @@ td.availability, td.total {
 	border-left: 1px solid #666;
 	border-right: 1px solid #666;
 	border-bottom: 1px solid #666;
-	padding-right: 5px;
-	width: 450px;
+	padding: 5px;
+	/* width: 450px; */
 }
 #orderItemsWrap #summaryCell {
 	padding-right: 0;
@@ -2432,6 +2621,13 @@ td.availability, td.total {
 .creditCardInfo p {
 	margin: 0 0 0 10px;
 }
+
+.paymentMethodImg.paypal {
+	background-image: url("/osafe_theme/images/user_content/images/paypal_wider.gif");
+    background-repeat:no-repeat;
+    width: 200px;
+}
+
 /****************************************************************
 * Order History
 ****************************************************************/
@@ -2551,8 +2747,13 @@ td.availability, td.total {
 	float: left;
 	margin: 0 0 0 10px;
 }
-.reviewDataSection .ratingNickname, .ratingTitle {
+.reviewDataSection .ratingNickname {
 	font-size: 1.5em;
+}
+.ratingTitle {
+color: #800000;
+       font-size: 1.5em;
+       font-weight: 700;
 }
 .reviewRow .reviewTextSection {
 	clear: left;
@@ -2560,8 +2761,7 @@ td.availability, td.total {
 	margin: 0 0 0 95px;
 }
 .reviewTextSection .reviewText {
-	color: #800000;
-	font-style: italic;
+        color: #000000;
 	font-size: 1.5em;
 }
 .reviewRow .reviewPostDateSection {
@@ -2589,9 +2789,9 @@ td.availability, td.total {
 * Customer Ratings PDP
 ************************/
 #productReviewCustomerRating {
-	clear: left;
-	float:left;
-	margin: 10px 0;
+/*	clear: left;  */
+/*	float:left;  */
+	margin: 10px 0 20px 0;
 }
 .reviewRatedLabel {
 	font-size: 1.6em;
@@ -2599,15 +2799,21 @@ td.availability, td.total {
 	color:#666666;
 }
 .customerRating {
+        clear: none;
 	float: right;
-	margin-right:50px;
+/*	margin-right:50px;  */
+}
+.reviewCustomerRating {
+        width: 100%;
+
 }
 .customerRatingLinks {
-	clear: left;
-	float:right;
-	width:200px;
-	font-size:11px;
-	margin-left:139px;
+    clear: left;
+    display: block;
+    font-size: 11px;
+    margin: 0 auto;
+    padding: 10px 0 0;
+    width: 180px;
 	
 }
 .customerRatingLinks a:hover{
@@ -2981,3 +3187,60 @@ div.distinguishingFeatures ul li label{
     font-size: 1.4em;
 }
 
+/****************************************
+* PLP QUICK LOOOK
+****************************************/
+
+.dialogBox.plpQuickLook {
+	background-color: rgb(255,255,255);
+}
+
+.productListItem .plpQuickLook {
+	left: 15px;
+	position: relative;
+	bottom: 20px;
+}
+
+.plpQuickLook #productDescriptions {
+	margin: 1em 30px;
+        clear: left;
+}
+
+/****************************************
+* Contact Us and Request Catalog
+****************************************/
+.textCounter {
+   font-size: 1.3em;
+   color: #999999;
+   margin: 0 0 0 10px;
+}
+
+/****************************************
+* Store Locator
+****************************************/
+
+#ptsStoreLocator {
+  
+}
+#ptsStoreLocator h3 {
+    font-size: 1.8em;
+    font-weight: 700; 
+    color: #C61010;
+      
+}
+
+/****************************************
+* Admin content review
+****************************************/
+#previewContentBody {
+    background: repeat-x scroll 0 0 white;
+    clear: left;
+    margin: 0 auto 2em;
+    position: relative;
+    width: 960px;
+    z-index: 10;
+}
+
+#previewContentBody p{
+    margin: 0.5em 1em;
+}

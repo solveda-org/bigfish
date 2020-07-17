@@ -344,21 +344,13 @@
 <ElectronicText dataResourceId="E_ORDER_CONFIRM">
   <textData>
      <![CDATA[
-     
-            <style type="text/css">
+      <style type="text/css">
                 p.info{
                     margin-top: 15px;
                 }
             </style>
 <p class="info" style="font-family:${EMAIL_FONT_FAMILY};">${uiLabelMap.ThankYouForShoppingEmailInfo}</p>
-${EMAIL_TITLE!""}
-<div style="font-family:${EMAIL_FONT_FAMILY}; margin-top:15px;">
-<p>Thank you for placing your order with ${EMAIL_CLNT_NAME}.  This message is to confirm that your order has been received and is now being processed by our shipping department.  If your items are in stock it will usually ship by 3pm of the following business day. Occasionally it takes 2 business days.</p>
-<br>
-<p>If you would like to contact customer service for questions about your order, the best way is to send your e-mail to <a href="mailto:${EMAIL_CLNT_REPLY_TO}?subject=${EMAIL_CLNT_NAME}:#${ORDER_ID} Thank you for Order!!">${EMAIL_CLNT_REPLY_TO}</a>
-.</p>
-<br>
-</div>
+
 <@renderContentAsText contentId="E_ORDER_DETAIL" ignoreTemplate="true"/>
 ]]>
    </textData>
@@ -796,5 +788,16 @@ ${EMAIL_TITLE!""}
    </textData>
 </ElectronicText>
  
+  <!-- CHANGE CUSTOMER EMAIL -->
+<ElectronicText dataResourceId="E_CHANGE_CUSTOMER">
+  <textData>
+     <![CDATA[
+<div class="emailContent" style="font-family:${EMAIL_FONT_FAMILY};">
+<p>Dear ${FIRST_NAME!""} ${MIDDLE_NAME!""} ${LAST_NAME!""} ${SUFFIX!""},</p>
+<p>Your personal information has been updated successfully.</p>
+</div>
+]]>
+   </textData>
+</ElectronicText>
 
 </entity-engine-xml>

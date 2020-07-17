@@ -21,30 +21,6 @@
 		     </div>
 		   </div>
 		 </div>
-        <#assign shippingPhone = shippingContactMechPhoneMap[shippingContactMech.contactMechId]["PHONE_HOME"]!"" />
-        <#if shippingPhone?has_content>
-          <#assign formattedPhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(shippingPhone.areaCode?if_exists, shippingPhone.contactNumber?if_exists)/>
-          <#if formattedPhone?has_content>
-            <div class="infoRow">
-              <div class="infoEntry">
-                <div class="infoCaption"><label>${uiLabelMap.HomePhoneCaption}</label></div>
-                <div class="infoValue">${formattedPhone}</div>
-              </div>
-            </div>
-          </#if>
-        </#if>
-        <#assign shippingMobile = shippingContactMechPhoneMap[shippingContactMech.contactMechId]["PHONE_MOBILE"]!"" />
-        <#if shippingMobile?has_content>
-          <#assign formattedMobilePhone = Static["com.osafe.util.OsafeAdminUtil"].formatTelephone(shippingMobile.areaCode?if_exists, shippingMobile.contactNumber?if_exists)/>
-          <#if formattedMobilePhone?has_content>
-            <div class="infoRow">
-              <div class="infoEntry">
-                <div class="infoCaption"><label>${uiLabelMap.MobilePhoneCaption}</label></div>
-                <div class="infoValue">${formattedMobilePhone!}</div>
-              </div>
-            </div>
-          </#if>
-        </#if>
       </div>
     </div>
   </#list>

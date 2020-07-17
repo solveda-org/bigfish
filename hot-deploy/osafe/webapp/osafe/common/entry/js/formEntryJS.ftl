@@ -22,8 +22,8 @@
       });
     }
 
-    if (jQuery('input[name="shipping_method"]:checked').val() == undefined) {
-      jQuery('input[name="shipping_method"]:first').attr("checked", true);
+    if (jQuery('input.shipping_method:checked').val() == undefined) {
+      jQuery('input.shipping_method:first').attr("checked", true);
     }
 
     if(jQuery('#content').length) {
@@ -149,10 +149,10 @@
                 }
                 jQuery.get('<@ofbizUrl>${updateShippingOptionRequest?if_exists}?postalCode='+postalcode+'&rnd='+String((new Date()).getTime()).replace(/\D/gi, "")+'</@ofbizUrl>', function(data) {
                     jQuery('#deliveryOptionBox').replaceWith(data);
-                    if(jQuery('input[name=shipping_method]:checked').val() != null) {
-                        setShippingMethod(jQuery('input[name=shipping_method]:checked').val());
+                    if(jQuery('input.shipping_method:checked').val() != null) {
+                        setShippingMethod(jQuery('input.shipping_method:checked').val());
                     } else {
-                        setShippingMethod(jQuery('input[name=shipping_method]').val());
+                        setShippingMethod(jQuery('input.shipping_method').val());
                     }
                 });
             } else {

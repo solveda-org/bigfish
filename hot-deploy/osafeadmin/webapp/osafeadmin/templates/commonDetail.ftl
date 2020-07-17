@@ -22,7 +22,9 @@ ${sections.render('commonFormDialog')?if_exists}
           ${sections.render('commonDetailActionButton')!}
           ${sections.render('commonDetailLinkButton')!}
       </form>
+      ${sections.render('commonDetailHelperText')!}
     </div>
 </div>
 ${sections.render('commonConfirm')!}
 ${sections.render('commonLookup')!}
+

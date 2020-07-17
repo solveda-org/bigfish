@@ -1,46 +1,56 @@
 <#if productStorePaymentSetting?has_content>
-    <#assign paymentServiceTypeEnums = delegator.findByAnd("Enumeration", Static["org.ofbiz.base.util.UtilMisc"].toMap("enumTypeId", "PRDS_PAYSVC"), Static["org.ofbiz.base.util.UtilMisc"].toList("description")) />
-    <#assign selectedPaymentServiceTypeEnum = parameters.paymentServiceTypeEnumId!productStorePaymentSetting.paymentServiceTypeEnumId!""/>
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
                 <label>${uiLabelMap.ServiceTypeCaption}</label>
             </div>
             <div class="infoValue">
-                <select name="paymentServiceTypeEnumId" id="paymentServiceTypeEnumId" class="extraSmall">
-                  <#if paymentServiceTypeEnums?has_content>
-                    <#list paymentServiceTypeEnums as paymentServiceTypeEnum>
-                      <option value='${paymentServiceTypeEnum.enumId!}' <#if selectedPaymentServiceTypeEnum == paymentServiceTypeEnum.enumId! >selected='selected'</#if>>
-                          ${(paymentServiceTypeEnum.get("description",locale))?default(paymentServiceTypeEnum.enumId!)}
-                      </option>
-                    </#list>
-                  </#if>
-                </select>
+                <#if mode?has_content && mode == "add">
+                    <#assign paymentServiceTypeEnums = delegator.findByAnd("Enumeration", Static["org.ofbiz.base.util.UtilMisc"].toMap("enumTypeId", "PRDS_PAYSVC"), Static["org.ofbiz.base.util.UtilMisc"].toList("description")) />
+                    <#assign selectedPaymentServiceTypeEnum = parameters.paymentServiceTypeEnumId!productStorePaymentSetting.paymentServiceTypeEnumId!""/>
+                    <select name="paymentServiceTypeEnumId" id="paymentServiceTypeEnumId" class="extraSmall">
+                      <#if paymentServiceTypeEnums?has_content>
+                        <#list paymentServiceTypeEnums as paymentServiceTypeEnum>
+                          <option value='${paymentServiceTypeEnum.enumId!}' <#if selectedPaymentServiceTypeEnum == paymentServiceTypeEnum.enumId! >selected='selected'</#if>>
+                              ${(paymentServiceTypeEnum.get("description",locale))?default(paymentServiceTypeEnum.enumId!)}
+                          </option>
+                        </#list>
+                      </#if>
+                    </select>
+                <#elseif mode?has_content && mode == "edit">
+                    <#assign paymentServiceTypeEnum = delegator.findByPrimaryKeyCache("Enumeration", Static["org.ofbiz.base.util.UtilMisc"].toMap("enumId", parameters.paymentServiceTypeEnumId!productStorePaymentSetting.paymentServiceTypeEnumId!""))?if_exists />
+                    <input type="hidden" name="paymentServiceTypeEnumId" value="${parameters.paymentServiceTypeEnumId!paymentServiceTypeEnum.enumId!""}" />${paymentServiceTypeEnum.description!paymentServiceTypeEnum.enumId!""}
+                </#if>
             </div>
         </div>
     </div>
 
-    <#assign paymentMethodTypes = delegator.findByAnd("PaymentMethodType", Static["org.ofbiz.base.util.UtilMisc"].toMap(), Static["org.ofbiz.base.util.UtilMisc"].toList("description")) />
-    <#assign selectedPaymentMethodType = parameters.paymentMethodTypeId!productStorePaymentSetting.paymentMethodTypeId!""/>
     <div class="infoRow row">
         <div class="infoEntry long">
             <div class="infoCaption">
                 <label>${uiLabelMap.PaymentMethodTypeCaption}</label>
             </div>
             <div class="infoValue">
-                <select name="paymentMethodTypeId" id="paymentMethodTypeId" class="extraSmall">
-                    <#if paymentMethodTypes?has_content && displayPaymentMethodTypes?has_content>
-                        <#assign displayPaymentMethodTypeList = Static["org.ofbiz.base.util.StringUtil"].split(displayPaymentMethodTypes,"|")/>
-                        <#list paymentMethodTypes as paymentMethodType>
-                            <#list displayPaymentMethodTypeList as displayPaymentMethodType>
-                                <#if paymentMethodType.paymentMethodTypeId.equals(displayPaymentMethodType)>
-                                    <option value='${paymentMethodType.paymentMethodTypeId!}' <#if selectedPaymentMethodType == paymentMethodType.paymentMethodTypeId! >selected=selected</#if>>
-                                        ${(paymentMethodType.get("description",locale))?default(paymentMethodType.paymentMethodTypeId!)}
-                                    </option>
-                                </#if>
+                <#if mode?has_content && mode == "add">
+                    <#assign paymentMethodTypes = delegator.findByAnd("PaymentMethodType", Static["org.ofbiz.base.util.UtilMisc"].toMap(), Static["org.ofbiz.base.util.UtilMisc"].toList("description")) />
+                    <#assign selectedPaymentMethodType = parameters.paymentMethodTypeId!productStorePaymentSetting.paymentMethodTypeId!""/>
+                    <select name="paymentMethodTypeId" id="paymentMethodTypeId" class="extraSmall">
+                        <#if paymentMethodTypes?has_content && displayPaymentMethodTypes?has_content>
+                            <#assign displayPaymentMethodTypeList = Static["org.ofbiz.base.util.StringUtil"].split(displayPaymentMethodTypes,"|")/>
+                            <#list paymentMethodTypes as paymentMethodType>
+                                <#list displayPaymentMethodTypeList as displayPaymentMethodType>
+                                    <#if paymentMethodType.paymentMethodTypeId.equals(displayPaymentMethodType)>
+                                        <option value='${paymentMethodType.paymentMethodTypeId!}' <#if selectedPaymentMethodType == paymentMethodType.paymentMethodTypeId! >selected=selected</#if>>
+                                            ${(paymentMethodType.get("description",locale))?default(paymentMethodType.paymentMethodTypeId!)}
+                                        </option>
+                                    </#if>
+                                </#list>
                             </#list>
-                        </#list>
-                    </#if>
+                        </#if>
+                <#elseif mode?has_content && mode == "edit">
+                    <#assign paymentMethodType = delegator.findByPrimaryKeyCache("PaymentMethodType", Static["org.ofbiz.base.util.UtilMisc"].toMap("paymentMethodTypeId", parameters.paymentMethodTypeId!productStorePaymentSetting.paymentMethodTypeId!""))?if_exists />
+                    <input type="hidden" name="paymentMethodTypeId" value="${parameters.paymentMethodTypeId!paymentMethodType.paymentMethodTypeId!""}" />${paymentMethodType.description!paymentMethodType.paymentMethodTypeId!""}
+                </#if>
                 </select>
             </div>
         </div>
@@ -57,7 +67,6 @@
         </div>
     </div>
 
-    <#assign paymentCustomMethods = delegator.findByAnd("CustomMethod", Static["org.ofbiz.base.util.UtilMisc"].toMap(), Static["org.ofbiz.base.util.UtilMisc"].toList("description")) />
     <#assign selectedPaymentCustomMethod = parameters.paymentCustomMethodId!productStorePaymentSetting.paymentCustomMethodId!""/>
     <div class="infoRow row">
         <div class="infoEntry long">
@@ -65,7 +74,7 @@
                 <label>${uiLabelMap.CustomMethodCaption}</label>
             </div>
             <div class="infoValue">
-                <select name="paymentCustomMethodId" id="paymentCustomMethodId" class="extraSmall">
+                <select name="paymentCustomMethodId" id="paymentCustomMethodId">
                   <#if paymentCustomMethods?has_content>
                     <#list paymentCustomMethods as paymentCustomMethod>
                       <option value='${paymentCustomMethod.customMethodId!}' <#if selectedPaymentCustomMethod == paymentCustomMethod.customMethodId! >selected=selected</#if>>
@@ -86,7 +95,7 @@
                 <label>${uiLabelMap.PaymentGatwayConfigIdCaption}</label>
             </div>
             <div class="infoValue">
-                <select name="paymentGatewayConfigId" id="paymentGatewayConfigId" class="extraSmall">
+                <select name="paymentGatewayConfigId" id="paymentGatewayConfigId">
                   <#if paymentGatewayConfigs?has_content>
                     <#list paymentGatewayConfigs as paymentGatewayConfig>
                       <option value='${paymentGatewayConfig.paymentGatewayConfigId!}' <#if selectedPaymentGatewayConfig == paymentGatewayConfig.paymentGatewayConfigId! >selected=selected</#if>>
